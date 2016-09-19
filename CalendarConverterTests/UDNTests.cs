@@ -205,22 +205,25 @@ namespace CalendarConverterTests
             Assert.AreEqual("????/??/??", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, UDN.UnknownMonth, UDN.UnknownDay).ToString());
             Assert.AreEqual("????/04/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 04, 23).ToString());
             Assert.AreEqual("????/03/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 03, 23).ToString());
-            //Assert.AreEqual("????/??/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, UDN.UnknownMonth, 23).ToString());
+            Assert.AreEqual("????/??/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, UDN.UnknownMonth, 23).ToString());
             Assert.AreEqual("2016/??/??", new UDN(UDNCalendarType.ctGregorian, 2016, UDN.UnknownMonth, UDN.UnknownDay).ToString());
             Assert.AreEqual("2016/??/10", new UDN(UDNCalendarType.ctGregorian, 2016, UDN.UnknownMonth, 10).ToString());
             Assert.AreEqual("2015/03/23", new UDN(UDNCalendarType.ctGregorian, 2015, 03, 23).ToString());
             Assert.AreEqual("2014/??/23", new UDN(UDNCalendarType.ctGregorian, 2014, UDN.UnknownMonth, 23).ToString());
             Assert.AreEqual("2016/05/31", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
             Assert.AreEqual("2016/05/31", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
-            //Assert.AreEqual("-4712/01/02", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString());
-            //Assert.AreEqual("-4712/01/03", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 3).ToString());
 
-            //Assert.AreEqual("1804/06/13", new UDN(UDNCalendarType.ctHebrew, 5564, 04, 04).ToString());
-            //Assert.AreEqual("1801/05/17", new UDN(UDNCalendarType.ctIslamic, 1216, 01, 04).ToString());
+            //Assert.AreEqual("-4712/01/02", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString()); // not work
+            //Assert.AreEqual("-4712/01/03", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 3).ToString()); // not work
+            Assert.AreEqual("-4212/01/02", new UDN(UDNCalendarType.ctGregorian, -4212, 1, 2).ToString()); // work
+            Assert.AreEqual("-4212/01/03", new UDN(UDNCalendarType.ctGregorian, -4212, 1, 3).ToString()); // work
+
+            Assert.AreEqual("1804/06/13", new UDN(UDNCalendarType.ctHebrew, 5564, 04, 04).ToString());
+            Assert.AreEqual("1801/05/17", new UDN(UDNCalendarType.ctIslamic, 1216, 01, 04).ToString());
             Assert.AreEqual("1802/05/01", new UDN(UDNCalendarType.ctGregorian, 1802, 05, 01).ToString());
 
-            //Assert.AreEqual("????/01/03", new UDN(UDNCalendarType.ctGregorian, 0, 1, 3).ToString());
-            //Assert.AreEqual("00-1/01/03", new UDN(UDNCalendarType.ctGregorian, -1, 1, 3).ToString()); // FIXME!
+            Assert.AreEqual("????/01/03", new UDN(UDNCalendarType.ctGregorian, 0, 1, 3).ToString());
+            Assert.AreEqual("00-1/01/03", new UDN(UDNCalendarType.ctGregorian, -1, 1, 3).ToString()); // FIXME!
 
             Assert.AreEqual("0001/01/03", new UDN(UDNCalendarType.ctGregorian, 1, 1, 3).ToString());
             Assert.AreEqual("2015/02/27", new UDN(UDNCalendarType.ctGregorian, 2015, 2, 27).ToString());
@@ -229,7 +232,7 @@ namespace CalendarConverterTests
             // Add dates before
             Assert.AreEqual("<0001/01/04", UDN.CreateBefore(UDNCalendarType.ctGregorian, 1, 1, 4).ToString());
             Assert.AreEqual("<2016/05/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
-            //Assert.AreEqual("<-4712/01/02", UDN.CreateBefore(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString());
+            //Assert.AreEqual("<-4712/01/02", UDN.CreateBefore(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString()); // not work
             Assert.AreEqual("<????/05/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 31).ToString());
             Assert.AreEqual("<2015/??/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, 2015, UDN.UnknownMonth, 31).ToString());
 

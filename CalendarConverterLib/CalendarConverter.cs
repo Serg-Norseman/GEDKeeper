@@ -143,19 +143,19 @@ namespace GKCommon
         public static void jd_to_gregorian3(uint jd, out int year,
                                             out int month, out int day)
         {
-          int sjd = (int) (jd);
-          int x3 = downwardRounding(4 * sjd - 6884477, 146097);
-          int r3 = 4 * sjd - 6884477 - 146097 * x3;
-          int temp = 100 * downwardRounding(r3, 4);
-          int x2 = downwardRounding(temp + 99, 36525);
-          int r2 = temp + 99 - 36525 * x2;
-          temp = 5 * downwardRounding(r2, 100);
-          int x1 = downwardRounding(temp + 2, 153);
-          int r1 = temp + 2 - 153 * x1;
-          day = downwardRounding(r1, 5) + 1;
-          int c0 = downwardRounding(x1 + 2, 12);
-          month = x1 - 12 * c0 + 3;
-          year = 100 * x3 + x2 + c0;
+            int sjd = (int) (jd);
+            int x3 = downwardRounding(4 * sjd - 6884477, 146097);
+            int r3 = 4 * sjd - 6884477 - 146097 * x3;
+            int temp = 100 * downwardRounding(r3, 4);
+            int x2 = downwardRounding(temp + 99, 36525);
+            int r2 = temp + 99 - 36525 * x2;
+            temp = 5 * downwardRounding(r2, 100);
+            int x1 = downwardRounding(temp + 2, 153);
+            int r1 = temp + 2 - 153 * x1;
+            day = downwardRounding(r1, 5) + 1;
+            int c0 = downwardRounding(x1 + 2, 12);
+            month = x1 - 12 * c0 + 3;
+            year = 100 * x3 + x2 + c0;
         }
 
         #endregion
@@ -195,10 +195,10 @@ namespace GKCommon
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
         public static uint julian_to_jd3(int year, int month, int day)
         {
-          int c0 = downwardRounding(month - 3, 12);
-          int j1 = downwardRounding(1461 * (year + c0), 4);
-          int j2 = downwardRounding(153 * month - 1836 * c0 - 457, 5);
-          return (uint) (j1 + j2 + day + 1721117);
+            int c0 = downwardRounding(month - 3, 12);
+            int j1 = downwardRounding(1461 * (year + c0), 4);
+            int j2 = downwardRounding(153 * month - 1836 * c0 - 457, 5);
+            return (uint) (j1 + j2 + day + 1721117);
         }
 
         public static void jd_to_julian2(double jd, out int year, out int month, out int day)
@@ -233,16 +233,16 @@ namespace GKCommon
         public static void jd_to_julian3(uint jd, out int year, out int month,
                                          out int day)
         {
-          int y2 = ((int) (jd)) - 1721118;
-          int k2 = 4 * y2 + 3;
-          int temp = downwardRounding(k2, 1461);
-          int k1 = 5 * downwardRounding(k2 - 1461 * temp, 4) + 2;
-          int x1 = downwardRounding(k1, 153);
-          int c0 = downwardRounding(x1 + 2, 12);
-          year = downwardRounding(k2, 1461) + c0;
-          month = x1 - 12 * c0 + 3;
-          temp = downwardRounding(k1, 153);
-          day = downwardRounding(k1 - 153 * temp, 5) + 1;
+            int y2 = ((int) (jd)) - 1721118;
+            int k2 = 4 * y2 + 3;
+            int temp = downwardRounding(k2, 1461);
+            int k1 = 5 * downwardRounding(k2 - 1461 * temp, 4) + 2;
+            int x1 = downwardRounding(k1, 153);
+            int c0 = downwardRounding(x1 + 2, 12);
+            year = downwardRounding(k2, 1461) + c0;
+            month = x1 - 12 * c0 + 3;
+            temp = downwardRounding(k1, 153);
+            day = downwardRounding(k1 - 153 * temp, 5) + 1;
         }
 
         #endregion
@@ -397,51 +397,51 @@ namespace GKCommon
 
         private static int getRunningMonthNumberOfTheFirstMonth(int year)
         {
-          // It's `c1(x1)`.
-          return downwardRounding(235 * year + 1, 19);
+            // It's `c1(x1)`.
+            return downwardRounding(235 * year + 1, 19);
         }
 
         private static int getTheFirstDelay(int year)
         {
-          // It's `v1(x1)`
-          int c1x1 = getRunningMonthNumberOfTheFirstMonth(year);
-          int qx1 = downwardRounding(c1x1, 1095);
-          int rx1 = c1x1 - 1095 * qx1;
-          int v1 = 15 * qx1 + 765433 * rx1 + 12084;
-          v1 = downwardRounding(v1, 25920);
-          return 32336 * qx1 + v1;
+            // It's `v1(x1)`
+            int c1x1 = getRunningMonthNumberOfTheFirstMonth(year);
+            int qx1 = downwardRounding(c1x1, 1095);
+            int rx1 = c1x1 - 1095 * qx1;
+            int v1 = 15 * qx1 + 765433 * rx1 + 12084;
+            v1 = downwardRounding(v1, 25920);
+            return 32336 * qx1 + v1;
         }
 
         private static int getTheSecondDelay(int year)
         {
-          // It's `v2(x1)`
-          int v1x1 = getTheFirstDelay(year);
-          int temp = v1x1 - 7 * downwardRounding(v1x1, 7);
-          temp = downwardRounding(6 * temp, 7);
-          temp = temp - 2 * downwardRounding(temp, 2);
-          return v1x1 + temp;
+            // It's `v2(x1)`
+            int v1x1 = getTheFirstDelay(year);
+            int temp = v1x1 - 7 * downwardRounding(v1x1, 7);
+            temp = downwardRounding(6 * temp, 7);
+            temp = temp - 2 * downwardRounding(temp, 2);
+            return v1x1 + temp;
         }
 
         private static int getTheThirdDelay(int year)
         {
-          // It's `v3(x1)`
-          int v3 = downwardRounding(getLengthOfYear(year) + 19, 15);
-          v3 = v3 - 2 * downwardRounding(v3, 2);
-          return 2 * v3;
+            // It's `v3(x1)`
+            int v3 = downwardRounding(getLengthOfYear(year) + 19, 15);
+            v3 = v3 - 2 * downwardRounding(v3, 2);
+            return 2 * v3;
         }
 
         private static int getTheFourthDelay(int year)
         {
-          // It's `v4(x1)`
-          int v4 = downwardRounding(getLengthOfYear(year) + 7, 15);
-          return v4 - 2 * downwardRounding(v4, 2);
+            // It's `v4(x1)`
+            int v4 = downwardRounding(getLengthOfYear(year) + 7, 15);
+            return v4 - 2 * downwardRounding(v4, 2);
         }
 
         private static int getRunningDayNumberOfNewYear(int year)
         {
-          // It's `c2(x1)`.
-          return getTheSecondDelay(year) + getTheThirdDelay(year) +
-                 getTheFourthDelay(year - 1);
+            // It's `c2(x1)`.
+            return getTheSecondDelay(year) + getTheThirdDelay(year) +
+                getTheFourthDelay(year - 1);
         }
 
         private static int getLengthOfYear(int year)
@@ -452,70 +452,70 @@ namespace GKCommon
 
         public static uint hebrew_to_jd3(int year, int month, int day)
         {
-          int c0 = downwardRounding(13 - month, 7);
-          int x1 = year - 1 + c0;
-          int x3 = month - 1;
-          int z4 = day - 1;
-          int c2 = getRunningDayNumberOfNewYear(x1);
-          int L = getRunningDayNumberOfNewYear(x1 + 1) - c2;
-          int c8 = downwardRounding(L + 7, 2);
-          c8 = c8 - 15 * downwardRounding(c8, 15);
-          int c9 = downwardRounding(385 - L, 2);
-          c9 = -(c9 - 15 * downwardRounding(c9, 15));
-          int c3 = downwardRounding(384 * x3 + 7, 13) +
-                   c8 * downwardRounding(x3 + 4, 12) +
-                   c9 * downwardRounding(x3 + 3, 12);
-          return (uint) (347821 + c2 + c3 + z4);
+            int c0 = downwardRounding(13 - month, 7);
+            int x1 = year - 1 + c0;
+            int x3 = month - 1;
+            int z4 = day - 1;
+            int c2 = getRunningDayNumberOfNewYear(x1);
+            int L = getRunningDayNumberOfNewYear(x1 + 1) - c2;
+            int c8 = downwardRounding(L + 7, 2);
+            c8 = c8 - 15 * downwardRounding(c8, 15);
+            int c9 = downwardRounding(385 - L, 2);
+            c9 = -(c9 - 15 * downwardRounding(c9, 15));
+            int c3 = downwardRounding(384 * x3 + 7, 13) +
+                c8 * downwardRounding(x3 + 4, 12) +
+                c9 * downwardRounding(x3 + 3, 12);
+            return (uint) (347821 + c2 + c3 + z4);
         }
 
         public static void jd_to_hebrew3(uint jd, out int year, out int month,
                                          out int day)
         {
-          int y4 = ((int) (jd)) - 347821;
-          int q = downwardRounding(y4, 1447);
-          int r = y4 - 1447 * q;
-          int gamma1 = 49 * q +
-                       downwardRounding(23 * q + 25920 * r + 13835, 765433) + 1;
-          int xi1 = downwardRounding(19 * gamma1 + 17, 235);
-          int mu1 = gamma1 - downwardRounding(235 * xi1 + 1, 19);
-          int c2 = getRunningDayNumberOfNewYear(xi1);
-          int L = getRunningDayNumberOfNewYear(xi1 + 1) - c2;
-          int c8 = downwardRounding(L + 7, 2);
-          c8 = c8 - 15 * downwardRounding(c8, 15);
-          int c9 = downwardRounding(385 - L, 2);
-          c9 = -(c9 - 15 * downwardRounding(c9, 15));
-          int c3 = downwardRounding(384 * mu1 + 7, 13) +
-                   c8 * downwardRounding(mu1 + 4, 12) +
-                   c9 * downwardRounding(mu1 + 3, 12);
-          int gamma2 = gamma1 + downwardRounding(y4 - (c2 + c3), 33);
-          int xi2 = downwardRounding(19 * gamma2 + 17, 235);
-          int mu2 = gamma2 - downwardRounding(235 * xi2 + 1, 19);
-          c2 = getRunningDayNumberOfNewYear(xi2);
-          L = getRunningDayNumberOfNewYear(xi2 + 1) - c2;
-          c8 = downwardRounding(L + 7, 2);
-          c8 = c8 - 15 * downwardRounding(c8, 15);
-          c9 = downwardRounding(385 - L, 2);
-          c9 = -(c9 - 15 * downwardRounding(c9, 15));
-          c3 = downwardRounding(384 * mu2 + 7, 13) +
-               c8 * downwardRounding(mu2 + 4, 12) +
-               c9 * downwardRounding(mu2 + 3, 12);
-          int gamma3 = gamma2 + downwardRounding(y4 - (c2 + c3), 33);
-          int xi3 = downwardRounding(19 * gamma3 + 17, 235);
-          int mu3 = gamma3 - downwardRounding(235 * xi3 + 1, 19);
-          c2 = getRunningDayNumberOfNewYear(xi3);
-          L = getRunningDayNumberOfNewYear(xi3 + 1) - c2;
-          c8 = downwardRounding(L + 7, 2);
-          c8 = c8 - 15 * downwardRounding(c8, 15);
-          c9 = downwardRounding(385 - L, 2);
-          c9 = -(c9 - 15 * downwardRounding(c9, 15));
-          c3 = downwardRounding(384 * mu3 + 7, 13) +
-               c8 * downwardRounding(mu3 + 4, 12) +
-               c9 * downwardRounding(mu3 + 3, 12);
-          int z4 = y4 - (c2 + c3);
-          int c = downwardRounding(12 - mu3, 7);
-          year = xi3 + 1 - c;
-          month = mu3 + 1;
-          day = z4 + 1;
+            int y4 = ((int) (jd)) - 347821;
+            int q = downwardRounding(y4, 1447);
+            int r = y4 - 1447 * q;
+            int gamma1 = 49 * q +
+                downwardRounding(23 * q + 25920 * r + 13835, 765433) + 1;
+            int xi1 = downwardRounding(19 * gamma1 + 17, 235);
+            int mu1 = gamma1 - downwardRounding(235 * xi1 + 1, 19);
+            int c2 = getRunningDayNumberOfNewYear(xi1);
+            int L = getRunningDayNumberOfNewYear(xi1 + 1) - c2;
+            int c8 = downwardRounding(L + 7, 2);
+            c8 = c8 - 15 * downwardRounding(c8, 15);
+            int c9 = downwardRounding(385 - L, 2);
+            c9 = -(c9 - 15 * downwardRounding(c9, 15));
+            int c3 = downwardRounding(384 * mu1 + 7, 13) +
+                c8 * downwardRounding(mu1 + 4, 12) +
+                c9 * downwardRounding(mu1 + 3, 12);
+            int gamma2 = gamma1 + downwardRounding(y4 - (c2 + c3), 33);
+            int xi2 = downwardRounding(19 * gamma2 + 17, 235);
+            int mu2 = gamma2 - downwardRounding(235 * xi2 + 1, 19);
+            c2 = getRunningDayNumberOfNewYear(xi2);
+            L = getRunningDayNumberOfNewYear(xi2 + 1) - c2;
+            c8 = downwardRounding(L + 7, 2);
+            c8 = c8 - 15 * downwardRounding(c8, 15);
+            c9 = downwardRounding(385 - L, 2);
+            c9 = -(c9 - 15 * downwardRounding(c9, 15));
+            c3 = downwardRounding(384 * mu2 + 7, 13) +
+                c8 * downwardRounding(mu2 + 4, 12) +
+                c9 * downwardRounding(mu2 + 3, 12);
+            int gamma3 = gamma2 + downwardRounding(y4 - (c2 + c3), 33);
+            int xi3 = downwardRounding(19 * gamma3 + 17, 235);
+            int mu3 = gamma3 - downwardRounding(235 * xi3 + 1, 19);
+            c2 = getRunningDayNumberOfNewYear(xi3);
+            L = getRunningDayNumberOfNewYear(xi3 + 1) - c2;
+            c8 = downwardRounding(L + 7, 2);
+            c8 = c8 - 15 * downwardRounding(c8, 15);
+            c9 = downwardRounding(385 - L, 2);
+            c9 = -(c9 - 15 * downwardRounding(c9, 15));
+            c3 = downwardRounding(384 * mu3 + 7, 13) +
+                c8 * downwardRounding(mu3 + 4, 12) +
+                c9 * downwardRounding(mu3 + 3, 12);
+            int z4 = y4 - (c2 + c3);
+            int c = downwardRounding(12 - mu3, 7);
+            year = xi3 + 1 - c;
+            month = mu3 + 1;
+            day = z4 + 1;
         }
 
 
@@ -546,22 +546,22 @@ namespace GKCommon
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
         public static uint islamic_to_jd3(int year, int month, int day)
         {
-          year = downwardRounding(10631 * year - 10617, 30);
-          month = downwardRounding(325 * month - 320, 11);
-          return (uint) (year + month + day + 1948439);
+            year = downwardRounding(10631 * year - 10617, 30);
+            month = downwardRounding(325 * month - 320, 11);
+            return (uint) (year + month + day + 1948439);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
         public static void jd_to_islamic3(uint jd, out int year, out int month,
                                           out int day)
         {
-          int k2 = 30 * (((int) (jd)) - 1948440) + 15;
-          int temp = k2 - 10631 * downwardRounding(k2, 10631);
-          int k1 = downwardRounding(temp, 30) * 11 + 5;
-          year = downwardRounding(k2, 10631) + 1;
-          month = downwardRounding(k1, 325) + 1;
-          temp = k1 - 325 * downwardRounding(k1, 325);
-          day = downwardRounding(temp, 11) + 1;
+            int k2 = 30 * (((int) (jd)) - 1948440) + 15;
+            int temp = k2 - 10631 * downwardRounding(k2, 10631);
+            int k1 = downwardRounding(temp, 30) * 11 + 5;
+            year = downwardRounding(k2, 10631) + 1;
+            month = downwardRounding(k1, 325) + 1;
+            temp = k1 - 325 * downwardRounding(k1, 325);
+            day = downwardRounding(temp, 11) + 1;
         }
 
         #endregion
