@@ -122,7 +122,7 @@ namespace GKCommon
                 }
 
                 return result;
-            } catch (Exception ex) {
+            } catch (Exception) {
                 System.Diagnostics.Debug.WriteLine("UDN.ToString()");
                 return "";
             }
