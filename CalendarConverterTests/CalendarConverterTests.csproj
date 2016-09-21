@@ -52,7 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtTests.cs" />
+    <Compile Include="CalendarTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UDNTests.cs" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace CalendarConverterTests
 {
     [TestFixture]
-    public class ExtTests
+    public class CalendarTests
     {
         private static string d2s(int day, string month, int year, string weekday)
         {
