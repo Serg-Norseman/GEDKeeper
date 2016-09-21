@@ -25,6 +25,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -95,6 +96,7 @@ namespace GKUI
             this.fPlaces = new StringList();
             this.fPlaces.Sorted = true;
             this.fChecksList = new List<TreeTools.CheckObj>();
+            this.gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             this.PrepareChecksList();
             this.PreparePatriarchsList();
@@ -380,6 +382,13 @@ namespace GKUI
             
             this.Base.SelectRecordByXRef(iRec.XRef);
             base.Close();
+        }
+
+        private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
+        {
+            if (args == null) return;
+
+            args.Hint = string.Format(LangMan.LS(LSID.LSID_LogHint), args.FragmentNumber, args.Size);
         }
 
         #endregion
@@ -770,7 +779,7 @@ namespace GKUI
                     {
                         List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(this.fTree, fBase);
 
-                        this.ListCompare.AppendText("  Поиск несвязанных однофамильцев:\r\n");
+                        this.ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0)
                         {
                             int num = uln.Count;

@@ -59,6 +59,11 @@ namespace GKCalendarPlugin
             this.fPlugin.Host.WidgetClose(this.fPlugin);
         }
 
+        private static string d2s(int day, string month, int year, string weekday)
+        {
+            return string.Format("{0} {1} {2}, {3}", day, month, year, weekday);
+        }
+
         private void qtc_DateSelected(object sender, DateRangeEventArgs e)
         {
             DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
@@ -66,51 +71,42 @@ namespace GKCalendarPlugin
             this.lvDates.BeginUpdate();
             try
             {
-                this.lvDates.Items.Clear();
-                DateTime gdt = this.qtc.SelectionStart;
                 string s;
+                int year, month, day;
+
+                this.lvDates.Items.Clear();
+
+                DateTime gdt = this.qtc.SelectionStart;
                 double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 
-                s = gdt.Day.ToString() + " " + CalendarData.ClassicMonths[gdt.Month - 1] + " " + gdt.Year.ToString();
-                s += " " + CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)];
+                CalendarConverter.jd_to_gregorian(jd, out year, out month, out day);
+                s = d2s(day, CalendarData.ClassicMonths[month - 1], year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 
-                int year, month, day;
                 CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-                s = day.ToString() + " " + CalendarData.ClassicMonths[month - 1] + " " + year.ToString();
-                s += " " + CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)];
+                s = d2s(day, CalendarData.ClassicMonths[month - 1], year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), s);
 
                 CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
-                s = day.ToString() + " ";
-                s += CalendarData.HebrewMonths[month - 1];
-                s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
+                s = d2s(day, CalendarData.HebrewMonths[month - 1], year, CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew), s);
 
                 CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
-                s = day.ToString() + " ";
-                s += CalendarData.IslamicMonths[month - 1];
-                s = s + " " + year.ToString() + ", йаум " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
+                s = d2s(day, CalendarData.IslamicMonths[month - 1], year, CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Islamic), s);
 
                 CalendarConverter.jd_to_persian(jd, out year, out month, out day);
-                s = day.ToString() + " ";
-                s += CalendarData.PersianMonths[month - 1];
-                s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
+                s = d2s(day, CalendarData.PersianMonths[month - 1], year, CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Persian), s);
 
                 CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
-                s = day.ToString() + " ";
-                s += CalendarData.IndianCivilMonths[month - 1];
-                s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
+                s = d2s(day, CalendarData.IndianCivilMonths[month - 1], year, CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Indian), s);
 
                 int major, cycle;
                 CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
-                s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
-                s = s + day.ToString() + " ";
-                s += CalendarData.BahaiMonths[month - 1];
-                s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
+                s = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), major, cycle) + ", ";
+                s = s + d2s(day, CalendarData.BahaiMonths[month - 1], year, CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)]);
                 this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Bahai), s);
             }
             finally

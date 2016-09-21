@@ -72,7 +72,7 @@ namespace GKCore
             }
 
             return cmp >= (int)Math.Round(len * 0.5);
-            // [Пав]ел/Павлович (3/5), [Ил]ья/Ильич (2/4)
+            // [Pav]el/Pavlovich (3/5), [Il]ja/Ilich (2/4)
         }
 
         #endregion

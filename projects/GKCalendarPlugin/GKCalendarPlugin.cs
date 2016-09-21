@@ -63,7 +63,8 @@ namespace GKCalendarPlugin
         LSID_IslamicMonths,
         LSID_IslamicWeekdays,
         LSID_PersianMonths,
-        LSID_PersianWeekdays
+        LSID_PersianWeekdays,
+        LSID_BahaiCycles
     }
 
     public sealed class Plugin : BaseObject, IPlugin, IWidget

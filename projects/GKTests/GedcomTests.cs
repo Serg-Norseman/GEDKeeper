@@ -1898,6 +1898,15 @@ namespace GKTests
             }
         }
 
+        [Test]
+        public void GEDCOMList_Tests()
+        {
+            using (GEDCOMList<GEDCOMObject> list = new GEDCOMList<GEDCOMObject>(null)) {
+                foreach (GEDCOMObject obj in list) {
+                }
+            }
+        }
+
         #endregion
 
         #region Partial Tests

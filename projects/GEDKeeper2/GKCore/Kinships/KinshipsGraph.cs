@@ -241,7 +241,7 @@ namespace GKCore.Kinships
             string result = "";
             for (int i = 1; i <= n; i++)
             {
-                result += "пра";
+                result += LangMan.LS(GKData.GreatPrefix);
             }
             return result;
         }

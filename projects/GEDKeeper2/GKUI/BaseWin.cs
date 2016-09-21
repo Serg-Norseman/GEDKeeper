@@ -551,7 +551,7 @@ namespace GKUI
             }
             catch (UnauthorizedAccessException)
             {
-                GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": доступ закрыт" }));
+                GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
             }
             catch (Exception ex)
             {

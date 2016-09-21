@@ -75,10 +75,10 @@ namespace GKUI.Dialogs
                 idx++;
             }
 
+            this.SetLang();
+
             this.InitGrid();
             this.UpdateGrid();
-
-            this.SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -291,6 +291,9 @@ namespace GKUI.Dialogs
 
         public void SetLang()
         {
+            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);

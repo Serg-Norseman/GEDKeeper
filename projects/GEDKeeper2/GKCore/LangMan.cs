@@ -47,19 +47,19 @@ namespace GKCore
         /* 013 */ LSID_MIExport,
         /* 014 */ LSID_MIExportToFamilyBook,
 
-        /* 015 */ LSID_Deprecated_00,
+        /* 015 */ LSID_Deprecated_015, // deprecated
 
         /* 016 */ LSID_MIExportToExcelFile,
         /* 017 */ LSID_MIExit,
 
-        /* 018 */ LSID_Deprecated_01,
-        /* 019 */ LSID_Deprecated_02,
+        /* 018 */ LSID_Deprecated_018, // deprecated
+        /* 019 */ LSID_Deprecated_019, // deprecated
 
         /* 020 */ LSID_MIRecordAdd,
         /* 021 */ LSID_MIRecordEdit,
         /* 022 */ LSID_MIRecordDelete,
 
-        /* 023 */ LSID_Deprecated_03,
+        /* 023 */ LSID_Deprecated_023, // deprecated
 
         /* 024 */ LSID_MITreeAncestors,
         /* 025 */ LSID_MITreeDescendants,
@@ -77,7 +77,7 @@ namespace GKCore
         /* 035 */ LSID_MIOrganizer,
         /* 036 */ LSID_MIScripts,
 
-        /* 037 */ LSID_Deprecated_04,
+        /* 037 */ LSID_Deprecated_037, // deprecated
 
         /* 038 */ LSID_MITreeTools = 38,
         /* 039 */ LSID_MIFilter,
@@ -197,9 +197,7 @@ namespace GKCore
         /* 147 */ LSID_StoreType,
         /* 148 */ LSID_File,
         /* 149 */ LSID_View,
-
-        /* 150 */ LSID_AdvancedWarning, // deprecated
-
+        /* 150 */ LSID_LogHint,
         /* 151 */ LSID_Father,
         /* 152 */ LSID_Mother,
         /* 153 */ LSID_Parents,
@@ -427,7 +425,7 @@ namespace GKCore
         /* 373 */ LSID_RK_SisterInLaw_H,
         /* 374 */ LSID_RK_BrotherInLaw_W,
         /* 375 */ LSID_RK_SisterInLaw_W,
-        /* 376 */ LSID_RK_05,
+        /* 376 */ LSID_RK_GreatPrefix,
         /* 377 */ LSID_RK_06,
         /* 378 */ LSID_RK_07,
         /* 379 */ LSID_RK_08,
@@ -455,9 +453,8 @@ namespace GKCore
         /* 399 */ LSID_DocPreview,
         /* 400 */ LSID_Generation,
 
-        /* 401 */ LSID_Deprecated_13,
-        /* 402 */ LSID_Deprecated_14,
-
+        /* 401 */ LSID_CondContains,
+        /* 402 */ LSID_CondNotContains,
         /* 403 */ LSID_DK_0,
         /* 404 */ LSID_DK_1,
         /* 405 */ LSID_DK_2,
@@ -573,9 +570,7 @@ namespace GKCore
         /* 513 */ LSID_ToolOp_2,
         /* 514 */ LSID_ToolOp_3,
         /* 515 */ LSID_ToolOp_4,
-
-        /* 516 */ LSID_ToolOp_5, // deprecated
-
+        /* 516 */ LSID_SearchUnlinkedNamesakes,
         /* 517 */ LSID_ToolOp_6,
         /* 518 */ LSID_ToolOp_7,
         /* 519 */ LSID_ToolOp_8,
@@ -844,9 +839,9 @@ namespace GKCore
             /* 043 */ "&Vertical tile",
             /* 044 */ "&Minimize all",
             /* 045 */ "&Rearrange all",
-            /* 046 */ "Internet resources...",
-            /* 047 */ "Kinship terms...",
-            /* 048 */ "FAQ...",
+            /* 046 */ "<?>",
+            /* 047 */ "<?>",
+            /* 048 */ "<?>",
             /* 049 */ "Content",
             /* 050 */ "About",
             /* 051 */ "Records",
@@ -948,7 +943,7 @@ namespace GKCore
             /* 147 */ "Store type",
             /* 148 */ "File",
             /* 149 */ "View",
-            /* 150 */ "Extension mode is not enabled for selected store type",
+            /* 150 */ "Fragment {0}: {1} individuals",
             /* 151 */ "Father",
             /* 152 */ "Mother",
             /* 153 */ "Parents",
@@ -1174,7 +1169,7 @@ namespace GKCore
             /* 373 */ "sister-in-law",
             /* 374 */ "brother-in-law",
             /* 375 */ "sister-in-law",
-            /* 376 */ "<?>",
+            /* 376 */ "great",
             /* 377 */ "<?>",
             /* 378 */ "<?>",
             /* 379 */ "<?>",
@@ -1199,8 +1194,8 @@ namespace GKCore
             /* 398 */ "Print",
             /* 399 */ "Preview",
             /* 400 */ "Generation",
-            /* 401 */ "<?>",
-            /* 402 */ "<?>",
+            /* 401 */ "contains",
+            /* 402 */ "not contains",
             /* 403 */ "Exact",
             /* 404 */ "Before",
             /* 405 */ "After",
@@ -1314,7 +1309,7 @@ namespace GKCore
             /* 513 */ "Merge databases",
             /* 514 */ "Split database",
             /* 515 */ "Merge records",
-            /* 516 */ "Import pedigrees",
+            /* 516 */ "Search unlinked namesakes",
             /* 517 */ "Check connection of families",
             /* 518 */ "Check database",
             /* 519 */ "Search the patriarchs",

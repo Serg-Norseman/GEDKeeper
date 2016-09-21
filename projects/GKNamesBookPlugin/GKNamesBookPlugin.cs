@@ -44,7 +44,8 @@ namespace GKNamesBookPlugin
 {
     public enum NLS
     {
-        /* 032 */ LSID_MINamesBook
+        LSID_MINamesBook,
+        LSID_Calendar
     }
     
     public sealed class Plugin : BaseObject, IPlugin, IWidget

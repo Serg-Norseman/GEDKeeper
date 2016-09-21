@@ -113,7 +113,7 @@ namespace GKNamesBookPlugin
             if (rec.ChIndex < 0) return;
 
             this.mmDesc.AppendText("\r\n");
-            this.mmDesc.AppendText("Святцы:\r\n");
+            this.mmDesc.AppendText(this.fPlugin.LangMan.LS(NLS.LSID_Calendar) + ":\r\n");
 
             StringList lst;
             switch (rec.Sex)

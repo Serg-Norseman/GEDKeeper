@@ -25,6 +25,21 @@ using System.Windows.Forms;
 
 namespace GKCommon.Controls
 {
+    public class HintRequestEventArgs : EventArgs
+    {
+        public int FragmentNumber { get; private set; }
+        public int Size { get; private set; }
+        public string Hint { get; set; }
+
+        public HintRequestEventArgs(int fragmentNumber, int size)
+        {
+            this.FragmentNumber = fragmentNumber;
+            this.Size = size;
+        }
+    }
+
+    public delegate void HintRequestEventHandler(object sender, HintRequestEventArgs args);
+
     /// <summary>
     /// 
     /// </summary>
@@ -50,6 +65,8 @@ namespace GKCommon.Controls
         private readonly List<Fragment> fList;
         private readonly ToolTip fToolTip;
         private string fHint;
+
+        public event HintRequestEventHandler OnHintRequest;
 
         public LogChart()
         {
@@ -192,6 +209,15 @@ namespace GKCommon.Controls
             gfx.FillRectangle(lb, x, 0, width, this.Height);
         }
 
+        private string HintRequest(int fragmentNumber, int size)
+        {
+            if (this.OnHintRequest == null) return string.Empty;
+
+            HintRequestEventArgs args = new HintRequestEventArgs(fragmentNumber, size);
+            this.OnHintRequest(this, args);
+            return args.Hint;
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -202,8 +228,7 @@ namespace GKCommon.Controls
                 Fragment frag = fList[i];
 
                 if (frag.Rect.Contains(e.X, e.Y)) {
-                    string st = (i + 1).ToString();
-                    hint = "Фрагмент: " + st + ", размер = " + frag.SrcVal.ToString();
+                    hint = HintRequest(i + 1, frag.SrcVal);
                     break;
                 }
             }

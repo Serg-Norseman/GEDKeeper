@@ -152,14 +152,18 @@ namespace GKCore
         public static readonly string[] RelationSigns;
         public static readonly string[] Numerals;
         public static readonly string[] NumKinship;
+        public static readonly LSID GreatPrefix;
         public static readonly StatsTitleStruct[] StatsTitles;
         public static readonly LSID[] CheckSolveNames;
-        public static readonly string[] CondSigns;
         public static readonly LSID[] NameTypes;
         public static readonly string[] Calendars;
 
+        public static string[] CondSigns;
+
         static GKData()
         {
+            GreatPrefix = LSID.LSID_RK_GreatPrefix;
+
             NumKinship = new string[]
             {
                 "-",
@@ -271,6 +275,16 @@ namespace GKCore
                 "Вероисповедание:Старообрядчество"
             };
 
+        ///* 723 */ LSID_RI_GeorgeKnight,
+        ///* 724 */ LSID_USSR_WWII_Combatant,
+        ///* 725 */ LSID_USSR_WWII_KilledInBattle,
+        ///* 726 */ LSID_USSR_WWII_HomeFrontWorker,
+        ///* 727 */ LSID_USSR_Repressed,
+        ///* 728 */ LSID_Religion_Islam,
+        ///* 729 */ LSID_Religion_Catholicism,
+        ///* 730 */ LSID_Religion_Orthodoxy,
+        ///* 731 */ LSID_Religion_TheOldBelievers,
+
 
             CertaintyAssessments = new LSID[]
             {
@@ -380,7 +394,7 @@ namespace GKCore
                 LSID.LSID_Unknown
             };
 
-            
+
             DateKindStruct[] array5 = new DateKindStruct[10];
             array5[0] = new DateKindStruct(LSID.LSID_DK_0, 1); // 1
             array5[1] = new DateKindStruct(LSID.LSID_DK_1, 2); // 2
@@ -436,7 +450,7 @@ namespace GKCore
             array6[36] = new PersonEventStruct(LSID.LSID_DNAMarkers, "_DNA", PersonEventKind.ekFact);
             PersonEvents = array6;
 
-            
+
             MarriageStatus = new MarStatusStruct[] {
                 new MarStatusStruct(LSID.LSID_Unknown, ""),
                 new MarStatusStruct(LSID.LSID_MarrRegistered, "MARRIED"),
@@ -528,7 +542,7 @@ namespace GKCore
 
             CondSigns = new string[]
             {
-                "!=", "<", "<=", "==", "=>", ">", "содержит", "не содержит"
+                "!=", "<", "<=", "==", "=>", ">", "contains", "not contains"
             };
 
             NameTypes = new LSID[]
