@@ -7,6 +7,11 @@ namespace CalendarConverterTests
     [TestFixture]
     public class ExtTests
     {
+        private static string d2s(int day, string month, int year, string weekday)
+        {
+            return string.Format("{0} {1} {2}, {3}", day, month, year, weekday);
+        }
+
         [Test]
         public void Calendar_Tests()
         {
@@ -29,41 +34,29 @@ namespace CalendarConverterTests
 
             int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-            s = day.ToString() + " ";
-            s += CalendarData.ClassicMonths[month - 1];
-            s = s + " " + year.ToString();
-            Assert.AreEqual("27 September 1990", s); // +
+            s = d2s(day, CalendarData.ClassicMonths[month - 1], year, "");
+            Assert.AreEqual("27 September 1990, ", s); // +
 
             CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
-            s = day.ToString() + " ";
-            s += CalendarData.HebrewMonths[month - 1];
-            s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
+            s = d2s(day, CalendarData.HebrewMonths[month - 1], year, CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)]);
             Assert.AreEqual("21 Tishri 5751, Dalet", s); // +
 
             CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
-            s = day.ToString() + " ";
-            s += CalendarData.IslamicMonths[month - 1];
-            s = s + " " + year.ToString() + ", " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
+            s = d2s(day, CalendarData.IslamicMonths[month - 1], year, CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)]);
             Assert.AreEqual("20 Rabi`al-Awwal 1411, Al-'arb`a'", s); // +
 
             CalendarConverter.jd_to_persian(jd, out year, out month, out day);
-            s = day.ToString() + " ";
-            s += CalendarData.PersianMonths[month - 1];
-            s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
+            s = d2s(day, CalendarData.PersianMonths[month - 1], year, CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)]);
             Assert.AreEqual("18 Mehr 1369, Chaharshanbeh", s); // +
 
             CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
-            s = day.ToString() + " ";
-            s += CalendarData.IndianCivilMonths[month - 1];
-            s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
+            s = d2s(day, CalendarData.IndianCivilMonths[month - 1], year, CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)]);
             Assert.AreEqual("18 Asvina 1912, Budhavara", s); // +
 
             int major, cycle;
             CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
             s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
-            s = s + day.ToString() + " ";
-            s += CalendarData.BahaiMonths[month - 1];
-            s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
+            s = s + d2s(day, CalendarData.BahaiMonths[month - 1], year, CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)]);
             Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Mashíyyat 14, ‘Idál", s); // ???
         }
 
@@ -76,8 +69,8 @@ namespace CalendarConverterTests
             const double needJD = 2448174.5; // 1990-10-10 [g], 1990-09-27 [j], 5751-07-21 [h]
 
             //for (int i = 0; i < 1000000; i++) {
-            jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
-            Assert.AreEqual(0.5, jd); // bad!
+            jd = CalendarConverter.gregorian_to_jd2(-4713, 11, 24);
+            Assert.AreEqual(0.0, jd);
 
             jd = CalendarConverter.gregorian_to_jd(1990, 10, 10);
             Assert.AreEqual(needJD, jd);
@@ -89,14 +82,8 @@ namespace CalendarConverterTests
             Assert.AreEqual(needJD, jd);
             //}
 
-            /*jd = CalendarConverter.julian_to_jd(1990, 09, 00);
-            CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-            Assert.AreEqual(1990, year, "j2jd 1");
-            Assert.AreEqual(09, month, "j2jd 2");
-            Assert.AreEqual(00, day, "j2jd 3");*/
-
             jd = CalendarConverter.gregorian_to_jd2(1990, 10, 10);
-            CalendarConverter.jd_to_gregorian2(jd, out year, out month, out day);
+            CalendarConverter.jd_to_gregorian2((uint) jd, out year, out month, out day);
             Assert.AreEqual(1990, year, "g2jd 1");
             Assert.AreEqual(10, month, "g2jd 2");
             Assert.AreEqual(10, day, "g2jd 3");

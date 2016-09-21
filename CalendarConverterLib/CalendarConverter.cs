@@ -103,13 +103,13 @@ namespace GKCommon
             day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
         }
 
-        public static double gregorian_to_jd2(int year, int month, int day)
+        public static uint gregorian_to_jd2(int year, int month, int day)
         {
             int a = (14 - month) / 12;
             int y = year + 4800 - a;
             int m = month + 12 * a - 3;
 
-            return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+            return (uint) (day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
@@ -147,7 +147,8 @@ namespace GKCommon
           return (uint) (c2 + day - 1 + 1721060);
         }
 
-        public static void jd_to_gregorian2(double jd, out int year, out int month, out int day)
+        // astronomical years, 0 = "-4713/11/24"
+        public static void jd_to_gregorian2(uint jd, out int year, out int month, out int day)
         {
             int a = ((int) (jd)) + 32044;
             int b = (4 * a + 3) / 146097;
@@ -255,13 +256,13 @@ namespace GKCommon
             return (Math.Floor((365.25 * (year + 4716))) + Math.Floor((30.6001 * (month + 1))) + day - 1524.5);
         }
 
-        public static double julian_to_jd2(int year, int month, int day)
+        public static uint julian_to_jd2(int year, int month, int day)
         {
             int a = (14 - month) / 12;
             int y = year + 4800 - a;
             int m = month + 12 * a - 3;
 
-            return day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083;
+            return (uint) (day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
@@ -273,7 +274,7 @@ namespace GKCommon
             return (uint) (j1 + j2 + day + 1721117);
         }
 
-        public static void jd_to_julian2(double jd, out int year, out int month, out int day)
+        public static void jd_to_julian2(uint jd, out int year, out int month, out int day)
         {
             int c = ((int) (jd)) + 32082;
             int d = (4 * c + 3) / 1461;

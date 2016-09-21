@@ -104,11 +104,15 @@ namespace GKCommon
                 int y = 0, m = 0, d = 0;
 
                 if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
-                    uint unmaskedVal = this.GetUnmaskedValue()/* + 0.5*/;
-                    CalendarConverter.jd_to_gregorian3(unmaskedVal, out y, out m, out d);
+                    uint unmaskedVal = this.GetUnmaskedValue();
+                    CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
                 }
 
+                int sign = Math.Sign(y);
+                y = Math.Abs(y);
                 string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
+                if (sign == -1) sy = "-" + sy;
+
                 string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
                 string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
 
@@ -123,8 +127,7 @@ namespace GKCommon
 
                 return result;
             } catch (Exception) {
-                System.Diagnostics.Debug.WriteLine("UDN.ToString()");
-                return "";
+                return "<error>";
             }
         }
 
@@ -344,19 +347,19 @@ namespace GKCommon
             switch (calendar)
             {
                 case UDNCalendarType.ctGregorian:
-                    result = CalendarConverter.gregorian_to_jd3(uYear, uMonth, uDay); // only the 3rd!
+                    result = CalendarConverter.gregorian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctJulian:
-                    result = CalendarConverter.julian_to_jd3(uYear, uMonth, uDay); // only the 3rd!
+                    result = CalendarConverter.julian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctHebrew:
-                    result = CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // IT IS SAFE now to the 3rd variant!
+                    result = CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
 
                 case UDNCalendarType.ctIslamic:
-                    result = CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay);
+                    result = CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
             }
 
