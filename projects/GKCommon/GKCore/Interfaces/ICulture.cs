@@ -37,5 +37,7 @@ namespace GKCore.Interfaces
 
         string[] GetSurnames(string surname, bool female);
         string[] GetSurnames(GEDCOMIndividualRecord iRec);
+
+        string GetGenitiveName(string name);
     }
 }

@@ -107,7 +107,7 @@ namespace GKUI.Dialogs
                     }
 
                     kinsGraph.SetTreeRoot(this.fRec1);
-                    txtResult.Text = kinsGraph.GetRelationship(this.fRec2);
+                    txtResult.Text = kinsGraph.GetRelationship(this.fRec2, true);
 
                     #if DEBUG_SOLVE
                     txtResult.Text += "\r\n" + kinsGraph.IndividualsPath;

@@ -76,5 +76,10 @@ namespace GKCore.Cultures
 
             return GetSurnames(fam, female);
         }
+
+        public string GetGenitiveName(string name)
+        {
+            return name;
+        }
     }
 }

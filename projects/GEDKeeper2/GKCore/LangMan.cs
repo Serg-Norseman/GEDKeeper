@@ -781,8 +781,9 @@ namespace GKCore
         /* 720 */ LSID_DescendantsCircle,
         /* 721 */ LSID_PortraitSelect,
         /* 722 */ LSID_RelationshipCalculator,
+        /* 723 */ LSID_RelationshipMask,
 
-        /* 000 */ LSID_Last = LSID_RelationshipCalculator
+        /* 000 */ LSID_Last = LSID_RelationshipMask
     }
 
     // TODO: remove and merge with LangManager
@@ -1516,6 +1517,7 @@ namespace GKCore
             /* 720 */ "Descendants Circle",
             /* 721 */ "Choice of portrait",
             /* 722 */ "Relationship Calculator",
+            /* 723 */ "is {0} of"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Kinships
@@ -94,7 +95,7 @@ namespace GKCore.Kinships
             this.fGraph.FindPathTree(root);
         }
 
-        public string GetRelationship(GEDCOMIndividualRecord targetRec)
+        public string GetRelationship(GEDCOMIndividualRecord targetRec, bool fullFormat = false)
         {
             if (targetRec == null) return "???";
             IVertex target = this.fGraph.FindVertex(targetRec.XRef);
@@ -102,8 +103,6 @@ namespace GKCore.Kinships
 
             try
             {
-                GEDCOMIndividualRecord targetIndividual = target.Value as GEDCOMIndividualRecord;
-
                 IEnumerable<IEdge> edgesPath = this.fGraph.GetPath(target);
 
                 string tmp = "";
@@ -111,11 +110,18 @@ namespace GKCore.Kinships
                 RelationKind finRel = RelationKind.rkNone;
                 int great = 0;
 
+                GEDCOMIndividualRecord src = null, tgt = null, prev_tgt = null;
+                string part, fullRel = "";
+
                 foreach (Edge edge in edgesPath)
                 {
                     GEDCOMIndividualRecord xFrom = (GEDCOMIndividualRecord)edge.Source.Value;
                     GEDCOMIndividualRecord xTo = (GEDCOMIndividualRecord)edge.Target.Value;
                     RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
+
+                    if (src == null) src = xFrom;
+                    prev_tgt = tgt;
+                    tgt = xTo;
 
                     if (tmp != "") tmp += ", ";
                     tmp += xFrom.XRef + ">" + GKData.RelationSigns[(int)curRel] + ">" + xTo.XRef;
@@ -126,20 +132,54 @@ namespace GKCore.Kinships
 
                         finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
                         great += g;
+
+                        // it's gap
+                        if (finRel == RelationKind.rkUndefined && fullFormat) {
+                            part = GetRelationPart(src, prev_tgt, prevRel, great);
+                            src = prev_tgt;
+                            great = 0;
+                            prevRel = RelationKind.rkNone;
+
+                            if (fullRel.Length > 0) fullRel += ", ";
+                            fullRel += part;
+
+                            finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
+                            great += g;
+                        }
+
                         prevRel = finRel;
                     }
                 }
 
-                IndividualsPath = targetIndividual.XRef + " [" + tmp + "]";
+                IndividualsPath = targetRec.XRef + " [" + tmp + "]";
 
-                string result = FixRelation(targetIndividual, finRel, great);
-                return result;
+                if (!fullFormat) {
+                    string relRes = FixRelation(targetRec, finRel, great);
+                    return relRes;
+                } else {
+                    part = GetRelationPart(src, tgt, finRel, great);
+
+                    if (fullRel.Length > 0) fullRel += ", ";
+                    fullRel += part;
+
+                    return fullRel;
+                }
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("KinshipsGraph.GetRelationship(): " + ex.Message);
                 return "";
             }
+        }
+
+        public static string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
+        {
+            string rel = FixRelation(ind2, xrel, great);
+            string name1 = ind1.GetNameString(true, false);
+            string name2 = ind2.GetNameString(true, false);
+
+            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
+            return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetGenitiveName(name1).Trim();
         }
 
         private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)
