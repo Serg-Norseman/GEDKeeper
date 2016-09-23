@@ -525,6 +525,8 @@
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
     <Compile Include="GKCore\Operations\PersonSexChange.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
+    <Compile Include="Sandbox\Declension.cs" />
+    <Compile Include="Sandbox\RusDeclension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">
