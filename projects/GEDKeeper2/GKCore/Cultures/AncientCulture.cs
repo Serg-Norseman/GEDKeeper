@@ -77,7 +77,7 @@ namespace GKCore.Cultures
             return GetSurnames(fam, female);
         }
 
-        public string GetGenitiveName(string name)
+        public string GetPossessiveName(string name)
         {
             return name;
         }

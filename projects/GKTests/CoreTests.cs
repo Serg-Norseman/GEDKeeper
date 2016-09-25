@@ -632,6 +632,8 @@ namespace GKTests
             Assert.AreEqual(GEDCOMSex.svMale, sx);
 
             Assert.AreEqual(GEDCOMSex.svNone, rusCulture.GetSex("", "", false));
+
+            Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
         }
 
         [Test]

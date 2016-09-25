@@ -20,9 +20,9 @@
 
 using System;
 using System.Windows.Forms;
+using Externals.Linguistics;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using Sandbox;
 
 namespace GKCore.Cultures
 {
@@ -184,11 +184,11 @@ namespace GKCore.Cultures
             return GetSurnames(fam, female);
         }
 
-        public string GetGenitiveName(string name)
+        public string GetPossessiveName(string name)
         {
-            // (genitive) "[the] sailor's / [of the] sailor" 
+            // (genitive) "[the] sailor's / [of the] sailor"
             // (e.g. Сын моряка — художник – the sailor's son is an artist)
-            return RusDeclension.GetDeclension(name, DeclensionCase.Genitive);
+            return RusDeclension.GetDeclension(name, DeclensionCase.Genitive).Trim();
         }
     }
 }

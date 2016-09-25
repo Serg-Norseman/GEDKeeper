@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
     <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
@@ -518,8 +519,6 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sandbox\Declension.cs" />
-    <Compile Include="Sandbox\RusDeclension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

@@ -179,7 +179,7 @@ namespace GKCore.Kinships
             string name2 = ind2.GetNameString(true, false);
 
             rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
-            return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetGenitiveName(name1).Trim();
+            return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetPossessiveName(name1);
         }
 
         private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)

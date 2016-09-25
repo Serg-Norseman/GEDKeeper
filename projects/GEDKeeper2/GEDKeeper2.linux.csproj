@@ -502,6 +502,7 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
@@ -525,8 +526,6 @@
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
     <Compile Include="GKCore\Operations\PersonSexChange.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
-    <Compile Include="Sandbox\Declension.cs" />
-    <Compile Include="Sandbox\RusDeclension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">
