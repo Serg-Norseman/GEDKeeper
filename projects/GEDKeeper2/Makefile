@@ -33,6 +33,7 @@ ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
+./Externals/RusDeclension.cs \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
 ./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
@@ -227,6 +228,7 @@ else
 
 # `$(sources)` for `$(linux)`
 sources := \
+./Externals/RusDeclension.cs \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
 ./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
