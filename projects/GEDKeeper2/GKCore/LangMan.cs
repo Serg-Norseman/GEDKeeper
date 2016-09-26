@@ -782,9 +782,10 @@ namespace GKCore
         /* 721 */ LSID_PortraitSelect,
         /* 722 */ LSID_RelationshipCalculator,
         /* 723 */ LSID_RelationshipMask,
+        /* 724 */ LSID_BirthdayToday,
 
-        /* 000 */ LSID_Last = LSID_RelationshipMask
-    }
+        /* 000 */ LSID_Last = LSID_BirthdayToday
+  }
 
     // TODO: remove and merge with LangManager
     public static class LangMan
@@ -1039,7 +1040,7 @@ namespace GKCore
             /* 242 */ "Detach link to multimedia?",
             /* 243 */ "Detach link to source?",
             /* 244 */ "Remove the association?",
-            /* 245 */ "Remove the user reference?",
+            /* 245 */ "Are you sure you want to remove reference \"{0}\"?",
             /* 246 */ "Loading of gedcom failed.",
             /* 247 */ "Check gedcom format failed.",
             /* 248 */ "Birth days",
@@ -1517,7 +1518,8 @@ namespace GKCore
             /* 720 */ "Descendants Circle",
             /* 721 */ "Choice of portrait",
             /* 722 */ "Relationship Calculator",
-            /* 723 */ "is {0} of"
+            /* 723 */ "is {0} of",
+            /* 724 */ "Today is birthday of {0}"
         };
 
         private static readonly LangManager fLangMan = new LangManager();
