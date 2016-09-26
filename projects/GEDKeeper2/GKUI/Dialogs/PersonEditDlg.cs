@@ -409,13 +409,19 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveUserRefQuery)) != DialogResult.No)
+                {
+                    string confirmation = (0 != userRef.StringValue.Length) ?
+                        userRef.StringValue : userRef.ReferenceType;
+                    confirmation = string.Format(
+                        LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
+                    if (GKUtils.ShowQuestion(confirmation) != DialogResult.No)
                     {
                         this.fPerson.UserReferences.Delete(userRef);
                         result = true;
                         this.fBase.Modified = true;
                     }
                     break;
+                }
             }
 
             if (result) this.UpdateURefsSheet();
