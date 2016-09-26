@@ -76,9 +76,21 @@ namespace GKUI.Dialogs
                 this.cmbSex.SelectedIndex = (sbyte)this.fPerson.Sex;
                 this.chkPatriarch.Checked = this.fPerson.Patriarch;
                 this.chkBookmark.Checked = this.fPerson.Bookmark;
-                this.cmbRestriction.SelectedIndex = (sbyte)this.fPerson.Restriction;
 
-                this.UpdateControls();
+                this.cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
+                this.cmbRestriction.SelectedIndex = (sbyte)this.fPerson.Restriction;
+                this.cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+
+                if (this.fPerson.PersonalNames.Count > 0)
+                {
+                    GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
+                    this.txtNamePrefix.Text = np.Pieces.Prefix;
+                    this.txtNickname.Text = np.Pieces.Nickname;
+                    this.txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
+                    this.txtNameSuffix.Text = np.Pieces.Suffix;
+                }
+
+                this.UpdateControls(true);
             }
             catch (Exception ex)
             {
@@ -86,52 +98,28 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void UpdatePortrait()
+        private void UpdateControls(bool totalUpdate = false)
         {
-            Image img = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
-
-            if (img != null)
-            {
-                this.imgPortrait.Image = img; // release impossible, the image disappears
-                this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
-
-                this.imgPortrait.Visible = true;
-            }
-            else
-            {
-                this.imgPortrait.Visible = false;
-            }
-        }
-
-        private void UpdateControls()
-        {
-            if (this.fPerson.PersonalNames.Count > 0)
-            {
-                GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-                this.txtNamePrefix.Text = np.Pieces.Prefix;
-                this.txtNickname.Text = np.Pieces.Nickname;
-                this.txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
-                this.txtNameSuffix.Text = np.Pieces.Suffix;
-            }
+            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
 
             if (this.fPerson.ChildToFamilyLinks.Count != 0)
             {
                 GEDCOMFamilyRecord family = this.fPerson.ChildToFamilyLinks[0].Family;
                 this.btnParentsAdd.Enabled = false;
-                this.btnParentsEdit.Enabled = true;
-                this.btnParentsDelete.Enabled = true;
+                this.btnParentsEdit.Enabled = true && !locked;
+                this.btnParentsDelete.Enabled = true && !locked;
 
                 GEDCOMIndividualRecord relPerson = family.GetHusband();
                 if (relPerson != null)
                 {
                     this.btnFatherAdd.Enabled = false;
-                    this.btnFatherDelete.Enabled = true;
-                    this.btnFatherSel.Enabled = true;
+                    this.btnFatherDelete.Enabled = true && !locked;
+                    this.btnFatherSel.Enabled = true && !locked;
                     this.txtFather.Text = relPerson.GetNameString(true, false);
                 }
                 else
                 {
-                    this.btnFatherAdd.Enabled = true;
+                    this.btnFatherAdd.Enabled = true && !locked;
                     this.btnFatherDelete.Enabled = false;
                     this.btnFatherSel.Enabled = false;
                     this.txtFather.Text = "";
@@ -141,13 +129,13 @@ namespace GKUI.Dialogs
                 if (relPerson != null)
                 {
                     this.btnMotherAdd.Enabled = false;
-                    this.btnMotherDelete.Enabled = true;
-                    this.btnMotherSel.Enabled = true;
+                    this.btnMotherDelete.Enabled = true && !locked;
+                    this.btnMotherSel.Enabled = true && !locked;
                     this.txtMother.Text = relPerson.GetNameString(true, false);
                 }
                 else
                 {
-                    this.btnMotherAdd.Enabled = true;
+                    this.btnMotherAdd.Enabled = true && !locked;
                     this.btnMotherDelete.Enabled = false;
                     this.btnMotherSel.Enabled = false;
                     this.txtMother.Text = "";
@@ -155,36 +143,37 @@ namespace GKUI.Dialogs
             }
             else
             {
-                this.btnParentsAdd.Enabled = true;
+                this.btnParentsAdd.Enabled = true && !locked;
                 this.btnParentsEdit.Enabled = false;
                 this.btnParentsDelete.Enabled = false;
-                this.btnFatherAdd.Enabled = true;
+
+                this.btnFatherAdd.Enabled = true && !locked;
                 this.btnFatherDelete.Enabled = false;
                 this.btnFatherSel.Enabled = false;
-                this.btnMotherAdd.Enabled = true;
+
+                this.btnMotherAdd.Enabled = true && !locked;
                 this.btnMotherDelete.Enabled = false;
                 this.btnMotherSel.Enabled = false;
+
                 this.txtFather.Text = "";
                 this.txtMother.Text = "";
             }
 
-            this.fEventsList.DataList = this.fPerson.Events.GetEnumerator();
-            this.fNotesList.DataList = this.fPerson.Notes.GetEnumerator();
-            this.fMediaList.DataList = this.fPerson.MultimediaLinks.GetEnumerator();
-            this.fSourcesList.DataList = this.fPerson.SourceCitations.GetEnumerator();
-            this.UpdateSpousesSheet();
-            this.UpdateAssociationsSheet();
-            this.UpdateGroupsSheet();
-            this.UpdateURefsSheet();
-            this.UpdateNamesSheet();
+            if (totalUpdate) {
+                this.fEventsList.DataList = this.fPerson.Events.GetEnumerator();
+                this.fNotesList.DataList = this.fPerson.Notes.GetEnumerator();
+                this.fMediaList.DataList = this.fPerson.MultimediaLinks.GetEnumerator();
+                this.fSourcesList.DataList = this.fPerson.SourceCitations.GetEnumerator();
+                this.UpdateSpousesSheet();
+                this.UpdateAssociationsSheet();
+                this.UpdateGroupsSheet();
+                this.UpdateURefsSheet();
+                this.UpdateNamesSheet();
+            }
 
-            this.UpdatePortrait();
+            this.UpdatePortrait(totalUpdate);
 
-            this.LockEditor(this.fPerson.Restriction == GEDCOMRestriction.rnLocked);
-        }
-
-        private void LockEditor(bool locked)
-        {
+            // controls lock
             this.txtName.Enabled = !locked;
             this.txtPatronymic.Enabled = !locked;
             this.txtSurname.Enabled = !locked;
@@ -198,18 +187,6 @@ namespace GKUI.Dialogs
             this.txtSurnamePrefix.Enabled = !locked;
             this.txtNameSuffix.Enabled = !locked;
 
-            this.btnParentsAdd.Enabled = !locked;
-            this.btnParentsEdit.Enabled = !locked;
-            this.btnParentsDelete.Enabled = !locked;
-
-            this.btnFatherAdd.Enabled = !locked;
-            this.btnFatherDelete.Enabled = !locked;
-            this.btnMotherAdd.Enabled = !locked;
-            this.btnMotherDelete.Enabled = !locked;
-
-            this.btnPortraitAdd.Enabled = !locked;
-            this.btnPortraitDelete.Enabled = !locked;
-
             this.fEventsList.ReadOnly = locked;
             this.fNotesList.ReadOnly = locked;
             this.fMediaList.ReadOnly = locked;
@@ -220,9 +197,22 @@ namespace GKUI.Dialogs
             this.fUserRefList.ReadOnly = locked;
         }
 
+        private void UpdatePortrait(bool totalUpdate)
+        {
+            if (totalUpdate) {
+                Image img = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
+                this.imgPortrait.Image = img;
+            }
+
+            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+
+            this.btnPortraitAdd.Enabled = !locked;
+            this.btnPortraitDelete.Enabled = this.imgPortrait.Image != null && !locked;
+        }
+
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.LockEditor(this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            this.UpdateControls();
         }
 
         private void AcceptChanges()
@@ -868,7 +858,7 @@ namespace GKUI.Dialogs
             }
 
             this.fMediaList.UpdateSheet();
-            this.UpdatePortrait();
+            this.UpdatePortrait(true);
         }
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
@@ -877,7 +867,7 @@ namespace GKUI.Dialogs
             if (mmLink == null) return;
 
             mmLink.IsPrimary = false;
-            this.UpdatePortrait();
+            this.UpdatePortrait(true);
         }
 
         private void edSurname_KeyDown(object sender, KeyEventArgs e)
@@ -953,6 +943,8 @@ namespace GKUI.Dialogs
             this.btnParentsAdd.Image = global::GKResources.iRecNew;
             this.btnParentsEdit.Image = global::GKResources.iRecEdit;
             this.btnParentsDelete.Image = global::GKResources.iRecDelete;
+
+            this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             this.SetLang();
         }
