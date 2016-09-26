@@ -939,7 +939,7 @@ namespace GKUI
                                 string nm = iRec.GetNameString(true, false);
                                 string days = GKUtils.GetDaysForBirth(iRec);
                                 // `days` always contains non-negative number.
-                                if (0 != days.Length)
+                                if (!string.IsNullOrEmpty(days))
                                 {
                                     uint daysBefore = uint.Parse(days);
                                     if (0 == daysBefore)

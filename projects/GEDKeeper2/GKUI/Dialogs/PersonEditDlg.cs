@@ -410,7 +410,8 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raDelete:
                 {
-                    string confirmation = (0 != userRef.StringValue.Length) ?
+                    string confirmation =
+                        !string.IsNullOrEmpty(userRef.StringValue) ?
                         userRef.StringValue : userRef.ReferenceType;
                     confirmation = string.Format(
                         LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
