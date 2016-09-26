@@ -71,6 +71,7 @@
     <Compile Include="CoreTests.cs" />
     <Compile Include="ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
+    <Compile Include="GKExtTests.cs" />
     <Compile Include="GXResources.Designer.cs">
       <DependentUpon>GXResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
