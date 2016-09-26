@@ -30,18 +30,17 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKNamesBookPlugin.cs \
-./NBResources.Designer.cs \
-./NamesBookWidget.Designer.cs \
-./NamesBookWidget.cs
+./NamesBookWidget.cs \
+./NamesBookWidget.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKNamesBookPlugin.cs \
-./NBResources.Designer.cs \
+./NamesBookWidget.cs \
 ./NamesBookWidget.Designer.cs \
-./NamesBookWidget.cs
+./NBResources.Designer.cs
 
 endif
 

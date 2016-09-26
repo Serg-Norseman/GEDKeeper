@@ -1039,7 +1039,7 @@ namespace GKCore
             /* 242 */ "Detach link to multimedia?",
             /* 243 */ "Detach link to source?",
             /* 244 */ "Remove the association?",
-            /* 245 */ "Remove the user reference?",
+            /* 245 */ "Are you sure you want to remove reference",
             /* 246 */ "Loading of gedcom failed.",
             /* 247 */ "Check gedcom format failed.",
             /* 248 */ "Birth days",

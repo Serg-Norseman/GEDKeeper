@@ -30,18 +30,17 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKImageViewerPlugin.cs \
-./IVPResource.Designer.cs \
-./ImageViewerWin.Designer.cs \
-./ImageViewerWin.cs
+./ImageViewerWin.cs \
+./ImageViewerWin.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKImageViewerPlugin.cs \
-./IVPResource.Designer.cs \
+./ImageViewerWin.cs \
 ./ImageViewerWin.Designer.cs \
-./ImageViewerWin.cs
+./IVPResource.Designer.cs
 
 endif
 

@@ -3,7 +3,7 @@
 windowscompilerdosany := /c/Program\ Files\ \(x86\)/MSBuild/14.0/bin/csc.exe
 windowscompilerdosx86-64 := $(windowscompilerdosany)
 windowscompilerdosx86 := $(windowscompilerdosany)
-windowsrcdosdotnet46 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0A/bin/NETFX\ 4.6\ Tools/ResGen.exe
+windowsrcdosdotnet46 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0A/bin/NETFX\ 4.6.1\ Tools/ResGen.exe
 windowsrcdosdotnet20 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v7.0A/bin/Resgen.exe
 
 msftexcelinterop := "C:\\WINDOWS\\assembly\\GAC_MSIL\\Microsoft.Office.Interop.Excel\\15.0.0.0__71e9bce111e9429c\\Microsoft.Office.Interop.Excel.dll"
@@ -12,7 +12,7 @@ msftwordinterop := "C:\\WINDOWS\\assembly\\GAC_MSIL\\Microsoft.Office.Interop.Wo
 #msftexcelinterop := "C:\\WINDOWS\\assembly\\GAC_MSIL\\Microsoft.Office.Interop.Excel\\14.0.0.0__71e9bce111e9429c\\Microsoft.Office.Interop.Excel.dll"
 #msftwordinterop := "C:\\WINDOWS\\assembly\\GAC_MSIL\\Microsoft.Office.Interop.Word\\14.0.0.0__71e9bce111e9429c\\Microsoft.Office.Interop.Word.dll"
 
-refsdosdotnet46 := C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5.2\\
+refsdosdotnet46 := C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.6.1\\
 refsdosdotnet20 := C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\
 refsdos := $(refsdos$(dotnet))
 coreresgenrefdotnet46 := \
