@@ -412,7 +412,7 @@ namespace GKUI.Dialogs
                 {
                     string confirmation = (0 != userRef.StringValue.Length) ?
                         userRef.StringValue : userRef.ReferenceType;
-                    confirmation = string.Format("{0} \"{1}\"?",
+                    confirmation = string.Format(
                         LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
                     if (GKUtils.ShowQuestion(confirmation) != DialogResult.No)
                     {
