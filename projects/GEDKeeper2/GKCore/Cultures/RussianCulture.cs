@@ -188,7 +188,7 @@ namespace GKCore.Cultures
         {
             // (genitive) "[the] sailor's / [of the] sailor"
             // (e.g. Сын моряка — художник – the sailor's son is an artist)
-            return RusDeclension.GetDeclension(name, DeclensionCase.Genitive).Trim();
+            return RusDeclension.GetDeclension(name, DeclensionCase.Genitive);
         }
     }
 }

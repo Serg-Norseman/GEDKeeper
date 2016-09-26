@@ -259,7 +259,7 @@ namespace Externals.Linguistics
                     string _token = _declension(_base, (int)declCase, Mid("ча" + z7, (gender == DeclensionGender.NotDefind ? (z6 == "оглы" || z6 == "кызы" ? 1 : 3) : (int)gender), 1), z5) + " ";
                     string _part = Replace(part, z5.ToString(), _token);
 
-                    return GetDeclension(_FIO, declCase, gender, _part, z5 + 1);
+                    return GetDeclension(_FIO, declCase, gender, _part, z5 + 1).Trim();
                 } else {
                     return part;
                 }
