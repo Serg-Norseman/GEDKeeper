@@ -501,10 +501,10 @@ namespace GKCore
 
         #region Date functions
 
-        public static int DaysBetween(DateTime now, DateTime then)
+        public static uint DaysBetween(DateTime now, DateTime then)
         {
             TimeSpan span = ((now < then) ? then - now : now - then);
-            return span.Days;
+            return (uint) (span.Days);
         }
 
         private static readonly ushort[][] MONTH_DAYS = new ushort[][]
@@ -917,7 +917,7 @@ namespace GKCore
                             bool ybc;
 
                             dt.GetDateParts(out bdY, out bdM, out bdD, out ybc);
-                            if (bdM > 0 && bdD > 0)
+                            if (bdM != 0 && bdD != 0)
                             {
                                 DateTime dtNow = DateTime.Now.Date;
                                 ushort curY = (ushort)dtNow.Year;

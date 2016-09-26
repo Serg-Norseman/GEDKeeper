@@ -938,9 +938,22 @@ namespace GKUI
                                 GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
                                 string nm = iRec.GetNameString(true, false);
                                 string days = GKUtils.GetDaysForBirth(iRec);
-
-                                if (days != "" && int.Parse(days) < 3) {
-                                    birthDays.Add(string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days));
+                                // `days` always contains non-negative number.
+                                if (0 != days.Length)
+                                {
+                                    uint daysBefore = uint.Parse(days);
+                                    if (0 == daysBefore)
+                                    {
+                                        birthDays.Add(string.Format(
+                                          LangMan.LS(LSID.LSID_BirthdayToday),
+                                          nm));
+                                    }
+                                    else if (3 > daysBefore)
+                                    {
+                                        birthDays.Add(string.Format(
+                                          LangMan.LS(LSID.LSID_DaysRemained),
+                                          nm, days));
+                                    }
                                 }
                             }
                         }
