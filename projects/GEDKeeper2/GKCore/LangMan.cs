@@ -785,7 +785,7 @@ namespace GKCore
         /* 724 */ LSID_BirthdayToday,
 
         /* 000 */ LSID_Last = LSID_BirthdayToday
-  }
+    }
 
     // TODO: remove and merge with LangManager
     public static class LangMan

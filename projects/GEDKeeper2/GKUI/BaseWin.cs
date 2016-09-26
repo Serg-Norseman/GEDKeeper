@@ -945,14 +945,14 @@ namespace GKUI
                                     if (0 == daysBefore)
                                     {
                                         birthDays.Add(string.Format(
-                                          LangMan.LS(LSID.LSID_BirthdayToday),
-                                          nm));
+                                            LangMan.LS(LSID.LSID_BirthdayToday),
+                                            nm));
                                     }
                                     else if (3 > daysBefore)
                                     {
                                         birthDays.Add(string.Format(
-                                          LangMan.LS(LSID.LSID_DaysRemained),
-                                          nm, days));
+                                            LangMan.LS(LSID.LSID_DaysRemained),
+                                            nm, days));
                                     }
                                 }
                             }

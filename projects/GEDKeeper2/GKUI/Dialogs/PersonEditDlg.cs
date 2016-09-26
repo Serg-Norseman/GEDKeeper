@@ -399,20 +399,20 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                {
-                    string confirmation =
-                        !string.IsNullOrEmpty(userRef.StringValue) ?
-                        userRef.StringValue : userRef.ReferenceType;
-                    confirmation = string.Format(
-                        LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                    if (GKUtils.ShowQuestion(confirmation) != DialogResult.No)
                     {
-                        this.fPerson.UserReferences.Delete(userRef);
-                        result = true;
-                        this.fBase.Modified = true;
+                        string confirmation =
+                            !string.IsNullOrEmpty(userRef.StringValue) ?
+                            userRef.StringValue : userRef.ReferenceType;
+                        confirmation = string.Format(
+                            LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
+                        if (GKUtils.ShowQuestion(confirmation) != DialogResult.No)
+                        {
+                            this.fPerson.UserReferences.Delete(userRef);
+                            result = true;
+                            this.fBase.Modified = true;
+                        }
+                        break;
                     }
-                    break;
-                }
             }
 
             if (result) this.UpdateURefsSheet();

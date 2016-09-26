@@ -424,7 +424,7 @@ namespace GKTests
 
             //
 
-            int days = GKUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
+            uint days = GKUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
             Assert.AreEqual(3, days);
 
             Assert.AreEqual(31, GKUtils.DaysInAMonth(1990, 5));
