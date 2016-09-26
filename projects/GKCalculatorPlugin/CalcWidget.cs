@@ -106,6 +106,17 @@ namespace GKCalculatorPlugin
             e.Effect = DragDropEffects.None;
         }
 
+        private void lbOutput_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.lbOutput.SelectedIndex < 0 || this.lbOutput.SelectedIndex >= this.lbOutput.Items.Count) return;
+
+            string line = (string)this.lbOutput.Items[this.lbOutput.SelectedIndex];
+            if (line.StartsWith("> ")) {
+                line = line.Substring(2);
+                this.edExpression.Text = line;
+            }
+        }
+
         #region ILocalization support
 
         public void SetLang()
