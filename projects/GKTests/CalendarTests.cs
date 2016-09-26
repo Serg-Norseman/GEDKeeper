@@ -55,9 +55,9 @@ namespace GKTests
 
             int major, cycle;
             CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
-            s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
+            s = "major " + major.ToString() + ", cycle " + cycle.ToString() + ", ";
             s = s + d2s(day, CalendarData.BahaiMonths[month - 1], year, CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)]);
-            Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Mashíyyat 14, ‘Idál", s); // ???
+            Assert.AreEqual("major 1, cycle 8, 14 Mashíyyat 14, ‘Idál", s); // ???
         }
 
         [Test]
