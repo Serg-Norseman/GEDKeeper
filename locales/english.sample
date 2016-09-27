@@ -68,19 +68,19 @@ unknown
 Male
 Female
 Undetermined
-The file is modified. Save?
+Do you want to save changes to the modified file?
 The specified parent has an existed family "{0}". Do you want to add the child to that family?
-Remove individual "{0}"?
-Remove family "{0}"?
-Remove note "{0}"?
-Remove source "{0}"?
-Remove multimedia "{0}"?
-Remove repository "{0}"?
-Remove group "{0}"?
-Remove research "{0}"?
-Remove task "{0}"?
-Remove communication "{0}"?
-Remove location "{0}"?
+Are you sure you want to remove individual "{0}"?
+Are you sure you want to remove family "{0}"?
+Are you sure you want to remove note "{0}"?
+Are you sure you want to remove source "{0}"?
+Are you sure you want to remove multimedia "{0}"?
+Are you sure you want to remove repository "{0}"?
+Are you sure you want to remove group "{0}"?
+Are you sure you want to remove research "{0}"?
+Are you sure you want to remove task "{0}"?
+Are you sure you want to remove communication "{0}"?
+Are you sure you want to remove location "{0}"?
 Address
 Events
 Last name
