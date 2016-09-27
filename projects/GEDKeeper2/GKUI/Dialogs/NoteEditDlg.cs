@@ -56,9 +56,21 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fNoteRecord.SetNotesArray(this.txtNote.Lines);
-                this.fBase.ChangeRecord(this.fNoteRecord);
-                base.DialogResult = DialogResult.OK;
+                int length = 0;
+                for (int it = 0; txtNote.Lines.Length > it; ++it)
+                {
+                    length += txtNote.Lines[it].Trim().Length;
+                }
+                if (0 != length)
+                {
+                    this.fNoteRecord.SetNotesArray(this.txtNote.Lines);
+                    this.fBase.ChangeRecord(this.fNoteRecord);
+                    base.DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    base.DialogResult = DialogResult.Cancel;
+                }
             }
             catch (Exception ex)
             {

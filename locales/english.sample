@@ -118,16 +118,16 @@ Husband
 Wife
 Status
 Childs
-Detach link to husband?
-Detach link to wife?
-Detach link to child?
+Are you sure you want to detach link to husband?
+Are you sure you want to detach link to wife?
+Are you sure you want to detach link to child?
 Birth date
 Death date
 Security restriction
 Title
 Members
 Edit group
-Detach link to member?
+Are you sure you want to detach link to member?
 view
 Stage
 Telephone number
@@ -144,7 +144,7 @@ Short title
 Author
 Published
 Common
-Detach link to repository?
+Are you sure you want to detach link to repository?
 Store type
 File
 View
@@ -185,9 +185,9 @@ Goal
 Theme
 Corresponder
 Group
-Detach link to task?
-Detach link to communication?
-Detach link to group?
+Are you sure you want to detach link to task?
+Are you sure you want to detach link to communication?
+Are you sure you want to detach link to group?
 Edit research
 Edit task
 Edit communication
@@ -239,10 +239,10 @@ marriage
 family
 Namesakes
 Remove the event?
-Detach link to note?
-Detach link to multimedia?
-Detach link to source?
-Remove the association?
+Are you sure you want to detach link to note?
+Are you sure you want to detach link to multimedia?
+Are you sure you want to detach link to source?
+Are you sure you want to remove the association?
 Are you sure you want to remove reference "{0}"?
 Loading of gedcom failed.
 Check gedcom format failed.
