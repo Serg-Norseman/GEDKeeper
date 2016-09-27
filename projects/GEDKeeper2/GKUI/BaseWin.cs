@@ -46,6 +46,8 @@ namespace GKUI
     /// </summary>
     public sealed partial class BaseWin : Form, IBaseWindow
     {
+        private static readonly int NoteNameMaxLength = 64;
+
         #region Private fields
         
         /*private readonly ExtList<GEDCOMRecord> fLockedRecords;*/
@@ -310,9 +312,14 @@ namespace GKUI
             return list;
         }
 
-        //----------------------------------------------------------------------
-        // Gets a hyper-view control for the specified record type.
-        //----------------------------------------------------------------------
+///-----------------------------------------------------------------------------
+/// <summary>
+/// Gets a hyper-view control for the specified record type. 
+/// </summary>
+/// <param name="recType">Record type for which a hyper view control is
+/// required.</param>
+/// <returns>Hyper view control.</returns>
+///-----------------------------------------------------------------------------
         public HyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
             HyperView view = null;
@@ -1470,7 +1477,27 @@ namespace GKUI
 
                     case GEDCOMRecordType.rtNote:
                     {
-                        msg = LangMan.LS(LSID.LSID_NoteDeleteQuery);
+                        StringList l = ((GEDCOMNoteRecord) (record)).Note;
+                        string value;
+                        if (0 != l.Count)
+                        {
+                            if (NoteNameMaxLength < l[0].Length)
+                            {
+                                value = l[0].Substring(0, NoteNameMaxLength) +
+                                        "...";
+                            }
+                            else
+                            {
+                                value = l[0];
+                            }
+                        }
+                        else
+                        {
+                            value = string.Format("#{0}",
+                                                  record.GetId().ToString());
+                        }
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_NoteDeleteQuery), value);
                         break;
                     }
 
