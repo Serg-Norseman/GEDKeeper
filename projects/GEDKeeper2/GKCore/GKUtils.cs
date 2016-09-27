@@ -116,6 +116,23 @@ namespace GKCore
             return result.ToString();
         }
 
+        public static string TruncateStrings(StringList value, int size)
+        {
+            string s;
+            if (0 != value.Count)
+            {
+                if (size < value[0].Length)
+                {
+                    s = value[0].Substring(0, size) + "...";
+                }
+                else
+                {
+                    s = value[0];
+                }
+            }
+            return s;
+        }
+
         public static void GetLocationLinks(GEDCOMTree tree, GEDCOMLocationRecord locRec, ref StringList linksList)
         {
             int num = tree.RecordsCount;
