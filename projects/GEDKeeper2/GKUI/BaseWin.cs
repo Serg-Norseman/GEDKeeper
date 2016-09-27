@@ -274,91 +274,115 @@ namespace GKUI
         public GKRecordsView GetRecordsViewByType(GEDCOMRecordType recType)
         {
             GKRecordsView list = null;
+
             switch (recType) {
                 case GEDCOMRecordType.rtIndividual:
                     list = this.ListPersons;
                     break;
+
                 case GEDCOMRecordType.rtFamily:
                     list = this.ListFamilies;
                     break;
+
                 case GEDCOMRecordType.rtNote:
                     list = this.ListNotes;
                     break;
+
                 case GEDCOMRecordType.rtMultimedia:
                     list = this.ListMultimedia;
                     break;
+
                 case GEDCOMRecordType.rtSource:
                     list = this.ListSources;
                     break;
+
                 case GEDCOMRecordType.rtRepository:
                     list = this.ListRepositories;
                     break;
+
                 case GEDCOMRecordType.rtGroup:
                     list = this.ListGroups;
                     break;
+
                 case GEDCOMRecordType.rtResearch:
                     list = this.ListResearches;
                     break;
+
                 case GEDCOMRecordType.rtTask:
                     list = this.ListTasks;
                     break;
+
                 case GEDCOMRecordType.rtCommunication:
                     list = this.ListCommunications;
                     break;
+
                 case GEDCOMRecordType.rtLocation:
                     list = this.ListLocations;
                     break;
             }
+
             return list;
         }
 
-///-----------------------------------------------------------------------------
-/// <summary>
-/// Gets a hyper-view control for the specified record type. 
-/// </summary>
-/// <param name="recType">Record type for which a hyper view control is
-/// required.</param>
-/// <returns>Hyper view control.</returns>
-///-----------------------------------------------------------------------------
+        ///-----------------------------------------------------------------------------
+        /// <summary>
+        /// Gets a hyper-view control for the specified record type.
+        /// </summary>
+        /// <param name="recType">Record type for which a hyper view control is
+        /// required.</param>
+        /// <returns>Hyper view control.</returns>
+        ///-----------------------------------------------------------------------------
         public HyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
             HyperView view = null;
+
             switch (recType)
             {
                 case GEDCOMRecordType.rtIndividual:
                     view = mPersonSummary;
                     break;
+
                 case GEDCOMRecordType.rtFamily:
                     view = mFamilySummary;
                     break;
+
                 case GEDCOMRecordType.rtNote:
                     view = mNoteSummary;
                     break;
+
                 case GEDCOMRecordType.rtMultimedia:
                     view = mMediaSummary;
                     break;
+
                 case GEDCOMRecordType.rtSource:
                     view = mSourceSummary;
                     break;
+
                 case GEDCOMRecordType.rtRepository:
                     view = mRepositorySummary;
                     break;
+
                 case GEDCOMRecordType.rtGroup:
                     view = mGroupSummary;
                     break;
+
                 case GEDCOMRecordType.rtResearch:
                     view = mResearchSummary;
                     break;
+
                 case GEDCOMRecordType.rtTask:
                     view = mTaskSummary;
                     break;
+
                 case GEDCOMRecordType.rtCommunication:
                     view = mCommunicationSummary;
                     break;
+
                 case GEDCOMRecordType.rtLocation:
                     view = mLocationSummary;
                     break;
             }
+
             return view;
         }
 
@@ -1438,40 +1462,50 @@ namespace GKUI
                     case GEDCOMRecordType.rtIndividual:
                         msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), ((GEDCOMIndividualRecord)record).GetNameString(true, false));
                         break;
+
                     case GEDCOMRecordType.rtFamily:
                         msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
                         break;
+
                     case GEDCOMRecordType.rtNote:
-                    {
-                        string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, NoteNameMaxLength);
-                        if (string.IsNullOrEmpty(value))
                         {
-                            value = string.Format("#{0}", record.GetId().ToString());
+                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, NoteNameMaxLength);
+                            if (string.IsNullOrEmpty(value))
+                            {
+                                value = string.Format("#{0}", record.GetId().ToString());
+                            }
+                            msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
+                            break;
                         }
-                        msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
-                        break;
-                    }
+
                     case GEDCOMRecordType.rtMultimedia:
                         msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
                         break;
+
                     case GEDCOMRecordType.rtSource:
                         msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
                         break;
+
                     case GEDCOMRecordType.rtRepository:
                         msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
                         break;
+
                     case GEDCOMRecordType.rtGroup:
                         msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
                         break;
+
                     case GEDCOMRecordType.rtResearch:
                         msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
                         break;
+
                     case GEDCOMRecordType.rtTask:
                         msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
                         break;
+
                     case GEDCOMRecordType.rtCommunication:
                         msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
                         break;
+
                     case GEDCOMRecordType.rtLocation:
                         msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
                         break;
