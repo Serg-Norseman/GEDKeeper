@@ -118,7 +118,8 @@ namespace GKCore
 
         public static string TruncateStrings(StringList value, int size)
         {
-            string s;
+            string s = string.Empty;
+
             if (0 != value.Count)
             {
                 if (size < value[0].Length)
@@ -130,6 +131,7 @@ namespace GKCore
                     s = value[0];
                 }
             }
+
             return s;
         }
 
