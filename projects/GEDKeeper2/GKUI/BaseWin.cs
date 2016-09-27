@@ -310,6 +310,73 @@ namespace GKUI
             return list;
         }
 
+        //----------------------------------------------------------------------
+        // Gets a hyper-view control for the specified record type.
+        //----------------------------------------------------------------------
+        public HyperView GetHyperViewByType(GEDCOMRecordType recType)
+        {
+            HyperView view = null;
+            switch (recType)
+            {
+                case GEDCOMRecordType.rtIndividual:
+                {
+                    view = mPersonSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtFamily:
+                {
+                    view = mFamilySummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtNote:
+                {
+                    view = mNoteSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtMultimedia:
+                {
+                    view = mMediaSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtSource:
+                {
+                    view = mSourceSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtRepository:
+                {
+                    view = mRepositorySummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtGroup:
+                {
+                    view = mGroupSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtResearch:
+                {
+                    view = mResearchSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtTask:
+                {
+                    view = mTaskSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtCommunication:
+                {
+                    view = mCommunicationSummary;
+                    break;
+                }
+                case GEDCOMRecordType.rtLocation:
+                {
+                    view = mLocationSummary;
+                    break;
+                }
+            }
+            return view;
+        }
+
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
             GKRecordsView rView = this.GetRecordsViewByType(recType);
@@ -752,6 +819,11 @@ namespace GKUI
             if (rView != null && notify == RecordAction.raDelete)
             {
                 rView.DeleteRecord(record);
+                HyperView hView = GetHyperViewByType(record.RecordType);
+                if ((null != hView) && (0 == rView.FilteredCount))
+                {
+                    hView.Lines.Clear();
+                }
             }
 
             MainWin.Instance.NotifyRecord(this, record, notify);
@@ -1376,55 +1448,99 @@ namespace GKUI
             {
                 //string xref = record.XRef;
                 string msg = "";
-
                 switch (record.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), ((GEDCOMIndividualRecord)record).GetNameString(true, false));
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_PersonDeleteQuery),
+                            ((GEDCOMIndividualRecord)record).GetNameString(
+                                true, false));
                         break;
+                    }
 
                     case GEDCOMRecordType.rtFamily:
-                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_FamilyDeleteQuery),
+                            GKUtils.GetFamilyString(
+                                (GEDCOMFamilyRecord)record));
                         break;
+                    }
 
                     case GEDCOMRecordType.rtNote:
+                    {
                         msg = LangMan.LS(LSID.LSID_NoteDeleteQuery);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtMultimedia:
-                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_MediaDeleteQuery),
+                            ((GEDCOMMultimediaRecord)record).GetFileTitle());
                         break;
+                    }
 
                     case GEDCOMRecordType.rtSource:
-                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_SourceDeleteQuery),
+                            ((GEDCOMSourceRecord)record).FiledByEntry);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtRepository:
-                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_RepositoryDeleteQuery),
+                            ((GEDCOMRepositoryRecord)record).RepositoryName);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtGroup:
-                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_GroupDeleteQuery),
+                            ((GEDCOMGroupRecord)record).GroupName);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtResearch:
-                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_ResearchDeleteQuery),
+                            ((GEDCOMResearchRecord)record).ResearchName);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_TaskDeleteQuery),
+                            GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
                         break;
+                    }
 
                     case GEDCOMRecordType.rtCommunication:
-                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_CommunicationDeleteQuery),
+                            ((GEDCOMCommunicationRecord)record).CommName);
                         break;
+                    }
 
                     case GEDCOMRecordType.rtLocation:
-                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
+                    {
+                        msg = string.Format(LangMan.LS(
+                            LSID.LSID_LocationDeleteQuery),
+                            ((GEDCOMLocationRecord)record).LocationName);
                         break;
+                    }
                 }
 
-                if (confirm && GKUtils.ShowQuestion(msg) != DialogResult.Yes) return false;
+                if (confirm && GKUtils.ShowQuestion(msg) != DialogResult.Yes)
+                    return false;
 
                 this.RecordNotify(record, RecordAction.raDelete);
 
