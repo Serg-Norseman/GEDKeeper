@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Operations;
 
 namespace GKCore
@@ -36,7 +37,7 @@ namespace GKCore
 
     public delegate void TransactionEventHandler(object sender, TransactionType type); // (object sender, EventArgs e);
 
-    public sealed class UndoManager : BaseObject
+    public sealed class UndoManager : BaseObject, IUndoManager
     {
         private const CustomOperation TRANS_DELIMITER = null;
 
@@ -70,8 +71,11 @@ namespace GKCore
         public UndoManager(GEDCOMTree tree)
         {
             this.fTree = tree;
+
             this.fStackUndo = new Stack<CustomOperation>();
             this.fStackRedo = new Stack<CustomOperation>();
+
+            this.fStackUndo.Push(TRANS_DELIMITER);
         }
 
         protected override void Dispose(bool disposing)

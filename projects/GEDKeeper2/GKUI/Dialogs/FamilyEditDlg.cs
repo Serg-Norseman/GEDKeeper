@@ -43,6 +43,7 @@ namespace GKUI.Dialogs
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         private readonly GKSourcesSheet fSourcesList;
+        private readonly UndoManager fLocalUndoman;
 
         private GEDCOMFamilyRecord fFamily;
 
@@ -87,10 +88,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public FamilyEditDlg(IBaseWindow aBase)
+        public FamilyEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
-            this.fBase = aBase;
+
+            this.fBase = baseWin;
+            this.fLocalUndoman = new UndoManager(this.fBase.Tree);
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
             {
@@ -271,6 +274,8 @@ namespace GKUI.Dialogs
 
             this.fFamily.SortChilds();
 
+            this.fLocalUndoman.Commit();
+
             this.fBase.ChangeRecord(this.fFamily);
         }
 
@@ -288,6 +293,18 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.fLocalUndoman.Rollback();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
+            }
+        }
+
         private void SetTitle()
         {
             this.Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), this.txtHusband.Text, this.txtWife.Text);
@@ -298,7 +315,8 @@ namespace GKUI.Dialogs
             GEDCOMIndividualRecord husband = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
             if (husband != null && this.fFamily.Husband.StringValue == "")
             {
-                this.fFamily.AddSpouse(husband);
+                //this.fFamily.AddSpouse(husband);
+                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
                 this.UpdateControls();
             }
         }
@@ -307,7 +325,8 @@ namespace GKUI.Dialogs
         {
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != DialogResult.No)
             {
-                this.fFamily.RemoveSpouse(this.fFamily.GetHusband());
+                //this.fFamily.RemoveSpouse(this.fFamily.GetHusband());
+                this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetHusband());
                 this.UpdateControls();
             }
         }
@@ -328,7 +347,8 @@ namespace GKUI.Dialogs
             GEDCOMIndividualRecord wife = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
             if (wife != null && this.fFamily.Wife.StringValue == "")
             {
-                this.fFamily.AddSpouse(wife);
+                //this.fFamily.AddSpouse(wife);
+                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
                 this.UpdateControls();
             }
         }
@@ -337,7 +357,8 @@ namespace GKUI.Dialogs
         {
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery)) != DialogResult.No)
             {
-                this.fFamily.RemoveSpouse(this.fFamily.GetWife());
+                //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
+                this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetWife());
                 this.UpdateControls();
             }
         }

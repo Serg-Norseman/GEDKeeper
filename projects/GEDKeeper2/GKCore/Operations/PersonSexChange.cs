@@ -23,7 +23,7 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public class PersonSexChange : CustomOperation
+    public sealed class PersonSexChange : CustomOperation
     {
         private string fPersonXRef;
         private GEDCOMSex fOldSex;

@@ -525,6 +525,10 @@
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
     <Compile Include="GKCore\Operations\PersonSexChange.cs" />
+    <Compile Include="GKCore\Operations\FamilyAttachSpouse.cs" />
+    <Compile Include="GKCore\Operations\PersonAttachParents.cs" />
+    <Compile Include="GKCore\Operations\FamilyDetachSpouse.cs" />
+    <Compile Include="GKCore\Operations\PersonDetachParents.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
   </ItemGroup>
   <ItemGroup>

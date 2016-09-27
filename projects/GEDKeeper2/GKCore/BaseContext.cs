@@ -1186,6 +1186,20 @@ namespace GKCore
             this.fHost.UpdateControls(false);
         }
 
+        public void DoCommit()
+        {
+            this.fUndoman.Commit();
+            //this.fViewer.RefreshLists(false);
+            //this.fHost.UpdateControls(false);
+        }
+
+        public void DoRollback()
+        {
+            this.fUndoman.Rollback();
+            //this.fViewer.RefreshLists(false);
+            //this.fHost.UpdateControls(false);
+        }
+
         public void ChangePersonSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
         {
             if (person == null)
@@ -1217,6 +1231,72 @@ namespace GKCore
             {
                 this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));
             }
+        }
+
+        public void DetachPersonParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        {
+            this.DetachPersonParents(this.fUndoman, person, family);
+        }
+
+        public void DetachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (person == null)
+                throw new ArgumentNullException("person");
+
+            if (family == null)
+                throw new ArgumentNullException("family");
+
+            ((UndoManager) undoman).DoOperation(new PersonDetachParents(this.fUndoman, person, family));
+        }
+
+        public void AttachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (person == null)
+                throw new ArgumentNullException("person");
+
+            if (family == null)
+                throw new ArgumentNullException("family");
+
+            ((UndoManager) undoman).DoOperation(new PersonAttachParents(this.fUndoman, person, family));
+        }
+
+        public void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
+        {
+            this.DetachFamilySpouse(this.fUndoman, family, spouse);
+        }
+
+        public void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (family == null)
+                throw new ArgumentNullException("family");
+
+            if (spouse == null)
+                throw new ArgumentNullException("spouse");
+
+            ((UndoManager) undoman).DoOperation(new FamilyDetachSpouse(this.fUndoman, family, spouse));
+        }
+
+        public void AttachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (family == null)
+                throw new ArgumentNullException("family");
+
+            if (spouse == null)
+                throw new ArgumentNullException("spouse");
+
+            ((UndoManager) undoman).DoOperation(new FamilyAttachSpouse(this.fUndoman, family, spouse));
         }
 
         #endregion

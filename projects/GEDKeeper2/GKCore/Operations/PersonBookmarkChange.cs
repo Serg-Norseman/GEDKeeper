@@ -23,7 +23,7 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public class PersonBookmarkChange : CustomOperation
+    public sealed class PersonBookmarkChange : CustomOperation
     {
         private string fPersonXRef;
         private bool fOldVal;

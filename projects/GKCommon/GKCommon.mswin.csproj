@@ -244,6 +244,7 @@
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />
+    <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
