@@ -560,6 +560,10 @@ namespace GKCore.Options
 
             ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
             ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
+            // `fMWinRect` stores physical coordinates. But what if user will
+            // change monitor(s) settings between two GK sessions? You must
+            // store logical coordinates instead. At least in win32 world you
+            // have to.
             ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
             ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
             ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);

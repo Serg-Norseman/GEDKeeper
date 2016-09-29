@@ -79,7 +79,11 @@ sources := \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/FamilyAttachSpouse.cs \
+./GKCore/Operations/FamilyDetachSpouse.cs \
+./GKCore/Operations/PersonAttachParents.cs \
 ./GKCore/Operations/PersonBookmarkChange.cs \
+./GKCore/Operations/PersonDetachParents.cs \
 ./GKCore/Operations/PersonPatriarchChange.cs \
 ./GKCore/Operations/PersonSexChange.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
@@ -274,7 +278,11 @@ sources := \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/FamilyAttachSpouse.cs \
+./GKCore/Operations/FamilyDetachSpouse.cs \
+./GKCore/Operations/PersonAttachParents.cs \
 ./GKCore/Operations/PersonBookmarkChange.cs \
+./GKCore/Operations/PersonDetachParents.cs \
 ./GKCore/Operations/PersonPatriarchChange.cs \
 ./GKCore/Operations/PersonSexChange.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
@@ -466,6 +474,7 @@ PersonsFilterDlg.resources \
 PortraitSelectDlg.resources \
 ProgressDlg.resources \
 RecordSelectDlg.resources \
+RelationshipCalculatorDlg.resources \
 RepositoryEditDlg.resources \
 ResearchEditDlg.resources \
 ScriptEditWin.resources \
@@ -520,6 +529,7 @@ PersonsFilterDlg.resources \
 PortraitSelectDlg.resources \
 ProgressDlg.resources \
 RecordSelectDlg.resources \
+RelationshipCalculatorDlg.resources \
 RepositoryEditDlg.resources \
 ResearchEditDlg.resources \
 ScriptEditWin.resources \
