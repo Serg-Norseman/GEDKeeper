@@ -1387,9 +1387,13 @@ namespace GKCore
             int y = form.Top;
             int w = form.Width;
             int h = form.Height;
+            // You must not expect user has a top window located on the primary
+            // monitor.
             Screen scr = Screen.PrimaryScreen;
             int mw = scr.WorkingArea.Width;
             int mh = scr.WorkingArea.Height;
+            // If a top window ain't on the primary monitor, `x` and `y` may be
+            // negative numbers.
             if (x < 0) x = 0;
             if (y < 0) y = 0;
             if (w > mw) w = mw;
