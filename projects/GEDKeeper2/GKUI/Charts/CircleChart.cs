@@ -451,11 +451,14 @@ namespace GKUI.Charts
         protected override void OnPaint(PaintEventArgs e)
         {
             this.InternalDraw(e.Graphics);
+
+            base.OnPaint(e);
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+
             this.Changed();
         }
 

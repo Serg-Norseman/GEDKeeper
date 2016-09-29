@@ -86,12 +86,15 @@ namespace GKTimeLinePlugin
             {
                 IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
-                ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
-                listMan.ExternalFilter = this.FilterHandler;
+                if (listMan != null)
+                {
+                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
+                    listMan.ExternalFilter = this.FilterHandler;
 
-                this.CollectData();
+                    this.CollectData();
 
-                this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                    this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                }
             }
 
             this.UpdateControls();

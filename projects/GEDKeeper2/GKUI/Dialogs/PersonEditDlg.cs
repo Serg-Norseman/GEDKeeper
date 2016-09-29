@@ -836,7 +836,7 @@ namespace GKUI.Dialogs
             if (family.IndexOfChild(this.fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
-                this.fBase.Context.AttachPersonParents(this.fLocalUndoman, this.fPerson, family);
+                this.fBase.Context.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
             }
             this.UpdateControls();
         }
@@ -858,7 +858,7 @@ namespace GKUI.Dialogs
                 if (family != null)
                 {
                     //family.RemoveChild(this.fPerson);
-                    this.fBase.Context.DetachPersonParents(this.fLocalUndoman, this.fPerson, family);
+                    this.fBase.Context.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
                     this.UpdateControls();
                 }
             }

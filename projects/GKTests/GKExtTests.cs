@@ -16,6 +16,9 @@ namespace GKTests
         public void RusDeclension_Tests()
         {
             Assert.AreEqual("Иванова Ивана Ивановича", RusDeclension.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
+
+            //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
+            //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));
         }
 
         #if !__MonoCS__

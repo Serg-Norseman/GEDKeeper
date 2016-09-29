@@ -80,11 +80,11 @@ namespace GKCore.Interfaces
         void DoCommit();
         void DoRollback();
 
-        void DetachPersonParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
+        void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
         void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
 
-        void AttachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
-        void DetachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
+        void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
+        void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
 
         void AttachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
         void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);

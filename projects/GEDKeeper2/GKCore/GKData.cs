@@ -30,7 +30,7 @@ namespace GKCore
         public string Copyright;
         public string Version;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -42,6 +42,8 @@ namespace GKCore
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
         public const string LUA_EXT = "lua";
+
+        public const int NoteNameMaxLength = 64;
 
         #if __MonoCS__
         public static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));

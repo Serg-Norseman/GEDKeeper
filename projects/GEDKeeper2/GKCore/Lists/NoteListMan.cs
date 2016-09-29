@@ -76,7 +76,9 @@ namespace GKCore.Lists
         {
             switch (colType) {
                 case 0:
-                    return GKUtils.MergeStrings(this.fRec.Note);
+                    string noteText = GKUtils.MergeStrings(this.fRec.Note);
+                    //string noteText = GKUtils.TruncateStrings(this.fRec.Note, GKData.NoteNameMaxLength);
+                    return noteText;
 
                 case 1:
                     return this.fRec.ChangeDate.ChangeDateTime;

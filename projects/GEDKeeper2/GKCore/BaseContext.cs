@@ -1200,7 +1200,7 @@ namespace GKCore
             //this.fHost.UpdateControls(false);
         }
 
-        public void ChangePersonSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
+        public void ChangeIndividualSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
         {
             if (person == null)
                 throw new ArgumentNullException("person");
@@ -1211,7 +1211,7 @@ namespace GKCore
             }
         }
 
-        public void ChangePersonPatriarch(GEDCOMIndividualRecord person, bool newValue)
+        public void ChangeIndividualPatriarch(GEDCOMIndividualRecord person, bool newValue)
         {
             if (person == null)
                 throw new ArgumentNullException("person");
@@ -1222,7 +1222,7 @@ namespace GKCore
             }
         }
 
-        public void ChangePersonBookmark(GEDCOMIndividualRecord person, bool newValue)
+        public void ChangeIndividualBookmark(GEDCOMIndividualRecord person, bool newValue)
         {
             if (person == null)
                 throw new ArgumentNullException("person");
@@ -1233,12 +1233,12 @@ namespace GKCore
             }
         }
 
-        public void DetachPersonParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        public void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
-            this.DetachPersonParents(this.fUndoman, person, family);
+            this.DetachIndividualParents(this.fUndoman, person, family);
         }
 
-        public void DetachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        public void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
             if (undoman == null)
                 throw new ArgumentNullException("undoman");
@@ -1252,7 +1252,7 @@ namespace GKCore
             ((UndoManager) undoman).DoOperation(new PersonDetachParents(this.fUndoman, person, family));
         }
 
-        public void AttachPersonParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
+        public void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
             if (undoman == null)
                 throw new ArgumentNullException("undoman");

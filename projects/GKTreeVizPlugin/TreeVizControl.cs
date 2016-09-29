@@ -281,6 +281,8 @@ namespace GKTreeVizPlugin
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            base.OnMouseMove(e);
+
             if (this.fMouseDrag) {
                 int dx = e.X - this.fLastX;
                 int dy = e.Y - this.fLastY;

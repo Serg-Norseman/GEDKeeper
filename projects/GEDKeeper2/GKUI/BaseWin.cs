@@ -46,8 +46,6 @@ namespace GKUI
     /// </summary>
     public sealed partial class BaseWin : Form, IBaseWindow
     {
-        private static readonly int NoteNameMaxLength = 64;
-
         #region Private fields
         
         /*private readonly ExtList<GEDCOMRecord> fLockedRecords;*/
@@ -1469,7 +1467,7 @@ namespace GKUI
 
                     case GEDCOMRecordType.rtNote:
                         {
-                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, NoteNameMaxLength);
+                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NoteNameMaxLength);
                             if (string.IsNullOrEmpty(value))
                             {
                                 value = string.Format("#{0}", record.GetId().ToString());

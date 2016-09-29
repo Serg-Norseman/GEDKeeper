@@ -174,10 +174,12 @@ namespace GKCommon.Controls
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
             if (e.Index < 0 || e.Index >= this.Items.Count) return;
-            
+
             SlideListItem itm = (SlideListItem)this.Items[e.Index];
 
             e.ItemHeight = (!itm.IsVisible) ? 0 : this.fItemHeight;
+
+            base.OnMeasureItem(e);
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
@@ -186,7 +188,7 @@ namespace GKCommon.Controls
 
             SlideListItem item = (SlideListItem)this.Items[e.Index];
             Rectangle rt = e.Bounds;
-            
+
             if (item.IsGroup) {
                 Brush brush = (item.IsExpanded) ? SystemBrushes.ActiveCaption : SystemBrushes.ActiveBorder;
                 Bitmap icon = (item.IsExpanded) ? fCollapseIcon : fExpandIcon;
@@ -209,16 +211,18 @@ namespace GKCommon.Controls
             }
 
             rt.Inflate(-5, -2);
-            
+
             Font fnt = this.Font;
             if (item.IsGroup) {
                 fnt = new Font(fnt, FontStyle.Bold);
             }
-            
+
             StringFormat fmt = new StringFormat();
             fmt.Alignment = StringAlignment.Near;
             fmt.LineAlignment = StringAlignment.Center;
             e.Graphics.DrawString(this.Items[e.Index].ToString(), fnt, Brushes.Black, rt, fmt);
+
+            base.OnDrawItem(e);
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)

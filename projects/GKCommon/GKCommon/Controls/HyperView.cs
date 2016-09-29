@@ -663,6 +663,8 @@ namespace GKCommon.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             this.DoPaint(e.Graphics);
+
+            base.OnPaint(e);
         }
 
         #endregion
