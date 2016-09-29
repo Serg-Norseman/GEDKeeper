@@ -176,6 +176,7 @@ sources := \
 ./GKCore/Interfaces/IProgressController.cs \
 ./GKCore/Interfaces/ISearchStrategy.cs \
 ./GKCore/Interfaces/ISubscriber.cs \
+./GKCore/Interfaces/IUndoManager.cs \
 ./GKCore/Interfaces/IWidget.cs \
 ./GKCore/Interfaces/IWorkWindow.cs \
 ./GKCore/Types/DateFormat.cs \
@@ -352,6 +353,7 @@ sources := \
 ./GKCore/Interfaces/IProgressController.cs \
 ./GKCore/Interfaces/ISearchStrategy.cs \
 ./GKCore/Interfaces/ISubscriber.cs \
+./GKCore/Interfaces/IUndoManager.cs \
 ./GKCore/Interfaces/IWidget.cs \
 ./GKCore/Interfaces/IWorkWindow.cs \
 ./GKCore/Types/DateFormat.cs \
