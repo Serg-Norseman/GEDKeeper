@@ -1027,6 +1027,13 @@ namespace GKUI
                                             LangMan.LS(LSID.LSID_BirthdayToday),
                                             nm));
                                     }
+                                    else if (1 == daysBefore)
+                                    {
+                                        birthDays.Add(string.Format(
+                                            LangMan.LS(
+                                                LSID.LSID_BirthdayTomorrow),
+                                            nm));
+                                    }
                                     else if (3 > daysBefore)
                                     {
                                         birthDays.Add(string.Format(
