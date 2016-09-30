@@ -31,7 +31,7 @@ namespace GKCore.Interfaces
     {
         IHost Host { get; }
         IBaseContext Context { get; }
-        
+
         bool Modified { get; set; }
         ShieldState ShieldState { get; set; }
         GEDCOMTree Tree { get; }
@@ -63,9 +63,9 @@ namespace GKCore.Interfaces
         void RefreshLists(bool titles);
         //void RefreshRecordsView(GEDCOMRecordType recType);
         void ShowRecordsTab(GEDCOMRecordType recType);
-        
+
         GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
-        
+
         bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec);
         bool ModifyNote(ref GEDCOMNoteRecord noteRec);
         bool ModifySource(ref GEDCOMSourceRecord sourceRec);

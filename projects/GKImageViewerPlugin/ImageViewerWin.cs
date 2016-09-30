@@ -159,9 +159,9 @@ namespace GKImageViewerPlugin
             }
             catch (Exception ex)
             {
-                this.fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
-
                 if (ctl != null) ctl.Dispose();
+
+                this.fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
             }
         }
 

@@ -121,6 +121,8 @@ namespace GKCommon.GEDCOM
 
         public override void Clear()
         {
+            base.Clear();
+
             this.fDateCalendar = GEDCOMCalendar.dcGregorian;
             this.fYear = -1;
             this.fYearBC = false;

@@ -124,9 +124,9 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
-
                 if (ctl != null) ctl.Dispose();
+
+                this.fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
             }
         }
 

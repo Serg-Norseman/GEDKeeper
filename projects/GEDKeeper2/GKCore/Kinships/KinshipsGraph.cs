@@ -174,12 +174,16 @@ namespace GKCore.Kinships
 
         public static string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
         {
-            string rel = FixRelation(ind2, xrel, great);
-            string name1 = ind1.GetNameString(true, false);
-            string name2 = ind2.GetNameString(true, false);
+            if (ind1 == null || ind2 == null) {
+                return "???";
+            } else {
+                string rel = FixRelation(ind2, xrel, great);
+                string name1 = ind1.GetNameString(true, false);
+                string name2 = ind2.GetNameString(true, false);
 
-            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
-            return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetPossessiveName(name1);
+                rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
+                return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetPossessiveName(name1);
+            }
         }
 
         private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)
