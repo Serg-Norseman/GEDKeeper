@@ -30,7 +30,11 @@ Example: `IFoo` The I prefix helps to differentiate between Interfaces and class
 Pascal Case, no underscores except in the event handlers. Try to avoid abbreviations. 
 Many programmers have a nasty habit of overly abbreviating everything. This should be discouraged.
 
-## Properties and Public Fields
+## Declare member variables of classes
+
+Do declare all member variables at the top of a class, with static variables at the very top.
+
+## Properties and Public Fields, Constants and readonly fields
 
 Pascal Case, no underscores. Try to avoid abbreviations.
 
@@ -45,9 +49,187 @@ Pascal Case with a leading `f`-char. Always indicate protected or private in the
 The leading character helps to prevent name collisions in constructors (a parameter and a private field 
 having the same name).
 
-## Constants and readonly fields
+The use of "m_" and "_" as prefixes for instance members is highly discouraged.
 
-ALL_CAPS.
+## Indentation
+
+Use spaces (and configure your IDE to show a size of 4 spaces for them) for writing your code. 
+If you are modifying someone else’s code, try to keep the coding style similar.
+
+Switch statements have the "case" at the additional indentation.
+
+```
+switch (x) {
+    case 'a':
+       ...
+    case 'b':
+       ...
+}
+```
+
+## Where to put spaces
+
+Don't use a space before an opening parenthesis when calling functions, or indexing, like this:
+
+bad:
+```
+method (a);
+b [10];
+```
+
+Don't put a space after the opening parenthesis and the closing one, ie:
+
+bad:
+```
+method ( a );
+array[ 10 ];
+```
+
+Don't put a space between the generic types, ie:
+
+bad:
+```
+var list = new List <int> ();
+```
+
+good:
+```
+var list = new List<int>();
+```
+
+
+## Where to put braces
+
+Inside a code block, put the opening brace on the same line as the statement:
+
+good:
+```
+if (a) {
+    code ();
+    code ();
+}
+```
+bad:
+```
+if (a)
+{
+    code ();
+    code ();
+}
+```
+Avoid using unnecessary open/close braces, vertical space is usually limited:
+
+good:
+```
+if (a)
+    code ();
+```
+bad:
+```
+if (a) {
+    code ();
+}
+```
+Unless there are either multiple hierarchical conditions being used or that the condition cannot fit into a single line.
+
+good:﻿
+```
+if (a) {
+    if (b)
+        code ();
+}
+```
+bad:
+```
+if (a)
+    if (b)
+        code ();
+```
+
+If statements with else clauses are formatted like this:
+
+good:
+```
+if (dingus) {
+        ...
+} else {
+        ...
+}
+```
+bad:
+```
+if (dingus)
+{
+        ...
+}
+else
+{
+        ...
+}
+```
+bad:
+```
+if (dingus) {
+        ...
+}
+else {
+        ...
+}
+```
+
+When defining namespaces and classes, a method (including ctor), properties and indexers, use a new line for the brace.
+For very small properties, you can compress things:
+
+passable:
+```
+int Property
+{
+    get { return value; }
+    set { x = value; }
+}
+```
+
+Empty methods: they should have the body of code using two lines (if it's temporary stub), or all in one line (if it will never be implemented).
+
+## Use whitespace for clarity
+
+Use white space in expressions liberally, except in the presence of parenthesis.
+
+good:
+
+```
+if (a + 5 > method(blah() + 4))
+```
+
+bad:
+
+```
+if (a + 5 > method (blah ()+4))
+```
+
+bad:
+
+```
+if (a+5>method(blah()+4))
+```
+
+## Use of var
+
+You can use "var" on the left-hand side of an assignment when the type name is repeated on the right hand side.
+Otherwise, the use of "var" is prohibited. Exception: primitive types (int, string, double, etc) use predefined names.
+
+## Use flags and directives
+
+Use flags and directives in code, so that you can come back later and work on it.
+
+You can use the #warning and #error directives,
+
+```
+#warning This is dirty code...
+#error Fix this before everything explodes!
+```
+
+Also you can mark it with "//TODO:" or "//FIXME:" comments that show up in the task pane in IDE or for fast search.
 
 ## Controls on Forms
 
