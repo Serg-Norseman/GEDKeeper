@@ -2780,6 +2780,11 @@ namespace GKCore
                                                         uint flags);
 
         [System.Runtime.InteropServices.UnmanagedFunctionPointer(
+            System.Runtime.InteropServices.CallingConvention.StdCall)]
+        public delegate IntPtr monitor_from_window_func_t(IntPtr hwnd,
+                                                          uint flags);
+
+        [System.Runtime.InteropServices.UnmanagedFunctionPointer(
             System.Runtime.InteropServices.CallingConvention.StdCall,
             CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
         public delegate int get_monitor_info_w_func_t(IntPtr monitor,
@@ -2867,6 +2872,41 @@ namespace GKCore
                     typeof(monitor_from_rect_func_t)));
                 // Does anyone still like .NET?
                 return monitorFromRect(ref rect, flags);
+            }
+            else
+            {
+                return IntPtr.Zero;
+            }
+        }
+
+        ///---------------------------------------------------------------------
+        /// <summary>
+        /// Retrieves a handle to the display monitor that has the largest area
+        /// of intersection with the bounding rectangle of a specified window.
+        /// </summary>
+        /// <param name="module">Handle to the loaded library module 'user32'.
+        /// When caller passes a valid handle the function uses it. Otherwise
+        /// the function returns here handle to the found/loaded library, and
+        /// caller must use `FreeLibrary` to release it.</param>
+        /// <param name="hwnd">A handle to the window of interest.</param>
+        /// <param name="flags">Determines the function's return value if the
+        /// rectangle does not intersect any display monitor.</param>
+        /// <returns>Handle to the display monitor or `nullptr` if the function
+        /// has failed.</returns>
+        ///---------------------------------------------------------------------
+        public static IntPtr MonitorFromWindow(ref IntPtr module, IntPtr hwnd,
+                                               uint flags)
+        {
+            IntPtr p = getFunction("user32.dll", "MonitorFromWindow",
+                                   ref module);
+            if (IntPtr.Zero != p)
+            {
+                monitor_from_window_func_t monitorFromWindow =
+                    (monitor_from_window_func_t) (
+                    System.Runtime.InteropServices.Marshal.
+                    GetDelegateForFunctionPointer(p,
+                    typeof(monitor_from_window_func_t)));
+                return monitorFromWindow(hwnd, flags);
             }
             else
             {

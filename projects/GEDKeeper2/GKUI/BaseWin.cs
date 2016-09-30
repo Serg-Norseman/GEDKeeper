@@ -1038,7 +1038,11 @@ namespace GKUI
                         }
 
                         if (birthDays.Count > 0) {
-                            MainWin.Instance.Options.ShowTips = DayTipsDlg.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays), MainWin.Instance.Options.ShowTips, birthDays);
+                            MainWin.Instance.Options.ShowTips =
+                                DayTipsDlg.ShowTipsEx(
+                                    LangMan.LS(LSID.LSID_BirthDays),
+                                    MainWin.Instance.Options.ShowTips,
+                                    birthDays, Handle);
                         }
                     }
                     finally
