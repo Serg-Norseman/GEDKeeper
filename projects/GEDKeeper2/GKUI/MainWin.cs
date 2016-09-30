@@ -203,11 +203,12 @@ namespace GKUI
                 base.Height = this.fOptions.MWinRect.Bottom - this.fOptions.MWinRect.Top + 1;
             } else {
                 //--------------------------------------------------------------
-                // This is an ERROR. You can't use explicit numbers like 600 or
-                // 800 to specify size of a window. You must take into account
-                // system DPI (starting from Windows 8.1: a monitor's DPI) to
-                // convert logical size to physical. At least you have to do
-                // this in native win32 world.
+                // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+                // FIXME: This is an ERROR. You can't use explicit numbers like
+                // 600 or 800 to specify size of a window. You must take into
+                // account system DPI (starting from Windows 8.1: a monitor's
+                // DPI) to convert logical size to physical. At least you have
+                // to do this in native win32 world.
                 //--------------------------------------------------------------
                 base.Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
                 base.Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
