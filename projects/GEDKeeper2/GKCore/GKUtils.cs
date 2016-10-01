@@ -24,10 +24,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore.Cultures;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -1378,42 +1377,6 @@ namespace GKCore
         #endregion
 
         #region UI functions
-
-        public static ExtRect GetFormRect(Form form)
-        {
-            if (form == null) return ExtRect.CreateEmpty();
-
-            int x = form.Left;
-            int y = form.Top;
-            int w = form.Width;
-            int h = form.Height;
-            // You must not expect user has a top window located on the primary
-            // monitor.
-            Screen scr = Screen.PrimaryScreen;
-            int mw = scr.WorkingArea.Width;
-            int mh = scr.WorkingArea.Height;
-            // If a top window ain't on the primary monitor, `x` and `y` may be
-            // negative numbers.
-            if (x < 0) x = 0;
-            if (y < 0) y = 0;
-            if (w > mw) w = mw;
-            if (h > mh) h = mh;
-            return ExtRect.Create(x, y, x + w - 1, y + h - 1);
-        }
-
-        public static void SetFormRect(Form form, ExtRect rt, FormWindowState winState)
-        {
-            // check for new and empty struct
-            if (form != null && !rt.IsEmpty())
-            {
-                form.Left = rt.Left;
-                form.Top = rt.Top;
-                form.Width = rt.GetWidth();
-                form.Height = rt.GetHeight();
-
-                form.WindowState = winState;
-            }
-        }
 
         public static void ShowMessage(string msg)
         {

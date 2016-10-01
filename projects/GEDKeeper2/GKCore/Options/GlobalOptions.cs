@@ -464,6 +464,8 @@ namespace GKCore.Options
             this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
             this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
+            UIManager.NormalizeFormRect(ref this.fMWinRect);
+
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
@@ -560,10 +562,18 @@ namespace GKCore.Options
 
             ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
             ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
-            // `fMWinRect` stores physical coordinates. But what if user will
-            // change monitor(s) settings between two GK sessions? You must
-            // store logical coordinates instead. At least in win32 world you
-            // have to.
+
+            //------------------------------------------------------------------
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // FIXME: If `Control::Left`, `Control::Top`, `Control::Width` and
+            // `Control::Height` return physical values (device depended), code
+            // here must convert members of `fMWinRect` to logical values
+            // (device independed) before storing it as the application
+            // settings. Had GK been a native Windows application, it had to do
+            // that. But since it's a .NET application I don't know is it a
+            // true. See also implementation of `GKCore::GKUtils::GetFormRect`
+            // member.
+            //------------------------------------------------------------------
             ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
             ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
             ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);

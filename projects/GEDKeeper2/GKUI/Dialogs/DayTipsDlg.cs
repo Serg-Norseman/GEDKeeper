@@ -74,7 +74,18 @@ namespace GKUI.Dialogs
             this.GetNextTip();
         }
 
-        public static bool ShowTipsEx(string caption, bool showTipsChecked, StringList tips)
+        /// <summary>
+        /// Shows MOTD window.
+        /// </summary>
+        /// <param name="caption">Window title.</param>
+        /// <param name="showTipsChecked">Initial state of the "Show on the
+        /// application startup" option.</param>
+        /// <param name="tips">List of messahes to show.</param>
+        /// <param name="parent">handle to the parent window.</param>
+        /// <returns>true if user wants to view MOTD window on the next
+        /// application startup and false otherwise.</returns>
+        public static bool ShowTipsEx(string caption, bool showTipsChecked,
+                                      StringList tips, IntPtr parent)
         {
             bool result;
             using (DayTipsDlg dlg = new DayTipsDlg())
@@ -84,7 +95,9 @@ namespace GKUI.Dialogs
                 dlg.lblTitle.Text = caption;
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
-                dlg.StartPosition = FormStartPosition.CenterScreen;
+
+                UIManager.CenterFormByParent(dlg, parent);
+
                 dlg.ShowDialog();
 
                 result = dlg.chkShow.Checked;
