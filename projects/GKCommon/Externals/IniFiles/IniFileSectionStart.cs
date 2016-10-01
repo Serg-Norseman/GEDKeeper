@@ -60,12 +60,14 @@ namespace Externals.IniFiles
                 inlineComment = value; Format();
             }
         }
+
         /// <summary>Determines whether specified string is a representation of particular IniFileElement object.</summary>
-        /// <param name="testString">Trimmed test string.</param>
-        public static bool IsLineValid(string testString)
+        /// <param name="testLine">Trimmed test string.</param>
+        public static bool IsLineValid(string testLine)
         {
-            return testString.StartsWith(IniFileSettings.SectionOpenBracket) && testString.EndsWith(IniFileSettings.SectionCloseBracket);
+            return testLine.StartsWith(IniFileSettings.SectionOpenBracket) && testLine.EndsWith(IniFileSettings.SectionCloseBracket);
         }
+
         /// <summary>Gets a string representation of this IniFileSectionStart object.</summary>
         public override string ToString()
         {

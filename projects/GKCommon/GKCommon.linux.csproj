@@ -41,12 +41,12 @@
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>

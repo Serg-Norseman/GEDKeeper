@@ -9,6 +9,7 @@
  * However, they use classes contained in the "ConfigFileElement.cs" source file.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -129,6 +130,9 @@ namespace Externals.IniFiles
         /// <summary>Writes a INI file to a stream, using options in IniFileSettings class</summary>
         public void Save(IniFileWriter writer)
         {
+            if (writer == null)
+                throw new ArgumentNullException("writer");
+
             writer.WriteIniFile(this);
         }
 

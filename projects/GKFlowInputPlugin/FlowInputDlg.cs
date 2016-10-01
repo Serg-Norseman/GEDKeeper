@@ -183,7 +183,7 @@ namespace GKFlowInputPlugin
             }
         }
 
-        public DataGridViewColumn AddTextColumn(string colName, string headerText)
+        public static DataGridViewColumn AddTextColumn(string colName, string headerText)
         {
             DataGridViewColumn col = new DataGridViewTextBoxColumn();
             col.HeaderText = headerText;
@@ -191,7 +191,7 @@ namespace GKFlowInputPlugin
             return col;
         }
 
-        public DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items)
+        public static DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items)
         {
             DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
             col.HeaderText = headerText;

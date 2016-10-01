@@ -47,7 +47,7 @@
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -98,9 +98,7 @@
     <Compile Include="GKCommon\Controls\ImageBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCommon\Controls\LogChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKCommon\Controls\LogChart.cs" />
     <Compile Include="GKCommon\Controls\ReflectionHelper.cs" />
     <Compile Include="GKCommon\Controls\SlideList.cs">
       <SubType>Component</SubType>

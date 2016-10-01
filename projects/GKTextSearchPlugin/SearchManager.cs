@@ -174,6 +174,9 @@ namespace GKTextSearchPlugin
 
         public void UpdateRecord(IBaseWindow aBase, GEDCOMRecord record)
         {
+            if (aBase == null)
+                throw new ArgumentNullException("aBase");
+
             if (record == null || !IsIndexedRecord(record)) return;
 
             try
@@ -199,6 +202,9 @@ namespace GKTextSearchPlugin
 
         public void DeleteRecord(IBaseWindow aBase, string xref)
         {
+            if (aBase == null)
+                throw new ArgumentNullException("aBase");
+
             try
             {
                 lock (xdbLock)
@@ -228,6 +234,9 @@ namespace GKTextSearchPlugin
 
         public List<SearchEntry> Search(IBaseWindow aBase, string searchText)
         {
+            if (aBase == null)
+                throw new ArgumentNullException("aBase");
+
             const uint flags = (uint)(QueryParser.feature_flag.FLAG_PARTIAL | QueryParser.feature_flag.FLAG_WILDCARD |
                                       QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |
                                       QueryParser.feature_flag.FLAG_LOVEHATE);
