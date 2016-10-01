@@ -64,10 +64,10 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Determines whether specified string is a representation of particular IniFileElement object.</summary>
-        /// <param name="testString">Trimmed test string.</param>
-        public static bool IsLineValid(string testString)
+        /// <param name="testLine">Trimmed test string.</param>
+        public static bool IsLineValid(string testLine)
         {
-            return IniFileSettings.StartsWith(testString.TrimStart(), IniFileSettings.CommentChars) != null;
+            return IniFileSettings.StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
         }
 
         /// <summary>Gets a string representation of this IniFileCommentary object.</summary>

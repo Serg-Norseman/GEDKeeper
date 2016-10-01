@@ -207,10 +207,10 @@ namespace Externals.IniFiles
             return ret;
         }
         /// <summary>Determines whether specified string is a representation of particular IniFileElement object.</summary>
-        /// <param name="testString">Trimmed test string.</param>
-        public static bool IsLineValid(string testString)
+        /// <param name="testLine">Trimmed test string.</param>
+        public static bool IsLineValid(string testLine)
         {
-            int index = testString.IndexOf(IniFileSettings.EqualsString);
+            int index = testLine.IndexOf(IniFileSettings.EqualsString);
             return index > 0;
         }
 

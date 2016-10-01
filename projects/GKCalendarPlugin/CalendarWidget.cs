@@ -66,8 +66,6 @@ namespace GKCalendarPlugin
 
         private void qtc_DateSelected(object sender, DateRangeEventArgs e)
         {
-            DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-
             this.lvDates.BeginUpdate();
             try
             {

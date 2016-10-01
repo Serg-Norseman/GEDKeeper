@@ -45,7 +45,7 @@ namespace GKNavigatorPlugin
         /* 001 */ LSID_Navigator,
     }
     
-    public class Plugin : BaseObject, IPlugin, IWidget
+    public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKNavigatorPlugin";
         private IHost fHost;

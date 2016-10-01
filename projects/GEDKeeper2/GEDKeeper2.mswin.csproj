@@ -65,7 +65,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
@@ -359,7 +359,9 @@
     <Compile Include="GKUI\Dialogs\RecordSelectDlg.Designer.cs">
       <DependentUpon>RecordSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.Designer.cs">
       <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </Compile>

@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -49,7 +50,7 @@ namespace GKTextSearchPlugin
         LSID_Search
     }
 
-    public class Plugin : IPlugin, ISubscriber
+    public sealed class Plugin : BaseObject, IPlugin, ISubscriber
     {
         private string fDisplayName = "GKTextSearchPlugin";
         private IHost fHost;
@@ -62,6 +63,15 @@ namespace GKTextSearchPlugin
         public SearchManager SearchMan { get { return this.fSearchMan; } }
 
         internal TextSearchWin tsWin;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (tsWin != null) tsWin.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         public void Execute()
         {
