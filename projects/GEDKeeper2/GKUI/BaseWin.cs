@@ -1027,6 +1027,13 @@ namespace GKUI
                                             LangMan.LS(LSID.LSID_BirthdayToday),
                                             nm));
                                     }
+                                    else if (1 == daysBefore)
+                                    {
+                                        birthDays.Add(string.Format(
+                                            LangMan.LS(
+                                                LSID.LSID_BirthdayTomorrow),
+                                            nm));
+                                    }
                                     else if (3 > daysBefore)
                                     {
                                         birthDays.Add(string.Format(
@@ -1038,7 +1045,11 @@ namespace GKUI
                         }
 
                         if (birthDays.Count > 0) {
-                            MainWin.Instance.Options.ShowTips = DayTipsDlg.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays), MainWin.Instance.Options.ShowTips, birthDays);
+                            MainWin.Instance.Options.ShowTips =
+                                DayTipsDlg.ShowTipsEx(
+                                    LangMan.LS(LSID.LSID_BirthDays),
+                                    MainWin.Instance.Options.ShowTips,
+                                    birthDays, Handle);
                         }
                     }
                     finally

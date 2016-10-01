@@ -74,7 +74,18 @@ namespace GKUI.Dialogs
             this.GetNextTip();
         }
 
-        public static bool ShowTipsEx(string caption, bool showTipsChecked, StringList tips)
+        /// <summary>
+        /// Shows MOTD window.
+        /// </summary>
+        /// <param name="caption">Window title.</param>
+        /// <param name="showTipsChecked">Initial state of the "Show on the
+        /// application startup" option.</param>
+        /// <param name="tips">List of messahes to show.</param>
+        /// <param name="parent">handle to the parent window.</param>
+        /// <returns>true if user wants to view MOTD window on the next
+        /// application startup and false otherwise.</returns>
+        public static bool ShowTipsEx(string caption, bool showTipsChecked,
+                                      StringList tips, IntPtr parent)
         {
             bool result;
             using (DayTipsDlg dlg = new DayTipsDlg())
@@ -84,7 +95,35 @@ namespace GKUI.Dialogs
                 dlg.lblTitle.Text = caption;
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
-                dlg.StartPosition = FormStartPosition.CenterScreen;
+                dlg.StartPosition = FormStartPosition.Manual;
+                // Center the new window on a monitor, where the parent window
+                // is located.
+                IntPtr user32 = IntPtr.Zero;
+                IntPtr monitor = NativeWindowsWorld.MonitorFromWindow(
+                    ref user32, parent,
+                    NativeWindowsWorld.MONITOR_DEFAULTTONEAREST);
+                if (IntPtr.Zero != monitor)
+                {
+                    NativeWindowsWorld.MONITORINFOEX mi =
+                        new NativeWindowsWorld.MONITORINFOEX();
+                    mi.Init();
+                    if (0 != NativeWindowsWorld.GetMonitorInfoW(ref user32,
+                        monitor, ref mi))
+                    {
+                        // Yes, here I calculate width and height of a window
+                        // using Windows API approach:
+                        // dim = coord2 - coord1
+                        // This approach differs from GK's one.
+                        dlg.Left = mi.work.left +
+                            ((mi.work.right - mi.work.left - dlg.Width) >> 1);
+                        dlg.Top = mi.work.top +
+                            ((mi.work.bottom - mi.work.top - dlg.Height) >> 1);
+                    }
+                }
+                if (IntPtr.Zero != user32)
+                {
+                    NativeWindowsWorld.FreeLibrary(user32);
+                }
                 dlg.ShowDialog();
 
                 result = dlg.chkShow.Checked;

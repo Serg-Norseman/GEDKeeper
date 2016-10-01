@@ -446,7 +446,6 @@ namespace GKCore.Options
                     MRUFile.DeleteKeys(ini, sect);
                 }
             }
-
             cnt = ini.ReadInteger("Relations", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
@@ -463,6 +462,48 @@ namespace GKCore.Options
             this.fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
             this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
             this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
+            //------------------------------------------------------------------
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // Restrict position and size of the main window.
+            // FIXME: DPI-aware code still required here. See also
+            // implementation of `GKCore::Options::GlobalOptions::SaveToFile`
+            // and `GKCore::GKUtils::GetFormRect` members.
+            //------------------------------------------------------------------
+            IntPtr user32 = IntPtr.Zero;
+            NativeWindowsWorld.RECT rect;
+            rect.left = fMWinRect.Left;
+            rect.top = fMWinRect.Top;
+            rect.right = fMWinRect.Right;
+            rect.bottom = fMWinRect.Bottom;
+            IntPtr monitor = NativeWindowsWorld.MonitorFromRect(ref user32,
+                ref rect, NativeWindowsWorld.MONITOR_DEFAULTTONEAREST);
+            if (IntPtr.Zero != monitor)
+            {
+                NativeWindowsWorld.MONITORINFOEX mi =
+                    new NativeWindowsWorld.MONITORINFOEX();
+                mi.Init();
+                if (0 != NativeWindowsWorld.GetMonitorInfoW(ref user32, monitor,
+                                                            ref mi))
+                {
+                    int width = fMWinRect.GetWidth();
+                    int height = fMWinRect.GetHeight();
+                    // Besides disallowing to the main window to have its right
+                    // and bottom borders overhanged entire virtual workspace,
+                    // combined from all available monitors, this code also
+                    // does not allow to have this window "between" two
+                    // monitors. This may be UNWANTED BEHAVIOR.
+                    fMWinRect.Left = Math.Max(mi.work.left, Math.Min(
+                        mi.work.right - width, fMWinRect.Left));
+                    fMWinRect.Top = Math.Max(mi.work.top, Math.Min(
+                        mi.work.bottom - height, fMWinRect.Top));
+                    fMWinRect.Right = fMWinRect.Left + width - 1;
+                    fMWinRect.Bottom = fMWinRect.Top + height - 1;
+                }
+            }
+            if (IntPtr.Zero != user32)
+            {
+                NativeWindowsWorld.FreeLibrary(user32);
+            }
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)
@@ -560,10 +601,17 @@ namespace GKCore.Options
 
             ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
             ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
-            // `fMWinRect` stores physical coordinates. But what if user will
-            // change monitor(s) settings between two GK sessions? You must
-            // store logical coordinates instead. At least in win32 world you
-            // have to.
+            //------------------------------------------------------------------
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // FIXME: If `Control::Left`, `Control::Top`, `Control::Width` and
+            // `Control::Height` return physical values (device depended), code
+            // here must convert members of `fMWinRect` to logical values
+            // (device independed) before storing it as the application
+            // settings. Had GK been a native Windows application, it had to do
+            // that. But since it's a .NET application I don't know is it a
+            // true. See also implementation of `GKCore::GKUtils::GetFormRect`
+            // member.
+            //------------------------------------------------------------------
             ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
             ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
             ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);
