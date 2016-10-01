@@ -30,7 +30,6 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -1049,7 +1048,7 @@ namespace GKUI
                                 DayTipsDlg.ShowTipsEx(
                                     LangMan.LS(LSID.LSID_BirthDays),
                                     MainWin.Instance.Options.ShowTips,
-                                    birthDays, Handle);
+                                    birthDays, this.Handle);
                         }
                     }
                     finally

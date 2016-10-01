@@ -237,7 +237,7 @@ namespace GKUI
             try {
                 this.UnloadPlugins();
 
-                this.fOptions.MWinRect = GKUtils.GetFormRect(this);
+                this.fOptions.MWinRect = UIManager.GetFormRect(this);
                 this.fOptions.MWinState = base.WindowState;
 
                 this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
@@ -526,7 +526,7 @@ namespace GKUI
             if (idx >= 0) {
                 MRUFile mf = this.fOptions.MRUFiles[idx];
 
-                mf.WinRect = GKUtils.GetFormRect(frm);
+                mf.WinRect = UIManager.GetFormRect(frm);
                 mf.WinState = frm.WindowState;
             }
         }
@@ -536,7 +536,7 @@ namespace GKUI
             int idx = this.fOptions.MRUFiles_IndexOf(fileName);
             if (idx >= 0) {
                 MRUFile mf = this.fOptions.MRUFiles[idx];
-                GKUtils.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
+                UIManager.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
             }
         }
 

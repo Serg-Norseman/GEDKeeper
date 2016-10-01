@@ -95,35 +95,9 @@ namespace GKUI.Dialogs
                 dlg.lblTitle.Text = caption;
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
-                dlg.StartPosition = FormStartPosition.Manual;
-                // Center the new window on a monitor, where the parent window
-                // is located.
-                IntPtr user32 = IntPtr.Zero;
-                IntPtr monitor = NativeWindowsWorld.MonitorFromWindow(
-                    ref user32, parent,
-                    NativeWindowsWorld.MONITOR_DEFAULTTONEAREST);
-                if (IntPtr.Zero != monitor)
-                {
-                    NativeWindowsWorld.MONITORINFOEX mi =
-                        new NativeWindowsWorld.MONITORINFOEX();
-                    mi.Init();
-                    if (0 != NativeWindowsWorld.GetMonitorInfoW(ref user32,
-                        monitor, ref mi))
-                    {
-                        // Yes, here I calculate width and height of a window
-                        // using Windows API approach:
-                        // dim = coord2 - coord1
-                        // This approach differs from GK's one.
-                        dlg.Left = mi.work.left +
-                            ((mi.work.right - mi.work.left - dlg.Width) >> 1);
-                        dlg.Top = mi.work.top +
-                            ((mi.work.bottom - mi.work.top - dlg.Height) >> 1);
-                    }
-                }
-                if (IntPtr.Zero != user32)
-                {
-                    NativeWindowsWorld.FreeLibrary(user32);
-                }
+
+                UIManager.CenterFormByParent(dlg, parent);
+
                 dlg.ShowDialog();
 
                 result = dlg.chkShow.Checked;
