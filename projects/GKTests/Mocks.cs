@@ -92,6 +92,7 @@ namespace GKTests.Mocks
         public void FileLoad(string fileName) { }
         public void FileSave(string fileName) { }
         public void CriticalSave() { }
+        public void CollectTips(StringList tipsList) { }
 
         public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex) { return null; }
         public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse) { return null; }

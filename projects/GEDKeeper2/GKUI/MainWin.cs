@@ -63,6 +63,9 @@ namespace GKUI
         private string[] fCommandArgs;
         private string fLogFilename;
 
+        private int fLoadingCount;
+        private readonly StringList fBirthDays;
+
         private static MainWin fInstance = null;
         private static GKResourceManager fResourceManager;
 
@@ -125,6 +128,8 @@ namespace GKUI
             this.fAutosaveTimer.Interval = 10 * 60 * 1000;
             this.fAutosaveTimer.Tick += this.AutosaveTimer_Tick;
 
+            this.fBirthDays = new StringList();
+
             //LangMan.SaveDefaultLanguage();
         }
 
@@ -184,6 +189,22 @@ namespace GKUI
             if (fCommandArgs != null && fCommandArgs.Length > 0) {
                 this.CreateBase(fCommandArgs[0]);
             }
+        }
+
+        private void ReloadLastBases()
+        {
+            this.BeginLoading();
+
+            // reload last open databases
+            int num = this.fOptions.GetLastBasesCount();
+            for (int i = 0; i < num; i++) {
+                string lb = this.fOptions.GetLastBase(i);
+                if (File.Exists(lb)) {
+                    this.CreateBase(lb);
+                }
+            }
+
+            this.EndLoading();
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -258,13 +279,7 @@ namespace GKUI
 
         private void Form_Show(object sender, EventArgs e)
         {
-            int num = this.fOptions.GetLastBasesCount();
-            for (int i = 0; i < num; i++) {
-                string lb = this.fOptions.GetLastBase(i);
-                if (File.Exists(lb)) {
-                    this.CreateBase(lb);
-                }
-            }
+            this.ReloadLastBases();
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -293,10 +308,14 @@ namespace GKUI
             try {
                 Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
                 if (a != null) {
+                    this.BeginLoading();
+
                     for (int i = 0; i < a.Length; i++) {
                         string fn = a.GetValue(i).ToString();
                         this.CreateBase(fn);
                     }
+
+                    this.EndLoading();
                 }
             } catch (Exception ex) {
                 this.LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
@@ -650,8 +669,38 @@ namespace GKUI
             return result;
         }
 
+        public void ShowTips()
+        {
+            if (this.fBirthDays.Count > 0) {
+                MainWin.Instance.Options.ShowTips =
+                    DayTipsDlg.ShowTipsEx(
+                        LangMan.LS(LSID.LSID_BirthDays),
+                        MainWin.Instance.Options.ShowTips,
+                        fBirthDays, this.Handle);
+
+                this.fBirthDays.Clear();
+            }
+        }
+
+        private void BeginLoading()
+        {
+            this.fLoadingCount++;
+        }
+
+        private void EndLoading()
+        {
+            this.fLoadingCount--;
+
+            if (this.fLoadingCount == 0)
+            {
+                this.ShowTips();
+            }
+        }
+
         public IBaseWindow CreateBase(string fileName)
         {
+            this.BeginLoading();
+
             IBaseWindow result = this.FindBase(fileName);
             if (result != null) {
                 result.Activate();
@@ -663,11 +712,14 @@ namespace GKUI
 
             if (fileName != "" && File.Exists(fileName)) {
                 result.FileLoad(fileName);
+                result.CollectTips(this.fBirthDays);
             } else {
                 result.FileNew();
             }
 
             this.RestoreMRU(result, fileName);
+
+            this.EndLoading();
 
             return result;
         }

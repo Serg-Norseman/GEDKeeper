@@ -601,7 +601,6 @@ namespace GKUI
 
             this.ChangeFileName();
             this.RefreshLists(false);
-            this.ShowTips();
         }
 
         public void FileSave(string fileName)
@@ -999,13 +998,15 @@ namespace GKUI
             }
         }
 
-        public void ShowTips()
+        public void CollectTips(StringList tipsList)
         {
+            if (tipsList == null)
+                throw new ArgumentNullException("tipsList");
+
             try
             {
                 if (MainWin.Instance.Options.ShowTips)
                 {
-                    StringList birthDays = new StringList();
                     try
                     {
                         int num = this.fTree.RecordsCount;
@@ -1014,7 +1015,10 @@ namespace GKUI
                             GEDCOMRecord rec = this.fTree[i];
                             if (rec is GEDCOMIndividualRecord) {
                                 GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+
                                 string nm = iRec.GetNameString(true, false);
+                                nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
+
                                 string days = GKUtils.GetDaysForBirth(iRec);
                                 // `days` always contains non-negative number.
                                 if (!string.IsNullOrEmpty(days))
@@ -1022,38 +1026,30 @@ namespace GKUI
                                     uint daysBefore = uint.Parse(days);
                                     if (0 == daysBefore)
                                     {
-                                        birthDays.Add(string.Format(
+                                        tipsList.Add(string.Format(
                                             LangMan.LS(LSID.LSID_BirthdayToday),
                                             nm));
                                     }
                                     else if (1 == daysBefore)
                                     {
-                                        birthDays.Add(string.Format(
+                                        tipsList.Add(string.Format(
                                             LangMan.LS(
                                                 LSID.LSID_BirthdayTomorrow),
                                             nm));
                                     }
                                     else if (3 > daysBefore)
                                     {
-                                        birthDays.Add(string.Format(
+                                        tipsList.Add(string.Format(
                                             LangMan.LS(LSID.LSID_DaysRemained),
                                             nm, days));
                                     }
                                 }
                             }
                         }
-
-                        if (birthDays.Count > 0) {
-                            MainWin.Instance.Options.ShowTips =
-                                DayTipsDlg.ShowTipsEx(
-                                    LangMan.LS(LSID.LSID_BirthDays),
-                                    MainWin.Instance.Options.ShowTips,
-                                    birthDays, this.Handle);
-                        }
                     }
                     finally
                     {
-                        birthDays.Dispose();
+                        // temp stub, remove try/finally here?
                     }
                 }
             }
