@@ -531,12 +531,12 @@ namespace GKUI
             }
         }
 
-        public void RestoreMRU(IBaseWindow aBase, string fileName)
+        public void RestoreMRU(IBaseWindow baseWin, string fileName)
         {
             int idx = this.fOptions.MRUFiles_IndexOf(fileName);
             if (idx >= 0) {
                 MRUFile mf = this.fOptions.MRUFiles[idx];
-                UIManager.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
+                UIManager.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
             }
         }
 

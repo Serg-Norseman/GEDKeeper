@@ -78,17 +78,21 @@ namespace GKCore
             #endif
         }
 
-        public static void SetFormRect(Form form, ExtRect rt, FormWindowState winState)
+        public static void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
         {
             // check for new and empty struct
             if (form != null && !rt.IsEmpty())
             {
-                form.Left = rt.Left;
-                form.Top = rt.Top;
-                form.Width = rt.GetWidth();
-                form.Height = rt.GetHeight();
+                if (winState != FormWindowState.Minimized) {
+                    form.Left = rt.Left;
+                    form.Top = rt.Top;
+                    form.Width = rt.GetWidth();
+                    form.Height = rt.GetHeight();
 
-                form.WindowState = winState;
+                    form.WindowState = winState;
+                } else {
+                    form.WindowState = FormWindowState.Maximized;
+                }
             }
         }
 
