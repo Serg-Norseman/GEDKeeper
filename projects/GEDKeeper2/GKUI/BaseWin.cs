@@ -26,6 +26,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+using Externals;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -43,7 +44,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWin : ExtForm, IBaseWindow
+    public sealed partial class BaseWin : MdiChildFormEx, IBaseWindow
     {
         #region Private fields
         

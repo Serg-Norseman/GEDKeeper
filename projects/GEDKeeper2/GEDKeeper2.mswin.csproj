@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Externals\MdiChildFormEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
