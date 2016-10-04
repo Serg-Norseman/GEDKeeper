@@ -43,7 +43,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWin : Form, IBaseWindow
+    public sealed partial class BaseWin : ExtForm, IBaseWindow
     {
         #region Private fields
         
