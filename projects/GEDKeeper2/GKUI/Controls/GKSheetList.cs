@@ -29,6 +29,34 @@ using GKCore.Types;
 namespace GKUI.Controls
 {
     public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
+    public delegate void ItemValidatingEventHandler(object sender, ItemValidatingEventArgs e);
+
+    public class ItemValidatingEventArgs : EventArgs
+    {
+        private bool fIsAvailable;
+        private object fItem;
+
+        public bool IsAvailable
+        {
+            get { return this.fIsAvailable; }
+            set { this.fIsAvailable = value; }
+        }
+
+        public object Item
+        {
+            get { return this.fItem; }
+            set { this.fItem = value; }
+        }
+
+        public ItemValidatingEventArgs() : this(null)
+        {
+        }
+
+        public ItemValidatingEventArgs(object item)
+        {
+            this.fItem = item;
+        }
+    }
 
     public enum SheetButton
     {
@@ -46,6 +74,7 @@ namespace GKUI.Controls
     public class GKSheetList : ContainerControl
     {
         private static readonly object EventModify;
+        private static readonly object EventItemValidating;
 
         private readonly ToolStripButton fBtnAdd;
         private readonly ToolStripButton fBtnDelete;
@@ -65,6 +94,12 @@ namespace GKUI.Controls
             remove { base.Events.RemoveHandler(GKSheetList.EventModify, value); }
         }
 
+        public event ItemValidatingEventHandler OnItemValidating
+        {
+            add { base.Events.AddHandler(GKSheetList.EventItemValidating, value); }
+            remove { base.Events.RemoveHandler(GKSheetList.EventItemValidating, value); }
+        }
+
         public EnumSet<SheetButton> Buttons
         {
             get { return this.fButtons; }
@@ -80,13 +115,13 @@ namespace GKUI.Controls
         static GKSheetList()
         {
             GKSheetList.EventModify = new object();
+            GKSheetList.EventItemValidating = new object();
         }
 
         public GKSheetList(Control owner)
         {
-            if (owner == null) {
+            if (owner == null)
                 throw new ArgumentNullException("owner");
-            }
 
             this.fBtnMoveDown = new ToolStripButton();
             this.fBtnMoveDown.Image = global::GKResources.iDown;
@@ -275,9 +310,22 @@ namespace GKUI.Controls
         private void DoModify(ModifyEventArgs eArgs)
         {
             ModifyEventHandler eventHandler = (ModifyEventHandler)base.Events[GKSheetList.EventModify];
-            if (eventHandler != null)
-            {
+            if (eventHandler != null) {
                 eventHandler(this, eArgs);
+            }
+        }
+
+        private bool ValidateItem(object item)
+        {
+            var args = new ItemValidatingEventArgs(item);
+
+            ItemValidatingEventHandler eventHandler = (ItemValidatingEventHandler)base.Events[GKSheetList.EventItemValidating];
+            if (eventHandler != null) {
+                eventHandler(this, args);
+
+                return args.IsAvailable;
+            } else {
+                return true;
             }
         }
 
@@ -296,6 +344,8 @@ namespace GKUI.Controls
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
             {
+                if (!this.ValidateItem(itemData)) return;
+
                 ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raEdit, itemData);
                 this.DoModify(eArgs);
                 this.RestoreSelected(eArgs.ItemData);
@@ -307,6 +357,8 @@ namespace GKUI.Controls
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
             {
+                if (!this.ValidateItem(itemData)) return;
+
                 ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raDelete, itemData);
                 this.DoModify(eArgs);
             }
@@ -317,6 +369,8 @@ namespace GKUI.Controls
             object itemData = this.GetSelectedData();
             if (itemData != null)
             {
+                if (!this.ValidateItem(itemData)) return;
+
                 ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raJump, itemData);
                 this.DoModify(eArgs);
             }

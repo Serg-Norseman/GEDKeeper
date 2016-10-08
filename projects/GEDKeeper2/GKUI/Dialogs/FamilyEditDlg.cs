@@ -79,7 +79,7 @@ namespace GKUI.Dialogs
                     this.cmbMarriageStatus.Enabled = true;
                     this.cmbMarriageStatus.SelectedIndex = statIdx;
                     this.cmbRestriction.SelectedIndex = (sbyte)this.fFamily.Restriction;
-                    
+
                     this.UpdateControls();
                 }
             }
@@ -120,6 +120,8 @@ namespace GKUI.Dialogs
             this.btnWifeAdd.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecNew")));
             this.btnWifeDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
             this.btnWifeSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
+
+            this.fChildsList.OnItemValidating += this.FamilyEditDlg_ItemValidating;
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -243,7 +245,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     child = this.fBase.SelectPerson(this.fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
-                    result = (child != null && this.fFamily.AddChild(child));
+                    result = (child != null && this.fBase.IsAvailableRecord(child) && this.fFamily.AddChild(child));
                     break;
 
                 case RecordAction.raEdit:
@@ -324,10 +326,13 @@ namespace GKUI.Dialogs
 
         private void btnHusbandDeleteClick(object sender, EventArgs e)
         {
+            GEDCOMIndividualRecord husband = this.fFamily.GetHusband();
+            if (!this.fBase.IsAvailableRecord(husband)) return;
+
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != DialogResult.No)
             {
-                //this.fFamily.RemoveSpouse(this.fFamily.GetHusband());
-                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetHusband());
+                //this.fFamily.RemoveSpouse(husband);
+                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
                 this.UpdateControls();
             }
         }
@@ -356,10 +361,13 @@ namespace GKUI.Dialogs
 
         private void btnWifeDeleteClick(object sender, EventArgs e)
         {
+            GEDCOMIndividualRecord wife = this.fFamily.GetWife();
+            if (!this.fBase.IsAvailableRecord(wife)) return;
+
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery)) != DialogResult.No)
             {
                 //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
-                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetWife());
+                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
                 this.UpdateControls();
             }
         }
@@ -383,6 +391,15 @@ namespace GKUI.Dialogs
         private void EditWife_TextChanged(object sender, EventArgs e)
         {
             this.SetTitle();
+        }
+
+        private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
+        {
+            if (e.Item is GEDCOMRecord && !this.fBase.IsAvailableRecord(e.Item as GEDCOMRecord)) {
+                e.IsAvailable = false;
+            } else {
+                e.IsAvailable = true;
+            }
         }
     }
 }

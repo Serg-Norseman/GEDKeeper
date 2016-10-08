@@ -1800,6 +1800,7 @@ namespace GKUI
 
             if (!result) {
                 // message, for exclude of duplication
+                GKUtils.ShowWarning("Record is locked by editor"); // FIXME: direct string at debug period
             }
 
             return result;
