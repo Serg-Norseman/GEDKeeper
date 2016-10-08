@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
@@ -316,7 +317,7 @@ namespace GKUI.Dialogs
             if (husband != null && this.fFamily.Husband.StringValue == "")
             {
                 //this.fFamily.AddSpouse(husband);
-                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
+                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
                 this.UpdateControls();
             }
         }
@@ -326,7 +327,7 @@ namespace GKUI.Dialogs
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != DialogResult.No)
             {
                 //this.fFamily.RemoveSpouse(this.fFamily.GetHusband());
-                this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetHusband());
+                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetHusband());
                 this.UpdateControls();
             }
         }
@@ -348,7 +349,7 @@ namespace GKUI.Dialogs
             if (wife != null && this.fFamily.Wife.StringValue == "")
             {
                 //this.fFamily.AddSpouse(wife);
-                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
+                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
                 this.UpdateControls();
             }
         }
@@ -358,7 +359,7 @@ namespace GKUI.Dialogs
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery)) != DialogResult.No)
             {
                 //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
-                this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetWife());
+                ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, this.fFamily.GetWife());
                 this.UpdateControls();
             }
         }

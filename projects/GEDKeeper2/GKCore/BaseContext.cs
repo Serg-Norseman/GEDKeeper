@@ -1235,68 +1235,12 @@ namespace GKCore
 
         public void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
-            this.DetachIndividualParents(this.fUndoman, person, family);
-        }
-
-        public void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            ((UndoManager) undoman).DoOperation(new PersonDetachParents(this.fUndoman, person, family));
-        }
-
-        public void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            ((UndoManager) undoman).DoOperation(new PersonAttachParents(this.fUndoman, person, family));
+            ChangeTracking.DetachIndividualParents(this.fUndoman, person, family);
         }
 
         public void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
         {
-            this.DetachFamilySpouse(this.fUndoman, family, spouse);
-        }
-
-        public void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            if (spouse == null)
-                throw new ArgumentNullException("spouse");
-
-            ((UndoManager) undoman).DoOperation(new FamilyDetachSpouse(this.fUndoman, family, spouse));
-        }
-
-        public void AttachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            if (spouse == null)
-                throw new ArgumentNullException("spouse");
-
-            ((UndoManager) undoman).DoOperation(new FamilyAttachSpouse(this.fUndoman, family, spouse));
+            ChangeTracking.DetachFamilySpouse(this.fUndoman, family, spouse);
         }
 
         #endregion

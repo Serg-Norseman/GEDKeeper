@@ -82,11 +82,5 @@ namespace GKCore.Interfaces
 
         void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
         void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
-
-        void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
-        void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
-
-        void AttachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
-        void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
     }
 }

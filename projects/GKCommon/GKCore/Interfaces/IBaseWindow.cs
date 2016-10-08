@@ -65,6 +65,8 @@ namespace GKCore.Interfaces
         //void RefreshRecordsView(GEDCOMRecordType recType);
         void ShowRecordsTab(GEDCOMRecordType recType);
 
+        bool IsAvailableRecord(GEDCOMRecord record);
+
         GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
 
         bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec);

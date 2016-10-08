@@ -55,6 +55,8 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Button btnMotherDelete;
 		private System.Windows.Forms.Button btnMotherSel;
 		private System.Windows.Forms.TabPage pageNames;
+		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.ToolTip toolTip1;
 
 		private void InitializeComponent()
 		{
@@ -681,7 +683,5 @@ namespace GKUI.Dialogs
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

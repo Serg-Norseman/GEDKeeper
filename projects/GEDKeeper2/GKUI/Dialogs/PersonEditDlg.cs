@@ -26,6 +26,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
@@ -67,6 +68,7 @@ namespace GKUI.Dialogs
         private void SetPerson(GEDCOMIndividualRecord value)
         {
             this.fPerson = value;
+
             try
             {
                 string fam, nam, pat;
@@ -751,7 +753,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
             if (family != null && family.Husband.Value == null) {
                 //family.AddSpouse(father);
-                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, family, father);
+                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, family, father);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
@@ -767,7 +769,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord father = family.GetHusband();
                     //family.RemoveSpouse(father);
-                    this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, family, father);
+                    ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, family, father);
                     this.UpdateControls();
                 }
             }
@@ -792,7 +794,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
             if (family != null && family.Wife.Value == null) {
                 //family.AddSpouse(mother);
-                this.fBase.Context.AttachFamilySpouse(this.fLocalUndoman, family, mother);
+                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, family, mother);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
@@ -808,7 +810,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord mother = family.GetWife();
                     //family.RemoveSpouse(mother);
-                    this.fBase.Context.DetachFamilySpouse(this.fLocalUndoman, family, mother);
+                    ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, family, mother);
                     this.UpdateControls();
                 }
             }
@@ -831,12 +833,12 @@ namespace GKUI.Dialogs
             if (family == null) return;
 
             // FIXME: it's not working correctly!
-            // because the child is added in a different location, 
+            // because the child is added in a different location,
             // need to check everything in order not to break other functions
             if (family.IndexOfChild(this.fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
-                this.fBase.Context.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                ChangeTracking.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
             }
             this.UpdateControls();
         }
@@ -858,7 +860,7 @@ namespace GKUI.Dialogs
                 if (family != null)
                 {
                     //family.RemoveChild(this.fPerson);
-                    this.fBase.Context.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                    ChangeTracking.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
                     this.UpdateControls();
                 }
             }

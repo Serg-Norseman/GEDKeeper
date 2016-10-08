@@ -107,6 +107,10 @@ namespace GKTests.Mocks
 
         public GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { return null; }
 
+        public void LockRecord(GEDCOMRecord record) { }
+        public void UnlockRecord(GEDCOMRecord record) { }
+        public bool IsAvailableRecord(GEDCOMRecord record) { return true; }
+
         public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec) { mediaRec = null; return false; }
         public bool ModifyNote(ref GEDCOMNoteRecord noteRec) { noteRec = null; return false; }
         public bool ModifySource(ref GEDCOMSourceRecord sourceRec) { sourceRec = null; return false; }

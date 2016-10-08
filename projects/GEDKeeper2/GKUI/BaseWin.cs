@@ -47,8 +47,8 @@ namespace GKUI
     public sealed partial class BaseWin : MdiChildFormEx, IBaseWindow
     {
         #region Private fields
-        
-        /*private readonly ExtList<GEDCOMRecord> fLockedRecords;*/
+
+        private readonly List<GEDCOMRecord> fLockedRecords;
 
         private readonly NavigationStack fNavman;
         private readonly IBaseContext fContext;
@@ -139,7 +139,7 @@ namespace GKUI
             this.InitializeComponent();
             base.MdiParent = MainWin.Instance;
 
-            /*this.fLockedRecords = new ExtList<GEDCOMRecord>();*/
+            this.fLockedRecords = new List<GEDCOMRecord>();
 
             this.fTree = new GEDCOMTree();
             this.fContext = new BaseContext(this.fTree, this);
@@ -1061,7 +1061,7 @@ namespace GKUI
         }
 
         #endregion
-        
+
         #region Name and sex functions
 
         public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
@@ -1773,6 +1773,38 @@ namespace GKUI
 
         #region Modify routines
 
+        /// <summary>
+        /// This method performs a basic locking of the records for their 
+        /// editors.
+        /// 
+        /// The original idea was to call the methods Lock/Unlock records, 
+        /// in the edit dialogs of the records. However, it would be unsafe, 
+        /// because in the case of a failure of dialogue, the record would 
+        /// remain locked. Therefore, the locking and unlocking of records 
+        /// must take on a methods that controls the dialog.
+        /// </summary>
+        /// <param name="record"></param>
+        public void LockRecord(GEDCOMRecord record)
+        {
+            this.fLockedRecords.Add(record);
+        }
+
+        public void UnlockRecord(GEDCOMRecord record)
+        {
+            this.fLockedRecords.Remove(record);
+        }
+
+        public bool IsAvailableRecord(GEDCOMRecord record)
+        {
+            bool result = this.fLockedRecords.IndexOf(record) < 0;
+
+            if (!result) {
+                // message, for exclude of duplication
+            }
+
+            return result;
+        }
+
         public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
         {
             bool result = false;
@@ -1789,9 +1821,15 @@ namespace GKUI
                         mediaRec.InitNew();
                     }
 
-                    dlg.MediaRec = mediaRec;
+                    try {
+                        this.LockRecord(mediaRec);
 
-                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        dlg.MediaRec = mediaRec;
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(mediaRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(mediaRec);
@@ -1823,9 +1861,15 @@ namespace GKUI
                         noteRec.InitNew();
                     }
 
-                    dlg.NoteRecord = noteRec;
+                    try {
+                        this.LockRecord(noteRec);
 
-                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        dlg.NoteRecord = noteRec;
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(noteRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(noteRec);
@@ -1857,9 +1901,15 @@ namespace GKUI
                         sourceRec.InitNew();
                     }
 
-                    fmSrcEdit.SourceRecord = sourceRec;
+                    try {
+                        this.LockRecord(sourceRec);
 
-                    result = (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK);
+                        fmSrcEdit.SourceRecord = sourceRec;
+                        result = (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(sourceRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(sourceRec);
@@ -1891,8 +1941,8 @@ namespace GKUI
                     }
 
                     fmSrcCitEdit.SourceCitation = cit;
-
                     result = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false) == DialogResult.OK;
+
                     if (!exists) {
                         if (result) {
                             _struct.SourceCitations.Add(cit);
@@ -1923,9 +1973,15 @@ namespace GKUI
                         repRec.InitNew();
                     }
 
-                    fmRepEdit.Repository = repRec;
+                    try {
+                        this.LockRecord(repRec);
 
-                    result = MainWin.Instance.ShowModalEx(fmRepEdit, false) == DialogResult.OK;
+                        fmRepEdit.Repository = repRec;
+                        result = MainWin.Instance.ShowModalEx(fmRepEdit, false) == DialogResult.OK;
+                    } finally {
+                        this.UnlockRecord(repRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(repRec);
@@ -1957,9 +2013,15 @@ namespace GKUI
                         groupRec.InitNew();
                     }
 
-                    fmGrpEdit.Group = groupRec;
+                    try {
+                        this.LockRecord(groupRec);
 
-                    result = (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK);
+                        fmGrpEdit.Group = groupRec;
+                        result = (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(groupRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(groupRec);
@@ -1991,9 +2053,15 @@ namespace GKUI
                         researchRec.InitNew();
                     }
 
-                    fmResEdit.Research = researchRec;
+                    try {
+                        this.LockRecord(researchRec);
 
-                    result = MainWin.Instance.ShowModalEx(fmResEdit, false) == DialogResult.OK;
+                        fmResEdit.Research = researchRec;
+                        result = MainWin.Instance.ShowModalEx(fmResEdit, false) == DialogResult.OK;
+                    } finally {
+                        this.UnlockRecord(researchRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(researchRec);
@@ -2025,9 +2093,15 @@ namespace GKUI
                         taskRec.InitNew();
                     }
 
-                    fmTaskEdit.Task = taskRec;
+                    try {
+                        this.LockRecord(taskRec);
 
-                    result = MainWin.Instance.ShowModalEx(fmTaskEdit, false) == DialogResult.OK;
+                        fmTaskEdit.Task = taskRec;
+                        result = MainWin.Instance.ShowModalEx(fmTaskEdit, false) == DialogResult.OK;
+                    } finally {
+                        this.UnlockRecord(taskRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(taskRec);
@@ -2059,9 +2133,15 @@ namespace GKUI
                         commRec.InitNew();
                     }
 
-                    fmCorrEdit.Communication = commRec;
+                    try {
+                        this.LockRecord(commRec);
 
-                    result = MainWin.Instance.ShowModalEx(fmCorrEdit, false) == DialogResult.OK;
+                        fmCorrEdit.Communication = commRec;
+                        result = MainWin.Instance.ShowModalEx(fmCorrEdit, false) == DialogResult.OK;
+                    } finally {
+                        this.UnlockRecord(commRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(commRec);
@@ -2093,9 +2173,15 @@ namespace GKUI
                         locRec.InitNew();
                     }
 
-                    fmLocEdit.LocationRecord = locRec;
+                    try {
+                        this.LockRecord(locRec);
 
-                    result = MainWin.Instance.ShowModalEx(fmLocEdit, false) == DialogResult.OK;
+                        fmLocEdit.LocationRecord = locRec;
+                        result = MainWin.Instance.ShowModalEx(fmLocEdit, false) == DialogResult.OK;
+                    } finally {
+                        this.UnlockRecord(locRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(locRec);
@@ -2188,8 +2274,14 @@ namespace GKUI
                     this.fContext.BeginUpdate();
 
                     using (PersonEditDlg dlg = new PersonEditDlg(this)) {
-                        dlg.Person = indivRec;
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        try {
+                            this.LockRecord(indivRec);
+
+                            dlg.Person = indivRec;
+                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        } finally {
+                            this.UnlockRecord(indivRec);
+                        }
                     }
                 } finally {
                     this.fContext.EndUpdate();
@@ -2227,9 +2319,15 @@ namespace GKUI
                         familyRec.AddChild(person);
                     }
 
-                    dlg.Family = familyRec;
+                    try {
+                        this.LockRecord(familyRec);
 
-                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        dlg.Family = familyRec;
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(familyRec);
+                    }
+
                     if (!exists) {
                         if (result) {
                             this.fTree.AddRecord(familyRec);
