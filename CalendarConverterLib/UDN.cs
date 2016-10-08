@@ -33,7 +33,7 @@ namespace GKCommon
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct UDN : ICloneable, IComparable
+    public struct UDN : ICloneable, IComparable<UDN>, IEquatable<UDN>
     {
         private const uint IgnoreYear = 1u << 31;
         private const uint IgnoreMonth = 1u << 30;
@@ -158,13 +158,23 @@ namespace GKCommon
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public int CompareTo(object obj)
+        public int CompareTo(UDN other)
         {
-            if (obj is UDN) {
-                return CompareVal(this.fValue, ((UDN)obj).fValue);
-            }
+            return CompareVal(this.fValue, other.fValue);
+        }
 
-            return -1;
+        #endregion
+
+        #region IEquatable implementation
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Equals(UDN other)
+        {
+            return (this.fValue == other.fValue);
         }
 
         #endregion
