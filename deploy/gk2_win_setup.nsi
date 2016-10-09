@@ -111,6 +111,10 @@ Section "$(gkreq)"
   SetOutPath "$INSTDIR\plugins"
   File "..\plugins\GKCommon.dll"
 
+  CreateDirectory "$INSTDIR\samples"
+  SetOutPath "$INSTDIR\samples"
+  File "..\samples\*.*"
+
   CreateDirectory "$INSTDIR\locales\help_enu"
   SetOutPath "$INSTDIR\locales\help_enu"
   File "..\locales\help_enu\*.*"

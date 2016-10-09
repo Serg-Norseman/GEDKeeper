@@ -77,6 +77,7 @@ namespace GKCommon.GEDCOM
             TAGS_BASE.Add("NSFX", new TagProperties("NSFX", true, false));
             TAGS_BASE.Add("_LOC", new TagProperties("_LOC", true,  true));
             TAGS_BASE.Add("_POSITION", new TagProperties("_POSITION", true,  true));
+            TAGS_BASE.Add("ALIA", new TagProperties("ALIA", true, false));
 
             //new TagProperties("HUSB", true, false));
             //new TagProperties("WIFE", true, false));
