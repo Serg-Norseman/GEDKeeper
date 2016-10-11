@@ -161,6 +161,7 @@ namespace GKCore
         public static readonly string[] Calendars;
 
         public static string[] CondSigns;
+        public static string BloodGroups;
 
         static GKData()
         {
@@ -411,7 +412,7 @@ namespace GKCore
             DateKinds = array5;
 
 
-            PersonEventStruct[] array6 = new PersonEventStruct[37];
+            PersonEventStruct[] array6 = new PersonEventStruct[40];
             array6[ 0] = new PersonEventStruct(LSID.LSID_Event, "EVEN", PersonEventKind.ekEvent);
             array6[ 1] = new PersonEventStruct(LSID.LSID_Birth, "BIRT", PersonEventKind.ekEvent);
             array6[ 2] = new PersonEventStruct(LSID.LSID_Adoption, "ADOP", PersonEventKind.ekEvent);
@@ -449,7 +450,10 @@ namespace GKCore
             array6[33] = new PersonEventStruct(LSID.LSID_MiliInd, "_MILI_IND", PersonEventKind.ekFact);
             array6[34] = new PersonEventStruct(LSID.LSID_MiliDis, "_MILI_DIS", PersonEventKind.ekFact);
             array6[35] = new PersonEventStruct(LSID.LSID_MiliRank, "_MILI_RANK", PersonEventKind.ekFact);
-            array6[36] = new PersonEventStruct(LSID.LSID_DNAMarkers, "_DNA", PersonEventKind.ekFact);
+            array6[36] = new PersonEventStruct(LSID.LSID_DNAMarkers, "_DNA", PersonEventKind.ekFact); // {FTM}
+            array6[37] = new PersonEventStruct(LSID.LSID_BloodGroup, "_BGRO", PersonEventKind.ekFact); // {MyFamilyTree}
+            array6[38] = new PersonEventStruct(LSID.LSID_HairColor, "_HAIR", PersonEventKind.ekFact); // {BKW6, PAF}
+            array6[39] = new PersonEventStruct(LSID.LSID_EyesColor, "_EYES", PersonEventKind.ekFact); // {Gen}
             PersonEvents = array6;
 
 
@@ -566,6 +570,9 @@ namespace GKCore
                 " [R]",
                 ""
             };
+
+            BloodGroups = "|A+|A-|B+|B-|AB+|AB-|O+|O-";
+            //BloodGroups = new string[] { "", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
         }
     }
 }

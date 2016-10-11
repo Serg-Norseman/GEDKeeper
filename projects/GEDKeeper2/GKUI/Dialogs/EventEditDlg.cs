@@ -433,7 +433,20 @@ namespace GKUI.Dialogs
                 evName = GKData.PersonEvents[id].Sign;
             }
 
-            string[] vals = this.fBase.Context.ValuesCollection.GetValues(evName);
+            // TODO: It is necessary to provide the registrable list of values for different tag types.
+            string[] vals;
+            bool canbeSorted, userInput;
+
+            if (evName == "_BGRO") {
+                vals = GKData.BloodGroups.Split('|');
+                canbeSorted = false;
+                userInput = false;
+            } else {
+                vals = this.fBase.Context.ValuesCollection.GetValues(evName);
+                canbeSorted = true;
+                userInput = true;
+            }
+
             if (vals != null) {
                 string tmp = this.txtAttribute.Text;
                 this.txtAttribute.Sorted = false;
@@ -441,8 +454,10 @@ namespace GKUI.Dialogs
                 this.txtAttribute.Items.Clear();
                 this.txtAttribute.Items.AddRange(vals);
 
-                this.txtAttribute.Sorted = true;
+                this.txtAttribute.Sorted = canbeSorted;
                 this.txtAttribute.Text = tmp;
+
+                this.txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
             }
         }
 

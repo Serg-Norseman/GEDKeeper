@@ -784,8 +784,11 @@ namespace GKCore
         /* 723 */ LSID_RelationshipMask,
         /* 724 */ LSID_BirthdayToday,
         /* 725 */ LSID_BirthdayTomorrow,
+        /* 726 */ LSID_BloodGroup,
+        /* 727 */ LSID_HairColor,
+        /* 728 */ LSID_EyesColor,
 
-        /* 000 */ LSID_Last = LSID_BirthdayTomorrow
+        /* 000 */ LSID_Last = LSID_EyesColor
     }
 
     // TODO: remove and merge with LangManager
@@ -1521,7 +1524,10 @@ namespace GKCore
             /* 722 */ "Relationship Calculator",
             /* 723 */ "is {0} of",
             /* 724 */ "Today is birthday of {0}",
-            /* 725 */ "Tomorrow is birthday of {0}"
+            /* 725 */ "Tomorrow is birthday of {0}",
+            /* 726 */ "Blood group",
+            /* 727 */ "Hair color",
+            /* 728 */ "Eyes color"
         };
 
         private static readonly LangManager fLangMan = new LangManager();
