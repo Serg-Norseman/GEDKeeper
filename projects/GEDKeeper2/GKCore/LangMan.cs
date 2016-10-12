@@ -787,8 +787,11 @@ namespace GKCore
         /* 726 */ LSID_BloodGroup,
         /* 727 */ LSID_HairColor,
         /* 728 */ LSID_EyesColor,
+        /* 729 */ LSID_ADNAMarkers,
+        /* 730 */ LSID_MDNAMarkers,
+        /* 731 */ LSID_YDNAMarkers,
 
-        /* 000 */ LSID_Last = LSID_EyesColor
+        /* 000 */ LSID_Last = LSID_YDNAMarkers
     }
 
     // TODO: remove and merge with LangManager
@@ -1527,7 +1530,10 @@ namespace GKCore
             /* 725 */ "Tomorrow is birthday of {0}",
             /* 726 */ "Blood group",
             /* 727 */ "Hair color",
-            /* 728 */ "Eyes color"
+            /* 728 */ "Eyes color",
+            /* 729 */ "atDNA markers",
+            /* 730 */ "mtDNA markers",
+            /* 731 */ "Y-DNA markers"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

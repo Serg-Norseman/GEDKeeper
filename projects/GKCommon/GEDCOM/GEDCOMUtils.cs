@@ -81,6 +81,14 @@ namespace GKCommon.GEDCOM
 
             //new TagProperties("HUSB", true, false));
             //new TagProperties("WIFE", true, false));
+
+            TAGS_BASE.Add("_BGRO", new TagProperties("_BGRO", true,  true));
+            TAGS_BASE.Add("_HAIR", new TagProperties("_HAIR", true,  true));
+            TAGS_BASE.Add("_EYES", new TagProperties("_EYES", true,  true));
+
+            TAGS_BASE.Add("_ADNA", new TagProperties("_ADNA", true,  true));
+            TAGS_BASE.Add("_MDNA", new TagProperties("_MDNA", true,  true));
+            TAGS_BASE.Add("_YDNA", new TagProperties("_YDNA", true,  true));
         }
 
         public static TagProperties GetTagProps(string tagName)

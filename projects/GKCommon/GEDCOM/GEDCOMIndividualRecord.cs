@@ -254,10 +254,13 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("_MILI_DIS", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_MILI_RANK", GEDCOMIndividualAttribute.Create);
 
-            //f.RegisterTag("_DNA", GEDCOMIndividualAttribute.Create); // FIXME: separate to y and mt
             f.RegisterTag("_BGRO", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_HAIR", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_EYES", GEDCOMIndividualAttribute.Create);
+
+            f.RegisterTag("_ADNA", GEDCOMIndividualAttribute.Create);
+            f.RegisterTag("_MDNA", GEDCOMIndividualAttribute.Create);
+            f.RegisterTag("_YDNA", GEDCOMIndividualAttribute.Create);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
