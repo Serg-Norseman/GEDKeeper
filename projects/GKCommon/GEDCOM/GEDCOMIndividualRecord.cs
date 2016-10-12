@@ -257,8 +257,6 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("_BGRO", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_HAIR", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_EYES", GEDCOMIndividualAttribute.Create);
-
-            f.RegisterTag("_ADNA", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_MDNA", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_YDNA", GEDCOMIndividualAttribute.Create);
         }

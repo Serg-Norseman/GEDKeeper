@@ -412,7 +412,7 @@ namespace GKCore
             DateKinds = array5;
 
 
-            PersonEventStruct[] array6 = new PersonEventStruct[42];
+            PersonEventStruct[] array6 = new PersonEventStruct[41];
             array6[ 0] = new PersonEventStruct(LSID.LSID_Event, "EVEN", PersonEventKind.ekEvent);
             array6[ 1] = new PersonEventStruct(LSID.LSID_Birth, "BIRT", PersonEventKind.ekEvent);
             array6[ 2] = new PersonEventStruct(LSID.LSID_Adoption, "ADOP", PersonEventKind.ekEvent);
@@ -455,9 +455,8 @@ namespace GKCore
             array6[37] = new PersonEventStruct(LSID.LSID_HairColor, "_HAIR", PersonEventKind.ekFact); // {BKW6, PAF}
             array6[38] = new PersonEventStruct(LSID.LSID_EyesColor, "_EYES", PersonEventKind.ekFact); // {Gen}
 
-            array6[39] = new PersonEventStruct(LSID.LSID_ADNAMarkers, "_ADNA", PersonEventKind.ekFact);
-            array6[40] = new PersonEventStruct(LSID.LSID_MDNAMarkers, "_MDNA", PersonEventKind.ekFact); // {MyFamilyTree}
-            array6[41] = new PersonEventStruct(LSID.LSID_YDNAMarkers, "_YDNA", PersonEventKind.ekFact); // {MyFamilyTree}
+            array6[39] = new PersonEventStruct(LSID.LSID_MDNAHaplogroup, "_MDNA", PersonEventKind.ekFact); // {MyFamilyTree}
+            array6[40] = new PersonEventStruct(LSID.LSID_YDNAHaplogroup, "_YDNA", PersonEventKind.ekFact); // {MyFamilyTree}
             PersonEvents = array6;
 
 
