@@ -79,6 +79,7 @@
     <Compile Include="Mocks.cs" />
     <Compile Include="PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SCCTests.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="UDNTests.cs" />
   </ItemGroup>

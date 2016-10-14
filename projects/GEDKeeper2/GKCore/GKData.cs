@@ -278,15 +278,15 @@ namespace GKCore
                 "Вероисповедание:Старообрядчество"
             };
 
-        ///* 723 */ LSID_RI_GeorgeKnight,
-        ///* 724 */ LSID_USSR_WWII_Combatant,
-        ///* 725 */ LSID_USSR_WWII_KilledInBattle,
-        ///* 726 */ LSID_USSR_WWII_HomeFrontWorker,
-        ///* 727 */ LSID_USSR_Repressed,
-        ///* 728 */ LSID_Religion_Islam,
-        ///* 729 */ LSID_Religion_Catholicism,
-        ///* 730 */ LSID_Religion_Orthodoxy,
-        ///* 731 */ LSID_Religion_TheOldBelievers,
+            ///* 723 */ LSID_RI_GeorgeKnight,
+            ///* 724 */ LSID_USSR_WWII_Combatant,
+            ///* 725 */ LSID_USSR_WWII_KilledInBattle,
+            ///* 726 */ LSID_USSR_WWII_HomeFrontWorker,
+            ///* 727 */ LSID_USSR_Repressed,
+            ///* 728 */ LSID_Religion_Islam,
+            ///* 729 */ LSID_Religion_Catholicism,
+            ///* 730 */ LSID_Religion_Orthodoxy,
+            ///* 731 */ LSID_Religion_TheOldBelievers,
 
 
             CertaintyAssessments = new LSID[]

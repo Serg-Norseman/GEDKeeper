@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,7 +52,7 @@ namespace GKCore
 
             Array.Clear(buffer, 0, buffer.Length);
         }
-        
+
         private static byte[] ArrConcat(byte[] L, byte[] R)
         {
             int num = ((L != null) ? L.Length : 0);
@@ -101,14 +101,14 @@ namespace GKCore
         // <returns>Array of byte that represents the <parameref name="source">.
         // Size of the array equals to <paramref name="count" />.</returns>
         //----------------------------------------------------------------------
-        private static byte[] moveL2S(uint source, int count)
+        public static byte[] MoveL2S(uint source, int count)
         {
-          byte[] result = new byte[count];
-          for (int it = 0; count > it; ++it)
-          {
-            result[it] = (byte) (0xFF & (source >> (it << 3)));
-          }
-          return result;
+            byte[] result = new byte[count];
+            for (int it = 0; count > it; ++it)
+            {
+                result[it] = (byte) (0xFF & (source >> (it << 3)));
+            }
+            return result;
         }
 
         private static byte[] Decode(byte[] data)
@@ -120,17 +120,17 @@ namespace GKCore
             switch (num) {
                 case 2:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6));
-                    result = moveL2S(I, 1);
+                    result = MoveL2S(I, 1);
                     break;
 
                 case 3:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12));
-                    result = moveL2S(I, 2);
+                    result = MoveL2S(I, 2);
                     break;
 
                 case 4:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12) + (U1_MAP[data[3]] << 18));
-                    result = moveL2S(I, 3);
+                    result = MoveL2S(I, 3);
                     break;
             }
             
@@ -148,20 +148,20 @@ namespace GKCore
         // <returns>32-bits integer signed avlue that represents the
         // <parameref name="source">.</returns>
         //----------------------------------------------------------------------
-        private static uint moveS2L(byte[] source, int count)
+        public static uint MoveS2L(byte[] source, int count)
         {
-          uint result = 0;
-          for (int it = 0; count > it; ++it)
-          {
-            result |= (uint) (source[it] << (it << 3));
-          }
-          return result;
+            uint result = 0;
+            for (int it = 0; count > it; ++it)
+            {
+                result |= (uint) (source[it] << (it << 3));
+            }
+            return result;
         }
 
         private static byte[] Encode(byte[] data)
         {
             int num = (data != null) ? data.Length : 0;
-            uint I = moveS2L(data, num);
+            uint I = MoveS2L(data, num);
 
             byte[] res = new byte[num + 1];
 
