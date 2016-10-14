@@ -50,11 +50,7 @@ namespace GKCore
             if (buffer == null)
                 throw new ArgumentNullException("buffer");
 
-            // Set each byte in the buffer to 0
-            for (int x = 0; x < buffer.Length; x++)
-            {
-                buffer[x] = 0;
-            }
+            Array.Clear(buffer, 0, buffer.Length);
         }
         
         private static byte[] ArrConcat(byte[] L, byte[] R)
@@ -91,22 +87,28 @@ namespace GKCore
             return result;
         }
 
-        private static byte[] MoveL2S(uint source, int count)
+        //----------------------------------------------------------------------
+        // <summary>
+        // Converts the specified 32-bits integer value to array of bytes. Only
+        // the specified number of bytes is copied to the result array.
+        // Despite the fact that I stuck with the original name of the method
+        // (`MoveL2S`), I really don't know what it means.
+        // </summary>
+        // <param name="source">Source 32-bits value to be converted to array of
+        // bytes.</param>
+        // <param name="count">Number of bytes to convert (starting from the
+        // least signficant byte).</param>
+        // <returns>Array of byte that represents the <parameref name="source">.
+        // Size of the array equals to <paramref name="count" />.</returns>
+        //----------------------------------------------------------------------
+        private static byte[] moveL2S(uint source, int count)
         {
-            byte[] dest = new byte[count];
-
-            unchecked
-            {
-                ushort wl = (ushort)(source);
-                ushort wh = (ushort)(source >> 16);
-
-                if (count >= 1) dest[0] = (byte)wl;
-                if (count >= 2) dest[1] = (byte)(wl >> 8);
-                if (count >= 3) dest[2] = (byte)wh;
-                if (count >= 4) dest[3] = (byte)(wh >> 8);
-            }
-
-            return dest;
+          byte[] result = new byte[count];
+          for (int it = 0; count > it; ++it)
+          {
+            result[it] = (byte) (0xFF & (source >> (it << 3)));
+          }
+          return result;
         }
 
         private static byte[] Decode(byte[] data)
@@ -118,58 +120,66 @@ namespace GKCore
             switch (num) {
                 case 2:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6));
-                    result = MoveL2S(I, 1);
+                    result = moveL2S(I, 1);
                     break;
 
                 case 3:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12));
-                    result = MoveL2S(I, 2);
+                    result = moveL2S(I, 2);
                     break;
 
                 case 4:
                     I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12) + (U1_MAP[data[3]] << 18));
-                    result = MoveL2S(I, 3);
+                    result = moveL2S(I, 3);
                     break;
             }
             
             return result;
         }
 
-        private static int MoveS2L(byte[] source, int count)
+        //----------------------------------------------------------------------
+        // <summary>
+        // Converts the specified array of bytes to 32-bits signed integer
+        // value.
+        // Despite the fact that I stuck with the original name of the method
+        // (`MoveS2L`), I really don't know what it means.
+        // </summary>
+        // <param name="source">Source array of bytes to be converted.</param>
+        // <returns>32-bits integer signed avlue that represents the
+        // <parameref name="source">.</returns>
+        //----------------------------------------------------------------------
+        private static uint moveS2L(byte[] source, int count)
         {
-            byte[] bytes = new byte[4];
-            bytes[0] = (byte)((count >= 1) ? source[0] : 0);
-            bytes[1] = (byte)((count >= 2) ? source[1] : 0);
-            bytes[2] = (byte)((count >= 3) ? source[2] : 0);
-            bytes[3] = (byte)((count >= 4) ? source[3] : 0);
-            
-            int dest;
-            dest = (bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16;
-            return dest;
+          uint result = 0;
+          for (int it = 0; count > it; ++it)
+          {
+            result |= (uint) (source[it] << (it << 3));
+          }
+          return result;
         }
 
         private static byte[] Encode(byte[] data)
         {
             int num = (data != null) ? data.Length : 0;
-            int I = MoveS2L(data, num);
+            uint I = moveS2L(data, num);
 
             byte[] res = new byte[num + 1];
 
             switch (num) {
                 case 1:
                     res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
+                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
                     break;
                 case 2:
                     res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
-                    res[2] = (byte)U2_MAP[((uint)I >> 12) % 64];
+                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
+                    res[2] = (byte)U2_MAP[(I >> 12) % 64];
                     break;
                 case 3:
                     res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
-                    res[2] = (byte)U2_MAP[((uint)I >> 12) % 64];
-                    res[3] = (byte)U2_MAP[((uint)I >> 18) % 64];
+                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
+                    res[2] = (byte)U2_MAP[(I >> 12) % 64];
+                    res[3] = (byte)U2_MAP[(I >> 18) % 64];
                     break;
             }
             
