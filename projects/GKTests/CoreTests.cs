@@ -567,6 +567,7 @@ namespace GKTests
             Assert.AreEqual(1, surnames.Length);
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
+            Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
 
 
             culture = new IcelandCulture();
@@ -581,6 +582,7 @@ namespace GKTests
             Assert.AreEqual(1, surnames.Length);
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
+            Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
         }
 
         [Test]

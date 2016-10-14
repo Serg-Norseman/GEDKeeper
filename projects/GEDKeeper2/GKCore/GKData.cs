@@ -574,7 +574,8 @@ namespace GKCore
                 ""
             };
 
-            BloodGroups = "|A+|A-|B+|B-|AB+|AB-|O+|O-";
+            //BloodGroups = "|A+|A-|B+|B-|AB+|AB-|O+|O-";
+            BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
             //BloodGroups = new string[] { "", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
         }
     }
