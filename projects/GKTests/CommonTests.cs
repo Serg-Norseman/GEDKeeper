@@ -299,6 +299,23 @@ namespace GKTests
 
             strList.Clear();
             Assert.IsTrue(strList.IsEmpty());
+
+
+            strList = new StringList(list);
+            Assert.AreEqual(0, strList.IndexOf("The"));
+            Assert.AreEqual(1, strList.IndexOf("string"));
+            Assert.AreEqual(2, strList.IndexOf("list"));
+            Assert.AreEqual(3, strList.IndexOf("test"));
+            Assert.AreEqual(-1, strList.IndexOf("abrakadabra"));
+
+            strList.DuplicateSolve = DuplicateSolve.Accept;
+            strList.Add("string");
+            strList.Sorted = true;
+            Assert.AreEqual(0, strList.IndexOf("list"));
+            Assert.AreEqual(1, strList.IndexOf("string"));
+            Assert.AreEqual(3, strList.IndexOf("test"));
+            Assert.AreEqual(4, strList.IndexOf("The"));
+            Assert.AreEqual(-1, strList.IndexOf("abrakadabra"));
         }
 
         [Test]

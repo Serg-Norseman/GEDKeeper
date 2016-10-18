@@ -1235,12 +1235,12 @@ namespace GKCore
 
         public void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
-            ChangeTracking.DetachIndividualParents(this.fUndoman, person, family);
+            ChangeTracker.DetachIndividualParents(this.fUndoman, person, family);
         }
 
         public void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
         {
-            ChangeTracking.DetachFamilySpouse(this.fUndoman, family, spouse);
+            ChangeTracker.DetachFamilySpouse(this.fUndoman, family, spouse);
         }
 
         #endregion

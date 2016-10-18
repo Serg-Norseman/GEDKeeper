@@ -27,7 +27,7 @@ namespace GKCore.Operations
     /// <summary>
     /// 
     /// </summary>
-    public static class ChangeTracking
+    public static class ChangeTracker
     {
 
         public static void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)

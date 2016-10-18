@@ -943,6 +943,8 @@ namespace GKTests
                 Assert.AreEqual(20, day);
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
+
+                Assert.Throws(typeof(NotSupportedException), () => { dtx1.SetDateTime(DateTime.Now); });
             }
         }
 
@@ -1002,6 +1004,8 @@ namespace GKTests
                 Assert.AreEqual(23, day);
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
+
+                Assert.Throws(typeof(NotSupportedException), () => { dtx1.SetDateTime(DateTime.Now); });
             }
         }
 

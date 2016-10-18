@@ -523,7 +523,7 @@
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKCore\UndoManager.cs" />
-    <Compile Include="GKCore\Operations\ChangeTracking.cs" />
+    <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />

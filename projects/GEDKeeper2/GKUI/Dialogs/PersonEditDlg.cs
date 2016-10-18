@@ -753,7 +753,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
             if (family != null && family.Husband.Value == null) {
                 //family.AddSpouse(father);
-                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, family, father);
+                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, family, father);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
@@ -769,7 +769,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord father = family.GetHusband();
                     //family.RemoveSpouse(father);
-                    ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, family, father);
+                    ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, family, father);
                     this.UpdateControls();
                 }
             }
@@ -794,7 +794,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
             if (family != null && family.Wife.Value == null) {
                 //family.AddSpouse(mother);
-                ChangeTracking.AttachFamilySpouse(this.fLocalUndoman, family, mother);
+                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, family, mother);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
@@ -810,7 +810,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord mother = family.GetWife();
                     //family.RemoveSpouse(mother);
-                    ChangeTracking.DetachFamilySpouse(this.fLocalUndoman, family, mother);
+                    ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, family, mother);
                     this.UpdateControls();
                 }
             }
@@ -838,7 +838,7 @@ namespace GKUI.Dialogs
             if (family.IndexOfChild(this.fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
-                ChangeTracking.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                ChangeTracker.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
             }
             this.UpdateControls();
         }
@@ -860,7 +860,7 @@ namespace GKUI.Dialogs
                 if (family != null)
                 {
                     //family.RemoveChild(this.fPerson);
-                    ChangeTracking.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                    ChangeTracker.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
                     this.UpdateControls();
                 }
             }

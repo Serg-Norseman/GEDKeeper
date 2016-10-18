@@ -95,22 +95,8 @@ namespace GKCommon.GEDCOM
 
         public override void SetDateTime(DateTime value)
         {
-            if (!this.fDateAfter.IsEmpty() && this.fDateBefore.IsEmpty())
-            {
-                this.fDateAfter.SetDateTime(value);
-            }
-            else
-            {
-                if (!this.fDateBefore.IsEmpty() && this.fDateAfter.IsEmpty())
-                {
-                    this.fDateBefore.SetDateTime(value);
-                }
-                else
-                {
-                    this.fDateAfter.SetDateTime(value);
-                    this.fDateBefore.SetDateTime(value);
-                }
-            }
+            // The risk of undefined behavior
+            throw new NotSupportedException();
         }
 
         protected override void Dispose(bool disposing)

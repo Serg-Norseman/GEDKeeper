@@ -138,7 +138,7 @@
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Maps\GMapPoint.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
-    <Compile Include="GKCore\Operations\ChangeTracking.cs" />
+    <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\FamilyAttachSpouse.cs" />
     <Compile Include="GKCore\Operations\PersonAttachParents.cs" />
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />

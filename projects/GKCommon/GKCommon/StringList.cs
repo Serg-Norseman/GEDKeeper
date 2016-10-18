@@ -54,13 +54,13 @@ namespace GKCommon
     {
         private sealed class StringItem
         {
-            public string FString;
-            public object FObject;
-            
+            public string StrVal;
+            public object ObjVal;
+
             public StringItem(string str, object obj)
             {
-                this.FString = str;
-                this.FObject = obj;
+                this.StrVal = str;
+                this.ObjVal = obj;
             }
         }
 
@@ -85,7 +85,7 @@ namespace GKCommon
                 if (index < 0 || index >= this.fList.Count)
                     throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
-                return this.fList[index].FString;
+                return this.fList[index].StrVal;
             }
 
             set {
@@ -96,7 +96,7 @@ namespace GKCommon
                     throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
                 this.Changing();
-                this.fList[index].FString = value;
+                this.fList[index].StrVal = value;
                 this.Changed();
             }
         }
@@ -197,7 +197,7 @@ namespace GKCommon
             if (index < 0 || index >= this.fList.Count)
                 throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
-            return this.fList[index].FObject;
+            return this.fList[index].ObjVal;
         }
 
         public void SetObject(int index, object obj)
@@ -206,7 +206,7 @@ namespace GKCommon
                 throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
             this.Changing();
-            this.fList[index].FObject = obj;
+            this.fList[index].ObjVal = obj;
             this.Changed();
         }
 
@@ -264,21 +264,19 @@ namespace GKCommon
         {
             int result;
 
-            if (!this.Sorted)
-            {
+            if (!this.fSorted) {
                 result = this.fList.Count;
-            }
-            else
-            {
-                if (this.Find(str, out result))
-                {
-                    if (this.fDuplicateSolve == DuplicateSolve.Ignore)
-                    {
+            } else {
+                result = this.IndexOf(str);
+                if (result >= 0) {
+                    if (this.fDuplicateSolve == DuplicateSolve.Ignore) {
                         return result;
                     }
 
                     if (this.fDuplicateSolve == DuplicateSolve.Error)
                         throw new StringListException("String list does not allow duplicates");
+                } else {
+                    result = 0;
                 }
             }
 
@@ -448,32 +446,11 @@ namespace GKCommon
 
         #region Search
 
-        public int IndexOf(string str)
-        {
-            int result = -1;
-
-            if (!this.Sorted) {
-                int num = this.fList.Count;
-                for (int i = 0; i < num; i++) {
-                    if (this.CompareStrings(this.fList[i].FString, str) == 0) {
-                        result = i;
-                        break;
-                    }
-                }
-            } else {
-                if (!this.Find(str, out result)) {
-                    result = -1;
-                }
-            }
-
-            return result;
-        }
-
         public int IndexOfObject(object obj)
         {
             int num = this.fList.Count;
             for (int i = 0; i < num; i++) {
-                if (this.fList[i].FObject == obj) {
+                if (this.fList[i].ObjVal == obj) {
                     return i;
                 }
             }
@@ -481,36 +458,48 @@ namespace GKCommon
             return -1;
         }
 
-        public bool Find(string str, out int index)
+        public int IndexOf(string str)
         {
-            bool result = false;
+            int result = -1;
+            if (this.fList.Count <= 0) return result;
 
-            int low = 0;
-            int high = this.fList.Count - 1;
-            
-            while (low <= high)
-            {
-                int idx = (int)((uint)(low + high) >> 1);
-                int cmpRes = this.CompareStrings(this.fList[idx].FString, str);
-                if (cmpRes < 0)
-                {
-                    low = idx + 1;
+            if (!this.fSorted) {
+
+                int num = this.fList.Count;
+                for (int i = 0; i < num; i++) {
+                    if (this.CompareStrings(this.fList[i].StrVal, str) == 0) {
+                        result = i;
+                        break;
+                    }
                 }
-                else
-                {
-                    high = idx - 1;
-                    if (cmpRes == 0)
-                    {
-                        result = true;
-                        if (this.fDuplicateSolve != DuplicateSolve.Accept)
-                        {
-                            low = idx;
+
+            } else {
+
+                bool found = false;
+                int low = 0;
+                int high = this.fList.Count - 1;
+                while (low <= high) {
+                    int idx = (int)((uint)(low + high) >> 1);
+                    int cmpRes = this.CompareStrings(this.fList[idx].StrVal, str);
+
+                    if (cmpRes < 0) {
+                        low = idx + 1;
+                    } else {
+                        high = idx - 1;
+
+                        if (cmpRes == 0) {
+                            found = true;
+                            if (this.fDuplicateSolve != DuplicateSolve.Accept) {
+                                low = idx;
+                            }
                         }
                     }
                 }
+
+                if (found) {
+                    result = low;
+                }
             }
-            
-            index = low;
 
             return result;
         }
@@ -578,7 +567,7 @@ namespace GKCommon
 
         public int SCompare(int index1, int index2)
         {
-            return string.Compare(fList[index1].FString, fList[index2].FString, !this.fCaseSensitive);
+            return string.Compare(fList[index1].StrVal, fList[index2].StrVal, !this.fCaseSensitive);
         }
 
         public void Sort()
