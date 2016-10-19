@@ -169,6 +169,9 @@ namespace GKCommon
 
         public static void NormalizeFormRect(ref ExtRect winRect)
         {
+            // Travis CI does not have access to UI and tests aren't performed.
+            #if !CI_MODE
+
             //------------------------------------------------------------------
             // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
             // Restrict position and size of the main window.
@@ -194,6 +197,8 @@ namespace GKCommon
                 winRect.Right = winRect.Left + width - 1;
                 winRect.Bottom = winRect.Top + height - 1;
             }
+
+            #endif
         }
 
         public static void CenterFormByParent(Form form, IntPtr parent)
