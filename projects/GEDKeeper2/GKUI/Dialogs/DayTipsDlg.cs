@@ -96,7 +96,7 @@ namespace GKUI.Dialogs
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
 
-                UIManager.CenterFormByParent(dlg, parent);
+                UIHelper.CenterFormByParent(dlg, parent);
 
                 dlg.ShowDialog();
 

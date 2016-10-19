@@ -464,7 +464,7 @@ namespace GKCore.Options
             this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
             this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
-            UIManager.NormalizeFormRect(ref this.fMWinRect);
+            UIHelper.NormalizeFormRect(ref this.fMWinRect);
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)

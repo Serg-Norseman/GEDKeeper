@@ -165,7 +165,6 @@
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
-    <Compile Include="GKCore\UIManager.cs" />
     <Compile Include="GKCore\UndoManager.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKResources.Designer.cs">

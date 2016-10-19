@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,21 +25,24 @@ using System.Windows.Forms;
 namespace GKCommon
 {
     /// <summary>
-    /// Description of UIHelper.
+    /// 
     /// </summary>
     public static class UIHelper
     {
         // TODO
         public static Font GetFont()
         {
-            using (FontDialog fontDlg = new FontDialog()) {
+            using (FontDialog fontDlg = new FontDialog())
+            {
                 return null;
             }
         }
 
-        public static string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
+        public static string GetOpenFile(string title, string context, string filter,
+                                         int filterIndex, string defaultExt)
         {
-            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {
+            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false))
+            {
                 if (ofd.ShowDialog() == DialogResult.OK) {
                     return ofd.FileName;
                 } else {
@@ -48,8 +51,8 @@ namespace GKCommon
             }
         }
 
-        public static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter, int filterIndex, string defaultExt,
-                                                          bool multiSelect)
+        public static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter,
+                                                          int filterIndex, string defaultExt, bool multiSelect)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             
@@ -82,7 +85,8 @@ namespace GKCommon
         public static string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                          string suggestedFileName, bool overwritePrompt = true)
         {
-            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
+            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
+            {
                 if (sfd.ShowDialog() == DialogResult.OK) {
                     return sfd.FileName;
                 } else {
@@ -91,8 +95,8 @@ namespace GKCommon
             }
         }
 
-        public static SaveFileDialog CreateSaveFileDialog(string title, string context, string filter, int filterIndex, string defaultExt,
-                                                          string suggestedFileName)
+        public static SaveFileDialog CreateSaveFileDialog(string title, string context, string filter,
+                                                          int filterIndex, string defaultExt, string suggestedFileName)
         {
             SaveFileDialog sfd = new SaveFileDialog();
 
@@ -116,6 +120,97 @@ namespace GKCommon
                 sfd.FileName = suggestedFileName;
 
             return sfd;
+        }
+
+
+
+        public static ExtRect GetFormRect(Form form)
+        {
+            if (form == null) return ExtRect.CreateEmpty();
+
+            // You must not expect user has a top window located on the primary
+            // monitor. If a top window ain't on the primary monitor,
+            // `x` and `y` may be negative numbers.
+
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // GK doesn't check size and position of the `form` here anymore.
+            // `GetFormRect` is called **before** closing the application, but
+            // there's no guarantees that user won't change a monitor settings
+            // after that. GK should restrict position of a top window on the
+            // application startup. And I'm still not sured GK should constrain
+            // a window size (either top one or child).
+            // FIXME: If `Control::Left`, `Control::Top`, `Control::Width` and
+            // `Control::Height` return physical values (device depended), code
+            // here or code that uses the result of `GetFormRect` must convert
+            // them to logical values (device independed) before storing it as
+            // the application settings. Had GK been a native Windows
+            // application, it had to do that. But since it's a .NET application
+            // I don't know is it a true.
+            return ExtRect.Create(form.Left, form.Top, form.Right, form.Bottom);
+        }
+
+        public static void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
+        {
+            // check for new and empty struct
+            if (form != null && !rt.IsEmpty())
+            {
+                if (winState != FormWindowState.Minimized) {
+                    form.Left = rt.Left;
+                    form.Top = rt.Top;
+                    form.Width = rt.GetWidth();
+                    form.Height = rt.GetHeight();
+
+                    form.WindowState = winState;
+                } else {
+                    form.WindowState = FormWindowState.Maximized;
+                }
+            }
+        }
+
+        public static void NormalizeFormRect(ref ExtRect winRect)
+        {
+            //------------------------------------------------------------------
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // Restrict position and size of the main window.
+            // FIXME: DPI-aware code still required here.
+            //------------------------------------------------------------------
+
+            Screen screen = Screen.FromRectangle(winRect.ToRectangle());
+            if (screen != null) {
+                Rectangle workArea = screen.WorkingArea;
+
+                int width = winRect.GetWidth();
+                int height = winRect.GetHeight();
+
+                // Besides disallowing to the main window to have its right
+                // and bottom borders overhanged entire virtual workspace,
+                // combined from all available monitors, this code also
+                // does not allow to have this window "between" two
+                // monitors. This may be UNWANTED BEHAVIOR.
+                winRect.Left = Math.Max(workArea.Left, Math.Min(
+                    workArea.Right - width, winRect.Left));
+                winRect.Top = Math.Max(workArea.Top, Math.Min(
+                    workArea.Bottom - height, winRect.Top));
+                winRect.Right = winRect.Left + width - 1;
+                winRect.Bottom = winRect.Top + height - 1;
+            }
+        }
+
+        public static void CenterFormByParent(Form form, IntPtr parent)
+        {
+            if (form == null) return;
+
+            form.StartPosition = FormStartPosition.Manual;
+
+            // Center the new window on a monitor, where the parent window
+            // is located.
+            Screen screen = Screen.FromHandle(parent);
+            if (screen != null) {
+                Rectangle workArea = screen.WorkingArea;
+
+                form.Left = workArea.Left + ((workArea.Width - form.Width) >> 1);
+                form.Top = workArea.Top + ((workArea.Height - form.Height) >> 1);
+            }
         }
     }
 }
