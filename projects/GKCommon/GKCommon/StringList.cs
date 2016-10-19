@@ -74,6 +74,19 @@ namespace GKCommon
 
         private const string LINE_BREAK = "\r\n";
 
+        public bool CaseSensitive
+        {
+            get {
+                return this.fCaseSensitive;
+            }
+            set {
+                if (value != this.fCaseSensitive) {
+                    this.fCaseSensitive = value;
+                    if (this.fSorted) this.Sort();
+                }
+            }
+        }
+
         public int Count
         {
             get { return this.fList.Count; }
@@ -101,11 +114,43 @@ namespace GKCommon
             }
         }
 
+        public DuplicateSolve DuplicateSolve
+        {
+            get { return this.fDuplicateSolve; }
+            set { this.fDuplicateSolve = value; }
+        }
+
+        public event NotifyEventHandler OnChange
+        {
+            add { this.fOnChange = value; }
+            remove { if (this.fOnChange == value) this.fOnChange = null; }
+        }
+
+        public event NotifyEventHandler OnChanging
+        {
+            add { this.fOnChanging = value; }
+            remove { if (this.fOnChanging == value) this.fOnChanging = null; }
+        }
+
+        public bool Sorted
+        {
+            get {
+                return this.fSorted;
+            }
+            set {
+                if (this.fSorted != value) {
+                    if (value) this.Sort();
+                    this.fSorted = value;
+                }
+            }
+        }
+
         public string Text
         {
             get { return this.GetTextStr(); }
             set { this.SetTextStr(value); }
         }
+
 
         public StringList()
         {
@@ -146,50 +191,6 @@ namespace GKCommon
         public bool IsEmpty()
         {
             return (this.fList.Count <= 0);
-        }
-
-        public event NotifyEventHandler OnChange
-        {
-            add { this.fOnChange = value; }
-            remove { if (this.fOnChange == value) this.fOnChange = null; }
-        }
-
-        public event NotifyEventHandler OnChanging
-        {
-            add { this.fOnChanging = value; }
-            remove { if (this.fOnChanging == value) this.fOnChanging = null; }
-        }
-
-        public DuplicateSolve DuplicateSolve
-        {
-            get { return this.fDuplicateSolve; }
-            set { this.fDuplicateSolve = value; }
-        }
-
-        public bool Sorted
-        {
-            get {
-                return this.fSorted;
-            }
-            set {
-                if (this.fSorted != value) {
-                    if (value) this.Sort();
-                    this.fSorted = value;
-                }
-            }
-        }
-
-        public bool CaseSensitive
-        {
-            get {
-                return this.fCaseSensitive;
-            }
-            set {
-                if (value != this.fCaseSensitive) {
-                    this.fCaseSensitive = value;
-                    if (this.fSorted) this.Sort();
-                }
-            }
         }
 
         public object GetObject(int index)
@@ -267,16 +268,12 @@ namespace GKCommon
             if (!this.fSorted) {
                 result = this.fList.Count;
             } else {
-                result = this.IndexOf(str);
-                if (result >= 0) {
-                    if (this.fDuplicateSolve == DuplicateSolve.Ignore) {
+                if (this.Find(str, out result)) {
+                    if (this.fDuplicateSolve == DuplicateSolve.Ignore)
                         return result;
-                    }
 
                     if (this.fDuplicateSolve == DuplicateSolve.Error)
                         throw new StringListException("String list does not allow duplicates");
-                } else {
-                    result = 0;
                 }
             }
 
@@ -398,20 +395,16 @@ namespace GKCommon
 
         private void SetUpdateState(bool updating)
         {
-            if (updating)
-            {
+            if (updating) {
                 this.Changing();
-            }
-            else
-            {
+            } else {
                 this.Changed();
             }
         }
 
         public void BeginUpdate()
         {
-            if (this.fUpdateCount == 0)
-            {
+            if (this.fUpdateCount == 0) {
                 this.SetUpdateState(true);
             }
             this.fUpdateCount++;
@@ -420,24 +413,21 @@ namespace GKCommon
         public void EndUpdate()
         {
             this.fUpdateCount--;
-            if (this.fUpdateCount == 0)
-            {
+            if (this.fUpdateCount == 0) {
                 this.SetUpdateState(false);
             }
         }
 
         private void Changed()
         {
-            if (this.fUpdateCount == 0 && this.fOnChange != null)
-            {
+            if (this.fUpdateCount == 0 && this.fOnChange != null) {
                 this.fOnChange(this);
             }
         }
 
         private void Changing()
         {
-            if (this.fUpdateCount == 0 && this.fOnChanging != null)
-            {
+            if (this.fUpdateCount == 0 && this.fOnChanging != null) {
                 this.fOnChanging(this);
             }
         }
@@ -464,7 +454,6 @@ namespace GKCommon
             if (this.fList.Count <= 0) return result;
 
             if (!this.fSorted) {
-
                 int num = this.fList.Count;
                 for (int i = 0; i < num; i++) {
                     if (this.CompareStrings(this.fList[i].StrVal, str) == 0) {
@@ -472,34 +461,50 @@ namespace GKCommon
                         break;
                     }
                 }
-
             } else {
+                if (!this.Find(str, out result)) {
+                    result = -1;
+                }
+            }
 
-                bool found = false;
-                int low = 0;
-                int high = this.fList.Count - 1;
-                while (low <= high) {
-                    int idx = (int)((uint)(low + high) >> 1);
-                    int cmpRes = this.CompareStrings(this.fList[idx].StrVal, str);
+            return result;
+        }
 
-                    if (cmpRes < 0) {
-                        low = idx + 1;
-                    } else {
-                        high = idx - 1;
+        /// <summary>
+        /// Important: `index`, returned by this method, necessary in the
+        /// methods of insertion for sorted lists - even when the search
+        /// string is not found.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private bool Find(string str, out int index)
+        {
+            bool result = false;
 
-                        if (cmpRes == 0) {
-                            found = true;
-                            if (this.fDuplicateSolve != DuplicateSolve.Accept) {
-                                low = idx;
-                            }
+            int low = 0;
+            int high = this.fList.Count - 1;
+
+            while (low <= high) {
+                int idx = (int)((uint)(low + high) >> 1);
+                int cmp = this.CompareStrings(this.fList[idx].StrVal, str);
+
+                if (cmp < 0) {
+                    low = idx + 1;
+                } else {
+                    high = idx - 1;
+
+                    if (cmp == 0) {
+                        result = true;
+
+                        if (this.fDuplicateSolve != DuplicateSolve.Accept) {
+                            low = idx;
                         }
                     }
                 }
-
-                if (found) {
-                    result = low;
-                }
             }
+
+            index = low;
 
             return result;
         }
@@ -508,66 +513,14 @@ namespace GKCommon
 
         #region Sorting
 
-        private void QuickSort(int left, int right)
-        {
-            int I;
-            do
-            {
-                I = left;
-                int J = right;
-                int mid = (int)((uint)(left + right) >> 1);
-                while (true)
-                {
-                    if (SCompare(I, mid) >= 0)
-                    {
-                        while (SCompare(J, mid) > 0)
-                        {
-                            J--;
-                        }
-                        if (I <= J)
-                        {
-                            this.ExchangeItems(I, J);
-                            if (mid == I)
-                            {
-                                mid = J;
-                            }
-                            else
-                            {
-                                if (mid == J)
-                                {
-                                    mid = I;
-                                }
-                            }
-                            I++;
-                            J--;
-                        }
-                        if (I > J)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        I++;
-                    }
-                }
-                if (left < J)
-                {
-                    this.QuickSort(left, J);
-                }
-                left = I;
-            }
-            while (I < right);
-        }
-
-        public int CompareStrings(string s1, string s2)
+        private int CompareStrings(string s1, string s2)
         {
             return string.Compare(s1, s2, !this.fCaseSensitive);
         }
 
-        public int SCompare(int index1, int index2)
+        private int CompareItems(StringItem item1, StringItem item2)
         {
-            return string.Compare(fList[index1].StrVal, fList[index2].StrVal, !this.fCaseSensitive);
+            return string.Compare(item1.StrVal, item2.StrVal, !this.fCaseSensitive);
         }
 
         public void Sort()
@@ -575,7 +528,7 @@ namespace GKCommon
             if (!this.fSorted && this.fList.Count > 1)
             {
                 this.Changing();
-                this.QuickSort(0, this.fList.Count - 1);
+                SortHelper.QuickSort(fList, CompareItems);
                 this.Changed();
             }
         }

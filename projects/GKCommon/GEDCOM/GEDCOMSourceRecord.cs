@@ -120,9 +120,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMSourceRecord targetSource = targetRecord as GEDCOMSourceRecord;
             if (targetSource == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
-            }
 
             StringList titl = new StringList();
             StringList orig = new StringList();

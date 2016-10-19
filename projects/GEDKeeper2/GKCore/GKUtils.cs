@@ -324,7 +324,7 @@ namespace GKCore
         #endregion
 
         #region Event Utils
-        
+
         public static void CollectEventValues(GEDCOMCustomEvent evt, ValuesCollection valuesCollection)
         {
             if (evt == null || valuesCollection == null) return;

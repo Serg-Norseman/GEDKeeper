@@ -433,9 +433,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMIndividualRecord sourceRec = source as GEDCOMIndividualRecord;
             if (sourceRec == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
-            }
 
             base.Assign(source);
 
@@ -451,9 +449,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
             if (toRec == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
-            }
 
             if (!clearDest)
             {

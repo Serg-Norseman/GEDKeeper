@@ -1615,6 +1615,8 @@ namespace GKTests
             indiRec.PermanentRecordFileNumber = "test22";
             Assert.AreEqual("test22", indiRec.PermanentRecordFileNumber);
 
+            Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null, false); });
+
             using (GEDCOMIndividualRecord copyIndi = new GEDCOMIndividualRecord(null, null, "", "")) {
                 Assert.IsNotNull(copyIndi);
 
@@ -1905,7 +1907,28 @@ namespace GKTests
         [Test]
         public void GEDCOMList_Tests()
         {
+            GEDCOMObject obj1 = new GEDCOMObject();
+            GEDCOMObject obj2 = new GEDCOMObject();
+
             using (GEDCOMList<GEDCOMObject> list = new GEDCOMList<GEDCOMObject>(null)) {
+                Assert.IsNull(list.Owner);
+
+                list.Add(obj1);
+                list.Add(obj2);
+                Assert.AreEqual(0, list.IndexOf(obj1));
+                Assert.AreEqual(1, list.IndexOf(obj2));
+
+                list.Delete(obj1);
+                Assert.AreEqual(-1, list.IndexOf(obj1));
+                Assert.AreEqual(0, list.IndexOf(obj2));
+
+                list.Add(obj1);
+                Assert.AreEqual(1, list.IndexOf(obj1));
+                Assert.AreEqual(0, list.IndexOf(obj2));
+                list.Exchange(0, 1);
+                Assert.AreEqual(0, list.IndexOf(obj1));
+                Assert.AreEqual(1, list.IndexOf(obj2));
+
                 foreach (GEDCOMObject obj in list) {
                 }
             }
@@ -2037,6 +2060,8 @@ namespace GKTests
 
         private static void GEDCOMRecordTest(GEDCOMRecord rec)
         {
+            Assert.Throws(typeof(ArgumentException), () => { rec.Assign(null); });
+
             rec.AutomatedRecordID = "test11";
             Assert.AreEqual("test11", rec.AutomatedRecordID);
 
@@ -2080,6 +2105,8 @@ namespace GKTests
 
                 Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));
                 Assert.AreEqual(100.0f, famRec.IsMatch(famRec, new MatchParams()));
+
+                Assert.Throws(typeof(ArgumentException), () => { famRec.MoveTo(null, false); });
             }
         }
 
@@ -2190,6 +2217,8 @@ namespace GKTests
             using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(null, null, "", "") as GEDCOMSourceRecord)
             {
                 Assert.IsNotNull(src1, "src1 != null");
+
+                Assert.Throws(typeof(ArgumentException), () => { src1.MoveTo(null, false); });
 
                 using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(null, null, "", ""))
                 {
@@ -2703,6 +2732,8 @@ namespace GKTests
 
                     Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()));
                 }
+
+                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
             }
         }
 

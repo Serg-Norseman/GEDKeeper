@@ -64,9 +64,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMRecordWithEvents sourceRec = source as GEDCOMRecordWithEvents;
             if (sourceRec == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
-            }
 
             base.Assign(source);
 
@@ -82,9 +80,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMRecordWithEvents target = targetRecord as GEDCOMRecordWithEvents;
             if (target == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
-            }
 
             base.MoveTo(targetRecord, clearDest);
 

@@ -29,11 +29,12 @@ namespace GKCore.Tools
     /// </summary>
     public sealed class PlaceObj : BaseObject
     {
-        public string Name;
+        public readonly string Name;
         public readonly List<GEDCOMCustomEvent> Facts;
 
-        public PlaceObj()
+        public PlaceObj(string name)
         {
+            this.Name = name;
             this.Facts = new List<GEDCOMCustomEvent>();
         }
 

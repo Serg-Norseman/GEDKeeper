@@ -1466,12 +1466,12 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void _CheckPlaces_PrepareEvent(StringList placesList, GEDCOMCustomEvent aEvent)
+        private static void PlacesSearch_CheckEventPlace(StringList placesList, GEDCOMCustomEvent evt)
         {
-            string placeStr = aEvent.Detail.Place.StringValue;
+            string placeStr = evt.Detail.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
-            GEDCOMLocationRecord loc = aEvent.Detail.Place.Location.Value as GEDCOMLocationRecord;
+            GEDCOMLocationRecord loc = evt.Detail.Place.Location.Value as GEDCOMLocationRecord;
             if (loc != null) {
                 placeStr = "[*] " + placeStr;
             }
@@ -1482,11 +1482,10 @@ namespace GKCore.Tools
             if (idx >= 0) {
                 placeObj = (PlaceObj)placesList.GetObject(idx);
             } else {
-                placeObj = new PlaceObj();
-                placeObj.Name = placeStr;
+                placeObj = new PlaceObj(placeStr);
                 placesList.AddObject(placeStr, placeObj);
             }
-            placeObj.Facts.Add(aEvent);
+            placeObj.Facts.Add(evt);
         }
 
         public static void PlacesSearch(GEDCOMTree tree, StringList placesList, IProgressController pc)
@@ -1502,31 +1501,29 @@ namespace GKCore.Tools
 
             PlacesSearch_Clear(placesList);
 
-            pc.ProgressInit(LangMan.LS(LSID.LSID_PlacesPrepare), tree.RecordsCount);
+            try
+            {
+                int recsCount = tree.RecordsCount;
+                pc.ProgressInit(LangMan.LS(LSID.LSID_PlacesPrepare), recsCount);
 
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                pc.ProgressStep();
-                GEDCOMRecord record = tree[i];
+                for (int i = 0; i < recsCount; i++) {
+                    pc.ProgressStep();
+                    GEDCOMRecord record = tree[i];
 
-                if (record is GEDCOMIndividualRecord) {
-                    GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+                    if (record is GEDCOMRecordWithEvents) {
+                        GEDCOMRecordWithEvents evsRec = record as GEDCOMRecordWithEvents;
 
-                    int num2 = iRec.Events.Count;
-                    for (int j = 0; j < num2; j++) {
-                        _CheckPlaces_PrepareEvent(placesList, iRec.Events[j]);
-                    }
-                } else if (record is GEDCOMFamilyRecord) {
-                    GEDCOMFamilyRecord fRec = record as GEDCOMFamilyRecord;
+                        int num2 = evsRec.Events.Count;
+                        for (int j = 0; j < num2; j++) {
+                            GEDCOMCustomEvent evt = evsRec.Events[j];
 
-                    int num3 = fRec.Events.Count;
-                    for (int j = 0; j < num3; j++) {
-                        _CheckPlaces_PrepareEvent(placesList, fRec.Events[j]);
+                            PlacesSearch_CheckEventPlace(placesList, evt);
+                        }
                     }
                 }
+            } finally {
+                pc.ProgressDone();
             }
-
-            pc.ProgressDone();
         }
 
         #endregion
