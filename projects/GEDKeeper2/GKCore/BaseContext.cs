@@ -32,7 +32,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
-using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
@@ -1198,49 +1197,6 @@ namespace GKCore
             this.fUndoman.Rollback();
             //this.fViewer.RefreshLists(false);
             //this.fHost.UpdateControls(false);
-        }
-
-        public void ChangeIndividualSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
-        {
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (person.Sex != newSex)
-            {
-                this.fUndoman.DoOperation(new PersonSexChange(this.fUndoman, person, newSex));
-            }
-        }
-
-        public void ChangeIndividualPatriarch(GEDCOMIndividualRecord person, bool newValue)
-        {
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (person.Patriarch != newValue)
-            {
-                this.fUndoman.DoOperation(new PersonPatriarchChange(this.fUndoman, person, newValue));
-            }
-        }
-
-        public void ChangeIndividualBookmark(GEDCOMIndividualRecord person, bool newValue)
-        {
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (person.Bookmark != newValue)
-            {
-                this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));
-            }
-        }
-
-        public void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
-        {
-            ChangeTracker.DetachIndividualParents(this.fUndoman, person, family);
-        }
-
-        public void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
-        {
-            ChangeTracker.DetachFamilySpouse(this.fUndoman, family, spouse);
         }
 
         #endregion

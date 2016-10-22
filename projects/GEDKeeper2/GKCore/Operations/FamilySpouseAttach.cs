@@ -23,12 +23,12 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public sealed class FamilyDetachSpouse : CustomOperation
+    public sealed class FamilySpouseAttach : CustomOperation
     {
         private string fFamilyXRef;
         private string fSpouseXRef;
 
-        public FamilyDetachSpouse(UndoManager manager, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse) : base(manager)
+        public FamilySpouseAttach(UndoManager manager, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse) : base(manager)
         {
             this.fFamilyXRef = family.XRef;
             this.fSpouseXRef = spouse.XRef;
@@ -44,7 +44,7 @@ namespace GKCore.Operations
             if (famRec == null || spouseRec == null) {
                 result = false;
             } else {
-                famRec.RemoveSpouse(spouseRec);
+                famRec.AddSpouse(spouseRec);
             }
 
             return result;
@@ -56,7 +56,7 @@ namespace GKCore.Operations
             GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
 
             if (famRec != null && spouseRec != null) {
-                famRec.AddSpouse(spouseRec);
+                famRec.RemoveSpouse(spouseRec);
             }
         }
     }

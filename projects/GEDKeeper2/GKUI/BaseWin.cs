@@ -1774,13 +1774,13 @@ namespace GKUI
         #region Modify routines
 
         /// <summary>
-        /// This method performs a basic locking of the records for their 
+        /// This method performs a basic locking of the records for their
         /// editors.
         /// 
-        /// The original idea was to call the methods Lock/Unlock records, 
-        /// in the edit dialogs of the records. However, it would be unsafe, 
-        /// because in the case of a failure of dialogue, the record would 
-        /// remain locked. Therefore, the locking and unlocking of records 
+        /// The original idea was to call the methods Lock/Unlock records,
+        /// in the edit dialogs of the records. However, it would be unsafe,
+        /// because in the case of a failure of dialogue, the record would
+        /// remain locked. Therefore, the locking and unlocking of records
         /// must take on a methods that controls the dialog.
         /// </summary>
         /// <param name="record"></param>

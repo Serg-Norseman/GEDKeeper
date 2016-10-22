@@ -30,6 +30,52 @@ namespace GKCore.Operations
     public static class ChangeTracker
     {
 
+        public static void ChangeIndividualSex(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMSex newSex)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (person == null)
+                throw new ArgumentNullException("person");
+
+            if (person.Sex != newSex)
+            {
+                UndoManager uMan = ((UndoManager) undoman);
+                uMan.DoOperation(new PersonSexChange(uMan, person, newSex));
+            }
+        }
+
+        public static void ChangeIndividualPatriarch(IUndoManager undoman, GEDCOMIndividualRecord person, bool newValue)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (person == null)
+                throw new ArgumentNullException("person");
+
+            if (person.Patriarch != newValue)
+            {
+                UndoManager uMan = ((UndoManager) undoman);
+                uMan.DoOperation(new PersonPatriarchChange(uMan, person, newValue));
+            }
+        }
+
+        public static void ChangeIndividualBookmark(IUndoManager undoman, GEDCOMIndividualRecord person, bool newValue)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (person == null)
+                throw new ArgumentNullException("person");
+
+            if (person.Bookmark != newValue)
+            {
+                UndoManager uMan = ((UndoManager) undoman);
+                uMan.DoOperation(new PersonBookmarkChange(uMan, person, newValue));
+            }
+        }
+
+
         public static void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
         {
             if (undoman == null)
@@ -42,7 +88,7 @@ namespace GKCore.Operations
                 throw new ArgumentNullException("family");
 
             UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new PersonAttachParents(uMan, person, family));
+            uMan.DoOperation(new PersonParentsAttach(uMan, person, family));
         }
 
         public static void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
@@ -57,7 +103,7 @@ namespace GKCore.Operations
                 throw new ArgumentNullException("family");
 
             UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new PersonDetachParents(uMan, person, family));
+            uMan.DoOperation(new PersonParentsDetach(uMan, person, family));
         }
 
 
@@ -73,7 +119,7 @@ namespace GKCore.Operations
                 throw new ArgumentNullException("spouse");
 
             UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new FamilyAttachSpouse(uMan, family, spouse));
+            uMan.DoOperation(new FamilySpouseAttach(uMan, family, spouse));
         }
 
         public static void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
@@ -88,7 +134,38 @@ namespace GKCore.Operations
                 throw new ArgumentNullException("spouse");
 
             UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new FamilyDetachSpouse(uMan, family, spouse));
+            uMan.DoOperation(new FamilySpouseDetach(uMan, family, spouse));
         }
+
+
+        /*public static void AttachGroupMember(IUndoManager undoman, GEDCOMGroupRecord group, GEDCOMIndividualRecord member)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (group == null)
+                throw new ArgumentNullException("group");
+
+            if (member == null)
+                throw new ArgumentNullException("member");
+
+            UndoManager uMan = ((UndoManager) undoman);
+            uMan.DoOperation(new GroupMemberAttach(uMan, group, member));
+        }*/
+
+        /*public static void DetachGroupMember(IUndoManager undoman, GEDCOMGroupRecord group, GEDCOMIndividualRecord member)
+        {
+            if (undoman == null)
+                throw new ArgumentNullException("undoman");
+
+            if (group == null)
+                throw new ArgumentNullException("group");
+
+            if (member == null)
+                throw new ArgumentNullException("member");
+
+            UndoManager uMan = ((UndoManager) undoman);
+            uMan.DoOperation(new GroupMemberDetach(uMan, group, member));
+        }*/
     }
 }

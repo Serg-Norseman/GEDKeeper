@@ -23,28 +23,31 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public sealed class FamilyAttachSpouse : CustomOperation
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class GroupMemberAttach : CustomOperation
     {
-        private string fFamilyXRef;
-        private string fSpouseXRef;
+        private string fGroupXRef;
+        private string fMemberXRef;
 
-        public FamilyAttachSpouse(UndoManager manager, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse) : base(manager)
+        public GroupMemberAttach(UndoManager manager, GEDCOMGroupRecord group, GEDCOMIndividualRecord member) : base(manager)
         {
-            this.fFamilyXRef = family.XRef;
-            this.fSpouseXRef = spouse.XRef;
+            this.fGroupXRef = group.XRef;
+            this.fMemberXRef = member.XRef;
         }
 
         public override bool Redo()
         {
             bool result = true;
 
-            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
-            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
+            GEDCOMGroupRecord grpRec = this.fManager.Tree.XRefIndex_Find(this.fGroupXRef) as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord mbrRec = this.fManager.Tree.XRefIndex_Find(this.fMemberXRef) as GEDCOMIndividualRecord;
 
-            if (famRec == null || spouseRec == null) {
+            if (grpRec == null || mbrRec == null) {
                 result = false;
             } else {
-                famRec.AddSpouse(spouseRec);
+                grpRec.AddMember(mbrRec);
             }
 
             return result;
@@ -52,11 +55,11 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
-            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
+            GEDCOMGroupRecord grpRec = this.fManager.Tree.XRefIndex_Find(this.fGroupXRef) as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord mbrRec = this.fManager.Tree.XRefIndex_Find(this.fMemberXRef) as GEDCOMIndividualRecord;
 
-            if (famRec != null && spouseRec != null) {
-                famRec.RemoveSpouse(spouseRec);
+            if (grpRec != null && mbrRec != null) {
+                grpRec.RemoveMember(mbrRec);
             }
         }
     }

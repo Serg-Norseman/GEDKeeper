@@ -23,12 +23,12 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public sealed class PersonDetachParents : CustomOperation
+    public sealed class PersonParentsDetach : CustomOperation
     {
         private string fPersonXRef;
         private string fFamilyXRef;
 
-        public PersonDetachParents(UndoManager manager, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family) : base(manager)
+        public PersonParentsDetach(UndoManager manager, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family) : base(manager)
         {
             this.fPersonXRef = person.XRef;
             this.fFamilyXRef = family.XRef;

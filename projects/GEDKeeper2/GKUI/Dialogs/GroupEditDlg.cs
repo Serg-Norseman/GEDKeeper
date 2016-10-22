@@ -20,11 +20,11 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
@@ -34,9 +34,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class GroupEditDlg : Form, IBaseEditor
+    public partial class GroupEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKSheetList fMembersList;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
@@ -47,11 +46,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fGroup; }
             set { this.SetGroup(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
         private void SetGroup(GEDCOMGroupRecord value)
@@ -71,18 +65,16 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
+                this.Base.Host.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
             }
         }
         
-        public GroupEditDlg(IBaseWindow aBase)
+        public GroupEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
             
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
-
-            this.fBase = aBase;
 
             this.fMembersList = CreateMembersSheet(this.pageMembers);
             this.fNotesList = new GKNotesSheet(this, this.pageNotes);
@@ -141,19 +133,29 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    member = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-                    result = (member != null && this.fGroup.AddMember(member));
+                    member = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    result = (member != null);
+                    if (result) {
+                        //this.fGroup.AddMember(member);
+                        //ChangeTracker.AttachGroupMember(this.fLocalUndoman, this.fGroup, member);
+                        this.fLocalUndoman.DoOperation(new GroupMemberAttach(this.fLocalUndoman, this.fGroup, member));
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No && this.fGroup.RemoveMember(member));
+                    result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No);
+                    if (result) {
+                        //this.fGroup.RemoveMember(member);
+                        //ChangeTracker.DetachGroupMember(this.fLocalUndoman, this.fGroup, member);
+                        this.fLocalUndoman.DoOperation(new GroupMemberDetach(this.fLocalUndoman, this.fGroup, member));
+                    }
                     break;
-                    
+
                 case RecordAction.raJump:
                     if (member != null) {
                         this.AcceptChanges();
                         base.DialogResult = DialogResult.OK;
-                        this.fBase.SelectRecordByXRef(member.XRef);
+                        this.Base.SelectRecordByXRef(member.XRef);
                         base.Close();
                     }
                     break;
@@ -164,8 +166,10 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
+            base.CommitChanges();
+
             this.fGroup.GroupName = this.edName.Text;
-            this.fBase.ChangeRecord(this.fGroup);
+            this.Base.ChangeRecord(this.fGroup);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -177,8 +181,20 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
+                this.Base.Host.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.Base.Host.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
     }

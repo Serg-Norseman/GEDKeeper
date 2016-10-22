@@ -79,8 +79,5 @@ namespace GKCore.Interfaces
         void DoRedo();
         void DoCommit();
         void DoRollback();
-
-        void DetachIndividualParents(GEDCOMIndividualRecord person, GEDCOMFamilyRecord family);
-        void DetachFamilySpouse(GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse);
     }
 }

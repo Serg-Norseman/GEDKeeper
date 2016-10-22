@@ -23,28 +23,28 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
-    public sealed class PersonAttachParents : CustomOperation
+    public sealed class FamilySpouseDetach : CustomOperation
     {
-        private string fPersonXRef;
         private string fFamilyXRef;
+        private string fSpouseXRef;
 
-        public PersonAttachParents(UndoManager manager, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family) : base(manager)
+        public FamilySpouseDetach(UndoManager manager, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse) : base(manager)
         {
-            this.fPersonXRef = person.XRef;
             this.fFamilyXRef = family.XRef;
+            this.fSpouseXRef = spouse.XRef;
         }
 
         public override bool Redo()
         {
             bool result = true;
 
-            GEDCOMIndividualRecord iRec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
-            GEDCOMFamilyRecord familyRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
 
-            if (iRec == null || familyRec == null) {
+            if (famRec == null || spouseRec == null) {
                 result = false;
             } else {
-                familyRec.AddChild(iRec);
+                famRec.RemoveSpouse(spouseRec);
             }
 
             return result;
@@ -52,11 +52,11 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMIndividualRecord iRec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
-            GEDCOMFamilyRecord familyRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
 
-            if (iRec != null && familyRec != null) {
-                familyRec.RemoveChild(iRec);
+            if (famRec != null && spouseRec != null) {
+                famRec.AddSpouse(spouseRec);
             }
         }
     }
