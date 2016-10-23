@@ -40,7 +40,7 @@ namespace GKCore.Operations
         {
             bool result = true;
 
-            GEDCOMIndividualRecord i_rec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord i_rec = this.FindRecord(this.fPersonXRef) as GEDCOMIndividualRecord;
             if (i_rec == null)
             {
                 result = false;
@@ -55,7 +55,7 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMIndividualRecord i_rec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord i_rec = this.FindRecord(this.fPersonXRef) as GEDCOMIndividualRecord;
             if (i_rec != null)
             {
                 i_rec.Bookmark = this.fOldVal;

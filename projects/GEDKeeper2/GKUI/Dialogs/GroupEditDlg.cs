@@ -137,7 +137,6 @@ namespace GKUI.Dialogs
                     result = (member != null);
                     if (result) {
                         //this.fGroup.AddMember(member);
-                        //ChangeTracker.AttachGroupMember(this.fLocalUndoman, this.fGroup, member);
                         this.fLocalUndoman.DoOperation(new GroupMemberAttach(this.fLocalUndoman, this.fGroup, member));
                     }
                     break;
@@ -146,7 +145,6 @@ namespace GKUI.Dialogs
                     result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No);
                     if (result) {
                         //this.fGroup.RemoveMember(member);
-                        //ChangeTracker.DetachGroupMember(this.fLocalUndoman, this.fGroup, member);
                         this.fLocalUndoman.DoOperation(new GroupMemberDetach(this.fLocalUndoman, this.fGroup, member));
                     }
                     break;

@@ -41,8 +41,8 @@ namespace GKCore.Operations
         {
             bool result = true;
 
-            GEDCOMGroupRecord grpRec = this.fManager.Tree.XRefIndex_Find(this.fGroupXRef) as GEDCOMGroupRecord;
-            GEDCOMIndividualRecord mbrRec = this.fManager.Tree.XRefIndex_Find(this.fMemberXRef) as GEDCOMIndividualRecord;
+            GEDCOMGroupRecord grpRec = this.FindRecord(this.fGroupXRef) as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord mbrRec = this.FindRecord(this.fMemberXRef) as GEDCOMIndividualRecord;
 
             if (grpRec == null || mbrRec == null) {
                 result = false;
@@ -55,8 +55,8 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMGroupRecord grpRec = this.fManager.Tree.XRefIndex_Find(this.fGroupXRef) as GEDCOMGroupRecord;
-            GEDCOMIndividualRecord mbrRec = this.fManager.Tree.XRefIndex_Find(this.fMemberXRef) as GEDCOMIndividualRecord;
+            GEDCOMGroupRecord grpRec = this.FindRecord(this.fGroupXRef) as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord mbrRec = this.FindRecord(this.fMemberXRef) as GEDCOMIndividualRecord;
 
             if (grpRec != null && mbrRec != null) {
                 grpRec.AddMember(mbrRec);

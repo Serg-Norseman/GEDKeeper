@@ -38,8 +38,8 @@ namespace GKCore.Operations
         {
             bool result = true;
 
-            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
-            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord famRec = this.FindRecord(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord spouseRec = this.FindRecord(this.fSpouseXRef) as GEDCOMIndividualRecord;
 
             if (famRec == null || spouseRec == null) {
                 result = false;
@@ -52,8 +52,8 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMFamilyRecord famRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
-            GEDCOMIndividualRecord spouseRec = this.fManager.Tree.XRefIndex_Find(this.fSpouseXRef) as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord famRec = this.FindRecord(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord spouseRec = this.FindRecord(this.fSpouseXRef) as GEDCOMIndividualRecord;
 
             if (famRec != null && spouseRec != null) {
                 famRec.RemoveSpouse(spouseRec);

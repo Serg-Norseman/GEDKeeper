@@ -527,6 +527,7 @@
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\GroupMemberAttach.cs" />
     <Compile Include="GKCore\Operations\GroupMemberDetach.cs" />
+    <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
     <Compile Include="GKCore\Operations\PersonSexChange.cs" />

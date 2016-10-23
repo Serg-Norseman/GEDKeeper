@@ -142,6 +142,7 @@
     <Compile Include="GKCore\Operations\FamilySpouseAttach.cs" />
     <Compile Include="GKCore\Operations\GroupMemberAttach.cs" />
     <Compile Include="GKCore\Operations\GroupMemberDetach.cs" />
+    <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\PersonParentsAttach.cs" />
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
     <Compile Include="GKCore\Operations\FamilySpouseDetach.cs" />

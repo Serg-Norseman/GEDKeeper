@@ -38,8 +38,8 @@ namespace GKCore.Operations
         {
             bool result = true;
 
-            GEDCOMIndividualRecord iRec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
-            GEDCOMFamilyRecord familyRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord iRec = this.FindRecord(this.fPersonXRef) as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord familyRec = this.FindRecord(this.fFamilyXRef) as GEDCOMFamilyRecord;
 
             if (iRec == null || familyRec == null) {
                 result = false;
@@ -52,8 +52,8 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            GEDCOMIndividualRecord iRec = this.fManager.Tree.XRefIndex_Find(this.fPersonXRef) as GEDCOMIndividualRecord;
-            GEDCOMFamilyRecord familyRec = this.fManager.Tree.XRefIndex_Find(this.fFamilyXRef) as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord iRec = this.FindRecord(this.fPersonXRef) as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord familyRec = this.FindRecord(this.fFamilyXRef) as GEDCOMFamilyRecord;
 
             if (iRec != null && familyRec != null) {
                 familyRec.AddChild(iRec);
