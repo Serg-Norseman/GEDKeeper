@@ -247,7 +247,7 @@ Are you sure you want to remove reference "{0}"?
 Loading of gedcom failed.
 Check gedcom format failed.
 Birth days
-Before the day of birth "{0}" remained {1} day(s)
+{1} days remain before the birthday of "{0}"
 Interface
 Trees
 Pedigrees

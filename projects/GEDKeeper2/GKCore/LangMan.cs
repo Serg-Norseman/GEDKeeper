@@ -1050,7 +1050,7 @@ namespace GKCore
             /* 246 */ "Loading of gedcom failed.",
             /* 247 */ "Check gedcom format failed.",
             /* 248 */ "Birth days",
-            /* 249 */ "Before the day of birth \"{0}\" remained {1} day(s)",
+            /* 249 */ "{1} days remain before the birthday of \"{0}\"",
             /* 250 */ "Interface",
             /* 251 */ "Trees",
             /* 252 */ "Pedigrees",
