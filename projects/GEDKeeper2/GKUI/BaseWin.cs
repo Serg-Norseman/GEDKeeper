@@ -1017,12 +1017,12 @@ namespace GKUI
                             if (rec is GEDCOMIndividualRecord) {
                                 GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                                string nm = iRec.GetNameString(true, false);
-                                nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
-
                                 uint days;
                                 if (GKUtils.GetDaysForBirth(iRec, out days))
                                 {
+                                    string nm = iRec.GetNameString(true, false);
+                                    nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
+
                                     if (0 == days)
                                     {
                                         tipsList.Add(string.Format(
