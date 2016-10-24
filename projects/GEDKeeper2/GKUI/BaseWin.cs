@@ -1020,25 +1020,23 @@ namespace GKUI
                                 string nm = iRec.GetNameString(true, false);
                                 nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
 
-                                string days = GKUtils.GetDaysForBirth(iRec);
-                                // `days` always contains non-negative number.
-                                if (!string.IsNullOrEmpty(days))
+                                uint days;
+                                if (GKUtils.GetDaysForBirth(iRec, out days))
                                 {
-                                    uint daysBefore = uint.Parse(days);
-                                    if (0 == daysBefore)
+                                    if (0 == days)
                                     {
                                         tipsList.Add(string.Format(
                                             LangMan.LS(LSID.LSID_BirthdayToday),
                                             nm));
                                     }
-                                    else if (1 == daysBefore)
+                                    else if (1 == days)
                                     {
                                         tipsList.Add(string.Format(
                                             LangMan.LS(
                                                 LSID.LSID_BirthdayTomorrow),
                                             nm));
                                     }
-                                    else if (3 > daysBefore)
+                                    else if (3 > days)
                                     {
                                         tipsList.Add(string.Format(
                                             LangMan.LS(LSID.LSID_DaysRemained),

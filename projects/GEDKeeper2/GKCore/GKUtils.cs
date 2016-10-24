@@ -913,55 +913,95 @@ namespace GKCore
             return (date == null) ? string.Empty : GetCustomDateFmtString(date, dateFormat, false, false);
         }
 
-        public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
+        /// <summary>
+        /// Get number of days remained until the birthday of the specified
+        /// person.
+        /// </summary>
+        /// <param name="iRec">A person record to check.</param>
+        /// <param name="distance">Number of days remained until the birthday of
+        /// the <paramref name="iRec" />. The caller must ignore this value if
+        /// the method returns false.</param>
+        /// <returns>true if the method succeeded and false otherwise. If the
+        /// method failed, the caller must ignore value of the
+        /// <paramref name="distance" />.</returns>
+        public static bool GetDaysForBirth(GEDCOMIndividualRecord iRec,
+                                           out uint distance)
         {
-            if (iRec == null) return string.Empty;
-
-            string result = "";
-            try
+            distance = 0;
+            bool result = false;
+            if (null != iRec)
             {
-                GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
-                if (evt == null)
+                try
                 {
-                    evt = iRec.FindEvent("BIRT");
-                    if (evt != null)
+                    GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
+                    if (evt == null)
                     {
-                        GEDCOMDate dt = evt.Detail.Date.Value as GEDCOMDate;
-                        if (dt != null)
+                        evt = iRec.FindEvent("BIRT");
+                        if (evt != null)
                         {
-                            int bdY;
-                            ushort bdM;
-                            ushort bdD;
-                            bool ybc;
-
-                            dt.GetDateParts(out bdY, out bdM, out bdD, out ybc);
-                            if (bdM != 0 && bdD != 0)
+                            GEDCOMDate dt = evt.Detail.Date.Value as GEDCOMDate;
+                            if (dt != null)
                             {
-                                DateTime dtNow = DateTime.Now.Date;
-                                ushort curY = (ushort)dtNow.Year;
-                                ushort curM = (ushort)dtNow.Month;
-                                ushort curD = (ushort)dtNow.Day;
-                                double dt2 = (curY + bdM / 12.0 + bdD / 12.0 / 31.0);
-                                double dt3 = (curY + curM / 12.0 + curD / 12.0 / 31.0);
-                                if (dt2 < dt3)
+                                int bdY;
+                                ushort bdM;
+                                ushort bdD;
+                                bool ybc;
+
+                                dt.GetDateParts(out bdY, out bdM, out bdD,
+                                                out ybc);
+                                if (bdM != 0 && bdD != 0)
                                 {
-                                    bdY = curY + 1;
+                                    DateTime dtNow = DateTime.Now.Date;
+                                    ushort curY = (ushort)dtNow.Year;
+                                    ushort curM = (ushort)dtNow.Month;
+                                    ushort curD = (ushort)dtNow.Day;
+                                    double dt2 =
+                                        curY + bdM / 12.0 + bdD / 12.0 / 31.0;
+                                    double dt3 =
+                                        curY + curM / 12.0 + curD / 12.0 / 31.0;
+                                    if (dt2 < dt3)
+                                    {
+                                        bdY = curY + 1;
+                                    }
+                                    else
+                                    {
+                                        bdY = curY;
+                                    }
+                                    distance = DaysBetween(dtNow,
+                                        new DateTime(bdY, bdM, bdD));
+                                    result = true;
                                 }
-                                else
-                                {
-                                    bdY = curY;
-                                }
-                                result = Convert.ToString(DaysBetween(dtNow, new DateTime(bdY, bdM, bdD)));
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
+                catch (Exception ex)
+                {
+                    Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
+                }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Get number of days remained until the birthday of the specified
+        /// person.
+        /// </summary>
+        /// <param name="iRec">Reference to percon record.</param>
+        /// <returns>Number of days remained until the birthday of
+        /// the <paramref name="iRec" />. On any error the method returns empty
+        /// string.</returns>
+        public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
+        {
+            uint distance;
+            if (GetDaysForBirth(iRec, out distance))
+            {
+                return Convert.ToString(distance);
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         #endregion
