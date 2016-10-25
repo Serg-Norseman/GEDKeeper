@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 
 namespace GKUI.Dialogs
 {
@@ -30,8 +30,8 @@ namespace GKUI.Dialogs
     /// </summary>
     public abstract class EditorDialog : Form, IBaseEditor
     {
-        private readonly IBaseWindow fBase;
-        protected readonly UndoManager fLocalUndoman;
+        protected readonly IBaseWindow fBase;
+        protected readonly ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
         {
@@ -41,7 +41,7 @@ namespace GKUI.Dialogs
         public EditorDialog(IBaseWindow baseWin)
         {
             this.fBase = baseWin;
-            this.fLocalUndoman = new UndoManager(this.fBase.Tree);
+            this.fLocalUndoman = new ChangeTracker(this.fBase.Tree);
         }
 
         protected void CommitChanges()

@@ -121,7 +121,7 @@ namespace GKTests
         [Test]
         public void Undoman_Tests()
         {
-            using (UndoManager undoman = new UndoManager(fContext.Tree)) {
+            using (ChangeTracker undoman = new ChangeTracker(fContext.Tree)) {
                 Assert.IsNotNull(undoman);
 
                 Assert.AreEqual(fContext.Tree, undoman.Tree);
@@ -145,15 +145,19 @@ namespace GKTests
 
             fContext.Undoman.Clear();
 
-            Assert.Throws(typeof(ArgumentNullException), () => { ChangeTracker.ChangeIndividualBookmark(null, null, true); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ChangeTracker.ChangeIndividualPatriarch(null, null, true); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ChangeTracker.ChangeIndividualSex(null, null, GEDCOMSex.svUndetermined); });
-
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoOrdinaryOperation(
+                                  OperationType.otIndividualBookmarkChange, null, true); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoOrdinaryOperation(
+                                  OperationType.otIndividualBookmarkChange, iRec, null); });
+
             iRec.Bookmark = false;
-            ChangeTracker.ChangeIndividualBookmark(fContext.Undoman, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
             Assert.IsTrue(iRec.Bookmark);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
@@ -161,7 +165,7 @@ namespace GKTests
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             iRec.Patriarch = false;
-            ChangeTracker.ChangeIndividualPatriarch(fContext.Undoman, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
             Assert.IsTrue(iRec.Patriarch);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
@@ -169,7 +173,7 @@ namespace GKTests
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             iRec.Sex = GEDCOMSex.svUndetermined;
-            ChangeTracker.ChangeIndividualSex(fContext.Undoman, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
             Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
@@ -187,9 +191,9 @@ namespace GKTests
             iRec.Patriarch = false;
             iRec.Sex = GEDCOMSex.svUndetermined;
 
-            ChangeTracker.ChangeIndividualBookmark(fContext.Undoman, iRec, true);
-            ChangeTracker.ChangeIndividualPatriarch(fContext.Undoman, iRec, true);
-            ChangeTracker.ChangeIndividualSex(fContext.Undoman, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
             fContext.Undoman.Commit();
             Assert.IsTrue(iRec.Bookmark);
             Assert.IsTrue(iRec.Patriarch);
@@ -202,9 +206,9 @@ namespace GKTests
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
 
-            ChangeTracker.ChangeIndividualBookmark(fContext.Undoman, iRec, true);
-            ChangeTracker.ChangeIndividualPatriarch(fContext.Undoman, iRec, true);
-            ChangeTracker.ChangeIndividualSex(fContext.Undoman, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
             fContext.Undoman.Rollback();
             Assert.IsFalse(iRec.Bookmark);
             Assert.IsFalse(iRec.Patriarch);

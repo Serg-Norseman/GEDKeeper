@@ -522,19 +522,10 @@
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKCore\UndoManager.cs" />
+    <Compile Include="GKCore\Operations\UndoManager.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
-    <Compile Include="GKCore\Operations\GroupMemberAttach.cs" />
-    <Compile Include="GKCore\Operations\GroupMemberDetach.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
-    <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
-    <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
-    <Compile Include="GKCore\Operations\PersonSexChange.cs" />
-    <Compile Include="GKCore\Operations\FamilySpouseAttach.cs" />
-    <Compile Include="GKCore\Operations\FamilySpouseDetach.cs" />
-    <Compile Include="GKCore\Operations\PersonParentsAttach.cs" />
-    <Compile Include="GKCore\Operations\PersonParentsDetach.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
   </ItemGroup>
   <ItemGroup>

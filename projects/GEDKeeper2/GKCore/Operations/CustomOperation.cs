@@ -19,22 +19,16 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
 
 namespace GKCore.Operations
 {
     public abstract class CustomOperation
     {
-        private readonly UndoManager fManager;
+        protected readonly UndoManager fManager;
 
         protected CustomOperation(UndoManager manager)
         {
             this.fManager = manager;
-        }
-
-        public GEDCOMRecord FindRecord(string xref)
-        {
-            return this.fManager.Tree.XRefIndex_Find(xref);
         }
 
         public abstract bool Redo();

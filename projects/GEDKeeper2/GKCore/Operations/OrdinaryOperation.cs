@@ -32,9 +32,9 @@ namespace GKCore.Operations
         otFamilySpouseDetach,
         otGroupMemberAttach,
         otGroupMemberDetach,
-        otPersonBookmarkChange,
-        otPersonPatriarchChange,
-        otPersonSexChange
+        otIndividualBookmarkChange,
+        otIndividualPatriarchChange,
+        otIndividualSexChange
     }
 
     /// <summary>
@@ -44,14 +44,15 @@ namespace GKCore.Operations
     {
         private readonly OperationType fType;
         private readonly GEDCOMObject fObj;
-        private readonly object fVal;
+        private object fOldVal;
+        private readonly object fNewVal;
 
         public OrdinaryOperation(UndoManager manager, OperationType type,
-                                 GEDCOMObject obj, object val) : base(manager)
+                                 GEDCOMObject obj, object newVal) : base(manager)
         {
             this.fType = type;
             this.fObj = obj;
-            this.fVal = val;
+            this.fNewVal = newVal;
         }
 
         public override bool Redo()
@@ -64,6 +65,11 @@ namespace GKCore.Operations
             this.ProcessOperation(false);
         }
 
+        /*public GEDCOMRecord FindRecord(string xref)
+        {
+            return this.fManager.Tree.XRefIndex_Find(xref);
+        }*/
+
         private bool ProcessOperation(bool redo)
         {
             bool result;
@@ -74,35 +80,21 @@ namespace GKCore.Operations
                     break;
 
                 case OperationType.otPersonParentsAttach:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMFamilyRecord familyRec = this.fVal as GEDCOMFamilyRecord;
-
-                        if (iRec == null || familyRec == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                familyRec.AddChild(iRec);
-                            } else {
-                                familyRec.RemoveChild(iRec);
-                            }
-                            result = true;
-                        }
-                    }
-                    break;
-
                 case OperationType.otPersonParentsDetach:
                     {
                         GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMFamilyRecord familyRec = this.fVal as GEDCOMFamilyRecord;
+                        GEDCOMFamilyRecord familyRec = this.fNewVal as GEDCOMFamilyRecord;
 
                         if (iRec == null || familyRec == null) {
                             result = false;
                         } else {
+                            if (this.fType == OperationType.otPersonParentsDetach) {
+                                redo = !redo;
+                            }
                             if (redo) {
-                                familyRec.RemoveChild(iRec);
-                            } else {
                                 familyRec.AddChild(iRec);
+                            } else {
+                                familyRec.RemoveChild(iRec);
                             }
                             result = true;
                         }
@@ -110,35 +102,21 @@ namespace GKCore.Operations
                     break;
 
                 case OperationType.otFamilySpouseAttach:
-                    {
-                        GEDCOMFamilyRecord famRec = this.fObj as GEDCOMFamilyRecord;
-                        GEDCOMIndividualRecord spouseRec = this.fVal as GEDCOMIndividualRecord;
-
-                        if (famRec == null || spouseRec == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                famRec.AddSpouse(spouseRec);
-                            } else {
-                                famRec.RemoveSpouse(spouseRec);
-                            }
-                            result = true;
-                        }
-                    }
-                    break;
-
                 case OperationType.otFamilySpouseDetach:
                     {
                         GEDCOMFamilyRecord famRec = this.fObj as GEDCOMFamilyRecord;
-                        GEDCOMIndividualRecord spouseRec = this.fVal as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord spouseRec = this.fNewVal as GEDCOMIndividualRecord;
 
                         if (famRec == null || spouseRec == null) {
                             result = false;
                         } else {
+                            if (this.fType == OperationType.otFamilySpouseDetach) {
+                                redo = !redo;
+                            }
                             if (redo) {
-                                famRec.RemoveSpouse(spouseRec);
-                            } else {
                                 famRec.AddSpouse(spouseRec);
+                            } else {
+                                famRec.RemoveSpouse(spouseRec);
                             }
                             result = true;
                         }
@@ -146,51 +124,81 @@ namespace GKCore.Operations
                     break;
 
                 case OperationType.otGroupMemberAttach:
-                    {
-                        GEDCOMGroupRecord grpRec = this.fObj as GEDCOMGroupRecord;
-                        GEDCOMIndividualRecord mbrRec = this.fVal as GEDCOMIndividualRecord;
-
-                        if (grpRec == null || mbrRec == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                grpRec.AddMember(mbrRec);
-                            } else {
-                                grpRec.RemoveMember(mbrRec);
-                            }
-                            result = true;
-                        }
-                    }
-                    break;
-
                 case OperationType.otGroupMemberDetach:
                     {
                         GEDCOMGroupRecord grpRec = this.fObj as GEDCOMGroupRecord;
-                        GEDCOMIndividualRecord mbrRec = this.fVal as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord mbrRec = this.fNewVal as GEDCOMIndividualRecord;
 
                         if (grpRec == null || mbrRec == null) {
                             result = false;
                         } else {
+                            if (this.fType == OperationType.otGroupMemberDetach) {
+                                redo = !redo;
+                            }
                             if (redo) {
-                                grpRec.RemoveMember(mbrRec);
-                            } else {
                                 grpRec.AddMember(mbrRec);
+                            } else {
+                                grpRec.RemoveMember(mbrRec);
                             }
                             result = true;
                         }
                     }
                     break;
 
-                case OperationType.otPersonBookmarkChange:
-                    result = false;
+
+                case OperationType.otIndividualBookmarkChange:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+
+                        if (iRec == null || this.fNewVal == null) {
+                            result = false;
+                        } else {
+                            if (redo) {
+                                this.fOldVal = iRec.Bookmark;
+                                iRec.Bookmark = (bool) this.fNewVal;
+                            } else {
+                                iRec.Bookmark = (bool) this.fOldVal;
+                            }
+                            result = true;
+                        }
+                    }
                     break;
 
-                case OperationType.otPersonPatriarchChange:
-                    result = false;
+
+                case OperationType.otIndividualPatriarchChange:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+
+                        if (iRec == null || this.fNewVal == null) {
+                            result = false;
+                        } else {
+                            if (redo) {
+                                this.fOldVal = iRec.Patriarch;
+                                iRec.Patriarch = (bool) this.fNewVal;
+                            } else {
+                                iRec.Patriarch = (bool) this.fOldVal;
+                            }
+                            result = true;
+                        }
+                    }
                     break;
 
-                case OperationType.otPersonSexChange:
-                    result = false;
+                case OperationType.otIndividualSexChange:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+
+                        if (iRec == null || this.fNewVal == null) {
+                            result = false;
+                        } else {
+                            if (redo) {
+                                this.fOldVal = iRec.Sex;
+                                iRec.Sex = (GEDCOMSex) this.fNewVal;
+                            } else {
+                                iRec.Sex = (GEDCOMSex) this.fOldVal;
+                            }
+                            result = true;
+                        }
+                    }
                     break;
 
                 default:

@@ -21,11 +21,9 @@
 using System;
 using System.Collections.Generic;
 using GKCommon;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Operations;
 
-namespace GKCore
+namespace GKCore.Operations
 {
     public enum TransactionType
     {
@@ -37,14 +35,13 @@ namespace GKCore
 
     public delegate void TransactionEventHandler(object sender, TransactionType type); // (object sender, EventArgs e);
 
-    public sealed class UndoManager : BaseObject, IUndoManager
+    public class UndoManager : BaseObject, IUndoManager
     {
         private const CustomOperation TRANS_DELIMITER = null;
 
         private TransactionEventHandler fOnTransaction;
         private Stack<CustomOperation> fStackUndo;
         private Stack<CustomOperation> fStackRedo;
-        private GEDCOMTree fTree;
 
 
         public event TransactionEventHandler OnTransaction
@@ -62,16 +59,9 @@ namespace GKCore
             }
         }
 
-        public GEDCOMTree Tree
+
+        public UndoManager()
         {
-            get { return this.fTree; }
-        }
-
-
-        public UndoManager(GEDCOMTree tree)
-        {
-            this.fTree = tree;
-
             this.fStackUndo = new Stack<CustomOperation>();
             this.fStackRedo = new Stack<CustomOperation>();
 

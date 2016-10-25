@@ -35,24 +35,16 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class FamilyEditDlg : Form, IBaseEditor
+    public partial class FamilyEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
-
         private readonly GKSheetList fChildsList;
         private readonly GKEventsSheet fEventsList;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         private readonly GKSourcesSheet fSourcesList;
-        private readonly UndoManager fLocalUndoman;
 
         private GEDCOMFamilyRecord fFamily;
 
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
-        }
-        
         public GEDCOMFamilyRecord Family
         {
             get	{ return this.fFamily; }
@@ -89,12 +81,9 @@ namespace GKUI.Dialogs
             }
         }
 
-        public FamilyEditDlg(IBaseWindow baseWin)
+        public FamilyEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
-
-            this.fBase = baseWin;
-            this.fLocalUndoman = new UndoManager(this.fBase.Tree);
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
             {
@@ -319,7 +308,7 @@ namespace GKUI.Dialogs
             if (husband != null && this.fFamily.Husband.StringValue == "")
             {
                 //this.fFamily.AddSpouse(husband);
-                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, this.fFamily, husband);
                 this.UpdateControls();
             }
         }
@@ -332,7 +321,7 @@ namespace GKUI.Dialogs
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != DialogResult.No)
             {
                 //this.fFamily.RemoveSpouse(husband);
-                ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, husband);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, this.fFamily, husband);
                 this.UpdateControls();
             }
         }
@@ -354,7 +343,7 @@ namespace GKUI.Dialogs
             if (wife != null && this.fFamily.Wife.StringValue == "")
             {
                 //this.fFamily.AddSpouse(wife);
-                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, this.fFamily, wife);
                 this.UpdateControls();
             }
         }
@@ -367,7 +356,7 @@ namespace GKUI.Dialogs
             if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery)) != DialogResult.No)
             {
                 //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
-                ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, this.fFamily, wife);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, this.fFamily, wife);
                 this.UpdateControls();
             }
         }

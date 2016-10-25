@@ -36,10 +36,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class PersonEditDlg : Form, IBaseEditor
+    public partial class PersonEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
-
         private readonly GKEventsSheet fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -49,7 +47,6 @@ namespace GKUI.Dialogs
         private readonly GKSourcesSheet fSourcesList;
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
-        private readonly UndoManager fLocalUndoman;
 
         private GEDCOMIndividualRecord fPerson;
 
@@ -57,11 +54,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fPerson; }
             set { this.SetPerson(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
 
@@ -753,7 +745,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
             if (family != null && family.Husband.Value == null) {
                 //family.AddSpouse(father);
-                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, family, father);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
@@ -769,7 +761,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord father = family.GetHusband();
                     //family.RemoveSpouse(father);
-                    ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, family, father);
+                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                     this.UpdateControls();
                 }
             }
@@ -794,7 +786,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
             if (family != null && family.Wife.Value == null) {
                 //family.AddSpouse(mother);
-                ChangeTracker.AttachFamilySpouse(this.fLocalUndoman, family, mother);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                 this.UpdateControls();
             } else {
                 this.fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
@@ -810,7 +802,7 @@ namespace GKUI.Dialogs
                 {
                     GEDCOMIndividualRecord mother = family.GetWife();
                     //family.RemoveSpouse(mother);
-                    ChangeTracker.DetachFamilySpouse(this.fLocalUndoman, family, mother);
+                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                     this.UpdateControls();
                 }
             }
@@ -924,7 +916,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PersonEditDlg(IBaseWindow baseWin)
+        public PersonEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
@@ -942,9 +934,6 @@ namespace GKUI.Dialogs
             this.btnMotherDelete.Image = global::GKResources.iRecEdit;
             this.btnMotherSel.Image = global::GKResources.iRecDelete;
             this.btnNameCopy.Image = global::GKResources.iCopy;
-
-            this.fBase = baseWin;
-            this.fLocalUndoman = new UndoManager(this.fBase.Tree);
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {

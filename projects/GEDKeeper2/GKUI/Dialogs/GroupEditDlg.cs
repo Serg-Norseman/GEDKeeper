@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -137,7 +138,7 @@ namespace GKUI.Dialogs
                     result = (member != null);
                     if (result) {
                         //this.fGroup.AddMember(member);
-                        this.fLocalUndoman.DoOperation(new GroupMemberAttach(this.fLocalUndoman, this.fGroup, member));
+                        this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, this.fGroup, member);
                     }
                     break;
 
@@ -145,7 +146,7 @@ namespace GKUI.Dialogs
                     result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No);
                     if (result) {
                         //this.fGroup.RemoveMember(member);
-                        this.fLocalUndoman.DoOperation(new GroupMemberDetach(this.fLocalUndoman, this.fGroup, member));
+                        this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, this.fGroup, member);
                     }
                     break;
 

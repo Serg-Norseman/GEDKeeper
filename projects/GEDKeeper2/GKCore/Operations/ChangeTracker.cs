@@ -20,152 +20,35 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
 
 namespace GKCore.Operations
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class ChangeTracker
+    public sealed class ChangeTracker : UndoManager
     {
+        private GEDCOMTree fTree;
 
-        public static void ChangeIndividualSex(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMSex newSex)
+        public GEDCOMTree Tree
         {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (person.Sex != newSex)
-            {
-                UndoManager uMan = ((UndoManager) undoman);
-                uMan.DoOperation(new PersonSexChange(uMan, person, newSex));
-            }
+            get { return this.fTree; }
         }
 
-        public static void ChangeIndividualPatriarch(IUndoManager undoman, GEDCOMIndividualRecord person, bool newValue)
+        public ChangeTracker(GEDCOMTree tree) : base()
         {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (person.Patriarch != newValue)
-            {
-                UndoManager uMan = ((UndoManager) undoman);
-                uMan.DoOperation(new PersonPatriarchChange(uMan, person, newValue));
-            }
+            this.fTree = tree;
         }
 
-        public static void ChangeIndividualBookmark(IUndoManager undoman, GEDCOMIndividualRecord person, bool newValue)
+        public void DoOrdinaryOperation(OperationType type, GEDCOMObject obj, object newVal)
         {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
+            if (obj == null)
+                throw new ArgumentNullException("obj");
 
-            if (person == null)
-                throw new ArgumentNullException("person");
+            if (newVal == null)
+                throw new ArgumentNullException("newVal");
 
-            if (person.Bookmark != newValue)
-            {
-                UndoManager uMan = ((UndoManager) undoman);
-                uMan.DoOperation(new PersonBookmarkChange(uMan, person, newValue));
-            }
+            base.DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
-
-
-        public static void AttachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new PersonParentsAttach(uMan, person, family));
-        }
-
-        public static void DetachIndividualParents(IUndoManager undoman, GEDCOMIndividualRecord person, GEDCOMFamilyRecord family)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new PersonParentsDetach(uMan, person, family));
-        }
-
-
-        public static void AttachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            if (spouse == null)
-                throw new ArgumentNullException("spouse");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new FamilySpouseAttach(uMan, family, spouse));
-        }
-
-        public static void DetachFamilySpouse(IUndoManager undoman, GEDCOMFamilyRecord family, GEDCOMIndividualRecord spouse)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (family == null)
-                throw new ArgumentNullException("family");
-
-            if (spouse == null)
-                throw new ArgumentNullException("spouse");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new FamilySpouseDetach(uMan, family, spouse));
-        }
-
-
-        /*public static void AttachGroupMember(IUndoManager undoman, GEDCOMGroupRecord group, GEDCOMIndividualRecord member)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (group == null)
-                throw new ArgumentNullException("group");
-
-            if (member == null)
-                throw new ArgumentNullException("member");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new GroupMemberAttach(uMan, group, member));
-        }*/
-
-        /*public static void DetachGroupMember(IUndoManager undoman, GEDCOMGroupRecord group, GEDCOMIndividualRecord member)
-        {
-            if (undoman == null)
-                throw new ArgumentNullException("undoman");
-
-            if (group == null)
-                throw new ArgumentNullException("group");
-
-            if (member == null)
-                throw new ArgumentNullException("member");
-
-            UndoManager uMan = ((UndoManager) undoman);
-            uMan.DoOperation(new GroupMemberDetach(uMan, group, member));
-        }*/
     }
 }

@@ -26,12 +26,12 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-
 using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
@@ -49,7 +49,7 @@ namespace GKCore
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
-        private UndoManager fUndoman;
+        private ChangeTracker fUndoman;
 
         #endregion
 
@@ -60,7 +60,7 @@ namespace GKCore
             get { return this.fTree; }
         }
 
-        public UndoManager Undoman
+        public ChangeTracker Undoman
         {
             get { return this.fUndoman; }
         }
@@ -79,7 +79,7 @@ namespace GKCore
             this.fTree = tree;
             this.fViewer = viewer;
             this.fHost = (viewer == null) ? null : viewer.Host;
-            this.fUndoman = new UndoManager(this.fTree);
+            this.fUndoman = new ChangeTracker(this.fTree);
             this.fValuesCollection = new ValuesCollection();
         }
 
