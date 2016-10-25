@@ -384,7 +384,7 @@ namespace GKUI
             } else if (sender == this.tbFileLoad) {
                 this.miFileLoadClick(null, null);
             } else if (sender == this.tbFileSave) {
-                this.miFileSaveClick(null, null);
+                this.miFileSave_Click(null, null);
             } else if (sender == this.tbRecordAdd) {
                 this.miRecordAddClick(null, null);
             } else if (sender == this.tbRecordEdit) {
@@ -589,7 +589,9 @@ namespace GKUI
                 bool baseEn = (rt != GEDCOMRecordType.rtNone);
 
                 this.miFileSave.Enabled = baseEn || (curChart != null);
+                this.miFileSaveAs.Enabled = this.miFileSave.Enabled;
                 this.tbFileSave.Enabled = this.miFileSave.Enabled;
+
                 this.miRecordAdd.Enabled = baseEn;
                 this.tbRecordAdd.Enabled = this.miRecordAdd.Enabled;
                 this.miRecordEdit.Enabled = baseEn;
@@ -882,7 +884,19 @@ namespace GKUI
             }
         }
 
-        public void miFileSaveClick(object sender, EventArgs e)
+        public void miFileSave_Click(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile(true);
+            if (curBase == null) return;
+
+            if (!curBase.IsUnknown()) {
+                curBase.FileSave(curBase.Tree.FileName);
+            } else {
+                this.miFileSaveAs_Click(sender, e);
+            }
+        }
+
+        private void miFileSaveAs_Click(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile(true);
             if (curBase == null) return;
@@ -1216,6 +1230,7 @@ namespace GKUI
             this.miFileLoad.Text = LangMan.LS(LSID.LSID_MIFileLoad);
             this.miMRUFiles.Text = LangMan.LS(LSID.LSID_MIMRUFiles);
             this.miFileSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
+            this.miFileSaveAs.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
             this.miFileClose.Text = LangMan.LS(LSID.LSID_MIFileClose);
             this.miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
             this.miExport.Text = LangMan.LS(LSID.LSID_MIExport);

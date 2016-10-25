@@ -129,7 +129,7 @@ namespace GKUI
             this.btnSelectAncestors.Text = LangMan.LS(LSID.LSID_SelAncestors);
             this.btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
             this.btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            this.btnSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
+            this.btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
             this.pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
             this.pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             this.btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);

@@ -489,7 +489,7 @@ namespace GKUI
 
                 switch (dialogResult) {
                     case DialogResult.Yes:
-                        MainWin.Instance.miFileSaveClick(null, null);
+                        MainWin.Instance.miFileSave_Click(null, null);
                         break;
                     case DialogResult.No:
                         break;

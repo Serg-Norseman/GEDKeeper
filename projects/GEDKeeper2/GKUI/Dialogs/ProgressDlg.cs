@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -193,11 +194,13 @@ namespace GKUI.Dialogs
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
         private bool fFormLoaded = false;
         private readonly Thread fThread;
+        private IntPtr fParentHandle;
 
         public ProgressProxy(string title, int max)
         {
             this.fTitle = title;
             this.fMax = max;
+            this.fParentHandle = MainWin.Instance.Handle;
 
             fThread = new Thread(ShowProgressForm);
             fThread.SetApartmentState(ApartmentState.STA);
@@ -213,9 +216,12 @@ namespace GKUI.Dialogs
         private void ShowProgressForm()
         {
             fProgressForm = new ProgressDlg();
-            fProgressForm.StartPosition = FormStartPosition.CenterScreen;
             fProgressForm.DoInit(fTitle, fMax);
             fProgressForm.Load += new EventHandler(ProgressForm_Load);
+
+            //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
+            UIHelper.CenterFormByParent(fProgressForm, this.fParentHandle);
+
             fProgressForm.ShowDialog();
             fProgressForm.Close();
         }

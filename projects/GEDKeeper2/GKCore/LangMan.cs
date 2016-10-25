@@ -46,9 +46,7 @@ namespace GKCore
         /* 012 */ LSID_MIFileProperties,
         /* 013 */ LSID_MIExport,
         /* 014 */ LSID_MIExportToFamilyBook,
-
-        /* 015 */ LSID_Deprecated_015, // deprecated
-
+        /* 015 */ LSID_MIFileSaveAs,
         /* 016 */ LSID_MIExportToExcelFile,
         /* 017 */ LSID_MIExit,
 
@@ -811,12 +809,12 @@ namespace GKCore
             /* 007 */ "New",
             /* 008 */ "Open...",
             /* 009 */ "Reopen",
-            /* 010 */ "Save...",
+            /* 010 */ "Save",
             /* 011 */ "Close",
             /* 012 */ "Properties",
             /* 013 */ "Export",
             /* 014 */ "Book of families...",
-            /* 015 */ "<?>",
+            /* 015 */ "Save As...",
             /* 016 */ "Export to Excel workbook...",
             /* 017 */ "Exit",
             /* 018 */ "<?>",
