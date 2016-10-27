@@ -121,10 +121,8 @@ namespace GKTests
         [Test]
         public void Undoman_Tests()
         {
-            using (ChangeTracker undoman = new ChangeTracker(fContext.Tree)) {
+            using (UndoManager undoman = new UndoManager()) {
                 Assert.IsNotNull(undoman);
-
-                Assert.AreEqual(fContext.Tree, undoman.Tree);
 
                 Assert.IsFalse(undoman.CanUndo());
                 Assert.IsFalse(undoman.CanRedo());
@@ -140,6 +138,8 @@ namespace GKTests
 
                 Assert.IsFalse(undoman.DoOperation(new InvalidOperation(undoman)));
             }
+
+            Assert.AreEqual(fContext.Tree, fContext.Undoman.Tree);
 
             fContext.Undoman.OnTransaction += TransactionEventHandler;
 

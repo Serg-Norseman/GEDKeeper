@@ -27,5 +27,15 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IUndoManager
     {
+        void Clear();
+        //bool DoOperation(CustomOperation operation);
+        void Undo();
+        void Redo();
+
+        bool CanUndo();
+        bool CanRedo();
+
+        void Commit();
+        void Rollback();
     }
 }
