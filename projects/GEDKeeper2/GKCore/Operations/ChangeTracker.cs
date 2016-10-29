@@ -40,7 +40,7 @@ namespace GKCore.Operations
             this.fTree = tree;
         }
 
-        public void DoOrdinaryOperation(OperationType type, GEDCOMObject obj, object newVal)
+        public bool DoOrdinaryOperation(OperationType type, GEDCOMObject obj, object newVal)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -48,7 +48,7 @@ namespace GKCore.Operations
             if (newVal == null)
                 throw new ArgumentNullException("newVal");
 
-            base.DoOperation(new OrdinaryOperation(this, type, obj, newVal));
+            return base.DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
     }
 }

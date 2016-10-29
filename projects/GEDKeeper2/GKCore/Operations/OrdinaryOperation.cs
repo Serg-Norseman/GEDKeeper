@@ -26,12 +26,24 @@ namespace GKCore.Operations
     public enum OperationType
     {
         otNOP,
-        otPersonParentsAttach,
-        otPersonParentsDetach,
+        otIndividualParentsAttach,
+        otIndividualParentsDetach,
         otFamilySpouseAttach,
         otFamilySpouseDetach,
         otGroupMemberAttach,
         otGroupMemberDetach,
+        otSourceRepositoryCitationAdd,
+        otSourceRepositoryCitationRemove,
+        otResearchTaskAdd,
+        otResearchTaskRemove,
+        otResearchCommunicationAdd,
+        otResearchCommunicationRemove,
+        otResearchGroupAdd,
+        otResearchGroupRemove,
+
+        otAdd,
+        otRemove,
+
         otIndividualBookmarkChange,
         otIndividualPatriarchChange,
         otIndividualSexChange
@@ -79,8 +91,8 @@ namespace GKCore.Operations
                     result = false;
                     break;
 
-                case OperationType.otPersonParentsAttach:
-                case OperationType.otPersonParentsDetach:
+                case OperationType.otIndividualParentsAttach:
+                case OperationType.otIndividualParentsDetach:
                     {
                         GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
                         GEDCOMFamilyRecord familyRec = this.fNewVal as GEDCOMFamilyRecord;
@@ -88,7 +100,7 @@ namespace GKCore.Operations
                         if (iRec == null || familyRec == null) {
                             result = false;
                         } else {
-                            if (this.fType == OperationType.otPersonParentsDetach) {
+                            if (this.fType == OperationType.otIndividualParentsDetach) {
                                 redo = !redo;
                             }
                             if (redo) {
@@ -139,6 +151,95 @@ namespace GKCore.Operations
                                 grpRec.AddMember(mbrRec);
                             } else {
                                 grpRec.RemoveMember(mbrRec);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+                case OperationType.otSourceRepositoryCitationAdd:
+                case OperationType.otSourceRepositoryCitationRemove:
+                    {
+                        GEDCOMSourceRecord srcRec = this.fObj as GEDCOMSourceRecord;
+                        GEDCOMRepositoryRecord repRec = this.fNewVal as GEDCOMRepositoryRecord;
+
+                        if (srcRec == null || repRec == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otSourceRepositoryCitationRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                srcRec.AddRepository(repRec);
+                            } else {
+                                srcRec.RemoveRepository(repRec);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+
+                case OperationType.otResearchTaskAdd:
+                case OperationType.otResearchTaskRemove:
+                    {
+                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
+                        GEDCOMTaskRecord taskRec = this.fNewVal as GEDCOMTaskRecord;
+
+                        if (resRec == null || taskRec == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otResearchTaskRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                resRec.AddTask(taskRec);
+                            } else {
+                                resRec.RemoveTask(taskRec);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+                case OperationType.otResearchCommunicationAdd:
+                case OperationType.otResearchCommunicationRemove:
+                    {
+                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
+                        GEDCOMCommunicationRecord commRec = this.fNewVal as GEDCOMCommunicationRecord;
+
+                        if (resRec == null || commRec == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otResearchCommunicationRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                resRec.AddCommunication(commRec);
+                            } else {
+                                resRec.RemoveCommunication(commRec);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+                case OperationType.otResearchGroupAdd:
+                case OperationType.otResearchGroupRemove:
+                    {
+                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
+                        GEDCOMGroupRecord grpRec = this.fNewVal as GEDCOMGroupRecord;
+
+                        if (resRec == null || grpRec == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otResearchGroupRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                resRec.AddGroup(grpRec);
+                            } else {
+                                resRec.RemoveGroup(grpRec);
                             }
                             result = true;
                         }

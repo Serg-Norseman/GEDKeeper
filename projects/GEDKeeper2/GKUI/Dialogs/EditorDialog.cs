@@ -28,7 +28,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public abstract class EditorDialog : Form, IBaseEditor
+    public class EditorDialog : Form, IBaseEditor
     {
         protected readonly IBaseWindow fBase;
         protected readonly ChangeTracker fLocalUndoman;
@@ -36,6 +36,14 @@ namespace GKUI.Dialogs
         public IBaseWindow Base
         {
             get { return this.fBase; }
+        }
+
+        /// <summary>
+        /// For the working state of the form designer, 
+        /// it is essential that existed a simple constructor.
+        /// </summary>
+        public EditorDialog()
+        {
         }
 
         public EditorDialog(IBaseWindow baseWin)

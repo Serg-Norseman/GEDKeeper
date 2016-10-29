@@ -247,6 +247,21 @@ namespace GKCommon.GEDCOM
             return cit;
         }
 
+        public void RemoveRepository(GEDCOMRepositoryRecord repRec)
+        {
+            if (repRec == null)
+                throw new ArgumentNullException("repRec");
+
+            foreach (GEDCOMRepositoryCitation repCit in this.fRepositoryCitations) {
+                GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
+
+                if (rep == repRec) {
+                    this.fRepositoryCitations.Delete(repCit);
+                    break;
+                }
+            }
+        }
+
         #endregion
     }
 }

@@ -234,7 +234,11 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     child = this.fBase.SelectPerson(this.fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
-                    result = (child != null && this.fBase.IsAvailableRecord(child) && this.fFamily.AddChild(child));
+                    result = (child != null && this.fBase.IsAvailableRecord(child));
+                    if (result) {
+                        //result = this.fFamily.AddChild(child);
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, this.fFamily);
+                    }
                     break;
 
                 case RecordAction.raEdit:
@@ -242,7 +246,11 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)) != DialogResult.No && this.fFamily.RemoveChild(child));
+                    result = (child != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)) != DialogResult.No);
+                    if (result) {
+                        //result = this.fFamily.RemoveChild(child);
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, this.fFamily);
+                    }
                     break;
 
                 case RecordAction.raJump:

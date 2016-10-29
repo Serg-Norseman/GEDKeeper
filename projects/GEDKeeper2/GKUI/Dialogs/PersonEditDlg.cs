@@ -830,8 +830,7 @@ namespace GKUI.Dialogs
             if (family.IndexOfChild(this.fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
-                this.fLocalUndoman.DoOperation(new OrdinaryOperation(this.fLocalUndoman, OperationType.otPersonParentsAttach, this.fPerson, family));
-                //ChangeTracker.AttachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, this.fPerson, family);
             }
             this.UpdateControls();
         }
@@ -853,8 +852,7 @@ namespace GKUI.Dialogs
                 if (family != null)
                 {
                     //family.RemoveChild(this.fPerson);
-                    this.fLocalUndoman.DoOperation(new OrdinaryOperation(this.fLocalUndoman, OperationType.otPersonParentsDetach, this.fPerson, family));
-                    //ChangeTracker.DetachIndividualParents(this.fLocalUndoman, this.fPerson, family);
+                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, this.fPerson, family);
                     this.UpdateControls();
                 }
             }

@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
@@ -34,9 +35,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class SourceEditDlg : Form, IBaseEditor
+    public partial class SourceEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         private readonly GKSheetList fRepositoriesList;
@@ -47,11 +47,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fSourceRecord; }
             set { this.SetSourceRecord(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
         private void SetSourceRecord(GEDCOMSourceRecord value)
@@ -71,14 +66,12 @@ namespace GKUI.Dialogs
             this.ActiveControl = this.txtShortTitle;
         }
 
-        public SourceEditDlg(IBaseWindow aBase)
+        public SourceEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
-
-            this.fBase = aBase;
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes);
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
@@ -143,14 +136,16 @@ namespace GKUI.Dialogs
                 case RecordAction.raAdd:
                     GEDCOMRepositoryRecord rep = this.fBase.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
-                        this.fSourceRecord.AddRepository(rep);
+                        //this.fSourceRecord.AddRepository(rep);
+                        this.fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, this.fSourceRecord, rep);
                         result = true;
                     }
                     break;
 
                 case RecordAction.raDelete:
                     if (cit != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != DialogResult.No) {
-                        this.fSourceRecord.RepositoryCitations.Delete(cit);
+                        //this.fSourceRecord.RepositoryCitations.Delete(cit);
+                        this.fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, this.fSourceRecord, cit.Value as GEDCOMRepositoryRecord);
                         result = true;
                     }
                     break;
@@ -158,7 +153,7 @@ namespace GKUI.Dialogs
                 case RecordAction.raJump:
                     if (cit != null) {
                         this.AcceptChanges();
-                        this.Base.SelectRecordByXRef(cit.Value.XRef);
+                        this.fBase.SelectRecordByXRef(cit.Value.XRef);
                         base.Close();
                     }
                     break;
@@ -179,7 +174,9 @@ namespace GKUI.Dialogs
             this.fSourceRecord.Text.Clear();
             this.fSourceRecord.SetTextArray(this.txtText.Lines);
 
-            this.Base.ChangeRecord(this.fSourceRecord);
+            base.CommitChanges();
+
+            this.fBase.ChangeRecord(this.fSourceRecord);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -193,6 +190,19 @@ namespace GKUI.Dialogs
             {
                 this.fBase.Host.LogWrite("SourceEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            //this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("SourceEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 

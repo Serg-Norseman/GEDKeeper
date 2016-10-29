@@ -66,10 +66,10 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.Base.Host.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
+                this.fBase.Host.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
             }
         }
-        
+
         public GroupEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
@@ -134,7 +134,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    member = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    member = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                     result = (member != null);
                     if (result) {
                         //this.fGroup.AddMember(member);
@@ -154,7 +154,7 @@ namespace GKUI.Dialogs
                     if (member != null) {
                         this.AcceptChanges();
                         base.DialogResult = DialogResult.OK;
-                        this.Base.SelectRecordByXRef(member.XRef);
+                        this.fBase.SelectRecordByXRef(member.XRef);
                         base.Close();
                     }
                     break;
@@ -168,7 +168,7 @@ namespace GKUI.Dialogs
             base.CommitChanges();
 
             this.fGroup.GroupName = this.edName.Text;
-            this.Base.ChangeRecord(this.fGroup);
+            this.fBase.ChangeRecord(this.fGroup);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -180,7 +180,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.Base.Host.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
@@ -193,7 +193,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.Base.Host.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
     }
