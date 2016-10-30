@@ -290,7 +290,7 @@ namespace GKCore.Operations
                         result = (swl != null && notes != null);
                         if (result) {
                             if (redo) {
-                                swl.Notes.Delete(notes);
+                                swl.Notes.Extract(notes); // bugfix(no delete!)
                             } else {
                                 swl.Notes.Add(notes);
                             }
@@ -324,7 +324,7 @@ namespace GKCore.Operations
                         result = (swl != null && mediaLink != null);
                         if (result) {
                             if (redo) {
-                                swl.MultimediaLinks.Delete(mediaLink);
+                                swl.MultimediaLinks.Extract(mediaLink); // bugfix(no delete!)
                             } else {
                                 swl.MultimediaLinks.Add(mediaLink);
                             }
@@ -347,7 +347,7 @@ namespace GKCore.Operations
                             if (redo) {
                                 swl.SourceCitations.Add(sourceCit);
                             } else {
-                                swl.SourceCitations.Delete(sourceCit);
+                                swl.SourceCitations.Extract(sourceCit); // bugfix(no delete!)
                             }
                             result = true;
                         }
@@ -370,7 +370,7 @@ namespace GKCore.Operations
                             if (redo) {
                                 rwe.AddEvent(evt);
                             } else {
-                                rwe.Events.Delete(evt);
+                                rwe.Events.Extract(evt); // bugfix(no delete!)
                             }
                             result = true;
                         }

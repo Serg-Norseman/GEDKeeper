@@ -196,6 +196,19 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        public T Extract(T item)
+        {
+            if (this.fDataList == null) return default(T);
+
+            int index = this.fDataList.IndexOf(item);
+            if (index >= 0) {
+                this.fDataList.RemoveAt(index);
+                return item;
+            } else {
+                return default(T);
+            }
+        }
+
         public void SaveToStream(StreamWriter stream)
         {
             if (this.fDataList == null) return;
