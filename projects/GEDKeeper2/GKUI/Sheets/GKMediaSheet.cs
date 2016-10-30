@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -32,7 +33,7 @@ namespace GKUI.Sheets
 {
     public sealed class GKMediaSheet : GKCustomSheet
     {
-        public GKMediaSheet(IBaseEditor baseEditor, Control aOwner) : base(baseEditor, aOwner)
+        public GKMediaSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
             this.Columns_BeginUpdate();
             this.AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
@@ -92,7 +93,10 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     mmRec = aBase.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
-                    result = (_struct.AddMultimedia(mmRec) != null);
+                    if (mmRec != null) {
+                        //result = (_struct.AddMultimedia(mmRec) != null);
+                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)_struct, mmRec);
+                    }
                     break;
 
                 case RecordAction.raEdit:
@@ -106,8 +110,9 @@ namespace GKUI.Sheets
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != DialogResult.No)
                     {
-                        _struct.MultimediaLinks.Delete(mmLink);
-                        result = true;
+                        //_struct.MultimediaLinks.Delete(mmLink);
+                        //result = true;
+                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)_struct, mmLink);
                     }
                     break;
 

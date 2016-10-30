@@ -33,9 +33,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class TaskEditDlg : Form, IBaseEditor
+    public partial class TaskEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         
         private GEDCOMTaskRecord fTask;
@@ -45,11 +44,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fTask; }
             set { this.SetTask(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
         private void SetTask(GEDCOMTaskRecord value)
@@ -119,6 +113,7 @@ namespace GKUI.Dialogs
                         break;
                 }
 
+                base.CommitChanges();
                 this.Base.ChangeRecord(this.fTask);
                 base.DialogResult = DialogResult.OK;
             }
@@ -126,6 +121,18 @@ namespace GKUI.Dialogs
             {
                 this.fBase.Host.LogWrite("TaskEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -180,7 +187,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public TaskEditDlg(IBaseWindow aBase)
+        public TaskEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
@@ -188,7 +195,6 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            this.fBase = aBase;
             this.fTempRec = null;
 
             for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
@@ -201,7 +207,7 @@ namespace GKUI.Dialogs
                 this.cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_WinTaskEdit);

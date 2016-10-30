@@ -33,20 +33,14 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class EventEditDlg : Form, IBaseEditor
+    public partial class EventEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         private readonly GKSourcesSheet fSourcesList;
 
         private GEDCOMCustomEvent fEvent;
         private GEDCOMLocationRecord fLocation;
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
-        }
 
         public GEDCOMCustomEvent Event
         {
@@ -164,6 +158,8 @@ namespace GKUI.Dialogs
                     this.fEvent = attr;
                 }
             }
+
+            base.CommitChanges();
         }
 
         private void ControlsRefresh()
@@ -353,6 +349,18 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
+            }
+        }
+
         private void btnAddress_Click(object sender, EventArgs e)
         {
             this.fBase.ModifyAddress(this.fEvent.Detail.Address);
@@ -485,7 +493,7 @@ namespace GKUI.Dialogs
             this.btnBC2.Enabled = this.txtEventDate2.Enabled;
         }
 
-        public EventEditDlg(IBaseWindow aBase)
+        public EventEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
@@ -493,8 +501,6 @@ namespace GKUI.Dialogs
             this.btnCancel.Image = global::GKResources.iBtnCancel;
             this.btnPlaceAdd.Image = global::GKResources.iRecNew;
             this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
-
-            this.fBase = aBase;
 
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)
@@ -513,9 +519,9 @@ namespace GKUI.Dialogs
 
             this.fLocation = null;
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Event);

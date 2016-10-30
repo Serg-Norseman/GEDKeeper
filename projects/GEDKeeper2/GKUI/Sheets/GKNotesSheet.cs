@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -32,7 +33,7 @@ namespace GKUI.Sheets
 {
     public sealed class GKNotesSheet : GKCustomSheet
     {
-        public GKNotesSheet(IBaseEditor baseEditor, Control aOwner) : base(baseEditor, aOwner)
+        public GKNotesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
             this.Columns_BeginUpdate();
             this.AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
@@ -73,8 +74,8 @@ namespace GKUI.Sheets
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
 
-            GEDCOMNotes aNote = eArgs.ItemData as GEDCOMNotes;
-            
+            GEDCOMNotes notes = eArgs.ItemData as GEDCOMNotes;
+
             bool result = false;
 
             GEDCOMNoteRecord noteRec;
@@ -82,13 +83,16 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     noteRec = aBase.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
-                    result = (_struct.AddNote(noteRec) != null);
+                    if (noteRec != null) {
+                        //result = (_struct.AddNote(noteRec) != null);
+                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)_struct, noteRec);
+                    }
                     break;
 
                 case RecordAction.raEdit:
-                    if (aNote != null)
+                    if (notes != null)
                     {
-                        noteRec = aNote.Value as GEDCOMNoteRecord;
+                        noteRec = notes.Value as GEDCOMNoteRecord;
                         result = aBase.ModifyNote(ref noteRec);
                     }
                     break;
@@ -96,8 +100,9 @@ namespace GKUI.Sheets
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery)) != DialogResult.No)
                     {
-                        _struct.Notes.Delete(aNote);
-                        result = true;
+                        //_struct.Notes.Delete(notes);
+                        //result = true;
+                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)_struct, notes);
                     }
                     break;
             }

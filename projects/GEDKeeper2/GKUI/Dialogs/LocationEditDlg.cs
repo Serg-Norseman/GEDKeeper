@@ -34,9 +34,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class LocationEditDlg : Form, IBaseEditor
+    public partial class LocationEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKMediaSheet fMediaList;
         private readonly GKNotesSheet fNotesList;
@@ -50,19 +49,13 @@ namespace GKUI.Dialogs
             set { this.SetLocationRecord(value); }
         }
 
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
-        }
-
-        public LocationEditDlg(IBaseWindow aBase)
+        public LocationEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            this.fBase = aBase;
             this.fSearchPoints = new ExtList<GMapPoint>(true);
 
             this.fMapBrowser = new GKMapBrowser();
@@ -70,8 +63,8 @@ namespace GKUI.Dialogs
             this.fMapBrowser.Dock = DockStyle.Fill;
             this.panMap.Controls.Add(this.fMapBrowser);
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Location);
@@ -133,6 +126,7 @@ namespace GKUI.Dialogs
                 this.fLocationRecord.LocationName = this.txtName.Text;
                 this.fLocationRecord.Map.Lati = ConvHelper.ParseFloat(this.txtLatitude.Text, 0.0);
                 this.fLocationRecord.Map.Long = ConvHelper.ParseFloat(this.txtLongitude.Text, 0.0);
+                base.CommitChanges();
                 this.fBase.ChangeRecord(this.fLocationRecord);
                 base.DialogResult = DialogResult.OK;
             }
@@ -140,6 +134,18 @@ namespace GKUI.Dialogs
             {
                 this.fBase.Host.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 

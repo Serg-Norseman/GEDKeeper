@@ -96,10 +96,10 @@ namespace GKUI.Dialogs
             }
 
             this.fChildsList = this.CreateChildsSheet(this.pageChilds);
-            this.fEventsList = new GKEventsSheet(this, this.pageEvents, false);
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
+            this.fEventsList = new GKEventsSheet(this, this.pageEvents, false, this.fLocalUndoman);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
 
             this.btnAccept.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnAccept")));
             this.btnCancel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnCancel")));

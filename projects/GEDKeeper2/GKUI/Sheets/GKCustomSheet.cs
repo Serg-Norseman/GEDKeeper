@@ -22,6 +22,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -30,6 +31,7 @@ namespace GKUI.Sheets
     {
         private readonly IBaseEditor fBaseEditor;
         private IGEDCOMListEnumerator fDataList;
+        protected readonly ChangeTracker fUndoman;
 
         public IGEDCOMListEnumerator DataList
         {
@@ -44,11 +46,12 @@ namespace GKUI.Sheets
         {
             get { return this.fBaseEditor; }
         }
-        
-        protected GKCustomSheet(IBaseEditor baseEditor, Control owner) : base(owner)
+
+        protected GKCustomSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(owner)
         {
             this.fBaseEditor = baseEditor;
             this.fDataList = null;
+            this.fUndoman = undoman;
         }
 
         public abstract void UpdateSheet();

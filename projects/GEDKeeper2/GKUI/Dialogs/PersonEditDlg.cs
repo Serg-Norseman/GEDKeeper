@@ -943,16 +943,16 @@ namespace GKUI.Dialogs
                 this.cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
-            this.fEventsList = new GKEventsSheet(this, this.pageEvents, true);
+            this.fEventsList = new GKEventsSheet(this, this.pageEvents, true, this.fLocalUndoman);
 
             this.fSpousesList = this.CreateSpousesSheet(this.pageSpouses);
             this.fNamesList = this.CreateNamesSheet(this.pageNames);
             this.fAssociationsList = this.CreateAssociationsSheet(this.pageAssociations);
             this.fGroupsList = this.CreateGroupsSheet(this.pageGroups);
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
 
             this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
 

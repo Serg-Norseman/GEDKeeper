@@ -31,9 +31,8 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class RepositoryEditDlg : Form, IBaseEditor
+    public partial class RepositoryEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
 
         private GEDCOMRepositoryRecord fRepository;
@@ -42,11 +41,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fRepository; }
             set { this.SetRepository(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
         private void SetRepository(GEDCOMRepositoryRecord value)
@@ -67,6 +61,7 @@ namespace GKUI.Dialogs
             try
             {
                 this.fRepository.RepositoryName = this.txtName.Text;
+                base.CommitChanges();
                 this.fBase.ChangeRecord(this.fRepository);
                 base.DialogResult = DialogResult.OK;
             }
@@ -77,16 +72,26 @@ namespace GKUI.Dialogs
             }
         }
 
-        public RepositoryEditDlg(IBaseWindow aBase)
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
+            }
+        }
+
+        public RepositoryEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            this.fBase = aBase;
-
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Repository);

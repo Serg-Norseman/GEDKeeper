@@ -33,6 +33,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
@@ -1925,7 +1926,7 @@ namespace GKUI
             return result;
         }
 
-        public bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
+        public bool ModifySourceCitation(ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
         {
             bool result = false;
 
@@ -1944,7 +1945,8 @@ namespace GKUI
 
                     if (!exists) {
                         if (result) {
-                            _struct.SourceCitations.Add(cit);
+                            //_struct.SourceCitations.Add(cit);
+                            result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GEDCOMObject)_struct, cit);
                         } else {
                             cit.Dispose();
                         }

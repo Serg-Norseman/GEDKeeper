@@ -32,19 +32,13 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommunicationEditDlg : Form, IBaseEditor
+    public partial class CommunicationEditDlg : EditorDialog
     {
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
 
         private GEDCOMCommunicationRecord fCommunication;
         private GEDCOMIndividualRecord fTempInd;
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
-        }
 
         public GEDCOMCommunicationRecord Communication
         {
@@ -103,7 +97,11 @@ namespace GKUI.Dialogs
                 this.fCommunication.CommunicationType = (GKCommunicationType)this.cmbCorrType.SelectedIndex;
                 this.fCommunication.Date.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtDate.Text, true));
                 this.fCommunication.SetCorresponder((GKCommunicationDir)this.txtDir.SelectedIndex, this.fTempInd);
+
+                base.CommitChanges();
+
                 this.fBase.ChangeRecord(this.fCommunication);
+
                 base.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
@@ -113,13 +111,25 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
+            }
+        }
+
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
             this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
             this.txtCorresponder.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
         }
 
-        public CommunicationEditDlg(IBaseWindow aBase)
+        public CommunicationEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
@@ -127,7 +137,6 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            this.fBase = aBase;
             this.fTempInd = null;
 
             for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++)
@@ -135,8 +144,8 @@ namespace GKUI.Dialogs
                 this.cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

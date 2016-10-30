@@ -81,7 +81,7 @@ namespace GKCore.Interfaces
         bool ModifyPerson(ref GEDCOMIndividualRecord indivRec);
         bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget target, GEDCOMIndividualRecord person);
         bool ModifyAddress(GEDCOMAddress address);
-        bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit);
+        //bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit);
 
         void RecordAdd();
         void RecordDelete();

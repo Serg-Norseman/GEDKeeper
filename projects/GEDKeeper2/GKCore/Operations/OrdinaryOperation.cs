@@ -26,20 +26,37 @@ namespace GKCore.Operations
     public enum OperationType
     {
         otNOP,
+
         otIndividualParentsAttach,
         otIndividualParentsDetach,
+
         otFamilySpouseAttach,
         otFamilySpouseDetach,
+
         otGroupMemberAttach,
         otGroupMemberDetach,
+
         otSourceRepositoryCitationAdd,
         otSourceRepositoryCitationRemove,
+
         otResearchTaskAdd,
         otResearchTaskRemove,
         otResearchCommunicationAdd,
         otResearchCommunicationRemove,
         otResearchGroupAdd,
         otResearchGroupRemove,
+
+        otRecordNoteAdd,
+        otRecordNoteRemove,
+
+        otRecordMediaAdd,
+        otRecordMediaRemove,
+
+        otRecordSourceCitAdd,
+        otRecordSourceCitRemove,
+
+        otRecordEventAdd,
+        otRecordEventRemove,
 
         otAdd,
         otRemove,
@@ -240,6 +257,120 @@ namespace GKCore.Operations
                                 resRec.AddGroup(grpRec);
                             } else {
                                 resRec.RemoveGroup(grpRec);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+
+                case OperationType.otRecordNoteAdd:
+                    {
+                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
+                        GEDCOMNoteRecord noteRec = this.fNewVal as GEDCOMNoteRecord;
+
+                        result = (swl != null && noteRec != null);
+                        if (result) {
+                            if (redo) {
+                                GEDCOMNotes notes = swl.AddNote(noteRec);
+                                this.fOldVal = notes;
+                            } else {
+                                GEDCOMNotes notes = this.fOldVal as GEDCOMNotes;
+                                swl.Notes.Delete(notes);
+                            }
+                        }
+                    }
+                    break;
+
+                case OperationType.otRecordNoteRemove:
+                    {
+                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
+                        GEDCOMNotes notes = this.fNewVal as GEDCOMNotes;
+
+                        result = (swl != null && notes != null);
+                        if (result) {
+                            if (redo) {
+                                swl.Notes.Delete(notes);
+                            } else {
+                                swl.Notes.Add(notes);
+                            }
+                        }
+                    }
+                    break;
+
+                case OperationType.otRecordMediaAdd:
+                    {
+                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
+                        GEDCOMMultimediaRecord mediaRec = this.fNewVal as GEDCOMMultimediaRecord;
+
+                        result = (swl != null && mediaRec != null);
+                        if (result) {
+                            if (redo) {
+                                GEDCOMMultimediaLink mmLink = swl.AddMultimedia(mediaRec);
+                                this.fOldVal = mmLink;
+                            } else {
+                                GEDCOMMultimediaLink mmLink = this.fOldVal as GEDCOMMultimediaLink;
+                                swl.MultimediaLinks.Delete(mmLink);
+                            }
+                        }
+                    }
+                    break;
+
+                case OperationType.otRecordMediaRemove:
+                    {
+                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
+                        GEDCOMMultimediaLink mediaLink = this.fNewVal as GEDCOMMultimediaLink;
+
+                        result = (swl != null && mediaLink != null);
+                        if (result) {
+                            if (redo) {
+                                swl.MultimediaLinks.Delete(mediaLink);
+                            } else {
+                                swl.MultimediaLinks.Add(mediaLink);
+                            }
+                        }
+                    }
+                    break;
+
+                case OperationType.otRecordSourceCitAdd:
+                case OperationType.otRecordSourceCitRemove:
+                    {
+                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
+                        GEDCOMSourceCitation sourceCit = this.fNewVal as GEDCOMSourceCitation;
+
+                        if (swl == null || sourceCit == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otRecordSourceCitRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                swl.SourceCitations.Add(sourceCit);
+                            } else {
+                                swl.SourceCitations.Delete(sourceCit);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+
+                case OperationType.otRecordEventAdd:
+                case OperationType.otRecordEventRemove:
+                    {
+                        GEDCOMRecordWithEvents rwe = this.fObj as GEDCOMRecordWithEvents;
+                        GEDCOMCustomEvent evt = this.fNewVal as GEDCOMCustomEvent;
+
+                        if (rwe == null || evt == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otRecordEventRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                rwe.AddEvent(evt);
+                            } else {
+                                rwe.Events.Delete(evt);
                             }
                             result = true;
                         }

@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
@@ -35,7 +36,7 @@ namespace GKUI.Sheets
     {
         private readonly bool fPersonsMode;
 
-        public GKEventsSheet(IBaseEditor baseEditor, Control aOwner, bool personsMode) : base(baseEditor, aOwner)
+        public GKEventsSheet(IBaseEditor baseEditor, Control owner, bool personsMode, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
             this.fPersonsMode = personsMode;
 
@@ -119,7 +120,7 @@ namespace GKUI.Sheets
             }
         }
 
-        private static bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
+        private bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
 
@@ -131,6 +132,8 @@ namespace GKUI.Sheets
                     case RecordAction.raEdit:
                         using (EventEditDlg dlgEventEdit = new EventEditDlg(aBase))
                         {
+                            bool exists = (aEvent != null);
+
                             GEDCOMCustomEvent newEvent;
                             if (aEvent != null) {
                                 newEvent = aEvent;
@@ -143,41 +146,39 @@ namespace GKUI.Sheets
                             }
 
                             dlgEventEdit.Event = newEvent;
-                            DialogResult dialogResult = MainWin.Instance.ShowModalEx(dlgEventEdit, true);
+                            result = (MainWin.Instance.ShowModalEx(dlgEventEdit, true) == DialogResult.OK);
 
-                            if (dialogResult != DialogResult.OK)
-                            {
-                                if (dialogResult == DialogResult.Cancel && aEvent == null) {
+                            if (!result) {
+                                if (!exists) {
                                     newEvent.Dispose();
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 newEvent = dlgEventEdit.Event;
 
-                                if (aEvent == null) {
-                                    record.AddEvent(newEvent);
+                                if (!exists) {
+                                    //record.AddEvent(newEvent);
+                                    result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                 } else {
                                     if (record is GEDCOMIndividualRecord && newEvent != aEvent) {
-                                        record.Events.Delete(aEvent);
-                                        record.AddEvent(newEvent);
+                                        //record.Events.Delete(aEvent);
+                                        //record.AddEvent(newEvent);
+                                        this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
+                                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                     }
                                 }
 
                                 aEvent = newEvent;
-
                                 aBase.Context.CollectEventValues(aEvent);
-
-                                result = true;
                             }
                         }
                         break;
 
                     case RecordAction.raDelete:
                         if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
-                            record.Events.Delete(aEvent);
+                            //record.Events.Delete(aEvent);
+                            //result = true;
+                            result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
                             aEvent = null;
-                            result = true;
                         }
                         break;
 

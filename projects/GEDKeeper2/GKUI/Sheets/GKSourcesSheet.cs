@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -32,7 +33,7 @@ namespace GKUI.Sheets
 {
     public sealed class GKSourcesSheet : GKCustomSheet
     {
-        public GKSourcesSheet(IBaseEditor baseEditor, Control aOwner) : base(baseEditor, aOwner)
+        public GKSourcesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
             this.Columns_BeginUpdate();
             this.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
@@ -94,14 +95,15 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = aBase.ModifySourceCitation(_struct, ref aCit);
+                    result = ((BaseWin) aBase).ModifySourceCitation(this.fUndoman, _struct, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSourceQuery)) != DialogResult.No)
                     {
-                        _struct.SourceCitations.Delete(aCit);
-                        result = true;
+                        //_struct.SourceCitations.Delete(aCit);
+                        //result = true;
+                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, (GEDCOMObject)_struct, aCit);
                     }
                     break;
 

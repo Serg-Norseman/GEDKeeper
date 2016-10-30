@@ -33,12 +33,11 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class MediaEditDlg : Form, IBaseEditor
+    public partial class MediaEditDlg : EditorDialog
     {
         private bool fIsNew;
         private GEDCOMMultimediaRecord fMediaRec;
 
-        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKSourcesSheet fSourcesList;
 
@@ -46,11 +45,6 @@ namespace GKUI.Dialogs
         {
             get { return this.fMediaRec; }
             set { this.SetMediaRec(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return this.fBase; }
         }
 
         private bool AcceptChanges()
@@ -76,6 +70,8 @@ namespace GKUI.Dialogs
             fileRef.Title = this.txtName.Text;
 
             this.ControlsRefresh();
+
+            base.CommitChanges();
             this.fBase.ChangeRecord(this.fMediaRec);
 
             return true;
@@ -133,6 +129,18 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                base.RollbackChanges();
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
+            }
+        }
+
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
@@ -167,22 +175,20 @@ namespace GKUI.Dialogs
             this.cmbStoreType.SelectedIndex = (int)select;
         }
 
-        public MediaEditDlg(IBaseWindow aBase)
+        public MediaEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            this.fBase = aBase;
-
             for (GEDCOMMediaType mt = GEDCOMMediaType.mtNone; mt <= GEDCOMMediaType.mtLast; mt++)
             {
                 this.cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_RPMultimedia);

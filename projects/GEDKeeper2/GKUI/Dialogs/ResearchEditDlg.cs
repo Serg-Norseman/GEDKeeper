@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -125,7 +126,7 @@ namespace GKUI.Dialogs
                );
             this.fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
 
             this.SetLang();
         }
