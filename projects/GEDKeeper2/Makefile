@@ -8,20 +8,17 @@ include $(includemk)toolchain.mk
 project := $(gedkeeper2)
 projectext := .exe
 
-# Get directories list for `vpath %.resx` via (run from this directory):
-# find -regex '.+\.resx' | sed 's/\(.\+\)\/.\+/\1 \\/' | awk '!a[$0]++' | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
-vpath %.resx \
-. \
-./GKUI \
-./GKUI/Charts \
-./GKUI/Controls \
-./GKUI/Dialogs
-
 objdir := obj/$(releasetype)/
 objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../
+
+ifeq ($(windows), $(softwareplatform))
+  vsproj := GEDKeeper2.mswin.csproj
+else
+  vsproj := GEDKeeper2.linux.csproj
+endif
 
 # Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
@@ -33,6 +30,7 @@ ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
+./Externals/MdiChildFormEx.cs \
 ./Externals/RusDeclension.cs \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
@@ -78,14 +76,10 @@ sources := \
 ./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
+./GKCore/Operations/ChangeTracker.cs \
 ./GKCore/Operations/CustomOperation.cs \
-./GKCore/Operations/FamilyAttachSpouse.cs \
-./GKCore/Operations/FamilyDetachSpouse.cs \
-./GKCore/Operations/PersonAttachParents.cs \
-./GKCore/Operations/PersonBookmarkChange.cs \
-./GKCore/Operations/PersonDetachParents.cs \
-./GKCore/Operations/PersonPatriarchChange.cs \
-./GKCore/Operations/PersonSexChange.cs \
+./GKCore/Operations/OrdinaryOperation.cs \
+./GKCore/Operations/UndoManager.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
@@ -103,7 +97,6 @@ sources := \
 ./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
-./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/BaseWin.cs \
@@ -150,6 +143,7 @@ sources := \
 ./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
 ./GKUI/Dialogs/DayTipsDlg.cs \
 ./GKUI/Dialogs/DayTipsDlg.Designer.cs \
+./GKUI/Dialogs/EditorDialog.cs \
 ./GKUI/Dialogs/EventEditDlg.cs \
 ./GKUI/Dialogs/EventEditDlg.Designer.cs \
 ./GKUI/Dialogs/FamilyEditDlg.cs \
@@ -232,6 +226,7 @@ else
 
 # `$(sources)` for `$(linux)`
 sources := \
+./Externals/MdiChildFormEx.cs \
 ./Externals/RusDeclension.cs \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
@@ -277,14 +272,10 @@ sources := \
 ./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
+./GKCore/Operations/ChangeTracker.cs \
 ./GKCore/Operations/CustomOperation.cs \
-./GKCore/Operations/FamilyAttachSpouse.cs \
-./GKCore/Operations/FamilyDetachSpouse.cs \
-./GKCore/Operations/PersonAttachParents.cs \
-./GKCore/Operations/PersonBookmarkChange.cs \
-./GKCore/Operations/PersonDetachParents.cs \
-./GKCore/Operations/PersonPatriarchChange.cs \
-./GKCore/Operations/PersonSexChange.cs \
+./GKCore/Operations/OrdinaryOperation.cs \
+./GKCore/Operations/UndoManager.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
@@ -302,7 +293,6 @@ sources := \
 ./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
-./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/BaseWin.cs \
@@ -349,6 +339,7 @@ sources := \
 ./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
 ./GKUI/Dialogs/DayTipsDlg.cs \
 ./GKUI/Dialogs/DayTipsDlg.Designer.cs \
+./GKUI/Dialogs/EditorDialog.cs \
 ./GKUI/Dialogs/EventEditDlg.cs \
 ./GKUI/Dialogs/EventEditDlg.Designer.cs \
 ./GKUI/Dialogs/FamilyEditDlg.cs \
@@ -432,62 +423,62 @@ endif
 # Get files list for `resources` via (run from this directory):
 # find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
 # Or (this is more valid -- it takes data from a project file):
-# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
-# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/;s/\//\./g;P}" < GEDKeeper2.mswin.csproj | sort
+# sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/;s/\//\./g;P}" < GEDKeeper2.linux.csproj | sort
 # Because `$(resources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
 # `$(resources)` for `$(windows)`
 resources := \
 $(addprefix $(objdir), \
-AboutDlg.resources \
-ACOptionsControl.resources \
-AddressEditDlg.resources \
-AssociationEditDlg.resources \
-BaseWin.resources \
-CircleChartWin.resources \
-CommonFilterDlg.resources \
-CommunicationEditDlg.resources \
-DayTipsDlg.resources \
-EventEditDlg.resources \
-FamilyEditDlg.resources \
-FilePropertiesDlg.resources \
-GKInputBox.resources \
-GKMergeControl.resources \
 GKResources.resources \
-GroupEditDlg.resources \
-LanguageSelectDlg.resources \
-LocationEditDlg.resources \
-MainWin.resources \
-MapsViewerWin.resources \
-MediaEditDlg.resources \
-MediaViewerWin.resources \
-NameEditDlg.resources \
-NoteEditDlg.resources \
-OptionsDlg.resources \
-OrganizerWin.resources \
-PatriarchsViewerWin.resources \
-PersonalNameEditDlg.resources \
-PersonEditDlg.resources \
-PersonNewDlg.resources \
-PersonsFilterDlg.resources \
-PortraitSelectDlg.resources \
-ProgressDlg.resources \
-RecordSelectDlg.resources \
-RelationshipCalculatorDlg.resources \
-RepositoryEditDlg.resources \
-ResearchEditDlg.resources \
-ScriptEditWin.resources \
-SexCheckDlg.resources \
-SlideshowWin.resources \
-SourceCitEditDlg.resources \
-SourceEditDlg.resources \
-StatisticsWin.resources \
-TaskEditDlg.resources \
-TreeChartWin.resources \
-TreeFilterDlg.resources \
-TreeToolsWin.resources \
-UserRefEditDlg.resources \
+GKUI.BaseWin.resources \
+GKUI.Charts.ACOptionsControl.resources \
+GKUI.CircleChartWin.resources \
+GKUI.Controls.GKInputBox.resources \
+GKUI.Controls.GKMergeControl.resources \
+GKUI.Dialogs.AboutDlg.resources \
+GKUI.Dialogs.AddressEditDlg.resources \
+GKUI.Dialogs.AssociationEditDlg.resources \
+GKUI.Dialogs.CommonFilterDlg.resources \
+GKUI.Dialogs.CommunicationEditDlg.resources \
+GKUI.Dialogs.DayTipsDlg.resources \
+GKUI.Dialogs.EventEditDlg.resources \
+GKUI.Dialogs.FamilyEditDlg.resources \
+GKUI.Dialogs.FilePropertiesDlg.resources \
+GKUI.Dialogs.GroupEditDlg.resources \
+GKUI.Dialogs.LanguageSelectDlg.resources \
+GKUI.Dialogs.LocationEditDlg.resources \
+GKUI.Dialogs.MediaEditDlg.resources \
+GKUI.Dialogs.NameEditDlg.resources \
+GKUI.Dialogs.NoteEditDlg.resources \
+GKUI.Dialogs.OptionsDlg.resources \
+GKUI.Dialogs.PersonalNameEditDlg.resources \
+GKUI.Dialogs.PersonEditDlg.resources \
+GKUI.Dialogs.PersonNewDlg.resources \
+GKUI.Dialogs.PersonsFilterDlg.resources \
+GKUI.Dialogs.PortraitSelectDlg.resources \
+GKUI.Dialogs.ProgressDlg.resources \
+GKUI.Dialogs.RecordSelectDlg.resources \
+GKUI.Dialogs.RelationshipCalculatorDlg.resources \
+GKUI.Dialogs.RepositoryEditDlg.resources \
+GKUI.Dialogs.ResearchEditDlg.resources \
+GKUI.Dialogs.SexCheckDlg.resources \
+GKUI.Dialogs.SourceCitEditDlg.resources \
+GKUI.Dialogs.SourceEditDlg.resources \
+GKUI.Dialogs.TaskEditDlg.resources \
+GKUI.Dialogs.TreeFilterDlg.resources \
+GKUI.Dialogs.UserRefEditDlg.resources \
+GKUI.MainWin.resources \
+GKUI.MapsViewerWin.resources \
+GKUI.MediaViewerWin.resources \
+GKUI.OrganizerWin.resources \
+GKUI.PatriarchsViewerWin.resources \
+GKUI.ScriptEditWin.resources \
+GKUI.SlideshowWin.resources \
+GKUI.StatisticsWin.resources \
+GKUI.TreeChartWin.resources \
+GKUI.TreeToolsWin.resources \
 )
 
 else
@@ -495,57 +486,59 @@ else
 # `$(resources)` for `$(linux)`
 resources := \
 $(addprefix $(objdir), \
-AboutDlg.resources \
-ACOptionsControl.resources \
-AddressEditDlg.resources \
-AssociationEditDlg.resources \
-BaseWin.resources \
-CircleChartWin.resources \
-CommonFilterDlg.resources \
-CommunicationEditDlg.resources \
-DayTipsDlg.resources \
-EventEditDlg.resources \
-FamilyEditDlg.resources \
-FilePropertiesDlg.resources \
-GKInputBox.resources \
-GKMergeControl.resources \
 GKResources.resources \
-GroupEditDlg.resources \
-LanguageSelectDlg.resources \
-LocationEditDlg.resources \
-MainWin.resources \
-MapsViewerWin.resources \
-MediaEditDlg.resources \
-MediaViewerWin.resources \
-NameEditDlg.resources \
-NoteEditDlg.resources \
-OptionsDlg.resources \
-OrganizerWin.resources \
-PatriarchsViewerWin.resources \
-PersonalNameEditDlg.resources \
-PersonEditDlg.resources \
-PersonNewDlg.resources \
-PersonsFilterDlg.resources \
-PortraitSelectDlg.resources \
-ProgressDlg.resources \
-RecordSelectDlg.resources \
-RelationshipCalculatorDlg.resources \
-RepositoryEditDlg.resources \
-ResearchEditDlg.resources \
-ScriptEditWin.resources \
-SexCheckDlg.resources \
-SlideshowWin.resources \
-SourceCitEditDlg.resources \
-SourceEditDlg.resources \
-StatisticsWin.resources \
-TaskEditDlg.resources \
-TreeChartWin.resources \
-TreeFilterDlg.resources \
-TreeToolsWin.resources \
-UserRefEditDlg.resources \
+GKUI.BaseWin.resources \
+GKUI.Charts.ACOptionsControl.resources \
+GKUI.CircleChartWin.resources \
+GKUI.Controls.GKInputBox.resources \
+GKUI.Controls.GKMergeControl.resources \
+GKUI.Dialogs.AboutDlg.resources \
+GKUI.Dialogs.AddressEditDlg.resources \
+GKUI.Dialogs.AssociationEditDlg.resources \
+GKUI.Dialogs.CommonFilterDlg.resources \
+GKUI.Dialogs.CommunicationEditDlg.resources \
+GKUI.Dialogs.DayTipsDlg.resources \
+GKUI.Dialogs.EventEditDlg.resources \
+GKUI.Dialogs.FamilyEditDlg.resources \
+GKUI.Dialogs.FilePropertiesDlg.resources \
+GKUI.Dialogs.GroupEditDlg.resources \
+GKUI.Dialogs.LanguageSelectDlg.resources \
+GKUI.Dialogs.LocationEditDlg.resources \
+GKUI.Dialogs.MediaEditDlg.resources \
+GKUI.Dialogs.NameEditDlg.resources \
+GKUI.Dialogs.NoteEditDlg.resources \
+GKUI.Dialogs.OptionsDlg.resources \
+GKUI.Dialogs.PersonalNameEditDlg.resources \
+GKUI.Dialogs.PersonEditDlg.resources \
+GKUI.Dialogs.PersonNewDlg.resources \
+GKUI.Dialogs.PersonsFilterDlg.resources \
+GKUI.Dialogs.PortraitSelectDlg.resources \
+GKUI.Dialogs.ProgressDlg.resources \
+GKUI.Dialogs.RecordSelectDlg.resources \
+GKUI.Dialogs.RelationshipCalculatorDlg.resources \
+GKUI.Dialogs.RepositoryEditDlg.resources \
+GKUI.Dialogs.ResearchEditDlg.resources \
+GKUI.Dialogs.SexCheckDlg.resources \
+GKUI.Dialogs.SourceCitEditDlg.resources \
+GKUI.Dialogs.SourceEditDlg.resources \
+GKUI.Dialogs.TaskEditDlg.resources \
+GKUI.Dialogs.TreeFilterDlg.resources \
+GKUI.Dialogs.UserRefEditDlg.resources \
+GKUI.MainWin.resources \
+GKUI.MapsViewerWin.resources \
+GKUI.MediaViewerWin.resources \
+GKUI.OrganizerWin.resources \
+GKUI.PatriarchsViewerWin.resources \
+GKUI.ScriptEditWin.resources \
+GKUI.SlideshowWin.resources \
+GKUI.StatisticsWin.resources \
+GKUI.TreeChartWin.resources \
+GKUI.TreeToolsWin.resources \
 )
 
 endif
+
+resdep := $(objdir)resmake.d
 
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll" \
@@ -659,9 +652,9 @@ clean:
 $(objdir):
 	@mkdir -p $(objdir)
 
-$(resources): | $(objdir)
+$(resdep): | $(objdir)
 
-$(outdir)$(project)$(projectext): ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll $(resources) $(sources)
+$(outdir)$(project)$(projectext): ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll $(resdep) $(resources) $(sources)
 ifeq ($(windows), $(softwareplatform))
 	$(compiler) //out:$(outdirdos)$(project)$(projectext) $(compilerflags) $(patsubst $(objdir)%,//resource:$(objdirdos)\\%,$(resources)) $(sources)
 else
@@ -669,12 +662,10 @@ else
 endif
 	@echo "**** $(project)$(projectext): build completed ($(releasetype) for $(hardwareplatform), $(softwareplatform))."
 
-$(objdir)%.resources: %.resx
-ifeq ($(windows), $(softwareplatform))
-	$(rc) $(rcflags) //compile $<,$@
-else
-	@echo "rc: not yet implemented for $(linux)"
-endif
+$(resdep): $(vsproj)
+	sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\.resx\)\"\([[:space:]]\?\/\)\?>/\1/;h;y/\//\./;s/\(.\+\.\)resx/$(subst /,\\/,$(objdir))\1resources/;G;s/\(.\+\)\n\(.\+\)/\1: \2\n\t$$\(rc\) $$\(rcflags\) \/\/compile $$<,$$\@/p}" < $< > $@
+
+-include $(resdep)
 
 .PHONY: $(gkcommon)
 $(gkcommon):

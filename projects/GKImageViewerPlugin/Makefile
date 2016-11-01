@@ -8,16 +8,17 @@ include $(includemk)toolchain.mk
 project := $(gkimageviewerplugin)
 projectext := .dll
 
-# Get directories list for `vpath %.resx` via (run from this directory):
-# find -regex '.+\.resx' | sed 's/\(.\+\)\/.\+/\1 \\/' | awk '!a[$0]++' | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
-vpath %.resx \
-.
-
 objdir := obj/$(releasetype)/
 objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../plugins/
+
+ifeq ($(windows), $(softwareplatform))
+  vsproj := GKImageViewerPlugin.mswin.csproj
+else
+  vsproj := GKImageViewerPlugin.linux.csproj
+endif
 
 # Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
@@ -47,8 +48,8 @@ endif
 # Get files list for `resources` via (run from this directory):
 # find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
 # Or (this is more valid -- it takes data from a project file):
-# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKImageViewerPlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
-# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKImageViewerPlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/;s/\//\./g;P}" < GKImageViewerPlugin.mswin.csproj | sort
+# sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/;s/\//\./g;P}" < GKImageViewerPlugin.linux.csproj | sort
 # Because `$(resources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
@@ -69,6 +70,8 @@ ImageViewerWin.resources \
 )
 
 endif
+
+resdep := $(objdir)resmake.d
 
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll"
@@ -170,9 +173,9 @@ clean:
 $(objdir):
 	@mkdir -p $(objdir)
 
-$(resources): | $(objdir)
+$(resdep): | $(objdir)
 
-$(outdir)$(project)$(projectext): ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll $(resources) $(sources)
+$(outdir)$(project)$(projectext): ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll $(resdep) $(resources) $(sources)
 ifeq ($(windows), $(softwareplatform))
 	$(compiler) //out:$(outdirdos)$(project)$(projectext) $(compilerflags) $(patsubst $(objdir)%,//resource:$(objdirdos)\\%,$(resources)) $(sources)
 else
@@ -180,12 +183,10 @@ else
 endif
 	@echo "**** $(project)$(projectext): build completed ($(releasetype) for $(hardwareplatform), $(softwareplatform))."
 
-$(objdir)%.resources: %.resx
-ifeq ($(windows), $(softwareplatform))
-	$(rc) $(rcflags) //compile $<,$@
-else
-	@echo "rc: not yet implemented for $(linux)"
-endif
+$(resdep): $(vsproj)
+	sed -n -e "/[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>/ {y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\"]\(.*\.resx\)\"\([[:space:]]\?\/\)\?>/\1/;h;y/\//\./;s/\(.\+\.\)resx/$(subst /,\\/,$(objdir))\1resources/;G;s/\(.\+\)\n\(.\+\)/\1: \2\n\t$$\(rc\) $$\(rcflags\) \/\/compile $$<,$$\@/p}" < $< > $@
+
+-include $(resdep)
 
 .PHONY: $(gkcommon)
 $(gkcommon):
