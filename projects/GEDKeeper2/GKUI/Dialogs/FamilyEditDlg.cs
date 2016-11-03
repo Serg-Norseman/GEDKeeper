@@ -242,7 +242,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raEdit:
-                    result = (this.fBase.ModifyPerson(ref child));
+                    result = (this.fBase.ModifyPerson(ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
                     break;
 
                 case RecordAction.raDelete:

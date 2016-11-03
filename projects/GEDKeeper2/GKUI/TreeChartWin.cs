@@ -31,6 +31,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
@@ -273,7 +274,7 @@ namespace GKUI
             if (person.Rec != null) {
                 GEDCOMIndividualRecord iRec = person.Rec;
 
-                if (this.fBase.ModifyPerson(ref iRec)) {
+                if (this.fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
                     this.UpdateChart();
                 }
             } else {
@@ -327,7 +328,7 @@ namespace GKUI
             if (p != null && p.Rec != null)
             {
                 GEDCOMIndividualRecord iRec = p.Rec;
-                if (this.fBase.ModifyPerson(ref iRec)) {
+                if (this.fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
                     this.UpdateChart();
                 }
             }

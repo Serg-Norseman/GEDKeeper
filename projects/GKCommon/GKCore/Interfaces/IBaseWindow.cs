@@ -67,8 +67,6 @@ namespace GKCore.Interfaces
 
         bool IsAvailableRecord(GEDCOMRecord record);
 
-        GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
-
         bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec);
         bool ModifyNote(ref GEDCOMNoteRecord noteRec);
         bool ModifySource(ref GEDCOMSourceRecord sourceRec);
@@ -78,7 +76,8 @@ namespace GKCore.Interfaces
         bool ModifyTask(ref GEDCOMTaskRecord taskRec);
         bool ModifyCommunication(ref GEDCOMCommunicationRecord commRec);
         bool ModifyLocation(ref GEDCOMLocationRecord locRec);
-        bool ModifyPerson(ref GEDCOMIndividualRecord indivRec);
+        bool ModifyPerson(ref GEDCOMIndividualRecord indivRec,
+                          GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
         bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget target, GEDCOMIndividualRecord person);
         bool ModifyAddress(GEDCOMAddress address);
         //bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit);

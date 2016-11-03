@@ -120,7 +120,8 @@ namespace GKTests.Mocks
         public bool ModifyTask(ref GEDCOMTaskRecord taskRec) { taskRec = null; return false; }
         public bool ModifyCommunication(ref GEDCOMCommunicationRecord commRec) { commRec = null; return false; }
         public bool ModifyLocation(ref GEDCOMLocationRecord locRec) { locRec = null; return false; }
-        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec) { indivRec = null; return false; }
+        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec,
+                                 GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { indivRec = null; return false; }
         public bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget target, GEDCOMIndividualRecord person) { familyRec = null; return false; }
         public bool ModifyAddress(GEDCOMAddress address) { return false; }
         public bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit) { cit = null; return false; }

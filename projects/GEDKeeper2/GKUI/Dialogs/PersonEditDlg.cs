@@ -27,6 +27,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
@@ -49,11 +50,25 @@ namespace GKUI.Dialogs
         private readonly GKSheetList fNamesList;
 
         private GEDCOMIndividualRecord fPerson;
+        private GEDCOMIndividualRecord fTarget;
+        private TargetMode fTargetMode;
 
         public GEDCOMIndividualRecord Person
         {
             get { return this.fPerson; }
             set { this.SetPerson(value); }
+        }
+
+        public GEDCOMIndividualRecord Target
+        {
+            get { return this.fTarget; }
+            set { this.SetTarget(value); }
+        }
+
+        public TargetMode TargetMode
+        {
+            get { return this.fTargetMode; }
+            set { this.fTargetMode = value; }
         }
 
 
@@ -67,7 +82,7 @@ namespace GKUI.Dialogs
                 GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat);
                 this.txtSurname.Text = fam;
                 this.txtName.Text = nam;
-                this.txtPatronymic.Text = pat;
+                this.cmbPatronymic.Text = pat;
                 this.cmbSex.SelectedIndex = (sbyte)this.fPerson.Sex;
                 this.chkPatriarch.Checked = this.fPerson.Patriarch;
                 this.chkBookmark.Checked = this.fPerson.Bookmark;
@@ -90,6 +105,54 @@ namespace GKUI.Dialogs
             catch (Exception ex)
             {
                 this.fBase.Host.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
+            }
+        }
+
+        private void SetTarget(GEDCOMIndividualRecord value)
+        {
+            try
+            {
+                this.fTarget = value;
+
+                if (this.fTarget != null)
+                {
+                    string iFamily, iName, iPatronymic;
+                    GKUtils.GetNameParts(this.fTarget, out iFamily, out iName, out iPatronymic);
+                    this.txtSurname.Text = iFamily;
+                    INamesTable names = MainWin.Instance.NamesTable;
+                    GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
+
+                    switch (this.fTargetMode) {
+                        case TargetMode.tmParent:
+                            if (sx == GEDCOMSex.svFemale) {
+                                this.txtSurname.Text = GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily);
+                            }
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
+                            this.cmbPatronymic.Text = names.GetPatronymicByName(iName, sx);
+                            break;
+
+                        case TargetMode.tmChild:
+                            switch (sx) {
+                                case GEDCOMSex.svMale:
+                                    this.txtName.Text = names.GetNameByPatronymic(iPatronymic);
+                                    break;
+
+                                case GEDCOMSex.svFemale:
+                                    this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
+                                    break;
+                            }
+                            break;
+
+                        case TargetMode.tmWife:
+                            this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("PersonEditDlg.SetTarget("+this.fTargetMode.ToString()+"): " + ex.Message);
             }
         }
 
@@ -170,7 +233,7 @@ namespace GKUI.Dialogs
 
             // controls lock
             this.txtName.Enabled = !locked;
-            this.txtPatronymic.Enabled = !locked;
+            this.cmbPatronymic.Enabled = !locked;
             this.txtSurname.Enabled = !locked;
 
             this.cmbSex.Enabled = !locked;
@@ -213,7 +276,7 @@ namespace GKUI.Dialogs
         private void AcceptChanges()
         {
             GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-            np.SetNameParts(this.txtName.Text.Trim() + " " + this.txtPatronymic.Text.Trim(), this.txtSurname.Text.Trim(), np.LastPart);
+            np.SetNameParts(this.txtName.Text.Trim() + " " + this.cmbPatronymic.Text.Trim(), this.txtSurname.Text.Trim(), np.LastPart);
 
             GEDCOMPersonalNamePieces pieces = np.Pieces;
             pieces.Nickname = this.txtNickname.Text;
@@ -719,20 +782,10 @@ namespace GKUI.Dialogs
         private void SetTitle()
         {
             this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.txtSurname.Text, this.txtName.Text,
-                                      this.txtPatronymic.Text, this.fPerson.GetXRefNum());
+                                      this.cmbPatronymic.Text, this.fPerson.GetXRefNum());
         }
 
         private void edSurname_TextChanged(object sender, EventArgs e)
-        {
-            this.SetTitle();
-        }
-
-        private void EditName_TextChanged(object sender, EventArgs e)
-        {
-            this.SetTitle();
-        }
-
-        private void EditPatronymic_TextChanged(object sender, EventArgs e)
         {
             this.SetTitle();
         }
@@ -899,9 +952,7 @@ namespace GKUI.Dialogs
         private void edSurname_KeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (sender as TextBox);
-
-            if (tb != null && e.KeyCode == Keys.Down && e.Control)
-            {
+            if (tb != null && e.KeyCode == Keys.Down && e.Control) {
                 tb.Text = GEDCOMUtils.NormalizeName(tb.Text);
             }
         }

@@ -1371,10 +1371,12 @@ namespace GKUI
             {
                 case GEDCOMRecordType.rtIndividual:
                     {
-                        rec = this.CreatePersonDialog(null, TargetMode.tmParent, GEDCOMSex.svNone);
-                        result = (rec != null);
+                        GEDCOMIndividualRecord indivRec = null;
+                        result = this.ModifyPerson(ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
+                        rec = indivRec;
                         break;
                     }
+
                 case GEDCOMRecordType.rtFamily:
                     {
                         GEDCOMFamilyRecord fam = null;
@@ -1553,7 +1555,7 @@ namespace GKUI
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
                     GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                    result = this.ModifyPerson(ref ind);
+                    result = this.ModifyPerson(ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
@@ -2217,76 +2219,81 @@ namespace GKUI
             return result;
         }
 
-        public GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
+        private void PostProcessPerson(GEDCOMIndividualRecord indivRec)
         {
-            GEDCOMIndividualRecord result = null;
+            MainWin.Instance.NamesTable.ImportNames(indivRec);
+
+            IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
+
+            if (iFilter.SourceMode == FilterGroupMode.Selected)
+            {
+                GEDCOMSourceRecord src = this.fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                if (src != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == DialogResult.Yes)
+                {
+                    indivRec.AddSource(src, "", 0);
+                }
+            }
+
+            if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
+            {
+                GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                if (grp != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == DialogResult.Yes)
+                {
+                    grp.AddMember(indivRec);
+                }
+            }
+        }
+
+        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec,
+                                 GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
+        {
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
 
-                using (PersonNewDlg dlg = new PersonNewDlg(this))
-                {
-                    dlg.cmbSex.SelectedIndex = (int)needSex;
-                    dlg.TargetMode = targetMode;
-                    dlg.Target = target;
+                using (PersonEditDlg dlg = new PersonEditDlg(this)) {
+                    bool exists = (indivRec != null);
+                    if (!exists) {
+                        indivRec = new GEDCOMIndividualRecord(this.fTree, this.fTree, "", "");
+                        indivRec.InitNew();
 
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK)
-                    {
-                        result = this.fContext.CreatePersonEx(dlg.txtName.Text, dlg.cmbPatronymic.Text, dlg.txtSurname.Text, (GEDCOMSex)dlg.cmbSex.SelectedIndex, true);
-                        this.ChangeRecord(result);
+                        indivRec.AddPersonalName(new GEDCOMPersonalName(this.fTree, indivRec, "", ""));
+                        this.fContext.CreateEventEx(indivRec, "BIRT", "", "");
+                    }
 
-                        MainWin.Instance.NamesTable.ImportNames(result);
+                    try {
+                        this.LockRecord(indivRec);
 
-                        IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
+                        dlg.Person = indivRec;
 
-                        if (iFilter.SourceMode == FilterGroupMode.Selected)
-                        {
-                            GEDCOMSourceRecord src = this.fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                            if (src != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == DialogResult.Yes)
-                            {
-                                result.AddSource(src, "", 0);
+                        if (targetMode != TargetMode.tmNone) {
+                            if (needSex == GEDCOMSex.svMale || needSex == GEDCOMSex.svFemale) {
+                                dlg.cmbSex.SelectedIndex = (int)needSex;
                             }
+                            dlg.TargetMode = targetMode;
+                            dlg.Target = target;
                         }
 
-                        if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
-                        {
-                            GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                            if (grp != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == DialogResult.Yes)
-                            {
-                                grp.AddMember(result);
-                            }
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    } finally {
+                        this.UnlockRecord(indivRec);
+                    }
+
+                    if (!exists) {
+                        if (result) {
+                            this.PostProcessPerson(indivRec);
+
+                            this.fTree.AddRecord(indivRec);
+                        } else {
+                            GEDCOMUtils.CleanIndividual(indivRec);
+                            indivRec.Dispose();
+                            indivRec = null;
                         }
                     }
                 }
             } finally {
                 this.fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec)
-        {
-            bool result = false;
-
-            if (indivRec != null)
-            {
-                try {
-                    this.fContext.BeginUpdate();
-
-                    using (PersonEditDlg dlg = new PersonEditDlg(this)) {
-                        try {
-                            this.LockRecord(indivRec);
-
-                            dlg.Person = indivRec;
-                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                        } finally {
-                            this.UnlockRecord(indivRec);
-                        }
-                    }
-                } finally {
-                    this.fContext.EndUpdate();
-                }
             }
 
             return result;

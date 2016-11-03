@@ -109,7 +109,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Externals\MdiChildFormEx.cs" />
+    <Compile Include="Externals\MdiChildFormEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
@@ -253,7 +255,9 @@
     <Compile Include="GKUI\Dialogs\CommunicationEditDlg.Designer.cs">
       <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\EditorDialog.cs" />
+    <Compile Include="GKUI\Dialogs\EditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\EventEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -325,12 +329,6 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\PersonEditDlg.Designer.cs">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Dialogs\PersonNewDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Dialogs\PersonNewDlg.Designer.cs">
-      <DependentUpon>PersonNewDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\PersonsFilterDlg.cs">
       <SubType>Form</SubType>
@@ -590,9 +588,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\PersonEditDlg.resx">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PersonNewDlg.resx">
-      <DependentUpon>PersonNewDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\PersonsFilterDlg.resx">
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>

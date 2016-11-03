@@ -311,12 +311,6 @@
     <Compile Include="GKUI\Dialogs\PersonEditDlg.Designer.cs">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonNewDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Dialogs\PersonNewDlg.Designer.cs">
-      <DependentUpon>PersonNewDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Dialogs\PersonsFilterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -595,9 +589,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\PersonEditDlg.resx">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PersonNewDlg.resx">
-      <DependentUpon>PersonNewDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\PersonsFilterDlg.resx">
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>

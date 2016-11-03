@@ -159,9 +159,8 @@ namespace GKUI.Dialogs
                 switch (this.fMode) {
                     case GEDCOMRecordType.rtIndividual:
                         {
-                            GEDCOMIndividualRecord iRec = this.fBase.CreatePersonDialog(this.Target, this.fTargetMode, this.NeedSex);
-                            if (iRec != null)
-                            {
+                            GEDCOMIndividualRecord iRec = null;
+                            if (this.fBase.ModifyPerson(ref iRec, this.Target, this.fTargetMode, this.NeedSex)) {
                                 this.ResultRecord = iRec;
                                 base.DialogResult = DialogResult.OK;
                             }
