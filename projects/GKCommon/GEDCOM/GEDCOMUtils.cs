@@ -590,6 +590,14 @@ namespace GKCommon.GEDCOM
             {
                 result = GEDCOMMultimediaFormat.mfWMA;
             }
+            else if (str == "PSD")
+            {
+                result = GEDCOMMultimediaFormat.mfPSD;
+            }
+            else if (str == "PDF")
+            {
+                result = GEDCOMMultimediaFormat.mfPDF;
+            }
             else
             {
                 result = GEDCOMMultimediaFormat.mfUnknown;
@@ -651,6 +659,12 @@ namespace GKCommon.GEDCOM
                     break;
                 case GEDCOMMultimediaFormat.mfWMA:
                     s = "wma";
+                    break;
+                case GEDCOMMultimediaFormat.mfPSD:
+                    s = "psd";
+                    break;
+                case GEDCOMMultimediaFormat.mfPDF:
+                    s = "pdf";
                     break;
                 default:
                     s = "";

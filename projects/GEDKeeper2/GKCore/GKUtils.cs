@@ -2639,11 +2639,13 @@ namespace GKCore
                 case GEDCOMMultimediaFormat.mfTGA:
                 case GEDCOMMultimediaFormat.mfPNG:
                 case GEDCOMMultimediaFormat.mfRAW:
+                case GEDCOMMultimediaFormat.mfPSD:
                     return MultimediaKind.mkImage;
 
                 case GEDCOMMultimediaFormat.mfTXT:
                 case GEDCOMMultimediaFormat.mfRTF:
                 case GEDCOMMultimediaFormat.mfHTM:
+                case GEDCOMMultimediaFormat.mfPDF:
                     return MultimediaKind.mkText;
 
                 case GEDCOMMultimediaFormat.mfWAV:

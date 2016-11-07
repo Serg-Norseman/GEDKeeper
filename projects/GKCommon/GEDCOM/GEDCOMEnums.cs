@@ -246,10 +246,12 @@ namespace GKCommon.GEDCOM
         mfTGA,
         mfPNG,
         mfRAW,
+        mfPSD,
 
         mfTXT,
         mfRTF,
         mfHTM,
+        mfPDF,
 
         mfWAV,
         mfMP3,
