@@ -196,6 +196,7 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\Extensions\GEDCOMCutoutPosition.cs" />
+    <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKCommon\ConvHelper.cs" />
     <Compile Include="GKCommon\CRC32.cs" />
