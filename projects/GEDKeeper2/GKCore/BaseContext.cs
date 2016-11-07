@@ -1068,6 +1068,7 @@ namespace GKCore
             this.MoveMediaContainers(oldFileName, fileName);
 
             if (string.IsNullOrEmpty(password)) {
+                this.PrepareHeader(fileName, GlobalOptions.Instance.DefCharacterSet);
                 this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 this.SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
@@ -1139,6 +1140,7 @@ namespace GKCore
 
                 using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
                 {
+                    this.PrepareHeader(fileName, charSet);
                     this.fTree.SaveToStreamExt(crStream, fileName, charSet);
                     crStream.Flush();
                 }
@@ -1146,6 +1148,30 @@ namespace GKCore
                 SCCrypt.ClearBytes(pwd);
                 SCCrypt.ClearBytes(salt);
                 cryptic.Clear();
+            }
+        }
+
+        private void PrepareHeader(string fileName, GEDCOMCharacterSet charSet)
+        {
+            GEDCOMHeader header = this.fTree.Header;
+
+            string subm = header.GetTagStringValue("SUBM");
+            int oldRev = header.FileRevision;
+
+            header.Clear();
+            header.Source = "GEDKeeper";
+            //header.SourceVersion = 
+            header.ReceivingSystemName = "GEDKeeper";
+            header.CharacterSet = charSet;
+            header.Language = "Russian";
+            header.GEDCOMVersion = "5.5";
+            header.GEDCOMForm = "LINEAGE-LINKED";
+            header.FileName = Path.GetFileName(fileName);
+            header.TransmissionDateTime = DateTime.Now;
+            header.FileRevision = oldRev + 1;
+
+            if (subm != "") {
+                header.SetTagStringValue("SUBM", subm);
             }
         }
 

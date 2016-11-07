@@ -373,6 +373,8 @@ namespace GKCommon.GEDCOM
 
         public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
         {
+            // Attention: processing of Header moved to BaseContext!
+
             using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
             {
                 this.SaveToStreamExt(fileStream, fileName, charSet);
@@ -392,25 +394,9 @@ namespace GKCommon.GEDCOM
 
         public void SaveToStreamExt(Stream outputStream, string fileName, GEDCOMCharacterSet charSet)
         {
+            // Attention: processing of Header moved to BaseContext!
+
             this.fFileName = fileName;
-
-            string subm = this.fHeader.GetTagStringValue("SUBM");
-            int rev = this.fHeader.FileRevision;
-
-            this.fHeader.Clear();
-            this.fHeader.Source = "GEDKeeper";
-            this.fHeader.ReceivingSystemName = "GEDKeeper";
-            this.fHeader.CharacterSet = charSet;
-            this.fHeader.Language = "Russian";
-            this.fHeader.GEDCOMVersion = "5.5";
-            this.fHeader.GEDCOMForm = "LINEAGE-LINKED";
-            this.fHeader.FileName = Path.GetFileName(fileName);
-            this.fHeader.TransmissionDateTime = DateTime.Now;
-            this.fHeader.FileRevision = rev + 1;
-
-            if (subm != "") {
-                this.fHeader.SetTagStringValue("SUBM", subm);
-            }
 
             this.Pack();
 

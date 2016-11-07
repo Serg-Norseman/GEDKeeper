@@ -639,6 +639,7 @@ namespace GKUI
             try
             {
                 string rfn = Path.ChangeExtension(this.fTree.FileName, ".restore");
+                // TODO: PrepareHeader or not?
                 this.fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
             } catch (Exception ex) {
                 this.Host.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
