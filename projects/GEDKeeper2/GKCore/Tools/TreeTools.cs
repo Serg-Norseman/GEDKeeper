@@ -526,6 +526,27 @@ namespace GKCore.Tools
             }
         }
 
+        private static void ConvertOldNames(GEDCOMIndividualRecord iRec)
+        {
+            try
+            {
+                int num = iRec.PersonalNames.Count;
+                for (int i = 0; i < num; i++) {
+                    GEDCOMPersonalName pName = iRec.PersonalNames[i];
+
+                    string surname, name, patronymic;
+                    GKUtils.GetRusNameParts(pName, out surname, out name, out patronymic);
+
+                    pName.Pieces.Surname = surname;
+                    pName.Pieces.Given = name;
+                    pName.Pieces.PatronymicName = patronymic;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
         public static bool CheckGEDCOMFormat(GEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
         {
             if (tree == null)
@@ -546,7 +567,7 @@ namespace GKCore.Tools
                 {
                     GEDCOMFormat format = tree.GetGEDCOMFormat();
                     bool idCheck = true;
-
+                    bool convNames = false;
 
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native)
@@ -559,8 +580,13 @@ namespace GKCore.Tools
 
                         tag = header.FindTag("_EXT_NAME", 0);
                         if (tag != null) header.DeleteTag("_EXT_NAME");
-                    }
 
+                        //int fileVer = ConvHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
+                        //if (fileVer == GKData.APP_FORMAT_DEFVER) {
+                            // TODO: make condition for languages with patronymics (Culture-depend)
+                            //convNames = true;
+                        //}
+                    }
 
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++)
@@ -571,6 +597,10 @@ namespace GKCore.Tools
                         if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0)
                         {
                             idCheck = false;
+                        }
+
+                        if (rec.RecordType == GEDCOMRecordType.rtIndividual && convNames) {
+                            ConvertOldNames(rec as GEDCOMIndividualRecord);
                         }
 
                         pc.ProgressStep();

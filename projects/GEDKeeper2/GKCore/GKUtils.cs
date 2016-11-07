@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//define DEBUG_NEWNAMES
+
 using System;
 using System.IO;
 using System.Reflection;
@@ -968,7 +970,7 @@ namespace GKCore
                                         bdY = curY;
                                     }
                                     distance = DaysBetween(dtNow,
-                                        new DateTime(bdY, bdM, bdD));
+                                                           new DateTime(bdY, bdM, bdD));
                                     result = true;
                                 }
                             }
@@ -1314,6 +1316,33 @@ namespace GKCore
                     rec.ExtData = value;
                 }
             }
+        }
+
+        public static void PrepareHeader(GEDCOMTree tree, string fileName, GEDCOMCharacterSet charSet)
+        {
+            GEDCOMHeader header = tree.Header;
+
+            string subm = header.GetTagStringValue("SUBM");
+            int oldRev = header.FileRevision;
+
+            header.Clear();
+            header.Source = "GEDKeeper";
+            header.ReceivingSystemName = "GEDKeeper";
+            header.CharacterSet = charSet;
+            header.Language = "Russian";
+            header.GEDCOMVersion = "5.5";
+            header.GEDCOMForm = "LINEAGE-LINKED";
+            header.FileName = Path.GetFileName(fileName);
+            header.TransmissionDateTime = DateTime.Now;
+            header.FileRevision = oldRev + 1;
+
+            if (subm != "") {
+                header.SetTagStringValue("SUBM", subm);
+            }
+
+            #if DEBUG_NEWNAMES
+            header.SourceVersion = GKData.APP_FORMAT_CURVER.ToString();
+            #endif
         }
 
         #endregion
@@ -2694,22 +2723,44 @@ namespace GKCore
 
         #region Names processing
 
+        public static void SetRusNameParts(GEDCOMPersonalName personalName, string surname, string name, string patronymic)
+        {
+            if (personalName == null)
+                throw new ArgumentNullException("personalName");
+
+            surname = surname.Trim();
+            name = name.Trim();
+            patronymic = patronymic.Trim();
+
+            personalName.SetNameParts(name + " " + patronymic, surname, personalName.LastPart);
+            personalName.Pieces.Surname = surname;
+            personalName.Pieces.Given = name;
+            personalName.Pieces.PatronymicName = patronymic;
+        }
+
         public static void GetRusNameParts(GEDCOMPersonalName personalName, out string surname, out string name, out string patronymic)
         {
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
-            string firstPart /*, dummy*/;
-            personalName.GetNameParts(out firstPart, out surname /*, out dummy*/);
+            surname = personalName.Pieces.Surname;
+            name = personalName.Pieces.Given;
+            patronymic = personalName.Pieces.PatronymicName;
 
-            string[] parts = firstPart.Split(' ');
-            if (parts.Length > 1)
+            if (string.IsNullOrEmpty(surname) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic))
             {
-                name = parts[0];
-                patronymic = parts[1];
-            } else {
-                name = firstPart;
-                patronymic = "";
+                string firstPart /*, dummy*/;
+                personalName.GetNameParts(out firstPart, out surname /*, out dummy*/);
+
+                string[] parts = firstPart.Split(' ');
+                if (parts.Length > 1)
+                {
+                    name = parts[0];
+                    patronymic = parts[1];
+                } else {
+                    name = firstPart;
+                    patronymic = "";
+                }
             }
         }
 

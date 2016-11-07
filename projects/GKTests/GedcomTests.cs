@@ -1658,11 +1658,18 @@ namespace GKTests
             using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(_context.Tree, _context.Tree, "", "")) {
                 Assert.IsNotNull(indi);
 
-                string surname, name, patr;
-                GKUtils.GetNameParts(indi, out surname, out name, out patr);
+                string surname, name, patronymic;
+                GKUtils.GetNameParts(indi, out surname, out name, out patronymic); // test with empty PersonalNames
                 Assert.AreEqual("", surname);
                 Assert.AreEqual("", name);
-                Assert.AreEqual("", patr);
+                Assert.AreEqual("", patronymic);
+
+                indi.AddPersonalName(new GEDCOMPersonalName(_context.Tree, indi, "", "")); // test with empty Name
+                GKUtils.GetNameParts(indi, out surname, out name, out patronymic);
+                Assert.AreEqual("", surname);
+                Assert.AreEqual("", name);
+                Assert.AreEqual("", patronymic);
+                indi.PersonalNames.Clear();
 
                 string st;
                 Assert.AreEqual("", indi.GetNameString(true, false));
@@ -1700,11 +1707,11 @@ namespace GKTests
 //			Assert.AreEqual(pieces.Name, "name");
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
 
-            string name, patr;
-            GKUtils.GetNameParts(iRec, out surname, out name, out patr);
+            string name, patronymic;
+            GKUtils.GetNameParts(iRec, out surname, out name, out patronymic);
             Assert.AreEqual("Ivanov", surname);
             Assert.AreEqual("Ivan", name);
-            Assert.AreEqual("Ivanovich", patr);
+            Assert.AreEqual("Ivanovich", patronymic);
 
 
             GEDCOMPersonalName persName;
@@ -1769,13 +1776,13 @@ namespace GKTests
             string buf = TagStreamTest(persName);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                             "2 TYPE birth\r\n"+
-                            "2 NPFX Prefix\r\n"+
+                            "2 SURN Surname\r\n"+
                             "2 GIVN Given\r\n"+
+                            "2 _PATN PatronymicName\r\n"+
+                            "2 NPFX Prefix\r\n"+
                             "2 NICK Nickname\r\n"+
                             "2 SPFX SurnamePrefix\r\n"+
-                            "2 SURN Surname\r\n"+
                             "2 NSFX Suffix\r\n"+
-                            "2 _PATN PatronymicName\r\n"+
                             "2 _MARN MarriedName\r\n"+
                             "2 _RELN ReligiousName\r\n"+
                             "2 _CENN CensusName\r\n", buf);
@@ -1787,13 +1794,13 @@ namespace GKTests
                 string buf2 = TagStreamTest(nameCopy);
                 Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                                 "2 TYPE birth\r\n"+
-                                "2 NPFX Prefix\r\n"+
+                                "2 SURN Surname\r\n"+
                                 "2 GIVN Given\r\n"+
+                                "2 _PATN PatronymicName\r\n"+
+                                "2 NPFX Prefix\r\n"+
                                 "2 NICK Nickname\r\n"+
                                 "2 SPFX SurnamePrefix\r\n"+
-                                "2 SURN Surname\r\n"+
                                 "2 NSFX Suffix\r\n"+
-                                "2 _PATN PatronymicName\r\n"+
                                 "2 _MARN MarriedName\r\n"+
                                 "2 _RELN ReligiousName\r\n"+
                                 "2 _CENN CensusName\r\n", buf2);

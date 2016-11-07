@@ -276,7 +276,7 @@ namespace GKUI.Dialogs
         private void AcceptChanges()
         {
             GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-            np.SetNameParts(this.txtName.Text.Trim() + " " + this.cmbPatronymic.Text.Trim(), this.txtSurname.Text.Trim(), np.LastPart);
+            GKUtils.SetRusNameParts(np, this.txtSurname.Text, this.txtName.Text, this.cmbPatronymic.Text);
 
             GEDCOMPersonalNamePieces pieces = np.Pieces;
             pieces.Nickname = this.txtNickname.Text;

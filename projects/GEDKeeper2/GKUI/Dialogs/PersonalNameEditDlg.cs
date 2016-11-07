@@ -59,12 +59,12 @@ namespace GKUI.Dialogs
 
         private void UpdateControls()
         {
-            string fam, nam, pat;
-            GKUtils.GetRusNameParts(fPersonalName, out fam, out nam, out pat);
+            string surname, name, patronymic;
+            GKUtils.GetRusNameParts(this.fPersonalName, out surname, out name, out patronymic);
 
-            this.txtSurname.Text = fam;
-            this.txtName.Text = nam;
-            this.txtPatronymic.Text = pat;
+            this.txtSurname.Text = surname;
+            this.txtName.Text = name;
+            this.txtPatronymic.Text = patronymic;
             this.cmbNameType.SelectedIndex = (sbyte)this.fPersonalName.NameType;
 
             this.txtNamePrefix.Text = fPersonalName.Pieces.Prefix;
@@ -75,9 +75,7 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            fPersonalName.SetNameParts(
-                this.txtName.Text.Trim() + " " + this.txtPatronymic.Text.Trim(),
-                this.txtSurname.Text.Trim(), fPersonalName.LastPart);
+            GKUtils.SetRusNameParts(fPersonalName, this.txtSurname.Text, this.txtName.Text, this.txtPatronymic.Text);
 
             GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
             pieces.Nickname = this.txtNickname.Text;

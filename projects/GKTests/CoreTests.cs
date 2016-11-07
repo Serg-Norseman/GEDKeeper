@@ -302,6 +302,13 @@ namespace GKTests
 
             //
 
+            string surname = "", name = "", patronymic = "";
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetRusNameParts(null, out surname, out name, out patronymic); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetRusNameParts(null, surname, name, patronymic); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, out surname, out name, out patronymic); });
+
+            //
+
             string st3;
             st3 = GKUtils.GetBirthDate(null, DateFormat.dfDD_MM_YYYY, true);
             Assert.AreEqual("", st3);

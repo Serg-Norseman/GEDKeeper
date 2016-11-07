@@ -69,12 +69,20 @@ namespace GKCommon.GEDCOM
             TAGS_BASE.Add("TIME", new TagProperties("TIME", true, false));
             TAGS_BASE.Add("TYPE", new TagProperties("TYPE", true, false));
             TAGS_BASE.Add("SUBM", new TagProperties("SUBM", true, false));
+            TAGS_BASE.Add("VERS", new TagProperties("VERS", true, false));
+
             TAGS_BASE.Add("NPFX", new TagProperties("NPFX", true, false));
             TAGS_BASE.Add("GIVN", new TagProperties("GIVN", true, false));
             TAGS_BASE.Add("NICK", new TagProperties("NICK", true, false));
             TAGS_BASE.Add("SPFX", new TagProperties("SPFX", true, false));
             TAGS_BASE.Add("SURN", new TagProperties("SURN", true, false));
             TAGS_BASE.Add("NSFX", new TagProperties("NSFX", true, false));
+
+            TAGS_BASE.Add("_PATN", new TagProperties("_PATN", true, true));
+            TAGS_BASE.Add("_MARN", new TagProperties("_MARN", true, true));
+            TAGS_BASE.Add("_RELN", new TagProperties("_RELN", true, true));
+            TAGS_BASE.Add("_CENN", new TagProperties("_CENN", true, true));
+
             TAGS_BASE.Add("_LOC", new TagProperties("_LOC", true,  true));
             TAGS_BASE.Add("_POSITION", new TagProperties("_POSITION", true,  true));
             TAGS_BASE.Add("ALIA", new TagProperties("ALIA", true, false));
