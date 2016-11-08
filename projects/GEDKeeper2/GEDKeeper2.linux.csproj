@@ -506,10 +506,13 @@
     <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
     <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
-    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
+    <Compile Include="GKCore\Cultures\BritishCulture.cs" />
+    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
+    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
+    <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -520,7 +523,6 @@
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
-    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

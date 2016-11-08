@@ -27,20 +27,20 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public class AncientCulture : ICulture
+    public class SwedishCulture : ICulture
     {
-        public AncientCulture()
+        public SwedishCulture()
         {
         }
 
         public MiddleNameType GetMiddleNameType()
         {
-            return MiddleNameType.mntNone;
+            return MiddleNameType.mntSecondSurname;
         }
 
         public bool HasSurname()
         {
-            return false;
+            return true;
         }
 
         public string NormalizeSurname(string sn, bool aFemale)

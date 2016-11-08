@@ -23,12 +23,20 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
+    public enum MiddleNameType
+    {
+        mntNone,
+        mntMiddleName,
+        mntPatronymic,
+        mntSecondSurname
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public interface ICulture
     {
-        bool HasPatronymic();
+        MiddleNameType GetMiddleNameType();
         bool HasSurname();
 
         string NormalizeSurname(string sn, bool aFemale);

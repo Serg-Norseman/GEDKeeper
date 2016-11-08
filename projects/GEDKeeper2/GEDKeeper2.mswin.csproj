@@ -122,8 +122,10 @@
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
+    <Compile Include="GKCore\Cultures\BritishCulture.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
+    <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
     <Compile Include="GKCore\Export\CustomWriter.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />
