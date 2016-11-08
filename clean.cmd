@@ -19,6 +19,9 @@ rmdir .\projects\GKTests\obj /s /q
 rmdir .\projects\GKTests\OpenCover /s /q
 rmdir .\projects\GKTests\PartCover /s /q
 
+rmdir .\projects\GKUpdater\bin /s /q
+rmdir .\projects\GKUpdater\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\GKSamplePlugin\bin /s /q

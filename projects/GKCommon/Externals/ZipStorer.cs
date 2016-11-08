@@ -390,6 +390,37 @@ namespace Externals
         }
 
         /// <summary>
+        /// Copy the contents of a stored files into a physical folder
+        /// </summary>
+        /// <param name="path">Path of folder to store uncompressed files</param>
+        /// <returns>True if success, false if not.</returns>
+        public bool ExtractFiles(string path)
+        {
+            // Make sure the parent directory exist
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            bool result = true;
+
+            // Get full list of entries
+            List<ZipFileEntry> fullList = this.ReadCentralDir();
+            try
+            {
+                foreach (ZipFileEntry zfe in fullList)
+                {
+                    string localName = Path.Combine(path, zfe.FilenameInZip);
+                    result = result && this.ExtractFile(zfe, localName);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Copy the contents of a stored file into an opened stream
         /// </summary>
         /// <param name="zfe">Entry information of file to extract</param>

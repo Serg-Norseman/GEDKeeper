@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2\GE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.mswin.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKUpdater", "GKUpdater\GKUpdater.csproj", "{EC117EAC-E63D-4B5C-90E4-B9AD87984067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -220,6 +222,14 @@ Global
 		{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}.Release|x86.ActiveCfg = Release|x86
 		{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}.Release|x64.Build.0 = Release|x64
 		{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}.Release|x64.ActiveCfg = Release|x64
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Debug|x86.Build.0 = Debug|x86
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Debug|x86.ActiveCfg = Debug|x86
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Debug|x64.Build.0 = Debug|x64
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Debug|x64.ActiveCfg = Debug|x64
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x86.Build.0 = Release|x86
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x86.ActiveCfg = Release|x86
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x64.Build.0 = Release|x64
+		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

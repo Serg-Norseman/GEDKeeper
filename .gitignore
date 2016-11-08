@@ -16,6 +16,9 @@ build_coverity.cmd
 /projects/GKCommon/bin/
 /projects/GKCommon/obj/
 
+/projects/GKUpdater/bin/
+/projects/GKUpdater/obj/
+
 /projects/GKTests/bin/
 /projects/GKTests/obj/
 /projects/GKTests/OpenCover/
