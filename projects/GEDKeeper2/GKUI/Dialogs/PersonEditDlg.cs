@@ -325,6 +325,16 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void AcceptTempData()
+        {
+            // It is very important for some methods
+            // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
+            // And we need to have actual name's value for visible it in FamilyEditDlg
+
+            this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, this.fPerson, (GEDCOMSex)this.cmbSex.SelectedIndex);
+            this.fLocalUndoman.DoIndividualNameChange(this.fPerson, this.txtSurname.Text, this.txtName.Text, this.cmbPatronymic.Text);
+        }
+
         private GKSheetList CreateAssociationsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
@@ -561,14 +571,15 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
+                    this.AcceptTempData();
                     result = (this.fBase.ModifyFamily(ref family, FamilyTarget.Spouse, this.fPerson));
                     if (result) {
                         eArgs.ItemData = family;
-                        // TODO: the last problem!!!
                     }
                     break;
 
                 case RecordAction.raEdit:
+                    this.AcceptTempData();
                     result = (this.fBase.ModifyFamily(ref family, FamilyTarget.None, null));
                     break;
 
@@ -892,12 +903,11 @@ namespace GKUI.Dialogs
 
         private void btnParentsAdd_Click(object sender, EventArgs e)
         {
+            this.AcceptTempData();
+
             GEDCOMFamilyRecord family = this.fBase.SelectFamily(this.fPerson);
             if (family == null) return;
 
-            // FIXME: it's not working correctly!
-            // because the child is added in a different location,
-            // need to check everything in order not to break other functions
             if (family.IndexOfChild(this.fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
@@ -908,6 +918,8 @@ namespace GKUI.Dialogs
 
         private void btnParentsEdit_Click(object sender, EventArgs e)
         {
+            this.AcceptTempData();
+
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
             if (family != null && this.fBase.ModifyFamily(ref family, FamilyTarget.None, null))
             {

@@ -2322,16 +2322,15 @@ namespace GKUI
                         familyRec.InitNew();
                     }
 
-                    if (targetType == FamilyTarget.Spouse && target != null) {
-                        familyRec.AddSpouse(target);
-                    } else if (targetType == FamilyTarget.Child && target != null) {
-                        familyRec.AddChild(target);
-                    }
-
                     try {
                         this.LockRecord(familyRec);
 
                         dlg.Family = familyRec;
+
+                        if (targetType != FamilyTarget.None && target != null) {
+                            dlg.SetTarget(targetType, target);
+                        }
+
                         result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                     } finally {
                         this.UnlockRecord(familyRec);

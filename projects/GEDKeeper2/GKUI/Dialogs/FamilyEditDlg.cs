@@ -310,6 +310,22 @@ namespace GKUI.Dialogs
             this.Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), this.txtHusband.Text, this.txtWife.Text);
         }
 
+        internal void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target)
+        {
+            if (targetType == FamilyTarget.None || target == null) return;
+
+            bool result = false;
+            if (targetType == FamilyTarget.Spouse) {
+                //this.fFamily.AddSpouse(target);
+                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, this.fFamily, target);
+            } else if (targetType == FamilyTarget.Child) {
+                //this.fFamily.AddChild(target);
+                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, this.fFamily);
+            }
+
+            if (result) this.UpdateControls();
+        }
+
         private void btnHusbandAddClick(object sender, EventArgs e)
         {
             GEDCOMIndividualRecord husband = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);

@@ -50,5 +50,13 @@ namespace GKCore.Operations
 
             return base.DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
+
+        public bool DoIndividualNameChange(GEDCOMIndividualRecord iRec, string surname, string name, string patronymic)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            return base.DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic));
+        }
     }
 }

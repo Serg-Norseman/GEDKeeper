@@ -145,6 +145,7 @@
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
+    <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
     <Compile Include="GKCore\Operations\UndoManager.cs" />
     <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
