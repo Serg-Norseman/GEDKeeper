@@ -381,7 +381,8 @@ namespace GKUI.Dialogs
 
                         if (!exists) {
                             if (result) {
-                                this.fPerson.Associations.Add(ast);
+                                //this.fPerson.Associations.Add(ast);
+                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, this.fPerson, ast);
                             } else {
                                 ast.Dispose();
                             }
@@ -392,8 +393,9 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != DialogResult.No)
                     {
-                        this.fPerson.Associations.Delete(ast);
-                        result = true;
+                        //this.fPerson.Associations.Delete(ast);
+                        //result = true;
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, this.fPerson, ast);
                         this.fBase.Modified = true;
                     }
                     break;
@@ -462,7 +464,8 @@ namespace GKUI.Dialogs
 
                         if (!exists) {
                             if (result) {
-                                this.fPerson.UserReferences.Add(userRef);
+                                //this.fPerson.UserReferences.Add(userRef);
+                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, this.fPerson, userRef);
                             } else {
                                 userRef.Dispose();
                             }
@@ -479,8 +482,9 @@ namespace GKUI.Dialogs
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
                         if (GKUtils.ShowQuestion(confirmation) != DialogResult.No)
                         {
-                            this.fPerson.UserReferences.Delete(userRef);
-                            result = true;
+                            //this.fPerson.UserReferences.Delete(userRef);
+                            //result = true;
+                            result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, this.fPerson, userRef);
                             this.fBase.Modified = true;
                         }
                         break;
@@ -558,7 +562,10 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     result = (this.fBase.ModifyFamily(ref family, FamilyTarget.Spouse, this.fPerson));
-                    if (result) eArgs.ItemData = family;
+                    if (result) {
+                        eArgs.ItemData = family;
+                        // TODO: the last problem!!!
+                    }
                     break;
 
                 case RecordAction.raEdit:
@@ -568,8 +575,9 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     if (family != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != DialogResult.No)
                     {
-                        family.RemoveSpouse(this.fPerson);
-                        result = true;
+                        //family.RemoveSpouse(this.fPerson);
+                        //result = true;
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, this.fPerson);
                     }
                     break;
 
@@ -665,11 +673,19 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     groupRec = this.fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
-                    result = (groupRec != null && groupRec.AddMember(this.fPerson));
+                    result = (groupRec != null);
+                    if (result) {
+                        //result = groupRec.AddMember(this.fPerson);
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, this.fPerson);
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No && groupRec.RemoveMember(this.fPerson));
+                    result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No);
+                    if (result) {
+                        //result = groupRec.RemoveMember(this.fPerson);
+                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, this.fPerson);
+                    }
                     break;
                     
                 case RecordAction.raJump:
@@ -740,7 +756,8 @@ namespace GKUI.Dialogs
 
                         if (!exists) {
                             if (result) {
-                                this.fPerson.PersonalNames.Add(persName);
+                                //this.fPerson.PersonalNames.Add(persName);
+                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, this.fPerson, persName);
                             } else {
                                 persName.Dispose();
                             }
@@ -752,7 +769,8 @@ namespace GKUI.Dialogs
                     if (this.fPerson.PersonalNames.Count > 1) {
                         result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveNameQuery)) != DialogResult.No);
                         if (result) {
-                            this.fPerson.PersonalNames.Delete(persName);
+                            //this.fPerson.PersonalNames.Delete(persName);
+                            result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, this.fPerson, persName);
                         }
                     } else {
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));

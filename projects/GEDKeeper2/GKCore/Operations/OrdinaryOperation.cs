@@ -61,6 +61,15 @@ namespace GKCore.Operations
         otAdd,
         otRemove,
 
+        otIndividualAssociationAdd,
+        otIndividualAssociationRemove,
+
+        otIndividualNameAdd,
+        otIndividualNameRemove,
+
+        otIndividualURefAdd,
+        otIndividualURefRemove,
+
         otIndividualBookmarkChange,
         otIndividualPatriarchChange,
         otIndividualSexChange
@@ -371,6 +380,73 @@ namespace GKCore.Operations
                                 rwe.AddEvent(evt);
                             } else {
                                 rwe.Events.Extract(evt); // bugfix(no delete!)
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+
+                case OperationType.otIndividualAssociationAdd:
+                case OperationType.otIndividualAssociationRemove:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+                        GEDCOMAssociation asso = this.fNewVal as GEDCOMAssociation;
+
+                        if (iRec == null || asso == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otIndividualAssociationRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                iRec.Associations.Add(asso);
+                            } else {
+                                iRec.Associations.Extract(asso);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+                case OperationType.otIndividualNameAdd:
+                case OperationType.otIndividualNameRemove:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+                        GEDCOMPersonalName persName = this.fNewVal as GEDCOMPersonalName;
+
+                        if (iRec == null || persName == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otIndividualNameRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                iRec.PersonalNames.Add(persName);
+                            } else {
+                                iRec.PersonalNames.Extract(persName);
+                            }
+                            result = true;
+                        }
+                    }
+                    break;
+
+                case OperationType.otIndividualURefAdd:
+                case OperationType.otIndividualURefRemove:
+                    {
+                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
+                        GEDCOMUserReference uRef = this.fNewVal as GEDCOMUserReference;
+
+                        if (iRec == null || uRef == null) {
+                            result = false;
+                        } else {
+                            if (this.fType == OperationType.otIndividualURefRemove) {
+                                redo = !redo;
+                            }
+                            if (redo) {
+                                iRec.UserReferences.Add(uRef);
+                            } else {
+                                iRec.UserReferences.Extract(uRef);
                             }
                             result = true;
                         }

@@ -2300,15 +2300,15 @@ namespace GKUI
             return result;
         }
 
-        public bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget target, GEDCOMIndividualRecord person)
+        public bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget targetType, GEDCOMIndividualRecord target)
         {
             bool result;
 
             try {
                 this.fContext.BeginUpdate();
 
-                if (target == FamilyTarget.Spouse && person != null) {
-                    GEDCOMSex sex = person.Sex;
+                if (targetType == FamilyTarget.Spouse && target != null) {
+                    GEDCOMSex sex = target.Sex;
                     if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                         return false;
@@ -2322,10 +2322,10 @@ namespace GKUI
                         familyRec.InitNew();
                     }
 
-                    if (target == FamilyTarget.Spouse && person != null) {
-                        familyRec.AddSpouse(person);
-                    } else if (target == FamilyTarget.Child && person != null) {
-                        familyRec.AddChild(person);
+                    if (targetType == FamilyTarget.Spouse && target != null) {
+                        familyRec.AddSpouse(target);
+                    } else if (targetType == FamilyTarget.Child && target != null) {
+                        familyRec.AddChild(target);
                     }
 
                     try {
