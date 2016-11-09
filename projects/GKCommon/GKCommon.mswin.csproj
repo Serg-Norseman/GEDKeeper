@@ -166,6 +166,7 @@
     <Compile Include="GEDCOM\GEDCOMIndividualEvent.cs" />
     <Compile Include="GEDCOM\GEDCOMIndividualOrdinance.cs" />
     <Compile Include="GEDCOM\GEDCOMIndividualRecord.cs" />
+    <Compile Include="GEDCOM\GEDCOMLanguage.cs" />
     <Compile Include="GEDCOM\GEDCOMLocationRecord.cs" />
     <Compile Include="GEDCOM\GEDCOMMap.cs" />
     <Compile Include="GEDCOM\GEDCOMMultimediaLink.cs" />

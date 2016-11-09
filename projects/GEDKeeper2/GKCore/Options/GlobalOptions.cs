@@ -69,6 +69,7 @@ namespace GKCore.Options
         private bool fAutosave;
         private int fAutosaveInterval;
         private bool fExtendedNames;
+        private WomanSurnameFormat fWomanSurnameFormat;
         private readonly AncestorsCircleOptions fAncestorsCircleOptions;
 
 
@@ -250,6 +251,12 @@ namespace GKCore.Options
             set { this.fExtendedNames = value; }
         }
 
+        public WomanSurnameFormat WomanSurnameFormat
+        {
+            get { return this.fWomanSurnameFormat; }
+            set { this.fWomanSurnameFormat = value; }
+        }
+
 
         public int GetLangsCount()
         {
@@ -406,6 +413,7 @@ namespace GKCore.Options
             this.fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
 
             this.fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
+            this.fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
 
             int kl = ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
             SysUtils.SetKeyLayout(kl);
@@ -515,6 +523,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "AutosaveInterval", this.fAutosaveInterval);
 
             ini.WriteBool("Common", "ExtendedNames", this.fExtendedNames);
+            ini.WriteInteger("Common", "WomanSurnameFormat", (int)this.fWomanSurnameFormat);
 
             this.fChartOptions.SaveToFile(ini);
             this.fPedigreeOptions.SaveToFile(ini);

@@ -24,6 +24,63 @@ using System.Text;
 
 namespace GKCommon.GEDCOM
 {
+    public sealed class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
+    {
+        private string[] fStrValues;
+        private Dictionary<string, int> fValues;
+        private T fDefaultValue;
+        private bool fCaseSensitive;
+
+        public GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
+        {
+            Type enumType = typeof(T);
+            if (!enumType.IsEnum) {
+                throw new ArgumentException(string.Format("{0} is not of type Enum", enumType.Name));
+            }
+
+            T[] enums = (T[]) Enum.GetValues(enumType);
+
+            if (enums.Length != strValues.Length) {
+                throw new ArgumentException("Arguments are not compatible");
+            }
+
+            this.fStrValues = strValues;
+            this.fDefaultValue = defaultValue;
+            this.fCaseSensitive = caseSensitive;
+
+            this.fValues = new Dictionary<string, int>(enums.Length);
+            for (int i = 0; i < enums.Length; i++)
+            {
+                this.fValues.Add(strValues[i], i);
+            }
+        }
+
+        public string GetStrValue(T enumVal)
+        {
+            int idx = (int)((IConvertible)enumVal);
+
+            if (idx < 0 || idx >= this.fStrValues.Length) {
+                return string.Empty;
+            } else {
+                return this.fStrValues[idx];
+            }
+        }
+
+        public T GetEnumValue(string key)
+        {
+            if (!this.fCaseSensitive) {
+                key = key.Trim().ToLowerInvariant();
+            }
+
+            int result;
+            if (this.fValues.TryGetValue(key, out result)) {
+                return (T)((IConvertible)result);
+            } else {
+                return (T)((IConvertible)this.fDefaultValue);
+            }
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -683,11 +740,11 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMMediaType GetMediaTypeVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMMediaType.mtNone;
+            GEDCOMMediaType result = GEDCOMMediaType.mtUnknown;
+            if (string.IsNullOrEmpty(str)) return result;
 
-            GEDCOMMediaType result;
             str = str.Trim().ToLowerInvariant();
-            
+
             if (str == "audio")
             {
                 result = GEDCOMMediaType.mtAudio;
@@ -740,10 +797,7 @@ namespace GKCommon.GEDCOM
             {
                 result = GEDCOMMediaType.mtVideo;
             }
-            else
-            {
-                result = GEDCOMMediaType.mtUnknown;
-            }
+
             return result;
         }
 

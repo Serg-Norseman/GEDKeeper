@@ -22,8 +22,9 @@ namespace GKCore.Types
 {
     public enum WomanSurnameFormat
     {
-        wsfMarried_Maiden, // default
+        wsfNotExpand, // default
         wsfMaiden_Married,
+        wsfMarried_Maiden,
         wsfMaiden,
         wsfMarried
     }

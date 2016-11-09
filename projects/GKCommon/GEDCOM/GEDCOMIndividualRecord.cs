@@ -707,7 +707,7 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public string GetNameString(bool startByFamily, bool includePieces)
+        public string GetNameString(bool firstSurname, bool includePieces)
         {
             string result;
             if (this.fPersonalNames.Count > 0)
@@ -717,7 +717,7 @@ namespace GKCommon.GEDCOM
                 string firstPart, surname/*, dummy*/;
                 np.GetNameParts(out firstPart, out surname /*, out dummy*/);
 
-                if (startByFamily)
+                if (firstSurname)
                 {
                     result = surname + " " + firstPart;
                 }

@@ -1329,7 +1329,8 @@ namespace GKCore
             header.Source = "GEDKeeper";
             header.ReceivingSystemName = "GEDKeeper";
             header.CharacterSet = charSet;
-            header.Language = "Russian";
+            //header.Language = "Russian";
+            header.Language.Value = GEDCOMLanguageID.Russian;
             header.GEDCOMVersion = "5.5";
             header.GEDCOMForm = "LINEAGE-LINKED";
             header.FileName = Path.GetFileName(fileName);

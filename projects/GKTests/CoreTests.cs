@@ -1118,6 +1118,9 @@ namespace GKTests
                 globalOptions.ExtendedNames = true;
                 Assert.AreEqual(true, globalOptions.ExtendedNames);
 
+                globalOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
+                Assert.AreEqual(WomanSurnameFormat.wsfMaiden, globalOptions.WomanSurnameFormat);
+
                 globalOptions.AddLastBase("sample.ged");
                 Assert.AreEqual(1, globalOptions.GetLastBasesCount());
                 Assert.AreEqual("sample.ged", globalOptions.GetLastBase(0));

@@ -351,7 +351,7 @@ namespace GKCore
 
             MediaTypes = new LSID[]
             {
-                LSID.LSID_DefaultValue,
+                LSID.LSID_DefaultValue, // TODO: may be LSID.LSID_MT_15 (Unknown)?
                 LSID.LSID_MT_02,
                 LSID.LSID_MT_03,
                 LSID.LSID_MT_04,
@@ -364,8 +364,8 @@ namespace GKCore
                 LSID.LSID_MT_11,
                 LSID.LSID_MT_12,
                 LSID.LSID_MT_13,
-                LSID.LSID_MT_14,
-                LSID.LSID_MT_15
+                LSID.LSID_MT_14
+                //LSID.LSID_MT_15 <Unknown removed to first position>
             };
 
 

@@ -108,10 +108,14 @@ namespace GKCommon.GEDCOM
             set { base.SetTagStringValue(@"CHAR\VERS", value); }
         }
 
-        public string Language
+        /*public string Language
         {
             get { return base.GetTagStringValue("LANG"); }
             set { base.SetTagStringValue("LANG", value); }
+        }*/
+        public GEDCOMLanguage Language
+        {
+            get { return base.TagClass("LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
         public string PlaceHierarchy

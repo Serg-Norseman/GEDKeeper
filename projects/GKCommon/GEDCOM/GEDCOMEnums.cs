@@ -215,7 +215,8 @@ namespace GKCommon.GEDCOM
 
     public enum GEDCOMMediaType
     {
-        mtNone,
+        mtUnknown,
+
         mtAudio,
         mtBook,
         mtCard,
@@ -229,9 +230,8 @@ namespace GKCommon.GEDCOM
         mtPhoto,
         mtTombstone,
         mtVideo,
-        mtUnknown,
 
-        mtLast = mtUnknown
+        mtLast = mtVideo
     }
 
     public enum GEDCOMMultimediaFormat

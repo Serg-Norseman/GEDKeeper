@@ -19,10 +19,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -307,7 +307,7 @@ namespace GKTests
 
             //
 
-            Assert.AreEqual(GEDCOMMediaType.mtNone, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtNone)));
+            Assert.AreEqual(GEDCOMMediaType.mtUnknown, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtUnknown)));
             Assert.AreEqual(GEDCOMMediaType.mtAudio, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtAudio)));
             Assert.AreEqual(GEDCOMMediaType.mtBook, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtBook)));
             Assert.AreEqual(GEDCOMMediaType.mtCard, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtCard)));
@@ -1511,8 +1511,9 @@ namespace GKTests
             headRec.ReceivingSystemName = "GEDKeeper";
             Assert.AreEqual("GEDKeeper", headRec.ReceivingSystemName);
 
-            headRec.Language = "Russian";
-            Assert.AreEqual("Russian", headRec.Language);
+            //headRec.Language = "Russian";
+            headRec.Language.Value = GEDCOMLanguageID.Russian;
+            Assert.AreEqual("Russian", headRec.Language.StringValue);
 
             headRec.GEDCOMVersion = "5.5";
             Assert.AreEqual("5.5", headRec.GEDCOMVersion);
@@ -1868,6 +1869,32 @@ namespace GKTests
             Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GEDCOMFileReference.RecognizeFormat("sample.mpeg"));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.htm"));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.html"));
+        }
+
+        [Test]
+        public void GEDCOMLanguage_Tests()
+        {
+            using (GEDCOMLanguage langTag = GEDCOMLanguage.Create(null, null, "", "") as GEDCOMLanguage) {
+                Assert.IsTrue(langTag.IsEmpty());
+
+                langTag.Value = GEDCOMLanguageID.AngloSaxon;
+                Assert.AreEqual(GEDCOMLanguageID.AngloSaxon, langTag.Value);
+
+                langTag.ParseString("Spanish");
+                Assert.AreEqual("Spanish", langTag.StringValue);
+
+                using (GEDCOMLanguage langTag2 = GEDCOMLanguage.Create(null, null, "", "") as GEDCOMLanguage) {
+                    Assert.IsTrue(langTag2.IsEmpty());
+
+                    langTag2.Assign(null);
+
+                    langTag2.Assign(langTag);
+                    Assert.AreEqual("Spanish", langTag2.StringValue);
+                }
+
+                langTag.Clear();
+                Assert.IsTrue(langTag.IsEmpty());
+            }
         }
 
         [Test]
@@ -2829,5 +2856,61 @@ namespace GKTests
                 }
             }
         }
+
+        #region GEDCOM Enums performance test
+        /*
+        private static string[] MediaTypeArr = new string[] { "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
+            "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
+
+        [Test]
+        public void GEDCOMEnumParse_Tests()
+        {
+            GEDCOMEnumHelper<GEDCOMMediaType> mediaEnumHelper = new GEDCOMEnumHelper<GEDCOMMediaType>(MediaTypeArr, GEDCOMMediaType.mtUnknown);
+
+            for (int k = 0; k < 10000; k++) {
+                string strVal1, strVal2, strVal3;
+
+                for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
+                    strVal1 = GEDCOMUtils.GetMediaTypeStr(mt);
+                    strVal2 = Enum2Str(mt, MediaTypeArr); // slower for 1.2 ms
+                    strVal3 = mediaEnumHelper.GetStrValue(mt); // slower for 1.4 ms
+                    Assert.AreEqual(strVal1, strVal2);
+                    Assert.AreEqual(strVal2, strVal3);
+
+                    GEDCOMMediaType mt1 = GEDCOMUtils.GetMediaTypeVal(strVal1);
+                    GEDCOMMediaType mt2 = (GEDCOMMediaType)Str2Enum(strVal2, MediaTypeArr); // slower for 23 ms
+                    GEDCOMMediaType mt3 = (GEDCOMMediaType)mediaEnumHelper.GetEnumValue(strVal2); // faster for 114 ms
+                    Assert.AreEqual(mt1, mt2);
+                    Assert.AreEqual(mt2, mt3);
+                }
+            }
+        }
+
+        #region Methods only for the test
+
+        public static int Str2Enum(string val, string[] values)
+        {
+            val = val.Trim().ToLowerInvariant();
+            for (int i = 0; i < values.Length; i++) {
+                if (values[i] == val) {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        public static string Enum2Str(IConvertible elem, string[] values)
+        {
+            int idx = (int)elem;
+            if (idx < 0 || idx >= values.Length) {
+                return string.Empty;
+            } else {
+                return values[idx];
+            }
+        }
+
+        #endregion
+        */
+        #endregion
     }
 }

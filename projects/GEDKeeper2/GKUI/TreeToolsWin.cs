@@ -627,7 +627,8 @@ namespace GKUI
                 this.fTree.Header.Source = "GEDKeeper";
                 this.fTree.Header.ReceivingSystemName = "GEDKeeper";
                 this.fTree.Header.CharacterSet = MainWin.Instance.Options.DefCharacterSet;
-                this.fTree.Header.Language = "Russian";
+                //this.fTree.Header.Language = "Russian";
+                this.fTree.Header.Language.Value = GEDCOMLanguageID.Russian;
                 this.fTree.Header.GEDCOMVersion = "5.5";
                 this.fTree.Header.GEDCOMForm = "LINEAGE-LINKED";
                 this.fTree.Header.FileName = Path.GetFileName(fileName);

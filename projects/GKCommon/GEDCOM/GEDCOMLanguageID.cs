@@ -25,6 +25,7 @@ namespace GKCommon.GEDCOM
     public enum GEDCOMLanguageID
     {
         Unknown,
+
         Afrikaans,
         Albanian,
         AngloSaxon,

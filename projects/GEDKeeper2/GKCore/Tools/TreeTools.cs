@@ -210,7 +210,7 @@ namespace GKCore.Tools
                     {
                         tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
                     }
-                    if (srcFileRef.MediaType != GEDCOMMediaType.mtNone)
+                    if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown)
                     {
                         tgtFileRef.MediaType = srcFileRef.MediaType;
                     }

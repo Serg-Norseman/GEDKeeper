@@ -182,7 +182,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = global::GKResources.iBtnAccept;
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
-            for (GEDCOMMediaType mt = GEDCOMMediaType.mtNone; mt <= GEDCOMMediaType.mtLast; mt++)
+            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++)
             {
                 this.cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
