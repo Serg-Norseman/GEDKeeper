@@ -55,7 +55,7 @@ namespace GKCommon.GEDCOM
     public enum GEDCOMCharacterSet
     {
         csASCII,
-        csANSEL,
+        csANSEL, // unsupported
         csUNICODE,
         csUTF8
     }
@@ -95,16 +95,6 @@ namespace GKCommon.GEDCOM
         ntMaiden,
         ntMarried
     }
-
-    /*public enum GEDCOMNamePieceType
-    {
-        nptPrefix,
-        nptGiven,
-        nptNickname,
-        nptSurnamePrefix,
-        nptSurname,
-        nptSuffix
-    }*/
 
     public enum GEDCOMCalendar
     {

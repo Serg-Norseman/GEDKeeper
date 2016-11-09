@@ -787,8 +787,9 @@ namespace GKCore
         /* 728 */ LSID_EyesColor,
         /* 729 */ LSID_MDNAHaplogroup,
         /* 730 */ LSID_YDNAHaplogroup,
+        /* 731 */ LSID_RecordIsLocked,
 
-        /* 000 */ LSID_Last = LSID_YDNAHaplogroup
+        /* 000 */ LSID_Last = LSID_RecordIsLocked
     }
 
     // TODO: remove and merge with LangManager
@@ -1529,7 +1530,8 @@ namespace GKCore
             /* 727 */ "Hair color",
             /* 728 */ "Eyes color",
             /* 729 */ "mtDNA haplogroup",
-            /* 730 */ "Y-DNA haplogroup"
+            /* 730 */ "Y-DNA haplogroup",
+            /* 731 */ "Record is locked by editor"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

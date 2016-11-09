@@ -22,14 +22,14 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMSubmitterRecord : GEDCOMRecord
     {
-        private GEDCOMList<GEDCOMTag> fLanguages;
+        private GEDCOMList<GEDCOMLanguage> fLanguages;
 
         public GEDCOMAddress Address
         {
             get { return base.TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
-        public GEDCOMList<GEDCOMTag> Languages
+        public GEDCOMList<GEDCOMLanguage> Languages
         {
             get { return this.fLanguages; }
         }
@@ -51,7 +51,7 @@ namespace GKCommon.GEDCOM
             {
                 while (index >= this.fLanguages.Count)
                 {
-                    this.fLanguages.Add(new GEDCOMTag(base.Owner, this, "LANG", ""));
+                    this.fLanguages.Add(new GEDCOMLanguage(base.Owner, this, "LANG", ""));
                 }
                 this.fLanguages[index].StringValue = value;
             }
@@ -63,7 +63,7 @@ namespace GKCommon.GEDCOM
             base.SetRecordType(GEDCOMRecordType.rtSubmitter);
             base.SetName("SUBM");
 
-            this.fLanguages = new GEDCOMList<GEDCOMTag>(this);
+            this.fLanguages = new GEDCOMList<GEDCOMLanguage>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -75,7 +75,7 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public GEDCOMTag AddLanguage(GEDCOMTag value)
+        public GEDCOMLanguage AddLanguage(GEDCOMLanguage value)
         {
             this.fLanguages.Add(value);
             return value;
@@ -95,7 +95,7 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "LANG")
             {
-                result = this.AddLanguage(new GEDCOMTag(base.Owner, this, tagName, tagValue));
+                result = this.AddLanguage(new GEDCOMLanguage(base.Owner, this, tagName, tagValue));
             }
             else
             {

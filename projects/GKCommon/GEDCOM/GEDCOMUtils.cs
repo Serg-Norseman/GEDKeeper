@@ -127,6 +127,7 @@ namespace GKCommon.GEDCOM
             TAGS_BASE.Add("TYPE", new TagProperties("TYPE", true, false));
             TAGS_BASE.Add("SUBM", new TagProperties("SUBM", true, false));
             TAGS_BASE.Add("VERS", new TagProperties("VERS", true, false));
+            TAGS_BASE.Add("LANG", new TagProperties("LANG", true, false));
 
             TAGS_BASE.Add("NPFX", new TagProperties("NPFX", true, false));
             TAGS_BASE.Add("GIVN", new TagProperties("GIVN", true, false));

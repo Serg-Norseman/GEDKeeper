@@ -6,6 +6,9 @@ del .\coverageResults.txt
 rmdir .\cov-int /s /q
 del .\coverity.zip
 
+del .\GKUpdater.ini
+del .\GKUpdater.log
+
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\projects\GEDKeeper2\bin /s /q

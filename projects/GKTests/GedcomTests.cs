@@ -576,14 +576,14 @@ namespace GKTests
             using (GEDCOMIndividualOrdinance iOrd = GEDCOMIndividualOrdinance.Create(null, null, "", "") as GEDCOMIndividualOrdinance)
             {
                 Assert.IsNotNull(iOrd);
-                
+
                 Assert.IsNotNull(iOrd.Date);
-                
+
                 iOrd.TempleCode = "temple code";
                 Assert.AreEqual("temple code", iOrd.TempleCode);
-                
-                iOrd.Place = "test place";
-                Assert.AreEqual("test place", iOrd.Place);
+
+                iOrd.Place.StringValue = "test place";
+                Assert.AreEqual("test place", iOrd.Place.StringValue);
                 
                 iOrd.BaptismDateStatus = GEDCOMBaptismDateStatus.bdsCompleted;
                 Assert.AreEqual(GEDCOMBaptismDateStatus.bdsCompleted, iOrd.BaptismDateStatus);
@@ -1511,7 +1511,6 @@ namespace GKTests
             headRec.ReceivingSystemName = "GEDKeeper";
             Assert.AreEqual("GEDKeeper", headRec.ReceivingSystemName);
 
-            //headRec.Language = "Russian";
             headRec.Language.Value = GEDCOMLanguageID.Russian;
             Assert.AreEqual("Russian", headRec.Language.StringValue);
 
@@ -2606,11 +2605,11 @@ namespace GKTests
                 subrRec.RegisteredReference = "regref";
                 Assert.AreEqual("regref", subrRec.RegisteredReference);
 
-                subrRec.AddTag("LANG", "RUS", null);
-                Assert.AreEqual("RUS", subrRec.Languages[0].StringValue);
+                subrRec.AddTag("LANG", "Russian", null);
+                Assert.AreEqual("Russian", subrRec.Languages[0].StringValue);
 
-                subrRec.SetLanguage(1, "ENG");
-                Assert.AreEqual("ENG", subrRec.Languages[1].StringValue);
+                subrRec.SetLanguage(1, "English");
+                Assert.AreEqual("English", subrRec.Languages[1].StringValue);
 
                 Assert.IsNotNull(subrRec.Address);
 
@@ -2857,8 +2856,8 @@ namespace GKTests
             }
         }
 
-        #region GEDCOM Enums performance test
-        /*
+        #region GEDCOM Enums test
+
         private static string[] MediaTypeArr = new string[] { "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
 
@@ -2867,7 +2866,23 @@ namespace GKTests
         {
             GEDCOMEnumHelper<GEDCOMMediaType> mediaEnumHelper = new GEDCOMEnumHelper<GEDCOMMediaType>(MediaTypeArr, GEDCOMMediaType.mtUnknown);
 
-            for (int k = 0; k < 10000; k++) {
+            string strVal3 = mediaEnumHelper.GetStrValue((GEDCOMMediaType) 15);
+            Assert.AreEqual("", strVal3);
+
+            strVal3 = mediaEnumHelper.GetStrValue(GEDCOMMediaType.mtMagazine);
+            Assert.AreEqual("magazine", strVal3);
+
+            GEDCOMMediaType mt3 = mediaEnumHelper.GetEnumValue(strVal3);
+            Assert.AreEqual(GEDCOMMediaType.mtMagazine, mt3);
+
+            mt3 = mediaEnumHelper.GetEnumValue("test");
+            Assert.AreEqual(GEDCOMMediaType.mtUnknown, mt3);
+
+            Assert.Throws(typeof(ArgumentException), () => { new GEDCOMEnumHelper<int>(MediaTypeArr, (int)GEDCOMMediaType.mtUnknown); });
+            Assert.Throws(typeof(ArgumentException), () => { new GEDCOMEnumHelper<GEDCOMMediaType>(new string[] { "" }, GEDCOMMediaType.mtUnknown); });
+
+            // performance test
+            /*for (int k = 0; k < 10000; k++) {
                 string strVal1, strVal2, strVal3;
 
                 for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
@@ -2883,7 +2898,7 @@ namespace GKTests
                     Assert.AreEqual(mt1, mt2);
                     Assert.AreEqual(mt2, mt3);
                 }
-            }
+            }*/
         }
 
         #region Methods only for the test
@@ -2910,7 +2925,7 @@ namespace GKTests
         }
 
         #endregion
-        */
+
         #endregion
     }
 }

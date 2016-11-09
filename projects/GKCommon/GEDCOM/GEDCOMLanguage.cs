@@ -27,7 +27,7 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public sealed class GEDCOMLanguage : GEDCOMTag
     {
-        public static readonly string[] LngEnumStr = new string[] {
+        private static readonly string[] LngEnumStr = new string[] {
             "", "Afrikaans", "Albanian", "Anglo-Saxon", "Catalan", "Catalan_Spn", "Czech", "Danish", "Dutch", "English",
             "Esperanto", "Estonian", "Faroese", "Finnish", "French", "German", "Hawaiian", "Hungarian", "Icelandic",
             "Indonesian", "Italian", "Latvian", "Lithuanian", "Navaho", "Norwegian", "Polish", "Portuguese", "Romanian",
@@ -80,7 +80,7 @@ namespace GKCommon.GEDCOM
         {
             if (!string.IsNullOrEmpty(strValue))
             {
-                this.fValue = (GEDCOMLanguageID)LangEnumHelper.GetEnumValue(strValue);
+                this.fValue = LangEnumHelper.GetEnumValue(strValue);
             }
 
             return strValue;

@@ -582,7 +582,7 @@ namespace GKCore.Tools
                         if (tag != null) header.DeleteTag("_EXT_NAME");
 
                         //int fileVer = ConvHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
-                        //if (fileVer == GKData.APP_FORMAT_DEFVER) {
+                        //if (fileVer == GKData.APP_FORMAT_DEFVER && header.Language.Value = GEDCOMLanguageID.Russian) {
                             // TODO: make condition for languages with patronymics (Culture-depend)
                             //convNames = true;
                         //}

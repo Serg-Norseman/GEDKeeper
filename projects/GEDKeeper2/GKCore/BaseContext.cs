@@ -606,14 +606,9 @@ namespace GKCore
 
             using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
             {
-                // TODO: new function FindFile()!
-                List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
-                foreach (ZipStorer.ZipFileEntry entry in dir)
-                {
-                    if (entry.FilenameInZip.Equals(targetFn)) {
-                        zip.ExtractFile(entry, toStream);
-                        break;
-                    }
+                ZipStorer.ZipFileEntry? entry = zip.FindFile(targetFn);
+                if (entry != null) {
+                    zip.ExtractFile(entry.Value, toStream);
                 }
             }
         }
