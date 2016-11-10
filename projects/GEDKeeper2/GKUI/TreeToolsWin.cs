@@ -347,7 +347,7 @@ namespace GKUI
                                 iRec = (GEDCOMIndividualRecord)groupRecords[j];
                                 prepared.Add(iRec);
 
-                                string pn = iRec.GetNameString(true, false);
+                                string pn = GKUtils.GetNameString(iRec, true, false);
                                 if (iRec.Patriarch)
                                 {
                                     pn = "(*) " + pn;
@@ -550,7 +550,7 @@ namespace GKUI
                     {
                         cnt++;
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-                        string st = iRec.XRef + " / " + iRec.GetNameString(true, false);
+                        string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
 
                         if (this.fSplitList.IndexOf(iRec) < 0) {
                             this.ListSkipped.Items.Add(st);
@@ -686,7 +686,7 @@ namespace GKUI
                     PatriarchObj pObj = lst[i];
                     string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
-                    GKListItem item = this.ListPatriarchs.AddItem(pSign + pObj.IRec.GetNameString(true, false), pObj.IRec);
+                    GKListItem item = this.ListPatriarchs.AddItem(pSign + GKUtils.GetNameString(pObj.IRec, true, false), pObj.IRec);
                     item.AddSubItem(pObj.BirthYear);
                     item.AddSubItem(pObj.DescendantsCount);
                     item.AddSubItem(pObj.DescGenerations);
@@ -745,8 +745,8 @@ namespace GKUI
 
         private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
         {
-            this.ListCompare.AppendText("    * [" + indivA.GetNameString(true, false) + "]\r\n");
-            this.ListCompare.AppendText("      [" + indivB.GetNameString(true, false) + "]\r\n\r\n");
+            this.ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
+            this.ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
             //this.ListCompare.AppendText("\r\n");
         }
 
@@ -785,7 +785,7 @@ namespace GKUI
                             int num = uln.Count;
                             foreach (TreeTools.ULIndividual indiv in uln)
                             {
-                                this.ListCompare.AppendText("    - [" + indiv.Family + "] " + indiv.IRec.GetNameString(true, false) + "\r\n");
+                                this.ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");
                             }
                         }
                         else

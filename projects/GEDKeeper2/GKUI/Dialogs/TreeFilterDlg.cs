@@ -107,7 +107,7 @@ namespace GKUI.Dialogs
                 {
                     string xref = tmpRefs[i];
                     GEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-                    if (p != null) this.fPersonsList.AddItem(p.GetNameString(true, false), p);
+                    if (p != null) this.fPersonsList.AddItem(GKUtils.GetNameString(p, true, false), p);
                 }
             }
 

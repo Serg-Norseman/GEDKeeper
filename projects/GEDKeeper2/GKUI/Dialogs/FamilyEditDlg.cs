@@ -137,14 +137,14 @@ namespace GKUI.Dialogs
         private void UpdateControls()
         {
             GEDCOMIndividualRecord husband = this.fFamily.GetHusband();
-            this.txtHusband.Text = (husband != null) ? husband.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkMale);
+            this.txtHusband.Text = (husband != null) ? GKUtils.GetNameString(husband, true, false) : LangMan.LS(LSID.LSID_UnkMale);
 
             this.btnHusbandAdd.Enabled = (husband == null);
             this.btnHusbandDelete.Enabled = (husband != null);
             this.btnHusbandSel.Enabled = (husband != null);
 
             GEDCOMIndividualRecord wife = this.fFamily.GetWife();
-            this.txtWife.Text = (wife != null) ? wife.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkFemale);
+            this.txtWife.Text = (wife != null) ? GKUtils.GetNameString(wife, true, false) : LangMan.LS(LSID.LSID_UnkFemale);
 
             this.btnWifeAdd.Enabled = (wife == null);
             this.btnWifeDelete.Enabled = (wife != null);
@@ -211,7 +211,7 @@ namespace GKUI.Dialogs
                     GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
 
                     GKListItem item = this.fChildsList.AddItem(idx, child);
-                    item.AddSubItem(child.GetNameString(true, false));
+                    item.AddSubItem(GKUtils.GetNameString(child, true, false));
                     item.AddSubItem(GKUtils.GetBirthDate(child));
                 }
 

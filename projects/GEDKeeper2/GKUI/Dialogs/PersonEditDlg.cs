@@ -173,7 +173,7 @@ namespace GKUI.Dialogs
                     this.btnFatherAdd.Enabled = false;
                     this.btnFatherDelete.Enabled = true && !locked;
                     this.btnFatherSel.Enabled = true && !locked;
-                    this.txtFather.Text = relPerson.GetNameString(true, false);
+                    this.txtFather.Text = GKUtils.GetNameString(relPerson, true, false);
                 }
                 else
                 {
@@ -189,7 +189,7 @@ namespace GKUI.Dialogs
                     this.btnMotherAdd.Enabled = false;
                     this.btnMotherDelete.Enabled = true && !locked;
                     this.btnMotherSel.Enabled = true && !locked;
-                    this.txtMother.Text = relPerson.GetNameString(true, false);
+                    this.txtMother.Text = GKUtils.GetNameString(relPerson, true, false);
                 }
                 else
                 {
@@ -357,7 +357,7 @@ namespace GKUI.Dialogs
                 fAssociationsList.ClearItems();
 
                 foreach (GEDCOMAssociation ast in this.fPerson.Associations) {
-                    string nm = ((ast.Individual == null) ? "" : ast.Individual.GetNameString(true, false));
+                    string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
 
                     GKListItem item = fAssociationsList.AddItem(ast.Relation, ast);
                     item.AddSubItem(nm);
@@ -546,7 +546,7 @@ namespace GKUI.Dialogs
                         }
 
                         if (relPerson != null) {
-                            relName = relPerson.GetNameString(true, false);
+                            relName = GKUtils.GetNameString(relPerson, true, false);
                         }
 
                         GKListItem item = this.fSpousesList.AddItem(idx, family);
@@ -943,7 +943,7 @@ namespace GKUI.Dialogs
 
         private void btnNameCopy1_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(this.fPerson.GetNameString(true, false));
+            Clipboard.SetDataObject(GKUtils.GetNameString(this.fPerson, true, false));
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

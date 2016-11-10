@@ -636,6 +636,8 @@ namespace GKTests
                 Assert.IsNotNull(list);
                 Assert.AreEqual(0, list.Count);
 
+                Assert.Throws(typeof(ListException), () => { list[-1] = null; });
+
                 object obj = new object();
                 list.Add(obj);
                 Assert.AreEqual(1, list.Count);
@@ -906,6 +908,17 @@ namespace GKTests
             N = LinqHelper.SingleOrDefault<int>(new int[] { });
             Assert.AreEqual(0, N);
             Assert.Throws(typeof(Exception), () => { LinqHelper.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
+        }
+
+        private void TweenHandler(int newX, int newY)
+        {
+        }
+
+        [Test]
+        public void Tween_Tests()
+        {
+            TweenLibrary tween = new TweenLibrary();
+            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
         }
     }
 }

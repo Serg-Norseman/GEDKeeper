@@ -92,7 +92,7 @@ namespace GKUI
                 if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
-                string nm = iRec.GetNameString(true, false);
+                string nm = GKUtils.GetNameString(iRec, true, false);
 
                 foreach (GEDCOMCustomEvent evt in iRec.Events) {
                     this.PrepareEvent(nm, evt);

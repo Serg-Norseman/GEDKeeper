@@ -315,7 +315,7 @@ namespace GKTreeVizPlugin
 
                             TVPerson prs = this.findPersonByIdx(id);
                             if (prs != null) {
-                                SelectedObject = "["+prs.IRec.XRef+"] " + prs.IRec.GetNameString(true, false)+
+                                SelectedObject = "["+prs.IRec.XRef+"] " + prs.IRec.GetPrimaryFullName()+
                                     ", " + prs.BirthYear.ToString() + " - " + prs.DeathYear.ToString();
                             } else {
                                 SelectedObject = "<none>";

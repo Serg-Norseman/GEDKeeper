@@ -337,7 +337,7 @@ namespace GKCore
         public string gt_get_person_name(object recPtr)
         {
             GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
-            return ((iRec == null) ? "" : iRec.GetNameString(true, false));
+            return ((iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false));
         }
 
         public int gt_get_person_associations_count(object recPtr)

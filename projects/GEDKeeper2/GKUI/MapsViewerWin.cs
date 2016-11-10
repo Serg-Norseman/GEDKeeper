@@ -121,7 +121,7 @@ namespace GKUI
                             }
 
                             if (pCnt > 0) {
-                                this.cmbPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
+                                this.cmbPersons.Items.Add(new GKComboItem(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind));
                             }
                         }
 

@@ -216,6 +216,15 @@ namespace GKTests
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             fContext.Undoman.OnTransaction -= TransactionEventHandler;
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoIndividualNameChange(null, "", "", ""); });
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            fContext.Undoman.DoIndividualNameChange(iRec, "Petrov", "Alex", "Ivanovich");
+            Assert.AreEqual("Petrov Alex Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            fContext.Undoman.Rollback();
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
         }
 
         [Test]
@@ -1649,7 +1658,17 @@ namespace GKTests
 
             BaseWindowMock baseWin = new BaseWindowMock(this.fContext.Tree);
 
+            using (HTMLWriter writer = new HTMLWriter()) {
+
+            }
+
+            using (RTFWriter writer = new RTFWriter()) {
+
+            }
+
             using (PedigreeExporter exporter = new PedigreeExporter(baseWin)) {
+                exporter.Options = GlobalOptions.Instance;
+                Assert.IsNotNull(exporter.Options);
 
             }
 

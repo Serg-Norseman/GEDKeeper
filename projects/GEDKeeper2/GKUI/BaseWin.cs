@@ -1022,7 +1022,7 @@ namespace GKUI
                                 uint days;
                                 if (GKUtils.GetDaysForBirth(iRec, out days))
                                 {
-                                    string nm = iRec.GetNameString(true, false);
+                                    string nm = GKUtils.GetNameString(iRec, true, false);
                                     nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
 
                                     if (0 == days)
@@ -1297,7 +1297,7 @@ namespace GKUI
                 if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
                     GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
-                    string fullname = iRec.GetNameString(true, false);
+                    string fullname = GKUtils.GetNameString(iRec, true, false);
                     if (GKUtils.MatchesRegex(fullname, regex)) {
                         //yield return new SearchResult(iRec);
                         result.Add(new SearchResult(iRec));
@@ -1467,7 +1467,7 @@ namespace GKUI
                 switch (record.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), ((GEDCOMIndividualRecord)record).GetNameString(true, false));
+                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GEDCOMIndividualRecord)record), true, false));
                         break;
 
                     case GEDCOMRecordType.rtFamily:

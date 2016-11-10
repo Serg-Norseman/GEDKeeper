@@ -145,7 +145,7 @@ namespace GKCore.Export
         private void WritePerson(PedigreePerson person)
         {
             this.fWriter.beginParagraph(CustomWriter.TextAlignment.taJustify, 6f, 6f);
-            this.fWriter.addParagraphChunkAnchor(this.GetIdStr(person) + ". " + person.IRec.GetNameString(true, false), fPersonFont, person.Id);
+            this.fWriter.addParagraphChunkAnchor(this.GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
             this.fWriter.addParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, this.fOptions.PedigreeOptions.Format), fTextFont);
 
             if (this.fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0)
@@ -216,12 +216,12 @@ namespace GKCore.Export
             if (father != null) {
                 prs = this.FindPerson(father);
                 id = (prs != null) ? prs.Id : "";
-                this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + father.GetNameString(true, false) + " ", fTextFont, id, fLinkFont);
+                this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, id, fLinkFont);
             }
             if (mother != null) {
                 prs = this.FindPerson(mother);
                 id = (prs != null) ? prs.Id : "";
-                this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + mother.GetNameString(true, false) + " ", fTextFont, id, fLinkFont);
+                this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, id, fLinkFont);
             }
 
             ExtList<PedigreeEvent> evList = new ExtList<PedigreeEvent>(true);
@@ -265,7 +265,7 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord irec = sp.Value as GEDCOMIndividualRecord;
                         string sps;
                         if (irec != null) {
-                            sps = st + irec.GetNameString(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format)/* + this.idLink(this.FindPerson(irec))*/;
+                            sps = st + GKUtils.GetNameString(irec, true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format)/* + this.idLink(this.FindPerson(irec))*/;
                         } else {
                             sps = st + unk;
                         }
@@ -352,7 +352,7 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord irec = sp.Value as GEDCOMIndividualRecord;
                         if (irec != null)
                         {
-                            st = st + irec.GetNameString(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format)/* + this.idLink(this.FindPerson(irec))*/;
+                            st = st + GKUtils.GetNameString(irec, true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format)/* + this.idLink(this.FindPerson(irec))*/;
                         }
                         else
                         {
@@ -425,7 +425,7 @@ namespace GKCore.Export
 
                     string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
 
-                    li = dt + st + evObj.IRec.GetNameString(true, false);
+                    li = dt + st + GKUtils.GetNameString(evObj.IRec, true, false);
                     PedigreePerson prs;
                     string id;
                     prs = this.FindPerson(evObj.IRec);
@@ -531,7 +531,7 @@ namespace GKCore.Export
 
             try
             {
-                this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fRoot.GetNameString(true, false);
+                this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(this.fRoot, true, false);
                 this.fWriter.setDocumentTitle(this.fTitle);
                 this.fWriter.setFileName(this.fPath);
 

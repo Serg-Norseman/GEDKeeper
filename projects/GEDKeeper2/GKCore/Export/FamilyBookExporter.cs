@@ -319,7 +319,7 @@ namespace GKCore.Export
             while (iEnum.MoveNext(out rec))
             {
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
-                string text = iRec.GetNameString(true, false);
+                string text = GKUtils.GetNameString(iRec, true, false);
                 string st;
 
                 mainIndex.AddObject(text, iRec);
@@ -440,7 +440,7 @@ namespace GKCore.Export
 
             if (father != null) {
                 pg = new Paragraph();
-                chunk = new Chunk(father.GetNameString(true, false), fLinkFont);
+                chunk = new Chunk(GKUtils.GetNameString(father, true, false), fLinkFont);
                 chunk.SetLocalGoto(father.XRef);
                 pg.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": ", fTextFont)); pg.Add(chunk);
                 mct.AddElement(pg);
@@ -448,7 +448,7 @@ namespace GKCore.Export
 
             if (mother != null) {
                 pg = new Paragraph();
-                chunk = new Chunk(mother.GetNameString(true, false), fLinkFont);
+                chunk = new Chunk(GKUtils.GetNameString(mother, true, false), fLinkFont);
                 chunk.SetLocalGoto(mother.XRef);
                 pg.Add(new Chunk(LangMan.LS(LSID.LSID_Mother) + ": ", fTextFont)); pg.Add(chunk);
                 mct.AddElement(pg);
@@ -551,7 +551,7 @@ namespace GKCore.Export
             }
 
             if (persons.IndexOfObject(iRec) < 0) {
-                persons.AddObject(iRec.GetNameString(true, false), iRec);
+                persons.AddObject(GKUtils.GetNameString(iRec, true, false), iRec);
             }
         }
 

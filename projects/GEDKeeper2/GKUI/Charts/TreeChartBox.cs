@@ -2120,7 +2120,7 @@ namespace GKUI.Charts
                 GEDCOMIndividualRecord iRec = person.Rec;
                 if (iRec == null) continue;
                 
-                string fullname = iRec.GetNameString(true, false);
+                string fullname = GKUtils.GetNameString(iRec, true, false);
                 if (GKUtils.MatchesRegex(fullname, regex)) {
                     //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(iRec));

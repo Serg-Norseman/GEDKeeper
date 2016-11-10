@@ -208,7 +208,7 @@ namespace GKUI.Controls
                     case GEDCOMRecordType.rtIndividual:
                         {
                             GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec1;
-                            this.Edit1.Text = iRec.GetNameString(true, false);
+                            this.Edit1.Text = GKUtils.GetNameString(iRec, true, false);
                             GKUtils.ShowPersonInfo(iRec, this.fView1.Lines, this.fBase.ShieldState);
                             break;
                         }
@@ -257,7 +257,7 @@ namespace GKUI.Controls
                     case GEDCOMRecordType.rtIndividual:
                         {
                             GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec2;
-                            this.Edit2.Text = iRec.GetNameString(true, false);
+                            this.Edit2.Text = GKUtils.GetNameString(iRec, true, false);
                             GKUtils.ShowPersonInfo(iRec, this.fView2.Lines, this.fBase.ShieldState);
                             break;
                         }

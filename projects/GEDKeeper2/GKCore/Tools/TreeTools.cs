@@ -150,7 +150,7 @@ namespace GKCore.Tools
 
                     if ((!loneSuppress) || (loneSuppress && pObj.HasLinks)) {
                         string color = (pObj.IRec.Sex == GEDCOMSex.svFemale) ? "pink" : "blue";
-                        gvw.WriteNode(pObj.IRec.XRef, pObj.IRec.GetNameString(true, false), "filled", color, "box");
+                        gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
                     }
                 }
 
@@ -861,7 +861,7 @@ namespace GKCore.Tools
                 switch (this.Rec.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        result = result + ((GEDCOMIndividualRecord)this.Rec).GetNameString(true, false);
+                        result = result + GKUtils.GetNameString(((GEDCOMIndividualRecord)this.Rec), true, false);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
@@ -1383,7 +1383,7 @@ namespace GKCore.Tools
                     {
                         GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
-                        int idx = names.AddObject(iRec.GetNameString(true, false), new ExtList<GEDCOMIndividualRecord>());
+                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GEDCOMIndividualRecord>());
                         ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         string fam, nam, pat;
@@ -1401,7 +1401,7 @@ namespace GKCore.Tools
                     {
                         GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)tempTree[i];
 
-                        string tm = iRec.GetNameString(true, false);
+                        string tm = GKUtils.GetNameString(iRec, true, false);
                         int idx = names.IndexOf(tm);
                         if (idx >= 0)
                         {
@@ -1462,7 +1462,7 @@ namespace GKCore.Tools
                         for (int j = 0; j < num5; j++)
                         {
                             GEDCOMIndividualRecord iRec = lst[j];
-                            logBox.AppendText("      * " + iRec.GetNameString(true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
+                            logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
                         }
                     }
                 }

@@ -133,7 +133,7 @@ namespace GKCore.Stats
 
         private static void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
         {
-            string iName = iRec.GetNameString(true, false);
+            string iName = GKUtils.GetNameString(iRec, true, false);
 
             switch (mode)
             {

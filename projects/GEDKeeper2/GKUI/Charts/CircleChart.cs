@@ -484,7 +484,7 @@ namespace GKUI.Charts
                 this.fSelected = selected;
 
                 if (selected != null && selected.IRec != null) {
-                    string name = selected.IRec.GetNameString(true, false);
+                    string name = GKUtils.GetNameString(selected.IRec, true, false);
                     hint = /*selected.Gen.ToString() + ", " + */name;
                 }
 

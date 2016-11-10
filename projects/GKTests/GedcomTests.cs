@@ -1672,19 +1672,19 @@ namespace GKTests
                 indi.PersonalNames.Clear();
 
                 string st;
-                Assert.AreEqual("", indi.GetNameString(true, false));
-                Assert.AreEqual("", indi.GetNickString());
+                Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
+                Assert.AreEqual("", GKUtils.GetNickString(indi));
 
                 GEDCOMPersonalName pName = new GEDCOMPersonalName(_context.Tree, indi, "", "");
                 indi.AddPersonalName(pName);
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
 
-                st = indi.GetNameString(true, true);
+                st = GKUtils.GetNameString(indi, true, true);
                 Assert.AreEqual("Petrov Ivan [BigHead]", st);
-                st = indi.GetNameString(false, true);
+                st = GKUtils.GetNameString(indi, false, true);
                 Assert.AreEqual("Ivan Petrov [BigHead]", st);
-                Assert.AreEqual("BigHead", indi.GetNickString());
+                Assert.AreEqual("BigHead", GKUtils.GetNickString(indi));
 
                 Assert.IsNull(indi.GetParentsFamily());
                 Assert.IsNotNull(indi.GetParentsFamily(true));
@@ -2132,10 +2132,10 @@ namespace GKTests
                 famRec.DeleteChild(child1);
                 Assert.AreEqual(-1, famRec.IndexOfChild(child1));
 
-                string str = famRec.GetFamilyString(null, null);
+                string str = GKUtils.GetFamilyString(famRec, null, null);
                 Assert.AreEqual("? - ?", str);
 
-                str = famRec.GetFamilyString("x", "x");
+                str = GKUtils.GetFamilyString(famRec, "x", "x");
                 Assert.AreEqual("x - x", str);
 
                 Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));

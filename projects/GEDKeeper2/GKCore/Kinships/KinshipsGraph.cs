@@ -178,8 +178,8 @@ namespace GKCore.Kinships
                 return "???";
             } else {
                 string rel = FixRelation(ind2, xrel, great);
-                string name1 = ind1.GetNameString(true, false);
-                string name2 = ind2.GetNameString(true, false);
+                string name1 = GKUtils.GetNameString(ind1, true, false);
+                string name2 = GKUtils.GetNameString(ind2, true, false);
 
                 rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
                 return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetPossessiveName(name1);

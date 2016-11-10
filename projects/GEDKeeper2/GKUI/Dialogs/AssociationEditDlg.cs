@@ -52,7 +52,7 @@ namespace GKUI.Dialogs
         {
             this.fAssociation = value;
             this.cmbRelation.Text = this.fAssociation.Relation;
-            string st = ((this.fAssociation.Individual == null) ? "" : this.fAssociation.Individual.GetNameString(true, false));
+            string st = ((this.fAssociation.Individual == null) ? "" : GKUtils.GetNameString(this.fAssociation.Individual, true, false));
             this.txtPerson.Text = st;
         }
 
@@ -80,7 +80,7 @@ namespace GKUI.Dialogs
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
             this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            this.txtPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
+            this.txtPerson.Text = ((this.fTempInd == null) ? "" : GKUtils.GetNameString(this.fTempInd, true, false));
         }
 
         public AssociationEditDlg(IBaseWindow aBase)

@@ -116,7 +116,7 @@ namespace GKUI.Dialogs
                     GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
                     if (member == null) continue;
 
-                    this.fMembersList.AddItem(member.GetNameString(true, false), member);
+                    this.fMembersList.AddItem(GKUtils.GetNameString(member, true, false), member);
                 }
             }
             catch (Exception ex)

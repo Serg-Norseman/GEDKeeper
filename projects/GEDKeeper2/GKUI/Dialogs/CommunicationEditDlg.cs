@@ -71,7 +71,7 @@ namespace GKUI.Dialogs
                     if (this.fTempInd != null)
                     {
                         this.txtDir.SelectedIndex = (int)dir;
-                        this.txtCorresponder.Text = this.fTempInd.GetNameString(true, false);
+                        this.txtCorresponder.Text = GKUtils.GetNameString(this.fTempInd, true, false);
                     }
                     else
                     {
@@ -126,7 +126,7 @@ namespace GKUI.Dialogs
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
             this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            this.txtCorresponder.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
+            this.txtCorresponder.Text = ((this.fTempInd == null) ? "" : GKUtils.GetNameString(this.fTempInd, true, false));
         }
 
         public CommunicationEditDlg(IBaseWindow baseWin) : base(baseWin)

@@ -692,50 +692,9 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public string GetNickString()
+        public string GetPrimaryFullName()
         {
-            string result;
-            if (this.fPersonalNames.Count > 0)
-            {
-                GEDCOMPersonalName np = this.fPersonalNames[0];
-                result = np.Pieces.Nickname;
-            }
-            else
-            {
-                result = "";
-            }
-            return result;
-        }
-
-        public string GetNameString(bool firstSurname, bool includePieces)
-        {
-            string result;
-            if (this.fPersonalNames.Count > 0)
-            {
-                GEDCOMPersonalName np = this.fPersonalNames[0];
-
-                string firstPart, surname/*, dummy*/;
-                np.GetNameParts(out firstPart, out surname /*, out dummy*/);
-
-                if (firstSurname)
-                {
-                    result = surname + " " + firstPart;
-                }
-                else
-                {
-                    result = firstPart + " " + surname;
-                }
-
-                if (includePieces)
-                {
-                    string nick = np.Pieces.Nickname;
-                    if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
-                }
-            }
-            else
-            {
-                result = "";
-            }
+            string result = (this.fPersonalNames.Count <= 0) ? string.Empty : this.fPersonalNames[0].FullName;
             return result;
         }
 

@@ -274,6 +274,19 @@ namespace GKCommon.GEDCOM
             return new GEDCOMFamilyRecord(owner, parent, tagName, tagValue);
         }
 
+        private string GetFamilyString()
+        {
+            string result = "";
+
+            GEDCOMIndividualRecord spouse = this.GetHusband();
+            result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
+            result += " - ";
+            spouse = this.GetWife();
+            result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
+
+            return result;
+        }
+
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
@@ -281,8 +294,8 @@ namespace GKCommon.GEDCOM
 
             float match = 0.0f;
 
-            string title1 = this.GetFamilyString(null, null);
-            string title2 = fam.GetFamilyString(null, null);
+            string title1 = this.GetFamilyString();
+            string title2 = fam.GetFamilyString();
             if (string.Compare(title1, title2, true) == 0) {
                 match = 100.0f;
             }
@@ -302,37 +315,6 @@ namespace GKCommon.GEDCOM
         public void SortChilds()
         {
             this.fChildrens.Sort(EventsCompare);
-        }
-
-        public string GetFamilyString(string unkHusband, string unkWife)
-        {
-            string result = "";
-
-            GEDCOMIndividualRecord spouse = this.GetHusband();
-            if (spouse == null)
-            {
-                if (unkHusband == null) unkHusband = "?";
-                result += unkHusband;
-            }
-            else
-            {
-                result += spouse.GetNameString(true, false);
-            }
-
-            result += " - ";
-
-            spouse = this.GetWife();
-            if (spouse == null)
-            {
-                if (unkWife == null) unkWife = "?";
-                result += unkWife;
-            }
-            else
-            {
-                result += spouse.GetNameString(true, false);
-            }
-
-            return result;
         }
 
         public GEDCOMIndividualRecord GetSpouseBy(GEDCOMIndividualRecord spouse)

@@ -309,14 +309,14 @@ namespace GKCore.Lists
                 case PersonColumnType.pctName:
                     {
                         if (colSubtype == -1) {
-                            result = this.fRec.GetNameString(true, false);
+                            result = GKUtils.GetNameString(this.fRec, true, false);
                         } else {
                             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
                             string f, i, p;
 
                             switch (defNameFormat) {
                                 case NameFormat.nfFNP:
-                                    result = this.fRec.GetNameString(true, false);
+                                    result = GKUtils.GetNameString(this.fRec, true, false);
                                     break;
 
                                 case NameFormat.nfF_NP:
@@ -352,7 +352,7 @@ namespace GKCore.Lists
                     }
 
                 case PersonColumnType.pctNick:
-                    result = this.fRec.GetNickString();
+                    result = GKUtils.GetNickString(this.fRec);
                     break;
 
                 case PersonColumnType.pctSex:
@@ -486,7 +486,7 @@ namespace GKCore.Lists
             this.fRec = (aRec as GEDCOMIndividualRecord);
             if (this.fRec == null) return;
 
-            buf_fullname = this.fRec.GetNameString(true, false);
+            buf_fullname = GKUtils.GetNameString(this.fRec, true, false);
             buf_bd = null;
             buf_dd = null;
             buf_residence = "";

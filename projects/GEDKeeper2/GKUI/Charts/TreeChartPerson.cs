@@ -287,7 +287,7 @@ namespace GKUI.Charts
                     this.fSurname = fam;
                     this.fName = nam;
                     this.fPatronymic = pat;
-                    this.fNick = iRec.GetNickString();
+                    this.fNick = GKUtils.GetNickString(iRec);
                     this.fSex = iRec.Sex;
 
                     GEDCOMCustomEvent birthEvent, deathEvent;
