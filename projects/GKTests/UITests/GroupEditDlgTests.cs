@@ -58,7 +58,7 @@ namespace GKTests.UITests
             _frm = new GroupEditDlg(fBase);
             _frm.Group = fGroupRecord;
             //_frm.ShowDialog();
-            //_frm.Show();
+            _frm.Show();
         }
 
         [Test]
@@ -68,10 +68,24 @@ namespace GKTests.UITests
             Assert.AreEqual(fGroupRecord, _frm.Group);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var edName = new TextBoxTester("edName");
+            edName.Enter("sample text");
+            Assert.AreEqual("sample text", edName.Text);
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fGroupRecord.GroupName);
         }
     }
 }

@@ -195,7 +195,6 @@ namespace GKUI.Dialogs
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            //this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             try
             {
                 base.RollbackChanges();

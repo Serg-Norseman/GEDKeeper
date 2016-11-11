@@ -68,9 +68,10 @@ namespace GKTests.UITests
             Assert.AreEqual(fEvent, _frm.Event);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
+            //var btnCancel = new ButtonTester("btnCancel");
             //btnCancel.Click();
         }
     }

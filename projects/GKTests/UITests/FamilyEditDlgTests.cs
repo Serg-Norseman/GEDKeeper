@@ -67,6 +67,20 @@ namespace GKTests.UITests
             Assert.AreEqual(fBase, _frm.Base);
             Assert.AreEqual(fFamilyRecord, _frm.Family);
         }
+
+        [Test]
+        public void Test_btnCancel()
+        {
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+        }
     }
 }
 

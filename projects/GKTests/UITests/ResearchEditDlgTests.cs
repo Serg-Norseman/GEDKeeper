@@ -34,17 +34,17 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RepositoryEditDlgTests : NUnitFormTest
+    public class ResearchEditDlgTests : NUnitFormTest
     {
-        public RepositoryEditDlgTests()
+        public ResearchEditDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMRepositoryRecord fRepositoryRecord;
+        private GEDCOMResearchRecord fResearchRecord;
         private IBaseWindow fBase;
 
-        private RepositoryEditDlg _frm;
+        private ResearchEditDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +52,11 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree, "", "");
+            fResearchRecord = new GEDCOMResearchRecord(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("RepositoryEditDlg", "DlgHandler");
-            _frm = new RepositoryEditDlg(fBase);
-            _frm.Repository = fRepositoryRecord;
+            //ExpectModal("ResearchEditDlg", "DlgHandler");
+            _frm = new ResearchEditDlg(fBase);
+            _frm.Research = fResearchRecord;
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -65,7 +65,7 @@ namespace GKTests.UITests
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fRepositoryRecord, _frm.Repository);
+            Assert.AreEqual(fResearchRecord, _frm.Research);
         }
 
         [Test]
@@ -73,6 +73,24 @@ namespace GKTests.UITests
         {
             var btnCancel = new ButtonTester("btnCancel");
             btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);
+
+            /*var txtAuthor = new TextBoxTester("txtAuthor");
+            txtAuthor.Enter("sample text");
+            Assert.AreEqual("sample text", txtAuthor.Text);*/
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fResearchRecord.ResearchName);
+            //Assert.AreEqual("sample text\r\n", fResearchRecord.Originator.Text);
         }
     }
 }

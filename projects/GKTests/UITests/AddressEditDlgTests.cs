@@ -54,11 +54,16 @@ namespace GKTests.UITests
             fContext = fBase.Context;
             fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
 
+            fAddress.AddWebPage("test");
+            fAddress.AddPhoneNumber("test");
+            fAddress.AddEmailAddress("test");
+            fAddress.AddFaxNumber("test");
+
             //ExpectModal("AddressEditDlg", "DlgHandler");
             _frm = new AddressEditDlg(fBase);
             _frm.Address = fAddress;
             //_frm.ShowDialog();
-            //_frm.Show();
+            _frm.Show();
         }
 
         [Test]
@@ -68,10 +73,29 @@ namespace GKTests.UITests
             Assert.AreEqual(fAddress, _frm.Address);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var txtCountry = new TextBoxTester("txtCountry");
+            txtCountry.Enter("sample text");
+            Assert.AreEqual("sample text", txtCountry.Text);
+
+            var txtState = new TextBoxTester("txtState");
+            txtState.Enter("sample text");
+            Assert.AreEqual("sample text", txtState.Text);
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fAddress.AddressCountry);
+            Assert.AreEqual("sample text", fAddress.AddressState);
         }
     }
 }

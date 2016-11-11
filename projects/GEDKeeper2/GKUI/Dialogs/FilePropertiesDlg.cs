@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -44,8 +45,11 @@ namespace GKUI.Dialogs
 
             this.fBase = aBase;
 
-            this.btnAccept.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnAccept")));
-            this.btnCancel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnCancel")));
+            GKResourceManager resourceManager = MainWin.ResourceManager;
+            if (resourceManager != null) {
+                this.btnAccept.Image = ((System.Drawing.Image)(resourceManager.GetObjectEx("iBtnAccept")));
+                this.btnCancel.Image = ((System.Drawing.Image)(resourceManager.GetObjectEx("iBtnCancel")));
+            }
 
             this.UpdateControls();
 

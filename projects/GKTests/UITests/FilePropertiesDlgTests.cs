@@ -34,17 +34,16 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RepositoryEditDlgTests : NUnitFormTest
+    public class FilePropertiesDlgTests : NUnitFormTest
     {
-        public RepositoryEditDlgTests()
+        public FilePropertiesDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMRepositoryRecord fRepositoryRecord;
         private IBaseWindow fBase;
 
-        private RepositoryEditDlg _frm;
+        private FilePropertiesDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +51,9 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("RepositoryEditDlg", "DlgHandler");
-            _frm = new RepositoryEditDlg(fBase);
-            _frm.Repository = fRepositoryRecord;
+            //ExpectModal("FilePropertiesDlg", "DlgHandler");
+            _frm = new FilePropertiesDlg(fBase);
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -65,7 +62,6 @@ namespace GKTests.UITests
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fRepositoryRecord, _frm.Repository);
         }
 
         [Test]
@@ -73,6 +69,20 @@ namespace GKTests.UITests
         {
             var btnCancel = new ButtonTester("btnCancel");
             btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            GEDCOMSubmitterRecord submitter = fContext.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
     }
 }

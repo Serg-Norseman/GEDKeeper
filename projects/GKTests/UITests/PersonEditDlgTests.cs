@@ -58,7 +58,7 @@ namespace GKTests.UITests
             _frm = new PersonEditDlg(fBase);
             _frm.Person = fIndividualRecord;
             //_frm.ShowDialog();
-            //_frm.Show();
+            _frm.Show();
         }
 
         [Test]
@@ -68,10 +68,11 @@ namespace GKTests.UITests
             Assert.AreEqual(fIndividualRecord, _frm.Person);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
         }
     }
 }

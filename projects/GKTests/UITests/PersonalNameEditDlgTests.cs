@@ -34,17 +34,17 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RepositoryEditDlgTests : NUnitFormTest
+    public class PersonalNameEditDlgTests : NUnitFormTest
     {
-        public RepositoryEditDlgTests()
+        public PersonalNameEditDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMRepositoryRecord fRepositoryRecord;
+        private GEDCOMPersonalName fPersonalName;
         private IBaseWindow fBase;
 
-        private RepositoryEditDlg _frm;
+        private PersonalNameEditDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +52,11 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree, "", "");
+            fPersonalName = new GEDCOMPersonalName(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("RepositoryEditDlg", "DlgHandler");
-            _frm = new RepositoryEditDlg(fBase);
-            _frm.Repository = fRepositoryRecord;
+            //ExpectModal("PersonalNameEditDlg", "DlgHandler");
+            _frm = new PersonalNameEditDlg(fBase);
+            _frm.PersonalName = fPersonalName;
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -65,7 +65,7 @@ namespace GKTests.UITests
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fRepositoryRecord, _frm.Repository);
+            Assert.AreEqual(fPersonalName, _frm.PersonalName);
         }
 
         [Test]
@@ -73,6 +73,19 @@ namespace GKTests.UITests
         {
             var btnCancel = new ButtonTester("btnCancel");
             btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var txtSurname = new TextBoxTester("txtSurname");
+            txtSurname.Enter("sample text");
+            Assert.AreEqual("sample text", txtSurname.Text);
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fPersonalName.Pieces.Surname);
         }
     }
 }

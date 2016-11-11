@@ -58,7 +58,7 @@ namespace GKTests.UITests
             _frm = new SourceEditDlg(fBase);
             _frm.SourceRecord = fSourceRecord;
             //_frm.ShowDialog();
-            //_frm.Show();
+            _frm.Show();
         }
 
         [Test]
@@ -68,10 +68,29 @@ namespace GKTests.UITests
             Assert.AreEqual(fSourceRecord, _frm.SourceRecord);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            var txtShortTitle = new TextBoxTester("txtShortTitle");
+            txtShortTitle.Enter("sample text");
+            Assert.AreEqual("sample text", txtShortTitle.Text);
+
+            var txtAuthor = new TextBoxTester("txtAuthor");
+            txtAuthor.Enter("sample text");
+            Assert.AreEqual("sample text", txtAuthor.Text);
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fSourceRecord.FiledByEntry);
+            Assert.AreEqual("sample text\r\n", fSourceRecord.Originator.Text);
         }
     }
 }

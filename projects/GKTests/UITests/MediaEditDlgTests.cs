@@ -58,7 +58,7 @@ namespace GKTests.UITests
             _frm = new MediaEditDlg(fBase);
             _frm.MediaRec = fMultimediaRecord;
             //_frm.ShowDialog();
-            //_frm.Show();
+            _frm.Show();
         }
 
         [Test]
@@ -68,10 +68,24 @@ namespace GKTests.UITests
             Assert.AreEqual(fMultimediaRecord, _frm.MediaRec);
         }
 
-        public void DlgHandler()
+        [Test]
+        public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
+            var btnCancel = new ButtonTester("btnCancel");
+            btnCancel.Click();
+        }
+
+        [Test]
+        public void Test_EnterTextAndAccept()
+        {
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            //Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
         }
     }
 }
