@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -59,6 +59,9 @@
     <Reference Include="nunit.framework">
       <HintPath>nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="NUnitForms">
+      <HintPath>NUnitForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -82,6 +85,8 @@
     <Compile Include="SCCTests.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="UDNTests.cs" />
+    <Compile Include="UITests\AboutDlgTests.cs" />
+    <Compile Include="UITests\NoteEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.mswin.csproj">
@@ -102,6 +107,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GXResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UITests" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
