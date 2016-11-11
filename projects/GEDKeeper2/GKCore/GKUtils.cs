@@ -29,6 +29,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -2723,11 +2724,14 @@ namespace GKCore
             return GKUtils.GetFamilyString(family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
         }
 
-        public static string GetFamilyString(GEDCOMFamilyRecord famRec, string unkHusband, string unkWife)
+        public static string GetFamilyString(GEDCOMFamilyRecord family, string unkHusband, string unkWife)
         {
+            if (family == null)
+                throw new ArgumentNullException("family");
+
             string result = "";
 
-            GEDCOMIndividualRecord spouse = famRec.GetHusband();
+            GEDCOMIndividualRecord spouse = family.GetHusband();
             if (spouse == null)
             {
                 if (unkHusband == null) unkHusband = "?";
@@ -2740,7 +2744,7 @@ namespace GKCore
 
             result += " - ";
 
-            spouse = famRec.GetWife();
+            spouse = family.GetWife();
             if (spouse == null)
             {
                 if (unkWife == null) unkWife = "?";
@@ -2772,6 +2776,55 @@ namespace GKCore
             return result;
         }
 
+        // TODO: what if you want to display only a surname that is missing?
+        private static string GetFmtSurname(GEDCOMIndividualRecord iRec, GEDCOMPersonalName personalName, string defSurname)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            if (personalName == null)
+                throw new ArgumentNullException("personalName");
+
+            string result;
+
+            WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
+            if (iRec.Sex == GEDCOMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
+                switch (wsFmt) {
+                    case WomanSurnameFormat.wsfMaiden_Married:
+                        result = defSurname;
+                        if (personalName.Pieces.MarriedName.Length > 0) {
+                            if (result.Length > 0) result += " ";
+                            result += "(" + personalName.Pieces.MarriedName + ")";
+                        }
+                        break;
+
+                    case WomanSurnameFormat.wsfMarried_Maiden:
+                        result = personalName.Pieces.MarriedName;
+                        if (defSurname.Length > 0) {
+                            if (result.Length > 0) result += " ";
+                            result += "(" + defSurname + ")";
+                        }
+                        break;
+
+                    case WomanSurnameFormat.wsfMaiden:
+                        result = defSurname; // by default GEDCOMPersonalName.Surname is maiden surname
+                        break;
+
+                    case WomanSurnameFormat.wsfMarried:
+                        result = personalName.Pieces.MarriedName;
+                        break;
+
+                    default:
+                        result = defSurname;
+                        break;
+                }
+            } else {
+                result = defSurname;
+            }
+
+            return result;
+        }
+
         public static string GetNameString(GEDCOMIndividualRecord iRec, bool firstSurname, bool includePieces)
         {
             if (iRec == null)
@@ -2782,20 +2835,18 @@ namespace GKCore
             {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
 
-                string firstPart, surname/*, dummy*/;
-                np.GetNameParts(out firstPart, out surname /*, out dummy*/);
+                string firstPart, surname;
+                np.GetNameParts(out firstPart, out surname);
 
-                if (firstSurname)
-                {
+                surname = GetFmtSurname(iRec, np, surname);
+
+                if (firstSurname) {
                     result = surname + " " + firstPart;
-                }
-                else
-                {
+                } else {
                     result = firstPart + " " + surname;
                 }
 
-                if (includePieces)
-                {
+                if (includePieces) {
                     string nick = np.Pieces.Nickname;
                     if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
                 }
@@ -2805,6 +2856,21 @@ namespace GKCore
                 result = "";
             }
             return result;
+        }
+
+        public static void SetMarriedSurname(GEDCOMIndividualRecord iRec, string marriedSurname)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            GEDCOMPersonalName personalName;
+            if (iRec.PersonalNames.Count <= 0) {
+                personalName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec.Owner, iRec, "", ""));
+            } else {
+                personalName = iRec.PersonalNames[0];
+            }
+
+            personalName.Pieces.MarriedName = marriedSurname.Trim();
         }
 
         public static void SetRusNameParts(GEDCOMPersonalName personalName, string surname, string name, string patronymic)
@@ -2848,7 +2914,7 @@ namespace GKCore
             }
         }
 
-        public static void GetNameParts(GEDCOMIndividualRecord iRec, out string surname, out string name, out string patronymic)
+        public static void GetNameParts(GEDCOMIndividualRecord iRec, out string surname, out string name, out string patronymic, bool formatted = true)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -2856,6 +2922,10 @@ namespace GKCore
             if (iRec.PersonalNames.Count > 0) {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
                 GKUtils.GetRusNameParts(np, out surname, out name, out patronymic);
+
+                if (formatted) {
+                    surname = GetFmtSurname(iRec, np, surname);
+                }
             } else {
                 surname = "";
                 name = "";

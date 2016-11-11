@@ -28,7 +28,7 @@ namespace GKCore.Stats
         smAncestors,
         smDescendants,
         smDescGenerations,
-        smFamilies,
+        smSurnames,
         smNames,
         smPatronymics,
         smAge,

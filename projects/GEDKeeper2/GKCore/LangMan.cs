@@ -788,8 +788,16 @@ namespace GKCore
         /* 729 */ LSID_MDNAHaplogroup,
         /* 730 */ LSID_YDNAHaplogroup,
         /* 731 */ LSID_RecordIsLocked,
+        /* 732 */ LSID_MaidenSurname,
+        /* 733 */ LSID_MarriedSurname,
+        /* 734 */ LSID_AdditionalNames, // TODO: better text
+        /* 735 */ LSID_ExtendedWomanSurnames,
+        /* 736 */ LSID_WSF_Maiden_Married,
+        /* 737 */ LSID_WSF_Married_Maiden,
+        /* 738 */ LSID_WSF_Maiden,
+        /* 739 */ LSID_WSF_Married,
 
-        /* 000 */ LSID_Last = LSID_RecordIsLocked
+        /* 000 */ LSID_Last = LSID_WSF_Married
     }
 
     // TODO: remove and merge with LangManager
@@ -1531,7 +1539,15 @@ namespace GKCore
             /* 728 */ "Eyes color",
             /* 729 */ "mtDNA haplogroup",
             /* 730 */ "Y-DNA haplogroup",
-            /* 731 */ "Record is locked by editor"
+            /* 731 */ "Record is locked by editor",
+            /* 732 */ "Maiden surname",
+            /* 733 */ "Married surname",
+            /* 734 */ "Additional names",
+            /* 735 */ "Extended women's surnames",
+            /* 736 */ "Format \"Maiden (Married)\"",
+            /* 737 */ "Format \"Married (Maiden)\"",
+            /* 738 */ "Format \"Maiden\"",
+            /* 739 */ "Format \"Married\"",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

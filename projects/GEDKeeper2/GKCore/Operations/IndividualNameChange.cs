@@ -49,14 +49,15 @@ namespace GKCore.Operations
             if (this.fPerson == null) {
                 result = false;
             } else {
-                string fam, nam, pat;
-                GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat);
-
-                this.fOldSurname = fam;
-                this.fOldName = nam;
-                this.fOldPatronymic = pat;
-
                 GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
+
+                string surname, name, patr;
+                GKUtils.GetRusNameParts(np, out surname, out name, out patr);
+
+                this.fOldSurname = surname;
+                this.fOldName = name;
+                this.fOldPatronymic = patr;
+
                 GKUtils.SetRusNameParts(np, this.fNewSurname, this.fNewName, this.fNewPatronymic);
             }
 

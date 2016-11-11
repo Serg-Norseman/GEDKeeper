@@ -57,6 +57,8 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.TabPage pageNames;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TextBox txtMarriedSurname;
+        private System.Windows.Forms.Label lblMarriedSurname;
 
         private void InitializeComponent()
         {
@@ -66,6 +68,7 @@ namespace GKUI.Dialogs
             this.lblRestriction = new System.Windows.Forms.Label();
             this.cmbRestriction = new System.Windows.Forms.ComboBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblMarriedSurname = new System.Windows.Forms.Label();
             this.lblSurname = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.lblPatronymic = new System.Windows.Forms.Label();
@@ -76,6 +79,7 @@ namespace GKUI.Dialogs
             this.lblNickname = new System.Windows.Forms.Label();
             this.btnPortraitAdd = new System.Windows.Forms.Button();
             this.btnPortraitDelete = new System.Windows.Forms.Button();
+            this.txtMarriedSurname = new System.Windows.Forms.TextBox();
             this.txtSurname = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.cmbPatronymic = new System.Windows.Forms.ComboBox();
@@ -167,6 +171,7 @@ namespace GKUI.Dialogs
             // 
             // GroupBox1
             // 
+            this.GroupBox1.Controls.Add(this.lblMarriedSurname);
             this.GroupBox1.Controls.Add(this.lblSurname);
             this.GroupBox1.Controls.Add(this.lblName);
             this.GroupBox1.Controls.Add(this.lblPatronymic);
@@ -177,6 +182,7 @@ namespace GKUI.Dialogs
             this.GroupBox1.Controls.Add(this.lblNickname);
             this.GroupBox1.Controls.Add(this.btnPortraitAdd);
             this.GroupBox1.Controls.Add(this.btnPortraitDelete);
+            this.GroupBox1.Controls.Add(this.txtMarriedSurname);
             this.GroupBox1.Controls.Add(this.txtSurname);
             this.GroupBox1.Controls.Add(this.txtName);
             this.GroupBox1.Controls.Add(this.cmbPatronymic);
@@ -198,6 +204,16 @@ namespace GKUI.Dialogs
             this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             // 
+            // lblMarriedSurname
+            // 
+            this.lblMarriedSurname.AutoSize = true;
+            this.lblMarriedSurname.Location = new System.Drawing.Point(11, 70);
+            this.lblMarriedSurname.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMarriedSurname.Name = "lblMarriedSurname";
+            this.lblMarriedSurname.Size = new System.Drawing.Size(119, 17);
+            this.lblMarriedSurname.TabIndex = 2;
+            this.lblMarriedSurname.Text = "lblMarriedSurname";
+            // 
             // lblSurname
             // 
             this.lblSurname.AutoSize = true;
@@ -211,37 +227,37 @@ namespace GKUI.Dialogs
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(11, 68);
+            this.lblName.Location = new System.Drawing.Point(11, 118);
             this.lblName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(55, 17);
-            this.lblName.TabIndex = 2;
+            this.lblName.TabIndex = 4;
             this.lblName.Text = "lblName";
             // 
             // lblPatronymic
             // 
             this.lblPatronymic.AutoSize = true;
-            this.lblPatronymic.Location = new System.Drawing.Point(11, 118);
+            this.lblPatronymic.Location = new System.Drawing.Point(11, 165);
             this.lblPatronymic.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPatronymic.Name = "lblPatronymic";
             this.lblPatronymic.Size = new System.Drawing.Size(90, 17);
-            this.lblPatronymic.TabIndex = 4;
+            this.lblPatronymic.TabIndex = 6;
             this.lblPatronymic.Text = "lblPatronymic";
             // 
             // lblSex
             // 
             this.lblSex.AutoSize = true;
-            this.lblSex.Location = new System.Drawing.Point(11, 165);
+            this.lblSex.Location = new System.Drawing.Point(450, 118);
             this.lblSex.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSex.Name = "lblSex";
             this.lblSex.Size = new System.Drawing.Size(43, 17);
-            this.lblSex.TabIndex = 6;
+            this.lblSex.TabIndex = 16;
             this.lblSex.Text = "lblSex";
             // 
             // lblSurnamePrefix
             // 
             this.lblSurnamePrefix.AutoSize = true;
-            this.lblSurnamePrefix.Location = new System.Drawing.Point(258, 19);
+            this.lblSurnamePrefix.Location = new System.Drawing.Point(259, 19);
             this.lblSurnamePrefix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSurnamePrefix.Name = "lblSurnamePrefix";
             this.lblSurnamePrefix.Size = new System.Drawing.Size(109, 17);
@@ -251,7 +267,7 @@ namespace GKUI.Dialogs
             // lblNamePrefix
             // 
             this.lblNamePrefix.AutoSize = true;
-            this.lblNamePrefix.Location = new System.Drawing.Point(258, 68);
+            this.lblNamePrefix.Location = new System.Drawing.Point(259, 68);
             this.lblNamePrefix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNamePrefix.Name = "lblNamePrefix";
             this.lblNamePrefix.Size = new System.Drawing.Size(89, 17);
@@ -261,7 +277,7 @@ namespace GKUI.Dialogs
             // lblNameSuffix
             // 
             this.lblNameSuffix.AutoSize = true;
-            this.lblNameSuffix.Location = new System.Drawing.Point(258, 118);
+            this.lblNameSuffix.Location = new System.Drawing.Point(259, 117);
             this.lblNameSuffix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNameSuffix.Name = "lblNameSuffix";
             this.lblNameSuffix.Size = new System.Drawing.Size(89, 17);
@@ -271,7 +287,7 @@ namespace GKUI.Dialogs
             // lblNickname
             // 
             this.lblNickname.AutoSize = true;
-            this.lblNickname.Location = new System.Drawing.Point(255, 165);
+            this.lblNickname.Location = new System.Drawing.Point(259, 165);
             this.lblNickname.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNickname.Name = "lblNickname";
             this.lblNickname.Size = new System.Drawing.Size(79, 17);
@@ -298,10 +314,21 @@ namespace GKUI.Dialogs
             this.btnPortraitDelete.TabStop = false;
             this.btnPortraitDelete.Click += new System.EventHandler(this.btnPortraitDelete_Click);
             // 
+            // txtMarriedSurname
+            // 
+            this.txtMarriedSurname.Location = new System.Drawing.Point(11, 88);
+            this.txtMarriedSurname.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
+            this.txtMarriedSurname.Name = "txtMarriedSurname";
+            this.txtMarriedSurname.Size = new System.Drawing.Size(226, 24);
+            this.txtMarriedSurname.TabIndex = 3;
+            this.txtMarriedSurname.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
+            this.txtMarriedSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
+            this.txtMarriedSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+            // 
             // txtSurname
             // 
             this.txtSurname.Location = new System.Drawing.Point(11, 39);
-            this.txtSurname.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSurname.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.Size = new System.Drawing.Size(226, 24);
             this.txtSurname.TabIndex = 1;
@@ -311,22 +338,22 @@ namespace GKUI.Dialogs
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(11, 88);
-            this.txtName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtName.Location = new System.Drawing.Point(11, 135);
+            this.txtName.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(226, 24);
-            this.txtName.TabIndex = 3;
+            this.txtName.TabIndex = 5;
             this.txtName.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.txtName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
             // 
             // cmbPatronymic
             // 
-            this.cmbPatronymic.Location = new System.Drawing.Point(11, 136);
-            this.cmbPatronymic.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbPatronymic.Location = new System.Drawing.Point(11, 184);
+            this.cmbPatronymic.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.cmbPatronymic.Name = "cmbPatronymic";
             this.cmbPatronymic.Size = new System.Drawing.Size(226, 25);
-            this.cmbPatronymic.TabIndex = 5;
+            this.cmbPatronymic.TabIndex = 7;
             this.cmbPatronymic.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.cmbPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.cmbPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
@@ -334,11 +361,12 @@ namespace GKUI.Dialogs
             // cmbSex
             // 
             this.cmbSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSex.Location = new System.Drawing.Point(11, 185);
+            this.cmbSex.Location = new System.Drawing.Point(450, 135);
             this.cmbSex.Margin = new System.Windows.Forms.Padding(2);
             this.cmbSex.Name = "cmbSex";
-            this.cmbSex.Size = new System.Drawing.Size(226, 25);
-            this.cmbSex.TabIndex = 7;
+            this.cmbSex.Size = new System.Drawing.Size(191, 25);
+            this.cmbSex.TabIndex = 17;
+            this.cmbSex.SelectedIndexChanged += new System.EventHandler(this.cbSex_SelectedIndexChanged);
             // 
             // chkPatriarch
             // 
@@ -347,7 +375,7 @@ namespace GKUI.Dialogs
             this.chkPatriarch.Margin = new System.Windows.Forms.Padding(2);
             this.chkPatriarch.Name = "chkPatriarch";
             this.chkPatriarch.Size = new System.Drawing.Size(106, 21);
-            this.chkPatriarch.TabIndex = 16;
+            this.chkPatriarch.TabIndex = 18;
             this.chkPatriarch.Text = "chkPatriarch";
             // 
             // panCtlParents
@@ -489,37 +517,37 @@ namespace GKUI.Dialogs
             this.chkBookmark.Margin = new System.Windows.Forms.Padding(2);
             this.chkBookmark.Name = "chkBookmark";
             this.chkBookmark.Size = new System.Drawing.Size(114, 21);
-            this.chkBookmark.TabIndex = 17;
+            this.chkBookmark.TabIndex = 19;
             this.chkBookmark.Text = "chkBookmark";
             // 
             // txtSurnamePrefix
             // 
-            this.txtSurnamePrefix.Location = new System.Drawing.Point(258, 39);
-            this.txtSurnamePrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSurnamePrefix.Location = new System.Drawing.Point(259, 39);
+            this.txtSurnamePrefix.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtSurnamePrefix.Name = "txtSurnamePrefix";
             this.txtSurnamePrefix.Size = new System.Drawing.Size(169, 24);
             this.txtSurnamePrefix.TabIndex = 9;
             // 
             // txtNamePrefix
             // 
-            this.txtNamePrefix.Location = new System.Drawing.Point(258, 88);
-            this.txtNamePrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.txtNamePrefix.Location = new System.Drawing.Point(259, 88);
+            this.txtNamePrefix.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtNamePrefix.Name = "txtNamePrefix";
             this.txtNamePrefix.Size = new System.Drawing.Size(169, 24);
             this.txtNamePrefix.TabIndex = 11;
             // 
             // txtNameSuffix
             // 
-            this.txtNameSuffix.Location = new System.Drawing.Point(258, 136);
-            this.txtNameSuffix.Margin = new System.Windows.Forms.Padding(2);
+            this.txtNameSuffix.Location = new System.Drawing.Point(259, 135);
+            this.txtNameSuffix.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtNameSuffix.Name = "txtNameSuffix";
             this.txtNameSuffix.Size = new System.Drawing.Size(169, 24);
             this.txtNameSuffix.TabIndex = 13;
             // 
             // txtNickname
             // 
-            this.txtNickname.Location = new System.Drawing.Point(258, 185);
-            this.txtNickname.Margin = new System.Windows.Forms.Padding(2);
+            this.txtNickname.Location = new System.Drawing.Point(259, 184);
+            this.txtNickname.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.txtNickname.Name = "txtNickname";
             this.txtNickname.Size = new System.Drawing.Size(169, 24);
             this.txtNickname.TabIndex = 15;

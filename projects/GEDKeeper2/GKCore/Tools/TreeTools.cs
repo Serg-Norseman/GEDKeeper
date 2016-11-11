@@ -526,7 +526,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void ConvertOldNames(GEDCOMIndividualRecord iRec)
+        /*private static void ConvertOldNames(GEDCOMIndividualRecord iRec)
         {
             try
             {
@@ -545,7 +545,7 @@ namespace GKCore.Tools
             catch (Exception ex)
             {
             }
-        }
+        }*/
 
         public static bool CheckGEDCOMFormat(GEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
         {
@@ -599,9 +599,9 @@ namespace GKCore.Tools
                             idCheck = false;
                         }
 
-                        if (rec.RecordType == GEDCOMRecordType.rtIndividual && convNames) {
+                        /*if (rec.RecordType == GEDCOMRecordType.rtIndividual && convNames) {
                             ConvertOldNames(rec as GEDCOMIndividualRecord);
-                        }
+                        }*/
 
                         pc.ProgressStep();
                     }

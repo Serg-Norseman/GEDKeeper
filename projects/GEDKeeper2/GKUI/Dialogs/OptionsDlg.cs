@@ -221,9 +221,53 @@ namespace GKUI.Dialogs
             this.UpdateLangs();
 
             this.UpdatePlugins();
+            this.UpdateWomanSurnameFormat();
 
             this.ancOptionsControl1.Options = this.fOptions.AncestorsCircleOptions;
             this.ancOptionsControl1.UpdateControls();
+        }
+
+        private void UpdateWomanSurnameFormat()
+        {
+            WomanSurnameFormat wsFmt = this.fOptions.WomanSurnameFormat;
+            bool isExtend = wsFmt != WomanSurnameFormat.wsfNotExtend;
+
+            chkExtendWomanSurnames.Checked = isExtend;
+            radMaiden_Married.Enabled = isExtend;
+            radMarried_Maiden.Enabled = isExtend;
+            radMaiden.Enabled = isExtend;
+            radMarried.Enabled = isExtend;
+
+            switch (wsFmt) {
+                case WomanSurnameFormat.wsfMaiden_Married:
+                    radMaiden_Married.Checked = true;
+                    break;
+
+                case WomanSurnameFormat.wsfMarried_Maiden:
+                    radMarried_Maiden.Checked = true;
+                    break;
+
+                case WomanSurnameFormat.wsfMaiden:
+                    radMaiden.Checked = true;
+                    break;
+
+                case WomanSurnameFormat.wsfMarried:
+                    radMarried.Checked = true;
+                    break;
+            }
+        }
+
+        private void chkExtendWomanSurnames_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!chkExtendWomanSurnames.Checked) {
+                this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+                this.UpdateWomanSurnameFormat();
+            } else {
+                radMaiden_Married.Enabled = true;
+                radMarried_Maiden.Enabled = true;
+                radMaiden.Enabled = true;
+                radMarried.Enabled = true;
+            }
         }
 
         private void UpdatePlugins()
@@ -366,6 +410,20 @@ namespace GKUI.Dialogs
 
             ancOptionsControl1.AcceptChanges();
 
+            if (!chkExtendWomanSurnames.Checked) {
+                this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+            } else {
+                if (radMaiden_Married.Checked) {
+                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
+                } else if (radMarried_Maiden.Checked) {
+                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
+                } else if (radMaiden.Checked) {
+                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
+                } else if (radMarried.Checked) {
+                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
+                }
+            }
+
             base.DialogResult = DialogResult.OK;
         }
 
@@ -497,6 +555,13 @@ namespace GKUI.Dialogs
 
             this.chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
             this.pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+
+            this.grpAdvancedNames.Text = LangMan.LS(LSID.LSID_AdditionalNames);
+            this.chkExtendWomanSurnames.Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);
+            this.radMaiden_Married.Text = LangMan.LS(LSID.LSID_WSF_Maiden_Married);
+            this.radMarried_Maiden.Text = LangMan.LS(LSID.LSID_WSF_Married_Maiden);
+            this.radMaiden.Text = LangMan.LS(LSID.LSID_WSF_Maiden);
+            this.radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
         }
     }
 }

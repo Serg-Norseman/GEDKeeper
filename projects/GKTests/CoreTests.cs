@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -1241,16 +1242,16 @@ namespace GKTests
 
             CommonStats commonStats = treeStats.GetCommonStats();
             Assert.IsNotNull(commonStats);
-            Assert.AreEqual(4, commonStats.persons, "Stats.TotalPersons");
+            Assert.AreEqual(5, commonStats.persons, "Stats.TotalPersons");
             Assert.AreEqual(2, commonStats.persons_m, "Stats.SumM");
-            Assert.AreEqual(2, commonStats.persons_f, "Stats.SumF");
+            Assert.AreEqual(3, commonStats.persons_f, "Stats.SumF");
 
             List<StatsItem> values = new List<StatsItem>();
 
             treeStats.GetSpecStats(StatsMode.smAncestors, values);
             treeStats.GetSpecStats(StatsMode.smDescendants, values);
             treeStats.GetSpecStats(StatsMode.smDescGenerations, values);
-            treeStats.GetSpecStats(StatsMode.smFamilies, values);
+            treeStats.GetSpecStats(StatsMode.smSurnames, values);
             treeStats.GetSpecStats(StatsMode.smNames, values);
             treeStats.GetSpecStats(StatsMode.smPatronymics, values);
             treeStats.GetSpecStats(StatsMode.smAge, values);
@@ -1696,6 +1697,32 @@ namespace GKTests
             Assert.IsNotNull(langMan);
 
             Assert.AreEqual("?", langMan.LS(LSID.LSID_First));
+        }
+
+        [Test]
+        public void ExtendedWomanSurnames_Tests()
+        {
+            // Anna Jones
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I5") as GEDCOMIndividualRecord;
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+            Assert.AreEqual("Jones Anna", GKUtils.GetNameString(iRec, true, false));
+
+            GKUtils.SetMarriedSurname(iRec, "Smith");
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
+            Assert.AreEqual("Jones Anna", GKUtils.GetNameString(iRec, true, false));
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
+            Assert.AreEqual("Smith Anna", GKUtils.GetNameString(iRec, true, false));
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
+            Assert.AreEqual("Jones (Smith) Anna", GKUtils.GetNameString(iRec, true, false));
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
+            Assert.AreEqual("Smith (Jones) Anna", GKUtils.GetNameString(iRec, true, false));
+
+            GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
         }
     }
 }

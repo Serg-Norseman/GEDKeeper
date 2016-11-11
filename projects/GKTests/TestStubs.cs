@@ -89,6 +89,9 @@ namespace GKTests
             evt = context.CreateEventEx(iRec4, "RESI", "12 FEB", "Far Forest");
             Assert.IsNotNull(evt);
 
+            // fifth
+            GEDCOMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
+
             // group for tests
             GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
             groupRec.GroupName = "GroupTest";

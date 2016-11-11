@@ -79,10 +79,11 @@ namespace GKUI.Dialogs
             try
             {
                 string fam, nam, pat;
-                GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat);
+                GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat, false);
                 this.txtSurname.Text = fam;
                 this.txtName.Text = nam;
                 this.cmbPatronymic.Text = pat;
+
                 this.cmbSex.SelectedIndex = (sbyte)this.fPerson.Sex;
                 this.chkPatriarch.Checked = this.fPerson.Patriarch;
                 this.chkBookmark.Checked = this.fPerson.Bookmark;
@@ -98,6 +99,8 @@ namespace GKUI.Dialogs
                     this.txtNickname.Text = np.Pieces.Nickname;
                     this.txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
                     this.txtNameSuffix.Text = np.Pieces.Suffix;
+
+                    this.txtMarriedSurname.Text = np.Pieces.MarriedName;
                 }
 
                 this.UpdateControls(true);
@@ -116,36 +119,36 @@ namespace GKUI.Dialogs
 
                 if (this.fTarget != null)
                 {
-                    string iFamily, iName, iPatronymic;
-                    GKUtils.GetNameParts(this.fTarget, out iFamily, out iName, out iPatronymic);
-                    this.txtSurname.Text = iFamily;
+                    string surname, name, patronymic;
+                    GKUtils.GetNameParts(this.fTarget, out surname, out name, out patronymic);
+                    this.txtSurname.Text = surname;
                     INamesTable names = MainWin.Instance.NamesTable;
                     GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
                     switch (this.fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                this.txtSurname.Text = GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily);
+                                this.SetMarriedSurname(surname);
                             }
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
-                            this.cmbPatronymic.Text = names.GetPatronymicByName(iName, sx);
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svMale));
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svFemale));
+                            this.cmbPatronymic.Text = names.GetPatronymicByName(name, sx);
                             break;
 
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GEDCOMSex.svMale:
-                                    this.txtName.Text = names.GetNameByPatronymic(iPatronymic);
+                                    this.txtName.Text = names.GetNameByPatronymic(patronymic);
                                     break;
 
                                 case GEDCOMSex.svFemale:
-                                    this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
+                                    this.SetMarriedSurname(surname);
                                     break;
                             }
                             break;
 
                         case TargetMode.tmWife:
-                            this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
+                            this.SetMarriedSurname(surname);
                             break;
                     }
                 }
@@ -153,6 +156,34 @@ namespace GKUI.Dialogs
             catch (Exception ex)
             {
                 this.fBase.Host.LogWrite("PersonEditDlg.SetTarget("+this.fTargetMode.ToString()+"): " + ex.Message);
+            }
+        }
+
+        private void SetMarriedSurname(string husbSurname)
+        {
+            string surname = GlobalOptions.CurrentCulture.GetMarriedSurname(husbSurname);
+            if (this.IsExtendedWomanSurname()) {
+                this.txtMarriedSurname.Text = surname;
+            } else {
+                this.txtSurname.Text = '(' + surname + ')';
+            }
+        }
+
+        private bool IsExtendedWomanSurname()
+        {
+            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
+                (this.cmbSex.SelectedIndex == (sbyte)GEDCOMSex.svFemale);
+            return result;
+        }
+
+        private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!this.IsExtendedWomanSurname()) {
+                this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+                this.txtMarriedSurname.Enabled = false;
+            } else {
+                this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                this.txtMarriedSurname.Enabled = true;
             }
         }
 
@@ -283,6 +314,9 @@ namespace GKUI.Dialogs
             pieces.Prefix = this.txtNamePrefix.Text;
             pieces.SurnamePrefix = this.txtSurnamePrefix.Text;
             pieces.Suffix = this.txtNameSuffix.Text;
+            if (this.IsExtendedWomanSurname()) {
+                pieces.MarriedName = txtMarriedSurname.Text;
+            }
 
             this.fPerson.Sex = (GEDCOMSex)this.cmbSex.SelectedIndex;
             this.fPerson.Patriarch = this.chkPatriarch.Checked;
@@ -1060,6 +1094,7 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinPersonEdit);
             this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            this.lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
             this.lblName.Text = LangMan.LS(LSID.LSID_Name);
             this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
             this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);

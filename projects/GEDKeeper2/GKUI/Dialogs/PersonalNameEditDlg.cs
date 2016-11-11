@@ -20,9 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
+using GKCore.Types;
 
 namespace GKUI.Dialogs
 {
@@ -57,6 +60,15 @@ namespace GKUI.Dialogs
             }
         }
 
+        private bool IsExtendedWomanSurname()
+        {
+            GEDCOMIndividualRecord iRec = this.fPersonalName.Parent as GEDCOMIndividualRecord;
+
+            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
+                (iRec.Sex == GEDCOMSex.svFemale);
+            return result;
+        }
+
         private void UpdateControls()
         {
             string surname, name, patronymic;
@@ -71,6 +83,16 @@ namespace GKUI.Dialogs
             this.txtNickname.Text = fPersonalName.Pieces.Nickname;
             this.txtSurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
             this.txtNameSuffix.Text = fPersonalName.Pieces.Suffix;
+
+            this.txtMarriedSurname.Text = fPersonalName.Pieces.MarriedName;
+
+            if (!this.IsExtendedWomanSurname()) {
+                this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+                this.txtMarriedSurname.Enabled = false;
+            } else {
+                this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                this.txtMarriedSurname.Enabled = true;
+            }
         }
 
         private void AcceptChanges()
@@ -123,6 +145,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            this.lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
             this.lblName.Text = LangMan.LS(LSID.LSID_Name);
             this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
             this.lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);

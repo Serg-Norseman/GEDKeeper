@@ -166,7 +166,7 @@ namespace GKCore.Stats
                     values.Add(new StatsItem(iName, GKUtils.GetMarriageAge(iRec)));
                     break;
 
-                case StatsMode.smFamilies:
+                case StatsMode.smSurnames:
                 case StatsMode.smNames:
                 case StatsMode.smPatronymics:
                     {
@@ -174,7 +174,7 @@ namespace GKCore.Stats
                         string fam, nam, pat;
                         GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
                         switch (mode) {
-                            case StatsMode.smFamilies:
+                            case StatsMode.smSurnames:
                                 v = GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                                 break;
                             case StatsMode.smNames:
