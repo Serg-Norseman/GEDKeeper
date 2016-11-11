@@ -21,6 +21,9 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -31,27 +34,44 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AboutDlgTests : NUnitFormTest
+    public class AddressEditDlgTests : NUnitFormTest
     {
-        public AboutDlgTests()
+        public AddressEditDlgTests()
         {
         }
 
-        private AboutDlg _frm;
+        private IBaseContext fContext;
+        private GEDCOMAddress fAddress;
+        private IBaseWindow fBase;
+
+        private AddressEditDlg _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            _frm = new AboutDlg();
-            _frm.Show();
+            fBase = new BaseWindowMock();
+            fContext = fBase.Context;
+            fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
+
+            //ExpectModal("AddressEditDlg", "DlgHandler");
+            _frm = new AddressEditDlg(fBase);
+            _frm.Address = fAddress;
+            //_frm.ShowDialog();
+            //_frm.Show();
         }
 
         [Test]
-        public void Test_btnClose()
+        public void Test_Misc()
         {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
+            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fAddress, _frm.Address);
+        }
+
+        public void DlgHandler()
+        {
+            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
+            //btnCancel.Click();
         }
     }
 }

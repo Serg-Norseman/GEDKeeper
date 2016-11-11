@@ -21,6 +21,9 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -31,27 +34,44 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AboutDlgTests : NUnitFormTest
+    public class GroupEditDlgTests : NUnitFormTest
     {
-        public AboutDlgTests()
+        public GroupEditDlgTests()
         {
         }
 
-        private AboutDlg _frm;
+        private IBaseContext fContext;
+        private GEDCOMGroupRecord fGroupRecord;
+        private IBaseWindow fBase;
+
+        private GroupEditDlg _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            _frm = new AboutDlg();
-            _frm.Show();
+            fBase = new BaseWindowMock();
+            fContext = fBase.Context;
+            fGroupRecord = new GEDCOMGroupRecord(fContext.Tree, fContext.Tree, "", "");
+
+            //ExpectModal("GroupEditDlg", "DlgHandler");
+            _frm = new GroupEditDlg(fBase);
+            _frm.Group = fGroupRecord;
+            //_frm.ShowDialog();
+            //_frm.Show();
         }
 
         [Test]
-        public void Test_btnClose()
+        public void Test_Misc()
         {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
+            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fGroupRecord, _frm.Group);
+        }
+
+        public void DlgHandler()
+        {
+            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
+            //btnCancel.Click();
         }
     }
 }

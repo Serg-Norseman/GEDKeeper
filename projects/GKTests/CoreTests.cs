@@ -1316,9 +1316,9 @@ namespace GKTests
 
             List<TreeTools.CheckObj> checksList = new List<TreeTools.CheckObj>();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(new BaseWindowMock(null), null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(new BaseWindowMock(), null); });
 
-            TreeTools.CheckBase(new BaseWindowMock(fContext.Tree), checksList);
+            TreeTools.CheckBase(new BaseWindowMock(), checksList);
 
             ///
 
@@ -1340,7 +1340,7 @@ namespace GKTests
 
             ///
 
-            BaseWindowMock basewin = new BaseWindowMock(null);
+            BaseWindowMock basewin = new BaseWindowMock();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(basewin, null); });
 
@@ -1657,7 +1657,7 @@ namespace GKTests
             Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
 
-            BaseWindowMock baseWin = new BaseWindowMock(this.fContext.Tree);
+            BaseWindowMock baseWin = new BaseWindowMock();
 
             using (HTMLWriter writer = new HTMLWriter()) {
 

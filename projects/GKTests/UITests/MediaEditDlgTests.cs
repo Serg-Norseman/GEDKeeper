@@ -21,6 +21,9 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -31,27 +34,44 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AboutDlgTests : NUnitFormTest
+    public class MediaEditDlgTests : NUnitFormTest
     {
-        public AboutDlgTests()
+        public MediaEditDlgTests()
         {
         }
 
-        private AboutDlg _frm;
+        private IBaseContext fContext;
+        private GEDCOMMultimediaRecord fMultimediaRecord;
+        private IBaseWindow fBase;
+
+        private MediaEditDlg _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            _frm = new AboutDlg();
-            _frm.Show();
+            fBase = new BaseWindowMock();
+            fContext = fBase.Context;
+            fMultimediaRecord = new GEDCOMMultimediaRecord(fContext.Tree, fContext.Tree, "", "");
+
+            //ExpectModal("MediaEditDlg", "DlgHandler");
+            _frm = new MediaEditDlg(fBase);
+            _frm.MediaRec = fMultimediaRecord;
+            //_frm.ShowDialog();
+            //_frm.Show();
         }
 
         [Test]
-        public void Test_btnClose()
+        public void Test_Misc()
         {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
+            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fMultimediaRecord, _frm.MediaRec);
+        }
+
+        public void DlgHandler()
+        {
+            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
+            //btnCancel.Click();
         }
     }
 }

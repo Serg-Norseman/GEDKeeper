@@ -20,8 +20,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -53,11 +56,16 @@ namespace GKTests.Mocks
 
     internal class BaseWindowMock : WorkWindowMock, IBaseWindow
     {
+        private static IHost fHost = new HostMock();
+
+        private IBaseContext fContext;
         private GEDCOMTree fTree;
 
-        public BaseWindowMock(GEDCOMTree tree)
+        public BaseWindowMock()
         {
-            this.fTree = tree;
+            this.fContext = TestStubs.CreateContext();
+            TestStubs.FillContext(this.fContext as BaseContext);
+            this.fTree = fContext.Tree;
         }
 
         public void ProgressInit(string title, int max) { }
@@ -68,8 +76,8 @@ namespace GKTests.Mocks
         public void SetLang() {}
 
 
-        public IHost Host { get { return null; } }
-        public IBaseContext Context { get { return null; } }
+        public IHost Host { get { return fHost; } }
+        public IBaseContext Context { get { return this.fContext; } }
 
         public bool Modified { get { return false; } set {} }
         public ShieldState ShieldState { get { return ShieldState.None; } set {} }
@@ -139,6 +147,42 @@ namespace GKTests.Mocks
         public void SelectRecordByXRef(string xref) { }
         public void Show() { }
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
+    }
+
+    public class HostMock : IHost
+    {
+        public INamesTable NamesTable { get { return null; } }
+
+        public IBaseWindow GetCurrentFile(bool extMode = false) { return null; }
+        public IWorkWindow GetWorkWindow() { return null; }
+
+        public IBaseWindow CreateBase(string fileName) { return null; }
+        public IBaseWindow FindBase(string fileName) { return null; }
+        public void BaseChanged(IBaseWindow aBase) {}
+        public void BaseClosed(IBaseWindow aBase) {}
+        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action) {}
+
+        public string GetAppDataPath() { return string.Empty; }
+
+        public void LogWrite(string msg) {}
+
+        public bool IsWidgetActive(IWidget widget) { return false; }
+        public void WidgetShow(IWidget widget) {}
+        public void WidgetClose(IWidget widget) {}
+
+        public void ShowMDI(Form form) {}
+
+        public ILangMan CreateLangMan(object sender) { return null; }
+        public void LoadLanguage(int langCode) {}
+        public void UpdateNavControls() {}
+        public void UpdateControls(bool forceDeactivate) {}
+        public void ShowHelpTopic(string topic) {}
+        public void EnableWindow(Form form, bool value) {}
+
+        public bool IsUnix() { return false; }
+        public void ShowWarning(string msg) {}
+
+        public void SetLang() {}
     }
 
     internal class ValItem

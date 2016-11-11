@@ -43,17 +43,18 @@ namespace GKTests.UITests
         private IBaseContext fContext;
         private GEDCOMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
+
         private NoteEditDlg _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            fContext = TestStubs.CreateContext();
+            fBase = new BaseWindowMock();
+            fContext = fBase.Context;
             fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
-            fBase = new BaseWindowMock(fContext.Tree);
 
-            //ExpectModal("NoteEditDlg", "NoteEditDlgHandler");
+            //ExpectModal("NoteEditDlg", "DlgHandler");
             _frm = new NoteEditDlg(fBase);
             _frm.NoteRecord = fNoteRecord;
             //_frm.ShowDialog();
@@ -67,11 +68,11 @@ namespace GKTests.UITests
             Assert.AreEqual(fNoteRecord, _frm.NoteRecord);
         }
 
-        /*public void NoteEditDlgHandler()
+        public void DlgHandler()
         {
-            var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            btnCancel.Click();
-        }*/
+            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
+            //btnCancel.Click();
+        }
 
         [Test]
         public void Test_btnCancel()

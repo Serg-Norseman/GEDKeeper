@@ -21,6 +21,9 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -31,27 +34,38 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AboutDlgTests : NUnitFormTest
+    public class FamilyEditDlgTests : NUnitFormTest
     {
-        public AboutDlgTests()
+        public FamilyEditDlgTests()
         {
         }
 
-        private AboutDlg _frm;
+        private IBaseContext fContext;
+        private GEDCOMFamilyRecord fFamilyRecord;
+        private IBaseWindow fBase;
+
+        private FamilyEditDlg _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            _frm = new AboutDlg();
+            fBase = new BaseWindowMock();
+            fContext = fBase.Context;
+            fFamilyRecord = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree, "", "");
+
+            //ExpectModal("NoteEditDlg", "NoteEditDlgHandler");
+            _frm = new FamilyEditDlg(fBase);
+            _frm.Family = fFamilyRecord;
+            //_frm.ShowDialog();
             _frm.Show();
         }
 
         [Test]
-        public void Test_btnClose()
+        public void Test_Misc()
         {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
+            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fFamilyRecord, _frm.Family);
         }
     }
 }

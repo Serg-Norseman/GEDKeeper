@@ -86,7 +86,15 @@
     <Compile Include="TestStubs.cs" />
     <Compile Include="UDNTests.cs" />
     <Compile Include="UITests\AboutDlgTests.cs" />
+    <Compile Include="UITests\AddressEditDlgTests.cs" />
+    <Compile Include="UITests\EventEditDlgTests.cs" />
+    <Compile Include="UITests\FamilyEditDlgTests.cs" />
+    <Compile Include="UITests\GroupEditDlgTests.cs" />
+    <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\NoteEditDlgTests.cs" />
+    <Compile Include="UITests\PersonEditDlgTests.cs" />
+    <Compile Include="UITests\RepositoryEditDlgTests.cs" />
+    <Compile Include="UITests\SourceEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.mswin.csproj">
