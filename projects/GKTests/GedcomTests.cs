@@ -74,6 +74,14 @@ namespace GKTests
             Assert.IsNotNull(evt.Detail.Address);
         }
 
+        [TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
+        [TestCase("@sample", Description = "Bad XRef Test", ExpectedException = typeof(EGEDCOMException))]
+        public void GEDCOMUtils_ExtractXRef_Tests(string arg)
+        {
+            string xref;
+            GEDCOMUtils.ExtractXRef(arg, out xref, false, "test");
+        }
+
         [Test]
         public void GEDCOMUtils_Tests()
         {
@@ -403,11 +411,6 @@ namespace GKTests
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsStillborn, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsStillborn)));
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsSubmitted, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsSubmitted)));
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsUncleared, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsUncleared)));
-        }
-
-        [Test]
-        public void _EmptyTests()
-        {
         }
 
         private GEDCOMTag TagConstructorTest(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

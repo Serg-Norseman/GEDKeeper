@@ -245,6 +245,8 @@ namespace GKCore.Options
         }
 
 
+        // TODO: Need to make a decision on additional types of names:
+        // religious and according to the census (see GEDCOMPersonalNamePieces)
         public bool ExtendedNames
         {
             get { return this.fExtendedNames; }

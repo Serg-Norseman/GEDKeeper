@@ -569,7 +569,7 @@ namespace GKTests
             }
         }
 
-        [Test]
+        [Test(Description = "Cultures test")]
         public void Cultures_Tests()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;

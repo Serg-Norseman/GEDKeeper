@@ -166,6 +166,14 @@ namespace GKTests
             Assert.Throws(typeof(ArgumentOutOfRangeException), () => { rec = fDates[42]; }, "(42)"); // end
         }
 
+        [Test(Description = "UDN Exceptions Test")]
+        [ExpectedException(typeof(Exception))]
+        public void UDNExceptions_Tests()
+        {
+            UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
+                              new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 07));
+        }
+
         [Test]
         public void UDNCommon_Tests()
         {
