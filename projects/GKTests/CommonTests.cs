@@ -917,8 +917,10 @@ namespace GKTests
         [Test]
         public void Tween_Tests()
         {
+            #if !__MonoCS__
             TweenLibrary tween = new TweenLibrary();
             tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
+            #endif
         }
     }
 }
