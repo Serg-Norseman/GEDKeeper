@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKUI.Dialogs
@@ -61,9 +62,9 @@ namespace GKUI.Dialogs
             try
             {
                 string rel = this.cmbRelation.Text.Trim();
-                if (rel != "" && MainWin.Instance.Options.Relations.IndexOf(rel) < 0)
+                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0)
                 {
-                    MainWin.Instance.Options.Relations.Add(rel);
+                    GlobalOptions.Instance.Relations.Add(rel);
                 }
 
                 this.fAssociation.Relation = this.cmbRelation.Text;
@@ -93,10 +94,10 @@ namespace GKUI.Dialogs
 
             this.fBase = aBase;
 
-            int num = MainWin.Instance.Options.Relations.Count;
+            int num = GlobalOptions.Instance.Relations.Count;
             for (int i = 0; i < num; i++)
             {
-                this.cmbRelation.Items.Add(MainWin.Instance.Options.Relations[i]);
+                this.cmbRelation.Items.Add(GlobalOptions.Instance.Relations[i]);
             }
 
             // SetLang()

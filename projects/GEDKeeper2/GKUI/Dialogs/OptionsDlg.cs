@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -56,13 +57,13 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnAccept");
-            this.btnCancel.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
-            this.btnColumnUp.Image = (Image)MainWin.ResourceManager.GetObjectEx("iUp");
-            this.btnColumnDown.Image = (Image)MainWin.ResourceManager.GetObjectEx("iDown");
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnColumnUp.Image = global::GKResources.iUp;
+            this.btnColumnDown.Image = global::GKResources.iDown;
 
             this.fHost = aHost;
-            this.fOptions = MainWin.Instance.Options;
+            this.fOptions = GlobalOptions.Instance;
             this.fTempColumns = new IndividualListColumns();
 
             this.SetLang();
@@ -272,6 +273,8 @@ namespace GKUI.Dialogs
 
         private void UpdatePlugins()
         {
+            if (MainWin.Instance == null) return;
+
             this.lvPlugins.Items.Clear();
 
             foreach (IPlugin plugin in MainWin.Instance.Plugins)

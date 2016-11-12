@@ -34,17 +34,17 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PersonEditDlgTests : NUnitFormTest
+    public class AssociationEditDlgTests : NUnitFormTest
     {
-        public PersonEditDlgTests()
+        public AssociationEditDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMIndividualRecord fIndividualRecord;
+        private GEDCOMAssociation fAssociation;
         private IBaseWindow fBase;
 
-        private PersonEditDlg _frm;
+        private AssociationEditDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +52,11 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fIndividualRecord = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "");
+            fAssociation = new GEDCOMAssociation(fContext.Tree, null, "", "");
 
-            //ExpectModal("PersonEditDlg", "DlgHandler");
-            _frm = new PersonEditDlg(fBase);
-            _frm.Person = fIndividualRecord;
+            //ExpectModal("AssociationEditDlg", "DlgHandler");
+            _frm = new AssociationEditDlg(fBase);
+            _frm.Association = fAssociation;
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -65,7 +65,7 @@ namespace GKTests.UITests
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fIndividualRecord, _frm.Person);
+            Assert.AreEqual(fAssociation, _frm.Association);
         }
 
         [Test]
@@ -78,14 +78,19 @@ namespace GKTests.UITests
         [Test]
         public void Test_EnterTextAndAccept()
         {
-            //var txtSurname = new TextBoxTester("txtSurname");
-            //txtSurname.Enter("sample text");
-            //Assert.AreEqual("sample text", txtSurname.Text);
+            var cmbRelation = new ComboBoxTester("cmbRelation");
+            cmbRelation.Enter("sample text");
+            Assert.AreEqual("sample text", cmbRelation.Text);
 
-            //var btnAccept = new ButtonTester("btnAccept");
-            //btnAccept.Click();
+            /*var txtAuthor = new TextBoxTester("txtAuthor");
+            txtAuthor.Enter("sample text");
+            Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            //Assert.AreEqual("sample text", fIndividualRecord.PersonalNames[0].Pieces.Surname);
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            Assert.AreEqual("sample text", fAssociation.Relation);
+            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
     }
 }

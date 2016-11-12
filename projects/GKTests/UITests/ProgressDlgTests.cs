@@ -21,7 +21,6 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
@@ -34,17 +33,16 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PersonEditDlgTests : NUnitFormTest
+    public class ProgressDlgTests : NUnitFormTest
     {
-        public PersonEditDlgTests()
+        public ProgressDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMIndividualRecord fIndividualRecord;
         private IBaseWindow fBase;
 
-        private PersonEditDlg _frm;
+        private ProgressDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +50,9 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fIndividualRecord = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("PersonEditDlg", "DlgHandler");
-            _frm = new PersonEditDlg(fBase);
-            _frm.Person = fIndividualRecord;
+            //ExpectModal("ProgressDlg", "DlgHandler");
+            _frm = new ProgressDlg();
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -64,28 +60,6 @@ namespace GKTests.UITests
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fIndividualRecord, _frm.Person);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterTextAndAccept()
-        {
-            //var txtSurname = new TextBoxTester("txtSurname");
-            //txtSurname.Enter("sample text");
-            //Assert.AreEqual("sample text", txtSurname.Text);
-
-            //var btnAccept = new ButtonTester("btnAccept");
-            //btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fIndividualRecord.PersonalNames[0].Pieces.Surname);
         }
     }
 }

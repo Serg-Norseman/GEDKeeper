@@ -39,7 +39,7 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
 
             this.Image1.Image = global::GKResources.iTipsLight;
-            this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+            this.btnClose.Image = global::GKResources.iBtnCancel;
 
             this.fTips = new StringList();
 

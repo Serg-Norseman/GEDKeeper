@@ -34,17 +34,17 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PersonEditDlgTests : NUnitFormTest
+    public class PortraitSelectDlgTests : NUnitFormTest
     {
-        public PersonEditDlgTests()
+        public PortraitSelectDlgTests()
         {
         }
 
         private IBaseContext fContext;
-        private GEDCOMIndividualRecord fIndividualRecord;
+        private GEDCOMMultimediaLink fMultimediaLink;
         private IBaseWindow fBase;
 
-        private PersonEditDlg _frm;
+        private PortraitSelectDlg _frm;
 
         public override void Setup()
         {
@@ -52,11 +52,11 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fIndividualRecord = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "");
+            fMultimediaLink = new GEDCOMMultimediaLink(fContext.Tree, null, "", "");
 
-            //ExpectModal("PersonEditDlg", "DlgHandler");
-            _frm = new PersonEditDlg(fBase);
-            _frm.Person = fIndividualRecord;
+            //ExpectModal("PortraitSelectDlg", "DlgHandler");
+            _frm = new PortraitSelectDlg(fBase);
+            _frm.MultimediaLink = fMultimediaLink;
             //_frm.ShowDialog();
             _frm.Show();
         }
@@ -65,7 +65,7 @@ namespace GKTests.UITests
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fIndividualRecord, _frm.Person);
+            Assert.AreEqual(fMultimediaLink, _frm.MultimediaLink);
         }
 
         [Test]
@@ -78,14 +78,19 @@ namespace GKTests.UITests
         [Test]
         public void Test_EnterTextAndAccept()
         {
-            //var txtSurname = new TextBoxTester("txtSurname");
-            //txtSurname.Enter("sample text");
-            //Assert.AreEqual("sample text", txtSurname.Text);
+            /*var txtShortTitle = new TextBoxTester("txtShortTitle");
+            txtShortTitle.Enter("sample text");
+            Assert.AreEqual("sample text", txtShortTitle.Text);
 
-            //var btnAccept = new ButtonTester("btnAccept");
-            //btnAccept.Click();
+            var txtAuthor = new TextBoxTester("txtAuthor");
+            txtAuthor.Enter("sample text");
+            Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            //Assert.AreEqual("sample text", fIndividualRecord.PersonalNames[0].Pieces.Surname);
+            var btnAccept = new ButtonTester("btnAccept");
+            btnAccept.Click();
+
+            //Assert.AreEqual("sample text", fTaskRecord.FiledByEntry);
+            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
     }
 }

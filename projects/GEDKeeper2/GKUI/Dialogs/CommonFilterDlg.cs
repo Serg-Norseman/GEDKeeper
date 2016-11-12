@@ -24,7 +24,6 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Lists;
 
 namespace GKUI.Dialogs
 {
@@ -58,8 +57,8 @@ namespace GKUI.Dialogs
 
             this.InitializeComponent();
 
-            this.btnAccept.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnAccept");
-            this.btnCancel.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
 
             this.fBase = aBase;
             this.fListMan = listMan;

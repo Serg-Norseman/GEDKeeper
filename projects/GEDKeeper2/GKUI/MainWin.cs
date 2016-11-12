@@ -102,6 +102,7 @@ namespace GKUI
 
             fInstance = this;
             fResourceManager = new GKResourceManager("GKResources", typeof(MainWin).Assembly);
+            this.fOptions = GlobalOptions.Instance;
 
             this.tbFileNew.Image = global::GKResources.iCreateNew;
             this.tbFileLoad.Image = global::GKResources.iLoad;
@@ -212,7 +213,6 @@ namespace GKUI
             this.fLogFilename = this.GetAppDataPath() + "GEDKeeper2.log";
             Logger.LogInit(this.fLogFilename);
 
-            this.fOptions = GlobalOptions.Instance;
             this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
             this.fOptions.FindLanguages();
             this.ApplyOptions();

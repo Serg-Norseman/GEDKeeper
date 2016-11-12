@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
         private void UpdateSpecific()
         {
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
-            GlobalOptions options = MainWin.Instance.Options;
+            GlobalOptions options = GlobalOptions.Instance;
 
             this.txtName.Items.Clear();
             this.txtName.Items.AddRange(options.NameFilters.ToArray());
