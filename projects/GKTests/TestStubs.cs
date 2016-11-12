@@ -20,7 +20,7 @@
 
 using GKCommon.GEDCOM;
 using GKCore;
-
+using GKCore.Interfaces;
 using NUnit.Framework;
 
 namespace GKTests
@@ -36,7 +36,7 @@ namespace GKTests
             return context;
         }
 
-        public static void FillContext(BaseContext context)
+        public static void FillContext(IBaseContext context)
         {
             // a null result if the record is not defined
             GEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "xxxxx", "xxxxx");

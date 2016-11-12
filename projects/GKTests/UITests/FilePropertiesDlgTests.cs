@@ -54,16 +54,11 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, fDialog.Base);
-        }
-
-        [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
@@ -73,8 +68,7 @@ namespace GKTests.UITests
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             GEDCOMSubmitterRecord submitter = fContext.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);

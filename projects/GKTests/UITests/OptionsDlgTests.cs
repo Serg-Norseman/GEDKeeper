@@ -24,7 +24,6 @@ using System;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -53,16 +52,9 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_Misc()
-        {
-            //Assert.AreEqual(fBase, _frm.Base);
-        }
-
-        [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
@@ -76,8 +68,7 @@ namespace GKTests.UITests
             txtAuthor.Enter("sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             //Assert.AreEqual("sample text", fListMan.Relation);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);

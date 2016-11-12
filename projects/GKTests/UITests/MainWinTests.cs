@@ -21,6 +21,11 @@
 #if !__MonoCS__
 
 using System;
+using System.Threading;
+using System.Windows.Forms;
+
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKUI;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -35,6 +40,7 @@ namespace GKTests.UITests
     public class MainWinTests : CustomWindowTest
     {
         private MainWin fMainWin;
+        private IBaseWindow fCurWin;
 
         public override void Setup()
         {
@@ -47,55 +53,150 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
-            // call to AboutDlg, closing in AboutDlg_Handler
+            // Stage 1: call to AboutDlg, closing in AboutDlg_Handler
+            Wait();
             ExpectModal("AboutDlg", "AboutDlg_Handler");
             ClickToolStripMenuItem("miAbout", fMainWin);
 
-            // create an empty base
+
+            // Stage 2.1: GetCurrentFile()
+            Assert.IsNull(fMainWin.GetCurrentFile(), "Stage 2.1");
+
+            // Stage 2.2: create an empty base
+            Wait();
             ClickToolStripButton("tbFileNew", fMainWin);
 
-            // call to StatsWin (required the base)
-            ClickToolStripButton("tbStats", fMainWin);
+            // Stage 2.3: GetCurrentFile()
+            fCurWin = fMainWin.GetCurrentFile();
+            Assert.IsNotNull(fCurWin, "Stage 2.3");
 
-            // call to SlideshowWin (required the base)
+            // Stage 2.4: fill context for sample data
+            TestStubs.FillContext(fCurWin.Context);
+            fCurWin.UpdateView();
+
+
+            // Stage 3: call to FilePropertiesDlg
+            Wait();
+            ModalFormHandler = FilePropertiesDlg_btnCancel_Handler; // FilePropertiesDlg.Cancel
+            ClickToolStripMenuItem("miFileProperties", fMainWin);
+            Wait();
+            ModalFormHandler = FilePropertiesDlg_btnAccept_Handler; // FilePropertiesDlg.Accept
+            ClickToolStripMenuItem("miFileProperties", fMainWin);
+
+
+            // Stage 4: call to OptionsDlg
+            Wait();
+            ModalFormHandler = OptionsDlg_btnCancel_Handler; // OptionsDlg.Cancel
+            ClickToolStripMenuItem("miOptions", fMainWin);
+            Wait();
+            ModalFormHandler = OptionsDlg_btnAccept_Handler; // OptionsDlg.Accept
+            ClickToolStripMenuItem("miOptions", fMainWin);
+
+
+            // Stage 30: call to StatsWin (required the base)
+            Wait();
+            ClickToolStripButton("tbStats", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is StatisticsWin, "Stage 30");
+            fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 31: call to SlideshowWin (required the base)
+            Wait();
             ClickToolStripMenuItem("miSlideshow", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 31");
+            fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 32: call to ScriptEditWin (required the base)
+            Wait();
+            ModalFormHandler = ScriptEditWin_Handler;
+            ClickToolStripMenuItem("miScripts", fMainWin);
+            //Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 32");
+            //fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 50: close Base
+            Wait();
+            ClickToolStripMenuItem("miFileClose", fMainWin);
         }
+
+        #region AboutDlg handler
 
         public void AboutDlg_Handler()
         {
             ClickButton("btnClose", "AboutDlg");
         }
 
-        public void TestFormNoDataHandler()
+        #endregion
+
+        #region FilePropertiesDlg handlers
+
+        public void FilePropertiesDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
-            var messageBoxTester = new MessageBoxTester("Message");
-            if (messageBoxTester != null)
-            {
-                messageBoxTester.ClickOk();
-            }
+            Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
+
+            ClickButton("btnCancel", form);
         }
+
+        public void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);
+
+            ClickButton("btnAccept", form);
+
+            GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        #endregion
+
+        #region OptionsDlg handlers
+
+        public void OptionsDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            //Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
+
+            ClickButton("btnCancel", form);
+        }
+
+        public void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnAccept", form);
+
+            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            //Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        #endregion
+
+        #region ScriptEditWin handlers
+
+        public void ScriptEditWin_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        #endregion
+
+        #region Service
+
+        private void Wait()
+        {
+            #if !CI_MODE
+            Application.DoEvents();
+            Thread.Sleep(1000);
+            #endif
+        }
+
+        #endregion
 
         /*[Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fNoteRecord, _frm.NoteRecord);
-        }
-
-        public void DlgHandler()
-        {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
         public void Test_EnterDataAndApply()
         {
             var txtNote = new TextBoxTester("txtNote");
