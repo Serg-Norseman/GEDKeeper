@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AddressEditDlgTests : NUnitFormTest
+    public class AddressEditDlgTests : CustomWindowTest
     {
-        public AddressEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
-
-        private AddressEditDlg _frm;
+        private AddressEditDlg fDialog;
 
         public override void Setup()
         {
@@ -52,7 +47,7 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
+            fAddress = new GEDCOMAddress(fContext.Tree, null, "", "");
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");
@@ -60,28 +55,23 @@ namespace GKTests.UITests
             fAddress.AddFaxNumber("test");
 
             //ExpectModal("AddressEditDlg", "DlgHandler");
-            _frm = new AddressEditDlg(fBase);
-            _frm.Address = fAddress;
-            //_frm.ShowDialog();
-            _frm.Show();
-        }
-
-        [Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fAddress, _frm.Address);
+            fDialog = new AddressEditDlg(fBase);
+            fDialog.Address = fAddress;
+            //fDialog.ShowDialog();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fAddress, fDialog.Address);
+
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtCountry = new TextBoxTester("txtCountry");
             txtCountry.Enter("sample text");
@@ -91,8 +81,7 @@ namespace GKTests.UITests
             txtState.Enter("sample text");
             Assert.AreEqual("sample text", txtState.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fAddress.AddressCountry);
             Assert.AreEqual("sample text", fAddress.AddressState);

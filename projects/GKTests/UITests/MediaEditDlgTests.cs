@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class MediaEditDlgTests : NUnitFormTest
+    public class MediaEditDlgTests : CustomWindowTest
     {
-        public MediaEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMMultimediaRecord fMultimediaRecord;
         private IBaseWindow fBase;
-
-        private MediaEditDlg _frm;
+        private MediaEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fMultimediaRecord = new GEDCOMMultimediaRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("MediaEditDlg", "DlgHandler");
-            _frm = new MediaEditDlg(fBase);
-            _frm.MediaRec = fMultimediaRecord;
+            fDialog = new MediaEditDlg(fBase);
+            fDialog.MediaRec = fMultimediaRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fMultimediaRecord, _frm.MediaRec);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fMultimediaRecord, fDialog.MediaRec);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");

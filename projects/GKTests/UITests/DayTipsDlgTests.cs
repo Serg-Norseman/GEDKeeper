@@ -24,7 +24,6 @@ using System;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -33,16 +32,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class DayTipsDlgTests : NUnitFormTest
+    public class DayTipsDlgTests : CustomWindowTest
     {
-        public DayTipsDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private DayTipsDlg _frm;
+        private DayTipsDlg fDialog;
 
         public override void Setup()
         {
@@ -52,25 +46,19 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("DayTipsDlg", "DlgHandler");
-            _frm = new DayTipsDlg();
-            //_frm.ShowDialog();
-            _frm.Show();
+            fDialog = new DayTipsDlg();
+            //fDialog.ShowDialog();
+            fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
+            ClickButton("btnClose", fDialog);
         }
 
         [Test]
-        public void Test_btnCancel()
-        {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
-        }
-
-        [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");

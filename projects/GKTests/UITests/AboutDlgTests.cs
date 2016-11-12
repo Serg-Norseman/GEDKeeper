@@ -22,7 +22,6 @@
 
 using System;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -31,27 +30,21 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AboutDlgTests : NUnitFormTest
+    public class AboutDlgTests : CustomWindowTest
     {
-        public AboutDlgTests()
-        {
-        }
-
-        private AboutDlg _frm;
+        private AboutDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
-
-            _frm = new AboutDlg();
-            _frm.Show();
+            fDialog = new AboutDlg();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_btnClose()
         {
-            var btnClose = new ButtonTester("btnClose");
-            btnClose.Click();
+            ClickButton("btnClose", fDialog);
         }
     }
 }

@@ -25,8 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
-using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -35,17 +33,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class OrganizerWinTests : NUnitFormTest
+    public class OrganizerWinTests : CustomWindowTest
     {
-        public OrganizerWinTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
-
-        private OrganizerWin _frm;
+        private OrganizerWin fDialog;
 
         public override void Setup()
         {
@@ -61,10 +54,10 @@ namespace GKTests.UITests
             fAddress.AddFaxNumber("test");
 
             //ExpectModal("OrganizerWin", "DlgHandler");
-            _frm = new OrganizerWin(fBase);
+            fDialog = new OrganizerWin(fBase);
             //_frm.Address = fAddress;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
@@ -82,7 +75,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtCountry = new TextBoxTester("txtCountry");
             txtCountry.Enter("sample text");

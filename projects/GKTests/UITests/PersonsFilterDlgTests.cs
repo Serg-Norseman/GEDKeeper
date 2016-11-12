@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PersonsFilterDlgTests : NUnitFormTest
+    public class PersonsFilterDlgTests : CustomWindowTest
     {
-        public PersonsFilterDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IListManager fListMan;
         private IBaseWindow fBase;
-
-        private PersonsFilterDlg _frm;
+        private PersonsFilterDlg fDialog;
 
         public override void Setup()
         {
@@ -55,16 +50,16 @@ namespace GKTests.UITests
             fListMan = new IndividualListMan(fContext.Tree);
 
             //ExpectModal("PersonsFilterDlg", "DlgHandler");
-            _frm = new PersonsFilterDlg(fBase, fListMan);
+            fDialog = new PersonsFilterDlg(fBase, fListMan);
             //_frm.IName = fNameEntry;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -82,7 +77,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

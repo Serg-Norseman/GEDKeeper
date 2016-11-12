@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class AssociationEditDlgTests : NUnitFormTest
+    public class AssociationEditDlgTests : CustomWindowTest
     {
-        public AssociationEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMAssociation fAssociation;
         private IBaseWindow fBase;
-
-        private AssociationEditDlg _frm;
+        private AssociationEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,42 +50,37 @@ namespace GKTests.UITests
             fAssociation = new GEDCOMAssociation(fContext.Tree, null, "", "");
 
             //ExpectModal("AssociationEditDlg", "DlgHandler");
-            _frm = new AssociationEditDlg(fBase);
-            _frm.Association = fAssociation;
+            fDialog = new AssociationEditDlg(fBase);
+            fDialog.Association = fAssociation;
             //_frm.ShowDialog();
-            _frm.Show();
-        }
-
-        [Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fAssociation, _frm.Association);
+            fDialog.Show();
         }
 
         [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fAssociation, fDialog.Association);
+
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");
             Assert.AreEqual("sample text", cmbRelation.Text);
 
+            // TODO: click and select Individual reference
             /*var txtAuthor = new TextBoxTester("txtAuthor");
             txtAuthor.Enter("sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fAssociation.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            Assert.AreEqual(null, fAssociation.Individual);
         }
     }
 }

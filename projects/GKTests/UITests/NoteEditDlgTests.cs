@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class NoteEditDlgTests : NUnitFormTest
+    public class NoteEditDlgTests : CustomWindowTest
     {
-        public NoteEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
-
-        private NoteEditDlg _frm;
+        private NoteEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("NoteEditDlg", "FormHandler");
-            _frm = new NoteEditDlg(fBase);
-            _frm.NoteRecord = fNoteRecord;
+            fDialog = new NoteEditDlg(fBase);
+            fDialog.NoteRecord = fNoteRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fNoteRecord, _frm.NoteRecord);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
         }
 
         public void FormHandler()
@@ -82,7 +77,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtNote = new TextBoxTester("txtNote");
             txtNote.Enter("sample text");

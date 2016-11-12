@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class CommunicationEditDlgTests : NUnitFormTest
+    public class CommunicationEditDlgTests : CustomWindowTest
     {
-        public CommunicationEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMCommunicationRecord fCommunicationRecord;
         private IBaseWindow fBase;
-
-        private CommunicationEditDlg _frm;
+        private CommunicationEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,35 +50,29 @@ namespace GKTests.UITests
             fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("CommunicationEditDlg", "DlgHandler");
-            _frm = new CommunicationEditDlg(fBase);
-            _frm.Communication = fCommunicationRecord;
-            //_frm.ShowDialog();
-            _frm.Show();
+            fDialog = new CommunicationEditDlg(fBase);
+            fDialog.Communication = fCommunicationRecord;
+            //fDialog.ShowDialog();
+            fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fCommunicationRecord, _frm.Communication);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
+
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
         }

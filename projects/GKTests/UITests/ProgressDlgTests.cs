@@ -24,7 +24,6 @@ using System;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -33,16 +32,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class ProgressDlgTests : NUnitFormTest
+    public class ProgressDlgTests : CustomWindowTest
     {
-        public ProgressDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private ProgressDlg _frm;
+        private ProgressDlg fDialog;
 
         public override void Setup()
         {
@@ -52,9 +46,9 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("ProgressDlg", "DlgHandler");
-            _frm = new ProgressDlg();
+            fDialog = new ProgressDlg();
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]

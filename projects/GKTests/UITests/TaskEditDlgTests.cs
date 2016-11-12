@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class TaskEditDlgTests : NUnitFormTest
+    public class TaskEditDlgTests : CustomWindowTest
     {
-        public TaskEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMTaskRecord fTaskRecord;
         private IBaseWindow fBase;
-
-        private TaskEditDlg _frm;
+        private TaskEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fTaskRecord = new GEDCOMTaskRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("TaskEditDlg", "DlgHandler");
-            _frm = new TaskEditDlg(fBase);
-            _frm.Task = fTaskRecord;
+            fDialog = new TaskEditDlg(fBase);
+            fDialog.Task = fTaskRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fTaskRecord, _frm.Task);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fTaskRecord, fDialog.Task);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");

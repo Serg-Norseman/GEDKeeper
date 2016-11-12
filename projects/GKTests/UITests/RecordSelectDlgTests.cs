@@ -33,16 +33,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RecordSelectDlgTests : NUnitFormTest
+    public class RecordSelectDlgTests : CustomWindowTest
     {
-        public RecordSelectDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private RecordSelectDlg _frm;
+        private RecordSelectDlg fDialog;
 
         public override void Setup()
         {
@@ -52,10 +47,10 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("RecordSelectDlg", "DlgHandler");
-            _frm = new RecordSelectDlg(fBase);
+            fDialog = new RecordSelectDlg(fBase);
             //_frm.IName = fNameEntry;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
@@ -72,7 +67,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

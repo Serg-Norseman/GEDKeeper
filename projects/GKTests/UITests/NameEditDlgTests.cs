@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class NameEditDlgTests : NUnitFormTest
+    public class NameEditDlgTests : CustomWindowTest
     {
-        public NameEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private NameEntry fNameEntry;
         private IBaseWindow fBase;
-
-        private NameEditDlg _frm;
+        private NameEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,16 +50,16 @@ namespace GKTests.UITests
             fNameEntry = new NameEntry();
 
             //ExpectModal("NameEditDlg", "DlgHandler");
-            _frm = new NameEditDlg(fBase);
-            _frm.IName = fNameEntry;
+            fDialog = new NameEditDlg(fBase);
+            fDialog.IName = fNameEntry;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -75,7 +70,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

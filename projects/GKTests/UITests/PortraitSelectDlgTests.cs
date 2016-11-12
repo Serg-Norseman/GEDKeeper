@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PortraitSelectDlgTests : NUnitFormTest
+    public class PortraitSelectDlgTests : CustomWindowTest
     {
-        public PortraitSelectDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMMultimediaLink fMultimediaLink;
         private IBaseWindow fBase;
-
-        private PortraitSelectDlg _frm;
+        private PortraitSelectDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fMultimediaLink = new GEDCOMMultimediaLink(fContext.Tree, null, "", "");
 
             //ExpectModal("PortraitSelectDlg", "DlgHandler");
-            _frm = new PortraitSelectDlg(fBase);
-            _frm.MultimediaLink = fMultimediaLink;
+            fDialog = new PortraitSelectDlg(fBase);
+            fDialog.MultimediaLink = fMultimediaLink;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fMultimediaLink, _frm.MultimediaLink);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fMultimediaLink, fDialog.MultimediaLink);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");

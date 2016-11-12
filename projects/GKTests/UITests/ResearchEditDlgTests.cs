@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class ResearchEditDlgTests : NUnitFormTest
+    public class ResearchEditDlgTests : CustomWindowTest
     {
-        public ResearchEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMResearchRecord fResearchRecord;
         private IBaseWindow fBase;
-
-        private ResearchEditDlg _frm;
+        private ResearchEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fResearchRecord = new GEDCOMResearchRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("ResearchEditDlg", "DlgHandler");
-            _frm = new ResearchEditDlg(fBase);
-            _frm.Research = fResearchRecord;
+            fDialog = new ResearchEditDlg(fBase);
+            fDialog.Research = fResearchRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fResearchRecord, _frm.Research);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fResearchRecord, fDialog.Research);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");

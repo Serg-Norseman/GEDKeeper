@@ -33,16 +33,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class OptionsDlgTests : NUnitFormTest
+    public class OptionsDlgTests : CustomWindowTest
     {
-        public OptionsDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private OptionsDlg _frm;
+        private OptionsDlg fDialog;
 
         public override void Setup()
         {
@@ -52,9 +47,9 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("NameEditDlg", "DlgHandler");
-            _frm = new OptionsDlg(fBase.Host);
+            fDialog = new OptionsDlg(fBase.Host);
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
@@ -71,7 +66,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

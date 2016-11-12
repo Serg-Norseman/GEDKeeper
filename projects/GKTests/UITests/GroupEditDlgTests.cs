@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class GroupEditDlgTests : NUnitFormTest
+    public class GroupEditDlgTests : CustomWindowTest
     {
-        public GroupEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMGroupRecord fGroupRecord;
         private IBaseWindow fBase;
-
-        private GroupEditDlg _frm;
+        private GroupEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fGroupRecord = new GEDCOMGroupRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("GroupEditDlg", "DlgHandler");
-            _frm = new GroupEditDlg(fBase);
-            _frm.Group = fGroupRecord;
+            fDialog = new GroupEditDlg(fBase);
+            fDialog.Group = fGroupRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fGroupRecord, _frm.Group);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fGroupRecord, fDialog.Group);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var edName = new TextBoxTester("edName");
             edName.Enter("sample text");

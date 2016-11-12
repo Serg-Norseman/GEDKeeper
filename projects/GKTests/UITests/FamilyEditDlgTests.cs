@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class FamilyEditDlgTests : NUnitFormTest
+    public class FamilyEditDlgTests : CustomWindowTest
     {
-        public FamilyEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMFamilyRecord fFamilyRecord;
         private IBaseWindow fBase;
-
-        private FamilyEditDlg _frm;
+        private FamilyEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fFamilyRecord = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("NoteEditDlg", "NoteEditDlgHandler");
-            _frm = new FamilyEditDlg(fBase);
-            _frm.Family = fFamilyRecord;
+            fDialog = new FamilyEditDlg(fBase);
+            fDialog.Family = fFamilyRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fFamilyRecord, _frm.Family);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fFamilyRecord, fDialog.Family);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var btnAccept = new ButtonTester("btnAccept");
             btnAccept.Click();

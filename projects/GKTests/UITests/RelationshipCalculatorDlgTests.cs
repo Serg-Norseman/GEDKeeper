@@ -24,7 +24,6 @@ using System;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -33,16 +32,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RelationshipCalculatorDlgTests : NUnitFormTest
+    public class RelationshipCalculatorDlgTests : CustomWindowTest
     {
-        public RelationshipCalculatorDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private RelationshipCalculatorDlg _frm;
+        private RelationshipCalculatorDlg fDialog;
 
         public override void Setup()
         {
@@ -52,9 +46,9 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("RelationshipCalculatorDlg", "DlgHandler");
-            _frm = new RelationshipCalculatorDlg(fBase);
+            fDialog = new RelationshipCalculatorDlg(fBase);
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
@@ -63,7 +57,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

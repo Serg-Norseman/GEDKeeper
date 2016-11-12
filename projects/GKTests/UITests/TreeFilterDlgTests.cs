@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class TreeFilterDlgTests : NUnitFormTest
+    public class TreeFilterDlgTests : CustomWindowTest
     {
-        public TreeFilterDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private ChartFilter fChartFilter;
         private IBaseWindow fBase;
-
-        private TreeFilterDlg _frm;
+        private TreeFilterDlg fDialog;
 
         public override void Setup()
         {
@@ -55,16 +50,16 @@ namespace GKTests.UITests
             fChartFilter = new ChartFilter();
 
             //ExpectModal("TreeFilterDlg", "DlgHandler");
-            _frm = new TreeFilterDlg(fBase);
-            _frm.Filter = fChartFilter;
+            fDialog = new TreeFilterDlg(fBase);
+            fDialog.Filter = fChartFilter;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -75,7 +70,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

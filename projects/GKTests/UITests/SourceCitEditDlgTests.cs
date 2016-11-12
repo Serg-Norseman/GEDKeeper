@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class SourceCitEditDlgTests : NUnitFormTest
+    public class SourceCitEditDlgTests : CustomWindowTest
     {
-        public SourceCitEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMSourceCitation fSourceCitation;
         private IBaseWindow fBase;
-
-        private SourceCitEditDlg _frm;
+        private SourceCitEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,16 +50,16 @@ namespace GKTests.UITests
             fSourceCitation = new GEDCOMSourceCitation(fContext.Tree, null, "", "");
 
             //ExpectModal("SourceCitEditDlg", "DlgHandler");
-            _frm = new SourceCitEditDlg(fBase);
-            _frm.SourceCitation = fSourceCitation;
+            fDialog = new SourceCitEditDlg(fBase);
+            fDialog.SourceCitation = fSourceCitation;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -75,7 +70,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

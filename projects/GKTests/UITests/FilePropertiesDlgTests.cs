@@ -34,16 +34,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class FilePropertiesDlgTests : NUnitFormTest
+    public class FilePropertiesDlgTests : CustomWindowTest
     {
-        public FilePropertiesDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private FilePropertiesDlg _frm;
+        private FilePropertiesDlg fDialog;
 
         public override void Setup()
         {
@@ -53,15 +48,15 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("FilePropertiesDlg", "DlgHandler");
-            _frm = new FilePropertiesDlg(fBase);
+            fDialog = new FilePropertiesDlg(fBase);
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -72,7 +67,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");

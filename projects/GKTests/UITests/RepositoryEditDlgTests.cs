@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class RepositoryEditDlgTests : NUnitFormTest
+    public class RepositoryEditDlgTests : CustomWindowTest
     {
-        public RepositoryEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMRepositoryRecord fRepositoryRecord;
         private IBaseWindow fBase;
-
-        private RepositoryEditDlg _frm;
+        private RepositoryEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fRepositoryRecord = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("RepositoryEditDlg", "DlgHandler");
-            _frm = new RepositoryEditDlg(fBase);
-            _frm.Repository = fRepositoryRecord;
+            fDialog = new RepositoryEditDlg(fBase);
+            fDialog.Repository = fRepositoryRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fRepositoryRecord, _frm.Repository);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
         }
 
         [Test]

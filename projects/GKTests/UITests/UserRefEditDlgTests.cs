@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class UserRefEditDlgTests : NUnitFormTest
+    public class UserRefEditDlgTests : CustomWindowTest
     {
-        public UserRefEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMUserReference fUserRef;
         private IBaseWindow fBase;
-
-        private UserRefEditDlg _frm;
+        private UserRefEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,16 +50,16 @@ namespace GKTests.UITests
             fUserRef = new GEDCOMUserReference(fContext.Tree, null, "", "");
 
             //ExpectModal("UserRefEditDlg", "DlgHandler");
-            _frm = new UserRefEditDlg(fBase);
-            _frm.UserRef = fUserRef;
+            fDialog = new UserRefEditDlg(fBase);
+            fDialog.UserRef = fUserRef;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
+            Assert.AreEqual(fBase, fDialog.Base);
         }
 
         [Test]
@@ -75,7 +70,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var cmbRef = new ComboBoxTester("cmbRef");
             cmbRef.Enter("sample text");

@@ -28,34 +28,19 @@ using NUnit.Framework;
 namespace GKTests.UITests
 {
     /// <summary>
-    /// 
+    /// Tests for the main application window. Dependent calls of other windows
+    /// and dialogs that are heavily dependent on the main window.
     /// </summary>
     [TestFixture]
     public class MainWinTests : CustomWindowTest
     {
-        public MainWinTests()
-        {
-        }
-
-        //private IBaseContext fContext;
-        //private GEDCOMNoteRecord fNoteRecord;
-        //private IBaseWindow fBase;
-
-        private MainWin _frm;
+        private MainWin fMainWin;
 
         public override void Setup()
         {
             base.Setup();
-
-            //fBase = new BaseWindowMock();
-            //fContext = fBase.Context;
-            //fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
-
-            //ExpectModal("NoteEditDlg", "DlgHandler");
-            _frm = new MainWin();
-            //_frm.NoteRecord = fNoteRecord;
-            //_frm.ShowDialog();
-            _frm.Show();
+            fMainWin = new MainWin();
+            fMainWin.Show();
         }
 
         [STAThread]
@@ -64,16 +49,16 @@ namespace GKTests.UITests
         {
             // call to AboutDlg, closing in AboutDlg_Handler
             ExpectModal("AboutDlg", "AboutDlg_Handler");
-            ClickToolStripMenuItem("miAbout", _frm);
+            ClickToolStripMenuItem("miAbout", fMainWin);
 
             // create an empty base
-            ClickToolStripButton("tbFileNew", _frm);
+            ClickToolStripButton("tbFileNew", fMainWin);
 
             // call to StatsWin (required the base)
-            ClickToolStripButton("tbStats", _frm);
+            ClickToolStripButton("tbStats", fMainWin);
 
             // call to SlideshowWin (required the base)
-            ClickToolStripMenuItem("miSlideshow", _frm);
+            ClickToolStripMenuItem("miSlideshow", fMainWin);
         }
 
         public void AboutDlg_Handler()
@@ -111,7 +96,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtNote = new TextBoxTester("txtNote");
             txtNote.Enter("sample text");

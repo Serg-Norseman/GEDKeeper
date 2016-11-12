@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class PersonEditDlgTests : NUnitFormTest
+    public class PersonEditDlgTests : CustomWindowTest
     {
-        public PersonEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMIndividualRecord fIndividualRecord;
         private IBaseWindow fBase;
-
-        private PersonEditDlg _frm;
+        private PersonEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fIndividualRecord = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("PersonEditDlg", "DlgHandler");
-            _frm = new PersonEditDlg(fBase);
-            _frm.Person = fIndividualRecord;
+            fDialog = new PersonEditDlg(fBase);
+            fDialog.Person = fIndividualRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fIndividualRecord, _frm.Person);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fIndividualRecord, fDialog.Person);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             //var txtSurname = new TextBoxTester("txtSurname");
             //txtSurname.Enter("sample text");

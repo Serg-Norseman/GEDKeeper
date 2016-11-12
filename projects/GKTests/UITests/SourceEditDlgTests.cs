@@ -34,17 +34,12 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class SourceEditDlgTests : NUnitFormTest
+    public class SourceEditDlgTests : CustomWindowTest
     {
-        public SourceEditDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private GEDCOMSourceRecord fSourceRecord;
         private IBaseWindow fBase;
-
-        private SourceEditDlg _frm;
+        private SourceEditDlg fDialog;
 
         public override void Setup()
         {
@@ -55,17 +50,17 @@ namespace GKTests.UITests
             fSourceRecord = new GEDCOMSourceRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("SourceEditDlg", "DlgHandler");
-            _frm = new SourceEditDlg(fBase);
-            _frm.SourceRecord = fSourceRecord;
+            fDialog = new SourceEditDlg(fBase);
+            fDialog.SourceRecord = fSourceRecord;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
         public void Test_Misc()
         {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fSourceRecord, _frm.SourceRecord);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
         }
 
         [Test]
@@ -76,7 +71,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");

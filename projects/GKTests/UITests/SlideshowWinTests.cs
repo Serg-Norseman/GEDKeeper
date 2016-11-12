@@ -21,12 +21,9 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
-using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -35,16 +32,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class SlideshowWinTests : NUnitFormTest
+    public class SlideshowWinTests : CustomWindowTest
     {
-        public SlideshowWinTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private SlideshowWin _frm;
+        private SlideshowWin fDialog;
 
         public override void Setup()
         {
@@ -54,10 +46,10 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("SlideshowWin", "FormHandler");
-            _frm = new SlideshowWin(fBase);
+            fDialog = new SlideshowWin(fBase);
             //_frm.Address = fAddress;
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         /*[Test]

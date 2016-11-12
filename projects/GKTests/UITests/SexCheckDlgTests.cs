@@ -33,16 +33,11 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class SexCheckDlgTests : NUnitFormTest
+    public class SexCheckDlgTests : CustomWindowTest
     {
-        public SexCheckDlgTests()
-        {
-        }
-
         private IBaseContext fContext;
         private IBaseWindow fBase;
-
-        private SexCheckDlg _frm;
+        private SexCheckDlg fDialog;
 
         public override void Setup()
         {
@@ -52,9 +47,9 @@ namespace GKTests.UITests
             fContext = fBase.Context;
 
             //ExpectModal("SexCheckDlg", "DlgHandler");
-            _frm = new SexCheckDlg();
+            fDialog = new SexCheckDlg();
             //_frm.ShowDialog();
-            _frm.Show();
+            fDialog.Show();
         }
 
         [Test]
@@ -71,7 +66,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_EnterTextAndAccept()
+        public void Test_EnterDataAndApply()
         {
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");
