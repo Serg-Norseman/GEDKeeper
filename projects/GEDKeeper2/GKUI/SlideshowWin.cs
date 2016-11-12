@@ -46,9 +46,9 @@ namespace GKUI
         {
             this.InitializeComponent();
 
-            this.tbStart.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
-            this.tbPrev.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLeft1");
-            this.tbNext.Image = (Image)MainWin.ResourceManager.GetObjectEx("iRight1");
+            this.tbStart.Image = global::GKResources.iStart;
+            this.tbPrev.Image = global::GKResources.iLeft1;
+            this.tbNext.Image = global::GKResources.iRight1;
 
             this.SuspendLayout();
             this.fImageCtl = new ImageBox();
@@ -121,8 +121,10 @@ namespace GKUI
 
         private void SetFileRef()
         {
+            if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
+
             GEDCOMFileReferenceWithTitle fileRef = this.fFileRefs[this.fCurrentIndex];
-            
+
             this.fCurrentText = fileRef.Title;
 
             switch (fileRef.MultimediaFormat)

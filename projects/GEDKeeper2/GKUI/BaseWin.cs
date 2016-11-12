@@ -169,8 +169,11 @@ namespace GKUI
             {
                 #if !__MonoCS__
                 this.fNavman.Dispose();
-                this.fTree.Dispose();
-                this.fTree = null;
+
+                if (this.fTree != null) {
+                    this.fTree.Dispose();
+                    this.fTree = null;
+                }
 
                 /*this.fLockedRecords.Dispose();*/
 

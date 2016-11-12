@@ -21,10 +21,7 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKTests.Mocks;
-using GKUI.Dialogs;
+using GKUI;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -34,41 +31,73 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class NoteEditDlgTests : NUnitFormTest
+    public class MainWinTests : CustomWindowTest
     {
-        public NoteEditDlgTests()
+        public MainWinTests()
         {
         }
 
-        private IBaseContext fContext;
-        private GEDCOMNoteRecord fNoteRecord;
-        private IBaseWindow fBase;
+        //private IBaseContext fContext;
+        //private GEDCOMNoteRecord fNoteRecord;
+        //private IBaseWindow fBase;
 
-        private NoteEditDlg _frm;
+        private MainWin _frm;
 
         public override void Setup()
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
+            //fBase = new BaseWindowMock();
+            //fContext = fBase.Context;
+            //fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("NoteEditDlg", "FormHandler");
-            _frm = new NoteEditDlg(fBase);
-            _frm.NoteRecord = fNoteRecord;
+            //ExpectModal("NoteEditDlg", "DlgHandler");
+            _frm = new MainWin();
+            //_frm.NoteRecord = fNoteRecord;
             //_frm.ShowDialog();
             _frm.Show();
         }
 
+        [STAThread]
         [Test]
+        public void Test_Common()
+        {
+            // call to AboutDlg, closing in AboutDlg_Handler
+            ExpectModal("AboutDlg", "AboutDlg_Handler");
+            ClickToolStripMenuItem("miAbout", _frm);
+
+            // create an empty base
+            ClickToolStripButton("tbFileNew", _frm);
+
+            // call to StatsWin (required the base)
+            ClickToolStripButton("tbStats", _frm);
+
+            // call to SlideshowWin (required the base)
+            ClickToolStripMenuItem("miSlideshow", _frm);
+        }
+
+        public void AboutDlg_Handler()
+        {
+            ClickButton("btnClose", "AboutDlg");
+        }
+
+        public void TestFormNoDataHandler()
+        {
+            var messageBoxTester = new MessageBoxTester("Message");
+            if (messageBoxTester != null)
+            {
+                messageBoxTester.ClickOk();
+            }
+        }
+
+        /*[Test]
         public void Test_Misc()
         {
             Assert.AreEqual(fBase, _frm.Base);
             Assert.AreEqual(fNoteRecord, _frm.NoteRecord);
         }
 
-        public void FormHandler()
+        public void DlgHandler()
         {
             //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
             //btnCancel.Click();
@@ -92,7 +121,7 @@ namespace GKTests.UITests
             btnAccept.Click();
 
             Assert.AreEqual("sample text\r\n", fNoteRecord.Note.Text);
-        }
+        }*/
 
         /*[Test]
         public void TestData()
