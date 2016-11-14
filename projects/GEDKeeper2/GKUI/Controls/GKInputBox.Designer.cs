@@ -4,7 +4,7 @@ namespace GKUI.Controls
 {
 	partial class GKInputBox
 	{
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox txtValue;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnAccept;
@@ -16,18 +16,18 @@ namespace GKUI.Controls
 
 		private void InitializeComponent()
 		{
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.txtValue = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// textBox1
+			// txtValue
 			// 
-			this.textBox1.Location = new System.Drawing.Point(12, 25);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(354, 20);
-			this.textBox1.TabIndex = 0;
+			this.txtValue.Location = new System.Drawing.Point(12, 25);
+			this.txtValue.Name = "txtValue";
+			this.txtValue.Size = new System.Drawing.Size(354, 20);
+			this.txtValue.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -69,7 +69,7 @@ namespace GKUI.Controls
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.txtValue);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "InputBox";
 			this.ShowInTaskbar = false;

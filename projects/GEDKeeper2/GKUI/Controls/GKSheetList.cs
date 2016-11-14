@@ -139,21 +139,25 @@ namespace GKUI.Controls
             this.fBtnLinkJump.Click += this.ButtonClick;
 
             this.fBtnDelete = new ToolStripButton();
+            this.fBtnDelete.Name = "btnDelete";
             this.fBtnDelete.Image = global::GKResources.iRecDelete;
             this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
             this.fBtnDelete.Click += this.ButtonClick;
 
             this.fBtnEdit = new ToolStripButton();
+            this.fBtnEdit.Name = "btnEdit";
             this.fBtnEdit.Image = global::GKResources.iRecEdit;
             this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
             this.fBtnEdit.Click += this.ButtonClick;
 
             this.fBtnAdd = new ToolStripButton();
+            this.fBtnAdd.Name = "btnAdd";
             this.fBtnAdd.Image = global::GKResources.iRecNew;
             this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
             this.fBtnAdd.Click += this.ButtonClick;
 
             this.fToolBar = new ToolStrip();
+            this.fToolBar.Name = "ToolBar";
             this.fToolBar.Dock = DockStyle.Right;
             //this.fToolBar.Appearance = ToolBarAppearance.Flat;
             this.fToolBar.Items.AddRange(new ToolStripItem[] {
@@ -210,6 +214,21 @@ namespace GKUI.Controls
                 this.fToolBar.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// The library NUnitForms has a bug in the class Finder<T>.
+        /// So we need unique names for hierarchical included components.
+        /// TODO: Need to fix this bug in NUnitForms.
+        /// </summary>
+        /// <param name="name"></param>
+        public void SetControlName(string name)
+        {
+            this.Name = name;
+            this.fToolBar.Name = name + "_ToolBar";
+            this.fBtnAdd.Name = this.fToolBar.Name + "_btnAdd";
+            this.fBtnEdit.Name = this.fToolBar.Name + "_btnEdit";
+            this.fBtnDelete.Name = this.fToolBar.Name + "_btnDelete";
         }
 
         private void SetButtons(EnumSet<SheetButton> value)

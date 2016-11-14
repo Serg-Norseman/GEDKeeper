@@ -35,8 +35,8 @@ namespace GKUI.Controls
 
         public string Value
         {
-            get { return this.textBox1.Text; }
-            set { this.textBox1.Text = value; }
+            get { return this.txtValue.Text; }
+            set { this.txtValue.Text = value; }
         }
 
         private GKInputBox(string caption, string prompt, string value, NumbersMode numbersMode, bool pwMode = false)
@@ -52,7 +52,7 @@ namespace GKUI.Controls
             this.fNumbersMode = numbersMode;
 
             if (pwMode) {
-                this.textBox1.PasswordChar = '*';
+                this.txtValue.PasswordChar = '*';
             }
 
             base.AcceptButton = this.btnAccept;

@@ -190,14 +190,17 @@ namespace GKUI.Dialogs
             this.fBase = aBase;
 
             this.fPhonesList = new GKSheetList(this.pagePhones);
+            this.fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
             this.fPhonesList.OnModify += this.ListModify;
             this.fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
             this.fMailsList = new GKSheetList(this.pageEmails);
+            this.fMailsList.SetControlName("fMailsList"); // for purpose of tests
             this.fMailsList.OnModify += this.ListModify;
             this.fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
             this.fWebsList = new GKSheetList(this.pageWebPages);
+            this.fWebsList.SetControlName("fWebsList"); // for purpose of tests
             this.fWebsList.OnModify += this.ListModify;
             this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 

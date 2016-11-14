@@ -23,10 +23,10 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
-
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKUI;
+using GKUI.Controls;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -74,6 +74,10 @@ namespace GKTests.UITests
             TestStubs.FillContext(fCurWin.Context);
             fCurWin.UpdateView();
 
+            // Stage 2.5: select first individual record in base
+            Wait();
+            fCurWin.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurWin).GetSelectedPerson().XRef);
 
             // Stage 3: call to FilePropertiesDlg
             Wait();
@@ -91,6 +95,78 @@ namespace GKTests.UITests
             Wait();
             ModalFormHandler = OptionsDlg_btnAccept_Handler; // OptionsDlg.Accept
             ClickToolStripMenuItem("miOptions", fMainWin);
+
+
+            // Stage 5: calls to the different Editors
+            Wait();
+            for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                fCurWin.ShowRecordsTab(rt);
+
+                Wait();
+                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ClickToolStripButton("tbRecordAdd", fMainWin);
+
+                Wait();
+                ModalFormHandler = EditorDlg_btnAccept_Handler;
+                ClickToolStripButton("tbRecordAdd", fMainWin);
+
+                Wait();
+                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ClickToolStripButton("tbRecordEdit", fMainWin);
+
+                Wait();
+                ModalFormHandler = EditorDlg_btnAccept_Handler;
+                ClickToolStripButton("tbRecordEdit", fMainWin);
+            }
+
+
+            // Stage 23: call to PersonsFilterDlg
+            Wait();
+            ModalFormHandler = PersonsFilterDlg_btnCancel_Handler; // PersonsFilterDlg.Cancel
+            ClickToolStripMenuItem("miFilter", fMainWin);
+            Wait();
+            ModalFormHandler = PersonsFilterDlg_btnAccept_Handler; // PersonsFilterDlg.Accept
+            ClickToolStripMenuItem("miFilter", fMainWin);
+
+
+            // Stage 24: call to TreeToolsWin
+            Wait();
+            ModalFormHandler = TreeToolsWin_Handler;
+            ClickToolStripMenuItem("miTreeTools", fMainWin);
+
+
+            // Stage 25: call to CircleChartWin (required the base, selected person)
+            Wait();
+            ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 25");
+            fMainWin.ActiveMdiChild.Close();
+
+            // Stage 26: call to CircleChartWin (required the base, selected person)
+            Wait();
+            ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 26");
+            fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 27: call to TreeChartWin (required the base, selected person)
+            Wait();
+            ClickToolStripMenuItem("miTreeAncestors", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 27");
+            fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 28: call to TreeChartWin (required the base, selected person)
+            Wait();
+            ClickToolStripMenuItem("miTreeDescendants", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 28");
+            fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 29: call to TreeChartWin (required the base, selected person)
+            Wait();
+            ClickToolStripMenuItem("miTreeBoth", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 29");
+            fMainWin.ActiveMdiChild.Close();
 
 
             // Stage 30: call to StatsWin (required the base)
@@ -113,6 +189,18 @@ namespace GKTests.UITests
             ClickToolStripMenuItem("miScripts", fMainWin);
             //Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 32");
             //fMainWin.ActiveMdiChild.Close();
+
+
+            // Stage 33: call to OrganizerWin
+            Wait();
+            ModalFormHandler = OrganizerWin_Handler;
+            ClickToolStripMenuItem("miOrganizer", fMainWin);
+
+
+            // Stage 34: call to RelationshipCalculatorDlg
+            Wait();
+            ModalFormHandler = RelationshipCalculatorDlg_Handler;
+            ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
 
 
             // Stage 50: close Base
@@ -175,11 +263,84 @@ namespace GKTests.UITests
 
         #endregion
 
+        #region PersonsFilterDlg handlers
+
+        public void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            //Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
+
+            ClickButton("btnCancel", form);
+        }
+
+        public void PersonsFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnAccept", form);
+
+            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            //Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        #endregion
+
         #region ScriptEditWin handlers
 
         public void ScriptEditWin_Handler(string name, IntPtr ptr, Form form)
         {
             form.Close();
+        }
+
+        #endregion
+
+        #region TreeToolsWin handlers
+
+        public void TreeToolsWin_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        #endregion
+
+        #region OrganizerWin handlers
+
+        public void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        #endregion
+
+        #region RelationshipCalculatorDlg handlers
+
+        public void RelationshipCalculatorDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        #endregion
+
+        #region EditorDlg handlers
+
+        public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            //Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
+
+            ClickButton("btnCancel", form);
+        }
+
+        public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnAccept", form);
+
+            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            //Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 
         #endregion

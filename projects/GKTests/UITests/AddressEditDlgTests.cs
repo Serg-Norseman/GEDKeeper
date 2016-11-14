@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
@@ -61,6 +62,11 @@ namespace GKTests.UITests
             fDialog.Show();
         }
 
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
         [Test]
         public void Test_btnCancel()
         {
@@ -81,10 +87,41 @@ namespace GKTests.UITests
             txtState.Enter("sample text");
             Assert.AreEqual("sample text", txtState.Text);
 
+            //var tabs = new TabControlTester("tabsAddrData");
+            //tabs.SelectTab(1);
+
+            // Test for adding phone
+            ModalFormHandler = InputBoxHandler;
+            var btnAddTester = new ToolStripButtonTester("fPhonesList_ToolBar_btnAdd", fDialog);
+            btnAddTester.Click();
+            Assert.AreEqual("sample text", fAddress.PhoneNumbers[1].StringValue);
+
+            // Test for adding mail
+            ModalFormHandler = InputBoxHandler;
+            btnAddTester = new ToolStripButtonTester("fMailsList_ToolBar_btnAdd", fDialog);
+            btnAddTester.Click();
+            Assert.AreEqual("sample text", fAddress.EmailAddresses[1].StringValue);
+
+            // Test for adding webpage
+            ModalFormHandler = InputBoxHandler;
+            btnAddTester = new ToolStripButtonTester("fWebsList_ToolBar_btnAdd", fDialog);
+            btnAddTester.Click();
+            Assert.AreEqual("sample text", fAddress.WebPages[1].StringValue);
+
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fAddress.AddressCountry);
             Assert.AreEqual("sample text", fAddress.AddressState);
+        }
+
+        public void InputBoxHandler(string name, IntPtr ptr, Form form)
+        {
+            var txtValue = new TextBoxTester("txtValue", form);
+            txtValue.Enter("sample text");
+            Assert.AreEqual("sample text", txtValue.Text);
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
         }
     }
 }
