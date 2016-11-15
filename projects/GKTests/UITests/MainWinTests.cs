@@ -120,6 +120,11 @@ namespace GKTests.UITests
             }
 
 
+            // Stage 22: call to QuickFind
+            Wait();
+            ClickToolStripMenuItem("miSearch", fMainWin);
+
+
             // Stage 23: call to PersonsFilterDlg
             Wait();
             ModalFormHandler = PersonsFilterDlg_btnCancel_Handler; // PersonsFilterDlg.Cancel

@@ -126,35 +126,35 @@ namespace GKUI.Controls
             this.fBtnMoveDown = new ToolStripButton();
             this.fBtnMoveDown.Image = global::GKResources.iDown;
             this.fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
-            this.fBtnMoveDown.Click += this.ButtonClick;
+            this.fBtnMoveDown.Click += this.ItemMoveDown;
 
             this.fBtnMoveUp = new ToolStripButton();
             this.fBtnMoveUp.Image = global::GKResources.iUp;
             this.fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
-            this.fBtnMoveUp.Click += this.ButtonClick;
+            this.fBtnMoveUp.Click += this.ItemMoveUp;
 
             this.fBtnLinkJump = new ToolStripButton();
             this.fBtnLinkJump.Image = global::GKResources.iToMan;
             this.fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
-            this.fBtnLinkJump.Click += this.ButtonClick;
+            this.fBtnLinkJump.Click += this.ItemJump;
 
             this.fBtnDelete = new ToolStripButton();
             this.fBtnDelete.Name = "btnDelete";
             this.fBtnDelete.Image = global::GKResources.iRecDelete;
             this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
-            this.fBtnDelete.Click += this.ButtonClick;
+            this.fBtnDelete.Click += this.ItemDelete;
 
             this.fBtnEdit = new ToolStripButton();
             this.fBtnEdit.Name = "btnEdit";
             this.fBtnEdit.Image = global::GKResources.iRecEdit;
             this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
-            this.fBtnEdit.Click += this.ButtonClick;
+            this.fBtnEdit.Click += this.ItemEdit;
 
             this.fBtnAdd = new ToolStripButton();
             this.fBtnAdd.Name = "btnAdd";
             this.fBtnAdd.Image = global::GKResources.iRecNew;
             this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
-            this.fBtnAdd.Click += this.ButtonClick;
+            this.fBtnAdd.Click += this.ItemAdd;
 
             this.fToolBar = new ToolStrip();
             this.fToolBar.Name = "ToolBar";
@@ -171,7 +171,6 @@ namespace GKUI.Controls
             this.fToolBar.ImageScalingSize = new System.Drawing.Size(24, 20);
             //this.fToolBar.AutoSize = true;
             //this.fToolBar.ShowToolTips = true;
-            //this.fToolBar.ButtonClick += this.ButtonClick;
 
             this.fList = new GKListView();
             this.fList.Dock = DockStyle.Fill;
@@ -255,37 +254,9 @@ namespace GKUI.Controls
             this.fList.BackColor = (this.fReadOnly) ? SystemColors.Control : SystemColors.Window;
         }
 
-        private void ButtonClick(object sender, EventArgs e)
-        {
-            if (sender == this.fBtnAdd)
-            {
-                this.ItemAdd();
-            }
-            else if (sender == this.fBtnEdit)
-            {
-                this.ItemEdit();
-            }
-            else if (sender == this.fBtnDelete)
-            {
-                this.ItemDelete();
-            }
-            else if (sender == this.fBtnLinkJump)
-            {
-                this.ItemJump();
-            }
-            else if (sender == this.fBtnMoveUp)
-            {
-                this.ItemMoveUp();
-            }
-            else if (sender == this.fBtnMoveDown)
-            {
-                this.ItemMoveDown();
-            }
-        }
-
         private void List_DoubleClick(object sender, EventArgs e)
         {
-            this.ItemEdit();
+            this.ItemEdit(sender, e);
         }
 
         private void List_KeyDown(object sender, KeyEventArgs e)
@@ -294,13 +265,13 @@ namespace GKUI.Controls
             {
                 switch (e.KeyCode) {
                     case Keys.I:
-                        this.ItemAdd();
+                        this.ItemAdd(sender, e);
                         break;
                     case Keys.D:
-                        this.ItemDelete();
+                        this.ItemDelete(sender, e);
                         break;
                     case Keys.Return:
-                        this.ItemEdit();
+                        this.ItemEdit(sender, e);
                         break;
                 }
             }
@@ -348,7 +319,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemAdd()
+        private void ItemAdd(object sender, EventArgs e)
         {
             if (!this.fReadOnly)
             {
@@ -358,7 +329,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemEdit()
+        private void ItemEdit(object sender, EventArgs e)
         {
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
@@ -371,7 +342,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemDelete()
+        private void ItemDelete(object sender, EventArgs e)
         {
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
@@ -383,7 +354,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemJump()
+        private void ItemJump(object sender, EventArgs e)
         {
             object itemData = this.GetSelectedData();
             if (itemData != null)
@@ -395,7 +366,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemMoveUp()
+        private void ItemMoveUp(object sender, EventArgs e)
         {
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
@@ -406,7 +377,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void ItemMoveDown()
+        private void ItemMoveDown(object sender, EventArgs e)
         {
             object itemData = this.GetSelectedData();
             if (!this.fReadOnly && itemData != null)
@@ -463,6 +434,11 @@ namespace GKUI.Controls
         public void SwitchSorter()
         {
             this.fList.SwitchSorter();
+        }
+
+        public void SelectItem(int index)
+        {
+            this.fList.SelectItem(index);
         }
     }
 }
