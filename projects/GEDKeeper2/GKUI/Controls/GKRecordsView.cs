@@ -454,8 +454,8 @@ namespace GKUI.Controls
 
         public void DeleteRecord(GEDCOMRecord record)
         {
-            // crash protection: when you delete records from the diagrams, 
-            // between the actual deleting a record and updating the list 
+            // crash protection: when you delete records from the diagrams,
+            // between the actual deleting a record and updating the list
             // may take a few requests to update the list's items which does not already exist
             int idx = this.IndexOfRecord(record);
             if (idx >= 0) {
@@ -490,7 +490,7 @@ namespace GKUI.Controls
                 GEDCOMRecord result = null;
 
                 if (!this.VirtualMode) {
-                    GKListItem item = base.SelectedItem();
+                    GKListItem item = base.GetSelectedItem();
                     if (item != null) result = (item.Data as GEDCOMRecord);
                 } else {
                     if (base.SelectedIndices.Count > 0) {

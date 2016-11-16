@@ -156,15 +156,6 @@ namespace GKUI.Controls
             base.ColumnClick += this.LVColumnClick;
         }
 
-        protected override void OnNotifyMessage(Message m)
-        {
-            ////Filter out the WM_ERASEBKGND message
-            //if(m.Msg != 0x14)
-            //{
-            //    base.OnNotifyMessage(m);
-            //}
-        }
-
         public void UnsetSorter()
         {
             base.ColumnClick -= this.LVColumnClick;
@@ -224,7 +215,7 @@ namespace GKUI.Controls
             return result;
         }
 
-        public GKListItem SelectedItem()
+        public GKListItem GetSelectedItem()
         {
             GKListItem result;
 

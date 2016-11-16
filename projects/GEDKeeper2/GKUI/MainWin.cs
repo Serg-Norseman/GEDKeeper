@@ -710,7 +710,7 @@ namespace GKUI
             }
 
             result = new BaseWin();
-            result.Show();
+            ShowMDI(result as Form);
 
             if (fileName != "" && File.Exists(fileName)) {
                 result.FileLoad(fileName);
@@ -1018,9 +1018,8 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            SlideshowWin dlg = new SlideshowWin(curBase);
-            dlg.MdiParent = this;
-            dlg.Show();
+            SlideshowWin win = new SlideshowWin(curBase);
+            ShowMDI(win);
         }
 
         private void miStatsClick(object sender, EventArgs e)
@@ -1030,8 +1029,8 @@ namespace GKUI
 
             List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 
-            StatisticsWin fmStats = new StatisticsWin(curBase, selectedRecords);
-            fmStats.Show();
+            StatisticsWin win = new StatisticsWin(curBase, selectedRecords);
+            ShowMDI(win);
         }
 
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)

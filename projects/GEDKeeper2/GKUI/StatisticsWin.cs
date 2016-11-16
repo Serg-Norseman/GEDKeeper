@@ -56,7 +56,6 @@ namespace GKUI
         public StatisticsWin(IBaseWindow aBase, List<GEDCOMRecord> selectedRecords)
         {
             this.InitializeComponent();
-            base.MdiParent = MainWin.Instance;
 
             this.tbExcelExport.Image = (System.Drawing.Image)MainWin.ResourceManager.GetObjectEx("iExcel");
 

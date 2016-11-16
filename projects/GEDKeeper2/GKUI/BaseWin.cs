@@ -138,7 +138,6 @@ namespace GKUI
         public BaseWin()
         {
             this.InitializeComponent();
-            base.MdiParent = MainWin.Instance;
 
             this.fLockedRecords = new List<GEDCOMRecord>();
 

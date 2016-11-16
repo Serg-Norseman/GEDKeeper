@@ -166,7 +166,7 @@ namespace GKUI
             this.btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
         }
 
-        private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.tabsTools.SelectedTab == this.pageFamilyGroups)
             {
@@ -276,7 +276,7 @@ namespace GKUI
             }
         }
 
-        private void RadioButton8_Click(object sender, EventArgs e)
+        private void radMergeMode_Click(object sender, EventArgs e)
         {
             if (this.radPersons.Checked) this.fRMMode = GEDCOMRecordType.rtIndividual;
             if (this.radNotes.Checked) this.fRMMode = GEDCOMRecordType.rtNote;
@@ -372,7 +372,7 @@ namespace GKUI
             }
         }
 
-        private void TreeView1_DoubleClick(object sender, EventArgs e)
+        private void tvGroups_DoubleClick(object sender, EventArgs e)
         {
             GKTreeNode node = this.tvGroups.SelectedNode as GKTreeNode;
             if (node == null) return;
@@ -399,7 +399,7 @@ namespace GKUI
         {
             this.ListChecks = GKUtils.CreateListView(this.Panel1);
             this.ListChecks.CheckBoxes = true;
-            this.ListChecks.DoubleClick += this.ListChecksDblClick;
+            this.ListChecks.DoubleClick += this.ListChecks_DblClick;
             this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
@@ -442,9 +442,9 @@ namespace GKUI
             }
         }
 
-        private void ListChecksDblClick(object sender, EventArgs e)
+        private void ListChecks_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListChecks.SelectedItem();
+            GKListItem item = this.ListChecks.GetSelectedItem();
             if (item == null) return;
 
             GEDCOMIndividualRecord iRec = ((TreeTools.CheckObj)item.Data).Rec as GEDCOMIndividualRecord;
@@ -461,7 +461,7 @@ namespace GKUI
         private void PreparePlacesList()
         {
             this.ListPlaces = GKUtils.CreateListView(this.Panel4);
-            this.ListPlaces.DoubleClick += this.ListPlacesDblClick;
+            this.ListPlaces.DoubleClick += this.ListPlaces_DblClick;
             this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
@@ -492,12 +492,12 @@ namespace GKUI
 
         private void btnIntoList_Click(object sender, EventArgs e)
         {
-            this.ListPlacesDblClick(null, null);
+            this.ListPlaces_DblClick(null, null);
         }
 
-        private void ListPlacesDblClick(object sender, EventArgs e)
+        private void ListPlaces_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListPlaces.SelectedItem();
+            GKListItem item = this.ListPlaces.GetSelectedItem();
             if (item == null) return;
             
             PlaceObj pObj = item.Data as PlaceObj;
@@ -652,16 +652,16 @@ namespace GKUI
         private void PreparePatriarchsList()
         {
             this.ListPatriarchs = GKUtils.CreateListView(this.Panel3);
-            this.ListPatriarchs.DoubleClick += this.ListPatriarchsDblClick;
+            this.ListPatriarchs.DoubleClick += this.ListPatriarchs_DblClick;
             this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
             this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
             this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
             this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
         }
 
-        private void ListPatriarchsDblClick(object sender, EventArgs e)
+        private void ListPatriarchs_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListPatriarchs.SelectedItem();
+            GKListItem item = this.ListPatriarchs.GetSelectedItem();
             if (item == null) return;
 
             GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
@@ -703,7 +703,7 @@ namespace GKUI
         {
             try
             {
-                GKListItem item = this.ListPatriarchs.SelectedItem();
+                GKListItem item = this.ListPatriarchs.GetSelectedItem();
                 if (item == null) return;
 
                 GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;

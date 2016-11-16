@@ -277,19 +277,10 @@ namespace GKUI.Controls
             }
         }
 
-        /*private void SheetShow(object sender, EventArgs e)
-		{
-			this.fList.Focus();
-		}*/
-
         public object GetSelectedData()
         {
-            object result = null;
-            if (this.fList.SelectedItem() != null)
-            {
-                result = this.fList.SelectedItem().Data;
-            }
-            return result;
+            GKListItem item = this.fList.GetSelectedItem();
+            return (item != null) ? item.Data : null;
         }
 
         private void RestoreSelected(object itemData)

@@ -26,7 +26,8 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKUI;
-using GKUI.Controls;
+using GKUI.Charts;
+using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -40,7 +41,7 @@ namespace GKTests.UITests
     public class MainWinTests : CustomWindowTest
     {
         private MainWin fMainWin;
-        private IBaseWindow fCurWin;
+        private IBaseWindow fCurBase;
 
         public override void Setup()
         {
@@ -67,17 +68,17 @@ namespace GKTests.UITests
             ClickToolStripButton("tbFileNew", fMainWin);
 
             // Stage 2.3: GetCurrentFile()
-            fCurWin = fMainWin.GetCurrentFile();
-            Assert.IsNotNull(fCurWin, "Stage 2.3");
+            fCurBase = fMainWin.GetCurrentFile();
+            Assert.IsNotNull(fCurBase, "Stage 2.3");
 
             // Stage 2.4: fill context for sample data
-            TestStubs.FillContext(fCurWin.Context);
-            fCurWin.UpdateView();
+            TestStubs.FillContext(fCurBase.Context);
+            fCurBase.UpdateView();
 
             // Stage 2.5: select first individual record in base
             Wait();
-            fCurWin.SelectRecordByXRef("I1");
-            Assert.AreEqual("I1", ((BaseWin) fCurWin).GetSelectedPerson().XRef);
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef);
 
             // Stage 3: call to FilePropertiesDlg
             Wait();
@@ -100,7 +101,7 @@ namespace GKTests.UITests
             // Stage 5: calls to the different Editors
             Wait();
             for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                fCurWin.ShowRecordsTab(rt);
+                fCurBase.ShowRecordsTab(rt);
 
                 Wait();
                 ModalFormHandler = EditorDlg_btnCancel_Handler;
@@ -144,40 +145,41 @@ namespace GKTests.UITests
             Wait();
             ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 25");
-            fMainWin.ActiveMdiChild.Close();
+            CircleChartWin_Tests(fMainWin.ActiveMdiChild as CircleChartWin);
 
             // Stage 26: call to CircleChartWin (required the base, selected person)
             Wait();
             ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 26");
-            fMainWin.ActiveMdiChild.Close();
+            CircleChartWin_Tests(fMainWin.ActiveMdiChild as CircleChartWin);
 
 
             // Stage 27: call to TreeChartWin (required the base, selected person)
             Wait();
             ClickToolStripMenuItem("miTreeAncestors", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 27");
-            fMainWin.ActiveMdiChild.Close();
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckAncestors);
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
             Wait();
             ClickToolStripMenuItem("miTreeDescendants", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 28");
-            fMainWin.ActiveMdiChild.Close();
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckDescendants);
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
             Wait();
             ClickToolStripMenuItem("miTreeBoth", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 29");
-            fMainWin.ActiveMdiChild.Close();
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckBoth);
 
 
             // Stage 30: call to StatsWin (required the base)
             Wait();
             ClickToolStripButton("tbStats", fMainWin);
             Assert.IsTrue(fMainWin.ActiveMdiChild is StatisticsWin, "Stage 30");
+            StatsWin_Tests(fMainWin.ActiveMdiChild as StatisticsWin);
             fMainWin.ActiveMdiChild.Close();
 
 
@@ -193,7 +195,6 @@ namespace GKTests.UITests
             ModalFormHandler = ScriptEditWin_Handler;
             ClickToolStripMenuItem("miScripts", fMainWin);
             //Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 32");
-            //fMainWin.ActiveMdiChild.Close();
 
 
             // Stage 33: call to OrganizerWin
@@ -208,9 +209,23 @@ namespace GKTests.UITests
             ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
 
 
+            // Stage 35: call to MapsViewerWin (required the base)
+            Wait();
+            ClickToolStripMenuItem("miMap", fMainWin);
+            Assert.IsTrue(fMainWin.ActiveMdiChild is MapsViewerWin, "Stage 35");
+            fMainWin.ActiveMdiChild.Close();
+
+
             // Stage 50: close Base
             Wait();
             ClickToolStripMenuItem("miFileClose", fMainWin);
+
+
+            // LoadLanguage
+
+            // Stage 51: exit
+            Wait();
+            ClickToolStripMenuItem("miExit", fMainWin);
         }
 
         #region AboutDlg handler
@@ -226,7 +241,7 @@ namespace GKTests.UITests
 
         public void FilePropertiesDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
-            Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
+            Assert.AreEqual(fCurBase, ((IBaseEditor)form).Base);
 
             ClickButton("btnCancel", form);
         }
@@ -239,7 +254,7 @@ namespace GKTests.UITests
 
             ClickButton("btnAccept", form);
 
-            GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            GEDCOMSubmitterRecord submitter = fCurBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 
@@ -304,6 +319,13 @@ namespace GKTests.UITests
 
         public void TreeToolsWin_Handler(string name, IntPtr ptr, Form form)
         {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            for (int i = 0; i < tabs.Properties.TabCount; i++) {
+                Wait();
+                tabs.SelectTab(i);
+            }
+
             form.Close();
         }
 
@@ -342,25 +364,76 @@ namespace GKTests.UITests
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);*/
 
+            if (form is FamilyEditDlg) {
+                FamilyEditDlg_Handler(form as FamilyEditDlg);
+            }
+
             ClickButton("btnAccept", form);
 
             //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
             //Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 
+        private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
+        {
+            var tabs = new TabControlTester("tabsFamilyData", dlg);
+
+            // notes
+            Wait();
+            tabs.SelectTab(2);
+
+            // media
+            Wait();
+            tabs.SelectTab(3);
+
+            // sources
+            Wait();
+            tabs.SelectTab(4);
+        }
+
         #endregion
+
+        private void CircleChartWin_Tests(CircleChartWin frm)
+        {
+            Assert.AreEqual(fCurBase, frm.Base);
+            //Assert.AreEqual(kind, frm.ChartKind);
+            frm.UpdateView();
+            frm.Close();
+        }
+
+        private void TreeChartWin_Tests(TreeChartWin frm, TreeChartBox.ChartKind kind)
+        {
+            Assert.AreEqual(fCurBase, frm.Base);
+            Assert.AreEqual(kind, frm.ChartKind);
+            frm.UpdateView();
+            frm.Close();
+        }
+
+        private void StatsWin_Tests(StatisticsWin frm)
+        {
+            var cbType = new ToolStripComboBoxTester("cbType", frm);
+
+            for (int i = 0; i < cbType.Properties.Items.Count; i++) {
+                Wait();
+                cbType.Select(i);
+            }
+
+            //frm.Close();
+        }
 
         #region Service
 
         private void Wait()
         {
             #if !CI_MODE
-            Application.DoEvents();
-            Thread.Sleep(1000);
+            //Application.DoEvents();
+            //Thread.Sleep(1000);
             #endif
         }
 
         #endregion
+
+        #region Useful stuff
 
         /*[Test]
         public void Test_EnterDataAndApply()
@@ -421,6 +494,8 @@ namespace GKTests.UITests
                 messageBoxTester.ClickOk();
             }
         }*/
+
+        #endregion
     }
 }
 

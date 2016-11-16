@@ -178,7 +178,7 @@ namespace GKUI
 		    this.tabsTools.SelectedIndex = 0;
 		    this.tabsTools.Size = new System.Drawing.Size(1010, 545);
 		    this.tabsTools.TabIndex = 0;
-		    this.tabsTools.SelectedIndexChanged += new System.EventHandler(this.PageControl_SelectedIndexChanged);
+		    this.tabsTools.SelectedIndexChanged += new System.EventHandler(this.tabsTools_SelectedIndexChanged);
 		    // 
 		    // pageTreeCompare
 		    // 
@@ -562,7 +562,7 @@ namespace GKUI
 		    this.radSources.Size = new System.Drawing.Size(269, 20);
 		    this.radSources.TabIndex = 3;
 		    this.radSources.Text = "radSources";
-		    this.radSources.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radSources.Click += new System.EventHandler(this.radMergeMode_Click);
 		    // 
 		    // radFamilies
 		    // 
@@ -571,7 +571,7 @@ namespace GKUI
 		    this.radFamilies.Size = new System.Drawing.Size(269, 19);
 		    this.radFamilies.TabIndex = 2;
 		    this.radFamilies.Text = "radFamilies";
-		    this.radFamilies.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radFamilies.Click += new System.EventHandler(this.radMergeMode_Click);
 		    // 
 		    // radNotes
 		    // 
@@ -580,7 +580,7 @@ namespace GKUI
 		    this.radNotes.Size = new System.Drawing.Size(269, 19);
 		    this.radNotes.TabIndex = 1;
 		    this.radNotes.Text = "radNotes";
-		    this.radNotes.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radNotes.Click += new System.EventHandler(this.radMergeMode_Click);
 		    // 
 		    // radPersons
 		    // 
@@ -591,7 +591,7 @@ namespace GKUI
 		    this.radPersons.TabIndex = 0;
 		    this.radPersons.TabStop = true;
 		    this.radPersons.Text = "radPersons";
-		    this.radPersons.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radPersons.Click += new System.EventHandler(this.radMergeMode_Click);
 		    // 
 		    // grpSearchPersons
 		    // 
@@ -688,7 +688,7 @@ namespace GKUI
 		    this.tvGroups.Name = "TreeView1";
 		    this.tvGroups.Size = new System.Drawing.Size(976, 437);
 		    this.tvGroups.TabIndex = 0;
-		    this.tvGroups.DoubleClick += new System.EventHandler(this.TreeView1_DoubleClick);
+		    this.tvGroups.DoubleClick += new System.EventHandler(this.tvGroups_DoubleClick);
 		    // 
 		    // pageTreeCheck
 		    // 
