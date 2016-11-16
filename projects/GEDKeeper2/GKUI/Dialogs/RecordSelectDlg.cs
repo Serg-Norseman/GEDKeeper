@@ -103,6 +103,7 @@ namespace GKUI.Dialogs
             }
 
             this.fListRecords = GKUtils.CreateRecordsView(this.panList, this.fBase.Tree, this.fMode);
+            this.fListRecords.Name = "fListRecords";
             this.fListRecords.ListMan.Filter.Clear();
             this.fListRecords.ListMan.QuickFilter = this.fFilter;
 

@@ -98,8 +98,11 @@ namespace GKUI.Dialogs
             this.fChildsList = this.CreateChildsSheet(this.pageChilds);
             this.fEventsList = new GKEventsSheet(this, this.pageEvents, false, this.fLocalUndoman);
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fNotesList.SetControlName("fNotesList"); // for purpose of tests
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fMediaList.SetControlName("fMediaList"); // for purpose of tests
             this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
+            this.fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             GKResourceManager resourceManager = MainWin.ResourceManager;
             if (resourceManager != null) {

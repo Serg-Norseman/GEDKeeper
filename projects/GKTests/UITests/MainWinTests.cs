@@ -25,6 +25,7 @@ using System.Threading;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests.Service;
 using GKUI;
 using GKUI.Charts;
 using GKUI.Dialogs;
@@ -351,6 +352,8 @@ namespace GKTests.UITests
 
         #region EditorDlg handlers
 
+        private static bool FamilyEditDlg_FirstCall = true;
+
         public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
             //Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
@@ -364,8 +367,9 @@ namespace GKTests.UITests
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);*/
 
-            if (form is FamilyEditDlg) {
+            if (FamilyEditDlg_FirstCall && form is FamilyEditDlg) {
                 FamilyEditDlg_Handler(form as FamilyEditDlg);
+                FamilyEditDlg_FirstCall = false;
             }
 
             ClickButton("btnAccept", form);
@@ -376,19 +380,54 @@ namespace GKTests.UITests
 
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
         {
+            GEDCOMFamilyRecord familyRecord = dlg.Family;
+
             var tabs = new TabControlTester("tabsFamilyData", dlg);
 
             // notes
+            Assert.AreEqual(0, familyRecord.Notes.Count);
             Wait();
             tabs.SelectTab(2);
+            ModalFormHandler = RecordSelectDlg_Select_Handler;
+            var btnTester = new ToolStripButtonTester("fNotesList_ToolBar_btnAdd", dlg);
+            btnTester.Click();
+            Assert.AreEqual(1, familyRecord.Notes.Count);
 
             // media
+            Assert.AreEqual(0, familyRecord.MultimediaLinks.Count);
             Wait();
             tabs.SelectTab(3);
+            ModalFormHandler = RecordSelectDlg_Select_Handler;
+            btnTester = new ToolStripButtonTester("fMediaList_ToolBar_btnAdd", dlg);
+            btnTester.Click();
+            Assert.AreEqual(1, familyRecord.MultimediaLinks.Count);
 
             // sources
+            Assert.AreEqual(0, familyRecord.SourceCitations.Count);
             Wait();
             tabs.SelectTab(4);
+            ModalFormHandler = SourceCitEditDlg_Handler;
+            btnTester = new ToolStripButtonTester("fSourcesList_ToolBar_btnAdd", dlg);
+            btnTester.Click();
+            Assert.AreEqual(1, familyRecord.SourceCitations.Count);
+        }
+
+        public void RecordSelectDlg_Select_Handler(string name, IntPtr ptr, Form form)
+        {
+            var listRecords = new GKRecordsViewTester("fListRecords", form);
+            listRecords.Properties.SelectItem(0);
+
+            var tsBtn = new ButtonTester("btnSelect", form);
+            tsBtn.FireEvent("Click");
+        }
+
+        public void SourceCitEditDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var cmbSource = new ComboBoxTester("cmbSource", form);
+            cmbSource.Properties.SelectedIndex = 0;
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
         }
 
         #endregion
@@ -420,18 +459,6 @@ namespace GKTests.UITests
 
             //frm.Close();
         }
-
-        #region Service
-
-        private void Wait()
-        {
-            #if !CI_MODE
-            //Application.DoEvents();
-            //Thread.Sleep(1000);
-            #endif
-        }
-
-        #endregion
 
         #region Useful stuff
 

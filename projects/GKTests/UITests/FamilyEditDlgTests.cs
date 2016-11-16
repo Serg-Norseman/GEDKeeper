@@ -57,15 +57,12 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_btnCancel()
         {
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fFamilyRecord, fDialog.Family);
-        }
 
-        [Test]
-        public void Test_btnCancel()
-        {
+
             var btnCancel = new ButtonTester("btnCancel");
             btnCancel.Click();
         }

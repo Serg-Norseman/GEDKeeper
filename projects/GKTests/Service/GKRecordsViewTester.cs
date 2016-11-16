@@ -18,52 +18,43 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Threading;
 using System.Windows.Forms;
+using GKUI.Controls;
 using NUnit.Extensions.Forms;
 
-namespace GKTests.UITests
+namespace GKTests.Service
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CustomWindowTest : NUnitFormTest
+    public class GKRecordsViewTester : ControlTester<GKRecordsView, GKRecordsViewTester>
     {
-        public static void ClickButton(string name, Form form)
+        public GKRecordsViewTester()
         {
-            var tsBtn = new ButtonTester(name, form);
-            tsBtn.Click();
         }
 
-        public static void ClickButton(string name, string form)
+        public GKRecordsViewTester(string name, Form form) : base(name, form)
         {
-            var tsBtn = new ButtonTester(name, form);
-            tsBtn.Click();
         }
 
-        public static void ClickToolStripButton(string name, Form form)
+        public GKRecordsViewTester(string name, string formName) : base(name, formName)
         {
-            var tsBtn = new ToolStripButtonTester(name, form);
-            tsBtn.Click();
         }
 
-        public static void ClickToolStripMenuItem(string name, Form form)
+        public GKRecordsViewTester(string name) : base(name)
         {
-            var tsMenuItem = new ToolStripMenuItemTester(name, form);
-            tsMenuItem.Click();
         }
 
-        #region Service
-
-        protected static void Wait()
+        /*public GKRecordsViewTester(GKSheetListTester tester, int index) : base(tester, index)
         {
-            #if !CI_MODE
-            Application.DoEvents();
-            Thread.Sleep(1000);
-            #endif
-        }
+        }*/
 
-        #endregion
+        public new GKRecordsView Properties
+        {
+            get
+            {
+                return (GKRecordsView) base.TheObject;
+            }
+        }
     }
 }
