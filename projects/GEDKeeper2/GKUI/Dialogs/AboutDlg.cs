@@ -20,8 +20,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 
 namespace GKUI.Dialogs
@@ -50,7 +52,7 @@ namespace GKUI.Dialogs
         public static void ShowAbout()
         {
             string copyright, version;
-            SysUtils.GetAssemblyVersion(out copyright, out version);
+            SysUtils.GetAssemblyVersion(Assembly.GetExecutingAssembly(), out copyright, out version);
 
             using (AboutDlg dlg = new AboutDlg())
             {

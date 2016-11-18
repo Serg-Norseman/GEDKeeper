@@ -24,6 +24,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests.Mocks;
@@ -879,35 +880,52 @@ namespace GKTests
         }
 
         [Test]
-        public void SysInfo_Tests()
+        public void SysUtils_Tests()
         {
             #if __MonoCS__
-            Assert.IsTrue(SysInfo.IsUnix());
-            Assert.AreEqual(PlatformID.Unix, SysInfo.GetPlatformID());
+            Assert.IsTrue(SysUtils.IsUnix());
+            Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
             #else
-            Assert.IsFalse(SysInfo.IsUnix());
-            Assert.AreEqual(PlatformID.Win32NT, SysInfo.GetPlatformID());
-            Assert.AreEqual(DesktopType.Windows, SysInfo.GetDesktopType());
+            Assert.IsFalse(SysUtils.IsUnix());
+            Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
             #endif
-        }
 
-        [Test]
-        public void LinqHelper_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.FirstOrDefault<int>(null); });
-            int N = LinqHelper.FirstOrDefault<int>(new int[] { 5, 7, 10 });
+            //
+
+            uint days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
+            Assert.AreEqual(3, days);
+
+            Assert.AreEqual(31, SysUtils.DaysInAMonth(1990, 5));
+
+            //
+
+            Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
+            Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
+            Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
+
+            //
+
+            Assert.AreEqual(495, SysUtils.Trunc(495.575));
+
+            Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
+            Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
+
+            //
+
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.FirstOrDefault<int>(null); });
+            int N = SysUtils.FirstOrDefault<int>(new int[] { 5, 7, 10 });
             Assert.AreEqual(5, N);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.LastOrDefault<int>(null); });
-            N = LinqHelper.LastOrDefault<int>(new int[] { 5, 7, 10 });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.LastOrDefault<int>(null); });
+            N = SysUtils.LastOrDefault<int>(new int[] { 5, 7, 10 });
             Assert.AreEqual(10, N);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.SingleOrDefault<int>(null); });
-            N = LinqHelper.SingleOrDefault<int>(new int[] { 11 });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SingleOrDefault<int>(null); });
+            N = SysUtils.SingleOrDefault<int>(new int[] { 11 });
             Assert.AreEqual(11, N);
-            N = LinqHelper.SingleOrDefault<int>(new int[] { });
+            N = SysUtils.SingleOrDefault<int>(new int[] { });
             Assert.AreEqual(0, N);
-            Assert.Throws(typeof(Exception), () => { LinqHelper.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
+            Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
         }
 
         private void TweenHandler(int newX, int newY)

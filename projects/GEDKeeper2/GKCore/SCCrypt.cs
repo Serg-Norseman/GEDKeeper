@@ -161,26 +161,27 @@ namespace GKCore
         private static byte[] Encode(byte[] data)
         {
             int num = (data != null) ? data.Length : 0;
-            uint I = MoveS2L(data, num);
-
             byte[] res = new byte[num + 1];
 
-            switch (num) {
-                case 1:
-                    res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
-                    break;
-                case 2:
-                    res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
-                    res[2] = (byte)U2_MAP[(I >> 12) % 64];
-                    break;
-                case 3:
-                    res[0] = (byte)U2_MAP[I % 64];
-                    res[1] = (byte)U2_MAP[(I >> 6) % 64];
-                    res[2] = (byte)U2_MAP[(I >> 12) % 64];
-                    res[3] = (byte)U2_MAP[(I >> 18) % 64];
-                    break;
+            if (num != 0) {
+                uint I = MoveS2L(data, num);
+                switch (num) {
+                    case 1:
+                        res[0] = (byte)U2_MAP[I % 64];
+                        res[1] = (byte)U2_MAP[(I >> 6) % 64];
+                        break;
+                    case 2:
+                        res[0] = (byte)U2_MAP[I % 64];
+                        res[1] = (byte)U2_MAP[(I >> 6) % 64];
+                        res[2] = (byte)U2_MAP[(I >> 12) % 64];
+                        break;
+                    case 3:
+                        res[0] = (byte)U2_MAP[I % 64];
+                        res[1] = (byte)U2_MAP[(I >> 6) % 64];
+                        res[2] = (byte)U2_MAP[(I >> 12) % 64];
+                        res[3] = (byte)U2_MAP[(I >> 18) % 64];
+                        break;
+                }
             }
             
             return res;
@@ -213,8 +214,6 @@ namespace GKCore
                         seed = unchecked((ushort)((ppd[i] + seed) * 28732u + 28446u));
                     }
                     res = Encoding.ASCII.GetString(tmp);
-                } else {
-                    res = "";
                 }
             }
 

@@ -1075,7 +1075,7 @@ namespace GKPedigreeImporterPlugin
             this.fRawContents.Clear();
 
             this.fFileName = fileName;
-            string ext = FileHelper.GetFileExtension(fileName);
+            string ext = SysUtils.GetFileExtension(fileName);
 
             if (ext == ".txt")
             {

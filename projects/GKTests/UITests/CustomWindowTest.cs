@@ -59,8 +59,8 @@ namespace GKTests.UITests
         protected static void Wait()
         {
             #if !CI_MODE
-            Application.DoEvents();
-            Thread.Sleep(1000);
+            //Application.DoEvents();
+            //Thread.Sleep(1000);
             #endif
         }
 

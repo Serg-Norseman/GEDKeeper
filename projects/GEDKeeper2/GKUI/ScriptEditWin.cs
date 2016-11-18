@@ -73,7 +73,7 @@ namespace GKUI
 
                 switch (dialogResult) {
                     case DialogResult.Yes:
-                        this.SaveScript();
+                        this.tbSaveScript_Click(this, null);
                         break;
                     case DialogResult.No:
                         break;
@@ -95,7 +95,7 @@ namespace GKUI
             }
         }
 
-        private void NewScript()
+        private void tbNewScript_Click(object sender, EventArgs e)
         {
             if (this.CheckModified())
             {
@@ -105,7 +105,7 @@ namespace GKUI
             }
         }
 
-        private void LoadScript()
+        private void tbLoadScript_Click(object sender, EventArgs e)
         {
             if (this.CheckModified())
             {
@@ -123,7 +123,7 @@ namespace GKUI
             }
         }
 
-        private void SaveScript()
+        private void tbSaveScript_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, this.FileName);
             if (!string.IsNullOrEmpty(fileName))
@@ -138,7 +138,7 @@ namespace GKUI
             }
         }
 
-        private void Run()
+        private void tbRun_Click(object sender, EventArgs e)
         {
             try
             {
@@ -164,19 +164,6 @@ namespace GKUI
             this.Modified = true;
         }
 
-        private void ToolBar1_ButtonClick(object sender, EventArgs e)
-        {
-            if (sender == this.tbNewScript) {
-                this.NewScript();
-            } else if (sender == this.tbLoadScript) {
-                this.LoadScript();
-            } else if (sender == this.tbSaveScript) {
-                this.SaveScript();
-            } else if (sender == this.tbRun) {
-                this.Run();
-            }
-        }
-
         public ScriptEditWin(IBaseWindow aBase)
         {
             this.InitializeComponent();
@@ -190,7 +177,7 @@ namespace GKUI
 
             this.txtScriptText.TextChanged += mmScriptText_TextChanged;
             
-            this.NewScript();
+            this.tbNewScript_Click(this, null);
 
             this.SetLang();
         }

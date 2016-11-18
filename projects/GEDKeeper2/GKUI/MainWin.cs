@@ -1309,9 +1309,8 @@ namespace GKUI
 
         public static PluginInfo GetPluginAttributes(IPlugin plugin)
         {
-            if (plugin == null) {
+            if (plugin == null)
                 throw new ArgumentNullException("plugin");
-            }
 
             PluginInfo info = new PluginInfo();
 
@@ -1450,7 +1449,7 @@ namespace GKUI
 
         public bool IsUnix()
         {
-            return SysInfo.IsUnix();
+            return SysUtils.IsUnix();
         }
 
         public void ShowWarning(string msg)

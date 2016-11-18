@@ -53,19 +53,19 @@ namespace GKUI
 		    // 
 		    this.tbNewScript.Name = "tbNewScript";
 		    this.tbNewScript.Size = new System.Drawing.Size(23, 22);
-		    this.tbNewScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+		    this.tbNewScript.Click += new System.EventHandler(this.tbNewScript_Click);
 		    // 
 		    // tbLoadScript
 		    // 
 		    this.tbLoadScript.Name = "tbLoadScript";
 		    this.tbLoadScript.Size = new System.Drawing.Size(23, 22);
-		    this.tbLoadScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+		    this.tbLoadScript.Click += new System.EventHandler(this.tbLoadScript_Click);
 		    // 
 		    // tbSaveScript
 		    // 
 		    this.tbSaveScript.Name = "tbSaveScript";
 		    this.tbSaveScript.Size = new System.Drawing.Size(23, 22);
-		    this.tbSaveScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+		    this.tbSaveScript.Click += new System.EventHandler(this.tbSaveScript_Click);
 		    // 
 		    // ToolButton2
 		    // 
@@ -76,7 +76,7 @@ namespace GKUI
 		    // 
 		    this.tbRun.Name = "tbRun";
 		    this.tbRun.Size = new System.Drawing.Size(23, 22);
-		    this.tbRun.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+		    this.tbRun.Click += new System.EventHandler(this.tbRun_Click);
 		    // 
 		    // splitContainer1
 		    // 

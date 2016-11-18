@@ -82,6 +82,8 @@ sources := \
 ./GEDCOM/GEDCOMIndividualOrdinance.cs \
 ./GEDCOM/GEDCOMIndividualRecord.cs \
 ./GEDCOM/GEDCOMInterfaces.cs \
+./GEDCOM/GEDCOMLanguage.cs \
+./GEDCOM/GEDCOMLanguageID.cs \
 ./GEDCOM/GEDCOMList.cs \
 ./GEDCOM/GEDCOMLocationRecord.cs \
 ./GEDCOM/GEDCOMMap.cs \
@@ -125,7 +127,7 @@ sources := \
 ./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
-./GKCommon/Controls/ReflectionHelper.cs \
+./GKCommon/ReflectionHelper.cs \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
@@ -134,12 +136,10 @@ sources := \
 ./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
-./GKCommon/FileHelper.cs \
 ./GKCommon/GfxHelper.cs \
 ./GKCommon/GKResourceManager.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
-./GKCommon/LinqHelper.cs \
 ./GKCommon/Logger.cs \
 ./GKCommon/Range.cs \
 ./GKCommon/SmartGraph/Edge.cs \
@@ -153,7 +153,7 @@ sources := \
 ./GKCommon/SortHelper.cs \
 ./GKCommon/StringList.cs \
 ./GKCommon/StringTokenizer.cs \
-./GKCommon/SysInfo.cs \
+./GKCommon/SysUtils.cs \
 ./GKCommon/Tween.cs \
 ./GKCommon/UDN.cs \
 ./GKCommon/UIHelper.cs \
@@ -259,6 +259,8 @@ sources := \
 ./GEDCOM/GEDCOMIndividualOrdinance.cs \
 ./GEDCOM/GEDCOMIndividualRecord.cs \
 ./GEDCOM/GEDCOMInterfaces.cs \
+./GEDCOM/GEDCOMLanguage.cs \
+./GEDCOM/GEDCOMLanguageID.cs \
 ./GEDCOM/GEDCOMList.cs \
 ./GEDCOM/GEDCOMLocationRecord.cs \
 ./GEDCOM/GEDCOMMap.cs \
@@ -302,7 +304,7 @@ sources := \
 ./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
-./GKCommon/Controls/ReflectionHelper.cs \
+./GKCommon/ReflectionHelper.cs \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
@@ -311,12 +313,10 @@ sources := \
 ./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
-./GKCommon/FileHelper.cs \
 ./GKCommon/GfxHelper.cs \
 ./GKCommon/GKResourceManager.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
-./GKCommon/LinqHelper.cs \
 ./GKCommon/Logger.cs \
 ./GKCommon/Range.cs \
 ./GKCommon/SmartGraph/Edge.cs \
@@ -330,7 +330,7 @@ sources := \
 ./GKCommon/SortHelper.cs \
 ./GKCommon/StringList.cs \
 ./GKCommon/StringTokenizer.cs \
-./GKCommon/SysInfo.cs \
+./GKCommon/SysUtils.cs \
 ./GKCommon/Tween.cs \
 ./GKCommon/UDN.cs \
 ./GKCommon/UIHelper.cs \

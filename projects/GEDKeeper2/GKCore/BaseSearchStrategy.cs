@@ -69,7 +69,7 @@ namespace GKCore
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
 
-                curResult = LinqHelper.FirstOrDefault(currentResults);
+                curResult = SysUtils.FirstOrDefault(currentResults);
             } else {
                 int idx = currentResults.IndexOf(curResult) + 1;
 
@@ -84,7 +84,7 @@ namespace GKCore
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
 
-                curResult = LinqHelper.LastOrDefault(currentResults);
+                curResult = SysUtils.LastOrDefault(currentResults);
             } else {
                 int idx = currentResults.IndexOf(curResult) - 1;
 

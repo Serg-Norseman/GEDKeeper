@@ -6,6 +6,9 @@
  *
  *  C# implementation:
  *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *
+ *  Additional methods for transformations:
+ *  Copyright (C) 2016 by Ruslan Garipov.
  */
 
 using System;

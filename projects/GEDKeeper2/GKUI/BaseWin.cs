@@ -572,7 +572,7 @@ namespace GKUI
             this.Clear();
 
             string pw = null;
-            string ext = FileHelper.GetFileExtension(fileName);
+            string ext = SysUtils.GetFileExtension(fileName);
             if (ext == ".geds") {
                 if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                     GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
@@ -612,7 +612,7 @@ namespace GKUI
             try
             {
                 string pw = null;
-                string ext = FileHelper.GetFileExtension(fileName);
+                string ext = SysUtils.GetFileExtension(fileName);
                 if (ext == ".geds") {
                     if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));

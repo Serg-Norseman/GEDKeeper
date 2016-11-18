@@ -371,7 +371,7 @@ namespace GKUI.Charts
                 Bitmap result = (Bitmap)source.Clone();
 
                 #if __MonoCS__
-                result.MakeTransparent(); // don't work
+                result.MakeTransparent(); // FIXME: don't work
                 #else
                 result.MakeTransparent(source.GetPixel(0, 0));
                 #endif
@@ -2136,7 +2136,7 @@ namespace GKUI.Charts
 
         public void SaveSnapshot(string fileName)
         {
-            string ext = FileHelper.GetFileExtension(fileName);
+            string ext = SysUtils.GetFileExtension(fileName);
 
             if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
             {

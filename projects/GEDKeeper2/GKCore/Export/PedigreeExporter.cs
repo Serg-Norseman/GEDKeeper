@@ -513,7 +513,7 @@ namespace GKCore.Export
             this.fPath = UIHelper.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(this.fPath)) return;
 
-            string ext = FileHelper.GetFileExtension(this.fPath);
+            string ext = SysUtils.GetFileExtension(this.fPath);
 
             if (string.Equals(ext, ".html")) {
                 this.fWriter = new HTMLWriter();

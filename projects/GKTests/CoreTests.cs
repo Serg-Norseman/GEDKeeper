@@ -99,6 +99,12 @@ namespace GKTests
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateCommunication()));
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
 
+            string fn = "";
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null, ref fn); });
+            Assert.AreEqual(MediaStoreType.mstReference, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "file.txt"), ref fn));
+            Assert.AreEqual(MediaStoreType.mstStorage, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "stg:file.txt"), ref fn));
+            Assert.AreEqual(MediaStoreType.mstArchive, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "arc:file.txt"), ref fn));
+
             //fContext.Clear();
             //Assert.AreEqual(0, fContext.Tree.RecordsCount);
 
@@ -246,21 +252,6 @@ namespace GKTests
         }
 
         [Test]
-        public void SysUtils_Tests()
-        {
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
-            Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
-
-            //
-
-            Assert.AreEqual(495, SysUtils.Trunc(495.575));
-
-            Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
-            Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
-        }
-
-        [Test]
         public void Utils_Tests()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
@@ -298,6 +289,10 @@ namespace GKTests
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, "", ""); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
 
@@ -454,11 +449,6 @@ namespace GKTests
 
             //
 
-            uint days = GKUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
-            Assert.AreEqual(3, days);
-
-            Assert.AreEqual(31, GKUtils.DaysInAMonth(1990, 5));
-
             Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfNone));
             Assert.AreEqual(MultimediaKind.mkImage, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfBMP));
             Assert.AreEqual(MultimediaKind.mkText, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfTXT));
@@ -480,6 +470,8 @@ namespace GKTests
 
             //
 
+            string test = GKUtils.TruncateStrings(new StringList("sample text for truncate"), 10);
+            Assert.AreEqual("sample tex...", test);
         }
 
         [Test]

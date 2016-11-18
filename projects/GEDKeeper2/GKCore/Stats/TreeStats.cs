@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Options;
 

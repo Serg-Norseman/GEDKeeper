@@ -25,7 +25,7 @@ namespace Externals.SingleInstancing
 
         public static bool CreateMutex(string strName, bool bInitiallyOwned)
         {
-            return !SysInfo.IsUnix() ? CreateMutexWin(strName, bInitiallyOwned) : CreateMutexUnix(strName, bInitiallyOwned);
+            return !SysUtils.IsUnix() ? CreateMutexWin(strName, bInitiallyOwned) : CreateMutexUnix(strName, bInitiallyOwned);
         }
 
         private static bool CreateMutexWin(string strName, bool bInitiallyOwned)
@@ -99,7 +99,7 @@ namespace Externals.SingleInstancing
 
         public static bool ReleaseMutex(string strName)
         {
-            return !SysInfo.IsUnix() ? ReleaseMutexWin(strName) : ReleaseMutexUnix(strName);
+            return !SysUtils.IsUnix() ? ReleaseMutexWin(strName) : ReleaseMutexUnix(strName);
         }
 
         private static bool ReleaseMutexWin(string strName)
@@ -152,7 +152,7 @@ namespace Externals.SingleInstancing
 
         public static void ReleaseAll()
         {
-            if (!SysInfo.IsUnix()) // Windows
+            if (!SysUtils.IsUnix()) // Windows
             {
                 for (int i = m_vMutexesWin.Count - 1; i >= 0; --i)
                     ReleaseMutexWin(m_vMutexesWin[i].Key);
@@ -166,7 +166,7 @@ namespace Externals.SingleInstancing
 
         public static void Refresh()
         {
-            if (!SysInfo.IsUnix()) return; // Windows, no refresh required
+            if (!SysUtils.IsUnix()) return; // Windows, no refresh required
 
             // Unix
             int iTicksDiff = (Environment.TickCount - m_iLastRefresh);

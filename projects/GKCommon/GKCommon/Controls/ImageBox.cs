@@ -846,7 +846,7 @@ namespace GKCommon.Controls
         /// <value>The height of the scaled image.</value>
         protected virtual int ScaledImageHeight
         {
-            get { return Convert.ToInt32(this.ViewSize.Height * this.ZoomFactor); }
+            get { return (int)(this.ViewSize.Height * this.ZoomFactor); }
         }
 
         /// <summary>
@@ -855,7 +855,7 @@ namespace GKCommon.Controls
         /// <value>The width of the scaled image.</value>
         protected virtual int ScaledImageWidth
         {
-            get { return Convert.ToInt32(this.ViewSize.Width * this.ZoomFactor); }
+            get { return (int)(this.ViewSize.Width * this.ZoomFactor); }
         }
 
         protected virtual Size ViewSize
@@ -916,15 +916,10 @@ namespace GKCommon.Controls
         /// </returns>
         public Rectangle FitRectangle(Rectangle rectangle)
         {
-            int x;
-            int y;
-            int w;
-            int h;
-
-            x = rectangle.X;
-            y = rectangle.Y;
-            w = rectangle.Width;
-            h = rectangle.Height;
+            int x = rectangle.X;
+            int y = rectangle.Y;
+            int w = rectangle.Width;
+            int h = rectangle.Height;
 
             if (x < 0)
                 x = 0;
@@ -950,15 +945,10 @@ namespace GKCommon.Controls
         /// </returns>
         public RectangleF FitRectangle(RectangleF rectangle)
         {
-            float x;
-            float y;
-            float w;
-            float h;
-
-            x = rectangle.X;
-            y = rectangle.Y;
-            w = rectangle.Width;
-            h = rectangle.Height;
+            float x = rectangle.X;
+            float y = rectangle.Y;
+            float w = rectangle.Width;
+            float h = rectangle.Height;
 
             if (x < 0)
                 x = 0;
@@ -997,11 +987,8 @@ namespace GKCommon.Controls
 
                 if (this.AutoCenter)
                 {
-                    int x;
-                    int y;
-
-                    x = !this.HScroll ? (innerRectangle.Width - (this.ScaledImageWidth + this.Padding.Horizontal)) / 2 : 0;
-                    y = !this.VScroll ? (innerRectangle.Height - (this.ScaledImageHeight + this.Padding.Vertical)) / 2 : 0;
+                    int x = !this.HScroll ? (innerRectangle.Width - (this.ScaledImageWidth + this.Padding.Horizontal)) / 2 : 0;
+                    int y = !this.VScroll ? (innerRectangle.Height - (this.ScaledImageHeight + this.Padding.Vertical)) / 2 : 0;
 
                     offset = new Point(x, y);
                 }
@@ -1028,15 +1015,10 @@ namespace GKCommon.Controls
         /// <returns></returns>
         public virtual Rectangle GetInsideViewPort(bool includePadding)
         {
-            int left;
-            int top;
-            int width;
-            int height;
-
-            left = 0;
-            top = 0;
-            width = this.ClientSize.Width;
-            height = this.ClientSize.Height;
+            int left = 0;
+            int top = 0;
+            int width = this.ClientSize.Width;
+            int height = this.ClientSize.Height;
 
             if (includePadding)
             {
@@ -1056,15 +1038,10 @@ namespace GKCommon.Controls
         /// <returns>A Point which has been repositioned to match the current zoom level and image offset</returns>
         public virtual PointF GetOffsetPoint(PointF source)
         {
-            Rectangle viewport;
-            PointF scaled;
-            int offsetX;
-            int offsetY;
-
-            viewport = this.GetImageViewPort();
-            scaled = this.GetScaledPoint(source);
-            offsetX = viewport.Left + this.Padding.Left + this.AutoScrollPosition.X;
-            offsetY = viewport.Top + this.Padding.Top + this.AutoScrollPosition.Y;
+            Rectangle viewport = this.GetImageViewPort();
+            PointF scaled = this.GetScaledPoint(source);
+            int offsetX = viewport.Left + this.Padding.Left + this.AutoScrollPosition.X;
+            int offsetY = viewport.Top + this.Padding.Top + this.AutoScrollPosition.Y;
 
             return new PointF(scaled.X + offsetX, scaled.Y + offsetY);
         }
@@ -1076,15 +1053,10 @@ namespace GKCommon.Controls
         /// <returns>A Rectangle which has been resized and repositioned to match the current zoom level and image offset</returns>
         public virtual RectangleF GetOffsetRectangle(RectangleF source)
         {
-            RectangleF viewport;
-            RectangleF scaled;
-            float offsetX;
-            float offsetY;
-
-            viewport = this.GetImageViewPort();
-            scaled = this.GetScaledRectangle(source);
-            offsetX = viewport.Left + this.Padding.Left + this.AutoScrollPosition.X;
-            offsetY = viewport.Top + this.Padding.Top + this.AutoScrollPosition.Y;
+            RectangleF viewport = this.GetImageViewPort();
+            RectangleF scaled = this.GetScaledRectangle(source);
+            float offsetX = viewport.Left + this.Padding.Left + this.AutoScrollPosition.X;
+            float offsetY = viewport.Top + this.Padding.Top + this.AutoScrollPosition.Y;
 
             return new RectangleF(new PointF(scaled.Left + offsetX, scaled.Top + offsetY), scaled.Size);
         }
@@ -1102,12 +1074,9 @@ namespace GKCommon.Controls
 
             if (!this.ViewSize.IsEmpty)
             {
-                int width;
-                int height;
-
                 // get the size of the image
-                width = this.ScaledImageWidth;
-                height = this.ScaledImageHeight;
+                int width = this.ScaledImageWidth;
+                int height = this.ScaledImageHeight;
 
                 // add an offset based on padding
                 width += this.Padding.Horizontal;
@@ -1146,16 +1115,6 @@ namespace GKCommon.Controls
         }
 
         /// <summary>
-        ///   Returns the source <see cref="T:System.Drawing.SizeF" /> scaled according to the current zoom level
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns>A Size which has been resized to match the current zoom level</returns>
-        public virtual SizeF GetScaledSize(SizeF source)
-        {
-            return new SizeF((float)(source.Width * this.ZoomFactor), (float)(source.Height * this.ZoomFactor));
-        }
-
-        /// <summary>
         ///   Creates an image based on the current selection region
         /// </summary>
         /// <returns>An image containing the selection contents if a selection if present, otherwise null</returns>
@@ -1189,17 +1148,11 @@ namespace GKCommon.Controls
 
             if (!this.ViewSize.IsEmpty)
             {
-                float sourceLeft;
-                float sourceTop;
-                float sourceWidth;
-                float sourceHeight;
-                Rectangle viewPort;
-
-                viewPort = this.GetImageViewPort();
-                sourceLeft = (float)(-this.AutoScrollPosition.X / this.ZoomFactor);
-                sourceTop = (float)(-this.AutoScrollPosition.Y / this.ZoomFactor);
-                sourceWidth = (float)(viewPort.Width / this.ZoomFactor);
-                sourceHeight = (float)(viewPort.Height / this.ZoomFactor);
+                Rectangle viewPort = this.GetImageViewPort();
+                float sourceLeft = (float)(-this.AutoScrollPosition.X / this.ZoomFactor);
+                float sourceTop = (float)(-this.AutoScrollPosition.Y / this.ZoomFactor);
+                float sourceWidth = (float)(viewPort.Width / this.ZoomFactor);
+                float sourceHeight = (float)(viewPort.Height / this.ZoomFactor);
 
                 region = new RectangleF(sourceLeft, sourceTop, sourceWidth, sourceHeight);
             }
@@ -1338,13 +1291,12 @@ namespace GKCommon.Controls
         {
             if (!this.ViewSize.IsEmpty)
             {
-                Rectangle innerRectangle;
                 double zoom;
                 double aspectRatio;
 
                 this.AutoScrollMinSize = Size.Empty;
 
-                innerRectangle = this.GetInsideViewPort(true);
+                Rectangle innerRectangle = this.GetInsideViewPort(true);
 
                 if (this.Image.Width > this.Image.Height)
                 {
@@ -1379,17 +1331,11 @@ namespace GKCommon.Controls
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public virtual void ZoomToRegion(RectangleF rectangle)
         {
-            double ratioX;
-            double ratioY;
-            double zoomFactor;
-            int cx;
-            int cy;
-
-            ratioX = this.ClientSize.Width / rectangle.Width;
-            ratioY = this.ClientSize.Height / rectangle.Height;
-            zoomFactor = Math.Min(ratioX, ratioY);
-            cx = (int)(rectangle.X + (rectangle.Width / 2));
-            cy = (int)(rectangle.Y + (rectangle.Height / 2));
+            double ratioX = this.ClientSize.Width / rectangle.Width;
+            double ratioY = this.ClientSize.Height / rectangle.Height;
+            double zoomFactor = Math.Min(ratioX, ratioY);
+            int cx = (int)(rectangle.X + (rectangle.Width / 2));
+            int cy = (int)(rectangle.Y + (rectangle.Height / 2));
 
             this.Zoom = (int)(zoomFactor * 100);
             this.CenterAt(new Point(cx, cy));
@@ -1400,32 +1346,17 @@ namespace GKCommon.Controls
         /// </summary>
         protected virtual void AdjustLayout()
         {
-            if (this.AutoSize)
-                this.AdjustSize();
-            else if (this.SizeToFit)
+            if (this.AutoSize) {
+                if (this.Dock == DockStyle.None)
+                    base.Size = base.PreferredSize;
+            } else if (this.SizeToFit)
                 this.ZoomToFit();
-            else if (this.AutoScroll)
-                this.AdjustViewPort();
+            else if (this.AutoScroll) {
+                if (!this.ViewSize.IsEmpty)
+                    this.AutoScrollMinSize = new Size(this.ScaledImageWidth + this.Padding.Horizontal, this.ScaledImageHeight + this.Padding.Vertical);
+            }
 
             this.Invalidate();
-        }
-
-        /// <summary>
-        ///   Adjusts the size.
-        /// </summary>
-        protected virtual void AdjustSize()
-        {
-            if (this.AutoSize && this.Dock == DockStyle.None)
-                base.Size = base.PreferredSize;
-        }
-
-        /// <summary>
-        ///   Adjusts the view port.
-        /// </summary>
-        protected virtual void AdjustViewPort()
-        {
-            if (this.AutoScroll && !this.ViewSize.IsEmpty)
-                this.AutoScrollMinSize = new Size(this.ScaledImageWidth + this.Padding.Horizontal, this.ScaledImageHeight + this.Padding.Vertical);
         }
 
         /// <summary>
@@ -1447,11 +1378,8 @@ namespace GKCommon.Controls
         /// <param name="viewPort"> The view port. </param>
         private void DrawDropShadow(Graphics g, Rectangle viewPort)
         {
-            Rectangle rightEdge;
-            Rectangle bottomEdge;
-
-            rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + this.DropShadowSize, this.DropShadowSize, viewPort.Height);
-            bottomEdge = new Rectangle(viewPort.Left + this.DropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, this.DropShadowSize);
+            Rectangle rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + this.DropShadowSize, this.DropShadowSize, viewPort.Height);
+            Rectangle bottomEdge = new Rectangle(viewPort.Left + this.DropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, this.DropShadowSize);
 
             using (Brush brush = new SolidBrush(this.ImageBorderColor))
                 g.FillRectangles(brush, new[] { rightEdge, bottomEdge });
@@ -1517,11 +1445,9 @@ namespace GKCommon.Controls
         {
             if (this.ImageBorderStyle != ImageBoxBorderStyle.None)
             {
-                Rectangle viewPort;
-
                 graphics.SetClip(this.GetInsideViewPort(false)); // make sure the image border doesn't overwrite the control border
 
-                viewPort = this.GetImageViewPort();
+                Rectangle viewPort = this.GetImageViewPort();
                 viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
 
                 using (Pen borderPen = new Pen(this.ImageBorderColor))
@@ -1549,11 +1475,9 @@ namespace GKCommon.Controls
         /// </param>
         private void DrawSelection(PaintEventArgs e)
         {
-            RectangleF rect;
-
             e.Graphics.SetClip(this.GetInsideViewPort(true));
 
-            rect = this.GetOffsetRectangle(this.SelectionRegion);
+            RectangleF rect = this.GetOffsetRectangle(this.SelectionRegion);
 
             using (Brush brush = new SolidBrush(Color.FromArgb(128, this.SelectionColor)))
                 e.Graphics.FillRectangle(brush, rect);
@@ -1618,10 +1542,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnAllowClickZoomChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.AllowClickZoomChanged;
-
+            EventHandler handler = this.AllowClickZoomChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1634,13 +1555,10 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnAllowDoubleClickChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.SetStyle(ControlStyles.StandardDoubleClick, this.AllowDoubleClick);
             this.UpdateStyles();
 
-            handler = this.AllowDoubleClickChanged;
-
+            EventHandler handler = this.AllowDoubleClickChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1653,10 +1571,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnAllowZoomChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.AllowZoomChanged;
-
+            EventHandler handler = this.AllowZoomChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1669,12 +1584,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnAutoCenterChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.Invalidate();
 
-            handler = this.AutoCenterChanged;
-
+            EventHandler handler = this.AutoCenterChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1687,10 +1599,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnAutoPanChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.AutoPanChanged;
-
+            EventHandler handler = this.AutoPanChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1732,10 +1641,7 @@ namespace GKCommon.Controls
         {
             this.Invalidate();
 
-            EventHandler handler;
-
-            handler = this.DropShadowSizeChanged;
-
+            EventHandler handler = this.DropShadowSizeChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1748,12 +1654,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnImageBorderColorChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.Invalidate();
 
-            handler = this.ImageBorderColorChanged;
-
+            EventHandler handler = this.ImageBorderColorChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1766,12 +1669,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnImageBorderStyleChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.Invalidate();
 
-            handler = this.ImageBorderStyleChanged;
-
+            EventHandler handler = this.ImageBorderStyleChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1784,12 +1684,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnImageChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.AdjustLayout();
 
-            handler = this.ImageChanged;
-
+            EventHandler handler = this.ImageChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1802,12 +1699,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnInterpolationModeChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.Invalidate();
 
-            handler = this.InterpolationModeChanged;
-
+            EventHandler handler = this.InterpolationModeChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1820,10 +1714,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnInvertMouseChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.InvertMouseChanged;
-
+            EventHandler handler = this.InvertMouseChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1850,10 +1741,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnLimitSelectionToImageChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.LimitSelectionToImageChanged;
-
+            EventHandler handler = this.LimitSelectionToImageChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -1905,11 +1793,9 @@ namespace GKCommon.Controls
         /// </param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            bool doNotProcessClick;
-
             base.OnMouseUp(e);
 
-            doNotProcessClick = this.IsPanning || this.IsSelecting;
+            bool doNotProcessClick = this.IsPanning || this.IsSelecting;
 
             if (this.IsPanning)
                 this.IsPanning = false;
@@ -1962,9 +1848,7 @@ namespace GKCommon.Controls
         {
             if (this.AllowPainting)
             {
-                Rectangle innerRectangle;
-
-                innerRectangle = this.GetInsideViewPort(false);
+                Rectangle innerRectangle = this.GetInsideViewPort(false);
 
                 // draw the background
                 using (SolidBrush brush = new SolidBrush(this.BackColor))
@@ -1994,10 +1878,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnPanEnd(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.PanEnd;
-
+            EventHandler handler = this.PanEnd;
             if (handler != null)
                 handler(this, e);
         }
@@ -2010,10 +1891,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnPanStart(CancelEventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.PanStart;
-
+            EventHandler handler = this.PanStart;
             if (handler != null)
                 handler(this, e);
         }
@@ -2051,8 +1929,6 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSelected(EventArgs e)
         {
-            EventHandler<EventArgs> handler;
-
             switch (this.SelectionMode)
             {
                 case ImageBoxSelectionMode.Zoom:
@@ -2064,8 +1940,7 @@ namespace GKCommon.Controls
                     break;
             }
 
-            handler = this.Selected;
-
+            EventHandler<EventArgs> handler = this.Selected;
             if (handler != null)
                 handler(this, e);
         }
@@ -2078,10 +1953,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSelecting(CancelEventArgs e)
         {
-            EventHandler<CancelEventArgs> handler;
-
-            handler = this.Selecting;
-
+            EventHandler<CancelEventArgs> handler = this.Selecting;
             if (handler != null)
                 handler(this, e);
         }
@@ -2094,10 +1966,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSelectionColorChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.SelectionColorChanged;
-
+            EventHandler handler = this.SelectionColorChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2110,10 +1979,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSelectionModeChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.SelectionModeChanged;
-
+            EventHandler handler = this.SelectionModeChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2126,12 +1992,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSelectionRegionChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.Invalidate();
 
-            handler = this.SelectionRegionChanged;
-
+            EventHandler handler = this.SelectionRegionChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2144,12 +2007,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnSizeToFitChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.AdjustLayout();
 
-            handler = this.SizeToFitChanged;
-
+            EventHandler handler = this.SizeToFitChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2162,10 +2022,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnVirtualDraw(PaintEventArgs e)
         {
-            PaintEventHandler handler;
-
-            handler = this.VirtualDraw;
-
+            PaintEventHandler handler = this.VirtualDraw;
             if (handler != null)
                 handler(this, e);
         }
@@ -2178,12 +2035,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnVirtualModeChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.AdjustLayout();
 
-            handler = this.VirtualModeChanged;
-
+            EventHandler handler = this.VirtualModeChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2196,12 +2050,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnVirtualSizeChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.AdjustLayout();
 
-            handler = this.VirtualSizeChanged;
-
+            EventHandler handler = this.VirtualSizeChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2214,12 +2065,9 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnZoomChanged(EventArgs e)
         {
-            EventHandler handler;
-
             this.AdjustLayout();
 
-            handler = this.ZoomChanged;
-
+            EventHandler handler = this.ZoomChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2232,10 +2080,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void OnZoomLevelsChanged(EventArgs e)
         {
-            EventHandler handler;
-
-            handler = this.ZoomLevelsChanged;
-
+            EventHandler handler = this.ZoomLevelsChanged;
             if (handler != null)
                 handler(this, e);
         }
@@ -2248,9 +2093,7 @@ namespace GKCommon.Controls
         /// </param>
         protected virtual void ProcessImageShortcuts(KeyEventArgs e)
         {
-            int previousZoom;
-
-            previousZoom = this.Zoom;
+            int previousZoom = this.Zoom;
 
             switch (e.KeyCode)
             {
@@ -2314,9 +2157,7 @@ namespace GKCommon.Controls
 
                 if (this.IsPanning)
                 {
-                    int x;
-                    int y;
-                    Point position;
+                    int x, y;
 
                     if (!this.InvertMouse)
                     {
@@ -2329,7 +2170,7 @@ namespace GKCommon.Controls
                         y = -(_startScrollPosition.Y + (_startMousePosition.Y - e.Location.Y));
                     }
 
-                    position = new Point(x, y);
+                    Point position = new Point(x, y);
 
                     this.UpdateScrollPosition(position);
                 }

@@ -104,7 +104,6 @@
     <Compile Include="GKCommon\Controls\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCommon\Controls\ReflectionHelper.cs" />
     <Compile Include="GKCommon\Controls\SlideList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -205,14 +204,13 @@
     <Compile Include="GKCommon\ExpCalculator.cs" />
     <Compile Include="GKCommon\ExtList.cs" />
     <Compile Include="GKCommon\ExtRect.cs" />
-    <Compile Include="GKCommon\FileHelper.cs" />
     <Compile Include="GKCommon\GfxHelper.cs" />
     <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
-    <Compile Include="GKCommon\LinqHelper.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Range.cs" />
+    <Compile Include="GKCommon\ReflectionHelper.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
     <Compile Include="GKCommon\SmartGraph\Graph.cs" />
     <Compile Include="GKCommon\SmartGraph\GraphvizWriter.cs" />
@@ -224,7 +222,7 @@
     <Compile Include="GKCommon\SortHelper.cs" />
     <Compile Include="GKCommon\StringList.cs" />
     <Compile Include="GKCommon\StringTokenizer.cs" />
-    <Compile Include="GKCommon\SysInfo.cs" />
+    <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\Tween.cs" />
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\UIHelper.cs" />

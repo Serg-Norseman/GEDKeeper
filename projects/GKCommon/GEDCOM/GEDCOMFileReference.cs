@@ -55,7 +55,7 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
 
-            string ext = FileHelper.GetFileExtension(fileName);
+            string ext = SysUtils.GetFileExtension(fileName);
 
             GEDCOMMultimediaFormat result;
             if (ext == ".bmp")

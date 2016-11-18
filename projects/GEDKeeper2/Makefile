@@ -78,6 +78,7 @@ sources := \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/ChangeTracker.cs \
 ./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/IndividualNameChange.cs \
 ./GKCore/Operations/OrdinaryOperation.cs \
 ./GKCore/Operations/UndoManager.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
@@ -94,7 +95,6 @@ sources := \
 ./GKCore/Stats/StatMode.cs \
 ./GKCore/Stats/StatsItem.cs \
 ./GKCore/Stats/TreeStats.cs \
-./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
 ./GKProgram.cs \
@@ -168,8 +168,6 @@ sources := \
 ./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
 ./GKUI/Dialogs/PersonEditDlg.cs \
 ./GKUI/Dialogs/PersonEditDlg.Designer.cs \
-./GKUI/Dialogs/PersonNewDlg.cs \
-./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
 ./GKUI/Dialogs/PortraitSelectDlg.cs \
@@ -274,6 +272,7 @@ sources := \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/ChangeTracker.cs \
 ./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/IndividualNameChange.cs \
 ./GKCore/Operations/OrdinaryOperation.cs \
 ./GKCore/Operations/UndoManager.cs \
 ./GKCore/Options/AncestorsCircleOptions.cs \
@@ -290,7 +289,6 @@ sources := \
 ./GKCore/Stats/StatMode.cs \
 ./GKCore/Stats/StatsItem.cs \
 ./GKCore/Stats/TreeStats.cs \
-./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
 ./GKProgram.cs \
@@ -364,8 +362,6 @@ sources := \
 ./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
 ./GKUI/Dialogs/PersonEditDlg.cs \
 ./GKUI/Dialogs/PersonEditDlg.Designer.cs \
-./GKUI/Dialogs/PersonNewDlg.cs \
-./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
 ./GKUI/Dialogs/PortraitSelectDlg.cs \
@@ -455,7 +451,6 @@ GKUI.Dialogs.NoteEditDlg.resources \
 GKUI.Dialogs.OptionsDlg.resources \
 GKUI.Dialogs.PersonalNameEditDlg.resources \
 GKUI.Dialogs.PersonEditDlg.resources \
-GKUI.Dialogs.PersonNewDlg.resources \
 GKUI.Dialogs.PersonsFilterDlg.resources \
 GKUI.Dialogs.PortraitSelectDlg.resources \
 GKUI.Dialogs.ProgressDlg.resources \
@@ -510,7 +505,6 @@ GKUI.Dialogs.NoteEditDlg.resources \
 GKUI.Dialogs.OptionsDlg.resources \
 GKUI.Dialogs.PersonalNameEditDlg.resources \
 GKUI.Dialogs.PersonEditDlg.resources \
-GKUI.Dialogs.PersonNewDlg.resources \
 GKUI.Dialogs.PersonsFilterDlg.resources \
 GKUI.Dialogs.PortraitSelectDlg.resources \
 GKUI.Dialogs.ProgressDlg.resources \

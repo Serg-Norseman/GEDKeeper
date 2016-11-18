@@ -152,7 +152,6 @@
     <Compile Include="GKCore\Stats\StatMode.cs" />
     <Compile Include="GKCore\Stats\StatsItem.cs" />
     <Compile Include="GKCore\Stats\TreeStats.cs" />
-    <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKProgram.cs" />
