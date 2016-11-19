@@ -22,11 +22,114 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore.Interfaces;
 
-namespace GKUI.Controls
+namespace GKCommon.Controls
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public class GKListItem : ListViewItem, IComparable
+    {
+        protected object fValue;
+
+        public object Data;
+
+        public GKListItem(object itemValue, object data)
+        {
+            this.fValue = itemValue;
+            base.Text = this.ToString();
+            this.Data = data;
+        }
+
+        public override string ToString()
+        {
+            return (this.fValue == null) ? string.Empty : this.fValue.ToString();
+        }
+
+        public int CompareTo(object obj)
+        {
+            GKListItem otherItem = obj as GKListItem;
+            if (otherItem == null) {
+                return -1;
+            }
+
+            IComparable cv1 = this.fValue as IComparable;
+            IComparable cv2 = otherItem.fValue as IComparable;
+
+            int compRes;
+            if (cv1 != null && cv2 != null)
+            {
+                compRes = cv1.CompareTo(cv2);
+            }
+            else if (cv1 != null)
+            {
+                compRes = -1;
+            }
+            else if (cv2 != null)
+            {
+                compRes = 1;
+            }
+            else {
+                compRes = 0;
+            }
+            return compRes;
+        }
+
+        public void AddSubItem(object itemValue)
+        {
+            GKListSubItem subItem = new GKListSubItem(itemValue);
+            this.SubItems.Add(subItem);
+        }
+    }
+
+
+    public class GKListSubItem : ListViewItem.ListViewSubItem, IComparable
+    {
+        protected object fValue;
+
+        public GKListSubItem(object itemValue)
+        {
+            this.fValue = itemValue;
+            base.Text = this.ToString();
+        }
+
+        public override string ToString()
+        {
+            return (this.fValue == null) ? string.Empty : this.fValue.ToString();
+        }
+
+        public int CompareTo(object obj)
+        {
+            GKListSubItem otherItem = obj as GKListSubItem;
+            if (otherItem == null) {
+                return -1;
+            }
+
+            IComparable cv1 = this.fValue as IComparable;
+            IComparable cv2 = otherItem.fValue as IComparable;
+
+            int compRes;
+            if (cv1 != null && cv2 != null)
+            {
+                compRes = cv1.CompareTo(cv2);
+            }
+            else if (cv1 != null)
+            {
+                compRes = -1;
+            }
+            else if (cv2 != null)
+            {
+                compRes = 1;
+            }
+            else {
+                compRes = 0;
+            }
+            return compRes;
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -64,17 +167,17 @@ namespace GKUI.Controls
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
-                    if (item1 is GKListItem && item2 is GKListItem) {
+                    if (item1 is IComparable && item2 is IComparable) {
                         if (this.fSortColumn == 0) {
-                            GKListItem eitem1 = ((GKListItem)x);
-                            GKListItem eitem2 = ((GKListItem)y);
+                            IComparable eitem1 = (IComparable)x;
+                            IComparable eitem2 = (IComparable)y;
 
                             result = eitem1.CompareTo(eitem2);
                         } else {
                             if (this.fSortColumn < item1.SubItems.Count && this.fSortColumn < item2.SubItems.Count)
                             {
-                                GKListSubItem sub1 = (GKListSubItem)item1.SubItems[this.fSortColumn];
-                                GKListSubItem sub2 = (GKListSubItem)item2.SubItems[this.fSortColumn];
+                                IComparable sub1 = (IComparable)item1.SubItems[this.fSortColumn];
+                                IComparable sub2 = (IComparable)item2.SubItems[this.fSortColumn];
 
                                 result = sub1.CompareTo(sub2);
                             }
@@ -149,6 +252,11 @@ namespace GKUI.Controls
 
             base.DoubleBuffered = true;
 
+            this.HideSelection = false;
+            this.LabelEdit = false;
+            this.FullRowSelect = true;
+            this.View = View.Details;
+
             this.fOldSortOrder = SortOrder.None;
             this.fColumnSorter = new LVColumnSorter();
 
@@ -208,6 +316,23 @@ namespace GKUI.Controls
             base.Columns.Add(caption, width, HorizontalAlignment.Left);
         }
 
+        public void ResizeColumn(int columnIndex)
+        {
+            try {
+                if (columnIndex >= 0 && this.Items.Count > 0)
+                {
+                    this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+                    if (this.Columns[columnIndex].Width < 20)
+                    {
+                        this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("ExtListView.ResizeColumn(): " + ex.Message);
+            }
+        }
+
         public GKListItem AddItem(object itemValue, object data)
         {
             GKListItem result = new GKListItem(itemValue, data);
@@ -226,23 +351,6 @@ namespace GKUI.Controls
             }
 
             return result;
-        }
-
-        public void ResizeColumn(int columnIndex)
-        {
-            try {
-                if (columnIndex >= 0 && this.Items.Count > 0)
-                {
-                    this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
-
-                    if (this.Columns[columnIndex].Width < 20)
-                    {
-                        this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
-            }
         }
 
         public void SelectItem(ListViewItem item)

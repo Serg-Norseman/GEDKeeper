@@ -107,6 +107,7 @@ namespace GKTests.Mocks
         public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent) { return null; }
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
         public StringList GetRecordContent(GEDCOMRecord record) { return null; }
+        public string GetRecordName(GEDCOMRecord record, bool signed) { return string.Empty; }
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
         public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
         public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
@@ -160,6 +161,7 @@ namespace GKTests.Mocks
         public IBaseWindow FindBase(string fileName) { return null; }
         public void BaseChanged(IBaseWindow aBase) {}
         public void BaseClosed(IBaseWindow aBase) {}
+        public void BaseRenamed(IBaseWindow aBase, string oldName, string newName) {}
         public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action) {}
 
         public string GetAppDataPath() { return string.Empty; }

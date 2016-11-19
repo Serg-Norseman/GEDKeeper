@@ -27,11 +27,11 @@ using System.Windows.Forms;
 
 using ExcelLibrary.SpreadSheet;
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
-using GKUI.Controls;
 using ZedGraph;
 
 namespace GKUI

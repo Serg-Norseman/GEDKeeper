@@ -209,7 +209,7 @@ namespace GKUI
 
             if (!e.Cancel)
             {
-                MainWin.Instance.BaseChanged(null);
+                MainWin.Instance.BaseClosed(this);
                 MainWin.Instance.CheckMRUWin(this.fTree.FileName, this);
             }
         }
@@ -820,13 +820,13 @@ namespace GKUI
             this.PageRecords_SelectedIndexChanged(null, null);
         }
 
-        public void RecordNotify(GEDCOMRecord record, RecordAction notify)
+        public void RecordNotify(GEDCOMRecord record, RecordAction action)
         {
             if (record == null) return;
             
             GKRecordsView rView = GetRecordsViewByType(record.RecordType);
 
-            if (rView != null && notify == RecordAction.raDelete)
+            if (rView != null && action == RecordAction.raDelete)
             {
                 rView.DeleteRecord(record);
                 HyperView hView = GetHyperViewByType(record.RecordType);
@@ -836,7 +836,7 @@ namespace GKUI
                 }
             }
 
-            MainWin.Instance.NotifyRecord(this, record, notify);
+            MainWin.Instance.NotifyRecord(this, record, action);
         }
 
         public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
@@ -1760,6 +1760,11 @@ namespace GKUI
             }
 
             return ctx;
+        }
+
+        public string GetRecordName(GEDCOMRecord record, bool signed)
+        {
+            return GKUtils.GetRecordName(record, signed);
         }
 
         public bool RecordIsFiltered(GEDCOMRecord record)

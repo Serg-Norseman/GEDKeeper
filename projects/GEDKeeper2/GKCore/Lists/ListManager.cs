@@ -20,13 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Controls;
 
 namespace GKCore.Lists
 {

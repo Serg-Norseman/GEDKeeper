@@ -68,6 +68,8 @@ namespace GKTimeLinePlugin
             base.Dispose(disposing);
         }
 
+        #region IPlugin support
+
         public void Execute()
         {
             if (!this.fHost.IsWidgetActive(this)) {
@@ -127,6 +129,8 @@ namespace GKTimeLinePlugin
             return result;
         }
 
+        #endregion
+
         #region IWidget support
 
         void IWidget.WidgetInit(IHost host) {}
@@ -145,6 +149,7 @@ namespace GKTimeLinePlugin
             }
         }
 
+        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
         void IWidget.WidgetEnable() {}
 
         #endregion

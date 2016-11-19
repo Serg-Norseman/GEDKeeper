@@ -206,10 +206,6 @@
       <DependentUpon>GKInputBox.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Controls\GKComboItem.cs" />
-    <Compile Include="GKUI\Controls\GKListItem.cs" />
-    <Compile Include="GKUI\Controls\GKListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Controls\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -416,6 +412,7 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">

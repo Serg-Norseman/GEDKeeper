@@ -34,24 +34,24 @@ namespace GKNavigatorPlugin
         private IBaseWindow fBase;
         private string fDatabaseName;
 
-        TreeNode root;
-        TreeNode recAct;
-        TreeNode jumpHist;
-        TreeNode problems;
-        TreeNode filters;
-        TreeNode bookmarks;
-        TreeNode records;
-        TreeNode recsIndividual;
-        TreeNode recsFamily;
-        TreeNode recsNote;
-        TreeNode recsMultimedia;
-        TreeNode recsSource;
-        TreeNode recsRepository;
-        TreeNode recsGroup;
-        TreeNode recsResearch;
-        TreeNode recsTask;
-        TreeNode recsCommunication;
-        TreeNode recsLocation;
+        private TreeNode tnRoot;
+        private TreeNode tnRecAct;
+        private TreeNode tnJumpHist;
+        private TreeNode tnProblems;
+        private TreeNode tnFilters;
+        private TreeNode tnBookmarks;
+        private TreeNode tnRecords;
+        private TreeNode tnRecsIndividual;
+        private TreeNode tnRecsFamily;
+        private TreeNode tnRecsNote;
+        private TreeNode tnRecsMultimedia;
+        private TreeNode tnRecsSource;
+        private TreeNode tnRecsRepository;
+        private TreeNode tnRecsGroup;
+        private TreeNode tnRecsResearch;
+        private TreeNode tnRecsTask;
+        private TreeNode tnRecsCommunication;
+        private TreeNode tnRecsLocation;
 
         public NavigatorWidget(Plugin plugin)
         {
@@ -60,9 +60,44 @@ namespace GKNavigatorPlugin
             this.fPlugin = plugin;
 
             this.InitControls();
-
             this.SetLang();
         }
+
+        private void InitControls()
+        {
+            this.treeView1.Nodes.Clear();
+
+            tnRoot = this.treeView1.Nodes.Add("root");
+
+            tnRecAct = tnRoot.Nodes.Add("Recent Activity");
+            tnJumpHist = tnRecAct.Nodes.Add("Jump history");
+            tnProblems = tnRecAct.Nodes.Add("Potencial problems");
+            tnFilters = tnRecAct.Nodes.Add("Filters");
+
+            tnBookmarks = tnRoot.Nodes.Add("Bookmarks");
+
+            tnRecords = tnRoot.Nodes.Add("Records");
+            tnRecsIndividual = CreateRecordTypeNode("Individuals", GEDCOMRecordType.rtIndividual);
+            tnRecsFamily = CreateRecordTypeNode("Families", GEDCOMRecordType.rtFamily);
+            tnRecsNote = CreateRecordTypeNode("Notes", GEDCOMRecordType.rtNote);
+            tnRecsMultimedia = CreateRecordTypeNode("Multimedia", GEDCOMRecordType.rtMultimedia);
+            tnRecsSource = CreateRecordTypeNode("Sources", GEDCOMRecordType.rtSource);
+            tnRecsRepository = CreateRecordTypeNode("Repositories", GEDCOMRecordType.rtRepository);
+            tnRecsGroup = CreateRecordTypeNode("Groups", GEDCOMRecordType.rtGroup);
+            tnRecsResearch = CreateRecordTypeNode("Researches", GEDCOMRecordType.rtResearch);
+            tnRecsTask = CreateRecordTypeNode("Tasks", GEDCOMRecordType.rtTask);
+            tnRecsCommunication = CreateRecordTypeNode("Communications", GEDCOMRecordType.rtCommunication);
+            tnRecsLocation = CreateRecordTypeNode("Locations", GEDCOMRecordType.rtLocation);
+        }
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_Navigator);
+        }
+
+        #endregion
 
         private void NavigatorWidget_Load(object sender, EventArgs e)
         {
@@ -93,41 +128,48 @@ namespace GKNavigatorPlugin
             this.UpdateControls();
         }
 
+        public void BaseClosed(IBaseWindow baseWin)
+        {
+            fPlugin.Data.CloseBase(baseWin.Context.Tree.FileName);
+            this.fDatabaseName = "";
+            this.fBase = null;
+            this.UpdateControls(true);
+        }
+
         private static string FmtTitle(string title, int count)
         {
             return string.Format("{0} ({1})", title, count);
         }
 
-        private void UpdateControls()
+        private void UpdateControls(bool afterClose = false)
         {
-            if (this.fBase == null) return;
-
             try {
+                string dbName;
+                int[] stats;
+
+                if (this.fBase == null) {
+                    dbName = "";
+                    stats = new int[((int)GEDCOMRecordType.rtLast)];
+                } else {
+                    dbName = this.fDatabaseName;
+                    stats = this.fBase.Tree.GetRecordStats();
+                }
+
                 try {
                     this.treeView1.BeginUpdate();
 
-                    root.Text = this.fDatabaseName;
-
-                    /*TreeNode recAct = root.Nodes.Add("Recent Activity");
-            TreeNode jumpHist = recAct.Nodes.Add("Jump history");
-            TreeNode problems = recAct.Nodes.Add("Potencial problems");
-            TreeNode filters = recAct.Nodes.Add("Filters");*/
-
-                    //TreeNode bookmarks = root.Nodes.Add("Bookmarks");
-                    //TreeNode records = root.Nodes.Add("Records");
-
-                    int[] stats = this.fBase.Tree.GetRecordStats();
-                    recsIndividual.Text = FmtTitle("Individuals", stats[(int)GEDCOMRecordType.rtIndividual]);
-                    recsFamily.Text = FmtTitle("Families", stats[(int)GEDCOMRecordType.rtFamily]);
-                    recsNote.Text = FmtTitle("Notes", stats[(int)GEDCOMRecordType.rtNote]);
-                    recsMultimedia.Text = FmtTitle("Multimedia", stats[(int)GEDCOMRecordType.rtMultimedia]);
-                    recsSource.Text = FmtTitle("Sources", stats[(int)GEDCOMRecordType.rtSource]);
-                    recsRepository.Text = FmtTitle("Repositories", stats[(int)GEDCOMRecordType.rtRepository]);
-                    recsGroup.Text = FmtTitle("Groups", stats[(int)GEDCOMRecordType.rtGroup]);
-                    recsResearch.Text = FmtTitle("Researches", stats[(int)GEDCOMRecordType.rtResearch]);
-                    recsTask.Text = FmtTitle("Tasks", stats[(int)GEDCOMRecordType.rtTask]);
-                    recsCommunication.Text = FmtTitle("Communications", stats[(int)GEDCOMRecordType.rtCommunication]);
-                    recsLocation.Text = FmtTitle("Locations", stats[(int)GEDCOMRecordType.rtLocation]);
+                    tnRoot.Text = this.fDatabaseName;
+                    tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GEDCOMRecordType.rtIndividual]);
+                    tnRecsFamily.Text = FmtTitle("Families", stats[(int)GEDCOMRecordType.rtFamily]);
+                    tnRecsNote.Text = FmtTitle("Notes", stats[(int)GEDCOMRecordType.rtNote]);
+                    tnRecsMultimedia.Text = FmtTitle("Multimedia", stats[(int)GEDCOMRecordType.rtMultimedia]);
+                    tnRecsSource.Text = FmtTitle("Sources", stats[(int)GEDCOMRecordType.rtSource]);
+                    tnRecsRepository.Text = FmtTitle("Repositories", stats[(int)GEDCOMRecordType.rtRepository]);
+                    tnRecsGroup.Text = FmtTitle("Groups", stats[(int)GEDCOMRecordType.rtGroup]);
+                    tnRecsResearch.Text = FmtTitle("Researches", stats[(int)GEDCOMRecordType.rtResearch]);
+                    tnRecsTask.Text = FmtTitle("Tasks", stats[(int)GEDCOMRecordType.rtTask]);
+                    tnRecsCommunication.Text = FmtTitle("Communications", stats[(int)GEDCOMRecordType.rtCommunication]);
+                    tnRecsLocation.Text = FmtTitle("Locations", stats[(int)GEDCOMRecordType.rtLocation]);
 
                     this.treeView1.ExpandAll();
                 } finally {
@@ -140,36 +182,22 @@ namespace GKNavigatorPlugin
             }
         }
 
-        private void InitControls()
+        public enum NodeType
         {
-            this.treeView1.Nodes.Clear();
+            ntRoot,
+            ntRecentActivity, ntJumpHistory, ntPotencialProblems, ntFilters,
+            ntBookmarks,
+            ntRecords
+        }
 
-            root = this.treeView1.Nodes.Add("root");
-
-            recAct = root.Nodes.Add("Recent Activity");
-            jumpHist = recAct.Nodes.Add("Jump history");
-            problems = recAct.Nodes.Add("Potencial problems");
-            filters = recAct.Nodes.Add("Filters");
-
-            bookmarks = root.Nodes.Add("Bookmarks");
-            records = root.Nodes.Add("Records");
-
-            recsIndividual = CreateRecordTypeNode("Individuals", GEDCOMRecordType.rtIndividual);
-            recsFamily = CreateRecordTypeNode("Families", GEDCOMRecordType.rtFamily);
-            recsNote = CreateRecordTypeNode("Notes", GEDCOMRecordType.rtNote);
-            recsMultimedia = CreateRecordTypeNode("Multimedia", GEDCOMRecordType.rtMultimedia);
-            recsSource = CreateRecordTypeNode("Sources", GEDCOMRecordType.rtSource);
-            recsRepository = CreateRecordTypeNode("Repositories", GEDCOMRecordType.rtRepository);
-            recsGroup = CreateRecordTypeNode("Groups", GEDCOMRecordType.rtGroup);
-            recsResearch = CreateRecordTypeNode("Researches", GEDCOMRecordType.rtResearch);
-            recsTask = CreateRecordTypeNode("Tasks", GEDCOMRecordType.rtTask);
-            recsCommunication = CreateRecordTypeNode("Communications", GEDCOMRecordType.rtCommunication);
-            recsLocation = CreateRecordTypeNode("Locations", GEDCOMRecordType.rtLocation);
+        private TreeNode CreateTreeNode(string title, NodeType nodeType, GEDCOMRecordType recType)
+        {
+            return null;
         }
 
         private TreeNode CreateRecordTypeNode(string title, GEDCOMRecordType recType)
         {
-            TreeNode result = records.Nodes.Add(title);
+            TreeNode result = tnRecords.Nodes.Add(title);
             result.Tag = recType;
             return result;
         }
@@ -177,15 +205,6 @@ namespace GKNavigatorPlugin
         private void CollectData()
         {
         }
-
-        #region ILocalization support
-
-        public void SetLang()
-        {
-            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_Navigator);
-        }
-
-        #endregion
 
         private void TreeView1AfterSelect(object sender, TreeViewEventArgs e)
         {

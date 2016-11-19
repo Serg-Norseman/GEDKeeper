@@ -73,6 +73,8 @@ namespace GKTextSearchPlugin
             base.Dispose(disposing);
         }
 
+        #region IPlugin support
+
         public void Execute()
         {
             if (this.fHost.IsUnix()) {
@@ -85,23 +87,6 @@ namespace GKTextSearchPlugin
 
             tsWin = new TextSearchWin(this, curBase);
             tsWin.Show();
-        }
-
-        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
-        {
-            #if !__MonoCS__
-            if (aBase == null || record == null || this.fSearchMan == null) return;
-            
-            switch (action) {
-                case RecordAction.raEdit:
-                    this.fSearchMan.UpdateRecord(aBase, (GEDCOMRecord)record);
-                    break;
-
-                case RecordAction.raDelete:
-                    this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
-                    break;
-            }
-            #endif
         }
         
         public void OnHostClosing(ref bool cancelClosing) {}
@@ -154,5 +139,28 @@ namespace GKTextSearchPlugin
             }
             return result;
         }
+
+        #endregion
+
+        #region ISubscriber support
+
+        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
+        {
+            #if !__MonoCS__
+            if (aBase == null || record == null || this.fSearchMan == null) return;
+
+            switch (action) {
+                case RecordAction.raEdit:
+                    this.fSearchMan.UpdateRecord(aBase, (GEDCOMRecord)record);
+                    break;
+
+                case RecordAction.raDelete:
+                    this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
+                    break;
+            }
+            #endif
+        }
+
+        #endregion
     }
 }

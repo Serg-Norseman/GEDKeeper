@@ -1576,6 +1576,11 @@ namespace GKUI
             }
         }
 
+        public void BaseRenamed(IBaseWindow aBase, string oldName, string newName)
+        {
+            // TODO: implementation of Base.SaveAs
+        }
+
         public void ShowMDI(Form form)
         {
             if (form != null) {

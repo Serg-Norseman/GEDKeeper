@@ -128,8 +128,9 @@ namespace GKCalculatorPlugin
         #region IWidget common
 
         void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBaseWindow aBase) {}
-        void IWidget.BaseClosed(IBaseWindow aBase) {}
+        void IWidget.BaseChanged(IBaseWindow baseWin) {}
+        void IWidget.BaseClosed(IBaseWindow baseWin) {}
+        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
 
         void IWidget.WidgetEnable()
         {

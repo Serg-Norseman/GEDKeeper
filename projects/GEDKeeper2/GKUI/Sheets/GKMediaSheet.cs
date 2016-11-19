@@ -22,6 +22,7 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

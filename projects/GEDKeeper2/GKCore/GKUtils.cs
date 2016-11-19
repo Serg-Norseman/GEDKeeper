@@ -28,6 +28,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Options;
 using GKCore.Types;
@@ -147,7 +148,7 @@ namespace GKCore
 
                         if (evt.Detail.Place.Location.Value == locRec)
                         {
-                            linksList.AddObject(GenRecordName(rec, true) + ", " + GetEventName(evt).ToLower(), rec);
+                            linksList.AddObject(GetRecordName(rec, true) + ", " + GetEventName(evt).ToLower(), rec);
                         }
                     }
                 }
@@ -169,7 +170,7 @@ namespace GKCore
             return result;
         }
 
-        public static string GenRecordName(GEDCOMRecord record, bool signed)
+        public static string GetRecordName(GEDCOMRecord record, bool signed)
         {
             string result = "";
 
@@ -236,7 +237,7 @@ namespace GKCore
             string result = "";
 
             if (record != null) {
-                result = HyperLink(record.XRef, GenRecordName(record, signed), 0);
+                result = HyperLink(record.XRef, GetRecordName(record, signed), 0);
             }
 
             return result;
@@ -1437,13 +1438,7 @@ namespace GKCore
             if (parent == null)
                 throw new ArgumentNullException("parent");
 
-            GKListView listView;
-
-            listView = new GKListView();
-            listView.HideSelection = false;
-            listView.LabelEdit = false;
-            listView.FullRowSelect = true;
-            listView.View = View.Details;
+            GKListView listView = new GKListView();
             listView.Dock = DockStyle.Fill;
             parent.Controls.Add(listView);
 

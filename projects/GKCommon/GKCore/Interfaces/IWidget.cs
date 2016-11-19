@@ -27,8 +27,9 @@ namespace GKCore.Interfaces
         /// </summary>
         IHost Host { get; }
 
-        void BaseChanged(IBaseWindow aBase);
-        void BaseClosed(IBaseWindow aBase);
+        void BaseChanged(IBaseWindow baseWin);
+        void BaseClosed(IBaseWindow baseWin);
+        void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
 
         void WidgetInit(IHost host);
         void WidgetEnable();

@@ -22,9 +22,11 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
@@ -218,7 +220,7 @@ namespace GKUI.Dialogs
 
                     GKListItem item = this.fChildsList.AddItem(idx, child);
                     item.AddSubItem(GKUtils.GetNameString(child, true, false));
-                    item.AddSubItem(GKUtils.GetBirthDate(child));
+                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetBirthDate(child)));
                 }
 
                 this.fChildsList.EndUpdate();

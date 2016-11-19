@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 
 using GKCommon;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper2 Navigator plugin")]
@@ -44,12 +45,13 @@ namespace GKNavigatorPlugin
     {
         /* 001 */ LSID_Navigator,
     }
-    
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+
+    public sealed class Plugin : BaseObject, IPlugin, IWidget, ISubscriber
     {
         private string fDisplayName = "GKNavigatorPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
+        private NavigatorData fData;
 
         public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
@@ -57,14 +59,29 @@ namespace GKNavigatorPlugin
 
         private NavigatorWidget frm;
 
+        internal NavigatorData Data
+        {
+            get { return this.fData; }
+        }
+
+        public Plugin()
+        {
+            this.fData = new NavigatorData();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) frm.Dispose();
+                if (frm != null) {
+                    frm.Dispose();
+                    frm = null;
+                }
             }
             base.Dispose(disposing);
         }
+
+        #region IPlugin support
 
         public void Execute()
         {
@@ -127,25 +144,44 @@ namespace GKNavigatorPlugin
             return result;
         }
 
+        #endregion
+
         #region IWidget support
 
         void IWidget.WidgetInit(IHost host) {}
 
-        void IWidget.BaseChanged(IBaseWindow aBase)
+        void IWidget.BaseChanged(IBaseWindow baseWin)
         {
             if (frm != null) {
-                frm.BaseChanged(aBase);
+                frm.BaseChanged(baseWin);
             }
         }
 
-        void IWidget.BaseClosed(IBaseWindow aBase)
+        void IWidget.BaseClosed(IBaseWindow baseWin)
         {
             if (frm != null) {
-                frm.BaseChanged(null);
+                frm.BaseClosed(baseWin);
             }
+        }
+
+        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        {
+            this.fData.RenameBase(oldName, newName);
         }
 
         void IWidget.WidgetEnable() {}
+
+        #endregion
+
+        #region ISubscriber support
+
+        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
+        {
+            if (baseWin == null || record == null) return;
+
+            string baseName = baseWin.Context.Tree.FileName;
+            fData[baseName].NotifyRecord(baseWin, record, action);
+        }
 
         #endregion
     }

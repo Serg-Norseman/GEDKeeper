@@ -22,9 +22,11 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
@@ -76,7 +78,7 @@ namespace GKUI.Sheets
                     
                     GKListItem item = this.AddItem(idx, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
-                    item.AddSubItem(evt.Detail.Date.Value);
+                    item.AddSubItem(new GEDCOMDateItem(evt.Detail.Date.Value));
 
                     if (this.fPersonsMode) {
                         string st = evt.Detail.Place.StringValue;

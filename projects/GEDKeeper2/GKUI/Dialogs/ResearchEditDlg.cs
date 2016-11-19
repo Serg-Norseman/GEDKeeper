@@ -22,9 +22,11 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Controls;
@@ -286,8 +288,8 @@ namespace GKUI.Dialogs
 
                 GKListItem item = this.fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
                 item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
-                item.AddSubItem(task.StartDate);
-                item.AddSubItem(task.StopDate);
+                item.AddSubItem(new GEDCOMDateItem(task.StartDate));
+                item.AddSubItem(new GEDCOMDateItem(task.StopDate));
             }
             this.fTasksList.EndUpdate();
 
@@ -301,7 +303,7 @@ namespace GKUI.Dialogs
                 GKListItem item = this.fCommunicationsList.AddItem(corr.CommName, corr);
                 item.AddSubItem(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
                 item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
-                item.AddSubItem(corr.Date);
+                item.AddSubItem(new GEDCOMDateItem(corr.Date));
             }
             this.fCommunicationsList.EndUpdate();
 

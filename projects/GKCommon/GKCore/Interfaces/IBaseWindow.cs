@@ -58,6 +58,7 @@ namespace GKCore.Interfaces
         GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);
+        string GetRecordName(GEDCOMRecord record, bool signed);
         IListManager GetRecordsListManByType(GEDCOMRecordType recType);
         GEDCOMIndividualRecord GetSelectedPerson();
         GEDCOMRecordType GetSelectedRecordType();

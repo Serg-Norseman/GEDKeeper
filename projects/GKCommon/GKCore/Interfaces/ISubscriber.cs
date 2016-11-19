@@ -24,6 +24,6 @@ namespace GKCore.Interfaces
 {
     public interface ISubscriber
     {
-        void NotifyRecord(IBaseWindow aBase, object record, RecordAction action);
+        void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
     }
 }

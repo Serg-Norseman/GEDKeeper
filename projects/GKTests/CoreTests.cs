@@ -24,6 +24,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
@@ -303,7 +304,7 @@ namespace GKTests
             //
 
             GEDCOMRecord rec = fContext.Tree.XRefIndex_Find("I1");
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GenRecordName(rec, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(rec, false));
 
             //
 
