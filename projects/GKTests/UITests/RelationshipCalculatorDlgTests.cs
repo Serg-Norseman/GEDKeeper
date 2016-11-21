@@ -45,33 +45,14 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
 
-            //ExpectModal("RelationshipCalculatorDlg", "DlgHandler");
             fDialog = new RelationshipCalculatorDlg(fBase);
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test()
         {
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
-
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            /*var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            Assert.AreEqual("sample text", fAssociation.Relation);*/
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            ClickButton("btnClose", fDialog);
         }
     }
 }

@@ -31,12 +31,12 @@ using NUnit.Framework;
 namespace GKTests.UITests
 {
     /// <summary>
-    /// 
+    /// Isolated test of dialogue (UserRefEditDlg), without the ability 
+    /// to add or change references to other records.
     /// </summary>
     [TestFixture]
     public class UserRefEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMUserReference fUserRef;
         private IBaseWindow fBase;
         private UserRefEditDlg fDialog;
@@ -46,45 +46,30 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fUserRef = new GEDCOMUserReference(fContext.Tree, null, "", "");
+            fUserRef = new GEDCOMUserReference(fBase.Context.Tree, null, "", "");
 
-            //ExpectModal("UserRefEditDlg", "DlgHandler");
             fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+
             var cmbRef = new ComboBoxTester("cmbRef");
             cmbRef.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRef.Text);
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fUserRef.StringValue);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
     }
 }

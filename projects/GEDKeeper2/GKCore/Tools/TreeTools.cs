@@ -567,7 +567,7 @@ namespace GKCore.Tools
                 {
                     GEDCOMFormat format = tree.GetGEDCOMFormat();
                     bool idCheck = true;
-                    bool convNames = false;
+                    //bool convNames = false;
 
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native)
@@ -583,8 +583,8 @@ namespace GKCore.Tools
 
                         //int fileVer = ConvHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
                         //if (fileVer == GKData.APP_FORMAT_DEFVER && header.Language.Value = GEDCOMLanguageID.Russian) {
-                            // TODO: make condition for languages with patronymics (Culture-depend)
-                            //convNames = true;
+                        // TODO: make condition for languages with patronymics (Culture-depend)
+                        //convNames = true;
                         //}
                     }
 

@@ -21,10 +21,10 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -46,41 +46,32 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
 
-            //ExpectModal("SexCheckDlg", "DlgHandler");
             fDialog = new SexCheckDlg();
-            //_frm.ShowDialog();
             fDialog.Show();
-        }
-
-        [Test]
-        public void Test_Misc()
-        {
-            //Assert.AreEqual(fBase, _frm.Base);
         }
 
         [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            fDialog.IndividualName = "test name";
+            Assert.AreEqual("test name", fDialog.IndividualName);
+
+            fDialog.Sex = GEDCOMSex.svMale;
+            Assert.AreEqual(GEDCOMSex.svMale, fDialog.Sex);
+
+            fDialog.Sex = GEDCOMSex.svFemale;
+            Assert.AreEqual(GEDCOMSex.svFemale, fDialog.Sex);
+
+            fDialog.Sex = GEDCOMSex.svNone;
+            Assert.AreEqual(GEDCOMSex.svNone, fDialog.Sex);
+
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
-
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            ClickButton("btnAccept", fDialog);
         }
     }
 }

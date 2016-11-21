@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class FamilyEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMFamilyRecord fFamilyRecord;
         private IBaseWindow fBase;
         private FamilyEditDlg fDialog;
@@ -46,32 +45,32 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fFamilyRecord = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree, "", "");
+            fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("NoteEditDlg", "NoteEditDlgHandler");
             fDialog = new FamilyEditDlg(fBase);
             fDialog.Family = fFamilyRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
         public void Test_btnCancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fFamilyRecord, fDialog.Family);
-
-
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fFamilyRecord, fDialog.Family);
+
+            var cmbMarriageStatus = new ComboBoxTester("cmbMarriageStatus", fDialog);
+            cmbMarriageStatus.Select(0);
+
+            // The links to other records can be added or edited only in MainWinTests
+            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
+
+            ClickButton("btnAccept", fDialog);
         }
     }
 }

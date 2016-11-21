@@ -45,21 +45,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
 
-            //ExpectModal("SlideshowWin", "FormHandler");
             fDialog = new SlideshowWin(fBase);
-            //_frm.Address = fAddress;
-            //_frm.ShowDialog();
             fDialog.Show();
-        }
-
-        /*[Test]
-        public void Test_Misc()
-        {
-            //Assert.AreEqual(fBase, _frm.Base);
-        }*/
-
-        public void FormHandler()
-        {
         }
     }
 }

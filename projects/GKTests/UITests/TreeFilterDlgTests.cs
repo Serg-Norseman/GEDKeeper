@@ -25,7 +25,6 @@ using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Charts;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -49,42 +48,23 @@ namespace GKTests.UITests
             fContext = fBase.Context;
             fChartFilter = new ChartFilter();
 
-            //ExpectModal("TreeFilterDlg", "DlgHandler");
             fDialog = new TreeFilterDlg(fBase);
             fDialog.Filter = fChartFilter;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
+            Assert.AreEqual(fBase, fDialog.Base);
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            ClickButton("btnAccept", fDialog);
         }
     }
 }

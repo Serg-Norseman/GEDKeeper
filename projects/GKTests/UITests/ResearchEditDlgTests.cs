@@ -31,12 +31,12 @@ using NUnit.Framework;
 namespace GKTests.UITests
 {
     /// <summary>
-    /// 
+    /// Isolated test of dialogue (ResearchEditDlg), without the ability 
+    /// to add or change references to other records.
     /// </summary>
     [TestFixture]
     public class ResearchEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMResearchRecord fResearchRecord;
         private IBaseWindow fBase;
         private ResearchEditDlg fDialog;
@@ -46,46 +46,34 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fResearchRecord = new GEDCOMResearchRecord(fContext.Tree, fContext.Tree, "", "");
+            fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("ResearchEditDlg", "DlgHandler");
             fDialog = new ResearchEditDlg(fBase);
             fDialog.Research = fResearchRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fResearchRecord, fDialog.Research);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            var txtName = new TextBoxTester("txtName");
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fResearchRecord, fDialog.Research);
+
+            var txtName = new TextBoxTester("txtName", fDialog);
             txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
+            // The links to other records can be added or edited only in MainWinTests
+            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fResearchRecord.ResearchName);
-            //Assert.AreEqual("sample text\r\n", fResearchRecord.Originator.Text);
         }
     }
 }

@@ -1063,15 +1063,23 @@ namespace GKUI.Dialogs
             this.fEventsList = new GKEventsSheet(this, this.pageEvents, true, this.fLocalUndoman);
 
             this.fSpousesList = this.CreateSpousesSheet(this.pageSpouses);
+            this.fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
+
             this.fNamesList = this.CreateNamesSheet(this.pageNames);
+            this.fNamesList.SetControlName("fNamesList"); // for purpose of tests
+
             this.fAssociationsList = this.CreateAssociationsSheet(this.pageAssociations);
+            this.fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
+
             this.fGroupsList = this.CreateGroupsSheet(this.pageGroups);
+            this.fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
             this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
 
             this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
+            this.fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             this.btnPortraitAdd.Image = global::GKResources.iRecNew;
             this.btnPortraitDelete.Image = global::GKResources.iRecDelete;

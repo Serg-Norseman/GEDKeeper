@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class GroupEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMGroupRecord fGroupRecord;
         private IBaseWindow fBase;
         private GroupEditDlg fDialog;
@@ -46,39 +45,29 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fGroupRecord = new GEDCOMGroupRecord(fContext.Tree, fContext.Tree, "", "");
+            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("GroupEditDlg", "DlgHandler");
             fDialog = new GroupEditDlg(fBase);
             fDialog.Group = fGroupRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
-        }
-
-        [Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fGroupRecord, fDialog.Group);
         }
 
         [Test]
         public void Test_btnCancel()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fGroupRecord, fDialog.Group);
+
             var edName = new TextBoxTester("edName");
             edName.Enter("sample text");
-            Assert.AreEqual("sample text", edName.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fGroupRecord.GroupName);
         }

@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -34,45 +33,35 @@ namespace GKTests.UITests
     /// 
     /// </summary>
     [TestFixture]
-    public class EventEditDlgTests : NUnitFormTest
+    public class EventEditDlgTests : CustomWindowTest
     {
-        public EventEditDlgTests()
-        {
-        }
-
-        private IBaseContext fContext;
         private GEDCOMCustomEvent fEvent;
         private IBaseWindow fBase;
-
-        private EventEditDlg _frm;
+        private EventEditDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fEvent = new GEDCOMIndividualEvent(fContext.Tree, fContext.Tree, "", "");
+            fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null, "", "");
 
-            //ExpectModal("EventEditDlg", "DlgHandler");
-            _frm = new EventEditDlg(fBase);
-            _frm.Event = fEvent;
-            //_frm.ShowDialog();
-            //_frm.Show();
+            fDialog = new EventEditDlg(fBase);
+            fDialog.Event = fEvent;
+            fDialog.Show();
         }
 
-        [Test]
-        public void Test_Misc()
-        {
-            Assert.AreEqual(fBase, _frm.Base);
-            Assert.AreEqual(fEvent, _frm.Event);
-        }
-
+        [STAThread]
         [Test]
         public void Test_btnCancel()
         {
-            //var btnCancel = new ButtonTester("btnCancel");
-            //btnCancel.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fEvent, fDialog.Event);
+
+            // The links to other records can be added or edited only in MainWinTests
+            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
+
+            ClickButton("btnCancel", fDialog);
         }
     }
 }

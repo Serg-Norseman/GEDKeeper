@@ -95,6 +95,13 @@ namespace GKNavigatorPlugin
         public void SetLang()
         {
             this.Text = this.fPlugin.LangMan.LS(PLS.LSID_Navigator);
+
+            // FIXME: translations
+            this.tnRecAct.Text = "Recent Activity";
+            this.tnJumpHist.Text = "Jump history";
+            this.tnProblems.Text = "Potencial problems";
+            this.tnFilters.Text = "Filters";
+            this.tnBookmarks.Text = "Bookmarks";
         }
 
         #endregion
@@ -158,7 +165,7 @@ namespace GKNavigatorPlugin
                 try {
                     this.treeView1.BeginUpdate();
 
-                    tnRoot.Text = this.fDatabaseName;
+                    tnRoot.Text = dbName;
                     tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GEDCOMRecordType.rtIndividual]);
                     tnRecsFamily.Text = FmtTitle("Families", stats[(int)GEDCOMRecordType.rtFamily]);
                     tnRecsNote.Text = FmtTitle("Notes", stats[(int)GEDCOMRecordType.rtNote]);

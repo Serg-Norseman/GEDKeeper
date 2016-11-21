@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -36,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class TaskEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMTaskRecord fTaskRecord;
         private IBaseWindow fBase;
         private TaskEditDlg fDialog;
@@ -46,33 +44,25 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fTaskRecord = new GEDCOMTaskRecord(fContext.Tree, fContext.Tree, "", "");
+            fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("TaskEditDlg", "DlgHandler");
             fDialog = new TaskEditDlg(fBase);
             fDialog.Task = fTaskRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fTaskRecord, fDialog.Task);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fTaskRecord, fDialog.Task);
+
             /*var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");
             Assert.AreEqual("sample text", txtShortTitle.Text);
@@ -81,8 +71,7 @@ namespace GKTests.UITests
             txtAuthor.Enter("sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             //Assert.AreEqual("sample text", fTaskRecord.FiledByEntry);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);

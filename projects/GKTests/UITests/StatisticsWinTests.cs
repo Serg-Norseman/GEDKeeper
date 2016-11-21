@@ -21,7 +21,6 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
@@ -36,7 +35,6 @@ namespace GKTests.UITests
     public class StatisticsWinTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
         private StatisticsWin fDialog;
 
@@ -46,51 +44,10 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
 
-            fAddress.AddWebPage("test");
-            fAddress.AddPhoneNumber("test");
-            fAddress.AddEmailAddress("test");
-            fAddress.AddFaxNumber("test");
-
-            //ExpectModal("StatisticsWin", "DlgHandler");
             fDialog = new StatisticsWin(fBase, null);
-            //_frm.Address = fAddress;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
-
-        /*[Test]
-        public void Test_Misc()
-        {
-            //Assert.AreEqual(fBase, _frm.Base);
-            //Assert.AreEqual(fAddress, _frm.Address);
-        }*/
-
-        /*[Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            var txtCountry = new TextBoxTester("txtCountry");
-            txtCountry.Enter("sample text");
-            Assert.AreEqual("sample text", txtCountry.Text);
-
-            var txtState = new TextBoxTester("txtState");
-            txtState.Enter("sample text");
-            Assert.AreEqual("sample text", txtState.Text);
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            Assert.AreEqual("sample text", fAddress.AddressCountry);
-            Assert.AreEqual("sample text", fAddress.AddressState);
-        }*/
     }
 }
 

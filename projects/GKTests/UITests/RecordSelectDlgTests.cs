@@ -21,7 +21,9 @@
 #if !__MonoCS__
 
 using System;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
@@ -46,42 +48,19 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
 
-            //ExpectModal("RecordSelectDlg", "DlgHandler");
             fDialog = new RecordSelectDlg(fBase);
-            //_frm.IName = fNameEntry;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
-            //Assert.AreEqual(fBase, _frm.Base);
-        }
+            Assert.AreEqual("*", fDialog.Filter);
+            Assert.AreEqual(GEDCOMRecordType.rtNone, fDialog.Mode);
+            Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
+            Assert.AreEqual(null, fDialog.ResultRecord);
 
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
-
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            //var btnAccept = new ButtonTester("btnAccept");
-            //btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            ClickButton("btnCancel", fDialog);
         }
     }
 }

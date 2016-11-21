@@ -78,6 +78,7 @@ namespace GKUI.Dialogs
             this.btnCancel.Image = global::GKResources.iBtnCancel;
 
             this.fMembersList = CreateMembersSheet(this.pageMembers);
+            this.fMembersList.SetControlName("fMembersList"); // for purpose of tests
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
 

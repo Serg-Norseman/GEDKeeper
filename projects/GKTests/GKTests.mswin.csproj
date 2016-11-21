@@ -85,6 +85,7 @@
     <Compile Include="SCCTests.cs" />
     <Compile Include="Service\GKRecordsViewTester.cs" />
     <Compile Include="Service\GKSheetListTester.cs" />
+    <Compile Include="Service\MaskedTextBoxTester.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="UDNTests.cs" />
     <Compile Include="UITests\AboutDlgTests.cs" />

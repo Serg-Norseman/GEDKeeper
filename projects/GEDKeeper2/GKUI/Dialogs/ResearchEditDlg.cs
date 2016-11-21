@@ -110,6 +110,7 @@ namespace GKUI.Dialogs
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
+            this.fTasksList.SetControlName("fTasksList"); // for purpose of tests
 
             this.fCommunicationsList = new GKSheetList(this.pageCommunications);
             this.fCommunicationsList.OnModify += this.ListCommunicationsModify;
@@ -120,6 +121,7 @@ namespace GKUI.Dialogs
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
+            this.fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
 
             this.fGroupsList = new GKSheetList(this.pageGroups);
             this.fGroupsList.OnModify += this.ListGroupsModify;
@@ -127,6 +129,7 @@ namespace GKUI.Dialogs
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
                );
             this.fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
+            this.fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
 
