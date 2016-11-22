@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -36,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class SourceCitEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMSourceCitation fSourceCitation;
         private IBaseWindow fBase;
         private SourceCitEditDlg fDialog;
@@ -46,45 +44,26 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fSourceCitation = new GEDCOMSourceCitation(fContext.Tree, null, "", "");
+            fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null, "", "");
 
-            //ExpectModal("SourceCitEditDlg", "DlgHandler");
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
+            Assert.AreEqual(fBase, fDialog.Base);
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            //var btnAccept = new ButtonTester("btnAccept");
-            //btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            // The links to other records can be added or edited only in MainWinTests
+            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX/SelectRecord)
         }
     }
 }

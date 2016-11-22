@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class FilePropertiesDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private FilePropertiesDlg fDialog;
 
@@ -45,32 +44,29 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
-            //ExpectModal("FilePropertiesDlg", "DlgHandler");
             fDialog = new FilePropertiesDlg(fBase);
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-
             ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);
 
             ClickButton("btnAccept", fDialog);
 
-            GEDCOMSubmitterRecord submitter = fContext.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
     }

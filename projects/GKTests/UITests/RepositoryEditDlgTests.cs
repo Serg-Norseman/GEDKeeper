@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -36,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class RepositoryEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMRepositoryRecord fRepositoryRecord;
         private IBaseWindow fBase;
         private RepositoryEditDlg fDialog;
@@ -46,28 +44,26 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree, "", "");
+            fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("RepositoryEditDlg", "DlgHandler");
             fDialog = new RepositoryEditDlg(fBase);
             fDialog.Repository = fRepositoryRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_EnterDataAndApply()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
+
+            ClickButton("btnAccept", fDialog);
         }
     }
 }

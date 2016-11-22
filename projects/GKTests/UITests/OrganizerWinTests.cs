@@ -35,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class OrganizerWinTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
         private OrganizerWin fDialog;
@@ -45,52 +44,21 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
+            fAddress = new GEDCOMAddress(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");
             fAddress.AddEmailAddress("test");
             fAddress.AddFaxNumber("test");
 
-            //ExpectModal("OrganizerWin", "DlgHandler");
             fDialog = new OrganizerWin(fBase);
-            //_frm.Address = fAddress;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
-            //Assert.AreEqual(fBase, _frm.Base);
-            //Assert.AreEqual(fAddress, _frm.Address);
         }
-
-        /*[Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            var txtCountry = new TextBoxTester("txtCountry");
-            txtCountry.Enter("sample text");
-            Assert.AreEqual("sample text", txtCountry.Text);
-
-            var txtState = new TextBoxTester("txtState");
-            txtState.Enter("sample text");
-            Assert.AreEqual("sample text", txtState.Text);
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            Assert.AreEqual("sample text", fAddress.AddressCountry);
-            Assert.AreEqual("sample text", fAddress.AddressState);
-        }*/
     }
 }
 

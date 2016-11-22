@@ -42,7 +42,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_btnClose()
+        public void Test_Close()
         {
             ClickButton("btnClose", fDialog);
         }

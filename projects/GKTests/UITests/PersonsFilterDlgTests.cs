@@ -25,7 +25,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -36,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class PersonsFilterDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IListManager fListMan;
         private IBaseWindow fBase;
         private PersonsFilterDlg fDialog;
@@ -46,39 +44,29 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fListMan = new IndividualListMan(fContext.Tree);
+            fListMan = new IndividualListMan(fBase.Context.Tree);
 
-            //ExpectModal("PersonsFilterDlg", "DlgHandler");
             fDialog = new PersonsFilterDlg(fBase, fListMan);
-            //_frm.IName = fNameEntry;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Reset()
         {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_btnReset()
-        {
-            var btnReset = new ButtonTester("btnReset");
-            btnReset.Click();
+            ClickButton("btnReset", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");
             Assert.AreEqual("sample text", cmbRelation.Text);*/
@@ -87,8 +75,7 @@ namespace GKTests.UITests
             txtAuthor.Enter("sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             //Assert.AreEqual("sample text", fListMan.Relation);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);

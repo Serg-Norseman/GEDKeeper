@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Threading;
 using System.Windows.Forms;
 using NUnit.Extensions.Forms;
 
@@ -53,17 +52,5 @@ namespace GKTests.UITests
             var tsMenuItem = new ToolStripMenuItemTester(name, form);
             tsMenuItem.Click();
         }
-
-        #region Service
-
-        protected static void Wait()
-        {
-            #if !CI_MODE
-            //Application.DoEvents();
-            //Thread.Sleep(1000);
-            #endif
-        }
-
-        #endregion
     }
 }

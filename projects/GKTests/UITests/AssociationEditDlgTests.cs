@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class AssociationEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMAssociation fAssociation;
         private IBaseWindow fBase;
         private AssociationEditDlg fDialog;
@@ -46,28 +45,25 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fAssociation = new GEDCOMAssociation(fContext.Tree, null, "", "");
+            fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
 
-            //ExpectModal("AssociationEditDlg", "DlgHandler");
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fAssociation, fDialog.Association);
-
             ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fAssociation, fDialog.Association);
+
             var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");
             Assert.AreEqual("sample text", cmbRelation.Text);

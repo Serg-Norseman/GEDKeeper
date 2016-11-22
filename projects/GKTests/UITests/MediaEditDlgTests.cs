@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class MediaEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMMultimediaRecord fMultimediaRecord;
         private IBaseWindow fBase;
         private MediaEditDlg fDialog;
@@ -46,39 +45,30 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fMultimediaRecord = new GEDCOMMultimediaRecord(fContext.Tree, fContext.Tree, "", "");
+            fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("MediaEditDlg", "DlgHandler");
             fDialog = new MediaEditDlg(fBase);
             fDialog.MediaRec = fMultimediaRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fMultimediaRecord, fDialog.MediaRec);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fMultimediaRecord, fDialog.MediaRec);
+
             /*var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);*/
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             //Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
         }

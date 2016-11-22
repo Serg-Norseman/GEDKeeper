@@ -281,6 +281,7 @@ namespace GKTests
             object obj = new object();
             strList.SetObject(2, obj);
             Assert.AreEqual(obj, strList.GetObject(2));
+            Assert.AreEqual(2, strList.IndexOfObject(obj));
 
             strList.CaseSensitive = true;
             Assert.IsTrue(strList.CaseSensitive);

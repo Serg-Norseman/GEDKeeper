@@ -26,7 +26,6 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -37,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class RecordSelectDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private RecordSelectDlg fDialog;
 
@@ -46,7 +44,6 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
             fDialog = new RecordSelectDlg(fBase);
             fDialog.Show();

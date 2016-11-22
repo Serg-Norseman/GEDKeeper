@@ -21,7 +21,6 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
@@ -35,8 +34,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class MediaViewerWinTests : CustomWindowTest
     {
-        private IBaseContext fContext;
-        private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
 
@@ -45,52 +42,16 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fAddress = new GEDCOMAddress(fContext.Tree, fContext.Tree, "", "");
 
-            fAddress.AddWebPage("test");
-            fAddress.AddPhoneNumber("test");
-            fAddress.AddEmailAddress("test");
-            fAddress.AddFaxNumber("test");
-
-            //ExpectModal("MediaViewerWin", "DlgHandler");
             fDialog = new MediaViewerWin(fBase);
-            //_frm.Address = fAddress;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
-            //Assert.AreEqual(fBase, _frm.Base);
-            //Assert.AreEqual(fAddress, _frm.Address);
+            Assert.AreEqual(null, fDialog.FileRef);
         }
-
-        /*[Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            var txtCountry = new TextBoxTester("txtCountry");
-            txtCountry.Enter("sample text");
-            Assert.AreEqual("sample text", txtCountry.Text);
-
-            var txtState = new TextBoxTester("txtState");
-            txtState.Enter("sample text");
-            Assert.AreEqual("sample text", txtState.Text);
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            Assert.AreEqual("sample text", fAddress.AddressCountry);
-            Assert.AreEqual("sample text", fAddress.AddressState);
-        }*/
     }
 }
 

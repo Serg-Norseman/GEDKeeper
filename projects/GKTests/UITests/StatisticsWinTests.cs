@@ -21,9 +21,12 @@
 #if !__MonoCS__
 
 using System;
+using System.Collections.Generic;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -45,8 +48,18 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
 
-            fDialog = new StatisticsWin(fBase, null);
+            fDialog = new StatisticsWin(fBase, new List<GEDCOMRecord>());
             fDialog.Show();
+        }
+
+        [Test]
+        public void Test_Common()
+        {
+            var cbType = new ToolStripComboBoxTester("cbType", fDialog);
+
+            for (int i = 0; i < cbType.Properties.Items.Count; i++) {
+                cbType.Select(i);
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -63,18 +64,20 @@ namespace GKTests.UITests
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fTaskRecord, fDialog.Task);
 
-            /*var txtShortTitle = new TextBoxTester("txtShortTitle");
-            txtShortTitle.Enter("sample text");
-            Assert.AreEqual("sample text", txtShortTitle.Text);
+            var txtPriority = new ComboBoxTester("txtPriority");
+            txtPriority.Select(1);
 
-            var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
+            var txtStartDate = new MaskedTextBoxTester("txtStartDate");
+            txtStartDate.Enter("01.01.2000");
+
+            var txtStopDate = new MaskedTextBoxTester("txtStopDate");
+            txtStopDate.Enter("20.02.2000");
 
             ClickButton("btnAccept", fDialog);
 
-            //Assert.AreEqual("sample text", fTaskRecord.FiledByEntry);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual("01 JAN 2000", fTaskRecord.StartDate.StringValue);
+            Assert.AreEqual("20 FEB 2000", fTaskRecord.StopDate.StringValue);
         }
     }
 }

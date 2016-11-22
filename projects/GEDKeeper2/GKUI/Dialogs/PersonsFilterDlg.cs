@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
     public partial class PersonsFilterDlg : CommonFilterDlg
     {
         private readonly IndividualListMan fListMan;
-        
+
         public PersonsFilterDlg() : base()
         {
             InitializeComponent();

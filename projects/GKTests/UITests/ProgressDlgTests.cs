@@ -34,7 +34,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class ProgressDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private ProgressDlg fDialog;
 
@@ -43,16 +42,13 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
-            //ExpectModal("ProgressDlg", "DlgHandler");
             fDialog = new ProgressDlg();
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Common()
         {
         }
     }

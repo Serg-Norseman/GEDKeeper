@@ -53,7 +53,7 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
             ClickButton("btnCancel", fDialog);
         }

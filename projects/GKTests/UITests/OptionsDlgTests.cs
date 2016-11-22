@@ -34,7 +34,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class OptionsDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private OptionsDlg fDialog;
 
@@ -43,16 +42,13 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
-            //ExpectModal("NameEditDlg", "DlgHandler");
             fDialog = new OptionsDlg(fBase.Host);
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
             ClickButton("btnCancel", fDialog);
         }

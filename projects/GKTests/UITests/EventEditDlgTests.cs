@@ -53,7 +53,7 @@ namespace GKTests.UITests
 
         [STAThread]
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fEvent, fDialog.Event);

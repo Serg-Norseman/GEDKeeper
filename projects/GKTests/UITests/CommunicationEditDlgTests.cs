@@ -57,17 +57,17 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_Common()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
-
             ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
+
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);

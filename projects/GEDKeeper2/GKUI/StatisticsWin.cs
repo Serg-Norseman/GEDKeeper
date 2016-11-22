@@ -57,7 +57,7 @@ namespace GKUI
         {
             this.InitializeComponent();
 
-            this.tbExcelExport.Image = (System.Drawing.Image)MainWin.ResourceManager.GetObjectEx("iExcel");
+            this.tbExcelExport.Image = global::GKResources.iExcel;
 
             this.fGraph = new ZedGraphControl();
             this.fGraph.IsShowPointValues = true;

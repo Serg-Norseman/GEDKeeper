@@ -34,7 +34,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class SlideshowWinTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private SlideshowWin fDialog;
 
@@ -43,11 +42,16 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
             fDialog = new SlideshowWin(fBase);
             fDialog.Show();
         }
+
+        /*[STAThread]
+        [Test]
+        public void Test_Common()
+        {
+        }*/
     }
 }
 

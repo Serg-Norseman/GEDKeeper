@@ -34,7 +34,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class RelationshipCalculatorDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private RelationshipCalculatorDlg fDialog;
 
@@ -43,14 +42,13 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
             fDialog = new RelationshipCalculatorDlg(fBase);
             fDialog.Show();
         }
 
         [Test]
-        public void Test()
+        public void Test_Common()
         {
             ClickButton("btnClose", fDialog);
         }

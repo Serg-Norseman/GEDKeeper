@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -49,43 +48,24 @@ namespace GKTests.UITests
             fContext = fBase.Context;
             fMultimediaLink = new GEDCOMMultimediaLink(fContext.Tree, null, "", "");
 
-            //ExpectModal("PortraitSelectDlg", "DlgHandler");
             fDialog = new PortraitSelectDlg(fBase);
             fDialog.MultimediaLink = fMultimediaLink;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fMultimediaLink, fDialog.MultimediaLink);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var txtShortTitle = new TextBoxTester("txtShortTitle");
-            txtShortTitle.Enter("sample text");
-            Assert.AreEqual("sample text", txtShortTitle.Text);
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fMultimediaLink, fDialog.MultimediaLink);
 
-            var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            //Assert.AreEqual("sample text", fTaskRecord.FiledByEntry);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            ClickButton("btnAccept", fDialog);
         }
     }
 }

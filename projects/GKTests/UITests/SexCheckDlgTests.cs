@@ -35,7 +35,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class SexCheckDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private SexCheckDlg fDialog;
 
@@ -44,14 +43,13 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
             fDialog = new SexCheckDlg();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
             fDialog.IndividualName = "test name";
             Assert.AreEqual("test name", fDialog.IndividualName);

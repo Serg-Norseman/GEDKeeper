@@ -38,7 +38,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class AddressEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMAddress fAddress;
         private IBaseWindow fBase;
         private AddressEditDlg fDialog;
@@ -48,18 +47,15 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fAddress = new GEDCOMAddress(fContext.Tree, null, "", "");
+            fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");
             fAddress.AddEmailAddress("test");
             fAddress.AddFaxNumber("test");
 
-            //ExpectModal("AddressEditDlg", "DlgHandler");
             fDialog = new AddressEditDlg(fBase);
             fDialog.Address = fAddress;
-            //fDialog.ShowDialog();
             fDialog.Show();
         }
 
@@ -69,17 +65,17 @@ namespace GKTests.UITests
         }
 
         [Test]
-        public void Test_btnCancel()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fAddress, fDialog.Address);
-
             ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fAddress, fDialog.Address);
+
             var txtCountry = new TextBoxTester("txtCountry");
             txtCountry.Enter("sample text");
             Assert.AreEqual("sample text", txtCountry.Text);

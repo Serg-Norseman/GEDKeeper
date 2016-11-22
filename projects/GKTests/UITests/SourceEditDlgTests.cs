@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class SourceEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMSourceRecord fSourceRecord;
         private IBaseWindow fBase;
         private SourceEditDlg fDialog;
@@ -46,33 +45,25 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fSourceRecord = new GEDCOMSourceRecord(fContext.Tree, fContext.Tree, "", "");
+            fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("SourceEditDlg", "DlgHandler");
             fDialog = new SourceEditDlg(fBase);
             fDialog.SourceRecord = fSourceRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
+
             var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");
             Assert.AreEqual("sample text", txtShortTitle.Text);
@@ -81,8 +72,7 @@ namespace GKTests.UITests
             txtAuthor.Enter("sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fSourceRecord.FiledByEntry);
             Assert.AreEqual("sample text\r\n", fSourceRecord.Originator.Text);

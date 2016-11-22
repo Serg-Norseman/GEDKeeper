@@ -36,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class NoteEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private GEDCOMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
         private NoteEditDlg fDialog;
@@ -46,95 +45,33 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
-            fNoteRecord = new GEDCOMNoteRecord(fContext.Tree, fContext.Tree, "", "");
+            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            //ExpectModal("NoteEditDlg", "FormHandler");
             fDialog = new NoteEditDlg(fBase);
             fDialog.NoteRecord = fNoteRecord;
-            //_frm.ShowDialog();
             fDialog.Show();
         }
 
         [Test]
-        public void Test_Misc()
+        public void Test_Cancel()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-            Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
-        }
-
-        public void FormHandler()
-        {
-            //var btnCancel = new ButtonTester("btnCancel", "NoteEditDlg");
-            //btnCancel.Click();
-        }
-
-        [Test]
-        public void Test_btnCancel()
-        {
-            var btnCancel = new ButtonTester("btnCancel");
-            btnCancel.Click();
+            ClickButton("btnCancel", fDialog);
         }
 
         [Test]
         public void Test_EnterDataAndApply()
         {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
+
             var txtNote = new TextBoxTester("txtNote");
             txtNote.Enter("sample text");
             Assert.AreEqual("sample text", txtNote.Text);
 
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
+            ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text\r\n", fNoteRecord.Note.Text);
         }
-
-        /*[Test]
-        public void TestData()
-        {
-            // CheckBoxTester uncheckBoxTester = new CheckBoxTester("aPanelName.checkBoxName", "MyFormName");
-            // RadioButtonTester radioTester = new RadioButtonTester("mainFormControlName.panelName.radioButtonName",  "MyFormName");
-
-            var txtInput = new TextBoxTester("txtInput") {["Text"] = "2+2"};
-            var txtOutput = new TextBoxTester("txtOutput");
-            Assert.AreEqual("2+2", txtInput.Text);
-            
-            var btnRes = new ButtonTester("btnRes");
-            btnRes.Click();
-            Assert.AreEqual("4", txtOutput.Text);
-        }*/
-        
-        /*[Test]
-        public void TestNoData()
-        {
-            ExpectModal("Message", new ModalFormActivated(TestFormNoDataHandler));
-            var nameTextbox = new TextBoxTester("txtName");
-            nameTextbox["Text"] = string.Empty;
-            Assert.AreEqual(string.Empty, nameTextbox.Text);
-            var okButton = new ButtonTester("btnOK");
-            okButton.Click();
-            Assert.IsFalse(form.DialogResult == DialogResult.OK);
-        }
-
-        [Test]
-        public void TestData()
-        {
-            var nameTextbox = new TextBoxTester("txtName");
-            nameTextbox["Text"] = "abcdefg";
-            Assert.AreEqual("abcdefg", nameTextbox.Text);
-            var okButton = new ButtonTester("btnOK");
-            okButton.Click();
-            Assert.IsTrue(form.DialogResult == DialogResult.OK);
-        }
-
-        public void TestFormNoDataHandler()
-        {
-            var messageBoxTester = new MessageBoxTester("Message");
-            if (messageBoxTester != null)
-            {
-                messageBoxTester.ClickOk();
-            }
-        }*/
     }
 }
 

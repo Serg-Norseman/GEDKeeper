@@ -23,7 +23,6 @@
 using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKTests.Service;
@@ -58,7 +57,6 @@ namespace GKTests.UITests
         public void Test_Common()
         {
             // Stage 1: call to AboutDlg, closing in AboutDlg_Handler
-            Wait();
             ExpectModal("AboutDlg", "AboutDlg_Handler");
             ClickToolStripMenuItem("miAbout", fMainWin);
 
@@ -67,7 +65,6 @@ namespace GKTests.UITests
             Assert.IsNull(fMainWin.GetCurrentFile(), "Stage 2.1");
 
             // Stage 2.2: create an empty base
-            Wait();
             ClickToolStripButton("tbFileNew", fMainWin);
 
             // Stage 2.3: GetCurrentFile()
@@ -79,160 +76,139 @@ namespace GKTests.UITests
             fCurBase.UpdateView();
 
             // Stage 2.5: select first individual record in base
-            Wait();
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef);
 
             // Stage 3: call to FilePropertiesDlg
-            Wait();
             ModalFormHandler = FilePropertiesDlg_btnCancel_Handler; // FilePropertiesDlg.Cancel
             ClickToolStripMenuItem("miFileProperties", fMainWin);
-            Wait();
             ModalFormHandler = FilePropertiesDlg_btnAccept_Handler; // FilePropertiesDlg.Accept
             ClickToolStripMenuItem("miFileProperties", fMainWin);
 
 
             // Stage 4: call to OptionsDlg
-            Wait();
             ModalFormHandler = OptionsDlg_btnCancel_Handler; // OptionsDlg.Cancel
             ClickToolStripMenuItem("miOptions", fMainWin);
-            Wait();
             ModalFormHandler = OptionsDlg_btnAccept_Handler; // OptionsDlg.Accept
             ClickToolStripMenuItem("miOptions", fMainWin);
 
 
-            // Stage 5: calls to the different Editors
-            Wait();
-            for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                fCurBase.ShowRecordsTab(rt);
-
-                Wait();
-                ModalFormHandler = EditorDlg_btnCancel_Handler;
-                ClickToolStripButton("tbRecordAdd", fMainWin);
-
-                Wait();
-                ModalFormHandler = EditorDlg_btnAccept_Handler;
-                ClickToolStripButton("tbRecordAdd", fMainWin);
-
-                Wait();
-                ModalFormHandler = EditorDlg_btnCancel_Handler;
-                ClickToolStripButton("tbRecordEdit", fMainWin);
-
-                Wait();
-                ModalFormHandler = EditorDlg_btnAccept_Handler;
-                ClickToolStripButton("tbRecordEdit", fMainWin);
-            }
+            // Stage 5: internals of BaseWin
+            BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
 
 
             // Stage 22: call to QuickFind
-            Wait();
             ClickToolStripMenuItem("miSearch", fMainWin);
 
 
             // Stage 23: call to PersonsFilterDlg
-            Wait();
-            ModalFormHandler = PersonsFilterDlg_btnCancel_Handler; // PersonsFilterDlg.Cancel
+            ModalFormHandler = PersonsFilterDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
-            Wait();
-            ModalFormHandler = PersonsFilterDlg_btnAccept_Handler; // PersonsFilterDlg.Accept
+            ModalFormHandler = PersonsFilterDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
 
 
             // Stage 24: call to TreeToolsWin
-            Wait();
             ModalFormHandler = TreeToolsWin_Handler;
             ClickToolStripMenuItem("miTreeTools", fMainWin);
 
 
             // Stage 25: call to CircleChartWin (required the base, selected person)
-            Wait();
             ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 25");
-            CircleChartWin_Tests(fMainWin.ActiveMdiChild as CircleChartWin);
+            CircleChartWin_Tests(fMainWin.ActiveMdiChild, "Stage 25");
 
             // Stage 26: call to CircleChartWin (required the base, selected person)
-            Wait();
             ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is CircleChartWin, "Stage 26");
-            CircleChartWin_Tests(fMainWin.ActiveMdiChild as CircleChartWin);
+            CircleChartWin_Tests(fMainWin.ActiveMdiChild, "Stage 26");
 
 
             // Stage 27: call to TreeChartWin (required the base, selected person)
-            Wait();
             ClickToolStripMenuItem("miTreeAncestors", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 27");
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckAncestors);
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckAncestors, "Stage 27");
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
-            Wait();
             ClickToolStripMenuItem("miTreeDescendants", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 28");
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckDescendants);
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckDescendants, "Stage 28");
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
-            Wait();
             ClickToolStripMenuItem("miTreeBoth", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is TreeChartWin, "Stage 29");
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild as TreeChartWin, TreeChartBox.ChartKind.ckBoth);
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckBoth, "Stage 29");
 
 
             // Stage 30: call to StatsWin (required the base)
-            Wait();
             ClickToolStripButton("tbStats", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is StatisticsWin, "Stage 30");
-            StatsWin_Tests(fMainWin.ActiveMdiChild as StatisticsWin);
-            fMainWin.ActiveMdiChild.Close();
+            StatsWin_Tests(fMainWin.ActiveMdiChild, "Stage 30");
 
 
             // Stage 31: call to SlideshowWin (required the base)
-            Wait();
             ClickToolStripMenuItem("miSlideshow", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 31");
-            fMainWin.ActiveMdiChild.Close();
+            SlideshowWin_Tests(fMainWin.ActiveMdiChild, "Stage 31");
 
 
             // Stage 32: call to ScriptEditWin (required the base)
-            Wait();
             ModalFormHandler = ScriptEditWin_Handler;
             ClickToolStripMenuItem("miScripts", fMainWin);
             //Assert.IsTrue(fMainWin.ActiveMdiChild is SlideshowWin, "Stage 32");
 
 
             // Stage 33: call to OrganizerWin
-            Wait();
             ModalFormHandler = OrganizerWin_Handler;
             ClickToolStripMenuItem("miOrganizer", fMainWin);
 
 
             // Stage 34: call to RelationshipCalculatorDlg
-            Wait();
             ModalFormHandler = RelationshipCalculatorDlg_Handler;
             ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
 
 
             // Stage 35: call to MapsViewerWin (required the base)
-            Wait();
             ClickToolStripMenuItem("miMap", fMainWin);
-            Assert.IsTrue(fMainWin.ActiveMdiChild is MapsViewerWin, "Stage 35");
-            fMainWin.ActiveMdiChild.Close();
+            MapsViewerWin_Tests(fMainWin.ActiveMdiChild, "Stage 35");
 
 
             // Stage 50: close Base
-            Wait();
             ClickToolStripMenuItem("miFileClose", fMainWin);
 
 
             // Stage 51: call to LanguageSelectDlg
-            Wait();
             ModalFormHandler = LanguageSelectDlg_Handler;
             fMainWin.LoadLanguage(0);
 
 
             // Stage 52: exit
-            Wait();
             ClickToolStripMenuItem("miExit", fMainWin);
+        }
+
+        private void BaseWin_Tests(BaseWin baseWin, string stage)
+        {
+            // Stage 5: calls to the different Editors
+            for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                Assert.IsNotNull(baseWin.GetHyperViewByType(rt), stage + ".1");
+
+                baseWin.ShowRecordsTab(rt);
+
+                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ClickToolStripButton("tbRecordAdd", fMainWin);
+
+                ModalFormHandler = EditorDlg_btnAccept_Handler;
+                ClickToolStripButton("tbRecordAdd", fMainWin);
+
+                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ClickToolStripButton("tbRecordEdit", fMainWin);
+
+                ModalFormHandler = EditorDlg_btnAccept_Handler;
+                ClickToolStripButton("tbRecordEdit", fMainWin);
+            }
+
+            Assert.IsTrue(baseWin.IsUnknown(), stage + ".2");
+
+            Assert.IsNotNull(baseWin.Navman, stage + ".3");
+
+            baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            baseWin.SelectRecordByXRef("I1");
+            //baseWin.me
         }
 
         #region AboutDlg handler
@@ -246,12 +222,12 @@ namespace GKTests.UITests
 
         #region FilePropertiesDlg handlers
 
-        public void FilePropertiesDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        private void FilePropertiesDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
         }
 
-        public void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        private void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             Assert.AreEqual(fCurBase, ((IBaseEditor)form).Base);
 
@@ -268,12 +244,12 @@ namespace GKTests.UITests
 
         #region OptionsDlg handlers
 
-        public void OptionsDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        private void OptionsDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
         }
 
-        public void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        private void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             Assert.AreEqual(GlobalOptions.Instance, ((OptionsDlg)form).Options);
 
@@ -291,12 +267,12 @@ namespace GKTests.UITests
 
         #region PersonsFilterDlg handlers
 
-        public void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        private void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
         }
 
-        public void PersonsFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        private void PersonsFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             Assert.AreEqual(fCurBase, ((CommonFilterDlg)form).Base);
 
@@ -314,7 +290,7 @@ namespace GKTests.UITests
 
         #region ScriptEditWin handlers
 
-        public void ScriptEditWin_Handler(string name, IntPtr ptr, Form form)
+        private void ScriptEditWin_Handler(string name, IntPtr ptr, Form form)
         {
             form.Close();
         }
@@ -323,12 +299,11 @@ namespace GKTests.UITests
 
         #region TreeToolsWin handlers
 
-        public void TreeToolsWin_Handler(string name, IntPtr ptr, Form form)
+        private void TreeToolsWin_Handler(string name, IntPtr ptr, Form form)
         {
             var tabs = new TabControlTester("tabsTools", form);
 
             for (int i = 0; i < tabs.Properties.TabCount; i++) {
-                Wait();
                 tabs.SelectTab(i);
             }
 
@@ -339,7 +314,7 @@ namespace GKTests.UITests
 
         #region OrganizerWin handlers
 
-        public void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
+        private void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
         {
             form.Close();
         }
@@ -348,7 +323,7 @@ namespace GKTests.UITests
 
         #region RelationshipCalculatorDlg handlers
 
-        public void RelationshipCalculatorDlg_Handler(string name, IntPtr ptr, Form form)
+        private void RelationshipCalculatorDlg_Handler(string name, IntPtr ptr, Form form)
         {
             Assert.IsTrue(fCurBase.Context.Tree.RecordsCount > 1);
             GEDCOMIndividualRecord iRec1 = fCurBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
@@ -380,7 +355,7 @@ namespace GKTests.UITests
 
         #region LanguageSelectDlg handlers
 
-        public void LanguageSelectDlg_Handler(string name, IntPtr ptr, Form form)
+        private void LanguageSelectDlg_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
         }
@@ -434,7 +409,6 @@ namespace GKTests.UITests
 
             // events
             Assert.AreEqual(0, familyRecord.Events.Count);
-            Wait();
             tabs.SelectTab(1);
             ModalFormHandler = EventEditDlg_Select_Handler;
             ClickToolStripButton("fEventsList_ToolBar_btnAdd", dlg);
@@ -453,7 +427,6 @@ namespace GKTests.UITests
 
             // notes
             Assert.AreEqual(0, familyRecord.Notes.Count);
-            Wait();
             tabs.SelectTab(2);
             ModalFormHandler = RecordSelectDlg_Select_Handler;
             ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
@@ -471,7 +444,6 @@ namespace GKTests.UITests
 
             // media
             Assert.AreEqual(0, familyRecord.MultimediaLinks.Count);
-            Wait();
             tabs.SelectTab(3);
             ModalFormHandler = RecordSelectDlg_Select_Handler;
             ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
@@ -489,7 +461,6 @@ namespace GKTests.UITests
 
             // sources
             Assert.AreEqual(0, familyRecord.SourceCitations.Count);
-            Wait();
             tabs.SelectTab(4);
             ModalFormHandler = SourceCitEditDlg_Handler;
             ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
@@ -513,7 +484,6 @@ namespace GKTests.UITests
 
             // groups
             Assert.AreEqual(0, indiRecord.Groups.Count);
-            Wait();
             RSD_SubHandler = GroupAdd_Mini_Handler;
             ModalFormHandler = RecordSelectDlg_Create_Handler;
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
@@ -533,7 +503,6 @@ namespace GKTests.UITests
 
             // groups
             Assert.AreEqual(0, resRecord.Groups.Count);
-            Wait();
             RSD_SubHandler = GroupAdd_Mini_Handler;
             ModalFormHandler = RecordSelectDlg_Create_Handler;
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
@@ -553,7 +522,6 @@ namespace GKTests.UITests
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);
-            Wait();
             ModalFormHandler = RecordSelectDlg_Select_Handler;
             ClickToolStripButton("fMembersList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, groupRecord.Members.Count);
@@ -665,32 +633,45 @@ namespace GKTests.UITests
 
         #endregion
 
-        private void CircleChartWin_Tests(CircleChartWin frm)
+        private void CircleChartWin_Tests(Form frm, string stage)
         {
-            Assert.AreEqual(fCurBase, frm.Base);
-            //Assert.AreEqual(kind, frm.ChartKind);
-            frm.UpdateView();
+            Assert.IsInstanceOf(typeof(CircleChartWin), frm, stage);
+
+            CircleChartWin ccWin = frm as CircleChartWin;
+            Assert.AreEqual(fCurBase, ccWin.Base);
+            ccWin.UpdateView();
+
             frm.Close();
         }
 
-        private void TreeChartWin_Tests(TreeChartWin frm, TreeChartBox.ChartKind kind)
+        private void TreeChartWin_Tests(Form frm, TreeChartBox.ChartKind kind, string stage)
         {
-            Assert.AreEqual(fCurBase, frm.Base);
-            Assert.AreEqual(kind, frm.ChartKind);
-            frm.UpdateView();
+            Assert.IsInstanceOf(typeof(TreeChartWin), frm, stage);
+
+            TreeChartWin tcWin = frm as TreeChartWin;
+            Assert.AreEqual(fCurBase, tcWin.Base);
+            Assert.AreEqual(kind, tcWin.ChartKind);
+            tcWin.UpdateView();
+
             frm.Close();
         }
 
-        private void StatsWin_Tests(StatisticsWin frm)
+        private void StatsWin_Tests(Form frm, string stage)
         {
-            var cbType = new ToolStripComboBoxTester("cbType", frm);
+            Assert.IsInstanceOf(typeof(StatisticsWin), frm, stage);
+            frm.Close();
+        }
 
-            for (int i = 0; i < cbType.Properties.Items.Count; i++) {
-                Wait();
-                cbType.Select(i);
-            }
+        private void SlideshowWin_Tests(Form frm, string stage)
+        {
+            Assert.IsInstanceOf(typeof(SlideshowWin), frm, stage);
+            frm.Close();
+        }
 
-            //frm.Close();
+        private void MapsViewerWin_Tests(Form frm, string stage)
+        {
+            Assert.IsInstanceOf(typeof(MapsViewerWin), frm, stage);
+            frm.Close();
         }
 
         #region Useful stuff
