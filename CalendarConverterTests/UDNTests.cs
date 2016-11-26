@@ -166,6 +166,14 @@ namespace CalendarConverterTests
             Assert.Throws(typeof(ArgumentOutOfRangeException), () => { rec = fDates[42]; }, "(42)"); // end
         }
 
+        [Test(Description = "UDN Exceptions Test")]
+        [ExpectedException(typeof(Exception))]
+        public void UDNExceptions_Tests()
+        {
+            UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
+                              new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 07));
+        }
+
         [Test]
         public void UDNCommon_Tests()
         {
@@ -179,7 +187,8 @@ namespace CalendarConverterTests
             Assert.AreEqual("~????/05/14", testUDNApp.ToString());
 
             Assert.AreEqual(-1, testUDNBef.CompareTo(testUDNAft));
-            //Assert.AreEqual(-1, testUDNBef.CompareTo(null));
+            Assert.AreEqual(-1, testUDNBef.CompareTo((object) testUDNAft));
+            Assert.AreEqual(-1, testUDNBef.CompareTo(null));
 
             UDN testUDN2 = (UDN)testUDNApp.Clone();
             Assert.AreEqual("~????/05/14", testUDN2.ToString());

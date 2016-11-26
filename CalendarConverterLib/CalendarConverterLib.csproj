@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalendarAltConverter.cs" />
     <Compile Include="CalendarConverter.cs" />
     <Compile Include="CalendarData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
