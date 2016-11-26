@@ -125,8 +125,8 @@ namespace GKUI.Dialogs
             try
             {
                 this.fLocationRecord.LocationName = this.txtName.Text;
-                this.fLocationRecord.Map.Lati = ConvHelper.ParseFloat(this.txtLatitude.Text, 0.0);
-                this.fLocationRecord.Map.Long = ConvHelper.ParseFloat(this.txtLongitude.Text, 0.0);
+                this.fLocationRecord.Map.Lati = SysUtils.ParseFloat(this.txtLatitude.Text, 0.0);
+                this.fLocationRecord.Map.Long = SysUtils.ParseFloat(this.txtLongitude.Text, 0.0);
                 base.CommitChanges();
                 this.fBase.ChangeRecord(this.fLocationRecord);
                 base.DialogResult = DialogResult.OK;
@@ -230,7 +230,7 @@ namespace GKUI.Dialogs
         {
             if (this.txtLatitude.Text != "" && this.txtLongitude.Text != "")
             {
-                this.fMapBrowser.SetCenter(ConvHelper.ParseFloat(this.txtLatitude.Text, 0), ConvHelper.ParseFloat(this.txtLongitude.Text, 0), -1);
+                this.fMapBrowser.SetCenter(SysUtils.ParseFloat(this.txtLatitude.Text, 0), SysUtils.ParseFloat(this.txtLongitude.Text, 0), -1);
             }
         }
     }

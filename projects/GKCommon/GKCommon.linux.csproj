@@ -190,18 +190,14 @@
     <Compile Include="GEDCOM\Extensions\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
-    <Compile Include="GKCommon\ConvHelper.cs" />
-    <Compile Include="GKCommon\CRC32.cs" />
     <Compile Include="GKCommon\EnumSet.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
     <Compile Include="GKCommon\ExtList.cs" />
     <Compile Include="GKCommon\ExtRect.cs" />
-    <Compile Include="GKCommon\GfxHelper.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Range.cs" />
-    <Compile Include="GKCommon\ReflectionHelper.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
     <Compile Include="GKCommon\SmartGraph\Graph.cs" />
     <Compile Include="GKCommon\SmartGraph\GraphvizWriter.cs" />
@@ -210,7 +206,6 @@
     <Compile Include="GKCommon\SmartGraph\IGraph.cs" />
     <Compile Include="GKCommon\SmartGraph\IVertex.cs" />
     <Compile Include="GKCommon\SmartGraph\Vertex.cs" />
-    <Compile Include="GKCommon\SortHelper.cs" />
     <Compile Include="GKCommon\StringList.cs" />
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />

@@ -113,6 +113,19 @@ namespace GKCore
             }
         }
 
+        public struct CalendarStruct
+        {
+            public LSID Name;
+            public string Sign;
+            public bool HasSupport;
+
+            public CalendarStruct(LSID name, string sign, bool hasSupport) {
+                this.Name = name;
+                this.Sign = sign;
+                this.HasSupport = hasSupport;
+            }
+        }
+
         public struct StoreTypeRec
         {
             public LSID Name;
@@ -142,7 +155,7 @@ namespace GKCore
         public static readonly MarStatusStruct[] MarriageStatus;
         public static readonly PersonEventStruct[] PersonEvents;
         public static readonly DateKindStruct[] DateKinds;
-        public static readonly LSID[] DateCalendars;
+        public static readonly CalendarStruct[] DateCalendars;
         public static readonly FamilyEventStruct[] FamilyEvents;
         public static readonly StoreTypeRec[] GKStoreTypes;
         public static readonly LSID[] MediaTypes;
@@ -161,7 +174,6 @@ namespace GKCore
         public static readonly StatsTitleStruct[] StatsTitles;
         public static readonly LSID[] CheckSolveNames;
         public static readonly LSID[] NameTypes;
-        public static readonly string[] Calendars;
 
         public static string[] CondSigns;
         public static string BloodGroups;
@@ -390,14 +402,16 @@ namespace GKCore
             };
 
 
-            DateCalendars = new LSID[]
+            // FIXME: use calendars for StrToGEDCOMDate() and class EventEditDlg
+            DateCalendars = new CalendarStruct[]
             {
-                LSID.LSID_Cal_Gregorian,
-                LSID.LSID_Cal_Julian,
-                LSID.LSID_Cal_Hebrew,
-                LSID.LSID_Cal_French,
-                LSID.LSID_Cal_Roman,
-                LSID.LSID_Unknown
+                new CalendarStruct(LSID.LSID_Cal_Gregorian, " [G]", true),
+                new CalendarStruct(LSID.LSID_Cal_Julian, " [J]", true),
+                new CalendarStruct(LSID.LSID_Cal_Hebrew, " [H]", false), // !
+                new CalendarStruct(LSID.LSID_Cal_French, " [FR]", false),
+                new CalendarStruct(LSID.LSID_Cal_Roman, " [R]", false),
+                new CalendarStruct(LSID.LSID_Cal_Islamic, " [I]", false), // !
+                new CalendarStruct(LSID.LSID_Unknown, "", false)
             };
 
 
@@ -565,16 +579,6 @@ namespace GKCore
                 LSID.LSID_NTImmigrant,
                 LSID.LSID_NTMaiden,
                 LSID.LSID_NTMarried
-            };
-
-            Calendars = new string[]
-            {
-                " [G]",
-                " [J]",
-                " [H]",
-                " [FR]",
-                " [R]",
-                ""
             };
 
             //BloodGroups = "|A+|A-|B+|B-|AB+|AB-|O+|O-";

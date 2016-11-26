@@ -34,15 +34,15 @@ namespace GKCommon.Controls
             base.ResizeRedraw = true;
 
             #if __MonoCS__
-            ScrollBar obj = ReflectionHelper.GetFieldValue(this, "hscrollbar") as ScrollBar;
+            ScrollBar obj = SysUtils.GetFieldValue(this, "hscrollbar") as ScrollBar;
             if (obj != null) {
-                ReflectionHelper.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                SysUtils.RemoveControlStdEventHandlers(obj, "ScrollEvent");
                 obj.Scroll += new ScrollEventHandler(HandleHScrollEvent);
             }
 
-            obj = ReflectionHelper.GetFieldValue(this, "vscrollbar") as ScrollBar;
+            obj = SysUtils.GetFieldValue(this, "vscrollbar") as ScrollBar;
             if (obj != null) {
-                ReflectionHelper.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                SysUtils.RemoveControlStdEventHandlers(obj, "ScrollEvent");
                 obj.Scroll += new ScrollEventHandler(HandleVScrollEvent);
             }
             #else

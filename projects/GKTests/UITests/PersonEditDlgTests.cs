@@ -23,6 +23,7 @@
 using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Framework;
@@ -62,6 +63,9 @@ namespace GKTests.UITests
         {
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fIndividualRecord, fDialog.Person);
+
+            Assert.AreEqual(null, fDialog.Target);
+            Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
 
             //var txtSurname = new TextBoxTester("txtSurname");
             //txtSurname.Enter("sample text");

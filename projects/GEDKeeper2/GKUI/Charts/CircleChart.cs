@@ -202,7 +202,7 @@ namespace GKUI.Charts
                 Color col = this.fOptions.BrushColor[i];
 
                 this.fCircleBrushes[i] = new SolidBrush(col);
-                this.fDarkBrushes[i] = new SolidBrush(GfxHelper.Darker(col, 0.2f));
+                this.fDarkBrushes[i] = new SolidBrush(SysUtils.Darker(col, 0.2f));
             }
 
             this.fPen = new Pen(this.fOptions.BrushColor[10]);
@@ -394,7 +394,7 @@ namespace GKUI.Charts
             var size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
-            float wedgeL = radius * (float)GfxHelper.DegreesToRadians(wedgeAngle);
+            float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
 
             return (wedgeL / size.Width <= 0.9f);
         }
@@ -406,7 +406,7 @@ namespace GKUI.Charts
             var size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
-            float textAngle = (float)GfxHelper.RadiansToDegrees((size.Width * 1.75f) / radius);
+            float textAngle = (float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius);
             float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
 
             startAngle -= 90.0f + deltaAngle;

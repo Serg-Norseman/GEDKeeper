@@ -1546,6 +1546,7 @@ namespace GKCommon.GEDCOM
             return stb.ToString();
         }
 
+        // FIXME: there is the bug - use GEDCOMMonthArray without depend to Calendar (hebrew and islamic month's names)
         public static string StrToGEDCOMDate(string strDate, bool aException)
         {
             if (string.IsNullOrEmpty(strDate)) return "";
@@ -1570,7 +1571,7 @@ namespace GKCommon.GEDCOM
             string py = dtParts[2].Trim();
 
             if (pd != "") result = result + pd + " ";
-            if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[ConvHelper.ParseInt(pm, 1) - 1] + " ";
+            if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[SysUtils.ParseInt(pm, 1) - 1] + " ";
             if (py != "") result += py;
 
             return result;

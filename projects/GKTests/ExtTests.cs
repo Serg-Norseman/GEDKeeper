@@ -37,8 +37,8 @@ namespace GKTests
         [Test]
         public void Sort_Tests()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.QuickSort<ValItem>(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.MergeSort<ValItem>(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.QuickSort<ValItem>(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.MergeSort<ValItem>(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
 
             Random rnd = new Random();
@@ -63,9 +63,9 @@ namespace GKTests
 
             listCS.Sort(CompareItems);
 
-            SortHelper.QuickSort(listQS, CompareItems);
+            SysUtils.QuickSort(listQS, CompareItems);
 
-            SortHelper.MergeSort(listMS, CompareItems);
+            SysUtils.MergeSort(listMS, CompareItems);
 
             ListTimSort<ValItem>.Sort(listTS, CompareItems);
 

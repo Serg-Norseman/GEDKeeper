@@ -66,7 +66,7 @@ namespace GKCommon
                     return Convert.ToInt32(intStr, 16);
                 }
             }
-            return ConvHelper.ParseInt(intStr, defaultValue);
+            return SysUtils.ParseInt(intStr, defaultValue);
         }
 
         public void WriteInteger(string section, string ident, int value)

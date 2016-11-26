@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Types;
 using GKTests.Service;
 using GKUI;
 using GKUI.Charts;
@@ -208,7 +209,16 @@ namespace GKTests.UITests
 
             baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
-            //baseWin.me
+
+            GEDCOMRecord record = baseWin.GetSelectedRecordEx();
+            Assert.IsNotNull(record, stage + ".4");
+
+            Assert.IsTrue(baseWin.IsAvailableRecord(record), stage + ".5");
+            Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
+
+            Assert.AreEqual(ShieldState.Maximum, baseWin.ShieldState, stage + ".7.1");
+            baseWin.ShieldState = ShieldState.None;
+            Assert.AreEqual(ShieldState.None, baseWin.ShieldState, stage + ".7.2");
         }
 
         #region AboutDlg handler
@@ -368,6 +378,7 @@ namespace GKTests.UITests
         private static bool GroupEditDlg_FirstCall = true;
         private static bool PersonEditDlg_FirstCall = true;
         private static bool ResearchEditDlg_FirstCall = true;
+        private static bool LocationEditDlg_FirstCall = true;
 
         public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -396,6 +407,11 @@ namespace GKTests.UITests
             if (ResearchEditDlg_FirstCall && form is ResearchEditDlg) {
                 ResearchEditDlg_Handler(form as ResearchEditDlg);
                 ResearchEditDlg_FirstCall = false;
+            }
+
+            if (LocationEditDlg_FirstCall && form is LocationEditDlg) {
+                LocationEditDlg_Handler(form as LocationEditDlg);
+                LocationEditDlg_FirstCall = false;
             }
 
             ClickButton("btnAccept", form);
@@ -513,6 +529,11 @@ namespace GKTests.UITests
             //sheetTester.Properties.SelectItem(0);
             //ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
             //Assert.AreEqual(0, resRecord.Groups.Count);
+        }
+
+        private void LocationEditDlg_Handler(LocationEditDlg dlg)
+        {
+            GEDCOMLocationRecord resRecord = dlg.LocationRecord;
         }
 
         private void GroupEditDlg_Handler(GroupEditDlg dlg)

@@ -403,8 +403,8 @@ namespace GKUI.Controls
                             if (addressNode != null && pointNode != null)
                             {
                                 string ptHint = addressNode.InnerText;
-                                double ptLongitude = ConvHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
-                                double ptLatitude = ConvHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
+                                double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
 
                                 if (ptLatitude != -1.0 && ptLongitude != -1.0)
                                 {

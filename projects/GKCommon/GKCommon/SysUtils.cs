@@ -20,13 +20,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace GKCommon
@@ -38,6 +43,12 @@ namespace GKCommon
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
     public static class SysUtils
     {
+        static SysUtils()
+        {
+            InitCRC32();
+            InitRome();
+        }
+
         public static bool IsSetBit(uint val, int pos)
         {
             return (val & (1 << pos)) != 0;
@@ -53,6 +64,16 @@ namespace GKCommon
         public static double SafeDiv(double dividend, double divisor)
         {
             return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
+        }
+
+        public static double DegreesToRadians(double degrees)
+        {
+            return degrees * (Math.PI / 180);
+        }
+
+        public static double RadiansToDegrees(double radians)
+        {
+            return radians * 180 / Math.PI;
         }
 
         #endregion
@@ -360,6 +381,450 @@ namespace GKCommon
 
             int count = list.Count;
             return (count > 0) ? list[count - 1] : default(T);
+        }
+
+        #endregion
+
+        #region Reflection helpers
+
+        private static PropertyInfo GetPropertyInfo(Type type, string propertyName)
+        {
+            PropertyInfo propInfo = null;
+            do {
+                propInfo = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                type = type.BaseType;
+            } while (propInfo == null && type != null);
+            return propInfo;
+        }
+
+        public static object GetPropertyValue(object obj, string propertyName)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            Type objType = obj.GetType();
+            PropertyInfo propInfo = GetPropertyInfo(objType, propertyName);
+            if (propInfo == null)
+                throw new ArgumentOutOfRangeException("propertyName",
+                                                      string.Format("Couldn't find property {0} in type {1}", propertyName, objType.FullName));
+            return propInfo.GetValue(obj, null);
+        }
+
+        public static void SetPropertyValue(object obj, string propertyName, object val)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            Type objType = obj.GetType();
+            PropertyInfo propInfo = GetPropertyInfo(objType, propertyName);
+            if (propInfo == null)
+                throw new ArgumentOutOfRangeException("propertyName",
+                                                      string.Format("Couldn't find property {0} in type {1}", propertyName, objType.FullName));
+            propInfo.SetValue(obj, val, null);
+        }
+
+
+        public static object GetFieldValue(object obj, string fieldName)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            Type objType = obj.GetType();
+            FieldInfo fieldInfo = objType.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (fieldInfo == null)
+                throw new ArgumentOutOfRangeException("fieldName",
+                                                      string.Format("Couldn't find field {0} in type {1}", fieldName, objType.FullName));
+
+            return fieldInfo.GetValue(obj);
+        }
+
+
+        private const BindingFlags AllBindings = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+
+        private static FieldInfo FindFieldInfo(Type t, string fieldName)
+        {
+            foreach (FieldInfo fi in t.GetFields(AllBindings))
+            {
+                if (fi.Name == fieldName)
+                {
+                    return fi;
+                }
+            }
+
+            return t.BaseType != null ? FindFieldInfo(t.BaseType, fieldName) : null;
+        }
+
+        public static void RemoveControlStdEventHandlers(Control ctl, string privateEventObj)
+        {
+            if (ctl == null)
+                throw new ArgumentNullException("ctl");
+
+            FieldInfo f1 = FindFieldInfo(ctl.GetType(), privateEventObj);
+            if (f1 == null) return;
+
+            object obj = f1.GetValue(ctl);
+
+            PropertyInfo pi = ctl.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (pi == null) return;
+
+            EventHandlerList list = (EventHandlerList)pi.GetValue(ctl, null);
+            list.RemoveHandler(obj, list[obj]);
+        }
+
+        #endregion
+
+        #region Convert helpers
+
+        private static int[] RN_N;
+        private static string[] RN_S;
+
+        private static void InitRome()
+        {
+            RN_N = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+            RN_S = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+        }
+
+        public static string GetRome(int num)
+        {
+            string rome = "";
+            int T = 12;
+
+            if (num > 0)
+            {
+                while (true)
+                {
+                    int rn = RN_N[T];
+
+                    if (num >= rn) {
+                        while (num >= rn) {
+                            num -= rn;
+                            rome += RN_S[T];
+                        }
+
+                        if (num <= 0) break;
+                    } else {
+                        T -= 1;
+                    }
+                }
+            }
+            return rome;
+        }
+
+        public static int ParseInt(string str, int Default)
+        {
+            int res;
+            if (!int.TryParse(str, out res)) res = Default;
+            return res;
+        }
+
+        public static double ParseFloat(string str, double Default, bool checkSeparator = false)
+        {
+            if (string.IsNullOrEmpty(str)) return Default;
+
+            string decSep;
+            if (checkSeparator) {
+                decSep = (str.Contains(",") ? "," : ".");
+            } else {
+                decSep = ".";
+            }
+
+            NumberFormatInfo formatInfo = (NumberFormatInfo)Thread.CurrentThread.CurrentCulture.NumberFormat.Clone();
+            formatInfo.NumberDecimalSeparator = decSep;
+            formatInfo.NumberGroupSeparator = " ";
+
+            double value;
+            double result;
+            if (double.TryParse(str, NumberStyles.Float, formatInfo, out value)) {
+                result = value;
+            } else {
+                result = Default;
+            }
+            return result;
+        }
+
+        public static string AdjustNum(int val, int up)
+        {
+            StringBuilder res = new StringBuilder(up);
+            res.Append(val.ToString());
+            while (res.Length < up) res.Insert(0, '0');
+            return res.ToString();
+        }
+
+        #endregion
+
+        #region CRC32
+
+        private const uint DefaultPolynomial = 0xedb88320u;
+        private static uint[] CCITT32_TABLE;
+
+        private static void InitCRC32()
+        {
+            CCITT32_TABLE = new uint[256];
+
+            for (uint i = 0; i < 256; i++)
+            {
+                uint val = i;
+
+                for (uint j = 0; j < 8; j++)
+                    if ((val & 1) == 1)
+                        val = (val >> 1) ^ DefaultPolynomial;
+                    else
+                        val = val >> 1;
+
+                CCITT32_TABLE[i] = val;
+            }
+        }
+
+        public static uint CrcBytes(byte[] data)
+        {
+            uint crc = 0u;
+            if (data != null && data.Length != 0)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    byte c = data[i];
+                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ (uint)c) & 255u)]);
+                }
+            }
+            return crc;
+        }
+
+        public static uint CrcStr(string str)
+        {
+            uint crc = 0u;
+            if (!string.IsNullOrEmpty(str))
+            {
+                byte[] data = Encoding.Unicode.GetBytes(str);
+                crc = CrcBytes(data);
+            }
+            return crc;
+        }
+
+        #endregion
+
+        #region Sort helpers
+
+        public static void QuickSort<T>(IList<T> list, Comparison<T> comparer)
+        {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (list.Count > 1)
+                QuickSort(list, comparer, 0, list.Count - 1);
+        }
+
+        private static void QuickSort<T>(IList<T> list, Comparison<T> comparer, int left, int right)
+        {
+            int I;
+            do
+            {
+                I = left;
+                int J = right;
+                T itm = list[(int)((uint)(left + right) >> 1)];
+                while (true)
+                {
+                    if (comparer(list[I], itm) >= 0)
+                    {
+                        while (comparer(list[J], itm) > 0) J--;
+
+                        if (I <= J)
+                        {
+                            T tmp = list[I];
+                            list[I] = list[J];
+                            list[J] = tmp;
+
+                            I++;
+                            J--;
+                        }
+
+                        if (I > J)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        I++;
+                    }
+                }
+                if (left < J) QuickSort(list, comparer, left, J);
+                left = I;
+            }
+            while (I < right);
+        }
+
+        public static void MergeSort<T>(IList<T> list, Comparison<T> comparer)
+        {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (list.Count > 1)
+                MergeSort(list, new T[list.Count], 0, list.Count - 1, comparer);
+        }
+
+        private static void MergeSort<T>(IList<T> list, T[] tmp, int left, int right, Comparison<T> comparer)
+        {
+            if (left >= right) return;
+
+            int mid = (left + right) >> 1;
+            MergeSort(list, tmp, left, mid, comparer);
+            MergeSort(list, tmp, mid + 1, right, comparer);
+
+            int i = left, j = mid + 1, k = left;
+
+            while (i <= mid && j <= right)
+            {
+                if (comparer(list[i], list[j]) < 0)
+                {
+                    tmp[k++] = list[i++];
+                }
+                else
+                {
+                    tmp[k++] = list[j++];
+                }
+            }
+            while (i <= mid) tmp[k++] = list[i++];
+            while (j <= right) tmp[k++] = list[j++];
+            for (i = left; i <= right; ++i) list[i] = tmp[i];
+        }
+
+        #endregion
+
+        #region Color transformations
+
+        public static Color Darker(Color color, float fraction)
+        {
+            float factor = (1.0f - fraction);
+
+            int rgb = color.ToArgb();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = (rgb >> 0) & 0xFF;
+            //int alpha = (rgb >> 24) & 0xFF;
+
+            red = (int) (red * factor);
+            green = (int) (green * factor);
+            blue = (int) (blue * factor);
+
+            red = (red < 0) ? 0 : red;
+            green = (green < 0) ? 0 : green;
+            blue = (blue < 0) ? 0 : blue;
+
+            return Color.FromArgb(red, green, blue);
+        }
+
+        public static Color Lighter(Color color, float fraction)
+        {
+            float factor = (1.0f + fraction);
+            
+            int rgb = color.ToArgb();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = (rgb >> 0) & 0xFF;
+            //int alpha = (rgb >> 24) & 0xFF;
+
+            red = (int) (red * factor);
+            green = (int) (green * factor);
+            blue = (int) (blue * factor);
+
+            if (red < 0) {
+                red = 0;
+            } else if (red > 255) {
+                red = 255;
+            }
+            if (green < 0) {
+                green = 0;
+            } else if (green > 255) {
+                green = 255;
+            }
+            if (blue < 0) {
+                blue = 0;
+            } else if (blue > 255) {
+                blue = 255;
+            }
+
+            //int alpha = color.getAlpha();
+
+            return Color.FromArgb(red, green, blue);
+        }
+
+        #endregion
+
+        #region Graphics functions
+
+        public static float ZoomToFit(int imgWidth, int imgHeight, int requireWidth, int requireHeight)
+        {
+            if (imgWidth == 0 || imgHeight == 0) return 1.0f;
+
+            float aspectRatio;
+
+            if (imgWidth > imgHeight) {
+                aspectRatio = (float)requireWidth / imgWidth;
+
+                if (requireHeight < imgHeight * aspectRatio) {
+                    aspectRatio = (float)requireHeight / imgHeight;
+                }
+            } else {
+                aspectRatio = (float)requireHeight / imgHeight;
+
+                if (requireWidth < imgWidth * aspectRatio) {
+                    aspectRatio = (float)requireWidth / imgWidth;
+                }
+            }
+
+            return aspectRatio;
+        }
+
+        public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
+        {
+            int xw = x + width;
+            int yh = y + height;
+            int xwr = xw - radius;
+            int yhr = yh - radius;
+            int xr = x + radius;
+            int yr = y + radius;
+            int r2 = radius * 2;
+            int xwr2 = xw - r2;
+            int yhr2 = yh - r2;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
+            p.AddLine(xr, y, xwr, y); // Top Edge
+            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
+            p.AddLine(xw, yr, xw, yhr); // Right Edge
+            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
+            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
+            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
+            p.AddLine(x, yhr, x, yr); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
+        public static void DrawPathWithFuzzyLine(Graphics gfx, GraphicsPath path, Color baseColor, int maxOpacity, int width, int opaqueWidth)
+        {
+            if (gfx == null || path == null) return;
+
+            int numSteps = width - opaqueWidth + 1; // Number of pens we will use
+            float delta = (float)maxOpacity / numSteps / numSteps; // Change in alpha between pens
+            float alpha = delta; // Initial alpha
+
+            for (int thickness = width; thickness >= opaqueWidth; thickness--)
+            {
+                Color color = Color.FromArgb((int)alpha, baseColor.R, baseColor.G, baseColor.B);
+
+                using (Pen pen = new Pen(color, thickness))
+                {
+                    pen.EndCap = LineCap.Round;
+                    pen.StartCap = LineCap.Round;
+                    gfx.DrawPath(pen, path);
+                }
+
+                alpha += delta;
+            }
         }
 
         #endregion

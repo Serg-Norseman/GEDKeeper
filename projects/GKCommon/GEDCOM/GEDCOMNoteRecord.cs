@@ -46,6 +46,11 @@ namespace GKCommon.GEDCOM
             base.SetName("NOTE");
         }
 
+        /// <summary>
+        /// The MoveTo() merges records and their references, but does not change the text in the target.
+        /// </summary>
+        /// <param name="targetRecord"></param>
+        /// <param name="clearDest"></param>
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
             GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);

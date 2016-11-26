@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -934,7 +933,7 @@ namespace GKCore
                             int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
 
                             if (thumbWidth > 0 && thumbHeight > 0) {
-                                float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
+                                float ratio = SysUtils.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
                                 imgWidth = (int)(imgWidth * ratio);
                                 imgHeight = (int)(imgHeight * ratio);
                             }
@@ -1051,7 +1050,7 @@ namespace GKCore
                     {
                         int rev = this.Tree.Header.FileRevision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
-                        string bakFile = Path.GetFileName(fileName) + "." + ConvHelper.AdjustNum(rev, 3);
+                        string bakFile = Path.GetFileName(fileName) + "." + SysUtils.AdjustNum(rev, 3);
 
                         if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
                         File.Move(fileName, bakPath + bakFile);

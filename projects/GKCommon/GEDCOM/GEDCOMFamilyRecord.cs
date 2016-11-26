@@ -203,9 +203,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
             if (targetFamily == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
-            }
 
             base.MoveTo(targetRecord, clearDest);
 

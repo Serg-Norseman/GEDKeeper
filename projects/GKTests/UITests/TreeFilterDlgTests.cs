@@ -63,6 +63,7 @@ namespace GKTests.UITests
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fBase, fDialog.Base);
+            Assert.IsNotNull(fDialog.Filter);
 
             ClickButton("btnAccept", fDialog);
         }

@@ -967,7 +967,7 @@ namespace GKUI.Charts
                             bColor = Color.Black;
                         }
                         
-                        if (highlighted) bColor = GfxHelper.Lighter(bColor, HIGHLIGHTED_VAL);
+                        if (highlighted) bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
                         gfx.FillRectangle(new SolidBrush(bColor), rect.Left, rect.Top, rect.Width, rect.Height);
                         gfx.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
                         break;
@@ -985,8 +985,8 @@ namespace GKUI.Charts
                             bColor = Color.Black;
                         }
 
-                        if (highlighted) bColor = GfxHelper.Lighter(bColor, HIGHLIGHTED_VAL);
-                        GraphicsPath path = GfxHelper.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
+                        if (highlighted) bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
+                        GraphicsPath path = SysUtils.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
                         
                         /*gfx.TranslateTransform(3, 3);
 					GKUtils.DrawPathWithFuzzyLine(path, gfx, Color.Black, 200, 20, 2);

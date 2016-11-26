@@ -132,7 +132,7 @@ namespace GKCommon.GEDCOM
                 orig.Text = (targetSource.Originator.Text + "\n" + this.Originator.Text).Trim();
                 publ.Text = (targetSource.Publication.Text + "\n" + this.Publication.Text).Trim();
                 text.Text = (targetSource.Text.Text + "\n" + this.Text.Text).Trim();
-                
+
                 base.DeleteTag("TITL");
                 base.DeleteTag("TEXT");
                 base.DeleteTag("ABBR");
@@ -140,7 +140,7 @@ namespace GKCommon.GEDCOM
                 base.DeleteTag("AUTH");
 
                 base.MoveTo(targetRecord, clearDest);
-                
+
                 targetSource.Title = titl;
                 targetSource.Originator = orig;
                 targetSource.Publication = publ;

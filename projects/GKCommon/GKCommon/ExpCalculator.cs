@@ -15,7 +15,6 @@ namespace GKCommon
     [Serializable]
     public class CalculateException : Exception
     {
-        public CalculateException() {}
         public CalculateException(string message) : base(message) {}
     }
 

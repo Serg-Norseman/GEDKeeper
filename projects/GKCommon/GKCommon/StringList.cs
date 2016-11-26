@@ -27,9 +27,6 @@ namespace GKCommon
     [Serializable]
     public class StringListException : Exception
     {
-        public StringListException()
-        {
-        }
         public StringListException(string message) : base(message)
         {
         }
@@ -528,7 +525,7 @@ namespace GKCommon
             if (!this.fSorted && this.fList.Count > 1)
             {
                 this.Changing();
-                SortHelper.QuickSort(fList, CompareItems);
+                SysUtils.QuickSort(fList, CompareItems);
                 this.Changed();
             }
         }

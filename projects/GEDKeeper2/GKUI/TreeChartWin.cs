@@ -518,7 +518,7 @@ namespace GKUI
 
             int imgW = img.Width;
             int imgH = img.Height;
-            float factor = GfxHelper.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
             imgW = (int)(imgW * factor);
             imgH = (int)(imgH * factor);
             int x = (pageBounds.Width - imgW) / 2;

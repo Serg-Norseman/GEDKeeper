@@ -53,14 +53,14 @@ namespace GKCore.Export
 
             private string GetOrderStr()
             {
-                string order = ConvHelper.AdjustNum(this.FamilyOrder, 2);
+                string order = SysUtils.AdjustNum(this.FamilyOrder, 2);
                 string result = ((this.Parent == null) ? order : this.Parent.GetOrderStr() + order);
                 return result;
             }
 
             public string GetInternalStr()
             {
-                return ConvHelper.AdjustNum(this.Level, 2) + this.GetOrderStr();
+                return SysUtils.AdjustNum(this.Level, 2) + this.GetOrderStr();
             }
         }
 
@@ -460,7 +460,7 @@ namespace GKCore.Export
                     if (includeGens && curLevel != person.Level)
                     {
                         curLevel = person.Level;
-                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
+                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + SysUtils.GetRome(curLevel);
 
                         this.fWriter.beginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
                         this.fWriter.addParagraphChunk(genTitle, fChapFont);

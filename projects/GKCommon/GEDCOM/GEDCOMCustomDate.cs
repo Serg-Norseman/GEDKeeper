@@ -42,7 +42,9 @@ namespace GKCommon.GEDCOM
 
             GEDCOMDateEscapeArray = new string[]
             {
-                "@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@", "@#DUNKNOWN@"
+                "@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@",
+                "@#DISLAMIC@", // GK+ (nonstandard)
+                "@#DUNKNOWN@"
             };
 
             GEDCOMMonthArray = new string[]

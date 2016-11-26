@@ -262,10 +262,10 @@ namespace GKCore.Lists
                     return val;
 
                 case DataType.dtInteger:
-                    return ConvHelper.ParseInt(val, 0);
+                    return SysUtils.ParseInt(val, 0);
 
                 case DataType.dtFloat:
-                    return ConvHelper.ParseFloat(val, 0.0);
+                    return SysUtils.ParseFloat(val, 0.0);
 
                 case DataType.dtDateTime:
                     return DateTime.Parse(val);

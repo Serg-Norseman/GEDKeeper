@@ -61,6 +61,7 @@ namespace GKTests.UITests
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fSourceCitation, fDialog.SourceCitation);
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX/SelectRecord)

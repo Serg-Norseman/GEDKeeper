@@ -63,6 +63,7 @@ namespace GKTests.UITests
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fUserRef, fDialog.UserRef);
 
             var cmbRef = new ComboBoxTester("cmbRef");
             cmbRef.Enter("sample text");

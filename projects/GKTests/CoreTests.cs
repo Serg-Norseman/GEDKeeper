@@ -239,8 +239,8 @@ namespace GKTests
         public void SCCrypt_Tests()
         {
             const string pw = "test password";
-            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)CRC32.CrcStr("test")));
-            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
+            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)SysUtils.CrcStr("test")));
+            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)SysUtils.CrcStr("test")));
 
             Assert.AreEqual(pw, pw1, "SCCrypt_Test");
 
@@ -259,6 +259,10 @@ namespace GKTests
 
             // individual record tests
             Assert.IsNotNull(iRec);
+
+            GEDCOMCustomDate date = GKUtils.GetBirthDate(iRec);
+            Assert.IsNotNull(date);
+            Assert.AreEqual("28 DEC 1990", date.StringValue);
 
             string age = GKUtils.GetAgeStr(null, 0);
             Assert.AreEqual("", age);

@@ -521,15 +521,15 @@ namespace GKCore
             {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
-                        result += day > 0 ? ConvHelper.AdjustNum(day, 2) + "." : "__.";
-                        result += month > 0 ? ConvHelper.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? SysUtils.AdjustNum(day, 2) + "." : "__.";
+                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
                         result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
                         break;
 
                     case DateFormat.dfYYYY_MM_DD:
                         result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        result += month > 0 ? ConvHelper.AdjustNum(month, 2) + "." : "__.";
-                        result += day > 0 ? ConvHelper.AdjustNum(day, 2) : "__";
+                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? SysUtils.AdjustNum(day, 2) : "__";
                         break;
 
                     case DateFormat.dfYYYY:
@@ -556,7 +556,7 @@ namespace GKCore
 
             if (showCalendar)
             {
-                result = result + GKData.Calendars[(int)date.DateCalendar];
+                result = result + GKData.DateCalendars[(int)date.DateCalendar];
             }
 
             return result;

@@ -103,6 +103,7 @@ namespace GKCommon.GEDCOM
         dcHebrew,
         dcFrench,
         dcRoman,
+        dcIslamic, // GK+ (nonstandard)
         dcUnknown,
 
         dcLast = dcUnknown

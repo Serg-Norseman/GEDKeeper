@@ -27,10 +27,6 @@ namespace GKCommon.GEDCOM
     [Serializable]
     public class GEDCOMDateException : EGEDCOMException
     {
-        public GEDCOMDateException()
-        {
-        }
-
         public GEDCOMDateException(string message) : base(message)
         {
         }
@@ -787,10 +783,15 @@ namespace GKCommon.GEDCOM
 
         #region UDN processing
 
-        // GEDCOMCalendar { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcUnknown }
+        // GEDCOMCalendar { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcIslamic, dcUnknown }
         private static UDNCalendarType[] UDNCalendars = new UDNCalendarType[] {
-            UDNCalendarType.ctGregorian, UDNCalendarType.ctJulian, UDNCalendarType.ctHebrew,
-            UDNCalendarType.ctGregorian, UDNCalendarType.ctGregorian, UDNCalendarType.ctGregorian
+            /* dcGregorian */   UDNCalendarType.ctGregorian,
+            /* dcJulian */      UDNCalendarType.ctJulian,
+            /* dcHebrew */      UDNCalendarType.ctHebrew,
+            /* dcFrench */      UDNCalendarType.ctGregorian, // not supported yet
+            /* dcRoman */       UDNCalendarType.ctGregorian, // not supported yet
+            /* dcIslamic */     UDNCalendarType.ctIslamic,
+            /* dcUnknown */     UDNCalendarType.ctGregorian
         };
 
         private void DateChanged()

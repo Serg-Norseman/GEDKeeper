@@ -365,7 +365,7 @@ namespace GKCommon.GEDCOM
             try
             {
                 string xref = this.GetXRefNum();
-                result = ConvHelper.ParseInt(xref, 0);
+                result = SysUtils.ParseInt(xref, 0);
             }
             catch (Exception)
             {

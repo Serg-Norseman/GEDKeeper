@@ -27,6 +27,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -49,18 +50,91 @@ namespace GKUI.Dialogs
             set { this.SetEvent(value); }
         }
 
+        public EventEditDlg(IBaseWindow baseWin) : base(baseWin)
+        {
+            this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnPlaceAdd.Image = global::GKResources.iRecNew;
+            this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
+
+            int num = GKData.DateKinds.Length;
+            for (int i = 0; i < num; i++)
+            {
+                this.cmbEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
+            }
+
+            for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++)
+            {
+                GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
+                if (cdr.HasSupport) {
+                    this.cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
+                    this.cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
+                }
+            }
+
+            this.cmbDate1Calendar.SelectedIndex = 0;
+            this.cmbDate2Calendar.SelectedIndex = 0;
+
+            this.fLocation = null;
+
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
+
+            // SetLang()
+            this.Text = LangMan.LS(LSID.LSID_Event);
+            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.lblEvent.Text = LangMan.LS(LSID.LSID_Event);
+            this.lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
+            this.lblPlace.Text = LangMan.LS(LSID.LSID_Place);
+            this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
+            this.lblCause.Text = LangMan.LS(LSID.LSID_Cause);
+            this.lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
+
+            this.toolTip1.SetToolTip(this.btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
+            this.toolTip1.SetToolTip(this.btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
+        }
+
+        private GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
+        {
+            GEDCOMCalendar result = (GEDCOMCalendar)(((GKComboItem)comboBox.SelectedItem).Tag);
+            return result;
+        }
+
+        private void SetComboCalendar(ComboBox comboBox, GEDCOMCalendar calendar)
+        {
+            foreach (object item in comboBox.Items) {
+                GKComboItem comboItem = (GKComboItem)item;
+
+                if ((GEDCOMCalendar)comboItem.Tag == calendar) {
+                    comboBox.SelectedItem = item;
+                    return;
+                }
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
         private string AssembleDate()
         {
             string result = "";
 
-            GEDCOMCalendar cal = (GEDCOMCalendar)this.cmbDate1Calendar.SelectedIndex;
-            GEDCOMCalendar cal2 = (GEDCOMCalendar)this.cmbDate2Calendar.SelectedIndex;
+            GEDCOMCalendar cal1 = GetComboCalendar(this.cmbDate1Calendar);
+            GEDCOMCalendar cal2 = GetComboCalendar(this.cmbDate2Calendar);
 
-            string gcd = GEDCOMUtils.StrToGEDCOMDate(this.txtEventDate1.Text, true);
+            string gcd1 = GEDCOMUtils.StrToGEDCOMDate(this.txtEventDate1.Text, true);
             string gcd2 = GEDCOMUtils.StrToGEDCOMDate(this.txtEventDate2.Text, true);
 
-            if (cal != GEDCOMCalendar.dcGregorian) {
-                gcd = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
+            if (cal1 != GEDCOMCalendar.dcGregorian) {
+                gcd1 = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal1] + " " + gcd1;
             }
 
             if (cal2 != GEDCOMCalendar.dcGregorian) {
@@ -68,7 +142,7 @@ namespace GKUI.Dialogs
             }
 
             if (btnBC1.Checked) {
-                gcd = gcd + GEDCOMObject.GEDCOM_YEAR_BC;
+                gcd1 = gcd1 + GEDCOMObject.GEDCOM_YEAR_BC;
             }
 
             if (btnBC2.Checked) {
@@ -77,7 +151,7 @@ namespace GKUI.Dialogs
 
             switch (this.cmbEventDateType.SelectedIndex) {
                 case 0:
-                    result = gcd;
+                    result = gcd1;
                     break;
 
                 case 1:
@@ -85,15 +159,15 @@ namespace GKUI.Dialogs
                     break;
 
                 case 2:
-                    result = "AFT " + gcd;
+                    result = "AFT " + gcd1;
                     break;
 
                 case 3:
-                    result = "BET " + gcd + " AND " + gcd2;
+                    result = "BET " + gcd1 + " AND " + gcd2;
                     break;
 
                 case 4:
-                    result = "FROM " + gcd;
+                    result = "FROM " + gcd1;
                     break;
 
                 case 5:
@@ -101,19 +175,19 @@ namespace GKUI.Dialogs
                     break;
 
                 case 6:
-                    result = "FROM " + gcd + " TO " + gcd2;
+                    result = "FROM " + gcd1 + " TO " + gcd2;
                     break;
 
                 case 7:
-                    result = "ABT " + gcd;
+                    result = "ABT " + gcd1;
                     break;
 
                 case 8:
-                    result = "CAL " + gcd;
+                    result = "CAL " + gcd1;
                     break;
 
                 case 9:
-                    result = "EST " + gcd;
+                    result = "EST " + gcd1;
                     break;
             }
 
@@ -241,7 +315,7 @@ namespace GKUI.Dialogs
                 }
 
                 this.txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
-                this.cmbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
+                SetComboCalendar(this.cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
                 this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
             }
             else
@@ -270,8 +344,8 @@ namespace GKUI.Dialogs
 
                     this.txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
                     this.txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
-                    this.cmbDate1Calendar.SelectedIndex = (int)dtRange.After.DateCalendar;
-                    this.cmbDate2Calendar.SelectedIndex = (int)dtRange.Before.DateCalendar;
+                    SetComboCalendar(this.cmbDate1Calendar, dtRange.After.DateCalendar);
+                    SetComboCalendar(this.cmbDate2Calendar, dtRange.Before.DateCalendar);
                     this.btnBC1.Checked = dtRange.After.YearBC;
                     this.btnBC2.Checked = dtRange.Before.YearBC;
                 }
@@ -301,8 +375,8 @@ namespace GKUI.Dialogs
 
                         this.txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
                         this.txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
-                        this.cmbDate1Calendar.SelectedIndex = (int)dtPeriod.DateFrom.DateCalendar;
-                        this.cmbDate2Calendar.SelectedIndex = (int)dtPeriod.DateTo.DateCalendar;
+                        SetComboCalendar(this.cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
+                        SetComboCalendar(this.cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
                         this.btnBC1.Checked = dtPeriod.DateFrom.YearBC;
                         this.btnBC2.Checked = dtPeriod.DateTo.YearBC;
                     }
@@ -312,7 +386,7 @@ namespace GKUI.Dialogs
                         {
                             this.cmbEventDateType.SelectedIndex = 0;
                             this.txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
-                            this.cmbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
+                            SetComboCalendar(this.cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
                             this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
                         }
                         else
@@ -492,56 +566,6 @@ namespace GKUI.Dialogs
 
             this.btnBC1.Enabled = this.txtEventDate1.Enabled;
             this.btnBC2.Enabled = this.txtEventDate2.Enabled;
-        }
-
-        public EventEditDlg(IBaseWindow baseWin) : base(baseWin)
-        {
-            this.InitializeComponent();
-
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
-            this.btnPlaceAdd.Image = global::GKResources.iRecNew;
-            this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
-
-            int num = GKData.DateKinds.Length;
-            for (int i = 0; i < num; i++)
-            {
-                this.cmbEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
-            }
-
-            for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++)
-            {
-                this.cmbDate1Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));
-                this.cmbDate2Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));
-            }
-
-            this.cmbDate1Calendar.SelectedIndex = 0;
-            this.cmbDate2Calendar.SelectedIndex = 0;
-
-            this.fLocation = null;
-
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
-
-            // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_Event);
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
-            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.lblEvent.Text = LangMan.LS(LSID.LSID_Event);
-            this.lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
-            this.lblPlace.Text = LangMan.LS(LSID.LSID_Place);
-            this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
-            this.lblCause.Text = LangMan.LS(LSID.LSID_Cause);
-            this.lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
-
-            this.toolTip1.SetToolTip(this.btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
-            this.toolTip1.SetToolTip(this.btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
         }
     }
 }

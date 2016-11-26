@@ -38,69 +38,69 @@ namespace GKTests
         [Test]
         public void ReflectionHelper_Tests()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.GetPropertyValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.SetPropertyValue(null, "Text", null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.GetFieldValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.SetPropertyValue(null, "Text", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetPropertyValue(null, "Text"); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetFieldValue(null, "Text"); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
 
             using (StringList strList = new StringList()) {
                 strList.Text = "Test line";
 
-                object obj = ReflectionHelper.GetPropertyValue(strList, "Text");
+                object obj = SysUtils.GetPropertyValue(strList, "Text");
                 Assert.AreEqual("Test line\r\n", obj);
 
-                ReflectionHelper.SetPropertyValue(strList, "Text", "Test2");
+                SysUtils.SetPropertyValue(strList, "Text", "Test2");
                 Assert.AreEqual("Test2\r\n", strList.Text);
 
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.GetPropertyValue(strList, "test"); });
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.SetPropertyValue(strList, "test", ""); });
+                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetPropertyValue(strList, "test"); });
+                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.SetPropertyValue(strList, "test", ""); });
             }
 
             Token tkn = new Token(TokenKind.Unknown, "", 111, 0);
-            object obj1 = ReflectionHelper.GetFieldValue(tkn, "Line");
+            object obj1 = SysUtils.GetFieldValue(tkn, "Line");
             Assert.AreEqual(111, obj1);
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.GetFieldValue(tkn, "Lines"); });
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetFieldValue(tkn, "Lines"); });
         }
 
         [Test]
         public void ConvHelper_Tests()
         {
-            int ival = ConvHelper.ParseInt("495", 0);
+            int ival = SysUtils.ParseInt("495", 0);
             Assert.AreEqual(495, ival);
 
-            ival = ConvHelper.ParseInt("asdfa", 11);
+            ival = SysUtils.ParseInt("asdfa", 11);
             Assert.AreEqual(11, ival);
 
-            double fval = ConvHelper.ParseFloat("495.575", 0);
+            double fval = SysUtils.ParseFloat("495.575", 0);
             Assert.AreEqual(495.575, fval);
 
-            fval = ConvHelper.ParseFloat("575,495", 0, true);
+            fval = SysUtils.ParseFloat("575,495", 0, true);
             Assert.AreEqual(575.495, fval);
 
-            fval = ConvHelper.ParseFloat("", 22.1);
+            fval = SysUtils.ParseFloat("", 22.1);
             Assert.AreEqual(22.1, fval);
 
-            fval = ConvHelper.ParseFloat("sdgfdf", 22.2);
+            fval = SysUtils.ParseFloat("sdgfdf", 22.2);
             Assert.AreEqual(22.2, fval);
 
-            string st = ConvHelper.AdjustNum(9, 3);
+            string st = SysUtils.AdjustNum(9, 3);
             Assert.AreEqual("009", st);
         }
 
         [Test]
         public void RomeNumbers_Tests()
         {
-            Assert.AreEqual("VI", ConvHelper.GetRome(6), "RomeTest_00");
-            Assert.AreEqual("VIII", ConvHelper.GetRome(8), "RomeTest_01");
-            Assert.AreEqual("IX", ConvHelper.GetRome(9), "RomeTest_02");
-            Assert.AreEqual("XXXI", ConvHelper.GetRome(31), "RomeTest_03");
-            Assert.AreEqual("XLVI", ConvHelper.GetRome(46), "RomeTest_04");
-            Assert.AreEqual("XCIX", ConvHelper.GetRome(99), "RomeTest_05");
-            Assert.AreEqual("DLXXXIII", ConvHelper.GetRome(583), "RomeTest_06");
-            Assert.AreEqual("DCCCLXXXVIII", ConvHelper.GetRome(888), "RomeTest_07");
-            Assert.AreEqual("MDCLXVIII", ConvHelper.GetRome(1668), "RomeTest_08");
-            Assert.AreEqual("MCMLXXXIX", ConvHelper.GetRome(1989), "RomeTest_09");
-            Assert.AreEqual("MMMCMXCIX", ConvHelper.GetRome(3999), "RomeTest_10");
+            Assert.AreEqual("VI", SysUtils.GetRome(6), "RomeTest_00");
+            Assert.AreEqual("VIII", SysUtils.GetRome(8), "RomeTest_01");
+            Assert.AreEqual("IX", SysUtils.GetRome(9), "RomeTest_02");
+            Assert.AreEqual("XXXI", SysUtils.GetRome(31), "RomeTest_03");
+            Assert.AreEqual("XLVI", SysUtils.GetRome(46), "RomeTest_04");
+            Assert.AreEqual("XCIX", SysUtils.GetRome(99), "RomeTest_05");
+            Assert.AreEqual("DLXXXIII", SysUtils.GetRome(583), "RomeTest_06");
+            Assert.AreEqual("DCCCLXXXVIII", SysUtils.GetRome(888), "RomeTest_07");
+            Assert.AreEqual("MDCLXVIII", SysUtils.GetRome(1668), "RomeTest_08");
+            Assert.AreEqual("MCMLXXXIX", SysUtils.GetRome(1989), "RomeTest_09");
+            Assert.AreEqual("MMMCMXCIX", SysUtils.GetRome(3999), "RomeTest_10");
         }
 
         private enum RestrictionEnum
@@ -265,6 +265,11 @@ namespace GKTests
             Assert.Throws(typeof(StringListException), () => { strList2.Exchange(-1, 0); });
             Assert.Throws(typeof(StringListException), () => { strList2.Exchange(0, -1); });
 
+            Assert.Throws(typeof(StringListException), () => { object item = strList2[-1]; });
+            Assert.Throws(typeof(StringListException), () => { strList2[-1] = null; });
+            Assert.Throws(typeof(StringListException), () => { object item = strList2.GetObject(-1); });
+            Assert.Throws(typeof(StringListException), () => { strList2.SetObject(-1, null); });
+
             string[] listVals = strList.ToArray();
             Assert.AreEqual("The", listVals[0]);
             Assert.AreEqual("string", listVals[1]);
@@ -282,6 +287,7 @@ namespace GKTests
             strList.SetObject(2, obj);
             Assert.AreEqual(obj, strList.GetObject(2));
             Assert.AreEqual(2, strList.IndexOfObject(obj));
+            Assert.AreEqual(-1, strList.IndexOfObject(new object()));
 
             strList.CaseSensitive = true;
             Assert.IsTrue(strList.CaseSensitive);
@@ -940,6 +946,19 @@ namespace GKTests
             TweenLibrary tween = new TweenLibrary();
             tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
             #endif
+        }
+
+        [Test]
+        public void GfxHelper_Tests()
+        {
+            Assert.AreEqual(57.295779513, SysUtils.RadiansToDegrees(1.0), 0.0000000001);
+            Assert.AreEqual(1.0, SysUtils.DegreesToRadians(57.295779513), 0.0000000001);
+
+            Assert.AreEqual(2.0, SysUtils.ZoomToFit(50, 20, 100, 50));
+            Assert.AreEqual(3.0, SysUtils.ZoomToFit(15, 40, 45, 120));
+
+            Assert.AreEqual(Color.FromArgb(50, 50, 50), SysUtils.Darker(Color.FromArgb(100, 100, 100), 0.5f));
+            Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));
         }
     }
 }

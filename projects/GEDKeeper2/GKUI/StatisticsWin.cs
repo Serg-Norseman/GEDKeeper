@@ -112,7 +112,7 @@ namespace GKUI
                     ListViewItem item = this.fListStats.Items[i];
 
                     string s = item.Text;
-                    double lab = (s == "?") ? 0.0f : ConvHelper.ParseFloat(s, 0.0f, true);
+                    double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
 
                     if (lab != 0 || !excludeUnknowns)
                     {
@@ -145,7 +145,7 @@ namespace GKUI
                 for (int i = 0; i < itemscount; i++)
                 {
                     StatsItem sti = vals[i];
-                    XValues[i] = ConvHelper.ParseInt(sti.Caption, 0);
+                    XValues[i] = SysUtils.ParseInt(sti.Caption, 0);
                     YValuesF[i] = sti.ValF;
                     YValuesM[i] = sti.ValM;
                 }

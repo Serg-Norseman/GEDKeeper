@@ -26,9 +26,6 @@ namespace GKCommon
     [Serializable]
     public class ListException : Exception
     {
-        public ListException()
-        {
-        }
         public ListException(string message) : base(message)
         {
         }
@@ -210,12 +207,12 @@ namespace GKCommon
 
         public void QuickSort(Comparison<T> comparer)
         {
-            SortHelper.QuickSort(fList, comparer);
+            SysUtils.QuickSort(fList, comparer);
         }
 
         public void MergeSort(Comparison<T> comparer)
         {
-            SortHelper.MergeSort(fList, comparer);
+            SysUtils.MergeSort(fList, comparer);
         }
     }
 }

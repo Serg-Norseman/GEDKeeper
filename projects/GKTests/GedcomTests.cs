@@ -2251,14 +2251,14 @@ namespace GKTests
         [Test]
         public void GEDCOMSourceRecord_Tests()
         {
+            GEDCOMTree tree = new GEDCOMTree();
+
             // check match
-            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(null, null, "", "") as GEDCOMSourceRecord)
+            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMSourceRecord)
             {
                 Assert.IsNotNull(src1, "src1 != null");
 
-                Assert.Throws(typeof(ArgumentException), () => { src1.MoveTo(null, false); });
-
-                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(null, null, "", ""))
+                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree, "", ""))
                 {
                     Assert.IsNotNull(src2, "src2 != null");
 
@@ -2271,6 +2271,48 @@ namespace GKTests
                     src1.FiledByEntry = "test source";
                     src2.FiledByEntry = "test source";
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
+                }
+            }
+
+            // check move
+            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMSourceRecord)
+            {
+                Assert.Throws(typeof(ArgumentException), () => { src1.MoveTo(null, false); });
+
+                // fill the record
+                src1.FiledByEntry = "test source";
+                src1.Title = new StringList("test title");
+                src1.Originator = new StringList("test author");
+                src1.Publication = new StringList("test publ");
+                src1.Text = new StringList("test text");
+
+                Assert.AreEqual("test source", src1.FiledByEntry);
+                Assert.AreEqual("test title\r\n", src1.Title.Text);
+                Assert.AreEqual("test author\r\n", src1.Originator.Text);
+                Assert.AreEqual("test publ\r\n", src1.Publication.Text);
+                Assert.AreEqual("test text\r\n", src1.Text.Text);
+
+                GEDCOMRepositoryRecord repRec = tree.CreateRepository();
+                repRec.RepositoryName = "test repository";
+                src1.AddRepository(repRec);
+                Assert.AreEqual(1, src1.RepositoryCitations.Count);
+
+                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree, "", ""))
+                {
+                    src2.FiledByEntry = "test source 2"; // title isn't replaced
+
+                    Assert.AreEqual(0, src2.RepositoryCitations.Count);
+
+                    src1.MoveTo(src2, false);
+
+                    Assert.AreEqual("test source 2", src2.FiledByEntry);
+
+                    Assert.AreEqual("test title\r\n", src2.Title.Text);
+                    Assert.AreEqual("test author\r\n", src2.Originator.Text);
+                    Assert.AreEqual("test publ\r\n", src2.Publication.Text);
+                    Assert.AreEqual("test text\r\n", src2.Text.Text);
+
+                    Assert.AreEqual(1, src2.RepositoryCitations.Count);
                 }
             }
         }
@@ -2772,6 +2814,15 @@ namespace GKTests
                 }
 
                 Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
+
+                using (GEDCOMNoteRecord noteRec3 = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
+                    noteRec3.SetNoteText("Test text 3");
+                    Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
+
+                    noteRec.MoveTo(noteRec3, false);
+
+                    Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
+                }
             }
         }
 
