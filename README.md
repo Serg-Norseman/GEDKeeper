@@ -6,6 +6,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
+[![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=500&user=serg-norseman)
 
