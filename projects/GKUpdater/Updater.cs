@@ -37,7 +37,7 @@ using System.Windows.Forms;
 
 namespace GKUpdater
 {
-    public class Updater
+    public static class Updater
     {
         public static void Main(string[] args)
         {

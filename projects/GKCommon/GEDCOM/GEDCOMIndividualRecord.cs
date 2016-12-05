@@ -700,18 +700,22 @@ namespace GKCommon.GEDCOM
 
         private string GetComparableName(bool onlyFirstPart)
         {
-            string firstPart, surname, fullName;
+            string resName;
+
             if (this.fPersonalNames.Count > 0) {
                 GEDCOMPersonalName np = this.fPersonalNames[0];
-                np.GetNameParts(out firstPart, out surname);
-                fullName = np.StringValue;
+
+                if (onlyFirstPart) {
+                    string firstPart, dummy;
+                    np.GetNameParts(out firstPart, out dummy);
+                    resName = firstPart;
+                } else {
+                    resName = np.StringValue;
+                }
             } else {
-                firstPart = "";
-                surname = "";
-                fullName = "";
+                resName = "";
             }
 
-            string resName = ((onlyFirstPart) ? firstPart : fullName);
             return resName;
         }
 

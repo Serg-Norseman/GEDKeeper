@@ -49,7 +49,7 @@ namespace GKCore
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
-        private ChangeTracker fUndoman;
+        private readonly ChangeTracker fUndoman;
 
         #endregion
 

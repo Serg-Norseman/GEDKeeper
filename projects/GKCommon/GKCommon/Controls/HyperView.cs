@@ -619,8 +619,10 @@ namespace GKCommon.Controls
         {
             bool result;
 
-            if ((keyData & Keys.Right) == Keys.Right | (keyData & Keys.Left) == Keys.Left | (keyData & Keys.Up) == Keys.Up | (keyData & Keys.Down) == Keys.Down
-                | (keyData & Keys.Prior) == Keys.Prior | (keyData & Keys.Next) == Keys.Next | (keyData & Keys.End) == Keys.End | (keyData & Keys.Home) == Keys.Home)
+            if ((keyData & Keys.Right) == Keys.Right || (keyData & Keys.Left) == Keys.Left ||
+                (keyData & Keys.Up) == Keys.Up || (keyData & Keys.Down) == Keys.Down ||
+                (keyData & Keys.Prior) == Keys.Prior || (keyData & Keys.Next) == Keys.Next ||
+                (keyData & Keys.End) == Keys.End || (keyData & Keys.Home) == Keys.Home)
                 result = true;
             else
                 result = base.IsInputKey(keyData);

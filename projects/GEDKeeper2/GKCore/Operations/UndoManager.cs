@@ -40,7 +40,7 @@ namespace GKCore.Operations
         private const CustomOperation TRANS_DELIMITER = null;
 
         private TransactionEventHandler fOnTransaction;
-        private List<CustomOperation> fList;
+        private readonly List<CustomOperation> fList;
         private int fCurrentIndex;
 
 

@@ -51,7 +51,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    internal sealed class GKProgram
+    public static class GKProgram
     {
         #if __MonoCS__
         private static MainWin fMainWin;

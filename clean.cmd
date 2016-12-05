@@ -6,6 +6,8 @@ del .\coverageResults.txt
 rmdir .\cov-int /s /q
 del .\coverity.zip
 
+rmdir .\.sonarqube /s /q
+
 del .\GKUpdater.ini
 del .\GKUpdater.log
 

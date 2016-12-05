@@ -79,8 +79,7 @@ namespace GKUI.Dialogs
                 this.Edit1.Text = "";
             } else {
                 this.Lab1.Text = this.fRec1.XRef;
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec1;
-                this.Edit1.Text = GKUtils.GetNameString(iRec, true, false);
+                this.Edit1.Text = GKUtils.GetNameString(this.fRec1, true, false);
             }
 
             if (this.fRec2 == null) {
@@ -88,8 +87,7 @@ namespace GKUI.Dialogs
                 this.Edit2.Text = "";
             } else {
                 this.Lab2.Text = this.fRec2.XRef;
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec2;
-                this.Edit2.Text = GKUtils.GetNameString(iRec, true, false);
+                this.Edit2.Text = GKUtils.GetNameString(this.fRec2, true, false);
             }
 
             if (this.fRec1 != null && this.fRec2 != null) {

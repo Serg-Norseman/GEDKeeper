@@ -61,6 +61,31 @@ namespace GKTests
         }
 
         [Test]
+        public void CalendarCP_Tests()
+        {
+            DateTime gdt = new DateTime(2016, 11, 28);
+
+            string s;
+            double jd;
+
+            jd = CalendarConverter.gregorian_to_jd2(gdt.Year, gdt.Month, gdt.Day);
+            Assert.AreEqual(2457721, jd); // ok+
+
+            int year, month, day;
+            CalendarConverter.jd_to_julian2((uint)jd, out year, out month, out day);
+            s = d2s(day, CalendarData.ClassicMonths[month - 1], year, "");
+            Assert.AreEqual("15 November 2016, ", s); // ok+
+
+            CalendarConverter.jd_to_hebrew3((uint)jd, out year, out month, out day);
+            s = d2s(day, CalendarData.HebrewMonths[month - 1], year, "");
+            Assert.AreEqual("27 Heshvan 5777, ", s); // ok+
+
+            CalendarConverter.jd_to_islamic3((uint)jd, out year, out month, out day);
+            s = d2s(day, CalendarData.IslamicMonths[month - 1], year, "");
+            Assert.AreEqual("27 Safar 1438, ", s); // ok+
+        }
+
+        [Test]
         public void CalendarGK_Tests()
         {
             double jd;

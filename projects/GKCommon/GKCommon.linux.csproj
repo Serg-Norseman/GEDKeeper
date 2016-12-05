@@ -95,9 +95,6 @@
     <Compile Include="GKCommon\Controls\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCommon\Controls\SlideList.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKCommon\Controls\WizardPages.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -263,9 +260,6 @@
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKCommon\Controls\SlideList.resx">
-      <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

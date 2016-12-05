@@ -72,7 +72,9 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Updater.cs" />
-    <Compile Include="UpdaterForm.cs" />
+    <Compile Include="UpdaterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">

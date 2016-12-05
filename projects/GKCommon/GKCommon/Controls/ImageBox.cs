@@ -1526,7 +1526,8 @@ namespace GKCommon.Controls
         {
             bool result;
 
-            if ((keyData & Keys.Right) == Keys.Right | (keyData & Keys.Left) == Keys.Left | (keyData & Keys.Up) == Keys.Up | (keyData & Keys.Down) == Keys.Down)
+            if ((keyData & Keys.Right) == Keys.Right || (keyData & Keys.Left) == Keys.Left ||
+                (keyData & Keys.Up) == Keys.Up || (keyData & Keys.Down) == Keys.Down)
                 result = true;
             else
                 result = base.IsInputKey(keyData);
@@ -2149,7 +2150,7 @@ namespace GKCommon.Controls
         {
             if (this.AutoPan && !this.ViewSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None)
             {
-                if (!this.IsPanning && (this.HScroll | this.VScroll))
+                if (!this.IsPanning && (this.HScroll || this.VScroll))
                 {
                     _startMousePosition = e.Location;
                     this.IsPanning = true;

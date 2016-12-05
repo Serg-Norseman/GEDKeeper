@@ -33,7 +33,7 @@ namespace GKUpdater
         private ProgressBar pgStatus;
         private Label lblStatus;
 
-        private Controller fController;
+        private readonly Controller fController;
 
         public UpdaterForm()
         {

@@ -59,7 +59,7 @@ namespace GKUpdater
         private StringDictionary fApplicationUpdates;
         private StringDictionary fPluginUpdates;
         private StringDictionary fExtensionUpdates;
-        private string fUpdatesPath;
+        private readonly string fUpdatesPath;
 
         public event UpdateMessageHandler DownloadProgress;
         public event UpdateMessageHandler UpdateMessage;
