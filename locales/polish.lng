@@ -1,0 +1,723 @@
+﻿;1045,pol,Polski
+Plik
+Korekta
+Rodowód
+Usługa
+&Окna
+Pomoc
+Nowy
+Оywórz...
+Оtwórz ostatni
+Zapisz...
+Zamknij
+Właściwości pliku...
+Eksport
+Książka rodziny PDF...
+<?>
+Eksport do pliku Excela...
+Wyjście
+<?>
+<?>
+Dodaj rekord
+Edytuj rekord
+Usuń rekord
+<?>
+Drzewo przodków
+Drzewo potomków
+Pełne drzewo
+schodzące po pokoleniu
+schodzący po pokoleniu
+Mapy
+Statystyka
+Wspinając się na rodowód
+<?>
+<?>
+<?>
+Organizator
+Skrypty...
+<?>
+Narzędzia...
+Filtr
+Opcje
+& Kaskada
+& Sąsiadująco w poziomie
+Idealna dachówka pionowe
+& Minimalizuj wszystkie
+& Ponowne rozmieszczanie wszystkich
+Zasoby internetowe...
+Warunki pokrewieństwa...
+FAQ...
+Zawartość
+O programie
+Rekordy
+Filtrowane
+Osoby
+Rodziny
+Notatki
+Multimedia
+Źródła
+Repozytoria
+Grupy
+Badania
+Zadania
+Komunikacja
+Lokalizacje
+nieznany
+nieznany
+?
+Mężczyzna
+Kobieta
+Nieokreślona
+Plik został zmodyfikowany. Zapisać?
+Określony obiekt nadrzędny ma istniejącą rodzine "{0}". Czy chcesz dodać dziecko do tej rodziny?
+Usuwanie pojedynczych "{0}"?
+Usunąć z rodziny "{0}"?
+Usunąć Uwaga "{0}"?
+Usuń Źródło "{0}"?
+Usunąć multimedia "{0}"?
+Usunąć repozytorium "{0}"?
+Usuwanie grupy "{0}"?
+Usunąć badania "{0}"?
+Usuń zadanie "{0}"?
+Usuń komunikat "{0}"?
+Usuwanie lokalizacji "{0}"?
+Adres
+Zdarzenia
+Nazwisko
+Imię
+Nazwisko rodowe
+Płeć
+Pseudonim
+Ostatni prefiks nazwy
+Prefiks nazwy
+Sufiks nazwy
+Patriarcha
+Zakładki
+Stowarzyszenie
+Relacja
+Osób
+Zatwierdź
+Anuluj
+Zamknij
+Wybierz
+Dołączyć
+Nowe jednostki
+Edytowanie poszczególnych
+Sprawdzanie płci
+Wybranie rekordu
+Cytowania źródeł
+Dokumentacja użytkownika
+Uwaga:
+Źródło
+Strona
+Pewność
+Odwołanie
+Typu
+Rodziny
+Mąż
+Żona
+Dzieci
+?
+Odłączyć łącze do męża?
+Odłączyć łącze do żony?
+Odłączyć łącze do dziecka?
+Data urodzenia
+Data śmierci
+Ograniczenie zabezpieczeń
+Tytuł
+Członkowie
+Edytuj grupę
+Odłączyć łącze do elementu członkowskiego?
+Widok
+Etap
+Numer telefonu
+Adres e-mail
+Witryna sieci Web
+Repozytorium
+Postęp
+Upłynęło czasu
+Pozostały czas
+Całkowity czas
+Data
+Tekst
+Krótki tytuł
+Autor
+Opublikowany
+Ogólne
+Odłączyć łącze do repozytorium?
+Typ magazynu
+Plik
+Widok
+Tryb rozszerzenia nie jest włączona dla wybranego sklepu typu
+Ojciec
+Matka
+Rodzice
+Małżonkowie
+Stowarzyszenia
+Odwołania do użytkownika
+Gregoriański
+Juliański
+Hebrajski
+Islamski
+Perski
+Indyjski
+Bahai
+Francuski
+Roman
+Nieznane
+Krótki opis
+Inne
+Składanie
+Wnioskodawca
+Lokalizacja
+Szerokość geograficzna
+Długość geograficzna
+Pokaż
+Szukaj coords
+Szukaj
+Wybierz coords
+Wybierz nazwę
+Priorytet
+Procent
+Rozpoczęcie
+Zatrzymanie
+Cel
+Tematu
+Muszą być w grze
+Grupa
+Odłączyć łącze do zadania?
+Odłączyć łącze do komunikacji?
+Odłączyć łącze do grupy?
+Edytuj badanie
+Edytuj zadanie
+Edytować komunikacji
+Błąd
+Lua uruchomić nie powiodło się!
+Format daty jest nieprawidłowy
+Kraj
+Państwo
+Miasto
+Kod pocztowy
+Numery telefonów
+E-maile
+Witryny sieci Web
+Wartość
+Zdarzenia
+Miejsce
+Przyczyna
+Agencja
+Kobieta
+Mężczyzna
+Pojedynczego rekordu nie jest zaznaczone.
+Osoba ta ma nie seks zdefiniowane.
+Ta osoba ma nie rodzin.
+Szacunkowa liczba przodków {0} jest więcej niż dopuszczalne granice.
+Szacunkowa liczba potomków {0} jest więcej niż dopuszczalne granice.
+Pokoleń widoczne:
+nieograniczony
+Małżonka
+Data ślubu
+Odłączyć łącze do ojca?
+Odłączyć łącze do matki?
+Odłączyć łącze do małżonka?
+Odłączyć łącze do rodziców?
+Wszystkie
+Przodków tylko
+Potomkowie tylko
+Śledzenia głównego
+Edycja
+Dodaj rodzinę
+Dodaj małżonka
+Dodaj syn
+Dodać córką
+Usuń
+Przebudować drzewo
+Odbudować Musarum
+Linki
+Miejsce zgonu
+małżeństwo
+Rodzina
+Imienniczki
+Usuwanie zdarzenia?
+Odłączyć łącze, aby pamiętać?
+Odłączyć łącze do multimediów?
+Odłączyć link do źródła?
+Należy usunąć skojarzenie?
+Usuń odwołanie do użytkownika?
+Nie powiodło się ładowanie gedcom.
+Sprawdź format gedcom nie powiodło się.
+Narodziny dni
+Przed dniem narodzin "{0}" pozostało {1} dni
+Interfejs
+Drzewa
+Rodowody
+Kodowanie plików
+Adresy
+E-mail
+Wstęgi
+Internet
+Użyj serwera proxy
+Serwer
+Port
+Login
+Hasło
+Hasło nie jest określony.
+Pokaż wskazówki przy starcie
+Język
+Wszystkie listy
+Lista osób
+Format nazwy w listach
+Nazwisko_Nazwa_Nazwisko rodowe
+Nazwisko; Nazwa; Nazwisko_rodowe
+Nazwisko; Nazwa; Nazwisko rodowe
+Format daty w listach
+Dołączyć adres w miejsce tekstu
+Bez podświetlenia elementów nadrzędnych.
+Podświetl niezamężna
+Wartości domyślne
+Pokaż osoby w drzewie
+Oddzielne wiersze
+Tylko lata
+Pokrewieństwo
+Dodatkowe symbole
+Drzewa dekoracyjne
+Pokaż portrety
+Ukryj zmarł w dzieciństwie
+Decor
+Człowiek
+Kobieta
+Nieznana płeć
+Rozwiedziony
+Rozwódka
+Czcionki
+Rodowód pokolenia
+Dołączyć atrybuty osób
+Dołączyć notatki
+Dołączyć źródła
+Rodowód w formacie
+Nadmiarowym
+Kompaktowym
+Przejdź do rekordu
+Wrzucić rekord
+Przesunąć rekord
+Imię i nazwisko
+Miejsce urodzenia
+Miejsce śmierci
+Rezydencja
+Wiek
+Okres istnienia
+Dni przed urodzeniem
+Religia
+Narodowość
+Edukacja
+Zawód
+Kasta
+Mili
+Mili ind
+Mili dis
+Ranga mili
+Zmiana
+Małżeństwo, zarejestrowany
+Małżeństwo nie jest zarejestrowany.
+Rozwiedziony
+Urodzenia
+Przyjęcie
+Chrzciny
+Miejsce urodzenia
+Przejścia na emeryturę
+Naturalizacji
+Emigracja
+Imigracji
+Spisu powszechnego
+Będzie
+Spadkowych woli
+Śmierć
+Pogrzeb
+Kremacja
+Fakt
+Opis fizyczny
+Numer identyfikacyjny krajowego
+Numer ubezpieczenia społecznego
+Liczba dzieci
+Liczba małżeństw
+Właściwość
+Tytuł
+Podróży
+Hobby
+Nagroda
+?
+Ojciec
+matka
+mąż
+żona
+Syn
+Córka
+Dziadek
+Babcia
+wnuk
+wnuczka
+brat
+Siostra
+zięć
+synowa
+teść
+teściowa
+teść
+teściowa
+Wujek
+Ciotka
+bratanek
+siostrzenica
+kuzyn
+kuzyn
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+Szerokość obrazu jest ponad 65 000 pikseli. Nie można zapisać.
+Wstecz
+Następny
+<?>
+Następny
+Czy wiesz, że...
+Obciążenia i wyszukiwanie miejsc
+(nie wybrano)
+Próbki
+Dla wszystkich ludzi
+Miejsca urodzenia
+Miejsce śmierci
+Miejsca zamieszkania
+Tylko wybrane
+Zapisz obraz...
+Format nie obsługiwany.
+Błąd podczas ładowania danych.
+Drukuj
+Podgląd
+Pokolenie
+<?>
+<?>
+Dokładny
+Przed
+Po
+Między
+Okres przed
+Okres od
+Okres między
+O programie
+Obliczone
+Szacowana
+Miejsce ślubu
+Małżeństwo
+Publiczne ogłoszenie małżeństwa
+Umowy majątkowej małżeńskiej
+Uzyskanie uprawnień do zawarcia małżeństwa
+Zawarcie umowy małżeńskiej
+Unieważnienie małżeństwa
+Zgłoszenia rozwodu
+Rozwód
+Link do pliku
+Zapisywanie do archiwum
+Zapisywanie w magazynie
+-
+Dźwięk
+Książka
+Karta
+Elektroniczne
+Dylatacyjne
+Film
+Magazyn
+Rękopis
+Mapa
+Gazeta
+Zdjęcie
+Nagrobek
+Wideo
+-Nieznane-
+Brak
+Niski
+Normalny
+Wysoki
+Najwyższy
+Zdefiniowane przez
+W toku
+Zawieszone
+Problemy
+Zakończone
+Wycofane
+Zadzwoń
+Adres e-mail
+Faks
+Litera
+Taśma
+Odwiedź
+od
+do
+indywidualne
+Rodziny
+źródła
+inne
+Wiarygodne dowody
+Wątpliwa wiarygodność dowodów
+Poszlaki
+Bezpośrednie i podstawowych dowodów
+Badania
+Zadania
+Korespondencja
+Korekcja identyfikatory
+Sprawdź format
+Korekta rekordów tożsamości jest wymagany, kontynuować?
+Liczba obiektów w baza danych master: {0}
+Synchronizacji.
+Szukaj patriarchów
+Szukaj linki
+Archiwum nie znaleziono, dane nie jest załadowany
+Skali
+Pliki GEDKeeper GEDCOM (*.ged) | * .ged | GEDKeeper GEDCOM zaszyfrowanych plików (*.geds) | * .geds
+Wszystkie pliki (*. *) | *. *
+Obrazy (*.bmp; *.gif; *.png; *.jpg) | * .bmp; *.gif; *.png, *.jpg
+Skrypty (*.lua) | * .lua
+Pliki BMP (*.bmp) | * .bmp | Pliki JPEG (*.jpg) | * jpg | Pliki EMF (*.EMF) | * .emf | Pliki PNG (*.png) | * PNG | Pliki GIF (*.gif) | * .gif
+Przyczyny śmierci
+Rodowód
+Parametr
+Łącznie
+Mężczyźni
+Kobiety
+Pole filtra
+Rok
+Pliki PDF (*.pdf) | * .pdf
+Pliki RTF (*.rtf) | * .rtf
+Pliki HTML (*.html) | * .html
+Pliki kopii zapasowej
+Tylko poprzedni plik
+Odcinając gałęzie
+Nie
+Na lata
+W wybranych osób
+-Wszystkie-
+-Żaden--
+-Wszelkie-
+Wzorzec bazy danych
+Bazy danych do korespondencji seryjnej
+[aktualne bazy danych]
+Źródłem jest filtr. Czy chcesz dodać źródło do nowej jednostki?
+Przez grupę jest filtr. Czy chcesz dodać grupę do nowej jednostki?
+Szukaj duplikatów
+Nieprawidłowa wartość
+Operacja
+Porównywanie bazy danych
+Scalanie baz danych
+Dzielona baza danych
+Scalanie rekordów
+Rodowody importu
+Sprawdź połączenie rodzin
+Sprawdź bazy danych
+Szukaj patriarchów
+Zarządzanie miejscami
+Pasujące...
+Sprawdź połączenie rodzin
+wszystkie
+Tylko żyjące
+Tylko martwe
+Żyjący przed
+Tylkolko mężczyźni
+Tylko kobiety
+Maska nazwy
+Maska zamieszkania
+Maska faktów
+Patriarchowie tylko
+Data jest nieprawidłowa
+Ludzie
+Lata
+Dziesięć lat
+Ur.
+Zmarł
+Życia
+Martwe
+Średni wiek
+Oczekiwana długość życia
+Średnia liczba dzieci
+Średni wiek urodzenia pierwszego dziecka
+Średnia liczba małżeństw
+Średni wiek małżeństwa
+Liczba przodków
+Liczba potomków
+Liczba pokoleń potomków
+Narodziny lat
+Urodzenia lat (lat)
+Lat śmierć
+Lat śmierć (lat)
+Rozkład liczby dzieci
+Wiek urodzenia pierwszego dziecka
+Wiek w małżeństwie
+Różnica wieku małżonków
+Wybierz wszystkie linki
+Wybierz rodzinę
+Wybierz przodków
+Wybierz elementy podrzędne
+Korespondencji seryjnej
+Szukaj
+Pomiń
+Rekordy
+Szukaj osób
+Bezpośrednie, dopasowywania
+Niewyraźne pasujące
+Tylko z nazwy / drugie imię (tylko kobiety)
+Sprawdź rok urodzenia
+Dokładność opisu, %
+Lat niedokładności
+Naprawy
+Pokolenia potomków, nie mniej niż
+Zestaw znak
+Rejestracja w liście lokalizacji
+Podobne nazwiska:
+Podobne nazwy:
+Wybrane osobiste rekordy usunięte 
+Rekord
+Problem
+Rozwiązania
+Być może zmarł (wiek {0})
+Seks jest niezdefiniowana
+Rok urodzenia więcej niż w roku śmierci
+Pierwsze małżeństwo w wieku lat {0}?
+Pierwsze dziecko urodziło się w wieku lat {0}?
+Potomkowie
+Pokoleń
+Liczba linków
+Przetwarzania miejsc
+Miejsce jest już na liście lokalizacji
+Markerów DNA
+Średni wiek rodziców w tym czasie pierworodnego pojawił się względem wieku rodziców
+Średni wiek rodziców w tym czasie pierworodnego pojawił się w stosunku do wieku dzieci
+Pusty rekord dla rodzin z dziećmi
+Tworzenie kopii zapasowych każdej wersji pliku
+Ładowanie
+Plik zapisywanie błędów "{0}" {1}.
+Kolor tła...
+Zdjęcia w tle...
+Osób w drzewo: {0}
+Zobacz dzienniku błędów
+Przodkowie koło
+Koło
+Kolor tekstu
+Kolor tła
+Kolor linii
+Brak
+Zablokowane
+Poufne
+Prywatne
+Wysyłanie dziennika błędów
+Wykresy
+Rozmiar okna
+Powiększyć
+Pomniejsz
+Ustalenia faktu śmierci
+Określić płeć
+Wtyczki
+Auto śledzenia relacji
+Nie znaleziono odpowiedników
+Znajdź poprzedni
+Znajdź następny
+Indeks pewności
+Monthes urodzenia
+Miesiąc
+Reset
+Pole
+Warunek
+Źródło nie jest określone.
+Pokaz slajdów
+Poprzedni rekord
+Następny rekord
+Tworzenie nie powiodła się
+Początek
+Przystanek
+Dane demograficzne
+Nazwy
+Nazwa pseudonim
+Imię i nazwisko
+Imigracji
+Nazwisko panieńskie
+Nazwa małżeństwa
+Usuwanie nazwy?
+Nie można usunąć jedną nazwą
+Cytat
+Umieścić zakładkę na scalone rekordy
+Pokaż kalendarz w pobliżu daty
+Zduplikowany rekord
+Uwaga: w przypadku zduplikowania indywidualnego, więzi rodzinne i stowarzyszenia nie są kopiowane
+Pokaż typ daty
+Utwórz nowy plik
+Otwórz plik 
+Zapisz plik
+Dodaj rekord (Ctrl + I)
+Edytowanie rekordu (Ctrl + Enter)
+Usuń rekord (Ctrl + L)
+Filtrowanie listy rekordów
+Pokaż drzewo przodków
+Pokaż drzewo potomków
+Pokaż pełne drzewo
+Rodowód
+Rodowód przez d'Aboville
+Rodowód przez Konowałow
+Statystyczna analiza danych
+Zapisz obraz
+Tryby wyświetlania
+Utworzyć nowy skrypt
+Otwórz skrypt
+Zapisz skrypt
+Wykonać skryptu
+Dołączyć portret
+Odłączyć portret
+Dołącz do rodziny rodziców
+Edycję rodziny rodziców
+Odłączyć rodziców dla rodzin z dziećmi
+Wybierz lub Dodaj ojca
+Odłączyć ojca
+Przejdź do rekordu ojca
+Wybierz lub Dodaj matki
+Odłączyć matki
+Przejdź do rekordu matki
+Kopiuj nazwę do schowka
+Wybierz lub Dodaj męża
+Odłączyć męża
+Przejdź do rekordu męża
+Wybierz lub Dodaj żonę
+Odłączyć żona
+Przejdź do rekordu żony
+Wybierz jednostki
+Wybierz lub Dodaj lokalizację
+Usuń łącze do miejsca
+Pokaż mapę
+Wybierz lub Dodaj rekord źródła
+Wybierz rekord docelowy
+Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
+Plik o tej samej nazwie już istnieje w repozytorium
+Nie jest to zgodne z GEDSEC plik
+Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
+Eksport do programu Excel nie powiódł się
+Określony filtr
+Wyświetlanie linii
+Typ porównania
+Wewnętrzne porównanie (Szukaj duplikatów)
+Porównanaj z inną bazą danych
+Analizy (eksperymentalne)
+Porównaj
+Ignoruj daty
+Wykres
+Książki dla rodzin z dziećmi
+Spis treści
+Zapisy osób fizycznych
+Katalogi
+Nie można automatycznie wykryć płci przy użyciu nazwy "{1}". Jest płci męskiej?
+Automatyczne zapisywanie co
+Minut
+Łączna liczba pokoleń
+Ukryj puste segmenty
+Potomkowie koło
+Wybór portretu
+
