@@ -183,6 +183,8 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
+            GEDCOMFormat format = Owner.GetGEDCOMFormat();
+
             this.fDateCalendar = GEDCOMCalendar.dcGregorian;
             this.fYear = -1;
             this.fYearBC = false;
@@ -194,6 +196,10 @@ namespace GKCommon.GEDCOM
 
             if (!string.IsNullOrEmpty(result))
             {
+                if (format == GEDCOMFormat.gf_Ahnenblatt) {
+                    result = PrepareAhnenblattDate(result);
+                }
+
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
                 result = this.ExtractEscape(result);
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
@@ -226,6 +232,25 @@ namespace GKCommon.GEDCOM
         }
 
         #region Private methods of parsing of the input format
+
+        private static string PrepareAhnenblattDate(string str)
+        {
+            // TODO: remove this dirty hack!
+            string result = str.Trim();
+            if (!string.IsNullOrEmpty(result)) {
+                if (result.StartsWith("(") && result.EndsWith(")")) {
+                    result = result.Substring(1, result.Length - 2);
+
+                    // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
+                    // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
+                    // FIXME: this code need to move to GEDCOMDateInterpreted
+                    result = result.Replace('/', '.');
+                    result = result.Replace('-', '.');
+                    result = result.Replace(' ', '.');
+                }
+            }
+            return result;
+        }
 
         private string DayString(bool noDelimiter)
         {

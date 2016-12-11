@@ -21,7 +21,7 @@
 namespace GKCommon.GEDCOM
 {
     /// <summary>
-    /// GEDCOMConsts.
+    /// 
     /// </summary>
     public static class GEDCOMConsts
     {
@@ -47,7 +47,8 @@ namespace GKCommon.GEDCOM
                 new GEDCOMAppFormat("GENBOX", "Genbox Family History"),
                 new GEDCOMAppFormat("ALTREE", "Agelong Tree"),
                 new GEDCOMAppFormat("AGES", "Ages!"),
-                new GEDCOMAppFormat("PAF", "Personal Ancestral File")
+                new GEDCOMAppFormat("PAF", "Personal Ancestral File"),
+                new GEDCOMAppFormat("AHN", "Ahnenblatt")
             };
         }
     }
