@@ -183,7 +183,7 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            GEDCOMFormat format = Owner.GetGEDCOMFormat();
+            GEDCOMFormat format = (Owner == null) ? GEDCOMFormat.gf_Unknown : Owner.GetGEDCOMFormat();
 
             this.fDateCalendar = GEDCOMCalendar.dcGregorian;
             this.fYear = -1;

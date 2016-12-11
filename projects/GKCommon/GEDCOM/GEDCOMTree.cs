@@ -93,7 +93,7 @@ namespace GKCommon.GEDCOM
         private ProgressEventHandler fOnProgressEvent;
         private GEDCOMState fState;
         private int fUpdateCount;
-        private GEDCOMFormat? fFormat = null;
+        private GEDCOMFormat fFormat;
 
 
         public string FileName
@@ -386,7 +386,7 @@ namespace GKCommon.GEDCOM
         {
             this.fFileName = fileName;
 
-            using (StreamReader reader = new StreamReader(inputStream, Encoding.GetEncoding(1251))) {
+            using (StreamReader reader = new StreamReader(inputStream, DEFAULT_ENCODING)) {
                 this.Clear();
                 this.LoadFromStream(fileStream, reader);
                 this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
@@ -409,8 +409,30 @@ namespace GKCommon.GEDCOM
             this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
         }
 
+        #region Encoding hack
+
+        private enum EncodingState { esUnchecked, esUnchanged, esChanged }
+
+        private const int DEF_CODEPAGE = 1251;
+        private static Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
+
+        private Encoding fSourceEncoding;
+        private EncodingState fEncodingState;
+
+        private static string ConvertStr(Encoding encoding, string str)
+        {
+            byte[] src = DEFAULT_ENCODING.GetBytes(str);
+            str = encoding.GetString(src);
+            return str;
+        }
+
+        #endregion
+
         private void LoadFromStream(Stream fileStream, StreamReader reader)
         {
+            this.fSourceEncoding = DEFAULT_ENCODING;
+            this.fEncodingState = EncodingState.esUnchecked;
+
             long fileSize = fileStream.Length;
             int progress = 0;
 
@@ -457,17 +479,40 @@ namespace GKCommon.GEDCOM
                                 throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
                             }
 
-                            // temp hack
-                            if (!string.IsNullOrEmpty(tagValue) && charSet == GEDCOMCharacterSet.csUTF8)
+                            // convert codepages
+                            if (!string.IsNullOrEmpty(tagValue) && this.fEncodingState == EncodingState.esChanged)
                             {
-                                if (!Equals(reader.CurrentEncoding, Encoding.UTF8)) {
-                                    tagValue = GEDCOMUtils.StrToUtf8(tagValue);
-                                }
+                                tagValue = ConvertStr(this.fSourceEncoding, tagValue);
                             }
-                            // end
 
                             if (tagLevel == 0)
                             {
+                                if (curRecord == this.fHeader && this.fEncodingState == EncodingState.esUnchecked) {
+                                    // beginning recognition of the first is not header record
+                                    // to check for additional versions of the code page
+
+                                    charSet = this.fHeader.CharacterSet;
+                                    switch (charSet)
+                                    {
+                                        case GEDCOMCharacterSet.csUTF8:
+                                            this.fSourceEncoding = Encoding.UTF8;
+                                            this.fEncodingState = EncodingState.esChanged;
+                                            break;
+
+                                        case GEDCOMCharacterSet.csASCII:
+                                            string cpVers = this.fHeader.CharacterSetVersion;
+                                            if (!string.IsNullOrEmpty(cpVers)) {
+                                                int sourceCodepage = SysUtils.ParseInt(cpVers, DEF_CODEPAGE);
+                                                this.fSourceEncoding = Encoding.GetEncoding(sourceCodepage);
+                                                this.fEncodingState = EncodingState.esChanged;
+                                            } else {
+                                                this.fSourceEncoding = DEFAULT_ENCODING;
+                                                this.fEncodingState = EncodingState.esUnchanged;
+                                            }
+                                            break;
+                                    }
+                                }
+
                                 if (tagName == "INDI")
                                 {
                                     curRecord = this.AddRecord(new GEDCOMIndividualRecord(this, this, "", ""));
@@ -541,12 +586,6 @@ namespace GKCommon.GEDCOM
                             }
                             else
                             {
-                                // temp hack
-                                if (tagName == "CHAR") {
-                                    charSet = GEDCOMUtils.GetCharacterSetVal(tagValue);
-                                }
-                                // end
-
                                 if (curRecord != null)
                                 {
                                     if (curTag == null || tagLevel == 1)
@@ -643,7 +682,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFormat GetGEDCOMFormat()
         {
-            if (fFormat.HasValue) return fFormat.Value;
+            if (fFormat != GEDCOMFormat.gf_Unknown) return fFormat;
 
             string sour = this.fHeader.Source;
 

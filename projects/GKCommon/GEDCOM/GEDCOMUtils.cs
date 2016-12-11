@@ -1489,12 +1489,6 @@ namespace GKCommon.GEDCOM
 
         #region Other
 
-        public static string StrToUtf8(string str)
-        {
-            byte[] src = Encoding.GetEncoding(1251).GetBytes(str);
-            return Encoding.UTF8.GetString(src);
-        }
-
         /// <summary>
         /// Fix of errors that are in the dates of FamilyTreeBuilder.
         /// </summary>
