@@ -556,7 +556,7 @@ namespace GKCore
 
             if (showCalendar)
             {
-                result = result + GKData.DateCalendars[(int)date.DateCalendar];
+                result = result + GKData.DateCalendars[(int)date.DateCalendar].Sign;
             }
 
             return result;

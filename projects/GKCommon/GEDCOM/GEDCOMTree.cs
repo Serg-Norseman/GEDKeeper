@@ -93,6 +93,7 @@ namespace GKCommon.GEDCOM
         private ProgressEventHandler fOnProgressEvent;
         private GEDCOMState fState;
         private int fUpdateCount;
+        private GEDCOMFormat? fFormat = null;
 
 
         public string FileName
@@ -642,16 +643,20 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFormat GetGEDCOMFormat()
         {
+            if (fFormat.HasValue) return fFormat.Value;
+
             string sour = this.fHeader.Source;
 
             for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++)
             {
                 if (GEDCOMConsts.GEDCOMFormats[(int)gf].Sign == sour)
                 {
+                    fFormat = gf;
                     return gf;
                 }
             }
 
+            fFormat = GEDCOMFormat.gf_Unknown;
             return GEDCOMFormat.gf_Unknown;
         }
 
