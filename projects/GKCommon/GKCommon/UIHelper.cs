@@ -87,6 +87,7 @@ namespace GKCommon
         {
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
             {
+                sfd.OverwritePrompt = overwritePrompt;
                 if (sfd.ShowDialog() == DialogResult.OK) {
                     return sfd.FileName;
                 } else {

@@ -566,7 +566,7 @@ namespace GKCore.Export
         }
     }
 
-    public class PDFWriterEvents : IPdfPageEvent
+    public sealed class PDFWriterEvents : IPdfPageEvent
     {
         private readonly BaseFont fFont;
         private readonly string fFooter;
@@ -577,11 +577,11 @@ namespace GKCore.Export
             this.fFooter = footer;
         }
 
-        public void OnOpenDocument(PdfWriter writer, Document document) { }
-        public void OnCloseDocument(PdfWriter writer, Document document) { }
-        public void OnStartPage(PdfWriter writer, Document document) { }
+        void IPdfPageEvent.OnOpenDocument(PdfWriter writer, Document document) { }
+        void IPdfPageEvent.OnCloseDocument(PdfWriter writer, Document document) { }
+        void IPdfPageEvent.OnStartPage(PdfWriter writer, Document document) { }
 
-        public void OnEndPage(PdfWriter writer, Document document)
+        void IPdfPageEvent.OnEndPage(PdfWriter writer, Document document)
         {
             if (writer.PageNumber == 1) return;
             
@@ -607,13 +607,13 @@ namespace GKCore.Export
             }
         }
 
-        public void OnParagraph(PdfWriter writer, Document document, float paragraphPosition) { }
-        public void OnParagraphEnd(PdfWriter writer, Document document, float paragraphPosition) { }
-        public void OnChapter(PdfWriter writer, Document document, float paragraphPosition, Paragraph title) { }
-        public void OnChapterEnd(PdfWriter writer, Document document, float paragraphPosition) { }
-        public void OnSection(PdfWriter writer, Document document, float paragraphPosition, int depth, Paragraph title) { }
-        public void OnSectionEnd(PdfWriter writer, Document document, float paragraphPosition) { }
-        public void OnGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) { }
+        void IPdfPageEvent.OnParagraph(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnParagraphEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnChapter(PdfWriter writer, Document document, float paragraphPosition, Paragraph title) { }
+        void IPdfPageEvent.OnChapterEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnSection(PdfWriter writer, Document document, float paragraphPosition, int depth, Paragraph title) { }
+        void IPdfPageEvent.OnSectionEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) { }
     }
 
     public class SimpleColumnText : ColumnText

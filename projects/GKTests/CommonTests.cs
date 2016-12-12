@@ -760,13 +760,14 @@ namespace GKTests
         {
             //Assert.Throws(typeof(ArgumentNullException), () => { new StringTokenizer(null); });
 
-            StringTokenizer strTok = new StringTokenizer("alpha beta 123 456.57, x");
+            StringTokenizer strTok = new StringTokenizer("alpha beta 123  456.57, x");
             Assert.IsNotNull(strTok);
 
             strTok.IgnoreWhiteSpace = false;
             Assert.IsFalse(strTok.IgnoreWhiteSpace);
 
             char[] symChars = strTok.SymbolChars;
+            strTok.SymbolChars = symChars;
 
             strTok.RecognizeDecimals = false;
             Assert.IsFalse(strTok.RecognizeDecimals);
@@ -774,6 +775,7 @@ namespace GKTests
             Token tok = strTok.Next();
             Assert.AreEqual(TokenKind.Word, tok.Kind);
             Assert.AreEqual("alpha", tok.Value);
+            Assert.AreEqual(5, strTok.Position);
 
             Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
 

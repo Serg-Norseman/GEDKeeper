@@ -116,7 +116,7 @@ namespace GKUpdater
         {
             OnUpdateMessage(new UpdateEventArgs("Loading source of updates...", 0));
 
-            string xml = this.InternalDownload(url);
+            string xml = InternalDownload(url);
             if (xml.Length > 0)
             {
                 XmlDocument doc = new XmlDocument();
@@ -172,7 +172,7 @@ namespace GKUpdater
             return updates;
         }
 
-        private StringDictionary CheckExtensions(XmlDocument doc, string xpath)
+        private static StringDictionary CheckExtensions(XmlDocument doc, string xpath)
         {
             StringDictionary updates = new StringDictionary();
 
@@ -257,7 +257,7 @@ namespace GKUpdater
 
         #region Internal download's routines
 
-        private string InternalDownload(string url)
+        private static string InternalDownload(string url)
         {
             string txt = string.Empty;
             WebResponse response = null;

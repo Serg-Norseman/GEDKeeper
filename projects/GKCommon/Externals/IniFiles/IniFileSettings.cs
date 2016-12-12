@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Externals.IniFiles
 {
@@ -227,39 +226,6 @@ namespace Externals.IniFiles
         }
 
         #endregion
-
-        /*internal static string TrimLeft(ref string str)
-        {
-            int i = 0;
-            StringBuilder ret = new StringBuilder();
-            while (i < str.Length && char.IsWhiteSpace(str, i)) {
-                ret.Append(str[i]);
-                i++;
-            }
-            if (str.Length > i)
-                str = str.Substring(i);
-            else
-                str = "";
-            return ret.ToString();
-        }
-
-        internal static string TrimRight(ref string str)
-        {
-            int i = str.Length - 1;
-            StringBuilder build = new StringBuilder();
-            while (i >= 0 && char.IsWhiteSpace(str, i)) {
-                build.Append(str[i]);
-                i--;
-            }
-            StringBuilder reversed = new StringBuilder();
-            for (int j = build.Length - 1; j >= 0; j--)
-                reversed.Append(build[j]);
-            if (str.Length - i > 0)
-                str = str.Substring(0, i + 1);
-            else
-                str = "";
-            return reversed.ToString();
-        }*/
 
         internal static string StartsWith(string line, string[] array)
         {

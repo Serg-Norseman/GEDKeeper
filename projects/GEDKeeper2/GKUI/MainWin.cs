@@ -327,7 +327,7 @@ namespace GKUI
         {
             base.WndProc(ref m);
 
-            if (m.Msg == SysUtils.WM_KEEPMODELESS) {
+            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
                 foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
                     widgetInfo.Widget.WidgetEnable();
                 }
@@ -482,7 +482,7 @@ namespace GKUI
             if (form == null) return DialogResult.None;
 
             if (keepModeless) {
-                SysUtils.PostMessage(this.Handle, SysUtils.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
             }
 
             return form.ShowDialog();
@@ -1592,7 +1592,7 @@ namespace GKUI
         public void EnableWindow(Form form, bool value)
         {
             if (form != null) {
-                SysUtils.EnableWindow(form.Handle, value);
+                NativeMethods.EnableWindow(form.Handle, value);
             }
         }
 

@@ -40,7 +40,25 @@ namespace GKCommon
     using Externals.MapiMail;
     #endif
 
+    #region Native WinAPI
+
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
+    public static class NativeMethods
+    {
+        public const uint WM_USER = 0x0400;
+        public const uint WM_KEEPMODELESS = WM_USER + 111;
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+    }
+
+    #endregion
+
     public static class SysUtils
     {
         static SysUtils()
@@ -63,7 +81,7 @@ namespace GKCommon
 
         public static double SafeDiv(double dividend, double divisor)
         {
-            return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
+            return (divisor == 0.0d) ? 0.0d : (dividend / divisor);
         }
 
         public static double DegreesToRadians(double degrees)
@@ -198,21 +216,6 @@ namespace GKCommon
 
             version = assembly.GetName().Version.ToString();
         }
-
-        #endregion
-
-        #region Native WinAPI
-
-        public const uint WM_USER 			= 0x0400;
-        public const uint WM_KEEPMODELESS 	= WM_USER + 111;
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
 
         #endregion
 
