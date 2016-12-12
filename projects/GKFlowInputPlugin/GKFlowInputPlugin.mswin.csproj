@@ -82,9 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKFlowInputPlugin.cs" />
-    <Compile Include="FlowInputDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="FlowInputDlg.cs" />
     <Compile Include="FlowInputDlg.Designer.cs">
       <DependentUpon>FlowInputDlg.cs</DependentUpon>
     </Compile>
@@ -102,6 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GKFlowInputPlugin.eng">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKFlowInputPlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKFlowInputPlugin.rus">

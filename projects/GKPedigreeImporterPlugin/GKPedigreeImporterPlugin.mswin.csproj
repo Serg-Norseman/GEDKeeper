@@ -113,6 +113,9 @@
     <None Include="GKPedigreeImporterPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKPedigreeImporterPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKPedigreeImporterPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

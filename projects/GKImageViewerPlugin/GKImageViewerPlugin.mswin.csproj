@@ -112,6 +112,9 @@
     <None Include="GKImageViewerPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKImageViewerPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKImageViewerPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

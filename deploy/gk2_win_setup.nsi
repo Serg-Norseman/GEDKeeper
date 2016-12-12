@@ -1,4 +1,4 @@
-; "GEDKeeper", the personal genealogical database editor.
+﻿; "GEDKeeper", the personal genealogical database editor.
 ; Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
 ; This file is part of "GEDKeeper".
 
@@ -20,7 +20,8 @@ RequestExecutionLevel admin
 
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "Russian"
-;!insertmacro MUI_LANGUAGE "Ukrainian"
+!insertmacro MUI_LANGUAGE "Ukrainian"
+!insertmacro MUI_LANGUAGE "Polish"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -34,50 +35,103 @@ Page instfiles
 ;LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 ;LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
 
+
 LangString gkreq ${LANG_ENGLISH} "GEDKeeper2 (required)"
-LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (����������)"
+LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
+LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
+LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
 
 LangString gkscr ${LANG_ENGLISH} "Script samples"
-LangString gkscr ${LANG_RUSSIAN} "������� ��������"
+LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
+LangString gkscr ${LANG_UKRAINIAN} "Примеры скриптов"
+LangString gkscr ${LANG_POLISH} "Przykłady skryptów"
 
 LangString gkreg ${LANG_ENGLISH} "System registration"
-LangString gkreg ${LANG_RUSSIAN} "����������� � �������"
+LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
+LangString gkreg ${LANG_UKRAINIAN} "Регистрация в системе"
+LangString gkreg ${LANG_POLISH} "Rejestracja w systemie"
 
 LangString gklang ${LANG_ENGLISH} "Languages"
-LangString gklang ${LANG_RUSSIAN} "�����"
+LangString gklang ${LANG_RUSSIAN} "Языки"
+LangString gklang ${LANG_UKRAINIAN} "Языки"
+LangString gklang ${LANG_POLISH} "Języki"
 
 LangString gkplg ${LANG_ENGLISH} "Plugins"
-LangString gkplg ${LANG_RUSSIAN} "�������"
+LangString gkplg ${LANG_RUSSIAN} "Плагины"
+LangString gkplg ${LANG_UKRAINIAN} "Плагины"
+LangString gkplg ${LANG_POLISH} "Wtyczki"
+
 
 LangString gkp_calc ${LANG_ENGLISH} "Expression calculator"
-LangString gkp_calc ${LANG_RUSSIAN} "����������� ���������"
+LangString gkp_calc ${LANG_RUSSIAN} "Калькулятор выражений"
+LangString gkp_calc ${LANG_UKRAINIAN} "Калькулятор выражений"
+LangString gkp_calc ${LANG_POLISH} "Kalkulator"
 
 LangString gkp_calendar ${LANG_ENGLISH} "Calendar"
-LangString gkp_calendar ${LANG_RUSSIAN} "���������"
+LangString gkp_calendar ${LANG_RUSSIAN} "Календарь"
+LangString gkp_calendar ${LANG_UKRAINIAN} "Календарь"
+LangString gkp_calendar ${LANG_POLISH} "Kalendarz"
 
 LangString gkp_nb ${LANG_ENGLISH} "Names book"
-LangString gkp_nb ${LANG_RUSSIAN} "���������� ����"
+LangString gkp_nb ${LANG_RUSSIAN} "Справочник имен"
+LangString gkp_nb ${LANG_UKRAINIAN} "Справочник имен"
+LangString gkp_nb ${LANG_POLISH} "Kieszonkowy nazw"
 
 LangString gkp_timeline ${LANG_ENGLISH} "Time line"
-LangString gkp_timeline ${LANG_RUSSIAN} "����� �������"
+LangString gkp_timeline ${LANG_RUSSIAN} "Линия времени"
+LangString gkp_timeline ${LANG_UKRAINIAN} "Линия времени"
+LangString gkp_timeline ${LANG_POLISH} "Linia czasu"
 
 LangString gkp_flowinput ${LANG_ENGLISH} "Flow input"
-LangString gkp_flowinput ${LANG_RUSSIAN} "�������� ����"
+LangString gkp_flowinput ${LANG_RUSSIAN} "Поточный ввод"
+LangString gkp_flowinput ${LANG_UKRAINIAN} "Поточный ввод"
+LangString gkp_flowinput ${LANG_POLISH} "Źródło wejścia"
 
 LangString gkp_pi ${LANG_ENGLISH} "Pedigrees importer"
-LangString gkp_pi ${LANG_RUSSIAN} "������ ��������"
+LangString gkp_pi ${LANG_RUSSIAN} "Импорт росписей"
+LangString gkp_pi ${LANG_UKRAINIAN} "Импорт росписей"
+LangString gkp_pi ${LANG_POLISH} "Importuj rodowód"
 
 LangString gkp_ts ${LANG_ENGLISH} "Text search"
-LangString gkp_ts ${LANG_RUSSIAN} "�������������� �����"
+LangString gkp_ts ${LANG_RUSSIAN} "Полнотекстовый поиск"
+LangString gkp_ts ${LANG_UKRAINIAN} "Полнотекстовый поиск"
+LangString gkp_ts ${LANG_POLISH} "Wyszukiwanie pełnotekstowe"
 
 LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
-LangString gkp_tv ${LANG_RUSSIAN} "3D ������������"
+LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
+LangString gkp_tv ${LANG_UKRAINIAN} "3D визуализация"
+LangString gkp_tv ${LANG_POLISH} "Wizualizacja 3D"
 
 LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
-LangString gkp_iv ${LANG_RUSSIAN} "�������� �����������"
+LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
+LangString gkp_iv ${LANG_UKRAINIAN} "Просмотр изображений"
+LangString gkp_iv ${LANG_POLISH} "Podgląd zdjęcia"
 
 LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
-LangString gkp_cl ${LANG_RUSSIAN} "���� '����� ������'"
+LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
+LangString gkp_cl ${LANG_UKRAINIAN} "Игра 'Жизнь Конвея'"
+LangString gkp_cl ${LANG_POLISH} "Gra w życie"
+
+
+LangString gkl_eng ${LANG_ENGLISH} "English"
+LangString gkl_eng ${LANG_RUSSIAN} "Английский"
+LangString gkl_eng ${LANG_UKRAINIAN} "Англійська мова"
+LangString gkl_eng ${LANG_POLISH} "Angielski"
+
+LangString gkl_rus ${LANG_ENGLISH} "Russian"
+LangString gkl_rus ${LANG_RUSSIAN} "Русский"
+LangString gkl_rus ${LANG_UKRAINIAN} "Російська мова"
+LangString gkl_rus ${LANG_POLISH} "Rosyjski"
+
+LangString gkl_ukr ${LANG_ENGLISH} "Ukrainian"
+LangString gkl_ukr ${LANG_RUSSIAN} "Украинский"
+LangString gkl_ukr ${LANG_UKRAINIAN} "Українська мова"
+LangString gkl_ukr ${LANG_POLISH} "Ukraiński"
+
+LangString gkl_pol ${LANG_ENGLISH} "Polish"
+LangString gkl_pol ${LANG_RUSSIAN} "Польский"
+LangString gkl_pol ${LANG_UKRAINIAN} "Польська мова"
+LangString gkl_pol ${LANG_POLISH} "Polski"
 
 function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
@@ -161,12 +215,12 @@ Section "$(gkreg)"
   WriteRegStr HKCR "GEDCOM.File" "" "GEDCOM File"
   WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\GEDKeeper2.exe,0"
   WriteRegStr HKCR "GEDCOM.File\shell" "" "open"
-  WriteRegStr HKCR "GEDCOM.File\shell\open" "" "&�������"
+  WriteRegStr HKCR "GEDCOM.File\shell\open" "" "&Открыть"
   WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper2.exe "%1"'
 SectionEnd
 
 SectionGroup /e "$(gklang)"
-	Section "�������"
+	Section "$(gkl_rus)"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\russian.lng"
 
@@ -178,13 +232,18 @@ SectionGroup /e "$(gklang)"
 		SetOutPath "$INSTDIR\locales\help_rus\images"
 		File "..\locales\help_rus\images\*.*"
 
-		CreateShortCut "$SMPROGRAMS\GEDKeeper2\������� (�������).lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
-		CreateShortCut "$SMPROGRAMS\GEDKeeper2\��� �������� (������).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
+		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка (русский).lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
+		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Род Пушкиных (пример).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
 	SectionEnd
 
-	Section "���������"
+	Section "$(gkl_ukr)"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\ukrainian.lng"
+	SectionEnd
+
+	Section "$(gkl_pol)"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\polish.lng"
 	SectionEnd
 SectionGroupEnd
 
@@ -195,6 +254,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKCalculatorPlugin.rus"
   		File "..\plugins\GKCalculatorPlugin.eng"
   		File "..\plugins\GKCalculatorPlugin.ukr"
+		File "..\plugins\GKCalculatorPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_calendar)"
@@ -203,6 +263,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKCalendarPlugin.rus"
   		File "..\plugins\GKCalendarPlugin.eng"
   		File "..\plugins\GKCalendarPlugin.ukr"
+		File "..\plugins\GKCalendarPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_nb)"
@@ -211,6 +272,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKNamesBookPlugin.rus"
   		File "..\plugins\GKNamesBookPlugin.eng"
   		File "..\plugins\GKNamesBookPlugin.ukr"
+		File "..\plugins\GKNamesBookPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_timeline)"
@@ -219,6 +281,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKTimeLinePlugin.rus"
   		File "..\plugins\GKTimeLinePlugin.eng"
   		File "..\plugins\GKTimeLinePlugin.ukr"
+		File "..\plugins\GKTimeLinePlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_flowinput)"
@@ -227,6 +290,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKFlowInputPlugin.rus"
   		File "..\plugins\GKFlowInputPlugin.eng"
   		File "..\plugins\GKFlowInputPlugin.ukr"
+		File "..\plugins\GKFlowInputPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_pi)"
@@ -235,6 +299,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKPedigreeImporterPlugin.rus"
   		File "..\plugins\GKPedigreeImporterPlugin.eng"
   		File "..\plugins\GKPedigreeImporterPlugin.ukr"
+		File "..\plugins\GKPedigreeImporterPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_ts)"
@@ -246,6 +311,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKTextSearchPlugin.rus"
   		File "..\plugins\GKTextSearchPlugin.eng"
   		File "..\plugins\GKTextSearchPlugin.ukr"
+		File "..\plugins\GKTextSearchPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_tv)"
@@ -256,6 +322,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKTreeVizPlugin.rus"
   		File "..\plugins\GKTreeVizPlugin.eng"
   		File "..\plugins\GKTreeVizPlugin.ukr"
+		File "..\plugins\GKTreeVizPlugin.pol"
 		File "..\plugins\ArborGVT.dll"
 	SectionEnd
 
@@ -265,6 +332,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKImageViewerPlugin.rus"
   		File "..\plugins\GKImageViewerPlugin.eng"
   		File "..\plugins\GKImageViewerPlugin.ukr"
+		File "..\plugins\GKImageViewerPlugin.pol"
 	SectionEnd
 
 	Section "$(gkp_cl)"
@@ -274,6 +342,7 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKLifePlugin.rus"
   		File "..\plugins\GKLifePlugin.eng"
   		File "..\plugins\GKLifePlugin.ukr"
+		File "..\plugins\GKLifePlugin.pol"
 	SectionEnd
 SectionGroupEnd
 

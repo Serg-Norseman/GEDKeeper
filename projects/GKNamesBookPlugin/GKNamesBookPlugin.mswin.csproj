@@ -103,6 +103,9 @@
     <None Include="GKNamesBookPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKNamesBookPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKNamesBookPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

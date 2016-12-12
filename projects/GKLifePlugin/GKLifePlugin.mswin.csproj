@@ -96,6 +96,9 @@
     <None Include="GKLifePlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKLifePlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKLifePlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -99,6 +99,9 @@
     <None Include="GKTimeLinePlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKTimeLinePlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKTimeLinePlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

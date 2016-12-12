@@ -108,6 +108,9 @@
     <None Include="GKTextSearchPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKTextSearchPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKTextSearchPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,37 +1,37 @@
-;1045,pol,Polski
-Importuj rodowód
+ï»¿;1045,pol,Polski
+Importuj rodowÃ³d
 Plik
 Wybierz
-Format nie jest obs³ugiwany.
-B³¹d podczas ³adowania danych.
-B³¹d analizy: rekordy zawieraj¹ luki.
+Format nie jest obsÅ‚ugiwany.
+BÅ‚Ä…d podczas Å‚adowania danych.
+BÅ‚Ä…d analizy: rekordy zawierajÄ… luki.
 Osobisty rekord
 Generacji
-B³¹d analizy: nie mo¿na odnaleŸæ listy przodków z liczb¹
-B³¹d analizy: Data
-B³¹d analizy: numer osoby jest zduplikowany.
+BÅ‚Ä…d analizy: nie moÅ¼na odnaleÅºÄ‡ listy przodkÃ³w z liczbÄ…
+BÅ‚Ä…d analizy: Data
+BÅ‚Ä…d analizy: numer osoby jest zduplikowany.
 Format liczb osoby
-Przez D'Aboville (nie obs³uguje jeszcze)
-Przez Konowa³ów
+Przez D'Aboville (nie obsÅ‚uguje jeszcze)
+Przez KonowaÅ‚Ã³w
 Nieznany
 Parametr rodowody tekstu
 Ogranicznik wiersza osoby
-Nazwy formatu w linii osobê
+Nazwy formatu w linii osobÄ™
 Format linii generacji
 Ogranicznik daty
 Format daty
 Parametry transformacji
 Normalizacja nazw (PETROW-> Petrow)
-Nastêpna &gt;
-< Powrót
+NastÄ™pna &gt;
+< PowrÃ³t
 Zamknij
 Specjalne ustawienia osobiste linie formacie
-(1) "numer. Nazwa (* urodzenia + œmierci) "- terminy w nawiasach
+(1) "numer. Nazwa (* urodzenia + Å›mierci) "- terminy w nawiasach
 Analizy
-£adowanie
+Åadowanie
 Nazwisko rodowe
-Nazwisko imiê nazwisko patronimiczne
+Nazwisko imiÄ™ nazwisko patronimiczne
 Oferta Specjalna
-Wszystkie obs³ugiwane formaty (*.txt, *.csv, * .doc, *.xls) | * .txt; *.csv; *.doc; * .xls | Rodowód w formacie txt (*.txt) | * .txt | Rodowód w formacie csv (*.csv) | * .csv | Rodowód w formacie MS Word (*.doc) | * .doc | Rodowód w formacie MS Excel (*.xls) | * .xls
-Wszystkie obs³ugiwane formaty (*.txt, *.csv) | * .txt; * .csv | Rodowód w formacie txt (*.txt) | * .txt | Rodowód w formacie csv (*.csv) | * .csv
-Sprzeczne informacje na temat ma³¿onków
+Wszystkie obsÅ‚ugiwane formaty (*.txt, *.csv, * .doc, *.xls) | * .txt; *.csv; *.doc; * .xls | RodowÃ³d w formacie txt (*.txt) | * .txt | RodowÃ³d w formacie csv (*.csv) | * .csv | RodowÃ³d w formacie MS Word (*.doc) | * .doc | RodowÃ³d w formacie MS Excel (*.xls) | * .xls
+Wszystkie obsÅ‚ugiwane formaty (*.txt, *.csv) | * .txt; * .csv | RodowÃ³d w formacie txt (*.txt) | * .txt | RodowÃ³d w formacie csv (*.csv) | * .csv
+Sprzeczne informacje na temat maÅ‚Å¼onkÃ³w
