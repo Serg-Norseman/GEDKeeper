@@ -57,6 +57,7 @@ namespace GKUI.Controls
             this.txtSearchPattern.Height = 24;
             this.txtSearchPattern.Margin = new Padding(3, 3, 3, 0);
             this.txtSearchPattern.TextChanged += this.SearchPattern_TextChanged;
+            this.txtSearchPattern.Name = "txtSearchPattern";
             
             this.btnPrev.Location = new System.Drawing.Point(156, 3);
             this.btnPrev.Margin = new Padding(3);
@@ -64,6 +65,7 @@ namespace GKUI.Controls
             this.btnPrev.Width = 24;
             this.btnPrev.Click += FindPrev_Click;
             this.btnPrev.Image = GKResources.iLeft1;
+            this.btnPrev.Name = "btnPrev";
             
             this.btnNext.Location = new System.Drawing.Point(156+27, 3);
             this.btnNext.Margin = new Padding(3);
@@ -71,6 +73,7 @@ namespace GKUI.Controls
             this.btnNext.Width = 24;
             this.btnNext.Click += FindNext_Click;
             this.btnNext.Image = GKResources.iRight1;
+            this.btnNext.Name = "btnNext";
             
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(210, 30);
@@ -81,6 +84,7 @@ namespace GKUI.Controls
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
             this.KeyDown += this.SearchPanel_KeyDown;
+            this.Name = "SearchPanel";
             this.ShowInTaskbar = false;
             this.StartPosition = FormStartPosition.Manual;
             this.TopMost = true;
@@ -92,16 +96,16 @@ namespace GKUI.Controls
         {
             this.fStrategy = new BaseSearchStrategy(this.fWorkWindow, this.txtSearchPattern.Text);
         }
-        
+
         private void FindNext_Click(object sender, EventArgs e)
         {
             if (this.fStrategy == null) return;
-            
+
             if (!this.fStrategy.HasResults()) {
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
-            
+
             ISearchResult result = this.fStrategy.FindNext();
             if (result != null) {
                 SelectResult(result as SearchResult);
@@ -111,12 +115,12 @@ namespace GKUI.Controls
         private void FindPrev_Click(object sender, EventArgs e)
         {
             if (this.fStrategy == null) return;
-            
+
             if (!this.fStrategy.HasResults()) {
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
-            
+
             ISearchResult result = this.fStrategy.FindPrev();
             if (result != null) {
                 SelectResult(result as SearchResult);

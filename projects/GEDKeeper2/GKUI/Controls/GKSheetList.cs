@@ -229,6 +229,8 @@ namespace GKUI.Controls
             this.fBtnAdd.Name = this.fToolBar.Name + "_btnAdd";
             this.fBtnEdit.Name = this.fToolBar.Name + "_btnEdit";
             this.fBtnDelete.Name = this.fToolBar.Name + "_btnDelete";
+            this.fBtnMoveUp.Name = this.fToolBar.Name + "_btnMoveUp";
+            this.fBtnMoveDown.Name = this.fToolBar.Name + "_btnMoveDown";
         }
 
         private void SetButtons(EnumSet<SheetButton> value)

@@ -1691,6 +1691,27 @@ namespace GKTests.GKCommon
 
                 Assert.IsNull(indi.GetParentsFamily());
                 Assert.IsNotNull(indi.GetParentsFamily(true));
+
+                // MoveTo test
+                GEDCOMIndividualRecord ind = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                GEDCOMAssociation asso1 = indi.AddAssociation("test", ind);
+
+                GEDCOMAlias als = indi.Aliases.Add(new GEDCOMAlias(_context.Tree, indi, "", ""));
+
+                GEDCOMIndividualOrdinance indOrd = indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(_context.Tree, indi, "", ""));
+
+                GEDCOMPointer ancInt = indi.AncestorsInterest.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+
+                GEDCOMPointer descInt = indi.DescendantsInterest.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+
+                GEDCOMPointer subm = indi.Submittors.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+
+                using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(_context.Tree, _context.Tree, "", "")) {
+                    indi.MoveTo(indi3, false);
+
+                    st = GKUtils.GetNameString(indi3, true, true);
+                    Assert.AreEqual("Petrov Ivan [BigHead]", st);
+                }
             }
         }
 
@@ -2144,7 +2165,33 @@ namespace GKTests.GKCommon
                 Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));
                 Assert.AreEqual(100.0f, famRec.IsMatch(famRec, new MatchParams()));
 
+                // MoveTo test
                 Assert.Throws(typeof(ArgumentException), () => { famRec.MoveTo(null, false); });
+
+                GEDCOMCustomEvent evt = famRec.AddEvent(new GEDCOMFamilyEvent(_context.Tree, famRec, "MARR", "01 SEP 1981"));
+                Assert.AreEqual(1, famRec.Events.Count);
+                Assert.AreEqual(evt, famRec.FindEvent("MARR"));
+
+                GEDCOMSpouseSealing sps = famRec.SpouseSealings.Add(new GEDCOMSpouseSealing(_context.Tree, _context.Tree, "", ""));
+                Assert.AreEqual(1, famRec.SpouseSealings.Count);
+                Assert.AreEqual(sps, famRec.SpouseSealings[0]);
+
+                using (GEDCOMFamilyRecord famRec2 = GEDCOMFamilyRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMFamilyRecord)
+                {
+                    Assert.AreEqual(0, famRec2.Events.Count);
+                    Assert.AreEqual(null, famRec2.FindEvent("MARR"));
+
+                    Assert.AreEqual(0, famRec2.SpouseSealings.Count);
+                    Assert.AreEqual(null, famRec2.SpouseSealings[0]);
+
+                    famRec.MoveTo(famRec2, false);
+
+                    Assert.AreEqual(1, famRec2.Events.Count);
+                    Assert.AreEqual(evt, famRec2.FindEvent("MARR"));
+
+                    Assert.AreEqual(1, famRec2.SpouseSealings.Count);
+                    Assert.AreEqual(sps, famRec2.SpouseSealings[0]);
+                }
             }
         }
 

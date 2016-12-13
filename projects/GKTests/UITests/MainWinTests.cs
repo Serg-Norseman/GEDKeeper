@@ -30,6 +30,7 @@ using GKCore.Types;
 using GKTests.Service;
 using GKUI;
 using GKUI.Charts;
+using GKUI.Controls;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -101,6 +102,11 @@ namespace GKTests.UITests
 
             // Stage 22: call to QuickFind
             ClickToolStripMenuItem("miSearch", fMainWin);
+            var searchPanel = new FormTester("SearchPanel");
+            //var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
+            //txtSearchPattern.Enter("John");
+            ClickButton("btnPrev", searchPanel.Properties);
+            ClickButton("btnNext", searchPanel.Properties);
 
 
             // Stage 23: call to PersonsFilterDlg
@@ -515,9 +521,15 @@ namespace GKTests.UITests
         private void PersonEditDlg_Handler(PersonEditDlg dlg)
         {
             GEDCOMIndividualRecord indiRecord = dlg.Person;
-            GKSheetListTester sheetTester = new GKSheetListTester("fGroupsList", dlg);
+
+            var cmbSex = new ComboBoxTester("cmbSex", dlg);
+            cmbSex.Select(1); // male
+
+            var tabs = new TabControlTester("tabsPersonData", dlg);
 
             // groups
+            tabs.SelectTab(4);
+            GKSheetListTester sheetTester = new GKSheetListTester("fGroupsList", dlg);
             Assert.AreEqual(0, indiRecord.Groups.Count);
             RSD_SubHandler = GroupAdd_Mini_Handler;
             ModalFormHandler = RecordSelectDlg_Create_Handler;
@@ -525,10 +537,76 @@ namespace GKTests.UITests
             Assert.AreEqual(1, indiRecord.Groups.Count);
             Assert.AreEqual("sample group", ((GEDCOMGroupRecord)indiRecord.Groups[0].Value).GroupName);
 
-            //ModalFormHandler = MessageBox_YesHandler;
-            //sheetTester.Properties.SelectItem(0);
-            //ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            //Assert.AreEqual(0, indiRecord.Groups.Count);
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.Groups.Count);
+
+            // associations
+            tabs.SelectTab(3);
+            sheetTester = new GKSheetListTester("fAssociationsList", dlg);
+            Assert.AreEqual(0, indiRecord.Associations.Count);
+            ModalFormHandler = AssociationEdit_Handler;
+            ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.Associations.Count);
+            Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fAssociationsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.Associations.Count);
+
+            // userrefs
+            tabs.SelectTab(8);
+            sheetTester = new GKSheetListTester("fUserRefList", dlg);
+            Assert.AreEqual(0, indiRecord.UserReferences.Count);
+            ModalFormHandler = UserRefEdit_Handler;
+            ClickToolStripButton("fUserRefList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.UserReferences.Count);
+            Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fUserRefList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.UserReferences.Count);
+
+            // names
+            tabs.SelectTab(2);
+            sheetTester = new GKSheetListTester("fNamesList", dlg);
+            Assert.AreEqual(1, indiRecord.PersonalNames.Count);
+            ModalFormHandler = NameEditAdd_Handler;
+            ClickToolStripButton("fNamesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(2, indiRecord.PersonalNames.Count);
+            Assert.AreEqual("sample surname", indiRecord.PersonalNames[1].Surname);
+
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = NameEditEdit_Handler;
+            ClickToolStripButton("fNamesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(2, indiRecord.PersonalNames.Count);
+            Assert.AreEqual("sample surname2", indiRecord.PersonalNames[1].Surname);
+
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fNamesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(1, indiRecord.PersonalNames.Count);
+
+            // spouses
+            tabs.SelectTab(1);
+            sheetTester = new GKSheetListTester("fSpousesList", dlg);
+            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
+            ModalFormHandler = SpouseEdit_Handler;
+            ClickToolStripButton("fSpousesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
+
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = SpouseEdit_Handler;
+            ClickToolStripButton("fSpousesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
+
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fSpousesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
         }
 
         private void ResearchEditDlg_Handler(ResearchEditDlg dlg)
@@ -642,6 +720,48 @@ namespace GKTests.UITests
             tsBtn.FireEvent("Click");
         }
 
+        public void AssociationEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            var cmbRelation = new ComboBoxTester("cmbRelation", form);
+            cmbRelation.Enter("sample relation");
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
+        }
+
+        public void UserRefEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            var cmbRef = new ComboBoxTester("cmbRef", form);
+            cmbRef.Enter("sample reference");
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
+        }
+
+        public void SpouseEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
+        }
+
+        public void NameEditAdd_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtSurname = new TextBoxTester("txtSurname", form);
+            txtSurname.Enter("sample surname");
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
+        }
+
+        public void NameEditEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtSurname = new TextBoxTester("txtSurname", form);
+            txtSurname.Enter("sample surname2");
+
+            var tsBtn = new ButtonTester("btnAccept", form);
+            tsBtn.FireEvent("Click");
+        }
+
         private ModalFormHandler RSD_SubHandler;
 
         public void RecordSelectDlg_Create_Handler(string name, IntPtr ptr, Form form)
@@ -653,6 +773,9 @@ namespace GKTests.UITests
 
         public void RecordSelectDlg_Select_Handler(string name, IntPtr ptr, Form form)
         {
+            var txtFastFilter = new TextBoxTester("txtFastFilter", form);
+            txtFastFilter.Enter("*");
+
             var listRecords = new GKRecordsViewTester("fListRecords", form);
             listRecords.Properties.SelectItem(0);
 
