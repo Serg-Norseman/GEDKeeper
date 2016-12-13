@@ -668,9 +668,8 @@ namespace GKUI
 
         public void SelectByRec(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
             this.fTreeBox.SelectByRec(iRec);
         }

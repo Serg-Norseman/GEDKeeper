@@ -3,7 +3,7 @@ using Externals.Linguistics;
 using Externals.SingleInstancing;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCore
 {
     [TestFixture]
     public class GKExtTests
@@ -34,6 +34,8 @@ namespace GKTests
             string[] args = new string[1];
 
             using (SingleInstanceTracker tracker = new SingleInstanceTracker("test", GetSingleInstanceEnforcer)) {
+                Assert.IsNotNull(tracker.Enforcer);
+
                 if (tracker.IsFirstInstance) {
                 } else {
                     tracker.SendMessageToFirstInstance(args);

@@ -370,8 +370,13 @@ namespace GKCore.Tools
                 if (iRec.SpouseToFamilyLinks[i].Family == null)
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
-            
-            MainWin.Instance.NamesTable.ImportNames(iRec);
+
+            // in test mode, these objects don't exist
+            if (MainWin.Instance != null) {
+                if (MainWin.Instance.NamesTable != null) {
+                    MainWin.Instance.NamesTable.ImportNames(iRec);
+                }
+            }
         }
 
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam, ValuesCollection valuesCollection)
@@ -526,27 +531,6 @@ namespace GKCore.Tools
             }
         }
 
-        /*private static void ConvertOldNames(GEDCOMIndividualRecord iRec)
-        {
-            try
-            {
-                int num = iRec.PersonalNames.Count;
-                for (int i = 0; i < num; i++) {
-                    GEDCOMPersonalName pName = iRec.PersonalNames[i];
-
-                    string surname, name, patronymic;
-                    GKUtils.GetRusNameParts(pName, out surname, out name, out patronymic);
-
-                    pName.Pieces.Surname = surname;
-                    pName.Pieces.Given = name;
-                    pName.Pieces.PatronymicName = patronymic;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-        }*/
-
         public static bool CheckGEDCOMFormat(GEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
         {
             if (tree == null)
@@ -567,7 +551,6 @@ namespace GKCore.Tools
                 {
                     GEDCOMFormat format = tree.GetGEDCOMFormat();
                     bool idCheck = true;
-                    //bool convNames = false;
 
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native)
@@ -584,7 +567,6 @@ namespace GKCore.Tools
                         //int fileVer = ConvHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
                         //if (fileVer == GKData.APP_FORMAT_DEFVER && header.Language.Value = GEDCOMLanguageID.Russian) {
                         // TODO: make condition for languages with patronymics (Culture-depend)
-                        //convNames = true;
                         //}
                     }
 
@@ -598,10 +580,6 @@ namespace GKCore.Tools
                         {
                             idCheck = false;
                         }
-
-                        /*if (rec.RecordType == GEDCOMRecordType.rtIndividual && convNames) {
-                            ConvertOldNames(rec as GEDCOMIndividualRecord);
-                        }*/
 
                         pc.ProgressStep();
                     }

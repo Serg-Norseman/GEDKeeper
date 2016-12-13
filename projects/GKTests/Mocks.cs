@@ -20,11 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -195,5 +197,26 @@ namespace GKTests.Mocks
         {
             this.Value = value;
         }
+    }
+
+    public class MockWriter : CustomWriter
+    {
+        public MockWriter() { }
+        public override void beginWrite() { }
+        public override void endWrite() { }
+        public override void addParagraph(string text, object font, TextAlignment alignment) { }
+        public override void addParagraph(string text, object font) { }
+        public override void addParagraphAnchor(string text, object font, string anchor) { }
+        public override void addParagraphLink(string text, object font, string link, object linkFont) { }
+        public override object createFont(string name, float size, bool bold, bool underline, Color color) { return null; }
+        public override void beginList() { }
+        public override void endList() { }
+        public override void addListItem(string text, object font) { }
+        public override void addListItemLink(string text, object font, string link, object linkFont) { }
+        public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter) { }
+        public override void endParagraph() { }
+        public override void addParagraphChunk(string text, object font) { }
+        public override void addParagraphChunkAnchor(string text, object font, string anchor) { }
+        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup) { }
     }
 }

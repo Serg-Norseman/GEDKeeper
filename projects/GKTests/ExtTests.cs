@@ -23,13 +23,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
-using GKTests.Mocks;
 
 using Externals;
 using GKCommon;
+using GKTests.Mocks;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCommon
 {
     [TestFixture]
     public class ExtTests

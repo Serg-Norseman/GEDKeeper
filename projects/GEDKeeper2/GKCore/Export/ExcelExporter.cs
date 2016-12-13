@@ -48,7 +48,7 @@ namespace GKCore.Export
         {
             this.fPath = UIHelper.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(this.fPath)) return;
-            
+
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");
 

@@ -43,7 +43,7 @@ using GKUI.Charts;
 using GKUI.Controls;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCore
 {
     [TestFixture]
     public class CoreTests
@@ -106,13 +106,26 @@ namespace GKTests
             Assert.AreEqual(MediaStoreType.mstStorage, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "stg:file.txt"), ref fn));
             Assert.AreEqual(MediaStoreType.mstArchive, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "arc:file.txt"), ref fn));
 
-            //fContext.Clear();
-            //Assert.AreEqual(0, fContext.Tree.RecordsCount);
+            fContext.CollectEventValues(null);
 
             fContext.BeginUpdate();
             Assert.IsTrue(fContext.IsUpdated());
             fContext.EndUpdate();
             Assert.IsFalse(fContext.IsUpdated());
+
+            //Graph patrGraph = fContext.GetPatriarchsGraph(1, true, false);
+            //Assert.IsNotNull(patrGraph);
+        }
+
+        [Test]
+        public void Context2_Tests()
+        {
+            BaseContext context = TestStubs.CreateContext();
+            TestStubs.FillContext(context);
+            Assert.AreEqual(15, context.Tree.RecordsCount);
+
+            context.Clear();
+            Assert.AreEqual(0, context.Tree.RecordsCount);
         }
 
         private void TransactionEventHandler(object sender, TransactionType type)
@@ -1328,7 +1341,7 @@ namespace GKTests
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, null); });
-            //TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
+            TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
 
             ///
 
@@ -1650,10 +1663,6 @@ namespace GKTests
         [Test]
         public void Export_Tests()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
-
             BaseWindowMock baseWin = new BaseWindowMock();
 
             using (HTMLWriter writer = new HTMLWriter()) {
@@ -1664,15 +1673,56 @@ namespace GKTests
 
             }
 
+            using (PDFWriter writer = new PDFWriter()) {
+
+            }
+
+            Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null); });
+
             using (PedigreeExporter exporter = new PedigreeExporter(baseWin)) {
                 exporter.Options = GlobalOptions.Instance;
                 Assert.IsNotNull(exporter.Options);
 
+                GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+                exporter.Root = iRec;
+                Assert.AreEqual(iRec, exporter.Root);
+
+                exporter.ShieldState = ShieldState.None;
+                Assert.AreEqual(ShieldState.None, exporter.ShieldState);
+
+                exporter.Options.PedigreeOptions.IncludeAttributes = true;
+                exporter.Options.PedigreeOptions.IncludeNotes = true;
+                exporter.Options.PedigreeOptions.IncludeSources = true;
+                exporter.Options.PedigreeOptions.IncludeGenerations = true;
+
+                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_Konovalov;
+                Assert.AreEqual(PedigreeExporter.PedigreeKind.pkDescend_Konovalov, exporter.Kind);
+
+                exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
+                Assert.IsTrue(exporter.Generate(new MockWriter()));
+
+                exporter.Options.PedigreeOptions.Format = PedigreeFormat.Compact;
+                Assert.IsTrue(exporter.Generate(new MockWriter()));
+
+
+                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_dAboville;
+                exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
+                Assert.IsTrue(exporter.Generate(new MockWriter()));
+
+
+                exporter.Kind = PedigreeExporter.PedigreeKind.pkAscend;
+                exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
+                Assert.IsTrue(exporter.Generate(new MockWriter()));
             }
+
+            Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
 
             using (ExcelExporter exporter = new ExcelExporter(baseWin)) {
 
             }
+
+            Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
 
             using (FamilyBookExporter exporter = new FamilyBookExporter(baseWin)) {
 

@@ -22,6 +22,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -124,18 +125,22 @@ namespace GKTests.UITests
 
 
             // Stage 27: call to TreeChartWin (required the base, selected person)
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 27.0");
             ClickToolStripMenuItem("miTreeAncestors", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckAncestors, "Stage 27");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckAncestors, "Stage 27", "I3");
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 28.0");
             ClickToolStripMenuItem("miTreeDescendants", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckDescendants, "Stage 28");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckDescendants, "Stage 28", "I1");
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
             ClickToolStripMenuItem("miTreeBoth", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckBoth, "Stage 29");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckBoth, "Stage 29", "I1");
 
 
             // Stage 30: call to StatsWin (required the base)
@@ -212,6 +217,12 @@ namespace GKTests.UITests
 
             GEDCOMRecord record = baseWin.GetSelectedRecordEx();
             Assert.IsNotNull(record, stage + ".4");
+
+            StringList recordContent = baseWin.GetRecordContent(record);
+            Assert.IsNotNull(recordContent, stage + ".4.1");
+
+            string recordName = baseWin.GetRecordName(record, true);
+            Assert.IsNotNull(recordName, stage + ".4.2");
 
             Assert.IsTrue(baseWin.IsAvailableRecord(record), stage + ".5");
             Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
@@ -302,6 +313,14 @@ namespace GKTests.UITests
 
         private void ScriptEditWin_Handler(string name, IntPtr ptr, Form form)
         {
+            ScriptEditWin scriptWin = form as ScriptEditWin;
+            Assert.AreEqual("unknown.lua", scriptWin.FileName);
+
+            var txtScriptText = new TextBoxTester("txtScriptText");
+            txtScriptText.Enter("gk_print(\"Hello\")");
+
+            ClickToolStripButton("tbRun", form);
+
             form.Close();
         }
 
@@ -662,10 +681,15 @@ namespace GKTests.UITests
             Assert.AreEqual(fCurBase, ccWin.Base);
             ccWin.UpdateView();
 
+            /*Assert.Throws(typeof(ArgumentNullException), () => { ccWin.SelectByRec(null); });
+            GEDCOMIndividualRecord iRec = ((BaseWin) fCurBase).GetSelectedPerson();
+            Assert.AreEqual("I1", iRec.XRef);
+            ccWin.SelectByRec(iRec);*/
+
             frm.Close();
         }
 
-        private void TreeChartWin_Tests(Form frm, TreeChartBox.ChartKind kind, string stage)
+        private void TreeChartWin_Tests(Form frm, TreeChartBox.ChartKind kind, string stage, string checkXRef)
         {
             Assert.IsInstanceOf(typeof(TreeChartWin), frm, stage);
 
@@ -673,6 +697,16 @@ namespace GKTests.UITests
             Assert.AreEqual(fCurBase, tcWin.Base);
             Assert.AreEqual(kind, tcWin.ChartKind);
             tcWin.UpdateView();
+
+            ClickToolStripMenuItem("miCertaintyIndex", tcWin);
+            ClickToolStripMenuItem("miTraceKinships", tcWin);
+            ClickToolStripMenuItem("miTraceSelected", tcWin);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { tcWin.SelectByRec(null); });
+
+            GEDCOMIndividualRecord iRec = ((BaseWin) fCurBase).GetSelectedPerson();
+            Assert.AreEqual(checkXRef, iRec.XRef);
+            tcWin.SelectByRec(iRec);
 
             frm.Close();
         }

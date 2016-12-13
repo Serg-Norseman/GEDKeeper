@@ -22,7 +22,7 @@ using System;
 using GKCore;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCore
 {
     /// <summary>
     /// 

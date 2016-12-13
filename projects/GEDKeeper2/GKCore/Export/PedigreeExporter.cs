@@ -494,43 +494,16 @@ namespace GKCore.Export
             }
         }
 
-        public override void Generate(bool show)
+        public bool Generate(CustomWriter writer)
         {
+            bool result = false;
+
             this.fFormat = this.fOptions.PedigreeOptions.Format;
-
-            if (this.fRoot == null)
-            {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-                return;
-            }
-
-            string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            #if !__MonoCS__
-            availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
-            #endif
-            
-            bool success = false;
-            this.fPath = UIHelper.GetSaveFile(availableFormats);
-            if (string.IsNullOrEmpty(this.fPath)) return;
-
-            string ext = SysUtils.GetFileExtension(this.fPath);
-
-            if (string.Equals(ext, ".html")) {
-                this.fWriter = new HTMLWriter();
-            } else if (string.Equals(ext, ".rtf")) {
-                this.fWriter = new RTFWriter();
-            } else {
-                #if !__MonoCS__
-                this.fWriter = new PDFWriter();
-                #else
-                this.fWriter = new PDFWriter();//PDFJetWriter();//PDFClownWriter();
-                #endif
-            }
-
-            this.fWriter.setAlbumPage(false);
 
             try
             {
+                this.fWriter = writer;
+                this.fWriter.setAlbumPage(false);
                 this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(this.fRoot, true, false);
                 this.fWriter.setDocumentTitle(this.fTitle);
                 this.fWriter.setFileName(this.fPath);
@@ -546,7 +519,7 @@ namespace GKCore.Export
                 try
                 {
                     this.InternalGenerate();
-                    success = true;
+                    result = true;
                 }
                 finally
                 {
@@ -558,6 +531,42 @@ namespace GKCore.Export
                 this.fBase.Host.LogWrite("PedigreeExporter.Generate(): " + ex.Message);
                 this.fBase.Host.LogWrite("PedigreeExporter.Generate(): " + ex.StackTrace);
             }
+
+            return result;
+        }
+
+        public override void Generate(bool show)
+        {
+            if (this.fRoot == null)
+            {
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
+
+            string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
+            #if !__MonoCS__
+            availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
+            #endif
+
+            this.fPath = UIHelper.GetSaveFile(availableFormats);
+            if (string.IsNullOrEmpty(this.fPath)) return;
+
+            string ext = SysUtils.GetFileExtension(this.fPath);
+
+            CustomWriter writer;
+            if (string.Equals(ext, ".html")) {
+                writer = new HTMLWriter();
+            } else if (string.Equals(ext, ".rtf")) {
+                writer = new RTFWriter();
+            } else {
+                #if !__MonoCS__
+                writer = new PDFWriter();
+                #else
+                writer = new PDFWriter();//PDFJetWriter();//PDFClownWriter();
+                #endif
+            }
+
+            bool success = this.Generate(writer);
 
             if (!success) {
                 MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));

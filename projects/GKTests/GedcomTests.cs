@@ -19,16 +19,16 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCommon
 {
     /// <summary>
     /// 

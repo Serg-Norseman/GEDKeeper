@@ -24,13 +24,12 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests.Mocks;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCommon
 {
     [TestFixture]
     public class CommonTests
@@ -961,6 +960,19 @@ namespace GKTests
 
             Assert.AreEqual(Color.FromArgb(50, 50, 50), SysUtils.Darker(Color.FromArgb(100, 100, 100), 0.5f));
             Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));
+        }
+
+
+        [Test]
+        public void ListItems_Tests()
+        {
+            var item1 = new GKListItem(10, null);
+            var item2 = new GKListItem(20, null);
+            Assert.AreEqual(-1, item1.CompareTo(item2));
+
+            var subitem1 = new GKListSubItem(10);
+            var subitem2 = new GKListSubItem(20);
+            Assert.AreEqual(-1, subitem1.CompareTo(subitem2));
         }
     }
 }
