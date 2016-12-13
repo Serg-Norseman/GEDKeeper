@@ -19,19 +19,18 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace GKCommon
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct EnumSet<T> : ICloneable where T : IComparable, IFormattable, IConvertible
     {
-        private byte[] data;
+        private ulong data;
 
         public static EnumSet<T> Create(params T[] args)
         {
             EnumSet<T> result = new EnumSet<T>();
-            result.data = new byte[32];
+            result.data = 0;
             result.Include(args);
             return result;
         }
@@ -48,19 +47,19 @@ namespace GKCommon
         public void Include(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            this.data[(idx >> 3)] = (byte)(this.data[(idx >> 3)] | (1 << (int)(idx & 7u)));
+            this.data = (this.data | (1u << idx));
         }
 
         public void Exclude(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            this.data[(idx >> 3)] = (byte)(this.data[(idx >> 3)] & (~(1 << (int)(idx & 7u))));
+            this.data = (this.data & (~(1u << idx)));
         }
 
         public bool Contains(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            return ((uint)this.data[(idx >> 3)] & (1 << (int)(idx & 7u))) > 0u;
+            return (this.data & (1u << idx)) > 0u;
         }
 
         public bool ContainsAll(params T[] e)
@@ -89,89 +88,58 @@ namespace GKCommon
 
         public void Clear()
         {
-            Array.Clear(this.data, 0, this.data.Length);
+            this.data = 0;
         }
 
         public bool IsEmpty()
         {
-            for (int i = 0; i <= 31; i++) {
-                if (this.data[i] != 0) {
-                    return false;
-                }
-            }
-            return true;
+            return (this.data == 0);
         }
 
         public static bool operator ==(EnumSet<T> left, EnumSet<T> right)
         {
-            for (int I = 0; I <= 31; I++) {
-                if (left.data[I] != right.data[I]) {
-                    return false;
-                }
-            }
-            return true;
+            return (left.data == right.data);
         }
 
         public static bool operator !=(EnumSet<T> left, EnumSet<T> right)
         {
-            return !(left == right);
+            return (left.data != right.data);
         }
 
         public static EnumSet<T> operator +(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            for (int I = 0; I <= 31; I++) {
-                result.data[I] |= right.data[I];
-            }
+            result.data |= right.data;
             return result;
         }
 
         public static EnumSet<T> operator -(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            for (int I = 0; I <= 31; I++) {
-                result.data[I] = (byte)(result.data[I] & (~right.data[I]));
-            }
+            result.data = (ulong)(result.data & (~right.data));
             return result;
         }
 
         public static EnumSet<T> operator *(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            for (int I = 0; I <= 31; I++) {
-                result.data[I] &= right.data[I];
-            }
+            result.data &= right.data;
             return result;
-        }
-
-        public string ByteToStr(int index)
-        {
-            byte val = this.data[index];
-
-            uint bt = 1;
-            string res = "";
-
-            for (int i = 1; i <= 8; i++) {
-                if ((val & bt) > 0) {
-                    res = "1" + res;
-                } else {
-                    res = "0" + res;
-                }
-
-                bt = bt << 1;
-            }
-
-            return res;
         }
 
         public override string ToString()
         {
-            string res = "";
-            for (int i = 0; i <= 31; i++) {
-                string bt = this.ByteToStr(i);
-                res = bt + res;
+            ulong val = this.data;
+            ulong bt = 1;
+
+            StringBuilder b = new StringBuilder(64);
+            for (int i = 1; i <= 64; i++) {
+                char sym = ((val & bt) > 0) ? '1' : '0';
+                b.Insert(0, sym);
+                bt = bt << 1;
             }
-            return res;
+
+            return b.ToString();
         }
 
         public override int GetHashCode()
@@ -191,8 +159,7 @@ namespace GKCommon
         public object Clone()
         {
             EnumSet<T> result = new EnumSet<T>();
-            result.data = new byte[32];
-            Array.Copy(this.data, result.data, 32);
+            result.data = this.data;
             return result;
         }
     }

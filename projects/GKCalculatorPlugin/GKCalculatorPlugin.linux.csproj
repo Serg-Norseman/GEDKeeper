@@ -110,6 +110,9 @@
     <None Include="GKCalculatorPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKCalculatorPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKCalculatorPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

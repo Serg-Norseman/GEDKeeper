@@ -134,12 +134,12 @@ namespace GKTests.GKCommon
             Assert.IsTrue(es.Contains(RestrictionEnum.rnNone));
             Assert.IsTrue(es.Contains(RestrictionEnum.rnLocked));
 
-            string test = es.ByteToStr(0);
+            string test = es.ToString().Substring(64-8);
             Assert.AreEqual("00000011", test);
 
             // clone test
             EnumSet<RestrictionEnum> copy = (EnumSet<RestrictionEnum>)es.Clone();
-            test = copy.ByteToStr(0);
+            test = copy.ToString().Substring(64-8);
             Assert.AreEqual("00000011", test);
 
             // clear test
@@ -178,8 +178,7 @@ namespace GKTests.GKCommon
             es = es - es2;
             es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone);
             Assert.IsTrue(es == es3);
-            Assert.AreEqual("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
-                            es3.ToString());
+            Assert.AreEqual("0000000000000000000000000000000000000000000000000000000000000001", es3.ToString());
             Assert.AreNotEqual(0, es3.GetHashCode());
         }
 

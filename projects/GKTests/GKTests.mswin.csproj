@@ -133,10 +133,6 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.mswin.csproj">
-      <Project>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</Project>
-      <Name>GKPedigreeImporterPlugin</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GXResources.resx">

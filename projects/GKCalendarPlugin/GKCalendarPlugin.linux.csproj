@@ -110,6 +110,9 @@
     <None Include="GKCalendarPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKCalendarPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKCalendarPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

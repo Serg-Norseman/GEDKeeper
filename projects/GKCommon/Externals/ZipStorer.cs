@@ -221,14 +221,13 @@ namespace Externals
             if (fAccess == FileAccess.Read)
                 throw new InvalidOperationException("Writing is not alowed");
 
-            long offset;
-            if (this.fFiles.Count==0)
+            /*long offset;
+            if (this.fFiles.Count == 0) {
                 offset = 0;
-            else
-            {
+            } else {
                 ZipFileEntry last = this.fFiles[this.fFiles.Count-1];
                 offset = last.HeaderOffset + last.HeaderSize;
-            }
+            }*/
 
             // Prepare the fileinfo
             ZipFileEntry zfe = new ZipFileEntry();

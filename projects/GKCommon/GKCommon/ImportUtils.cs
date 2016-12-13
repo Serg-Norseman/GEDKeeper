@@ -18,14 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon;
-
-namespace GKPedigreeImporterPlugin
+namespace GKCommon
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class ImpUtils
+    public static class ImportUtils
     {
         private const string ROME_CHARS = "IVXLCDM";
 

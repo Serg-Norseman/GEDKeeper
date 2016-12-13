@@ -121,6 +121,9 @@
     <None Include="GKFlowInputPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKFlowInputPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKFlowInputPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

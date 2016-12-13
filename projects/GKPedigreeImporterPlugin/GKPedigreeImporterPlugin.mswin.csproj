@@ -96,7 +96,6 @@
     </Compile>
     <Compile Include="Importer.cs" />
     <Compile Include="GKPedigreeImporterPlugin.cs" />
-    <Compile Include="ImpUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PedigreeImporterDlg.resx">

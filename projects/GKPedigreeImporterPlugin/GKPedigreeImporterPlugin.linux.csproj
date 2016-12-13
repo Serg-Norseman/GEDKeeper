@@ -110,7 +110,6 @@
     </Compile>
     <Compile Include="Importer.cs" />
     <Compile Include="GKPedigreeImporterPlugin.cs" />
-    <Compile Include="ImpUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PedigreeImporterDlg.resx">
@@ -125,6 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GKPedigreeImporterPlugin.eng">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKPedigreeImporterPlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKPedigreeImporterPlugin.rus">

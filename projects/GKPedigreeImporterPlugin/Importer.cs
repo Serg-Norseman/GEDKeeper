@@ -322,10 +322,10 @@ namespace GKPedigreeImporterPlugin
         {
             switch (this.NumbersType) {
                 case PersonNumbersType.pnDAboville:
-                    return ImpUtils.IsPersonLine_DAboville(str, out p_id);
+                    return ImportUtils.IsPersonLine_DAboville(str, out p_id);
 
                 case PersonNumbersType.pnKonovalov:
-                    return ImpUtils.IsPersonLine_Konovalov(str, out p_id);
+                    return ImportUtils.IsPersonLine_Konovalov(str, out p_id);
 
                 default:
                     return false;
@@ -337,10 +337,10 @@ namespace GKPedigreeImporterPlugin
         {
             switch (this.NumbersType) {
                 case PersonNumbersType.pnDAboville:
-                    return ImpUtils.ParsePersonLine_DAboville(str, out persId, out parentId, out marNum, out extData, out pos);
+                    return ImportUtils.ParsePersonLine_DAboville(str, out persId, out parentId, out marNum, out extData, out pos);
 
                 case PersonNumbersType.pnKonovalov:
-                    return ImpUtils.ParsePersonLine_Konovalov(str, out persId, out parentId, out marNum, out extData, out pos);
+                    return ImportUtils.ParsePersonLine_Konovalov(str, out persId, out parentId, out marNum, out extData, out pos);
 
                 default:
                     persId = "";
@@ -568,7 +568,7 @@ namespace GKPedigreeImporterPlugin
                     string spSex, extData;
                     int marrNum;
                     int pos;
-                    if (ImpUtils.ParseSpouseLine(line, out spSex, out marrNum, out extData, out pos))
+                    if (ImportUtils.ParseSpouseLine(line, out spSex, out marrNum, out extData, out pos))
                     {
                         // define sex
                         GEDCOMSex sx = (spSex[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
@@ -655,7 +655,7 @@ namespace GKPedigreeImporterPlugin
             switch (this.GenerationFormat)
             {
                 case GenerationFormat.gfRome:
-                    return ImpUtils.IsRomeLine(str);
+                    return ImportUtils.IsRomeLine(str);
 
                 case GenerationFormat.gfGenWord:
                     return str.StartsWith("Поколение ", StringComparison.InvariantCultureIgnoreCase);
@@ -703,13 +703,13 @@ namespace GKPedigreeImporterPlugin
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
                                 string dummy = "";
 
-                                if (ImpUtils.IsPersonLine_DAboville(txt, out dummy))
+                                if (ImportUtils.IsPersonLine_DAboville(txt, out dummy))
                                 {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnDAboville;
                                     numberStats[1]++;
                                 }
-                                else if (ImpUtils.IsPersonLine_Konovalov(txt, out dummy))
+                                else if (ImportUtils.IsPersonLine_Konovalov(txt, out dummy))
                                 {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnKonovalov;

@@ -140,6 +140,9 @@
     <None Include="GKTreeVizPlugin.eng">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GKTreeVizPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKTreeVizPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
