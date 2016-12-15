@@ -21,7 +21,7 @@ namespace Externals.SingleInstancing
         private Mutex singleInstanceMutex;
         private bool isFirstInstance;
         private IChannel ipcChannel;
-        private SingleInstanceProxy proxy;
+        private readonly SingleInstanceProxy proxy;
 
         #endregion
 

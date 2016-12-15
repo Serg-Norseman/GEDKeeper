@@ -116,7 +116,7 @@ namespace GKCommon
         public static EnumSet<T> operator -(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            result.data = (ulong)(result.data & (~right.data));
+            result.data = result.data & (~right.data);
             return result;
         }
 

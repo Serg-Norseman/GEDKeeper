@@ -8,10 +8,6 @@ namespace GKTests.GKCore
     [TestFixture]
     public class GKExtTests
     {
-        public GKExtTests()
-        {
-        }
-
         [Test]
         public void RusDeclension_Tests()
         {

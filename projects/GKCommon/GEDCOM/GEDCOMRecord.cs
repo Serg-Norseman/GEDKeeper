@@ -88,8 +88,8 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 byte val = binary[i];
-                checkA = unchecked((byte)((uint)checkA + (uint)val));
-                checkB = unchecked((byte)((uint)checkB + (uint)checkA));
+                checkA = unchecked((byte)(checkA + (uint)val));
+                checkB = unchecked((byte)(checkB + (uint)checkA));
                 result += string.Format("{0:X2}", val);
             }
 

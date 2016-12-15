@@ -90,8 +90,6 @@ namespace GKCommon.GEDCOM
             if (tag == null) return 0.0f;
             GEDCOMCustomEvent ev = (GEDCOMCustomEvent)tag;
 
-            float match = 0.0f;
-
             // match date
             float dateMatch = 0.0f;
             GEDCOMDateValue dtVal = this.fDetail.Date;
@@ -115,7 +113,7 @@ namespace GKCommon.GEDCOM
 				}
 			}*/
 
-            match = (dateMatch); /* + locMatch) / 2.0f;*/
+            float match = (dateMatch); /* + locMatch) / 2.0f;*/
             return match;
         }
     }

@@ -386,7 +386,7 @@ namespace GKCommon.GEDCOM
         {
             this.fFileName = fileName;
 
-            using (StreamReader reader = new StreamReader(inputStream, DEFAULT_ENCODING)) {
+            using (StreamReader reader = GEDCOMUtils.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
                 this.Clear();
                 this.LoadFromStream(fileStream, reader);
                 this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
@@ -414,7 +414,7 @@ namespace GKCommon.GEDCOM
         private enum EncodingState { esUnchecked, esUnchanged, esChanged }
 
         private const int DEF_CODEPAGE = 1251;
-        private static Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
+        private static readonly Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
 
         private Encoding fSourceEncoding;
         private EncodingState fEncodingState;
@@ -441,7 +441,6 @@ namespace GKCommon.GEDCOM
             {
                 GEDCOMCustomRecord curRecord = null;
                 GEDCOMTag curTag = null;
-                GEDCOMCharacterSet charSet = GEDCOMCharacterSet.csASCII;
 
                 int lineNum = 0;
                 while (reader.Peek() != -1)
@@ -491,12 +490,25 @@ namespace GKCommon.GEDCOM
                                     // beginning recognition of the first is not header record
                                     // to check for additional versions of the code page
 
-                                    charSet = this.fHeader.CharacterSet;
+                                    GEDCOMCharacterSet charSet = this.fHeader.CharacterSet;
                                     switch (charSet)
                                     {
                                         case GEDCOMCharacterSet.csUTF8:
-                                            this.fSourceEncoding = Encoding.UTF8;
-                                            this.fEncodingState = EncodingState.esChanged;
+                                            if (!GEDCOMUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
+                                                this.fSourceEncoding = Encoding.UTF8;
+                                                this.fEncodingState = EncodingState.esChanged; // file without BOM
+                                            } else {
+                                                this.fEncodingState = EncodingState.esUnchanged;
+                                            }
+                                            break;
+
+                                        case GEDCOMCharacterSet.csUNICODE:
+                                            if (!GEDCOMUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
+                                                this.fSourceEncoding = Encoding.Unicode;
+                                                this.fEncodingState = EncodingState.esChanged; // file without BOM
+                                            } else {
+                                                this.fEncodingState = EncodingState.esUnchanged;
+                                            }
                                             break;
 
                                         case GEDCOMCharacterSet.csASCII:
@@ -506,8 +518,8 @@ namespace GKCommon.GEDCOM
                                                 this.fSourceEncoding = Encoding.GetEncoding(sourceCodepage);
                                                 this.fEncodingState = EncodingState.esChanged;
                                             } else {
-                                                this.fSourceEncoding = DEFAULT_ENCODING;
-                                                this.fEncodingState = EncodingState.esUnchanged;
+                                                this.fSourceEncoding = Encoding.GetEncoding(DEF_CODEPAGE);
+                                                this.fEncodingState = EncodingState.esChanged;
                                             }
                                             break;
                                     }

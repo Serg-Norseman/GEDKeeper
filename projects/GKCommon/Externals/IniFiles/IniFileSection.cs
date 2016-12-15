@@ -151,8 +151,7 @@ namespace Externals.IniFiles
             }
             set
             {
-                IniFileValue v;
-                v = GetValue(key);
+                IniFileValue v = GetValue(key);
                 //if (!IniFileSettings.AllowEmptyValues && value == "") {
                 //    if (v != null) {
                 //        elements.Remove(v);

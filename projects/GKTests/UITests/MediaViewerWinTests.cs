@@ -20,8 +20,11 @@
 
 #if !__MonoCS__
 
-using System;
+using System.Drawing;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests.GKCommon;
 using GKTests.Mocks;
 using GKUI;
 using NUnit.Framework;
@@ -36,12 +39,20 @@ namespace GKTests.UITests
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
+        GEDCOMFileReferenceWithTitle fileRef;
 
         public override void Setup()
         {
             base.Setup();
 
             fBase = new BaseWindowMock();
+
+            GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
+            mmRec.AddTag("FILE", "", null);
+            fileRef = mmRec.FileReferences[0];
+            fileRef.Title = "File Title 2";
+            fileRef.LinkFile("shaytan_plant.jpg");
+            fileRef.MediaType = GEDCOMMediaType.mtPhoto;
 
             fDialog = new MediaViewerWin(fBase);
             fDialog.Show();
@@ -51,6 +62,12 @@ namespace GKTests.UITests
         public void Test_Common()
         {
             Assert.AreEqual(null, fDialog.FileRef);
+            fDialog.FileRef = fileRef;
+            Assert.AreEqual(fileRef, fDialog.FileRef);
+
+            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
+            Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
+            fDialog.SetViewImage(img);
         }
     }
 }

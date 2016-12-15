@@ -26,10 +26,6 @@ namespace GKTests
     [TestFixture]
     public class PIPTests
     {
-        public PIPTests()
-        {
-        }
-
         [Test]
         public void ImpUtils_Valid_Tests()
         {

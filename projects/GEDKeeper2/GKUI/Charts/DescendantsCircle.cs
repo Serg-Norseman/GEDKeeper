@@ -34,7 +34,7 @@ namespace GKUI.Charts
     {
         private class PersonSegment : CircleSegment
         {
-            public List<PersonSegment> ChildSegments;
+            public readonly List<PersonSegment> ChildSegments;
             public int TotalSubSegments;
 
             public PersonSegment(int generation) : base(generation)
@@ -189,11 +189,9 @@ namespace GKUI.Charts
                 PersonSegment segment = (PersonSegment)this.fSegments[i];
 
                 if (segment.IRec != null) {
-                    int brIndex;
-                    brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                    int brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
 
-                    SolidBrush brush;
-                    brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
+                    SolidBrush brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
 
                     GraphicsPath path = segment.Path;
                     gfx.FillPath(brush, path);

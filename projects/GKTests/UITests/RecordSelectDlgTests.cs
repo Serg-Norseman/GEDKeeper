@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;

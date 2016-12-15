@@ -239,7 +239,7 @@ namespace Externals.Linguistics
         /// 
         /// </summary>
         /// <param name="fn">фамилия имя отчество, например Железняков Юрий Юрьевич</param>
-        /// <param name="declansionCase">падеж</param>
+        /// <param name="declCase">падеж</param>
         /// <param name="gender">параметр 'пол' может не указываться, но при наличии фамилий с
         /// инициалами точное определение пола невозможно, поэтому предлагается задавать пол этим
         /// параметром</param>
@@ -295,9 +295,7 @@ namespace Externals.Linguistics
 
         private static string Mid(string s, int i)
         {
-            if (i > s.Length) return string.Empty;
-
-            return s.Substring(i - 1);
+            return (i > s.Length) ? string.Empty : s.Substring(i - 1);
         }
 
         private static string Left(string s, int len)

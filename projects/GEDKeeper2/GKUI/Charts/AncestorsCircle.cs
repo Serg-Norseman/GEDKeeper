@@ -239,8 +239,7 @@ namespace GKUI.Charts
                         brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
                     }
 
-                    SolidBrush brush;
-                    brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
+                    SolidBrush brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
 
                     GraphicsPath path = segment.Path;
                     gfx.FillPath(brush, path);

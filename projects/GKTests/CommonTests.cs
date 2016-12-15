@@ -700,7 +700,7 @@ namespace GKTests.GKCommon
             }
         }
 
-        private int CompareItems(ValItem item1, ValItem item2)
+        private static int CompareItems(ValItem item1, ValItem item2)
         {
             return item1.Value.CompareTo(item2.Value);
         }
@@ -813,7 +813,7 @@ namespace GKTests.GKCommon
 
             //
 
-            strTok = new StringTokenizer("alpha beta 123 456.57, x; \r \n \"test quote\"");
+            strTok = new StringTokenizer("alpha beta 123 456.57, x; \r\n \r \n \"test quote\"");
             Assert.IsNotNull(strTok);
 
             strTok.IgnoreWhiteSpace = true;
@@ -850,6 +850,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual(TokenKind.Symbol, tok.Kind);
             Assert.AreEqual(";", tok.Value);
 
+            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
             Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
             Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
 
@@ -920,19 +921,19 @@ namespace GKTests.GKCommon
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.FirstOrDefault<int>(null); });
-            int N = SysUtils.FirstOrDefault<int>(new int[] { 5, 7, 10 });
+            int N = SysUtils.FirstOrDefault(new int[] { 5, 7, 10 });
             Assert.AreEqual(5, N);
 
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.LastOrDefault<int>(null); });
-            N = SysUtils.LastOrDefault<int>(new int[] { 5, 7, 10 });
+            N = SysUtils.LastOrDefault(new int[] { 5, 7, 10 });
             Assert.AreEqual(10, N);
 
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SingleOrDefault<int>(null); });
-            N = SysUtils.SingleOrDefault<int>(new int[] { 11 });
+            N = SysUtils.SingleOrDefault(new int[] { 11 });
             Assert.AreEqual(11, N);
-            N = SysUtils.SingleOrDefault<int>(new int[] { });
+            N = SysUtils.SingleOrDefault(new int[] { });
             Assert.AreEqual(0, N);
-            Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
+            Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault(new int[] { 5, 7, 10 }); });
         }
 
         private void TweenHandler(int newX, int newY)
@@ -969,9 +970,26 @@ namespace GKTests.GKCommon
             var item2 = new GKListItem(20, null);
             Assert.AreEqual(-1, item1.CompareTo(item2));
 
+            item1 = new GKListItem(10, null);
+            item2 = new GKListItem(null, null);
+            Assert.AreEqual(-1, item1.CompareTo(item2));
+
+            item1 = new GKListItem(null, null);
+            item2 = new GKListItem(20, null);
+            Assert.AreEqual(1, item1.CompareTo(item2));
+
+
             var subitem1 = new GKListSubItem(10);
             var subitem2 = new GKListSubItem(20);
             Assert.AreEqual(-1, subitem1.CompareTo(subitem2));
+
+            subitem1 = new GKListSubItem(10);
+            subitem2 = new GKListSubItem(null);
+            Assert.AreEqual(-1, subitem1.CompareTo(subitem2));
+
+            subitem1 = new GKListSubItem(null);
+            subitem2 = new GKListSubItem(20);
+            Assert.AreEqual(1, subitem1.CompareTo(subitem2));
         }
     }
 }

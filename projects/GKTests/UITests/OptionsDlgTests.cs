@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;

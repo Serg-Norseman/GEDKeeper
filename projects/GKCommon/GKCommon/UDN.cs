@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
@@ -169,7 +168,7 @@ namespace GKCommon
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
         public int CompareTo(UDN other)
         {
@@ -183,7 +182,7 @@ namespace GKCommon
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(UDN other)
         {

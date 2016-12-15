@@ -1035,20 +1035,20 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
-            this.btnPortraitAdd.Image = global::GKResources.iRecNew;
-            this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
-            this.btnParentsAdd.Image = global::GKResources.iRecNew;
-            this.btnParentsEdit.Image = global::GKResources.iRecEdit;
-            this.btnParentsDelete.Image = global::GKResources.iRecDelete;
-            this.btnFatherAdd.Image = global::GKResources.iRecNew;
-            this.btnFatherDelete.Image = global::GKResources.iRecEdit;
-            this.btnFatherSel.Image = global::GKResources.iRecDelete;
-            this.btnMotherAdd.Image = global::GKResources.iRecNew;
-            this.btnMotherDelete.Image = global::GKResources.iRecEdit;
-            this.btnMotherSel.Image = global::GKResources.iRecDelete;
-            this.btnNameCopy.Image = global::GKResources.iCopy;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
+            this.btnPortraitAdd.Image = GKResources.iRecNew;
+            this.btnPortraitDelete.Image = GKResources.iRecDelete;
+            this.btnParentsAdd.Image = GKResources.iRecNew;
+            this.btnParentsEdit.Image = GKResources.iRecEdit;
+            this.btnParentsDelete.Image = GKResources.iRecDelete;
+            this.btnFatherAdd.Image = GKResources.iRecNew;
+            this.btnFatherDelete.Image = GKResources.iRecEdit;
+            this.btnFatherSel.Image = GKResources.iRecDelete;
+            this.btnMotherAdd.Image = GKResources.iRecNew;
+            this.btnMotherDelete.Image = GKResources.iRecEdit;
+            this.btnMotherSel.Image = GKResources.iRecDelete;
+            this.btnNameCopy.Image = GKResources.iCopy;
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {
@@ -1081,17 +1081,17 @@ namespace GKUI.Dialogs
             this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
             this.fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
-            this.btnPortraitAdd.Image = global::GKResources.iRecNew;
-            this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
-            this.btnFatherAdd.Image = global::GKResources.iRecNew;
-            this.btnFatherDelete.Image = global::GKResources.iRecDelete;
-            this.btnFatherSel.Image = global::GKResources.iToMan;
-            this.btnMotherAdd.Image = global::GKResources.iRecNew;
-            this.btnMotherDelete.Image = global::GKResources.iRecDelete;
-            this.btnMotherSel.Image = global::GKResources.iToMan;
-            this.btnParentsAdd.Image = global::GKResources.iRecNew;
-            this.btnParentsEdit.Image = global::GKResources.iRecEdit;
-            this.btnParentsDelete.Image = global::GKResources.iRecDelete;
+            this.btnPortraitAdd.Image = GKResources.iRecNew;
+            this.btnPortraitDelete.Image = GKResources.iRecDelete;
+            this.btnFatherAdd.Image = GKResources.iRecNew;
+            this.btnFatherDelete.Image = GKResources.iRecDelete;
+            this.btnFatherSel.Image = GKResources.iToMan;
+            this.btnMotherAdd.Image = GKResources.iRecNew;
+            this.btnMotherDelete.Image = GKResources.iRecDelete;
+            this.btnMotherSel.Image = GKResources.iToMan;
+            this.btnParentsAdd.Image = GKResources.iRecNew;
+            this.btnParentsEdit.Image = GKResources.iRecEdit;
+            this.btnParentsDelete.Image = GKResources.iRecDelete;
 
             this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 

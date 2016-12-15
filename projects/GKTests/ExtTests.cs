@@ -79,7 +79,7 @@ namespace GKTests.GKCommon
             }
         }
 
-        private int CompareItems(ValItem item1, ValItem item2)
+        private static int CompareItems(ValItem item1, ValItem item2)
         {
             return item1.Value.CompareTo(item2.Value);
         }

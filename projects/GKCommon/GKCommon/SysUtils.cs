@@ -285,10 +285,10 @@ namespace GKCommon
 
         public static ulong ParseVersion(string strVersion)
         {
-            if (strVersion == null) { Debug.Assert(false); return 0; }
+            if (strVersion == null) { return 0; }
 
             string[] vVer = strVersion.Split(VersionSep);
-            if ((vVer == null) || (vVer.Length == 0)) { Debug.Assert(false); return 0; }
+            if ((vVer == null) || (vVer.Length == 0)) { return 0; }
 
             ushort uPart;
             ushort.TryParse(vVer[0].Trim(), out uPart);
@@ -392,7 +392,7 @@ namespace GKCommon
 
         private static PropertyInfo GetPropertyInfo(Type type, string propertyName)
         {
-            PropertyInfo propInfo = null;
+            PropertyInfo propInfo;
             do {
                 propInfo = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 type = type.BaseType;
@@ -587,7 +587,7 @@ namespace GKCommon
                 for (int i = 0; i < data.Length; i++)
                 {
                     byte c = data[i];
-                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ (uint)c) & 255u)]);
+                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ c) & 255u)]);
                 }
             }
             return crc;

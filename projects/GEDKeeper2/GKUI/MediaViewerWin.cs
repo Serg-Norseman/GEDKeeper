@@ -38,9 +38,7 @@ namespace GKUI
     public partial class MediaViewerWin : Form, ILocalization
     {
         private readonly IBaseWindow fBase;
-
         private GEDCOMFileReferenceWithTitle fFileRef;
-        private ImageView fImageCtl;
 
         public GEDCOMFileReferenceWithTitle FileRef
         {
@@ -63,9 +61,7 @@ namespace GKUI
                     case MultimediaKind.mkImage:
                         {
                             Image img = this.fBase.Context.LoadMediaImage(this.fFileRef, false);
-                            this.fImageCtl = new ImageView();
-                            this.fImageCtl.OpenImage(img);
-                            ctl = this.fImageCtl;
+                            this.SetViewImage(img);
                             break;
                         }
 
@@ -89,6 +85,7 @@ namespace GKUI
                                         txtBox.ScrollBars = ScrollBars.Both;
                                         txtBox.Text = strd.ReadToEnd();
                                         ctl = txtBox;
+                                        this.SetViewControl(ctl);
                                     }
                                     break;
 
@@ -98,28 +95,18 @@ namespace GKUI
                                         rtfBox.ReadOnly = true;
                                         rtfBox.Text = strd.ReadToEnd();
                                         ctl = rtfBox;
+                                        this.SetViewControl(ctl);
                                     }
                                     break;
 
                                 case GEDCOMMultimediaFormat.mfHTM:
                                     ctl = new WebBrowser();
                                     (ctl as WebBrowser).DocumentStream = fs;
+                                    this.SetViewControl(ctl);
                                     break;
                             }
                             break;
                         }
-                }
-
-                if (ctl != null) {
-                    this.SuspendLayout();
-
-                    ctl.Dock = DockStyle.Fill;
-                    ctl.Location = new Point(0, 0);
-                    ctl.Size = new Size(100, 100);
-                    base.Controls.Add(ctl);
-                    base.Controls.SetChildIndex(ctl, 0);
-
-                    this.ResumeLayout(false);
                 }
             }
             catch (Exception ex)
@@ -130,10 +117,29 @@ namespace GKUI
             }
         }
 
-        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
+        public void SetViewImage(Image img)
         {
-            if (e.KeyCode == Keys.Escape) {
-                base.Close();
+            ImageView imageCtl = new ImageView();
+            imageCtl.OpenImage(img);
+            imageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+            imageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+            imageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+
+            this.SetViewControl(imageCtl);
+        }
+
+        private void SetViewControl(Control ctl)
+        {
+            if (ctl != null) {
+                this.SuspendLayout();
+
+                ctl.Dock = DockStyle.Fill;
+                ctl.Location = new Point(0, 0);
+                ctl.Size = new Size(100, 100);
+                base.Controls.Add(ctl);
+                base.Controls.SetChildIndex(ctl, 0);
+
+                this.ResumeLayout(false);
             }
         }
 
@@ -147,10 +153,12 @@ namespace GKUI
 
         public void SetLang()
         {
-            if (this.fImageCtl != null) {
-                this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-                this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-                this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+        }
+
+        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape) {
+                base.Close();
             }
         }
     }

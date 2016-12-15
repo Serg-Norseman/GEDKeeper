@@ -141,13 +141,13 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Formats this element using given formatting string</summary>
-        /// <param name="formatting">Formatting template, where '['-open bracket, '$'-section name, ']'-close bracket, ';'-inline comments.</param>
-        public void Format(string formatting)
+        /// <param name="pFormatting">Formatting template, where '['-open bracket, '$'-section name, ']'-close bracket, ';'-inline comments.</param>
+        public void Format(string pFormatting)
         {
             StringBuilder build = new StringBuilder();
-            for (int i = 0; i < formatting.Length; i++)
+            for (int i = 0; i < pFormatting.Length; i++)
             {
-                char currC = formatting[i];
+                char currC = pFormatting[i];
                 if (currC == '$')
                     build.Append(sectionName);
                 else if (currC == '[')
@@ -156,8 +156,8 @@ namespace Externals.IniFiles
                     build.Append(IniFileSettings.SectionCloseBracket);
                 else if (currC == ';' && IniFileSettings.CommentChars.Length > 0 && inlineComment != null)
                     build.Append(IniFileSettings.CommentChars[0]).Append(inlineComment);
-                else if (char.IsWhiteSpace(formatting[i]))
-                    build.Append(formatting[i]);
+                else if (char.IsWhiteSpace(pFormatting[i]))
+                    build.Append(pFormatting[i]);
             }
             Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? textOnTheRight : "");
         }

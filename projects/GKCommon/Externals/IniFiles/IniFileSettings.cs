@@ -15,6 +15,7 @@ namespace Externals.IniFiles
         private static string tabReplacement = "    ";
         private static string sectionOpenBracket = "[";
 
+        [Flags]
         private enum IniFlags { PreserveFormatting = 1, AllowEmptyValues = 2, AllowTextOnTheRight = 4,
             GroupElements = 8, CaseSensitive = 16, SeparateHeader = 32, AllowBlankLines = 64,
             AllowInlineComments = 128}

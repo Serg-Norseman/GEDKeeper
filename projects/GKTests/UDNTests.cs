@@ -35,7 +35,7 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class UDNTests
     {
-        private List<UDNRecord> fDates = new List<UDNRecord>();
+        private readonly List<UDNRecord> fDates = new List<UDNRecord>();
 
         public UDNTests()
         {

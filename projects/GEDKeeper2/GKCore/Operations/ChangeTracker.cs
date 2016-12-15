@@ -28,7 +28,7 @@ namespace GKCore.Operations
     /// </summary>
     public sealed class ChangeTracker : UndoManager
     {
-        private GEDCOMTree fTree;
+        private readonly GEDCOMTree fTree;
 
         public GEDCOMTree Tree
         {

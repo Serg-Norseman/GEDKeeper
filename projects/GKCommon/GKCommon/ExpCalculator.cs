@@ -249,7 +249,7 @@ namespace GKCommon
 
         private bool DoGetVar(string varName, ref double varValue)
         {
-            GetVarEventHandler eventHandler = (GetVarEventHandler)this.OnGetVar; //base.Events[ExpCalculator.EventGetVar];
+            GetVarEventHandler eventHandler = this.OnGetVar; //base.Events[ExpCalculator.EventGetVar];
             return (eventHandler != null) && eventHandler(this, varName, ref varValue);
         }
 
@@ -747,7 +747,7 @@ namespace GKCommon
 
                 switch (oldt) {
                     case ExpToken.tkINV:
-                        R = (double)(~trunc(R));
+                        R = ~trunc(R);
                         break;
 
                     case ExpToken.tkNOT:
@@ -785,7 +785,7 @@ namespace GKCommon
                         break;
 
                     case ExpToken.tkMOD:
-                        R = ((double)(trunc(R) % trunc(V)));
+                        R = trunc(R) % trunc(V);
                         break;
 
                     case ExpToken.tkPER:
@@ -873,15 +873,15 @@ namespace GKCommon
 
                 switch (oldt) {
                     case ExpToken.tkOR:
-                        R = (double)(trunc(R) | trunc(V));
+                        R = trunc(R) | trunc(V);
                         break;
 
                     case ExpToken.tkXOR:
-                        R = (double)(trunc(R) ^ trunc(V));
+                        R = trunc(R) ^ trunc(V);
                         break;
 
                     case ExpToken.tkAND:
-                        R = (double)(trunc(R) & trunc(V));
+                        R = trunc(R) & trunc(V);
                         break;
                 }
             }

@@ -426,10 +426,8 @@ namespace GKCore.Export
                     string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
 
                     li = dt + st + GKUtils.GetNameString(evObj.IRec, true, false);
-                    PedigreePerson prs;
-                    string id;
-                    prs = this.FindPerson(evObj.IRec);
-                    id = (prs != null) ? prs.Id : "";
+                    PedigreePerson prs = this.FindPerson(evObj.IRec);
+                    string id = (prs != null) ? prs.Id : "";
 
                     this.fWriter.addListItemLink(" " + li + " ", fTextFont, id, fLinkFont);
                 }

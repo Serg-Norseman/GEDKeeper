@@ -19,10 +19,8 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -57,10 +55,10 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
-            this.btnColumnUp.Image = global::GKResources.iUp;
-            this.btnColumnDown.Image = global::GKResources.iDown;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
+            this.btnColumnUp.Image = GKResources.iUp;
+            this.btnColumnDown.Image = GKResources.iDown;
 
             this.fHost = aHost;
             this.fOptions = GlobalOptions.Instance;

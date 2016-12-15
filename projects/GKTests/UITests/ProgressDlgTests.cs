@@ -20,9 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
-using GKCore.Interfaces;
-using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Framework;
 
@@ -34,14 +31,11 @@ namespace GKTests.UITests
     [TestFixture]
     public class ProgressDlgTests : CustomWindowTest
     {
-        private IBaseWindow fBase;
         private ProgressDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
-
-            fBase = new BaseWindowMock();
 
             fDialog = new ProgressDlg();
             fDialog.Show();

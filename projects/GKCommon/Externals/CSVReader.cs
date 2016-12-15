@@ -107,21 +107,6 @@ namespace Externals
         /// </summary>
         /// <param name="filename">Filename of CSV file</param>
         /// <param name="headerRow">True if the first row contains column names</param>
-        /// <param name="scanRows">The number of rows to scan for types when building a DataTable (0 to scan the whole file)</param>
-        /// <returns>System.Data.DataTable object that contains the CSV data</returns>
-        public static DataTable ReadCSVFile(string filename, bool headerRow, int scanRows)
-        {
-            using (CSVReader reader = new CSVReader(new FileInfo(filename)))
-            {
-                return reader.CreateDataTable(headerRow);
-            }
-        }
-
-        /// <summary>
-        /// Read a CSV file into a table
-        /// </summary>
-        /// <param name="filename">Filename of CSV file</param>
-        /// <param name="headerRow">True if the first row contains column names</param>
         /// <returns>System.Data.DataTable object that contains the CSV data</returns>
         public static DataTable ReadCSVFile(string filename, bool headerRow)
         {

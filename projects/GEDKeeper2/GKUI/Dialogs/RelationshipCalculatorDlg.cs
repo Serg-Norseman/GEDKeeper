@@ -47,7 +47,7 @@ namespace GKUI.Dialogs
 
             this.fBase = baseWin;
 
-            this.btnClose.Image = global::GKResources.iBtnCancel;
+            this.btnClose.Image = GKResources.iBtnCancel;
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);

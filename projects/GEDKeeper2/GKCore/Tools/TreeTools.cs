@@ -193,38 +193,32 @@ namespace GKCore.Tools
 
         private static void ReformMultimediaLink(GEDCOMTree tree, GEDCOMMultimediaLink mmLink)
         {
-            try
+            string title = mmLink.Title;
+            GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
+
+            int num = mmLink.FileReferences.Count;
+            for (int i = 0; i < num; i++)
             {
-                string title = mmLink.Title;
-                GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
+                GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
+                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(tree, mmRec, "", "");
 
-                int num = mmLink.FileReferences.Count;
-                for (int i = 0; i < num; i++)
+                tgtFileRef.LinkFile(srcFileRef.StringValue);
+
+                if (srcFileRef.MultimediaFormat != GEDCOMMultimediaFormat.mfNone)
                 {
-                    GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
-                    GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(tree, mmRec, "", "");
-
-                    tgtFileRef.LinkFile(srcFileRef.StringValue);
-
-                    if (srcFileRef.MultimediaFormat != GEDCOMMultimediaFormat.mfNone)
-                    {
-                        tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
-                    }
-                    if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown)
-                    {
-                        tgtFileRef.MediaType = srcFileRef.MediaType;
-                    }
-
-                    mmRec.FileReferences.Add(tgtFileRef);
+                    tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
+                }
+                if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown)
+                {
+                    tgtFileRef.MediaType = srcFileRef.MediaType;
                 }
 
-                mmLink.Clear();
-                mmLink.Value = mmRec;
-                mmLink.Title = title;
+                mmRec.FileReferences.Add(tgtFileRef);
             }
-            finally
-            {
-            }
+
+            mmLink.Clear();
+            mmLink.Value = mmRec;
+            mmLink.Title = title;
         }
 
         private static void ReformSourceCitation(GEDCOMTree tree, GEDCOMSourceCitation sourCit)

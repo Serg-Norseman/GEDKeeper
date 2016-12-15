@@ -422,11 +422,7 @@ namespace GKCore
             }
 
             GEDCOMDate date = evt.Detail.Date.Value as GEDCOMDate;
-            if (date == null) {
-                return 0;
-            } else {
-                return date.Year;
-            }
+            return (date == null) ? 0 : date.Year;
         }
 
         public void gt_set_event_date(object evPtr, string date)

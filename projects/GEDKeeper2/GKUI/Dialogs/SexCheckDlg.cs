@@ -34,8 +34,8 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

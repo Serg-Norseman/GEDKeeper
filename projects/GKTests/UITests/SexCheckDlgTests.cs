@@ -20,10 +20,7 @@
 
 #if !__MonoCS__
 
-using System;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Framework;
 
@@ -35,14 +32,11 @@ namespace GKTests.UITests
     [TestFixture]
     public class SexCheckDlgTests : CustomWindowTest
     {
-        private IBaseWindow fBase;
         private SexCheckDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
-
-            fBase = new BaseWindowMock();
 
             fDialog = new SexCheckDlg();
             fDialog.Show();

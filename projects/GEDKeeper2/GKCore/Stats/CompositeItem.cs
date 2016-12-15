@@ -53,7 +53,7 @@ namespace GKCore.Stats
 
         public void TakeVal(float val, GEDCOMSex sex, bool ignoreZero)
         {
-            if (val == 0 && ignoreZero) return;
+            if (val == 0.0f && ignoreZero) return;
 
             CommonSum += val;
             CommonCount++;

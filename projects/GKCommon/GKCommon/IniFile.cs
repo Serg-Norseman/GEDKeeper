@@ -112,7 +112,7 @@ namespace GKCommon
         public string ReadString(string section, string ident, string defaultValue)
         {
             string result = this.fHandler[section][ident];
-            return result == null ? defaultValue : result;
+            return (result == null) ? defaultValue : result;
         }
 
         public void WriteString(string section, string ident, string value)

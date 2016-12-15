@@ -45,7 +45,7 @@ namespace GKUpdater
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             StartPosition = FormStartPosition.CenterScreen;
             TopMost = true;
-            Load += new EventHandler(OnFormLoad);
+            Load += OnFormLoad;
 
             pgStatus = new ProgressBar();
             pgStatus.Parent = this;
@@ -59,8 +59,8 @@ namespace GKUpdater
             lblStatus.Size = new Size(250, 20);
 
             fController = Controller.Instance;
-            fController.UpdateMessage += new UpdateMessageHandler(OnUpdateMessage);
-            fController.DownloadProgress += new UpdateMessageHandler(OnUpdateMessage);
+            fController.UpdateMessage += OnUpdateMessage;
+            fController.DownloadProgress += OnUpdateMessage;
         }
 
         private void WorkerMethod()
@@ -84,7 +84,7 @@ namespace GKUpdater
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("UpdaterForm.WorkerMethod(): " + ex.ToString());
+                    Logger.LogWrite("UpdaterForm.WorkerMethod(): " + ex.Message);
                 }
 
                 if (fController.NeedsUpdate && !success)
@@ -130,7 +130,7 @@ namespace GKUpdater
 
         private void OnFormLoad(object sender, EventArgs ea)
         {
-            Thread worker = new Thread(new ThreadStart(WorkerMethod));
+            Thread worker = new Thread(WorkerMethod);
             worker.SetApartmentState(ApartmentState.STA);
             worker.IsBackground = true;
             worker.Start();

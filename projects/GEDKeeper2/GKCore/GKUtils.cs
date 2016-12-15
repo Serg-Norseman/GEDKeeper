@@ -1453,8 +1453,7 @@ namespace GKCore
             if (tree == null)
                 throw new ArgumentNullException("tree");
 
-            GKRecordsView recView;
-            recView = new GKRecordsView();
+            GKRecordsView recView = new GKRecordsView();
             recView.HideSelection = false;
             recView.LabelEdit = false;
             recView.FullRowSelect = true;

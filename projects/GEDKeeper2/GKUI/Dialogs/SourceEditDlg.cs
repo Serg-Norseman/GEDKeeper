@@ -70,8 +70,8 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);

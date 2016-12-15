@@ -809,7 +809,7 @@ namespace GKCommon.GEDCOM
         #region UDN processing
 
         // GEDCOMCalendar { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcIslamic, dcUnknown }
-        private static UDNCalendarType[] UDNCalendars = new UDNCalendarType[] {
+        private static readonly UDNCalendarType[] UDNCalendars = new UDNCalendarType[] {
             /* dcGregorian */   UDNCalendarType.ctGregorian,
             /* dcJulian */      UDNCalendarType.ctJulian,
             /* dcHebrew */      UDNCalendarType.ctHebrew,

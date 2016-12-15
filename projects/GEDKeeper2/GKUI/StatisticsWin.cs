@@ -57,7 +57,7 @@ namespace GKUI
         {
             this.InitializeComponent();
 
-            this.tbExcelExport.Image = global::GKResources.iExcel;
+            this.tbExcelExport.Image = GKResources.iExcel;
 
             this.fGraph = new ZedGraphControl();
             this.fGraph.IsShowPointValues = true;
@@ -114,7 +114,7 @@ namespace GKUI
                     string s = item.Text;
                     double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
 
-                    if (lab != 0 || !excludeUnknowns)
+                    if (lab != 0.0d || !excludeUnknowns)
                     {
                         int val = int.Parse(item.SubItems[1].Text);
                         ppList.Add(lab, val);

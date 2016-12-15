@@ -44,7 +44,7 @@ namespace GKCore.Options
             Color.Black, // text
             Color.Moccasin, // background
             Color.Black, // lines
-            Color.PaleGreen, // lines
+            Color.PaleGreen // lines
         };
 
         public Color[] BrushColor = new Color[MAX_BRUSHES];

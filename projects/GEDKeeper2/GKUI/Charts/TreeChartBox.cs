@@ -595,7 +595,7 @@ namespace GKUI.Charts
                         result.AddChild(aChild);
                     }
 
-                    if (this.fOptions.Kinship && aPerson != null)
+                    if (this.fOptions.Kinship)
                     {
                         result.Node = this.fGraph.AddIndividual(aPerson);
                     }

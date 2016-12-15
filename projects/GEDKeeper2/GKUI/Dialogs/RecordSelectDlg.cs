@@ -73,8 +73,8 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnSelect.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnSelect.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
 
             this.fBase = aBase;
             this.fFilter = "*";
@@ -172,8 +172,7 @@ namespace GKUI.Dialogs
                         {
                             GEDCOMFamilyRecord famRec = null;
 
-                            FamilyTarget famTarget;
-                            famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
+                            FamilyTarget famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
 
                             if (this.fBase.ModifyFamily(ref famRec, famTarget, this.Target))
                             {

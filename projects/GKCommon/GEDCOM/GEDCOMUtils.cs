@@ -20,16 +20,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
     {
-        private string[] fStrValues;
-        private Dictionary<string, int> fValues;
-        private T fDefaultValue;
-        private bool fCaseSensitive;
+        private readonly string[] fStrValues;
+        private readonly Dictionary<string, int> fValues;
+        private readonly T fDefaultValue;
+        private readonly bool fCaseSensitive;
 
         public GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
         {
@@ -76,7 +77,7 @@ namespace GKCommon.GEDCOM
             if (this.fValues.TryGetValue(key, out result)) {
                 return (T)((IConvertible)result);
             } else {
-                return (T)((IConvertible)this.fDefaultValue);
+                return this.fDefaultValue;
             }
         }
     }
@@ -157,7 +158,7 @@ namespace GKCommon.GEDCOM
 
         public static TagProperties GetTagProps(string tagName)
         {
-            TagProperties result = null;
+            TagProperties result;
             TAGS_BASE.TryGetValue(tagName, out result);
             return result;
         }
@@ -1488,6 +1489,43 @@ namespace GKCommon.GEDCOM
         #endregion
 
         #region Other
+
+        public static StreamReader OpenStreamReader(Stream src, Encoding defaultEncoding)
+        {
+            Encoding encodingSource = defaultEncoding;
+            bool detectEncoding = false;
+
+            if (src.CanSeek)
+            {
+                byte[] bPreamble = new byte[4];
+                int iReaded = src.Read(bPreamble, 0, 4);
+
+                if (iReaded >= 3 && bPreamble[0] == 0xEF && bPreamble[1] == 0xBB && bPreamble[2] == 0xBF) // utf-8
+                    encodingSource = Encoding.UTF8;
+                else if (iReaded == 4 && bPreamble[0] == 0x00 && bPreamble[1] == 0x00 && bPreamble[2] == 0xFE && bPreamble[3] == 0xFF) // utf-32 EB
+                {
+                    encodingSource = Encoding.GetEncoding("utf-32"); // is a EL codepage, but the StreamReader should switch to EB
+                    detectEncoding = true;
+                }
+                else if (iReaded == 4 && bPreamble[0] == 0xFF && bPreamble[1] == 0xFE && bPreamble[2] == 0x00 && bPreamble[3] == 0x00) // utf-32 EL
+                    encodingSource = Encoding.GetEncoding("utf-32");
+                else if (iReaded >= 2 && bPreamble[0] == 0xFE && bPreamble[1] == 0xFF) // utf-16 EB
+                    encodingSource = Encoding.BigEndianUnicode;
+                else if (iReaded >= 2 && bPreamble[0] == 0xFF && bPreamble[1] == 0xFE) // utf-16 EL
+                    encodingSource = Encoding.Unicode;
+
+                src.Seek(-iReaded, SeekOrigin.Current);
+            }
+            else
+                detectEncoding = true;
+
+            return new StreamReader(src, encodingSource, detectEncoding);
+        }
+
+        public static bool IsUnicodeEncoding(Encoding encoding)
+        {
+            return (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
+        }
 
         /// <summary>
         /// Fix of errors that are in the dates of FamilyTreeBuilder.

@@ -104,22 +104,22 @@ namespace GKUI
             fResourceManager = new GKResourceManager("GKResources", typeof(MainWin).Assembly);
             this.fOptions = GlobalOptions.Instance;
 
-            this.tbFileNew.Image = global::GKResources.iCreateNew;
-            this.tbFileLoad.Image = global::GKResources.iLoad;
-            this.tbFileSave.Image = global::GKResources.iSave;
-            this.tbRecordAdd.Image = global::GKResources.iRecNew;
-            this.tbRecordEdit.Image = global::GKResources.iRecEdit;
-            this.tbRecordDelete.Image = global::GKResources.iRecDelete;
-            this.tbFilter.Image = global::GKResources.iFilter;
-            this.tbTreeAncestors.Image = global::GKResources.iTreeAncestry;
-            this.tbTreeDescendants.Image = global::GKResources.iTreeDescendants;
-            this.tbTreeBoth.Image = global::GKResources.iTreeBoth;
-            this.tbPedigree.Image = global::GKResources.iScroll;
-            this.tbStats.Image = global::GKResources.iTable;
-            this.tbPrev.Image = global::GKResources.iLeft1;
-            this.tbNext.Image = global::GKResources.iRight1;
-            this.tbDocPreview.Image = global::GKResources.iPreview;
-            this.tbDocPrint.Image = global::GKResources.iPrint;
+            this.tbFileNew.Image = GKResources.iCreateNew;
+            this.tbFileLoad.Image = GKResources.iLoad;
+            this.tbFileSave.Image = GKResources.iSave;
+            this.tbRecordAdd.Image = GKResources.iRecNew;
+            this.tbRecordEdit.Image = GKResources.iRecEdit;
+            this.tbRecordDelete.Image = GKResources.iRecDelete;
+            this.tbFilter.Image = GKResources.iFilter;
+            this.tbTreeAncestors.Image = GKResources.iTreeAncestry;
+            this.tbTreeDescendants.Image = GKResources.iTreeDescendants;
+            this.tbTreeBoth.Image = GKResources.iTreeBoth;
+            this.tbPedigree.Image = GKResources.iScroll;
+            this.tbStats.Image = GKResources.iTable;
+            this.tbPrev.Image = GKResources.iLeft1;
+            this.tbNext.Image = GKResources.iRight1;
+            this.tbDocPreview.Image = GKResources.iPreview;
+            this.tbDocPrint.Image = GKResources.iPrint;
 
             this.fActiveWidgets = new List<WidgetInfo>();
 
@@ -732,10 +732,9 @@ namespace GKUI
             {
                 int num = base.MdiChildren.Length;
                 for (int i = 0; i < num; i++) {
-                    Form child = base.MdiChildren[i];
-
-                    if (child is IBaseWindow) {
-                        ((IBaseWindow)child).CriticalSave();
+                    IBaseWindow baseWin = base.MdiChildren[i] as IBaseWindow;
+                    if (baseWin != null) {
+                        baseWin.CriticalSave();
                     }
                 }
             } catch (Exception ex) {

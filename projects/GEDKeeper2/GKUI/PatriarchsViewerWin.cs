@@ -76,7 +76,7 @@ namespace GKUI
             }
         }
 
-        private static void PL_ConvertGraphToArborSystem(Graph graph, ArborSystem sys)
+        private static void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
         {
             foreach (Vertex vtx in graph.Vertices) {
                 ArborNode arbNode = sys.addNode(vtx.Sign);

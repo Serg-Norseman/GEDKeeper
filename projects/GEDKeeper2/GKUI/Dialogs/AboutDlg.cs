@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnClose.Image = global::GKResources.iBtnAccept;
+            this.btnClose.Image = GKResources.iBtnAccept;
 
             this.Text = LangMan.LS(LSID.LSID_MIAbout);
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);

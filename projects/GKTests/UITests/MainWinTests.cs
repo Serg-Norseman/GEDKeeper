@@ -22,6 +22,7 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -30,7 +31,6 @@ using GKCore.Types;
 using GKTests.Service;
 using GKUI;
 using GKUI.Charts;
-using GKUI.Controls;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -122,10 +122,14 @@ namespace GKTests.UITests
 
 
             // Stage 25: call to CircleChartWin (required the base, selected person)
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 25.0");
             ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
             CircleChartWin_Tests(fMainWin.ActiveMdiChild, "Stage 25");
 
             // Stage 26: call to CircleChartWin (required the base, selected person)
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 26.0");
             ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
             CircleChartWin_Tests(fMainWin.ActiveMdiChild, "Stage 26");
 

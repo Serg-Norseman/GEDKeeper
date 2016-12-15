@@ -119,10 +119,9 @@ namespace GKUI
                 return this.fShieldState;
             }
             set {
-                if (this.fShieldState != value) {
-                    this.fShieldState = value;
-                    this.RefreshLists(false);
-                }
+                if (this.fShieldState == value) return;
+                this.fShieldState = value;
+                this.RefreshLists(false);
             }
         }
 
@@ -1817,7 +1816,7 @@ namespace GKUI
 
         public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -1858,7 +1857,7 @@ namespace GKUI
 
         public bool ModifyNote(ref GEDCOMNoteRecord noteRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -1898,7 +1897,7 @@ namespace GKUI
 
         public bool ModifySource(ref GEDCOMSourceRecord sourceRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -1938,7 +1937,7 @@ namespace GKUI
 
         public bool ModifySourceCitation(ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -1971,7 +1970,7 @@ namespace GKUI
 
         public bool ModifyRepository(ref GEDCOMRepositoryRecord repRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -2011,7 +2010,7 @@ namespace GKUI
 
         public bool ModifyGroup(ref GEDCOMGroupRecord groupRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -2051,7 +2050,7 @@ namespace GKUI
 
         public bool ModifyResearch(ref GEDCOMResearchRecord researchRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -2091,7 +2090,7 @@ namespace GKUI
 
         public bool ModifyTask(ref GEDCOMTaskRecord taskRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -2131,7 +2130,7 @@ namespace GKUI
 
         public bool ModifyCommunication(ref GEDCOMCommunicationRecord commRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();
@@ -2171,7 +2170,7 @@ namespace GKUI
 
         public bool ModifyLocation(ref GEDCOMLocationRecord locRec)
         {
-            bool result = false;
+            bool result;
 
             try {
                 this.fContext.BeginUpdate();

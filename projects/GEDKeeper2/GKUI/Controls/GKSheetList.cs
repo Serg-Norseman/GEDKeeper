@@ -125,35 +125,35 @@ namespace GKUI.Controls
                 throw new ArgumentNullException("owner");
 
             this.fBtnMoveDown = new ToolStripButton();
-            this.fBtnMoveDown.Image = global::GKResources.iDown;
+            this.fBtnMoveDown.Image = GKResources.iDown;
             this.fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
             this.fBtnMoveDown.Click += this.ItemMoveDown;
 
             this.fBtnMoveUp = new ToolStripButton();
-            this.fBtnMoveUp.Image = global::GKResources.iUp;
+            this.fBtnMoveUp.Image = GKResources.iUp;
             this.fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
             this.fBtnMoveUp.Click += this.ItemMoveUp;
 
             this.fBtnLinkJump = new ToolStripButton();
-            this.fBtnLinkJump.Image = global::GKResources.iToMan;
+            this.fBtnLinkJump.Image = GKResources.iToMan;
             this.fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
             this.fBtnLinkJump.Click += this.ItemJump;
 
             this.fBtnDelete = new ToolStripButton();
             this.fBtnDelete.Name = "btnDelete";
-            this.fBtnDelete.Image = global::GKResources.iRecDelete;
+            this.fBtnDelete.Image = GKResources.iRecDelete;
             this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
             this.fBtnDelete.Click += this.ItemDelete;
 
             this.fBtnEdit = new ToolStripButton();
             this.fBtnEdit.Name = "btnEdit";
-            this.fBtnEdit.Image = global::GKResources.iRecEdit;
+            this.fBtnEdit.Image = GKResources.iRecEdit;
             this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
             this.fBtnEdit.Click += this.ItemEdit;
 
             this.fBtnAdd = new ToolStripButton();
             this.fBtnAdd.Name = "btnAdd";
-            this.fBtnAdd.Image = global::GKResources.iRecNew;
+            this.fBtnAdd.Image = GKResources.iRecNew;
             this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
             this.fBtnAdd.Click += this.ItemAdd;
 
@@ -217,7 +217,7 @@ namespace GKUI.Controls
         }
 
         /// <summary>
-        /// The library NUnitForms has a bug in the class Finder<T>.
+        /// The library NUnitForms has a bug in the class Finder.
         /// So we need unique names for hierarchical included components.
         /// TODO: Need to fix this bug in NUnitForms.
         /// </summary>

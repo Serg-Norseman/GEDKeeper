@@ -53,14 +53,20 @@ namespace GKUI.Dialogs
         {
             this.fMultimediaLink = value;
 
-            Image img = null;
             if (this.fMultimediaLink != null && this.fMultimediaLink.Value != null)
             {
                 GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)this.fMultimediaLink.Value;
-                img = this.fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
-            }
+                Image img = this.fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
 
-            this.imageView1.OpenImage(img);
+                if (img != null) {
+                    this.imageView1.OpenImage(img);
+
+                    if (this.fMultimediaLink.IsPrimaryCutout) {
+                        ExtRect rt = this.fMultimediaLink.CutoutPosition.Value;
+                        this.imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
+                    }
+                }
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -91,8 +97,8 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
 
             this.fBase = aBase;
             this.imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;

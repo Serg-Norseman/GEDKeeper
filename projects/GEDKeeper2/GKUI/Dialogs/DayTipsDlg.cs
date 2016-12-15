@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -38,8 +37,8 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.Image1.Image = global::GKResources.iTipsLight;
-            this.btnClose.Image = global::GKResources.iBtnCancel;
+            this.Image1.Image = GKResources.iTipsLight;
+            this.btnClose.Image = GKResources.iBtnCancel;
 
             this.fTips = new StringList();
 

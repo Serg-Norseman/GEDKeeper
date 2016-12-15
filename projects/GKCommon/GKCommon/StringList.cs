@@ -77,10 +77,9 @@ namespace GKCommon
                 return this.fCaseSensitive;
             }
             set {
-                if (value != this.fCaseSensitive) {
-                    this.fCaseSensitive = value;
-                    if (this.fSorted) this.Sort();
-                }
+                if (value == this.fCaseSensitive) return;
+                this.fCaseSensitive = value;
+                if (this.fSorted) this.Sort();
             }
         }
 
@@ -135,10 +134,9 @@ namespace GKCommon
                 return this.fSorted;
             }
             set {
-                if (this.fSorted != value) {
-                    if (value) this.Sort();
-                    this.fSorted = value;
-                }
+                if (this.fSorted == value) return;
+                if (value) this.Sort();
+                this.fSorted = value;
             }
         }
 

@@ -70,8 +70,8 @@ namespace GKUI
             this.InitializeComponent();
             base.MdiParent = MainWin.Instance;
 
-            this.tbImageSave.Image = global::GKResources.iSaveImage;
-            this.tbModes.Image = global::GKResources.iTools;
+            this.tbImageSave.Image = GKResources.iSaveImage;
+            this.tbModes.Image = GKResources.iTools;
 
             this.miModeBoth.Tag = TreeChartBox.ChartKind.ckBoth;
             this.miModeAncestors.Tag = TreeChartBox.ChartKind.ckAncestors;

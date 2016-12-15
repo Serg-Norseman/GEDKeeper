@@ -57,8 +57,8 @@ namespace GKCore.Lists
                 return -1;
             }
 
-            IComparable cv1 = this.fDate as IComparable;
-            IComparable cv2 = otherItem.fDate as IComparable;
+            IComparable cv1 = this.fDate;
+            IComparable cv2 = otherItem.fDate;
 
             int compRes;
             if (cv1 != null && cv2 != null)

@@ -54,10 +54,10 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
-            this.btnPlaceAdd.Image = global::GKResources.iRecNew;
-            this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
+            this.btnPlaceAdd.Image = GKResources.iRecNew;
+            this.btnPlaceDelete.Image = GKResources.iRecDelete;
 
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)
@@ -103,13 +103,13 @@ namespace GKUI.Dialogs
             this.toolTip1.SetToolTip(this.btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
         }
 
-        private GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
+        private static GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
         {
             GEDCOMCalendar result = (GEDCOMCalendar)(((GKComboItem)comboBox.SelectedItem).Tag);
             return result;
         }
 
-        private void SetComboCalendar(ComboBox comboBox, GEDCOMCalendar calendar)
+        private static void SetComboCalendar(ComboBox comboBox, GEDCOMCalendar calendar)
         {
             foreach (object item in comboBox.Items) {
                 GKComboItem comboItem = (GKComboItem)item;

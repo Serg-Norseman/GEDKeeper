@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GKCore;
 using NUnit.Framework;
 
@@ -91,8 +90,7 @@ namespace GKTests.GKCore
             bytes[2] = (byte)((count >= 3) ? source[2] : 0);
             bytes[3] = (byte)((count >= 4) ? source[3] : 0);
 
-            uint dest;
-            dest = (uint)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
+            uint dest = (uint)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
             return dest;
         }
     }

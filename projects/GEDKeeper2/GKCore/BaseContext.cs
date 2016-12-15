@@ -283,7 +283,7 @@ namespace GKCore
                         GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
-                            return birthDate -= 20;
+                            return birthDate - 20;
                         }
                     }
                 }
@@ -319,7 +319,7 @@ namespace GKCore
                 }
 
                 if (maxBirth != 0) {
-                    return maxBirth += 1;
+                    return maxBirth + 1;
                 }
             }
 
@@ -707,7 +707,7 @@ namespace GKCore
         {
             stream = null;
             if (fileReference == null) return;
-            
+
             string targetFn = "";
             MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
 
@@ -1077,12 +1077,10 @@ namespace GKCore
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                byte gsMajVer, gsMinVer;
-
                 byte[] gsHeader = new byte[8];
                 fileStream.Read(gsHeader, 0, 8);
-                gsMajVer = gsHeader[6];
-                gsMinVer = gsHeader[7];
+                byte gsMajVer = gsHeader[6];
+                byte gsMinVer = gsHeader[7];
                 gsHeader[6] = 65;
                 gsHeader[7] = 65;
                 string gsh = Encoding.ASCII.GetString(gsHeader);

@@ -35,9 +35,9 @@ namespace Externals.IniFiles
             get { return commentChar; }
             set
             {
-                if (commentChar != value) {
-                    commentChar = value; Rewrite();
-                }
+                if (commentChar == value) return;
+                commentChar = value;
+                Rewrite();
             }
         }
 
@@ -47,9 +47,9 @@ namespace Externals.IniFiles
             get { return comment; }
             set
             {
-                if (comment != value) {
-                    comment = value; Rewrite();
-                }
+                if (comment == value) return;
+                comment = value;
+                Rewrite();
             }
         }
 

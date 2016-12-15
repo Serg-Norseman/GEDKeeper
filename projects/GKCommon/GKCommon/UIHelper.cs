@@ -79,7 +79,7 @@ namespace GKCommon
 
         public static string GetSaveFile(string filter)
         {
-            return GetSaveFile("", "", filter, 1, "", "", true);
+            return GetSaveFile("", "", filter, 1, "", "");
         }
 
         public static string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,

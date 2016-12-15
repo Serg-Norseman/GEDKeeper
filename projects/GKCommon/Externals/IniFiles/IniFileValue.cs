@@ -11,8 +11,7 @@ namespace Externals.IniFiles
         private string textOnTheRight; // only if qoutes are on, e.g. "Name = 'Jack' text-on-the-right"
         private string inlineComment, inlineCommentChar;
 
-        private IniFileValue()
-            : base()
+        private IniFileValue() : base()
         {
         }
         /// <summary>Initializes a new instance IniFileValue.</summary>
@@ -155,13 +154,13 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Formats this element using given formatting string</summary>
-        /// <param name="formatting">Formatting template, where '?'-key, '='-equality sign, '$'-value, ';'-inline comments.</param>
-        public void Format(string formatting)
+        /// <param name="pFormatting">Formatting template, where '?'-key, '='-equality sign, '$'-value, ';'-inline comments.</param>
+        public void Format(string pFormatting)
         {
             StringBuilder build = new StringBuilder();
-            for (int i = 0; i < formatting.Length; i++)
+            for (int i = 0; i < pFormatting.Length; i++)
             {
-                char currC = formatting[i];
+                char currC = pFormatting[i];
                 if (currC == '?')
                     build.Append(key);
                 else if (currC == '$') {
@@ -176,7 +175,7 @@ namespace Externals.IniFiles
                     build.Append(IniFileSettings.EqualsString);
                 else if (currC == ';')
                     build.Append(inlineCommentChar + inlineComment);
-                else if (char.IsWhiteSpace(formatting[i]))
+                else if (char.IsWhiteSpace(pFormatting[i]))
                     build.Append(currC);
             }
             Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? textOnTheRight : "");
@@ -190,12 +189,12 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Creates a new IniFileValue object basing on a key and a value and the formatting  of this IniFileValue.</summary>
-        /// <param name="key">Name of value</param>
-        /// <param name="value">Value</param>
-        public IniFileValue CreateNew(string key, string value)
+        /// <param name="pKey">Name of value</param>
+        /// <param name="pValue">Value</param>
+        public IniFileValue CreateNew(string pKey, string pValue)
         {
             IniFileValue ret = new IniFileValue();
-            ret.key = key; ret.value = value;
+            ret.key = pKey; ret.value = pValue;
             if (IniFileSettings.PreserveFormatting) {
                 ret.formatting = formatting;
                 if (IniFileSettings.AllowInlineComments)
@@ -215,9 +214,9 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Sets both key and values. Recommended when both properties have to be changed.</summary>
-        public void Set(string key, string value)
+        public void Set(string pKey, string pValue)
         {
-            this.key = key; this.value = value;
+            this.key = pKey; this.value = pValue;
             Format();
         }
 

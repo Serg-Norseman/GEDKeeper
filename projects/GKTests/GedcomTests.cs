@@ -42,8 +42,6 @@ namespace GKTests.GKCommon
         public void SetUp()
         {
             _context = TestStubs.CreateContext();
-            GEDCOMTree tree = _context.Tree;
-            
             TestStubs.FillContext(_context);
         }
 
@@ -411,6 +409,11 @@ namespace GKTests.GKCommon
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsStillborn, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsStillborn)));
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsSubmitted, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsSubmitted)));
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsUncleared, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsUncleared)));
+
+            //
+
+            Assert.IsTrue(GEDCOMUtils.IsUnicodeEncoding(Encoding.UTF8));
+            Assert.IsFalse(GEDCOMUtils.IsUnicodeEncoding(Encoding.ASCII));
         }
 
         private GEDCOMTag TagConstructorTest(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
@@ -421,7 +424,7 @@ namespace GKTests.GKCommon
         [Test]
         public void GEDCOMFactory_Tests()
         {
-            TagConstructor tagConst = new TagConstructor(TagConstructorTest);
+            TagConstructor tagConst = TagConstructorTest;
             Assert.AreEqual(null, tagConst.Invoke(null, null, "x", "x"));
 
             //
@@ -1738,9 +1741,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("Ivanovich", patronymic);
 
 
-            GEDCOMPersonalName persName;
-
-            persName = GEDCOMPersonalName.Create(iRec.Owner, iRec, "", "") as GEDCOMPersonalName;
+            GEDCOMPersonalName persName = GEDCOMPersonalName.Create(iRec.Owner, iRec, "", "") as GEDCOMPersonalName;
             iRec.AddPersonalName(persName);
 
             persName = iRec.PersonalNames[0];
@@ -2564,16 +2565,16 @@ namespace GKTests.GKCommon
             mediaRec.AddTag("FILE", "", null);
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             Assert.IsNotNull(fileRef);
-            
+
             fileRef.Title = "File Title 2";
             Assert.AreEqual("File Title 2", fileRef.Title);
-            
+
             fileRef.LinkFile("sample.png");
             fileRef.MediaType = GEDCOMMediaType.mtManuscript;
             Assert.AreEqual("sample.png", fileRef.StringValue);
             Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, fileRef.MultimediaFormat);
             Assert.AreEqual(GEDCOMMediaType.mtManuscript, fileRef.MediaType);
-            
+
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
 

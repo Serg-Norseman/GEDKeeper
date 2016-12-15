@@ -28,8 +28,8 @@ namespace GKCommon.Controls
     {
         public bool ShowToolbar
         {
-            get { return this.toolStrip.Visible; }
-            set { this.toolStrip.Visible = value; }
+            get { return toolStrip.Visible; }
+            set { toolStrip.Visible = value; }
         }
 
         public ImageBoxSelectionMode SelectionMode
@@ -49,21 +49,24 @@ namespace GKCommon.Controls
         {
             InitializeComponent();
 
-            this.FillZoomLevels();
+            FillZoomLevels();
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            imageBox.LimitSelectionToImage = true;
+            imageBox.AllowDoubleClick = false;
+            imageBox.AllowZoom = true;
         }
 
         public void OpenImage(Image image)
         {
             if (image == null) return;
 
+            imageBox.BeginUpdate();
             imageBox.Image = image;
             imageBox.ZoomToFit();
+            imageBox.EndUpdate();
 
-            this.UpdateZoomLevels();
+            UpdateZoomLevels();
         }
 
         private void FillZoomLevels()
@@ -82,17 +85,12 @@ namespace GKCommon.Controls
         private void btnSizeToFit_Click(object sender, EventArgs e)
         {
             imageBox.ZoomToFit();
-            this.UpdateZoomLevels();
+            UpdateZoomLevels();
         }
 
         private void imageBox_ZoomChanged(object sender, EventArgs e)
         {
-            this.UpdateZoomLevels();
-        }
-
-        private void imageBox_ZoomLevelsChanged(object sender, EventArgs e)
-        {
-            this.FillZoomLevels();
+            UpdateZoomLevels();
         }
 
         private void btnZoomIn_Click(object sender, EventArgs e)

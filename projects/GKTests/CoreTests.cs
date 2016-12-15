@@ -1308,12 +1308,12 @@ namespace GKTests.GKCore
             placeObj.Dispose();
             Assert.IsNotNull(placeObj);
 
-            ///
+            //
 
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            ///
+            //
 
             List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
             TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
@@ -1322,7 +1322,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(null, TreeTools.TreeWalkMode.twmAll, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, null); });
 
-            ///
+            //
 
             List<TreeTools.CheckObj> checksList = new List<TreeTools.CheckObj>();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
@@ -1330,11 +1330,11 @@ namespace GKTests.GKCore
 
             TreeTools.CheckBase(new BaseWindowMock(), checksList);
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
 
-            ///
+            //
 
             ValuesCollection valuesCollection = new ValuesCollection();
             ProgressMock progress = new ProgressMock();
@@ -1343,27 +1343,27 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, null); });
             TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(fContext.Tree, null, null); });
 
-            ///
+            //
 
             BaseWindowMock basewin = new BaseWindowMock();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(basewin, null); });
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(fContext.Tree, null); });
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(null, null, 0.0f, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, null, 0.0f, null, null); });
@@ -1371,12 +1371,12 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, fContext.Tree, 0.0f, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, fContext.Tree, 0.0f, null, progress); });
 
-            ///
+            //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext.Tree, null, null); });
 
-            ///
+            //
 
             StringList placesList = new StringList();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(null, null, null); });

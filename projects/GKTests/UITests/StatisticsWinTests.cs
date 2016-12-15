@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Collections.Generic;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -37,7 +36,6 @@ namespace GKTests.UITests
     [TestFixture]
     public class StatisticsWinTests : CustomWindowTest
     {
-        private IBaseContext fContext;
         private IBaseWindow fBase;
         private StatisticsWin fDialog;
 
@@ -46,7 +44,6 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fContext = fBase.Context;
 
             fDialog = new StatisticsWin(fBase, new List<GEDCOMRecord>());
             fDialog.Show();

@@ -254,8 +254,6 @@ namespace GKCommon.GEDCOM
         {
             if (otherName == null) return 0.0f;
 
-            float match = 0.0f;
-
             int parts = 0;
             float matches = 0;
             bool surnameMatched = false;
@@ -297,7 +295,7 @@ namespace GKCommon.GEDCOM
                 if (otherName.Pieces.Nickname == this.Pieces.Nickname) matches++;
             }
 
-            match = (parts == 0) ? 0.0f : (matches / parts) * 100.0f;
+            float match = (parts == 0) ? 0.0f : (matches / parts) * 100.0f;
 
             // heavily penalise the surname not matching
             // for this to work correctly better matching needs to be

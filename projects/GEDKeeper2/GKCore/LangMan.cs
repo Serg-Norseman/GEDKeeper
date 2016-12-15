@@ -1547,7 +1547,7 @@ namespace GKCore
             /* 736 */ "Format \"Maiden (Married)\"",
             /* 737 */ "Format \"Married (Maiden)\"",
             /* 738 */ "Format \"Maiden\"",
-            /* 739 */ "Format \"Married\"",
+            /* 739 */ "Format \"Married\""
         };
 
         private static readonly LangManager fLangMan = new LangManager();

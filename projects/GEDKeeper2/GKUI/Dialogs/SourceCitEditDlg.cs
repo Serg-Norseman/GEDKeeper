@@ -147,9 +147,9 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
-            this.btnSourceAdd.Image = global::GKResources.iRecNew;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
+            this.btnSourceAdd.Image = GKResources.iRecNew;
 
             this.fBase = aBase;
 

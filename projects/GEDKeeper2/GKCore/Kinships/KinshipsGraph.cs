@@ -63,9 +63,7 @@ namespace GKCore.Kinships
 
         public IVertex AddIndividual(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) return null;
-
-            return this.fGraph.AddVertex(iRec.XRef, iRec);
+            return (iRec == null) ? null : this.fGraph.AddVertex(iRec.XRef, iRec);
         }
 
         public IVertex FindVertex(string sign)

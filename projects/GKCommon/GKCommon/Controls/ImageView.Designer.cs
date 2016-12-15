@@ -110,7 +110,6 @@
         	this.imageBox.Size = new System.Drawing.Size(944, 361);
         	this.imageBox.TabIndex = 0;
         	this.imageBox.ZoomChanged += new System.EventHandler(this.imageBox_ZoomChanged);
-        	this.imageBox.ZoomLevelsChanged += new System.EventHandler(this.imageBox_ZoomLevelsChanged);
         	// 
         	// ImageView
         	// 

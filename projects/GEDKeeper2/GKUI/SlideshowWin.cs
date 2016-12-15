@@ -46,9 +46,9 @@ namespace GKUI
         {
             this.InitializeComponent();
 
-            this.tbStart.Image = global::GKResources.iStart;
-            this.tbPrev.Image = global::GKResources.iLeft1;
-            this.tbNext.Image = global::GKResources.iRight1;
+            this.tbStart.Image = GKResources.iStart;
+            this.tbPrev.Image = GKResources.iLeft1;
+            this.tbNext.Image = GKResources.iRight1;
 
             this.SuspendLayout();
             this.fImageCtl = new ImageBox();

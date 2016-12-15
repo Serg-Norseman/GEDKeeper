@@ -39,8 +39,8 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            this.btnAccept.Image = global::GKResources.iBtnAccept;
-            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnAccept.Image = GKResources.iBtnAccept;
+            this.btnCancel.Image = GKResources.iBtnCancel;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

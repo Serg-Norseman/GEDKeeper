@@ -444,12 +444,10 @@ namespace GKPedigreeImporterPlugin
 
         private GEDCOMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
         {
-            GEDCOMIndividualRecord result;
-
             string iName, iPatr, iSurname, bd, dd;
             this.DefinePersonName(str, out iName, out iPatr, out iSurname, out bd, out dd);
 
-            result = this.fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
+            GEDCOMIndividualRecord result = this.fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
 
             if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
                 this.fBase.CheckPersonSex(result);
@@ -667,9 +665,7 @@ namespace GKPedigreeImporterPlugin
 
         private static string PrepareLine(string line)
         {
-            string result;
-
-            result = line.Replace('–', '-');
+            string result = line.Replace('–', '-');
             result = result.Replace('', '+'); // some formats of the death date prefix
 
             return result.Trim();
@@ -701,7 +697,7 @@ namespace GKPedigreeImporterPlugin
                                 rawLine.Type = RawLineType.rltRomeGeneration;
                             } else {
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
-                                string dummy = "";
+                                string dummy;
 
                                 if (ImportUtils.IsPersonLine_DAboville(txt, out dummy))
                                 {

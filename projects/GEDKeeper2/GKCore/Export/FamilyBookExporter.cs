@@ -584,27 +584,20 @@ namespace GKCore.Export
         void IPdfPageEvent.OnEndPage(PdfWriter writer, Document document)
         {
             if (writer.PageNumber == 1) return;
-            
-            try
-            {
-                PdfContentByte cb = writer.DirectContent;
-                Rectangle pageSize = document.PageSize;
-                string text = fFooter + writer.PageNumber;
-                
-                cb.SaveState();
-                cb.BeginText();
 
-                cb.SetFontAndSize(fFont, 9);
-                cb.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, text,
-                                   pageSize.GetRight(document.RightMargin), pageSize.GetBottom(document.BottomMargin), 0);
-                
-                cb.EndText();
-                cb.RestoreState();
-            }
-            catch (DocumentException)
-            {
-                throw;
-            }
+            PdfContentByte cb = writer.DirectContent;
+            Rectangle pageSize = document.PageSize;
+            string text = fFooter + writer.PageNumber;
+
+            cb.SaveState();
+            cb.BeginText();
+
+            cb.SetFontAndSize(fFont, 9);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, text,
+                               pageSize.GetRight(document.RightMargin), pageSize.GetBottom(document.BottomMargin), 0);
+
+            cb.EndText();
+            cb.RestoreState();
         }
 
         void IPdfPageEvent.OnParagraph(PdfWriter writer, Document document, float paragraphPosition) { }

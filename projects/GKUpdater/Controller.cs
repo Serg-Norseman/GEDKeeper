@@ -133,7 +133,7 @@ namespace GKUpdater
                 }
                 catch (XmlException ex)
                 {
-                    Logger.LogWrite("Controller.CheckForUpdates(): " + ex.ToString());
+                    Logger.LogWrite("Controller.CheckForUpdates(): " + ex.Message);
                 }
             }
         }
@@ -165,7 +165,7 @@ namespace GKUpdater
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWrite("Controller.CheckApplicationUpdates(): " + ex.ToString());
+                    Logger.LogWrite("Controller.CheckApplicationUpdates(): " + ex.Message);
                 }
             }
 
@@ -190,7 +190,7 @@ namespace GKUpdater
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWrite("Controller.CheckExtensions(): " + ex.ToString());
+                    Logger.LogWrite("Controller.CheckExtensions(): " + ex.Message);
                 }
             }
 
@@ -247,7 +247,7 @@ namespace GKUpdater
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWrite("Controller.DownloadFile(): " + ex.ToString());
+                    Logger.LogWrite("Controller.DownloadFile(): " + ex.Message);
                     return false;
                 }
             }
@@ -278,7 +278,7 @@ namespace GKUpdater
             }
             catch (WebException ex)
             {
-                Logger.LogWrite("Controller.InternalDownload.1(): " + ex.ToString());
+                Logger.LogWrite("Controller.InternalDownload.1(): " + ex.Message);
             }
             finally
             {
@@ -316,13 +316,13 @@ namespace GKUpdater
                     stmOut.Write(buffer, 0, bytesRead);
                     localSize += bytesRead;
 
-                    float progress = (localSize * 100.0f)/ (float)fileSize;
+                    float progress = (localSize * 100.0f) / fileSize;
                     OnDownloadProgress(new UpdateEventArgs(url, Math.Min((int)progress, 100)));
                 } while (bytesRead > 0);
             }
             catch (WebException ex)
             {
-                Logger.LogWrite("Controller.InternalDownload.2(): " + ex.ToString());
+                Logger.LogWrite("Controller.InternalDownload.2(): " + ex.Message);
             }
             finally
             {
@@ -337,7 +337,7 @@ namespace GKUpdater
             return (int)localSize;
         }
 
-        private long GetFileSize(string url)
+        private static long GetFileSize(string url)
         {
             long fileSize = 0;
 
@@ -352,7 +352,7 @@ namespace GKUpdater
             }
             catch (WebException ex)
             {
-                Logger.LogWrite("Controller.GetFileSize(): " + ex.ToString());
+                Logger.LogWrite("Controller.GetFileSize(): " + ex.Message);
             }
             finally
             {

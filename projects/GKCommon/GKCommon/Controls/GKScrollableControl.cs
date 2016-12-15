@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -79,23 +78,23 @@ namespace GKCommon.Controls
         /// <summary>
         ///   Raises the <see cref="System.Windows.Forms.ScrollableControl.Scroll" /> event.
         /// </summary>
-        /// <param name="e">
+        /// <param name="se">
         ///   A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
         /// </param>
         protected override void OnScroll(ScrollEventArgs se)
         {
-            this.Invalidate();
+            Invalidate();
 
             if (se.Type != ScrollEventType.EndScroll /*&& this.fValidEvent*/)
             {
                 switch (se.ScrollOrientation)
                 {
                     case ScrollOrientation.HorizontalScroll:
-                        this.ScrollByOffset(new Size(se.NewValue + this.AutoScrollPosition.X, 0));
+                        ScrollByOffset(new Size(se.NewValue + this.AutoScrollPosition.X, 0));
                         break;
 
                     case ScrollOrientation.VerticalScroll:
-                        this.ScrollByOffset(new Size(0, se.NewValue + this.AutoScrollPosition.Y));
+                        ScrollByOffset(new Size(0, se.NewValue + this.AutoScrollPosition.Y));
                         break;
                 }
             }
@@ -129,7 +128,7 @@ namespace GKCommon.Controls
         protected void AdjustScroll(int x, int y)
         {
             Point scrollPosition = new Point(this.HorizontalScroll.Value + x, this.VerticalScroll.Value + y);
-            this.UpdateScrollPosition(scrollPosition);
+            UpdateScrollPosition(scrollPosition);
         }
 
         /// <summary>
@@ -138,9 +137,9 @@ namespace GKCommon.Controls
         /// <param name="position">The position.</param>
         protected void UpdateScrollPosition(Point position)
         {
-            this.AutoScrollPosition = position;
-            this.Invalidate();
-            this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            AutoScrollPosition = position;
+            Invalidate();
+            OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
         }
 
         protected void AdjustViewPort(Size imageSize, bool noRedraw = false)
@@ -149,7 +148,7 @@ namespace GKCommon.Controls
                 this.AutoScrollMinSize = new Size(imageSize.Width + this.Padding.Horizontal, imageSize.Height + this.Padding.Vertical);
             }
 
-            if (!noRedraw) this.Invalidate();
+            if (!noRedraw) Invalidate();
         }
     }
 }

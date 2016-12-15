@@ -113,25 +113,28 @@ namespace GKCore
 
         private static byte[] Decode(byte[] data)
         {
-            int num = (data != null) ? data.Length : 0;
             byte[] result = null;
-            uint I;
 
-            switch (num) {
-                case 2:
-                    I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6));
-                    result = MoveL2S(I, 1);
-                    break;
+            if (data != null)
+            {
+                uint I;
+                switch (data.Length)
+                {
+                    case 2:
+                        I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6));
+                        result = MoveL2S(I, 1);
+                        break;
 
-                case 3:
-                    I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12));
-                    result = MoveL2S(I, 2);
-                    break;
+                    case 3:
+                        I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12));
+                        result = MoveL2S(I, 2);
+                        break;
 
-                case 4:
-                    I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12) + (U1_MAP[data[3]] << 18));
-                    result = MoveL2S(I, 3);
-                    break;
+                    case 4:
+                        I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12) + (U1_MAP[data[3]] << 18));
+                        result = MoveL2S(I, 3);
+                        break;
+                }
             }
             
             return result;

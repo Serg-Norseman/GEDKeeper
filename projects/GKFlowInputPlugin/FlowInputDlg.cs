@@ -71,7 +71,7 @@ namespace GKFlowInputPlugin
         {
             this.InitializeComponent();
 
-            //this.btnClose.Image = global::GKResources.iBtnCancel;
+            //this.btnClose.Image = GKResources.iBtnCancel;
 
             this.fPlugin = plugin;
             this.fLangMan = plugin.LangMan;

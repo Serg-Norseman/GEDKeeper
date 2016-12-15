@@ -129,7 +129,7 @@ namespace GKUI.Dialogs
 
             double max = this.ProgressBar1.Maximum;
             double pos = this.fVal;
-            if (pos == 0) pos = 1;
+            if (pos == 0.0d) pos = 1;
 
             TimeSpan passTime = DateTime.Now - this.fStartTime;
             TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));
@@ -194,7 +194,7 @@ namespace GKUI.Dialogs
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
         private bool fFormLoaded = false;
         private readonly Thread fThread;
-        private IntPtr fParentHandle;
+        private readonly IntPtr fParentHandle;
 
         public ProgressProxy(string title, int max)
         {
@@ -217,7 +217,7 @@ namespace GKUI.Dialogs
         {
             fProgressForm = new ProgressDlg();
             fProgressForm.DoInit(fTitle, fMax);
-            fProgressForm.Load += new EventHandler(ProgressForm_Load);
+            fProgressForm.Load += ProgressForm_Load;
 
             //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
             UIHelper.CenterFormByParent(fProgressForm, this.fParentHandle);
