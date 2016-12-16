@@ -60,7 +60,7 @@ namespace GKUI.Charts
 
         private void DoNavRefresh()
         {
-            EventHandler eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
+            var eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
             if (eventHandler == null) return;
 
             eventHandler(this, null);

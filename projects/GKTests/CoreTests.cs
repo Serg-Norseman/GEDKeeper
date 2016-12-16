@@ -1660,17 +1660,21 @@ namespace GKTests.GKCore
             GKUtils.ShowLocationInfo(locRec, summary);
         }
 
+        private void EWriter_Test(CustomWriter writer)
+        {
+        }
+
         [Test]
         public void Export_Tests()
         {
             BaseWindowMock baseWin = new BaseWindowMock();
 
             using (HTMLWriter writer = new HTMLWriter()) {
-
+                EWriter_Test(writer);
             }
 
             using (RTFWriter writer = new RTFWriter()) {
-
+                EWriter_Test(writer);
             }
 
             /*using (PDFWriter writer = new PDFWriter()) {

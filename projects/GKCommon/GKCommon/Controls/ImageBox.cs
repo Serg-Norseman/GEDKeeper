@@ -861,8 +861,8 @@ namespace GKCommon.Controls
         /// <param name="viewPort"> The view port. </param>
         private void DrawDropShadow(Graphics g, Rectangle viewPort)
         {
-            Rectangle rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
-            Rectangle bottomEdge = new Rectangle(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
+            var rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
+            var bottomEdge = new Rectangle(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
 
             using (Brush brush = new SolidBrush(fImageBorderColor))
                 g.FillRectangles(brush, new[] { rightEdge, bottomEdge });
@@ -877,7 +877,7 @@ namespace GKCommon.Controls
         {
             g.SetClip(viewPort, CombineMode.Exclude); // make sure the inside glow doesn't appear
 
-            using (GraphicsPath path = new GraphicsPath())
+            using (var path = new GraphicsPath())
             {
                 path.AddRectangle(viewPort);
 
@@ -888,7 +888,7 @@ namespace GKCommon.Controls
                 {
                     int alpha = feather - ((feather / glowSize) * i);
 
-                    using (Pen pen = new Pen(Color.FromArgb(alpha, fImageBorderColor), i) { LineJoin = LineJoin.Round })
+                    using (var pen = new Pen(Color.FromArgb(alpha, fImageBorderColor), i) { LineJoin = LineJoin.Round })
                         g.DrawPath(pen, path);
                 }
             }
@@ -925,7 +925,7 @@ namespace GKCommon.Controls
             Rectangle viewPort = GetImageViewPort();
             viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
 
-            using (Pen borderPen = new Pen(fImageBorderColor))
+            using (var borderPen = new Pen(fImageBorderColor))
                 graphics.DrawRectangle(borderPen, viewPort);
 
             switch (fImageBorderStyle)
@@ -956,7 +956,7 @@ namespace GKCommon.Controls
             using (Brush brush = new SolidBrush(Color.FromArgb(128, fSelectionColor)))
                 e.Graphics.FillRectangle(brush, rect);
 
-            using (Pen pen = new Pen(fSelectionColor))
+            using (var pen = new Pen(fSelectionColor))
                 e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
 
             e.Graphics.ResetClip();
@@ -1170,7 +1170,7 @@ namespace GKCommon.Controls
             Rectangle innerRectangle = GetInsideViewPort(false);
 
             // draw the background
-            using (SolidBrush brush = new SolidBrush(BackColor))
+            using (var brush = new SolidBrush(BackColor))
                 e.Graphics.FillRectangle(brush, innerRectangle);
 
             // draw the image

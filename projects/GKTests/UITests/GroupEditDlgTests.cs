@@ -20,9 +20,12 @@
 
 #if !__MonoCS__
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
+using GKTests.Service;
+using GKUI.Controls;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -62,6 +65,11 @@ namespace GKTests.UITests
         {
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fGroupRecord, fDialog.Group);
+
+            var sheetTester = new GKSheetListTester("fMembersList", fDialog);
+            EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
+            Assert.IsTrue(buttons.ContainsAll(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump));
+            Assert.IsFalse(sheetTester.Properties.ReadOnly);
 
             var edName = new TextBoxTester("edName");
             edName.Enter("sample text");

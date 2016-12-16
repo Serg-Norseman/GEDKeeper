@@ -228,7 +228,7 @@ namespace GKUI.Charts
 
         protected void DoRootChanged(GEDCOMIndividualRecord person)
         {
-            ARootChangedEventHandler eventHandler = (ARootChangedEventHandler)base.Events[AncestorsCircle.EventRootChanged];
+            var eventHandler = (ARootChangedEventHandler)base.Events[CircleChart.EventRootChanged];
             if (eventHandler == null) return;
 
             eventHandler(this, person);

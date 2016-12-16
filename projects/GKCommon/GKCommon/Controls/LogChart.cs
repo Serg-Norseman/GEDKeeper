@@ -59,8 +59,8 @@ namespace GKCommon.Controls
             public Rectangle Rect;
         }
 
-        private readonly Brush FRAG_BRUSH = new SolidBrush(Color.Green);
-        private readonly Brush EMPTY_BRUSH = new SolidBrush(Color.Gray);
+        private static readonly Brush FRAG_BRUSH = new SolidBrush(Color.Green);
+        private static readonly Brush EMPTY_BRUSH = new SolidBrush(Color.Gray);
         
         private readonly List<Fragment> fList;
         private readonly ToolTip fToolTip;

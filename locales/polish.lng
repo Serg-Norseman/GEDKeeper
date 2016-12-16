@@ -8,12 +8,12 @@ Pomoc
 Nowy
 Оywórz...
 Оtwórz ostatni
-Zapisz...
+Zapisz
 Zamknij
 Właściwości pliku...
 Eksport
 Książka rodziny PDF...
-<?>
+Zapisz Jako...
 Eksport do pliku Excela...
 Wyjście
 <?>
@@ -68,7 +68,7 @@ nieznany
 Mężczyzna
 Kobieta
 Nieokreślona
-Plik został zmodyfikowany. Zapisać?
+Czy chcesz zapisać zmiany w zmodyfikowany plik?
 Określony obiekt nadrzędny ma istniejącą rodzine "{0}". Czy chcesz dodać dziecko do tej rodziny?
 Usuwanie pojedynczych "{0}"?
 Usunąć z rodziny "{0}"?
@@ -720,4 +720,21 @@ Minut
 Ukryj puste segmenty
 Potomkowie koło
 Wybór portretu
-
+Kalkulator Relacje
+to {0} z
+Dziś urodziny {0}
+Jutro urodziny {0}
+Grupa krwi
+Kolor włosów
+Kolor oczu
+Гаплогруппа mtДНК
+Гаплогруппа Y-ДНК
+Rekord jest zablokowany edytor
+Nazwisko panieńskie
+Zamężna nazwisko
+Dodatkowe nazwy
+Zaawansowane damskie nazwiska
+Format "Nazwisko panieńskie (Nazwisko w małżeństwie)"
+Format "Nazwisko w małżeństwie (Nazwisko panieńskie)"
+Format "Nazwisko panieńskie"
+Format "Nazwisko w małżeństwie"

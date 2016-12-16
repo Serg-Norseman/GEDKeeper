@@ -43,73 +43,73 @@ LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
 
 LangString gkscr ${LANG_ENGLISH} "Script samples"
 LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
-LangString gkscr ${LANG_UKRAINIAN} "Примеры скриптов"
+LangString gkscr ${LANG_UKRAINIAN} "Приклади скриптів"
 LangString gkscr ${LANG_POLISH} "Przykłady skryptów"
 
 LangString gkreg ${LANG_ENGLISH} "System registration"
 LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
-LangString gkreg ${LANG_UKRAINIAN} "Регистрация в системе"
+LangString gkreg ${LANG_UKRAINIAN} "Реєстрація в системі"
 LangString gkreg ${LANG_POLISH} "Rejestracja w systemie"
 
 LangString gklang ${LANG_ENGLISH} "Languages"
 LangString gklang ${LANG_RUSSIAN} "Языки"
-LangString gklang ${LANG_UKRAINIAN} "Языки"
+LangString gklang ${LANG_UKRAINIAN} "Мови"
 LangString gklang ${LANG_POLISH} "Języki"
 
 LangString gkplg ${LANG_ENGLISH} "Plugins"
 LangString gkplg ${LANG_RUSSIAN} "Плагины"
-LangString gkplg ${LANG_UKRAINIAN} "Плагины"
+LangString gkplg ${LANG_UKRAINIAN} "Плагіни"
 LangString gkplg ${LANG_POLISH} "Wtyczki"
 
 
 LangString gkp_calc ${LANG_ENGLISH} "Expression calculator"
 LangString gkp_calc ${LANG_RUSSIAN} "Калькулятор выражений"
-LangString gkp_calc ${LANG_UKRAINIAN} "Калькулятор выражений"
+LangString gkp_calc ${LANG_UKRAINIAN} "Калькулятор"
 LangString gkp_calc ${LANG_POLISH} "Kalkulator"
 
 LangString gkp_calendar ${LANG_ENGLISH} "Calendar"
 LangString gkp_calendar ${LANG_RUSSIAN} "Календарь"
-LangString gkp_calendar ${LANG_UKRAINIAN} "Календарь"
+LangString gkp_calendar ${LANG_UKRAINIAN} "Календар"
 LangString gkp_calendar ${LANG_POLISH} "Kalendarz"
 
 LangString gkp_nb ${LANG_ENGLISH} "Names book"
 LangString gkp_nb ${LANG_RUSSIAN} "Справочник имен"
-LangString gkp_nb ${LANG_UKRAINIAN} "Справочник имен"
+LangString gkp_nb ${LANG_UKRAINIAN} "Довідник імен"
 LangString gkp_nb ${LANG_POLISH} "Kieszonkowy nazw"
 
 LangString gkp_timeline ${LANG_ENGLISH} "Time line"
 LangString gkp_timeline ${LANG_RUSSIAN} "Линия времени"
-LangString gkp_timeline ${LANG_UKRAINIAN} "Линия времени"
+LangString gkp_timeline ${LANG_UKRAINIAN} "Линія часу"
 LangString gkp_timeline ${LANG_POLISH} "Linia czasu"
 
 LangString gkp_flowinput ${LANG_ENGLISH} "Flow input"
 LangString gkp_flowinput ${LANG_RUSSIAN} "Поточный ввод"
-LangString gkp_flowinput ${LANG_UKRAINIAN} "Поточный ввод"
+LangString gkp_flowinput ${LANG_UKRAINIAN} "Поточне введення"
 LangString gkp_flowinput ${LANG_POLISH} "Źródło wejścia"
 
 LangString gkp_pi ${LANG_ENGLISH} "Pedigrees importer"
 LangString gkp_pi ${LANG_RUSSIAN} "Импорт росписей"
-LangString gkp_pi ${LANG_UKRAINIAN} "Импорт росписей"
+LangString gkp_pi ${LANG_UKRAINIAN} "Імпорт розписів"
 LangString gkp_pi ${LANG_POLISH} "Importuj rodowód"
 
 LangString gkp_ts ${LANG_ENGLISH} "Text search"
 LangString gkp_ts ${LANG_RUSSIAN} "Полнотекстовый поиск"
-LangString gkp_ts ${LANG_UKRAINIAN} "Полнотекстовый поиск"
+LangString gkp_ts ${LANG_UKRAINIAN} "Повнотекстовий пошук"
 LangString gkp_ts ${LANG_POLISH} "Wyszukiwanie pełnotekstowe"
 
 LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
 LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
-LangString gkp_tv ${LANG_UKRAINIAN} "3D визуализация"
+LangString gkp_tv ${LANG_UKRAINIAN} "3D візуалізатор"
 LangString gkp_tv ${LANG_POLISH} "Wizualizacja 3D"
 
 LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
 LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
-LangString gkp_iv ${LANG_UKRAINIAN} "Просмотр изображений"
+LangString gkp_iv ${LANG_UKRAINIAN} "Перегляд зображень"
 LangString gkp_iv ${LANG_POLISH} "Podgląd zdjęcia"
 
 LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
 LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
-LangString gkp_cl ${LANG_UKRAINIAN} "Игра 'Жизнь Конвея'"
+LangString gkp_cl ${LANG_UKRAINIAN} "Гра 'Життя Конвея'"
 LangString gkp_cl ${LANG_POLISH} "Gra w życie"
 
 

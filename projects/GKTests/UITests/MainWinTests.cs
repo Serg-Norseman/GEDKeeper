@@ -386,6 +386,11 @@ namespace GKTests.UITests
         private void RCD_RecordSelectDlg_Select_Handler(string name, IntPtr ptr, Form form)
         {
             var listRecords = new GKRecordsViewTester("fListRecords", form);
+
+            Assert.IsFalse(listRecords.Properties.IsMainList);
+            Assert.IsNotNull(listRecords.Properties.Tree);
+            Assert.AreNotEqual(GEDCOMRecordType.rtNone, listRecords.Properties.RecordType);
+
             listRecords.Properties.SelectItem(fIndex);
             ClickButton("btnSelect", form);
         }

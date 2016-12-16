@@ -82,7 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKFlowInputPlugin.cs" />
-    <Compile Include="FlowInputDlg.cs" />
+    <Compile Include="FlowInputDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FlowInputDlg.Designer.cs">
       <DependentUpon>FlowInputDlg.cs</DependentUpon>
     </Compile>

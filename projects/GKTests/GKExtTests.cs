@@ -27,6 +27,8 @@ namespace GKTests.GKCore
         [Test]
         public void SingleInstanceTracker_Tests()
         {
+            //Assert.Throws(typeof(ArgumentNullException), () => { new SingleInstanceProxy(null); });
+
             string[] args = new string[1];
 
             using (SingleInstanceTracker tracker = new SingleInstanceTracker("test", GetSingleInstanceEnforcer)) {

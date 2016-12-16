@@ -35,8 +35,9 @@ namespace GKUI.Charts
                 return this.fOptions;
             }
             set {
-                if (value is AncestorsCircleOptions) {
-                    this.fOptions = value as AncestorsCircleOptions;
+                var ancestorsCircleOptions = value as AncestorsCircleOptions;
+                if (ancestorsCircleOptions != null) {
+                    this.fOptions = ancestorsCircleOptions;
                     this.UpdateControls();
                 }
             }
