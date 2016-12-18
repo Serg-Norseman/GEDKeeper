@@ -477,11 +477,11 @@ Szukaj patriarchów
 Szukaj linki
 Archiwum nie znaleziono, dane nie jest załadowany
 Skali
-Pliki GEDKeeper GEDCOM (*.ged) | * .ged | GEDKeeper GEDCOM zaszyfrowanych plików (*.geds) | * .geds
-Wszystkie pliki (*. *) | *. *
-Obrazy (*.bmp; *.gif; *.png; *.jpg) | * .bmp; *.gif; *.png, *.jpg
-Skrypty (*.lua) | * .lua
-Pliki BMP (*.bmp) | * .bmp | Pliki JPEG (*.jpg) | * jpg | Pliki EMF (*.EMF) | * .emf | Pliki PNG (*.png) | * PNG | Pliki GIF (*.gif) | * .gif
+Pliki GEDKeeper GEDCOM (*.ged)|*.ged|GEDKeeper GEDCOM zaszyfrowanych plików (*.geds)|*.geds
+Wszystkie pliki (*.*)|*.*
+Obrazy (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+Skrypty (*.lua)|*.lua
+Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki EMF (*.emf)|*.emf|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
 Przyczyny śmierci
 Rodowód
 Parametr
@@ -490,9 +490,9 @@ Mężczyźni
 Kobiety
 Pole filtra
 Rok
-Pliki PDF (*.pdf) | * .pdf
-Pliki RTF (*.rtf) | * .rtf
-Pliki HTML (*.html) | * .html
+Pliki PDF (*.pdf)|*.pdf
+Pliki RTF (*.rtf)|*.rtf
+Pliki HTML (*.html)|*.html
 Pliki kopii zapasowej
 Tylko poprzedni plik
 Odcinając gałęzie

@@ -365,60 +365,61 @@ namespace GKUI.Controls
         public static void RequestGeoCoords(string searchValue, ExtList<GMapPoint> pointsList)
         {
             if (string.IsNullOrEmpty(searchValue))
-            {
                 throw new ArgumentNullException("searchValue");
-            }
 
             if (pointsList == null)
-            {
                 throw new ArgumentNullException("pointsList");
-            }
 
-            Stream stm = null;
             try
             {
-                searchValue = searchValue.Trim().Replace(" ", "+");
-
-                string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru";
-                netQuery = string.Format(netQuery, new object[] { searchValue });
-
-                if (!GetInetFile(netQuery, out stm)) return;
-
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(stm);
-                XmlNode node = xmlDocument.DocumentElement;
-
-                if (node != null && node.ChildNodes.Count > 0)
+                Stream stm = null;
+                try
                 {
-                    int num = node.ChildNodes.Count;
-                    for (int i = 0; i < num; i++)
+                    searchValue = searchValue.Trim().Replace(" ", "+");
+
+                    string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru&key=AIzaSyCo57eNeJx7-ws2eei6QgAVUxOnS95IqQM";
+                    netQuery = string.Format(netQuery, new object[] { searchValue });
+
+                    if (!GetInetFile(netQuery, out stm)) return;
+
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(stm);
+                    XmlNode node = xmlDocument.DocumentElement;
+
+                    if (node != null && node.ChildNodes.Count > 0)
                     {
-                        XmlNode xNode = node.ChildNodes[i];
-                        if (xNode.Name == "result")
+                        int num = node.ChildNodes.Count;
+                        for (int i = 0; i < num; i++)
                         {
-                            XmlNode addressNode = xNode["formatted_address"];
-                            XmlNode geometry = xNode["geometry"];
-                            XmlNode pointNode = geometry["location"];
-
-                            if (addressNode != null && pointNode != null)
+                            XmlNode xNode = node.ChildNodes[i];
+                            if (xNode.Name == "result")
                             {
-                                string ptHint = addressNode.InnerText;
-                                double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-                                double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+                                XmlNode addressNode = xNode["formatted_address"];
+                                XmlNode geometry = xNode["geometry"];
+                                XmlNode pointNode = geometry["location"];
 
-                                if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                                if (addressNode != null && pointNode != null)
                                 {
-                                    GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
-                                    pointsList.Add(pt);
+                                    string ptHint = addressNode.InnerText;
+                                    double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                    double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+
+                                    if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                                    {
+                                        GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
+                                        pointsList.Add(pt);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            finally
-            {
-                if (stm != null) stm.Dispose();
+                finally
+                {
+                    if (stm != null) stm.Dispose();
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("GKMapBrowser.RequestGeoCoords(): " + ex.Message);
             }
         }
 

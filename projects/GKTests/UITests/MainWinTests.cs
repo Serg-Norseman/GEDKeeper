@@ -184,6 +184,16 @@ namespace GKTests.UITests
             MapsViewerWin_Tests(fMainWin.ActiveMdiChild, "Stage 35");
 
 
+            // Stage 36
+            fCurBase.CollectTips(new StringList());
+
+            // Stage 37
+            ModalFormHandler = MessageBox_OkHandler;
+            ((BaseWin)fCurBase).RecordDuplicate();
+
+            // Stage 38
+            MainWin_Test();
+
             // Stage 50: close Base
             ClickToolStripMenuItem("miFileClose", fMainWin);
 
@@ -240,6 +250,26 @@ namespace GKTests.UITests
             Assert.AreEqual(ShieldState.Maximum, baseWin.ShieldState, stage + ".7.1");
             baseWin.ShieldState = ShieldState.None;
             Assert.AreEqual(ShieldState.None, baseWin.ShieldState, stage + ".7.2");
+        }
+
+        private void MainWin_Test()
+        {
+            fMainWin.AddMRU("test.ged");
+
+            Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
+
+            // TODO: implement this!
+            //CreateLangMan()
+
+            //ClickToolStripButton("tbNext", fMainWin);
+            //ClickToolStripButton("tbPrev", fMainWin);
+
+            ClickToolStripMenuItem("miWinArrange", fMainWin);
+            ClickToolStripMenuItem("miWinCascade", fMainWin);
+            ClickToolStripMenuItem("miWinHTile", fMainWin);
+            ClickToolStripMenuItem("miWinMinimize", fMainWin);
+            ClickToolStripMenuItem("miWinVTile", fMainWin);
+            ClickToolStripMenuItem("miWinArrange", fMainWin);
         }
 
         #region AboutDlg handler
@@ -665,6 +695,12 @@ namespace GKTests.UITests
             messageBox.SendCommand(MessageBoxTester.Command.Yes);
         }
 
+        private void MessageBox_OkHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.OK);
+        }
+
         private void EventEditDlg_Select_Handler(string name, IntPtr ptr, Form form)
         {
             EventEditDlg eventDlg = (EventEditDlg) form;
@@ -839,6 +875,14 @@ namespace GKTests.UITests
             GEDCOMIndividualRecord iRec = ((BaseWin) fCurBase).GetSelectedPerson();
             Assert.AreEqual(checkXRef, iRec.XRef);
             tcWin.SelectByRec(iRec);
+
+            var formTester = new FormTester(tcWin.Name);
+            Assert.IsNotNull(formTester);
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.F5));
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.F6));
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.F7));
+
+            //formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.F | Keys.Control));
 
             frm.Close();
         }

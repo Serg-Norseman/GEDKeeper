@@ -48,6 +48,8 @@ namespace GKCommon
         public const uint WM_USER = 0x0400;
         public const uint WM_KEEPMODELESS = WM_USER + 111;
 
+        #if !__MonoCS__
+
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
@@ -55,6 +57,8 @@ namespace GKCommon
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+
+        #endif
     }
 
     #endregion

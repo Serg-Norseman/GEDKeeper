@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 
-using GKCommon;
 using GKUI;
 
 namespace Externals.SingleInstancing
@@ -416,9 +415,10 @@ namespace Externals.SingleInstancing
             return ipcParam;
         }
 
-        public static void ProcessGlobalMessage(int nId, MainWin mf)
+        public static void ProcessGlobalMessage(int nId, ISingleInstanceEnforcer mf)
         {
-            if (mf == null) throw new ArgumentNullException("mf");
+            if (mf == null)
+                throw new ArgumentNullException("mf");
 
             IpcParamEx ipcMsg = LoadIpcInfoFile(nId);
 
@@ -428,7 +428,7 @@ namespace Externals.SingleInstancing
 
                 if (vArgs != null) {
                     MessageEventArgs eArgs = new MessageEventArgs(vArgs);
-                    ((ISingleInstanceEnforcer)mf).OnMessageReceived(eArgs);
+                    mf.OnMessageReceived(eArgs);
                 }
             }
         }

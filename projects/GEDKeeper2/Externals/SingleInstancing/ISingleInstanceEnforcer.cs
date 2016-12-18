@@ -27,7 +27,7 @@ namespace Externals.SingleInstancing
             if (message == null)
                 throw new ArgumentNullException("message", @"message cannot be null.");
 
-            this.Message = message;
+            Message = message;
         }
     }
 

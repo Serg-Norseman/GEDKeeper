@@ -482,7 +482,9 @@ namespace GKUI
             if (form == null) return DialogResult.None;
 
             if (keepModeless) {
+                #if !__MonoCS__
                 NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                #endif
             }
 
             return form.ShowDialog();
@@ -1458,9 +1460,8 @@ namespace GKUI
 
         public ILangMan CreateLangMan(object sender)
         {
-            if (sender == null) {
+            if (sender == null)
                 return null;
-            }
 
             CultureInfo cultInfo = new CultureInfo(this.fOptions.InterfaceLang);
             string ext = cultInfo.ThreeLetterISOLanguageName;
@@ -1591,7 +1592,9 @@ namespace GKUI
         public void EnableWindow(Form form, bool value)
         {
             if (form != null) {
+                #if !__MonoCS__
                 NativeMethods.EnableWindow(form.Handle, value);
+                #endif
             }
         }
 

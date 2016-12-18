@@ -10,6 +10,6 @@ MimeType=application/x-gedkeeper
 Icon=/usr/share/pixmaps/gedkeeper.png
 Terminal=false
 Type=Application
-Categories=Office;Hobby
+Categories=Office
 StartupNotify=true
 

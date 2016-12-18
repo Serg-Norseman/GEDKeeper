@@ -17,11 +17,11 @@ namespace Externals.SingleInstancing
     {
         #region Member Variables
 
-        private bool disposed;
-        private Mutex singleInstanceMutex;
-        private bool isFirstInstance;
-        private IChannel ipcChannel;
-        private readonly SingleInstanceProxy proxy;
+        private bool fDisposed;
+        private IChannel fIpcChannel;
+        private readonly bool fIsFirstInstance;
+        private readonly SingleInstanceProxy fProxy;
+        private Mutex fSingleInstanceMutex;
 
         #endregion
 
@@ -34,10 +34,10 @@ namespace Externals.SingleInstancing
         {
             get
             {
-                if (disposed)
+                if (fDisposed)
                     throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
 
-                return isFirstInstance;
+                return fIsFirstInstance;
             }
         }
 
@@ -48,10 +48,10 @@ namespace Externals.SingleInstancing
         {
             get
             {
-                if (disposed)
+                if (fDisposed)
                     throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
 
-                return proxy.Enforcer;
+                return fProxy.Enforcer;
             }
         }
 
@@ -85,7 +85,7 @@ namespace Externals.SingleInstancing
 
             try
             {
-                singleInstanceMutex = new Mutex(true, name, out isFirstInstance);
+                fSingleInstanceMutex = new Mutex(true, name, out fIsFirstInstance);
 
                 // Do not attempt to construct the IPC channel if there is no need for messages
                 if (enforcerRetriever != null)
@@ -94,12 +94,12 @@ namespace Externals.SingleInstancing
                     string proxyUri = "ipc://" + name + "/" + proxyObjectName;
 
                     // If no previous instance was found, create a server channel which will provide the proxy to the first created instance
-                    if (isFirstInstance)
+                    if (fIsFirstInstance)
                     {
                         // Create an IPC server channel to listen for SingleInstanceProxy object requests
-                        ipcChannel = new IpcServerChannel(name);
+                        fIpcChannel = new IpcServerChannel(name);
                         // Register the channel and get it ready for use
-                        ChannelServices.RegisterChannel(ipcChannel, false);
+                        ChannelServices.RegisterChannel(fIpcChannel, false);
                         // Register the service which gets the SingleInstanceProxy object, so it can be accessible by IPC client channels
                         RemotingConfiguration.RegisterWellKnownServiceType(typeof(SingleInstanceProxy), proxyObjectName, WellKnownObjectMode.Singleton);
 
@@ -110,22 +110,22 @@ namespace Externals.SingleInstancing
                             throw new InvalidOperationException("The method delegated by the enforcerRetriever argument returned null. The method must return an ISingleInstanceEnforcer object.");
 
                         // Create the first proxy object
-                        proxy = new SingleInstanceProxy(enforcer);
+                        fProxy = new SingleInstanceProxy(enforcer);
                         // Publish the first proxy object so IPC clients requesting a proxy would receive a reference to it
-                        RemotingServices.Marshal(proxy, proxyObjectName);
+                        RemotingServices.Marshal(fProxy, proxyObjectName);
                     }
                     else
                     {
                         // Create an IPC client channel to request the existing SingleInstanceProxy object.
-                        ipcChannel = new IpcClientChannel();
+                        fIpcChannel = new IpcClientChannel();
                         // Register the channel and get it ready for use
-                        ChannelServices.RegisterChannel(ipcChannel, false);
+                        ChannelServices.RegisterChannel(fIpcChannel, false);
 
                         // Retreive a reference to the proxy object which will be later used to send messages
-                        proxy = (SingleInstanceProxy)Activator.GetObject(typeof(SingleInstanceProxy), proxyUri);
+                        fProxy = (SingleInstanceProxy)Activator.GetObject(typeof(SingleInstanceProxy), proxyUri);
 
                         // Notify the first instance of the application that a new instance was created
-                        proxy.Enforcer.OnNewInstanceCreated(new EventArgs());
+                        fProxy.Enforcer.OnNewInstanceCreated(new EventArgs());
                     }
                 }
             }
@@ -149,24 +149,24 @@ namespace Externals.SingleInstancing
         /// <param name="disposing">true to dispose of managed resources; otherwise false.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!fDisposed)
             {
                 if (disposing)
                 {
-                    if (singleInstanceMutex != null)
+                    if (fSingleInstanceMutex != null)
                     {
-                        singleInstanceMutex.Close();
-                        singleInstanceMutex = null;
+                        fSingleInstanceMutex.Close();
+                        fSingleInstanceMutex = null;
                     }
 
-                    if (ipcChannel != null)
+                    if (fIpcChannel != null)
                     {
-                        ChannelServices.UnregisterChannel(ipcChannel);
-                        ipcChannel = null;
+                        ChannelServices.UnregisterChannel(fIpcChannel);
+                        fIpcChannel = null;
                     }
                 }
 
-                disposed = true;
+                fDisposed = true;
             }
         }
 
@@ -191,15 +191,15 @@ namespace Externals.SingleInstancing
         /// <exception cref="SingleInstancing.SingleInstancingException">The SingleInstanceInteractor has failed to send the message to the first application instance. The first instance might have terminated.</exception>
         public void SendMessageToFirstInstance(object message)
         {
-            if (disposed)
+            if (fDisposed)
                 throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
 
-            if (ipcChannel == null)
+            if (fIpcChannel == null)
                 throw new InvalidOperationException("The object was constructed with the SingleInstanceTracker(string name) constructor overload, or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload, with enforcerRetriever set to null, thus you cannot send messages to the first instance.");
 
             try
             {
-                proxy.Enforcer.OnMessageReceived(new MessageEventArgs(message));
+                fProxy.Enforcer.OnMessageReceived(new MessageEventArgs(message));
             }
             catch (Exception ex)
             {

@@ -42,6 +42,7 @@ cp $DEV_PATH/LICENSE ~/$LIB_PATH
 cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
+cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 
 chmod -x $LIB_PATH/GKCommon.dll
 chmod -x $LIB_PATH/ArborGVT.dll
@@ -56,9 +57,17 @@ chmod -x $LIB_PATH/LICENSE
 find $LIB_PATH/locales -type f -exec chmod -x '{}' \;
 find $LIB_PATH/plugins -type f -exec chmod -x '{}' \;
 find $LIB_PATH/scripts -type f -exec chmod -x '{}' \;
+find $LIB_PATH/samples -type f -exec chmod -x '{}' \;
+
+chmod -x $LIB_PATH/gedkeeper.png
+chmod -x $PACK_PATH/usr/share/pixmaps/gedkeeper.png
+chmod -x $PACK_PATH/usr/share/applications/gedkeeper.desktop
+chmod -x $PACK_PATH/usr/share/mime/packages/application-x-gedkeeper.xml
 
 cd ~/$PACK_PATH
-md5deep -r -l usr > DEBIAN/md5sums
+#md5deep -r -l usr > DEBIAN/md5sums
+#hashdeep -rlc md5 usr > DEBIAN/md5sums
+hashdeep -rlc md5 usr | tail -n +6 | awk -F',' '{ print $2 "  " $3 }' > DEBIAN/md5sums
 cd ..
 
 fakeroot dpkg-deb -b ~/$PACK_PATH/ .
