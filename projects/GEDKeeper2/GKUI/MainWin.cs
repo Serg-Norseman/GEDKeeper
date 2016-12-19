@@ -251,6 +251,8 @@ namespace GKUI
             this.UpdateControls(false);
 
             this.LoadArgs();
+
+            UpdateMan.CheckUpdate();
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
