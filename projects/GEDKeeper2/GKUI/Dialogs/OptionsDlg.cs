@@ -118,7 +118,7 @@ namespace GKUI.Dialogs
 
         private void UpdateForm()
         {
-            switch (this.fOptions.DefCharacterSet)
+            /*switch (this.fOptions.DefCharacterSet)
             {
                 case GEDCOMCharacterSet.csASCII:
                     this.radASCII.Checked = true;
@@ -126,7 +126,7 @@ namespace GKUI.Dialogs
                 case GEDCOMCharacterSet.csUTF8:
                     this.radUTF.Checked = true;
                     break;
-            }
+            }*/
 
             switch (this.fOptions.DefNameFormat)
             {
@@ -331,11 +331,11 @@ namespace GKUI.Dialogs
         {
             this.fTempColumns.CopyTo(this.fOptions.IndividualListColumns);
 
-            if (this.radASCII.Checked) {
+            /*if (this.radASCII.Checked) {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
             } else if (this.radUTF.Checked) {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
-            }
+            }*/
 
             if (this.radSNP.Checked) {
                 this.fOptions.DefNameFormat = NameFormat.nfFNP;
@@ -490,7 +490,7 @@ namespace GKUI.Dialogs
             this.pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
             this.pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
             this.pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
-            this.grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);
+            /*this.grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);*/
 
             this.grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
             this.chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);

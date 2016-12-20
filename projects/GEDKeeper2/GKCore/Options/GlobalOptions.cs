@@ -42,7 +42,7 @@ namespace GKCore.Options
         private static ICulture fCulture = null;
 
         private readonly TreeChartOptions fChartOptions;
-        private GEDCOMCharacterSet fDefCharacterSet;
+        /*private GEDCOMCharacterSet fDefCharacterSet;*/
         private DateFormat fDefDateFormat;
         private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
@@ -106,10 +106,15 @@ namespace GKCore.Options
             get { return this.fAncestorsCircleOptions; }
         }
 
-        public GEDCOMCharacterSet DefCharacterSet
+        /*public GEDCOMCharacterSet DefCharacterSet
         {
             get { return this.fDefCharacterSet; }
             set { this.fDefCharacterSet = value; }
+        }*/
+
+        public GEDCOMCharacterSet DefCharacterSet
+        {
+            get { return GEDCOMCharacterSet.csUTF8; }
         }
 
         public DateFormat DefDateFormat
@@ -400,7 +405,7 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            this.fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);
+            /*this.fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);*/
             this.fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
             this.fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
             this.fLastDir = ini.ReadString("Common", "LastDir", "");
@@ -508,7 +513,7 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            ini.WriteInteger("Common", "DefCharacterSet", (int)this.fDefCharacterSet);
+            /*ini.WriteInteger("Common", "DefCharacterSet", (int)this.fDefCharacterSet);*/
             ini.WriteInteger("Common", "DefNameFormat", (int)this.fDefNameFormat);
             ini.WriteInteger("Common", "DefDateFormat", (int)this.fDefDateFormat);
             ini.WriteString("Common", "LastDir", this.fLastDir);

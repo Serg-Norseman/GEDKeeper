@@ -6,7 +6,6 @@ namespace GKUI.Dialogs
     {
         private System.Windows.Forms.TabControl PageControl1;
         private System.Windows.Forms.TabPage pageCommon;
-        private System.Windows.Forms.GroupBox grpEncoding;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TabPage pageTreeChart;
@@ -66,8 +65,6 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.ComboBox cmbLanguages;
         private System.Windows.Forms.CheckBox chkTreeDecorative;
         private System.Windows.Forms.CheckBox chkPortraitsVisible;
-        private System.Windows.Forms.RadioButton radASCII;
-        private System.Windows.Forms.RadioButton radUTF;
         private System.Windows.Forms.RadioButton radSNP;
         private System.Windows.Forms.RadioButton radS_NP;
         private System.Windows.Forms.RadioButton radS_N_P;
@@ -123,9 +120,6 @@ namespace GKUI.Dialogs
             this.radFBOnlyPrev = new System.Windows.Forms.RadioButton();
             this.radFBNone = new System.Windows.Forms.RadioButton();
             this.lblLanguage = new System.Windows.Forms.Label();
-            this.grpEncoding = new System.Windows.Forms.GroupBox();
-            this.radUTF = new System.Windows.Forms.RadioButton();
-            this.radASCII = new System.Windows.Forms.RadioButton();
             this.grpInternet = new System.Windows.Forms.GroupBox();
             this.lblProxyServer = new System.Windows.Forms.Label();
             this.lblProxyPort = new System.Windows.Forms.Label();
@@ -222,7 +216,6 @@ namespace GKUI.Dialogs
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numASMin)).BeginInit();
             this.grpFileBackup.SuspendLayout();
-            this.grpEncoding.SuspendLayout();
             this.grpInternet.SuspendLayout();
             this.grpOther.SuspendLayout();
             this.pageCharts.SuspendLayout();
@@ -269,7 +262,6 @@ namespace GKUI.Dialogs
             // 
             this.pageCommon.Controls.Add(this.groupBox1);
             this.pageCommon.Controls.Add(this.lblLanguage);
-            this.pageCommon.Controls.Add(this.grpEncoding);
             this.pageCommon.Controls.Add(this.grpInternet);
             this.pageCommon.Controls.Add(this.grpOther);
             this.pageCommon.Controls.Add(this.cmbLanguages);
@@ -389,36 +381,6 @@ namespace GKUI.Dialogs
             this.lblLanguage.TabIndex = 0;
             this.lblLanguage.Text = "lblLanguage";
             // 
-            // grpEncoding
-            // 
-            this.grpEncoding.Controls.Add(this.radUTF);
-            this.grpEncoding.Controls.Add(this.radASCII);
-            this.grpEncoding.Location = new System.Drawing.Point(11, 10);
-            this.grpEncoding.Name = "grpEncoding";
-            this.grpEncoding.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEncoding.Size = new System.Drawing.Size(324, 59);
-            this.grpEncoding.TabIndex = 0;
-            this.grpEncoding.TabStop = false;
-            this.grpEncoding.Text = "grpEncoding";
-            // 
-            // radUTF
-            // 
-            this.radUTF.AutoSize = true;
-            this.radUTF.Location = new System.Drawing.Point(138, 25);
-            this.radUTF.Name = "radUTF";
-            this.radUTF.Size = new System.Drawing.Size(66, 21);
-            this.radUTF.TabIndex = 1;
-            this.radUTF.Text = "UTF-8";
-            // 
-            // radASCII
-            // 
-            this.radASCII.AutoSize = true;
-            this.radASCII.Location = new System.Drawing.Point(13, 25);
-            this.radASCII.Name = "radASCII";
-            this.radASCII.Size = new System.Drawing.Size(62, 21);
-            this.radASCII.TabIndex = 0;
-            this.radASCII.Text = "ASCII";
-            // 
             // grpInternet
             // 
             this.grpInternet.Controls.Add(this.lblProxyServer);
@@ -430,7 +392,7 @@ namespace GKUI.Dialogs
             this.grpInternet.Controls.Add(this.txtProxyPort);
             this.grpInternet.Controls.Add(this.txtProxyLogin);
             this.grpInternet.Controls.Add(this.txtProxyPass);
-            this.grpInternet.Location = new System.Drawing.Point(11, 77);
+            this.grpInternet.Location = new System.Drawing.Point(11, 10);
             this.grpInternet.Name = "grpInternet";
             this.grpInternet.Size = new System.Drawing.Size(324, 195);
             this.grpInternet.TabIndex = 1;
@@ -515,7 +477,7 @@ namespace GKUI.Dialogs
             // grpOther
             // 
             this.grpOther.Controls.Add(this.chkShowOnStart);
-            this.grpOther.Location = new System.Drawing.Point(11, 279);
+            this.grpOther.Location = new System.Drawing.Point(11, 221);
             this.grpOther.Name = "grpOther";
             this.grpOther.Size = new System.Drawing.Size(324, 60);
             this.grpOther.TabIndex = 2;
@@ -1341,8 +1303,6 @@ namespace GKUI.Dialogs
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numASMin)).EndInit();
             this.grpFileBackup.ResumeLayout(false);
-            this.grpEncoding.ResumeLayout(false);
-            this.grpEncoding.PerformLayout();
             this.grpInternet.ResumeLayout(false);
             this.grpInternet.PerformLayout();
             this.grpOther.ResumeLayout(false);

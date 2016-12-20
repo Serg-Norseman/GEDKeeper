@@ -1071,8 +1071,9 @@ namespace GKTests.GKCore
                 Assert.IsNotNull(globalOptions.ChartOptions);
                 Assert.IsNotNull(globalOptions.AncestorsCircleOptions);
 
-                globalOptions.DefCharacterSet = GEDCOMCharacterSet.csUNICODE;
-                Assert.AreEqual(GEDCOMCharacterSet.csUNICODE, globalOptions.DefCharacterSet);
+                /*globalOptions.DefCharacterSet = GEDCOMCharacterSet.csUNICODE;
+                Assert.AreEqual(GEDCOMCharacterSet.csUNICODE, globalOptions.DefCharacterSet);*/
+                Assert.AreEqual(GEDCOMCharacterSet.csUTF8, globalOptions.DefCharacterSet);
 
                 globalOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
                 Assert.AreEqual(DateFormat.dfDD_MM_YYYY, globalOptions.DefDateFormat);
