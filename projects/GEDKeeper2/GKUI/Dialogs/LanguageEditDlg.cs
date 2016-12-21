@@ -49,7 +49,7 @@ namespace GKUI.Dialogs
 
             for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++)
             {
-                cmbLanguage.Items.Add(new GKComboItem(lid.ToString(), lid));
+                cmbLanguage.Items.Add(new GKComboItem(GEDCOMConsts.LngEnumStr[(int)lid], lid));
             }
 
             // SetLang()
@@ -62,7 +62,7 @@ namespace GKUI.Dialogs
         private void SetLanguageID(GEDCOMLanguageID value)
         {
             fLanguageID = value;
-            cmbLanguage.Text = fLanguageID.ToString();
+            cmbLanguage.Text = GEDCOMConsts.LngEnumStr[(int)fLanguageID];
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -70,7 +70,6 @@ namespace GKUI.Dialogs
             try
             {
                 var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
-
                 fLanguageID = (GEDCOMLanguageID)item.Tag;
                 DialogResult = DialogResult.OK;
             }

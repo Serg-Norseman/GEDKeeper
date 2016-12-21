@@ -25,18 +25,6 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public sealed class GEDCOMLanguage : GEDCOMTag
     {
-        private static readonly string[] LngEnumStr = new string[] {
-            "", "Afrikaans", "Albanian", "Anglo-Saxon", "Catalan", "Catalan_Spn", "Czech", "Danish", "Dutch", "English",
-            "Esperanto", "Estonian", "Faroese", "Finnish", "French", "German", "Hawaiian", "Hungarian", "Icelandic",
-            "Indonesian", "Italian", "Latvian", "Lithuanian", "Navaho", "Norwegian", "Polish", "Portuguese", "Romanian",
-            "Serbo_Croa", "Slovak", "Slovene", "Spanish", "Swedish", "Turkish", "Wendic",
-            "Amharic", "Arabic", "Armenian", "Assamese", "Belorusian", "Bengali", "Braj", "Bulgarian", "Burmese",
-            "Cantonese", "Church-Slavic", "Dogri", "Georgian", "Greek", "Gujarati", "Hebrew", "Hindi", "Japanese",
-            "Kannada", "Khmer", "Konkani", "Korean", "Lahnda", "Lao", "Macedonian", "Maithili", "Malayalam", "Mandrin",
-            "Manipuri", "Marathi", "Mewari", "Nepali", "Oriya", "Pahari", "Pali", "Panjabi", "Persian", "Prakrit", "Pusto",
-            "Rajasthani", "Russian", "Sanskrit", "Serb", "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Ukrainian", "Urdu",
-            "Vietnamese", "Yiddish" };
-
         private static readonly GEDCOMEnumHelper<GEDCOMLanguageID> LangEnumHelper;
 
         private GEDCOMLanguageID fValue;
@@ -49,7 +37,7 @@ namespace GKCommon.GEDCOM
 
         static GEDCOMLanguage()
         {
-            LangEnumHelper = new GEDCOMEnumHelper<GEDCOMLanguageID>(LngEnumStr, GEDCOMLanguageID.Unknown, true);
+            LangEnumHelper = new GEDCOMEnumHelper<GEDCOMLanguageID>(GEDCOMConsts.LngEnumStr, GEDCOMLanguageID.Unknown, true);
         }
 
         public override void Clear()
@@ -89,16 +77,6 @@ namespace GKCommon.GEDCOM
             return LangEnumHelper.GetStrValue(this.fValue);
         }
 
-        public static GEDCOMLanguageID GetLIDByName(string name)
-        {
-            return LangEnumHelper.GetEnumValue(name);
-        }
-
-        public static string GetNameByLID(GEDCOMLanguageID lid)
-        {
-            return LangEnumHelper.GetStrValue(lid);
-        }
-
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
@@ -113,5 +91,19 @@ namespace GKCommon.GEDCOM
         {
             return new GEDCOMLanguage(owner, parent, tagName, tagValue);
         }
+
+        #region Aux functions
+
+        public static GEDCOMLanguageID GetLIDByName(string name)
+        {
+            return LangEnumHelper.GetEnumValue(name);
+        }
+
+        public static string GetNameByLID(GEDCOMLanguageID lid)
+        {
+            return LangEnumHelper.GetStrValue(lid);
+        }
+
+        #endregion
     }
 }

@@ -124,9 +124,8 @@ namespace GKUI.Dialogs
 		        dlg.LanguageID = this.fBase.Tree.Header.Language.Value;
 
 		        if (dlg.ShowDialog() == DialogResult.OK) {
-		            var lang = new GEDCOMLanguage(null, null, "", "");
-		            lang.Value = dlg.LanguageID;
-		            txtLanguage.Text =  lang.StringValue;
+		            // Assignment in control, instead of the header's property to work Cancel.
+		            txtLanguage.Text = GEDCOMLanguage.GetNameByLID(dlg.LanguageID);
 		        }
 		    }
 		}

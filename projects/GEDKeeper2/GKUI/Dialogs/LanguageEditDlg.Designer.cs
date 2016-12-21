@@ -67,6 +67,7 @@
             // 
             // cmbLanguage
             // 
+            this.cmbLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLanguage.Location = new System.Drawing.Point(12, 30);
             this.cmbLanguage.Margin = new System.Windows.Forms.Padding(4);
             this.cmbLanguage.Name = "cmbLanguage";

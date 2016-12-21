@@ -286,6 +286,7 @@ namespace GKCore.Options
             return null;
         }
 
+        // TODO: rework it
         public GEDCOMLanguageID GetCurrentItfLang()
         {
             if (this.InterfaceLang == LangMan.LS_DEF_CODE) {
