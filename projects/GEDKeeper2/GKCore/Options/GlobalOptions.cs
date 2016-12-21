@@ -286,6 +286,16 @@ namespace GKCore.Options
             return null;
         }
 
+        public GEDCOMLanguageID GetCurrentItfLang()
+        {
+            if (this.InterfaceLang == LangMan.LS_DEF_CODE) {
+                return GEDCOMLanguageID.English;
+            } else {
+                LangRecord langRec = this.GetLangByCode(this.InterfaceLang);
+                return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
+            }
+        }
+
         public string GetLastBase(int index)
         {
             return this.fLastBases[index];

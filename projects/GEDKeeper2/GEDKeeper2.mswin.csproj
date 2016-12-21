@@ -281,6 +281,12 @@
     <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.Designer.cs">
+      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -562,6 +568,9 @@
     <EmbeddedResource Include="GKUI\Dialogs\GroupEditDlg.resx">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\LanguageEditDlg.resx">
+      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\LanguageSelectDlg.resx">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -701,8 +710,6 @@
       <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Sandbox\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

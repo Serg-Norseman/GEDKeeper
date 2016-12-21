@@ -510,6 +510,12 @@
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.Designer.cs">
+      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -562,6 +568,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\GroupEditDlg.resx">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\LanguageEditDlg.resx">
+      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\LanguageSelectDlg.resx">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>

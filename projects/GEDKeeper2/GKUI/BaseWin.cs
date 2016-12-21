@@ -563,6 +563,7 @@ namespace GKUI
             this.RefreshLists(false);
             GKUtils.ShowPersonInfo(null, this.mPersonSummary.Lines, this.fShieldState);
             this.fTree.SetFileName(LangMan.LS(LSID.LSID_Unknown));
+            this.fTree.Header.Language.Value = MainWin.Instance.Options.GetCurrentItfLang();
             this.Modified = false;
         }
 

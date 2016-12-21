@@ -18,6 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
+using GKCommon;
+using GKCommon.GEDCOM;
+
 namespace GKCore.Options
 {
     public sealed class LangRecord
@@ -26,6 +30,7 @@ namespace GKCore.Options
         public readonly string Sign;
         public readonly string Name;
         public readonly string FileName;
+        public readonly GEDCOMLanguageID LangID;
 
         public LangRecord(ushort code, string sign, string name, string fileName)
         {
@@ -33,6 +38,9 @@ namespace GKCore.Options
             this.Sign = sign;
             this.Name = name;
             this.FileName = fileName;
+
+            string engLangName = SysUtils.NormalizeName(Path.GetFileNameWithoutExtension(fileName));
+            this.LangID = GEDCOMLanguage.GetLIDByName(engLangName);
         }
     }
 }

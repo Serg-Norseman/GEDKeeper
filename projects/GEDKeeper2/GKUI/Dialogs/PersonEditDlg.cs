@@ -1019,7 +1019,7 @@ namespace GKUI.Dialogs
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && e.KeyCode == Keys.Down && e.Control) {
-                tb.Text = GEDCOMUtils.NormalizeName(tb.Text);
+                tb.Text = SysUtils.NormalizeName(tb.Text);
             }
         }
 

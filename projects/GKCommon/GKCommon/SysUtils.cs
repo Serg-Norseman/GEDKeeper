@@ -558,6 +558,15 @@ namespace GKCommon
             return res.ToString();
         }
 
+        public static string NormalizeName(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+
+            StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
+            stb[0] = Char.ToUpperInvariant(stb[0]);
+            return stb.ToString();
+        }
+
         #endregion
 
         #region CRC32

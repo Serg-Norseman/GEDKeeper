@@ -117,14 +117,6 @@ namespace GKTests.GKCommon
             
             gcStr = GEDCOMUtils.StrToGEDCOMDate("1980", false);
             Assert.AreEqual("", gcStr);
-            
-            // other
-            string st = "ivan";
-            st = GEDCOMUtils.NormalizeName(st);
-            Assert.AreEqual("Ivan", st);
-            
-            st = GEDCOMUtils.NormalizeName(null);
-            Assert.AreEqual("", st);
 
             //
 
@@ -141,6 +133,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
 
             //
+            string st;
             string s1 = "abcd 12345 efgh";
             string s2;
             s2 = GEDCOMUtils.ExtractString(s1, out st, "");

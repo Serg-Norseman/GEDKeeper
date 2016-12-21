@@ -89,6 +89,16 @@ namespace GKCommon.GEDCOM
             return LangEnumHelper.GetStrValue(this.fValue);
         }
 
+        public static GEDCOMLanguageID GetLIDByName(string name)
+        {
+            return LangEnumHelper.GetEnumValue(name);
+        }
+
+        public static string GetNameByLID(GEDCOMLanguageID lid)
+        {
+            return LangEnumHelper.GetStrValue(lid);
+        }
+
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);

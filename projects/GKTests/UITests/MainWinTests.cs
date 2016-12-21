@@ -295,6 +295,9 @@ namespace GKTests.UITests
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
 
+            ModalFormHandler = LanguageEditDlg_Handler;
+            ClickButton("btnLangEdit", form);
+
             ClickButton("btnAccept", form);
 
             GEDCOMSubmitterRecord submitter = fCurBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
@@ -432,6 +435,15 @@ namespace GKTests.UITests
         private void LanguageSelectDlg_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
+        }
+
+        #endregion
+
+        #region LanguageEditDlg handlers
+
+        private void LanguageEditDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
         }
 
         #endregion

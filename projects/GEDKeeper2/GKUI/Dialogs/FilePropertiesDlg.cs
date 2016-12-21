@@ -43,13 +43,11 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
-            this.fBase = aBase;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnLangEdit.Image = GKResources.iRecEdit;
 
-            GKResourceManager resourceManager = MainWin.ResourceManager;
-            if (resourceManager != null) {
-                this.btnAccept.Image = ((System.Drawing.Image)(resourceManager.GetObjectEx("iBtnAccept")));
-                this.btnCancel.Image = ((System.Drawing.Image)(resourceManager.GetObjectEx("iBtnCancel")));
-            }
+            this.fBase = aBase;
 
             this.UpdateControls();
 
@@ -63,10 +61,13 @@ namespace GKUI.Dialogs
             this.lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
             this.pageOther.Text = LangMan.LS(LSID.LSID_Other);
             this.lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
+            this.lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 
         private void UpdateControls()
         {
+            txtLanguage.Text = this.fBase.Tree.Header.Language.StringValue;
+
             GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
             this.txtName.Text = submitter.Name.FullName;
             this.txtAddress.Text = submitter.Address.Address.Text;
@@ -94,6 +95,8 @@ namespace GKUI.Dialogs
         {
             try
             {
+                this.fBase.Tree.Header.Language.ParseString(txtLanguage.Text);
+
                 GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
                 submitter.Name.StringValue = this.txtName.Text;
                 submitter.Address.SetAddressArray(this.txtAddress.Lines);
@@ -114,5 +117,18 @@ namespace GKUI.Dialogs
                 base.DialogResult = DialogResult.None;
             }
         }
+
+		private void btnLangEdit_Click(object sender, EventArgs e)
+		{
+		    using (var dlg = new LanguageEditDlg()) {
+		        dlg.LanguageID = this.fBase.Tree.Header.Language.Value;
+
+		        if (dlg.ShowDialog() == DialogResult.OK) {
+		            var lang = new GEDCOMLanguage(null, null, "", "");
+		            lang.Value = dlg.LanguageID;
+		            txtLanguage.Text =  lang.StringValue;
+		        }
+		    }
+		}
     }
 }

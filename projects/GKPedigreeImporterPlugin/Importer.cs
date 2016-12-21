@@ -312,7 +312,7 @@ namespace GKPedigreeImporterPlugin
             }
 
             if (this.SurnamesNormalize) {
-                f_fam = GEDCOMUtils.NormalizeName(f_fam);
+                f_fam = SysUtils.NormalizeName(f_fam);
             }
 
             //return true;

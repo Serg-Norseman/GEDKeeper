@@ -1569,15 +1569,6 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public static string NormalizeName(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return "";
-
-            StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
-            stb[0] = Char.ToUpperInvariant(stb[0]);
-            return stb.ToString();
-        }
-
         // FIXME: there is the bug - use GEDCOMMonthArray without depend to Calendar (hebrew and islamic month's names)
         public static string StrToGEDCOMDate(string strDate, bool aException)
         {

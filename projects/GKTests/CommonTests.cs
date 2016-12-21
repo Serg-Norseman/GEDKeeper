@@ -934,6 +934,14 @@ namespace GKTests.GKCommon
             N = SysUtils.SingleOrDefault(new int[] { });
             Assert.AreEqual(0, N);
             Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault(new int[] { 5, 7, 10 }); });
+
+            // other
+            string st = "ivan";
+            st = SysUtils.NormalizeName(st);
+            Assert.AreEqual("Ivan", st);
+
+            st = SysUtils.NormalizeName(null);
+            Assert.AreEqual("", st);
         }
 
         private void TweenHandler(int newX, int newY)

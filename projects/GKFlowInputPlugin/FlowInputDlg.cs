@@ -269,9 +269,9 @@ namespace GKFlowInputPlugin
             }
             else
             {
-                string fam = GEDCOMUtils.NormalizeName(tokens[0]);
-                string nam = GEDCOMUtils.NormalizeName(tokens[1]);
-                string pat = GEDCOMUtils.NormalizeName(tokens[2]);
+                string fam = SysUtils.NormalizeName(tokens[0]);
+                string nam = SysUtils.NormalizeName(tokens[1]);
+                string pat = SysUtils.NormalizeName(tokens[2]);
 
                 GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
                 if (this.CheckBirth.Checked) {
