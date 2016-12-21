@@ -33,10 +33,10 @@ namespace GKCommon
 
         public Token(TokenKind kind, string value, int line, int column)
         {
-            this.Kind = kind;
-            this.Value = value;
-            this.Line = line;
-            this.Column = column;
+            Kind = kind;
+            Value = value;
+            Line = line;
+            Column = column;
         }
     }
 
@@ -47,26 +47,26 @@ namespace GKCommon
     {
         private const char EOF = (char)0;
 
-        private int line;
-        private int column;
-        private int pos;	// position within data
+        private int fLine;
+        private int fColumn;
+        private int fPos;	// position within data
 
-        private readonly string data;
+        private readonly string fData;
 
-        private bool ignoreWhiteSpace;
-        private bool recognizeDecimals;
-        private char[] symbolChars;
+        private bool fIgnoreWhiteSpace;
+        private bool fRecognizeDecimals;
+        private char[] fSymbolChars;
 
-        private int saveLine;
-        private int saveCol;
-        private int savePos;
+        private int fSaveLine;
+        private int fSaveCol;
+        private int fSavePos;
 
         public StringTokenizer(TextReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
-            data = reader.ReadToEnd();
+            fData = reader.ReadToEnd();
 
             Reset();
         }
@@ -76,7 +76,7 @@ namespace GKCommon
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            this.data = data;
+            fData = data;
 
             Reset();
         }
@@ -86,8 +86,8 @@ namespace GKCommon
         /// </summary>
         public char[] SymbolChars
         {
-            get { return this.symbolChars; }
-            set { this.symbolChars = value; }
+            get { return fSymbolChars; }
+            set { fSymbolChars = value; }
         }
 
         /// <summary>
@@ -96,55 +96,55 @@ namespace GKCommon
         /// </summary>
         public bool IgnoreWhiteSpace
         {
-            get { return this.ignoreWhiteSpace; }
-            set { this.ignoreWhiteSpace = value; }
+            get { return fIgnoreWhiteSpace; }
+            set { fIgnoreWhiteSpace = value; }
         }
 
         public bool RecognizeDecimals
         {
-            get { return this.recognizeDecimals; }
-            set { this.recognizeDecimals = value; }
+            get { return fRecognizeDecimals; }
+            set { fRecognizeDecimals = value; }
         }
 
         public int Position
         {
-            get { return this.pos; }
+            get { return fPos; }
         }
 
         private void Reset()
         {
-            this.ignoreWhiteSpace = false;
-            this.recognizeDecimals = true;
-            this.symbolChars = new char[]{'=', '+', '-', '/', ',', '.', '*', '~', '!', '@', '#', '$', '%', '^', '&', '(', ')', '{', '}', '[', ']', ':', ';', '<', '>', '?', '|', '\\'};
+            fIgnoreWhiteSpace = false;
+            fRecognizeDecimals = true;
+            fSymbolChars = new char[]{'=', '+', '-', '/', ',', '.', '*', '~', '!', '@', '#', '$', '%', '^', '&', '(', ')', '{', '}', '[', ']', ':', ';', '<', '>', '?', '|', '\\'};
 
-            line = 1;
-            column = 1;
-            pos = 0;
+            fLine = 1;
+            fColumn = 1;
+            fPos = 0;
         }
 
         protected char LA(int count)
         {
-            return (pos + count >= data.Length) ? EOF : data[pos+count];
+            return (fPos + count >= fData.Length) ? EOF : fData[fPos+count];
         }
 
         protected char Consume()
         {
-            char ret = data[pos];
-            pos++;
-            column++;
+            char ret = fData[fPos];
+            fPos++;
+            fColumn++;
 
             return ret;
         }
 
         protected Token CreateToken(TokenKind kind, string value)
         {
-            return new Token(kind, value, line, column);
+            return new Token(kind, value, fLine, fColumn);
         }
 
         protected Token CreateToken(TokenKind kind)
         {
-            string tokenData = data.Substring(savePos, pos-savePos);
-            return new Token(kind, tokenData, saveLine, saveCol);
+            string tokenData = fData.Substring(fSavePos, fPos-fSavePos);
+            return new Token(kind, tokenData, fSaveLine, fSaveCol);
         }
 
         public Token Next()
@@ -160,7 +160,7 @@ namespace GKCommon
                 case ' ':
                 case '\t':
                     {
-                        if (this.ignoreWhiteSpace)
+                        if (fIgnoreWhiteSpace)
                         {
                             Consume();
                             goto ReadToken;
@@ -186,8 +186,8 @@ namespace GKCommon
                         if (LA(0) == '\n')
                             Consume();	// on DOS/Windows we have \r\n for new line
 
-                        line++;
-                        column=1;
+                        fLine++;
+                        fColumn=1;
 
                         return CreateToken(TokenKind.EOL);
                     }
@@ -195,8 +195,8 @@ namespace GKCommon
                     {
                         StartRead();
                         Consume();
-                        line++;
-                        column=1;
+                        fLine++;
+                        fColumn=1;
                         
                         return CreateToken(TokenKind.EOL);
                     }
@@ -210,7 +210,8 @@ namespace GKCommon
                     {
                         if (Char.IsLetter(ch) || ch == '_')
                             return ReadWord();
-                        else if (IsSymbol(ch))
+                        
+                        if (IsSymbol(ch))
                         {
                             StartRead();
                             Consume();
@@ -223,7 +224,6 @@ namespace GKCommon
                             return CreateToken(TokenKind.Unknown);
                         }
                     }
-
             }
         }
 
@@ -232,9 +232,9 @@ namespace GKCommon
         /// </summary>
         private void StartRead()
         {
-            saveLine = line;
-            saveCol = column;
-            savePos = pos;
+            fSaveLine = fLine;
+            fSaveCol = fColumn;
+            fSavePos = fPos;
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace GKCommon
                 char ch = LA(0);
                 if (Char.IsDigit(ch))
                     Consume();
-                else if (ch == '.' && recognizeDecimals && !hadDot)
+                else if (ch == '.' && fRecognizeDecimals && !hadDot)
                 {
                     hadDot = true;
                     Consume();
@@ -332,15 +332,15 @@ namespace GKCommon
                     if (LA(0) == '\n')	// for DOS & windows
                         Consume();
 
-                    line++;
-                    column = 1;
+                    fLine++;
+                    fColumn = 1;
                 }
                 else if (ch == '\n')	// new line in quoted string
                 {
                     Consume();
 
-                    line++;
-                    column = 1;
+                    fLine++;
+                    fColumn = 1;
                 }
                 else if (ch == '"')
                 {
@@ -361,8 +361,8 @@ namespace GKCommon
         /// </summary>
         protected bool IsSymbol(char c)
         {
-            for (int i = 0; i < symbolChars.Length; i++)
-                if (symbolChars[i] == c)
+            for (int i = 0; i < fSymbolChars.Length; i++)
+                if (fSymbolChars[i] == c)
                     return true;
 
             return false;

@@ -179,6 +179,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("MAP", GEDCOMMap.Create);
             f.RegisterTag("_LOC", GEDCOMPointer.Create);
             f.RegisterTag("_POSITION", GEDCOMCutoutPosition.Create);
+            f.RegisterTag("LANG", GEDCOMLanguage.Create);
 
             //f.RegisterTag("xxxx", xxxx.Create);
         }

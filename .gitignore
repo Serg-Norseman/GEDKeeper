@@ -17,6 +17,9 @@ sonarqube.cmd
 /projects/GKCommon/bin/
 /projects/GKCommon/obj/
 
+/projects/GKIntl/bin/
+/projects/GKIntl/obj/
+
 /projects/GKUpdater/bin/
 /projects/GKUpdater/obj/
 

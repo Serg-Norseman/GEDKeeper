@@ -333,13 +333,13 @@ namespace GKCore.Export
                         if (person.IRec.Sex == GEDCOMSex.svMale)
                         {
                             sp = family.Wife;
-                            st = "Ж";
+                            st = LangMan.LS(LSID.LSID_WifeSign);
                             unk = LangMan.LS(LSID.LSID_UnkFemale);
                         }
                         else
                         {
                             sp = family.Husband;
-                            st = "М";
+                            st = LangMan.LS(LSID.LSID_HusbSign);
                             unk = LangMan.LS(LSID.LSID_UnkMale);
                         }
 

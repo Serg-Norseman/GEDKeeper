@@ -622,20 +622,7 @@ namespace GKUI
             {
                 TreeTools.CheckRelations(fSplitList);
 
-                string subm = this.fTree.Header.GetTagStringValue("SUBM");
-                this.fTree.Header.Clear();
-                this.fTree.Header.Source = "GEDKeeper";
-                this.fTree.Header.ReceivingSystemName = "GEDKeeper";
-                this.fTree.Header.CharacterSet = MainWin.Instance.Options.DefCharacterSet;
-                this.fTree.Header.Language.Value = GEDCOMLanguageID.Russian;
-                this.fTree.Header.GEDCOMVersion = "5.5";
-                this.fTree.Header.GEDCOMForm = "LINEAGE-LINKED";
-                this.fTree.Header.FileName = Path.GetFileName(fileName);
-                this.fTree.Header.TransmissionDate.Date = DateTime.Now;
-
-                if (subm != "") {
-                    this.fTree.Header.SetTagStringValue("SUBM", subm);
-                }
+                GKUtils.PrepareHeader(this.fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
 
                 using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(this.fTree.Header.CharacterSet)))
                 {

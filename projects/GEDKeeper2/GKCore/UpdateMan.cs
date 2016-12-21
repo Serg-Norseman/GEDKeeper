@@ -96,10 +96,12 @@ namespace GKCore
                 {
                     string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
 
+                    #if !CI_MODE
                     if (DialogResult.Yes == GKUtils.ShowQuestion(string.Format(question, curVersion, newVersion)))
                     {
                         Process.Start(url);
                     }
+                    #endif
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("UpdateMan.WorkerMethod(): " + ex.Message);

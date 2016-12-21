@@ -796,8 +796,10 @@ namespace GKCore
         /* 737 */ LSID_WSF_Married_Maiden,
         /* 738 */ LSID_WSF_Maiden,
         /* 739 */ LSID_WSF_Married,
+        /* 740 */ LSID_HusbSign,
+        /* 741 */ LSID_WifeSign,
 
-        /* 000 */ LSID_Last = LSID_WSF_Married
+        /* 000 */ LSID_Last = LSID_WifeSign
     }
 
     // TODO: remove and merge with LangManager
@@ -1547,7 +1549,9 @@ namespace GKCore
             /* 736 */ "Format \"Maiden (Married)\"",
             /* 737 */ "Format \"Married (Maiden)\"",
             /* 738 */ "Format \"Maiden\"",
-            /* 739 */ "Format \"Married\""
+            /* 739 */ "Format \"Married\"",
+            /* 740 */ "H",
+            /* 741 */ "W"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

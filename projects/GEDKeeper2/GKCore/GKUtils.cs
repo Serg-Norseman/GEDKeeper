@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_NEWNAMES
-
 using System;
 using System.IO;
 using System.Reflection;
@@ -1284,31 +1282,35 @@ namespace GKCore
             }
         }
 
-        public static void PrepareHeader(GEDCOMTree tree, string fileName, GEDCOMCharacterSet charSet)
+        public static void PrepareHeader(GEDCOMTree tree, string fileName, GEDCOMCharacterSet charSet, bool zeroRev)
         {
             GEDCOMHeader header = tree.Header;
 
             string subm = header.GetTagStringValue("SUBM");
             int oldRev = header.FileRevision;
+            GEDCOMLanguageID langId = header.Language.Value;
 
             header.Clear();
             header.Source = "GEDKeeper";
             header.ReceivingSystemName = "GEDKeeper";
             header.CharacterSet = charSet;
-            header.Language.Value = GEDCOMLanguageID.Russian;
-            header.GEDCOMVersion = "5.5";
+            header.Language.Value = langId;
+            header.GEDCOMVersion = "5.5.1";
             header.GEDCOMForm = "LINEAGE-LINKED";
             header.FileName = Path.GetFileName(fileName);
             header.TransmissionDateTime = DateTime.Now;
-            header.FileRevision = oldRev + 1;
+
+            header.SourceVersion = GKData.APP_FORMAT_CURVER.ToString();
+
+            if (zeroRev) {
+                header.FileRevision = 0;
+            } else {
+                header.FileRevision = oldRev + 1;
+            }
 
             if (subm != "") {
                 header.SetTagStringValue("SUBM", subm);
             }
-
-            #if DEBUG_NEWNAMES
-            header.SourceVersion = GKData.APP_FORMAT_CURVER.ToString();
-            #endif
         }
 
         #endregion

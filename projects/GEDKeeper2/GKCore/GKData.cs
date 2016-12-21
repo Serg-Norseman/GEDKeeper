@@ -39,7 +39,7 @@ namespace GKCore
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
-        public const int APP_FORMAT_DEFVER = 38; // don't change it!
+        public const int APP_FORMAT_DEFVER = 39; // don't change it!
         public const int APP_FORMAT_CURVER = 39;
 
         public const string GEDCOM_EXT = "ged";

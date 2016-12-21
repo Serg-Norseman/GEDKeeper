@@ -19,6 +19,9 @@ rmdir .\projects\GEDKeeper2\obj /s /q
 rmdir .\projects\GKCommon\bin /s /q
 rmdir .\projects\GKCommon\obj /s /q
 
+rmdir .\projects\GKIntl\bin /s /q
+rmdir .\projects\GKIntl\obj /s /q
+
 rmdir .\projects\GKTests\bin /s /q
 rmdir .\projects\GKTests\obj /s /q
 rmdir .\projects\GKTests\OpenCover /s /q

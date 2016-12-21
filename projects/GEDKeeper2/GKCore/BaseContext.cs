@@ -1062,7 +1062,7 @@ namespace GKCore
             this.MoveMediaContainers(oldFileName, fileName);
 
             if (string.IsNullOrEmpty(password)) {
-                GKUtils.PrepareHeader(this.fTree, fileName, GlobalOptions.Instance.DefCharacterSet);
+                GKUtils.PrepareHeader(this.fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
                 this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 this.SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
@@ -1132,7 +1132,7 @@ namespace GKCore
 
                 using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
                 {
-                    GKUtils.PrepareHeader(this.fTree, fileName, charSet);
+                    GKUtils.PrepareHeader(this.fTree, fileName, charSet, false);
                     this.fTree.SaveToStreamExt(crStream, fileName, charSet);
                     crStream.Flush();
                 }
