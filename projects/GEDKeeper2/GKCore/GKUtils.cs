@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,6 +29,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
+using GKCore.Geocoding;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
@@ -313,6 +315,25 @@ namespace GKCore
             }
 
             return string.Empty;
+        }
+
+        public static IGeocoder CreateGeocoder(GlobalOptions options)
+        {
+            ProxyOptions proxyOptions = options.Proxy;
+            IWebProxy proxy = null;
+            if (proxyOptions.UseProxy)
+            {
+                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true)
+                {
+                    Credentials = CredentialCache.DefaultCredentials
+                };
+            }
+
+            IGeocoder geocoder = IGeocoder.Create(options.Geocoder);
+            geocoder.SetKey(GKData.GAPI_KEY);
+            geocoder.SetProxy(proxy);
+
+            return geocoder;
         }
 
         #endregion

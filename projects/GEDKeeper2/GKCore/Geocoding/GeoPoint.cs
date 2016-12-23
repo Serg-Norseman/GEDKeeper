@@ -20,16 +20,16 @@
 
 using System;
 
-namespace GKCore.Maps
+namespace GKCore.Geocoding
 {
-    public sealed class GMapPoint
+    public sealed class GeoPoint
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Hint { get; set; }
         public DateTime Date { get; set; }
 
-        public GMapPoint(double latitude, double longitude, string hint)
+        public GeoPoint(double latitude, double longitude, string hint)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;

@@ -211,6 +211,8 @@ namespace GKUI.Dialogs
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
             this.FontDialog1 = new System.Windows.Forms.FontDialog();
+            this.cmbGeocoder = new System.Windows.Forms.ComboBox();
+            this.lblGeocoder = new System.Windows.Forms.Label();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -261,9 +263,11 @@ namespace GKUI.Dialogs
             // pageCommon
             // 
             this.pageCommon.Controls.Add(this.groupBox1);
+            this.pageCommon.Controls.Add(this.lblGeocoder);
             this.pageCommon.Controls.Add(this.lblLanguage);
             this.pageCommon.Controls.Add(this.grpInternet);
             this.pageCommon.Controls.Add(this.grpOther);
+            this.pageCommon.Controls.Add(this.cmbGeocoder);
             this.pageCommon.Controls.Add(this.cmbLanguages);
             this.pageCommon.Location = new System.Drawing.Point(4, 26);
             this.pageCommon.Name = "pageCommon";
@@ -1278,6 +1282,26 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cmbGeocoder
+            // 
+            this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGeocoder.Items.AddRange(new object[] {
+                                    "Google",
+                                    "Yandex"});
+            this.cmbGeocoder.Location = new System.Drawing.Point(105, 425);
+            this.cmbGeocoder.Name = "cmbGeocoder";
+            this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
+            this.cmbGeocoder.TabIndex = 4;
+            // 
+            // lblGeocoder
+            // 
+            this.lblGeocoder.AutoSize = true;
+            this.lblGeocoder.Location = new System.Drawing.Point(13, 428);
+            this.lblGeocoder.Name = "lblGeocoder";
+            this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
+            this.lblGeocoder.TabIndex = 0;
+            this.lblGeocoder.Text = "lblGeocoder";
+            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1334,5 +1358,7 @@ namespace GKUI.Dialogs
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+        private System.Windows.Forms.ComboBox cmbGeocoder;
+        private System.Windows.Forms.Label lblGeocoder;
     }
 }

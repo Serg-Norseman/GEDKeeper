@@ -224,6 +224,8 @@ namespace GKUI.Dialogs
 
             this.ancOptionsControl1.Options = this.fOptions.AncestorsCircleOptions;
             this.ancOptionsControl1.UpdateControls();
+
+            this.cmbGeocoder.Text = this.fOptions.Geocoder;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -425,6 +427,8 @@ namespace GKUI.Dialogs
                 }
             }
 
+            this.fOptions.Geocoder = this.cmbGeocoder.Text; 
+
             base.DialogResult = DialogResult.OK;
         }
 
@@ -563,6 +567,8 @@ namespace GKUI.Dialogs
             this.radMarried_Maiden.Text = LangMan.LS(LSID.LSID_WSF_Married_Maiden);
             this.radMaiden.Text = LangMan.LS(LSID.LSID_WSF_Maiden);
             this.radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
+
+            this.lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
         }
     }
 }

@@ -71,6 +71,7 @@ namespace GKCore.Options
         private bool fExtendedNames;
         private WomanSurnameFormat fWomanSurnameFormat;
         private readonly AncestorsCircleOptions fAncestorsCircleOptions;
+        private string fGeocoder;
 
 
         public static GlobalOptions Instance
@@ -264,6 +265,12 @@ namespace GKCore.Options
             set { this.fWomanSurnameFormat = value; }
         }
 
+        public string Geocoder
+        {
+            get { return this.fGeocoder; }
+            set { this.fGeocoder = value; }
+        }
+
 
         public int GetLangsCount()
         {
@@ -330,6 +337,7 @@ namespace GKCore.Options
             this.fProxy = new ProxyOptions();
             this.fRelations = new StringList();
             this.fAncestorsCircleOptions = new AncestorsCircleOptions();
+            this.fGeocoder = "Google";
 
             this.fIndividualListColumns = new IndividualListColumns();
             this.fIndividualListColumns.ResetDefaults();
@@ -432,6 +440,8 @@ namespace GKCore.Options
 
             this.fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
             this.fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
+
+            this.fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
 
             int kl = ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
             SysUtils.SetKeyLayout(kl);
@@ -542,6 +552,8 @@ namespace GKCore.Options
 
             ini.WriteBool("Common", "ExtendedNames", this.fExtendedNames);
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)this.fWomanSurnameFormat);
+
+            ini.WriteString("Common", "Geocoder", this.fGeocoder);
 
             this.fChartOptions.SaveToFile(ini);
             this.fPedigreeOptions.SaveToFile(ini);
