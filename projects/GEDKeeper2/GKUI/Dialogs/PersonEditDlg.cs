@@ -1061,6 +1061,7 @@ namespace GKUI.Dialogs
             }
 
             this.fEventsList = new GKEventsSheet(this, this.pageEvents, true, this.fLocalUndoman);
+            this.fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
             this.fSpousesList = this.CreateSpousesSheet(this.pageSpouses);
             this.fSpousesList.SetControlName("fSpousesList"); // for purpose of tests

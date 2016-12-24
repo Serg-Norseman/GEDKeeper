@@ -21,7 +21,6 @@ namespace Externals.IniFiles
         /// <summary>Same as Formatting</summary>
         protected string formatting = "";
 
-
         /// <summary>Initializes a new, empty instance IniFileElement</summary>
         protected IniFileElement()
         {
@@ -65,12 +64,14 @@ namespace Externals.IniFiles
                 line = value + line.TrimStart();
             }
         }
+
         /// <summary>Gets full text representation of a config file element, excluding intendation.</summary>
         public string Content
         {
             get { return line.TrimStart(); }
             protected set { line = value; }
         }
+
         /// <summary>Gets full text representation of a config file element, including intendation.</summary>
         public string Line
         {
@@ -90,11 +91,13 @@ namespace Externals.IniFiles
                 return line;
             }
         }
+
         /// <summary>Gets a string representation of this IniFileElement object.</summary>
         public override string ToString()
         {
             return "Line: \"" + line + "\"";
         }
+
         /// <summary>Formats this config element</summary>
         public virtual void FormatDefault()
         {

@@ -35,6 +35,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.PreserveFormatting;
             }
         }
+
         /// <summary>If true empty keys will not be removed. Default TRUE.</summary>
         public static bool AllowEmptyValues
         {
@@ -47,6 +48,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.AllowEmptyValues;
             }
         }
+
         /// <summary>If Quotes are on, then it in such situation: |KEY = "VALUE" blabla|, 'blabla' is
         /// a "text on the right". If this field is set to False, then such string will be ignored.</summary>
         public static bool AllowTextOnTheRight
@@ -60,6 +62,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.AllowTextOnTheRight;
             }
         }
+
         /// <summary>Indicates whether comments and blank lines should be grouped
         /// (if true then multiple line comment will be parsed to the one single IniFileComment object).
         /// Otherwise, one IniFileElement will be always representing one single line in the file. Default TRUE.</summary>
@@ -74,6 +77,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.GroupElements;
             }
         }
+
         /// <summary>Determines whether all searching/testing operation are case-sensitive. Default TRUE.</summary>
         public static bool CaseSensitive
         {
@@ -86,6 +90,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.CaseSensitive;
             }
         }
+
         /// <summary>Determines whether a header comment of an INI file is separate from a comment of first section.
         /// If false, comment at the beginning of file may be considered both as header and commentary of the first section. Default TRUE.</summary>
         public static bool SeparateHeader
@@ -99,6 +104,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.SeparateHeader;
             }
         }
+
         /// <summary>If true, blank lines will be written to a file. Otherwise, they will ignored.</summary>
         public static bool AllowBlankLines
         {
@@ -111,6 +117,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.AllowBlankLines;
             }
         }
+
         /// <summary>If true, blank lines will be written to a file. Otherwise, they will ignored.</summary>
         public static bool AllowInlineComments
         {
@@ -121,6 +128,7 @@ namespace Externals.IniFiles
                 else flags &= ~IniFlags.AllowInlineComments;
             }
         }
+
         /// <summary>A string which represents close bracket for a section. If empty or null, sections will
         /// disabled. Default "]"</summary>
         public static string SectionCloseBracket
@@ -133,6 +141,7 @@ namespace Externals.IniFiles
                 IniFileSettings.sectionCloseBracket = value;
             }
         }
+
         /// <summary>Gets or sets array of strings which start a comment line.
         /// Default is {"#" (hash), ";" (semicolon)}. If empty or null, commentaries
         /// will not be allowed.</summary>

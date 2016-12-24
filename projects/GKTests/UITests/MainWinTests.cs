@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -99,6 +100,9 @@ namespace GKTests.UITests
             // Stage 5: internals of BaseWin
             BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
 
+
+            // Stage 21
+            MainWin_Test();
 
             // Stage 22: call to QuickFind
             ClickToolStripMenuItem("miSearch", fMainWin);
@@ -190,9 +194,6 @@ namespace GKTests.UITests
             // Stage 37
             ModalFormHandler = MessageBox_OkHandler;
             ((BaseWin)fCurBase).RecordDuplicate();
-
-            // Stage 38
-            MainWin_Test();
 
             // Stage 50: close Base
             ClickToolStripMenuItem("miFileClose", fMainWin);
@@ -577,49 +578,43 @@ namespace GKTests.UITests
             cmbSex.Select(1); // male
 
             var tabs = new TabControlTester("tabsPersonData", dlg);
+            GKSheetListTester sheetTester;
 
-            // groups
-            tabs.SelectTab(4);
-            GKSheetListTester sheetTester = new GKSheetListTester("fGroupsList", dlg);
-            Assert.AreEqual(0, indiRecord.Groups.Count);
-            RSD_SubHandler = GroupAdd_Mini_Handler;
-            ModalFormHandler = RecordSelectDlg_Create_Handler;
-            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GEDCOMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+            // events
+            tabs.SelectTab(0);
+            Assert.AreEqual(1, indiRecord.Events.Count);
+            ModalFormHandler = EventEditDlg_Select_Handler;
+            ClickToolStripButton("fEventsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(2, indiRecord.Events.Count);
 
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.Groups.Count);
-
-            // associations
-            tabs.SelectTab(3);
-            sheetTester = new GKSheetListTester("fAssociationsList", dlg);
-            Assert.AreEqual(0, indiRecord.Associations.Count);
-            ModalFormHandler = AssociationEdit_Handler;
-            ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.Associations.Count);
-            Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
+            sheetTester = new GKSheetListTester("fEventsList", dlg);
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = EventEditDlg_Select_Handler;
+            ClickToolStripButton("fEventsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(2, indiRecord.Events.Count);
 
             ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fAssociationsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.Associations.Count);
+            sheetTester.Properties.SelectItem(1);
+            ClickToolStripButton("fEventsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(1, indiRecord.Events.Count);
 
-            // userrefs
-            tabs.SelectTab(8);
-            sheetTester = new GKSheetListTester("fUserRefList", dlg);
-            Assert.AreEqual(0, indiRecord.UserReferences.Count);
-            ModalFormHandler = UserRefEdit_Handler;
-            ClickToolStripButton("fUserRefList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.UserReferences.Count);
-            Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
+            // spouses
+            tabs.SelectTab(1);
+            sheetTester = new GKSheetListTester("fSpousesList", dlg);
+            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
+            ModalFormHandler = SpouseEdit_Handler;
+            ClickToolStripButton("fSpousesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
 
+            sheetTester.Properties.SelectItem(1);
+            ModalFormHandler = SpouseEdit_Handler;
+            ClickToolStripButton("fSpousesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
+
+            sheetTester.Properties.SelectItem(1);
             ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fUserRefList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.UserReferences.Count);
+            ClickToolStripButton("fSpousesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
 
             // names
             tabs.SelectTab(2);
@@ -641,23 +636,48 @@ namespace GKTests.UITests
             ClickToolStripButton("fNamesList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(1, indiRecord.PersonalNames.Count);
 
-            // spouses
-            tabs.SelectTab(1);
-            sheetTester = new GKSheetListTester("fSpousesList", dlg);
-            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
-            ModalFormHandler = SpouseEdit_Handler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
+            // associations
+            tabs.SelectTab(3);
+            sheetTester = new GKSheetListTester("fAssociationsList", dlg);
+            Assert.AreEqual(0, indiRecord.Associations.Count);
+            ModalFormHandler = AssociationEdit_Handler;
+            ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.Associations.Count);
+            Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
 
-            sheetTester.Properties.SelectItem(1);
-            ModalFormHandler = SpouseEdit_Handler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
-
-            sheetTester.Properties.SelectItem(1);
             ModalFormHandler = MessageBox_YesHandler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fAssociationsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.Associations.Count);
+
+            // groups
+            tabs.SelectTab(4);
+            sheetTester = new GKSheetListTester("fGroupsList", dlg);
+            Assert.AreEqual(0, indiRecord.Groups.Count);
+            RSD_SubHandler = GroupAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.Groups.Count);
+            Assert.AreEqual("sample group", ((GEDCOMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.Groups.Count);
+
+            // userrefs
+            tabs.SelectTab(8);
+            sheetTester = new GKSheetListTester("fUserRefList", dlg);
+            Assert.AreEqual(0, indiRecord.UserReferences.Count);
+            ModalFormHandler = UserRefEdit_Handler;
+            ClickToolStripButton("fUserRefList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.UserReferences.Count);
+            Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fUserRefList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.UserReferences.Count);
         }
 
         private void ResearchEditDlg_Handler(ResearchEditDlg dlg)
@@ -720,7 +740,7 @@ namespace GKTests.UITests
             Assert.IsNotNull(eventDlg.Event);
 
             var cmbEventType = new ComboBoxTester("cmbEventType", form);
-            cmbEventType.Select(1); // Birth
+            cmbEventType.Select(1); // Birth(indi) / ?(fam)
 
             var txtEventPlace = new TextBoxTester("txtEventPlace", form);
             txtEventPlace.Enter("test place");
@@ -896,7 +916,26 @@ namespace GKTests.UITests
 
             //formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.F | Keys.Control));
 
+            tcWin.NavPrev();
+            tcWin.NavNext();
+
+            ModalFormHandler = TreeFilterDlg_btnAccept_Handler;
+            tcWin.SetFilter();
+
+            IList<ISearchResult> search = tcWin.FindAll("Maria");
+            Assert.AreEqual(1, search.Count);
+
             frm.Close();
+        }
+
+        private void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
+        }
+
+        private void TreeFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnCancel", form);
         }
 
         private void StatsWin_Tests(Form frm, string stage)
@@ -908,6 +947,26 @@ namespace GKTests.UITests
         private void SlideshowWin_Tests(Form frm, string stage)
         {
             Assert.IsInstanceOf(typeof(SlideshowWin), frm, stage);
+
+            SlideshowWin slidesWin = (SlideshowWin)frm;
+
+            Assert.AreEqual(null, slidesWin.FindAll(""));
+
+            Assert.AreEqual(false, slidesWin.AllowFilter());
+            slidesWin.SetFilter();
+
+            slidesWin.SelectByRec(null);
+            slidesWin.UpdateView();
+
+            Assert.AreEqual(false, slidesWin.AllowQuickFind());
+            slidesWin.QuickFind();
+
+            Assert.AreEqual(false, slidesWin.NavCanBackward());
+            slidesWin.NavPrev();
+
+            Assert.AreEqual(false, slidesWin.NavCanForward());
+            slidesWin.NavNext();
+
             frm.Close();
         }
 

@@ -99,6 +99,7 @@
     <Compile Include="UITests\FamilyEditDlgTests.cs" />
     <Compile Include="UITests\FilePropertiesDlgTests.cs" />
     <Compile Include="UITests\GroupEditDlgTests.cs" />
+    <Compile Include="UITests\InputBoxTests.cs" />
     <Compile Include="UITests\MainWinTests.cs" />
     <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />
     <Compile Include="UITests\ResearchEditDlgTests.cs" />
     <Compile Include="UITests\SexCheckDlgTests.cs" />
-    <Compile Include="UITests\SlideshowWinTests.cs" />
     <Compile Include="UITests\SourceCitEditDlgTests.cs" />
     <Compile Include="UITests\SourceEditDlgTests.cs" />
     <Compile Include="UITests\StatisticsWinTests.cs" />
