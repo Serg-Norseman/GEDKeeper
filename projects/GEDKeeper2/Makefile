@@ -53,6 +53,10 @@ sources := \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
 ./GKCore/Export/RTFWriter.cs \
+./GKCore/Geocoding/GeoPoint.cs \
+./GKCore/Geocoding/GoogleGeocoder.cs \
+./GKCore/Geocoding/IGeocoder.cs \
+./GKCore/Geocoding/YandexGeocoder.cs \
 ./GKCore/GKData.cs \
 ./GKCore/GKUtils.cs \
 ./GKCore/Kinships/KinshipRec.cs \
@@ -61,6 +65,7 @@ sources := \
 ./GKCore/LangMan.cs \
 ./GKCore/Lists/CommunicationListMan.cs \
 ./GKCore/Lists/FamilyListMan.cs \
+./GKCore/Lists/GEDCOMDateItem.cs \
 ./GKCore/Lists/GroupListMan.cs \
 ./GKCore/Lists/IndividualListMan.cs \
 ./GKCore/Lists/ListColumns.cs \
@@ -73,7 +78,6 @@ sources := \
 ./GKCore/Lists/ResearchListMan.cs \
 ./GKCore/Lists/SourceListMan.cs \
 ./GKCore/Lists/TaskListMan.cs \
-./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/ChangeTracker.cs \
@@ -97,6 +101,7 @@ sources := \
 ./GKCore/Stats/TreeStats.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
+./GKCore/UpdateMan.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/BaseWin.cs \
@@ -120,8 +125,6 @@ sources := \
 ./GKUI/Controls/GKComboItem.cs \
 ./GKUI/Controls/GKInputBox.cs \
 ./GKUI/Controls/GKInputBox.Designer.cs \
-./GKUI/Controls/GKListItem.cs \
-./GKUI/Controls/GKListView.cs \
 ./GKUI/Controls/GKMapBrowser.cs \
 ./GKUI/Controls/GKMenuItem.cs \
 ./GKUI/Controls/GKMergeControl.cs \
@@ -152,6 +155,8 @@ sources := \
 ./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
 ./GKUI/Dialogs/GroupEditDlg.cs \
 ./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/LanguageEditDlg.cs \
+./GKUI/Dialogs/LanguageEditDlg.Designer.cs \
 ./GKUI/Dialogs/LanguageSelectDlg.cs \
 ./GKUI/Dialogs/LanguageSelectDlg.Designer.cs \
 ./GKUI/Dialogs/LocationEditDlg.cs \
@@ -247,6 +252,10 @@ sources := \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
 ./GKCore/Export/RTFWriter.cs \
+./GKCore/Geocoding/GeoPoint.cs \
+./GKCore/Geocoding/GoogleGeocoder.cs \
+./GKCore/Geocoding/IGeocoder.cs \
+./GKCore/Geocoding/YandexGeocoder.cs \
 ./GKCore/GKData.cs \
 ./GKCore/GKUtils.cs \
 ./GKCore/Kinships/KinshipRec.cs \
@@ -255,6 +264,7 @@ sources := \
 ./GKCore/LangMan.cs \
 ./GKCore/Lists/CommunicationListMan.cs \
 ./GKCore/Lists/FamilyListMan.cs \
+./GKCore/Lists/GEDCOMDateItem.cs \
 ./GKCore/Lists/GroupListMan.cs \
 ./GKCore/Lists/IndividualListMan.cs \
 ./GKCore/Lists/ListColumns.cs \
@@ -267,7 +277,6 @@ sources := \
 ./GKCore/Lists/ResearchListMan.cs \
 ./GKCore/Lists/SourceListMan.cs \
 ./GKCore/Lists/TaskListMan.cs \
-./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
 ./GKCore/Operations/ChangeTracker.cs \
@@ -291,6 +300,7 @@ sources := \
 ./GKCore/Stats/TreeStats.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
+./GKCore/UpdateMan.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/BaseWin.cs \
@@ -314,8 +324,6 @@ sources := \
 ./GKUI/Controls/GKComboItem.cs \
 ./GKUI/Controls/GKInputBox.cs \
 ./GKUI/Controls/GKInputBox.Designer.cs \
-./GKUI/Controls/GKListItem.cs \
-./GKUI/Controls/GKListView.cs \
 ./GKUI/Controls/GKMapBrowser.cs \
 ./GKUI/Controls/GKMenuItem.cs \
 ./GKUI/Controls/GKMergeControl.cs \
@@ -346,6 +354,8 @@ sources := \
 ./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
 ./GKUI/Dialogs/GroupEditDlg.cs \
 ./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/LanguageEditDlg.cs \
+./GKUI/Dialogs/LanguageEditDlg.Designer.cs \
 ./GKUI/Dialogs/LanguageSelectDlg.cs \
 ./GKUI/Dialogs/LanguageSelectDlg.Designer.cs \
 ./GKUI/Dialogs/LocationEditDlg.cs \
@@ -443,6 +453,7 @@ GKUI.Dialogs.EventEditDlg.resources \
 GKUI.Dialogs.FamilyEditDlg.resources \
 GKUI.Dialogs.FilePropertiesDlg.resources \
 GKUI.Dialogs.GroupEditDlg.resources \
+GKUI.Dialogs.LanguageEditDlg.resources \
 GKUI.Dialogs.LanguageSelectDlg.resources \
 GKUI.Dialogs.LocationEditDlg.resources \
 GKUI.Dialogs.MediaEditDlg.resources \
@@ -497,6 +508,7 @@ GKUI.Dialogs.EventEditDlg.resources \
 GKUI.Dialogs.FamilyEditDlg.resources \
 GKUI.Dialogs.FilePropertiesDlg.resources \
 GKUI.Dialogs.GroupEditDlg.resources \
+GKUI.Dialogs.LanguageEditDlg.resources \
 GKUI.Dialogs.LanguageSelectDlg.resources \
 GKUI.Dialogs.LocationEditDlg.resources \
 GKUI.Dialogs.MediaEditDlg.resources \

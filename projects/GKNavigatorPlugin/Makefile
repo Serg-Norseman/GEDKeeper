@@ -31,6 +31,7 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKNavigatorPlugin.cs \
+./NavigatorData.cs \
 ./NavigatorWidget.cs \
 ./NavigatorWidget.Designer.cs
 
@@ -39,8 +40,9 @@ else
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKNavigatorPlugin.cs \
-./PluginForm.cs \
-./PluginForm.Designer.cs
+./NavigatorData.cs \
+./NavigatorWidget.cs \
+./NavigatorWidget.Designer.cs
 
 endif
 
@@ -63,7 +65,7 @@ else
 # `$(resources)` for `$(linux)`
 resources := \
 $(addprefix $(objdir), \
-PluginForm.resources \
+NavigatorWidget.resources \
 )
 
 endif
