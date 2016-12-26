@@ -247,6 +247,11 @@ namespace GKUI
             this.miRecordDuplicate.Visible = (recView == this.ListPersons);
         }
 
+        private void miRecordAdd_Click(object sender, EventArgs e)
+        {
+        	this.RecordAdd();
+        }
+        
         private void miRecordEdit_Click(object sender, EventArgs e)
         {
             this.RecordEdit(null, null);
@@ -1176,6 +1181,7 @@ namespace GKUI
             this.tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
             this.tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
 
+            this.miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
             this.miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             this.miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
             this.miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
