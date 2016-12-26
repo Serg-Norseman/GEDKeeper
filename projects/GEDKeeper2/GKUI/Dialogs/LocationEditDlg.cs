@@ -19,14 +19,15 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Geocoding;
 using GKCore.Interfaces;
-using GKCore.Maps;
 using GKUI.Controls;
 using GKUI.Sheets;
 
@@ -40,7 +41,6 @@ namespace GKUI.Dialogs
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKMediaSheet fMediaList;
         private readonly GKNotesSheet fNotesList;
-        private readonly ExtList<GMapPoint> fSearchPoints;
 
         private GEDCOMLocationRecord fLocationRecord;
 
@@ -57,11 +57,10 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fSearchPoints = new ExtList<GMapPoint>(true);
-
             this.fMapBrowser = new GKMapBrowser();
             this.fMapBrowser.InitMap();
             this.fMapBrowser.Dock = DockStyle.Fill;
+            this.fMapBrowser.ShowLines = false;
             this.panMap.Controls.Add(this.fMapBrowser);
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
@@ -93,7 +92,6 @@ namespace GKUI.Dialogs
         {
             if (disposing)
             {
-                this.fSearchPoints.Dispose();
                 if (this.components != null) this.components.Dispose();
             }
             base.Dispose(disposing);
@@ -152,21 +150,20 @@ namespace GKUI.Dialogs
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            this.fMapBrowser.ShowLines = false;
-
             this.ListGeoCoords.BeginUpdate();
             this.fMapBrowser.BeginUpdate();
             try
             {
-                this.fSearchPoints.Clear();
-                GKMapBrowser.RequestGeoCoords(this.txtName.Text, this.fSearchPoints);
+                IList<GeoPoint> searchPoints = new List<GeoPoint>();
+
+                GKMapBrowser.RequestGeoCoords(this.txtName.Text, searchPoints);
                 this.ListGeoCoords.Items.Clear();
                 this.fMapBrowser.ClearPoints();
 
-                int num = this.fSearchPoints.Count;
+                int num = searchPoints.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GMapPoint pt = this.fSearchPoints[i];
+                    GeoPoint pt = searchPoints[i];
 
                     GKListItem item = new GKListItem(pt.Hint, pt);
                     item.AddSubItem(GKMapBrowser.CoordToStr(pt.Latitude));
@@ -174,9 +171,13 @@ namespace GKUI.Dialogs
                     this.ListGeoCoords.Items.Add(item);
 
                     this.fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
+
+                    if (i == 0) {
+                        this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+                    }
                 }
 
-                this.fMapBrowser.ZoomToBounds();
+                //this.fMapBrowser.ZoomToBounds();
             }
             finally
             {
@@ -215,7 +216,7 @@ namespace GKUI.Dialogs
             GKListItem item = this.GetSelectedGeoItem();
             if (item == null) return;
 
-            GMapPoint pt = item.Data as GMapPoint;
+            GeoPoint pt = item.Data as GeoPoint;
             if (pt == null) return;
 
             this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);

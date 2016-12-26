@@ -91,6 +91,7 @@ namespace Externals.IniFiles
             if (val == null) return;
             setComment(val, comment);
         }
+
         /// <summary>Sets the inline comment for given key.</summary>
         public void SetInlineComment(string key, string comment)
         {

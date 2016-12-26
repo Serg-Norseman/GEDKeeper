@@ -35,6 +35,7 @@ namespace Externals.IniFiles
                 IniFileSection sect = GetSection(sectionName);
                 if (sect != null)
                     return sect;
+
                 IniFileSectionStart start;
                 if (sections.Count > 0) {
                     IniFileSectionStart prev = sections[sections.Count - 1].sectionStart;
@@ -74,15 +75,22 @@ namespace Externals.IniFiles
                 File.Create(path).Close();
                 return new IniFileEx();
             }
-            IniFileReader reader = new IniFileReader(path);
-            IniFileEx ret = FromStream(reader);
-            reader.Close();
-            return ret;
+
+            using (StreamReader reader = new StreamReader(path)) {
+                IniFileEx ret = FromStream(reader);
+                return ret;
+            }
+        }
+
+        /// <summary>Reads a INI file from a stream.</summary>
+        public static IniFileEx FromStream(StreamReader reader)
+        {
+            return FromElements(ParseText(reader));
         }
 
         /// <summary>Creates a new IniFile from elements collection (Advanced member).</summary>
         /// <param name="elemes">Elements collection.</param>
-        public static IniFileEx FromElements(IEnumerable<IniFileElement> elemes)
+        private static IniFileEx FromElements(IEnumerable<IniFileElement> elemes)
         {
             IniFileEx ret = new IniFileEx();
             ret.elements.AddRange(elemes);
@@ -113,27 +121,93 @@ namespace Externals.IniFiles
             return ret;
         }
 
-        /// <summary>Reads a INI file from a stream.</summary>
-        public static IniFileEx FromStream(IniFileReader reader)
-        {
-            return FromElements(reader.ReadElementsToEnd());
-        }
-
         /// <summary>Writes a INI file to a disc, using options in IniFileSettings class</summary>
         public void Save(string path)
         {
-            using (IniFileWriter writer = new IniFileWriter(path)) {
+            using (StreamWriter writer = new StreamWriter(path)) {
                 this.Save(writer);
             }
         }
 
         /// <summary>Writes a INI file to a stream, using options in IniFileSettings class</summary>
-        public void Save(IniFileWriter writer)
+        public void Save(StreamWriter writer)
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            writer.WriteIniFile(this);
+            foreach (IniFileElement el in this.elements)
+                WriteElement(writer, el);
+        }
+
+        /// <summary>Parses a single line.</summary>
+        /// <param name="line">Text to parse.</param>
+        private static IniFileElement ParseLine(string line)
+        {
+            if (line == null)
+                return null;
+            if (line.Contains("\n"))
+                throw new ArgumentException("String passed to the ParseLine method cannot contain more than one line.");
+            string trim = line.Trim();
+            IniFileElement elem = null;
+            if (IniFileBlankLine.IsLineValid(trim))
+                elem = new IniFileBlankLine(1);
+            else if (IniFileCommentary.IsLineValid(line))
+                elem = new IniFileCommentary(line);
+            else if (IniFileSectionStart.IsLineValid(trim))
+                elem = new IniFileSectionStart(line);
+            else if (IniFileValue.IsLineValid(trim))
+                elem = new IniFileValue(line);
+            return elem ?? new IniFileElement(line);
+        }
+
+        /// <summary>Parses given text.</summary>
+        /// <param name="text">Text to parse.</param>
+        private static List<IniFileElement> ParseText(StreamReader reader)
+        {
+            if (reader == null)
+                return null;
+
+            List<IniFileElement> ret = new List<IniFileElement>();
+            IniFileElement lastEl = null;
+
+            while (reader.Peek() != -1)
+            {
+                IniFileElement currEl = ParseLine(reader.ReadLine());
+
+                if (IniFileSettings.GroupElements) {
+                    if (lastEl != null)
+                    {
+                        if (currEl is IniFileBlankLine && lastEl is IniFileBlankLine) {
+                            ((IniFileBlankLine)lastEl).Amount++;
+                            continue;
+                        }
+
+                        if (currEl is IniFileCommentary && lastEl is IniFileCommentary) {
+                            ((IniFileCommentary)lastEl).Comment += Environment.NewLine + ((IniFileCommentary)currEl).Comment;
+                            continue;
+                        }
+                    }
+                    else
+                        lastEl = currEl;
+                }
+                lastEl = currEl;
+                ret.Add(currEl);
+            }
+            return ret;
+        }
+
+        /// <summary>Writes INI file element to the file.</summary>
+        /// <param name="element">Element to write.</param>
+        private void WriteElement(StreamWriter writer, IniFileElement element)
+        {
+            if (!IniFileSettings.PreserveFormatting)
+                element.FormatDefault();
+            // do not write if:
+            if (!( // 1) element is a blank line AND blank lines are not allowed
+                  (element is IniFileBlankLine && !IniFileSettings.AllowBlankLines)
+                  // 2) element is an empty value AND empty values are not allowed
+                  || (!IniFileSettings.AllowEmptyValues && element is IniFileValue && ((IniFileValue)element).Value == "")))
+                writer.WriteLine(element.Line);
         }
 
         /// <summary>Deletes a section and all it's values and comments. No exception is thrown if there is no section of requested name.</summary>
@@ -177,6 +251,7 @@ namespace Externals.IniFiles
                 }
             }
         }
+
         /// <summary>Joins sections which are definied more than one time.</summary>
         public void UnifySections()
         {
@@ -240,7 +315,7 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Gets or sets a commentary at the end of an INI file.</summary>
-        public string Foot
+        public string Footer
         {
             get
             {

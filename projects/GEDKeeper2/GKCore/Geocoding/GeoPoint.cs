@@ -18,40 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+using System;
 
-using GKCore.Interfaces;
-using GKTests.Mocks;
-using GKUI;
-using NUnit.Framework;
-
-namespace GKTests.UITests
+namespace GKCore.Geocoding
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [TestFixture]
-    public class SlideshowWinTests : CustomWindowTest
+    public sealed class GeoPoint
     {
-        private IBaseWindow fBase;
-        private SlideshowWin fDialog;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Hint { get; set; }
+        public DateTime Date { get; set; }
 
-        public override void Setup()
+        public GeoPoint(double latitude, double longitude, string hint)
         {
-            base.Setup();
-
-            fBase = new BaseWindowMock();
-
-            fDialog = new SlideshowWin(fBase);
-            fDialog.Show();
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Hint = hint;
         }
-
-        /*[STAThread]
-        [Test]
-        public void Test_Common()
-        {
-        }*/
     }
 }
-
-#endif

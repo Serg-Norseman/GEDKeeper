@@ -89,44 +89,47 @@ namespace GKTests.UITests
             // Test for adding phone
             tabs.SelectTab(1);
             ModalFormHandler = InputBoxAddHandler;
-            var btnTester = new ToolStripButtonTester("fPhonesList_ToolBar_btnAdd", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fPhonesList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.PhoneNumbers[1].StringValue);
 
             var sheetTester = new GKSheetListTester("fPhonesList");
             sheetTester.Properties.SelectItem(1);
             ModalFormHandler = InputBoxEditHandler;
-            btnTester = new ToolStripButtonTester("fPhonesList_ToolBar_btnEdit", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fPhonesList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.PhoneNumbers[1].StringValue);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fPhonesList_ToolBar_btnDelete", fDialog);
 
             // Test for adding mail
             tabs.SelectTab(2);
             ModalFormHandler = InputBoxAddHandler;
-            btnTester = new ToolStripButtonTester("fMailsList_ToolBar_btnAdd", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fMailsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.EmailAddresses[1].StringValue);
 
             sheetTester = new GKSheetListTester("fMailsList");
             sheetTester.Properties.SelectItem(1);
             ModalFormHandler = InputBoxEditHandler;
-            btnTester = new ToolStripButtonTester("fMailsList_ToolBar_btnEdit", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fMailsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.EmailAddresses[1].StringValue);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fMailsList_ToolBar_btnDelete", fDialog);
 
             // Test for adding webpage
             tabs.SelectTab(3);
             ModalFormHandler = InputBoxAddHandler;
-            btnTester = new ToolStripButtonTester("fWebsList_ToolBar_btnAdd", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fWebsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.WebPages[1].StringValue);
 
             sheetTester = new GKSheetListTester("fWebsList");
             sheetTester.Properties.SelectItem(1);
             ModalFormHandler = InputBoxEditHandler;
-            btnTester = new ToolStripButtonTester("fWebsList_ToolBar_btnEdit", fDialog);
-            btnTester.Click();
+            ClickToolStripButton("fWebsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.WebPages[1].StringValue);
+
+            //ModalFormHandler = MessageBox_YesHandler;
+            //ClickToolStripButton("fWebsList_ToolBar_btnDelete", fDialog);
 
 
             ClickButton("btnAccept", fDialog);
@@ -153,6 +156,12 @@ namespace GKTests.UITests
 
             var tsBtn = new ButtonTester("btnAccept", form);
             tsBtn.FireEvent("Click");
+        }
+
+        private void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.Yes);
         }
     }
 }

@@ -226,7 +226,7 @@ namespace GKUI
 
         public bool AllowQuickFind()
         {
-            return true;
+            return false;
         }
 
         public IList<ISearchResult> FindAll(string searchPattern)

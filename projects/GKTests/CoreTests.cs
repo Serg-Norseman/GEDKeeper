@@ -30,9 +30,9 @@ using GKCore;
 using GKCore.Cultures;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Geocoding;
 using GKCore.Kinships;
 using GKCore.Lists;
-using GKCore.Maps;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Stats;
@@ -1041,7 +1041,7 @@ namespace GKTests.GKCore
         [Test]
         public void Maps_Tests()
         {
-            GMapPoint mapPoint = new GMapPoint(0.5f, 0.5f, "test");
+            GeoPoint mapPoint = new GeoPoint(0.5f, 0.5f, "test");
             Assert.IsNotNull(mapPoint);
             Assert.AreEqual(0.5f, mapPoint.Latitude);
             Assert.AreEqual(0.5f, mapPoint.Longitude);

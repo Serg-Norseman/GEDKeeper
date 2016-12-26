@@ -32,6 +32,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Export;
+using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -77,6 +78,11 @@ namespace GKUI
         public static GKResourceManager ResourceManager
         {
             get { return fResourceManager; }
+        }
+
+        public IGeocoder Geocoder
+        {
+            get { return GKUtils.CreateGeocoder(fOptions); }
         }
 
         public INamesTable NamesTable

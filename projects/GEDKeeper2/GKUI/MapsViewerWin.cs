@@ -25,8 +25,8 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Geocoding;
 using GKCore.Interfaces;
-using GKCore.Maps;
 using GKUI.Controls;
 
 namespace GKUI
@@ -51,12 +51,12 @@ namespace GKUI
         private class MapPlace : BaseObject
         {
             public string Name;
-            public readonly ExtList<GMapPoint> Points;
+            public readonly IList<GeoPoint> Points;
             public readonly ExtList<PlaceRef> PlaceRefs;
 
             public MapPlace()
             {
-                this.Points = new ExtList<GMapPoint>(true);
+                this.Points = new List<GeoPoint>();
                 this.PlaceRefs = new ExtList<PlaceRef>(false);
             }
 
@@ -65,7 +65,6 @@ namespace GKUI
                 if (disposing)
                 {
                     this.PlaceRefs.Dispose();
-                    this.Points.Dispose();
                 }
                 base.Dispose(disposing);
             }
@@ -73,7 +72,7 @@ namespace GKUI
 
         private readonly TreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
-        private readonly ExtList<GMapPoint> fMapPoints;
+        private readonly ExtList<GeoPoint> fMapPoints;
         private readonly ExtList<MapPlace> fPlaces;
         private readonly List<GEDCOMRecord> fSelectedPersons;
         private readonly IBaseWindow fBase;
@@ -146,7 +145,7 @@ namespace GKUI
             }
         }
 
-        private void PreparePointsList(ExtList<GMapPoint> gmapPoints, bool byPerson)
+        private void PreparePointsList(ExtList<GeoPoint> gmapPoints, bool byPerson)
         {
             this.fMapBrowser.BeginUpdate();
             try
@@ -156,7 +155,7 @@ namespace GKUI
                 int num = gmapPoints.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GMapPoint pt = gmapPoints[i];
+                    GeoPoint pt = gmapPoints[i];
                     string stHint = pt.Hint;
                     if (byPerson)
                     {
@@ -251,7 +250,7 @@ namespace GKUI
             this.PreparePointsList(this.fMapPoints, ind != null);
         }
 
-        private static int MapPointsCompare(GMapPoint item1, GMapPoint item2)
+        private static int MapPointsCompare(GeoPoint item1, GeoPoint item2)
         {
             return item1.Date.CompareTo(item2.Date);
         }
@@ -261,7 +260,7 @@ namespace GKUI
             GKTreeNode node = this.tvPlaces.SelectedNode as GKTreeNode;
             if (node != null)
             {
-                GMapPoint pt = node.Tag as GMapPoint;
+                GeoPoint pt = node.Tag as GeoPoint;
                 if (pt != null)
                 {
                     this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
@@ -287,7 +286,7 @@ namespace GKUI
             this.fTree = baseWin.Tree;
             this.fSelectedPersons = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
 
-            this.fMapPoints = new ExtList<GMapPoint>(true);
+            this.fMapPoints = new ExtList<GeoPoint>(true);
             this.fPlaces = new ExtList<MapPlace>(true);
             this.fBaseRoot = this.tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
             this.radTotal.Checked = true;
@@ -348,12 +347,12 @@ namespace GKUI
 
                         int num = mapPlace.Points.Count;
                         for (int i = 0; i < num; i++) {
-                            GMapPoint pt = mapPlace.Points[i];
+                            GeoPoint pt = mapPlace.Points[i];
                             string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
                             node.Nodes.Add(new GKTreeNode(ptTitle, pt));
                         }
                     } else {
-                        GMapPoint pt = new GMapPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
+                        GeoPoint pt = new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
                         mapPlace.Points.Add(pt);
 
                         string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
@@ -369,9 +368,9 @@ namespace GKUI
             }
         }
 
-        private void CopyPoint(GMapPoint gmPt, PlaceRef placeRef)
+        private void CopyPoint(GeoPoint gmPt, PlaceRef placeRef)
         {
-            GMapPoint pt;
+            GeoPoint pt;
             int num = this.fMapPoints.Count;
             for (int i = 0; i < num; i++) {
                 pt = this.fMapPoints[i];
@@ -380,7 +379,7 @@ namespace GKUI
                 }
             }
 
-            pt = new GMapPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint);
+            pt = new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint);
             pt.Date = placeRef.Date;
             this.fMapPoints.Add(pt);
         }

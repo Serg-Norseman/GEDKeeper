@@ -99,11 +99,6 @@ StringTokenizer
     (C) 2004 Andrew Deren
 
 
-SysInfo (was ...)
-    (C) 2003-2016 Dominik Reichl
-    Licensed under GPLv2.
-
-
 TimSort
     Licensed under the Apache License, version 2.0.
     (C) 2008 The Android Open Source Project

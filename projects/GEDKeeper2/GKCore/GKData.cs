@@ -48,6 +48,8 @@ namespace GKCore
 
         public const int NoteNameMaxLength = 64;
 
+        public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
+
         #if __MonoCS__
         public static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
         public static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));

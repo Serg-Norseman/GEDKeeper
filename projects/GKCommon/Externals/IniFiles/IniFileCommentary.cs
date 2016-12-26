@@ -15,8 +15,7 @@ namespace Externals.IniFiles
 
         /// <summary>Initializes a new instance IniFileCommentary</summary>
         /// <param name="content">Actual content of a line in a INI file.</param>
-        public IniFileCommentary(string content)
-            : base(content)
+        public IniFileCommentary(string content) : base(content)
         {
             if (IniFileSettings.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");

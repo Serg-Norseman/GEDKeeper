@@ -13,10 +13,10 @@ namespace Externals.IniFiles
         private IniFileSectionStart() : base()
         {
         }
+
         /// <summary>Initializes a new instance IniFileSectionStart</summary>
         /// <param name="content">Actual content of a line in an INI file. Initializer assumes that it is valid.</param>
-        public IniFileSectionStart(string content)
-            : base(content)
+        public IniFileSectionStart(string content) : base(content)
         {
             //content = Content;
             formatting = ExtractFormat(content);
@@ -39,6 +39,7 @@ namespace Externals.IniFiles
             Content = content;
             Format();
         }
+
         /// <summary>Gets or sets a secion's name.</summary>
         public string SectionName
         {
@@ -49,6 +50,7 @@ namespace Externals.IniFiles
                 Format();
             }
         }
+
         /// <summary>Gets or sets an inline comment, which appear after the value.</summary>
         public string InlineComment
         {
@@ -73,6 +75,7 @@ namespace Externals.IniFiles
         {
             return "Section: \"" + sectionName + "\"";
         }
+
         /// <summary>Creates a new IniFileSectionStart object basing on a name of section and the formatting style of this section.</summary>
         /// <param name="sectName">Name of the new section</param>
         public IniFileSectionStart CreateNew(string sectName)
@@ -161,6 +164,7 @@ namespace Externals.IniFiles
             }
             Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? textOnTheRight : "");
         }
+
         /// <summary>Crates a IniFileSectionStart object from name of a section.</summary>
         /// <param name="sectionName">Name of a section</param>
         public static IniFileSectionStart FromName(string sectionName)

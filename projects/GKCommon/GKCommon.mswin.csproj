@@ -82,12 +82,10 @@
     <Compile Include="Externals\CSVReader.cs" />
     <Compile Include="Externals\IniFiles\IniFileBlankLine.cs" />
     <Compile Include="Externals\IniFiles\IniFileCommentary.cs" />
-    <Compile Include="Externals\IniFiles\IniFileReader.cs" />
     <Compile Include="Externals\IniFiles\IniFileSection.cs" />
     <Compile Include="Externals\IniFiles\IniFileSectionStart.cs" />
     <Compile Include="Externals\IniFiles\IniFileSettings.cs" />
     <Compile Include="Externals\IniFiles\IniFileValue.cs" />
-    <Compile Include="Externals\IniFiles\IniFileWriter.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />

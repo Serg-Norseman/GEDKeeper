@@ -109,6 +109,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
+    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
     <Compile Include="Externals\MdiChildFormEx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,7 +144,6 @@
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
     <Compile Include="GKCore\LangMan.cs" />
-    <Compile Include="GKCore\Maps\GMapPoint.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
@@ -710,6 +713,9 @@
       <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKCore\Geocoding" />
+    <Folder Include="Sandbox" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

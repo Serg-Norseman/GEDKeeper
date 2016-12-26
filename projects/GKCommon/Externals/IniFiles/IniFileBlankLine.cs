@@ -8,8 +8,7 @@ namespace Externals.IniFiles
     {
         /// <summary>Initializes a new instance IniFileBlankLine</summary>
         /// <param name="amount">Number of blank lines.</param>
-        public IniFileBlankLine(int amount)
-            : base("")
+        public IniFileBlankLine(int amount) : base("")
         {
             Amount = amount;
         }

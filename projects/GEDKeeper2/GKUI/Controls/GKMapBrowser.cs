@@ -19,15 +19,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Net;
 using System.Windows.Forms;
-using System.Xml;
 
 using GKCommon;
-using GKCore.Maps;
-using GKCore.Options;
+using GKCore.Geocoding;
 
 namespace GKUI.Controls
 {
@@ -44,7 +41,7 @@ namespace GKUI.Controls
             public double MaxLat;
         }
 
-        private readonly ExtList<GMapPoint> fMapPoints;
+        private readonly ExtList<GeoPoint> fMapPoints;
         private bool fShowPoints;
         private bool fShowLines;
         private int fUpdateCount;
@@ -72,14 +69,14 @@ namespace GKUI.Controls
             }
         }
 
-        public ExtList<GMapPoint> MapPoints
+        public ExtList<GeoPoint> MapPoints
         {
             get { return this.fMapPoints; }
         }
 
         public GKMapBrowser()
         {
-            this.fMapPoints = new ExtList<GMapPoint>(true);
+            this.fMapPoints = new ExtList<GeoPoint>(true);
             this.fUpdateCount = 0;
             this.fShowPoints = true;
             this.fShowLines = true;
@@ -101,7 +98,7 @@ namespace GKUI.Controls
             CoordsRect result = new CoordsRect();
             if (this.fMapPoints.Count > 0)
             {
-                GMapPoint pt = this.fMapPoints[0];
+                GeoPoint pt = this.fMapPoints[0];
                 result.MinLon = pt.Longitude;
                 result.MaxLon = pt.Longitude;
                 result.MinLat = pt.Latitude;
@@ -134,7 +131,7 @@ namespace GKUI.Controls
 
         public int AddPoint(double latitude, double longitude, string hint)
         {
-            GMapPoint pt = new GMapPoint(latitude, longitude, hint);
+            GeoPoint pt = new GeoPoint(latitude, longitude, hint);
             return this.fMapPoints.Add(pt);
         }
 
@@ -199,7 +196,7 @@ namespace GKUI.Controls
                     "<html>" +
                     "<head>" +
                     "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" +
-                    "<script src=\"http://maps.googleapis.com/maps/api/js?sensor=false&language=ru&key=AIzaSyCo57eNeJx7-ws2eei6QgAVUxOnS95IqQM\" type=\"text/javascript\"></script>" +
+                    "<script src=\"http://maps.googleapis.com/maps/api/js?sensor=false&language=ru&key=AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk\" type=\"text/javascript\"></script>" +
                     "<script type=\"text/javascript\">" +
                     "var map;" +
                     "var markersArray = [];" +
@@ -256,14 +253,20 @@ namespace GKUI.Controls
                 int num = this.fMapPoints.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GMapPoint pt = this.fMapPoints[i];
+                    GeoPoint pt = this.fMapPoints[i];
                     pointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
                                                   { CoordToStr(pt.Latitude), CoordToStr(pt.Longitude), pt.Hint });
 
-                    polylineScript = string.Concat(new string[]
+                    /*polylineScript = string.Concat(new string[]
                                                    {
                                                        polylineScript, "new google.maps.LatLng(",
                                                        CoordToStr(pt.Latitude), ",", CoordToStr(pt.Longitude), "),"
+                                                   });*/
+
+                    polylineScript = string.Concat(new string[]
+                                                   {
+                                                       polylineScript,
+                                                       "{lat:", CoordToStr(pt.Latitude), ",lng:", CoordToStr(pt.Longitude), "},"
                                                    });
                 }
 
@@ -277,9 +280,9 @@ namespace GKUI.Controls
                     int num2 = (polylineScript != null) ? polylineScript.Length : 0;
                     polylineScript = polylineScript.Remove(num2 - 1, 1);
                     polylineScript =
-                        "var polyline = new google.maps.Polyline({path: [" + polylineScript + "],strokeColor: \"#FF0000\", strokeWeight: 3}); " +
-                        "polyline.setMap(map);"+
-                        "markersArray.push(polyline);";
+                        "var polyline = new google.maps.Polyline({path: [" + polylineScript + "],strokeColor: '#FF0000', strokeWeight: 3}); " +
+                        "polyline.setMap(map);"/*+
+                        "markersArray.push(polyline);"*/;
                     this.gm_ExecScript(polylineScript);
                 }
             }
@@ -330,39 +333,7 @@ namespace GKUI.Controls
             }
         }
 
-        private static bool GetInetFile(string fileURL, out Stream stream)
-        {
-            bool result;
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(fileURL));
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                ProxyOptions proxy = MainWin.Instance.Options.Proxy;
-                if (proxy.UseProxy)
-                {
-                    request.Proxy = new WebProxy(proxy.Server + ":" + proxy.Port, true)
-                    {
-                        Credentials = CredentialCache.DefaultCredentials
-                    };
-                }
-
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
-                    stream = response.GetResponseStream();
-                    result = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKMapBrowser.GetInetFile(): " + ex.Message);
-                stream = null;
-                result = false;
-            }
-
-            return result;
-        }
-
-        public static void RequestGeoCoords(string searchValue, ExtList<GMapPoint> pointsList)
+        public static void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
         {
             if (string.IsNullOrEmpty(searchValue))
                 throw new ArgumentNullException("searchValue");
@@ -372,51 +343,10 @@ namespace GKUI.Controls
 
             try
             {
-                Stream stm = null;
-                try
+                IEnumerable<GeoPoint> geoPoints = MainWin.Instance.Geocoder.Geocode(searchValue, 1);
+                foreach (GeoPoint pt in geoPoints)
                 {
-                    searchValue = searchValue.Trim().Replace(" ", "+");
-
-                    string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru&key=AIzaSyCo57eNeJx7-ws2eei6QgAVUxOnS95IqQM";
-                    netQuery = string.Format(netQuery, new object[] { searchValue });
-
-                    if (!GetInetFile(netQuery, out stm)) return;
-
-                    XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.Load(stm);
-                    XmlNode node = xmlDocument.DocumentElement;
-
-                    if (node != null && node.ChildNodes.Count > 0)
-                    {
-                        int num = node.ChildNodes.Count;
-                        for (int i = 0; i < num; i++)
-                        {
-                            XmlNode xNode = node.ChildNodes[i];
-                            if (xNode.Name == "result")
-                            {
-                                XmlNode addressNode = xNode["formatted_address"];
-                                XmlNode geometry = xNode["geometry"];
-                                XmlNode pointNode = geometry["location"];
-
-                                if (addressNode != null && pointNode != null)
-                                {
-                                    string ptHint = addressNode.InnerText;
-                                    double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-                                    double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
-
-                                    if (ptLatitude != -1.0 && ptLongitude != -1.0)
-                                    {
-                                        GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
-                                        pointsList.Add(pt);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    if (stm != null) stm.Dispose();
+                    pointsList.Add(pt);
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("GKMapBrowser.RequestGeoCoords(): " + ex.Message);

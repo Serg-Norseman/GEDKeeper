@@ -14,17 +14,15 @@ namespace Externals.IniFiles
         private IniFileValue() : base()
         {
         }
+
         /// <summary>Initializes a new instance IniFileValue.</summary>
         /// <param name="content">Actual content of a line in an INI file. Initializer assumes that it is valid.</param>
-        public IniFileValue(string content)
-            : base(content)
+        public IniFileValue(string content) : base(content)
         {
             string[] split = Content.Split(new string[] { IniFileSettings.EqualsString }, StringSplitOptions.None);
             formatting = ExtractFormat(content);
             string split0 = split[0].Trim();
-            string split1 = split.Length >= 1 ?
-                split[1].Trim()
-                : "";
+            string split1 = split.Length >= 1 ? split[1].Trim() : "";
             
             if (split0.Length > 0) {
                 if (IniFileSettings.AllowInlineComments) {
@@ -57,18 +55,21 @@ namespace Externals.IniFiles
             }
             Format();
         }
+
         /// <summary>Gets or sets a name of value.</summary>
         public string Key
         {
             get { return key; }
             set { key = value; Format(); }
         }
+
         /// <summary>Gets or sets a value.</summary>
         public string Value
         {
             get { return value; }
             set { this.value = value; Format(); }
         }
+
         /// <summary>Gets or sets an inline comment, which appear after the value.</summary>
         public string InlineComment
         {
@@ -205,19 +206,13 @@ namespace Externals.IniFiles
                 ret.FormatDefault();
             return ret;
         }
+
         /// <summary>Determines whether specified string is a representation of particular IniFileElement object.</summary>
         /// <param name="testLine">Trimmed test string.</param>
         public static bool IsLineValid(string testLine)
         {
             int index = testLine.IndexOf(IniFileSettings.EqualsString);
             return index > 0;
-        }
-
-        /// <summary>Sets both key and values. Recommended when both properties have to be changed.</summary>
-        public void Set(string pKey, string pValue)
-        {
-            this.key = pKey; this.value = pValue;
-            Format();
         }
 
         /// <summary>Gets a string representation of this IniFileValue object.</summary>

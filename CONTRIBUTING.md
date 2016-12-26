@@ -105,16 +105,16 @@ Inside a code block, put the opening brace on the same line as the statement:
 good:
 ```
 if (a) {
-    code ();
-    code ();
+    code();
+    code();
 }
 ```
 bad:
 ```
 if (a)
 {
-    code ();
-    code ();
+    code();
+    code();
 }
 ```
 Avoid using unnecessary open/close braces, vertical space is usually limited:
@@ -122,12 +122,12 @@ Avoid using unnecessary open/close braces, vertical space is usually limited:
 good:
 ```
 if (a)
-    code ();
+    code();
 ```
 bad:
 ```
 if (a) {
-    code ();
+    code();
 }
 ```
 Unless there are either multiple hierarchical conditions being used or that the condition cannot fit into a single line.
@@ -136,14 +136,14 @@ good:﻿
 ```
 if (a) {
     if (b)
-        code ();
+        code();
 }
 ```
 bad:
 ```
 if (a)
     if (b)
-        code ();
+        code();
 ```
 
 If statements with else clauses are formatted like this:
