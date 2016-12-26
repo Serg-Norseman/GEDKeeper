@@ -164,7 +164,7 @@ namespace GKUI
             this.Modified = true;
         }
 
-        public ScriptEditWin(IBaseWindow aBase)
+        public ScriptEditWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -173,7 +173,7 @@ namespace GKUI
             this.tbSaveScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iSave");
             this.tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             this.txtScriptText.TextChanged += mmScriptText_TextChanged;
             

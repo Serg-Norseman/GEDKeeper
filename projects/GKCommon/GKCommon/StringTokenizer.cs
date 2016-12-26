@@ -61,16 +61,6 @@ namespace GKCommon
         private int fSaveCol;
         private int fSavePos;
 
-        public StringTokenizer(TextReader reader)
-        {
-            if (reader == null)
-                throw new ArgumentNullException("reader");
-
-            fData = reader.ReadToEnd();
-
-            Reset();
-        }
-
         public StringTokenizer(string data)
         {
             if (data == null)

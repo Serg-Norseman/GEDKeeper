@@ -35,43 +35,43 @@ namespace GKUI.Controls
 
         public string Value
         {
-            get { return this.txtValue.Text; }
-            set { this.txtValue.Text = value; }
+            get { return txtValue.Text; }
+            set { txtValue.Text = value; }
         }
 
         private GKInputBox(string caption, string prompt, string value, NumbersMode numbersMode, bool pwMode = false)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.Text = caption;
-            this.label1.Text = prompt;
-            this.Value = value;
-            this.fNumbersMode = numbersMode;
+            Text = caption;
+            label1.Text = prompt;
+            Value = value;
+            fNumbersMode = numbersMode;
 
             if (pwMode) {
-                this.txtValue.PasswordChar = '*';
+                txtValue.PasswordChar = '*';
             }
 
-            base.AcceptButton = this.btnAccept;
-            base.CancelButton = this.btnCancel;
+            AcceptButton = btnAccept;
+            CancelButton = btnCancel;
 
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            base.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                switch (this.fNumbersMode)
+                switch (fNumbersMode)
                 {
                     case NumbersMode.nmNone:
                         break;
@@ -85,12 +85,12 @@ namespace GKUI.Controls
                         break;
                 }
 
-                base.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             catch
             {
                 GKUtils.ShowError("Number format is invalid");
-                base.DialogResult = DialogResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -100,7 +100,7 @@ namespace GKUI.Controls
             bool result = false;
             value = 0.0;
 
-            using (GKInputBox inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat))
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {
@@ -116,7 +116,7 @@ namespace GKUI.Controls
             bool result = false;
             value = 0;
 
-            using (GKInputBox inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt))
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {
@@ -131,7 +131,7 @@ namespace GKUI.Controls
         {
             bool result = false;
 
-            using (GKInputBox inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone))
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {
@@ -147,7 +147,7 @@ namespace GKUI.Controls
         {
             bool result = false;
 
-            using (GKInputBox inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true))
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {

@@ -270,6 +270,11 @@ namespace GKTests.GKCore
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
+            GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, true);
+            Assert.AreEqual(0, fContext.Tree.Header.FileRevision);
+            GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, false);
+            Assert.AreEqual(1, fContext.Tree.Header.FileRevision);
+
             // individual record tests
             Assert.IsNotNull(iRec);
 
@@ -461,9 +466,12 @@ namespace GKTests.GKCore
             Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.Maximum));
             Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.Maximum));
             Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.Maximum));
-            
+
             st1 = GKUtils.HyperLink("@X001@", "test", 0);
             Assert.AreEqual("~^" + "@X001@" + ":" + "test" + "~", st1);
+
+            st1 = GKUtils.HyperLink("@X001@", "", 0);
+            Assert.AreEqual("~^" + "@X001@" + ":" + "???" + "~", st1);
 
             //
 
@@ -1775,6 +1783,26 @@ namespace GKTests.GKCore
             Assert.AreEqual("Smith (Jones) Anna", GKUtils.GetNameString(iRec, true, false));
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+        }
+
+        [Test]
+        public void Geocoding_Tests()
+        {
+            IGeocoder geocoder = IGeocoder.Create("");
+            IList<GeoPoint> geoPoints;
+
+            geocoder.SetKey("");
+            geocoder.SetProxy(null);
+            geocoder.SetLang("");
+
+            geocoder = IGeocoder.Create("Google");
+            geocoder.SetKey(GKData.GAPI_KEY);
+            geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
+
+            geocoder = IGeocoder.Create("Yandex");
+            geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
         }
     }
 }

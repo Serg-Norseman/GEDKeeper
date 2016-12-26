@@ -75,7 +75,9 @@ namespace GKUI.Dialogs
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+
             this.fRepositoriesList = this.CreateReposSheet(this.pageRepositories);
+            this.fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Source);

@@ -86,6 +86,8 @@
     <Compile Include="Externals\IniFiles\IniFileSectionStart.cs" />
     <Compile Include="Externals\IniFiles\IniFileSettings.cs" />
     <Compile Include="Externals\IniFiles\IniFileValue.cs" />
+    <Compile Include="Externals\IniFiles\IniFileElement.cs" />
+    <Compile Include="Externals\IniFiles\IniFileEx.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />
@@ -118,8 +120,6 @@
     <Compile Include="GKCommon\Controls\ImageView.Designer.cs">
       <DependentUpon>ImageView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Externals\IniFiles\IniFileElement.cs" />
-    <Compile Include="Externals\IniFiles\IniFiles.cs" />
     <Compile Include="Externals\ListTimSort.cs" />
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />

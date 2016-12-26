@@ -209,6 +209,7 @@ namespace Externals.IniFiles
             }
             else
                 ret = IniFileValue.FromData(key, value);
+
             if (prev == null) {
                 elements.Insert(elements.IndexOf(sectionStart) + 1, ret);
                 parent.elements.Insert(parent.elements.IndexOf(sectionStart) + 1, ret);

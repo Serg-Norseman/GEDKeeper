@@ -161,7 +161,6 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Parses given text.</summary>
-        /// <param name="text">Text to parse.</param>
         private static List<IniFileElement> ParseText(StreamReader reader)
         {
             if (reader == null)
@@ -202,6 +201,7 @@ namespace Externals.IniFiles
         {
             if (!IniFileSettings.PreserveFormatting)
                 element.FormatDefault();
+
             // do not write if:
             if (!( // 1) element is a blank line AND blank lines are not allowed
                   (element is IniFileBlankLine && !IniFileSettings.AllowBlankLines)
@@ -270,10 +270,7 @@ namespace Externals.IniFiles
                         if (!(el is IniFileBlankLine)) {
                             elements.Insert(index, el);
                             IniFileValue val = this[sect.Name].FirstValue();
-                            if (val != null)
-                                el.Intendation = val.Intendation;
-                            else
-                                el.Intendation = this[sect.Name].sectionStart.Intendation;
+                            el.Intendation = (val != null) ? val.Intendation : this[sect.Name].sectionStart.Intendation;
                         }
                     }
                 }

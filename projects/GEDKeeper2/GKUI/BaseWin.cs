@@ -823,7 +823,7 @@ namespace GKUI
         public void RecordNotify(GEDCOMRecord record, RecordAction action)
         {
             if (record == null) return;
-            
+
             GKRecordsView rView = GetRecordsViewByType(record.RecordType);
 
             if (rView != null && action == RecordAction.raDelete)
@@ -2209,7 +2209,7 @@ namespace GKUI
             return result;
         }
 
-        public bool ModifyName(ref NameEntry aName)
+        public bool ModifyName(ref NameEntry nameEntry)
         {
             bool result;
 
@@ -2217,7 +2217,7 @@ namespace GKUI
                 this.fContext.BeginUpdate();
 
                 using (NameEditDlg dlg = new NameEditDlg(this)) {
-                    dlg.IName = aName;
+                    dlg.IName = nameEntry;
                     result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                 }
             } finally {

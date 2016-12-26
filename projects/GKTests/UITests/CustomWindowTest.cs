@@ -31,7 +31,6 @@ namespace GKTests.UITests
         public static void ClickButton(string name, Form form)
         {
             var tsBtn = new ButtonTester(name, form);
-            //tsBtn.Click();
             tsBtn.FireEvent("Click");
         }
 

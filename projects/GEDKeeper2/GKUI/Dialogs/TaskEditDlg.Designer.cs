@@ -141,7 +141,7 @@ namespace GKUI.Dialogs
 		    this.cmbGoalType.Name = "cmbGoalType";
 		    this.cmbGoalType.Size = new System.Drawing.Size(158, 25);
 		    this.cmbGoalType.TabIndex = 1;
-		    this.cmbGoalType.SelectedIndexChanged += new System.EventHandler(this.cbGoalType_SelectedIndexChanged);
+		    this.cmbGoalType.SelectedIndexChanged += new System.EventHandler(this.cmbGoalType_SelectedIndexChanged);
 		    // 
 		    // txtGoal
 		    // 

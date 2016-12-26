@@ -1509,16 +1509,16 @@ namespace GKUI
             Logger.LogWrite(msg);
         }
 
-        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
+        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
             if (this.fPlugins == null) return;
-            if (aBase == null || record == null) return;
+            if (baseWin == null || record == null) return;
 
             foreach (IPlugin plugin in this.fPlugins) {
                 ISubscriber subscriber = (plugin as ISubscriber);
                 if (subscriber != null) {
                     try {
-                        subscriber.NotifyRecord(aBase, record, action);
+                        subscriber.NotifyRecord(baseWin, record, action);
                     } catch (Exception ex) {
                         Logger.LogWrite("MainWin.NotifyRecord(): " + ex.Message);
                     }
@@ -1570,21 +1570,21 @@ namespace GKUI
             }
         }
 
-        public void BaseChanged(IBaseWindow aBase)
+        public void BaseChanged(IBaseWindow baseWin)
         {
             foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
-                widgetInfo.Widget.BaseChanged(aBase);
+                widgetInfo.Widget.BaseChanged(baseWin);
             }
         }
 
-        public void BaseClosed(IBaseWindow aBase)
+        public void BaseClosed(IBaseWindow baseWin)
         {
             foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
-                widgetInfo.Widget.BaseClosed(aBase);
+                widgetInfo.Widget.BaseClosed(baseWin);
             }
         }
 
-        public void BaseRenamed(IBaseWindow aBase, string oldName, string newName)
+        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
         {
             // TODO: implementation of Base.SaveAs
         }

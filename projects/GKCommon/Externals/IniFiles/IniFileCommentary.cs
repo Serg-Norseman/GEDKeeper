@@ -6,8 +6,8 @@ namespace Externals.IniFiles
     /// <summary>Represents one or more comment lines in a config file.</summary>
     public class IniFileCommentary : IniFileElement
     {
-        private string comment;
-        private string commentChar;
+        private string fComment;
+        private string fCommentChar;
 
         private IniFileCommentary()
         {
@@ -20,22 +20,22 @@ namespace Externals.IniFiles
             if (IniFileSettings.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
 
-            commentChar = IniFileSettings.StartsWith(Content, IniFileSettings.CommentChars);
+            fCommentChar = IniFileElement.StartsWith(Content, IniFileSettings.CommentChars);
 
-            if (commentChar != null && Content.Length > commentChar.Length)
-                comment = Content.Substring(commentChar.Length);
+            if (fCommentChar != null && Content.Length > fCommentChar.Length)
+                fComment = Content.Substring(fCommentChar.Length);
             else
-                comment = "";
+                fComment = "";
         }
 
         /// <summary>Gets or sets comment char used in the config file for this comment.</summary>
         public string CommentChar
         {
-            get { return commentChar; }
+            get { return fCommentChar; }
             set
             {
-                if (commentChar == value) return;
-                commentChar = value;
+                if (fCommentChar == value) return;
+                fCommentChar = value;
                 Rewrite();
             }
         }
@@ -43,11 +43,11 @@ namespace Externals.IniFiles
         /// <summary>Gets or sets a commentary string.</summary>
         public string Comment
         {
-            get { return comment; }
+            get { return fComment; }
             set
             {
-                if (comment == value) return;
-                comment = value;
+                if (fComment == value) return;
+                fComment = value;
                 Rewrite();
             }
         }
@@ -55,10 +55,10 @@ namespace Externals.IniFiles
         void Rewrite()
         {
             StringBuilder newContent = new StringBuilder();
-            string[] lines = comment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            newContent.Append(commentChar + lines[0]);
+            string[] lines = fComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            newContent.Append(fCommentChar + lines[0]);
             for (int i = 1; i < lines.Length; i++)
-                newContent.Append(Environment.NewLine + commentChar + lines[i]);
+                newContent.Append(Environment.NewLine + fCommentChar + lines[i]);
             Content = newContent.ToString();
         }
 
@@ -66,13 +66,13 @@ namespace Externals.IniFiles
         /// <param name="testLine">Trimmed test string.</param>
         public static bool IsLineValid(string testLine)
         {
-            return IniFileSettings.StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
+            return IniFileElement.StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
         }
 
         /// <summary>Gets a string representation of this IniFileCommentary object.</summary>
         public override string ToString()
         {
-            return "Comment: \"" + comment + "\"";
+            return "Comment: \"" + fComment + "\"";
         }
 
         /// <summary>Gets an IniFileCommentary object from commentary text.</summary>
@@ -83,7 +83,7 @@ namespace Externals.IniFiles
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
 
             IniFileCommentary ret = new IniFileCommentary();
-            ret.comment = comment;
+            ret.fComment = comment;
             ret.CommentChar = IniFileSettings.CommentChars[0];
             return ret;
         }
