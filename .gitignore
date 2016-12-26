@@ -9,6 +9,7 @@
 
 gource-gk.cmd
 build_coverity.cmd
+/projects/GEDKeeper2.mswin-cov.sln
 sonarqube.cmd
 
 /projects/GEDKeeper2/bin/

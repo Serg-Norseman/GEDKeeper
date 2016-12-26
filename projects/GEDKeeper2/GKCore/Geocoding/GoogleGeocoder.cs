@@ -56,35 +56,37 @@ namespace GKCore.Geocoding
             request.ContentType = "application/x-www-form-urlencoded";
             request.Proxy = fProxy;
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream stream = response.GetResponseStream();
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
+                using (Stream stream = response.GetResponseStream()) {
 
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(stream);
-            XmlNode node = xmlDocument.DocumentElement;
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(stream);
+                    XmlNode node = xmlDocument.DocumentElement;
 
-            if (node != null && node.ChildNodes.Count > 0)
-            {
-                int num = node.ChildNodes.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    XmlNode xNode = node.ChildNodes[i];
-                    if (xNode.Name == "result")
+                    if (node != null && node.ChildNodes.Count > 0)
                     {
-                        XmlNode addressNode = xNode["formatted_address"];
-                        XmlNode geometry = xNode["geometry"];
-                        XmlNode pointNode = geometry["location"];
-
-                        if (addressNode != null && pointNode != null)
+                        int num = node.ChildNodes.Count;
+                        for (int i = 0; i < num; i++)
                         {
-                            string ptHint = addressNode.InnerText;
-                            double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-                            double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
-
-                            if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                            XmlNode xNode = node.ChildNodes[i];
+                            if (xNode.Name == "result")
                             {
-                                GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
-                                geoObjects.Add(gpt);
+                                XmlNode addressNode = xNode["formatted_address"];
+                                XmlNode geometry = xNode["geometry"];
+                                XmlNode pointNode = geometry["location"];
+
+                                if (addressNode != null && pointNode != null)
+                                {
+                                    string ptHint = addressNode.InnerText;
+                                    double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                    double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+
+                                    if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                                    {
+                                        GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
+                                        geoObjects.Add(gpt);
+                                    }
+                                }
                             }
                         }
                     }

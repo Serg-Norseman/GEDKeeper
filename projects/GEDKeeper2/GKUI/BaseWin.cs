@@ -249,7 +249,7 @@ namespace GKUI
 
         private void miRecordAdd_Click(object sender, EventArgs e)
         {
-        	this.RecordAdd();
+            this.RecordAdd();
         }
         
         private void miRecordEdit_Click(object sender, EventArgs e)
