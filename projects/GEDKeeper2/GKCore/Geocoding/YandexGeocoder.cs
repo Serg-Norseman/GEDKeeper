@@ -70,8 +70,9 @@ namespace GKCore.Geocoding
                         string[] splitted = pointNode.InnerText.Split(new char[] { ' ' }, count: 2);
                         double lng = double.Parse(splitted[0], CultureInfo.InvariantCulture);
                         double lat = double.Parse(splitted[1], CultureInfo.InvariantCulture);
+                        string ptHint = (metaNode == null) ? string.Empty : metaNode["text"].InnerText;
 
-                        GeoPoint gpt = new GeoPoint(lat, lng, metaNode["text"].InnerText);
+                        GeoPoint gpt = new GeoPoint(lat, lng, ptHint);
                         geoObjects.Add(gpt);
                     }
                 }

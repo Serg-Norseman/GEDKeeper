@@ -189,9 +189,6 @@ namespace GKTests.UITests
 
 
             // Stage 36
-            fCurBase.CollectTips(new StringList());
-
-            // Stage 37
             ModalFormHandler = MessageBox_OkHandler;
             ((BaseWin)fCurBase).RecordDuplicate();
 
@@ -251,6 +248,26 @@ namespace GKTests.UITests
             Assert.AreEqual(ShieldState.Maximum, baseWin.ShieldState, stage + ".7.1");
             baseWin.ShieldState = ShieldState.None;
             Assert.AreEqual(ShieldState.None, baseWin.ShieldState, stage + ".7.2");
+
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.SelectSpouseFor(null); });
+            baseWin.RecordNotify(null, RecordAction.raAdd);
+
+            IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
+            Assert.AreEqual(1, search.Count);
+
+            Assert.AreEqual(null, baseWin.GetChildFamily(null, false, null));
+            Assert.AreEqual(null, baseWin.AddChildForParent(null, GEDCOMSex.svNone));
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.AddFamilyForSpouse(null); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.CollectTips(null); });
+            baseWin.CollectTips(new StringList());
+
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.CheckPersonSex(null); });
+
+            baseWin.ChangeRecord(null);
+
+            baseWin.ApplyFilter();
         }
 
         private void MainWin_Test()
@@ -456,6 +473,7 @@ namespace GKTests.UITests
         private static bool PersonEditDlg_FirstCall = true;
         private static bool ResearchEditDlg_FirstCall = true;
         private static bool LocationEditDlg_FirstCall = true;
+        private static bool SourceEditDlg_FirstCall = true;
 
         public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -489,6 +507,11 @@ namespace GKTests.UITests
             if (LocationEditDlg_FirstCall && form is LocationEditDlg) {
                 LocationEditDlg_Handler(form as LocationEditDlg);
                 LocationEditDlg_FirstCall = false;
+            }
+
+            if (SourceEditDlg_FirstCall && form is SourceEditDlg) {
+                SourceEditDlg_Handler(form as SourceEditDlg);
+                SourceEditDlg_FirstCall = false;
             }
 
             ClickButton("btnAccept", form);
@@ -680,12 +703,73 @@ namespace GKTests.UITests
             Assert.AreEqual(0, indiRecord.UserReferences.Count);
         }
 
+        private void SourceEditDlg_Handler(SourceEditDlg dlg)
+        {
+            GEDCOMSourceRecord srcRecord = dlg.SourceRecord;
+            GKSheetListTester sheetTester;
+            var tabs = new TabControlTester("tabsData", dlg);
+
+            // repositories
+            tabs.SelectTab(2);
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+            RSD_SubHandler = TaskAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, srcRecord.RepositoryCitations.Count);
+
+            sheetTester = new GKSheetListTester("fRepositoriesList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+        }
+
         private void ResearchEditDlg_Handler(ResearchEditDlg dlg)
         {
             GEDCOMResearchRecord resRecord = dlg.Research;
-            GKSheetListTester sheetTester = new GKSheetListTester("fGroupsList", dlg);
+            GKSheetListTester sheetTester;
+            var tabs = new TabControlTester("tabsData", dlg);
+
+            // tasks
+            tabs.SelectTab(0);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+            RSD_SubHandler = TaskAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fTasksList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            sheetTester = new GKSheetListTester("fTasksList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = TaskAdd_Mini_Handler;
+            ClickToolStripButton("fTasksList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fTasksList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+
+            // communications
+            tabs.SelectTab(1);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+            RSD_SubHandler = CommunicationAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            sheetTester = new GKSheetListTester("fCommunicationsList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = CommunicationAdd_Mini_Handler;
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Communications.Count);
 
             // groups
+            tabs.SelectTab(2);
             Assert.AreEqual(0, resRecord.Groups.Count);
             RSD_SubHandler = GroupAdd_Mini_Handler;
             ModalFormHandler = RecordSelectDlg_Create_Handler;
@@ -693,10 +777,16 @@ namespace GKTests.UITests
             Assert.AreEqual(1, resRecord.Groups.Count);
             Assert.AreEqual("sample group", ((GEDCOMGroupRecord)resRecord.Groups[0].Value).GroupName);
 
-            //ModalFormHandler = MessageBox_YesHandler;
-            //sheetTester.Properties.SelectItem(0);
-            //ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            //Assert.AreEqual(0, resRecord.Groups.Count);
+            sheetTester = new GKSheetListTester("fGroupsList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = GroupAdd_Mini_Handler;
+            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+
+            sheetTester.Properties.SelectItem(0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Groups.Count);
         }
 
         private void LocationEditDlg_Handler(LocationEditDlg dlg)
@@ -793,8 +883,23 @@ namespace GKTests.UITests
             var edName = new TextBoxTester("edName", form);
             edName.Enter("sample group");
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
+        }
+
+        public void TaskAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void CommunicationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
         }
 
         public void AssociationEdit_Handler(string name, IntPtr ptr, Form form)
@@ -844,8 +949,7 @@ namespace GKTests.UITests
         public void RecordSelectDlg_Create_Handler(string name, IntPtr ptr, Form form)
         {
             ModalFormHandler = RSD_SubHandler;
-            var tsBtn = new ButtonTester("btnCreate", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnCreate", form);
         }
 
         public void RecordSelectDlg_Select_Handler(string name, IntPtr ptr, Form form)
@@ -856,8 +960,7 @@ namespace GKTests.UITests
             var listRecords = new GKRecordsViewTester("fListRecords", form);
             listRecords.Properties.SelectItem(0);
 
-            var tsBtn = new ButtonTester("btnSelect", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnSelect", form);
         }
 
         #endregion

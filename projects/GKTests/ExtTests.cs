@@ -216,30 +216,6 @@ namespace GKTests.GKCommon
         [Test]
         public void IniFile_Tests()
         {
-            IniFileSettings.AllowBlankLines = true;
-            Assert.AreEqual(true, IniFileSettings.AllowBlankLines);
-
-            IniFileSettings.AllowEmptyValues = true;
-            Assert.AreEqual(true, IniFileSettings.AllowEmptyValues);
-
-            IniFileSettings.AllowInlineComments = true;
-            Assert.AreEqual(true, IniFileSettings.AllowInlineComments);
-
-            IniFileSettings.AllowTextOnTheRight = true;
-            Assert.AreEqual(true, IniFileSettings.AllowTextOnTheRight);
-
-            IniFileSettings.CaseSensitive = true;
-            Assert.AreEqual(true, IniFileSettings.CaseSensitive);
-
-            IniFileSettings.GroupElements = true;
-            Assert.AreEqual(true, IniFileSettings.GroupElements);
-
-            IniFileSettings.PreserveFormatting = true;
-            Assert.AreEqual(true, IniFileSettings.PreserveFormatting);
-
-            IniFileSettings.SeparateHeader = true;
-            Assert.AreEqual(true, IniFileSettings.SeparateHeader);
-
             using (IniFile iniFile = new IniFile()) {
                 iniFile.WriteInteger("test", "int", 15);
                 Assert.AreEqual(15, iniFile.ReadInteger("test", "int", 0));

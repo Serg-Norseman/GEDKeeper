@@ -6,9 +6,9 @@ namespace Externals.IniFiles
     /// <summary>Represents section's start line, e.g. "[SectionName]".</summary>
     public class IniFileSectionStart : IniFileElement
     {
-        private string sectionName;
-        private string textOnTheRight; // e.g.  "[SectionName] some text"
-        private string inlineComment;
+        private string fSectionName;
+        private string fTextOnTheRight; // e.g.  "[SectionName] some text"
+        private string fInlineComment;
 
         private IniFileSectionStart() : base()
         {
@@ -19,23 +19,23 @@ namespace Externals.IniFiles
         public IniFileSectionStart(string content) : base(content)
         {
             //content = Content;
-            formatting = ExtractFormat(content);
+            fFormatting = ExtractFormat(content);
             content = content.TrimStart();
             if (IniFileSettings.AllowInlineComments) {
-                IniFileSettings.IndexOfAnyResult result = IniFileSettings.IndexOfAny(content, IniFileSettings.CommentChars);
+                IndexOfAnyResult result = IniFileElement.IndexOfAny(content, IniFileSettings.CommentChars);
                 if (result.Index > content.IndexOf(IniFileSettings.SectionCloseBracket)) {
-                    inlineComment = content.Substring(result.Index + result.Any.Length);
+                    fInlineComment = content.Substring(result.Index + result.Any.Length);
                     content = content.Substring(0, result.Index);
                 }
             }
             if (IniFileSettings.AllowTextOnTheRight) {
                 int closeBracketPos = content.LastIndexOf(IniFileSettings.SectionCloseBracket);
                 if (closeBracketPos != content.Length - 1) {
-                    textOnTheRight = content.Substring(closeBracketPos + 1);
+                    fTextOnTheRight = content.Substring(closeBracketPos + 1);
                     content = content.Substring(0, closeBracketPos);
                 }
             }
-            sectionName = content.Substring(IniFileSettings.SectionOpenBracket.Length, content.Length - IniFileSettings.SectionCloseBracket.Length - IniFileSettings.SectionOpenBracket.Length).Trim();
+            fSectionName = content.Substring(IniFileSettings.SectionOpenBracket.Length, content.Length - IniFileSettings.SectionCloseBracket.Length - IniFileSettings.SectionOpenBracket.Length).Trim();
             Content = content;
             Format();
         }
@@ -43,10 +43,10 @@ namespace Externals.IniFiles
         /// <summary>Gets or sets a secion's name.</summary>
         public string SectionName
         {
-            get { return sectionName; }
+            get { return fSectionName; }
             set
             {
-                sectionName = value;
+                fSectionName = value;
                 Format();
             }
         }
@@ -54,12 +54,12 @@ namespace Externals.IniFiles
         /// <summary>Gets or sets an inline comment, which appear after the value.</summary>
         public string InlineComment
         {
-            get { return inlineComment; }
+            get { return fInlineComment; }
             set
             {
                 if (!IniFileSettings.AllowInlineComments || IniFileSettings.CommentChars.Length == 0)
                     throw new NotSupportedException("Inline comments are disabled.");
-                inlineComment = value; Format();
+                fInlineComment = value; Format();
             }
         }
 
@@ -73,7 +73,7 @@ namespace Externals.IniFiles
         /// <summary>Gets a string representation of this IniFileSectionStart object.</summary>
         public override string ToString()
         {
-            return "Section: \"" + sectionName + "\"";
+            return "Section: \"" + fSectionName + "\"";
         }
 
         /// <summary>Creates a new IniFileSectionStart object basing on a name of section and the formatting style of this section.</summary>
@@ -81,13 +81,15 @@ namespace Externals.IniFiles
         public IniFileSectionStart CreateNew(string sectName)
         {
             IniFileSectionStart ret = new IniFileSectionStart();
-            ret.sectionName = sectName;
+            ret.fSectionName = sectName;
+
             if (IniFileSettings.PreserveFormatting) {
-                ret.formatting = formatting;
+                ret.fFormatting = fFormatting;
                 ret.Format();
             }
             else
                 ret.Format();
+ 
             return ret;
         }
 
@@ -116,7 +118,7 @@ namespace Externals.IniFiles
                     form.Append(insideWhiteChars);
                     afterS = false; form.Append(IniFileSettings.SectionCloseBracket);
                 }
-                else if ((IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((IniFileElement.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
                     form.Append(';');
                 }
                 else if (char.IsWhiteSpace(currC)) {
@@ -140,7 +142,7 @@ namespace Externals.IniFiles
         /// <summary>Formats this element using a formatting string in Formatting property.</summary>
         public void Format()
         {
-            Format(formatting);
+            Format(fFormatting);
         }
 
         /// <summary>Formats this element using given formatting string</summary>
@@ -152,17 +154,17 @@ namespace Externals.IniFiles
             {
                 char currC = pFormatting[i];
                 if (currC == '$')
-                    build.Append(sectionName);
+                    build.Append(fSectionName);
                 else if (currC == '[')
                     build.Append(IniFileSettings.SectionOpenBracket);
                 else if (currC == ']')
                     build.Append(IniFileSettings.SectionCloseBracket);
-                else if (currC == ';' && IniFileSettings.CommentChars.Length > 0 && inlineComment != null)
-                    build.Append(IniFileSettings.CommentChars[0]).Append(inlineComment);
+                else if (currC == ';' && IniFileSettings.CommentChars.Length > 0 && fInlineComment != null)
+                    build.Append(IniFileSettings.CommentChars[0]).Append(fInlineComment);
                 else if (char.IsWhiteSpace(pFormatting[i]))
                     build.Append(pFormatting[i]);
             }
-            Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? textOnTheRight : "");
+            Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? fTextOnTheRight : "");
         }
 
         /// <summary>Crates a IniFileSectionStart object from name of a section.</summary>

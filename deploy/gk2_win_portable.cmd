@@ -5,7 +5,7 @@ rem Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman)
 rem This file is part of "GEDKeeper".
 
 set lstfile=".\listfile.txt"
-set out_fn="GEDKeeper2-v2.9.0-win-portable"
+set out_fn="GEDKeeper2-v2.10.0-win-portable"
 set zip_fn=".\%out_fn%.zip"
 set log_fn=".\%out_fn%.log"
 

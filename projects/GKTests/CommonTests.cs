@@ -756,7 +756,7 @@ namespace GKTests.GKCommon
         [Test]
         public void StringTokenizer_Tests()
         {
-            //Assert.Throws(typeof(ArgumentNullException), () => { new StringTokenizer(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new StringTokenizer(null); });
 
             StringTokenizer strTok = new StringTokenizer("alpha beta 123  456.57, x");
             Assert.IsNotNull(strTok);
@@ -813,7 +813,7 @@ namespace GKTests.GKCommon
 
             //
 
-            strTok = new StringTokenizer("alpha beta 123 456.57, x; \r\n \r \n \"test quote\"");
+            strTok = new StringTokenizer("alpha beta 123 456.57, x; \r\n \r \n \"test quote\"  \"test \r \n quote2\"");
             Assert.IsNotNull(strTok);
 
             strTok.IgnoreWhiteSpace = true;
@@ -857,6 +857,10 @@ namespace GKTests.GKCommon
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
             Assert.AreEqual("\"test quote\"", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
+            Assert.AreEqual("\"test \r \n quote2\"", tok.Value);
         }
 
         [Test]

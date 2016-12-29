@@ -86,7 +86,7 @@ namespace GKUI.Dialogs
                     this.fNotesList.DataList = this.fTask.Notes.GetEnumerator();
                 }
 
-                this.cbGoalType_SelectedIndexChanged(null, null);
+                this.cmbGoalType_SelectedIndexChanged(null, null);
             }
             catch (Exception ex)
             {
@@ -160,7 +160,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void cbGoalType_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbGoalType_SelectedIndexChanged(object sender, EventArgs e)
         {
             GKGoalType gt = (GKGoalType)this.cmbGoalType.SelectedIndex;
             switch (gt) {

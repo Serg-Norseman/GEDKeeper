@@ -31,7 +31,6 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKPedigreeImporterPlugin.cs \
-./ImpUtils.cs \
 ./Importer.cs \
 ./PedigreeImporterDlg.Designer.cs \
 ./PedigreeImporterDlg.cs
@@ -41,7 +40,6 @@ else
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKPedigreeImporterPlugin.cs \
-./ImpUtils.cs \
 ./Importer.cs \
 ./PedigreeImporterDlg.Designer.cs \
 ./PedigreeImporterDlg.cs

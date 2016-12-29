@@ -35,13 +35,11 @@ sources := \
 ./Externals/IniFiles/IniFileBlankLine.cs \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
-./Externals/IniFiles/IniFileReader.cs \
-./Externals/IniFiles/IniFiles.cs \
+./Externals/IniFiles/IniFileEx.cs \
 ./Externals/IniFiles/IniFileSection.cs \
 ./Externals/IniFiles/IniFileSectionStart.cs \
 ./Externals/IniFiles/IniFileSettings.cs \
 ./Externals/IniFiles/IniFileValue.cs \
-./Externals/IniFiles/IniFileWriter.cs \
 ./Externals/ListTimSort.cs \
 ./Externals/MapiMailMessage.cs \
 ./Externals/ZipStorer.cs \
@@ -121,23 +119,20 @@ sources := \
 ./GKCommon/CalendarConverter.cs \
 ./GKCommon/CalendarData.cs \
 ./GKCommon/Controls/ExtResources.Designer.cs \
+./GKCommon/Controls/GKListView.cs \
 ./GKCommon/Controls/GKScrollableControl.cs \
 ./GKCommon/Controls/HyperView.cs \
 ./GKCommon/Controls/ImageBox.cs \
 ./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
-./GKCommon/ReflectionHelper.cs \
-./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
-./GKCommon/ConvHelper.cs \
-./GKCommon/CRC32.cs \
 ./GKCommon/EnumSet.cs \
 ./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
-./GKCommon/GfxHelper.cs \
 ./GKCommon/GKResourceManager.cs \
+./GKCommon/ImportUtils.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/Logger.cs \
@@ -150,7 +145,6 @@ sources := \
 ./GKCommon/SmartGraph/IGraph.cs \
 ./GKCommon/SmartGraph/IVertex.cs \
 ./GKCommon/SmartGraph/Vertex.cs \
-./GKCommon/SortHelper.cs \
 ./GKCommon/StringList.cs \
 ./GKCommon/StringTokenizer.cs \
 ./GKCommon/SysUtils.cs \
@@ -212,13 +206,11 @@ sources := \
 ./Externals/IniFiles/IniFileBlankLine.cs \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
-./Externals/IniFiles/IniFileReader.cs \
-./Externals/IniFiles/IniFiles.cs \
+./Externals/IniFiles/IniFileEx.cs \
 ./Externals/IniFiles/IniFileSection.cs \
 ./Externals/IniFiles/IniFileSectionStart.cs \
 ./Externals/IniFiles/IniFileSettings.cs \
 ./Externals/IniFiles/IniFileValue.cs \
-./Externals/IniFiles/IniFileWriter.cs \
 ./Externals/ListTimSort.cs \
 ./Externals/MapiMailMessage.cs \
 ./Externals/ZipStorer.cs \
@@ -298,23 +290,20 @@ sources := \
 ./GKCommon/CalendarConverter.cs \
 ./GKCommon/CalendarData.cs \
 ./GKCommon/Controls/ExtResources.Designer.cs \
+./GKCommon/Controls/GKListView.cs \
 ./GKCommon/Controls/GKScrollableControl.cs \
 ./GKCommon/Controls/HyperView.cs \
 ./GKCommon/Controls/ImageBox.cs \
 ./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
-./GKCommon/ReflectionHelper.cs \
-./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
-./GKCommon/ConvHelper.cs \
-./GKCommon/CRC32.cs \
 ./GKCommon/EnumSet.cs \
 ./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
-./GKCommon/GfxHelper.cs \
 ./GKCommon/GKResourceManager.cs \
+./GKCommon/ImportUtils.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/Logger.cs \
@@ -327,7 +316,6 @@ sources := \
 ./GKCommon/SmartGraph/IGraph.cs \
 ./GKCommon/SmartGraph/IVertex.cs \
 ./GKCommon/SmartGraph/Vertex.cs \
-./GKCommon/SortHelper.cs \
 ./GKCommon/StringList.cs \
 ./GKCommon/StringTokenizer.cs \
 ./GKCommon/SysUtils.cs \
@@ -394,7 +382,6 @@ ifeq ($(windows), $(softwareplatform))
 resources := \
 $(addprefix $(objdir), \
 GKCommon.Controls.ExtResources.resources \
-GKCommon.Controls.SlideList.resources \
 )
 
 else
@@ -403,7 +390,6 @@ else
 resources := \
 $(addprefix $(objdir), \
 GKCommon.Controls.ExtResources.resources \
-GKCommon.Controls.SlideList.resources \
 )
 
 endif
