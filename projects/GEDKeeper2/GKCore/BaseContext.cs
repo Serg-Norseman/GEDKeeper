@@ -30,6 +30,7 @@ using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -54,6 +55,44 @@ namespace GKCore
         #endregion
 
         #region Public properties
+
+        public ICulture Culture
+        {
+            get {
+                GEDCOMLanguageID langID = this.fTree.Header.Language.Value;
+                ICulture culture;
+
+                switch (langID) {
+                    case GEDCOMLanguageID.Russian:
+                    case GEDCOMLanguageID.Ukrainian:
+                        culture = new RussianCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Polish:
+                        culture = new PolishCulture();
+                        break;
+
+                    case GEDCOMLanguageID.German:
+                        culture = new GermanCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Swedish:
+                        culture = new SwedishCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Icelandic:
+                        culture = new IcelandCulture();
+                        break;
+
+                    case GEDCOMLanguageID.English:
+                    default:
+                        culture = new BritishCulture();
+                        break;
+                }
+
+                return culture;
+            }
+        }
 
         public GEDCOMTree Tree
         {

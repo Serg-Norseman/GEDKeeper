@@ -759,12 +759,12 @@ namespace GKUI
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(this.fTree, external_match_db, this.ListCompare);
+                    TreeTools.TreeCompare(this.fBase.Context, external_match_db, this.ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:
                     {
-                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(this.fTree, fBase);
+                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
 
                         this.ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0)

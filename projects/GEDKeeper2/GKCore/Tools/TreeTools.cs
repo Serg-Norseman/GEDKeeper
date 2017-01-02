@@ -367,8 +367,9 @@ namespace GKCore.Tools
 
             // in test mode, these objects don't exist
             if (MainWin.Instance != null) {
-                if (MainWin.Instance.NamesTable != null) {
-                    MainWin.Instance.NamesTable.ImportNames(iRec);
+                INamesTable namesTable = MainWin.Instance.NamesTable;
+                if (namesTable != null) {
+                    namesTable.ImportNames(iRec);
                 }
             }
         }
@@ -683,12 +684,12 @@ namespace GKCore.Tools
 
         #region KinshipsGraph
 
-        public static KinshipsGraph SearchKinshipsGraph(GEDCOMIndividualRecord iRec)
+        public static KinshipsGraph SearchKinshipsGraph(IBaseContext context, GEDCOMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            KinshipsGraph graph = new KinshipsGraph();
+            KinshipsGraph graph = new KinshipsGraph(context);
 
             SearchKGInt(null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
 
@@ -910,24 +911,24 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CheckBase(IBaseWindow aBase, List<CheckObj> checksList)
+        public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
 
             try
             {
-                GEDCOMTree tree = aBase.Tree;
+                GEDCOMTree tree = baseWin.Tree;
 
-                aBase.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
+                baseWin.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
 
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    aBase.ProgressStep();
+                    baseWin.ProgressStep();
 
                     GEDCOMRecord rec = tree[i];
 
@@ -944,32 +945,32 @@ namespace GKCore.Tools
             }
             finally
             {
-                aBase.ProgressDone();
+                baseWin.ProgressDone();
             }
         }
 
-        public static void RepairProblem(IBaseWindow aBase, CheckObj checkObj)
+        public static void RepairProblem(IBaseWindow baseWin, CheckObj checkObj)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             if (checkObj == null)
                 throw new ArgumentNullException("checkObj");
 
-            GEDCOMTree tree = aBase.Tree;
+            GEDCOMTree tree = baseWin.Tree;
             GEDCOMIndividualRecord iRec;
 
             switch (checkObj.Diag)
             {
                 case CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
-                    aBase.Context.CreateEventEx(iRec, "DEAT", "", "");
+                    baseWin.Context.CreateEventEx(iRec, "DEAT", "", "");
                     //this.Base.ChangeRecord(iRec);
                     break;
 
                 case CheckDiag.cdPersonSexless:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
-                    aBase.CheckPersonSex(iRec);
+                    baseWin.CheckPersonSex(iRec);
                     //this.Base.ChangeRecord(iRec);
                     break;
 
@@ -1186,19 +1187,18 @@ namespace GKCore.Tools
             public GEDCOMIndividualRecord IRec;
         }
 
-        public static List<ULIndividual> GetUnlinkedNamesakes(GEDCOMTree tree, IProgressController pc)
+        public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin)
         {
-            if (tree == null)
-                throw new ArgumentNullException("tree");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
-            if (pc == null)
-                throw new ArgumentNullException("pc");
+            GEDCOMTree tree = baseWin.Context.Tree;
 
             List<ULIndividual> result = new List<ULIndividual>();
 
             Hashtable families = new Hashtable();
 
-            pc.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
+            baseWin.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
@@ -1210,7 +1210,7 @@ namespace GKCore.Tools
                 {
                     GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                    string[] fams = GlobalOptions.CurrentCulture.GetSurnames(iRec);
+                    string[] fams = baseWin.Context.Culture.GetSurnames(iRec);
 
                     for (int k = 0; k < fams.Length; k++)
                     {
@@ -1227,10 +1227,10 @@ namespace GKCore.Tools
                     }
                 }
 
-                pc.ProgressStep();
+                baseWin.ProgressStep();
             }
 
-            pc.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
+            baseWin.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
 
             // find all persons of one surname, not related by ties of kinship
             foreach (DictionaryEntry entry in families)
@@ -1266,12 +1266,12 @@ namespace GKCore.Tools
                     result.Add(indiv);
                 }
 
-                pc.ProgressStep();
+                baseWin.ProgressStep();
             }
 
             result.Sort(new IndividualRecordComparer());
             
-            pc.ProgressDone();
+            baseWin.ProgressDone();
 
             return result;
         }
@@ -1329,14 +1329,15 @@ namespace GKCore.Tools
             }
         }
 
-        public static void TreeCompare(GEDCOMTree mainTree, string fileName, TextBox logBox)
+        public static void TreeCompare(IBaseContext context, string fileName, TextBox logBox)
         {
-            if (mainTree == null)
-                throw new ArgumentNullException("mainTree");
+            if (context == null)
+                throw new ArgumentNullException("context");
 
             if (logBox == null)
                 throw new ArgumentNullException("logBox");
 
+            GEDCOMTree mainTree = context.Tree;
             GEDCOMTree tempTree = new GEDCOMTree();
             tempTree.LoadFromFile(fileName);
 
@@ -1361,7 +1362,7 @@ namespace GKCore.Tools
                         string fam, nam, pat;
                         GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
 
-                        fams.AddObject(GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
+                        fams.AddObject(context.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
                     }
                 }
 
@@ -1383,7 +1384,7 @@ namespace GKCore.Tools
                         string fam, nam, pat;
                         GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
 
-                        tm = GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                        tm = context.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0)
                         {

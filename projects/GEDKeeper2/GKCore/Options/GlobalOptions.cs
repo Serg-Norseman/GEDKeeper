@@ -39,7 +39,6 @@ namespace GKCore.Options
     public sealed class GlobalOptions : BaseObject
     {
         private static GlobalOptions fInstance = null;
-        private static ICulture fCulture = null;
 
         private readonly TreeChartOptions fChartOptions;
         /*private GEDCOMCharacterSet fDefCharacterSet;*/
@@ -82,17 +81,6 @@ namespace GKCore.Options
                 }
 
                 return fInstance;
-            }
-        }
-
-        public static ICulture CurrentCulture
-        {
-            get {
-                if (fCulture == null) {
-                    fCulture = new RussianCulture();
-                }
-
-                return fCulture;
             }
         }
 

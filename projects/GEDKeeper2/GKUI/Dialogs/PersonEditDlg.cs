@@ -121,10 +121,13 @@ namespace GKUI.Dialogs
 
                 if (this.fTarget != null)
                 {
+                    ICulture culture = this.fBase.Context.Culture;
+                    bool hasPatronymic = (culture.GetMiddleNameType() == MiddleNameType.mntPatronymic);
+                    INamesTable namesTable = MainWin.Instance.NamesTable;
+
                     string surname, name, patronymic;
                     GKUtils.GetNameParts(this.fTarget, out surname, out name, out patronymic);
                     this.txtSurname.Text = surname;
-                    INamesTable names = MainWin.Instance.NamesTable;
                     GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
                     switch (this.fTargetMode) {
@@ -132,15 +135,19 @@ namespace GKUI.Dialogs
                             if (sx == GEDCOMSex.svFemale) {
                                 this.SetMarriedSurname(surname);
                             }
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svMale));
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svFemale));
-                            this.cmbPatronymic.Text = names.GetPatronymicByName(name, sx);
+                            if (hasPatronymic) {
+                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
+                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
+                                this.cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
+                            }
                             break;
 
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GEDCOMSex.svMale:
-                                    this.txtName.Text = names.GetNameByPatronymic(patronymic);
+                                    if (hasPatronymic) {
+                                        this.txtName.Text = namesTable.GetNameByPatronymic(patronymic);
+                                    }
                                     break;
 
                                 case GEDCOMSex.svFemale:
@@ -163,7 +170,7 @@ namespace GKUI.Dialogs
 
         private void SetMarriedSurname(string husbSurname)
         {
-            string surname = GlobalOptions.CurrentCulture.GetMarriedSurname(husbSurname);
+            string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
             if (this.IsExtendedWomanSurname()) {
                 this.txtMarriedSurname.Text = surname;
             } else {
@@ -286,6 +293,9 @@ namespace GKUI.Dialogs
             this.fAssociationsList.ReadOnly = locked;
             this.fGroupsList.ReadOnly = locked;
             this.fUserRefList.ReadOnly = locked;
+
+            ICulture culture = this.fBase.Context.Culture;
+            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
         }
 
         private void UpdatePortrait(bool totalUpdate)

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -33,12 +34,14 @@ namespace GKCore.Kinships
     /// </summary>
     public sealed class KinshipsGraph : BaseObject
     {
+        private readonly IBaseContext fContext;
         private readonly Graph fGraph;
 
         public string IndividualsPath;
 
-        public KinshipsGraph()
+        public KinshipsGraph(IBaseContext context)
         {
+            this.fContext = context;
             this.fGraph = new Graph();
         }
 
@@ -170,7 +173,7 @@ namespace GKCore.Kinships
             }
         }
 
-        public static string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
+        private string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
         {
             if (ind1 == null || ind2 == null) {
                 return "???";
@@ -180,7 +183,7 @@ namespace GKCore.Kinships
                 string name2 = GKUtils.GetNameString(ind2, true, false);
 
                 rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
-                return name2 + " " + rel + " " + GlobalOptions.CurrentCulture.GetPossessiveName(name1);
+                return name2 + " " + rel + " " + fContext.Culture.GetPossessiveName(name1);
             }
         }
 

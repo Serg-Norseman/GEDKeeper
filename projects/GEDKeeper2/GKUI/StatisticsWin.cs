@@ -83,7 +83,7 @@ namespace GKUI
 
             this.fBase = aBase;
             this.fSelectedRecords = selectedRecords;
-            this.fTreeStats = new TreeStats(this.fBase.Tree, this.fSelectedRecords);
+            this.fTreeStats = new TreeStats(this.fBase.Context, this.fSelectedRecords);
 
             this.UpdateStatsTypes();
 

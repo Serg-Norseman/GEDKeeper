@@ -93,6 +93,9 @@ namespace GKUI.Dialogs
                 this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
                 this.txtMarriedSurname.Enabled = true;
             }
+
+            ICulture culture = this.fBase.Context.Culture;
+            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
         }
 
         private void AcceptChanges()

@@ -429,7 +429,8 @@ namespace GKTests.UITests
             ClickButton("btnRec2Select", form);
 
             var txtResult = new TextBoxTester("txtResult", form);
-            Assert.AreEqual("Ivanova Maria Petrovna is wife of Ivanov Ivanа Ivanovichа", txtResult.Text); // :D
+            // default is not Russian culture
+            Assert.AreEqual("Ivanova Maria Petrovna is wife of Ivanov Ivan Ivanovich", txtResult.Text); // :D
 
             ClickButton("btnClose", form);
         }
