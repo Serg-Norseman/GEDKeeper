@@ -122,7 +122,6 @@ namespace GKUI.Dialogs
                 if (this.fTarget != null)
                 {
                     ICulture culture = this.fBase.Context.Culture;
-                    bool hasPatronymic = (culture.GetMiddleNameType() == MiddleNameType.mntPatronymic);
                     INamesTable namesTable = MainWin.Instance.NamesTable;
 
                     string surname, name, patronymic;
@@ -135,7 +134,7 @@ namespace GKUI.Dialogs
                             if (sx == GEDCOMSex.svFemale) {
                                 this.SetMarriedSurname(surname);
                             }
-                            if (hasPatronymic) {
+                            if (culture.HasPatronymic()) {
                                 this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
                                 this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
                                 this.cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
@@ -145,7 +144,7 @@ namespace GKUI.Dialogs
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GEDCOMSex.svMale:
-                                    if (hasPatronymic) {
+                                    if (culture.HasPatronymic()) {
                                         this.txtName.Text = namesTable.GetNameByPatronymic(patronymic);
                                     }
                                     break;
@@ -296,6 +295,7 @@ namespace GKUI.Dialogs
 
             ICulture culture = this.fBase.Context.Culture;
             this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
+            this.cmbPatronymic.Enabled = this.cmbPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void UpdatePortrait(bool totalUpdate)

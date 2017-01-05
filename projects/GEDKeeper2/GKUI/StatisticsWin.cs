@@ -333,12 +333,18 @@ namespace GKUI
 
         private void UpdateStatsTypes()
         {
+            ICulture culture = this.fBase.Context.Culture;
+
+            this.cbType.BeginUpdate();
             this.cbType.Items.Clear();
-            for (StatsMode i = StatsMode.smAncestors; i <= StatsMode.smLast; i++)
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
             {
-                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)i];
+                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+
+                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
                 this.cbType.Items.Add(LangMan.LS(tr.Title));
             }
+            this.cbType.EndUpdate();
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

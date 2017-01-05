@@ -27,59 +27,20 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public class IcelandCulture : ICulture
+    public sealed class IcelandCulture : DefaultCulture
     {
         public IcelandCulture()
         {
         }
 
-        public MiddleNameType GetMiddleNameType()
+        public override bool HasPatronymic()
         {
-            return MiddleNameType.mntPatronymic;
+            return true;
         }
 
-        public bool HasSurname()
+        public override bool HasSurname()
         {
             return false; // doesn't exist and is prohibited by law from July 27, 1925
-        }
-
-        public string NormalizeSurname(string sn, bool aFemale)
-        {
-            return sn;
-        }
-
-        public string GetMarriedSurname(string husbSurname)
-        {
-            return husbSurname;
-        }
-
-        public GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
-        {
-            return GEDCOMSex.svUndetermined;
-        }
-
-        public string[] GetSurnames(string surname, bool female)
-        {
-            string[] result = new string[1];
-            result[0] = surname;
-            return result;
-        }
-
-        public string[] GetSurnames(GEDCOMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            string fam, nam, pat;
-            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
-
-            return GetSurnames(fam, female);
-        }
-
-        public string GetPossessiveName(string name)
-        {
-            return name;
         }
     }
 }

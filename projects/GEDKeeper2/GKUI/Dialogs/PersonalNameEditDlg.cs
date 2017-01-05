@@ -96,6 +96,7 @@ namespace GKUI.Dialogs
 
             ICulture culture = this.fBase.Context.Culture;
             this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
+            this.txtPatronymic.Enabled = this.txtPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void AcceptChanges()

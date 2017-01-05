@@ -27,9 +27,9 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public class AncientCulture : DefaultCulture
+    public class EuropeanCulture : DefaultCulture
     {
-        public AncientCulture()
+        public EuropeanCulture()
         {
         }
 
@@ -40,7 +40,7 @@ namespace GKCore.Cultures
 
         public override bool HasSurname()
         {
-            return false;
+            return true;
         }
     }
 }

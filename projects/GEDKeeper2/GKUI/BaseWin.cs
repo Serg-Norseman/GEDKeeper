@@ -1085,8 +1085,7 @@ namespace GKUI
         public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
         {
             ICulture culture = this.fContext.Culture;
-            bool hasPatronymic = (culture.GetMiddleNameType() == MiddleNameType.mntPatronymic);
-            if (!hasPatronymic) return string.Empty;
+            if (!culture.HasPatronymic()) return string.Empty;
 
             string result = "";
 

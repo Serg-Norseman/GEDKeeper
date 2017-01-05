@@ -596,7 +596,7 @@ namespace GKTests.GKCore
 
             ICulture culture = new RussianCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntPatronymic, culture.GetMiddleNameType());
+            Assert.IsTrue(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             //
             string[] surnames = culture.GetSurnames(iRec);
@@ -607,7 +607,7 @@ namespace GKTests.GKCore
 
             culture = new AncientCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntNone, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -622,7 +622,7 @@ namespace GKTests.GKCore
 
             culture = new IcelandCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntPatronymic, culture.GetMiddleNameType());
+            Assert.IsTrue(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -637,7 +637,7 @@ namespace GKTests.GKCore
 
             culture = new BritishCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntMiddleName, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -652,7 +652,7 @@ namespace GKTests.GKCore
 
             culture = new SwedishCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntSecondSurname, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
