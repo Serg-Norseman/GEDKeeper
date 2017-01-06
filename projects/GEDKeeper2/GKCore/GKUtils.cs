@@ -2824,8 +2824,8 @@ namespace GKCore
             {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
 
-                string firstPart, surname;
-                np.GetNameParts(out firstPart, out surname);
+                string firstPart = np.FirstPart;
+                string surname = np.Surname;
 
                 surname = GetFmtSurname(iRec, np, surname);
 
@@ -2888,8 +2888,8 @@ namespace GKCore
 
             if (string.IsNullOrEmpty(surname) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic))
             {
-                string firstPart /*, dummy*/;
-                personalName.GetNameParts(out firstPart, out surname /*, out dummy*/);
+                string firstPart = personalName.FirstPart;
+                surname = personalName.Surname;
 
                 string[] parts = firstPart.Split(' ');
                 if (parts.Length > 1)

@@ -286,14 +286,14 @@ namespace GKCommon.GEDCOM
 
         public virtual bool IsEmpty()
         {
-            return ((this.fStringValue == "") && (this.fTags.Count == 0));
+            return (string.IsNullOrEmpty(this.fStringValue) && (this.fTags.Count == 0));
         }
-        
+
         public virtual float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             return 0.0f;
         }
-        
+
         #endregion
 
         #region Values management

@@ -27,27 +27,43 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public sealed class GEDCOMPersonalName : GEDCOMTag
     {
+        private string fFirstPart;
+        private string fSurname;
+        private string fLastPart;
         private GEDCOMPersonalNamePieces fPieces;
 
         public string FullName
         {
-            get { return this.GetFullName(); }
+            get {
+                string result = GEDCOMUtils.TrimLeft(fFirstPart);
+                if (!string.IsNullOrEmpty(fSurname)) {
+                    result += " " + fSurname;
+
+                    if (!string.IsNullOrEmpty(fLastPart)) {
+                        result += GEDCOMUtils.TrimRight(" " + fLastPart);
+                    }
+                }
+
+                return result;
+            }
         }
 
         public string FirstPart
         {
-            get { return this.GetFirstPart(); }
+            get { return fFirstPart; }
+            set { fFirstPart = value; }
         }
 
         public string Surname
         {
-            get { return this.GetSurname(); }
-            set { this.SetSurname(value); }
+            get { return fSurname; }
+            set { fSurname = value; }
         }
 
         public string LastPart
         {
-            get { return this.GetLastPart(); }
+            get { return fLastPart; }
+            set { fLastPart = value; }
         }
 
         public GEDCOMPersonalNamePieces Pieces
@@ -61,114 +77,56 @@ namespace GKCommon.GEDCOM
             set { base.SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
         }
 
-        public void GetNameParts(out string firstPart, out string surname/*, out string ALastPart*/)
+        protected override string GetStringValue()
         {
-            string sv = base.StringValue;
+            // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
 
-            if (string.IsNullOrEmpty(sv)) {
-                firstPart = "";
-                surname = "";
-            } else {
-                int p = sv.IndexOf('/');
+            string result = GEDCOMUtils.TrimLeft(fFirstPart);
+            if (!string.IsNullOrEmpty(fSurname)) {
+                result += " /" + fSurname + "/";
 
-                if (p < 0) {
-                    firstPart = "";
-                } else {
-                    firstPart = sv.Substring(0, p);
-                    firstPart = GEDCOMUtils.TrimRight(firstPart);
-                }
-
-                int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
-
-                if (p < 0 || p2 < 0) {
-                    surname = "";
-                } else {
-                    p++;
-                    surname = sv.Substring(p, p2 - p);
+                if (!string.IsNullOrEmpty(fLastPart)) {
+                    result += GEDCOMUtils.TrimRight(" " + fLastPart);
                 }
             }
+            return result;
+        }
 
-            //ALastPart = GetLastPart();
+        public override string ParseString(string strValue)
+        {
+            fFirstPart = "";
+            fSurname = "";
+            fLastPart = "";
+
+            string sv = strValue;
+            if (string.IsNullOrEmpty(sv)) return string.Empty;
+
+            int p = sv.IndexOf('/');
+            if (p < 0) {
+                fFirstPart = sv;
+                return string.Empty;
+            }
+
+            fFirstPart = sv.Substring(0, p);
+            fFirstPart = GEDCOMUtils.TrimRight(fFirstPart);
+
+            int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
+            if (p2 < 0) return string.Empty;
+
+            p++;
+            fSurname = sv.Substring(p, p2 - p);
+
+            if (p2 >= sv.Length - 1) return string.Empty;
+
+            fLastPart = GEDCOMUtils.TrimLeft(sv.Substring(p2 + 1));
+            return string.Empty;
         }
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);
-        }
-
-        private string GetFirstPart()
-        {
-            string result;
-
-            string sv = base.StringValue;
-            if (string.IsNullOrEmpty(sv)) {
-                result = "";
-            } else {
-                int p = sv.IndexOf('/');
-                if (p < 0) {
-                    result = "";
-                } else {
-                    result = sv.Substring(0, p);
-                    result = GEDCOMUtils.TrimRight(result);
-                }
-            }
-
-            return result;
-        }
-
-        private string GetSurname()
-        {
-            string result;
-
-            string sv = base.StringValue;
-            if (string.IsNullOrEmpty(sv)) {
-                result = "";
-            } else {
-                int p = sv.IndexOf('/');
-                int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
-
-                if (p < 0 || p2 < 0) {
-                    result = "";
-                } else {
-                    p++;
-                    result = sv.Substring(p, p2 - p);
-                }
-            }
-
-            return result;
-        }
-
-        private string GetLastPart()
-        {
-            string result = "";
-
-            string sv = base.StringValue;
-            int p = sv.IndexOf('/');
-            if (p >= 0)
-            {
-                p = sv.IndexOf('/', p + 1);
-                if (p >= 0)
-                {
-                    result = GEDCOMUtils.TrimLeft(sv.Substring(p + 1));
-                }
-            }
-
-            return result;
-        }
-
-        private string GetFullName()
-        {
-            string result = base.StringValue;
-            while (result.IndexOf('/') >= 0)
-            {
-                result = result.Remove(result.IndexOf('/'), 1);
-            }
-            return result;
-        }
-
-        private void SetSurname(string value)
-        {
-            base.StringValue = string.Concat(GEDCOMUtils.TrimLeft(this.FirstPart + " "), "/", value, "/", GEDCOMUtils.TrimRight(" " + this.LastPart));
+            this.fFirstPart = firstPart.Trim();
+            this.fSurname = surname.Trim();
+            this.fLastPart = lastPart.Trim();
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -178,6 +136,10 @@ namespace GKCommon.GEDCOM
 
             this.fPieces = new GEDCOMPersonalNamePieces(owner, this, "", "");
             this.fPieces.SetLevel(base.Level);
+
+            this.fFirstPart = "";
+            this.fSurname = "";
+            this.fLastPart = "";
         }
 
         protected override void Dispose(bool disposing)
@@ -209,21 +171,33 @@ namespace GKCommon.GEDCOM
         {
             base.Assign(source);
 
-            if (source is GEDCOMPersonalName)
+            GEDCOMPersonalName otherName = (source as GEDCOMPersonalName);
+            if (otherName != null)
             {
-                this.fPieces.Assign((source as GEDCOMPersonalName).Pieces);
+                this.fFirstPart = otherName.fFirstPart;
+                this.fSurname = otherName.fSurname;
+                this.fLastPart = otherName.fLastPart;
+
+                this.fPieces.Assign(otherName.Pieces);
             }
         }
 
         public override void Clear()
         {
             base.Clear();
+
+            this.fFirstPart = "";
+            this.fSurname = "";
+            this.fLastPart = "";
+
             if (this.fPieces != null) this.fPieces.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fPieces.IsEmpty();
+            return base.IsEmpty()
+                && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
+                && this.fPieces.IsEmpty();
         }
 
         public override void Pack()
