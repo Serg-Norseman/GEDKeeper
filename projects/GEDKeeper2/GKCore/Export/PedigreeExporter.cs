@@ -566,11 +566,13 @@ namespace GKCore.Export
 
             bool success = this.Generate(writer);
 
+            #if !CI_MODE
             if (!success) {
                 MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) this.ShowResult();
             }
+            #endif
         }
 
         private void GenStep(PedigreePerson parent, GEDCOMIndividualRecord iRec, int level, int familyOrder)

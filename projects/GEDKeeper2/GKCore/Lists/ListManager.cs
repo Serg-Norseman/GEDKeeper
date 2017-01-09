@@ -283,7 +283,7 @@ namespace GKCore.Lists
             object condValue = ConvertColumnStr(value, this.GetColumnDataType(col));
 
             FilterCondition fltCond = new FilterCondition(col, condition, condValue);
-            this.Filter.Conditions.Add(fltCond);
+            this.fFilter.Conditions.Add(fltCond);
         }
 
         private bool CheckCondition(FilterCondition fcond)

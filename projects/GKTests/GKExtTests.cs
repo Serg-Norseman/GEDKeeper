@@ -13,6 +13,8 @@ namespace GKTests.GKCore
         {
             Assert.AreEqual("Иванова Ивана Ивановича", RusDeclension.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
 
+            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", RusDeclension.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
+
             //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
             //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));
         }

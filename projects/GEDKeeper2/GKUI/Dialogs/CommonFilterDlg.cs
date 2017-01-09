@@ -42,15 +42,20 @@ namespace GKUI.Dialogs
             get { return this.fBase; }
         }
 
+        public IListManager ListMan
+        {
+            get { return this.fListMan; }
+        }
+
         public CommonFilterDlg()
         {
             this.InitializeComponent();
         }
 
-        public CommonFilterDlg(IBaseWindow aBase, IListManager listMan)
+        public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             if (listMan == null)
                 throw new ArgumentNullException("listMan");
@@ -60,7 +65,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fListMan = listMan;
 
             Type colEnum = fListMan.ListColumns.GetColumnsEnum();
@@ -147,6 +152,7 @@ namespace GKUI.Dialogs
         {
             this.fMaskedTextBox = new MaskedTextBox();
             this.fMaskedTextBox.Visible = false;
+            this.fMaskedTextBox.Name = "fMaskedTextBox";
             this.fMaskedTextBox.Mask = @"00/00/0000";
             this.fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             this.dataGridView1.Controls.Add(this.fMaskedTextBox);

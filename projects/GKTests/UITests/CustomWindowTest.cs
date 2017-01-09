@@ -43,7 +43,7 @@ namespace GKTests.UITests
         public static void ClickToolStripButton(string name, Form form)
         {
             var tsBtn = new ToolStripButtonTester(name, form);
-            tsBtn.Click();
+            tsBtn.FireEvent("Click");
         }
 
         public static void ClickToolStripMenuItem(string name, Form form)

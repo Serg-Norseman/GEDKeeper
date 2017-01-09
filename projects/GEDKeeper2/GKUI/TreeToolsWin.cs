@@ -40,6 +40,8 @@ namespace GKUI
     /// </summary>
     public sealed partial class TreeToolsWin : Form
     {
+        public enum ToolType { ttTreeCompare, ttTreeMerge, ttTreeSplit, ttRecMerge, ttFamilyGroups, ttTreeCheck, ttPatSearch, ttPlaceManage }
+
         // runtime
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;

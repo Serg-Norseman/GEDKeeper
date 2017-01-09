@@ -22,11 +22,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests.Service;
@@ -101,28 +104,28 @@ namespace GKTests.UITests
             BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
 
 
-            // Stage 21
+            // Stage 20
             MainWin_Test();
 
-            // Stage 22: call to QuickFind
-            ClickToolStripMenuItem("miSearch", fMainWin);
-            var searchPanel = new FormTester("SearchPanel");
-            //var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
-            //txtSearchPattern.Enter("John");
-            ClickButton("btnPrev", searchPanel.Properties);
-            ClickButton("btnNext", searchPanel.Properties);
+
+            // Stage 21: call to QuickFind
+            QuickSearch_Test();
 
 
-            // Stage 23: call to PersonsFilterDlg
+            // Stage 22: call to PersonsFilterDlg
             ModalFormHandler = PersonsFilterDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
             ModalFormHandler = PersonsFilterDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
 
 
-            // Stage 24: call to TreeToolsWin
+            // Stage 23: call to TreeToolsWin
             ModalFormHandler = TreeToolsWin_Handler;
             ClickToolStripMenuItem("miTreeTools", fMainWin);
+
+
+            // Stage 24: call to GeneratePedigree (required the base, selected person)
+            GeneratePedigree_Tests("Stage 24");
 
 
             // Stage 25: call to CircleChartWin (required the base, selected person)
@@ -224,6 +227,14 @@ namespace GKTests.UITests
 
                 ModalFormHandler = EditorDlg_btnAccept_Handler;
                 ClickToolStripButton("tbRecordEdit", fMainWin);
+
+                IListManager listMan = baseWin.GetRecordsListManByType(rt);
+                listMan.AddCondition(PersonColumnType.pctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
+
+                ModalFormHandler = CommonFilterDlg_btnAccept_Handler;
+                ClickToolStripMenuItem("miFilter", fMainWin);
+                ModalFormHandler = CommonFilterDlg_btnReset_Handler;
+                ClickToolStripMenuItem("miFilter", fMainWin);
             }
 
             Assert.IsTrue(baseWin.IsUnknown(), stage + ".2");
@@ -290,6 +301,61 @@ namespace GKTests.UITests
             ClickToolStripMenuItem("miWinArrange", fMainWin);
         }
 
+        private void QuickSearch_Test()
+        {
+            ClickToolStripMenuItem("miSearch", fMainWin);
+
+            var searchPanel = new FormTester("SearchPanel");
+            // handlers for empty text
+            ClickButton("btnPrev", searchPanel.Properties);
+            ClickButton("btnNext", searchPanel.Properties);
+            // enter text
+            var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
+            txtSearchPattern.Enter("John");
+            // handlers for entered text? - msgbox processing
+        }
+
+        #region Pedigrees tests
+
+        private string fFileExt;
+
+        private void GeneratePedigree_Tests(string stage)
+        {
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, stage + ".1");
+
+            fFileExt = ".html";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+
+            fFileExt = ".rtf";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+
+            #if !__MonoCS__
+            fFileExt = ".pdf";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+            #endif
+
+            // Stage 24: call to GeneratePedigree (required the base, selected person)
+            //fCurBase.SelectRecordByXRef("I1");
+            //Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 24.0");
+            //ClickToolStripMenuItem("miPedigree_dAboville", fMainWin);
+        }
+
+        private void GeneratePedigree_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test" + fFileExt;
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        #endregion
+
         #region AboutDlg handler
 
         public void AboutDlg_Handler()
@@ -347,7 +413,47 @@ namespace GKTests.UITests
 
         #endregion
 
-        #region PersonsFilterDlg handlers
+        #region XFilterDlg handlers
+
+        private void CommonFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            CommonFilterDlg cfDlg = ((CommonFilterDlg)form);
+            Assert.AreEqual(fCurBase, cfDlg.Base);
+
+            IListManager listMan = cfDlg.ListMan;
+
+            var tabsFilters = new TabControlTester("tabsFilters", form);
+            tabsFilters.SelectTab(0);
+
+            //var maskedTextBox = new MaskedTextBoxTester("fMaskedTextBox", form);
+
+            var dataGridView1 = new DataGridViewTester("dataGridView1", form);
+            dataGridView1.SelectCell(0, 0);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 1);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 2);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnAccept", form);
+
+            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            //Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        private void CommonFilterDlg_btnReset_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnReset", form);
+
+            ClickButton("btnAccept", form);
+        }
 
         private void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -395,6 +501,18 @@ namespace GKTests.UITests
 
             for (int i = 0; i < tabs.Properties.TabCount; i++) {
                 tabs.SelectTab(i);
+
+                TreeToolsWin.ToolType tt = (TreeToolsWin.ToolType)i;
+                if (tt == TreeToolsWin.ToolType.ttPatSearch) {
+                    var edMinGens = new NumericUpDownTester("edMinGens", form);
+                    edMinGens.EnterValue(1);
+
+                    ClickButton("btnPatSearch", form);
+
+                    ClickButton("btnPatriarchsDiagram", form);
+                    var pvWin = new FormTester("PatriarchsViewerWin");
+                    pvWin.Close();
+                }
             }
 
             form.Close();

@@ -24,9 +24,6 @@ using NUnit.Extensions.Forms;
 
 namespace GKTests.Service
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class GKRecordsViewTester : ControlTester<GKRecordsView, GKRecordsViewTester>
     {
         public GKRecordsViewTester()
@@ -37,24 +34,9 @@ namespace GKTests.Service
         {
         }
 
-        public GKRecordsViewTester(string name, string formName) : base(name, formName)
-        {
-        }
-
-        public GKRecordsViewTester(string name) : base(name)
-        {
-        }
-
-        /*public GKRecordsViewTester(GKSheetListTester tester, int index) : base(tester, index)
-        {
-        }*/
-
         public new GKRecordsView Properties
         {
-            get
-            {
-                return (GKRecordsView) base.TheObject;
-            }
+            get { return (GKRecordsView) base.TheObject; }
         }
     }
 }
