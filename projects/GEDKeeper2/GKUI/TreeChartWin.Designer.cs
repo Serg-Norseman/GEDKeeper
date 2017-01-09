@@ -48,7 +48,8 @@ namespace GKUI
 		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.ToolStripSeparator tbs2;
 		private System.Windows.Forms.ToolStripSeparator tbs1;
-
+		private System.Windows.Forms.ToolStripMenuItem miFatherAdd;
+		private System.Windows.Forms.ToolStripMenuItem miMotherAdd;
 		private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
@@ -84,6 +85,8 @@ namespace GKUI
 		    this.MenuPerson = new System.Windows.Forms.ContextMenuStrip(this.components);
 		    this.miEdit = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N1 = new System.Windows.Forms.ToolStripSeparator();
+		    this.miFatherAdd = new System.Windows.Forms.ToolStripMenuItem();
+		    this.miMotherAdd = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miFamilyAdd = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miSpouseAdd = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miSonAdd = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,6 +331,8 @@ namespace GKUI
 		    this.MenuPerson.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 		    		    		    this.miEdit,
 		    		    		    this.N1,
+		    		    		    this.miFatherAdd,
+		    		    		    this.miMotherAdd,
 		    		    		    this.miFamilyAdd,
 		    		    		    this.miSpouseAdd,
 		    		    		    this.miSonAdd,
@@ -338,7 +343,7 @@ namespace GKUI
 		    		    		    this.miRebuildTree,
 		    		    		    this.miRebuildKinships});
 		    this.MenuPerson.Name = "MenuPerson";
-		    this.MenuPerson.Size = new System.Drawing.Size(173, 198);
+		    this.MenuPerson.Size = new System.Drawing.Size(173, 264);
 		    // 
 		    // miEdit
 		    // 
@@ -351,6 +356,20 @@ namespace GKUI
 		    // 
 		    this.N1.Name = "N1";
 		    this.N1.Size = new System.Drawing.Size(169, 6);
+		    // 
+		    // miAddFather
+		    // 
+		    this.miFatherAdd.Name = "miAddFather";
+		    this.miFatherAdd.Size = new System.Drawing.Size(172, 22);
+		    this.miFatherAdd.Text = "miFatherAdd";
+		    this.miFatherAdd.Click += new System.EventHandler(this.miFatherAdd_Click);
+		    // 
+		    // miMotherAdd
+		    // 
+		    this.miMotherAdd.Name = "miMotherAdd";
+		    this.miMotherAdd.Size = new System.Drawing.Size(172, 22);
+		    this.miMotherAdd.Text = "miMotherAdd";
+		    this.miMotherAdd.Click += new System.EventHandler(this.miMotherAdd_Click);
 		    // 
 		    // miFamilyAdd
 		    // 

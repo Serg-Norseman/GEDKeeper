@@ -799,6 +799,8 @@ namespace GKCore
         /* 740 */ LSID_HusbSign,
         /* 741 */ LSID_WifeSign,
         /* 742 */ LSID_Geocoder,
+        /* 743 */ LSID_FatherAdd,
+        /* 744 */ LSID_MotherAdd,
 
         /* 000 */ LSID_Last = LSID_Geocoder
     }
@@ -1553,7 +1555,9 @@ namespace GKCore
             /* 739 */ "Format \"Married\"",
             /* 740 */ "H",
             /* 741 */ "W",
-            /* 742 */ "Geocoder"
+            /* 742 */ "Geocoder",
+            /* 743 */ "Add Father",
+            /* 744 */ "Add Mather"
         };
 
         private static readonly LangManager fLangMan = new LangManager();
