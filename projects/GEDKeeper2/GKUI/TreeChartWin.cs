@@ -333,6 +333,44 @@ namespace GKUI
                 }
             }
         }
+        
+        private void parentAdd(GEDCOMSex NeedSex)
+        {
+            TreeChartPerson p = this.fTreeBox.Selected;
+
+            if (p != null && p.Rec != null)
+            {
+                bool needParent = false, familyExist = p.Rec.GetParentsFamily() != null;
+                if (familyExist) {
+                    GEDCOMIndividualRecord mother, father;
+                    p.Rec.GetParents(out father, out mother);
+                    needParent = (father == null && NeedSex == GEDCOMSex.svMale) ||
+                        (mother == null && NeedSex == GEDCOMSex.svFemale);
+                }
+                if (!familyExist || needParent) {
+                    GEDCOMIndividualRecord child = p.Rec;
+                    GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : this.fBase.Tree.CreateFamily();
+                    GEDCOMIndividualRecord parent = this.fBase.SelectPerson(null, TargetMode.tmParent, NeedSex);
+                    if (parent != null) {
+                        fam.AddSpouse(parent);
+                        if (!familyExist)
+                            fam.AddChild(child);
+                        
+                        this.UpdateChart();
+                    }
+                }
+            }
+        }
+        
+        private void miFatherAdd_Click(object sender, EventArgs e)
+        {
+            parentAdd(GEDCOMSex.svMale);
+        }
+
+        private void miMotherAdd_Click(object sender, EventArgs e)
+        {
+            parentAdd(GEDCOMSex.svFemale);
+        }
 
         private void miSpouseAdd_Click(object sender, EventArgs e)
         {
@@ -603,6 +641,8 @@ namespace GKUI
             this.miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
             this.miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
             this.miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
+            this.miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
+            this.miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
             this.miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
             this.miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
             this.miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
