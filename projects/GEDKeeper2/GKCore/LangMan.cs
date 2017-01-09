@@ -802,7 +802,7 @@ namespace GKCore
         /* 743 */ LSID_FatherAdd,
         /* 744 */ LSID_MotherAdd,
 
-        /* 000 */ LSID_Last = LSID_Geocoder
+        /* 000 */ LSID_Last = LSID_MotherAdd
     }
 
     // TODO: remove and merge with LangManager
@@ -1556,8 +1556,8 @@ namespace GKCore
             /* 740 */ "H",
             /* 741 */ "W",
             /* 742 */ "Geocoder",
-            /* 743 */ "Add Father",
-            /* 744 */ "Add Mather"
+            /* 743 */ "Add father",
+            /* 744 */ "Add mother"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

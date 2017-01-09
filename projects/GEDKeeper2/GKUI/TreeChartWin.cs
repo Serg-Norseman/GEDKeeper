@@ -333,24 +333,52 @@ namespace GKUI
                 }
             }
         }
-        
-        private void parentAdd(GEDCOMSex NeedSex)
+
+        private bool ParentIsRequired(GEDCOMSex needSex)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
 
             if (p != null && p.Rec != null)
             {
-                bool needParent = false, familyExist = p.Rec.GetParentsFamily() != null;
+                bool needParent = false;
+                bool familyExist = p.Rec.GetParentsFamily() != null;
+
                 if (familyExist) {
                     GEDCOMIndividualRecord mother, father;
                     p.Rec.GetParents(out father, out mother);
-                    needParent = (father == null && NeedSex == GEDCOMSex.svMale) ||
-                        (mother == null && NeedSex == GEDCOMSex.svFemale);
+
+                    needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                        (mother == null && needSex == GEDCOMSex.svFemale);
+
+                    return needParent;
                 }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ParentAdd(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = this.fTreeBox.Selected;
+
+            if (p != null && p.Rec != null)
+            {
+                bool needParent = false;
+                bool familyExist = p.Rec.GetParentsFamily() != null;
+
+                if (familyExist) {
+                    GEDCOMIndividualRecord mother, father;
+                    p.Rec.GetParents(out father, out mother);
+                    needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                        (mother == null && needSex == GEDCOMSex.svFemale);
+                }
+
                 if (!familyExist || needParent) {
                     GEDCOMIndividualRecord child = p.Rec;
                     GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : this.fBase.Tree.CreateFamily();
-                    GEDCOMIndividualRecord parent = this.fBase.SelectPerson(null, TargetMode.tmParent, NeedSex);
+                    GEDCOMIndividualRecord parent = this.fBase.SelectPerson(null, TargetMode.tmParent, needSex);
                     if (parent != null) {
                         fam.AddSpouse(parent);
                         if (!familyExist)
@@ -361,15 +389,15 @@ namespace GKUI
                 }
             }
         }
-        
+
         private void miFatherAdd_Click(object sender, EventArgs e)
         {
-            parentAdd(GEDCOMSex.svMale);
+            ParentAdd(GEDCOMSex.svMale);
         }
 
         private void miMotherAdd_Click(object sender, EventArgs e)
         {
-            parentAdd(GEDCOMSex.svFemale);
+            ParentAdd(GEDCOMSex.svFemale);
         }
 
         private void miSpouseAdd_Click(object sender, EventArgs e)
@@ -507,6 +535,12 @@ namespace GKUI
             {
                 this.fBase.Host.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
+        }
+
+        private void MenuPerson_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            miFatherAdd.Enabled = ParentIsRequired(GEDCOMSex.svMale);
+            miMotherAdd.Enabled = ParentIsRequired(GEDCOMSex.svFemale);
         }
 
         #endregion
