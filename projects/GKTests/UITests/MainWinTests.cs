@@ -28,6 +28,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -104,27 +105,30 @@ namespace GKTests.UITests
             BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
 
 
-            // Stage 20
+            // Stage 6
             MainWin_Test();
 
 
-            // Stage 21: call to QuickFind
+            // Stage 7: call to QuickFind
             QuickSearch_Test();
 
 
-            // Stage 22: call to PersonsFilterDlg
+            // Stage 20: call to PersonsFilterDlg
             ModalFormHandler = PersonsFilterDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
             ModalFormHandler = PersonsFilterDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
 
 
-            // Stage 23: call to TreeToolsWin
+            // Stage 21: call to TreeToolsWin
             ModalFormHandler = TreeToolsWin_Handler;
             ClickToolStripMenuItem("miTreeTools", fMainWin);
 
 
-            // Stage 24: call to GeneratePedigree (required the base, selected person)
+            // Stage 22-24: call to exports
+            Exporter.TEST_MODE = true;
+            GenerateFamilyBook_Tests("Stage 22");
+            GenerateExcel_Tests("Stage 23");
             GeneratePedigree_Tests("Stage 24");
 
 
@@ -315,7 +319,7 @@ namespace GKTests.UITests
             // handlers for entered text? - msgbox processing
         }
 
-        #region Pedigrees tests
+        #region Exports tests
 
         private string fFileExt;
 
@@ -324,6 +328,17 @@ namespace GKTests.UITests
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, stage + ".1");
 
+            GeneratePedigree(stage, "miPedigreeAscend");
+
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, stage + ".2");
+
+            GeneratePedigree(stage, "miPedigree_dAboville");
+            GeneratePedigree(stage, "miPedigree_Konovalov");
+        }
+
+        private void GeneratePedigree(string stage, string menuItem)
+        {
             fFileExt = ".html";
             ModalFormHandler = GeneratePedigree_Handler;
             ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
@@ -337,16 +352,43 @@ namespace GKTests.UITests
             ModalFormHandler = GeneratePedigree_Handler;
             ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
             #endif
-
-            // Stage 24: call to GeneratePedigree (required the base, selected person)
-            //fCurBase.SelectRecordByXRef("I1");
-            //Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 24.0");
-            //ClickToolStripMenuItem("miPedigree_dAboville", fMainWin);
         }
 
         private void GeneratePedigree_Handler(string name, IntPtr hWnd, Form form)
         {
             string filename = GKUtils.GetTempDir() + "test" + fFileExt;
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        private void GenerateExcel_Tests(string stage)
+        {
+            ModalFormHandler = GenerateExcel_Handler;
+            ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+        }
+
+        private void GenerateExcel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test.xls";
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        private void GenerateFamilyBook_Tests(string stage)
+        {
+            ModalFormHandler = GenerateFamilyBook_Handler;
+            ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+        }
+
+        private void GenerateFamilyBook_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test2.pdf";
             if (File.Exists(filename)) File.Delete(filename); // for local tests!
 
             SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
@@ -484,8 +526,19 @@ namespace GKTests.UITests
             Assert.AreEqual("unknown.lua", scriptWin.FileName);
 
             var txtScriptText = new TextBoxTester("txtScriptText");
-            txtScriptText.Enter("gk_print(\"Hello\")");
 
+            txtScriptText.Enter("gk_print(\"Hello\")");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("R = gt_get_records_count()");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("R = gt_get_record(0); rt = gt_get_record_type(R); "+
+                                "xref = gt_get_record_xref(R); uid = gt_get_record_uid(R);"+
+                                "isf = gt_record_is_filtered(R); tn = gt_get_record_type_name(rt);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("gk_progress_init(1, \"Hello\"); gk_progress_step(); gk_progress_done(); gk_update_view()");
             ClickToolStripButton("tbRun", form);
 
             form.Close();

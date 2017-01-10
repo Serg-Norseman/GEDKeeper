@@ -101,7 +101,7 @@ namespace GKCore.Export
             composer.Flush();
         }
 
-        public override object createFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override object CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
         {
             this.requireDocument();
 

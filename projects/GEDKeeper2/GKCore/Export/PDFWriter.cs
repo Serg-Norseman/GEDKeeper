@@ -80,7 +80,7 @@ namespace GKCore.Export
             this.fDocument.Close();
         }
 
-        public override object createFont(string name, float size, bool bold, bool underline, Color color)
+        public override object CreateFont(string name, float size, bool bold, bool underline, Color color)
         {
             int style = it.Font.NORMAL;
             if (bold) style |= it.Font.BOLD;

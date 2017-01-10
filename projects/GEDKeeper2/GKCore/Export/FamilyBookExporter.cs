@@ -161,11 +161,13 @@ namespace GKCore.Export
                 this.fBase.Host.LogWrite("FamilyBookExporter.Generate(): " + ex.StackTrace);
             }
 
+            #if !CI_MODE
             if (!success) {
                 MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) this.ShowResult();
             }
+            #endif
         }
 
         private void InternalGenerate()
@@ -335,12 +337,11 @@ namespace GKCore.Export
                         for (int m = 0; m < srcNum2; m++)
                         {
                             GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
-                            if (src != null)
-                            {
-                                st = src.FiledByEntry;
-                                if (string.IsNullOrEmpty(st)) st = src.Title.Text;
-                                PrepareSpecIndex(sourcesIndex, st, iRec);
-                            }
+                            if (src == null) continue;
+
+                            st = src.FiledByEntry;
+                            if (string.IsNullOrEmpty(st)) st = src.Title.Text;
+                            PrepareSpecIndex(sourcesIndex, st, iRec);
                         }
 
                         // The analysis places
@@ -382,12 +383,11 @@ namespace GKCore.Export
                 for (int k = 0; k < srcNum; k++)
                 {
                     GEDCOMSourceRecord src = iRec.SourceCitations[k].Value as GEDCOMSourceRecord;
+                    if (src == null) continue;
 
-                    if (src != null) {
-                        st = src.FiledByEntry;
-                        if (string.IsNullOrEmpty(st)) st = src.Title.Text;
-                        PrepareSpecIndex(sourcesIndex, st, iRec);
-                    }
+                    st = src.FiledByEntry;
+                    if (string.IsNullOrEmpty(st)) st = src.Title.Text;
+                    PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }
 

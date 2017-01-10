@@ -791,7 +791,6 @@ namespace GKUI
 
             using (ExcelExporter exExp = new ExcelExporter(curBase)) {
                 exExp.Options = this.fOptions;
-                exExp.SelectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
                 exExp.Generate(true);
             }
         }

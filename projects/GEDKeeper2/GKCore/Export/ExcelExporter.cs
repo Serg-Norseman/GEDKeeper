@@ -32,27 +32,22 @@ namespace GKCore.Export
     /// </summary>
     public sealed class ExcelExporter : Exporter
     {
-        private List<GEDCOMRecord> fSelectedRecords;
+        private readonly List<GEDCOMRecord> fSelectedRecords;
 
-        public List<GEDCOMRecord> SelectedRecords
+        public ExcelExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            get { return this.fSelectedRecords; }
-            set { this.fSelectedRecords = value; }
-        }
-
-        public ExcelExporter(IBaseWindow aBase) : base(aBase)
-        {
+            fSelectedRecords = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
         }
 
         public override void Generate(bool show)
         {
-            this.fPath = UIHelper.GetSaveFile("Excel files (*.xls)|*.xls");
-            if (string.IsNullOrEmpty(this.fPath)) return;
+            fPath = UIHelper.GetSaveFile("Excel files (*.xls)|*.xls");
+            if (string.IsNullOrEmpty(fPath)) return;
 
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");
 
-            this.fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", this.fTree.RecordsCount);
+            fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
             //TCellAttributeSet cas = (TCellAttributeSet.acBottomBorder | TCellAttributeSet.acTopBorder | TCellAttributeSet.acRightBorder | TCellAttributeSet.acLeftBorder);
 
@@ -72,13 +67,13 @@ namespace GKCore.Export
                 worksheet.Cells[1, 12] = new Cell(LangMan.LS(LSID.LSID_LifeExpectancy));
 
                 ushort row = 1;
-                int num = this.fTree.RecordsCount;
+                int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = this.fTree[i];
+                    GEDCOMRecord rec = fTree[i];
                     if (rec is GEDCOMIndividualRecord) {
                         GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                        if (this.fSelectedRecords == null || this.fSelectedRecords.IndexOf(rec) >= 0) {
+                        if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
                             string fam, nam, pat;
                             GKUtils.GetNameParts(ind, out fam, out nam, out pat);
 
@@ -94,23 +89,25 @@ namespace GKCore.Export
                             worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, DateFormat.dfDD_MM_YYYY, false));
                             worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
                             worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
-                            worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, this.fOptions.PlacesWithAddress));
+                            worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, fOptions.PlacesWithAddress));
                             worksheet.Cells[row,11] = new Cell(GKUtils.GetAge(ind, -1));
                             worksheet.Cells[row,12] = new Cell(GKUtils.GetLifeExpectancy(ind));
                         }
                     }
 
-                    this.fBase.ProgressStep();
+                    fBase.ProgressStep();
                 }
 
                 workbook.Worksheets.Add(worksheet);
-                workbook.Save(this.fPath);
+                workbook.Save(fPath);
 
-                if (show) this.ShowResult();
+                #if !CI_MODE
+                if (show) ShowResult();
+                #endif
             }
             finally
             {
-                this.fBase.ProgressDone();
+                fBase.ProgressDone();
             }
         }
     }

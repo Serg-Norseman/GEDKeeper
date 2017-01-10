@@ -208,7 +208,7 @@ namespace GKTests.Mocks
         public override void addParagraph(string text, object font) { }
         public override void addParagraphAnchor(string text, object font, string anchor) { }
         public override void addParagraphLink(string text, object font, string link, object linkFont) { }
-        public override object createFont(string name, float size, bool bold, bool underline, Color color) { return null; }
+        public override object CreateFont(string name, float size, bool bold, bool underline, Color color) { return null; }
         public override void beginList() { }
         public override void endList() { }
         public override void addListItem(string text, object font) { }
