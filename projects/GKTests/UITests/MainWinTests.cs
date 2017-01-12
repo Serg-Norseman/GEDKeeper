@@ -291,6 +291,10 @@ namespace GKTests.UITests
 
             Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
 
+            ModalFormHandler = DayTipsDlg_btnClose_Handler;
+            fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
+            DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
+
             // TODO: implement this!
             //CreateLangMan()
 
@@ -397,6 +401,11 @@ namespace GKTests.UITests
         }
 
         #endregion
+
+        public void DayTipsDlg_btnClose_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
+        }
 
         #region AboutDlg handler
 
@@ -694,6 +703,43 @@ namespace GKTests.UITests
             GEDCOMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
             GKSheetListTester sheetTester;
+
+            // father
+            fNeedIndividualSex = GEDCOMSex.svMale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnHusbandAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnHusbandDelete", dlg);
+
+            // mother
+            fNeedIndividualSex = GEDCOMSex.svFemale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnWifeAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnWifeDelete", dlg);
+
+            // childs
+            Assert.AreEqual(0, familyRecord.Childrens.Count);
+            tabs.SelectTab(0);
+            fNeedIndividualSex = GEDCOMSex.svFemale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, familyRecord.Childrens.Count);
+
+            //sheetTester = new GKSheetListTester("fEventsList", dlg);
+            //sheetTester.Properties.SelectItem(0);
+            //ModalFormHandler = EventEditDlg_Select_Handler;
+            //ClickToolStripButton("fChildsList_ToolBar_btnEdit", dlg);
+            //Assert.AreEqual(1, familyRecord.Childrens.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester = new GKSheetListTester("fChildsList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fChildsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, familyRecord.Childrens.Count);
 
             // events
             Assert.AreEqual(0, familyRecord.Events.Count);
@@ -1049,6 +1095,53 @@ namespace GKTests.UITests
         }
 
         #region RecordSelectDlg handlers
+
+        private GEDCOMSex fNeedIndividualSex;
+
+        public void IndividualAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtName = new TextBoxTester("txtName", form);
+            txtName.Enter("test");
+
+            var cmbSex = new ComboBoxTester("cmbSex", form);
+            cmbSex.Select((int)fNeedIndividualSex);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void FamilyAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        //
 
         public void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {

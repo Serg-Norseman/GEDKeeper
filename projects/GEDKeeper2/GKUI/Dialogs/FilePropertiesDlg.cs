@@ -39,7 +39,7 @@ namespace GKUI.Dialogs
             get { return this.fBase; }
         }
 
-        public FilePropertiesDlg(IBaseWindow aBase)
+        public FilePropertiesDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -47,7 +47,7 @@ namespace GKUI.Dialogs
             btnCancel.Image = GKResources.iBtnCancel;
             btnLangEdit.Image = GKResources.iRecEdit;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             this.UpdateControls();
 

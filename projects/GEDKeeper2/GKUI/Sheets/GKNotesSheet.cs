@@ -68,8 +68,8 @@ namespace GKUI.Sheets
         {
             if (this.DataList == null) return;
             
-            IBaseWindow aBase = this.Editor.Base;
-            if (aBase == null) return;
+            IBaseWindow baseWin = this.Editor.Base;
+            if (baseWin == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
@@ -82,7 +82,7 @@ namespace GKUI.Sheets
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = aBase.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = baseWin.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null) {
                         //result = (_struct.AddNote(noteRec) != null);
                         result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)_struct, noteRec);
@@ -93,7 +93,7 @@ namespace GKUI.Sheets
                     if (notes != null)
                     {
                         noteRec = notes.Value as GEDCOMNoteRecord;
-                        result = aBase.ModifyNote(ref noteRec);
+                        result = baseWin.ModifyNote(ref noteRec);
                     }
                     break;
 
@@ -109,7 +109,7 @@ namespace GKUI.Sheets
             
             if (result)
             {
-                aBase.Modified = true;
+                baseWin.Modified = true;
                 this.UpdateSheet();
             }
         }

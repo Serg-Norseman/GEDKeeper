@@ -35,13 +35,13 @@ namespace Externals.SingleInstancing
                 bool bCreatedNew;
                 Mutex m = new Mutex(bInitiallyOwned, strName, out bCreatedNew);
 
-                if(bCreatedNew)
+                if (bCreatedNew)
                 {
                     m_vMutexesWin.Add(new KeyValuePair<string, Mutex>(strName, m));
                     return true;
                 }
             }
-            catch(Exception) { }
+            catch (Exception) { }
 
             return false;
         }
@@ -51,16 +51,16 @@ namespace Externals.SingleInstancing
             string strPath = GetMutexPath(strName);
             try
             {
-                if(File.Exists(strPath))
+                if (File.Exists(strPath))
                 {
                     byte[] pbEnc = File.ReadAllBytes(strPath);
                     byte[] pb = pbEnc;
-                    if(pb.Length == 12)
+                    if (pb.Length == 12)
                     {
                         long lTime = BitConverter.ToInt64(pb, 0);
                         DateTime dt = DateTime.FromBinary(lTime);
 
-                        if((DateTime.UtcNow - dt).TotalSeconds < GmpMutexValidSecs)
+                        if ((DateTime.UtcNow - dt).TotalSeconds < GmpMutexValidSecs)
                         {
                             int pid = BitConverter.ToInt32(pb, 8);
                             try
@@ -68,7 +68,7 @@ namespace Externals.SingleInstancing
                                 Process.GetProcessById(pid); // Throws if process is not running
                                 return false; // Actively owned by other process
                             }
-                            catch(Exception) { }
+                            catch (Exception) { }
                         }
 
                         // Release the old mutex since process is not running
@@ -77,7 +77,7 @@ namespace Externals.SingleInstancing
                     else { Debug.Assert(false); }
                 }
             }
-            catch(Exception) { Debug.Assert(false); }
+            catch (Exception) { Debug.Assert(false); }
 
             try {
                 WriteMutexFilePriv(strPath);

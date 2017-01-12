@@ -118,7 +118,7 @@ namespace GKCore.Export
             set { this.fShieldState = value; }
         }
 
-        public PedigreeExporter(IBaseWindow aBase) : base(aBase)
+        public PedigreeExporter(IBaseWindow baseWin) : base(baseWin)
         {
         }
 

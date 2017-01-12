@@ -79,14 +79,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public NoteEditDlg(IBaseWindow aBase)
+        public NoteEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

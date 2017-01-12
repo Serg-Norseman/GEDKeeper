@@ -144,18 +144,18 @@ namespace GKTextSearchPlugin
 
         #region ISubscriber support
 
-        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
+        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
             #if !__MonoCS__
-            if (aBase == null || record == null || this.fSearchMan == null) return;
+            if (baseWin == null || record == null || this.fSearchMan == null) return;
 
             switch (action) {
                 case RecordAction.raEdit:
-                    this.fSearchMan.UpdateRecord(aBase, (GEDCOMRecord)record);
+                    this.fSearchMan.UpdateRecord(baseWin, (GEDCOMRecord)record);
                     break;
 
                 case RecordAction.raDelete:
-                    this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
+                    this.fSearchMan.DeleteRecord(baseWin, ((GEDCOMRecord)record).XRef);
                     break;
             }
             #endif

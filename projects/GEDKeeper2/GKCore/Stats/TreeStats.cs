@@ -337,9 +337,8 @@ namespace GKCore.Stats
 
         public void GetSpecStats(StatsMode mode, List<StatsItem> values)
         {
-            if (values == null) {
+            if (values == null)
                 throw new ArgumentNullException("values");
-            }
 
             if (mode < StatsMode.smDescGenerations)
             {

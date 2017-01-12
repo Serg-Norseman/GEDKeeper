@@ -36,11 +36,11 @@ namespace GKUI
         private readonly ToolTip fTip;
         private bool fTipShow;
 
-        public PatriarchsViewerWin(IBaseWindow aBase, int minGens)
+        public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             InitializeComponent();
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fTip = new ToolTip();
             this.fTipShow = false;
 

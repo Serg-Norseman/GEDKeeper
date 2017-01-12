@@ -140,10 +140,10 @@ namespace GKPedigreeImporterPlugin
             get { return this.fRawContents; }
         }
 
-        public Importer(IBaseWindow aBase, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
+        public Importer(IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
-            this.fBase = aBase;
-            this.fTree = aBase.Tree;
+            this.fBase = baseWin;
+            this.fTree = baseWin.Tree;
             this.fLog = aLog;
             this.fLangMan = langMan;
 

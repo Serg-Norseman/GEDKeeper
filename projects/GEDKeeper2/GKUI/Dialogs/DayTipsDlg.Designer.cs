@@ -55,7 +55,7 @@ namespace GKUI.Dialogs
 		    this.btnNextTip.Size = new System.Drawing.Size(105, 31);
 		    this.btnNextTip.TabIndex = 1;
 		    this.btnNextTip.Text = "btnNextTip";
-		    this.btnNextTip.Click += new System.EventHandler(this.NextTipBtn_Click);
+		    this.btnNextTip.Click += new System.EventHandler(this.btnNextTip_Click);
 		    // 
 		    // btnClose
 		    // 

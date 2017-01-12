@@ -45,9 +45,9 @@ namespace GKTextSearchPlugin
 
         #region Private methods
         
-        private static string GetSign(IBaseWindow aBase)
+        private static string GetSign(IBaseWindow baseWin)
         {
-            return Path.GetFileNameWithoutExtension(aBase.Tree.FileName);
+            return Path.GetFileNameWithoutExtension(baseWin.Tree.FileName);
         }
 
         private static bool IsIndexedRecord(GEDCOMRecord rec)
@@ -55,10 +55,10 @@ namespace GKTextSearchPlugin
             return !((rec is GEDCOMLocationRecord || rec is GEDCOMGroupRecord));
         }
 
-        private static void SetDBLastChange(IBaseWindow aBase, WritableDatabase database)
+        private static void SetDBLastChange(IBaseWindow baseWin, WritableDatabase database)
         {
-            string dbLastchange = aBase.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
-            database.SetMetadata(GetSign(aBase), dbLastchange);
+            string dbLastchange = baseWin.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
+            database.SetMetadata(GetSign(baseWin), dbLastchange);
         }
 
         private string GetXDBFolder()
@@ -68,11 +68,11 @@ namespace GKTextSearchPlugin
             return xdbDir;
         }
 
-        private static uint FindDocId(IBaseWindow aBase, WritableDatabase database, string xref)
+        private static uint FindDocId(IBaseWindow baseWin, WritableDatabase database, string xref)
         {
             uint result;
 
-            string key = "Q" + GetSign(aBase) + "_" + xref;
+            string key = "Q" + GetSign(baseWin) + "_" + xref;
 
             using (PostingIterator p = database.PostListBegin(key)) {
                 if (p == database.PostListEnd(key)) {
@@ -85,13 +85,13 @@ namespace GKTextSearchPlugin
             return result;
         }
 
-        private static bool SetDocumentContext(IBaseWindow aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
+        private static bool SetDocumentContext(IBaseWindow baseWin, Document doc, TermGenerator indexer, GEDCOMRecord rec)
         {
-            StringList ctx = aBase.GetRecordContent(rec);
+            StringList ctx = baseWin.GetRecordContent(rec);
             if (ctx == null) return false;
 
             string recLastchange = rec.ChangeDate.ToString();
-            string baseSign = GetSign(aBase);
+            string baseSign = GetSign(baseWin);
 
             doc.SetData(rec.XRef);							// not edit: for link from search results to gedcom-base
             doc.AddTerm("Q" + baseSign + "_" + rec.XRef);	// not edit: specific db_rec_id - for FindDocId()
@@ -104,9 +104,9 @@ namespace GKTextSearchPlugin
             return true;
         }
 
-        private static void ReindexRecord(IBaseWindow aBase, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
+        private static void ReindexRecord(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
         {
-            uint docid = FindDocId(aBase, database, record.XRef);
+            uint docid = FindDocId(baseWin, database, record.XRef);
 
             if (docid != 0) {
                 // checking for needed updates
@@ -121,7 +121,7 @@ namespace GKTextSearchPlugin
                 if (!string.Equals(recLastchange, docLastchange)) {
                     using (Document doc = new Document())
                     {
-                        if (SetDocumentContext(aBase, doc, indexer, record))
+                        if (SetDocumentContext(baseWin, doc, indexer, record))
                             database.ReplaceDocument(docid, doc);
                     }
                 }
@@ -129,7 +129,7 @@ namespace GKTextSearchPlugin
                 // only adding
                 using (Document doc = new Document())
                 {
-                    if (SetDocumentContext(aBase, doc, indexer, record))
+                    if (SetDocumentContext(baseWin, doc, indexer, record))
                         database.AddDocument(doc);
                 }
             }
@@ -137,9 +137,9 @@ namespace GKTextSearchPlugin
 
         #endregion
 
-        public void ReindexBase(IBaseWindow aBase)
+        public void ReindexBase(IBaseWindow baseWin)
         {
-            if (aBase == null) return;
+            if (baseWin == null) return;
 
             try
             {
@@ -151,31 +151,31 @@ namespace GKTextSearchPlugin
                     {
                         indexer.SetStemmer(stemmer);
 
-                        aBase.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), aBase.Tree.RecordsCount);
-                        int num = aBase.Tree.RecordsCount - 1;
+                        baseWin.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Tree.RecordsCount);
+                        int num = baseWin.Tree.RecordsCount - 1;
                         for (int i = 0; i <= num; i++)
                         {
-                            GEDCOMRecord record = aBase.Tree[i];
-                            if (IsIndexedRecord(record)) ReindexRecord(aBase, database, indexer, record);
+                            GEDCOMRecord record = baseWin.Tree[i];
+                            if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);
 
-                            aBase.ProgressStep();
+                            baseWin.ProgressStep();
                         }
-                        aBase.ProgressDone();
+                        baseWin.ProgressDone();
 
-                        SetDBLastChange(aBase, database);
+                        SetDBLastChange(baseWin, database);
                     }
                 }
             }
             catch (Exception ex)
             {
-                aBase.Host.LogWrite("SearchManager.ReindexBase(): " + ex.Message);
+                baseWin.Host.LogWrite("SearchManager.ReindexBase(): " + ex.Message);
             }
         }
 
-        public void UpdateRecord(IBaseWindow aBase, GEDCOMRecord record)
+        public void UpdateRecord(IBaseWindow baseWin, GEDCOMRecord record)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             if (record == null || !IsIndexedRecord(record)) return;
 
@@ -189,21 +189,21 @@ namespace GKTextSearchPlugin
                     {
                         indexer.SetStemmer(stemmer);
 
-                        ReindexRecord(aBase, database, indexer, record);
-                        SetDBLastChange(aBase, database);
+                        ReindexRecord(baseWin, database, indexer, record);
+                        SetDBLastChange(baseWin, database);
                     }
                 }
             }
             catch (Exception ex)
             {
-                aBase.Host.LogWrite("SearchManager.UpdateRecord(): " + ex.Message);
+                baseWin.Host.LogWrite("SearchManager.UpdateRecord(): " + ex.Message);
             }
         }
 
-        public void DeleteRecord(IBaseWindow aBase, string xref)
+        public void DeleteRecord(IBaseWindow baseWin, string xref)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             try
             {
@@ -211,17 +211,17 @@ namespace GKTextSearchPlugin
                 {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
                     {
-                        uint docid = FindDocId(aBase, database, xref);
+                        uint docid = FindDocId(baseWin, database, xref);
                         if (docid != 0) {
                             database.DeleteDocument(docid);
-                            SetDBLastChange(aBase, database);
+                            SetDBLastChange(baseWin, database);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                aBase.Host.LogWrite("SearchManager.DeleteRecord(): " + ex.Message);
+                baseWin.Host.LogWrite("SearchManager.DeleteRecord(): " + ex.Message);
             }
         }
 
@@ -232,10 +232,10 @@ namespace GKTextSearchPlugin
             public int Percent;
         }
 
-        public List<SearchEntry> Search(IBaseWindow aBase, string searchText)
+        public List<SearchEntry> Search(IBaseWindow baseWin, string searchText)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             const uint flags = (uint)(QueryParser.feature_flag.FLAG_PARTIAL | QueryParser.feature_flag.FLAG_WILDCARD |
                                       QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |
@@ -257,7 +257,7 @@ namespace GKTextSearchPlugin
                         qp.SetDefaultOp(Query.op.OP_AND);
                         qp.SetStemmingStrategy(QueryParser.stem_strategy.STEM_SOME);
 
-                        string qs = searchText + " ged:" + GetSign(aBase);
+                        string qs = searchText + " ged:" + GetSign(baseWin);
                         qp.AddBooleanPrefix("ged", "GDB");
 
                         using (Query query = qp.ParseQuery(qs, flags))
@@ -281,7 +281,7 @@ namespace GKTextSearchPlugin
                                     }
                                     catch (Exception ex)
                                     {
-                                        aBase.Host.LogWrite("SearchManager.Search(): " + ex.Message);
+                                        baseWin.Host.LogWrite("SearchManager.Search(): " + ex.Message);
                                     }
 
                                     m = m.Next();
@@ -293,7 +293,7 @@ namespace GKTextSearchPlugin
             }
             catch (Exception ex)
             {
-                aBase.Host.LogWrite("SearchManager.Search(): " + ex.Message);
+                baseWin.Host.LogWrite("SearchManager.Search(): " + ex.Message);
             }
 
             return res;

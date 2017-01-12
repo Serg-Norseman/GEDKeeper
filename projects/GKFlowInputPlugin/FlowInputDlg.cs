@@ -67,7 +67,7 @@ namespace GKFlowInputPlugin
 
         #region Instance control
         
-        public FlowInputDlg(Plugin plugin, IBaseWindow aBase)
+        public FlowInputDlg(Plugin plugin, IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -75,7 +75,7 @@ namespace GKFlowInputPlugin
 
             this.fPlugin = plugin;
             this.fLangMan = plugin.LangMan;
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fSourcesList = new StringList();
 
             this.cbEventType.Items.AddRange(new object[] {

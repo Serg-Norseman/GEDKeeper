@@ -54,6 +54,7 @@ namespace GKUI.Dialogs
         private GEDCOMIndividualRecord fPerson;
         private GEDCOMIndividualRecord fTarget;
         private TargetMode fTargetMode;
+        private Image fPortraitImg;
 
         public GEDCOMIndividualRecord Person
         {
@@ -193,6 +194,8 @@ namespace GKUI.Dialogs
                 this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
                 this.txtMarriedSurname.Enabled = true;
             }
+
+            this.UpdatePortrait(true);
         }
 
         private void UpdateControls(bool totalUpdate = false)
@@ -300,15 +303,31 @@ namespace GKUI.Dialogs
 
         private void UpdatePortrait(bool totalUpdate)
         {
-            if (totalUpdate) {
-                Image img = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
-                this.imgPortrait.Image = img;
+            if (fPortraitImg == null || totalUpdate) {
+                fPortraitImg = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
             }
 
-            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            Image img = fPortraitImg;
+            if (img == null) {
+                // using avatar's image
+                GEDCOMSex curSex = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
+                switch (curSex) {
+                    case GEDCOMSex.svMale:
+                        break;
+
+                    case GEDCOMSex.svFemale:
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            this.imgPortrait.Image = img;
+
+            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
             this.btnPortraitAdd.Enabled = !locked;
-            this.btnPortraitDelete.Enabled = this.imgPortrait.Image != null && !locked;
+            this.btnPortraitDelete.Enabled = fPortraitImg != null && !locked;
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)

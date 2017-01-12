@@ -1336,9 +1336,8 @@ namespace GKUI
 
         void IWorkWindow.SelectByRec(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
             // platform: In Windows works without it
             #if __MonoCS__

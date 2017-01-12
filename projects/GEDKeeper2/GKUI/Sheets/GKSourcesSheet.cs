@@ -82,8 +82,8 @@ namespace GKUI.Sheets
         {
             if (this.DataList == null) return;
 
-            IBaseWindow aBase = this.Editor.Base;
-            if (aBase == null) return;
+            IBaseWindow baseWin = this.Editor.Base;
+            if (baseWin == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
@@ -96,7 +96,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = ((BaseWin) aBase).ModifySourceCitation(this.fUndoman, _struct, ref aCit);
+                    result = ((BaseWin) baseWin).ModifySourceCitation(this.fUndoman, _struct, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
@@ -131,7 +131,7 @@ namespace GKUI.Sheets
 
             if (result)
             {
-                aBase.Modified = true;
+                baseWin.Modified = true;
                 this.UpdateSheet();
             }
         }

@@ -28,7 +28,6 @@ using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Kinships;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI;
 
@@ -134,15 +133,15 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static void GenPatriarchsGraphviz(IBaseWindow aBase, string outpath, int minGens, bool loneSuppress = true)
+        public static void GenPatriarchsGraphviz(IBaseWindow baseWin, string outpath, int minGens, bool loneSuppress = true)
         {
-            if (aBase == null)
-                throw new ArgumentNullException("aBase");
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
 
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
 
-            using (ExtList<PatriarchObj> patList = aBase.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
+            using (ExtList<PatriarchObj> patList = baseWin.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
             {
                 int num = patList.Count;
                 for (int i = 0; i < num; i++) {

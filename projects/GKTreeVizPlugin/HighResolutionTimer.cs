@@ -95,7 +95,7 @@ namespace GKTreeVizPlugin
 					test = false;
 				}
 
-				if(test && testTime != 0) {
+				if (test && testTime != 0) {
 					fType = TimerType.TimeGetTime;
 					fFrequency = 1000;
 				}

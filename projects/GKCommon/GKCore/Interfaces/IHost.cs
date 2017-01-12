@@ -32,10 +32,10 @@ namespace GKCore.Interfaces
 
         IBaseWindow CreateBase(string fileName);
         IBaseWindow FindBase(string fileName);
-        void BaseChanged(IBaseWindow aBase);
-        void BaseClosed(IBaseWindow aBase);
-        void BaseRenamed(IBaseWindow aBase, string oldName, string newName);
-        void NotifyRecord(IBaseWindow aBase, object record, RecordAction action);
+        void BaseChanged(IBaseWindow baseWin);
+        void BaseClosed(IBaseWindow baseWin);
+        void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
+        void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
 
         string GetAppDataPath();
 

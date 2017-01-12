@@ -417,9 +417,7 @@ namespace GKCore
         public int gt_get_event_year(object evPtr)
         {
             GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
-            if (evt == null) {
-                return 0;
-            }
+            if (evt == null) return 0;
 
             GEDCOMDate date = evt.Detail.Date.Value as GEDCOMDate;
             return (date == null) ? 0 : date.Year;

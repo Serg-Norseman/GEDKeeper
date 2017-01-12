@@ -229,14 +229,14 @@ namespace GKUI.Dialogs
             this.UpdateControls();
         }
 
-        public TreeFilterDlg(IBaseWindow aBase)
+        public TreeFilterDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fPersonsList = new GKSheetList(this.Panel1);
             this.fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             this.fPersonsList.OnModify += this.ListModify;

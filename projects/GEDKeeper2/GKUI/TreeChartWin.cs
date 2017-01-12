@@ -65,7 +65,7 @@ namespace GKUI
             }
         }
 
-        public TreeChartWin(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
+        public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
             this.InitializeComponent();
             base.MdiParent = MainWin.Instance;
@@ -77,7 +77,7 @@ namespace GKUI
             this.miModeAncestors.Tag = TreeChartBox.ChartKind.ckAncestors;
             this.miModeDescendants.Tag = TreeChartBox.ChartKind.ckDescendants;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fPerson = startPerson;
 
             this.fTreeBox = new TreeChartBox();

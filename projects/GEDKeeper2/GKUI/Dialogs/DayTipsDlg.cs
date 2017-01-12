@@ -68,7 +68,7 @@ namespace GKUI.Dialogs
             this.btnNextTip.Enabled = (this.fTips.Count > 0);
         }
 
-        private void NextTipBtn_Click(object sender, EventArgs e)
+        private void btnNextTip_Click(object sender, EventArgs e)
         {
             this.GetNextTip();
         }

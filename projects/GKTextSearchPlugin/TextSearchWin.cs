@@ -40,12 +40,12 @@ namespace GKTextSearchPlugin
         private readonly IBaseWindow fBase;
         private readonly HyperView fResultsText;
 
-        public TextSearchWin(Plugin plugin, IBaseWindow aBase)
+        public TextSearchWin(Plugin plugin, IBaseWindow baseWin)
         {
             InitializeComponent();
 
             this.fPlugin = plugin;
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.Text = string.Format(fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]", Path.GetFileName(fBase.Tree.FileName));
 
             this.SuspendLayout();

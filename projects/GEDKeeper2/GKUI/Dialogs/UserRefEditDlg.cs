@@ -70,14 +70,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public UserRefEditDlg(IBaseWindow aBase)
+        public UserRefEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
             {

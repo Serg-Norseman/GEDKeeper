@@ -378,18 +378,17 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
 
-            GEDCOMTree tree = this.fTree;
             IProgressController pctl = this.fViewer;
-            
-            pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), tree.RecordsCount);
 
-            GKUtils.InitExtCounts(tree, -1);
+            pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), fTree.RecordsCount);
+
+            GKUtils.InitExtCounts(fTree, -1);
             try
             {
-                int num = tree.RecordsCount;
+                int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = tree[i];
+                    GEDCOMRecord rec = fTree[i];
 
                     if (rec is GEDCOMIndividualRecord)
                     {
@@ -529,11 +528,10 @@ namespace GKCore
             {
                 using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
                 {
-                    GEDCOMTree tree = this.fTree;
                     IProgressController pctl = this.fViewer;
 
                     // init
-                    GKUtils.InitExtData(tree);
+                    GKUtils.InitExtData(fTree);
 
                     // prepare
                     int count = patList.Count;
@@ -596,7 +594,7 @@ namespace GKCore
                     }
 
                     // clear
-                    GKUtils.InitExtData(tree);
+                    GKUtils.InitExtData(fTree);
 
                     /*if (gpl_params.aLoneSuppress) {
 				for (int i = aList.Count - 1; i >= 0; i--) {
@@ -712,9 +710,8 @@ namespace GKCore
 
         public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
         {
-            if (fileReference == null) {
+            if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
-            }
 
             string fileRef = fileReference.StringValue;
 

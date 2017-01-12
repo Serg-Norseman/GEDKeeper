@@ -143,7 +143,7 @@ namespace GKUI.Dialogs
             base.Dispose(disposing);
         }
 
-        public SourceCitEditDlg(IBaseWindow aBase)
+        public SourceCitEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -151,7 +151,7 @@ namespace GKUI.Dialogs
             this.btnCancel.Image = GKResources.iBtnCancel;
             this.btnSourceAdd.Image = GKResources.iRecNew;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
             {

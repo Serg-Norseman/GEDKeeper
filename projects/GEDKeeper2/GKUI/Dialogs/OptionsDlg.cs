@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon.GEDCOM;
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -304,12 +304,12 @@ namespace GKUI.Dialogs
         {
             TreeChartOptions chartOptions = this.fOptions.ChartOptions;
 
-            this.FontDialog1.Font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
-
-            if (this.FontDialog1.ShowDialog() == DialogResult.OK)
+            var font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
+            font = UIHelper.SelectFont(font);
+            if (font != null)
             {
-                chartOptions.DefFontName = this.FontDialog1.Font.Name;
-                chartOptions.DefFontSize = (int)(Math.Round(this.FontDialog1.Font.Size));
+                chartOptions.DefFontName = font.Name;
+                chartOptions.DefFontSize = (int)(Math.Round(font.Size));
             }
 
             this.UpdateControls();

@@ -180,14 +180,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public AddressEditDlg(IBaseWindow aBase)
+        public AddressEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             this.fPhonesList = new GKSheetList(this.pagePhones);
             this.fPhonesList.SetControlName("fPhonesList"); // for purpose of tests

@@ -103,7 +103,7 @@ namespace GKCore.Export
         public bool IncludeNotes = true;
 
 
-        public FamilyBookExporter(IBaseWindow aBase) : base(aBase)
+        public FamilyBookExporter(IBaseWindow baseWin) : base(baseWin)
         {
             this.fMargins = new Padding(20);
             this.fAlbumPage = true;
@@ -532,13 +532,11 @@ namespace GKCore.Export
 
         private static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
         {
-            if (index == null) {
+            if (index == null)
                 throw new ArgumentNullException("index");
-            }
 
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
             StringList persons;
 

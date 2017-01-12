@@ -126,14 +126,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PersonalNameEditDlg(IBaseWindow aBase)
+        public PersonalNameEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)
             {

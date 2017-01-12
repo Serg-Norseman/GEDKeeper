@@ -77,13 +77,13 @@ namespace GKUI
             base.Dispose(disposing);
         }
 
-        public TreeToolsWin(IBaseWindow aBase)
+        public TreeToolsWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fTree = this.Base.Tree;
 
             this.tabsTools.SelectedIndex = 0;

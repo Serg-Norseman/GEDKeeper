@@ -42,7 +42,7 @@ namespace GKUI
         private int fCurrentIndex;
         private string fCurrentText;
 
-        public SlideshowWin(IBaseWindow aBase)
+        public SlideshowWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -69,7 +69,7 @@ namespace GKUI
 
             this.SetLang();
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fFileRefs = new List<GEDCOMFileReferenceWithTitle>();
             this.fCurrentIndex = -1;
 

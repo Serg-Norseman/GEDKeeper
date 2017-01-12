@@ -53,7 +53,7 @@ namespace GKUI
         private string fChartXTitle;
         private string fChartYTitle;
 
-        public StatisticsWin(IBaseWindow aBase, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
             this.InitializeComponent();
 
@@ -81,7 +81,7 @@ namespace GKUI
             this.Panel1.Controls.SetChildIndex(this.fGraph, 3);
             this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fSelectedRecords = selectedRecords;
             this.fTreeStats = new TreeStats(this.fBase.Context, this.fSelectedRecords);
 
