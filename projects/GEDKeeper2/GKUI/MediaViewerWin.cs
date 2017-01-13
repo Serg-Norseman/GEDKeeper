@@ -143,10 +143,10 @@ namespace GKUI
             }
         }
 
-        public MediaViewerWin(IBaseWindow aBase)
+        public MediaViewerWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             this.SetLang();
         }

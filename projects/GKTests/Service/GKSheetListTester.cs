@@ -37,24 +37,13 @@ namespace GKTests.Service
         {
         }
 
-        public GKSheetListTester(string name, string formName) : base(name, formName)
-        {
-        }
-
         public GKSheetListTester(string name) : base(name)
-        {
-        }
-
-        public GKSheetListTester(GKSheetListTester tester, int index) : base(tester, index)
         {
         }
 
         public new GKSheetList Properties
         {
-            get
-            {
-                return (GKSheetList) base.TheObject;
-            }
+            get { return (GKSheetList) base.TheObject; }
         }
     }
 }

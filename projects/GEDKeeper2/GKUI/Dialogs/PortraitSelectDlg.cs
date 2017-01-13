@@ -93,14 +93,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PortraitSelectDlg(IBaseWindow aBase)
+        public PortraitSelectDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
             // SetLang()

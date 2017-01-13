@@ -135,14 +135,14 @@ namespace GKTimeLinePlugin
 
         void IWidget.WidgetInit(IHost host) {}
 
-        void IWidget.BaseChanged(IBaseWindow aBase)
+        void IWidget.BaseChanged(IBaseWindow baseWin)
         {
             if (frm != null) {
-                frm.BaseChanged(aBase);
+                frm.BaseChanged(baseWin);
             }
         }
 
-        void IWidget.BaseClosed(IBaseWindow aBase)
+        void IWidget.BaseClosed(IBaseWindow baseWin)
         {
             if (frm != null) {
                 frm.BaseChanged(null);

@@ -706,9 +706,7 @@ namespace GKCommon.GEDCOM
                 GEDCOMPersonalName np = this.fPersonalNames[0];
 
                 if (onlyFirstPart) {
-                    string firstPart, dummy;
-                    np.GetNameParts(out firstPart, out dummy);
-                    resName = firstPart;
+                    resName = np.FirstPart;
                 } else {
                     resName = np.StringValue;
                 }

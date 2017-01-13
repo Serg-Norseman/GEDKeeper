@@ -40,6 +40,8 @@ namespace GKUI
     /// </summary>
     public sealed partial class TreeToolsWin : Form
     {
+        public enum ToolType { ttTreeCompare, ttTreeMerge, ttTreeSplit, ttRecMerge, ttFamilyGroups, ttTreeCheck, ttPatSearch, ttPlaceManage }
+
         // runtime
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -75,13 +77,13 @@ namespace GKUI
             base.Dispose(disposing);
         }
 
-        public TreeToolsWin(IBaseWindow aBase)
+        public TreeToolsWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fTree = this.Base.Tree;
 
             this.tabsTools.SelectedIndex = 0;
@@ -759,12 +761,12 @@ namespace GKUI
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(this.fTree, external_match_db, this.ListCompare);
+                    TreeTools.TreeCompare(this.fBase.Context, external_match_db, this.ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:
                     {
-                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(this.fTree, fBase);
+                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
 
                         this.ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0)

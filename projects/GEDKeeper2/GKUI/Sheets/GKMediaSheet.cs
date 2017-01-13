@@ -79,8 +79,8 @@ namespace GKUI.Sheets
         {
             if (this.DataList == null) return;
 
-            IBaseWindow aBase = this.Editor.Base;
-            if (aBase == null) return;
+            IBaseWindow baseWin = this.Editor.Base;
+            if (baseWin == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
@@ -93,7 +93,7 @@ namespace GKUI.Sheets
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = aBase.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    mmRec = baseWin.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
                     if (mmRec != null) {
                         //result = (_struct.AddMultimedia(mmRec) != null);
                         result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)_struct, mmRec);
@@ -104,7 +104,7 @@ namespace GKUI.Sheets
                     if (mmLink != null)
                     {
                         mmRec = mmLink.Value as GEDCOMMultimediaRecord;
-                        result = aBase.ModifyMedia(ref mmRec);
+                        result = baseWin.ModifyMedia(ref mmRec);
                     }
                     break;
 
@@ -139,7 +139,7 @@ namespace GKUI.Sheets
             }
 
             if (result) {
-                aBase.Modified = true;
+                baseWin.Modified = true;
                 this.UpdateSheet();
             }
         }

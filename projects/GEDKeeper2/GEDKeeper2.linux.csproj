@@ -510,7 +510,11 @@
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
+    <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
+    <Compile Include="GKCore\Cultures\EuropeanCulture.cs" />
+    <Compile Include="GKCore\Cultures\GermanCulture.cs" />
     <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
+    <Compile Include="GKCore\Cultures\PolishCulture.cs" />
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
     <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs">

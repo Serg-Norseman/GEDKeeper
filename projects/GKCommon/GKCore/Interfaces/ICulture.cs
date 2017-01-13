@@ -22,20 +22,18 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
-    public enum MiddleNameType
-    {
-        mntNone,
-        mntMiddleName,
-        mntPatronymic,
-        mntSecondSurname
-    }
-
     /// <summary>
     /// 
+    /// 
+    /// In most languages, where there is a middle name, it consists of several parts.
+    /// Since we do not introduce a separate field for storage of these parts - 
+    /// we are also not going to control the middle names by the specific flag.
+    /// Similarly for the second surname. Therefore, the corresponding flags are 
+    /// removed and will no longer be used.
     /// </summary>
     public interface ICulture
     {
-        MiddleNameType GetMiddleNameType();
+        bool HasPatronymic();
         bool HasSurname();
 
         string NormalizeSurname(string sn, bool aFemale);

@@ -84,7 +84,7 @@ namespace GKUI.Dialogs
             this.txtPerson.Text = ((this.fTempInd == null) ? "" : GKUtils.GetNameString(this.fTempInd, true, false));
         }
 
-        public AssociationEditDlg(IBaseWindow aBase)
+        public AssociationEditDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
@@ -92,7 +92,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             int num = GlobalOptions.Instance.Relations.Count;
             for (int i = 0; i < num; i++)

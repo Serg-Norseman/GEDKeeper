@@ -29,12 +29,12 @@ namespace GKCommon
     /// </summary>
     public static class UIHelper
     {
-        // TODO
-        public static Font GetFont()
+        public static Font SelectFont(Font font)
         {
             using (FontDialog fontDlg = new FontDialog())
             {
-                return null;
+                fontDlg.Font = font;
+                return (fontDlg.ShowDialog() != DialogResult.OK) ? null : fontDlg.Font;
             }
         }
 

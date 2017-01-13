@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore.Stats
@@ -31,12 +32,14 @@ namespace GKCore.Stats
     /// </summary>
     public class TreeStats
     {
+        private readonly IBaseContext fContext;
         private readonly GEDCOMTree fTree;
         private readonly List<GEDCOMRecord> fSelectedRecords;
         
-        public TreeStats(GEDCOMTree tree, List<GEDCOMRecord> selectedRecords)
+        public TreeStats(IBaseContext context, List<GEDCOMRecord> selectedRecords)
         {
-            this.fTree = tree;
+            this.fContext = context;
+            this.fTree = context.Tree;
             this.fSelectedRecords = selectedRecords;
         }
 
@@ -132,7 +135,7 @@ namespace GKCore.Stats
             }
         }
 
-        private static void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
+        private void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
         {
             string iName = GKUtils.GetNameString(iRec, true, false);
 
@@ -176,7 +179,7 @@ namespace GKCore.Stats
                         GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
                         switch (mode) {
                             case StatsMode.smSurnames:
-                                v = GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                                v = fContext.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                                 break;
                             case StatsMode.smNames:
                                 v = nam;
@@ -334,9 +337,8 @@ namespace GKCore.Stats
 
         public void GetSpecStats(StatsMode mode, List<StatsItem> values)
         {
-            if (values == null) {
+            if (values == null)
                 throw new ArgumentNullException("values");
-            }
 
             if (mode < StatsMode.smDescGenerations)
             {

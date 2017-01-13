@@ -93,7 +93,7 @@ namespace GKUI.Dialogs
             if (this.fRec1 != null && this.fRec2 != null) {
                 txtResult.Text = "???";
 
-                using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(this.fRec1)) {
+                using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(fBase.Context, this.fRec1)) {
                     if (kinsGraph.IsEmpty()) {
                         txtResult.Text = "Empty graph.";
                         return;

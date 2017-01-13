@@ -35,9 +35,9 @@ namespace GKCore.Cultures
         {
         }
 
-        public MiddleNameType GetMiddleNameType()
+        public bool HasPatronymic()
         {
-            return MiddleNameType.mntPatronymic;
+            return true;
         }
 
         public bool HasSurname()

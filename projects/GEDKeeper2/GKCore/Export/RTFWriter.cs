@@ -104,7 +104,7 @@ namespace GKCore.Export
             fmt.LocalHyperlink = link;
         }
 
-        public override object createFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override object CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
         {
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
@@ -132,7 +132,7 @@ namespace GKCore.Export
             RtfParagraph par = this.fDocument.addParagraph();
 
             FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)this.createFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct symFont = (FontStruct)this.CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
@@ -143,7 +143,7 @@ namespace GKCore.Export
             RtfParagraph par = this.fDocument.addParagraph();
 
             FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)this.createFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct symFont = (FontStruct)this.CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);

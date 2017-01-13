@@ -161,10 +161,10 @@ namespace GKTests.Mocks
 
         public IBaseWindow CreateBase(string fileName) { return null; }
         public IBaseWindow FindBase(string fileName) { return null; }
-        public void BaseChanged(IBaseWindow aBase) {}
-        public void BaseClosed(IBaseWindow aBase) {}
-        public void BaseRenamed(IBaseWindow aBase, string oldName, string newName) {}
-        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action) {}
+        public void BaseChanged(IBaseWindow baseWin) {}
+        public void BaseClosed(IBaseWindow baseWin) {}
+        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
+        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
 
         public string GetAppDataPath() { return string.Empty; }
 
@@ -208,7 +208,7 @@ namespace GKTests.Mocks
         public override void addParagraph(string text, object font) { }
         public override void addParagraphAnchor(string text, object font, string anchor) { }
         public override void addParagraphLink(string text, object font, string link, object linkFont) { }
-        public override object createFont(string name, float size, bool bold, bool underline, Color color) { return null; }
+        public override object CreateFont(string name, float size, bool bold, bool underline, Color color) { return null; }
         public override void beginList() { }
         public override void endList() { }
         public override void addListItem(string text, object font) { }

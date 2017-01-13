@@ -18,38 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
-using NUnit.Extensions.Forms;
+using System;
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 
-namespace GKTests.UITests
+namespace GKCore.Cultures
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CustomWindowTest : NUnitFormTest
+    public sealed class GermanCulture : EuropeanCulture
     {
-        public static void ClickButton(string name, Form form)
+        public GermanCulture()
         {
-            var tsBtn = new ButtonTester(name, form);
-            tsBtn.FireEvent("Click");
-        }
-
-        public static void ClickButton(string name, string form)
-        {
-            var tsBtn = new ButtonTester(name, form);
-            tsBtn.Click();
-        }
-
-        public static void ClickToolStripButton(string name, Form form)
-        {
-            var tsBtn = new ToolStripButtonTester(name, form);
-            tsBtn.FireEvent("Click");
-        }
-
-        public static void ClickToolStripMenuItem(string name, Form form)
-        {
-            var tsMenuItem = new ToolStripMenuItemTester(name, form);
-            tsMenuItem.Click();
         }
     }
 }

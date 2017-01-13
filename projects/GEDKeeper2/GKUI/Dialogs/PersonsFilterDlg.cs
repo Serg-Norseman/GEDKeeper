@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
             InitializeComponent();
         }
 
-        public PersonsFilterDlg(IBaseWindow aBase, IListManager listMan) : base(aBase, listMan)
+        public PersonsFilterDlg(IBaseWindow baseWin, IListManager listMan) : base(baseWin, listMan)
         {
             InitializeComponent();
 

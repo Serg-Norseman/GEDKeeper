@@ -54,7 +54,6 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.CheckBox chkChildlessExclude;
         private System.Windows.Forms.Label lblFont;
         private System.Windows.Forms.Panel panDefFont;
-        private System.Windows.Forms.FontDialog FontDialog1;
         private System.Windows.Forms.TabPage pagePedigree;
         private System.Windows.Forms.GroupBox grpPedigree;
         private System.Windows.Forms.CheckBox chkAttributes;
@@ -210,7 +209,6 @@ namespace GKUI.Dialogs
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.FontDialog1 = new System.Windows.Forms.FontDialog();
             this.cmbGeocoder = new System.Windows.Forms.ComboBox();
             this.lblGeocoder = new System.Windows.Forms.Label();
             this.PageControl1.SuspendLayout();

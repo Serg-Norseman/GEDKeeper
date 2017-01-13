@@ -64,9 +64,9 @@ namespace GKTimeLinePlugin
             this.fPlugin.Host.WidgetClose(this.fPlugin);
         }
 
-        public void BaseChanged(IBaseWindow aBase)
+        public void BaseChanged(IBaseWindow baseWin)
         {
-            if (this.fBase != aBase && this.fBase != null)
+            if (this.fBase != baseWin && this.fBase != null)
             {
                 IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
@@ -76,7 +76,7 @@ namespace GKTimeLinePlugin
                 this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             this.fYearMin = 10000;
             this.fYearMax = 0;

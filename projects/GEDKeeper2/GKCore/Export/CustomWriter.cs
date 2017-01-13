@@ -38,26 +38,23 @@ namespace GKCore.Export
 
         protected CustomWriter()
         {
-            this.fMargins.Left = 20;
-            this.fMargins.Top = 20;
-            this.fMargins.Right = 20;
-            this.fMargins.Bottom = 20;
-            this.fAlbumPage = false;
+            fAlbumPage = false;
+            fMargins = new Padding(20);
         }
 
-        public void setDocumentTitle(string title)
+        public virtual void SetAlbumPage(bool value)
         {
-            this.fDocumentTitle = title;
+            fAlbumPage = value;
         }
 
-        public void setFileName(string fileName)
+        public void SetDocumentTitle(string title)
         {
-            this.fFileName = fileName;
+            fDocumentTitle = title;
         }
 
-        public virtual void setAlbumPage(bool value)
+        public void SetFileName(string fileName)
         {
-            this.fAlbumPage = value;
+            fFileName = fileName;
         }
 
         public abstract void beginWrite();
@@ -68,7 +65,7 @@ namespace GKCore.Export
         public abstract void addParagraphAnchor(string text, object font, string anchor);
         public abstract void addParagraphLink(string text, object font, string link, object linkFont);
 
-        public abstract object createFont(string name, float size, bool bold, bool underline, Color color);
+        public abstract object CreateFont(string name, float size, bool bold, bool underline, Color color);
 
         public abstract void beginList();
         public abstract void addListItem(string text, object font);

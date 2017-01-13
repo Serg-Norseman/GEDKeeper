@@ -416,9 +416,9 @@ namespace GKTreeVizPlugin
             }
         }
 
-        public void createArborGraph(IBaseWindow aBase, int minGens, bool loneSuppress)
+        public void createArborGraph(IBaseWindow baseWin, int minGens, bool loneSuppress)
         {
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             try
             {
@@ -426,7 +426,7 @@ namespace GKTreeVizPlugin
                 fSys.setScreenSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
-                using (ExtList<PatriarchObj> patList = aBase.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
+                using (ExtList<PatriarchObj> patList = baseWin.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
                 {
                     int num = patList.Count;
                     for (int i = 0; i < num; i++) {

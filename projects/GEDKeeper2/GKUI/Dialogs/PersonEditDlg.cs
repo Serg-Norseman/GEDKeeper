@@ -54,6 +54,7 @@ namespace GKUI.Dialogs
         private GEDCOMIndividualRecord fPerson;
         private GEDCOMIndividualRecord fTarget;
         private TargetMode fTargetMode;
+        private Image fPortraitImg;
 
         public GEDCOMIndividualRecord Person
         {
@@ -121,10 +122,12 @@ namespace GKUI.Dialogs
 
                 if (this.fTarget != null)
                 {
+                    ICulture culture = this.fBase.Context.Culture;
+                    INamesTable namesTable = MainWin.Instance.NamesTable;
+
                     string surname, name, patronymic;
                     GKUtils.GetNameParts(this.fTarget, out surname, out name, out patronymic);
                     this.txtSurname.Text = surname;
-                    INamesTable names = MainWin.Instance.NamesTable;
                     GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
                     switch (this.fTargetMode) {
@@ -132,15 +135,19 @@ namespace GKUI.Dialogs
                             if (sx == GEDCOMSex.svFemale) {
                                 this.SetMarriedSurname(surname);
                             }
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svMale));
-                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(name, GEDCOMSex.svFemale));
-                            this.cmbPatronymic.Text = names.GetPatronymicByName(name, sx);
+                            if (culture.HasPatronymic()) {
+                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
+                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
+                                this.cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
+                            }
                             break;
 
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GEDCOMSex.svMale:
-                                    this.txtName.Text = names.GetNameByPatronymic(patronymic);
+                                    if (culture.HasPatronymic()) {
+                                        this.txtName.Text = namesTable.GetNameByPatronymic(patronymic);
+                                    }
                                     break;
 
                                 case GEDCOMSex.svFemale:
@@ -163,7 +170,7 @@ namespace GKUI.Dialogs
 
         private void SetMarriedSurname(string husbSurname)
         {
-            string surname = GlobalOptions.CurrentCulture.GetMarriedSurname(husbSurname);
+            string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
             if (this.IsExtendedWomanSurname()) {
                 this.txtMarriedSurname.Text = surname;
             } else {
@@ -187,6 +194,8 @@ namespace GKUI.Dialogs
                 this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
                 this.txtMarriedSurname.Enabled = true;
             }
+
+            this.UpdatePortrait(true);
         }
 
         private void UpdateControls(bool totalUpdate = false)
@@ -286,19 +295,39 @@ namespace GKUI.Dialogs
             this.fAssociationsList.ReadOnly = locked;
             this.fGroupsList.ReadOnly = locked;
             this.fUserRefList.ReadOnly = locked;
+
+            ICulture culture = this.fBase.Context.Culture;
+            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
+            this.cmbPatronymic.Enabled = this.cmbPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void UpdatePortrait(bool totalUpdate)
         {
-            if (totalUpdate) {
-                Image img = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
-                this.imgPortrait.Image = img;
+            if (fPortraitImg == null || totalUpdate) {
+                fPortraitImg = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
             }
 
-            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            Image img = fPortraitImg;
+            if (img == null) {
+                // using avatar's image
+                GEDCOMSex curSex = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
+                switch (curSex) {
+                    case GEDCOMSex.svMale:
+                        break;
+
+                    case GEDCOMSex.svFemale:
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            this.imgPortrait.Image = img;
+
+            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
             this.btnPortraitAdd.Enabled = !locked;
-            this.btnPortraitDelete.Enabled = this.imgPortrait.Image != null && !locked;
+            this.btnPortraitDelete.Enabled = fPortraitImg != null && !locked;
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)

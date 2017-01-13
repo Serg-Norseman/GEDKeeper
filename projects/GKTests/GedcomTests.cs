@@ -1717,17 +1717,20 @@ namespace GKTests.GKCommon
             GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
             GEDCOMPersonalName pName = iRec.PersonalNames[0];
-            string first, surname;
-            pName.GetNameParts(out first, out surname);
-            Assert.AreEqual("Ivanov", surname);
-            Assert.AreEqual("Ivan Ivanovich", first);
+            Assert.AreEqual("Ivanov", pName.Surname);
+            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
+
+            pName.SetNameParts("Ivan Ivanovich", "Ivanov", "testLastPart");
+            Assert.AreEqual("Ivanov", pName.Surname);
+            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
+            Assert.AreEqual("testLastPart", pName.LastPart);
 
 //			GEDCOMPersonalNamePieces pieces = pName.Pieces;
 //			Assert.AreEqual(pieces.Surname, "surname");
 //			Assert.AreEqual(pieces.Name, "name");
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
 
-            string name, patronymic;
+            string surname, name, patronymic;
             GKUtils.GetNameParts(iRec, out surname, out name, out patronymic);
             Assert.AreEqual("Ivanov", surname);
             Assert.AreEqual("Ivan", name);
@@ -1752,8 +1755,14 @@ namespace GKTests.GKCommon
 
             Assert.AreEqual("Petr Ivanov Fedoroff", persName.FullName);
 
+            persName.FirstPart = "Petr";
+            Assert.AreEqual("Petr", persName.FirstPart);
+
             persName.Surname = "Test";
             Assert.AreEqual("Test", persName.Surname);
+
+            persName.LastPart = "Fedoroff";
+            Assert.AreEqual("Fedoroff", persName.LastPart);
 
             //
 
@@ -1829,11 +1838,6 @@ namespace GKTests.GKCommon
             using (GEDCOMPersonalName name1 = new GEDCOMPersonalName(null, null, "", "")) {
                 Assert.AreEqual("", name1.FirstPart);
                 Assert.AreEqual("", name1.Surname);
-
-                string fp, sp;
-                name1.GetNameParts(out fp, out sp);
-                Assert.AreEqual("", fp);
-                Assert.AreEqual("", sp);
 
                 Assert.AreEqual(0.0f, name1.IsMatch(null, false));
 

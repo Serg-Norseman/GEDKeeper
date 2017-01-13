@@ -47,7 +47,7 @@ namespace Externals.SingleInstancing
 
         public static void Serialize(BinaryWriter bw, IpcMessage msg)
         {
-            if((bw == null) || (msg == null)) { Debug.Assert(false); return; }
+            if ((bw == null) || (msg == null)) { Debug.Assert(false); return; }
 
             bw.Write(msg.ID);
             bw.Write(msg.Time);
@@ -57,7 +57,7 @@ namespace Externals.SingleInstancing
 
         public static IpcMessage Deserialize(BinaryReader br)
         {
-            if(br == null) { Debug.Assert(false); return null; }
+            if (br == null) { Debug.Assert(false); return null; }
 
             IpcMessage msg = new IpcMessage();
 
@@ -245,7 +245,7 @@ namespace Externals.SingleInstancing
             MemoryStream ms = new MemoryStream(pb, false);
             BinaryReader br = new BinaryReader(ms);
             ulong uSig = br.ReadUInt64();
-            if(uSig != IpcFileSig) { Debug.Assert(false); return l; }
+            if (uSig != IpcFileSig) { Debug.Assert(false); return l; }
             uint uMessages = br.ReadUInt32();
 
             for (uint u = 0; u < uMessages; ++u)
@@ -336,9 +336,9 @@ namespace Externals.SingleInstancing
             for (int r = 0; r < 50; ++r)
             {
                 try {
-                    if(!File.Exists(strIpcFile)) break;
+                    if (!File.Exists(strIpcFile)) break;
                 }
-                catch(Exception) { }
+                catch (Exception) { }
 
                 Thread.Sleep(20);
             }
@@ -386,10 +386,10 @@ namespace Externals.SingleInstancing
         private static void RemoveIpcInfoFile(int nId)
         {
             /*string strPath = GetIpcFilePath(nId);
-			if(string.IsNullOrEmpty(strPath)) return;
+			if (string.IsNullOrEmpty(strPath)) return;
 
-			try { if(File.Exists(strPath)) File.Delete(strPath); }
-			catch(Exception) { Debug.Assert(false); }*/
+			try { if (File.Exists(strPath)) File.Delete(strPath); }
+			catch (Exception) { Debug.Assert(false); }*/
         }
 
         private static IpcParamEx LoadIpcInfoFile(int nId)

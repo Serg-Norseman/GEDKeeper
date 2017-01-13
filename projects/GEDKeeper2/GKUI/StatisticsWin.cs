@@ -53,7 +53,7 @@ namespace GKUI
         private string fChartXTitle;
         private string fChartYTitle;
 
-        public StatisticsWin(IBaseWindow aBase, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
             this.InitializeComponent();
 
@@ -81,9 +81,9 @@ namespace GKUI
             this.Panel1.Controls.SetChildIndex(this.fGraph, 3);
             this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fSelectedRecords = selectedRecords;
-            this.fTreeStats = new TreeStats(this.fBase.Tree, this.fSelectedRecords);
+            this.fTreeStats = new TreeStats(this.fBase.Context, this.fSelectedRecords);
 
             this.UpdateStatsTypes();
 
@@ -333,12 +333,18 @@ namespace GKUI
 
         private void UpdateStatsTypes()
         {
+            ICulture culture = this.fBase.Context.Culture;
+
+            this.cbType.BeginUpdate();
             this.cbType.Items.Clear();
-            for (StatsMode i = StatsMode.smAncestors; i <= StatsMode.smLast; i++)
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
             {
-                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)i];
+                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+
+                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
                 this.cbType.Items.Add(LangMan.LS(tr.Title));
             }
+            this.cbType.EndUpdate();
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

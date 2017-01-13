@@ -30,6 +30,7 @@ using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -54,6 +55,44 @@ namespace GKCore
         #endregion
 
         #region Public properties
+
+        public ICulture Culture
+        {
+            get {
+                GEDCOMLanguageID langID = this.fTree.Header.Language.Value;
+                ICulture culture;
+
+                switch (langID) {
+                    case GEDCOMLanguageID.Russian:
+                    case GEDCOMLanguageID.Ukrainian:
+                        culture = new RussianCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Polish:
+                        culture = new PolishCulture();
+                        break;
+
+                    case GEDCOMLanguageID.German:
+                        culture = new GermanCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Swedish:
+                        culture = new SwedishCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Icelandic:
+                        culture = new IcelandCulture();
+                        break;
+
+                    case GEDCOMLanguageID.English:
+                    default:
+                        culture = new BritishCulture();
+                        break;
+                }
+
+                return culture;
+            }
+        }
 
         public GEDCOMTree Tree
         {
@@ -339,18 +378,17 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
 
-            GEDCOMTree tree = this.fTree;
             IProgressController pctl = this.fViewer;
-            
-            pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), tree.RecordsCount);
 
-            GKUtils.InitExtCounts(tree, -1);
+            pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), fTree.RecordsCount);
+
+            GKUtils.InitExtCounts(fTree, -1);
             try
             {
-                int num = tree.RecordsCount;
+                int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = tree[i];
+                    GEDCOMRecord rec = fTree[i];
 
                     if (rec is GEDCOMIndividualRecord)
                     {
@@ -490,11 +528,10 @@ namespace GKCore
             {
                 using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
                 {
-                    GEDCOMTree tree = this.fTree;
                     IProgressController pctl = this.fViewer;
 
                     // init
-                    GKUtils.InitExtData(tree);
+                    GKUtils.InitExtData(fTree);
 
                     // prepare
                     int count = patList.Count;
@@ -557,7 +594,7 @@ namespace GKCore
                     }
 
                     // clear
-                    GKUtils.InitExtData(tree);
+                    GKUtils.InitExtData(fTree);
 
                     /*if (gpl_params.aLoneSuppress) {
 				for (int i = aList.Count - 1; i >= 0; i--) {
@@ -673,9 +710,8 @@ namespace GKCore
 
         public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
         {
-            if (fileReference == null) {
+            if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
-            }
 
             string fileRef = fileReference.StringValue;
 

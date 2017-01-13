@@ -89,7 +89,6 @@ namespace GKUI.Charts
         #region Private fields
 
         private readonly ChartFilter fFilter;
-        private readonly KinshipsGraph fGraph;
         private readonly PersonList fPersons;
         private readonly List<string> fPreparedFamilies;
         internal readonly List<string> fPreparedIndividuals;
@@ -101,6 +100,7 @@ namespace GKUI.Charts
         private bool fCertaintyIndex;
         private int fDepthLimit;
         private Font fDrawFont;
+        private KinshipsGraph fGraph;
         private ChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
@@ -178,6 +178,7 @@ namespace GKUI.Charts
             set {
                 this.fBase = value;
                 this.fTree = this.fBase.Tree;
+                this.fGraph = new KinshipsGraph(fBase.Context);
             }
         }
 
@@ -331,7 +332,7 @@ namespace GKUI.Charts
             this.fSelected = null;
             this.fScale = 1.0f;
             this.fTraceSelected = true;
-            this.fGraph = new KinshipsGraph();
+            this.fGraph = null;
 
             this.fPreparedFamilies = new List<string>();
             this.fPreparedIndividuals = new List<string>();

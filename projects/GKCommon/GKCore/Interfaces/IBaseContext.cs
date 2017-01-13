@@ -30,6 +30,7 @@ namespace GKCore.Interfaces
 {
     public interface IBaseContext
     {
+        ICulture Culture { get; }
         GEDCOMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
 

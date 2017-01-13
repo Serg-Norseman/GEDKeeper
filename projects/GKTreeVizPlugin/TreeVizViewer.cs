@@ -49,11 +49,11 @@ namespace GKTreeVizPlugin
 		private StatusBarPanel sbpTimeControl;
 		private TreeVizControl fTreeVizView;
 
-		public TreeVizViewer(IBaseWindow aBase, int minGens)
+		public TreeVizViewer(IBaseWindow baseWin, int minGens)
 		{
 		    this.InitializeComponent();
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fMinGens = minGens;
 
             this.fHighresTimer = new HighResolutionTimer();

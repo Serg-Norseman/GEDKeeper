@@ -67,6 +67,8 @@ namespace GKTests.GKCore
         [Test]
         public void Context_Tests()
         {
+            Assert.IsNotNull(fContext.Culture);
+
             GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
             Assert.IsNull(srcRec);
 
@@ -594,7 +596,7 @@ namespace GKTests.GKCore
 
             ICulture culture = new RussianCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntPatronymic, culture.GetMiddleNameType());
+            Assert.IsTrue(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             //
             string[] surnames = culture.GetSurnames(iRec);
@@ -605,7 +607,7 @@ namespace GKTests.GKCore
 
             culture = new AncientCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntNone, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -620,7 +622,7 @@ namespace GKTests.GKCore
 
             culture = new IcelandCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntPatronymic, culture.GetMiddleNameType());
+            Assert.IsTrue(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -635,7 +637,7 @@ namespace GKTests.GKCore
 
             culture = new BritishCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntMiddleName, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -650,7 +652,7 @@ namespace GKTests.GKCore
 
             culture = new SwedishCulture();
             Assert.IsNotNull(culture);
-            Assert.AreEqual(MiddleNameType.mntSecondSurname, culture.GetMiddleNameType());
+            Assert.IsFalse(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
@@ -732,7 +734,7 @@ namespace GKTests.GKCore
             GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord otherRec = this.fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
 
-            using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(indRec)) {
+            using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(this.fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
 
                 Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));
@@ -1075,7 +1077,6 @@ namespace GKTests.GKCore
                 GlobalOptions globalOptions = GlobalOptions.Instance;
                 Assert.IsNotNull(globalOptions);
 
-                Assert.IsNotNull(GlobalOptions.CurrentCulture);
                 Assert.IsNotNull(globalOptions.ChartOptions);
                 Assert.IsNotNull(globalOptions.AncestorsCircleOptions);
 
@@ -1256,7 +1257,7 @@ namespace GKTests.GKCore
                 selectedRecords.Add(current);
             }
 
-            TreeStats treeStats = new TreeStats(fContext.Tree, selectedRecords);
+            TreeStats treeStats = new TreeStats(fContext, selectedRecords);
             Assert.IsNotNull(treeStats);
 
             CommonStats commonStats = treeStats.GetCommonStats();
@@ -1309,6 +1310,10 @@ namespace GKTests.GKCore
         [Test]
         public void Tools_Tests()
         {
+            IBaseWindow baseWin = new BaseWindowMock();
+
+            //
+
             PlaceObj placeObj = new PlaceObj(null);
             Assert.IsNotNull(placeObj);
             Assert.AreEqual(null, placeObj.Name);
@@ -1335,9 +1340,9 @@ namespace GKTests.GKCore
 
             List<TreeTools.CheckObj> checksList = new List<TreeTools.CheckObj>();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(new BaseWindowMock(), null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(baseWin, null); });
 
-            TreeTools.CheckBase(new BaseWindowMock(), checksList);
+            TreeTools.CheckBase(baseWin, checksList);
 
             //
 
@@ -1359,9 +1364,8 @@ namespace GKTests.GKCore
 
             //
 
-            BaseWindowMock basewin = new BaseWindowMock();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(basewin, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(baseWin, null); });
 
             //
 
@@ -1369,8 +1373,8 @@ namespace GKTests.GKCore
 
             //
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(fContext.Tree, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null); });
+            //TreeTools.GetUnlinkedNamesakes(baseWin);
 
             //
 
@@ -1383,7 +1387,7 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext, null, null); });
 
             //
 
@@ -1392,7 +1396,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, placesList, null); });
 
-            TreeTools.PlacesSearch(fContext.Tree, placesList, basewin);
+            TreeTools.PlacesSearch(fContext.Tree, placesList, baseWin);
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs

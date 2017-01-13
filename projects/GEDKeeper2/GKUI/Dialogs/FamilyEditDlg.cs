@@ -98,6 +98,7 @@ namespace GKUI.Dialogs
             }
 
             this.fChildsList = this.CreateChildsSheet(this.pageChilds);
+            this.fChildsList.SetControlName("fChildsList"); // for purpose of tests
             this.fEventsList = new GKEventsSheet(this, this.pageEvents, false, this.fLocalUndoman);
             this.fEventsList.SetControlName("fEventsList"); // for purpose of tests
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);

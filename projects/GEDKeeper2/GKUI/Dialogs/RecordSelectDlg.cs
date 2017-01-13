@@ -69,14 +69,14 @@ namespace GKUI.Dialogs
         }
 
 
-        public RecordSelectDlg(IBaseWindow aBase)
+        public RecordSelectDlg(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
             this.btnSelect.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             this.fFilter = "*";
 
             // SetLang()

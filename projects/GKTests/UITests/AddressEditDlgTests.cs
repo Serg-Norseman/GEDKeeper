@@ -138,24 +138,22 @@ namespace GKTests.UITests
             Assert.AreEqual("sample text", fAddress.AddressState);
         }
 
-        public void InputBoxAddHandler(string name, IntPtr ptr, Form form)
+        private void InputBoxAddHandler(string name, IntPtr ptr, Form form)
         {
             var txtValue = new TextBoxTester("txtValue", form);
             txtValue.Enter("sample add");
             Assert.AreEqual("sample add", txtValue.Text);
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
-        public void InputBoxEditHandler(string name, IntPtr ptr, Form form)
+        private void InputBoxEditHandler(string name, IntPtr ptr, Form form)
         {
             var txtValue = new TextBoxTester("txtValue", form);
             txtValue.Enter("sample edit");
             Assert.AreEqual("sample edit", txtValue.Text);
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         private void MessageBox_YesHandler(string name, IntPtr ptr, Form form)

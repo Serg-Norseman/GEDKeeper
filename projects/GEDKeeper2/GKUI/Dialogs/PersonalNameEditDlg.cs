@@ -93,6 +93,10 @@ namespace GKUI.Dialogs
                 this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
                 this.txtMarriedSurname.Enabled = true;
             }
+
+            ICulture culture = this.fBase.Context.Culture;
+            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
+            this.txtPatronymic.Enabled = this.txtPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void AcceptChanges()
@@ -122,14 +126,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PersonalNameEditDlg(IBaseWindow aBase)
+        public PersonalNameEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
 
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)
             {

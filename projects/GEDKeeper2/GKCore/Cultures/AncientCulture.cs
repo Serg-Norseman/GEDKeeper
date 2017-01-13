@@ -27,59 +27,20 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public class AncientCulture : ICulture
+    public class AncientCulture : DefaultCulture
     {
         public AncientCulture()
         {
         }
 
-        public MiddleNameType GetMiddleNameType()
-        {
-            return MiddleNameType.mntNone;
-        }
-
-        public bool HasSurname()
+        public override bool HasPatronymic()
         {
             return false;
         }
 
-        public string NormalizeSurname(string sn, bool aFemale)
+        public override bool HasSurname()
         {
-            return sn;
-        }
-
-        public string GetMarriedSurname(string husbSurname)
-        {
-            return husbSurname;
-        }
-
-        public GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
-        {
-            return GEDCOMSex.svUndetermined;
-        }
-
-        public string[] GetSurnames(string surname, bool female)
-        {
-            string[] result = new string[1];
-            result[0] = surname;
-            return result;
-        }
-
-        public string[] GetSurnames(GEDCOMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            string fam, nam, pat;
-            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
-
-            return GetSurnames(fam, female);
-        }
-
-        public string GetPossessiveName(string name)
-        {
-            return name;
+            return false;
         }
     }
 }

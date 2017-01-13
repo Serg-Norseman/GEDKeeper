@@ -6,7 +6,7 @@ Maintainer: Serg V. Zhdanovskih (aka Norseman) <norseman@mail.ru>
 Homepage: https://gedkeeper.github.io/
 Origin: https://github.com/serg-norseman/gedkeeper
 Installed-Size: 13004
-Section: editors
+Section: misc
 Priority: optional
 Description: GEDKeeper2
  Personal genealogical database editor.

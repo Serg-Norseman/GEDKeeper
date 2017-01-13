@@ -41,11 +41,11 @@ namespace GKUI
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
 
-        public OrganizerWin(IBaseWindow aBase)
+        public OrganizerWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
-            this.fBase = aBase;
+            this.fBase = baseWin;
             
             this.fAdrList = new GKSheetList(this.pageAddresses);
             this.fAdrList.Buttons = EnumSet<SheetButton>.Create();

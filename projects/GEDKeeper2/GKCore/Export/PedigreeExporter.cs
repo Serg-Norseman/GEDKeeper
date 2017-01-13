@@ -118,7 +118,7 @@ namespace GKCore.Export
             set { this.fShieldState = value; }
         }
 
-        public PedigreeExporter(IBaseWindow aBase) : base(aBase)
+        public PedigreeExporter(IBaseWindow baseWin) : base(baseWin)
         {
         }
 
@@ -501,17 +501,17 @@ namespace GKCore.Export
             try
             {
                 this.fWriter = writer;
-                this.fWriter.setAlbumPage(false);
+                this.fWriter.SetAlbumPage(false);
                 this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(this.fRoot, true, false);
-                this.fWriter.setDocumentTitle(this.fTitle);
-                this.fWriter.setFileName(this.fPath);
+                this.fWriter.SetDocumentTitle(this.fTitle);
+                this.fWriter.SetFileName(this.fPath);
 
-                fTitleFont = this.fWriter.createFont("", 16f/*20f*/, true, false, Color.Black);
-                fChapFont = this.fWriter.createFont("", 14f/*16f*/, true, false, Color.Black);
-                fPersonFont = this.fWriter.createFont("", 12f/*10f*/, true, false, Color.Black);
-                fLinkFont = this.fWriter.createFont("", 10f/*8f*/, false, true, Color.Blue);
-                fTextFont = this.fWriter.createFont("", 10f/*8f*/, false, false, Color.Black);
-                fSupText = this.fWriter.createFont("", ((this.fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, Color.Blue);
+                fTitleFont = this.fWriter.CreateFont("", 16f/*20f*/, true, false, Color.Black);
+                fChapFont = this.fWriter.CreateFont("", 14f/*16f*/, true, false, Color.Black);
+                fPersonFont = this.fWriter.CreateFont("", 12f/*10f*/, true, false, Color.Black);
+                fLinkFont = this.fWriter.CreateFont("", 10f/*8f*/, false, true, Color.Blue);
+                fTextFont = this.fWriter.CreateFont("", 10f/*8f*/, false, false, Color.Black);
+                fSupText = this.fWriter.CreateFont("", ((this.fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, Color.Blue);
 
                 this.fWriter.beginWrite();
                 try
@@ -566,11 +566,13 @@ namespace GKCore.Export
 
             bool success = this.Generate(writer);
 
+            #if !CI_MODE
             if (!success) {
                 MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) this.ShowResult();
             }
+            #endif
         }
 
         private void GenStep(PedigreePerson parent, GEDCOMIndividualRecord iRec, int level, int familyOrder)

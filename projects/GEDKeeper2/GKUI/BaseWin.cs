@@ -759,7 +759,7 @@ namespace GKUI
                     {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        MainWin.Instance.NamesTable.ImportNames(child);
+                        this.ImportNames(child);
 
                         resultChild = child;
                     }
@@ -1030,7 +1030,7 @@ namespace GKUI
                                 if (GKUtils.GetDaysForBirth(iRec, out days))
                                 {
                                     string nm = GKUtils.GetNameString(iRec, true, false);
-                                    nm = GlobalOptions.CurrentCulture.GetPossessiveName(nm);
+                                    nm = fContext.Culture.GetPossessiveName(nm);
 
                                     if (0 == days)
                                     {
@@ -1071,17 +1071,33 @@ namespace GKUI
 
         #region Name and sex functions
 
+        // may be move to host (MainWin)?
+        public void ImportNames(GEDCOMIndividualRecord iRec)
+        {
+            if (MainWin.Instance != null) {
+                INamesTable namesTable = MainWin.Instance.NamesTable;
+                if (namesTable != null) {
+                    namesTable.ImportNames(iRec);
+                }
+            }
+        }
+
         public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
         {
+            ICulture culture = this.fContext.Culture;
+            if (!culture.HasPatronymic()) return string.Empty;
+
             string result = "";
 
-            NameEntry n = MainWin.Instance.NamesTable.FindName(name);
+            INamesTable namesTable = MainWin.Instance.NamesTable;
+
+            NameEntry n = namesTable.FindName(name);
             if (n == null) {
                 if (!confirm) {
                     return result;
                 }
 
-                n = MainWin.Instance.NamesTable.AddName(name);
+                n = namesTable.AddName(name);
             }
 
             switch (sex) {
@@ -1118,7 +1134,9 @@ namespace GKUI
 
         public GEDCOMSex DefineSex(string iName, string iPatr)
         {
+            //ICulture culture = this.fContext.Culture;
             INamesTable namesTable = MainWin.Instance.NamesTable;
+
             GEDCOMSex result = namesTable.GetSexByName(iName);
 
             if (result == GEDCOMSex.svNone)
@@ -1126,7 +1144,7 @@ namespace GKUI
                 using (SexCheckDlg dlg = new SexCheckDlg())
                 {
                     dlg.IndividualName = iName + " " + iPatr;
-                    result = GlobalOptions.CurrentCulture.GetSex(iName, iPatr, false);
+                    result = fContext.Culture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
                     if (dlg.ShowDialog() == DialogResult.OK)
@@ -1318,9 +1336,8 @@ namespace GKUI
 
         void IWorkWindow.SelectByRec(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
             // platform: In Windows works without it
             #if __MonoCS__
@@ -2235,7 +2252,7 @@ namespace GKUI
 
         private void PostProcessPerson(GEDCOMIndividualRecord indivRec)
         {
-            MainWin.Instance.NamesTable.ImportNames(indivRec);
+            this.ImportNames(indivRec);
 
             IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
 

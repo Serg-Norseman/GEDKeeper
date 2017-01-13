@@ -88,7 +88,7 @@ namespace GKCore.Export
             fStream.WriteLine("<p class=\""+font+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
         }
 
-        public override object createFont(string name, float size, bool bold, bool underline, Color color)
+        public override object CreateFont(string name, float size, bool bold, bool underline, Color color)
         {
             string style;
             

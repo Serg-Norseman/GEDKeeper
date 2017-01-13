@@ -107,22 +107,22 @@ namespace GKUI.Sheets
         {
             if (this.DataList == null) return;
 
-            IBaseWindow aBase = this.Editor.Base;
-            if (aBase == null) return;
+            IBaseWindow baseWin = this.Editor.Base;
+            if (baseWin == null) return;
 
             GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
 
-            bool result = ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
+            bool result = ModifyRecEvent(baseWin, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
 
             if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
 
             if (result) {
-                aBase.Modified = true;
+                baseWin.Modified = true;
                 this.UpdateSheet();
             }
         }
 
-        private bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
+        private bool ModifyRecEvent(IBaseWindow baseWin, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
 
@@ -132,7 +132,7 @@ namespace GKUI.Sheets
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (EventEditDlg dlgEventEdit = new EventEditDlg(aBase))
+                        using (EventEditDlg dlgEventEdit = new EventEditDlg(baseWin))
                         {
                             bool exists = (aEvent != null);
 
@@ -141,9 +141,9 @@ namespace GKUI.Sheets
                                 newEvent = aEvent;
                             } else {
                                 if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(aBase.Tree, record, "", "");
+                                    newEvent = new GEDCOMIndividualEvent(baseWin.Tree, record, "", "");
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(aBase.Tree, record, "", "");
+                                    newEvent = new GEDCOMFamilyEvent(baseWin.Tree, record, "", "");
                                 }
                             }
 
@@ -170,7 +170,7 @@ namespace GKUI.Sheets
                                 }
 
                                 aEvent = newEvent;
-                                aBase.Context.CollectEventValues(aEvent);
+                                baseWin.Context.CollectEventValues(aEvent);
                             }
                         }
                         break;

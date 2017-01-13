@@ -44,6 +44,8 @@ namespace GKTests.UITests
         [Test]
         public void Test_Close()
         {
+            ClickButton("btnNextTip", fDialog);
+
             ClickButton("btnClose", fDialog);
         }
     }

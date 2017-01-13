@@ -22,11 +22,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
+using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests.Service;
@@ -101,28 +105,31 @@ namespace GKTests.UITests
             BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
 
 
-            // Stage 21
+            // Stage 6
             MainWin_Test();
 
-            // Stage 22: call to QuickFind
-            ClickToolStripMenuItem("miSearch", fMainWin);
-            var searchPanel = new FormTester("SearchPanel");
-            //var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
-            //txtSearchPattern.Enter("John");
-            ClickButton("btnPrev", searchPanel.Properties);
-            ClickButton("btnNext", searchPanel.Properties);
+
+            // Stage 7: call to QuickFind
+            QuickSearch_Test();
 
 
-            // Stage 23: call to PersonsFilterDlg
+            // Stage 20: call to PersonsFilterDlg
             ModalFormHandler = PersonsFilterDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
             ModalFormHandler = PersonsFilterDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFilter", fMainWin);
 
 
-            // Stage 24: call to TreeToolsWin
+            // Stage 21: call to TreeToolsWin
             ModalFormHandler = TreeToolsWin_Handler;
             ClickToolStripMenuItem("miTreeTools", fMainWin);
+
+
+            // Stage 22-24: call to exports
+            Exporter.TEST_MODE = true;
+            GenerateFamilyBook_Tests("Stage 22");
+            GenerateExcel_Tests("Stage 23");
+            GeneratePedigree_Tests("Stage 24");
 
 
             // Stage 25: call to CircleChartWin (required the base, selected person)
@@ -224,6 +231,14 @@ namespace GKTests.UITests
 
                 ModalFormHandler = EditorDlg_btnAccept_Handler;
                 ClickToolStripButton("tbRecordEdit", fMainWin);
+
+                IListManager listMan = baseWin.GetRecordsListManByType(rt);
+                listMan.AddCondition(PersonColumnType.pctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
+
+                ModalFormHandler = CommonFilterDlg_btnAccept_Handler;
+                ClickToolStripMenuItem("miFilter", fMainWin);
+                ModalFormHandler = CommonFilterDlg_btnReset_Handler;
+                ClickToolStripMenuItem("miFilter", fMainWin);
             }
 
             Assert.IsTrue(baseWin.IsUnknown(), stage + ".2");
@@ -276,6 +291,10 @@ namespace GKTests.UITests
 
             Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
 
+            ModalFormHandler = DayTipsDlg_btnClose_Handler;
+            fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
+            DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
+
             // TODO: implement this!
             //CreateLangMan()
 
@@ -288,6 +307,104 @@ namespace GKTests.UITests
             ClickToolStripMenuItem("miWinMinimize", fMainWin);
             ClickToolStripMenuItem("miWinVTile", fMainWin);
             ClickToolStripMenuItem("miWinArrange", fMainWin);
+        }
+
+        private void QuickSearch_Test()
+        {
+            ClickToolStripMenuItem("miSearch", fMainWin);
+
+            var searchPanel = new FormTester("SearchPanel");
+            // handlers for empty text
+            ClickButton("btnPrev", searchPanel.Properties);
+            ClickButton("btnNext", searchPanel.Properties);
+            // enter text
+            var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
+            txtSearchPattern.Enter("John");
+            // handlers for entered text? - msgbox processing
+        }
+
+        #region Exports tests
+
+        private string fFileExt;
+
+        private void GeneratePedigree_Tests(string stage)
+        {
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, stage + ".1");
+
+            GeneratePedigree(stage, "miPedigreeAscend");
+
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, stage + ".2");
+
+            GeneratePedigree(stage, "miPedigree_dAboville");
+            GeneratePedigree(stage, "miPedigree_Konovalov");
+        }
+
+        private void GeneratePedigree(string stage, string menuItem)
+        {
+            fFileExt = ".html";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+
+            fFileExt = ".rtf";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+
+            #if !__MonoCS__
+            fFileExt = ".pdf";
+            ModalFormHandler = GeneratePedigree_Handler;
+            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+            #endif
+        }
+
+        private void GeneratePedigree_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test" + fFileExt;
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        private void GenerateExcel_Tests(string stage)
+        {
+            ModalFormHandler = GenerateExcel_Handler;
+            ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+        }
+
+        private void GenerateExcel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test.xls";
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        private void GenerateFamilyBook_Tests(string stage)
+        {
+            ModalFormHandler = GenerateFamilyBook_Handler;
+            ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+        }
+
+        private void GenerateFamilyBook_Handler(string name, IntPtr hWnd, Form form)
+        {
+            string filename = GKUtils.GetTempDir() + "test2.pdf";
+            if (File.Exists(filename)) File.Delete(filename); // for local tests!
+
+            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(filename);
+            saveDlg.SaveFile();
+        }
+
+        #endregion
+
+        public void DayTipsDlg_btnClose_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
         }
 
         #region AboutDlg handler
@@ -347,7 +464,47 @@ namespace GKTests.UITests
 
         #endregion
 
-        #region PersonsFilterDlg handlers
+        #region XFilterDlg handlers
+
+        private void CommonFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            CommonFilterDlg cfDlg = ((CommonFilterDlg)form);
+            Assert.AreEqual(fCurBase, cfDlg.Base);
+
+            IListManager listMan = cfDlg.ListMan;
+
+            var tabsFilters = new TabControlTester("tabsFilters", form);
+            tabsFilters.SelectTab(0);
+
+            //var maskedTextBox = new MaskedTextBoxTester("fMaskedTextBox", form);
+
+            var dataGridView1 = new DataGridViewTester("dataGridView1", form);
+            dataGridView1.SelectCell(0, 0);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 1);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 2);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+
+            /*var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+            Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnAccept", form);
+
+            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            //Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        private void CommonFilterDlg_btnReset_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnReset", form);
+
+            ClickButton("btnAccept", form);
+        }
 
         private void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -378,8 +535,19 @@ namespace GKTests.UITests
             Assert.AreEqual("unknown.lua", scriptWin.FileName);
 
             var txtScriptText = new TextBoxTester("txtScriptText");
-            txtScriptText.Enter("gk_print(\"Hello\")");
 
+            txtScriptText.Enter("gk_print(\"Hello\")");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("R = gt_get_records_count()");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("R = gt_get_record(0); rt = gt_get_record_type(R); "+
+                                "xref = gt_get_record_xref(R); uid = gt_get_record_uid(R);"+
+                                "isf = gt_record_is_filtered(R); tn = gt_get_record_type_name(rt);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("gk_progress_init(1, \"Hello\"); gk_progress_step(); gk_progress_done(); gk_update_view()");
             ClickToolStripButton("tbRun", form);
 
             form.Close();
@@ -395,6 +563,18 @@ namespace GKTests.UITests
 
             for (int i = 0; i < tabs.Properties.TabCount; i++) {
                 tabs.SelectTab(i);
+
+                TreeToolsWin.ToolType tt = (TreeToolsWin.ToolType)i;
+                if (tt == TreeToolsWin.ToolType.ttPatSearch) {
+                    var edMinGens = new NumericUpDownTester("edMinGens", form);
+                    edMinGens.EnterValue(1);
+
+                    ClickButton("btnPatSearch", form);
+
+                    ClickButton("btnPatriarchsDiagram", form);
+                    var pvWin = new FormTester("PatriarchsViewerWin");
+                    pvWin.Close();
+                }
             }
 
             form.Close();
@@ -429,7 +609,8 @@ namespace GKTests.UITests
             ClickButton("btnRec2Select", form);
 
             var txtResult = new TextBoxTester("txtResult", form);
-            Assert.AreEqual("Ivanova Maria Petrovna is wife of Ivanov Ivanа Ivanovichа", txtResult.Text); // :D
+            // default is not Russian culture
+            Assert.AreEqual("Ivanova Maria Petrovna is wife of Ivanov Ivan Ivanovich", txtResult.Text); // :D
 
             ClickButton("btnClose", form);
         }
@@ -522,6 +703,43 @@ namespace GKTests.UITests
             GEDCOMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
             GKSheetListTester sheetTester;
+
+            // father
+            fNeedIndividualSex = GEDCOMSex.svMale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnHusbandAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnHusbandDelete", dlg);
+
+            // mother
+            fNeedIndividualSex = GEDCOMSex.svFemale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnWifeAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnWifeDelete", dlg);
+
+            // childs
+            Assert.AreEqual(0, familyRecord.Childrens.Count);
+            tabs.SelectTab(0);
+            fNeedIndividualSex = GEDCOMSex.svFemale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, familyRecord.Childrens.Count);
+
+            //sheetTester = new GKSheetListTester("fEventsList", dlg);
+            //sheetTester.Properties.SelectItem(0);
+            //ModalFormHandler = EventEditDlg_Select_Handler;
+            //ClickToolStripButton("fChildsList_ToolBar_btnEdit", dlg);
+            //Assert.AreEqual(1, familyRecord.Childrens.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester = new GKSheetListTester("fChildsList", dlg);
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fChildsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, familyRecord.Childrens.Count);
 
             // events
             Assert.AreEqual(0, familyRecord.Events.Count);
@@ -877,6 +1095,53 @@ namespace GKTests.UITests
         }
 
         #region RecordSelectDlg handlers
+
+        private GEDCOMSex fNeedIndividualSex;
+
+        public void IndividualAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtName = new TextBoxTester("txtName", form);
+            txtName.Enter("test");
+
+            var cmbSex = new ComboBoxTester("cmbSex", form);
+            cmbSex.Select((int)fNeedIndividualSex);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void FamilyAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //var edName = new TextBoxTester("edName", form);
+            //edName.Enter("sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        //
 
         public void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
