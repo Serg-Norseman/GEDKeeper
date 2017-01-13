@@ -577,7 +577,7 @@ namespace GKUI.Dialogs
             this.btnNameCopy.Name = "btnNameCopy";
             this.btnNameCopy.Size = new System.Drawing.Size(46, 30);
             this.btnNameCopy.TabIndex = 4;
-            this.btnNameCopy.Click += new System.EventHandler(this.btnNameCopy1_Click);
+            this.btnNameCopy.Click += new System.EventHandler(this.btnNameCopy_Click);
             // 
             // tabsPersonData
             // 

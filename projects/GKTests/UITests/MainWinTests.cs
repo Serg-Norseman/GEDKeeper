@@ -821,6 +821,33 @@ namespace GKTests.UITests
             var tabs = new TabControlTester("tabsPersonData", dlg);
             GKSheetListTester sheetTester;
 
+            var cmbRestriction = new ComboBoxTester("cmbRestriction", dlg);
+            cmbRestriction.Select(3);
+            cmbRestriction.Select(2);
+            cmbRestriction.Select(1);
+            cmbRestriction.Select(0);
+
+            var txtSurname = new TextBoxTester("txtSurname", dlg);
+            txtSurname.FireEvent("KeyDown", new KeyEventArgs(Keys.Down | Keys.Control));
+
+            // father
+            fNeedIndividualSex = GEDCOMSex.svMale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnFatherAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnFatherDelete", dlg);
+
+            // mother
+            fNeedIndividualSex = GEDCOMSex.svFemale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnMotherAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnMotherDelete", dlg);
+
+            ClickButton("btnNameCopy", dlg);
+
             // events
             tabs.SelectTab(0);
             Assert.AreEqual(1, indiRecord.Events.Count);
@@ -1077,8 +1104,15 @@ namespace GKTests.UITests
             ModalFormHandler = AddressEditDlg_btnCancel_Handler;
             ClickButton("btnAddress", form);
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+
+            RSD_SubHandler = LocationAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnPlaceAdd", form);
+
+            ClickButton("btnPlaceDelete", form);
+
+
+            ClickButton("btnAccept", form);
 
             // this don't working here
             //Assert.AreEqual("BIRT", eventDlg.Event.Name);
@@ -1141,7 +1175,13 @@ namespace GKTests.UITests
             ClickButton("btnAccept", form);
         }
 
-        //
+        public void LocationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtName = new TextBoxTester("txtName", form);
+            txtName.Enter("sample location");
+
+            ClickButton("btnAccept", form);
+        }
 
         public void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
@@ -1172,8 +1212,7 @@ namespace GKTests.UITests
             var cmbRelation = new ComboBoxTester("cmbRelation", form);
             cmbRelation.Enter("sample relation");
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         public void UserRefEdit_Handler(string name, IntPtr ptr, Form form)
@@ -1181,14 +1220,12 @@ namespace GKTests.UITests
             var cmbRef = new ComboBoxTester("cmbRef", form);
             cmbRef.Enter("sample reference");
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         public void SpouseEdit_Handler(string name, IntPtr ptr, Form form)
         {
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         public void NameEditAdd_Handler(string name, IntPtr ptr, Form form)
@@ -1196,8 +1233,7 @@ namespace GKTests.UITests
             var txtSurname = new TextBoxTester("txtSurname", form);
             txtSurname.Enter("sample surname");
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         public void NameEditEdit_Handler(string name, IntPtr ptr, Form form)
@@ -1205,8 +1241,7 @@ namespace GKTests.UITests
             var txtSurname = new TextBoxTester("txtSurname", form);
             txtSurname.Enter("sample surname2");
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         private ModalFormHandler RSD_SubHandler;
@@ -1235,8 +1270,7 @@ namespace GKTests.UITests
             var cmbSource = new ComboBoxTester("cmbSource", form);
             cmbSource.Select(0);
 
-            var tsBtn = new ButtonTester("btnAccept", form);
-            tsBtn.FireEvent("Click");
+            ClickButton("btnAccept", form);
         }
 
         #endregion
@@ -1248,11 +1282,18 @@ namespace GKTests.UITests
             CircleChartWin ccWin = frm as CircleChartWin;
             Assert.AreEqual(fCurBase, ccWin.Base);
             ccWin.UpdateView();
+            //System.Threading.Thread.Sleep(1000);
 
-            /*Assert.Throws(typeof(ArgumentNullException), () => { ccWin.SelectByRec(null); });
-            GEDCOMIndividualRecord iRec = ((BaseWin) fCurBase).GetSelectedPerson();
-            Assert.AreEqual("I1", iRec.XRef);
-            ccWin.SelectByRec(iRec);*/
+            Assert.IsFalse(ccWin.NavCanBackward());
+            ccWin.NavPrev();
+            Assert.IsFalse(ccWin.NavCanForward());
+            ccWin.NavNext();
+
+            // empty methods
+            Assert.IsNull(ccWin.FindAll(""));
+            ccWin.QuickFind();
+            ccWin.SelectByRec(null);
+            ccWin.SetFilter();
 
             frm.Close();
         }
