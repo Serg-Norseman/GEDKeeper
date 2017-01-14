@@ -58,6 +58,9 @@ namespace GKTests.UITests
 
             ClickButton("btnCancel", fDialog);
         }
+
+        #region Handlers for external tests
+        #endregion
     }
 }
 

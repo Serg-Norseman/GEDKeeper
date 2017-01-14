@@ -814,7 +814,7 @@ namespace GKUI.Dialogs
             this.panDefFont.Name = "panDefFont";
             this.panDefFont.Size = new System.Drawing.Size(215, 31);
             this.panDefFont.TabIndex = 5;
-            this.panDefFont.Click += new System.EventHandler(this.PanDefFont_Click);
+            this.panDefFont.Click += new System.EventHandler(this.panDefFont_Click);
             // 
             // lblChartFont
             // 
@@ -825,7 +825,7 @@ namespace GKUI.Dialogs
             this.lblChartFont.TabIndex = 0;
             this.lblChartFont.Text = "lblChartFont";
             this.lblChartFont.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblChartFont.Click += new System.EventHandler(this.PanDefFont_Click);
+            this.lblChartFont.Click += new System.EventHandler(this.panDefFont_Click);
             // 
             // pageAncCircle
             // 

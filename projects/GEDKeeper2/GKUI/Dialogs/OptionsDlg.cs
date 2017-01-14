@@ -300,7 +300,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void PanDefFont_Click(object sender, EventArgs e)
+        private void panDefFont_Click(object sender, EventArgs e)
         {
             TreeChartOptions chartOptions = this.fOptions.ChartOptions;
 

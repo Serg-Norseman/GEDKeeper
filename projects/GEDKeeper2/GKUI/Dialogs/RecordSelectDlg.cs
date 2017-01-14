@@ -50,7 +50,16 @@ namespace GKUI.Dialogs
         public string Filter
         {
             get { return this.fFilter; }
-            set { this.SetFilter(value); }
+            set {
+                string flt = value;
+                if (flt == "") {
+                    flt = "*";
+                } else if (flt != "*") {
+                    flt = "*" + flt + "*";
+                }
+                this.fFilter = flt;
+                this.DataRefresh();
+            }
         }
 
         public GEDCOMRecordType Mode
@@ -125,17 +134,6 @@ namespace GKUI.Dialogs
             if (iRec == null) return false;
 
             return (iRec.ChildToFamilyLinks.Count == 0);
-        }
-
-        private void SetFilter(string value)
-        {
-            this.fFilter = value;
-            if (this.fFilter == "") {
-                this.fFilter = "*";
-            } else if (this.fFilter != "*") {
-                this.fFilter = "*" + this.fFilter + "*";
-            }
-            this.DataRefresh();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -279,9 +277,9 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void edFastFilter_TextChanged(object sender, EventArgs e)
+        private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            this.SetFilter(this.txtFastFilter.Text);
+            this.Filter = this.txtFastFilter.Text;
         }
     }
 }

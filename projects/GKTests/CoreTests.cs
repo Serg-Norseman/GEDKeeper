@@ -758,6 +758,33 @@ namespace GKTests.GKCore
             }
         }
 
+        [Test]
+        public void DateItems_Tests()
+        {
+            var dtx1 = new GEDCOMDateValue(null, null, "DATE", "05 JAN 2013");
+            var dtItem1 = new GEDCOMDateItem(dtx1);
+
+            var dtx2 = new GEDCOMDateValue(null, null, "DATE", "17 FEB 2013");
+            var dtItem2 = new GEDCOMDateItem(dtx2);
+
+            Assert.AreEqual(0, dtItem1.CompareTo(dtItem1));
+            Assert.AreEqual(-1, dtItem1.CompareTo(dtItem2));
+            Assert.AreEqual(-1, dtItem1.CompareTo(null));
+            Assert.AreEqual(+1, dtItem2.CompareTo(dtItem1));
+
+            dtItem1 = new GEDCOMDateItem(dtx1);
+            dtItem2 = new GEDCOMDateItem(null);
+            Assert.AreEqual(-1, dtItem1.CompareTo(dtItem2));
+
+            dtItem1 = new GEDCOMDateItem(null);
+            dtItem2 = new GEDCOMDateItem(dtx2);
+            Assert.AreEqual(+1, dtItem1.CompareTo(dtItem2));
+
+            dtItem1 = new GEDCOMDateItem(null);
+            dtItem2 = new GEDCOMDateItem(null);
+            Assert.AreEqual(0, dtItem1.CompareTo(dtItem2));
+        }
+
         private class ListViewMock : IListView
         {
             public void AddListColumn(string caption, int width, bool autoSize) {}

@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
@@ -77,6 +79,18 @@ namespace GKTests.UITests
             Assert.AreEqual("sample text", fAssociation.Relation);
             Assert.AreEqual(null, fAssociation.Individual);
         }
+
+        #region Handlers for external tests
+
+        public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
+        {
+            var cmbRelation = new ComboBoxTester("cmbRelation", form);
+            cmbRelation.Enter("sample relation");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

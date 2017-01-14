@@ -74,6 +74,9 @@ namespace GKTests.UITests
             //Assert.AreEqual("sample text", fListMan.Relation);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
+
+        #region Handlers for external tests
+        #endregion
     }
 }
 

@@ -291,7 +291,7 @@ namespace GKTests.UITests
 
             Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
 
-            ModalFormHandler = DayTipsDlg_btnClose_Handler;
+            ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
             fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
             DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
 
@@ -402,11 +402,6 @@ namespace GKTests.UITests
 
         #endregion
 
-        public void DayTipsDlg_btnClose_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnClose", form);
-        }
-
         #region AboutDlg handler
 
         public void AboutDlg_Handler()
@@ -450,11 +445,25 @@ namespace GKTests.UITests
 
         private void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
-            Assert.AreEqual(GlobalOptions.Instance, ((OptionsDlg)form).Options);
+            var optDlg = ((OptionsDlg)form);
+            Assert.AreEqual(GlobalOptions.Instance, optDlg.Options);
+
+            optDlg.SetPage(OptionsPage.opCommon);
+            optDlg.SetPage(OptionsPage.opTreeChart);
+            optDlg.SetPage(OptionsPage.opAncestorsCircle);
+            optDlg.SetPage(OptionsPage.opInterface);
+            optDlg.SetPage(OptionsPage.opPedigree);
+
+            // CheckBoxTester uncheckBoxTester = new CheckBoxTester("aPanelName.checkBoxName", "MyFormName");
+            // RadioButtonTester radioTester = new RadioButtonTester("mainFormControlName.panelName.radioButtonName",  "MyFormName");
 
             /*var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);*/
+
+            ClickButton("btnColumnUp", form);
+            ClickButton("btnColumnDown", form);
+            ClickButton("btnDefList", form);
 
             ClickButton("btnAccept", form);
 
@@ -655,6 +664,7 @@ namespace GKTests.UITests
         private static bool ResearchEditDlg_FirstCall = true;
         private static bool LocationEditDlg_FirstCall = true;
         private static bool SourceEditDlg_FirstCall = true;
+        private static bool CommunicationEditDlg_FirstCall = true;
 
         public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -693,6 +703,11 @@ namespace GKTests.UITests
             if (SourceEditDlg_FirstCall && form is SourceEditDlg) {
                 SourceEditDlg_Handler(form as SourceEditDlg);
                 SourceEditDlg_FirstCall = false;
+            }
+
+            if (CommunicationEditDlg_FirstCall && form is CommunicationEditDlg) {
+                CommunicationEditDlg_Handler(form as CommunicationEditDlg);
+                CommunicationEditDlg_FirstCall = false;
             }
 
             ClickButton("btnAccept", form);
@@ -796,7 +811,7 @@ namespace GKTests.UITests
             // sources
             Assert.AreEqual(0, familyRecord.SourceCitations.Count);
             tabs.SelectTab(4);
-            ModalFormHandler = SourceCitEditDlg_Handler;
+            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, familyRecord.SourceCitations.Count);
 
@@ -829,6 +844,13 @@ namespace GKTests.UITests
 
             var txtSurname = new TextBoxTester("txtSurname", dlg);
             txtSurname.FireEvent("KeyDown", new KeyEventArgs(Keys.Down | Keys.Control));
+
+            // parents
+            RSD_SubHandler = FamilyAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnParentsAdd", dlg);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnParentsDelete", dlg);
 
             // father
             fNeedIndividualSex = GEDCOMSex.svMale;
@@ -908,7 +930,7 @@ namespace GKTests.UITests
             tabs.SelectTab(3);
             sheetTester = new GKSheetListTester("fAssociationsList", dlg);
             Assert.AreEqual(0, indiRecord.Associations.Count);
-            ModalFormHandler = AssociationEdit_Handler;
+            ModalFormHandler = AssociationEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Associations.Count);
             Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
@@ -933,11 +955,68 @@ namespace GKTests.UITests
             ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(0, indiRecord.Groups.Count);
 
+
+
+            // notes
+            tabs.SelectTab(5);
+            Assert.AreEqual(0, indiRecord.Notes.Count);
+            RSD_SubHandler = NoteAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.Notes.Count);
+
+            sheetTester = new GKSheetListTester("fNotesList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, indiRecord.Notes.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.Notes.Count);
+
+            // media
+            tabs.SelectTab(6);
+            Assert.AreEqual(0, indiRecord.MultimediaLinks.Count);
+            RSD_SubHandler = MediaAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.MultimediaLinks.Count);
+
+            sheetTester = new GKSheetListTester("fMediaList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, indiRecord.MultimediaLinks.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.MultimediaLinks.Count);
+
+            // sources
+            /*tabs.SelectTab(7);
+            Assert.AreEqual(0, indiRecord.SourceCitations.Count);
+            RSD_SubHandler = SourceAdd_Mini_Handler;
+            ModalFormHandler = SourceCitEditDlg_Handler;
+            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, indiRecord.SourceCitations.Count);
+
+            sheetTester = new GKSheetListTester("fSourcesList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, indiRecord.SourceCitations.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, indiRecord.SourceCitations.Count);*/
+
+
             // userrefs
             tabs.SelectTab(8);
             sheetTester = new GKSheetListTester("fUserRefList", dlg);
             Assert.AreEqual(0, indiRecord.UserReferences.Count);
-            ModalFormHandler = UserRefEdit_Handler;
+            ModalFormHandler = UserRefEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fUserRefList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.UserReferences.Count);
             Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
@@ -1037,6 +1116,14 @@ namespace GKTests.UITests
         private void LocationEditDlg_Handler(LocationEditDlg dlg)
         {
             GEDCOMLocationRecord resRecord = dlg.LocationRecord;
+        }
+
+        private void CommunicationEditDlg_Handler(CommunicationEditDlg dlg)
+        {
+            fNeedIndividualSex = GEDCOMSex.svMale;
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnPersonAdd", dlg);
         }
 
         private void GroupEditDlg_Handler(GroupEditDlg dlg)
@@ -1153,24 +1240,24 @@ namespace GKTests.UITests
 
         public void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            //var edName = new TextBoxTester("edName", form);
-            //edName.Enter("sample group");
+            var txtNote = new TextBoxTester("txtNote");
+            txtNote.Enter("sample text");
 
             ClickButton("btnAccept", form);
         }
 
         public void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            //var edName = new TextBoxTester("edName", form);
-            //edName.Enter("sample group");
+            var txtShortTitle = new TextBoxTester("txtShortTitle");
+            txtShortTitle.Enter("sample text");
 
             ClickButton("btnAccept", form);
         }
 
         public void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            //var edName = new TextBoxTester("edName", form);
-            //edName.Enter("sample group");
+            //var txtName = new TextBoxTester("txtName");
+            //txtName.Enter("sample text");
 
             ClickButton("btnAccept", form);
         }
@@ -1203,22 +1290,6 @@ namespace GKTests.UITests
         {
             //var edName = new TextBoxTester("edName", form);
             //edName.Enter("sample group");
-
-            ClickButton("btnAccept", form);
-        }
-
-        public void AssociationEdit_Handler(string name, IntPtr ptr, Form form)
-        {
-            var cmbRelation = new ComboBoxTester("cmbRelation", form);
-            cmbRelation.Enter("sample relation");
-
-            ClickButton("btnAccept", form);
-        }
-
-        public void UserRefEdit_Handler(string name, IntPtr ptr, Form form)
-        {
-            var cmbRef = new ComboBoxTester("cmbRef", form);
-            cmbRef.Enter("sample reference");
 
             ClickButton("btnAccept", form);
         }
@@ -1264,14 +1335,6 @@ namespace GKTests.UITests
         }
 
         #endregion
-
-        public void SourceCitEditDlg_Handler(string name, IntPtr ptr, Form form)
-        {
-            var cmbSource = new ComboBoxTester("cmbSource", form);
-            cmbSource.Select(0);
-
-            ClickButton("btnAccept", form);
-        }
 
         #endregion
 
@@ -1334,6 +1397,20 @@ namespace GKTests.UITests
             IList<ISearchResult> search = tcWin.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
+            // handlers tests
+            //ClickToolStripMenuItem("miEdit", tcWin);
+            //ClickToolStripMenuItem("miFatherAdd", tcWin);
+            //ClickToolStripMenuItem("miMotherAdd", tcWin);
+            //ClickToolStripMenuItem("miSpouseAdd", tcWin);
+            //ClickToolStripMenuItem("miSonAdd", tcWin);
+            //ClickToolStripMenuItem("miDaughterAdd", tcWin);
+            //ClickToolStripMenuItem("miFamilyAdd", tcWin);
+            //ClickToolStripMenuItem("miDelete", tcWin);
+            //ClickToolStripMenuItem("miRebuildKinships", tcWin);
+            //ClickToolStripMenuItem("miFillColor", tcWin);
+            //ClickToolStripMenuItem("miFillImage", tcWin);
+            //ClickToolStripMenuItem("miRebuildTree", tcWin);
+
             frm.Close();
         }
 
@@ -1384,50 +1461,6 @@ namespace GKTests.UITests
             Assert.IsInstanceOf(typeof(MapsViewerWin), frm, stage);
             frm.Close();
         }
-
-        #region Useful stuff
-
-        /*[Test]
-        public void Test_EnterDataAndApply()
-        {
-            var txtNote = new TextBoxTester("txtNote");
-            txtNote.Enter("sample text");
-
-            var btnAccept = new ButtonTester("btnAccept");
-            btnAccept.Click();
-
-            Assert.AreEqual("sample text\r\n", fNoteRecord.Note.Text);
-        }*/
-
-        /*[Test]
-        public void TestData()
-        {
-            // CheckBoxTester uncheckBoxTester = new CheckBoxTester("aPanelName.checkBoxName", "MyFormName");
-            // RadioButtonTester radioTester = new RadioButtonTester("mainFormControlName.panelName.radioButtonName",  "MyFormName");
-
-            var txtInput = new TextBoxTester("txtInput") {["Text"] = "2+2"};
-            var txtOutput = new TextBoxTester("txtOutput");
-            Assert.AreEqual("2+2", txtInput.Text);
-            
-            var btnRes = new ButtonTester("btnRes");
-            btnRes.Click();
-            Assert.AreEqual("4", txtOutput.Text);
-
-            var okButton = new ButtonTester("btnOK");
-            okButton.Click();
-            Assert.IsTrue(form.DialogResult == DialogResult.OK);
-        }*/
-        
-        /*public void TestFormNoDataHandler()
-        {
-            var messageBoxTester = new MessageBoxTester("Message");
-            if (messageBoxTester != null)
-            {
-                messageBoxTester.ClickOk();
-            }
-        }*/
-
-        #endregion
     }
 }
 

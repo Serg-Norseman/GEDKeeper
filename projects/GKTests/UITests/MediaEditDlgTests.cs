@@ -24,6 +24,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -62,9 +63,9 @@ namespace GKTests.UITests
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fMultimediaRecord, fDialog.MediaRec);
 
-            /*var txtName = new TextBoxTester("txtName");
+            var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);*/
+            Assert.AreEqual("sample text", txtName.Text);
 
             ClickButton("btnAccept", fDialog);
 
