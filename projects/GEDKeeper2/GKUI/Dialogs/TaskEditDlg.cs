@@ -169,16 +169,19 @@ namespace GKUI.Dialogs
                     this.txtGoal.BackColor = SystemColors.Control;
                     this.txtGoal.ReadOnly = true;
                     break;
+
                 case GKGoalType.gtFamily:
                     this.btnGoalSelect.Enabled = true;
                     this.txtGoal.BackColor = SystemColors.Control;
                     this.txtGoal.ReadOnly = true;
                     break;
+
                 case GKGoalType.gtSource:
                     this.btnGoalSelect.Enabled = true;
                     this.txtGoal.BackColor = SystemColors.Control;
                     this.txtGoal.ReadOnly = true;
                     break;
+
                 case GKGoalType.gtOther:
                     this.btnGoalSelect.Enabled = false;
                     this.txtGoal.BackColor = SystemColors.Window;

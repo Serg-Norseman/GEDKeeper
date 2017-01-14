@@ -665,6 +665,7 @@ namespace GKTests.UITests
         private static bool LocationEditDlg_FirstCall = true;
         private static bool SourceEditDlg_FirstCall = true;
         private static bool CommunicationEditDlg_FirstCall = true;
+        private static bool TaskEditDlg_FirstCall = true;
 
         public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
         {
@@ -708,6 +709,11 @@ namespace GKTests.UITests
             if (CommunicationEditDlg_FirstCall && form is CommunicationEditDlg) {
                 CommunicationEditDlg_Handler(form as CommunicationEditDlg);
                 CommunicationEditDlg_FirstCall = false;
+            }
+
+            if (TaskEditDlg_FirstCall && form is TaskEditDlg) {
+                TaskEditDlg_Handler(form as TaskEditDlg);
+                TaskEditDlg_FirstCall = false;
             }
 
             ClickButton("btnAccept", form);
@@ -1126,6 +1132,28 @@ namespace GKTests.UITests
             ClickButton("btnPersonAdd", dlg);
         }
 
+        private void TaskEditDlg_Handler(TaskEditDlg dlg)
+        {
+            var cmbGoalType = new ComboBoxTester("cmbGoalType", dlg);
+            cmbGoalType.Select(3);
+            ClickButton("btnGoalSelect", dlg);
+
+            cmbGoalType.Select(2);
+            RSD_SubHandler = SourceAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnGoalSelect", dlg);
+
+            cmbGoalType.Select(1);
+            RSD_SubHandler = FamilyAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnGoalSelect", dlg);
+
+            cmbGoalType.Select(0);
+            RSD_SubHandler = IndividualAdd_Mini_Handler;
+            ModalFormHandler = RecordSelectDlg_Create_Handler;
+            ClickButton("btnGoalSelect", dlg);
+        }
+
         private void GroupEditDlg_Handler(GroupEditDlg dlg)
         {
             GEDCOMGroupRecord groupRecord = dlg.Group;
@@ -1345,7 +1373,9 @@ namespace GKTests.UITests
             CircleChartWin ccWin = frm as CircleChartWin;
             Assert.AreEqual(fCurBase, ccWin.Base);
             ccWin.UpdateView();
-            //System.Threading.Thread.Sleep(1000);
+
+            // forced update
+            ccWin.Refresh();
 
             Assert.IsFalse(ccWin.NavCanBackward());
             ccWin.NavPrev();
@@ -1369,6 +1399,9 @@ namespace GKTests.UITests
             Assert.AreEqual(fCurBase, tcWin.Base);
             Assert.AreEqual(kind, tcWin.ChartKind);
             tcWin.UpdateView();
+
+            // forced update
+            tcWin.Refresh();
 
             ClickToolStripMenuItem("miCertaintyIndex", tcWin);
             ClickToolStripMenuItem("miTraceKinships", tcWin);
