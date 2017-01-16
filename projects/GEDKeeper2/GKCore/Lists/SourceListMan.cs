@@ -77,18 +77,22 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            object result = null;
             switch (colType) {
                 case 0:
-                    return this.fRec.FiledByEntry.Trim();
+                    result = this.fRec.FiledByEntry.Trim();
+                    break;
                 case 1:
-                    return this.fRec.Originator.Text.Trim();
+                    result = this.fRec.Originator.Text.Trim();
+                    break;
                 case 2:
-                    return this.fRec.Title.Text.Trim();
+                    result = this.fRec.Title.Text.Trim();
+                    break;
                 case 3:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public SourceListMan(GEDCOMTree tree) : base(tree, new SourceListColumns())

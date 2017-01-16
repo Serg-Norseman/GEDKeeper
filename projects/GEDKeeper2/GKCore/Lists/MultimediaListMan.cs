@@ -81,18 +81,22 @@ namespace GKCore.Lists
         {
             GEDCOMFileReferenceWithTitle fileRef = this.fRec.FileReferences[0];
 
+            object result = null;
             switch (colType) {
                 case 0:
-                    return fileRef.Title;
+                    result = fileRef.Title;
+                    break;
                 case 1:
-                    return LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
+                    result = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
+                    break;
                 case 2:
-                    return fileRef.StringValue;
+                    result = fileRef.StringValue;
+                    break;
                 case 3:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public MultimediaListMan(GEDCOMTree tree) : base(tree, new MultimediaListColumns())

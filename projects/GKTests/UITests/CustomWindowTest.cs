@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
 using NUnit.Extensions.Forms;
 
@@ -50,6 +51,18 @@ namespace GKTests.UITests
         {
             var tsMenuItem = new ToolStripMenuItemTester(name, form);
             tsMenuItem.Click();
+        }
+
+        public static void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.Yes);
+        }
+
+        public static void MessageBox_OkHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.OK);
         }
     }
 }

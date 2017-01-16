@@ -83,24 +83,31 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            object result = null;
             switch (colType) {
                 case 0:
-                    return this.fRec.ResearchName;
+                    result = this.fRec.ResearchName;
+                    break;
                 case 1:
-                    return LangMan.LS(GKData.PriorityNames[(int)this.fRec.Priority]);
+                    result = LangMan.LS(GKData.PriorityNames[(int)this.fRec.Priority]);
+                    break;
                 case 2:
-                    return LangMan.LS(GKData.StatusNames[(int)this.fRec.Status]);
+                    result = LangMan.LS(GKData.StatusNames[(int)this.fRec.Status]);
+                    break;
                 case 3:
-                    return GetDateValue(this.fRec.StartDate, isVisible);
+                    result = GetDateValue(this.fRec.StartDate, isVisible);
+                    break;
                 case 4:
-                    return GetDateValue(this.fRec.StopDate, isVisible);
+                    result = GetDateValue(this.fRec.StopDate, isVisible);
+                    break;
                 case 5:
-                    return this.fRec.Percent;
+                    result = this.fRec.Percent;
+                    break;
                 case 6:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public ResearchListMan(GEDCOMTree tree) : base(tree, new ResearchListColumns())

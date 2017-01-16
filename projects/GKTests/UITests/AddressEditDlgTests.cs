@@ -155,12 +155,6 @@ namespace GKTests.UITests
 
             ClickButton("btnAccept", form);
         }
-
-        private void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
-        {
-            MessageBoxTester messageBox = new MessageBoxTester(ptr);
-            messageBox.SendCommand(MessageBoxTester.Command.Yes);
-        }
     }
 }
 

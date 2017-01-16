@@ -58,7 +58,13 @@ namespace GKTests.UITests
             base.Setup();
             fMainWin = new MainWin();
             fMainWin.Show();
-        }
+
+            var indiCols = GlobalOptions.Instance.IndividualListColumns;
+            for (int i = 0; i < indiCols.Count; i++) {
+                ColumnProps colProps = indiCols[i];
+                colProps.ColActive = true;
+            }
+         }
 
         [STAThread]
         [Test]
@@ -283,6 +289,14 @@ namespace GKTests.UITests
             baseWin.ChangeRecord(null);
 
             baseWin.ApplyFilter();
+
+            // default lang for tests is English
+            string patr = baseWin.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
+            Assert.AreEqual("", patr);
+
+            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_Accept_Handler;
+            GEDCOMSex sex = baseWin.DefineSex("Ivan", "Ivanovich");
+            Assert.AreEqual(GEDCOMSex.svMale, sex);
         }
 
         private void MainWin_Test()
@@ -295,11 +309,17 @@ namespace GKTests.UITests
             fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
             DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
 
+            #if !__MonoCS__
+            Assert.IsFalse(fMainWin.IsUnix());
+            #else
+            Assert.IsTrue(fMainWin.IsUnix());
+            #endif
+
             // TODO: implement this!
             //CreateLangMan()
 
-            //ClickToolStripButton("tbNext", fMainWin);
-            //ClickToolStripButton("tbPrev", fMainWin);
+            ClickToolStripButton("tbNext", fMainWin);
+            ClickToolStripButton("tbPrev", fMainWin);
 
             ClickToolStripMenuItem("miWinArrange", fMainWin);
             ClickToolStripMenuItem("miWinCascade", fMainWin);
@@ -345,16 +365,16 @@ namespace GKTests.UITests
         {
             fFileExt = ".html";
             ModalFormHandler = GeneratePedigree_Handler;
-            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+            ClickToolStripMenuItem(menuItem, fMainWin);
 
             fFileExt = ".rtf";
             ModalFormHandler = GeneratePedigree_Handler;
-            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+            ClickToolStripMenuItem(menuItem, fMainWin);
 
             #if !__MonoCS__
             fFileExt = ".pdf";
             ModalFormHandler = GeneratePedigree_Handler;
-            ClickToolStripMenuItem("miPedigreeAscend", fMainWin);
+            ClickToolStripMenuItem(menuItem, fMainWin);
             #endif
         }
 
@@ -454,21 +474,11 @@ namespace GKTests.UITests
             optDlg.SetPage(OptionsPage.opInterface);
             optDlg.SetPage(OptionsPage.opPedigree);
 
-            // CheckBoxTester uncheckBoxTester = new CheckBoxTester("aPanelName.checkBoxName", "MyFormName");
-            // RadioButtonTester radioTester = new RadioButtonTester("mainFormControlName.panelName.radioButtonName",  "MyFormName");
-
-            /*var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);*/
-
             ClickButton("btnColumnUp", form);
             ClickButton("btnColumnDown", form);
             ClickButton("btnDefList", form);
 
             ClickButton("btnAccept", form);
-
-            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
-            //Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 
         #endregion
@@ -595,7 +605,8 @@ namespace GKTests.UITests
 
         private void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
         {
-            form.Close();
+            var formTester = new FormTester(form.Name);
+            formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
         }
 
         #endregion
@@ -1171,18 +1182,6 @@ namespace GKTests.UITests
             Assert.AreEqual(0, groupRecord.Members.Count);
         }
 
-        private void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
-        {
-            MessageBoxTester messageBox = new MessageBoxTester(ptr);
-            messageBox.SendCommand(MessageBoxTester.Command.Yes);
-        }
-
-        private void MessageBox_OkHandler(string name, IntPtr ptr, Form form)
-        {
-            MessageBoxTester messageBox = new MessageBoxTester(ptr);
-            messageBox.SendCommand(MessageBoxTester.Command.OK);
-        }
-
         private void EventEditDlg_Select_Handler(string name, IntPtr ptr, Form form)
         {
             EventEditDlg eventDlg = (EventEditDlg) form;
@@ -1216,7 +1215,7 @@ namespace GKTests.UITests
             var txtEventOrg = new TextBoxTester("txtEventOrg", form);
             txtEventOrg.Enter("test agency");
 
-            ModalFormHandler = AddressEditDlg_btnCancel_Handler;
+            ModalFormHandler = AddressEditDlg_btnAccept_Handler;
             ClickButton("btnAddress", form);
 
 
@@ -1238,9 +1237,10 @@ namespace GKTests.UITests
             //Assert.AreEqual("test agency", eventDlg.Event.Detail.Agency);
         }
 
-        public void AddressEditDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        public void AddressEditDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
-            ClickButton("btnCancel", form);
+            var addrDlg = (AddressEditDlg)form;
+            ClickButton("btnAccept", form);
         }
 
         #region RecordSelectDlg handlers
@@ -1403,10 +1403,6 @@ namespace GKTests.UITests
             // forced update
             tcWin.Refresh();
 
-            ClickToolStripMenuItem("miCertaintyIndex", tcWin);
-            ClickToolStripMenuItem("miTraceKinships", tcWin);
-            ClickToolStripMenuItem("miTraceSelected", tcWin);
-
             Assert.Throws(typeof(ArgumentNullException), () => { tcWin.SelectByRec(null); });
 
             GEDCOMIndividualRecord iRec = ((BaseWin) fCurBase).GetSelectedPerson();
@@ -1430,6 +1426,25 @@ namespace GKTests.UITests
             IList<ISearchResult> search = tcWin.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
+            ClickToolStripMenuItem("miGens9", tcWin);
+            ClickToolStripMenuItem("miGens8", tcWin);
+            ClickToolStripMenuItem("miGens7", tcWin);
+            ClickToolStripMenuItem("miGens6", tcWin);
+            ClickToolStripMenuItem("miGens5", tcWin);
+            ClickToolStripMenuItem("miGens4", tcWin);
+            ClickToolStripMenuItem("miGens3", tcWin);
+            ClickToolStripMenuItem("miGens2", tcWin);
+            ClickToolStripMenuItem("miGens1", tcWin);
+            ClickToolStripMenuItem("miGensInf", tcWin);
+
+            ClickToolStripMenuItem("miModeBoth", tcWin);
+            ClickToolStripMenuItem("miModeAncestors", tcWin);
+            ClickToolStripMenuItem("miModeDescendants", tcWin);
+
+            ClickToolStripMenuItem("miCertaintyIndex", tcWin);
+            ClickToolStripMenuItem("miTraceKinships", tcWin);
+            ClickToolStripMenuItem("miTraceSelected", tcWin);
+
             // handlers tests
             //ClickToolStripMenuItem("miEdit", tcWin);
             //ClickToolStripMenuItem("miFatherAdd", tcWin);
@@ -1444,7 +1459,8 @@ namespace GKTests.UITests
             //ClickToolStripMenuItem("miFillImage", tcWin);
             //ClickToolStripMenuItem("miRebuildTree", tcWin);
 
-            frm.Close();
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
+            //frm.Close();
         }
 
         private void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
@@ -1460,6 +1476,9 @@ namespace GKTests.UITests
         private void StatsWin_Tests(Form frm, string stage)
         {
             Assert.IsInstanceOf(typeof(StatisticsWin), frm, stage);
+
+            //var formTester = new FormTester(frm.Name);
+            //formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
             frm.Close();
         }
 
@@ -1486,6 +1505,8 @@ namespace GKTests.UITests
             Assert.AreEqual(false, slidesWin.NavCanForward());
             slidesWin.NavNext();
 
+            //var formTester = new FormTester(frm.Name);
+            //formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
             frm.Close();
         }
 

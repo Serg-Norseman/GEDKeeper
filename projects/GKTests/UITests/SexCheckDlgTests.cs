@@ -20,8 +20,11 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKUI.Dialogs;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -65,6 +68,18 @@ namespace GKTests.UITests
         {
             ClickButton("btnAccept", fDialog);
         }
+
+        #region Handlers for external tests
+
+        public static void SexCheckDlgTests_Accept_Handler(string name, IntPtr ptr, Form form)
+        {
+            var rbMale = new RadioButtonTester("rbMale", form);
+            rbMale.Properties.Checked = true;
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 
