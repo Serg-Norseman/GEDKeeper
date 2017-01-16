@@ -320,6 +320,13 @@ namespace GKUI.Charts
                         try
                         {
                             this.fPortrait = this.fChart.Base.Context.GetPrimaryBitmap(iRec, -1, -1, true);
+                            if (this.fPortrait == null && this.fChart.Options.DefaultPortraits) {
+                                if (this.fSex == GEDCOMSex.svFemale) {
+                                    this.fPortrait = GKResources.piFemale140;
+                                } else {
+                                    this.fPortrait = GKResources.piMale140;
+                                }
+                            }
                         }
                         catch (MediaFileNotFoundException)
                         {

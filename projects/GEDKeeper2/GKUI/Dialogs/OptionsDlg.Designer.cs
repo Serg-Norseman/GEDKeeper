@@ -118,6 +118,7 @@ namespace GKUI.Dialogs
             this.radFBEachRevision = new System.Windows.Forms.RadioButton();
             this.radFBOnlyPrev = new System.Windows.Forms.RadioButton();
             this.radFBNone = new System.Windows.Forms.RadioButton();
+            this.lblGeocoder = new System.Windows.Forms.Label();
             this.lblLanguage = new System.Windows.Forms.Label();
             this.grpInternet = new System.Windows.Forms.GroupBox();
             this.lblProxyServer = new System.Windows.Forms.Label();
@@ -131,6 +132,7 @@ namespace GKUI.Dialogs
             this.txtProxyPass = new System.Windows.Forms.TextBox();
             this.grpOther = new System.Windows.Forms.GroupBox();
             this.chkShowOnStart = new System.Windows.Forms.CheckBox();
+            this.cmbGeocoder = new System.Windows.Forms.ComboBox();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
             this.pageCharts = new System.Windows.Forms.TabPage();
             this.tabsCharts = new System.Windows.Forms.TabControl();
@@ -143,6 +145,7 @@ namespace GKUI.Dialogs
             this.chkBirthDate = new System.Windows.Forms.CheckBox();
             this.chkDeathDate = new System.Windows.Forms.CheckBox();
             this.chkKinship = new System.Windows.Forms.CheckBox();
+            this.chkDefaultPortraits = new System.Windows.Forms.CheckBox();
             this.chkOnlyYears = new System.Windows.Forms.CheckBox();
             this.chkSignsVisible = new System.Windows.Forms.CheckBox();
             this.chkChildlessExclude = new System.Windows.Forms.CheckBox();
@@ -209,8 +212,6 @@ namespace GKUI.Dialogs
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.cmbGeocoder = new System.Windows.Forms.ComboBox();
-            this.lblGeocoder = new System.Windows.Forms.Label();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -374,6 +375,15 @@ namespace GKUI.Dialogs
             this.radFBNone.Text = "radFBNone";
             this.radFBNone.UseVisualStyleBackColor = true;
             // 
+            // lblGeocoder
+            // 
+            this.lblGeocoder.AutoSize = true;
+            this.lblGeocoder.Location = new System.Drawing.Point(13, 428);
+            this.lblGeocoder.Name = "lblGeocoder";
+            this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
+            this.lblGeocoder.TabIndex = 0;
+            this.lblGeocoder.Text = "lblGeocoder";
+            // 
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
@@ -495,6 +505,17 @@ namespace GKUI.Dialogs
             this.chkShowOnStart.TabIndex = 0;
             this.chkShowOnStart.Text = "chkShowOnStart";
             // 
+            // cmbGeocoder
+            // 
+            this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGeocoder.Items.AddRange(new object[] {
+                                    "Google",
+                                    "Yandex"});
+            this.cmbGeocoder.Location = new System.Drawing.Point(105, 425);
+            this.cmbGeocoder.Name = "cmbGeocoder";
+            this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
+            this.cmbGeocoder.TabIndex = 4;
+            // 
             // cmbLanguages
             // 
             this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -545,6 +566,7 @@ namespace GKUI.Dialogs
             this.grpTreePersons.Controls.Add(this.chkBirthDate);
             this.grpTreePersons.Controls.Add(this.chkDeathDate);
             this.grpTreePersons.Controls.Add(this.chkKinship);
+            this.grpTreePersons.Controls.Add(this.chkDefaultPortraits);
             this.grpTreePersons.Controls.Add(this.chkOnlyYears);
             this.grpTreePersons.Controls.Add(this.chkSignsVisible);
             this.grpTreePersons.Controls.Add(this.chkChildlessExclude);
@@ -553,7 +575,7 @@ namespace GKUI.Dialogs
             this.grpTreePersons.Location = new System.Drawing.Point(11, 10);
             this.grpTreePersons.Name = "grpTreePersons";
             this.grpTreePersons.Padding = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Size = new System.Drawing.Size(391, 357);
+            this.grpTreePersons.Size = new System.Drawing.Size(391, 394);
             this.grpTreePersons.TabIndex = 0;
             this.grpTreePersons.TabStop = false;
             this.grpTreePersons.Text = "grpTreePersons";
@@ -621,6 +643,15 @@ namespace GKUI.Dialogs
             this.chkKinship.TabIndex = 7;
             this.chkKinship.Text = "chkKinship";
             // 
+            // chkDefaultPortraits
+            // 
+            this.chkDefaultPortraits.Location = new System.Drawing.Point(40, 310);
+            this.chkDefaultPortraits.Margin = new System.Windows.Forms.Padding(30, 0, 0, 5);
+            this.chkDefaultPortraits.Name = "chkDefaultPortraits";
+            this.chkDefaultPortraits.Size = new System.Drawing.Size(326, 21);
+            this.chkDefaultPortraits.TabIndex = 6;
+            this.chkDefaultPortraits.Text = "chkDefaultPortraits";
+            // 
             // chkOnlyYears
             // 
             this.chkOnlyYears.Location = new System.Drawing.Point(40, 181);
@@ -641,7 +672,7 @@ namespace GKUI.Dialogs
             // 
             // chkChildlessExclude
             // 
-            this.chkChildlessExclude.Location = new System.Drawing.Point(17, 320);
+            this.chkChildlessExclude.Location = new System.Drawing.Point(17, 354);
             this.chkChildlessExclude.Margin = new System.Windows.Forms.Padding(10, 10, 0, 0);
             this.chkChildlessExclude.Name = "chkChildlessExclude";
             this.chkChildlessExclude.Size = new System.Drawing.Size(349, 21);
@@ -665,6 +696,7 @@ namespace GKUI.Dialogs
             this.chkPortraitsVisible.Size = new System.Drawing.Size(349, 20);
             this.chkPortraitsVisible.TabIndex = 10;
             this.chkPortraitsVisible.Text = "chkPortraitsVisible";
+            this.chkPortraitsVisible.CheckedChanged += new System.EventHandler(this.chkPortraitsVisible_CheckedChanged);
             // 
             // grpTreeDecor
             // 
@@ -1280,26 +1312,6 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cmbGeocoder
-            // 
-            this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGeocoder.Items.AddRange(new object[] {
-                                    "Google",
-                                    "Yandex"});
-            this.cmbGeocoder.Location = new System.Drawing.Point(105, 425);
-            this.cmbGeocoder.Name = "cmbGeocoder";
-            this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
-            this.cmbGeocoder.TabIndex = 4;
-            // 
-            // lblGeocoder
-            // 
-            this.lblGeocoder.AutoSize = true;
-            this.lblGeocoder.Location = new System.Drawing.Point(13, 428);
-            this.lblGeocoder.Name = "lblGeocoder";
-            this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
-            this.lblGeocoder.TabIndex = 0;
-            this.lblGeocoder.Text = "lblGeocoder";
-            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1356,6 +1368,7 @@ namespace GKUI.Dialogs
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+        private System.Windows.Forms.CheckBox chkDefaultPortraits;
         private System.Windows.Forms.ComboBox cmbGeocoder;
         private System.Windows.Forms.Label lblGeocoder;
     }
