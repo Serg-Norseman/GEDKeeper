@@ -579,4 +579,64 @@ internal class GKResources {
             return ((System.Drawing.Bitmap)(obj));
         }
     }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piFemale140 {
+        get {
+            object obj = ResourceManager.GetObject("piFemale140", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piFemale200 {
+        get {
+            object obj = ResourceManager.GetObject("piFemale200", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piFemale400 {
+        get {
+            object obj = ResourceManager.GetObject("piFemale400", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piMale140 {
+        get {
+            object obj = ResourceManager.GetObject("piMale140", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piMale200 {
+        get {
+            object obj = ResourceManager.GetObject("piMale200", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap piMale400 {
+        get {
+            object obj = ResourceManager.GetObject("piMale400", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
 }

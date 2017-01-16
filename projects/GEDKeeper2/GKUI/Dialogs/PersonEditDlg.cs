@@ -314,9 +314,11 @@ namespace GKUI.Dialogs
 
                 switch (curSex) {
                     case GEDCOMSex.svMale:
+                        img = GKResources.piMale140;
                         break;
 
                     case GEDCOMSex.svFemale:
+                        img = GKResources.piFemale140;
                         break;
 
                     default:
