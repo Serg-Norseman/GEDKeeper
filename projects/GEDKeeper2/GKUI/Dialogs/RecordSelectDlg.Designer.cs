@@ -68,7 +68,7 @@ namespace GKUI.Dialogs
 			this.txtFastFilter.Name = "txtFastFilter";
 			this.txtFastFilter.Size = new System.Drawing.Size(506, 24);
 			this.txtFastFilter.TabIndex = 0;
-			this.txtFastFilter.TextChanged += new System.EventHandler(this.edFastFilter_TextChanged);
+			this.txtFastFilter.TextChanged += new System.EventHandler(this.txtFastFilter_TextChanged);
 			// 
 			// panList
 			// 

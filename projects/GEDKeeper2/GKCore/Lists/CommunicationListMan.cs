@@ -79,20 +79,25 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            object result = null;
             switch (colType) {
                 case 0:
-                    return this.fRec.CommName;
+                    result = this.fRec.CommName;
+                    break;
                 case 1:
-                    return GKUtils.GetCorresponderStr(this.fTree, this.fRec, false);
+                    result = GKUtils.GetCorresponderStr(this.fTree, this.fRec, false);
+                    break;
                 case 2:
-                    return LangMan.LS(GKData.CommunicationNames[(int)this.fRec.CommunicationType]);
+                    result = LangMan.LS(GKData.CommunicationNames[(int)this.fRec.CommunicationType]);
+                    break;
                 case 3:
-                    return GetDateValue(this.fRec.Date, isVisible);
+                    result = GetDateValue(this.fRec.Date, isVisible);
+                    break;
                 case 4:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public CommunicationListMan(GEDCOMTree tree) : base(tree, new CommunicationListColumns())

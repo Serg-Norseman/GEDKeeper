@@ -20,10 +20,13 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -65,6 +68,18 @@ namespace GKTests.UITests
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX/SelectRecord)
         }
+
+        #region Handlers for external tests
+
+        public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
+        {
+            var cmbSource = new ComboBoxTester("cmbSource", form);
+            cmbSource.Select(0);
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

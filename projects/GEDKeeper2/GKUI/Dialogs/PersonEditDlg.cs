@@ -1008,7 +1008,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void btnNameCopy1_Click(object sender, EventArgs e)
+        private void btnNameCopy_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(GKUtils.GetNameString(this.fPerson, true, false));
         }
@@ -1107,8 +1107,13 @@ namespace GKUI.Dialogs
             this.fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
+            this.fNotesList.SetControlName("fNotesList"); // for purpose of tests
+
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            this.fMediaList.SetControlName("fMediaList"); // for purpose of tests
+
             this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
+            this.fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
             this.fUserRefList.SetControlName("fUserRefList"); // for purpose of tests

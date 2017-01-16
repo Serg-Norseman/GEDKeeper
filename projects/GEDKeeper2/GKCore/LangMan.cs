@@ -801,8 +801,9 @@ namespace GKCore
         /* 742 */ LSID_Geocoder,
         /* 743 */ LSID_FatherAdd,
         /* 744 */ LSID_MotherAdd,
+        /* 745 */ LSID_DefaultPortraits,
 
-        /* 000 */ LSID_Last = LSID_MotherAdd
+        /* 000 */ LSID_Last = LSID_DefaultPortraits
     }
 
     // TODO: remove and merge with LangManager
@@ -1557,7 +1558,8 @@ namespace GKCore
             /* 741 */ "W",
             /* 742 */ "Geocoder",
             /* 743 */ "Add father",
-            /* 744 */ "Add mother"
+            /* 744 */ "Add mother",
+            /* 745 */ "Show default portraits"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

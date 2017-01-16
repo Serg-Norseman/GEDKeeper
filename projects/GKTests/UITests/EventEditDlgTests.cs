@@ -48,13 +48,126 @@ namespace GKTests.UITests
 
             fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date1()
+        {
+            fEvent.Detail.Date.ParseString("3 MAY 1835");
+            fDialog.Event = fEvent;
             fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date2()
+        {
+            fEvent.Detail.Date.ParseString("ABT 1844");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        //
+
+        [STAThread]
+        [Test]
+        public void Test_Date3()
+        {
+            fEvent.Detail.Date.ParseString("ABT 20 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date4()
+        {
+            fEvent.Detail.Date.ParseString("CAL 20 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date5()
+        {
+            fEvent.Detail.Date.ParseString("EST 20 DEC 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date6()
+        {
+            fEvent.Detail.Date.ParseString("FROM 04 JAN 2013 TO 23 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date7()
+        {
+            fEvent.Detail.Date.ParseString("BEF 20 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date8()
+        {
+            fEvent.Detail.Date.ParseString("AFT 20 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date9()
+        {
+            fEvent.Detail.Date.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date10()
+        {
+            fEvent.Detail.Date.ParseString("FROM 04 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Date11()
+        {
+            fEvent.Detail.Date.ParseString("TO 23 JAN 2013");
+            fDialog.Event = fEvent;
+            fDialog.Show();
+            ClickButton("btnAccept", fDialog);
         }
 
         [STAThread]
         [Test]
         public void Test_Cancel()
         {
+            fDialog.Show();
+
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fEvent, fDialog.Event);
 

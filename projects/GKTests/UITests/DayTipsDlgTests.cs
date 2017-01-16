@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKUI.Dialogs;
 using NUnit.Framework;
 
@@ -48,6 +50,15 @@ namespace GKTests.UITests
 
             ClickButton("btnClose", fDialog);
         }
+
+        #region Handlers for external tests
+
+        public static void CloseModalHandler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
+        }
+
+        #endregion
     }
 }
 

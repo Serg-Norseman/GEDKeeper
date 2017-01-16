@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
@@ -71,6 +73,18 @@ namespace GKTests.UITests
 
             Assert.AreEqual("sample text", fUserRef.StringValue);
         }
+
+        #region Handlers for external tests
+
+        public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
+        {
+            var cmbRef = new ComboBoxTester("cmbRef", form);
+            cmbRef.Enter("sample reference");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

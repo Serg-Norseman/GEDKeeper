@@ -68,6 +68,12 @@ namespace GKTests.UITests
             GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
             Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
             fDialog.SetViewImage(img);
+
+            fDialog.Refresh();
+
+            ClickToolStripButton("btnZoomIn", fDialog);
+            ClickToolStripButton("btnZoomOut", fDialog);
+            ClickToolStripButton("btnSizeToFit", fDialog);
         }
     }
 }

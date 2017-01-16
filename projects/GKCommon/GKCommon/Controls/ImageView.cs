@@ -88,25 +88,25 @@ namespace GKCommon.Controls
             UpdateZoomLevels();
         }
 
-        private void imageBox_ZoomChanged(object sender, EventArgs e)
-        {
-            UpdateZoomLevels();
-        }
-
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
             imageBox.ZoomIn();
+        }
+
+        private void btnZoomOut_Click(object sender, EventArgs e)
+        {
+            imageBox.ZoomOut();
+        }
+
+        private void imageBox_ZoomChanged(object sender, EventArgs e)
+        {
+            UpdateZoomLevels();
         }
 
         private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(zoomLevelsToolStripComboBox.Text.Substring(0, zoomLevelsToolStripComboBox.Text.Length - 1));
             imageBox.Zoom = zoom;
-        }
-
-        private void btnZoomOut_Click(object sender, EventArgs e)
-        {
-            imageBox.ZoomOut();
         }
     }
 }

@@ -171,6 +171,7 @@ namespace GKUI.Dialogs
             this.chkChildlessExclude.Checked = this.fOptions.ChartOptions.ChildlessExclude;
             this.chkTreeDecorative.Checked = this.fOptions.ChartOptions.Decorative;
             this.chkPortraitsVisible.Checked = this.fOptions.ChartOptions.PortraitsVisible;
+            this.chkDefaultPortraits.Checked = this.fOptions.ChartOptions.DefaultPortraits;
             this.lblMaleColor.BackColor = this.fOptions.ChartOptions.MaleColor;
             this.lblFemaleColor.BackColor = this.fOptions.ChartOptions.FemaleColor;
             this.lblUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
@@ -300,7 +301,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void PanDefFont_Click(object sender, EventArgs e)
+        private void panDefFont_Click(object sender, EventArgs e)
         {
             TreeChartOptions chartOptions = this.fOptions.ChartOptions;
 
@@ -373,6 +374,7 @@ namespace GKUI.Dialogs
             this.fOptions.ChartOptions.ChildlessExclude = this.chkChildlessExclude.Checked;
             this.fOptions.ChartOptions.Decorative = this.chkTreeDecorative.Checked;
             this.fOptions.ChartOptions.PortraitsVisible = this.chkPortraitsVisible.Checked;
+            this.fOptions.ChartOptions.DefaultPortraits = this.chkDefaultPortraits.Checked;
             this.fOptions.ChartOptions.MaleColor = this.lblMaleColor.BackColor;
             this.fOptions.ChartOptions.FemaleColor = this.lblFemaleColor.BackColor;
             this.fOptions.ChartOptions.UnkSexColor = this.lblUnkSexColor.BackColor;
@@ -462,6 +464,11 @@ namespace GKUI.Dialogs
             this.fTempColumns[e.Index].ColActive = cs;
         }
 
+        private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
+        {
+            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
+        }
+
         public void SetPage(OptionsPage page)
         {
             switch (page) {
@@ -530,6 +537,7 @@ namespace GKUI.Dialogs
             this.chkSignsVisible.Text = LangMan.LS(LSID.LSID_SignsVisible);
             this.chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
             this.chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
+            this.chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
             this.chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
             this.grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             this.lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);

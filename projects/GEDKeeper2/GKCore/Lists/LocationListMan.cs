@@ -81,18 +81,22 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            object result = null;
             switch (colType) {
                 case 0:
-                    return this.fRec.LocationName;
+                    result = this.fRec.LocationName;
+                    break;
                 case 1:
-                    return this.fRec.Map.Lati;
+                    result = this.fRec.Map.Lati;
+                    break;
                 case 2:
-                    return this.fRec.Map.Long;
+                    result = this.fRec.Map.Long;
+                    break;
                 case 3:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public LocationListMan(GEDCOMTree tree) : base(tree, new LocationListColumns())

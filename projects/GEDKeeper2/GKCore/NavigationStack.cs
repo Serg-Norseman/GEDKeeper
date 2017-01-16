@@ -79,7 +79,7 @@ namespace GKCore
             {
                 this.fStackForward.Push(this.fCurrent);
             }
-            this.fCurrent = this.fStackBackward.Pop();
+            this.fCurrent = (this.fStackBackward.Count > 0) ? this.fStackBackward.Pop() : null;
             return this.fCurrent;
         }
 
@@ -89,7 +89,7 @@ namespace GKCore
             {
                 this.fStackBackward.Push(this.fCurrent);
             }
-            this.fCurrent = this.fStackForward.Pop();
+            this.fCurrent = (this.fStackForward.Count > 0) ? this.fStackForward.Pop() : null;
             return this.fCurrent;
         }
 

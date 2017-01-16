@@ -93,13 +93,23 @@ namespace GKCommon.Controls
         public int BorderWidth
         {
             get { return this.fBorderWidth; }
-            set { this.SetBorderWidth(value); }
+            set {
+                if (this.fBorderWidth != value) {
+                    this.fBorderWidth = value;
+                    base.Invalidate();
+                }
+            }
         }
 
         public Color Color
         {
             get { return this.fColor; }
-            set { this.SetColor(value); }
+            set {
+                if (this.fColor != value) {
+                    this.fColor = value;
+                    base.Invalidate();
+                }
+            }
         }
 
         public StringList Lines
@@ -156,24 +166,6 @@ namespace GKCommon.Controls
                 if (fTextFont != null) fTextFont.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private void SetBorderWidth(int value)
-        {
-            if (this.fBorderWidth != value)
-            {
-                this.fBorderWidth = value;
-                base.Invalidate();
-            }
-        }
-
-        private void SetColor(Color value)
-        {
-            if (this.fColor != value)
-            {
-                this.fColor = value;
-                base.Invalidate();
-            }
         }
 
         /*private void SetRuleStyle(TRuleStyle value)

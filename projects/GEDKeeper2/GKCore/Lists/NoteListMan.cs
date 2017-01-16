@@ -73,18 +73,19 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            object result = null;
             switch (colType) {
                 case 0:
                     string noteText = GKUtils.MergeStrings(this.fRec.Note);
                     //string noteText = GKUtils.TruncateStrings(this.fRec.Note, GKData.NoteNameMaxLength);
-                    return noteText;
+                    result = noteText;
+                    break;
 
                 case 1:
-                    return this.fRec.ChangeDate.ChangeDateTime;
-
-                default:
-                    return null;
+                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    break;
             }
+            return result;
         }
 
         public NoteListMan(GEDCOMTree tree) : base(tree, new NoteListColumns())
