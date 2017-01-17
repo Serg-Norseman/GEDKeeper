@@ -429,6 +429,10 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\GKPortrait.cs" />
+    <Compile Include="GKUI\GKPortrait.Designer.cs">
+      <DependentUpon>GKPortrait.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -643,6 +647,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\UserRefEditDlg.resx">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\GKPortrait.resx">
+      <DependentUpon>GKPortrait.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\MapsViewerWin.resx">
       <DependentUpon>MapsViewerWin.cs</DependentUpon>
