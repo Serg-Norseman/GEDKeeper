@@ -1068,10 +1068,8 @@ namespace GKUI.Dialogs
 
             this.btnAccept.Image = GKResources.iBtnAccept;
             this.btnCancel.Image = GKResources.iBtnCancel;
-            
             this.btnPortraitAdd.Image = GKResources.iRecNew;
             this.btnPortraitDelete.Image = GKResources.iRecDelete;
-            
             this.btnParentsAdd.Image = GKResources.iRecNew;
             this.btnParentsEdit.Image = GKResources.iRecEdit;
             this.btnParentsDelete.Image = GKResources.iRecDelete;
@@ -1085,8 +1083,6 @@ namespace GKUI.Dialogs
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
-            
-            
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {
                 this.cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));

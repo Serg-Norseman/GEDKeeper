@@ -209,7 +209,7 @@ namespace GKUI.Dialogs
             this.imgPortrait.Size = new System.Drawing.Size(149, 165);
             this.imgPortrait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
             this.imgPortrait.SlidePanelHeight = 36;
-            this.imgPortrait.SlidePanelSpeed = 5;
+            this.imgPortrait.PixelSpeed = 5;
             this.imgPortrait.TabIndex = 22;
             // 
             // lblMarriedSurname
