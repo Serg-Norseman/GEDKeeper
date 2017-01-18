@@ -31,13 +31,44 @@ namespace GKUI.Controls
     /// </summary>
     public partial class GKPortrait : UserControl
     {
-        public Image Image { get { return this.pictureBox1.Image; } set { this.pictureBox1.Image = value; } }
-        public override Image BackgroundImage { get { return this.pictureBox1.BackgroundImage; } set { this.pictureBox1.BackgroundImage = value; } }
-        public int SlidePanelHeight { get { return btnPanel.Height; } set { btnPanel.Height = value; } }
-        public Panel SlidePanel { get { return btnPanel; } set { btnPanel = value; } }
-        public int SlidePanelSpeed { get { return pixelSpeed; } set { pixelSpeed = value; } }
-        public PictureBoxSizeMode SizeMode { get { return pictureBox1.SizeMode; } set { pictureBox1.SizeMode = value;} }
-        public override Cursor Cursor {
+        public Image Image 
+        { 
+            get { return this.pictureBox1.Image; } 
+            set { this.pictureBox1.Image = value; } 
+        }
+        
+        public override Image BackgroundImage 
+        {
+            get { return this.pictureBox1.BackgroundImage; } 
+            set { this.pictureBox1.BackgroundImage = value; } 
+        }
+        
+        public int SlidePanelHeight
+        { 
+            get { return btnPanel.Height; } 
+            set { btnPanel.Height = value; } 
+        }
+        
+        public Panel SlidePanel 
+        {
+            get { return btnPanel; } 
+            set { btnPanel = value; } 
+        }
+        
+        public int PixelSpeed 
+        { 
+            get { return fPixelSpeed; } 
+            set { fPixelSpeed = value; } 
+        }
+        
+        public PictureBoxSizeMode SizeMode 
+        { 
+            get { return pictureBox1.SizeMode; } 
+            set { pictureBox1.SizeMode = value;} 
+        }
+        
+        public override Cursor Cursor
+        {
             get {
                 return base.Cursor;
             }
@@ -48,8 +79,8 @@ namespace GKUI.Controls
             }
         }
         
-        private int pixelSpeed = 5;
-        private List<Button> btns = new List<Button>();        
+        private int fPixelSpeed = 5;
+        private List<Button> fBtnsList = new List<Button>();        
         
         public GKPortrait()
         {
@@ -60,7 +91,7 @@ namespace GKUI.Controls
         
         public void AddButton(Button b)
         {
-            btns.Add(b);
+            fBtnsList.Add(b);
             ReDrawButtons();
         }
 
@@ -70,22 +101,22 @@ namespace GKUI.Controls
 
             btnPanel.Controls.Clear();
 
-            for (int i = 0, c = btns.Count; i < c; i++)
+            for (int i = 0, c = fBtnsList.Count; i < c; i++)
             {
-                lenwagon += (i != c) ? (btns[i].Width + 8) : btns[i].Width;
+                lenwagon += (i != c) ? (fBtnsList[i].Width + 8) : fBtnsList[i].Width;
             }
 
             int center = lenwagon / 2;
             int startPosition = btnPanel.Width / 2 - center;
             
-            for (int i = 0, c = btns.Count; i < c; i++)
+            for (int i = 0, c = fBtnsList.Count; i < c; i++)
             {
                 int heightCenter = btnPanel.Height / 2;
-                int btnCenter = btns[i].Height / 2;
+                int btnCenter = fBtnsList[i].Height / 2;
                 
-                btns[i].Location = new System.Drawing.Point(startPosition, heightCenter - btnCenter);
-                btnPanel.Controls.Add(btns[i]);
-                startPosition += btns[i].Width + 8;
+                fBtnsList[i].Location = new System.Drawing.Point(startPosition, heightCenter - btnCenter);
+                btnPanel.Controls.Add(fBtnsList[i]);
+                startPosition += fBtnsList[i].Width + 8;
             }
 
         }
@@ -95,7 +126,7 @@ namespace GKUI.Controls
             if (btnPanel.Top <= this.Height - btnPanel.Height)
                 timer.Stop();
             else 
-                btnPanel.Top -= (btnPanel.Top - 5 > this.Height - btnPanel.Height) ? pixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
+                btnPanel.Top -= (btnPanel.Top - 5 > this.Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
         }
         
         private void PictureBox1MouseHover(object sender, EventArgs e)
@@ -121,7 +152,7 @@ namespace GKUI.Controls
         private void CheckCursorPosition(object sender, EventArgs e)
         {
             Point p = this.PointToClient(Cursor.Position);
-            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height-1);
+            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
             if (!buf) {
                 timer.Start();
                 timer.Interval = 1;
@@ -132,10 +163,11 @@ namespace GKUI.Controls
             }
         }
         
-        private void GKPortraitResize(object sender, EventArgs e)
+        protected override void OnResize(EventArgs e)
         {
+            base.OnResize(e);
             btnPanel.Width = this.Width;
-            this.CheckCursorPosition(sender, e);
+            this.CheckCursorPosition(this, e);
         }
     }
 }
