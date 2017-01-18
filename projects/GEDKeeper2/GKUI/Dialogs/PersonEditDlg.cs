@@ -1081,6 +1081,8 @@ namespace GKUI.Dialogs
             this.btnMotherSel.Image = GKResources.iRecDelete;
             this.btnNameCopy.Image = GKResources.iCopy;
 
+            imgPortrait.AddButton(btnPortraitAdd);
+            imgPortrait.AddButton(btnPortraitDelete);
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {
                 this.cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
