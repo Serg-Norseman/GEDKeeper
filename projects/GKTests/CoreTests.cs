@@ -663,6 +663,26 @@ namespace GKTests.GKCore
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
             Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
+
+            //
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.German;
+            Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Polish;
+            Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Swedish;
+            Assert.IsInstanceOf(typeof(SwedishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Icelandic;
+            Assert.IsInstanceOf(typeof(IcelandCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Russian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Ukrainian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
         }
 
         [Test]
@@ -733,6 +753,8 @@ namespace GKTests.GKCore
             GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord otherRec = this.fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchKinshipsGraph(this.fContext, null); });
 
             using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(this.fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
@@ -1374,6 +1396,9 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
+            //string filename = GKUtils.GetTempDir() + "test.gvf";
+            //if (File.Exists(filename)) File.Delete(filename); // for local tests!
+            //TreeTools.GenPatriarchsGraphviz(baseWin, filename, 0, false);
 
             //
 
@@ -1397,11 +1422,14 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
+            List<GEDCOMRecord> splitList = new List<GEDCOMRecord>();
+            splitList.Add(iRec);
+            TreeTools.CheckRelations(splitList);
 
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null); });
-            //TreeTools.GetUnlinkedNamesakes(baseWin);
+            List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(baseWin);
 
             //
 
@@ -1417,6 +1445,8 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext, null, null); });
 
             //
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch_Clear(null); });
 
             StringList placesList = new StringList();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(null, null, null); });

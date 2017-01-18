@@ -65,7 +65,7 @@ namespace GKTests.Mocks
 
         public BaseWindowMock()
         {
-            this.fContext = TestStubs.CreateContext();
+            this.fContext = TestStubs.CreateContext(/*this*/);
             TestStubs.FillContext(this.fContext as BaseContext);
             this.fTree = fContext.Tree;
         }

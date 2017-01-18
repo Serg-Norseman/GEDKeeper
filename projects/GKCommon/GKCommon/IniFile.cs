@@ -34,21 +34,21 @@ namespace GKCommon
 
         public IniFile()
         {
-            this.fFileName = "";
-            this.fHandler = new IniFileEx();
+            fFileName = "";
+            fHandler = new IniFileEx();
         }
 
         public IniFile(string fileName)
         {
-            this.fFileName = fileName;
-            this.fHandler = IniFileEx.FromFile(fileName);
+            fFileName = fileName;
+            fHandler = IniFileEx.FromFile(fileName);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (!string.IsNullOrEmpty(this.fFileName)) {
-                    this.fHandler.Save(this.fFileName);
+                if (!string.IsNullOrEmpty(fFileName)) {
+                    fHandler.Save(fFileName);
                 }
             }
             base.Dispose(disposing);
@@ -56,7 +56,7 @@ namespace GKCommon
 
         public int ReadInteger(string section, string ident, int defaultValue)
         {
-            string intStr = this.ReadString(section, ident, "");
+            string intStr = ReadString(section, ident, "");
 
             if (!string.IsNullOrEmpty(intStr))
             {
@@ -71,34 +71,34 @@ namespace GKCommon
 
         public void WriteInteger(string section, string ident, int value)
         {
-            this.WriteString(section, ident, value.ToString());
+            WriteString(section, ident, value.ToString());
         }
 
         public bool ReadBool(string section, string ident, bool defaultValue)
         {
-            return this.ReadInteger(section, ident, (defaultValue ? 1 : 0)) > 0;
+            return ReadInteger(section, ident, (defaultValue ? 1 : 0)) > 0;
         }
 
         public void WriteBool(string section, string ident, bool value)
         {
-            this.WriteInteger(section, ident, (value ? 1 : 0));
+            WriteInteger(section, ident, (value ? 1 : 0));
         }
 
         public DateTime ReadDateTime(string section, string name, DateTime defaultValue)
         {
-            string dateStr = this.ReadString(section, name, "");
+            string dateStr = ReadString(section, name, "");
             DateTime result = (string.IsNullOrEmpty(dateStr)) ? defaultValue : DateTime.Parse(dateStr);
             return result;
         }
 
         public void WriteDateTime(string section, string name, DateTime value)
         {
-            this.WriteString(section, name, value.ToString());
+            WriteString(section, name, value.ToString());
         }
 
         public double ReadFloat(string section, string name, double defaultValue)
         {
-            string floatStr = this.ReadString(section, name, "");
+            string floatStr = ReadString(section, name, "");
 
             double result = (string.IsNullOrEmpty(floatStr)) ? defaultValue : double.Parse(floatStr);
             return result;
@@ -106,28 +106,28 @@ namespace GKCommon
 
         public void WriteFloat(string section, string name, double value)
         {
-            this.WriteString(section, name, value.ToString());
+            WriteString(section, name, value.ToString());
         }
 
         public string ReadString(string section, string ident, string defaultValue)
         {
-            string result = this.fHandler[section][ident];
+            string result = fHandler[section][ident];
             return (result == null) ? defaultValue : result;
         }
 
         public void WriteString(string section, string ident, string value)
         {
-            this.fHandler[section][ident] = value;
+            fHandler[section][ident] = value;
         }
 
         public void DeleteSection(string section)
         {
-            this.fHandler.DeleteSection(section);
+            fHandler.DeleteSection(section);
         }
 
         public void DeleteKey(string section, string ident)
         {
-            this.fHandler[section].DeleteKey(ident);
+            fHandler[section].DeleteKey(ident);
         }
     }
 }

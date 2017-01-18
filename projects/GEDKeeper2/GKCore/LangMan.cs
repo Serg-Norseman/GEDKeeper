@@ -1603,14 +1603,14 @@ namespace GKCore
 
         public LangManager()
         {
-            this.fList = new Dictionary<int, string>();
+            fList = new Dictionary<int, string>();
         }
 
         public string LS(Enum lsid)
         {
             int idx = ((IConvertible)lsid).ToInt32(null);
             string res;
-            return (this.fList.TryGetValue(idx, out res)) ? res : "?";
+            return (fList.TryGetValue(idx, out res)) ? res : "?";
         }
 
         internal bool LoadFromFile(string fileName, int offset = 0)
@@ -1619,7 +1619,7 @@ namespace GKCore
 
             if (File.Exists(fileName))
             {
-                this.fList.Clear();
+                fList.Clear();
 
                 using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
                 {
@@ -1628,7 +1628,7 @@ namespace GKCore
                     while (lngFile.Peek() != -1)
                     {
                         string st = lngFile.ReadLine().Trim();
-                        this.fList.Add(i, st);
+                        fList.Add(i, st);
                         i++;
                     }
                     result = true;
@@ -1640,12 +1640,12 @@ namespace GKCore
 
         internal void DefInit(string[] source)
         {
-            this.fList.Clear();
+            fList.Clear();
 
             for (LSID id = LSID.LSID_First; id <= LSID.LSID_Last; id++)
             {
                 int idx = (int)id;
-                this.fList.Add(idx, source[idx - 1]);
+                fList.Add(idx, source[idx - 1]);
             }
         }
     }

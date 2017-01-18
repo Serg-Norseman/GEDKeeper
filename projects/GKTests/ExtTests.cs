@@ -25,7 +25,6 @@ using System.IO;
 using System.Text;
 
 using Externals;
-using Externals.IniFiles;
 using GKCommon;
 using GKTests.Mocks;
 using NUnit.Framework;

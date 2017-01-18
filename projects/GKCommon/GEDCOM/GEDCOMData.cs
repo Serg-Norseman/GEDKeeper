@@ -26,28 +26,28 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMEvent> Events
         {
-            get { return this.fEvents; }
+            get { return fEvents; }
         }
 
         public string Agency
         {
-            get { return base.GetTagStringValue("AGNC"); }
-            set { base.SetTagStringValue("AGNC", value); }
+            get { return GetTagStringValue("AGNC"); }
+            set { SetTagStringValue("AGNC", value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("DATA");
+            SetName("DATA");
 
-            this.fEvents = new GEDCOMList<GEDCOMEvent>(this);
+            fEvents = new GEDCOMList<GEDCOMEvent>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fEvents.Dispose();
+                fEvents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "EVEN")
             {
-                result = this.fEvents.Add(new GEDCOMEvent(base.Owner, this, tagName, tagValue));
+                result = fEvents.Add(new GEDCOMEvent(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -71,18 +71,18 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fEvents.Clear();
+            fEvents.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fEvents.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fEvents.ResetOwner(newOwner);
+            fEvents.ResetOwner(newOwner);
         }
 
         public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

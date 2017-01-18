@@ -2939,7 +2939,6 @@ namespace GKTests.GKCommon
         public void Standart_Tests()
         {
             GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
-
             byte[] gedcom = (byte[])resMgr.GetObjectEx("TGC55CLF_GED");
 
             using (MemoryStream inStream = new MemoryStream(gedcom))

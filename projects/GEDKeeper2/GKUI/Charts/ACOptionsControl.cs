@@ -32,14 +32,14 @@ namespace GKUI.Charts
         public IOptions Options
         {
             get {
-                return this.fOptions;
+                return fOptions;
             }
             set {
                 var ancestorsCircleOptions = value as AncestorsCircleOptions;
-                if (ancestorsCircleOptions != null) {
-                    this.fOptions = ancestorsCircleOptions;
-                    this.UpdateControls();
-                }
+                if (ancestorsCircleOptions == null) return;
+
+                fOptions = ancestorsCircleOptions;
+                UpdateControls();
             }
         }
 

@@ -64,7 +64,7 @@ namespace GKTests.UITests
                 ColumnProps colProps = indiCols[i];
                 colProps.ColActive = true;
             }
-         }
+        }
 
         [STAThread]
         [Test]
@@ -117,13 +117,6 @@ namespace GKTests.UITests
 
             // Stage 7: call to QuickFind
             QuickSearch_Test();
-
-
-            // Stage 20: call to PersonsFilterDlg
-            ModalFormHandler = PersonsFilterDlg_btnCancel_Handler;
-            ClickToolStripMenuItem("miFilter", fMainWin);
-            ModalFormHandler = PersonsFilterDlg_btnAccept_Handler;
-            ClickToolStripMenuItem("miFilter", fMainWin);
 
 
             // Stage 21: call to TreeToolsWin
@@ -383,7 +376,7 @@ namespace GKTests.UITests
             string filename = GKUtils.GetTempDir() + "test" + fFileExt;
             if (File.Exists(filename)) File.Delete(filename); // for local tests!
 
-            SaveFileDialogTester saveDlg = new SaveFileDialogTester(hWnd);
+            var saveDlg = new SaveFileDialogTester(hWnd);
             saveDlg.SaveFile(filename);
             saveDlg.SaveFile();
         }
@@ -512,6 +505,10 @@ namespace GKTests.UITests
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);*/
 
+            if (form is PersonsFilterDlg) {
+                PersonsFilterDlg_Handler(form);
+            }
+
             ClickButton("btnAccept", form);
 
             //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
@@ -525,23 +522,30 @@ namespace GKTests.UITests
             ClickButton("btnAccept", form);
         }
 
-        private void PersonsFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
+        private void PersonsFilterDlg_Handler(Form form)
         {
-            ClickButton("btnCancel", form);
-        }
+            PersonsFilterDlg pfDlg = (PersonsFilterDlg)form;
 
-        private void PersonsFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
-        {
-            Assert.AreEqual(fCurBase, ((CommonFilterDlg)form).Base);
+            var rbSexMale = new RadioButtonTester("rbSexMale", form);
+            rbSexMale.Properties.Checked = true;
 
-            /*var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);*/
+            var rbOnlyLive = new RadioButtonTester("rbOnlyLive", form);
+            rbOnlyLive.Properties.Checked = true;
 
-            ClickButton("btnAccept", form);
+            var txtName = new ComboBoxTester("txtName", form);
+            txtName.Enter("*Ivan*");
 
-            //GEDCOMSubmitterRecord submitter = fCurWin.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
-            //Assert.AreEqual("sample text", submitter.Name.StringValue);
+            var cmbResidence = new ComboBoxTester("cmbResidence", form);
+            cmbResidence.Enter("*test place*");
+
+            var cmbEventVal = new ComboBoxTester("cmbEventVal", form);
+            cmbEventVal.Enter("*test event*");
+
+            var cmbGroup = new ComboBoxTester("cmbGroup", form);
+            cmbGroup.Enter("- any -");
+
+            var cmbSource = new ComboBoxTester("cmbSource", form);
+            cmbSource.Enter("- any -");
         }
 
         #endregion
@@ -563,10 +567,76 @@ namespace GKTests.UITests
 
             txtScriptText.Enter("R = gt_get_record(0); rt = gt_get_record_type(R); "+
                                 "xref = gt_get_record_xref(R); uid = gt_get_record_uid(R);"+
-                                "isf = gt_record_is_filtered(R); tn = gt_get_record_type_name(rt);");
+                                "isf = gt_record_is_filtered(R); tn = gt_get_record_type_name(rt);"+
+                                "num = gt_get_records_count();");
             ClickToolStripButton("tbRun", form);
 
             txtScriptText.Enter("gk_progress_init(1, \"Hello\"); gk_progress_step(); gk_progress_done(); gk_update_view()");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("x = gk_strpos(\"test\", \"alpha test\");");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("indi = gt_create_person(\"Ivan\", \"Ivanovich\", \"Ivanov\", \"M\");"+
+                                "gt_set_person_sex(indi, \"M\"); name = gt_get_person_name(indi);" +
+                                "gt_add_person_association(indi, \"rel\", indi);" +
+                                "assoNum = gt_get_person_associations_count(indi);" +
+                                "asso = gt_get_person_association(indi, 0);" +
+                                "gt_delete_person_association(indi, 0);" +
+                                "evtNum = gt_get_person_events_count(indi);" +
+                                "evt = gt_get_person_event(indi, 0);" +
+                                "gt_delete_person_event(indi, 0);" +
+                                "parentsFam = gt_get_person_parents_family(indi);" +
+                                "sx = gt_get_person_sex(indi);" +
+                                "evt2 = gt_get_person_event_ex(indi, \"BIRT\");");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("indi = gt_create_person(\"John\", \"\", \"Smith\", \"M\");" +
+                                "evt = gt_create_event(indi, \"FACT\");" +
+                                "gt_set_event_date(evt, \"08 MAR 1990\");" +
+                                "gt_set_event_place(evt, \"sample place\");" +
+                                "gt_set_event_value(evt, \"sample value\");" +
+                                "ed = gt_get_event_date(evt);" +
+                                "en = gt_get_event_name(evt);" +
+                                "ep = gt_get_event_place(evt);" +
+                                "ev = gt_get_event_value(evt);" +
+                                "ey = gt_get_event_year(evt);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("fam = gt_create_family(); evt = gt_create_event(fam, \"MARR\");" +
+                                "R = gt_get_record(0); gt_bind_family_spouse(fam, R); " +
+                                "R2 = gt_get_record(1); gt_bind_family_child(fam, R2); " +
+                                "chNum = gt_get_family_childs_count(fam); chl = gt_get_family_child(fam, 0);" +
+                                "h = gt_get_family_husband(fam); w = gt_get_family_wife(fam);" +
+                                "spNum = gt_get_person_spouses_count(R);" +
+                                "fam2 = gt_get_person_spouse_family(R, 0);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("note = gt_create_note(); gt_add_note_text(note, \"test\");" +
+                                "R = gt_get_record(0); gt_bind_record_note(R, note); " +
+                                "ntNum = gt_get_record_notes_count(R);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("src = gt_create_source(\"source\");" +
+                                "R = gt_get_record(0); gt_bind_record_source(R, src, \"p1\", 1); " +
+                                "src = gt_find_source(\"source\");");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("grp = gt_create_group(\"group\");" +
+                                "R = gt_get_record(0); gt_bind_group_member(grp, R); " +
+                                "gname = gt_get_group_name(grp);" +
+                                "gNum = gt_get_person_groups_count(R); grp1 = gt_get_person_group(R, 0);" +
+                                "gt_delete_record(grp);");
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("x = gt_get_location_usages(loc);"); // -1
+            ClickToolStripButton("tbRun", form);
+
+            txtScriptText.Enter("con = ado_open(\"test\"); qr = ado_query_open(con, \"select * from X\"); "+
+                                "ado_query_first(con); ado_query_prev(con);"+
+                                "ado_query_next(con); ado_query_last(con);"+
+                                "x = ado_get_query_field(con, \"field\");"+
+                                "ado_query_close(qr); ado_dump(con);  ado_close(con);");
             ClickToolStripButton("tbRun", form);
 
             form.Close();
@@ -1459,8 +1529,25 @@ namespace GKTests.UITests
             //ClickToolStripMenuItem("miFillImage", tcWin);
             //ClickToolStripMenuItem("miRebuildTree", tcWin);
 
+            //ModalFormHandler = PrintPreviewDialog_Handler;
+            //ClickToolStripButton("tbDocPrint", fMainWin);
+
+            ModalFormHandler = PrintDialog_Handler;
+            ClickToolStripButton("tbDocPreview", fMainWin);
+
             formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
             //frm.Close();
+        }
+
+        private void PrintDialog_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        private void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Refresh();
+            form.Close();
         }
 
         private void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)

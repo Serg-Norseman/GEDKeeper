@@ -983,7 +983,7 @@ namespace GKCore.Tools
 
         #region Tree Split
 
-        private static void _CheckRelations_AddRel(List<GEDCOMRecord> splitList, GEDCOMRecord aRec)
+        private static void CheckRelations_AddRel(List<GEDCOMRecord> splitList, GEDCOMRecord aRec)
         {
             if (splitList.IndexOf(aRec) < 0)
             {
@@ -991,138 +991,138 @@ namespace GKCore.Tools
             }
         }
 
-        private static void _CheckRelations_CheckRecord(List<GEDCOMRecord> splitList, GEDCOMRecord rec)
+        private static void CheckRelations_CheckRecord(List<GEDCOMRecord> splitList, GEDCOMRecord rec)
         {
             int num = rec.MultimediaLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                _CheckRelations_AddRel(splitList, rec.MultimediaLinks[i].Value);
+                CheckRelations_AddRel(splitList, rec.MultimediaLinks[i].Value);
             }
 
             int num2 = rec.Notes.Count;
             for (int i = 0; i < num2; i++)
             {
-                _CheckRelations_AddRel(splitList, rec.Notes[i].Value);
+                CheckRelations_AddRel(splitList, rec.Notes[i].Value);
             }
 
             int num3 = rec.SourceCitations.Count;
             for (int i = 0; i < num3; i++)
             {
-                _CheckRelations_AddRel(splitList, rec.SourceCitations[i].Value);
+                CheckRelations_AddRel(splitList, rec.SourceCitations[i].Value);
             }
         }
 
-        private static void _CheckRelations_CheckTag(List<GEDCOMRecord> splitList, GEDCOMTagWithLists tag)
+        private static void CheckRelations_CheckTag(List<GEDCOMRecord> splitList, GEDCOMTagWithLists tag)
         {
             int num = tag.MultimediaLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                _CheckRelations_AddRel(splitList, tag.MultimediaLinks[i].Value);
+                CheckRelations_AddRel(splitList, tag.MultimediaLinks[i].Value);
             }
 
             int num2 = tag.Notes.Count;
             for (int i = 0; i < num2; i++)
             {
-                _CheckRelations_AddRel(splitList, tag.Notes[i].Value);
+                CheckRelations_AddRel(splitList, tag.Notes[i].Value);
             }
 
             int num3 = tag.SourceCitations.Count;
             for (int i = 0; i < num3; i++)
             {
-                _CheckRelations_AddRel(splitList, tag.SourceCitations[i].Value);
+                CheckRelations_AddRel(splitList, tag.SourceCitations[i].Value);
             }
         }
 
-        private static void _CheckRelations_CheckIndividual(List<GEDCOMRecord> splitList, GEDCOMIndividualRecord iRec)
+        private static void CheckRelations_CheckIndividual(List<GEDCOMRecord> splitList, GEDCOMIndividualRecord iRec)
         {
-            _CheckRelations_CheckRecord(splitList, iRec);
+            CheckRelations_CheckRecord(splitList, iRec);
 
             int num = iRec.ChildToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.ChildToFamilyLinks[i].Family);
+                CheckRelations_AddRel(splitList, iRec.ChildToFamilyLinks[i].Family);
             }
 
             int num2 = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num2; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.SpouseToFamilyLinks[i].Family);
+                CheckRelations_AddRel(splitList, iRec.SpouseToFamilyLinks[i].Family);
             }
 
             int num3 = iRec.Events.Count;
             for (int i = 0; i < num3; i++)
             {
-                _CheckRelations_CheckTag(splitList, iRec.Events[i].Detail);
+                CheckRelations_CheckTag(splitList, iRec.Events[i].Detail);
             }
 
             int num4 = iRec.IndividualOrdinances.Count;
             for (int i = 0; i < num4; i++)
             {
-                _CheckRelations_CheckTag(splitList, iRec.IndividualOrdinances[i]);
+                CheckRelations_CheckTag(splitList, iRec.IndividualOrdinances[i]);
             }
 
             int num5 = iRec.Submittors.Count;
             for (int i = 0; i < num5; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.Submittors[i].Value);
+                CheckRelations_AddRel(splitList, iRec.Submittors[i].Value);
             }
 
             int num6 = iRec.Associations.Count;
             for (int i = 0; i < num6; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
+                CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
             }
 
             int num7 = iRec.Aliases.Count;
             for (int i = 0; i < num7; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.Aliases[i].Value);
+                CheckRelations_AddRel(splitList, iRec.Aliases[i].Value);
             }
 
             int num8 = iRec.AncestorsInterest.Count;
             for (int i = 0; i < num8; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.AncestorsInterest[i].Value);
+                CheckRelations_AddRel(splitList, iRec.AncestorsInterest[i].Value);
             }
 
             int num9 = iRec.DescendantsInterest.Count;
             for (int i = 0; i < num9; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.DescendantsInterest[i].Value);
+                CheckRelations_AddRel(splitList, iRec.DescendantsInterest[i].Value);
             }
 
             int num10 = iRec.Groups.Count;
             for (int i = 0; i < num10; i++)
             {
-                _CheckRelations_AddRel(splitList, iRec.Groups[i].Value);
+                CheckRelations_AddRel(splitList, iRec.Groups[i].Value);
             }
         }
 
-        private static void _CheckRelations_CheckFamily(List<GEDCOMRecord> splitList, GEDCOMFamilyRecord fRec)
+        private static void CheckRelations_CheckFamily(List<GEDCOMRecord> splitList, GEDCOMFamilyRecord fRec)
         {
-            _CheckRelations_CheckRecord(splitList, fRec);
+            CheckRelations_CheckRecord(splitList, fRec);
 
             int num = fRec.Events.Count;
             for (int i = 0; i < num; i++)
             {
-                _CheckRelations_CheckTag(splitList, fRec.Events[i].Detail);
+                CheckRelations_CheckTag(splitList, fRec.Events[i].Detail);
             }
-            _CheckRelations_AddRel(splitList, fRec.Submitter.Value);
+            CheckRelations_AddRel(splitList, fRec.Submitter.Value);
 
             int num2 = fRec.SpouseSealings.Count;
             for (int i = 0; i < num2; i++)
             {
-                _CheckRelations_CheckTag(splitList, fRec.SpouseSealings[i]);
+                CheckRelations_CheckTag(splitList, fRec.SpouseSealings[i]);
             }
         }
 
-        private static void _CheckRelations_CheckSource(List<GEDCOMRecord> splitList, GEDCOMSourceRecord sRec)
+        private static void CheckRelations_CheckSource(List<GEDCOMRecord> splitList, GEDCOMSourceRecord sRec)
         {
-            _CheckRelations_CheckRecord(splitList, sRec);
+            CheckRelations_CheckRecord(splitList, sRec);
 
             int num = sRec.RepositoryCitations.Count;
             for (int i = 0; i < num; i++) {
-                _CheckRelations_AddRel(splitList, sRec.RepositoryCitations[i].Value);
+                CheckRelations_AddRel(splitList, sRec.RepositoryCitations[i].Value);
             }
         }
 
@@ -1138,31 +1138,31 @@ namespace GKCore.Tools
                 switch (rec.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        _CheckRelations_CheckIndividual(splitList, rec as GEDCOMIndividualRecord);
+                        CheckRelations_CheckIndividual(splitList, rec as GEDCOMIndividualRecord);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        _CheckRelations_CheckFamily(splitList, rec as GEDCOMFamilyRecord);
+                        CheckRelations_CheckFamily(splitList, rec as GEDCOMFamilyRecord);
                         break;
 
                     case GEDCOMRecordType.rtNote:
-                        _CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(splitList, rec);
                         break;
 
                     case GEDCOMRecordType.rtMultimedia:
-                        _CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(splitList, rec);
                         break;
 
                     case GEDCOMRecordType.rtSource:
-                        _CheckRelations_CheckSource(splitList, rec as GEDCOMSourceRecord);
+                        CheckRelations_CheckSource(splitList, rec as GEDCOMSourceRecord);
                         break;
 
                     case GEDCOMRecordType.rtRepository:
-                        _CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(splitList, rec);
                         break;
 
                     case GEDCOMRecordType.rtSubmitter:
-                        _CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(splitList, rec);
                         break;
                 }
             }

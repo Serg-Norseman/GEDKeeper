@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.IO;
 
 namespace GKCommon
 {

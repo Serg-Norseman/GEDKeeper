@@ -97,28 +97,26 @@ namespace GKUI
 
         private void tbNewScript_Click(object sender, EventArgs e)
         {
-            if (this.CheckModified())
-            {
-                this.txtScriptText.Clear();
-                this.FileName = "unknown.lua";
-                this.Modified = false;
-            }
+            if (!CheckModified()) return;
+
+            this.txtScriptText.Clear();
+            this.FileName = "unknown.lua";
+            this.Modified = false;
         }
 
         private void tbLoadScript_Click(object sender, EventArgs e)
         {
-            if (this.CheckModified())
+            if (!CheckModified()) return;
+
+            string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
-                if (!string.IsNullOrEmpty(fileName))
+                using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
                 {
-                    using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
-                    {
-                        this.txtScriptText.Text = strd.ReadToEnd();
-                        this.FileName = fileName;
-                        this.Modified = false;
-                        strd.Close();
-                    }
+                    this.txtScriptText.Text = strd.ReadToEnd();
+                    this.FileName = fileName;
+                    this.Modified = false;
+                    strd.Close();
                 }
             }
         }
