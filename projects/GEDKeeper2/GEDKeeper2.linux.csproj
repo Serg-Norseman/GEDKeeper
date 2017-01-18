@@ -199,6 +199,10 @@
     <Compile Include="GKUI\Controls\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Controls\GKPortrait.cs" />
+    <Compile Include="GKUI\Controls\GKPortrait.Designer.cs">
+      <DependentUpon>GKPortrait.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Controls\GKTreeNode.cs" />
     <Compile Include="GKUI\Controls\GKMapBrowser.cs">
       <SubType>Component</SubType>
@@ -548,6 +552,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
       <DependentUpon>GKInputBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Controls\GKPortrait.resx">
+      <DependentUpon>GKPortrait.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\AboutDlg.resx">
       <DependentUpon>AboutDlg.cs</DependentUpon>
