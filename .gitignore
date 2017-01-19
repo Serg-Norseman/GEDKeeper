@@ -22,6 +22,9 @@ code_heat.sh
 /projects/GKIntl/bin/
 /projects/GKIntl/obj/
 
+/projects/GKSandbox/bin/
+/projects/GKSandbox/obj/
+
 /projects/GKUpdater/bin/
 /projects/GKUpdater/obj/
 
