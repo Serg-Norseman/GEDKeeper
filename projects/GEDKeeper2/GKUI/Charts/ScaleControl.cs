@@ -30,8 +30,8 @@ namespace GKUI.Charts
     {
         #region Private fields
         
-        private static readonly Rectangle ControlsScaleRect = new Rectangle(0, 0, 26, 320);
-        private static readonly Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 11);
+        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26, 320);
+        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26, 11);
 
         private const int SCALE_Y1 = 22;
         private const int SCALE_Y2 = 297;
@@ -62,28 +62,28 @@ namespace GKUI.Charts
 
         public int DCount
         {
-            get { return this.fDCount; }
-            set { this.fDCount = value; }
+            get { return fDCount; }
+            set { fDCount = value; }
         }
 
         public int ThumbPos
         {
-            get { return this.fThumbPos; }
-            set { this.fThumbPos = value; }
+            get { return fThumbPos; }
+            set { fThumbPos = value; }
         }
         
         public string Tip
         {
-            get { return this.fTip; }
-            set { this.fTip = value; }
+            get { return fTip; }
+            set { fTip = value; }
         }
         
         public bool Visible
         {
-            get { return this.fVisible; }
+            get { return fVisible; }
             set {
-                this.fVisible = value;
-                this.fChart.Invalidate();
+                fVisible = value;
+                fChart.Invalidate();
             }
         }
 
@@ -91,8 +91,8 @@ namespace GKUI.Charts
         
         public ScaleControl(TreeChartBox chart)
         {
-            this.fChart = chart;
-            this.fControlsImage = GKResources.iChartControls;
+            fChart = chart;
+            fControlsImage = GKResources.iChartControls;
         }
 
         public void Dispose()
@@ -103,7 +103,7 @@ namespace GKUI.Charts
         public void Update()
         {
             Rectangle cr = fChart.ClientRectangle;
-            this.fDestRect = new Rectangle(cr.Right - (10 + this.Width), 10, this.Width, this.Height);
+            fDestRect = new Rectangle(cr.Right - (10 + Width), 10, Width, Height);
         }
 
         public void Draw(Graphics gfx)
@@ -114,17 +114,17 @@ namespace GKUI.Charts
             gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
-            gfx.DrawImage(fControlsImage, fDestRect, ControlsScaleRect, GraphicsUnit.Pixel);
+            gfx.DrawImage(fControlsImage, fDestRect, SCALE_RECT, GraphicsUnit.Pixel);
 
-            if (this.fDCount == 0) return;
-            gfx.DrawImage(fControlsImage, this.GetDRect(fThumbPos), ControlsThumbRect, GraphicsUnit.Pixel);
+            if (fDCount == 0) return;
+            gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT, GraphicsUnit.Pixel);
         }
 
         private Rectangle GetDRect(int d)
         {
-            int dH = ((SCALE_Y2 - SCALE_Y1) - ControlsThumbRect.Height) / (this.fDCount - 1);
+            int dH = ((SCALE_Y2 - SCALE_Y1) - THUMB_RECT.Height) / (fDCount - 1);
             int thumbY = fDestRect.Top + SCALE_Y1 + (d - 1) * dH;
-            return new Rectangle(fDestRect.Left, thumbY, fDestRect.Width, ControlsThumbRect.Height);
+            return new Rectangle(fDestRect.Left, thumbY, fDestRect.Width, THUMB_RECT.Height);
         }
 
         public bool Contains(int x, int y)
@@ -134,7 +134,7 @@ namespace GKUI.Charts
 
         public void MouseDown(int x, int y)
         {
-            fThumbCaptured = (this.GetDRect(fThumbPos).Contains(x, y) && !fThumbCaptured);
+            fThumbCaptured = (GetDRect(fThumbPos).Contains(x, y) && !fThumbCaptured);
         }
 
         public void MouseMove(int x, int y, ThumbMoved thumbMoved)

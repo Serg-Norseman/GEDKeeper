@@ -80,7 +80,7 @@ namespace GKUI
             this.fBase = baseWin;
             this.fPerson = startPerson;
 
-            this.fTreeBox = new TreeChartBox();
+            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
             this.fTreeBox.Base = this.fBase;
             this.fTreeBox.Dock = DockStyle.Fill;
             this.fTreeBox.DragOver += this.ImageTree_DragOver;

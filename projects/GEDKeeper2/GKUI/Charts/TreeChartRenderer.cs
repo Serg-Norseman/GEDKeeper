@@ -18,20 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Drawing;
 
 namespace GKUI.Charts
 {
     /// <summary>
     /// 
     /// </summary>
-    public class PersonModifyEventArgs : EventArgs
+    public abstract class TreeChartRenderer
     {
-        public TreeChartPerson Person { get; set; }
-
-        public PersonModifyEventArgs(TreeChartPerson person)
+        protected TreeChartRenderer()
         {
-            Person = person;
         }
+
+        public abstract void SetTarget(object target);
+
+        public abstract void DrawLine(Pen pen, float x1, float y1, float x2, float y2);
     }
 }

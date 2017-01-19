@@ -131,6 +131,7 @@
     <Compile Include="GKCore\Export\HTMLWriter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
@@ -183,6 +184,8 @@
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
+    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

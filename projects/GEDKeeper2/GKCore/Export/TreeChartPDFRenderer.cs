@@ -19,19 +19,35 @@
  */
 
 using System;
+using System.Drawing;
+using GKUI.Charts;
+using iTextSharp.text.pdf;
 
-namespace GKUI.Charts
+namespace GKCore.Export
 {
     /// <summary>
     /// 
     /// </summary>
-    public class PersonModifyEventArgs : EventArgs
+    public sealed class TreeChartPDFRenderer : TreeChartRenderer
     {
-        public TreeChartPerson Person { get; set; }
+        private PdfContentByte fCanvas;
 
-        public PersonModifyEventArgs(TreeChartPerson person)
+        public TreeChartPDFRenderer()
         {
-            Person = person;
+        }
+
+        public override void SetTarget(object target)
+        {
+            PdfContentByte gfx = target as PdfContentByte;
+            if (gfx == null)
+                throw new ArgumentException(@"Argument's type mismatch", "target");
+
+            fCanvas = gfx;
+        }
+
+        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        {
+            
         }
     }
 }

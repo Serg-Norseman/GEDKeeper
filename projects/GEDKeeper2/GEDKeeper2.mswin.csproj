@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
@@ -200,7 +201,9 @@
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
+    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -217,7 +220,9 @@
     <Compile Include="GKUI\Controls\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKPortrait.cs" />
+    <Compile Include="GKUI\Controls\GKPortrait.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Controls\GKPortrait.Designer.cs">
       <DependentUpon>GKPortrait.cs</DependentUpon>
     </Compile>
@@ -725,8 +730,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCore\Geocoding" />
-    <Folder Include="Sandbox" />
+    <Folder Include="Sandbox\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

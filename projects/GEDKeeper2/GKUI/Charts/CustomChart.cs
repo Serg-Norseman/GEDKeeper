@@ -46,14 +46,14 @@ namespace GKUI.Charts
 
         protected CustomChart() : base()
         {
-            this.fNavman = new NavigationStack();
+            fNavman = new NavigationStack();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (this.fNavman != null) this.fNavman.Dispose();
+                if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -72,8 +72,8 @@ namespace GKUI.Charts
 
         public bool NavAdd(object obj)
         {
-            if (obj != null && !this.fNavman.Busy) {
-                this.fNavman.Current = obj;
+            if (obj != null && !fNavman.Busy) {
+                fNavman.Current = obj;
                 return true;
             }
             return false;
@@ -81,43 +81,43 @@ namespace GKUI.Charts
 
         public bool NavCanBackward()
         {
-            return this.fNavman.CanBackward();
+            return fNavman.CanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fNavman.CanForward();
+            return fNavman.CanForward();
         }
 
         public void NavNext()
         {
-            if (!this.fNavman.CanForward()) return;
+            if (!fNavman.CanForward()) return;
 
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                this.SetNavObject(this.fNavman.Next());
-                this.DoNavRefresh();
+                SetNavObject(fNavman.Next());
+                DoNavRefresh();
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
 
         public void NavPrev()
         {
-            if (!this.fNavman.CanBackward()) return;
+            if (!fNavman.CanBackward()) return;
 
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                this.SetNavObject(this.fNavman.Back());
-                this.DoNavRefresh();
+                SetNavObject(fNavman.Back());
+                DoNavRefresh();
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
     }

@@ -39,38 +39,38 @@ namespace GKUI.Charts
         
         public bool Visible
         {
-            get { return this.fVisible; }
+            get { return fVisible; }
             set {
-                this.fVisible = value;
-                this.fChart.Invalidate();
+                fVisible = value;
+                fChart.Invalidate();
             }
         }
         
         public PersonControl(TreeChartBox chart)
         {
-            this.fChart = chart;
-            this.fCtlPen = new Pen(Color.Black, 2.0f);
-            this.fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
+            fChart = chart;
+            fCtlPen = new Pen(Color.Black, 2.0f);
+            fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
         }
 
         public void Dispose()
         {
-            this.fCtlPen.Dispose();
-            this.fCtlBrush.Dispose();
+            fCtlPen.Dispose();
+            fCtlBrush.Dispose();
         }
 
         public void SetPerson(TreeChartPerson person)
         {
             if (person == null) return;
-            this.fPerson = person;
+            fPerson = person;
             
-            ExtRect rt = this.fPerson.Rect.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
+            ExtRect rt = fPerson.Rect.GetOffset(fChart.fSPX, fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             rect.X = rect.Right;
             rect.Width = 40;
             
-            this.fDestRect = rect;
+            fDestRect = rect;
         }
         
         public void Update()
@@ -81,8 +81,8 @@ namespace GKUI.Charts
         {
             if (gfx == null) return;
 
-            /*ExtRect rt = this.fPerson.Rect;
-            rt = rt.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
+            /*ExtRect rt = fPerson.Rect;
+            rt = rt.GetOffset(fChart.fSPX, fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             //rect.Top = rect.Top;
@@ -95,8 +95,8 @@ namespace GKUI.Charts
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
             
-            gfx.FillRectangle(this.fCtlBrush, this.fDestRect);
-            gfx.DrawRectangle(this.fCtlPen, this.fDestRect);
+            gfx.FillRectangle(fCtlBrush, fDestRect);
+            gfx.DrawRectangle(fCtlPen, fDestRect);
         }
 
         public bool Contains(int x, int y)

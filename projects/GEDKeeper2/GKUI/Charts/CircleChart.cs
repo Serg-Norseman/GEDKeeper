@@ -54,16 +54,16 @@ namespace GKUI.Charts
 
             public CircleSegment(int generation)
             {
-                this.Gen = generation;
-                this.IRec = null;
-                this.Path = new GraphicsPath();
+                Gen = generation;
+                IRec = null;
+                Path = new GraphicsPath();
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    if (this.Path != null) this.Path.Dispose();
+                    if (Path != null) Path.Dispose();
                 }
                 base.Dispose(disposing);
             }
@@ -102,24 +102,24 @@ namespace GKUI.Charts
         public int GenWidth
         {
             get {
-                return this.fGenWidth;
+                return fGenWidth;
             }
             set {
                 if (value < 20 || value > 100) return;
 
-                this.fGenWidth = value;
-                this.Changed();
+                fGenWidth = value;
+                Changed();
             }
         }
 
         public int IndividualsCount
         {
-            get { return this.fIndividualsCount; }
+            get { return fIndividualsCount; }
         }
 
         public AncestorsCircleOptions Options
         {
-            get { return this.fOptions; }
+            get { return fOptions; }
         }
 
         public event ARootChangedEventHandler RootChanged
@@ -131,15 +131,15 @@ namespace GKUI.Charts
         public GEDCOMIndividualRecord RootPerson
         {
             get {
-                return this.fRootPerson;
+                return fRootPerson;
             }
             set {
-                this.fRootPerson = value;
+                fRootPerson = value;
 
-                this.NavAdd(value);
-                this.Changed();
+                NavAdd(value);
+                Changed();
 
-                this.DoRootChanged(value);
+                DoRootChanged(value);
             }
         }
 
@@ -151,40 +151,39 @@ namespace GKUI.Charts
 
         protected CircleChart(IBaseWindow baseWin)
         {
-            this.DoubleBuffered = true;
+            DoubleBuffered = true;
 
-            this.fComponents = new System.ComponentModel.Container();
+            fComponents = new Container();
+            fToolTip = new ToolTip(fComponents);
+            fToolTip.AutoPopDelay = 5000;
+            fToolTip.InitialDelay = 250;
+            fToolTip.ReshowDelay = 50;
+            fToolTip.ShowAlways = true;
 
-            this.fToolTip = new ToolTip(fComponents);
-            this.fToolTip.AutoPopDelay = 5000;
-            this.fToolTip.InitialDelay = 250;
-            this.fToolTip.ReshowDelay = 50;
-            this.fToolTip.ShowAlways = true;
+            fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            fGenWidth = DEFAULT_GEN_WIDTH;
+            fMaxGenerations = 8;
+            fOptions = new AncestorsCircleOptions();
+            fSegments = new List<CircleSegment>();
+            fSelected = null;
+            fShieldState = baseWin.ShieldState;
 
-            this.fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-            this.fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-            this.fGenWidth = DEFAULT_GEN_WIDTH;
-            this.fMaxGenerations = 8;
-            this.fOptions = new AncestorsCircleOptions();
-            this.fSegments = new List<CircleSegment>();
-            this.fSelected = null;
-            this.fShieldState = baseWin.ShieldState;
-
-            this.BackColor = this.fOptions.BrushColor[9];
+            BackColor = fOptions.BrushColor[9];
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 if (fComponents != null) fComponents.Dispose();
-                this.DisposeBrushes();
+                DisposeBrushes();
             }
             base.Dispose(disposing);
         }
 
         protected override void SetNavObject(object obj)
         {
-            this.RootPerson = obj as GEDCOMIndividualRecord;
+            RootPerson = obj as GEDCOMIndividualRecord;
         }
 
         #region Abstract methods
@@ -197,33 +196,33 @@ namespace GKUI.Charts
 
         private void CreateBrushes()
         {
-            for (int i = 0; i < this.fOptions.BrushColor.Length; i++)
+            for (int i = 0; i < fOptions.BrushColor.Length; i++)
             {
-                Color col = this.fOptions.BrushColor[i];
+                Color col = fOptions.BrushColor[i];
 
-                this.fCircleBrushes[i] = new SolidBrush(col);
-                this.fDarkBrushes[i] = new SolidBrush(SysUtils.Darker(col, 0.2f));
+                fCircleBrushes[i] = new SolidBrush(col);
+                fDarkBrushes[i] = new SolidBrush(SysUtils.Darker(col, 0.2f));
             }
 
-            this.fPen = new Pen(this.fOptions.BrushColor[10]);
+            fPen = new Pen(fOptions.BrushColor[10]);
         }
 
         private void DisposeBrushes()
         {
-            for (int i = 0; i < this.fOptions.BrushColor.Length; i++)
+            for (int i = 0; i < fOptions.BrushColor.Length; i++)
             {
-                if (this.fCircleBrushes[i] != null) this.fCircleBrushes[i].Dispose();
-                if (this.fDarkBrushes[i] != null) this.fDarkBrushes[i].Dispose();
+                if (fCircleBrushes[i] != null) fCircleBrushes[i].Dispose();
+                if (fDarkBrushes[i] != null) fDarkBrushes[i].Dispose();
             }
 
-            if (this.fPen != null) this.fPen.Dispose();
+            if (fPen != null) fPen.Dispose();
         }
 
         public void Changed()
         {
-            this.CreateBrushes();
-            this.BuildPathTree();
-            this.Invalidate();
+            CreateBrushes();
+            BuildPathTree();
+            Invalidate();
         }
 
         protected void DoRootChanged(GEDCOMIndividualRecord person)
@@ -238,9 +237,9 @@ namespace GKUI.Charts
         {
             CircleSegment result = null;
 
-            int num = this.fSegments.Count;
+            int num = fSegments.Count;
             for (int i = 0; i < num; i++) {
-                CircleSegment segment = this.fSegments[i];
+                CircleSegment segment = fSegments[i];
 
                 if (segment.IRec == iRec) {
                     result = segment;
@@ -255,9 +254,9 @@ namespace GKUI.Charts
         {
             CircleSegment result = null;
 
-            int num = this.fSegments.Count;
+            int num = fSegments.Count;
             for (int i = 0; i < num; i++) {
-                CircleSegment segment = this.fSegments[i];
+                CircleSegment segment = fSegments[i];
 
                 if (segment.Path.IsVisible(mX, mY)) {
                     result = segment;
@@ -290,17 +289,17 @@ namespace GKUI.Charts
             float angle = segment.StartAngle + 90.0f + segment.WedgeAngle / 2;
             float wedgeAngle = segment.WedgeAngle;
 
-            bool isNarrow = IsNarrowSegment(gfx, givn, rad, wedgeAngle, this.Font);
+            bool isNarrow = IsNarrowSegment(gfx, givn, rad, wedgeAngle, Font);
 
             if (gen == 0) {
 
                 gfx.ResetTransform();
-                gfx.TranslateTransform(this.fCenterX, this.fCenterY);
+                gfx.TranslateTransform(fCenterX, fCenterY);
 
-                SizeF sizeF = gfx.MeasureString(surn, this.Font);
-                gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
-                sizeF = gfx.MeasureString(givn, this.Font);
-                gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, 0f);
+                SizeF sizeF = gfx.MeasureString(surn, Font);
+                gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
+                sizeF = gfx.MeasureString(givn, Font);
+                gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, 0f);
 
             } else {
 
@@ -309,11 +308,11 @@ namespace GKUI.Charts
                     float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                     float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
                     gfx.ResetTransform();
-                    gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                    gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                     gfx.RotateTransform(angle - 90.0f);
 
-                    SizeF size = gfx.MeasureString(givn, this.Font);
-                    gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                    SizeF size = gfx.MeasureString(givn, Font);
+                    gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
                 } else {
 
@@ -322,66 +321,66 @@ namespace GKUI.Charts
                         float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                         float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
                         gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                        gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                         gfx.RotateTransform(angle);
 
-                        SizeF size = gfx.MeasureString(givn, this.Font);
-                        gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                        SizeF size = gfx.MeasureString(givn, Font);
+                        gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
                     } else if (wedgeAngle < 180) {
 
                         if (ArcText) {
                             if (gen == 2) {
-                                SizeF sizeF = gfx.MeasureString(surn, this.Font);
-                                DrawArcText(gfx, surn, this.fCenterX, this.fCenterY, rad + sizeF.Height / 2f,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                                SizeF sizeF = gfx.MeasureString(surn, Font);
+                                DrawArcText(gfx, surn, fCenterX, fCenterY, rad + sizeF.Height / 2f,
+                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                                sizeF = gfx.MeasureString(givn, this.Font);
-                                DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad - sizeF.Height / 2f,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                                sizeF = gfx.MeasureString(givn, Font);
+                                DrawArcText(gfx, givn, fCenterX, fCenterY, rad - sizeF.Height / 2f,
+                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
-                                DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                                DrawArcText(gfx, givn, fCenterX, fCenterY, rad,
+                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             }
                         } else {
                             float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                             float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
                             gfx.ResetTransform();
-                            gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                             gfx.RotateTransform(angle);
-                            SizeF sizeF2 = gfx.MeasureString(surn, this.Font);
-                            gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            SizeF sizeF2 = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
 
-                            sizeF2 = gfx.MeasureString(givn, this.Font);
+                            sizeF2 = gfx.MeasureString(givn, Font);
                             dx = (float)Math.Sin(PI * angle / 180.0) * (rad - sizeF2.Height);
                             dy = (float)Math.Cos(PI * angle / 180.0) * (rad - sizeF2.Height);
                             gfx.ResetTransform();
-                            gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                             gfx.RotateTransform(angle);
-                            gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
                         }
 
                     } else if (wedgeAngle < 200) {
 
                         if (ArcText) {
-                            SizeF sizeF = gfx.MeasureString(surn, this.Font);
-                            DrawArcText(gfx, surn, this.fCenterX, this.fCenterY, rad + sizeF.Height / 2f,
-                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                            SizeF sizeF = gfx.MeasureString(surn, Font);
+                            DrawArcText(gfx, surn, fCenterX, fCenterY, rad + sizeF.Height / 2f,
+                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                            sizeF = gfx.MeasureString(givn, this.Font);
-                            DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad - sizeF.Height / 2f,
-                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                            sizeF = gfx.MeasureString(givn, Font);
+                            DrawArcText(gfx, givn, fCenterX, fCenterY, rad - sizeF.Height / 2f,
+                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
                             float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                             float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
                             gfx.ResetTransform();
-                            gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                             gfx.RotateTransform(angle);
 
-                            SizeF sizeF = gfx.MeasureString(surn, this.Font);
-                            gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
-                            sizeF = gfx.MeasureString(givn, this.Font);
-                            gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
+                            SizeF sizeF = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
+                            sizeF = gfx.MeasureString(givn, Font);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
                         }
 
                     }
@@ -450,7 +449,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.InternalDraw(e.Graphics);
+            InternalDraw(e.Graphics);
 
             base.OnPaint(e);
         }
@@ -459,17 +458,17 @@ namespace GKUI.Charts
         {
             base.OnResize(e);
 
-            this.Changed();
+            Changed();
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
-            CircleSegment selected = this.FindSegment(e.X, e.Y);
+            CircleSegment selected = FindSegment(e.X, e.Y);
 
             if (selected != null && selected.IRec != null) {
-                this.RootPerson = selected.IRec;
+                RootPerson = selected.IRec;
             }
         }
 
@@ -477,22 +476,22 @@ namespace GKUI.Charts
         {
             base.OnMouseMove(e);
 
-            CircleSegment selected = this.FindSegment(e.X, e.Y);
+            CircleSegment selected = FindSegment(e.X, e.Y);
 
             string hint = "";
-            if (!Equals(this.fSelected, selected)) {
-                this.fSelected = selected;
+            if (!Equals(fSelected, selected)) {
+                fSelected = selected;
 
                 if (selected != null && selected.IRec != null) {
                     string name = GKUtils.GetNameString(selected.IRec, true, false);
                     hint = /*selected.Gen.ToString() + ", " + */name;
                 }
 
-                this.Invalidate();
+                Invalidate();
             }
 
-            if (!Equals(this.fHint, hint)) {
-                this.fHint = hint;
+            if (!Equals(fHint, hint)) {
+                fHint = hint;
 
                 if (!string.IsNullOrEmpty(hint)) {
                     fToolTip.Show(hint, this, e.X, e.Y, 3000);

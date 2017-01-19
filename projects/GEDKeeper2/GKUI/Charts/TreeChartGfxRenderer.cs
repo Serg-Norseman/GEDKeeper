@@ -19,19 +19,33 @@
  */
 
 using System;
+using System.Drawing;
 
 namespace GKUI.Charts
 {
     /// <summary>
     /// 
     /// </summary>
-    public class PersonModifyEventArgs : EventArgs
+    public sealed class TreeChartGfxRenderer : TreeChartRenderer
     {
-        public TreeChartPerson Person { get; set; }
+        private Graphics fCanvas;
 
-        public PersonModifyEventArgs(TreeChartPerson person)
+        public TreeChartGfxRenderer()
         {
-            Person = person;
+        }
+
+        public override void SetTarget(object target)
+        {
+            Graphics gfx = target as Graphics;
+            if (gfx == null)
+                throw new ArgumentException(@"Argument's type mismatch", "target");
+
+            fCanvas = gfx;
+        }
+
+        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        {
+            fCanvas.DrawLine(pen, x1, y1, x2, y2);
         }
     }
 }

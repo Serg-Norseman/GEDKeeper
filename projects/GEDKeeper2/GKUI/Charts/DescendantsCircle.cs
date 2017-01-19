@@ -39,8 +39,8 @@ namespace GKUI.Charts
 
             public PersonSegment(int generation) : base(generation)
             {
-                this.ChildSegments = new List<DescendantsCircle.PersonSegment>();
-                this.TotalSubSegments = 0;
+                ChildSegments = new List<PersonSegment>();
+                TotalSubSegments = 0;
             }
         }
 
@@ -51,33 +51,33 @@ namespace GKUI.Charts
 
         protected override void BuildPathTree()
         {
-            this.fSegments.Clear();
+            fSegments.Clear();
 
             // traverse tree
-            this.fIndividualsCount = 0;
+            fIndividualsCount = 0;
 
             PersonSegment rootSegment;
-            if (this.fRootPerson != null) {
-                rootSegment = this.TraverseDescendants(this.fRootPerson, 0);
+            if (fRootPerson != null) {
+                rootSegment = TraverseDescendants(fRootPerson, 0);
             } else {
                 return;
             }
 
-            this.fCenterX = base.Width / 2 + this.fOffsetX;
-            this.fCenterY = base.Height / 2 + this.fOffsetY;
+            fCenterX = Width / 2 + fOffsetX;
+            fCenterY = Height / 2 + fOffsetY;
 
             int inRad = CENTER_RAD - 50;
             float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
-            this.CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
+            CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
         }
 
         private void CalcDescendants(PersonSegment segment, int inRad, float startAngle, float stepAngle)
         {
             GraphicsPath path = segment.Path;
 
-            int ctX = this.fCenterX;
-            int ctY = this.fCenterY;
+            int ctX = fCenterX;
+            int ctY = fCenterY;
 
             int extRad;
             if (segment.Gen == 0) {
@@ -89,7 +89,7 @@ namespace GKUI.Charts
 
                 extRad = inRad;
             } else {
-                extRad = inRad + this.fGenWidth;
+                extRad = inRad + fGenWidth;
 
                 int size = (segment.TotalSubSegments > 0) ? segment.TotalSubSegments : 1;
                 float wedgeAngle = stepAngle * size;
@@ -127,7 +127,7 @@ namespace GKUI.Charts
             for (int i = 0; i < segment.ChildSegments.Count; i++) {
                 PersonSegment childSegment = segment.ChildSegments[i];
 
-                this.CalcDescendants(childSegment, extRad, childStartAngle, stepAngle);
+                CalcDescendants(childSegment, extRad, childStartAngle, stepAngle);
 
                 int steps = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
 
@@ -141,19 +141,19 @@ namespace GKUI.Charts
             
             try
             {
-                this.fIndividualsCount++;
+                fIndividualsCount++;
 
                 PersonSegment resultSegment = new PersonSegment(gen);
                 resultSegment.IRec = iRec;
-                this.fSegments.Add(resultSegment);
+                fSegments.Add(resultSegment);
 
-                if (gen < this.fMaxGenerations)
+                if (gen < fMaxGenerations)
                 {
                     int num2 = iRec.SpouseToFamilyLinks.Count;
                     for (int j = 0; j < num2; j++)
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-                        if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
+                        if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
                         {
                             family.SortChilds();
 
@@ -161,7 +161,7 @@ namespace GKUI.Charts
                             for (int i = 0; i < num3; i++)
                             {
                                 GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
-                                PersonSegment childSegment = this.TraverseDescendants(child, gen + 1);
+                                PersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                                 int size = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
                                 resultSegment.TotalSubSegments += size;
@@ -184,23 +184,21 @@ namespace GKUI.Charts
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int num = this.fSegments.Count;
+            int num = fSegments.Count;
             for (int i = 0; i < num; i++) {
-                PersonSegment segment = (PersonSegment)this.fSegments[i];
+                PersonSegment segment = (PersonSegment)fSegments[i];
+                if (segment.IRec == null) continue;
 
-                if (segment.IRec != null) {
-                    int brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                int brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
-                    SolidBrush brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
-
-                    GraphicsPath path = segment.Path;
-                    gfx.FillPath(brush, path);
-                    gfx.DrawPath(this.fPen, path);
-                }
+                GraphicsPath path = segment.Path;
+                gfx.FillPath(brush, path);
+                gfx.DrawPath(fPen, path);
             }
 
             for (int i = 0; i < num; i++) {
-                this.DrawPersonName(gfx, this.fSegments[i]);
+                DrawPersonName(gfx, fSegments[i]);
             }
         }
 
@@ -211,15 +209,15 @@ namespace GKUI.Charts
             e.Handled = false;
             switch (e.KeyCode) {
                 case Keys.Add:
-                    this.GenWidth += 10;
+                    GenWidth += 10;
                     break;
 
                 case Keys.Subtract:
-                    this.GenWidth -= 10;
+                    GenWidth -= 10;
                     break;
 
                 case Keys.Back:
-                    this.NavPrev();
+                    NavPrev();
                     return;
 
                 default:

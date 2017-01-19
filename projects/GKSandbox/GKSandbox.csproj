@@ -69,9 +69,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ProgressStatusBar.cs" />
-    <Compile Include="Controls\SlideList.cs" />
-    <Compile Include="MainForm.cs" />
+    <Compile Include="Controls\ProgressStatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SlideList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
@@ -81,10 +87,16 @@
     <Compile Include="Pluralizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\NumericFieldValidator.cs" />
-    <Compile Include="Validation\RequiredFieldValidator.cs" />
+    <Compile Include="Validation\NumericFieldValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Validation\RequiredFieldValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Validation\ValidatableControlConverter.cs" />
-    <Compile Include="Validation\ValidatorBase.cs" />
+    <Compile Include="Validation\ValidatorBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
@@ -92,11 +104,7 @@
       <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls" />
-    <Folder Include="Obsolete" />
-    <Folder Include="Validation" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Controls\SlideList.resx">
       <DependentUpon>SlideList.cs</DependentUpon>
