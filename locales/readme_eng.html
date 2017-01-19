@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Rules and guidelines for translation</title>
+</head>
+<body>
+
+<h1>Rules and guidelines for translation</h1>
+
+<p><ol>
+<li>Encoding of the language file is UTF8, is used to support national characters.<ol>
+
+<li>To edit files in Windows it is recommended to use Notepad++ editor (you can download it at https://notepad-plus-plus.org/), because it automatically recognizes files encoded in UTF8, correctly opens and saves. Also, to facilitate the translation work you can use WinMerge to see the strict correspondence of rows in files in two different languages. Use office applications (Word or Writer), is not recommended.
+<li>For effective translation work in Linux, you can use the program Meld or KDiff3 (instead of WinMerge) and GEdit (for example).</ol>
+
+<li>Files russian.lng and english.sample contain reference text. You can insert them the contents, starting with the second line to the file of translation. The basis for the transfer (English or Russian) you can use any - what language is closer to the translator.<ol>
+
+<li>To simplify the translation, some translators do so: copy all the text in the online translator for translate into the target language, inserting the translation into the final file, and then correct line by line, referring to the original. This reduces the time of translation.
+<li>Alternatively, there may be another way: a partial translation. Full text of the original (English or Russian) inserted into the resulting file, after which gradually, to the extent possible is translated in separate lines.</ol>
+
+<li>The first line of the language file header with the code designation, signature and the name of the language, you need to be careful not to damage. The symbol ";" at the beginning is mandatory. When you create a new translation if no special knowledge about the codes and symbols of languages it is recommended to contact the developers.
+<li>The order of the rows in the file does not change!
+<li>Duplicates the leave as is (if exists - so it should be).
+<li>The notation %s, %n, {0}, {1} don't touch - that substitution of other text or numbers.
+<li>A line of the form <reserved>, <?> or <-> - reserved, leave as is.
+<li>The translation can be tested at any stage. The data from the file loaded when you switch language in the program, so in running the program periodically to change the selected language and see the changes in the interface.
+<li>If the translation there are words or phrases, the context of use unclear - we recommend that you contact the developers for clarification.
+</ol></p>
+
+<p>Each participant of the translation into other languages will be inscribed 
+in the application's history as the author's translations. Enter your name in the annals of the program :)</p>
+
+</body>
+</html>
