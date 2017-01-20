@@ -4,34 +4,33 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Rules and guidelines for translation</title>
+<title>Translation guidelines and rules</title>
 </head>
 <body>
 
-<h1>Rules and guidelines for translation</h1>
+<h1>Translation guidelines and rules</h1>
 
 <p><ol>
-<li>Encoding of the language file is UTF8, is used to support national characters.<ol>
+<li>To allow use of national characters please create files with UTF-8 encoding.<ol>
 
-<li>To edit files in Windows it is recommended to use Notepad++ editor (you can download it at https://notepad-plus-plus.org/), because it automatically recognizes files encoded in UTF8, correctly opens and saves. Also, to facilitate the translation work you can use WinMerge to see the strict correspondence of rows in files in two different languages. Use office applications (Word or Writer), is not recommended.
-<li>For effective translation work in Linux, you can use the program Meld or KDiff3 (instead of WinMerge) and GEdit (for example).</ol>
+<li>One good example of a perfect editor supporting creation and modification UTF-8 encoded files is Notepad++ editor (available at <a href="https://notepad-plus-plus.org/" target="_blank">https://notepad-plus-plus.org/</a>). Notepad++ can automatically recognizes opening file encoding. We also recommend tool WinMerge, which displays strict correspondence of lines of two files with texts in two different languages. Please, never use office program, like Microsoft Word or Writer -- they create overweighted files.
+<li>To compile a good translation toolset under Linux, you can use programs like Meld or KDiff3 (instead of WinMerge) and GEdit.</ol>
 
-<li>Files russian.lng and english.sample contain reference text. You can insert them the contents, starting with the second line to the file of translation. The basis for the transfer (English or Russian) you can use any - what language is closer to the translator.<ol>
+<li>There is the reference text stored in files russian.lng and english.sample. To begin creation of a new language file, you can copy any of the reference files into the new one, and then translate content of the new file line by line starting from the second line. Translator may choose any of the files he or she likes as a source (russian.lng or english.sample). Selection depends on translator experience and knowledges.<ol>
 
-<li>To simplify the translation, some translators do so: copy all the text in the online translator for translate into the target language, inserting the translation into the final file, and then correct line by line, referring to the original. This reduces the time of translation.
-<li>Alternatively, there may be another way: a partial translation. Full text of the original (English or Russian) inserted into the resulting file, after which gradually, to the extent possible is translated in separate lines.</ol>
+<li>To make translation more easy, some translators do the following: they load complete content of the file they have chosen into an online translating service, translate the text into the target language, and then store the result into the final file. After that, translator processes the file line by line, referring to the original. This technique dramatically decreases translation time.
+<li>There is an alternative technique of partial translation. One inserts the original file content into the final file and then translates the latter gradually, from line to line, starting from translation of most known (or easy) text.</ol>
 
-<li>The first line of the language file header with the code designation, signature and the name of the language, you need to be careful not to damage. The symbol ";" at the beginning is mandatory. When you create a new translation if no special knowledge about the codes and symbols of languages it is recommended to contact the developers.
-<li>The order of the rows in the file does not change!
-<li>Duplicates the leave as is (if exists - so it should be).
-<li>The notation %s, %n, {0}, {1} don't touch - that substitution of other text or numbers.
-<li>A line of the form <reserved>, <?> or <-> - reserved, leave as is.
-<li>The translation can be tested at any stage. The data from the file loaded when you switch language in the program, so in running the program periodically to change the selected language and see the changes in the interface.
-<li>If the translation there are words or phrases, the context of use unclear - we recommend that you contact the developers for clarification.
+<li>The first line in a language file is the header that contains language code, signature and name. Please be careful and avoid corruption of the header. The header line must start with the character &quot;;&quot;. If you have started new translation, but you are in doubt or you do not know which language code and symbols you should specify, please contact the developers.
+<li>You must never change lines order in the files!
+<li>You must remain duplicated lines existing (if you found such lines, be sure -- this is by design).
+<li>You must not change <i>placeholders</i> like %s, %n, {0}, {1} -- they are places for missing text or numbers.
+<li>You must remain lines like &lt;reserved&gt;, &lt;?&gt; or &lt;-&gt; existing -- such lines are reserved.
+<li>You may check your translation at any time. The program loads a language file every time you change language in the program. Therefore, you may update your file while GEDKeeper is running, and change program language to view your modifications in GEDKeeper on the fly.
+<li>If you require to clear context of using of a word or phrase you are translating, please contact the developers.
 </ol></p>
 
-<p>Each participant of the translation into other languages will be inscribed 
-in the application's history as the author's translations. Enter your name in the annals of the program :)</p>
+<p>Every translation author gets a place in the program history as the translation&#39;s author. Enter your name in the chronicle of the program 😄</p>
 
 </body>
 </html>
