@@ -1204,16 +1204,18 @@ namespace GKCore
 
         public void DoUndo()
         {
-            this.fUndoman.Undo();
-            this.fViewer.RefreshLists(false);
-            this.fHost.UpdateControls(false);
+            fUndoman.Undo();
+
+            if (fViewer != null) fViewer.RefreshLists(false);
+            if (fHost != null) fHost.UpdateControls(false);
         }
 
         public void DoRedo()
         {
-            this.fUndoman.Redo();
-            this.fViewer.RefreshLists(false);
-            this.fHost.UpdateControls(false);
+            fUndoman.Redo();
+
+            if (fViewer != null) fViewer.RefreshLists(false);
+            if (fHost != null) fHost.UpdateControls(false);
         }
 
         public void DoCommit()

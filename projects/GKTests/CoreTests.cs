@@ -117,6 +117,11 @@ namespace GKTests.GKCore
 
             //Graph patrGraph = fContext.GetPatriarchsGraph(1, true, false);
             //Assert.IsNotNull(patrGraph);
+
+            fContext.DoUndo();
+            fContext.DoRedo();
+            fContext.DoCommit();
+            fContext.DoRollback();
         }
 
         [Test]

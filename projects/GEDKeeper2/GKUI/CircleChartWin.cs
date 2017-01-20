@@ -55,6 +55,7 @@ namespace GKUI
                 this.fCircleChart = new DescendantsCircle(this.fBaseWin);
             }
 
+            this.fCircleChart.Name = "fCircleChart";
             this.fCircleChart.Dock = DockStyle.Fill;
             this.fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             this.fCircleChart.RootChanged += CircleChartWin_RootChanged;

@@ -147,19 +147,19 @@ namespace GKTests.UITests
             // Stage 27: call to TreeChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 27.0");
-            ClickToolStripMenuItem("miTreeAncestors", fMainWin);
+            ClickToolStripButton("tbTreeAncestors", fMainWin);
             TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckAncestors, "Stage 27", "I3");
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 28.0");
-            ClickToolStripMenuItem("miTreeDescendants", fMainWin);
+            ClickToolStripButton("tbTreeDescendants", fMainWin);
             TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckDescendants, "Stage 28", "I1");
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
-            ClickToolStripMenuItem("miTreeBoth", fMainWin);
+            ClickToolStripButton("tbTreeBoth", fMainWin);
             TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckBoth, "Stage 29", "I1");
 
 
@@ -209,6 +209,14 @@ namespace GKTests.UITests
 
             // Stage 52: exit
             ClickToolStripMenuItem("miExit", fMainWin);
+
+
+            // Other
+            ModalFormHandler = MessageBox_OkHandler;
+            GKUtils.ShowMessage("test msg");
+
+            ModalFormHandler = MessageBox_OkHandler;
+            GKUtils.ShowError("test error msg");
         }
 
         private void BaseWin_Tests(BaseWin baseWin, string stage)
@@ -235,9 +243,9 @@ namespace GKTests.UITests
                 listMan.AddCondition(PersonColumnType.pctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
 
                 ModalFormHandler = CommonFilterDlg_btnAccept_Handler;
-                ClickToolStripMenuItem("miFilter", fMainWin);
+                ClickToolStripButton("tbFilter", fMainWin);
                 ModalFormHandler = CommonFilterDlg_btnReset_Handler;
-                ClickToolStripMenuItem("miFilter", fMainWin);
+                ClickToolStripButton("tbFilter", fMainWin);
             }
 
             Assert.IsTrue(baseWin.IsUnknown(), stage + ".2");
@@ -294,22 +302,39 @@ namespace GKTests.UITests
 
         private void MainWin_Test()
         {
-            fMainWin.AddMRU("test.ged");
-
-            Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
-
             ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
             fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
             DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
 
+            Assert.Throws(typeof(ArgumentNullException), () => { MainWin.GetPluginAttributes(null); });
+
+            fMainWin.AddMRU("test.ged");
+
+            Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
+
+            // IHost tests
+            IHost host = fMainWin;
+
+            IBaseWindow baseWin = host.FindBase("Unknown");
+            Assert.IsNotNull(baseWin);
+
             #if !__MonoCS__
-            Assert.IsFalse(fMainWin.IsUnix());
+            Assert.IsFalse(host.IsUnix());
             #else
-            Assert.IsTrue(fMainWin.IsUnix());
+            Assert.IsTrue(host.IsUnix());
             #endif
 
-            // TODO: implement this!
-            //CreateLangMan()
+            ILangMan langMan = host.CreateLangMan(null);
+            Assert.IsNull(langMan);
+
+            host.WidgetShow(null);
+            host.WidgetClose(null);
+            Assert.IsFalse(host.IsWidgetActive(null));
+            host.EnableWindow(null, false);
+
+
+            //var formTester = new FormTester(form.Name);
+            //formTester.FireEvent("PanelClick", new StatusBarPanelClickEventArgs(fMainWin.sta));
 
             ClickToolStripButton("tbNext", fMainWin);
             ClickToolStripButton("tbPrev", fMainWin);
@@ -639,7 +664,26 @@ namespace GKTests.UITests
                                 "ado_query_close(qr); ado_dump(con);  ado_close(con);");
             ClickToolStripButton("tbRun", form);
 
+            ModalFormHandler = OpenFile_Cancel_Handler;
+            txtScriptText.Enter("file = gk_select_file();");
+            ClickToolStripButton("tbRun", form);
+
+            ModalFormHandler = RecordSelectDlg_Cancel_Handler;
+            txtScriptText.Enter("R = gt_select_record(rtIndividual);");
+            ClickToolStripButton("tbRun", form);
+
             form.Close();
+        }
+
+        private void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            var openDlg = new OpenFileDialogTester(hWnd);
+            openDlg.ClickCancel();
+        }
+
+        public void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnCancel", form);
         }
 
         #endregion
@@ -1452,6 +1496,17 @@ namespace GKTests.UITests
             Assert.IsFalse(ccWin.NavCanForward());
             ccWin.NavNext();
 
+            var ctl = new ControlTester("fCircleChart", frm);
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Add));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Subtract));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Left));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Back));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Right));
+
+            ctl.FireEvent("DoubleClick", new EventArgs());
+            ctl.Properties.Refresh();
+            ctl.FireEvent("DoubleClick", new EventArgs());
+
             // empty methods
             Assert.IsNull(ccWin.FindAll(""));
             ccWin.QuickFind();
@@ -1514,6 +1569,12 @@ namespace GKTests.UITests
             ClickToolStripMenuItem("miCertaintyIndex", tcWin);
             ClickToolStripMenuItem("miTraceKinships", tcWin);
             ClickToolStripMenuItem("miTraceSelected", tcWin);
+
+            var ctl = new ControlTester("fTreeBox", frm);
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Add));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Subtract));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Back));
+            ctl.FireEvent("DoubleClick", new EventArgs());
 
             // handlers tests
             //ClickToolStripMenuItem("miEdit", tcWin);
