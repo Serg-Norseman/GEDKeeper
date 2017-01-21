@@ -41,42 +41,35 @@ namespace GKUI.Controls
         private readonly HyperView fView2;
 
         private IBaseWindow fBase;
-        private GEDCOMTree fTree;
         private GEDCOMRecordType fMergeMode;
         private bool fBookmark;
 
         public IBaseWindow Base
         {
-            get	{
-                return this.fBase;
-            }
-            set
-            {
-                this.fBase = value;
-                this.fTree = (value != null) ? this.fBase.Tree : null;
-            }
+            get { return fBase; }
+            set { fBase = value; }
         }
 
         public bool Bookmark
         {
-            get { return this.fBookmark; }
-            set { this.fBookmark = value; }
+            get { return fBookmark; }
+            set { fBookmark = value; }
         }
 
         public GEDCOMRecordType MergeMode
         {
-            get { return this.fMergeMode; }
-            set { this.fMergeMode = value; }
+            get { return fMergeMode; }
+            set { fMergeMode = value; }
         }
 
         public GEDCOMRecord Rec1
         {
-            get { return this.fRec1; }
+            get { return fRec1; }
         }
 
         public GEDCOMRecord Rec2
         {
-            get { return this.fRec2; }
+            get { return fRec2; }
         }
 
         public GKMergeControl()
@@ -115,66 +108,38 @@ namespace GKUI.Controls
 
         protected override void OnResize(EventArgs e)
         {
-            this.AdjustControls();
-
+            AdjustControls();
             base.OnResize(e);
         }
 
         private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord sourceRec)
         {
             if (targetRec == null)
-            {
                 throw new ArgumentNullException("targetRec");
-            }
 
             if (sourceRec == null)
-            {
                 throw new ArgumentNullException("sourceRec");
-            }
 
             XRefReplacer repMap = new XRefReplacer();
             try
             {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
-                int num = this.fTree.RecordsCount;
+                GEDCOMTree tree = fBase.Tree;
+                int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    this.fTree[i].ReplaceXRefs(repMap);
+                    tree[i].ReplaceXRefs(repMap);
                 }
 
-                switch (targetRec.RecordType)
-                {
-                    case GEDCOMRecordType.rtIndividual:
-                        GEDCOMIndividualRecord indRec = (GEDCOMIndividualRecord)sourceRec;
-                        indRec.MoveTo(targetRec, false);
-                        this.Base.RecordDelete(indRec, false);
-                        if (this.fBookmark) {
-                            ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
-                        }
-                        break;
+                sourceRec.MoveTo(targetRec, false);
+                fBase.RecordDelete(sourceRec, false);
 
-                    case GEDCOMRecordType.rtNote:
-                        GEDCOMNoteRecord noteRec = (GEDCOMNoteRecord)sourceRec;
-                        noteRec.MoveTo(targetRec, false);
-                        this.Base.RecordDelete(noteRec, false);
-                        break;
-
-                    case GEDCOMRecordType.rtFamily:
-                        GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)sourceRec;
-                        famRec.MoveTo(targetRec, false);
-                        this.Base.RecordDelete(famRec, false);
-                        break;
-
-                    case GEDCOMRecordType.rtSource:
-                        GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)sourceRec;
-                        srcRec.MoveTo(targetRec, false);
-                        this.Base.RecordDelete(srcRec, false);
-                        break;
+                if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && fBookmark) {
+                    ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
                 }
 
-                this.Base.ChangeRecord(targetRec);
-
-                this.Base.RefreshLists(false);
+                fBase.ChangeRecord(targetRec);
+                fBase.RefreshLists(false);
             }
             finally
             {
@@ -184,132 +149,66 @@ namespace GKUI.Controls
 
         private void UpdateMergeButtons()
         {
-            this.btnMergeToLeft.Enabled = (this.fRec1 != null && this.fRec2 != null);
-            this.btnMergeToRight.Enabled = (this.fRec1 != null && this.fRec2 != null);
+            btnMergeToLeft.Enabled = (fRec1 != null && fRec2 != null);
+            btnMergeToRight.Enabled = (fRec1 != null && fRec2 != null);
         }
 
         public void SetRec1(GEDCOMRecord value)
         {
-            this.fRec1 = value;
-            this.UpdateMergeButtons();
+            fRec1 = value;
+            UpdateMergeButtons();
 
-            if (this.fRec1 == null)
-            {
-                this.Lab1.Text = @"XXX1";
-                this.Edit1.Text = "";
-                this.fView1.Lines.Clear();
-            }
-            else
-            {
-                this.Lab1.Text = this.fRec1.XRef;
-
-                switch (this.fMergeMode)
-                {
-                    case GEDCOMRecordType.rtIndividual:
-                        {
-                            GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec1;
-                            this.Edit1.Text = GKUtils.GetNameString(iRec, true, false);
-                            GKUtils.ShowPersonInfo(iRec, this.fView1.Lines, this.fBase.ShieldState);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtNote:
-                        {
-                            GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec1;
-                            this.Edit1.Text = nRec.Note[0];
-                            GKUtils.ShowNoteInfo(nRec, this.fView1.Lines);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtFamily:
-                        {
-                            GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec1;
-                            this.Edit1.Text = GKUtils.GetFamilyString(famRec);
-                            GKUtils.ShowFamilyInfo(famRec, this.fView1.Lines, this.fBase.ShieldState);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtSource:
-                        {
-                            GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec1;
-                            this.Edit1.Text = srcRec.FiledByEntry;
-                            GKUtils.ShowSourceInfo(srcRec, this.fView1.Lines);
-                            break;
-                        }
-                }
+            if (fRec1 == null) {
+                Lab1.Text = @"XXX1";
+                Edit1.Text = "";
+                fView1.Lines.Clear();
+            } else {
+                Lab1.Text = fRec1.XRef;
+                Edit1.Text = GKUtils.GetRecordName(fRec1, false);
+                fView1.Lines.Assign(fBase.GetRecordContent(fRec1));
             }
         }
 
         public void SetRec2(GEDCOMRecord value)
         {
-            this.fRec2 = value;
-            this.UpdateMergeButtons();
+            fRec2 = value;
+            UpdateMergeButtons();
 
-            if (this.fRec2 == null)
-            {
-                this.Lab2.Text = @"XXX2";
-                this.Edit2.Text = "";
-                this.fView2.Lines.Clear();
-            }
-            else
-            {
-                this.Lab2.Text = this.fRec2.XRef;
-
-                switch (this.fMergeMode)
-                {
-                    case GEDCOMRecordType.rtIndividual:
-                        {
-                            GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec2;
-                            this.Edit2.Text = GKUtils.GetNameString(iRec, true, false);
-                            GKUtils.ShowPersonInfo(iRec, this.fView2.Lines, this.fBase.ShieldState);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtNote:
-                        {
-                            GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec2;
-                            this.Edit2.Text = nRec.Note[0];
-                            GKUtils.ShowNoteInfo(nRec, this.fView2.Lines);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtFamily:
-                        {
-                            GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec2;
-                            this.Edit2.Text = GKUtils.GetFamilyString(famRec);
-                            GKUtils.ShowFamilyInfo(famRec, this.fView2.Lines, this.fBase.ShieldState);
-                            break;
-                        }
-                    case GEDCOMRecordType.rtSource:
-                        {
-                            GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec2;
-                            this.Edit2.Text = srcRec.FiledByEntry;
-                            GKUtils.ShowSourceInfo(srcRec, this.fView2.Lines);
-                            break;
-                        }
-                }
+            if (fRec2 == null) {
+                Lab2.Text = @"XXX2";
+                Edit2.Text = "";
+                fView2.Lines.Clear();
+            } else {
+                Lab2.Text = fRec2.XRef;
+                Edit2.Text = GKUtils.GetRecordName(fRec2, false);
+                fView2.Lines.Assign(fBase.GetRecordContent(fRec2));
             }
         }
 
-        void btnRec1Select_Click(object sender, EventArgs e)
+        private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = this.Base.SelectRecord(this.fMergeMode, null);
-            if (irec != null) this.SetRec1(irec);
+            GEDCOMRecord irec = fBase.SelectRecord(fMergeMode, null);
+            if (irec != null) SetRec1(irec);
         }
 
-        void btnRec2Select_Click(object sender, EventArgs e)
+        private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = this.Base.SelectRecord(this.fMergeMode, null);
-            if (irec != null) this.SetRec2(irec);
+            GEDCOMRecord irec = fBase.SelectRecord(fMergeMode, null);
+            if (irec != null) SetRec2(irec);
         }
 
-        void btnMergeToLeft_Click(object sender, EventArgs e)
+        private void btnMergeToLeft_Click(object sender, EventArgs e)
         {
-            this.RecordMerge(this.fRec1, this.fRec2);
-            this.SetRec1(this.fRec1);
-            this.SetRec2(null);
+            RecordMerge(fRec1, fRec2);
+            SetRec1(fRec1);
+            SetRec2(null);
         }
 
-        void btnMergeToRight_Click(object sender, EventArgs e)
+        private void btnMergeToRight_Click(object sender, EventArgs e)
         {
-            this.RecordMerge(this.fRec2, this.fRec1);
-            this.SetRec1(null);
-            this.SetRec2(this.fRec2);
+            RecordMerge(fRec2, fRec1);
+            SetRec1(null);
+            SetRec2(fRec2);
         }
     }
 }

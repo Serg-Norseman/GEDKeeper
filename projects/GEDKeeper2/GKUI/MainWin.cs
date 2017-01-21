@@ -498,6 +498,26 @@ namespace GKUI
             return form.ShowDialog();
         }
 
+        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+                throw new ArgumentNullException("searchValue");
+
+            if (pointsList == null)
+                throw new ArgumentNullException("pointsList");
+
+            try
+            {
+                IEnumerable<GeoPoint> geoPoints = Geocoder.Geocode(searchValue, 1);
+                foreach (GeoPoint pt in geoPoints)
+                {
+                    pointsList.Add(pt);
+                }
+            } catch (Exception ex) {
+                LogWrite("MainWin.RequestGeoCoords(): " + ex.Message);
+            }
+        }
+
         #endregion
 
         #region MRU functions
@@ -614,7 +634,7 @@ namespace GKUI
                 this.miFilter.Enabled = (workWin != null && workWin.AllowFilter());
                 this.tbFilter.Enabled = this.miFilter.Enabled;
 
-                this.miSearch.Enabled = (workWin != null && workWin.AllowQuickFind());
+                this.miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
 
                 this.tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
                 this.tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
@@ -755,19 +775,17 @@ namespace GKUI
         private void miUndoClick(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile();
-            if (curBase != null)
-            {
-                curBase.Context.DoUndo();
-            }
+            if (curBase == null) return;
+
+            curBase.Context.DoUndo();
         }
 
         private void miRedoClick(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile();
-            if (curBase != null)
-            {
-                curBase.Context.DoRedo();
-            }
+            if (curBase == null) return;
+
+            curBase.Context.DoRedo();
         }
 
         private void miExportToFamilyBookClick(object sender, EventArgs e)
@@ -944,7 +962,7 @@ namespace GKUI
             IWorkWindow win = this.GetWorkWindow();
             if (win == null) return;
 
-            win.QuickFind();
+            win.QuickSearch();
         }
 
         private void miFilterClick(object sender, EventArgs e)
@@ -1462,7 +1480,7 @@ namespace GKUI
 
         public void ShowWarning(string msg)
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            GKUtils.ShowWarning(msg);
         }
 
         public ILangMan CreateLangMan(object sender)

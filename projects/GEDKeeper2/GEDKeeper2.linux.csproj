@@ -217,9 +217,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
-    <Compile Include="GKUI\Controls\SearchPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -354,6 +351,9 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\ResearchEditDlg.Designer.cs">
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\QuickSearchDlg.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Dialogs\SexCheckDlg.cs">
       <SubType>Form</SubType>

@@ -40,9 +40,9 @@ namespace GKTests.Mocks
         public bool NavCanForward() { return false; }
         public void NavNext() {}
         public void NavPrev() {}
-        public bool AllowQuickFind() { return false; }
+        public bool AllowQuickSearch() { return false; }
         public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
-        public void QuickFind() {}
+        public void QuickSearch() {}
         public void SelectByRec(GEDCOMIndividualRecord iRec) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}

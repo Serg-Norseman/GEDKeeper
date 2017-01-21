@@ -221,7 +221,7 @@ namespace GKUI
 
                 case Keys.F:
                     if (e.Control) {
-                        this.QuickFind();
+                        this.QuickSearch();
                     }
                     break;
             }
@@ -731,7 +731,7 @@ namespace GKUI
             return this.fTreeBox.NavCanForward();
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return true;
         }
@@ -749,15 +749,15 @@ namespace GKUI
             this.fTreeBox.SelectByRec(iRec);
         }
 
-        public void QuickFind()
+        public void QuickSearch()
         {
-            SearchPanel panel = new SearchPanel(this);
+            QuickSearchDlg qsDlg = new QuickSearchDlg(this);
             
             Rectangle client = this.ClientRectangle;
-            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
-            panel.Location = pt;
+            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            qsDlg.Location = pt;
 
-            panel.Show();
+            qsDlg.Show();
         }
 
         public bool AllowFilter()

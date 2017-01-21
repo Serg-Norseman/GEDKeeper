@@ -37,9 +37,9 @@ namespace GKCore.Interfaces
         void NavNext();
         void NavPrev();
 
-        bool AllowQuickFind();
+        bool AllowQuickSearch();
         IList<ISearchResult> FindAll(string searchPattern);
-        void QuickFind();
+        void QuickSearch();
         void SelectByRec(GEDCOMIndividualRecord iRec);
 
         bool AllowFilter();

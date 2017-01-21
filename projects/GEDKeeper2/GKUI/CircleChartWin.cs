@@ -159,7 +159,7 @@ namespace GKUI
             this.fCircleChart.NavPrev();
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return false;
         }
@@ -169,7 +169,7 @@ namespace GKUI
             return null;
         }
 
-        public void QuickFind()
+        public void QuickSearch()
         {
         }
 

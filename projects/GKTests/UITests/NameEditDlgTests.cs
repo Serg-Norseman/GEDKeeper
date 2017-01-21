@@ -46,6 +46,7 @@ namespace GKTests.UITests
             fNameEntry = new NameEntry();
 
             fDialog = new NameEditDlg(fBase);
+            fDialog.IName = null;
             fDialog.IName = fNameEntry;
             fDialog.Show();
         }
@@ -60,6 +61,7 @@ namespace GKTests.UITests
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fNameEntry, fDialog.IName);
 
             /*var cmbRelation = new ComboBoxTester("cmbRelation");
             cmbRelation.Enter("sample text");

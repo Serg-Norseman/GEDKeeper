@@ -197,6 +197,9 @@ namespace GKCore
                     case GEDCOMRecordType.rtFamily:
                         st = GetFamilyString((GEDCOMFamilyRecord)record);
                         break;
+                    case GEDCOMRecordType.rtNote:
+                        st = ((GEDCOMNoteRecord)record).Note[0]; // TODO: bad solution?!
+                        break;
                     case GEDCOMRecordType.rtMultimedia:
                         st = ((GEDCOMMultimediaRecord)record).FileReferences[0].Title;
                         break;
