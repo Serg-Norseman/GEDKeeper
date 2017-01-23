@@ -64,6 +64,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>libs\mswin\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -75,6 +78,7 @@
     <Compile Include="Controls\SlideList.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Database\GKDatabase.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,10 +108,15 @@
       <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Database" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\SlideList.resx">
       <DependentUpon>SlideList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

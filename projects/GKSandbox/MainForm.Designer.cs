@@ -28,12 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.SuspendLayout();
             // 
             // MainForm
             // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "GKSandbox";
+            this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "MainForm";
+            this.Text = "GKSandbox";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormFormClosed);
+            this.ResumeLayout(false);
         }
     }
 }
