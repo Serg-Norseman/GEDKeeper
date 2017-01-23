@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+
 using GKCommon;
 using GKUI.Charts;
 using iTextSharp.text;
@@ -27,6 +28,9 @@ using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
+    using itFont = iTextSharp.text.Font;
+    using sdFont = System.Drawing.Font;
+
     /// <summary>
     /// 
     /// </summary>
@@ -76,14 +80,37 @@ namespace GKCore.Export
             
         }
 
+        private BaseFont GetBaseFont(sdFont font)
+        {
+            string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\"+font.FontFamily.Name+".ttf");
+            var baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            return baseFont;
+        }
+
+        private void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
+        {
+            baseFont = GetBaseFont(font);
+            fontSize = font.Height * fZoomFactor; // TODO: .Size or .Height? what is units?!
+        }
+
         public override int GetTextHeight(string text, System.Drawing.Font font)
         {
-            return 0;
+            BaseFont baseFont;
+            float fontSize;
+            GetFontInfo(font, out baseFont, out fontSize);
+
+            float height = baseFont.GetAscentPoint(text, fontSize) - baseFont.GetDescentPoint(text, fontSize);
+            return (int)(height);
         }
 
         public override int GetTextWidth(string text, System.Drawing.Font font)
         {
-            return 0;
+            BaseFont baseFont;
+            float fontSize;
+            GetFontInfo(font, out baseFont, out fontSize);
+
+            float width = baseFont.GetWidthPoint(text, fontSize);
+            return (int)(width);
         }
 
         public override void DrawString(string text, System.Drawing.Font font, Brush brush, int x, int y)
@@ -92,9 +119,15 @@ namespace GKCore.Export
             SetFillColor(color);
 
             x = CheckCoord(x, false);
-            y = CheckCoord(y, true) /* - textHeight! */;
+            y = CheckCoord(y, true);
 
             try {
+                BaseFont baseFont;
+                float fontSize;
+                GetFontInfo(font, out baseFont, out fontSize);
+
+                fCanvas.SetFontAndSize(baseFont, fontSize);
+
                 fCanvas.BeginText();
                 fCanvas.SetTextMatrix(x, y);
                 fCanvas.ShowText(text);

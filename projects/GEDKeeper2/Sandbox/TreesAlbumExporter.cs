@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -31,26 +30,25 @@ using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
+    using itFont = iTextSharp.text.Font;
+    using itRectangle = iTextSharp.text.Rectangle;
+
     public sealed class TreesAlbumExporter : PDFExporter
     {
         private ShieldState fShieldState;
         private StringList fPatList;
 
-        private iTextSharp.text.Font fTitleFont;
-        //private Font fChapFont;
-        private iTextSharp.text.Font fPersonFont;
-        //private Font fLinkFont;
-        private iTextSharp.text.Font fTextFont;
-        //private Font fSupText;
-
-        public ShieldState ShieldState
-        {
-            get { return fShieldState; }
-            set { fShieldState = value; }
-        }
+        private itFont fTitleFont;
+        private itFont fChapFont;
+        private itFont fSubchapFont;
+        private itFont fLinkFont;
+        private itFont fTextFont;
+        private itFont fBoldFont;
+        private itFont fSymFont;
 
         public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin)
         {
+            fShieldState = fBase.ShieldState;
             fPatList = new StringList();
         }
 
@@ -68,48 +66,43 @@ namespace GKCore.Export
                     fDocument.Open();
 
                     BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                    fTitleFont = new iTextSharp.text.Font(baseFont, 20f, iTextSharp.text.Font.BOLD);
-                    //fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
-                    fPersonFont = new iTextSharp.text.Font(baseFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                    //fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
-                    fTextFont = new iTextSharp.text.Font(baseFont, 8f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
-                    //fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
+                    fTitleFont = new itFont(baseFont, 30f, itFont.BOLD);
+                    fChapFont = new itFont(baseFont, 16f, itFont.BOLD, BaseColor.BLACK);
+                    fSubchapFont = new itFont(baseFont, 14f, itFont.BOLD, BaseColor.BLACK);
+                    fLinkFont = new itFont(baseFont, 8f, itFont.UNDERLINE, BaseColor.BLUE);
+                    fTextFont = new itFont(baseFont, 8f, itFont.NORMAL, BaseColor.BLACK);
+                    fBoldFont = new itFont(baseFont, 8f, itFont.BOLD, BaseColor.BLACK);
+                    fSymFont = new itFont(baseFont, 12f, itFont.BOLD, BaseColor.BLACK);
 
-                    fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
+                    float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
+                    fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
+                    fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER });
+                    fDocument.NewPage();
 
                     PreparePatriarchs();
 
-                    iTextSharp.text.Rectangle pageSize = fDocument.PageSize;
-                    ExtRect pageRect = ExtRect.CreateBounds(0, 0, (int)pageSize.Width, (int)pageSize.Height);
-                    ExtRect clientRect = ExtRect.CreateBounds(fMargins.Left, fMargins.Top,
-                                                              (int)pageSize.Width - fMargins.Left - fMargins.Right,
-                                                              (int)pageSize.Height - fMargins.Top - fMargins.Bottom);
+                    var itPS = fDocument.PageSize;
+                    var pageSize = new System.Drawing.Size((int)itPS.Width, (int)itPS.Height);
 
                     var renderer = new TreeChartPDFRenderer(true);
                     renderer.SetTarget(fPdfWriter.DirectContent);
-                    PdfContentByte cb = fPdfWriter.DirectContent;
 
                     var treeBox = new TreeChartBox(renderer);
                     treeBox.Base = fBase;
                     treeBox.Options = MainWin.Instance.Options.ChartOptions;
-                    treeBox.DepthLimit = 2;
-                    treeBox.ShieldState = fBase.ShieldState;
-                    treeBox.Height = clientRect.GetHeight();
-                    treeBox.Width = clientRect.GetWidth();
+                    treeBox.DepthLimit = 3;
+                    treeBox.ShieldState = fShieldState;
+                    treeBox.Height = pageSize.Height;
+                    treeBox.Width = pageSize.Width;
 
                     int num = fPatList.Count;
                     for (int i = 0; i < num; i++) {
                         string iName = fPatList[i];
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
-                        fDocument.Add(new Paragraph(iName, fTextFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
 
-                        cb.SetFontAndSize(baseFont, 6);
-
-                        treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, true);
-
-                        renderer.SetSizes(new Size(pageRect.GetWidth(), pageRect.GetHeight()), treeBox.ImageSize);
-
-                        treeBox.RenderStatic();
+                        treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, false);
+                        renderer.SetSizes(pageSize, treeBox.ImageSize);
+                        treeBox.RenderStatic(true);
 
                         fDocument.NewPage();
                     }

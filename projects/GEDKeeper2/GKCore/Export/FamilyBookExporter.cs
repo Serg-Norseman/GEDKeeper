@@ -31,6 +31,8 @@ using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
+    using itFont = iTextSharp.text.Font;
+
     /// <summary>
     /// 
     /// CodeTransformation: need
@@ -78,13 +80,13 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
         };
 
-        private Font fTitleFont;
-        private Font fChapFont;
-        private Font fSubchapFont;
-        private Font fLinkFont;
-        private Font fTextFont;
-        private Font fBoldFont;
-        private Font fSymFont;
+        private itFont fTitleFont;
+        private itFont fChapFont;
+        private itFont fSubchapFont;
+        private itFont fLinkFont;
+        private itFont fTextFont;
+        private itFont fBoldFont;
+        private itFont fSymFont;
 
         private StringList mainIndex;
         private StringList byIndex, dyIndex, bpIndex, dpIndex;

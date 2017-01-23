@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -76,7 +75,8 @@ namespace GKUI.Charts
         public enum DrawMode
         {
             dmInteractive,
-            dmStatic
+            dmStatic,
+            dmStaticCentered
         }
 
         public enum MouseAction
@@ -453,7 +453,7 @@ namespace GKUI.Charts
             }
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool center)
+        public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool rootCenter)
         {
             if (iRec == null) return;
             
@@ -492,7 +492,7 @@ namespace GKUI.Charts
 
                 RecalcChart();
 
-                if (center) CenterPerson(fRoot);
+                if (rootCenter) CenterPerson(fRoot);
                 
                 NavAdd(iRec);
                 DoRootChanged(fRoot);
@@ -1182,6 +1182,18 @@ namespace GKUI.Charts
 
                 fVisibleArea = GetSourceImageRegion();
             } else {
+                if (drawMode == DrawMode.dmStaticCentered) {
+                    Size sz = ClientSize;
+
+                    if (fImageWidth < sz.Width) {
+                        fSPX += (sz.Width - fImageWidth) / 2;
+                    }
+
+                    if (fImageHeight < sz.Height) {
+                        fSPY += (sz.Height - fImageHeight) / 2;
+                    }
+                }
+
                 fVisibleArea = new Rectangle(0, 0, fImageWidth, fImageHeight);
             }
 
@@ -2149,10 +2161,11 @@ namespace GKUI.Charts
             return image;
         }
 
-        public void RenderStatic()
+        public void RenderStatic(bool centered = false)
         {
             Predef();
-            InternalDraw(DrawMode.dmStatic);
+            DrawMode drawMode = (!centered) ? DrawMode.dmStatic : DrawMode.dmStaticCentered; 
+            InternalDraw(drawMode);
         }
 
         #endregion
