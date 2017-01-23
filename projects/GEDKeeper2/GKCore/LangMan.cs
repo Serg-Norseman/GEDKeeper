@@ -933,7 +933,7 @@ namespace GKCore
             /* 116 */ "Husband",
             /* 117 */ "Wife",
             /* 118 */ "Status",
-            /* 119 */ "Childs",
+            /* 119 */ "Children",
             /* 120 */ "Are you sure you want to detach link to husband?",
             /* 121 */ "Are you sure you want to detach link to wife?",
             /* 122 */ "Are you sure you want to detach link to child?",

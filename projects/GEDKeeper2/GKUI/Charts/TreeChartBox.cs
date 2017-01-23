@@ -50,6 +50,8 @@ namespace GKUI.Charts
     /// </summary>
     public class TreeChartBox : CustomChart
     {
+        private const float HIGHLIGHTED_VAL = 0.1f;
+
         public const int DEF_MARGINS = 24;
         public const int DEF_SPOUSE_DISTANCE = 10;
         public const int DEF_BRANCH_DISTANCE = 40;
@@ -73,8 +75,8 @@ namespace GKUI.Charts
 
         public enum DrawMode
         {
-            dmScreen,
-            dmFile
+            dmInteractive,
+            dmStatic
         }
 
         public enum MouseAction
@@ -883,6 +885,26 @@ namespace GKUI.Charts
 
         #region Drawing routines
 
+        private void InitGraphics()
+        {
+            fLinePen = new Pen(Color.Black, 1f);
+            fDecorativeLinePen = new Pen(Color.Silver, 1f);
+            fSolidBlack = new SolidBrush(Color.Black);
+        }
+
+        private void DoneGraphics()
+        {
+            fLinePen.Dispose();
+            fDecorativeLinePen.Dispose();
+            fSolidBlack.Dispose();
+        }
+
+        private static ExtRect GetExpanderRect(ExtRect personRect)
+        {
+            ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
+            return expRt;
+        }
+
         private bool IsPersonVisible(ExtRect pnRect)
         {
             return fVisibleArea.IntersectsWith(pnRect.ToRectangle());
@@ -921,169 +943,72 @@ namespace GKUI.Charts
             if (fOptions.Decorative) {
                 if (sX == sX2) {
                     fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
-                } else {
-                    if (sY == sY2) {
-                        fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
-                    }
+                } else if (sY == sY2) {
+                    fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
                 }
             }
         }
 
-        private void InitGraphics()
+        private void DrawBorder(Pen xpen, ExtRect rt, bool dead, TreeChartPerson person)
         {
-            fLinePen = new Pen(Color.Black, 1f);
-            fDecorativeLinePen = new Pen(Color.Silver, 1f);
-            fSolidBlack = new SolidBrush(Color.Black);
-        }
+            Color bColor = person.GetFillColor(dead);
+            if (fHighlightedPerson == person) {
+                bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
+            }
 
-        private void DoneGraphics()
-        {
-            fLinePen.Dispose();
-            fDecorativeLinePen.Dispose();
-            fSolidBlack.Dispose();
-        }
-
-        private void DrawText(Graphics gfx, ExtRect rt, string s, int h, int line)
-        {
-            int stw = gfx.MeasureString(s, fDrawFont).ToSize().Width;
-            int rx = rt.Left + ((rt.Right - rt.Left + 1) - stw) / 2;
-            int ry = rt.Top + (10 + (h * line));
-            gfx.DrawString(s, fDrawFont, fSolidBlack, rx, ry);
-        }
-
-        private const float HIGHLIGHTED_VAL = 0.1f;
-
-        private void DrawBorder(Graphics gfx, Pen xpen, ExtRect rt, bool dead, TreeChartPerson person)
-        {
-            Rectangle rect = rt.ToRectangle();
-            Color bColor;
-            bool highlighted = (fHighlightedPerson == person);
-            
-            switch (person.Sex) {
-                case GEDCOMSex.svMale:
-                    {
-                        if (!dead) {
-                            if (person.IsDup) {
-                                bColor = Color.FromArgb(192, 192, 192);
-                            } else {
-                                bColor = person.Divorced ? fOptions.UnHusbandColor : fOptions.MaleColor;
-                            }
-                        } else {
-                            bColor = Color.Black;
-                        }
-                        
-                        if (highlighted) bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
-                        gfx.FillRectangle(new SolidBrush(bColor), rect.Left, rect.Top, rect.Width, rect.Height);
-                        gfx.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
-                        break;
-                    }
-
-                case GEDCOMSex.svFemale:
-                    {
-                        if (!dead) {
-                            if (person.IsDup) {
-                                bColor = Color.FromArgb(192, 192, 192);
-                            } else {
-                                bColor = person.Divorced ? fOptions.UnWifeColor : fOptions.FemaleColor;
-                            }
-                        } else {
-                            bColor = Color.Black;
-                        }
-
-                        if (highlighted) bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
-                        GraphicsPath path = SysUtils.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
-                        
-                        /*gfx.TranslateTransform(3, 3);
-					GKUtils.DrawPathWithFuzzyLine(path, gfx, Color.Black, 200, 20, 2);
-					gfx.ResetTransform();*/
-
-                        gfx.FillPath(new SolidBrush(bColor), path);
-                        gfx.DrawPath(xpen, path);
-                        break;
-                    }
-
-                default:
-                    {
-                        bColor = !dead ? fOptions.UnkSexColor : Color.Black;
-                        gfx.FillRectangle(new SolidBrush(bColor), rect.Left, rect.Top, rect.Width, rect.Height);
-                        gfx.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
-                        break;
-                    }
+            if (person.Sex == GEDCOMSex.svFemale) {
+                fRenderer.DrawRoundedRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), 6);
+            } else {
+                fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
             }
         }
 
-        private static ExtRect GetExpanderRect(ExtRect personRect)
-        {
-            ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
-            return expRt;
-        }
-
-        private void DrawPerson(Graphics gfx, int spx, int spy, TreeChartPerson person, DrawMode drawMode)
+        private void DrawPerson(TreeChartPerson person, DrawMode drawMode)
         {
             try {
-                ExtRect rt = person.Rect;
-                if (drawMode == DrawMode.dmScreen && !IsPersonVisible(rt))
+                ExtRect prt = person.Rect;
+                if (drawMode == DrawMode.dmInteractive && !IsPersonVisible(prt))
                     return;
 
-                rt.Offset(spx, spy);
-                int h = gfx.MeasureString("A", fDrawFont).ToSize().Height;
+                prt.Offset(fSPX, fSPY);
 
                 if (person.IsDead) {
-                    ExtRect dt = rt.GetOffset(-2, -2);
-                    DrawBorder(gfx, fLinePen, dt, true, person);
+                    ExtRect dt = prt.GetOffset(-2, -2);
+                    DrawBorder(null, dt, true, person);
                 }
 
                 Pen xpen = null;
                 try {
-                    if (drawMode == DrawMode.dmScreen && person.Selected) {
-                        const float penWidth = 2.0f;
-
-                        Color penColor;
-                        switch (person.Sex) {
-                            case GEDCOMSex.svMale:
-                                penColor = Color.Blue;
-                                break;
-
-                            case GEDCOMSex.svFemale:
-                                penColor = Color.Red;
-                                break;
-
-                            default:
-                                penColor = Color.Black;
-                                break;
-                        }
-                        xpen = new Pen(penColor, penWidth);
+                    if (drawMode == DrawMode.dmInteractive && person.Selected) {
+                        Color penColor = person.GetSelectedColor();
+                        xpen = new Pen(penColor, 2.0f);
                     } else {
-                        xpen = new Pen(Color.Black, 1f);
+                        xpen = new Pen(Color.Black, 1.0f);
                     }
 
-                    DrawBorder(gfx, xpen, rt, false, person);
+                    DrawBorder(xpen, prt, false, person);
                 } finally {
                     if (xpen != null)
                         xpen.Dispose();
                 }
-                
-                if (drawMode == DrawMode.dmScreen && person.CanExpand) {
-                    ExtRect expRt = GetExpanderRect(rt);
-                    gfx.DrawImage(fExpPic, expRt.Left, expRt.Top);
-                }
 
-                // draw CI only for existing individuals
-                if (fCertaintyIndex && person.Rec != null) {
-                    string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
-                    gfx.DrawString(cas, fDrawFont, fSolidBlack, rt.Left, rt.Bottom);
-                }
-
+                ExtRect brt = prt;
                 if (person.Portrait != null) {
-                    ExtRect portRt = person.PortraitArea.GetOffset(rt.Left, rt.Top);
-                    gfx.DrawImage(person.Portrait, portRt.ToRectangle());
+                    ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
+                    fRenderer.DrawImage(person.Portrait, portRt);
 
-                    rt.Left += person.PortraitWidth;
+                    prt.Left += person.PortraitWidth;
                 }
 
+                int h = fRenderer.GetTextHeight("A", fDrawFont);
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
-                    DrawText(gfx, rt, person.Lines[k], h, k);
+                    string line = person.Lines[k];
+
+                    int stw = fRenderer.GetTextWidth(line, fDrawFont);
+                    int rx = prt.Left + ((prt.Right - prt.Left + 1) - stw) / 2;
+                    int ry = prt.Top + (10 + (h * k));
+                    fRenderer.DrawString(line, fDrawFont, fSolidBlack, rx, ry);
                 }
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
@@ -1092,8 +1017,22 @@ namespace GKUI.Charts
                         if (!person.Signs.Contains(cps)) continue;
 
                         Bitmap pic = fSignsPic[(int)cps - 1];
-                        gfx.DrawImage(pic, rt.Right, rt.Top - 21 + i * pic.Height);
+                        fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height);
                         i++;
+                    }
+                }
+
+                // only interactive mode
+                if (drawMode == DrawMode.dmInteractive) {
+                    if (person.CanExpand) {
+                        ExtRect expRt = GetExpanderRect(brt);
+                        fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top);
+                    }
+
+                    // draw CI only for existing individuals
+                    if (fCertaintyIndex && person.Rec != null) {
+                        string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
+                        fRenderer.DrawString(cas, fDrawFont, fSolidBlack, brt.Left, brt.Bottom);
                     }
                 }
             } catch (Exception ex) {
@@ -1101,10 +1040,10 @@ namespace GKUI.Charts
             }
         }
 
-        private void DrawAncestors(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
+        private void DrawAncestors(TreeChartPerson person, DrawMode drawMode)
         {
-            Draw(gfx, person.Father, ChartKind.ckAncestors, drawMode);
-            Draw(gfx, person.Mother, ChartKind.ckAncestors, drawMode);
+            Draw(person.Father, ChartKind.ckAncestors, drawMode);
+            Draw(person.Mother, ChartKind.ckAncestors, drawMode);
             int crY = person.PtY - fLevelDistance / 2;
 
             if (person.Father != null) {
@@ -1122,11 +1061,11 @@ namespace GKUI.Charts
             }
         }
 
-        private void DrawDescendants(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
+        private void DrawDescendants(TreeChartPerson person, DrawMode drawMode)
         {
             int num = person.GetChildsCount();
             for (int i = 0; i < num; i++) {
-                Draw(gfx, person.GetChild(i), ChartKind.ckDescendants, drawMode);
+                Draw(person.GetChild(i), ChartKind.ckDescendants, drawMode);
             }
 
             int spbOfs = (person.Height - 10) / (person.GetSpousesCount() + 1);
@@ -1152,7 +1091,7 @@ namespace GKUI.Charts
 
             int num4 = person.GetSpousesCount();
             for (int i = 0; i < num4; i++) {
-                Draw(gfx, person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
+                Draw(person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
             }
 
             int crY = person.PtY + person.Height + fLevelDistance / 2;
@@ -1215,7 +1154,7 @@ namespace GKUI.Charts
             fSPX = 0;
             fSPY = 0;
 
-            if (drawMode == DrawMode.dmScreen) {
+            if (drawMode == DrawMode.dmInteractive) {
                 /*Rectangle viewPort = this.GetImageViewPort();
 				this.fSPX = -viewPort.Left;
 				this.fSPY = -viewPort.Top;*/
@@ -1246,32 +1185,32 @@ namespace GKUI.Charts
             #endif
 
             fRenderer.SetTarget(gfx);
-            Draw(gfx, fRoot, fKind, drawMode);
+            Draw(fRoot, fKind, drawMode);
 
             if (fScaleControl.Visible) fScaleControl.Draw(gfx);
             //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
         }
 
-        protected void Draw(Graphics gfx, TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
+        protected void Draw(TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
         {
             if (person == null) return;
 
             switch (fKind) {
                 case ChartKind.ckAncestors:
-                    DrawAncestors(gfx, person, drawMode);
+                    DrawAncestors(person, drawMode);
                     break;
 
                 case ChartKind.ckDescendants:
-                    DrawDescendants(gfx, person, drawMode);
+                    DrawDescendants(person, drawMode);
                     break;
 
                 case ChartKind.ckBoth:
-                    if (person == fRoot || dirKind == ChartKind.ckAncestors) DrawAncestors(gfx, person, drawMode);
-                    if (person == fRoot || dirKind == ChartKind.ckDescendants) DrawDescendants(gfx, person, drawMode);
+                    if (person == fRoot || dirKind == ChartKind.ckAncestors) DrawAncestors(person, drawMode);
+                    if (person == fRoot || dirKind == ChartKind.ckDescendants) DrawDescendants(person, drawMode);
                     break;
             }
 
-            DrawPerson(gfx, fSPX, fSPY, person, drawMode);
+            DrawPerson(person, drawMode);
         }
 
         #endregion
@@ -1784,7 +1723,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            InternalDraw(e.Graphics, DrawMode.dmScreen);
+            InternalDraw(e.Graphics, DrawMode.dmInteractive);
         }
 
         protected override void OnDoubleClick(EventArgs e)
@@ -2171,7 +2110,7 @@ namespace GKUI.Charts
                 {
                     using (Graphics gfx = Graphics.FromImage(pic)) {
                         Predef();
-                        InternalDraw(gfx, DrawMode.dmFile);
+                        InternalDraw(gfx, DrawMode.dmStatic);
                     }
 
                     pic.Save(fileName, imFmt);
@@ -2195,7 +2134,7 @@ namespace GKUI.Charts
 
             using (Graphics gfx = Graphics.FromImage(image)) {
                 Predef();
-                InternalDraw(gfx, DrawMode.dmFile);
+                InternalDraw(gfx, DrawMode.dmStatic);
             }
 
             return image;

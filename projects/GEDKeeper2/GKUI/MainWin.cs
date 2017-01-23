@@ -282,6 +282,16 @@ namespace GKUI
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12) {
+            #if __MonoCS__
+            this.ShowWarning(@"This function is not supported in Linux");
+            #else
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (TreesAlbumExporter fb = new TreesAlbumExporter(curBase)) {
+                fb.Generate(true);
+            }
+            #endif
             }
         }
 

@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -36,7 +35,7 @@ namespace GKCore.Export
     /// 
     /// CodeTransformation: need
     /// </summary>
-    public sealed class FamilyBookExporter : Exporter
+    public sealed class FamilyBookExporter : PDFExporter
     {
         private enum BookCatalog
         {
@@ -62,9 +61,9 @@ namespace GKCore.Export
 
             public CatalogProps(string sign, string title)
             {
-                this.Sign = sign;
-                this.Title = title;
-                this.Index = null;
+                Sign = sign;
+                Title = title;
+                Index = null;
             }
         }
 
@@ -78,11 +77,6 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Religion", LangMan.LS(LSID.LSID_Religion)),
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
         };
-
-        private Padding fMargins;
-        private Document fDocument;
-        private PdfWriter fPdfWriter;
-        private bool fAlbumPage;
 
         private Font fTitleFont;
         private Font fChapFont;
@@ -105,8 +99,8 @@ namespace GKCore.Export
 
         public FamilyBookExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            this.fMargins = new Padding(20);
-            this.fAlbumPage = true;
+            fMargins = new Padding(20);
+            fAlbumPage = true;
         }
 
         protected override void Dispose(bool disposing)
@@ -133,48 +127,11 @@ namespace GKCore.Export
             fDocument.Add(new Paragraph(chunk) { Alignment = alignment });
         }*/
 
-        public override void Generate(bool show)
-        {
-            bool success = false;
-            this.fPath = UIHelper.GetSaveFile("PDF files (*.pdf)|*.pdf");
-            if (string.IsNullOrEmpty(this.fPath)) return;
-
-            Rectangle pageSize = !this.fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
-
-            fDocument = new Document(pageSize, this.fMargins.Left, this.fMargins.Right, this.fMargins.Top, this.fMargins.Bottom);
-            try
-            {
-                try
-                {
-                    this.fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fPath, FileMode.Create));
-                    this.InternalGenerate();
-                    success = true;
-                }
-                finally
-                {
-                    fDocument.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                this.fBase.Host.LogWrite("FamilyBookExporter.Generate(): " + ex.Message);
-                this.fBase.Host.LogWrite("FamilyBookExporter.Generate(): " + ex.StackTrace);
-            }
-
-            #if !CI_MODE
-            if (!success) {
-                MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
-            } else {
-                if (show) this.ShowResult();
-            }
-            #endif
-        }
-
-        private void InternalGenerate()
+        protected override void InternalGenerate()
         {
             try
             {
-                this.PrepareData();
+                PrepareData();
 
                 fDocument.AddTitle("FamilyBook");
                 fDocument.AddSubject("FamilyBook");
@@ -224,7 +181,7 @@ namespace GKCore.Export
                 {
                     CatalogProps catProps = BookCatalogs[(int)cat];
                     
-                    if (!this.SkipEmptyCatalogs || catProps.Index.Count > 0) {
+                    if (!SkipEmptyCatalogs || catProps.Index.Count > 0) {
                         catNum++;
                         string title = "2." + catNum.ToString() + ". " + catProps.Title;
                         
@@ -263,7 +220,7 @@ namespace GKCore.Export
                         }
                     }
 
-                    this.ExposePerson(columnText, iRec, text, colWidth);
+                    ExposePerson(columnText, iRec, text, colWidth);
 
                     columnText.AddElement(new Paragraph(Chunk.NEWLINE));
                 }
@@ -276,7 +233,7 @@ namespace GKCore.Export
                 fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
                 //SimpleColumnText columnText;
-                if (!this.CatalogNewPages) {
+                if (!CatalogNewPages) {
                     columnText = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, 3, 10f);
                 }
 
@@ -284,19 +241,19 @@ namespace GKCore.Export
                 {
                     CatalogProps catProps = BookCatalogs[(int)cat];
                     
-                    if (!this.SkipEmptyCatalogs || catProps.Index.Count > 0) {
-                        if (this.CatalogNewPages) {
+                    if (!SkipEmptyCatalogs || catProps.Index.Count > 0) {
+                        if (CatalogNewPages) {
                             fDocument.NewPage();
                             columnText = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, 3, 10f);
                         }
 
-                        this.ExposeCatalog(fDocument, columnText, catProps);
+                        ExposeCatalog(fDocument, columnText, catProps);
                     }
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
+                fBase.Host.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
                 throw;
             }
         }
@@ -317,7 +274,7 @@ namespace GKCore.Export
             
             GEDCOMRecord rec;
 
-            var iEnum = this.fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var iEnum = fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
             while (iEnum.MoveNext(out rec))
             {
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
@@ -414,7 +371,7 @@ namespace GKCore.Export
             pg.KeepTogether = true;
             mct.AddElement(pg);
 
-            var bmp = this.fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
+            var bmp = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
             if (bmp != null)
             {
                 iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -454,7 +411,7 @@ namespace GKCore.Export
                 mct.AddElement(pg);
             }
 
-            if (this.IncludeEvents && iRec.Events.Count != 0)
+            if (IncludeEvents && iRec.Events.Count != 0)
             {
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++)
@@ -474,7 +431,7 @@ namespace GKCore.Export
                 }
             }
 
-            if (this.IncludeNotes && iRec.Notes.Count != 0)
+            if (IncludeNotes && iRec.Notes.Count != 0)
             {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++)
@@ -493,7 +450,7 @@ namespace GKCore.Export
             Chunk chunk = new Chunk(catProps.Title, fSubchapFont);
             chunk.SetLocalDestination(catProps.Sign);
             
-            if (this.CatalogNewPages) {
+            if (CatalogNewPages) {
                 document.Add(new Paragraph(chunk));
                 document.Add(new Paragraph(Chunk.NEWLINE));
             } else {
@@ -571,8 +528,8 @@ namespace GKCore.Export
 
         public PDFWriterEvents(BaseFont font, string footer)
         {
-            this.fFont = font;
-            this.fFooter = footer;
+            fFont = font;
+            fFooter = footer;
         }
 
         void IPdfPageEvent.OnOpenDocument(PdfWriter writer, Document document) { }
@@ -615,10 +572,10 @@ namespace GKCore.Export
 
         public SimpleColumnText(Document document, PdfContentByte content, int columnCount, float columnSpacing) : base(content)
         {
-            this.fDocument = document;
-            this.fColumns = new List<Rectangle>();
-            this.fCurrentColumn = 0;
-            this.CalculateColumnBoundries(columnCount, columnSpacing);
+            fDocument = document;
+            fColumns = new List<Rectangle>();
+            fCurrentColumn = 0;
+            CalculateColumnBoundries(columnCount, columnSpacing);
         }
 
         private void CalculateColumnBoundries(int columnCount, float columnSpacing)
@@ -653,7 +610,7 @@ namespace GKCore.Export
                         fDocument.NewPage();
                         fCurrentColumn = 0;
                     }
-                    base.SetSimpleColumn(this.fColumns[fCurrentColumn]);
+                    base.SetSimpleColumn(fColumns[fCurrentColumn]);
                     fCurrentColumn += 1;
                 }
 

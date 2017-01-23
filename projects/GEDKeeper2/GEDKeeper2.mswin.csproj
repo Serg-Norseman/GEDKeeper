@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
@@ -542,6 +543,7 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sandbox\TreesAlbumExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

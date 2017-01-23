@@ -20,6 +20,8 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using GKCommon;
 
 namespace GKUI.Charts
 {
@@ -43,9 +45,50 @@ namespace GKUI.Charts
             fCanvas = gfx;
         }
 
-        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        public override void DrawImage(Image image, int x, int y)
+        {
+            fCanvas.DrawImage(image, x, y);
+        }
+
+        public override void DrawImage(Image image, ExtRect rect)
+        {
+            fCanvas.DrawImage(image, rect.ToRectangle());
+        }
+
+        public override int GetTextHeight(string text, Font font)
+        {
+            return fCanvas.MeasureString(text, font).ToSize().Height;
+        }
+
+        public override int GetTextWidth(string text, Font font)
+        {
+            return fCanvas.MeasureString(text, font).ToSize().Width;
+        }
+
+        public override void DrawString(string text, Font font, Brush brush, int x, int y)
+        {
+            fCanvas.DrawString(text, font, brush, x, y);
+        }
+
+        public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
         {
             fCanvas.DrawLine(pen, x1, y1, x2, y2);
+        }
+
+        public override void DrawRectangle(Pen pen, Color fillColor,
+                                           int x, int y, int width, int height)
+        {
+            GraphicsPath path = SysUtils.CreateRectangle(x, y, width, height);
+            fCanvas.FillPath(new SolidBrush(fillColor), path);
+            if (pen != null) fCanvas.DrawPath(pen, path);
+        }
+
+        public override void DrawRoundedRectangle(Pen pen, Color fillColor,
+                                                  int x, int y, int width, int height, int radius)
+        {
+            GraphicsPath path = SysUtils.CreateRoundedRectangle(x, y, width, height, radius);
+            fCanvas.FillPath(new SolidBrush(fillColor), path);
+            if (pen != null) fCanvas.DrawPath(pen, path);
         }
     }
 }

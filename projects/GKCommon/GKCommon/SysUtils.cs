@@ -792,6 +792,23 @@ namespace GKCommon
             return aspectRatio;
         }
 
+        public static GraphicsPath CreateRectangle(int x, int y, int width, int height)
+        {
+            int xw = x + width;
+            int yh = y + height;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddLine(x, y, xw, y); // Top Edge
+            p.AddLine(xw, y, xw, yh); // Right Edge
+            p.AddLine(xw, yh, x, yh); // Bottom Edge
+            p.AddLine(x, yh, x, y); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
         public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
         {
             int xw = x + width;

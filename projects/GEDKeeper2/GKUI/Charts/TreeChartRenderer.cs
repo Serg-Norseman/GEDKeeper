@@ -19,6 +19,7 @@
  */
 
 using System.Drawing;
+using GKCommon;
 
 namespace GKUI.Charts
 {
@@ -33,6 +34,19 @@ namespace GKUI.Charts
 
         public abstract void SetTarget(object target);
 
-        public abstract void DrawLine(Pen pen, float x1, float y1, float x2, float y2);
+        public abstract void DrawImage(Image image, int x, int y);
+        public abstract void DrawImage(Image image, ExtRect rect);
+
+        public abstract int GetTextHeight(string text, Font font);
+        public abstract int GetTextWidth(string text, Font font);
+
+        public abstract void DrawString(string s, Font font, Brush brush, int x, int y);
+
+        public abstract void DrawLine(Pen pen, int x1, int y1, int x2, int y2);
+
+        public abstract void DrawRectangle(Pen pen, Color fillColor,
+                                           int x, int y, int width, int height);
+        public abstract void DrawRoundedRectangle(Pen pen, Color fillColor,
+                                                  int x, int y, int width, int height, int radius);
     }
 }

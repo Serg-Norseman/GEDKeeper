@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using GKCommon;
 using GKUI.Charts;
 using iTextSharp.text.pdf;
 
@@ -45,7 +46,50 @@ namespace GKCore.Export
             fCanvas = gfx;
         }
 
-        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        public override void DrawImage(Image image, int x, int y)
+        {
+            
+        }
+
+        public override void DrawImage(Image image, ExtRect rect)
+        {
+            
+        }
+
+        public override int GetTextHeight(string text, Font font)
+        {
+            return 0;
+        }
+
+        public override int GetTextWidth(string text, Font font)
+        {
+            return 0;
+        }
+
+        public override void DrawString(string s, Font font, Brush brush, int x, int y)
+        {
+            
+        }
+
+        public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
+        {
+            /*Color color = pen.Color;
+            fCanvas.SetRGBColorStroke(color.R, color.G, color.B);
+            fCanvas.SetLineWidth(pen.Width);*/
+            
+            fCanvas.MoveTo(x1, y1);
+            fCanvas.LineTo(x2, y2);
+            fCanvas.Stroke();
+        }
+
+        public override void DrawRectangle(Pen pen, Color fillColor,
+                                           int x, int y, int width, int height)
+        {
+            
+        }
+
+        public override void DrawRoundedRectangle(Pen pen, Color fillColor,
+                                                  int x, int y, int width, int height, int radius)
         {
             
         }

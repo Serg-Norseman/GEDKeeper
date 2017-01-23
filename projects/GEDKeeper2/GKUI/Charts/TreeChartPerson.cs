@@ -486,5 +486,55 @@ namespace GKUI.Charts
                 fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }
+
+        public Color GetSelectedColor()
+        {
+            Color result;
+
+            switch (fSex) {
+                case GEDCOMSex.svMale:
+                    result = Color.Blue;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    result = Color.Red;
+                    break;
+
+                default:
+                    result = Color.Black;
+                    break;
+            }
+
+            return result;
+        }
+
+        public Color GetFillColor(bool dead)
+        {
+            Color result;
+
+            if (dead) {
+                result = Color.Black;
+            } else {
+                if (IsDup) {
+                    result = Color.FromArgb(192, 192, 192);
+                } else {
+                    switch (fSex) {
+                        case GEDCOMSex.svMale:
+                            result = this.Divorced ? fChart.Options.UnHusbandColor : fChart.Options.MaleColor;
+                            break;
+
+                        case GEDCOMSex.svFemale:
+                            result = this.Divorced ? fChart.Options.UnWifeColor : fChart.Options.FemaleColor;
+                            break;
+
+                        default:
+                            result = fChart.Options.UnkSexColor;
+                            break;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
