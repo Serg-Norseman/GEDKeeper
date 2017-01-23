@@ -32,7 +32,7 @@ namespace GKUI.Charts
     {
         private Graphics fCanvas;
 
-        public TreeChartGfxRenderer()
+        public TreeChartGfxRenderer(bool autoScale) : base(autoScale)
         {
         }
 
@@ -52,7 +52,7 @@ namespace GKUI.Charts
 
         public override void DrawImage(Image image, ExtRect rect)
         {
-            fCanvas.DrawImage(image, rect.ToRectangle());
+            fCanvas.DrawImage(image, rect.Left, rect.Top, rect.GetWidth(), rect.GetHeight());
         }
 
         public override int GetTextHeight(string text, Font font)
@@ -79,16 +79,28 @@ namespace GKUI.Charts
                                            int x, int y, int width, int height)
         {
             GraphicsPath path = SysUtils.CreateRectangle(x, y, width, height);
-            fCanvas.FillPath(new SolidBrush(fillColor), path);
-            if (pen != null) fCanvas.DrawPath(pen, path);
+
+            if (fillColor != Color.Transparent) {
+                fCanvas.FillPath(new SolidBrush(fillColor), path);
+            }
+
+            if (pen != null) {
+                fCanvas.DrawPath(pen, path);
+            }
         }
 
         public override void DrawRoundedRectangle(Pen pen, Color fillColor,
                                                   int x, int y, int width, int height, int radius)
         {
             GraphicsPath path = SysUtils.CreateRoundedRectangle(x, y, width, height, radius);
-            fCanvas.FillPath(new SolidBrush(fillColor), path);
-            if (pen != null) fCanvas.DrawPath(pen, path);
+
+            if (fillColor != Color.Transparent) {
+                fCanvas.FillPath(new SolidBrush(fillColor), path);
+            }
+
+            if (pen != null) {
+                fCanvas.DrawPath(pen, path);
+            }
         }
     }
 }

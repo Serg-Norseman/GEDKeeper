@@ -33,7 +33,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Controls;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -45,11 +44,12 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
-        private PrintDocument fPrintDoc;
 
         private TreeChartBox.ChartKind fChartKind;
         private int fGensLimit;
         private GEDCOMIndividualRecord fPerson;
+        private PrintDocument fPrintDoc;
+
 
         public IBaseWindow Base
         {
@@ -65,6 +65,7 @@ namespace GKUI
             }
         }
 
+
         public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
             this.InitializeComponent();
@@ -79,8 +80,9 @@ namespace GKUI
 
             this.fBase = baseWin;
             this.fPerson = startPerson;
+            this.fGensLimit = -1;
 
-            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
+            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer(false));
             this.fTreeBox.Name = "fTreeBox";
             this.fTreeBox.Base = this.fBase;
             this.fTreeBox.Dock = DockStyle.Fill;
@@ -95,7 +97,6 @@ namespace GKUI
             base.Controls.SetChildIndex(this.fTreeBox, 0);
             base.Controls.SetChildIndex(this.ToolBar1, 1);
 
-            this.fGensLimit = -1;
             this.SetLang();
 
             this.miCertaintyIndex.Checked = this.fTreeBox.Options.CertaintyIndexVisible;
@@ -576,10 +577,6 @@ namespace GKUI
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
         {
             Graphics gfx = e.Graphics;
-
-            //PrinterBounds objBounds = new PrinterBounds(e);
-            //Rectangle realMarginBounds = objBounds.Bounds;  // Get the REAL Margin Bounds !
-
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 

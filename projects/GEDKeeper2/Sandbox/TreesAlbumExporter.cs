@@ -19,10 +19,13 @@
  */
 
 using System;
+using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI;
+using GKUI.Charts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -33,11 +36,11 @@ namespace GKCore.Export
         private ShieldState fShieldState;
         private StringList fPatList;
 
-        private Font fTitleFont;
+        private iTextSharp.text.Font fTitleFont;
         //private Font fChapFont;
-        private Font fPersonFont;
+        private iTextSharp.text.Font fPersonFont;
         //private Font fLinkFont;
-        private Font fTextFont;
+        private iTextSharp.text.Font fTextFont;
         //private Font fSupText;
 
         public ShieldState ShieldState
@@ -65,28 +68,34 @@ namespace GKCore.Export
                     fDocument.Open();
 
                     BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                    fTitleFont = new Font(baseFont, 20f, Font.BOLD);
+                    fTitleFont = new iTextSharp.text.Font(baseFont, 20f, iTextSharp.text.Font.BOLD);
                     //fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
-                    fPersonFont = new Font(baseFont, 10f, Font.BOLD, BaseColor.BLACK);
+                    fPersonFont = new iTextSharp.text.Font(baseFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
                     //fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
-                    fTextFont = new Font(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
+                    fTextFont = new iTextSharp.text.Font(baseFont, 8f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
                     //fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
 
                     fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
 
                     PreparePatriarchs();
 
-                    Rectangle pageSize = fDocument.PageSize;
+                    iTextSharp.text.Rectangle pageSize = fDocument.PageSize;
+                    ExtRect pageRect = ExtRect.CreateBounds(0, 0, (int)pageSize.Width, (int)pageSize.Height);
                     ExtRect clientRect = ExtRect.CreateBounds(fMargins.Left, fMargins.Top,
                                                               (int)pageSize.Width - fMargins.Left - fMargins.Right,
                                                               (int)pageSize.Height - fMargins.Top - fMargins.Bottom);
 
-                    float cx = (pageSize.Width - fMargins.Left - fMargins.Right) / 2;
-                    float cy = (pageSize.Height - fMargins.Top - fMargins.Bottom) / 2;
-
-                    TreeChartPDFRenderer renderer = new TreeChartPDFRenderer();
+                    var renderer = new TreeChartPDFRenderer(true);
                     renderer.SetTarget(fPdfWriter.DirectContent);
                     PdfContentByte cb = fPdfWriter.DirectContent;
+
+                    var treeBox = new TreeChartBox(renderer);
+                    treeBox.Base = fBase;
+                    treeBox.Options = MainWin.Instance.Options.ChartOptions;
+                    treeBox.DepthLimit = 2;
+                    treeBox.ShieldState = fBase.ShieldState;
+                    treeBox.Height = clientRect.GetHeight();
+                    treeBox.Width = clientRect.GetWidth();
 
                     int num = fPatList.Count;
                     for (int i = 0; i < num; i++) {
@@ -94,13 +103,13 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
                         fDocument.Add(new Paragraph(iName, fTextFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
 
-                        renderer.DrawLine(null, clientRect.Left, clientRect.Top + 200, clientRect.Right, clientRect.Top + 200);
-
-                        cb.BeginText();
                         cb.SetFontAndSize(baseFont, 6);
-                        cb.SetTextMatrix(cx, cy);
-                        cb.ShowText("Some text here and the Date: " + DateTime.Now.ToShortDateString());
-                        cb.EndText();
+
+                        treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, true);
+
+                        renderer.SetSizes(new Size(pageRect.GetWidth(), pageRect.GetHeight()), treeBox.ImageSize);
+
+                        treeBox.RenderStatic();
 
                         fDocument.NewPage();
                     }

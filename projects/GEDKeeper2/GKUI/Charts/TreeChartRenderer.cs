@@ -28,8 +28,11 @@ namespace GKUI.Charts
     /// </summary>
     public abstract class TreeChartRenderer
     {
-        protected TreeChartRenderer()
+        protected bool fAutoScale;
+
+        protected TreeChartRenderer(bool autoScale)
         {
+            fAutoScale = autoScale;
         }
 
         public abstract void SetTarget(object target);
@@ -40,7 +43,7 @@ namespace GKUI.Charts
         public abstract int GetTextHeight(string text, Font font);
         public abstract int GetTextWidth(string text, Font font);
 
-        public abstract void DrawString(string s, Font font, Brush brush, int x, int y);
+        public abstract void DrawString(string text, Font font, Brush brush, int x, int y);
 
         public abstract void DrawLine(Pen pen, int x1, int y1, int x2, int y2);
 

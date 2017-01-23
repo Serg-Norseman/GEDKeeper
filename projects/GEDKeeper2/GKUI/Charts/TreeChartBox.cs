@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_IMAGE
+#define DEBUG_IMAGE
 
 using System;
 using System.Collections.Generic;
@@ -220,6 +220,11 @@ namespace GKUI.Charts
         public ChartFilter Filter
         {
             get { return fFilter; }
+        }
+
+        public Size ImageSize
+        {
+            get { return fImageSize; }
         }
 
         public int IndividualsCount
@@ -1138,17 +1143,20 @@ namespace GKUI.Charts
             }
         }
 
-        private void InternalDraw(Graphics gfx, DrawMode drawMode)
+        private void InternalDraw(DrawMode drawMode)
         {
+            // TODO: need to complete this!
             var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-            if (BackgroundImage == null) {
-                using (Brush brush = new SolidBrush(BackColor)) {
+            bool hasBackground = (BackgroundImage != null && fRenderer is TreeChartGfxRenderer);
+            if (!hasBackground) {
+                /*using (Brush brush = new SolidBrush(BackColor)) {
                     gfx.FillRectangle(brush, imgRect);
-                }
+                }*/
+                //fRenderer.DrawRectangle(null, Color.Silver, imgRect.Left, imgRect.Top, imgRect.Width, imgRect.Height);
             } else {
-                using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
+                /*using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
                     gfx.FillRectangle(textureBrush, imgRect);
-                }
+                }*/
             }
 
             fSPX = 0;
@@ -1178,17 +1186,12 @@ namespace GKUI.Charts
             }
 
             #if DEBUG_IMAGE
-            Rectangle irt = new Rectangle(this.fSPX, this.fSPY, this.fImageWidth - 1, this.fImageHeight - 1);
             using (Pen pen = new Pen(Color.Red)) {
-                gfx.DrawRectangle(pen, irt);
+                fRenderer.DrawRectangle(pen, Color.Transparent, fSPX, fSPY, fImageWidth, fImageHeight);
             }
             #endif
 
-            fRenderer.SetTarget(gfx);
             Draw(fRoot, fKind, drawMode);
-
-            if (fScaleControl.Visible) fScaleControl.Draw(gfx);
-            //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
         }
 
         protected void Draw(TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
@@ -1723,7 +1726,13 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            InternalDraw(e.Graphics, DrawMode.dmInteractive);
+            Graphics gfx = e.Graphics;
+            fRenderer.SetTarget(gfx);
+            InternalDraw(DrawMode.dmInteractive);
+
+            // interactive controls
+            if (fScaleControl.Visible) fScaleControl.Draw(gfx);
+            //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
         }
 
         protected override void OnDoubleClick(EventArgs e)
@@ -2109,8 +2118,8 @@ namespace GKUI.Charts
                 try
                 {
                     using (Graphics gfx = Graphics.FromImage(pic)) {
-                        Predef();
-                        InternalDraw(gfx, DrawMode.dmStatic);
+                        fRenderer.SetTarget(gfx);
+                        RenderStatic();
                     }
 
                     pic.Save(fileName, imFmt);
@@ -2133,11 +2142,17 @@ namespace GKUI.Charts
             Image image = new Metafile(CreateGraphics().GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
 
             using (Graphics gfx = Graphics.FromImage(image)) {
-                Predef();
-                InternalDraw(gfx, DrawMode.dmStatic);
+                fRenderer.SetTarget(gfx);
+                RenderStatic();
             }
 
             return image;
+        }
+
+        public void RenderStatic()
+        {
+            Predef();
+            InternalDraw(DrawMode.dmStatic);
         }
 
         #endregion
