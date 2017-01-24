@@ -440,7 +440,7 @@ namespace GKUI.Charts
 
         public void SetScale(float value)
         {
-            if (value < 0.5 || value > 1.5) return;
+            //if (value < 0.5 || value > 1.5) return;
             fScale = value;
 
             fScaleControl.ThumbPos = (int)Math.Round((value - 0.4f) / 0.1f);
@@ -1001,7 +1001,8 @@ namespace GKUI.Charts
                 ExtRect brt = prt;
                 if (person.Portrait != null) {
                     ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
-                    fRenderer.DrawImage(person.Portrait, portRt);
+                    fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top, 
+                                        portRt.GetWidth(), portRt.GetHeight());
 
                     prt.Left += person.PortraitWidth;
                 }
@@ -1233,7 +1234,7 @@ namespace GKUI.Charts
 
         #region Sizes and adjustment routines
 
-        private void Predef()
+        public void Predef()
         {
             float sc = fScale;
 

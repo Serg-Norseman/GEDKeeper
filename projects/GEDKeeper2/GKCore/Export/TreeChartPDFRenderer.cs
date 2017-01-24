@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 using GKCommon;
 using GKUI.Charts;
@@ -29,7 +30,9 @@ using iTextSharp.text.pdf;
 namespace GKCore.Export
 {
     using itFont = iTextSharp.text.Font;
+    using itImage = iTextSharp.text.Image;
     using sdFont = System.Drawing.Font;
+    using sdImage = System.Drawing.Image;
 
     /// <summary>
     /// 
@@ -37,9 +40,9 @@ namespace GKCore.Export
     public sealed class TreeChartPDFRenderer : TreeChartRenderer
     {
         private PdfContentByte fCanvas;
-        private Size fAreaSize;
-        private Size fImageSize;
-        //private float fZoomFactor;
+        private Size fPageSize;
+        private Size fChartSize;
+        private float fZoomFactor;
 
         public TreeChartPDFRenderer(bool autoScale) : base(autoScale)
         {
@@ -66,7 +69,7 @@ namespace GKCore.Export
         private void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
         {
             baseFont = GetBaseFont(font);
-            fontSize = font.SizeInPoints /* * fZoomFactor*/; // TODO: .Size or .Height? what is units?!
+            fontSize = font.SizeInPoints * fZoomFactor;
         }
 
         private void SetPen(Pen pen)
@@ -81,47 +84,77 @@ namespace GKCore.Export
             fCanvas.SetColorFill(new BaseColor(color.R, color.G, color.B));
         }
 
-        private int CheckCoord(int value, bool isY, int yOffset = 0)
+        private int CheckVal(float value, bool yAxis = false, float yOffset = 0)
         {
             float newVal = value;
 
             // the Y-axis of this canvas starts from the bottom left corner
-            if (isY) newVal = fAreaSize.Height - newVal - yOffset;
+            if (yAxis) newVal = fPageSize.Height - newVal - yOffset;
 
-            return (int)newVal /* * fZoomFactor*/;
+            newVal = newVal * fZoomFactor;
+
+            return (int)(newVal);
+        }
+
+        /*private const float PointsPerInch = 72;
+        private const float PixelsPerInch = 96;
+
+        private float pt2pix(float points)
+        {
+            return (points / PointsPerInch) * PixelsPerInch;
+        }*/
+
+        const float pixelToPoint = 72f / 96f;
+
+        public static float pt2pix(float points)
+        {
+            return (points / pixelToPoint);
         }
 
         #endregion
 
-        public float SetSizes(Size areaSize, Size imageSize)
+        public void ResetFactor()
         {
-            fAreaSize = areaSize;
-            fImageSize = imageSize;
-
-            float factor = SysUtils.ZoomToFit(fImageSize.Width, fImageSize.Height, fAreaSize.Width, fAreaSize.Height);
-            //fZoomFactor = 1.0f;
-            return (factor > 1.0f) ? 1.0f : factor;
+            fZoomFactor = 1.0f;
         }
 
-        public override void DrawImage(System.Drawing.Image image, int x, int y)
+        public float SetSizes(Size pageSize, Size chartSize)
         {
+            fPageSize = pageSize;
+            fChartSize = chartSize;
+
+            float factor = SysUtils.ZoomToFit(fChartSize.Width, fChartSize.Height, fPageSize.Width, fPageSize.Height);
+            factor = (factor > 1.0f) ? 1.0f : factor;
+            //fZoomFactor = factor;
+            fZoomFactor = 1.0f;
+            return factor;
         }
 
-        public override void DrawImage(System.Drawing.Image image, ExtRect rect)
+        public override void DrawImage(sdImage image, float x, float y,
+                                       float width, float height)
         {
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, height);
+            width = CheckVal(width);
+            height = CheckVal(height);
+
+            var img = itImage.GetInstance(image, ImageFormat.Bmp);
+            fCanvas.AddImage(img, width, 0, 0, height, x, y);
         }
 
-        public override int GetTextHeight(string text, System.Drawing.Font font)
+        public override int GetTextHeight(string text, sdFont font)
         {
             BaseFont baseFont;
             float fontSize;
             GetFontInfo(font, out baseFont, out fontSize);
 
-            float height = baseFont.GetAscentPoint(text, fontSize) - baseFont.GetDescentPoint(text, fontSize);
+            float ascent = baseFont.GetAscentPoint(text, fontSize);
+            float descent = baseFont.GetDescentPoint(text, fontSize);
+            float height = (ascent - descent) * 1.66f;
             return (int)(height);
         }
 
-        public override int GetTextWidth(string text, System.Drawing.Font font)
+        public override int GetTextWidth(string text, sdFont font)
         {
             BaseFont baseFont;
             float fontSize;
@@ -131,38 +164,43 @@ namespace GKCore.Export
             return (int)(width);
         }
 
-        public override void DrawString(string text, System.Drawing.Font font, Brush brush, int x, int y)
+        public override void DrawString(string text, sdFont font, Brush brush, float x, float y)
         {
             Color color = ((SolidBrush)brush).Color;
             SetFillColor(color);
 
-            x = CheckCoord(x, false);
-            y = CheckCoord(y, true);
+            BaseFont baseFont;
+            float fontSize;
+            GetFontInfo(font, out baseFont, out fontSize);
+
+            int h = GetTextHeight(text, font);
+            //int h = (int)Math.Round(baseFont.GetAscentPoint(text, fontSize));
+            //int h = (int)Math.Round((baseFont.GetAscentPoint(text, fontSize) - baseFont.GetDescentPoint(text, fontSize)) * 25.4f / 72.0f);
+
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, h);
 
             try {
-                BaseFont baseFont;
-                float fontSize;
-                GetFontInfo(font, out baseFont, out fontSize);
-
                 fCanvas.SetFontAndSize(baseFont, fontSize);
 
                 fCanvas.BeginText();
                 fCanvas.SetTextMatrix(x, y);
+                //fCanvas.SetTextMatrix(1.0f, 0.0f, 0.0f, 1.0f, x, y);
                 fCanvas.ShowText(text);
             } finally {
                 fCanvas.EndText();
             }
         }
 
-        public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
+        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
             if (pen == null) return;
 
-            x1 = CheckCoord(x1, false);
-            x2 = CheckCoord(x2, false);
+            x1 = CheckVal(x1, false);
+            y1 = CheckVal(y1, true);
 
-            y1 = CheckCoord(y1, true);
-            y2 = CheckCoord(y2, true);
+            x2 = CheckVal(x2, false);
+            y2 = CheckVal(y2, true);
 
             SetPen(pen);
             fCanvas.MoveTo(x1, y1);
@@ -170,11 +208,13 @@ namespace GKCore.Export
             fCanvas.Stroke();
         }
 
-        public override void DrawRectangle(Pen pen, Color fillColor,
-                                           int x, int y, int width, int height)
+        public override void DrawRectangle(Pen pen, Color fillColor, float x, float y,
+                                           float width, float height)
         {
-            x = CheckCoord(x, false);
-            y = CheckCoord(y, true, height);
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, height);
+            width = CheckVal(width);
+            height = CheckVal(height);
 
             fCanvas.Rectangle(x, y, width, height);
 
@@ -191,11 +231,13 @@ namespace GKCore.Export
             }
         }
 
-        public override void DrawRoundedRectangle(Pen pen, Color fillColor,
-                                                  int x, int y, int width, int height, int radius)
+        public override void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
+                                                  float width, float height, float radius)
         {
-            x = CheckCoord(x, false);
-            y = CheckCoord(y, true, height);
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, height);
+            width = CheckVal(width);
+            height = CheckVal(height);
 
             fCanvas.RoundRectangle(x, y, width, height, radius);
 

@@ -46,14 +46,10 @@ namespace GKUI.Charts
             fCanvas = gfx;
         }
 
-        public override void DrawImage(Image image, int x, int y)
+        public override void DrawImage(Image image, float x, float y,
+                                       float width, float height)
         {
-            fCanvas.DrawImage(image, x, y);
-        }
-
-        public override void DrawImage(Image image, ExtRect rect)
-        {
-            fCanvas.DrawImage(image, rect.Left, rect.Top, rect.GetWidth(), rect.GetHeight());
+            fCanvas.DrawImage(image, x, y, width, height);
         }
 
         public override int GetTextHeight(string text, Font font)
@@ -66,18 +62,18 @@ namespace GKUI.Charts
             return fCanvas.MeasureString(text, font).ToSize().Width;
         }
 
-        public override void DrawString(string text, Font font, Brush brush, int x, int y)
+        public override void DrawString(string text, Font font, Brush brush, float x, float y)
         {
             fCanvas.DrawString(text, font, brush, x, y);
         }
 
-        public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
+        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
             fCanvas.DrawLine(pen, x1, y1, x2, y2);
         }
 
         public override void DrawRectangle(Pen pen, Color fillColor,
-                                           int x, int y, int width, int height)
+                                           float x, float y, float width, float height)
         {
             GraphicsPath path = SysUtils.CreateRectangle(x, y, width, height);
 
@@ -90,8 +86,8 @@ namespace GKUI.Charts
             }
         }
 
-        public override void DrawRoundedRectangle(Pen pen, Color fillColor,
-                                                  int x, int y, int width, int height, int radius)
+        public override void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
+                                                  float width, float height, float radius)
         {
             GraphicsPath path = SysUtils.CreateRoundedRectangle(x, y, width, height, radius);
 

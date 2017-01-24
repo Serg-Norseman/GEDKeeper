@@ -792,10 +792,10 @@ namespace GKCommon
             return aspectRatio;
         }
 
-        public static GraphicsPath CreateRectangle(int x, int y, int width, int height)
+        public static GraphicsPath CreateRectangle(float x, float y, float width, float height)
         {
-            int xw = x + width;
-            int yh = y + height;
+            float xw = x + width;
+            float yh = y + height;
 
             GraphicsPath p = new GraphicsPath();
             p.StartFigure();
@@ -809,17 +809,17 @@ namespace GKCommon
             return p;
         }
 
-        public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
+        public static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
         {
-            int xw = x + width;
-            int yh = y + height;
-            int xwr = xw - radius;
-            int yhr = yh - radius;
-            int xr = x + radius;
-            int yr = y + radius;
-            int r2 = radius * 2;
-            int xwr2 = xw - r2;
-            int yhr2 = yh - r2;
+            float xw = x + width;
+            float yh = y + height;
+            float xwr = xw - radius;
+            float yhr = yh - radius;
+            float xr = x + radius;
+            float yr = y + radius;
+            float r2 = radius * 2;
+            float xwr2 = xw - r2;
+            float yhr2 = yh - r2;
 
             GraphicsPath p = new GraphicsPath();
             p.StartFigure();

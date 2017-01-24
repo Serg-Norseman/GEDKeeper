@@ -74,10 +74,10 @@ namespace GKCore.Export
                     fBoldFont = new itFont(baseFont, 8f, itFont.BOLD, BaseColor.BLACK);
                     fSymFont = new itFont(baseFont, 12f, itFont.BOLD, BaseColor.BLACK);
 
-                    float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
+                    /*float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
                     fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
                     fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER });
-                    fDocument.NewPage();
+                    fDocument.NewPage();*/
 
                     PreparePatriarchs();
 
@@ -100,10 +100,11 @@ namespace GKCore.Export
                         string iName = fPatList[i];
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
 
+                        renderer.ResetFactor();
+                        treeBox.SetScale(1.0f);
                         treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, false);
                         float zoomFactor = renderer.SetSizes(pageSize, treeBox.ImageSize);
-                        //treeBox.SetScale(zoomFactor);
-                        //treeBox.RecalcChart(true);
+                        treeBox.SetScale(zoomFactor);
                         treeBox.RenderStatic(true);
 
                         fDocument.NewPage();
