@@ -39,7 +39,7 @@ namespace GKCore.Export
         private PdfContentByte fCanvas;
         private Size fAreaSize;
         private Size fImageSize;
-        private float fZoomFactor;
+        //private float fZoomFactor;
 
         public TreeChartPDFRenderer(bool autoScale) : base(autoScale)
         {
@@ -54,31 +54,7 @@ namespace GKCore.Export
             fCanvas = gfx;
         }
 
-        public void SetSizes(Size areaSize, Size imageSize)
-        {
-            fAreaSize = areaSize;
-            fImageSize = imageSize;
-
-            float factor = SysUtils.ZoomToFit(fImageSize.Width, fImageSize.Height, fAreaSize.Width, fAreaSize.Height);
-            fZoomFactor = (factor > 1.0f) ? 1.0f : factor;
-        }
-
-        private int CheckCoord(int value, bool isY, int yOffset = 0)
-        {
-            float newVal = value * fZoomFactor;
-            if (isY) newVal = fAreaSize.Height - newVal - yOffset;
-            return (int)newVal;
-        }
-
-        public override void DrawImage(System.Drawing.Image image, int x, int y)
-        {
-            
-        }
-
-        public override void DrawImage(System.Drawing.Image image, ExtRect rect)
-        {
-            
-        }
+        #region Private methods
 
         private BaseFont GetBaseFont(sdFont font)
         {
@@ -90,7 +66,49 @@ namespace GKCore.Export
         private void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
         {
             baseFont = GetBaseFont(font);
-            fontSize = font.Height * fZoomFactor; // TODO: .Size or .Height? what is units?!
+            fontSize = font.SizeInPoints /* * fZoomFactor*/; // TODO: .Size or .Height? what is units?!
+        }
+
+        private void SetPen(Pen pen)
+        {
+            Color color = pen.Color;
+            fCanvas.SetRGBColorStroke(color.R, color.G, color.B);
+            fCanvas.SetLineWidth(pen.Width);
+        }
+
+        private void SetFillColor(Color color)
+        {
+            fCanvas.SetColorFill(new BaseColor(color.R, color.G, color.B));
+        }
+
+        private int CheckCoord(int value, bool isY, int yOffset = 0)
+        {
+            float newVal = value;
+
+            // the Y-axis of this canvas starts from the bottom left corner
+            if (isY) newVal = fAreaSize.Height - newVal - yOffset;
+
+            return (int)newVal /* * fZoomFactor*/;
+        }
+
+        #endregion
+
+        public float SetSizes(Size areaSize, Size imageSize)
+        {
+            fAreaSize = areaSize;
+            fImageSize = imageSize;
+
+            float factor = SysUtils.ZoomToFit(fImageSize.Width, fImageSize.Height, fAreaSize.Width, fAreaSize.Height);
+            //fZoomFactor = 1.0f;
+            return (factor > 1.0f) ? 1.0f : factor;
+        }
+
+        public override void DrawImage(System.Drawing.Image image, int x, int y)
+        {
+        }
+
+        public override void DrawImage(System.Drawing.Image image, ExtRect rect)
+        {
         }
 
         public override int GetTextHeight(string text, System.Drawing.Font font)
@@ -134,18 +152,6 @@ namespace GKCore.Export
             } finally {
                 fCanvas.EndText();
             }
-        }
-
-        private void SetPen(Pen pen)
-        {
-            Color color = pen.Color;
-            fCanvas.SetRGBColorStroke(color.R, color.G, color.B);
-            fCanvas.SetLineWidth(pen.Width);
-        }
-
-        private void SetFillColor(Color color)
-        {
-            fCanvas.SetColorFill(new BaseColor(color.R, color.G, color.B));
         }
 
         public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2)

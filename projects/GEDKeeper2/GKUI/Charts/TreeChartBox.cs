@@ -440,6 +440,7 @@ namespace GKUI.Charts
 
         public void SetScale(float value)
         {
+            if (value < 0.5 || value > 1.5) return;
             fScale = value;
 
             fScaleControl.ThumbPos = (int)Math.Round((value - 0.4f) / 0.1f);
@@ -1234,12 +1235,11 @@ namespace GKUI.Charts
 
         private void Predef()
         {
-            double sc = fScale;
-            int fsz = (int)Math.Round(fOptions.DefFontSize * sc);
+            float sc = fScale;
 
-            string fontName = (fsz <= 7) ? "Small Fonts" : fOptions.DefFontName;
+            float fsz = (float)Math.Round(fOptions.DefFontSize * sc);
+            fDrawFont = new Font(fOptions.DefFontName, fsz, FontStyle.Regular, GraphicsUnit.Point);
 
-            fDrawFont = new Font(fontName, fsz, FontStyle.Regular, GraphicsUnit.Point);
             fSpouseDistance = (int)Math.Round(DEF_SPOUSE_DISTANCE * sc);
             fBranchDistance = (int)Math.Round(DEF_BRANCH_DISTANCE * sc);
             fLevelDistance = (int)Math.Round(DEF_LEVEL_DISTANCE * sc);
@@ -1283,7 +1283,7 @@ namespace GKUI.Charts
             return lines;
         }
 
-        private void RecalcChart(bool noRedraw = false)
+        public void RecalcChart(bool noRedraw = false)
         {
             if (fOptions.Kinship && fKinRoot != null) {
                 fGraph.SetTreeRoot(fKinRoot.Rec);
@@ -1291,7 +1291,12 @@ namespace GKUI.Charts
 
             int lines = InitInfoSize();
 
-            using (Graphics gfx = CreateGraphics()) {
+            Graphics gfx = null;
+            if (fRenderer is TreeChartGfxRenderer) {
+                gfx = CreateGraphics();
+                fRenderer.SetTarget(gfx);
+            }
+            try {
                 int num = fPersons.Count;
                 for (int i = 0; i < num; i++) {
                     TreeChartPerson p = fPersons[i];
@@ -1300,7 +1305,11 @@ namespace GKUI.Charts
                         FindRelationship(p);
                     }
 
-                    p.CalcBounds(lines, gfx);
+                    p.CalcBounds(lines, fRenderer);
+                }
+            } finally {
+                if (fRenderer is TreeChartGfxRenderer && gfx != null) {
+                    gfx.Dispose();
                 }
             }
 
@@ -1758,15 +1767,8 @@ namespace GKUI.Charts
         {
             //base.OnMouseWheel(e);
             if (ModifierKeys == Keys.Control) {
-                float newScale = fScale;
+                float newScale = (e.Delta > 0) ? fScale - 0.05f : fScale + 0.05f;
 
-                if (e.Delta > 0) {
-                    newScale -= 0.05f;
-                } else {
-                    newScale += 0.05f;
-                }
-
-                if (newScale < 0.5 || newScale > 1.5) return;
                 SetScale(newScale);
             } else {
                 int dx = 0, dy = 0;
@@ -2164,7 +2166,7 @@ namespace GKUI.Charts
         public void RenderStatic(bool centered = false)
         {
             Predef();
-            DrawMode drawMode = (!centered) ? DrawMode.dmStatic : DrawMode.dmStaticCentered; 
+            DrawMode drawMode = (!centered) ? DrawMode.dmStatic : DrawMode.dmStaticCentered;
             InternalDraw(drawMode);
         }
 

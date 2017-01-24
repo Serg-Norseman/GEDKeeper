@@ -442,12 +442,7 @@ namespace GKUI.Charts
             }
         }
 
-        private int TextWidth(Graphics gfx, string st)
-        {
-            return gfx.MeasureString(st, fChart.DrawFont).ToSize().Width;
-        }
-
-        public void CalcBounds(int lines, Graphics gfx)
+        public void CalcBounds(int lines, TreeChartRenderer renderer)
         {
             try
             {
@@ -456,12 +451,12 @@ namespace GKUI.Charts
 
                 int maxwid = 0;
                 for (int k = 0; k < lines; k++) {
-                    int wt = TextWidth(gfx, Lines[k]);
+                    int wt = renderer.GetTextWidth(Lines[k], fChart.DrawFont);
                     if (maxwid < wt) maxwid = wt;
                 }
 
                 fWidth = maxwid + 20;
-                fHeight = gfx.MeasureString("A", fChart.DrawFont).ToSize().Height * lines + 20;
+                fHeight = renderer.GetTextHeight("A", fChart.DrawFont) * lines + 20;
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);

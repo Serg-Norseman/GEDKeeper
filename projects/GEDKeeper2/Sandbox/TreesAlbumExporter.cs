@@ -101,7 +101,9 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
 
                         treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, false);
-                        renderer.SetSizes(pageSize, treeBox.ImageSize);
+                        float zoomFactor = renderer.SetSizes(pageSize, treeBox.ImageSize);
+                        //treeBox.SetScale(zoomFactor);
+                        //treeBox.RecalcChart(true);
                         treeBox.RenderStatic(true);
 
                         fDocument.NewPage();
