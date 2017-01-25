@@ -127,7 +127,12 @@ namespace GKTests.GKCommon
         {
             Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.Open("", FileAccess.Read); });
 
+            #if !__MonoCS__
             string fileName = GKUtils.GetTempDir() + "test.zip";
+            #else
+            string fileName = GKUtils.GetHomePath() + "test.zip";
+            #endif
+
             if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
 
             using (ZipStorer zip = ZipStorer.Create(fileName, "test")) {
@@ -241,7 +246,12 @@ namespace GKTests.GKCommon
         [Test]
         public void IniFile_Tests()
         {
+            #if !__MonoCS__
             string fileName = GKUtils.GetTempDir() + "test.ini";
+            #else
+            string fileName = GKUtils.GetHomePath() + "test.ini";
+            #endif
+
             if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
 
             using (IniFile iniFile = new IniFile(fileName)) {
