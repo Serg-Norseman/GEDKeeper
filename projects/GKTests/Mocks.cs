@@ -159,6 +159,7 @@ namespace GKTests.Mocks
         public IBaseWindow GetCurrentFile(bool extMode = false) { return null; }
         public IWorkWindow GetWorkWindow() { return null; }
 
+        public string GetUserFilesPath(string filePath) { return string.Empty; }
         public IBaseWindow CreateBase(string fileName) { return null; }
         public IBaseWindow FindBase(string fileName) { return null; }
         public void BaseChanged(IBaseWindow baseWin) {}

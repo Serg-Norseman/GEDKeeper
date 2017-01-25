@@ -318,6 +318,10 @@ namespace GKTests.UITests
             // IHost tests
             IHost host = fMainWin;
 
+            string ufPath = host.GetUserFilesPath("");
+            Assert.AreEqual(GKUtils.GetHomePath(), ufPath);
+            Assert.IsFalse(string.IsNullOrEmpty(ufPath));
+
             IBaseWindow baseWin = host.FindBase("Unknown");
             Assert.IsNotNull(baseWin);
 

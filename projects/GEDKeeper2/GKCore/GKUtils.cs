@@ -1435,6 +1435,12 @@ namespace GKCore
             return appPath + "backgrounds" + Path.DirectorySeparatorChar;
         }
 
+        public static string GetHomePath()
+        {
+            string homePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            return homePath + Path.DirectorySeparatorChar;
+        }
+
         #endregion
 
         #region UI functions

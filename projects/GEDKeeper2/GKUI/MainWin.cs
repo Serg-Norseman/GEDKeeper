@@ -912,11 +912,39 @@ namespace GKUI
             this.CreateBase("");
         }
 
+        public string GetUserFilesPath(string filePath)
+        {
+            string ufPath = filePath;
+            if (!Directory.Exists(ufPath)) {
+                ufPath = this.fOptions.LastDir;
+                if (!Directory.Exists(ufPath)) {
+                    ufPath = GKUtils.GetHomePath();
+                }
+            }
+
+            return ufPath;
+        }
+
         private void miFileLoadClick(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", this.fOptions.LastDir, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string homePath = GetUserFilesPath("");
+
+            string fileName = UIHelper.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 this.CreateBase(fileName);
+            }
+        }
+
+        private void miFileSaveAs_Click(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile(true);
+            if (curBase == null) return;
+
+            string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
+
+            string fileName = UIHelper.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
+            if (!string.IsNullOrEmpty(fileName)) {
+                curBase.FileSave(fileName);
             }
         }
 
@@ -929,17 +957,6 @@ namespace GKUI
                 curBase.FileSave(curBase.Tree.FileName);
             } else {
                 this.miFileSaveAs_Click(sender, e);
-            }
-        }
-
-        private void miFileSaveAs_Click(object sender, EventArgs e)
-        {
-            IBaseWindow curBase = this.GetCurrentFile(true);
-            if (curBase == null) return;
-
-            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
-            if (!string.IsNullOrEmpty(fileName)) {
-                curBase.FileSave(fileName);
             }
         }
 
