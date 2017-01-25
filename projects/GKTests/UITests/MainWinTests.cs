@@ -93,16 +93,16 @@ namespace GKTests.UITests
             Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef);
 
             // Stage 3: call to FilePropertiesDlg
-            ModalFormHandler = FilePropertiesDlg_btnCancel_Handler; // FilePropertiesDlg.Cancel
+            ModalFormHandler = FilePropertiesDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miFileProperties", fMainWin);
-            ModalFormHandler = FilePropertiesDlg_btnAccept_Handler; // FilePropertiesDlg.Accept
+            ModalFormHandler = FilePropertiesDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFileProperties", fMainWin);
 
 
             // Stage 4: call to OptionsDlg
-            ModalFormHandler = OptionsDlg_btnCancel_Handler; // OptionsDlg.Cancel
+            ModalFormHandler = OptionsDlg_btnCancel_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
-            ModalFormHandler = OptionsDlg_btnAccept_Handler; // OptionsDlg.Accept
+            ModalFormHandler = OptionsDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
 
 
@@ -202,7 +202,7 @@ namespace GKTests.UITests
 
 
             // Stage 51: call to LanguageSelectDlg
-            ModalFormHandler = LanguageSelectDlg_Handler;
+            ModalFormHandler = LanguageSelectDlg_Accept_Handler;
             fMainWin.LoadLanguage(0);
 
 
@@ -538,10 +538,13 @@ namespace GKTests.UITests
         {
             PersonsFilterDlg pfDlg = (PersonsFilterDlg)form;
 
-            var rbAliveBefore = new RadioButtonTester("rbAliveBefore", form);
-            rbAliveBefore.Properties.Checked = true;
-            var rbAll = new RadioButtonTester("rbAll", form);
-            rbAll.Properties.Checked = true;
+            var tabs = new TabControlTester("tabsFilters", form);
+            tabs.SelectTab(1);
+
+            var rbAliveBefore = new RadioButtonTester("rgLife.rbAliveBefore", form);
+            rbAliveBefore.Click();
+            var rbAll = new RadioButtonTester("rgLife.rbAll", form);
+            rbAll.Click();
 
             var rbSexMale = new RadioButtonTester("rbSexMale", form);
             rbSexMale.Properties.Checked = true;
@@ -787,9 +790,9 @@ namespace GKTests.UITests
 
         #region LanguageSelectDlg handlers
 
-        private void LanguageSelectDlg_Handler(string name, IntPtr ptr, Form form)
+        private void LanguageSelectDlg_Accept_Handler(string name, IntPtr ptr, Form form)
         {
-            ClickButton("btnCancel", form);
+            ClickButton("btnAccept", form);
         }
 
         #endregion
@@ -821,8 +824,6 @@ namespace GKTests.UITests
 
         public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
-            //Assert.AreEqual(fCurWin, ((IBaseEditor)form).Base);
-
             if (FamilyEditDlg_FirstCall && form is FamilyEditDlg) {
                 FamilyEditDlg_Handler(form as FamilyEditDlg);
                 FamilyEditDlg_FirstCall = false;
@@ -1635,8 +1636,7 @@ namespace GKTests.UITests
             ModalFormHandler = PrintDialog_Handler;
             ClickToolStripButton("tbDocPreview", fMainWin);
 
-            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
-            //frm.Close();
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape)); // frm.Close();
         }
 
         private void SaveSnapshot_Handler(string name, IntPtr hWnd, Form form)
