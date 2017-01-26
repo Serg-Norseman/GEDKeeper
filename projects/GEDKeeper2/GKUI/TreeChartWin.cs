@@ -82,7 +82,7 @@ namespace GKUI
             this.fPerson = startPerson;
             this.fGensLimit = -1;
 
-            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer(false));
+            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
             this.fTreeBox.Name = "fTreeBox";
             this.fTreeBox.Base = this.fBase;
             this.fTreeBox.Dock = DockStyle.Fill;

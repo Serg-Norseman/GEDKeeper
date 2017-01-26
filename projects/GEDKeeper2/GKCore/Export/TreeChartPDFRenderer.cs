@@ -40,12 +40,13 @@ namespace GKCore.Export
     public sealed class TreeChartPDFRenderer : TreeChartRenderer
     {
         private PdfContentByte fCanvas;
-        private Size fPageSize;
-        private Size fChartSize;
-        private float fZoomFactor;
+        private float fPageHeight;
+        private float fPageWidth;
 
-        public TreeChartPDFRenderer(bool autoScale) : base(autoScale)
+        public TreeChartPDFRenderer(float pageWidth, float pageHeight) : base()
         {
+            fPageHeight = pageHeight;
+            fPageWidth = pageWidth;
         }
 
         public override void SetTarget(object target)
@@ -59,17 +60,12 @@ namespace GKCore.Export
 
         #region Private methods
 
-        private BaseFont GetBaseFont(sdFont font)
-        {
-            string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\"+font.FontFamily.Name+".ttf");
-            var baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            return baseFont;
-        }
-
         private void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
         {
-            baseFont = GetBaseFont(font);
-            fontSize = font.SizeInPoints * fZoomFactor;
+            string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\"+font.FontFamily.Name+".ttf");
+
+            baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            fontSize = font.SizeInPoints;
         }
 
         private void SetPen(Pen pen)
@@ -84,51 +80,17 @@ namespace GKCore.Export
             fCanvas.SetColorFill(new BaseColor(color.R, color.G, color.B));
         }
 
-        private int CheckVal(float value, bool yAxis = false, float yOffset = 0)
+        private float CheckVal(float value, bool yAxis = false, float yOffset = 0)
         {
             float newVal = value;
 
             // the Y-axis of this canvas starts from the bottom left corner
-            if (yAxis) newVal = fPageSize.Height - newVal - yOffset;
+            if (yAxis) newVal = fPageHeight - newVal - yOffset;
 
-            newVal = newVal * fZoomFactor;
-
-            return (int)(newVal);
-        }
-
-        /*private const float PointsPerInch = 72;
-        private const float PixelsPerInch = 96;
-
-        private float pt2pix(float points)
-        {
-            return (points / PointsPerInch) * PixelsPerInch;
-        }*/
-
-        const float pixelToPoint = 72f / 96f;
-
-        public static float pt2pix(float points)
-        {
-            return (points / pixelToPoint);
+            return newVal;
         }
 
         #endregion
-
-        public void ResetFactor()
-        {
-            fZoomFactor = 1.0f;
-        }
-
-        public float SetSizes(Size pageSize, Size chartSize)
-        {
-            fPageSize = pageSize;
-            fChartSize = chartSize;
-
-            float factor = SysUtils.ZoomToFit(fChartSize.Width, fChartSize.Height, fPageSize.Width, fPageSize.Height);
-            factor = (factor > 1.0f) ? 1.0f : factor;
-            //fZoomFactor = factor;
-            fZoomFactor = 1.0f;
-            return factor;
-        }
 
         public override void DrawImage(sdImage image, float x, float y,
                                        float width, float height)
@@ -142,15 +104,15 @@ namespace GKCore.Export
             fCanvas.AddImage(img, width, 0, 0, height, x, y);
         }
 
-        public override int GetTextHeight(string text, sdFont font)
+        public override int GetTextHeight(sdFont font)
         {
             BaseFont baseFont;
             float fontSize;
             GetFontInfo(font, out baseFont, out fontSize);
 
-            float ascent = baseFont.GetAscentPoint(text, fontSize);
-            float descent = baseFont.GetDescentPoint(text, fontSize);
-            float height = (ascent - descent) * 1.66f;
+            float ascent = baseFont.GetAscentPoint(STR_HEIGHT_SAMPLE, fontSize);
+            float descent = baseFont.GetDescentPoint(STR_HEIGHT_SAMPLE, fontSize);
+            float height = (ascent - descent) * 1.33f; // Line spacing
             return (int)(height);
         }
 
@@ -173,10 +135,7 @@ namespace GKCore.Export
             float fontSize;
             GetFontInfo(font, out baseFont, out fontSize);
 
-            int h = GetTextHeight(text, font);
-            //int h = (int)Math.Round(baseFont.GetAscentPoint(text, fontSize));
-            //int h = (int)Math.Round((baseFont.GetAscentPoint(text, fontSize) - baseFont.GetDescentPoint(text, fontSize)) * 25.4f / 72.0f);
-
+            int h = GetTextHeight(font);
             x = CheckVal(x, false);
             y = CheckVal(y, true, h);
 
@@ -185,7 +144,6 @@ namespace GKCore.Export
 
                 fCanvas.BeginText();
                 fCanvas.SetTextMatrix(x, y);
-                //fCanvas.SetTextMatrix(1.0f, 0.0f, 0.0f, 1.0f, x, y);
                 fCanvas.ShowText(text);
             } finally {
                 fCanvas.EndText();

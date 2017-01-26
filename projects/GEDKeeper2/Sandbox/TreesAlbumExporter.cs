@@ -31,7 +31,6 @@ using iTextSharp.text.pdf;
 namespace GKCore.Export
 {
     using itFont = iTextSharp.text.Font;
-    using itRectangle = iTextSharp.text.Rectangle;
 
     public sealed class TreesAlbumExporter : PDFExporter
     {
@@ -57,7 +56,7 @@ namespace GKCore.Export
             try
             {
                 {
-                    string title = "Trees Album";//LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(fAncestor, true, false);
+                    string title = "Trees Album";//LangMan.LS(LSID.LSID_TreesAlbum)
 
                     fDocument.AddTitle(title);
                     fDocument.AddSubject("");
@@ -74,41 +73,52 @@ namespace GKCore.Export
                     fBoldFont = new itFont(baseFont, 8f, itFont.BOLD, BaseColor.BLACK);
                     fSymFont = new itFont(baseFont, 12f, itFont.BOLD, BaseColor.BLACK);
 
-                    /*float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
+                    float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
                     fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
                     fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER });
-                    fDocument.NewPage();*/
+                    fDocument.NewPage();
 
                     PreparePatriarchs();
 
                     var itPS = fDocument.PageSize;
-                    var pageSize = new System.Drawing.Size((int)itPS.Width, (int)itPS.Height);
+                    float pageHeight = itPS.Height;
+                    float pageWidth = itPS.Width;
 
-                    var renderer = new TreeChartPDFRenderer(true);
+                    var renderer = new TreeChartPDFRenderer(pageWidth, pageHeight);
                     renderer.SetTarget(fPdfWriter.DirectContent);
+
+                    // TODO: replace by local options in TreeChartBox
+                    bool prevKinship = MainWin.Instance.Options.ChartOptions.Kinship;
+                    MainWin.Instance.Options.ChartOptions.Kinship = false;
 
                     var treeBox = new TreeChartBox(renderer);
                     treeBox.Base = fBase;
                     treeBox.Options = MainWin.Instance.Options.ChartOptions;
                     treeBox.DepthLimit = 3;
                     treeBox.ShieldState = fShieldState;
-                    treeBox.Height = pageSize.Height;
-                    treeBox.Width = pageSize.Width;
+                    treeBox.Height = (int)pageHeight;
+                    treeBox.Width = (int)pageWidth;
 
                     int num = fPatList.Count;
                     for (int i = 0; i < num; i++) {
                         string iName = fPatList[i];
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
 
-                        renderer.ResetFactor();
                         treeBox.SetScale(1.0f);
                         treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, false);
-                        float zoomFactor = renderer.SetSizes(pageSize, treeBox.ImageSize);
-                        treeBox.SetScale(zoomFactor);
-                        treeBox.RenderStatic(true);
+
+                        float scaleFactor = SysUtils.ZoomToFit(treeBox.ImageSize.Width,
+                                                               treeBox.ImageSize.Height,
+                                                               pageWidth, pageHeight);
+                        scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
+
+                        treeBox.SetScale(scaleFactor);
+                        treeBox.RenderStatic(TreeChartBox.BackgroundMode.bmNone, true);
 
                         fDocument.NewPage();
                     }
+
+                    MainWin.Instance.Options.ChartOptions.Kinship = prevKinship;
                 }
             }
             catch (Exception)

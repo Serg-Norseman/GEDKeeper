@@ -33,7 +33,7 @@ namespace GKUI.Charts
     {
         private Graphics fCanvas;
 
-        public TreeChartGfxRenderer(bool autoScale) : base(autoScale)
+        public TreeChartGfxRenderer() : base()
         {
         }
 
@@ -52,9 +52,9 @@ namespace GKUI.Charts
             fCanvas.DrawImage(image, x, y, width, height);
         }
 
-        public override int GetTextHeight(string text, Font font)
+        public override int GetTextHeight(Font font)
         {
-            return fCanvas.MeasureString(text, font).ToSize().Height;
+            return fCanvas.MeasureString(STR_HEIGHT_SAMPLE, font).ToSize().Height;
         }
 
         public override int GetTextWidth(string text, Font font)

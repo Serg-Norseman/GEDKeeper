@@ -769,23 +769,24 @@ namespace GKCommon
 
         #region Graphics functions
 
-        public static float ZoomToFit(int imgWidth, int imgHeight, int requireWidth, int requireHeight)
+        public static float ZoomToFit(float imgWidth, float imgHeight,
+                                      float requireWidth, float requireHeight)
         {
-            if (imgWidth == 0 || imgHeight == 0) return 1.0f;
+            if (imgWidth == 0.0f || imgHeight == 0.0f) return 1.0f;
 
             float aspectRatio;
 
             if (imgWidth > imgHeight) {
-                aspectRatio = (float)requireWidth / imgWidth;
+                aspectRatio = requireWidth / imgWidth;
 
                 if (requireHeight < imgHeight * aspectRatio) {
-                    aspectRatio = (float)requireHeight / imgHeight;
+                    aspectRatio = requireHeight / imgHeight;
                 }
             } else {
-                aspectRatio = (float)requireHeight / imgHeight;
+                aspectRatio = requireHeight / imgHeight;
 
                 if (requireWidth < imgWidth * aspectRatio) {
-                    aspectRatio = (float)requireWidth / imgWidth;
+                    aspectRatio = requireWidth / imgWidth;
                 }
             }
 

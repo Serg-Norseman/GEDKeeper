@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define DEBUG_IMAGE
+//define DEBUG_IMAGE
 
 using System;
 using System.Collections.Generic;
@@ -56,6 +56,9 @@ namespace GKUI.Charts
         public const int DEF_BRANCH_DISTANCE = 40;
         public const int DEF_LEVEL_DISTANCE = 46;
 
+        // Specifies the interior spacing of a node.
+        public const int DEF_PERSON_NODE_PADDING = 10;
+
         #region Subtypes
         
         private enum ChartControlMode
@@ -85,6 +88,14 @@ namespace GKUI.Charts
             maProperties,
             maExpand
         }
+
+        public enum BackgroundMode
+        {
+            bmNone,
+            bmImage,
+            bmFill,
+            bmAny
+        }
         
         #endregion
 
@@ -108,6 +119,7 @@ namespace GKUI.Charts
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
         private int fMargins;
+        private int fNodePadding;
         private TreeChartOptions fOptions;
         private bool fPathDebug;
         private TreeChartPerson fRoot;
@@ -115,7 +127,6 @@ namespace GKUI.Charts
         private TreeChartPerson fSelected;
         private GEDCOMIndividualRecord fSaveSelection;
         private ShieldState fShieldState;
-        //private string[] FSignsData;
         private Bitmap[] fSignsPic;
         private int fSpouseDistance;
         private bool fTraceKinships;
@@ -188,7 +199,12 @@ namespace GKUI.Charts
         public int BorderWidth
         {
             get { return fBorderWidth; }
-            set { SetBorderWidth(value); }
+            set {
+                if (fBorderWidth == value) return;
+
+                fBorderWidth = value;
+                Invalidate();
+            }
         }
 
         public int BranchDistance
@@ -242,6 +258,11 @@ namespace GKUI.Charts
         {
             get { return fMargins; }
             set { fMargins = value; }
+        }
+
+        public int NodePadding
+        {
+            get { return fNodePadding; }
         }
 
         public TreeChartOptions Options
@@ -440,12 +461,11 @@ namespace GKUI.Charts
 
         public void SetScale(float value)
         {
-            //if (value < 0.5 || value > 1.5) return;
+            if (value < 0.5 || value > 1.5) return;
             fScale = value;
 
             fScaleControl.ThumbPos = (int)Math.Round((value - 0.4f) / 0.1f);
 
-            Predef();
             RecalcChart();
 
             if (fTraceSelected && fSelected != null)
@@ -460,8 +480,6 @@ namespace GKUI.Charts
             
             try
             {
-                Predef();
-
                 fKind = kind;
                 fSelected = null;
                 fPersons.Clear();
@@ -1001,20 +1019,20 @@ namespace GKUI.Charts
                 ExtRect brt = prt;
                 if (person.Portrait != null) {
                     ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
-                    fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top, 
+                    fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top,
                                         portRt.GetWidth(), portRt.GetHeight());
 
                     prt.Left += person.PortraitWidth;
                 }
 
-                int h = fRenderer.GetTextHeight("A", fDrawFont);
+                int h = fRenderer.GetTextHeight(fDrawFont);
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
                     string line = person.Lines[k];
 
                     int stw = fRenderer.GetTextWidth(line, fDrawFont);
                     int rx = prt.Left + ((prt.Right - prt.Left + 1) - stw) / 2;
-                    int ry = prt.Top + (10 + (h * k));
+                    int ry = prt.Top + fNodePadding + (h * k);
                     fRenderer.DrawString(line, fDrawFont, fSolidBlack, rx, ry);
                 }
 
@@ -1145,21 +1163,33 @@ namespace GKUI.Charts
             }
         }
 
-        private void InternalDraw(DrawMode drawMode)
+        private void DrawBackground(BackgroundMode background)
         {
-            // TODO: need to complete this!
-            var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-            bool hasBackground = (BackgroundImage != null && fRenderer is TreeChartGfxRenderer);
-            if (!hasBackground) {
-                /*using (Brush brush = new SolidBrush(BackColor)) {
-                    gfx.FillRectangle(brush, imgRect);
-                }*/
-                //fRenderer.DrawRectangle(null, Color.Silver, imgRect.Left, imgRect.Top, imgRect.Width, imgRect.Height);
-            } else {
-                /*using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
-                    gfx.FillRectangle(textureBrush, imgRect);
-                }*/
+            if (background != BackgroundMode.bmNone) {
+                bool bgImage = ((BackgroundImage != null) &&
+                                (background == BackgroundMode.bmAny ||
+                                 background == BackgroundMode.bmImage));
+
+                if (bgImage) {
+                    /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
+
+                    using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
+                        gfx.FillRectangle(textureBrush, imgRect);
+                    }*/
+                } else {
+                    bool bgFill = (background == BackgroundMode.bmAny ||
+                                   background == BackgroundMode.bmImage);
+
+                    if (bgFill) {
+                        fRenderer.DrawRectangle(null, BackColor, 0, 0, fImageWidth, fImageHeight);
+                    }
+                }
             }
+        }
+
+        private void InternalDraw(DrawMode drawMode, BackgroundMode background)
+        {
+            DrawBackground(background);
 
             fSPX = 0;
             fSPY = 0;
@@ -1245,6 +1275,7 @@ namespace GKUI.Charts
             fBranchDistance = (int)Math.Round(DEF_BRANCH_DISTANCE * sc);
             fLevelDistance = (int)Math.Round(DEF_LEVEL_DISTANCE * sc);
             fMargins = (int)Math.Round(DEF_MARGINS * sc);
+            fNodePadding = (int)(DEF_PERSON_NODE_PADDING * sc);
         }
         
         private int InitInfoSize()
@@ -1286,6 +1317,8 @@ namespace GKUI.Charts
 
         public void RecalcChart(bool noRedraw = false)
         {
+            Predef();
+
             if (fOptions.Kinship && fKinRoot != null) {
                 fGraph.SetTreeRoot(fKinRoot.Rec);
             }
@@ -1598,14 +1631,6 @@ namespace GKUI.Charts
             RecalcDesc(ref edges, fRoot, new Point(fMargins, fMargins), predef);
         }
 
-        private void SetBorderWidth(int value)
-        {
-            if (fBorderWidth != value) {
-                fBorderWidth = value;
-                Invalidate();
-            }
-        }
-
         private void SetScroll(int x, int y)
         {
             AutoScrollPosition = new Point(x, y);
@@ -1750,7 +1775,7 @@ namespace GKUI.Charts
         {
             Graphics gfx = e.Graphics;
             fRenderer.SetTarget(gfx);
-            InternalDraw(DrawMode.dmInteractive);
+            InternalDraw(DrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
             if (fScaleControl.Visible) fScaleControl.Draw(gfx);
@@ -2129,12 +2154,12 @@ namespace GKUI.Charts
                 } else {
                     pic = new Bitmap(fImageWidth, fImageHeight, PixelFormat.Format24bppRgb);
                 }
-                
+
                 try
                 {
                     using (Graphics gfx = Graphics.FromImage(pic)) {
                         fRenderer.SetTarget(gfx);
-                        RenderStatic();
+                        RenderStatic(BackgroundMode.bmAny);
                     }
 
                     pic.Save(fileName, imFmt);
@@ -2158,17 +2183,16 @@ namespace GKUI.Charts
 
             using (Graphics gfx = Graphics.FromImage(image)) {
                 fRenderer.SetTarget(gfx);
-                RenderStatic();
+                RenderStatic(BackgroundMode.bmImage);
             }
 
             return image;
         }
 
-        public void RenderStatic(bool centered = false)
+        public void RenderStatic(BackgroundMode background, bool centered = false)
         {
-            Predef();
             DrawMode drawMode = (!centered) ? DrawMode.dmStatic : DrawMode.dmStaticCentered;
-            InternalDraw(drawMode);
+            InternalDraw(drawMode, background);
         }
 
         #endregion

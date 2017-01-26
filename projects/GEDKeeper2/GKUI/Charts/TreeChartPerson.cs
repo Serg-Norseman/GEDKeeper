@@ -455,8 +455,10 @@ namespace GKUI.Charts
                     if (maxwid < wt) maxwid = wt;
                 }
 
-                fWidth = maxwid + 20;
-                fHeight = renderer.GetTextHeight("A", fChart.DrawFont) * lines + 20;
+                int pad2side = (fChart.NodePadding * 2);
+
+                fWidth = pad2side + maxwid;
+                fHeight = pad2side + renderer.GetTextHeight(fChart.DrawFont) * lines;
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);

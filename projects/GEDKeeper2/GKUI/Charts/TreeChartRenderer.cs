@@ -28,11 +28,12 @@ namespace GKUI.Charts
     /// </summary>
     public abstract class TreeChartRenderer
     {
-        protected bool fAutoScale;
+        // Example of string to measurement the height, where there are chars
+        // with the ascent and descent of elements.
+        protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
-        protected TreeChartRenderer(bool autoScale)
+        protected TreeChartRenderer()
         {
-            fAutoScale = autoScale;
         }
 
         public abstract void SetTarget(object target);
@@ -45,7 +46,7 @@ namespace GKUI.Charts
         public abstract void DrawImage(Image image, float x, float y,
                                        float width, float height);
 
-        public abstract int GetTextHeight(string text, Font font);
+        public abstract int GetTextHeight(Font font);
         public abstract int GetTextWidth(string text, Font font);
 
         public abstract void DrawString(string text, Font font, Brush brush, float x, float y);
