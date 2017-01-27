@@ -24,25 +24,38 @@ using System.Drawing.Drawing2D;
 namespace GKUI.Charts
 {
     /// <summary>
-    /// 
+    /// Non-windowed scaling control.
+    /// Uses a resource bitmap to draw itself on the parent's context.
     /// </summary>
     public sealed class ScaleControl : ITreeControl
     {
         #region Private fields
         
-        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26, 320);
-        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26, 11);
-
+        /* Define areas within the resource bitmap. */
+        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26,
+                                                                     320);
+        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26,
+                                                                     11);
+        /* Range [`SCALE_Y1`, `SCALE_Y2`) is available range for the thumb. */
         private const int SCALE_Y1 = 22;
         private const int SCALE_Y2 = 297;
+        /* Padding for this control within the owner client area. */
+        private const int PADDING_X = 10;
+        private const int PADDING_Y = 10;
+        private const int SHADOW_TOP = 4;
+        private const int SHADOW_BOTTOM = 1;
 
         private readonly Bitmap fControlsImage;
         private readonly TreeChartBox fChart;
 
-        private int fDCount = 11;
-        private int fThumbPos = 6;
+        private int fDCount = 10;
+        private int fThumbPos = 5; /* Counts from zero. */
         private bool fVisible;
         private bool fThumbCaptured;
+        /* Set member `fGrowOver` or property `GrowOver` to `true` if you want
+         * to have the control with height exceeds height of `SCALE_RECT`
+         * (i.e. height of the original image). */
+        private bool fGrowOver = false;
         private string fTip;
         private Rectangle fDestRect;
 
@@ -50,14 +63,14 @@ namespace GKUI.Charts
         
         #region Public properties
         
-        public int Width
+        public static int Width
         {
-            get { return 26; }
+            get { return SCALE_RECT.Width; }
         }
 
-        public int Height
+        public static int Height
         {
-            get { return 320; }
+            get { return SCALE_RECT.Height; }
         }
 
         public int DCount
@@ -69,6 +82,12 @@ namespace GKUI.Charts
         public bool ThumbCaptured
         {
             get { return fThumbCaptured; }
+        }
+
+        public bool GrowOver
+        {
+            get { return fGrowOver; }
+            set { fGrowOver = value; }
         }
 
         public int ThumbPos
@@ -108,7 +127,20 @@ namespace GKUI.Charts
         public void Update()
         {
             Rectangle cr = fChart.ClientRectangle;
-            fDestRect = new Rectangle(cr.Right - (10 + Width), 10, Width, Height);
+            if (fGrowOver)
+            {
+                int height = cr.Height - (PADDING_Y << 1);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
+                                          PADDING_Y, Width, height);
+            }
+            else
+            {
+                int height = System.Math.Min(cr.Height - (PADDING_Y << 1),
+                                             Height);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
+                    System.Math.Max(PADDING_Y, (cr.Height - height) >> 1),
+                    Width, height);
+            }
         }
 
         public void Draw(Graphics gfx)
@@ -119,17 +151,53 @@ namespace GKUI.Charts
             gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
-            gfx.DrawImage(fControlsImage, fDestRect, SCALE_RECT, GraphicsUnit.Pixel);
-
-            if (fDCount == 0) return;
-            gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT, GraphicsUnit.Pixel);
+            /* Render the top icon without scaling. */
+            Rectangle source_rect = new Rectangle(0, 0, Width,
+                                                  SCALE_Y1 + SHADOW_TOP);
+            Rectangle destination_rect = new Rectangle(fDestRect.Left,
+                fDestRect.Top, Width, SCALE_Y1 + SHADOW_TOP);
+            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
+                          GraphicsUnit.Pixel);
+            /* Render the bottom icon without scaling. */
+            source_rect = new Rectangle(0, SCALE_Y2, Width,
+                                        Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destination_rect = new Rectangle(fDestRect.Left,
+                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)), Width,
+                Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
+                          GraphicsUnit.Pixel);
+            /* Render the vertical bar with scaling of Y's (there's still no
+             * scaling for X's). Image source must ignore some shadows at the
+             * top and bottom. */
+            /* Source image has a defect: the bottom zoom icon has continuous
+             * top line (but the line must have a whitespace -- just as the
+             * bottom line of the top icon does). To fix the issue I extend the
+             * destination rect by one pixel -- this is height of the line. */
+            source_rect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width,
+                                        Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destination_rect = new Rectangle(fDestRect.Left,
+                fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
+                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) -
+                    (fDestRect.Top + SCALE_Y1 + SHADOW_TOP) + 1);
+            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
+                          GraphicsUnit.Pixel);
+            if (0 < fDCount)
+            {
+                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT,
+                              GraphicsUnit.Pixel);
+            }
         }
 
-        private Rectangle GetDRect(int d)
+        private Rectangle GetDRect(int step_index)
         {
-            int dH = ((SCALE_Y2 - SCALE_Y1) - THUMB_RECT.Height) / (fDCount - 1);
-            int thumbY = fDestRect.Top + SCALE_Y1 + (d - 1) * dH;
-            return new Rectangle(fDestRect.Left, thumbY, fDestRect.Width, THUMB_RECT.Height);
+            int available_height = fDestRect.Height -
+                                   (SCALE_Y1 + (Height - SCALE_Y2));
+            int step = available_height / fDCount;
+            int thump_top = System.Math.Min(
+                fDestRect.Top + SCALE_Y1 + step_index * step,
+                fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
+            return new Rectangle(fDestRect.Left, thump_top, fDestRect.Width,
+                                 THUMB_RECT.Height);
         }
 
         public bool Contains(int x, int y)
@@ -145,13 +213,18 @@ namespace GKUI.Charts
         public void MouseMove(int x, int y, ThumbMoved thumbMoved)
         {
             if (!fThumbCaptured) return;
-            
-            for (int i = 1; i <= fDCount; i++) {
+            /* The thumb is drawn on top of a "step", therefore to take the last
+             * step into account I have to check non-existent step under the
+             * last one. */
+            for (int i = 0; fDCount >= i; ++i) {
                 Rectangle r = GetDRect(i);
                 if ((r.Top <= y) && (r.Bottom > y)) {
-                    fThumbPos = i;
-                    fChart.Invalidate();
-                    if (thumbMoved != null) thumbMoved(i);
+                    if (i != fThumbPos)
+                    {
+                        fThumbPos = i;
+                        fChart.Invalidate();
+                        if (thumbMoved != null) thumbMoved(i);
+                    }
                     break;
                 }
             }
