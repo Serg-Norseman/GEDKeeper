@@ -1909,7 +1909,8 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    if (!fScaleControl.Contains(e.X, e.Y)) {
+                    if (!(fScaleControl.Contains(e.X, e.Y) ||
+                          fScaleControl.ThumbCaptured)) {
                         fMode = ChartControlMode.ccmDefault;
                         fScaleControl.Visible = false;
                         fToolTip.Hide(this);

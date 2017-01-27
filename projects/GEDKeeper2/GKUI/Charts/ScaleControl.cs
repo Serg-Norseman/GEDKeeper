@@ -66,6 +66,11 @@ namespace GKUI.Charts
             set { fDCount = value; }
         }
 
+        public bool ThumbCaptured
+        {
+            get { return fThumbCaptured; }
+        }
+
         public int ThumbPos
         {
             get { return fThumbPos; }
@@ -143,7 +148,7 @@ namespace GKUI.Charts
             
             for (int i = 1; i <= fDCount; i++) {
                 Rectangle r = GetDRect(i);
-                if (r.Contains(x, y)) {
+                if ((r.Top <= y) && (r.Bottom > y)) {
                     fThumbPos = i;
                     fChart.Invalidate();
                     if (thumbMoved != null) thumbMoved(i);
@@ -154,7 +159,7 @@ namespace GKUI.Charts
 
         public void MouseUp(int x, int y)
         {
-            if (fThumbCaptured) fThumbCaptured = false;
+            fThumbCaptured = false;
         }
     }
 }
