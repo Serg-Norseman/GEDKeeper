@@ -31,16 +31,16 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKSamplePlugin.cs \
-./PluginForm.Designer.cs \
-./PluginForm.cs
+./PluginForm.cs \
+./PluginForm.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKSamplePlugin.cs \
-./PluginForm.Designer.cs \
-./PluginForm.cs
+./PluginForm.cs \
+./PluginForm.Designer.cs
 
 endif
 

@@ -464,7 +464,8 @@ namespace GKUI.Charts
             if (value < 0.5 || value > 1.5) return;
             fScale = value;
 
-            fScaleControl.ThumbPos = (int)Math.Round((value - 0.4f) / 0.1f);
+            fScaleControl.ThumbPos = (int)Math.Round((value - 0.5f) *
+                                                     fScaleControl.DCount);
 
             RecalcChart();
 
@@ -1909,7 +1910,8 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    if (!fScaleControl.Contains(e.X, e.Y)) {
+                    if (!(fScaleControl.Contains(e.X, e.Y) ||
+                          fScaleControl.ThumbCaptured)) {
                         fMode = ChartControlMode.ccmDefault;
                         fScaleControl.Visible = false;
                         fToolTip.Hide(this);
@@ -1922,7 +1924,7 @@ namespace GKUI.Charts
 
         private void ThumbMoved(int position)
         {
-            SetScale(0.4f + (position * 0.1f));
+            SetScale(0.5f + (((float)(position)) / fScaleControl.DCount));
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
