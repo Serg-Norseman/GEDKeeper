@@ -32,16 +32,15 @@ namespace GKUI.Charts
         #region Private fields
         
         /* Define areas within the resource bitmap. */
-        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26,
-                                                                     320);
-        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26,
-                                                                     11);
+        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26, 320);
+        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26, 11);
         /* Range [`SCALE_Y1`, `SCALE_Y2`) is available range for the thumb. */
         private const int SCALE_Y1 = 22;
         private const int SCALE_Y2 = 297;
         /* Padding for this control within the owner client area. */
         private const int PADDING_X = 10;
         private const int PADDING_Y = 10;
+        /* Shadow spaces after/before `SCALE_Y1` and `SCALE_Y2`. */
         private const int SHADOW_TOP = 4;
         private const int SHADOW_BOTTOM = 1;
 
@@ -127,19 +126,14 @@ namespace GKUI.Charts
         public void Update()
         {
             Rectangle cr = fChart.ClientRectangle;
-            if (fGrowOver)
-            {
+            if (fGrowOver) {
                 int height = cr.Height - (PADDING_Y << 1);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), PADDING_Y, Width, height);
+            } else {
+                int height = System.Math.Min(cr.Height - (PADDING_Y << 1), Height);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
-                                          PADDING_Y, Width, height);
-            }
-            else
-            {
-                int height = System.Math.Min(cr.Height - (PADDING_Y << 1),
-                                             Height);
-                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
-                    System.Math.Max(PADDING_Y, (cr.Height - height) >> 1),
-                    Width, height);
+                                          System.Math.Max(PADDING_Y, (cr.Height - height) >> 1),
+                                          Width, height);
             }
         }
 
@@ -152,48 +146,37 @@ namespace GKUI.Charts
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
             /* Render the top icon without scaling. */
-            Rectangle source_rect = new Rectangle(0, 0, Width,
-                                                  SCALE_Y1 + SHADOW_TOP);
-            Rectangle destination_rect = new Rectangle(fDestRect.Left,
-                fDestRect.Top, Width, SCALE_Y1 + SHADOW_TOP);
-            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
+            Rectangle sourceRect = new Rectangle(0, 0, Width, SCALE_Y1 + SHADOW_TOP);
+            Rectangle destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top,
+                                                      Width, SCALE_Y1 + SHADOW_TOP);
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect,
                           GraphicsUnit.Pixel);
             /* Render the bottom icon without scaling. */
-            source_rect = new Rectangle(0, SCALE_Y2, Width,
-                                        Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            destination_rect = new Rectangle(fDestRect.Left,
-                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)), Width,
-                Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
-                          GraphicsUnit.Pixel);
+            sourceRect = new Rectangle(0, SCALE_Y2, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destinationRect = new Rectangle(fDestRect.Left,
+                                            fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)),
+                                            Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
             /* Render the vertical bar with scaling of Y's (there's still no
              * scaling for X's). Image source must ignore some shadows at the
              * top and bottom. */
-            source_rect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width,
-                                        Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            destination_rect = new Rectangle(fDestRect.Left,
-                fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
-                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) -
-                    (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
-            gfx.DrawImage(fControlsImage, destination_rect, source_rect,
-                          GraphicsUnit.Pixel);
+            sourceRect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
+                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
             if (0 < fDCount)
             {
-                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT,
-                              GraphicsUnit.Pixel);
+                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT, GraphicsUnit.Pixel);
             }
         }
 
-        private Rectangle GetDRect(int step_index)
+        private Rectangle GetDRect(int stepIndex)
         {
-            int available_height = fDestRect.Height -
-                                   (SCALE_Y1 + (Height - SCALE_Y2));
-            int step = available_height / fDCount;
-            int thump_top = System.Math.Min(
-                fDestRect.Top + SCALE_Y1 + step_index * step,
-                fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
-            return new Rectangle(fDestRect.Left, thump_top, fDestRect.Width,
-                                 THUMB_RECT.Height);
+            int availableHeight = fDestRect.Height - (SCALE_Y1 + (Height - SCALE_Y2));
+            int step = availableHeight / fDCount;
+            int thumpTop = System.Math.Min(fDestRect.Top + SCALE_Y1 + stepIndex * step,
+                                           fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
+            return new Rectangle(fDestRect.Left, thumpTop, fDestRect.Width, THUMB_RECT.Height);
         }
 
         public bool Contains(int x, int y)
@@ -215,8 +198,7 @@ namespace GKUI.Charts
             for (int i = 0; fDCount >= i; ++i) {
                 Rectangle r = GetDRect(i);
                 if ((r.Top <= y) && (r.Bottom > y)) {
-                    if (i != fThumbPos)
-                    {
+                    if (i != fThumbPos) {
                         fThumbPos = i;
                         fChart.Invalidate();
                         if (thumbMoved != null) thumbMoved(i);
