@@ -40,7 +40,7 @@ namespace GKUI.Charts
         private readonly TreeChartBox fChart;
 
         private int fDCount = 11;
-        private int fThumbPos = 5;
+        private int fThumbPos = 6;
         private bool fVisible;
         private bool fThumbCaptured;
         private string fTip;
