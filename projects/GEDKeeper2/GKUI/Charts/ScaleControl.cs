@@ -169,16 +169,12 @@ namespace GKUI.Charts
             /* Render the vertical bar with scaling of Y's (there's still no
              * scaling for X's). Image source must ignore some shadows at the
              * top and bottom. */
-            /* Source image has a defect: the bottom zoom icon has continuous
-             * top line (but the line must have a whitespace -- just as the
-             * bottom line of the top icon does). To fix the issue I extend the
-             * destination rect by one pixel -- this is height of the line. */
             source_rect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width,
                                         Height - (SCALE_Y2 + SHADOW_BOTTOM));
             destination_rect = new Rectangle(fDestRect.Left,
                 fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
                 fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) -
-                    (fDestRect.Top + SCALE_Y1 + SHADOW_TOP) + 1);
+                    (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
             gfx.DrawImage(fControlsImage, destination_rect, source_rect,
                           GraphicsUnit.Pixel);
             if (0 < fDCount)
