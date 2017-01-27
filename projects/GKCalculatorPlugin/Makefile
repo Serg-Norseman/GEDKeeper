@@ -24,16 +24,16 @@ ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
-./CalcWidget.Designer.cs \
 ./CalcWidget.cs \
+./CalcWidget.Designer.cs \
 ./GKCalculatorPlugin.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
-./CalcWidget.Designer.cs \
 ./CalcWidget.cs \
+./CalcWidget.Designer.cs \
 ./GKCalculatorPlugin.cs
 
 endif

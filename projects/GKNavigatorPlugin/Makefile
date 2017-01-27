@@ -40,9 +40,8 @@ else
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKNavigatorPlugin.cs \
-./NavigatorData.cs \
-./NavigatorWidget.cs \
-./NavigatorWidget.Designer.cs
+./PluginForm.cs \
+./PluginForm.Designer.cs
 
 endif
 
@@ -65,7 +64,7 @@ else
 # `$(resources)` for `$(linux)`
 resources := \
 $(addprefix $(objdir), \
-NavigatorWidget.resources \
+PluginForm.resources \
 )
 
 endif

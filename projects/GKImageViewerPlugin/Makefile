@@ -32,7 +32,8 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./GKImageViewerPlugin.cs \
 ./ImageViewerWin.cs \
-./ImageViewerWin.Designer.cs
+./ImageViewerWin.Designer.cs \
+./IVPResource.Designer.cs
 
 else
 
@@ -56,8 +57,8 @@ ifeq ($(windows), $(softwareplatform))
 # `$(resources)` for `$(windows)`
 resources := \
 $(addprefix $(objdir), \
-IVPResource.resources \
 ImageViewerWin.resources \
+IVPResource.resources \
 )
 
 else
@@ -65,8 +66,8 @@ else
 # `$(resources)` for `$(linux)`
 resources := \
 $(addprefix $(objdir), \
-IVPResource.resources \
 ImageViewerWin.resources \
+IVPResource.resources \
 )
 
 endif

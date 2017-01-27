@@ -32,11 +32,11 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./GKTreeVizPlugin.cs \
 ./HighResolutionTimer.cs \
-./TVPerson.cs \
-./TVSettingsDlg.Designer.cs \
-./TVSettingsDlg.cs \
 ./TreeVizControl.cs \
-./TreeVizViewer.cs
+./TreeVizViewer.cs \
+./TVPerson.cs \
+./TVSettingsDlg.cs \
+./TVSettingsDlg.Designer.cs
 
 else
 
@@ -44,11 +44,11 @@ else
 sources := \
 ./GKTreeVizPlugin.cs \
 ./HighResolutionTimer.cs \
-./TVPerson.cs \
-./TVSettingsDlg.Designer.cs \
-./TVSettingsDlg.cs \
 ./TreeVizControl.cs \
-./TreeVizViewer.cs
+./TreeVizViewer.cs \
+./TVPerson.cs \
+./TVSettingsDlg.cs \
+./TVSettingsDlg.Designer.cs
 
 endif
 
