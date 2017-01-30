@@ -59,17 +59,15 @@ namespace GKUI.Charts
             PersonSegment rootSegment;
             if (fRootPerson != null) {
                 rootSegment = TraverseDescendants(fRootPerson, 0);
-            } else {
-                return;
+
+                fCenterX = Width / 2 + fOffsetX;
+                fCenterY = Height / 2 + fOffsetY;
+
+                const int inRad = CENTER_RAD - 50;
+                float stepAngle = (360.0f / rootSegment.TotalSubSegments);
+
+                CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
             }
-
-            fCenterX = Width / 2 + fOffsetX;
-            fCenterY = Height / 2 + fOffsetY;
-
-            int inRad = CENTER_RAD - 50;
-            float stepAngle = (360.0f / rootSegment.TotalSubSegments);
-
-            CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
         }
 
         private void CalcDescendants(PersonSegment segment, int inRad, float startAngle, float stepAngle)
@@ -149,16 +147,16 @@ namespace GKUI.Charts
 
                 if (gen < fMaxGenerations)
                 {
-                    int num2 = iRec.SpouseToFamilyLinks.Count;
-                    for (int j = 0; j < num2; j++)
+                    int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
+                    for (int j = 0; j < numberOfFamilyLinks; j++)
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
                         if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
                         {
                             family.SortChilds();
 
-                            int num3 = family.Childrens.Count;
-                            for (int i = 0; i < num3; i++)
+                            int numberOfChildren = family.Childrens.Count;
+                            for (int i = 0; i < numberOfChildren; i++)
                             {
                                 GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
                                 PersonSegment childSegment = TraverseDescendants(child, gen + 1);
@@ -184,11 +182,12 @@ namespace GKUI.Charts
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int num = fSegments.Count;
-            for (int i = 0; i < num; i++) {
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
                 if (segment.IRec == null) continue;
-
+                /* FIXME(brigadir15@gmail.com): Replace literal `9` below with a
+                 * const. */
                 int brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
                 SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
@@ -196,8 +195,7 @@ namespace GKUI.Charts
                 gfx.FillPath(brush, path);
                 gfx.DrawPath(fPen, path);
             }
-
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < numberOfSegments; i++) {
                 DrawPersonName(gfx, fSegments[i]);
             }
         }

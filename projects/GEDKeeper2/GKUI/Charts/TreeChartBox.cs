@@ -1196,8 +1196,8 @@ namespace GKUI.Charts
 
             if (drawMode == DrawMode.dmInteractive) {
                 /*Rectangle viewPort = this.GetImageViewPort();
-				this.fSPX = -viewPort.Left;
-				this.fSPY = -viewPort.Top;*/
+                this.fSPX = -viewPort.Left;
+                this.fSPY = -viewPort.Top;*/
 
                 fSPX += fBorderWidth - -AutoScrollPosition.X;
                 fSPY += fBorderWidth - -AutoScrollPosition.Y;
@@ -1878,8 +1878,7 @@ namespace GKUI.Charts
                         pt.Offset(+Left, +Top);
                         fToolTip.Show(fScaleControl.Tip, this, pt, 1500);
                     } /*if (this.fPersonControl.Contains(e.X, e.Y)) {
-						
-					} */else {
+                    } */else {
                         TreeChartPerson p = FindPersonByCoords(e.X, e.Y);
                         if (fHighlightedPerson != p)
                         {
@@ -1895,10 +1894,10 @@ namespace GKUI.Charts
                             Invalidate();
                         }
 //
-//						if (p != null && e.Button == MouseButtons.Left)
-//						{
-//							this.fTreeBox.DoDragDrop(p.Rec.XRef, DragDropEffects.Move);
-//						}
+//                      if (p != null && e.Button == MouseButtons.Left)
+//                      {
+//                          this.fTreeBox.DoDragDrop(p.Rec.XRef, DragDropEffects.Move);
+//                      }
                     }
                     break;
 

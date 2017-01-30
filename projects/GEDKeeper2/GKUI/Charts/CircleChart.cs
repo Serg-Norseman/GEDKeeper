@@ -88,6 +88,16 @@ namespace GKUI.Charts
         protected int fGenWidth;
         private string fHint;
         protected int fIndividualsCount;
+        /* TODO(brigadir15@gmail.com): Member `fMaxGenerations` should be a
+         * const field, I believe. Member `CircleSegment::Gen` is used as an
+         * index when accessing the array `fCircleBrushes`, for example. The
+         * latter contains **predefined** brush list, with first eight elements
+         * used as brushes for eight possible generations (`CircleChart` ctor
+         * assigns `fMaxGenerations` with `8`; see code below).
+         * Thus, if one will want to extent number of available visible
+         * generation, he/she will have to change a huge amount of the code.
+         * Therefore, to avoid someone's tendency to change initial values of
+         * member `fMaxGenerations`, the member should be a const field. */
         protected int fMaxGenerations;
         protected int fOffsetX = 0;
         protected int fOffsetY = 0;
