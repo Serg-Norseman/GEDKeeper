@@ -223,8 +223,8 @@ namespace GKUI.Charts
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int num = fSegments.Count;
-            for (int i = 0; i < num; i++) {
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; numberOfSegments > i; ++i) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
 
                 bool draw = (!Options.HideEmptySegments || segment.IRec != null);
@@ -243,9 +243,7 @@ namespace GKUI.Charts
                     gfx.FillPath(brush, path);
                     gfx.DrawPath(fPen, path);
                 }
-            }
 
-            for (int i = 0; i < num; i++) {
                 DrawPersonName(gfx, fSegments[i]);
             }
         }

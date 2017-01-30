@@ -277,6 +277,15 @@ namespace GKUI.Charts
             return result;
         }
 
+        /// <summary>
+        /// Renders a specified <paramref name="segment"/>'s person name within
+        /// the segment.
+        /// </summary>
+        /// <param name="gfx">GDI+ context to render on. This member may change
+        /// this context's transformation. If it does, it also reverts the
+        /// transformation back. Thus, from the point of view of the client code
+        /// this member doesn't change the context's transformation.</param>
+        /// <param name="segment">Source segment to be drawn on `gfx`.</param>
         protected void DrawPersonName(Graphics gfx, CircleSegment segment)
         {
             int gen = segment.Gen;
@@ -300,10 +309,9 @@ namespace GKUI.Charts
             float wedgeAngle = segment.WedgeAngle;
 
             bool isNarrow = IsNarrowSegment(gfx, givn, rad, wedgeAngle, Font);
-
+            Matrix previousTransformation = gfx.Transform;
             if (gen == 0) {
 
-                gfx.ResetTransform();
                 gfx.TranslateTransform(fCenterX, fCenterY);
 
                 SizeF sizeF = gfx.MeasureString(surn, Font);
@@ -317,7 +325,6 @@ namespace GKUI.Charts
 
                     float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                     float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                    gfx.ResetTransform();
                     gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                     gfx.RotateTransform(angle - 90.0f);
 
@@ -330,7 +337,6 @@ namespace GKUI.Charts
 
                         float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                         float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                        gfx.ResetTransform();
                         gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                         gfx.RotateTransform(angle);
 
@@ -355,18 +361,23 @@ namespace GKUI.Charts
                         } else {
                             float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                             float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                            gfx.ResetTransform();
-                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
-                            gfx.RotateTransform(angle);
+                            /* Change `gfx`'s transformation via direct matrix
+                             * processing, not with its member functions because
+                             * we are about to change the transformation several
+                             * times (thus, we are avoiding transformation
+                             * reseting on `gfx`). */
+                            Matrix m = new Matrix(1, 0, 0, 1, fCenterX + dx, fCenterY - dy);
+                            m.Rotate(angle);
+                            gfx.Transform = m;
                             SizeF sizeF2 = gfx.MeasureString(surn, Font);
                             gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
 
                             sizeF2 = gfx.MeasureString(givn, Font);
                             dx = (float)Math.Sin(PI * angle / 180.0) * (rad - sizeF2.Height);
                             dy = (float)Math.Cos(PI * angle / 180.0) * (rad - sizeF2.Height);
-                            gfx.ResetTransform();
-                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
-                            gfx.RotateTransform(angle);
+                            m = new Matrix(1, 0, 0, 1, fCenterX + dx, fCenterY - dy);
+                            m.Rotate(angle);
+                            gfx.Transform = m;
                             gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
                         }
 
@@ -383,7 +394,6 @@ namespace GKUI.Charts
                         } else {
                             float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                             float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                            gfx.ResetTransform();
                             gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
                             gfx.RotateTransform(angle);
 
@@ -396,6 +406,7 @@ namespace GKUI.Charts
                     }
                 }
             }
+            gfx.Transform = previousTransformation;
         }
 
         private static bool IsNarrowSegment(Graphics gfx, string text, float radius, float wedgeAngle, Font font)
