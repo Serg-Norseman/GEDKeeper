@@ -83,8 +83,6 @@ namespace GKUI.Charts
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;
 
-        protected int fCenterX;
-        protected int fCenterY;
         protected int fGenWidth;
         private string fHint;
         protected int fIndividualsCount;
@@ -107,7 +105,9 @@ namespace GKUI.Charts
         protected ShieldState fShieldState;
 
         private bool ArcText = false;
-
+        /* This chart's GDI+ paths boundary (in the following order: left, top,
+         * right and bottom). */
+        private float[] fBounds;
 
         public int GenWidth
         {
@@ -178,6 +178,7 @@ namespace GKUI.Charts
             fSegments = new List<CircleSegment>();
             fSelected = null;
             fShieldState = baseWin.ShieldState;
+            fBounds = new float[4];
 
             BackColor = fOptions.BrushColor[9];
         }
@@ -232,7 +233,23 @@ namespace GKUI.Charts
         {
             CreateBrushes();
             BuildPathTree();
-            Invalidate();
+            /* Update scrolling area. */
+            fBounds[0] = 0.0f;
+            fBounds[1] = 0.0f;
+            fBounds[2] = 0.0f;
+            fBounds[3] = 0.0f;
+            foreach (var segment in fSegments) {
+                RectangleF bound = segment.Path.GetBounds();
+                fBounds[0] = Math.Min(fBounds[0], bound.Left);
+                fBounds[1] = Math.Min(fBounds[1], bound.Top);
+                fBounds[2] = Math.Max(fBounds[2], bound.Right);
+                fBounds[3] = Math.Max(fBounds[3], bound.Bottom);
+            }
+            /* Add double width of the pen -- adjust both sides. */
+            Size pageSize = new Size((int)(fBounds[2] - fBounds[0] + (fPen.Width * 2)),
+                                     (int)(fBounds[3] - fBounds[1] + (fPen.Width * 2)));
+            AdjustViewPort(pageSize, false);
+            /* Invalidate(); */
         }
 
         protected void DoRootChanged(GEDCOMIndividualRecord person)
@@ -243,12 +260,31 @@ namespace GKUI.Charts
             eventHandler(this, person);
         }
 
+        /// <summary>
+        /// Returns the center point of this chart relative to up left point of
+        /// this window's client area.
+        /// </summary>
+        /// <returns>Center point of this chart.</returns>
+        private PointF GetCenter()
+        {
+            PointF center = new PointF();
+            center.X = AutoScrollPosition.X + fOffsetX;
+            center.Y = AutoScrollPosition.Y + fOffsetY;
+            if (0 > fBounds[0]) {
+                center.X -= fBounds[0];
+            }
+            if (0 > fBounds[1]) {
+                center.Y -= fBounds[1];
+            }
+            return center;
+        }
+
         protected CircleSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)
         {
             CircleSegment result = null;
 
-            int num = fSegments.Count;
-            for (int i = 0; i < num; i++) {
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fSegments[i];
 
                 if (segment.IRec == iRec) {
@@ -262,10 +298,13 @@ namespace GKUI.Charts
 
         protected CircleSegment FindSegment(int mX, int mY)
         {
+            PointF center = GetCenter();
+            mX -= (int)(center.X);
+            mY -= (int)(center.Y);
             CircleSegment result = null;
 
-            int num = fSegments.Count;
-            for (int i = 0; i < num; i++) {
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; numberOfSegments > i; ++i) {
                 CircleSegment segment = fSegments[i];
 
                 if (segment.Path.IsVisible(mX, mY)) {
@@ -312,8 +351,6 @@ namespace GKUI.Charts
             Matrix previousTransformation = gfx.Transform;
             if (gen == 0) {
 
-                gfx.TranslateTransform(fCenterX, fCenterY);
-
                 SizeF sizeF = gfx.MeasureString(surn, Font);
                 gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
                 sizeF = gfx.MeasureString(givn, Font);
@@ -325,7 +362,7 @@ namespace GKUI.Charts
 
                     float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                     float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                    gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
+                    gfx.TranslateTransform(dx, -dy);
                     gfx.RotateTransform(angle - 90.0f);
 
                     SizeF size = gfx.MeasureString(givn, Font);
@@ -337,7 +374,7 @@ namespace GKUI.Charts
 
                         float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                         float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                        gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
+                        gfx.TranslateTransform(dx, -dy);
                         gfx.RotateTransform(angle);
 
                         SizeF size = gfx.MeasureString(givn, Font);
@@ -348,14 +385,14 @@ namespace GKUI.Charts
                         if (ArcText) {
                             if (gen == 2) {
                                 SizeF sizeF = gfx.MeasureString(surn, Font);
-                                DrawArcText(gfx, surn, fCenterX, fCenterY, rad + sizeF.Height / 2f,
+                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
                                 sizeF = gfx.MeasureString(givn, Font);
-                                DrawArcText(gfx, givn, fCenterX, fCenterY, rad - sizeF.Height / 2f,
+                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
-                                DrawArcText(gfx, givn, fCenterX, fCenterY, rad,
+                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             }
                         } else {
@@ -366,7 +403,8 @@ namespace GKUI.Charts
                              * we are about to change the transformation several
                              * times (thus, we are avoiding transformation
                              * reseting on `gfx`). */
-                            Matrix m = new Matrix(1, 0, 0, 1, fCenterX + dx, fCenterY - dy);
+                            Matrix m = new Matrix(1, 0, 0, 1, dx, -dy);
+                            m.Multiply(previousTransformation);
                             m.Rotate(angle);
                             gfx.Transform = m;
                             SizeF sizeF2 = gfx.MeasureString(surn, Font);
@@ -375,26 +413,27 @@ namespace GKUI.Charts
                             sizeF2 = gfx.MeasureString(givn, Font);
                             dx = (float)Math.Sin(PI * angle / 180.0) * (rad - sizeF2.Height);
                             dy = (float)Math.Cos(PI * angle / 180.0) * (rad - sizeF2.Height);
-                            m = new Matrix(1, 0, 0, 1, fCenterX + dx, fCenterY - dy);
+                            m = new Matrix(1, 0, 0, 1, dx, -dy);
+                            m.Multiply(previousTransformation);
                             m.Rotate(angle);
                             gfx.Transform = m;
                             gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
                         }
 
-                    } else if (wedgeAngle < 200) {
+                    } else if (wedgeAngle < 361) {
 
                         if (ArcText) {
                             SizeF sizeF = gfx.MeasureString(surn, Font);
-                            DrawArcText(gfx, surn, fCenterX, fCenterY, rad + sizeF.Height / 2f,
+                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
                             sizeF = gfx.MeasureString(givn, Font);
-                            DrawArcText(gfx, givn, fCenterX, fCenterY, rad - sizeF.Height / 2f,
+                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
                             float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
                             float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                            gfx.TranslateTransform(fCenterX + dx, fCenterY - dy);
+                            gfx.TranslateTransform(dx, -dy);
                             gfx.RotateTransform(angle);
 
                             SizeF sizeF = gfx.MeasureString(surn, Font);
@@ -470,9 +509,12 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            PointF center = GetCenter();
+            e.Graphics.TranslateTransform(center.X, center.Y);
             InternalDraw(e.Graphics);
 
             base.OnPaint(e);
+            e.Graphics.ResetTransform();
         }
 
         protected override void OnResize(EventArgs e)

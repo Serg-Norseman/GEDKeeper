@@ -75,15 +75,12 @@ namespace GKUI.Charts
         {
             fSegments.Clear();
 
-            fCenterX = Width / 2 + fOffsetX;
-            fCenterY = Height / 2 + fOffsetY;
-
             int inRad = CENTER_RAD - 50;
 
             PersonSegment segment = new PersonSegment(0);
             GraphicsPath path = segment.Path;
             path.StartFigure();
-            path.AddEllipse(fCenterX - inRad, fCenterY - inRad, inRad * 2, inRad * 2);
+            path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
             path.CloseFigure();
             fSegments.Add(segment);
 
@@ -102,17 +99,17 @@ namespace GKUI.Charts
                 {
                     float ang1 = (stp * stepAngle) - 90.0f;
                     float angval1 = ang1 * PI / 180.0f;
-                    int px1 = fCenterX + (int)(inRad * Math.Cos(angval1));
-                    int py1 = fCenterY + (int)(inRad * Math.Sin(angval1));
-                    int px2 = fCenterX + (int)(extRad * Math.Cos(angval1));
-                    int py2 = fCenterY + (int)(extRad * Math.Sin(angval1));
+                    int px1 = (int)(inRad * Math.Cos(angval1));
+                    int py1 = (int)(inRad * Math.Sin(angval1));
+                    int px2 = (int)(extRad * Math.Cos(angval1));
+                    int py2 = (int)(extRad * Math.Sin(angval1));
 
                     float ang2 = ang1 + stepAngle;
                     float angval2 = ang2 * PI / 180.0f;
-                    int nx1 = fCenterX + (int)(inRad * Math.Cos(angval2));
-                    int ny1 = fCenterY + (int)(inRad * Math.Sin(angval2));
-                    int nx2 = fCenterX + (int)(extRad * Math.Cos(angval2));
-                    int ny2 = fCenterY + (int)(extRad * Math.Sin(angval2));
+                    int nx1 = (int)(inRad * Math.Cos(angval2));
+                    int ny1 = (int)(inRad * Math.Sin(angval2));
+                    int nx2 = (int)(extRad * Math.Cos(angval2));
+                    int ny2 = (int)(extRad * Math.Sin(angval2));
 
                     segment = new PersonSegment(gen);
                     segment.StartAngle = ang1;
@@ -121,9 +118,9 @@ namespace GKUI.Charts
                     path = segment.Path;
                     path.StartFigure();
                     path.AddLine(px2, py2, px1, py1);
-                    path.AddArc(fCenterX - inRad, fCenterY - inRad, ir2, ir2, ang1, stepAngle);
+                    path.AddArc(-inRad, -inRad, ir2, ir2, ang1, stepAngle);
                     path.AddLine(nx1, ny1, nx2, ny2);
-                    path.AddArc(fCenterX - extRad, fCenterY - extRad, er2, er2, ang2, -stepAngle);
+                    path.AddArc(-extRad, -extRad, er2, er2, ang2, -stepAngle);
                     path.CloseFigure();
                     fSegments.Add(segment);
                 }

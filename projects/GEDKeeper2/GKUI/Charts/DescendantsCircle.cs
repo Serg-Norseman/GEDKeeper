@@ -60,9 +60,6 @@ namespace GKUI.Charts
             if (fRootPerson != null) {
                 rootSegment = TraverseDescendants(fRootPerson, 0);
 
-                fCenterX = Width / 2 + fOffsetX;
-                fCenterY = Height / 2 + fOffsetY;
-
                 const int inRad = CENTER_RAD - 50;
                 float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
@@ -74,40 +71,36 @@ namespace GKUI.Charts
         {
             GraphicsPath path = segment.Path;
 
-            int ctX = fCenterX;
-            int ctY = fCenterY;
-
             int extRad;
             if (segment.Gen == 0) {
                 segment.WedgeAngle = 360.0f;
 
                 path.StartFigure();
-                path.AddEllipse(ctX - inRad, ctY - inRad, inRad * 2, inRad * 2);
+                path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
                 path.CloseFigure();
 
                 extRad = inRad;
             } else {
                 extRad = inRad + fGenWidth;
 
-                int size = (segment.TotalSubSegments > 0) ? segment.TotalSubSegments : 1;
+                int size = Math.Max(1, segment.TotalSubSegments);
                 float wedgeAngle = stepAngle * size;
 
-                int ir2 = inRad * 2;
-                int er2 = extRad * 2;
+                int ir2 = inRad << 1;
+                int er2 = extRad << 1;
 
-                float ang1 = startAngle;
-                float angval1 = ang1 * PI / 180.0f;
-                int px1 = ctX + (int)(inRad * Math.Cos(angval1));
-                int py1 = ctY + (int)(inRad * Math.Sin(angval1));
-                int px2 = ctX + (int)(extRad * Math.Cos(angval1));
-                int py2 = ctY + (int)(extRad * Math.Sin(angval1));
+                float angval1 = startAngle * PI / 180.0f;
+                int px1 = (int)(inRad * Math.Cos(angval1));
+                int py1 = (int)(inRad * Math.Sin(angval1));
+                int px2 = (int)(extRad * Math.Cos(angval1));
+                int py2 = (int)(extRad * Math.Sin(angval1));
 
-                float ang2 = ang1 + wedgeAngle;
+                float ang2 = startAngle + wedgeAngle;
                 float angval2 = ang2 * PI / 180.0f;
-                int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
-                int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
-                int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
-                int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
+                int nx1 = (int)(inRad * Math.Cos(angval2));
+                int ny1 = (int)(inRad * Math.Sin(angval2));
+                int nx2 = (int)(extRad * Math.Cos(angval2));
+                int ny2 = (int)(extRad * Math.Sin(angval2));
 
                 segment.StartAngle = startAngle;
                 segment.WedgeAngle = wedgeAngle;
@@ -115,21 +108,20 @@ namespace GKUI.Charts
 
                 path.StartFigure();
                 path.AddLine(px2, py2, px1, py1);
-                path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+                path.AddArc(-inRad, -inRad, ir2, ir2, startAngle, wedgeAngle);
                 path.AddLine(nx1, ny1, nx2, ny2);
-                path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
+                path.AddArc(-extRad, -extRad, er2, er2, ang2, -wedgeAngle);
                 path.CloseFigure();
             }
 
-            float childStartAngle = startAngle;
             for (int i = 0; i < segment.ChildSegments.Count; i++) {
                 PersonSegment childSegment = segment.ChildSegments[i];
 
-                CalcDescendants(childSegment, extRad, childStartAngle, stepAngle);
+                CalcDescendants(childSegment, extRad, startAngle, stepAngle);
 
-                int steps = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
+                int steps = Math.Max(1, childSegment.TotalSubSegments);
 
-                childStartAngle += stepAngle * steps;
+                startAngle += stepAngle * steps;
             }
         }
 
@@ -161,7 +153,7 @@ namespace GKUI.Charts
                                 GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
                                 PersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
-                                int size = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
+                                int size = Math.Max(1, childSegment.TotalSubSegments);
                                 resultSegment.TotalSubSegments += size;
 
                                 resultSegment.ChildSegments.Add(childSegment);
