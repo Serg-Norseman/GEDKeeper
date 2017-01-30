@@ -369,11 +369,6 @@ namespace GKCore
 
         #region Patriarchs Search
 
-        private static int PatriarchsCompare(object item1, object item2)
-        {
-            return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
-        }
-
         public ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck)
         {
             ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
@@ -423,8 +418,6 @@ namespace GKCore
 
                     pctl.ProgressStep();
                 }
-
-                patList.QuickSort(PatriarchsCompare);
             }
             finally
             {

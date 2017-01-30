@@ -133,6 +133,7 @@
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
@@ -180,6 +181,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\DescendantsCircle.cs" />
+    <Compile Include="GKUI\Charts\GenerationsControl.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
@@ -505,7 +507,6 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sandbox\TreesAlbumExporter.cs" />
     <Compile Include="Externals\MdiChildFormEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />

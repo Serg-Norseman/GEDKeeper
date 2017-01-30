@@ -20,19 +20,56 @@
 
 using System;
 using System.Drawing;
+using GKCommon;
 
 namespace GKUI.Charts
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface ITreeControl : IDisposable
+    public abstract class ITreeControl : BaseObject
     {
-        void Update();
-        void Draw(Graphics gfx);
-        bool Contains(int x, int y);
-        void MouseDown(int x, int y);
-        void MouseMove(int x, int y, ThumbMoved thumbMoved);
-        void MouseUp(int x, int y);
+        protected readonly TreeChartBox fChart;
+
+        protected Rectangle fDestRect;
+        protected bool fMouseCaptured;
+        protected bool fVisible;
+
+        public bool MouseCaptured
+        {
+            get { return fMouseCaptured; }
+        }
+
+        public bool Visible
+        {
+            get { return fVisible; }
+            set {
+                if (fVisible == value) return;
+
+                fVisible = value;
+                fChart.Invalidate();
+            }
+        }
+
+        public abstract string Tip { get; }
+        public abstract int Height { get; }
+        public abstract int Width { get; }
+
+        public abstract void UpdateState();
+        public abstract void UpdateView();
+        public abstract void Draw(Graphics gfx);
+        public abstract void MouseDown(int x, int y);
+        public abstract void MouseMove(int x, int y);
+        public abstract void MouseUp(int x, int y);
+
+        protected ITreeControl(TreeChartBox chart)
+        {
+            fChart = chart;
+        }
+
+        public virtual bool Contains(int x, int y)
+        {
+            return fDestRect.Contains(x, y);
+        }
     }
 }

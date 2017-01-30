@@ -86,32 +86,11 @@ namespace GKUI.Charts
                 int size = Math.Max(1, segment.TotalSubSegments);
                 float wedgeAngle = stepAngle * size;
 
-                int ir2 = inRad << 1;
-                int er2 = extRad << 1;
-
-                float angval1 = startAngle * PI / 180.0f;
-                int px1 = (int)(inRad * Math.Cos(angval1));
-                int py1 = (int)(inRad * Math.Sin(angval1));
-                int px2 = (int)(extRad * Math.Cos(angval1));
-                int py2 = (int)(extRad * Math.Sin(angval1));
-
-                float ang2 = startAngle + wedgeAngle;
-                float angval2 = ang2 * PI / 180.0f;
-                int nx1 = (int)(inRad * Math.Cos(angval2));
-                int ny1 = (int)(inRad * Math.Sin(angval2));
-                int nx2 = (int)(extRad * Math.Cos(angval2));
-                int ny2 = (int)(extRad * Math.Sin(angval2));
-
                 segment.StartAngle = startAngle;
                 segment.WedgeAngle = wedgeAngle;
                 segment.Rad = inRad + 50;
 
-                path.StartFigure();
-                path.AddLine(px2, py2, px1, py1);
-                path.AddArc(-inRad, -inRad, ir2, ir2, startAngle, wedgeAngle);
-                path.AddLine(nx1, ny1, nx2, ny2);
-                path.AddArc(-extRad, -extRad, er2, er2, ang2, -wedgeAngle);
-                path.CloseFigure();
+                CreateCircleSegment(path, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
             }
 
             for (int i = 0; i < segment.ChildSegments.Count; i++) {

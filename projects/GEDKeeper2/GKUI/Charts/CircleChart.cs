@@ -71,7 +71,6 @@ namespace GKUI.Charts
 
         protected static readonly object EventRootChanged;
 
-        protected const float PI = 3.1415926535897931f;
         protected const int CENTER_RAD = 90;
         protected const int DEFAULT_GEN_WIDTH = 60;
 

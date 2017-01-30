@@ -91,37 +91,17 @@ namespace GKUI.Charts
                 int extRad = inRad + fGenWidth;
                 maxSteps *= 2;
 
-                int ir2 = inRad * 2;
-                int er2 = extRad * 2;
                 float stepAngle = (360.0f / maxSteps);
 
                 for (int stp = 0; stp < maxSteps; stp++)
                 {
                     float ang1 = (stp * stepAngle) - 90.0f;
-                    float angval1 = ang1 * PI / 180.0f;
-                    int px1 = (int)(inRad * Math.Cos(angval1));
-                    int py1 = (int)(inRad * Math.Sin(angval1));
-                    int px2 = (int)(extRad * Math.Cos(angval1));
-                    int py2 = (int)(extRad * Math.Sin(angval1));
-
                     float ang2 = ang1 + stepAngle;
-                    float angval2 = ang2 * PI / 180.0f;
-                    int nx1 = (int)(inRad * Math.Cos(angval2));
-                    int ny1 = (int)(inRad * Math.Sin(angval2));
-                    int nx2 = (int)(extRad * Math.Cos(angval2));
-                    int ny2 = (int)(extRad * Math.Sin(angval2));
 
                     segment = new PersonSegment(gen);
                     segment.StartAngle = ang1;
                     segment.WedgeAngle = stepAngle;
-
-                    path = segment.Path;
-                    path.StartFigure();
-                    path.AddLine(px2, py2, px1, py1);
-                    path.AddArc(-inRad, -inRad, ir2, ir2, ang1, stepAngle);
-                    path.AddLine(nx1, ny1, nx2, ny2);
-                    path.AddArc(-extRad, -extRad, er2, er2, ang2, -stepAngle);
-                    path.CloseFigure();
+                    CreateCircleSegment(segment.Path, inRad, extRad, stepAngle, ang1, ang2);
                     fSegments.Add(segment);
                 }
             }
