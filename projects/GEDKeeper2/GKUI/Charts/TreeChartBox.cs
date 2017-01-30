@@ -578,8 +578,8 @@ namespace GKUI.Charts
 
                 RecalcChart();
 
-                if (rootCenter) CenterPerson(fRoot);
-                
+                if (rootCenter) CenterPerson(fRoot, false);
+
                 NavAdd(iRec);
                 DoRootChanged(fRoot);
             }
@@ -1344,7 +1344,7 @@ namespace GKUI.Charts
             fMargins = (int)Math.Round(DEF_MARGINS * sc);
             fNodePadding = (int)(DEF_PERSON_NODE_PADDING * sc);
         }
-        
+
         private int InitInfoSize()
         {
             int lines = 0;

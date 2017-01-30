@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using GKCore;
 
 namespace GKUI.Charts
@@ -136,20 +137,14 @@ namespace GKUI.Charts
         {
             if (!fMouseCaptured) return;
 
-            /* The thumb is drawn on top of a "step", therefore to take the last
-             * step into account I have to check non-existent step under the
-             * last one. */
             for (int i = 0; fDCount >= i; ++i) {
                 Rectangle r = GetDRect(i);
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;
 
-                        fChart.Invalidate();
-
                         int depthLimit = (fThumbPos < 9) ? fThumbPos + 1 : -1;
                         fChart.DepthLimit = depthLimit;
-                        // bad! very bad! very bad architecture!!!
                         fChart.GenChart(fChart.Root.Rec, fChart.Kind, true);
                     }
                     break;
