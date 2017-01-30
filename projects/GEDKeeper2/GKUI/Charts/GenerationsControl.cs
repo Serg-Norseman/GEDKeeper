@@ -48,7 +48,7 @@ namespace GKUI.Charts
         {
             get {
                 string gen = (fThumbPos < 9) ? fThumbPos.ToString() : LangMan.LS(LSID.LSID_Unlimited);
-                return "Generations: " + gen;
+                return LangMan.LS(LSID.LSID_Generations) + ": " + gen;
             }
         }
 

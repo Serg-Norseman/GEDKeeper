@@ -127,16 +127,22 @@ namespace GKCore.Export
             }
         }
 
+        private static int PatriarchsCompare(object item1, object item2)
+        {
+            return ((PatriarchObj)item2).DescendantsCount - ((PatriarchObj)item1).DescendantsCount;
+        }
+
         private void PreparePatriarchs()
         {
             using (ExtList<PatriarchObj> lst = fBase.Context.GetPatriarchsList(2, false))
             {
+                lst.QuickSort(PatriarchsCompare);
+
                 int num = lst.Count;
                 for (int i = 0; i < num; i++) {
                     PatriarchObj pObj = lst[i];
                     fPatList.AddObject(GKUtils.GetNameString(pObj.IRec, true, false), pObj.IRec);
                 }
-                fPatList.Sort();
             }
         }
     }

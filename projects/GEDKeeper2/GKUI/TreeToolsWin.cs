@@ -660,6 +660,11 @@ namespace GKUI
             this.Close();
         }
 
+        private static int PatriarchsCompare(object item1, object item2)
+        {
+            return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
+        }
+
         private void btnPatSearch_Click(object sender, EventArgs e)
         {
             this.ListPatriarchs.BeginUpdate();
@@ -668,6 +673,7 @@ namespace GKUI
             {
                 this.ListPatriarchs.Items.Clear();
                 lst = this.fBase.Context.GetPatriarchsList(decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+                lst.QuickSort(PatriarchsCompare);
 
                 int num = lst.Count;
                 for (int i = 0; i < num; i++)
