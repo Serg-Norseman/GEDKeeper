@@ -198,6 +198,7 @@
     <Compile Include="GKUI\Charts\DescendantsCircle.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Charts\GenerationsControl.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />

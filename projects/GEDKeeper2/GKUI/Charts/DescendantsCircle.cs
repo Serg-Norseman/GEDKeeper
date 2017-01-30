@@ -76,15 +76,12 @@ namespace GKUI.Charts
         {
             GraphicsPath path = segment.Path;
 
-            int ctX = fCenterX;
-            int ctY = fCenterY;
-
             int extRad;
             if (segment.Gen == 0) {
                 segment.WedgeAngle = 360.0f;
 
                 path.StartFigure();
-                path.AddEllipse(ctX - inRad, ctY - inRad, inRad * 2, inRad * 2);
+                path.AddEllipse(fCenterX - inRad, fCenterY - inRad, inRad * 2, inRad * 2);
                 path.CloseFigure();
 
                 extRad = inRad;
@@ -94,33 +91,11 @@ namespace GKUI.Charts
                 int size = (segment.TotalSubSegments > 0) ? segment.TotalSubSegments : 1;
                 float wedgeAngle = stepAngle * size;
 
-                int ir2 = inRad * 2;
-                int er2 = extRad * 2;
-
-                float ang1 = startAngle;
-                float angval1 = ang1 * PI / 180.0f;
-                int px1 = ctX + (int)(inRad * Math.Cos(angval1));
-                int py1 = ctY + (int)(inRad * Math.Sin(angval1));
-                int px2 = ctX + (int)(extRad * Math.Cos(angval1));
-                int py2 = ctY + (int)(extRad * Math.Sin(angval1));
-
-                float ang2 = ang1 + wedgeAngle;
-                float angval2 = ang2 * PI / 180.0f;
-                int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
-                int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
-                int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
-                int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
-
                 segment.StartAngle = startAngle;
                 segment.WedgeAngle = wedgeAngle;
                 segment.Rad = inRad + 50;
 
-                path.StartFigure();
-                path.AddLine(px2, py2, px1, py1);
-                path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
-                path.AddLine(nx1, ny1, nx2, ny2);
-                path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
-                path.CloseFigure();
+                CreateCircleSegment(path, fCenterX, fCenterY, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
             }
 
             float childStartAngle = startAngle;

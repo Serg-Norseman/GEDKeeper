@@ -688,8 +688,6 @@ namespace GKUI
             this.miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             this.miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 
-            this.fTreeBox.ScaleControl.Tip = LangMan.LS(LSID.LSID_Scale);
-
             this.tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
             this.tbModes.ToolTipText = LangMan.LS(LSID.LSID_ModesTip);
         }

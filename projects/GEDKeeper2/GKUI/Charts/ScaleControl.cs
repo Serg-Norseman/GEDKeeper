@@ -18,8 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GKCore;
 
 namespace GKUI.Charts
 {
@@ -45,29 +47,24 @@ namespace GKUI.Charts
         private const int SHADOW_BOTTOM = 1;
 
         private readonly Bitmap fControlsImage;
-        private readonly TreeChartBox fChart;
 
         private int fDCount = 10;
         private int fThumbPos = 5; /* Counts from zero. */
-        private bool fVisible;
-        private bool fThumbCaptured;
         /* Set member `fGrowOver` or property `GrowOver` to `true` if you want
          * to have the control with height exceeds height of `SCALE_RECT`
          * (i.e. height of the original image). */
         private bool fGrowOver = false;
-        private string fTip;
-        private Rectangle fDestRect;
 
         #endregion
-        
+
         #region Public properties
-        
-        public static int Width
+
+        public override int Width
         {
             get { return SCALE_RECT.Width; }
         }
 
-        public static int Height
+        public override int Height
         {
             get { return SCALE_RECT.Height; }
         }
@@ -78,66 +75,44 @@ namespace GKUI.Charts
             set { fDCount = value; }
         }
 
-        public bool ThumbCaptured
-        {
-            get { return fThumbCaptured; }
-        }
-
         public bool GrowOver
         {
             get { return fGrowOver; }
             set { fGrowOver = value; }
         }
 
-        public int ThumbPos
+        public override string Tip
         {
-            get { return fThumbPos; }
-            set { fThumbPos = value; }
-        }
-        
-        public string Tip
-        {
-            get { return fTip; }
-            set { fTip = value; }
-        }
-        
-        public bool Visible
-        {
-            get { return fVisible; }
-            set {
-                fVisible = value;
-                fChart.Invalidate();
-            }
+            get { return LangMan.LS(LSID.LSID_Scale); }
         }
 
         #endregion
-        
-        public ScaleControl(TreeChartBox chart)
+
+        public ScaleControl(TreeChartBox chart) : base(chart)
         {
-            fChart = chart;
             fControlsImage = GKResources.iChartControls;
         }
 
-        public void Dispose()
-        {
-            // dummy
-        }
-
-        public void Update()
+        public override void UpdateView()
         {
             Rectangle cr = fChart.ClientRectangle;
             if (fGrowOver) {
                 int height = cr.Height - (PADDING_Y << 1);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), PADDING_Y, Width, height);
             } else {
-                int height = System.Math.Min(cr.Height - (PADDING_Y << 1), Height);
+                int height = Math.Min(cr.Height - (PADDING_Y << 1), Height);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
-                                          System.Math.Max(PADDING_Y, (cr.Height - height) >> 1),
+                                          Math.Max(PADDING_Y, (cr.Height - height) >> 1),
                                           Width, height);
             }
         }
 
-        public void Draw(Graphics gfx)
+        public override void UpdateState()
+        {
+            fThumbPos = (int)Math.Round((fChart.Scale - 0.5f) * fDCount);
+        }
+
+        public override void Draw(Graphics gfx)
         {
             if (gfx == null) return;
 
@@ -145,6 +120,7 @@ namespace GKUI.Charts
             gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
+
             /* Render the top icon without scaling. */
             Rectangle sourceRect = new Rectangle(0, 0, Width, SCALE_Y1 + SHADOW_TOP);
             Rectangle destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top,
@@ -179,19 +155,14 @@ namespace GKUI.Charts
             return new Rectangle(fDestRect.Left, thumpTop, fDestRect.Width, THUMB_RECT.Height);
         }
 
-        public bool Contains(int x, int y)
+        public override void MouseDown(int x, int y)
         {
-            return fDestRect.Contains(x, y);
+            fMouseCaptured = (GetDRect(fThumbPos).Contains(x, y) && !fMouseCaptured);
         }
 
-        public void MouseDown(int x, int y)
+        public override void MouseMove(int x, int y)
         {
-            fThumbCaptured = (GetDRect(fThumbPos).Contains(x, y) && !fThumbCaptured);
-        }
-
-        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
-        {
-            if (!fThumbCaptured) return;
+            if (!fMouseCaptured) return;
             /* The thumb is drawn on top of a "step", therefore to take the last
              * step into account I have to check non-existent step under the
              * last one. */
@@ -200,17 +171,16 @@ namespace GKUI.Charts
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;
-                        fChart.Invalidate();
-                        if (thumbMoved != null) thumbMoved(i);
+                        fChart.SetScale(0.5f + (((float)(i)) / fDCount));
                     }
                     break;
                 }
             }
         }
 
-        public void MouseUp(int x, int y)
+        public override void MouseUp(int x, int y)
         {
-            fThumbCaptured = false;
+            fMouseCaptured = false;
         }
     }
 }

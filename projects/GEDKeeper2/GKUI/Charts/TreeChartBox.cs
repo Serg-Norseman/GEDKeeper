@@ -38,8 +38,6 @@ using GKCore.Types;
 
 namespace GKUI.Charts
 {
-    public delegate void ThumbMoved(int position);
-
     public delegate void PersonModifyEventHandler(object sender, PersonModifyEventArgs eArgs);
 
     public delegate void RootChangedEventHandler(object sender, TreeChartPerson person);
@@ -96,7 +94,76 @@ namespace GKUI.Charts
             bmFill,
             bmAny
         }
-        
+
+        public sealed class TreeControlsList<T> : List<T>, IDisposable where T : ITreeControl
+        {
+            public void Draw(Graphics gfx)
+            {
+                if (gfx == null) return;
+
+                for (int i = 0; i < Count; i++) {
+                    var ctl = this[i];
+                    if (ctl.Visible) ctl.Draw(gfx);
+                }
+            }
+
+            public void UpdateState()
+            {
+                for (int i = 0; i < Count; i++) {
+                    this[i].UpdateState();
+                }
+            }
+
+            public void UpdateView()
+            {
+                for (int i = 0; i < Count; i++) {
+                    this[i].UpdateView();
+                }
+            }
+
+            public ITreeControl Contains(int x, int y)
+            {
+                for (int i = 0; i < Count; i++) {
+                    ITreeControl ctl = this[i];
+                    if (ctl.Contains(x, y)) return ctl;
+                }
+
+                return null;
+            }
+
+            public void MouseDown(int x, int y)
+            {
+                for (int i = 0; i < Count; i++) {
+                    var ctl = this[i];
+                    if (ctl.Visible) ctl.MouseDown(x, y);
+                }
+            }
+
+            public void MouseMove(int x, int y, bool defaultChartMode)
+            {
+                for (int i = 0; i < Count; i++) {
+                    var ctl = this[i];
+                    if (ctl.Visible) ctl.MouseMove(x, y);
+                }
+            }
+
+            public void MouseUp(int x, int y)
+            {
+                for (int i = 0; i < Count; i++) {
+                    var ctl = this[i];
+                    if (ctl.Visible) ctl.MouseUp(x, y);
+                }
+            }
+
+            public void Dispose()
+            {
+                for (int i = 0; i < Count; i++) {
+                    this[i].Dispose();
+                }
+                Clear();
+            }
+        }
+
         #endregion
 
         #region Private fields
@@ -106,8 +173,8 @@ namespace GKUI.Charts
         private readonly List<string> fPreparedFamilies;
         internal readonly List<string> fPreparedIndividuals;
         private readonly TreeChartRenderer fRenderer;
-        private readonly ScaleControl fScaleControl;
         private readonly ToolTip fToolTip;
+        private readonly TreeControlsList<ITreeControl> fTreeControls;
         
         private IBaseWindow fBase;
         private int fBranchDistance;
@@ -154,6 +221,7 @@ namespace GKUI.Charts
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;
         //private PersonControl fPersonControl;
+        private ITreeControl fActiveControl;
 
         private IContainer fComponents;
         private Timer fTimer;
@@ -221,7 +289,7 @@ namespace GKUI.Charts
                 Invalidate();
             }
         }
-        
+
         public int DepthLimit
         {
             get { return fDepthLimit; }
@@ -287,11 +355,6 @@ namespace GKUI.Charts
             get { return fScale; }
         }
 
-        public new ScaleControl ScaleControl
-        {
-            get { return fScaleControl; }
-        }
-
         public TreeChartPerson Selected
         {
             get { return fSelected; }
@@ -355,9 +418,12 @@ namespace GKUI.Charts
             fPreparedFamilies = new List<string>();
             fPreparedIndividuals = new List<string>();
 
-            fScaleControl = new ScaleControl(this);
-            //fPersonControl = new PersonControl(this);
             fToolTip = new ToolTip();
+
+            fTreeControls = new TreeControlsList<ITreeControl>();
+            fTreeControls.Add(new ScaleControl(this));
+            fTreeControls.Add(new GenerationsControl(this));
+            //fPersonControl = new PersonControl(this);
 
             InitTimer();
             InitGraphics();
@@ -375,7 +441,8 @@ namespace GKUI.Charts
                 DoneSigns();
 
                 if (fDrawFont != null) fDrawFont.Dispose();
-                if (fScaleControl != null) fScaleControl.Dispose();
+
+                if (fTreeControls != null) fTreeControls.Dispose();
 
                 if (fComponents != null) fComponents.Dispose();
             }
@@ -464,7 +531,7 @@ namespace GKUI.Charts
             if (value < 0.5 || value > 1.5) return;
             fScale = value;
 
-            fScaleControl.ThumbPos = (int)Math.Round((value - 0.5f) * fScaleControl.DCount);
+            fTreeControls.UpdateState();
 
             RecalcChart();
 
@@ -1764,7 +1831,7 @@ namespace GKUI.Charts
             SaveSelection();
             
             AdjustViewPort(fImageSize);
-            fScaleControl.Update();
+            fTreeControls.UpdateView();
 
             RestoreSelection();
 
@@ -1778,7 +1845,7 @@ namespace GKUI.Charts
             InternalDraw(DrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
-            if (fScaleControl.Visible) fScaleControl.Draw(gfx);
+            fTreeControls.Draw(gfx);
             //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
         }
 
@@ -1859,7 +1926,7 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    fScaleControl.MouseDown(e.X, e.Y);
+                    fTreeControls.MouseDown(e.X, e.Y);
                     break;
             }
         }
@@ -1869,17 +1936,17 @@ namespace GKUI.Charts
             switch (fMode)
             {
                 case ChartControlMode.ccmDefault:
-                    if (fScaleControl.Contains(e.X, e.Y)) {
-                        fMode = ChartControlMode.ccmControlsVisible;
-                        fScaleControl.Visible = true;
-                        fScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
+                    ITreeControl ctl = fTreeControls.Contains(e.X, e.Y);
 
-                        var pt = new Point(e.X, e.Y);
-                        pt.Offset(+Left, +Top);
-                        fToolTip.Show(fScaleControl.Tip, this, pt, 1500);
-                    } /*if (this.fPersonControl.Contains(e.X, e.Y)) {
-						
-					} */else {
+                    if (ctl != null) {
+                        fMode = ChartControlMode.ccmControlsVisible;
+                        ctl.Visible = true;
+                        ctl.MouseMove(e.X, e.Y);
+                        fActiveControl = ctl;
+
+                        var pt = new Point(e.X + Left, e.Y + Top);
+                        fToolTip.Show(ctl.Tip, this, pt, 1500);
+                    } else {
                         TreeChartPerson p = FindPersonByCoords(e.X, e.Y);
                         if (fHighlightedPerson != p)
                         {
@@ -1909,20 +1976,18 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    if (!(fScaleControl.Contains(e.X, e.Y) || fScaleControl.ThumbCaptured)) {
-                        fMode = ChartControlMode.ccmDefault;
-                        fScaleControl.Visible = false;
-                        fToolTip.Hide(this);
-                    } else {
-                        fScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
+                    if (fActiveControl != null) {
+                        if (!(fActiveControl.Contains(e.X, e.Y) || fActiveControl.MouseCaptured)) {
+                            fMode = ChartControlMode.ccmDefault;
+                            fActiveControl.Visible = false;
+                            fToolTip.Hide(this);
+                            fActiveControl = null;
+                        } else {
+                            fActiveControl.MouseMove(e.X, e.Y);
+                        }
                     }
                     break;
             }
-        }
-
-        private void ThumbMoved(int position)
-        {
-            SetScale(0.5f + (((float)(position)) / fScaleControl.DCount));
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -1956,7 +2021,7 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    fScaleControl.MouseUp(e.X, e.Y);
+                    fTreeControls.MouseUp(e.X, e.Y);
                     break;
             }
         }

@@ -29,31 +29,37 @@ namespace GKUI.Charts
     /// </summary>
     public sealed class PersonControl : ITreeControl
     {
-        private readonly TreeChartBox fChart;
         private readonly Pen fCtlPen;
         private readonly Brush fCtlBrush;
 
-        private Rectangle fDestRect;
         private TreeChartPerson fPerson;
-        private bool fVisible;
-        
-        public bool Visible
+
+        #region Public properties
+
+        public override string Tip
         {
-            get { return fVisible; }
-            set {
-                fVisible = value;
-                fChart.Invalidate();
-            }
+            get { return string.Empty; }
         }
-        
-        public PersonControl(TreeChartBox chart)
+
+        public override int Width
         {
-            fChart = chart;
+            get { return 0; }
+        }
+
+        public override int Height
+        {
+            get { return 0; }
+        }
+
+        #endregion
+
+        public PersonControl(TreeChartBox chart) : base(chart)
+        {
             fCtlPen = new Pen(Color.Black, 2.0f);
             fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
             fCtlPen.Dispose();
             fCtlBrush.Dispose();
@@ -72,12 +78,16 @@ namespace GKUI.Charts
             
             fDestRect = rect;
         }
-        
-        public void Update()
+
+        public override void UpdateState()
         {
         }
 
-        public void Draw(Graphics gfx)
+        public override void UpdateView()
+        {
+        }
+
+        public override void Draw(Graphics gfx)
         {
             if (gfx == null) return;
 
@@ -99,20 +109,15 @@ namespace GKUI.Charts
             gfx.DrawRectangle(fCtlPen, fDestRect);
         }
 
-        public bool Contains(int x, int y)
-        {
-            return fDestRect.Contains(x, y);
-        }
-
-        public void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y)
         {
         }
 
-        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
+        public override void MouseMove(int x, int y)
         {
         }
 
-        public void MouseUp(int x, int y)
+        public override void MouseUp(int x, int y)
         {
         }
     }
