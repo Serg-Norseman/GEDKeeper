@@ -71,6 +71,12 @@ namespace GKUI.Charts
 
         private struct ValuesAsFloat {};
 
+        private enum RenderTarget
+        {
+            kScreen,
+            kNonScreenCanvas
+        }
+
         protected static readonly object EventRootChanged;
 
         protected const int CENTER_RAD = 90;
@@ -281,15 +287,29 @@ namespace GKUI.Charts
         }
 
         /// <summary>
-        /// Returns the center point of this chart relative to up left point of
-        /// this window's client area.
+        /// Returns a point that must be the center of this chart after it will
+        /// be rendered on a target.
+        /// </summary>
+        /// <param name="target">Rendering target for which the client requires
+        /// the center point.</param>
+        /// <returns>Center point of this chart.</returns>
+        private PointF GetCenter(RenderTarget target)
+        {
+            return (RenderTarget.kScreen == target ?
+                    GetCenterForScreenRendering() :
+                    GetCenterForNonScreenRendering());
+        }
+
+        /// <summary>
+        /// Returns the center point of this chart relative to the upper left
+        /// point of this window's client area.
         /// According to discussion at PR #99 (GitHub), this member centers this
         /// chart on an axis when there's no scrolling required along that axis.
         /// And if scrolling is required, this member aligns this chart on its
         /// left edge.
         /// </summary>
         /// <returns>Center point of this chart.</returns>
-        private PointF GetCenter()
+        private PointF GetCenterForScreenRendering()
         {
             PointF center = new PointF();
             SizeF boundary = GetPathsBoundary(fFloatType);
@@ -306,6 +326,17 @@ namespace GKUI.Charts
                 center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1];
             }
             return center;
+        }
+
+        /// <summary>
+        /// Returns the center point of this chart relative to the upper left
+        /// corner/point of printing canvas.
+        /// </summary>
+        /// <returns>Center point of this chart.</returns>
+        private PointF GetCenterForNonScreenRendering()
+        {
+            return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0],
+                              AutoScrollPosition.Y + fOffsetY - fBounds[1]);
         }
 
         protected CircleSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)
@@ -327,7 +358,7 @@ namespace GKUI.Charts
 
         protected CircleSegment FindSegment(int mX, int mY)
         {
-            PointF center = GetCenter();
+            PointF center = GetCenter(RenderTarget.kScreen);
             mX -= (int)(center.X);
             mY -= (int)(center.Y);
             CircleSegment result = null;
@@ -343,6 +374,20 @@ namespace GKUI.Charts
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Renders this chart on the specified target and the context
+        /// associated with the target.
+        /// </summary>
+        /// <param name="context">GDI+ rendering context.</param>
+        /// <param name="target">Rendering target.</param>
+        private void Render(Graphics context, RenderTarget target)
+        {
+            PointF center = GetCenter(target);
+            context.TranslateTransform(center.X, center.Y);
+            InternalDraw(context);
+            context.ResetTransform();
         }
 
         /// <summary>
@@ -538,11 +583,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            PointF center = GetCenter();
-            e.Graphics.TranslateTransform(center.X, center.Y);
-            InternalDraw(e.Graphics);
-            e.Graphics.ResetTransform();
-
+            Render(e.Graphics, RenderTarget.kScreen);
             base.OnPaint(e);
         }
 
@@ -589,6 +630,16 @@ namespace GKUI.Charts
                     fToolTip.Show(hint, this, e.X, e.Y, 3000);
                 }
             }
+        }
+
+        /* TODO(brigadir15@gmail.com): Remove this member. */
+        protected override void OnDoubleClick(EventArgs e)
+        {
+            Size imageSize = GetPathsBoundary();
+            Image image = new System.Drawing.Bitmap(imageSize.Width, imageSize.Height);
+            Graphics context = Graphics.FromImage(image);
+            Render(context, RenderTarget.kNonScreenCanvas);
+            image.Save("circle_chart.bmp");
         }
 
         #endregion
