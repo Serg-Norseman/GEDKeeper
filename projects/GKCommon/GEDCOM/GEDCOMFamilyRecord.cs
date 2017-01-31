@@ -26,7 +26,8 @@ namespace GKCommon.GEDCOM
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
     {
         private static readonly GEDCOMFactory fTagsFactory;
-        
+        /* FIXME(brigadir15@gmail.com): Word `children' is already the plural of `child'.
+         * `Childrens' is not correct I believe. */
         private GEDCOMList<GEDCOMPointer> fChildrens;
         private GEDCOMList<GEDCOMSpouseSealing> fSpouseSealings;
 

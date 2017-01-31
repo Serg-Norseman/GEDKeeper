@@ -75,15 +75,12 @@ namespace GKUI.Charts
         {
             fSegments.Clear();
 
-            fCenterX = Width / 2 + fOffsetX;
-            fCenterY = Height / 2 + fOffsetY;
-
             int inRad = CENTER_RAD - 50;
 
             PersonSegment segment = new PersonSegment(0);
             GraphicsPath path = segment.Path;
             path.StartFigure();
-            path.AddEllipse(fCenterX - inRad, fCenterY - inRad, inRad * 2, inRad * 2);
+            path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
             path.CloseFigure();
             fSegments.Add(segment);
 
@@ -104,7 +101,7 @@ namespace GKUI.Charts
                     segment = new PersonSegment(gen);
                     segment.StartAngle = ang1;
                     segment.WedgeAngle = stepAngle;
-                    CreateCircleSegment(segment.Path, fCenterX, fCenterY, inRad, extRad, stepAngle, ang1, ang2);
+                    CreateCircleSegment(segment.Path, inRad, extRad, stepAngle, ang1, ang2);
                     fSegments.Add(segment);
                 }
             }
@@ -203,8 +200,8 @@ namespace GKUI.Charts
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int num = fSegments.Count;
-            for (int i = 0; i < num; i++) {
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
 
                 bool draw = (!Options.HideEmptySegments || segment.IRec != null);
@@ -223,9 +220,7 @@ namespace GKUI.Charts
                     gfx.FillPath(brush, path);
                     gfx.DrawPath(fPen, path);
                 }
-            }
 
-            for (int i = 0; i < num; i++) {
                 DrawPersonName(gfx, fSegments[i]);
             }
         }

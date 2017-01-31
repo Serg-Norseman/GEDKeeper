@@ -124,6 +124,13 @@ namespace GKUI.Charts
             }
         }
 
+        internal static void CreateCircleSegment(GraphicsPath path,
+                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+        }
+
         internal static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
                                                  int inRad, int extRad, float wedgeAngle,
                                                  float ang1, float ang2)
