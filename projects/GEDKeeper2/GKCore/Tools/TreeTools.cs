@@ -89,10 +89,10 @@ namespace GKCore.Tools
                 }
 
                 if (ancestorRec.Sex == GEDCOMSex.svMale) {
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
                         res = PL_SearchDesc(child, searchRec, out cross);
                         if (res) return true;
@@ -119,10 +119,10 @@ namespace GKCore.Tools
 
                 if (ancestor.Sex == GEDCOMSex.svMale)
                 {
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
                         GEDCOMFamilyRecord res = PL_SearchIntersection(child, searchRec);
                         if (res != null) return res;
@@ -392,10 +392,10 @@ namespace GKCore.Tools
                 }
             }
 
-            for (int i = fam.Childrens.Count - 1; i >= 0; i--)
+            for (int i = fam.Children.Count - 1; i >= 0; i--)
             {
-                if (fam.Childrens[i].Value == null)
-                    fam.Childrens.DeleteAt(i);
+                if (fam.Children[i].Value == null)
+                    fam.Children.DeleteAt(i);
             }
 
             GEDCOMRecord val = fam.Husband.Value;
@@ -669,10 +669,10 @@ namespace GKCore.Tools
                             break;
                     }
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+                        GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
                         TreeWalkInt(child, intMode, walkList);
                     }
                 }
@@ -734,10 +734,10 @@ namespace GKCore.Tools
 
                 SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
-                int num2 = family.Childrens.Count;
+                int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++)
                 {
-                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
                     SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }
@@ -900,7 +900,7 @@ namespace GKCore.Tools
         private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, List<CheckObj> checksList)
         {
             bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
-            empty = empty && (fRec.Events.Count == 0 && fRec.Childrens.Count == 0 && fRec.SpouseSealings.Count == 0);
+            empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0 && fRec.SpouseSealings.Count == 0);
             empty = empty && (fRec.Husband.Value == null && fRec.Wife.Value == null);
 
             if (empty) {

@@ -316,10 +316,10 @@ namespace GKCore
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -345,10 +345,10 @@ namespace GKCore
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0) {
@@ -505,9 +505,9 @@ namespace GKCore
                     prevNode = node;
                 }
 
-                for (int k = 0, count2 = family.Childrens.Count; k < count2; k++)
+                for (int k = 0, count2 = family.Children.Count; k < count2; k++)
                 {
-                    GEDCOMIndividualRecord child = family.Childrens[k].Value as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord child = family.Children[k].Value as GEDCOMIndividualRecord;
                     PL_WalkDescLinks(graph, prevNode, child);
                 }
             }

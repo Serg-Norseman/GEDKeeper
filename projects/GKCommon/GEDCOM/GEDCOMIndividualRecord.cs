@@ -471,10 +471,10 @@ namespace GKCommon.GEDCOM
                 GEDCOMChildToFamilyLink ctfLink = this.fChildToFamilyLinks.Extract(0);
                 GEDCOMFamilyRecord family = ctfLink.Family;
 
-                int num = family.Childrens.Count;
+                int num = family.Children.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMPointer childPtr = family.Childrens[i];
+                    GEDCOMPointer childPtr = family.Children[i];
                     
                     if (childPtr.StringValue == "@" + base.XRef + "@") {
                         childPtr.StringValue = "@" + targetRecord.XRef + "@";
@@ -849,7 +849,7 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 GEDCOMFamilyRecord family = this.SpouseToFamilyLinks[i].Family;
-                result += family.Childrens.Count;
+                result += family.Children.Count;
             }
 
             return result;

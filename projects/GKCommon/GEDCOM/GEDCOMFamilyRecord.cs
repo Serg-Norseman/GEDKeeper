@@ -26,14 +26,12 @@ namespace GKCommon.GEDCOM
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
     {
         private static readonly GEDCOMFactory fTagsFactory;
-        /* FIXME(brigadir15@gmail.com): Word `children' is already the plural of `child'.
-         * `Childrens' is not correct I believe. */
-        private GEDCOMList<GEDCOMPointer> fChildrens;
+        private GEDCOMList<GEDCOMPointer> fChildren;
         private GEDCOMList<GEDCOMSpouseSealing> fSpouseSealings;
 
-        public GEDCOMList<GEDCOMPointer> Childrens
+        public GEDCOMList<GEDCOMPointer> Children
         {
-            get { return this.fChildrens; }
+            get { return this.fChildren; }
         }
 
         public GEDCOMPointer Husband
@@ -68,7 +66,7 @@ namespace GKCommon.GEDCOM
             base.SetRecordType(GEDCOMRecordType.rtFamily);
             base.SetName("FAM");
 
-            this.fChildrens = new GEDCOMList<GEDCOMPointer>(this);
+            this.fChildren = new GEDCOMList<GEDCOMPointer>(this);
             this.fSpouseSealings = new GEDCOMList<GEDCOMSpouseSealing>(this);
         }
 
@@ -76,7 +74,7 @@ namespace GKCommon.GEDCOM
         {
             if (disposing)
             {
-                this.fChildrens.Dispose();
+                this.fChildren.Dispose();
                 this.fSpouseSealings.Dispose();
             }
             base.Dispose(disposing);
@@ -123,7 +121,7 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "CHIL")
             {
-                result = this.fChildrens.Add(new GEDCOMPointer(base.Owner, this, tagName, tagValue));
+                result = this.fChildren.Add(new GEDCOMPointer(base.Owner, this, tagName, tagValue));
             }
             else
             {
@@ -163,22 +161,22 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            this.fChildrens.Clear();
+            this.fChildren.Clear();
             this.fSpouseSealings.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fChildrens.Count == 0 && this.fSpouseSealings.Count == 0;
+            return base.IsEmpty() && this.fChildren.Count == 0 && this.fSpouseSealings.Count == 0;
         }
 
         public void DeleteChild(GEDCOMRecord childRec)
         {
-            for (int i = this.fChildrens.Count - 1; i >= 0; i--)
+            for (int i = this.fChildren.Count - 1; i >= 0; i--)
             {
-                if (this.fChildrens[i].Value == childRec)
+                if (this.fChildren[i].Value == childRec)
                 {
-                    this.fChildrens.DeleteAt(i);
+                    this.fChildren.DeleteAt(i);
                     break;
                 }
             }
@@ -188,9 +186,9 @@ namespace GKCommon.GEDCOM
         {
             int result = -1;
 
-            for (int i = this.fChildrens.Count - 1; i >= 0; i--)
+            for (int i = this.fChildren.Count - 1; i >= 0; i--)
             {
-                if (this.fChildrens[i].Value == childRec)
+                if (this.fChildren[i].Value == childRec)
                 {
                     result = i;
                     break;
@@ -208,11 +206,11 @@ namespace GKCommon.GEDCOM
 
             base.MoveTo(targetRecord, clearDest);
 
-            while (this.fChildrens.Count > 0)
+            while (this.fChildren.Count > 0)
             {
-                GEDCOMPointer obj = this.fChildrens.Extract(0);
+                GEDCOMPointer obj = this.fChildren.Extract(0);
                 obj.ResetParent(targetFamily);
-                targetFamily.Childrens.Add(obj);
+                targetFamily.Children.Add(obj);
             }
 
             while (this.fSpouseSealings.Count > 0)
@@ -227,7 +225,7 @@ namespace GKCommon.GEDCOM
         {
             base.Pack();
 
-            this.fChildrens.Pack();
+            this.fChildren.Pack();
             this.fSpouseSealings.Pack();
         }
 
@@ -243,7 +241,7 @@ namespace GKCommon.GEDCOM
                 this.Wife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(this.Wife.StringValue));
             }
 
-            this.fChildrens.ReplaceXRefs(map);
+            this.fChildren.ReplaceXRefs(map);
             this.fSpouseSealings.ReplaceXRefs(map);
         }
 
@@ -251,7 +249,7 @@ namespace GKCommon.GEDCOM
         {
             base.ResetOwner(newOwner);
 
-            this.fChildrens.ResetOwner(newOwner);
+            this.fChildren.ResetOwner(newOwner);
             this.fSpouseSealings.ResetOwner(newOwner);
         }
 
@@ -259,7 +257,7 @@ namespace GKCommon.GEDCOM
         {
             base.SaveToStream(stream);
 
-            this.fChildrens.SaveToStream(stream);
+            this.fChildren.SaveToStream(stream);
             this.Events.SaveToStream(stream); // for files content compatibility
             this.fSpouseSealings.SaveToStream(stream);
         }
@@ -313,7 +311,7 @@ namespace GKCommon.GEDCOM
 
         public void SortChilds()
         {
-            this.fChildrens.Sort(EventsCompare);
+            this.fChildren.Sort(EventsCompare);
         }
 
         public GEDCOMIndividualRecord GetSpouseBy(GEDCOMIndividualRecord spouse)
@@ -379,7 +377,7 @@ namespace GKCommon.GEDCOM
 
             GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
             ptr.SetNamedValue("CHIL", child);
-            this.fChildrens.Add(ptr);
+            this.fChildren.Add(ptr);
 
             GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.Owner, child, "", "");
             chLink.Family = this;

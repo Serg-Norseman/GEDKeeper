@@ -273,10 +273,10 @@ namespace GKCore.Export
                         this.fWriter.addParagraph(sps, fTextFont);
 
                         evList.Clear();
-                        int num3 = family.Childrens.Count;
+                        int num3 = family.Children.Count;
                         for (int j = 0; j < num3; j++)
                         {
-                            irec = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+                            irec = (GEDCOMIndividualRecord)family.Children[j].Value;
                             evList.Add(new PedigreeEvent(irec, irec.FindEvent("BIRT")));
                         }
                         this.WriteEventList(person, evList);
@@ -636,10 +636,10 @@ namespace GKCore.Export
                         {
                             family.SortChilds();
 
-                            int num3 = family.Childrens.Count;
+                            int num3 = family.Children.Count;
                             for (int i = 0; i < num3; i++)
                             {
-                                GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
+                                GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
                                 GenStep(res, child, level + 1, i + 1);
                             }
                         }

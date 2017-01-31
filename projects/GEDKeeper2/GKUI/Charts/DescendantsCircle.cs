@@ -126,10 +126,10 @@ namespace GKUI.Charts
                         {
                             family.SortChilds();
 
-                            int numberOfChildren = family.Childrens.Count;
+                            int numberOfChildren = family.Children.Count;
                             for (int i = 0; i < numberOfChildren; i++)
                             {
-                                GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
+                                GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
                                 PersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                                 int size = Math.Max(1, childSegment.TotalSubSegments);

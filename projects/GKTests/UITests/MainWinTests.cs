@@ -894,13 +894,13 @@ namespace GKTests.UITests
             ClickButton("btnWifeDelete", dlg);
 
             // childs
-            Assert.AreEqual(0, familyRecord.Childrens.Count);
+            Assert.AreEqual(0, familyRecord.Children.Count);
             tabs.SelectTab(0);
             fNeedIndividualSex = GEDCOMSex.svFemale;
             RSD_SubHandler = IndividualAdd_Mini_Handler;
             ModalFormHandler = RecordSelectDlg_Create_Handler;
             ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.Childrens.Count);
+            Assert.AreEqual(1, familyRecord.Children.Count);
 
             //sheetTester = new GKSheetListTester("fEventsList", dlg);
             //sheetTester.Properties.SelectItem(0);
@@ -912,7 +912,7 @@ namespace GKTests.UITests
             sheetTester = new GKSheetListTester("fChildsList", dlg);
             sheetTester.Properties.SelectItem(0);
             ClickToolStripButton("fChildsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.Childrens.Count);
+            Assert.AreEqual(0, familyRecord.Children.Count);
 
             // events
             Assert.AreEqual(0, familyRecord.Events.Count);

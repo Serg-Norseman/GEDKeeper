@@ -645,13 +645,13 @@ namespace GKCore
         public int gt_get_family_childs_count(object recPtr)
         {
             GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
-            return (fam == null) ? -1 : fam.Childrens.Count;
+            return (fam == null) ? -1 : fam.Children.Count;
         }
 
         public object gt_get_family_child(object recPtr, int childIndex)
         {
             GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
-            return (fam == null) ? null : fam.Childrens[childIndex].Value;
+            return (fam == null) ? null : fam.Children[childIndex].Value;
         }
 
         public int gt_get_location_usages(object recPtr)

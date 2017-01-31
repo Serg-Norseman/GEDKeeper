@@ -909,10 +909,10 @@ namespace GKUI.Charts
 
                             if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
                             {
-                                int num2 = family.Childrens.Count;
+                                int num2 = family.Children.Count;
                                 for (int j = 0; j < num2; j++)
                                 {
-                                    var childRec = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                                    var childRec = family.Children[j].Value as GEDCOMIndividualRecord;
 
                                     // protection against invalid third-party files
                                     if (childRec == null) {
@@ -938,7 +938,7 @@ namespace GKUI.Charts
                                     }
                                 }
                             } else {
-                                if (family.Childrens.Count > 0) {
+                                if (family.Children.Count > 0) {
                                     ft.SetFlag(PersonFlag.pfHasInvDesc);
                                     mt.SetFlag(PersonFlag.pfHasInvDesc);
                                 }
@@ -2153,10 +2153,10 @@ namespace GKUI.Charts
                 {
                     GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
                         bool resChild = DoDescendantsFilter(child);
                         result |= resChild;
                     }
