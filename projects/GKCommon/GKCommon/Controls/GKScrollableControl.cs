@@ -45,25 +45,25 @@ namespace GKCommon.Controls
                 obj.Scroll += new ScrollEventHandler(HandleVScrollEvent);
             }
             #else
-            //this.fValidEvent = true;
+            //fValidEvent = true;
             #endif
         }
 
         #if __MonoCS__
         private void HandleHScrollEvent (object sender, ScrollEventArgs args)
         {
-            //this.fValidEvent = true;
+            //fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.HorizontalScroll);
-            this.OnScroll(newArgs);
-            //this.fValidEvent = false;
+            OnScroll(newArgs);
+            //fValidEvent = false;
         }
 
         private void HandleVScrollEvent (object sender, ScrollEventArgs args)
         {
-            //this.fValidEvent = true;
+            //fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.VerticalScroll);
-            this.OnScroll(newArgs);
-            //this.fValidEvent = false;
+            OnScroll(newArgs);
+            //fValidEvent = false;
         }
         #endif
 
@@ -71,8 +71,8 @@ namespace GKCommon.Controls
         {
             base.OnMouseDown(e);
 
-            if (!this.Focused)
-                this.Focus();
+            if (!Focused)
+                Focus();
         }
 
         /// <summary>
@@ -85,16 +85,16 @@ namespace GKCommon.Controls
         {
             Invalidate();
 
-            if (se.Type != ScrollEventType.EndScroll /*&& this.fValidEvent*/)
+            if (se.Type != ScrollEventType.EndScroll /*&& fValidEvent*/)
             {
                 switch (se.ScrollOrientation)
                 {
                     case ScrollOrientation.HorizontalScroll:
-                        ScrollByOffset(new Size(se.NewValue + this.AutoScrollPosition.X, 0));
+                        ScrollByOffset(new Size(se.NewValue + AutoScrollPosition.X, 0));
                         break;
 
                     case ScrollOrientation.VerticalScroll:
-                        ScrollByOffset(new Size(0, se.NewValue + this.AutoScrollPosition.Y));
+                        ScrollByOffset(new Size(0, se.NewValue + AutoScrollPosition.Y));
                         break;
                 }
             }
@@ -106,17 +106,17 @@ namespace GKCommon.Controls
         {
             if (!offset.IsEmpty)
             {
-                this.SuspendLayout();
+                SuspendLayout();
                 foreach (Control child in Controls) {
                     child.Location -= offset;
                 }
 
-                this.AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
+                AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
 
-                this.ResumeLayout();
-                this.Invalidate();
-                //this.Update();
-                //this.Refresh();
+                ResumeLayout();
+                Invalidate();
+                //Update();
+                //Refresh();
             }
         }
 
@@ -127,7 +127,7 @@ namespace GKCommon.Controls
         /// <param name="y">The y.</param>
         protected void AdjustScroll(int x, int y)
         {
-            Point scrollPosition = new Point(this.HorizontalScroll.Value + x, this.VerticalScroll.Value + y);
+            Point scrollPosition = new Point(HorizontalScroll.Value + x, VerticalScroll.Value + y);
             UpdateScrollPosition(scrollPosition);
         }
 
@@ -144,8 +144,8 @@ namespace GKCommon.Controls
 
         protected void AdjustViewPort(Size imageSize, bool noRedraw = false)
         {
-            if (this.AutoScroll && !imageSize.IsEmpty) {
-                this.AutoScrollMinSize = new Size(imageSize.Width + this.Padding.Horizontal, imageSize.Height + this.Padding.Vertical);
+            if (AutoScroll && !imageSize.IsEmpty) {
+                AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
             }
 
             if (!noRedraw) Invalidate();

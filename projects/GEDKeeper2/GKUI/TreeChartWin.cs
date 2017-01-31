@@ -107,7 +107,7 @@ namespace GKUI
 
             this.miTraceKinships.Checked = this.fTreeBox.TraceKinships;
             this.miTraceKinships.Visible = false;
-            
+
             this.InitPrintDoc();
         }
 

@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -2192,66 +2191,18 @@ namespace GKUI.Charts
 
         #region Print support
 
-        public void SaveSnapshot(string fileName)
+        /* TODO(zsv): Temporary implementation. Refactoring this hierarchy later. */
+        public override Size GetImageSize()
         {
-            string ext = SysUtils.GetFileExtension(fileName);
-
-            if ((ext == ".bmp" || ext == ".jpg") && fImageWidth >= 65535)
-            {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
-            }
-            else
-            {
-                ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
-                else
-                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
-                else
-                    if (ext == ".png") { imFmt = ImageFormat.Png; }
-                else
-                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-                else
-                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
-
-                Image pic;
-                if (Equals(imFmt, ImageFormat.Emf)) {
-                    pic = new Metafile(fileName, CreateGraphics().GetHdc());
-                } else {
-                    pic = new Bitmap(fImageWidth, fImageHeight, PixelFormat.Format24bppRgb);
-                }
-
-                try
-                {
-                    using (Graphics gfx = Graphics.FromImage(pic)) {
-                        fRenderer.SetTarget(gfx);
-                        RenderStatic(BackgroundMode.bmAny);
-                    }
-
-                    pic.Save(fileName, imFmt);
-                }
-                finally
-                {
-                    pic.Dispose();
-                }
-            }
+            return fImageSize;
         }
 
-        public bool IsLandscape()
+        public override void RenderStaticImage(Graphics gfx, bool printer)
         {
-            return (fImageHeight < fImageWidth);
-        }
+            BackgroundMode bgMode = (printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
 
-        public Image GetPrintableImage()
-        {
-            var frameRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-            Image image = new Metafile(CreateGraphics().GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
-
-            using (Graphics gfx = Graphics.FromImage(image)) {
-                fRenderer.SetTarget(gfx);
-                RenderStatic(BackgroundMode.bmImage);
-            }
-
-            return image;
+            fRenderer.SetTarget(gfx);
+            RenderStatic(bgMode);
         }
 
         public void RenderStatic(BackgroundMode background, bool centered = false)

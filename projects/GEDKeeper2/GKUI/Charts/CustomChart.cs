@@ -19,7 +19,11 @@
  */
 
 using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
+using GKCommon;
 using GKCommon.Controls;
 using GKCore;
 
@@ -61,6 +65,80 @@ namespace GKUI.Charts
             base.Dispose(disposing);
         }
 
+        #region Print and snaphots support
+
+        public abstract Size GetImageSize();
+        public abstract void RenderStaticImage(Graphics gfx, bool printer);
+
+        public bool IsLandscape()
+        {
+            Size imageSize = GetImageSize();
+            return (imageSize.Height < imageSize.Width);
+        }
+
+        public Image GetPrintableImage()
+        {
+            Size imageSize = GetImageSize();
+            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
+            Image image = new Metafile(CreateGraphics().GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
+
+            using (Graphics gfx = Graphics.FromImage(image)) {
+                RenderStaticImage(gfx, true);
+            }
+
+            return image;
+        }
+
+        /* TODO(zsv): Need to find an appropriate icon in the general style
+         * for the main toolbar - screenshot capture for windows with charts. */
+        public void SaveSnapshot(string fileName)
+        {
+            string ext = SysUtils.GetFileExtension(fileName);
+
+            Size imageSize = GetImageSize();
+            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
+            {
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+            }
+            else
+            {
+                ImageFormat imFmt = ImageFormat.Png;
+                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
+                else
+                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
+                else
+                    if (ext == ".png") { imFmt = ImageFormat.Png; }
+                else
+                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
+                else
+                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+
+                Image pic;
+                if (Equals(imFmt, ImageFormat.Emf)) {
+                    pic = new Metafile(fileName, CreateGraphics().GetHdc());
+                } else {
+                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                }
+
+                try
+                {
+                    using (Graphics gfx = Graphics.FromImage(pic)) {
+                        RenderStaticImage(gfx, false);
+                    }
+
+                    pic.Save(fileName, imFmt);
+                }
+                finally
+                {
+                    pic.Dispose();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Navigation support
+
         private void DoNavRefresh()
         {
             var eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
@@ -69,9 +147,7 @@ namespace GKUI.Charts
             eventHandler(this, null);
         }
 
-
         protected abstract void SetNavObject(object obj);
-
 
         public bool NavAdd(object obj)
         {
@@ -124,6 +200,10 @@ namespace GKUI.Charts
             }
         }
 
+        #endregion
+
+        #region Static drawing methods
+
         internal static void CreateCircleSegment(GraphicsPath path,
                                                  int inRad, int extRad, float wedgeAngle,
                                                  float ang1, float ang2)
@@ -157,5 +237,7 @@ namespace GKUI.Charts
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();
         }
+
+        #endregion
     }
 }

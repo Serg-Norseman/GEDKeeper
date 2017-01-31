@@ -69,12 +69,10 @@ namespace GKUI.Charts
             }
         }
 
-        private struct ValuesAsFloat {};
-
         private enum RenderTarget
         {
-            kScreen,
-            kNonScreenCanvas
+            rtScreen,
+            rtNonScreenCanvas
         }
 
         protected static readonly object EventRootChanged;
@@ -115,7 +113,6 @@ namespace GKUI.Charts
         /* This chart's GDI+ paths boundary (in the following order: left, top,
          * right and bottom). */
         private float[] fBounds;
-        private ValuesAsFloat fFloatType = new ValuesAsFloat();
 
         public int GenWidth
         {
@@ -241,6 +238,7 @@ namespace GKUI.Charts
         {
             CreateBrushes();
             BuildPathTree();
+
             /* Update scrolling area. */
             fBounds[0] = 0.0f;
             fBounds[1] = 0.0f;
@@ -253,9 +251,9 @@ namespace GKUI.Charts
                 fBounds[2] = Math.Max(fBounds[2], bound.Right);
                 fBounds[3] = Math.Max(fBounds[3], bound.Bottom);
             }
-            Size boundary = GetPathsBoundary();
+
+            Size boundary = GetPathsBoundaryI();
             AdjustViewPort(boundary, false);
-            /* Invalidate(); */
         }
 
         protected void DoRootChanged(GEDCOMIndividualRecord person)
@@ -273,13 +271,13 @@ namespace GKUI.Charts
         /// Result includes width of a path's borders.
         /// </summary>
         /// <returns>The paths boundary.</returns>
-        private SizeF GetPathsBoundary(ValuesAsFloat dummy)
+        private SizeF GetPathsBoundaryF()
         {
             /* Add double width of the pen -- adjust both sides. */
             return new SizeF(fBounds[2] - fBounds[0] + (fPen.Width * 2),
                              fBounds[3] - fBounds[1] + (fPen.Width * 2));
         }
-        private Size GetPathsBoundary()
+        private Size GetPathsBoundaryI()
         {
             /* Add double width of the pen -- adjust both sides. */
             return new Size((int)(fBounds[2] - fBounds[0] + (fPen.Width * 2)),
@@ -295,48 +293,38 @@ namespace GKUI.Charts
         /// <returns>Center point of this chart.</returns>
         private PointF GetCenter(RenderTarget target)
         {
-            return (RenderTarget.kScreen == target ?
-                    GetCenterForScreenRendering() :
-                    GetCenterForNonScreenRendering());
-        }
+            if (target == RenderTarget.rtScreen) {
 
-        /// <summary>
-        /// Returns the center point of this chart relative to the upper left
-        /// point of this window's client area.
-        /// According to discussion at PR #99 (GitHub), this member centers this
-        /// chart on an axis when there's no scrolling required along that axis.
-        /// And if scrolling is required, this member aligns this chart on its
-        /// left edge.
-        /// </summary>
-        /// <returns>Center point of this chart.</returns>
-        private PointF GetCenterForScreenRendering()
-        {
-            PointF center = new PointF();
-            SizeF boundary = GetPathsBoundary(fFloatType);
-            if (ClientSize.Width > boundary.Width) {
-                center.X = Math.Min(ClientSize.Width - fBounds[2], ClientSize.Width >> 1);
-            }
-            else {
-                center.X = AutoScrollPosition.X + fOffsetX - fBounds[0];
-            }
-            if (ClientSize.Height > boundary.Height) {
-                center.Y = Math.Min(ClientSize.Height - fBounds[3], ClientSize.Height >> 1);
-            }
-            else {
-                center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1];
-            }
-            return center;
-        }
+                // Returns the center point of this chart relative to the upper left
+                // point of this window's client area.
+                // According to discussion at PR #99 (GitHub), this member centers this
+                // chart on an axis when there's no scrolling required along that axis.
+                // And if scrolling is required, this member aligns this chart on its
+                // left edge.
+                PointF center = new PointF();
+                SizeF boundary = GetPathsBoundaryF();
+                if (ClientSize.Width > boundary.Width) {
+                    center.X = Math.Min(ClientSize.Width - fBounds[2], ClientSize.Width >> 1);
+                }
+                else {
+                    center.X = AutoScrollPosition.X + fOffsetX - fBounds[0];
+                }
+                if (ClientSize.Height > boundary.Height) {
+                    center.Y = Math.Min(ClientSize.Height - fBounds[3], ClientSize.Height >> 1);
+                }
+                else {
+                    center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1];
+                }
+                return center;
 
-        /// <summary>
-        /// Returns the center point of this chart relative to the upper left
-        /// corner/point of printing canvas.
-        /// </summary>
-        /// <returns>Center point of this chart.</returns>
-        private PointF GetCenterForNonScreenRendering()
-        {
-            return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0],
-                              AutoScrollPosition.Y + fOffsetY - fBounds[1]);
+            } else {
+
+                // Returns the center point of this chart relative to the upper left
+                // corner/point of printing canvas.
+                return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0],
+                                  AutoScrollPosition.Y + fOffsetY - fBounds[1]);
+
+            }
         }
 
         protected CircleSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)
@@ -358,7 +346,7 @@ namespace GKUI.Charts
 
         protected CircleSegment FindSegment(int mX, int mY)
         {
-            PointF center = GetCenter(RenderTarget.kScreen);
+            PointF center = GetCenter(RenderTarget.rtScreen);
             mX -= (int)(center.X);
             mY -= (int)(center.Y);
             CircleSegment result = null;
@@ -583,7 +571,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Render(e.Graphics, RenderTarget.kScreen);
+            Render(e.Graphics, RenderTarget.rtScreen);
             base.OnPaint(e);
         }
 
@@ -632,16 +620,17 @@ namespace GKUI.Charts
             }
         }
 
-        /* TODO(brigadir15@gmail.com): Remove this member. */
-        protected override void OnDoubleClick(EventArgs e)
+        #endregion
+
+        /* TODO(zsv): Temporary implementation. Refactoring this hierarchy later. */
+        public override Size GetImageSize()
         {
-            Size imageSize = GetPathsBoundary();
-            Image image = new System.Drawing.Bitmap(imageSize.Width, imageSize.Height);
-            Graphics context = Graphics.FromImage(image);
-            Render(context, RenderTarget.kNonScreenCanvas);
-            image.Save("circle_chart.bmp");
+            return GetPathsBoundaryI();
         }
 
-        #endregion
+        public override void RenderStaticImage(Graphics gfx, bool printer)
+        {
+            Render(gfx, RenderTarget.rtNonScreenCanvas);
+        }
     }
 }
