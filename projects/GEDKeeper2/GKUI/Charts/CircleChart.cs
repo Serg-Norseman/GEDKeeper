@@ -269,10 +269,10 @@ namespace GKUI.Charts
             PointF center = new PointF();
             center.X = AutoScrollPosition.X + fOffsetX;
             center.Y = AutoScrollPosition.Y + fOffsetY;
-            if (0 > fBounds[0]) {
+            if (fBounds[0] < 0) {
                 center.X -= fBounds[0];
             }
-            if (0 > fBounds[1]) {
+            if (fBounds[1] < 0) {
                 center.Y -= fBounds[1];
             }
             return center;
@@ -303,7 +303,7 @@ namespace GKUI.Charts
             CircleSegment result = null;
 
             int numberOfSegments = fSegments.Count;
-            for (int i = 0; numberOfSegments > i; ++i) {
+            for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fSegments[i];
 
                 if (segment.Path.IsVisible(mX, mY)) {
