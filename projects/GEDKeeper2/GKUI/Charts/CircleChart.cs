@@ -113,6 +113,11 @@ namespace GKUI.Charts
         /* This chart's GDI+ paths boundary (in the following order: left, top,
          * right and bottom). */
         private float[] fBounds;
+        /* Animation timer. */
+        private Timer fAnimationTimer;
+        private UInt64 fAnimationTime;
+        private float fAnimationAngle;
+        const UInt64 fAnimationTimeLimit = 17;
 
         public int GenWidth
         {
@@ -184,6 +189,7 @@ namespace GKUI.Charts
             fSelected = null;
             fShieldState = baseWin.ShieldState;
             fBounds = new float[4];
+            InitTimer();
 
             BackColor = fOptions.BrushColor[9];
         }
@@ -374,6 +380,9 @@ namespace GKUI.Charts
         {
             PointF center = GetCenter(target);
             context.TranslateTransform(center.X, center.Y);
+            if (RenderTarget.rtScreen == target) {
+                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) * Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
+            }
             InternalDraw(context);
             context.ResetTransform();
         }
@@ -574,6 +583,26 @@ namespace GKUI.Charts
             gfx.Transform = previousTransformation;
         }
 
+        private void InitTimer()
+        {
+            fAnimationAngle = 0.0f;
+            fAnimationTime = 0;
+            fAnimationTimer = new Timer();
+            fAnimationTimer.Interval = 1;
+            fAnimationTimer.Tick += AnimationTimerTick;
+            fAnimationTimer.Start();
+        }
+
+        private void AnimationTimerTick(object sender, EventArgs e)
+        {
+            ++fAnimationTime;
+            if (fAnimationTimeLimit < fAnimationTime) {
+                fAnimationTimer.Stop();
+                fAnimationTime = 0;
+            }
+            Invalidate();
+        }
+
         #region Protected inherited methods
 
         protected override bool IsInputKey(Keys keyData)
@@ -611,6 +640,7 @@ namespace GKUI.Charts
 
             if (selected != null && selected.IRec != null) {
                 RootPerson = selected.IRec;
+                InitTimer();
             }
         }
 
