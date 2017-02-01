@@ -160,6 +160,7 @@ namespace GKUI.Charts
                 Changed();
 
                 DoRootChanged(value);
+                InitTimer();
             }
         }
 
@@ -381,7 +382,13 @@ namespace GKUI.Charts
             PointF center = GetCenter(target);
             context.TranslateTransform(center.X, center.Y);
             if (RenderTarget.rtScreen == target) {
-                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) * Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
+                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
+                                                Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
+                float zoomX = 1.0f + ((0 != fAnimationTime) ?
+                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                float zoomY = 1.0f - ((0 != fAnimationTime) ?
+                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                context.ScaleTransform(zoomX, zoomY);
             }
             InternalDraw(context);
             context.ResetTransform();
@@ -585,12 +592,14 @@ namespace GKUI.Charts
 
         private void InitTimer()
         {
-            fAnimationAngle = 0.0f;
-            fAnimationTime = 0;
-            fAnimationTimer = new Timer();
-            fAnimationTimer.Interval = 1;
-            fAnimationTimer.Tick += AnimationTimerTick;
-            fAnimationTimer.Start();
+            if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
+                fAnimationAngle = 0.0f;
+                fAnimationTime = 0;
+                fAnimationTimer = new Timer();
+                fAnimationTimer.Interval = 1;
+                fAnimationTimer.Tick += AnimationTimerTick;
+                fAnimationTimer.Start();
+            }
         }
 
         private void AnimationTimerTick(object sender, EventArgs e)
@@ -640,7 +649,6 @@ namespace GKUI.Charts
 
             if (selected != null && selected.IRec != null) {
                 RootPerson = selected.IRec;
-                InitTimer();
             }
         }
 
