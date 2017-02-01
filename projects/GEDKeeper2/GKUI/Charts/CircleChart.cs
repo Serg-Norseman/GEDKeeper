@@ -557,14 +557,16 @@ namespace GKUI.Charts
                 float angle = clockwise ? startAngle - offset : startAngle + offset;
 
                 double radAngle = angle * (Math.PI / 180.0d);
-                float x = (float)(centerX + previousTransformation.OffsetX + Math.Cos(radAngle) * radius);
-                float y = (float)(centerY + previousTransformation.OffsetY - Math.Sin(radAngle) * radius);
+                float x = (float)(centerX + Math.Cos(radAngle) * radius);
+                float y = (float)(centerY - Math.Sin(radAngle) * radius);
                 float charRotation = 90 - (inside ? angle : angle + 180);
                 charRotation *= (float)(Math.PI / 180.0f);
                 float cosine = (float)(Math.Cos(charRotation));
                 float sine = (float)(Math.Sin(charRotation));
                 /* Translate and rotate. */
-                gfx.Transform = new Matrix(cosine, sine, -sine, cosine, x, y);
+                Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
+                m.Multiply(previousTransformation, MatrixOrder.Append);
+                gfx.Transform = m;
 
                 string chr = new String(text[i], 1);
                 gfx.DrawString(chr, font, brush, 0, 0);
