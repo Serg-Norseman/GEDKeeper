@@ -560,7 +560,7 @@ namespace GKUI.Charts
                 float x = (float)(centerX + previousTransformation.OffsetX + Math.Cos(radAngle) * radius);
                 float y = (float)(centerY + previousTransformation.OffsetY - Math.Sin(radAngle) * radius);
                 float charRotation = 90 - (inside ? angle : angle + 180);
-                charRotation *= Math.PI / 180.0f;
+                charRotation *= (float)(Math.PI / 180.0f);
                 float cosine = (float)(Math.Cos(charRotation));
                 float sine = (float)(Math.Sin(charRotation));
                 /* Translate and rotate. */
