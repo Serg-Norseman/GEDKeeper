@@ -422,10 +422,14 @@ namespace GKUI.Charts
 
                 if (isNarrow) {
 
-                    float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
-                    float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                    gfx.TranslateTransform(dx, -dy);
-                    gfx.RotateTransform(angle - 90.0f);
+                    float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
+                    float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
+                    float rotation = (float)((angle - 90.0f) * Math.PI / 180.0f);
+                    float cosine = (float)(Math.Cos(rotation));
+                    float sine = (float)(Math.Sin(rotation));
+                    Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
+                    m.Multiply(previousTransformation, MatrixOrder.Append);
+                    gfx.Transform = m;
 
                     SizeF size = gfx.MeasureString(givn, Font);
                     gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
@@ -434,10 +438,14 @@ namespace GKUI.Charts
 
                     if (wedgeAngle < 20) {
 
-                        float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
-                        float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                        gfx.TranslateTransform(dx, -dy);
-                        gfx.RotateTransform(angle);
+                        float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
+                        float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
+                        float rotation = (float)(angle * Math.PI / 180.0f);
+                        float cosine = (float)(Math.Cos(rotation));
+                        float sine = (float)(Math.Sin(rotation));
+                        Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
+                        m.Multiply(previousTransformation, MatrixOrder.Append);
+                        gfx.Transform = m;
 
                         SizeF size = gfx.MeasureString(givn, Font);
                         gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
@@ -458,26 +466,27 @@ namespace GKUI.Charts
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             }
                         } else {
-                            float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
-                            float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
+                            float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
+                            float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
                             /* Change `gfx`'s transformation via direct matrix
                              * processing, not with its member functions because
                              * we are about to change the transformation several
                              * times (thus, we are avoiding transformation
                              * reseting on `gfx`). */
-                            Matrix m = new Matrix(1, 0, 0, 1, dx, -dy);
-                            m.Multiply(previousTransformation);
-                            m.Rotate(angle);
+                            float rotation = (float)(angle * Math.PI / 180.0f);
+                            float cosine = (float)(Math.Cos(rotation));
+                            float sine = (float)(Math.Sin(rotation));
+                            Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
+                            m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
                             SizeF sizeF2 = gfx.MeasureString(surn, Font);
                             gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
 
                             sizeF2 = gfx.MeasureString(givn, Font);
-                            dx = (float)Math.Sin(PI * angle / 180.0) * (rad - sizeF2.Height);
-                            dy = (float)Math.Cos(PI * angle / 180.0) * (rad - sizeF2.Height);
-                            m = new Matrix(1, 0, 0, 1, dx, -dy);
-                            m.Multiply(previousTransformation);
-                            m.Rotate(angle);
+                            dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
+                            dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
+                            m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
+                            m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
                             gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
                         }
@@ -493,10 +502,14 @@ namespace GKUI.Charts
                             DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
-                            float dx = (float)Math.Sin(PI * angle / 180.0) * rad;
-                            float dy = (float)Math.Cos(PI * angle / 180.0) * rad;
-                            gfx.TranslateTransform(dx, -dy);
-                            gfx.RotateTransform(angle);
+                            float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
+                            float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
+                            float rotation = (float)(angle * Math.PI / 180.0f);
+                            float cosine = (float)(Math.Cos(rotation));
+                            float sine = (float)(Math.Sin(rotation));
+                            Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
+                            m.Multiply(previousTransformation, MatrixOrder.Append);
+                            gfx.Transform = m;
 
                             SizeF sizeF = gfx.MeasureString(surn, Font);
                             gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
@@ -527,30 +540,36 @@ namespace GKUI.Charts
             var size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
-            float textAngle = (float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius);
+            float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
             float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
 
-            startAngle -= 90.0f + deltaAngle;
+            if (clockwise) {
+                startAngle += deltaAngle;
+            } else {
+                startAngle += wedgeAngle - deltaAngle;
+            }
+            startAngle = -startAngle;
 
+            Matrix previousTransformation = gfx.Transform;
             for (var i = 0; i < text.Length; ++i)
             {
-                gfx.ResetTransform();
-
-                float offset = (textAngle * ((i + 0.0f) / text.Length));
-                offset = clockwise ? -offset : offset;
-                float angle = startAngle + offset;
+                float offset = (textAngle * ((float)(i) / text.Length));
+                float angle = clockwise ? startAngle - offset : startAngle + offset;
 
                 double radAngle = angle * (Math.PI / 180.0d);
-                float x = (float)(centerX + Math.Sin(radAngle) * radius);
-                float y = (float)(centerY + Math.Cos(radAngle) * radius);
-                gfx.TranslateTransform(x, y);
-
-                double charRotation = inside ? -angle + 180 : -angle;
-                gfx.RotateTransform((float)(charRotation));
+                float x = (float)(centerX + previousTransformation.OffsetX + Math.Cos(radAngle) * radius);
+                float y = (float)(centerY + previousTransformation.OffsetY - Math.Sin(radAngle) * radius);
+                float charRotation = 90 - (inside ? angle : angle + 180);
+                charRotation *= (float)(Math.PI / 180.0f);
+                float cosine = (float)(Math.Cos(charRotation));
+                float sine = (float)(Math.Sin(charRotation));
+                /* Translate and rotate. */
+                gfx.Transform = new Matrix(cosine, sine, -sine, cosine, x, y);
 
                 string chr = new String(text[i], 1);
                 gfx.DrawString(chr, font, brush, 0, 0);
             }
+            gfx.Transform = previousTransformation;
         }
 
         #region Protected inherited methods
