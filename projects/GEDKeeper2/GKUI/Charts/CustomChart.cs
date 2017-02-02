@@ -31,8 +31,6 @@ namespace GKUI.Charts
 {
     public abstract class CustomChart : GKScrollableControl
     {
-        protected const float PI = 3.1415926535897931f;
-
         private static readonly object EventNavRefresh;
 
 
@@ -215,13 +213,13 @@ namespace GKUI.Charts
                                                  int inRad, int extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
-            float angval1 = ang1 * PI / 180.0f;
+            float angval1 = (float)(ang1 * Math.PI / 180.0f);
             int px1 = ctX + (int)(inRad * Math.Cos(angval1));
             int py1 = ctY + (int)(inRad * Math.Sin(angval1));
             int px2 = ctX + (int)(extRad * Math.Cos(angval1));
             int py2 = ctY + (int)(extRad * Math.Sin(angval1));
 
-            float angval2 = ang2 * PI / 180.0f;
+            float angval2 = (float)(ang2 * Math.PI / 180.0f);
             int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
             int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
             int nx2 = ctX + (int)(extRad * Math.Cos(angval2));

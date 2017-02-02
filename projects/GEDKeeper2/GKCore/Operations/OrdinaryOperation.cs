@@ -57,9 +57,6 @@ namespace GKCore.Operations
         otRecordEventAdd,
         otRecordEventRemove,
 
-        otAdd,
-        otRemove,
-
         otIndividualAssociationAdd,
         otIndividualAssociationRemove,
 
@@ -75,7 +72,7 @@ namespace GKCore.Operations
     }
 
     /// <summary>
-    /// 
+    /// Processing operations of change one of the properties of the records.
     /// </summary>
     public class OrdinaryOperation : CustomOperation
     {
@@ -87,425 +84,117 @@ namespace GKCore.Operations
         public OrdinaryOperation(UndoManager manager, OperationType type,
                                  GEDCOMObject obj, object newVal) : base(manager)
         {
-            this.fType = type;
-            this.fObj = obj;
-            this.fNewVal = newVal;
+            fType = type;
+            fObj = obj;
+            fNewVal = newVal;
         }
 
         public override bool Redo()
         {
-            return this.ProcessOperation(true);
+            return ProcessOperation(true);
         }
 
         public override void Undo()
         {
-            this.ProcessOperation(false);
+            ProcessOperation(false);
         }
-
-        /*public GEDCOMRecord FindRecord(string xref)
-        {
-            return this.fManager.Tree.XRefIndex_Find(xref);
-        }*/
 
         private bool ProcessOperation(bool redo)
         {
             bool result;
 
-            switch (this.fType) {
+            switch (fType) {
                 case OperationType.otNOP:
                     result = false;
                     break;
 
                 case OperationType.otIndividualParentsAttach:
                 case OperationType.otIndividualParentsDetach:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMFamilyRecord familyRec = this.fNewVal as GEDCOMFamilyRecord;
-
-                        if (iRec == null || familyRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otIndividualParentsDetach) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                familyRec.AddChild(iRec);
-                            } else {
-                                familyRec.RemoveChild(iRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualParents(redo);
                     break;
 
                 case OperationType.otFamilySpouseAttach:
                 case OperationType.otFamilySpouseDetach:
-                    {
-                        GEDCOMFamilyRecord famRec = this.fObj as GEDCOMFamilyRecord;
-                        GEDCOMIndividualRecord spouseRec = this.fNewVal as GEDCOMIndividualRecord;
-
-                        if (famRec == null || spouseRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otFamilySpouseDetach) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                famRec.AddSpouse(spouseRec);
-                            } else {
-                                famRec.RemoveSpouse(spouseRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessFamilySpouse(redo);
                     break;
 
                 case OperationType.otGroupMemberAttach:
                 case OperationType.otGroupMemberDetach:
-                    {
-                        GEDCOMGroupRecord grpRec = this.fObj as GEDCOMGroupRecord;
-                        GEDCOMIndividualRecord mbrRec = this.fNewVal as GEDCOMIndividualRecord;
-
-                        if (grpRec == null || mbrRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otGroupMemberDetach) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                grpRec.AddMember(mbrRec);
-                            } else {
-                                grpRec.RemoveMember(mbrRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessGroupMember(redo);
                     break;
 
                 case OperationType.otSourceRepositoryCitationAdd:
                 case OperationType.otSourceRepositoryCitationRemove:
-                    {
-                        GEDCOMSourceRecord srcRec = this.fObj as GEDCOMSourceRecord;
-                        GEDCOMRepositoryRecord repRec = this.fNewVal as GEDCOMRepositoryRecord;
-
-                        if (srcRec == null || repRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otSourceRepositoryCitationRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                srcRec.AddRepository(repRec);
-                            } else {
-                                srcRec.RemoveRepository(repRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessSourceRepositoryCitation(redo);
                     break;
 
 
                 case OperationType.otResearchTaskAdd:
                 case OperationType.otResearchTaskRemove:
-                    {
-                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
-                        GEDCOMTaskRecord taskRec = this.fNewVal as GEDCOMTaskRecord;
-
-                        if (resRec == null || taskRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otResearchTaskRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                resRec.AddTask(taskRec);
-                            } else {
-                                resRec.RemoveTask(taskRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessResearchTask(redo);
                     break;
 
                 case OperationType.otResearchCommunicationAdd:
                 case OperationType.otResearchCommunicationRemove:
-                    {
-                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
-                        GEDCOMCommunicationRecord commRec = this.fNewVal as GEDCOMCommunicationRecord;
-
-                        if (resRec == null || commRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otResearchCommunicationRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                resRec.AddCommunication(commRec);
-                            } else {
-                                resRec.RemoveCommunication(commRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessResearchCommunication(redo);
                     break;
 
                 case OperationType.otResearchGroupAdd:
                 case OperationType.otResearchGroupRemove:
-                    {
-                        GEDCOMResearchRecord resRec = this.fObj as GEDCOMResearchRecord;
-                        GEDCOMGroupRecord grpRec = this.fNewVal as GEDCOMGroupRecord;
-
-                        if (resRec == null || grpRec == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otResearchGroupRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                resRec.AddGroup(grpRec);
-                            } else {
-                                resRec.RemoveGroup(grpRec);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessResearchGroup(redo);
                     break;
 
-
                 case OperationType.otRecordNoteAdd:
-                    {
-                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
-                        GEDCOMNoteRecord noteRec = this.fNewVal as GEDCOMNoteRecord;
-
-                        result = (swl != null && noteRec != null);
-                        if (result) {
-                            if (redo) {
-                                GEDCOMNotes notes = swl.AddNote(noteRec);
-                                this.fOldVal = notes;
-                            } else {
-                                GEDCOMNotes notes = this.fOldVal as GEDCOMNotes;
-                                swl.Notes.Delete(notes);
-                            }
-                        }
-                    }
+                    result = ProcessRecordNoteAdd(redo);
                     break;
 
                 case OperationType.otRecordNoteRemove:
-                    {
-                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
-                        GEDCOMNotes notes = this.fNewVal as GEDCOMNotes;
-
-                        result = (swl != null && notes != null);
-                        if (result) {
-                            if (redo) {
-                                swl.Notes.Extract(notes); // bugfix(no delete!)
-                            } else {
-                                swl.Notes.Add(notes);
-                            }
-                        }
-                    }
+                    result = ProcessRecordNoteRemove(redo);
                     break;
 
                 case OperationType.otRecordMediaAdd:
-                    {
-                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
-                        GEDCOMMultimediaRecord mediaRec = this.fNewVal as GEDCOMMultimediaRecord;
-
-                        result = (swl != null && mediaRec != null);
-                        if (result) {
-                            if (redo) {
-                                GEDCOMMultimediaLink mmLink = swl.AddMultimedia(mediaRec);
-                                this.fOldVal = mmLink;
-                            } else {
-                                GEDCOMMultimediaLink mmLink = this.fOldVal as GEDCOMMultimediaLink;
-                                swl.MultimediaLinks.Delete(mmLink);
-                            }
-                        }
-                    }
+                    result = ProcessRecordMediaAdd(redo);
                     break;
 
                 case OperationType.otRecordMediaRemove:
-                    {
-                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
-                        GEDCOMMultimediaLink mediaLink = this.fNewVal as GEDCOMMultimediaLink;
-
-                        result = (swl != null && mediaLink != null);
-                        if (result) {
-                            if (redo) {
-                                swl.MultimediaLinks.Extract(mediaLink); // bugfix(no delete!)
-                            } else {
-                                swl.MultimediaLinks.Add(mediaLink);
-                            }
-                        }
-                    }
+                    result = ProcessRecordMediaRemove(redo);
                     break;
 
                 case OperationType.otRecordSourceCitAdd:
                 case OperationType.otRecordSourceCitRemove:
-                    {
-                        IGEDCOMStructWithLists swl = this.fObj as IGEDCOMStructWithLists;
-                        GEDCOMSourceCitation sourceCit = this.fNewVal as GEDCOMSourceCitation;
-
-                        if (swl == null || sourceCit == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otRecordSourceCitRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                swl.SourceCitations.Add(sourceCit);
-                            } else {
-                                swl.SourceCitations.Extract(sourceCit); // bugfix(no delete!)
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessRecordSourceCit(redo);
                     break;
-
 
                 case OperationType.otRecordEventAdd:
                 case OperationType.otRecordEventRemove:
-                    {
-                        GEDCOMRecordWithEvents rwe = this.fObj as GEDCOMRecordWithEvents;
-                        GEDCOMCustomEvent evt = this.fNewVal as GEDCOMCustomEvent;
-
-                        if (rwe == null || evt == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otRecordEventRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                rwe.AddEvent(evt);
-                            } else {
-                                rwe.Events.Extract(evt); // bugfix(no delete!)
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessRecordEvent(redo);
                     break;
-
 
                 case OperationType.otIndividualAssociationAdd:
                 case OperationType.otIndividualAssociationRemove:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMAssociation asso = this.fNewVal as GEDCOMAssociation;
-
-                        if (iRec == null || asso == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otIndividualAssociationRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                iRec.Associations.Add(asso);
-                            } else {
-                                iRec.Associations.Extract(asso);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualAssociation(redo);
                     break;
 
                 case OperationType.otIndividualNameAdd:
                 case OperationType.otIndividualNameRemove:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMPersonalName persName = this.fNewVal as GEDCOMPersonalName;
-
-                        if (iRec == null || persName == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otIndividualNameRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                iRec.PersonalNames.Add(persName);
-                            } else {
-                                iRec.PersonalNames.Extract(persName);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualName(redo);
                     break;
 
                 case OperationType.otIndividualURefAdd:
                 case OperationType.otIndividualURefRemove:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-                        GEDCOMUserReference uRef = this.fNewVal as GEDCOMUserReference;
-
-                        if (iRec == null || uRef == null) {
-                            result = false;
-                        } else {
-                            if (this.fType == OperationType.otIndividualURefRemove) {
-                                redo = !redo;
-                            }
-                            if (redo) {
-                                iRec.UserReferences.Add(uRef);
-                            } else {
-                                iRec.UserReferences.Extract(uRef);
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualURef(redo);
                     break;
-
 
                 case OperationType.otIndividualBookmarkChange:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-
-                        if (iRec == null || this.fNewVal == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                this.fOldVal = iRec.Bookmark;
-                                iRec.Bookmark = (bool) this.fNewVal;
-                            } else {
-                                iRec.Bookmark = (bool) this.fOldVal;
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualBookmarkChange(redo);
                     break;
 
-
                 case OperationType.otIndividualPatriarchChange:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-
-                        if (iRec == null || this.fNewVal == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                this.fOldVal = iRec.Patriarch;
-                                iRec.Patriarch = (bool) this.fNewVal;
-                            } else {
-                                iRec.Patriarch = (bool) this.fOldVal;
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualPatriarchChange(redo);
                     break;
 
                 case OperationType.otIndividualSexChange:
-                    {
-                        GEDCOMIndividualRecord iRec = this.fObj as GEDCOMIndividualRecord;
-
-                        if (iRec == null || this.fNewVal == null) {
-                            result = false;
-                        } else {
-                            if (redo) {
-                                this.fOldVal = iRec.Sex;
-                                iRec.Sex = (GEDCOMSex) this.fNewVal;
-                            } else {
-                                iRec.Sex = (GEDCOMSex) this.fOldVal;
-                            }
-                            result = true;
-                        }
-                    }
+                    result = ProcessIndividualSexChange(redo);
                     break;
 
                 default:
@@ -514,6 +203,380 @@ namespace GKCore.Operations
             }
 
             return result;
+        }
+
+        private bool ProcessIndividualParents(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord familyRec = fNewVal as GEDCOMFamilyRecord;
+
+            if (iRec == null || familyRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otIndividualParentsDetach) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    familyRec.AddChild(iRec);
+                } else {
+                    familyRec.RemoveChild(iRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessFamilySpouse(bool redo)
+        {
+            GEDCOMFamilyRecord famRec = fObj as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord spouseRec = fNewVal as GEDCOMIndividualRecord;
+
+            if (famRec == null || spouseRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otFamilySpouseDetach) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    famRec.AddSpouse(spouseRec);
+                } else {
+                    famRec.RemoveSpouse(spouseRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessGroupMember(bool redo)
+        {
+            GEDCOMGroupRecord grpRec = fObj as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord mbrRec = fNewVal as GEDCOMIndividualRecord;
+
+            if (grpRec == null || mbrRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otGroupMemberDetach) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    grpRec.AddMember(mbrRec);
+                } else {
+                    grpRec.RemoveMember(mbrRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessSourceRepositoryCitation(bool redo)
+        {
+            GEDCOMSourceRecord srcRec = fObj as GEDCOMSourceRecord;
+            GEDCOMRepositoryRecord repRec = fNewVal as GEDCOMRepositoryRecord;
+
+            if (srcRec == null || repRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otSourceRepositoryCitationRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    srcRec.AddRepository(repRec);
+                } else {
+                    srcRec.RemoveRepository(repRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessResearchTask(bool redo)
+        {
+            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
+            GEDCOMTaskRecord taskRec = fNewVal as GEDCOMTaskRecord;
+
+            if (resRec == null || taskRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otResearchTaskRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    resRec.AddTask(taskRec);
+                } else {
+                    resRec.RemoveTask(taskRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessResearchCommunication(bool redo)
+        {
+            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
+            GEDCOMCommunicationRecord commRec = fNewVal as GEDCOMCommunicationRecord;
+
+            if (resRec == null || commRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otResearchCommunicationRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    resRec.AddCommunication(commRec);
+                } else {
+                    resRec.RemoveCommunication(commRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessResearchGroup(bool redo)
+        {
+            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
+            GEDCOMGroupRecord grpRec = fNewVal as GEDCOMGroupRecord;
+
+            if (resRec == null || grpRec == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otResearchGroupRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    resRec.AddGroup(grpRec);
+                } else {
+                    resRec.RemoveGroup(grpRec);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessRecordNoteAdd(bool redo)
+        {
+            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            GEDCOMNoteRecord noteRec = fNewVal as GEDCOMNoteRecord;
+
+            bool result = (swl != null && noteRec != null);
+            if (result) {
+                if (redo) {
+                    GEDCOMNotes notes = swl.AddNote(noteRec);
+                    fOldVal = notes;
+                } else {
+                    GEDCOMNotes notes = fOldVal as GEDCOMNotes;
+                    swl.Notes.Delete(notes);
+                }
+            }
+            return result;
+        }
+
+        private bool ProcessRecordNoteRemove(bool redo)
+        {
+            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            GEDCOMNotes notes = fNewVal as GEDCOMNotes;
+
+            bool result = (swl != null && notes != null);
+            if (result) {
+                if (redo) {
+                    swl.Notes.Extract(notes); // bugfix(no delete!)
+                } else {
+                    swl.Notes.Add(notes);
+                }
+            }
+            return result;
+        }
+
+        private bool ProcessRecordMediaAdd(bool redo)
+        {
+            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            GEDCOMMultimediaRecord mediaRec = fNewVal as GEDCOMMultimediaRecord;
+
+            bool result = (swl != null && mediaRec != null);
+            if (result) {
+                if (redo) {
+                    GEDCOMMultimediaLink mmLink = swl.AddMultimedia(mediaRec);
+                    fOldVal = mmLink;
+                } else {
+                    GEDCOMMultimediaLink mmLink = fOldVal as GEDCOMMultimediaLink;
+                    swl.MultimediaLinks.Delete(mmLink);
+                }
+            }
+            return result;
+        }
+
+        private bool ProcessRecordMediaRemove(bool redo)
+        {
+            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            GEDCOMMultimediaLink mediaLink = fNewVal as GEDCOMMultimediaLink;
+
+            bool result = (swl != null && mediaLink != null);
+            if (result) {
+                if (redo) {
+                    swl.MultimediaLinks.Extract(mediaLink); // bugfix(no delete!)
+                } else {
+                    swl.MultimediaLinks.Add(mediaLink);
+                }
+            }
+            return result;
+        }
+
+        private bool ProcessRecordSourceCit(bool redo)
+        {
+            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            GEDCOMSourceCitation sourceCit = fNewVal as GEDCOMSourceCitation;
+
+            if (swl == null || sourceCit == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otRecordSourceCitRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    swl.SourceCitations.Add(sourceCit);
+                } else {
+                    swl.SourceCitations.Extract(sourceCit); // bugfix(no delete!)
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessRecordEvent(bool redo)
+        {
+            GEDCOMRecordWithEvents rwe = fObj as GEDCOMRecordWithEvents;
+            GEDCOMCustomEvent evt = fNewVal as GEDCOMCustomEvent;
+
+            if (rwe == null || evt == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otRecordEventRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    rwe.AddEvent(evt);
+                } else {
+                    rwe.Events.Extract(evt); // bugfix(no delete!)
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessIndividualAssociation(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GEDCOMAssociation asso = fNewVal as GEDCOMAssociation;
+
+            if (iRec == null || asso == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otIndividualAssociationRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    iRec.Associations.Add(asso);
+                } else {
+                    iRec.Associations.Extract(asso);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessIndividualName(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GEDCOMPersonalName persName = fNewVal as GEDCOMPersonalName;
+
+            if (iRec == null || persName == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otIndividualNameRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    iRec.PersonalNames.Add(persName);
+                } else {
+                    iRec.PersonalNames.Extract(persName);
+                }
+                return true;
+            }
+        }
+
+        private bool ProcessIndividualURef(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GEDCOMUserReference uRef = fNewVal as GEDCOMUserReference;
+
+            if (iRec == null || uRef == null) {
+                return false;
+            } else {
+                if (fType == OperationType.otIndividualURefRemove) {
+                    redo = !redo;
+                }
+                if (redo) {
+                    iRec.UserReferences.Add(uRef);
+                } else {
+                    iRec.UserReferences.Extract(uRef);
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Processing of undo/redo operations bookmark change of personal records.
+        /// </summary>
+        /// <param name="redo"></param>
+        /// <returns></returns>
+        private bool ProcessIndividualBookmarkChange(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+
+            if (iRec == null || fNewVal == null) {
+                return false;
+            } else {
+                if (redo) {
+                    fOldVal = iRec.Bookmark;
+                    iRec.Bookmark = (bool) fNewVal;
+                } else {
+                    iRec.Bookmark = (bool) fOldVal;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Processing of undo/redo operations patriarch's bookmark change of personal records.
+        /// </summary>
+        /// <param name="redo"></param>
+        /// <returns></returns>
+        private bool ProcessIndividualPatriarchChange(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+
+            if (iRec == null || fNewVal == null) {
+                return false;
+            } else {
+                if (redo) {
+                    fOldVal = iRec.Patriarch;
+                    iRec.Patriarch = (bool) fNewVal;
+                } else {
+                    iRec.Patriarch = (bool) fOldVal;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Processing of undo/redo operations sex change of personal records.
+        /// </summary>
+        /// <param name="redo"></param>
+        /// <returns></returns>
+        private bool ProcessIndividualSexChange(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+
+            if (iRec == null || fNewVal == null) {
+                return false;
+            } else {
+                if (redo) {
+                    fOldVal = iRec.Sex;
+                    iRec.Sex = (GEDCOMSex) fNewVal;
+                } else {
+                    iRec.Sex = (GEDCOMSex) fOldVal;
+                }
+                return true;
+            }
         }
     }
 }
