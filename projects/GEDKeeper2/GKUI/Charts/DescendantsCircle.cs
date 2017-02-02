@@ -60,23 +60,23 @@ namespace GKUI.Charts
             if (fRootPerson != null) {
                 rootSegment = TraverseDescendants(fRootPerson, 0);
 
-                const int inRad = CENTER_RAD - 50;
+                const float inRad = CENTER_RAD - 50;
                 float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
                 CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
             }
         }
 
-        private void CalcDescendants(PersonSegment segment, int inRad, float startAngle, float stepAngle)
+        private void CalcDescendants(PersonSegment segment, float inRad, float startAngle, float stepAngle)
         {
             GraphicsPath path = segment.Path;
 
-            int extRad;
+            float extRad;
             if (segment.Gen == 0) {
                 segment.WedgeAngle = 360.0f;
 
                 path.StartFigure();
-                path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
+                path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
                 path.CloseFigure();
 
                 extRad = inRad;

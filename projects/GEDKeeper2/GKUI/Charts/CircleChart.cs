@@ -50,7 +50,7 @@ namespace GKUI.Charts
             public int Gen;
             public GEDCOMIndividualRecord IRec;
             public GraphicsPath Path;
-            public int Rad;
+            public float Rad;
             public float StartAngle;
             public float WedgeAngle;
 
@@ -79,8 +79,8 @@ namespace GKUI.Charts
 
         protected static readonly object EventRootChanged;
 
-        protected const int CENTER_RAD = 90;
-        protected const int DEFAULT_GEN_WIDTH = 60;
+        protected const float CENTER_RAD = 90;
+        protected const float DEFAULT_GEN_WIDTH = 60;
 
         protected readonly SolidBrush[] fCircleBrushes;
         protected readonly SolidBrush[] fDarkBrushes;
@@ -93,7 +93,7 @@ namespace GKUI.Charts
         /* This chart's GDI+ paths boundary (in the following order: left, top,
          * right and bottom). */
         private float[] fBounds;
-        protected int fGenWidth;
+        protected float fGenWidth;
         private string fHint;
         protected int fIndividualsCount;
         /* TODO(brigadir15@gmail.com): Member `fMaxGenerations` should be a
@@ -107,8 +107,8 @@ namespace GKUI.Charts
          * Therefore, to avoid someone's tendency to change initial values of
          * member `fMaxGenerations`, the member should be a const field. */
         protected int fMaxGenerations;
-        protected int fOffsetX = 0;
-        protected int fOffsetY = 0;
+        protected float fOffsetX = 0;
+        protected float fOffsetY = 0;
         protected Pen fPen;
         protected GEDCOMIndividualRecord fRootPerson;
         protected CircleSegment fSelected;
@@ -116,14 +116,13 @@ namespace GKUI.Charts
 
         /* Animation timer. */
         #if FUN_ANIM
-        //private float fAnimationAngle;
         private Timer fAnimationTimer;
-        #endif
         private UInt64 fAnimationTime = 0;
         private const UInt64 fAnimationTimeLimit = 17;
+        #endif
 
 
-        public int GenWidth
+        public float GenWidth
         {
             get {
                 return fGenWidth;
@@ -362,11 +361,11 @@ namespace GKUI.Charts
             return result;
         }
 
-        protected CircleSegment FindSegment(int mX, int mY)
+        protected CircleSegment FindSegment(float mX, float mY)
         {
             PointF center = GetCenter(RenderTarget.rtScreen);
-            mX -= (int)(center.X);
-            mY -= (int)(center.Y);
+            mX -= center.X;
+            mY -= center.Y;
             CircleSegment result = null;
 
             int numberOfSegments = fSegments.Count;
@@ -392,6 +391,7 @@ namespace GKUI.Charts
         {
             PointF center = GetCenter(target);
             context.TranslateTransform(center.X, center.Y);
+#if FUN_ANIM
             if (RenderTarget.rtScreen == target) {
                 context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
                                                 Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
@@ -401,6 +401,7 @@ namespace GKUI.Charts
                                       (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
                 context.ScaleTransform(zoomX, zoomY);
             }
+#endif
             InternalDraw(context);
             context.ResetTransform();
         }
@@ -432,7 +433,7 @@ namespace GKUI.Charts
                 GKUtils.GetNameParts(iRec, out surn, out givn, out dummy);
             }
 
-            int rad = segment.Rad - 20;
+            float rad = segment.Rad - 20;
             float angle = segment.StartAngle + 90.0f + segment.WedgeAngle / 2;
             float wedgeAngle = segment.WedgeAngle;
 
@@ -440,10 +441,10 @@ namespace GKUI.Charts
             Matrix previousTransformation = gfx.Transform;
             if (gen == 0) {
 
-                SizeF sizeF = gfx.MeasureString(surn, Font);
-                gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
-                sizeF = gfx.MeasureString(givn, Font);
-                gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, 0f);
+                SizeF size = gfx.MeasureString(surn, Font);
+                gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
+                size = gfx.MeasureString(givn, Font);
+                gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, 0f);
 
             } else {
 
@@ -481,12 +482,12 @@ namespace GKUI.Charts
 
                         if (fOptions.ArcText) {
                             if (gen == 2) {
-                                SizeF sizeF = gfx.MeasureString(surn, Font);
-                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
+                                SizeF size = gfx.MeasureString(surn, Font);
+                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                                sizeF = gfx.MeasureString(givn, Font);
-                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
+                                size = gfx.MeasureString(givn, Font);
+                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
                                 DrawArcText(gfx, givn, 0.0f, 0.0f, rad,
@@ -506,27 +507,27 @@ namespace GKUI.Charts
                             Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            SizeF sizeF2 = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
-                            sizeF2 = gfx.MeasureString(givn, Font);
-                            dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
-                            dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
+                            size = gfx.MeasureString(givn, Font);
+                            dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
+                            dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
                             m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
                         }
 
                     } else if (wedgeAngle < 361) {
 
                         if (fOptions.ArcText) {
-                            SizeF sizeF = gfx.MeasureString(surn, Font);
-                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                            sizeF = gfx.MeasureString(givn, Font);
-                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
+                            size = gfx.MeasureString(givn, Font);
+                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
@@ -538,10 +539,10 @@ namespace GKUI.Charts
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
 
-                            SizeF sizeF = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
-                            sizeF = gfx.MeasureString(givn, Font);
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            size = gfx.MeasureString(givn, Font);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f + size.Height);
                         }
 
                     }
@@ -552,7 +553,7 @@ namespace GKUI.Charts
 
         private static bool IsNarrowSegment(Graphics gfx, string text, float radius, float wedgeAngle, Font font)
         {
-            var size = gfx.MeasureString(text, font);
+            SizeF size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
             float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
@@ -564,7 +565,7 @@ namespace GKUI.Charts
                                         float startAngle, float wedgeAngle,
                                         bool inside, bool clockwise, Font font, Brush brush)
         {
-            var size = gfx.MeasureString(text, font);
+            SizeF size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
             float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
