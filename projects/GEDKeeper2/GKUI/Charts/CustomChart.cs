@@ -214,23 +214,23 @@ namespace GKUI.Charts
                                                  float ang1, float ang2)
         {
             float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            PointF point1 = new PointF(ctX + (float)(inRad * Math.Cos(angval1)),
-                                       ctY + (float)(inRad * Math.Sin(angval1)));
-            PointF point2 = new PointF(ctX + (float)(extRad * Math.Cos(angval1)),
-                                       ctY + (float)(extRad * Math.Sin(angval1)));
+            int px1 = ctX + (int)(inRad * Math.Cos(angval1));
+            int py1 = ctY + (int)(inRad * Math.Sin(angval1));
+            int px2 = ctX + (int)(extRad * Math.Cos(angval1));
+            int py2 = ctY + (int)(extRad * Math.Sin(angval1));
             float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            PointF point3 = new PointF(ctX + (float)(inRad * Math.Cos(angval2)),
-                                       ctY + (float)(inRad * Math.Sin(angval2)));
-            PointF point4 = new PointF(ctX + (float)(extRad * Math.Cos(angval2)),
-                                       ctY + (float)(extRad * Math.Sin(angval2)));
+            int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
+            int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
+            int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
+            int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
 
             float ir2 = inRad * 2.0f;
             float er2 = extRad * 2.0f;
 
             path.StartFigure();
-            path.AddLine(point1, point2);
+            path.AddLine(px2, py2, px1, py1);
             if (0 < ir2) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
-            path.AddLine(point3, point4);
+            path.AddLine(nx1, ny1, nx2, ny2);
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();
         }

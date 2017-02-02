@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define FUN_ANIM
+// #define FUN_ANIM
 
 using System;
 using System.Collections.Generic;
@@ -606,7 +606,6 @@ namespace GKUI.Charts
         private void InitTimer()
         {
             if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
-                fAnimationAngle = 0.0f;
                 fAnimationTime = 0;
                 fAnimationTimer = new Timer();
                 fAnimationTimer.Interval = 1;
