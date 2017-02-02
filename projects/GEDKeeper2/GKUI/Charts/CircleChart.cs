@@ -113,7 +113,9 @@ namespace GKUI.Charts
         protected GEDCOMIndividualRecord fRootPerson;
         protected CircleSegment fSelected;
         protected ShieldState fShieldState;
-
+        /* Zoom factors */
+        private float fZoomX = 1.0f;
+        private float fZoomY = 1.0f;
         /* Animation timer. */
         #if FUN_ANIM
         private Timer fAnimationTimer;
@@ -291,14 +293,14 @@ namespace GKUI.Charts
         private SizeF GetPathsBoundaryF()
         {
             /* Add double width of the pen -- adjust both sides. */
-            return new SizeF(fBounds[2] - fBounds[0] + (fPen.Width * 2),
-                             fBounds[3] - fBounds[1] + (fPen.Width * 2));
+            return new SizeF((fBounds[2] - fBounds[0] + (fPen.Width * 2)) * fZoomX,
+                             (fBounds[3] - fBounds[1] + (fPen.Width * 2)) * fZoomY);
         }
         private Size GetPathsBoundaryI()
         {
             /* Add double width of the pen -- adjust both sides. */
-            return new Size((int)(fBounds[2] - fBounds[0] + (fPen.Width * 2)),
-                            (int)(fBounds[3] - fBounds[1] + (fPen.Width * 2)));
+            return new Size((int)((fBounds[2] - fBounds[0] + (fPen.Width * 2)) * fZoomX),
+                            (int)((fBounds[3] - fBounds[1] + (fPen.Width * 2)) * fZoomY));
         }
 
         /// <summary>
@@ -321,16 +323,16 @@ namespace GKUI.Charts
                 PointF center = new PointF();
                 SizeF boundary = GetPathsBoundaryF();
                 if (ClientSize.Width > boundary.Width) {
-                    center.X = Math.Min(ClientSize.Width - fBounds[2], ClientSize.Width >> 1);
+                    center.X = Math.Min(ClientSize.Width - fBounds[2] * fZoomX, ClientSize.Width >> 1);
                 }
                 else {
-                    center.X = AutoScrollPosition.X + fOffsetX - fBounds[0];
+                    center.X = AutoScrollPosition.X + fOffsetX - fBounds[0] * fZoomX;
                 }
                 if (ClientSize.Height > boundary.Height) {
-                    center.Y = Math.Min(ClientSize.Height - fBounds[3], ClientSize.Height >> 1);
+                    center.Y = Math.Min(ClientSize.Height - fBounds[3] * fZoomY, ClientSize.Height >> 1);
                 }
                 else {
-                    center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1];
+                    center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1] * fZoomY;
                 }
                 return center;
 
@@ -338,8 +340,8 @@ namespace GKUI.Charts
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0],
-                                  AutoScrollPosition.Y + fOffsetY - fBounds[1]);
+                return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0] * fZoomX,
+                                  AutoScrollPosition.Y + fOffsetY - fBounds[1] * fZoomY);
 
             }
         }
@@ -371,8 +373,9 @@ namespace GKUI.Charts
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fSegments[i];
-
-                if (segment.Path.IsVisible(mX, mY)) {
+                /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
+                 * const Graphics*)` doesn't work for me. */
+                if (segment.Path.IsVisible(mX / fZoomX, mY / fZoomY)) {
                     result = segment;
                     break;
                 }
@@ -391,14 +394,15 @@ namespace GKUI.Charts
         {
             PointF center = GetCenter(target);
             context.TranslateTransform(center.X, center.Y);
+            context.ScaleTransform(fZoomX, fZoomY);
 #if FUN_ANIM
             if (RenderTarget.rtScreen == target) {
                 context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
                                                 Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
-                float zoomX = 1.0f + ((0 != fAnimationTime) ?
-                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                float zoomY = 1.0f - ((0 != fAnimationTime) ?
-                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                float zoomX = fZoomX + ((0 != fAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                float zoomY = fZoomY - ((0 != fAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
                 context.ScaleTransform(zoomX, zoomY);
             }
 #endif
@@ -654,6 +658,41 @@ namespace GKUI.Charts
             Changed();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.KeyCode) {
+                case Keys.W:
+                {
+                    fZoomX += fZoomX * 0.05f;
+                    fZoomY += fZoomY * 0.05f;
+                    Invalidate();
+                    Size boundary = GetPathsBoundaryI();
+                    AdjustViewPort(boundary, false);
+                    break;
+                }
+                case Keys.S:
+                {
+                    fZoomX -= fZoomX * 0.05f;
+                    fZoomY -= fZoomY * 0.05f;
+                    Invalidate();
+                    Size boundary = GetPathsBoundaryI();
+                    AdjustViewPort(boundary, false);
+                    break;
+                }
+                case Keys.D0:
+                {
+                    if (e.Control) {
+                        fZoomX = 1.0f;
+                        fZoomY = 1.0f;
+                        Invalidate();
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, false);
+                    }
+                    break;
+                }
+            }
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -689,6 +728,23 @@ namespace GKUI.Charts
                 if (!string.IsNullOrEmpty(hint)) {
                     fToolTip.Show(hint, this, e.X, e.Y, 3000);
                 }
+            }
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            if (Keys.None != (Keys.Control & ModifierKeys)) {
+                if (0 > e.Delta) {
+                    fZoomX -= fZoomX * 0.05f;
+                    fZoomY -= fZoomY * 0.05f;
+                } else {
+                    fZoomX += fZoomX * 0.05f;
+                    fZoomY += fZoomY * 0.05f;
+                }
+                Invalidate();
+                Size boundary = GetPathsBoundaryI();
+                AdjustViewPort(boundary, false);
             }
         }
 
