@@ -203,14 +203,14 @@ namespace GKUI.Charts
         #region Static drawing methods
 
         internal static void CreateCircleSegment(GraphicsPath path,
-                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
         }
 
         internal static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             float angval1 = (float)(ang1 * Math.PI / 180.0f);
@@ -218,19 +218,18 @@ namespace GKUI.Charts
             int py1 = ctY + (int)(inRad * Math.Sin(angval1));
             int px2 = ctX + (int)(extRad * Math.Cos(angval1));
             int py2 = ctY + (int)(extRad * Math.Sin(angval1));
-
             float angval2 = (float)(ang2 * Math.PI / 180.0f);
             int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
             int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
             int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
             int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
 
-            int ir2 = inRad * 2;
-            int er2 = extRad * 2;
+            float ir2 = inRad * 2.0f;
+            float er2 = extRad * 2.0f;
 
             path.StartFigure();
             path.AddLine(px2, py2, px1, py1);
-            if (ir2 != 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            if (0 < ir2) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
             path.AddLine(nx1, ny1, nx2, ny2);
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();
