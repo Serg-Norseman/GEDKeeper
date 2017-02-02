@@ -214,15 +214,15 @@ namespace GKUI.Charts
                                                  float ang1, float ang2)
         {
             float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            int px1 = ctX + (int)(inRad * Math.Cos(angval1));
-            int py1 = ctY + (int)(inRad * Math.Sin(angval1));
-            int px2 = ctX + (int)(extRad * Math.Cos(angval1));
-            int py2 = ctY + (int)(extRad * Math.Sin(angval1));
+            float px1 = ctX + (float)(inRad * Math.Cos(angval1));
+            float py1 = ctY + (float)(inRad * Math.Sin(angval1));
+            float px2 = ctX + (float)(extRad * Math.Cos(angval1));
+            float py2 = ctY + (float)(extRad * Math.Sin(angval1));
             float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
-            int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
-            int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
-            int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
+            float nx1 = ctX + (float)(inRad * Math.Cos(angval2));
+            float ny1 = ctY + (float)(inRad * Math.Sin(angval2));
+            float nx2 = ctX + (float)(extRad * Math.Cos(angval2));
+            float ny2 = ctY + (float)(extRad * Math.Sin(angval2));
 
             float ir2 = inRad * 2.0f;
             float er2 = extRad * 2.0f;
