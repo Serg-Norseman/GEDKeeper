@@ -30,6 +30,7 @@ namespace GKCore.Interfaces
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
 
+        string GetUserFilesPath(string filePath);
         IBaseWindow CreateBase(string fileName);
         IBaseWindow FindBase(string fileName);
         void BaseChanged(IBaseWindow baseWin);

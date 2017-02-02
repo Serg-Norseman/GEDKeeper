@@ -29,60 +29,70 @@ namespace GKUI.Charts
     /// </summary>
     public sealed class PersonControl : ITreeControl
     {
-        private readonly TreeChartBox fChart;
         private readonly Pen fCtlPen;
         private readonly Brush fCtlBrush;
 
-        private Rectangle fDestRect;
         private TreeChartPerson fPerson;
-        private bool fVisible;
-        
-        public bool Visible
+
+        #region Public properties
+
+        public override string Tip
         {
-            get { return this.fVisible; }
-            set {
-                this.fVisible = value;
-                this.fChart.Invalidate();
-            }
-        }
-        
-        public PersonControl(TreeChartBox chart)
-        {
-            this.fChart = chart;
-            this.fCtlPen = new Pen(Color.Black, 2.0f);
-            this.fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
+            get { return string.Empty; }
         }
 
-        public void Dispose()
+        public override int Width
         {
-            this.fCtlPen.Dispose();
-            this.fCtlBrush.Dispose();
+            get { return 0; }
+        }
+
+        public override int Height
+        {
+            get { return 0; }
+        }
+
+        #endregion
+
+        public PersonControl(TreeChartBox chart) : base(chart)
+        {
+            fCtlPen = new Pen(Color.Black, 2.0f);
+            fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            fCtlPen.Dispose();
+            fCtlBrush.Dispose();
         }
 
         public void SetPerson(TreeChartPerson person)
         {
             if (person == null) return;
-            this.fPerson = person;
+            fPerson = person;
             
-            ExtRect rt = this.fPerson.Rect.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
+            ExtRect rt = fPerson.Rect.GetOffset(fChart.fSPX, fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             rect.X = rect.Right;
             rect.Width = 40;
             
-            this.fDestRect = rect;
+            fDestRect = rect;
         }
-        
-        public void Update()
+
+        public override void UpdateState()
         {
         }
 
-        public void Draw(Graphics gfx)
+        public override void UpdateView()
+        {
+        }
+
+        public override void Draw(Graphics gfx)
         {
             if (gfx == null) return;
 
-            /*ExtRect rt = this.fPerson.Rect;
-            rt = rt.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
+            /*ExtRect rt = fPerson.Rect;
+            rt = rt.GetOffset(fChart.fSPX, fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             //rect.Top = rect.Top;
@@ -95,24 +105,19 @@ namespace GKUI.Charts
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
             
-            gfx.FillRectangle(this.fCtlBrush, this.fDestRect);
-            gfx.DrawRectangle(this.fCtlPen, this.fDestRect);
+            gfx.FillRectangle(fCtlBrush, fDestRect);
+            gfx.DrawRectangle(fCtlPen, fDestRect);
         }
 
-        public bool Contains(int x, int y)
-        {
-            return fDestRect.Contains(x, y);
-        }
-
-        public void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y)
         {
         }
 
-        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
+        public override void MouseMove(int x, int y)
         {
         }
 
-        public void MouseUp(int x, int y)
+        public override void MouseUp(int x, int y)
         {
         }
     }

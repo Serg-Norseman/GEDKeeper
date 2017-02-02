@@ -215,7 +215,7 @@ namespace GKUI.Dialogs
                 this.fChildsList.ClearItems();
 
                 int idx = 0;
-                foreach (GEDCOMPointer ptr in this.fFamily.Childrens) {
+                foreach (GEDCOMPointer ptr in this.fFamily.Children) {
                     idx += 1;
 
                     GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;

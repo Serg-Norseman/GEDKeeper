@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFactory()
         {
-            this.fConstructors = new Dictionary<string, TagConstructor>();
+            fConstructors = new Dictionary<string, TagConstructor>();
         }
 
         public void RegisterTag(string key, TagConstructor constructor)

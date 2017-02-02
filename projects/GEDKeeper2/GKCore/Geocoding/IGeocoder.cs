@@ -29,7 +29,7 @@ namespace GKCore.Geocoding
         protected IWebProxy fProxy;
         protected string fLang;
 
-        public IGeocoder()
+        protected IGeocoder()
         {
             fKey = string.Empty;
         }

@@ -32,12 +32,12 @@ namespace GKCore.Operations
 
         public GEDCOMTree Tree
         {
-            get { return this.fTree; }
+            get { return fTree; }
         }
 
-        public ChangeTracker(GEDCOMTree tree) : base()
+        public ChangeTracker(GEDCOMTree tree)
         {
-            this.fTree = tree;
+            fTree = tree;
         }
 
         public bool DoOrdinaryOperation(OperationType type, GEDCOMObject obj, object newVal)
@@ -48,7 +48,7 @@ namespace GKCore.Operations
             if (newVal == null)
                 throw new ArgumentNullException("newVal");
 
-            return base.DoOperation(new OrdinaryOperation(this, type, obj, newVal));
+            return DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
 
         public bool DoIndividualNameChange(GEDCOMIndividualRecord iRec, string surname, string name, string patronymic)
@@ -56,7 +56,7 @@ namespace GKCore.Operations
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            return base.DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic));
+            return DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic));
         }
     }
 }

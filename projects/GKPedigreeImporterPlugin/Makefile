@@ -32,8 +32,8 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./GKPedigreeImporterPlugin.cs \
 ./Importer.cs \
-./PedigreeImporterDlg.Designer.cs \
-./PedigreeImporterDlg.cs
+./PedigreeImporterDlg.cs \
+./PedigreeImporterDlg.Designer.cs
 
 else
 
@@ -41,8 +41,8 @@ else
 sources := \
 ./GKPedigreeImporterPlugin.cs \
 ./Importer.cs \
-./PedigreeImporterDlg.Designer.cs \
-./PedigreeImporterDlg.cs
+./PedigreeImporterDlg.cs \
+./PedigreeImporterDlg.Designer.cs
 
 endif
 

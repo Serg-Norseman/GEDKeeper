@@ -32,90 +32,90 @@ namespace GKUI.Charts
         public IOptions Options
         {
             get {
-                return this.fOptions;
+                return fOptions;
             }
             set {
                 var ancestorsCircleOptions = value as AncestorsCircleOptions;
-                if (ancestorsCircleOptions != null) {
-                    this.fOptions = ancestorsCircleOptions;
-                    this.UpdateControls();
-                }
+                if (ancestorsCircleOptions == null) return;
+
+                fOptions = ancestorsCircleOptions;
+                UpdateControls();
             }
         }
 
         public ACOptionsControl()
         {
-            this.InitializeComponent();
-            this.SetLang();
+            InitializeComponent();
+            SetLang();
         }
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_MIOptions);
+            Text = LangMan.LS(LSID.LSID_MIOptions);
 
-            //this.SheetAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            this.acb0.Text = LangMan.LS(LSID.LSID_Circle) + @" 0";
-            this.acb1.Text = LangMan.LS(LSID.LSID_Circle) + @" 1";
-            this.acb2.Text = LangMan.LS(LSID.LSID_Circle) + @" 2";
-            this.acb3.Text = LangMan.LS(LSID.LSID_Circle) + @" 3";
-            this.acb4.Text = LangMan.LS(LSID.LSID_Circle) + @" 4";
-            this.acb5.Text = LangMan.LS(LSID.LSID_Circle) + @" 5";
-            this.acb6.Text = LangMan.LS(LSID.LSID_Circle) + @" 6";
-            this.acb7.Text = LangMan.LS(LSID.LSID_Circle) + @" 7";
-            this.acbText.Text = LangMan.LS(LSID.LSID_TextColor);
-            this.acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
-            this.acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
-            this.chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
+            //SheetAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            acb0.Text = LangMan.LS(LSID.LSID_Circle) + @" 0";
+            acb1.Text = LangMan.LS(LSID.LSID_Circle) + @" 1";
+            acb2.Text = LangMan.LS(LSID.LSID_Circle) + @" 2";
+            acb3.Text = LangMan.LS(LSID.LSID_Circle) + @" 3";
+            acb4.Text = LangMan.LS(LSID.LSID_Circle) + @" 4";
+            acb5.Text = LangMan.LS(LSID.LSID_Circle) + @" 5";
+            acb6.Text = LangMan.LS(LSID.LSID_Circle) + @" 6";
+            acb7.Text = LangMan.LS(LSID.LSID_Circle) + @" 7";
+            acbText.Text = LangMan.LS(LSID.LSID_TextColor);
+            acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
+            acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
+            chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
         }
 
         public void AcceptChanges()
         {
-            if (this.fOptions == null) return;
+            if (fOptions == null) return;
 
-            this.fOptions.BrushColor[ 0] = this.acb0.BackColor;
-            this.fOptions.BrushColor[ 1] = this.acb1.BackColor;
-            this.fOptions.BrushColor[ 2] = this.acb2.BackColor;
-            this.fOptions.BrushColor[ 3] = this.acb3.BackColor;
-            this.fOptions.BrushColor[ 4] = this.acb4.BackColor;
-            this.fOptions.BrushColor[ 5] = this.acb5.BackColor;
-            this.fOptions.BrushColor[ 6] = this.acb6.BackColor;
-            this.fOptions.BrushColor[ 7] = this.acb7.BackColor;
-            this.fOptions.BrushColor[ 8] = this.acbText.BackColor;
-            this.fOptions.BrushColor[ 9] = this.acbBack.BackColor;
-            this.fOptions.BrushColor[10] = this.acbLine.BackColor;
+            fOptions.BrushColor[ 0] = acb0.BackColor;
+            fOptions.BrushColor[ 1] = acb1.BackColor;
+            fOptions.BrushColor[ 2] = acb2.BackColor;
+            fOptions.BrushColor[ 3] = acb3.BackColor;
+            fOptions.BrushColor[ 4] = acb4.BackColor;
+            fOptions.BrushColor[ 5] = acb5.BackColor;
+            fOptions.BrushColor[ 6] = acb6.BackColor;
+            fOptions.BrushColor[ 7] = acb7.BackColor;
+            fOptions.BrushColor[ 8] = acbText.BackColor;
+            fOptions.BrushColor[ 9] = acbBack.BackColor;
+            fOptions.BrushColor[10] = acbLine.BackColor;
 
-            this.fOptions.HideEmptySegments = this.chkHideEmptySegments.Checked;
-            //this.fOptions.Apply();
+            fOptions.HideEmptySegments = chkHideEmptySegments.Checked;
+            //fOptions.Apply();
         }
 
         public void UpdateControls()
         {
-            if (this.fOptions == null) return;
-            //this.PanDefFont.Text = this.FOptions.ChartOptions.DefFont_Name + ", " + this.FOptions.ChartOptions.DefFont_Size.ToString();
+            if (fOptions == null) return;
+            //PanDefFont.Text = FOptions.ChartOptions.DefFont_Name + ", " + FOptions.ChartOptions.DefFont_Size.ToString();
 
-            this.acb0.BackColor = this.fOptions.BrushColor[0];
-            this.acb1.BackColor = this.fOptions.BrushColor[1];
-            this.acb2.BackColor = this.fOptions.BrushColor[2];
-            this.acb3.BackColor = this.fOptions.BrushColor[3];
-            this.acb4.BackColor = this.fOptions.BrushColor[4];
-            this.acb5.BackColor = this.fOptions.BrushColor[5];
-            this.acb6.BackColor = this.fOptions.BrushColor[6];
-            this.acb7.BackColor = this.fOptions.BrushColor[7];
-            this.acbText.BackColor = this.fOptions.BrushColor[8];
-            this.acbBack.BackColor = this.fOptions.BrushColor[9];
-            this.acbLine.BackColor = this.fOptions.BrushColor[10];
+            acb0.BackColor = fOptions.BrushColor[0];
+            acb1.BackColor = fOptions.BrushColor[1];
+            acb2.BackColor = fOptions.BrushColor[2];
+            acb3.BackColor = fOptions.BrushColor[3];
+            acb4.BackColor = fOptions.BrushColor[4];
+            acb5.BackColor = fOptions.BrushColor[5];
+            acb6.BackColor = fOptions.BrushColor[6];
+            acb7.BackColor = fOptions.BrushColor[7];
+            acbText.BackColor = fOptions.BrushColor[8];
+            acbBack.BackColor = fOptions.BrushColor[9];
+            acbLine.BackColor = fOptions.BrushColor[10];
 
-            this.chkHideEmptySegments.Checked = this.fOptions.HideEmptySegments;
+            chkHideEmptySegments.Checked = fOptions.HideEmptySegments;
         }
 
         /*private void PanDefFont_Click(object sender, EventArgs e)
         {
-            if (this.FontDialog1.ShowDialog() == DialogResult.OK)
+            if (FontDialog1.ShowDialog() == DialogResult.OK)
             {
-                //this.FOptions.ChartOptions.DefFont_Name = this.FontDialog1.Font.Name;
-                //this.FOptions.ChartOptions.DefFont_Size = (int)checked((long)Math.Round((double)this.FontDialog1.Font.Size));
+                //FOptions.ChartOptions.DefFont_Name = FontDialog1.Font.Name;
+                //FOptions.ChartOptions.DefFont_Size = (int)checked((long)Math.Round((double)FontDialog1.Font.Size));
             }
-            this.UpdateControls();
+            UpdateControls();
         }*/
 
         private void lblColorClick(object sender, MouseEventArgs e)
@@ -123,10 +123,10 @@ namespace GKUI.Charts
             Label lbl = sender as Label;
             if (lbl == null) return;
 
-            this.ColorDialog1.Color = lbl.BackColor;
+            ColorDialog1.Color = lbl.BackColor;
 
-            if (this.ColorDialog1.ShowDialog() == DialogResult.OK) {
-                lbl.BackColor = this.ColorDialog1.Color;
+            if (ColorDialog1.ShowDialog() == DialogResult.OK) {
+                lbl.BackColor = ColorDialog1.Color;
             }
         }
     }

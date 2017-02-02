@@ -19,6 +19,11 @@
  */
 
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
+using GKCommon;
 using GKCommon.Controls;
 using GKCore;
 
@@ -46,17 +51,91 @@ namespace GKUI.Charts
 
         protected CustomChart() : base()
         {
-            this.fNavman = new NavigationStack();
+            fNavman = new NavigationStack();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (this.fNavman != null) this.fNavman.Dispose();
+                if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
+
+        #region Print and snaphots support
+
+        public abstract Size GetImageSize();
+        public abstract void RenderStaticImage(Graphics gfx, bool printer);
+
+        public bool IsLandscape()
+        {
+            Size imageSize = GetImageSize();
+            return (imageSize.Height < imageSize.Width);
+        }
+
+        public Image GetPrintableImage()
+        {
+            Size imageSize = GetImageSize();
+            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
+            Image image = new Metafile(CreateGraphics().GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
+
+            using (Graphics gfx = Graphics.FromImage(image)) {
+                RenderStaticImage(gfx, true);
+            }
+
+            return image;
+        }
+
+        /* TODO(zsv): Need to find an appropriate icon in the general style
+         * for the main toolbar - screenshot capture for windows with charts. */
+        public void SaveSnapshot(string fileName)
+        {
+            string ext = SysUtils.GetFileExtension(fileName);
+
+            Size imageSize = GetImageSize();
+            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
+            {
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+            }
+            else
+            {
+                ImageFormat imFmt = ImageFormat.Png;
+                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
+                else
+                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
+                else
+                    if (ext == ".png") { imFmt = ImageFormat.Png; }
+                else
+                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
+                else
+                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+
+                Image pic;
+                if (Equals(imFmt, ImageFormat.Emf)) {
+                    pic = new Metafile(fileName, CreateGraphics().GetHdc());
+                } else {
+                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                }
+
+                try
+                {
+                    using (Graphics gfx = Graphics.FromImage(pic)) {
+                        RenderStaticImage(gfx, false);
+                    }
+
+                    pic.Save(fileName, imFmt);
+                }
+                finally
+                {
+                    pic.Dispose();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Navigation support
 
         private void DoNavRefresh()
         {
@@ -66,14 +145,12 @@ namespace GKUI.Charts
             eventHandler(this, null);
         }
 
-
         protected abstract void SetNavObject(object obj);
-
 
         public bool NavAdd(object obj)
         {
-            if (obj != null && !this.fNavman.Busy) {
-                this.fNavman.Current = obj;
+            if (obj != null && !fNavman.Busy) {
+                fNavman.Current = obj;
                 return true;
             }
             return false;
@@ -81,44 +158,84 @@ namespace GKUI.Charts
 
         public bool NavCanBackward()
         {
-            return this.fNavman.CanBackward();
+            return fNavman.CanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fNavman.CanForward();
+            return fNavman.CanForward();
         }
 
         public void NavNext()
         {
-            if (!this.fNavman.CanForward()) return;
+            if (!fNavman.CanForward()) return;
 
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                this.SetNavObject(this.fNavman.Next());
-                this.DoNavRefresh();
+                SetNavObject(fNavman.Next());
+                DoNavRefresh();
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
 
         public void NavPrev()
         {
-            if (!this.fNavman.CanBackward()) return;
+            if (!fNavman.CanBackward()) return;
 
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                this.SetNavObject(this.fNavman.Back());
-                this.DoNavRefresh();
+                SetNavObject(fNavman.Back());
+                DoNavRefresh();
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
+
+        #endregion
+
+        #region Static drawing methods
+
+        internal static void CreateCircleSegment(GraphicsPath path,
+                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+        }
+
+        internal static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            float angval1 = (float)(ang1 * Math.PI / 180.0f);
+            int px1 = ctX + (int)(inRad * Math.Cos(angval1));
+            int py1 = ctY + (int)(inRad * Math.Sin(angval1));
+            int px2 = ctX + (int)(extRad * Math.Cos(angval1));
+            int py2 = ctY + (int)(extRad * Math.Sin(angval1));
+
+            float angval2 = (float)(ang2 * Math.PI / 180.0f);
+            int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
+            int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
+            int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
+            int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
+
+            int ir2 = inRad * 2;
+            int er2 = extRad * 2;
+
+            path.StartFigure();
+            path.AddLine(px2, py2, px1, py1);
+            if (ir2 != 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            path.AddLine(nx1, ny1, nx2, ny2);
+            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
+            path.CloseFigure();
+        }
+
+        #endregion
     }
 }

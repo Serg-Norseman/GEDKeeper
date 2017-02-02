@@ -32,8 +32,8 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./GKTextSearchPlugin.cs \
 ./SearchManager.cs \
-./TextSearchWin.Designer.cs \
-./TextSearchWin.cs
+./TextSearchWin.cs \
+./TextSearchWin.Designer.cs
 
 else
 
@@ -41,8 +41,8 @@ else
 sources := \
 ./GKTextSearchPlugin.cs \
 ./SearchManager.cs \
-./TextSearchWin.Designer.cs \
-./TextSearchWin.cs
+./TextSearchWin.cs \
+./TextSearchWin.Designer.cs
 
 endif
 

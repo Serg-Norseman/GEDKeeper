@@ -25,12 +25,16 @@ namespace GKCommon
 {
     public struct EnumSet<T> : ICloneable where T : IComparable, IFormattable, IConvertible
     {
-        private ulong data;
+        private ulong fData;
+
+        private EnumSet(ulong value)
+        {
+            fData = value;
+        }
 
         public static EnumSet<T> Create(params T[] args)
         {
-            EnumSet<T> result = new EnumSet<T>();
-            result.data = 0;
+            EnumSet<T> result = new EnumSet<T>(0);
             result.Include(args);
             return result;
         }
@@ -40,26 +44,26 @@ namespace GKCommon
             if (e == null) return;
 
             for (int i = 0; i < e.Length; i++) {
-                this.Include(e[i]);
+                Include(e[i]);
             }
         }
 
         public void Include(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            this.data = (this.data | (1u << idx));
+            fData = (fData | (1u << idx));
         }
 
         public void Exclude(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            this.data = (this.data & (~(1u << idx)));
+            fData = (fData & (~(1u << idx)));
         }
 
         public bool Contains(T elem)
         {
             byte idx = ((IConvertible)elem).ToByte(null);
-            return (this.data & (1u << idx)) > 0u;
+            return (fData & (1u << idx)) > 0u;
         }
 
         public bool ContainsAll(params T[] e)
@@ -67,7 +71,7 @@ namespace GKCommon
             if (e == null || e.Length == 0) return false;
 
             for (int i = 0; i < e.Length; i++) {
-                if (!this.Contains(e[i])) {
+                if (!Contains(e[i])) {
                     return false;
                 }
             }
@@ -79,7 +83,7 @@ namespace GKCommon
             if (e == null || e.Length == 0) return false;
 
             for (int i = 0; i < e.Length; i++) {
-                if (this.Contains(e[i])) {
+                if (Contains(e[i])) {
                     return true;
                 }
             }
@@ -88,48 +92,48 @@ namespace GKCommon
 
         public void Clear()
         {
-            this.data = 0;
+            fData = 0;
         }
 
         public bool IsEmpty()
         {
-            return (this.data == 0);
+            return (fData == 0);
         }
 
         public static bool operator ==(EnumSet<T> left, EnumSet<T> right)
         {
-            return (left.data == right.data);
+            return (left.fData == right.fData);
         }
 
         public static bool operator !=(EnumSet<T> left, EnumSet<T> right)
         {
-            return (left.data != right.data);
+            return (left.fData != right.fData);
         }
 
         public static EnumSet<T> operator +(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            result.data |= right.data;
+            result.fData |= right.fData;
             return result;
         }
 
         public static EnumSet<T> operator -(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            result.data = result.data & (~right.data);
+            result.fData = result.fData & (~right.fData);
             return result;
         }
 
         public static EnumSet<T> operator *(EnumSet<T> left, EnumSet<T> right)
         {
             EnumSet<T> result = left;
-            result.data &= right.data;
+            result.fData &= right.fData;
             return result;
         }
 
         public override string ToString()
         {
-            ulong val = this.data;
+            ulong val = fData;
             ulong bt = 1;
 
             StringBuilder b = new StringBuilder(64);
@@ -144,7 +148,7 @@ namespace GKCommon
 
         public override int GetHashCode()
         {
-            return this.data.GetHashCode();
+            return fData.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -158,9 +162,7 @@ namespace GKCommon
         // ICloneable
         public object Clone()
         {
-            EnumSet<T> result = new EnumSet<T>();
-            result.data = this.data;
-            return result;
+            return new EnumSet<T>(fData);
         }
     }
 }

@@ -19,7 +19,10 @@
  */
 
 using System;
+using System.IO;
 using System.Windows.Forms;
+
+using GKCore;
 using NUnit.Extensions.Forms;
 
 namespace GKTests.UITests
@@ -63,6 +66,16 @@ namespace GKTests.UITests
         {
             MessageBoxTester messageBox = new MessageBoxTester(ptr);
             messageBox.SendCommand(MessageBoxTester.Command.OK);
+        }
+
+        public static void PrepareFileSave(string fileName, IntPtr hWnd)
+        {
+            fileName = GKUtils.GetTempDir() + fileName;
+            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+
+            var saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(fileName);
+            saveDlg.SaveFile();
         }
     }
 }

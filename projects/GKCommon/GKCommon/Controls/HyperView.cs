@@ -92,36 +92,36 @@ namespace GKCommon.Controls
 
         public int BorderWidth
         {
-            get { return this.fBorderWidth; }
+            get { return fBorderWidth; }
             set {
-                if (this.fBorderWidth != value) {
-                    this.fBorderWidth = value;
-                    base.Invalidate();
-                }
+                if (fBorderWidth == value) return;
+
+                fBorderWidth = value;
+                Invalidate();
             }
         }
 
         public Color Color
         {
-            get { return this.fColor; }
+            get { return fColor; }
             set {
-                if (this.fColor != value) {
-                    this.fColor = value;
-                    base.Invalidate();
-                }
+                if (fColor == value) return;
+
+                fColor = value;
+                Invalidate();
             }
         }
 
         public StringList Lines
         {
-            get { return this.fLines; }
-            set { this.fLines.Assign(value); }
+            get { return fLines; }
+            set { fLines.Assign(value); }
         }
 
         public Color LinkColor
         {
-            get { return this.fLinkColor; }
-            set { this.fLinkColor = value; }
+            get { return fLinkColor; }
+            set { fLinkColor = value; }
         }
 
         /*public TRuleStyle RuleStyle

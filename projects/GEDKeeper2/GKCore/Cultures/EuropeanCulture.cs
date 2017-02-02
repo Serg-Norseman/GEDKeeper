@@ -18,18 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-
 namespace GKCore.Cultures
 {
     /// <summary>
     /// 
     /// </summary>
-    public class EuropeanCulture : DefaultCulture
+    public abstract class EuropeanCulture : DefaultCulture
     {
-        public EuropeanCulture()
+        protected EuropeanCulture()
         {
         }
 

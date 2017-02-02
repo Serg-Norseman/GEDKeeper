@@ -50,31 +50,31 @@ namespace GKUI.Charts
 
         public ChartFilter()
         {
-            this.Reset();
+            Reset();
         }
 
         public void Reset()
         {
-            this.SourceMode = FilterGroupMode.All;
-            this.BranchCut = BranchCutType.None;
+            SourceMode = FilterGroupMode.All;
+            BranchCut = BranchCutType.None;
         }
 
         public void Backup()
         {
-            this.fBackSourceMode = this.SourceMode;
-            this.fBackSourceRef = this.SourceRef;
-            this.fBackBranchCut = this.BranchCut;
-            this.fBackBranchYear = this.BranchYear;
-            this.fBackBranchPersons = this.BranchPersons;
+            fBackSourceMode = SourceMode;
+            fBackSourceRef = SourceRef;
+            fBackBranchCut = BranchCut;
+            fBackBranchYear = BranchYear;
+            fBackBranchPersons = BranchPersons;
         }
 
         public void Restore()
         {
-            this.SourceMode = this.fBackSourceMode;
-            this.SourceRef = this.fBackSourceRef;
-            this.BranchCut = this.fBackBranchCut;
-            this.BranchYear = this.fBackBranchYear;
-            this.BranchPersons = this.fBackBranchPersons;
+            SourceMode = fBackSourceMode;
+            SourceRef = fBackSourceRef;
+            BranchCut = fBackBranchCut;
+            BranchYear = fBackBranchYear;
+            BranchPersons = fBackBranchPersons;
         }
     }
 }

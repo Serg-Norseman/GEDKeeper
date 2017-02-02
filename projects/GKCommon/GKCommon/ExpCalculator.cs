@@ -27,9 +27,6 @@ namespace GKCommon
     {
         #region Private members
 
-        private const double PI = 3.1415926535897931;
-        private const double E = 2.718281828;
-
         private class NamedVar
         {
             public string Name;
@@ -73,8 +70,8 @@ namespace GKCommon
             tkAND
         }
 
-        private double fvalue;
-        private string svalue;
+        private double fValue;
+        private string fIdent;
         private string fExpression;
         private int fPtr;
         private ExpToken fToken;
@@ -127,11 +124,6 @@ namespace GKCommon
         #endregion
 
         #region Private methods
-
-        private static void raiseError(string msg)
-        {
-            throw new CalculateException(msg);
-        }
 
         private static double bool2float(bool B)
         {
@@ -224,9 +216,9 @@ namespace GKCommon
             switch (ctype) {
                 case CallbackType.GetValue:
                     if (name == "pi") {
-                        val = PI;
+                        val = Math.PI;
                     } else if (name == "e") {
-                        val = E;
+                        val = Math.E;
                     } else {
                         val = this.GetVar(name);
                         if (double.IsNaN(val)) {
@@ -244,7 +236,8 @@ namespace GKCommon
                     break;
             }
 
-            if (!result) raiseError("Unknown function or variable \"" + name + "\".");
+            if (!result)
+                throw new CalculateException("Unknown function or variable \"" + name + "\".");
         }
 
         private bool DoGetVar(string varName, ref double varValue)
@@ -255,7 +248,7 @@ namespace GKCommon
 
         private bool ConvertNumber(int first, int last, ushort numBase)
         {
-            this.fvalue = 0.0;
+            this.fValue = 0.0;
 
             while (first < last)
             {
@@ -274,7 +267,7 @@ namespace GKCommon
                     break;
                 }
 
-                this.fvalue = (this.fvalue * numBase + c);
+                this.fValue = (this.fValue * numBase + c);
                 first++;
             }
 
@@ -397,7 +390,7 @@ namespace GKCommon
                                 {
                                     if (this.fExpression[this.fPtr] == '`')
                                     {
-                                        this.fvalue = (this.fvalue * PI / 180.0);
+                                        this.fValue = (this.fValue * Math.PI / 180.0);
                                         this.fPtr++;
                                         double frac = 0.0;
                                         while (true)
@@ -410,7 +403,7 @@ namespace GKCommon
                                             frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
                                             this.fPtr++;
                                         }
-                                        this.fvalue = (this.fvalue + frac * PI / 180.0 / 60.0);
+                                        this.fValue = (this.fValue + frac * Math.PI / 180.0 / 60.0);
                                         if (this.fExpression[this.fPtr] == '`')
                                         {
                                             this.fPtr++;
@@ -425,9 +418,9 @@ namespace GKCommon
                                                 frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
                                                 this.fPtr++;
                                             }
-                                            this.fvalue = (this.fvalue + frac * PI / 180.0 / 60.0 / 60.0);
+                                            this.fValue = (this.fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
                                         }
-                                        this.fvalue = fmod(this.fvalue, 6.2831853071795862);
+                                        this.fValue = fmod(this.fValue, 6.2831853071795862);
                                         return;
                                     }
 
@@ -443,7 +436,7 @@ namespace GKCommon
                                                 break;
                                             }
                                             frac = (frac / 10.0);
-                                            this.fvalue = (this.fvalue + frac * ((int)this.fExpression[this.fPtr] - 48));
+                                            this.fValue = (this.fValue + frac * ((int)this.fExpression[this.fPtr] - 48));
                                             this.fPtr++;
                                         }
                                     }
@@ -482,7 +475,7 @@ namespace GKCommon
                                         {
                                             while (exp > 0)
                                             {
-                                                this.fvalue = (this.fvalue / 10.0);
+                                                this.fValue = (this.fValue / 10.0);
                                                 exp--;
                                             }
                                             return;
@@ -491,7 +484,7 @@ namespace GKCommon
                                         {
                                             while (exp > 0)
                                             {
-                                                this.fvalue = (this.fvalue * 10.0);
+                                                this.fValue = (this.fValue * 10.0);
                                                 exp--;
                                             }
                                             return;
@@ -506,21 +499,21 @@ namespace GKCommon
                         lc = this.fExpression[this.fPtr];
                         if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
                         {
-                            this.svalue = new string(this.fExpression[this.fPtr], 1);
+                            this.fIdent = new string(this.fExpression[this.fPtr], 1);
                             this.fPtr++;
                             while (true)
                             {
                                 lc = this.fExpression[this.fPtr];
-                                if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc >= '{')))))
+                                if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc > 'z')))))
                                 {
                                     break;
                                 }
-                                string text = this.svalue;
+                                string text = this.fIdent;
                                 if (((text != null) ? text.Length : 0) >= 32)
                                 {
                                     break;
                                 }
-                                this.svalue += this.fExpression[this.fPtr];
+                                this.fIdent += this.fExpression[this.fPtr];
                                 this.fPtr++;
                             }
                             this.fToken = ExpToken.tkIDENT;
@@ -647,7 +640,8 @@ namespace GKCommon
 
         private void checkToken(ExpToken expected)
         {
-            if (this.fToken != expected) raiseError("Syntax error");
+            if (this.fToken != expected)
+                throw new CalculateException("Syntax error");
         }
 
         private void term(ref double R)
@@ -662,13 +656,13 @@ namespace GKCommon
                     break;
 
                 case ExpToken.tkNUMBER:
-                    R = this.fvalue;
+                    R = this.fValue;
                     this.lex();
                     break;
 
                 case ExpToken.tkIDENT:
                     {
-                        string st = this.svalue;
+                        string st = this.fIdent;
                         if (!this.fCaseSensitive) {
                             st = st.ToLower();
                         }
@@ -702,7 +696,7 @@ namespace GKCommon
                     break;
 
                 default:
-                    raiseError("Syntax error");
+                    throw new CalculateException("Syntax error");
                     break;
             }
         }

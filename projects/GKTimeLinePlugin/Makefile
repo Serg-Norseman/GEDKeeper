@@ -25,16 +25,16 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKTimeLinePlugin.cs \
-./TimeLineWidget.Designer.cs \
-./TimeLineWidget.cs
+./TimeLineWidget.cs \
+./TimeLineWidget.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKTimeLinePlugin.cs \
-./TimeLineWidget.Designer.cs \
-./TimeLineWidget.cs
+./TimeLineWidget.cs \
+./TimeLineWidget.Designer.cs
 
 endif
 

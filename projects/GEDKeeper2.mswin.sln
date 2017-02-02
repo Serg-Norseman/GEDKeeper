@@ -1,8 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 5.1
+# SharpDevelop 4.4
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{F5B0E1E6-6FA7-4EEA-905A-B32125985C14}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTreeVizPlugin", "GKTreeVizPlugin\GKTreeVizPlugin.mswin.csproj", "{29156CC1-79B1-473D-93F4-62340686FFC3}"
 EndProject
@@ -35,6 +37,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.mswin.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKUpdater", "GKUpdater\GKUpdater.csproj", "{EC117EAC-E63D-4B5C-90E4-B9AD87984067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSandbox", "GKSandbox\GKSandbox.csproj", "{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,6 +176,14 @@ Global
 		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x86.Build.0 = Release|x86
 		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x64.ActiveCfg = Release|x64
 		{EC117EAC-E63D-4B5C-90E4-B9AD87984067}.Release|x64.Build.0 = Release|x64
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Debug|x86.Build.0 = Debug|x86
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Debug|x86.ActiveCfg = Debug|x86
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Debug|x64.Build.0 = Debug|x64
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Debug|x64.ActiveCfg = Debug|x64
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Release|x86.Build.0 = Release|x86
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Release|x86.ActiveCfg = Release|x86
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Release|x64.Build.0 = Release|x64
+		{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

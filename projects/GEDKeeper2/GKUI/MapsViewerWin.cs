@@ -343,7 +343,7 @@ namespace GKUI
                     this.fBaseRoot.Nodes.Add(node);
 
                     if (locRec == null) {
-                        GKMapBrowser.RequestGeoCoords(placeName, mapPlace.Points);
+                        MainWin.Instance.RequestGeoCoords(placeName, mapPlace.Points);
 
                         int num = mapPlace.Points.Count;
                         for (int i = 0; i < num; i++) {

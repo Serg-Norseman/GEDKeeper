@@ -333,26 +333,6 @@ namespace GKUI.Controls
             }
         }
 
-        public static void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
-        {
-            if (string.IsNullOrEmpty(searchValue))
-                throw new ArgumentNullException("searchValue");
-
-            if (pointsList == null)
-                throw new ArgumentNullException("pointsList");
-
-            try
-            {
-                IEnumerable<GeoPoint> geoPoints = MainWin.Instance.Geocoder.Geocode(searchValue, 1);
-                foreach (GeoPoint pt in geoPoints)
-                {
-                    pointsList.Add(pt);
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("GKMapBrowser.RequestGeoCoords(): " + ex.Message);
-            }
-        }
-
         #region Google-specific
 
         private void gm_ClearPoints()

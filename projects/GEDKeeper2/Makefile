@@ -41,18 +41,26 @@ sources := \
 ./GKCore/BaseContext.cs \
 ./GKCore/BaseSearchStrategy.cs \
 ./GKCore/Cultures/AncientCulture.cs \
+./GKCore/Cultures/BritishCulture.cs \
+./GKCore/Cultures/DefaultCulture.cs \
+./GKCore/Cultures/EuropeanCulture.cs \
+./GKCore/Cultures/GermanCulture.cs \
 ./GKCore/Cultures/IcelandCulture.cs \
+./GKCore/Cultures/PolishCulture.cs \
 ./GKCore/Cultures/RussianCulture.cs \
+./GKCore/Cultures/SwedishCulture.cs \
 ./GKCore/Export/CustomWriter.cs \
 ./GKCore/Export/ExcelExporter.cs \
 ./GKCore/Export/Exporter.cs \
 ./GKCore/Export/FamilyBookExporter.cs \
 ./GKCore/Export/HTMLWriter.cs \
 ./GKCore/Export/PDFClownWriter.cs \
+./GKCore/Export/PDFExporter.cs \
 ./GKCore/Export/PDFJetWriter.cs \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
 ./GKCore/Export/RTFWriter.cs \
+./GKCore/Export/TreeChartPDFRenderer.cs \
 ./GKCore/Geocoding/GeoPoint.cs \
 ./GKCore/Geocoding/GoogleGeocoder.cs \
 ./GKCore/Geocoding/IGeocoder.cs \
@@ -119,7 +127,9 @@ sources := \
 ./GKUI/Charts/PersonModifyEventArgs.cs \
 ./GKUI/Charts/ScaleControl.cs \
 ./GKUI/Charts/TreeChartBox.cs \
+./GKUI/Charts/TreeChartGfxRenderer.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
+./GKUI/Charts/TreeChartRenderer.cs \
 ./GKUI/CircleChartWin.cs \
 ./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/Controls/GKComboItem.cs \
@@ -129,11 +139,12 @@ sources := \
 ./GKUI/Controls/GKMenuItem.cs \
 ./GKUI/Controls/GKMergeControl.cs \
 ./GKUI/Controls/GKMergeControl.Designer.cs \
+./GKUI/Controls/GKPortrait.cs \
+./GKUI/Controls/GKPortrait.Designer.cs \
 ./GKUI/Controls/GKRecordsView.cs \
 ./GKUI/Controls/GKSheetList.cs \
 ./GKUI/Controls/GKTreeNode.cs \
 ./GKUI/Controls/ModifyEventArgs.cs \
-./GKUI/Controls/SearchPanel.cs \
 ./GKUI/Dialogs/AboutDlg.cs \
 ./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AddressEditDlg.cs \
@@ -179,6 +190,7 @@ sources := \
 ./GKUI/Dialogs/PortraitSelectDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
+./GKUI/Dialogs/QuickSearchDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
 ./GKUI/Dialogs/RelationshipCalculatorDlg.cs \
@@ -223,7 +235,8 @@ sources := \
 ./GKUI/TreeChartWin.cs \
 ./GKUI/TreeChartWin.Designer.cs \
 ./GKUI/TreeToolsWin.cs \
-./GKUI/TreeToolsWin.Designer.cs
+./GKUI/TreeToolsWin.Designer.cs \
+./Sandbox/TreesAlbumExporter.cs
 
 else
 
@@ -240,18 +253,26 @@ sources := \
 ./GKCore/BaseContext.cs \
 ./GKCore/BaseSearchStrategy.cs \
 ./GKCore/Cultures/AncientCulture.cs \
+./GKCore/Cultures/BritishCulture.cs \
+./GKCore/Cultures/DefaultCulture.cs \
+./GKCore/Cultures/EuropeanCulture.cs \
+./GKCore/Cultures/GermanCulture.cs \
 ./GKCore/Cultures/IcelandCulture.cs \
+./GKCore/Cultures/PolishCulture.cs \
 ./GKCore/Cultures/RussianCulture.cs \
+./GKCore/Cultures/SwedishCulture.cs \
 ./GKCore/Export/CustomWriter.cs \
 ./GKCore/Export/ExcelExporter.cs \
 ./GKCore/Export/Exporter.cs \
 ./GKCore/Export/FamilyBookExporter.cs \
 ./GKCore/Export/HTMLWriter.cs \
 ./GKCore/Export/PDFClownWriter.cs \
+./GKCore/Export/PDFExporter.cs \
 ./GKCore/Export/PDFJetWriter.cs \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
 ./GKCore/Export/RTFWriter.cs \
+./GKCore/Export/TreeChartPDFRenderer.cs \
 ./GKCore/Geocoding/GeoPoint.cs \
 ./GKCore/Geocoding/GoogleGeocoder.cs \
 ./GKCore/Geocoding/IGeocoder.cs \
@@ -318,7 +339,9 @@ sources := \
 ./GKUI/Charts/PersonModifyEventArgs.cs \
 ./GKUI/Charts/ScaleControl.cs \
 ./GKUI/Charts/TreeChartBox.cs \
+./GKUI/Charts/TreeChartGfxRenderer.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
+./GKUI/Charts/TreeChartRenderer.cs \
 ./GKUI/CircleChartWin.cs \
 ./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/Controls/GKComboItem.cs \
@@ -328,11 +351,12 @@ sources := \
 ./GKUI/Controls/GKMenuItem.cs \
 ./GKUI/Controls/GKMergeControl.cs \
 ./GKUI/Controls/GKMergeControl.Designer.cs \
+./GKUI/Controls/GKPortrait.cs \
+./GKUI/Controls/GKPortrait.Designer.cs \
 ./GKUI/Controls/GKRecordsView.cs \
 ./GKUI/Controls/GKSheetList.cs \
 ./GKUI/Controls/GKTreeNode.cs \
 ./GKUI/Controls/ModifyEventArgs.cs \
-./GKUI/Controls/SearchPanel.cs \
 ./GKUI/Dialogs/AboutDlg.cs \
 ./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AddressEditDlg.cs \
@@ -378,6 +402,7 @@ sources := \
 ./GKUI/Dialogs/PortraitSelectDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
+./GKUI/Dialogs/QuickSearchDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
 ./GKUI/Dialogs/RelationshipCalculatorDlg.cs \
@@ -422,7 +447,8 @@ sources := \
 ./GKUI/TreeChartWin.cs \
 ./GKUI/TreeChartWin.Designer.cs \
 ./GKUI/TreeToolsWin.cs \
-./GKUI/TreeToolsWin.Designer.cs
+./GKUI/TreeToolsWin.Designer.cs \
+./Sandbox/TreesAlbumExporter.cs
 
 endif
 
@@ -443,6 +469,7 @@ GKUI.Charts.ACOptionsControl.resources \
 GKUI.CircleChartWin.resources \
 GKUI.Controls.GKInputBox.resources \
 GKUI.Controls.GKMergeControl.resources \
+GKUI.Controls.GKPortrait.resources \
 GKUI.Dialogs.AboutDlg.resources \
 GKUI.Dialogs.AddressEditDlg.resources \
 GKUI.Dialogs.AssociationEditDlg.resources \
@@ -498,6 +525,7 @@ GKUI.Charts.ACOptionsControl.resources \
 GKUI.CircleChartWin.resources \
 GKUI.Controls.GKInputBox.resources \
 GKUI.Controls.GKMergeControl.resources \
+GKUI.Controls.GKPortrait.resources \
 GKUI.Dialogs.AboutDlg.resources \
 GKUI.Dialogs.AddressEditDlg.resources \
 GKUI.Dialogs.AssociationEditDlg.resources \

@@ -45,7 +45,7 @@
 			this.arborViewer1.Size = new System.Drawing.Size(1105, 645);
 			this.arborViewer1.TabIndex = 0;
 			this.arborViewer1.TabStop = true;
-			this.arborViewer1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ArborViewer1MouseMove);
+			this.arborViewer1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ArborViewer1_MouseMove);
 			// 
 			// PatriarchsViewerWin
 			// 

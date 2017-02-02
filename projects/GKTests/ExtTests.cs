@@ -25,8 +25,8 @@ using System.IO;
 using System.Text;
 
 using Externals;
-using Externals.IniFiles;
 using GKCommon;
+using GKCore;
 using GKTests.Mocks;
 using NUnit.Framework;
 
@@ -125,16 +125,46 @@ namespace GKTests.GKCommon
         [Test]
         public void ZipStorer_Tests()
         {
-            using (MemoryStream stream = new MemoryStream()) {
-                using (ZipStorer zip = ZipStorer.Create(stream, "test")) {
-                    using (MemoryStream csvStream = new MemoryStream(Encoding.ASCII.GetBytes(CSVData))) {
-                        zip.AddStream(ZipStorer.Compression.Deflate, "csv_file.csv", csvStream, DateTime.Now, "");
+            Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.Open("", FileAccess.Read); });
+
+            #if !__MonoCS__
+            string fileName = GKUtils.GetTempDir() + "test.zip";
+            #else
+            string fileName = GKUtils.GetHomePath() + "test.zip";
+            #endif
+
+            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+
+            using (ZipStorer zip = ZipStorer.Create(fileName, "test")) {
+                using (MemoryStream csvStream = new MemoryStream(Encoding.ASCII.GetBytes(CSVData))) {
+                    zip.AddStream(ZipStorer.Compression.Deflate, "csv_file.csv", csvStream, DateTime.Now, "");
+                }
+
+                Assert.Throws(typeof(InvalidOperationException), () => { zip.ReadCentralDir(); });
+
+                ZipStorer xzip = null;
+                Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.RemoveEntries(ref xzip, null); });
+                xzip = zip;
+                Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.RemoveEntries(ref xzip, null); });
+            }
+
+            using (ZipStorer zip = ZipStorer.Open(fileName, FileAccess.Read)) {
+                Assert.Throws(typeof(ArgumentNullException), () => { zip.FindFile(null); });
+
+                ZipStorer.ZipFileEntry? entry = zip.FindFile("invalid");
+                Assert.IsNull(entry);
+
+                entry = zip.FindFile("csv_file.csv");
+                Assert.IsNotNull(entry);
+
+                using (MemoryStream csvStream = new MemoryStream()) {
+                    zip.ExtractFile(entry.Value, csvStream);
+
+                    csvStream.Seek(0, SeekOrigin.Begin);
+                    using (var reader = new StreamReader(csvStream, Encoding.ASCII)) {
+                        var text = reader.ReadToEnd();
+                        Assert.AreEqual(CSVData, text);
                     }
-
-                    //ZipStorer.ZipFileEntry? entry = zip.FindFile("invalid");
-                    //Assert.IsNull(entry);
-
-                    //zip.ExtractFile(
                 }
             }
         }
@@ -216,7 +246,15 @@ namespace GKTests.GKCommon
         [Test]
         public void IniFile_Tests()
         {
-            using (IniFile iniFile = new IniFile()) {
+            #if !__MonoCS__
+            string fileName = GKUtils.GetTempDir() + "test.ini";
+            #else
+            string fileName = GKUtils.GetHomePath() + "test.ini";
+            #endif
+
+            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+
+            using (IniFile iniFile = new IniFile(fileName)) {
                 iniFile.WriteInteger("test", "int", 15);
                 Assert.AreEqual(15, iniFile.ReadInteger("test", "int", 0));
                 iniFile.WriteString("test", "int", "0x9F");

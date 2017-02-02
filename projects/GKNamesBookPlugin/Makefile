@@ -32,7 +32,8 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./GKNamesBookPlugin.cs \
 ./NamesBookWidget.cs \
-./NamesBookWidget.Designer.cs
+./NamesBookWidget.Designer.cs \
+./NBResources.Designer.cs
 
 else
 

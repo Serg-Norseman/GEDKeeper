@@ -47,13 +47,13 @@ namespace GKCore.Operations
         {
             add
             {
-                this.fOnTransaction = value;
+                fOnTransaction = value;
             }
             remove
             {
-                if (this.fOnTransaction == value)
+                if (fOnTransaction == value)
                 {
-                    this.fOnTransaction = null;
+                    fOnTransaction = null;
                 }
             }
         }
@@ -61,10 +61,10 @@ namespace GKCore.Operations
 
         public UndoManager()
         {
-            this.fList = new List<CustomOperation>();
-            this.fCurrentIndex = -1;
+            fList = new List<CustomOperation>();
+            fCurrentIndex = -1;
 
-            this.IntPush(TRANS_DELIMITER);
+            IntPush(TRANS_DELIMITER);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,35 +79,34 @@ namespace GKCore.Operations
 
         private void Transaction(TransactionType type)
         {
-            if (this.fOnTransaction != null)
+            if (fOnTransaction != null)
             {
-                this.fOnTransaction(this, type);
+                fOnTransaction(this, type);
             }
         }
 
         private CustomOperation IntPeek()
         {
-            if (this.fCurrentIndex < 0 || this.fCurrentIndex >= this.fList.Count) {
+            if (fCurrentIndex < 0 || fCurrentIndex >= fList.Count)
                 return null;
-            } else {
-                return this.fList[this.fCurrentIndex];
-            }
+
+            return fList[fCurrentIndex];
         }
 
         private void IntPush(CustomOperation op)
         {
-            this.fList.Add(op);
-            this.fCurrentIndex++;
+            fList.Add(op);
+            fCurrentIndex++;
         }
 
         #endregion
 
         public void Clear()
         {
-            this.fList.Clear();
-            this.fCurrentIndex = -1;
+            fList.Clear();
+            fCurrentIndex = -1;
 
-            this.IntPush(TRANS_DELIMITER);
+            IntPush(TRANS_DELIMITER);
         }
 
         public bool DoOperation(CustomOperation operation)
@@ -118,18 +117,18 @@ namespace GKCore.Operations
 
             if (!operation.Redo())
             {
-                this.Rollback();
+                Rollback();
                 result = false;
             }
             else
             {
                 // cut off redo-items
-                int index = this.fCurrentIndex + 1;
-                if (index < this.fList.Count)
-                    this.fList.RemoveRange(index, this.fList.Count - index);
+                int index = fCurrentIndex + 1;
+                if (index < fList.Count)
+                    fList.RemoveRange(index, fList.Count - index);
 
                 // add new operation
-                this.IntPush(operation);
+                IntPush(operation);
 
                 result = true;
             }
@@ -139,77 +138,77 @@ namespace GKCore.Operations
 
         public void Undo()
         {
-            if (this.fCurrentIndex >= 1)
+            if (fCurrentIndex >= 1)
             {
-                if (this.IntPeek() == TRANS_DELIMITER)
+                if (IntPeek() == TRANS_DELIMITER)
                 {
-                    this.fCurrentIndex--;
+                    fCurrentIndex--;
                 }
 
-                while (this.IntPeek() != TRANS_DELIMITER)
+                while (IntPeek() != TRANS_DELIMITER)
                 {
-                    CustomOperation cmd = this.fList[this.fCurrentIndex];
-                    this.fCurrentIndex--;
+                    CustomOperation cmd = fList[fCurrentIndex];
+                    fCurrentIndex--;
                     cmd.Undo();
                 }
 
-                this.Transaction(TransactionType.taCommitUndo);
+                Transaction(TransactionType.taCommitUndo);
             }
         }
 
         public void Redo()
         {
-            if (this.fCurrentIndex < this.fList.Count - 1)
+            if (fCurrentIndex < fList.Count - 1)
             {
-                if (this.fList[this.fCurrentIndex] == TRANS_DELIMITER)
+                if (fList[fCurrentIndex] == TRANS_DELIMITER)
                 {
-                    this.fCurrentIndex++;
+                    fCurrentIndex++;
                 }
 
-                while (this.IntPeek() != TRANS_DELIMITER)
+                while (IntPeek() != TRANS_DELIMITER)
                 {
-                    CustomOperation cmd = this.fList[fCurrentIndex];
-                    this.fCurrentIndex++;
+                    CustomOperation cmd = fList[fCurrentIndex];
+                    fCurrentIndex++;
 
                     if (!cmd.Redo())
                     {
-                        this.Rollback();
+                        Rollback();
                         return;
                     }
                 }
 
-                this.Transaction(TransactionType.taCommitRedo);
+                Transaction(TransactionType.taCommitRedo);
             }
         }
 
         public bool CanUndo()
         {
-            return this.fCurrentIndex > 0;
+            return fCurrentIndex > 0;
         }
 
         public bool CanRedo()
         {
-            return this.fList.Count > 0 && this.fCurrentIndex < this.fList.Count - 1;
+            return fList.Count > 0 && fCurrentIndex < fList.Count - 1;
         }
 
         public void Commit()
         {
-            if (this.IntPeek() != TRANS_DELIMITER)
+            if (IntPeek() != TRANS_DELIMITER)
             {
-                this.IntPush(TRANS_DELIMITER);
-                this.Transaction(TransactionType.taCommit);
+                IntPush(TRANS_DELIMITER);
+                Transaction(TransactionType.taCommit);
             }
         }
 
         public void Rollback()
         {
-            while (this.IntPeek() != TRANS_DELIMITER)
+            while (IntPeek() != TRANS_DELIMITER)
             {
-                CustomOperation cmd = this.fList[this.fCurrentIndex];
-                this.fCurrentIndex--;
+                CustomOperation cmd = fList[fCurrentIndex];
+                fCurrentIndex--;
                 cmd.Undo();
             }
-            this.Transaction(TransactionType.taRollback);
+            Transaction(TransactionType.taRollback);
         }
     }
 }

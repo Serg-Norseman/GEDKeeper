@@ -85,13 +85,8 @@ namespace Externals.IniFiles
         /// <summary>Reads a INI file from a stream.</summary>
         public static IniFileEx FromStream(StreamReader reader)
         {
-            return FromElements(ParseText(reader));
-        }
+            IEnumerable<IniFileElement> elemes = ParseText(reader);
 
-        /// <summary>Creates a new IniFile from elements collection (Advanced member).</summary>
-        /// <param name="elemes">Elements collection.</param>
-        private static IniFileEx FromElements(IEnumerable<IniFileElement> elemes)
-        {
             IniFileEx ret = new IniFileEx();
             ret.elements.AddRange(elemes);
             if (ret.elements.Count > 0) {
@@ -125,7 +120,7 @@ namespace Externals.IniFiles
         public void Save(string path)
         {
             using (StreamWriter writer = new StreamWriter(path)) {
-                this.Save(writer);
+                Save(writer);
             }
         }
 
@@ -135,7 +130,7 @@ namespace Externals.IniFiles
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            foreach (IniFileElement el in this.elements)
+            foreach (IniFileElement el in elements)
                 WriteElement(writer, el);
         }
 

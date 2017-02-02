@@ -26,8 +26,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore.Cultures;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 

@@ -24,12 +24,12 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 
-namespace GKUI.Controls
+namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SearchPanel : Form, ILocalization
+    public sealed class QuickSearchDlg : Form, ILocalization
     {
         private readonly IWorkWindow fWorkWindow;
         private ISearchStrategy fStrategy;
@@ -38,11 +38,11 @@ namespace GKUI.Controls
         private Button btnPrev;
         private Button btnNext;
 
-        public SearchPanel(IWorkWindow workWindow)
+        public QuickSearchDlg(IWorkWindow workWindow)
         {
-            this.InitializeComponent();
-            this.fWorkWindow = workWindow;
-            this.SetLang();
+            InitializeComponent();
+            fWorkWindow = workWindow;
+            SetLang();
         }
         
         private void InitializeComponent()
@@ -94,7 +94,7 @@ namespace GKUI.Controls
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
         {
-            this.fStrategy = new BaseSearchStrategy(this.fWorkWindow, this.txtSearchPattern.Text);
+            fStrategy = new BaseSearchStrategy(fWorkWindow, txtSearchPattern.Text);
         }
 
         private void FindNext_Click(object sender, EventArgs e)
@@ -131,7 +131,7 @@ namespace GKUI.Controls
         {
             if (result == null || result.Result == null) return;
             
-            this.fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
+            fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
         }
         
         private void SearchPanel_KeyDown(object sender, KeyEventArgs e)

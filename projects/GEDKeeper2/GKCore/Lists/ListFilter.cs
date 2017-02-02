@@ -32,17 +32,17 @@ namespace GKCore.Lists
 
         public List<FilterCondition> Conditions
         {
-            get { return this.fConditions; }
+            get { return fConditions; }
         }
 
         public ListFilter()
         {
-            this.fConditions = new List<FilterCondition>();
+            fConditions = new List<FilterCondition>();
         }
 
         public virtual void Clear()
         {
-            this.fConditions.Clear();
+            fConditions.Clear();
         }
     }
 }

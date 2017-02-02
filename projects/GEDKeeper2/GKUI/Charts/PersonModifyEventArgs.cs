@@ -31,7 +31,7 @@ namespace GKUI.Charts
 
         public PersonModifyEventArgs(TreeChartPerson person)
         {
-            this.Person = person;
+            Person = person;
         }
     }
 }

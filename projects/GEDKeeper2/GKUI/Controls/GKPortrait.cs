@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2016 by Serg V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017 by Serg V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -31,42 +31,42 @@ namespace GKUI.Controls
     /// </summary>
     public partial class GKPortrait : UserControl
     {
-        public Image Image 
-        { 
-            get { return this.pictureBox1.Image; } 
-            set { this.pictureBox1.Image = value; } 
-        }
-        
-        public override Image BackgroundImage 
+        public Image Image
         {
-            get { return this.pictureBox1.BackgroundImage; } 
-            set { this.pictureBox1.BackgroundImage = value; } 
+            get { return this.pictureBox1.Image; }
+            set { this.pictureBox1.Image = value; }
         }
-        
+
+        public override Image BackgroundImage
+        {
+            get { return this.pictureBox1.BackgroundImage; }
+            set { this.pictureBox1.BackgroundImage = value; }
+        }
+
         public int SlidePanelHeight
-        { 
-            get { return btnPanel.Height; } 
-            set { btnPanel.Height = value; } 
-        }
-        
-        public Panel SlidePanel 
         {
-            get { return btnPanel; } 
-            set { btnPanel = value; } 
+            get { return btnPanel.Height; }
+            set { btnPanel.Height = value; }
         }
-        
-        public int PixelSpeed 
-        { 
-            get { return fPixelSpeed; } 
-            set { fPixelSpeed = value; } 
+
+        public Panel SlidePanel
+        {
+            get { return btnPanel; }
+            set { btnPanel = value; }
         }
-        
-        public PictureBoxSizeMode SizeMode 
-        { 
-            get { return pictureBox1.SizeMode; } 
-            set { pictureBox1.SizeMode = value;} 
+
+        public int PixelSpeed
+        {
+            get { return fPixelSpeed; }
+            set { fPixelSpeed = value; }
         }
-        
+
+        public PictureBoxSizeMode SizeMode
+        {
+            get { return pictureBox1.SizeMode; }
+            set { pictureBox1.SizeMode = value;}
+        }
+
         public override Cursor Cursor
         {
             get {
@@ -78,17 +78,17 @@ namespace GKUI.Controls
                 btnPanel.Cursor = value;
             }
         }
-        
+
         private int fPixelSpeed = 5;
-        private List<Button> fBtnsList = new List<Button>();        
-        
+        private List<Button> fBtnsList = new List<Button>();
+
         public GKPortrait()
         {
             InitializeComponent();
             btnPanel.Top = this.Height;
             timer.Stop();
         }
-        
+
         public void AddButton(Button b)
         {
             fBtnsList.Add(b);
@@ -125,7 +125,7 @@ namespace GKUI.Controls
         {
             if (btnPanel.Top <= this.Height - btnPanel.Height)
                 timer.Stop();
-            else 
+            else
                 btnPanel.Top -= (btnPanel.Top - 5 > this.Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
         }
         
@@ -133,22 +133,22 @@ namespace GKUI.Controls
         {
             this.CheckCursorPosition(sender, e);
         }
-        
+
         private void Panel1MouseHover(object sender, EventArgs e)
         {
             this.CheckCursorPosition(sender, e);
         }
-        
+
         private void PictureBox1MouseLeave(object sender, EventArgs e)
         {
             this.CheckCursorPosition(sender, e);
         }
-        
+
         private void Panel1MouseLeave(object sender, EventArgs e)
         {
             this.CheckCursorPosition(sender, e);
         }
-        
+
         private void CheckCursorPosition(object sender, EventArgs e)
         {
             Point p = this.PointToClient(Cursor.Position);
@@ -162,7 +162,7 @@ namespace GKUI.Controls
                 timer.Stop();
             }
         }
-        
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);

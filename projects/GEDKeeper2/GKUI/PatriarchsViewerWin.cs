@@ -48,11 +48,12 @@ namespace GKUI
                 PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
             }
 
+            arborViewer1.Name = "arborViewer1";
             arborViewer1.NodesDragging = true;
             arborViewer1.start();
         }
 
-        private void ArborViewer1MouseMove(object sender, MouseEventArgs e)
+        private void ArborViewer1_MouseMove(object sender, MouseEventArgs e)
         {
             ArborNode resNode = arborViewer1.getNodeByCoord(e.X, e.Y);
 

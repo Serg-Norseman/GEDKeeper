@@ -131,6 +131,9 @@
     <Compile Include="GKCore\Export\HTMLWriter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\PDFExporter.cs" />
+    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
@@ -178,11 +181,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\DescendantsCircle.cs" />
+    <Compile Include="GKUI\Charts\GenerationsControl.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
+    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -214,9 +220,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
-    <Compile Include="GKUI\Controls\SearchPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -351,6 +354,9 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\ResearchEditDlg.Designer.cs">
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\QuickSearchDlg.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Dialogs\SexCheckDlg.cs">
       <SubType>Form</SubType>

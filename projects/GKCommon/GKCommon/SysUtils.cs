@@ -769,40 +769,58 @@ namespace GKCommon
 
         #region Graphics functions
 
-        public static float ZoomToFit(int imgWidth, int imgHeight, int requireWidth, int requireHeight)
+        public static float ZoomToFit(float imgWidth, float imgHeight,
+                                      float requireWidth, float requireHeight)
         {
-            if (imgWidth == 0 || imgHeight == 0) return 1.0f;
+            if (imgWidth == 0.0f || imgHeight == 0.0f) return 1.0f;
 
             float aspectRatio;
 
             if (imgWidth > imgHeight) {
-                aspectRatio = (float)requireWidth / imgWidth;
+                aspectRatio = requireWidth / imgWidth;
 
                 if (requireHeight < imgHeight * aspectRatio) {
-                    aspectRatio = (float)requireHeight / imgHeight;
+                    aspectRatio = requireHeight / imgHeight;
                 }
             } else {
-                aspectRatio = (float)requireHeight / imgHeight;
+                aspectRatio = requireHeight / imgHeight;
 
                 if (requireWidth < imgWidth * aspectRatio) {
-                    aspectRatio = (float)requireWidth / imgWidth;
+                    aspectRatio = requireWidth / imgWidth;
                 }
             }
 
             return aspectRatio;
         }
 
-        public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
+        public static GraphicsPath CreateRectangle(float x, float y, float width, float height)
         {
-            int xw = x + width;
-            int yh = y + height;
-            int xwr = xw - radius;
-            int yhr = yh - radius;
-            int xr = x + radius;
-            int yr = y + radius;
-            int r2 = radius * 2;
-            int xwr2 = xw - r2;
-            int yhr2 = yh - r2;
+            float xw = x + width;
+            float yh = y + height;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddLine(x, y, xw, y); // Top Edge
+            p.AddLine(xw, y, xw, yh); // Right Edge
+            p.AddLine(xw, yh, x, yh); // Bottom Edge
+            p.AddLine(x, yh, x, y); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
+        public static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
+        {
+            float xw = x + width;
+            float yh = y + height;
+            float xwr = xw - radius;
+            float yhr = yh - radius;
+            float xr = x + radius;
+            float yr = y + radius;
+            float r2 = radius * 2;
+            float xwr2 = xw - r2;
+            float yhr2 = yh - r2;
 
             GraphicsPath p = new GraphicsPath();
             p.StartFigure();

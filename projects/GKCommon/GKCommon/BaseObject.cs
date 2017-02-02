@@ -35,10 +35,10 @@ namespace GKCommon
 
         public void Dispose()
         {
-            if (!this.fDisposed)
+            if (!fDisposed)
             {
-                this.Dispose(true /*called by user directly*/);
-                this.fDisposed = true;
+                Dispose(true /*called by user directly*/);
+                fDisposed = true;
             }
 
             GC.SuppressFinalize(this);
@@ -46,7 +46,7 @@ namespace GKCommon
 
         ~BaseObject()
         {
-            this.Dispose(false /*not called by user directly*/);
+            Dispose(false /*not called by user directly*/);
         }
     }
 }

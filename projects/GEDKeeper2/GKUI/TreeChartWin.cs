@@ -33,7 +33,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Controls;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -45,11 +44,12 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
-        private PrintDocument fPrintDoc;
 
         private TreeChartBox.ChartKind fChartKind;
         private int fGensLimit;
         private GEDCOMIndividualRecord fPerson;
+        private PrintDocument fPrintDoc;
+
 
         public IBaseWindow Base
         {
@@ -65,6 +65,7 @@ namespace GKUI
             }
         }
 
+
         public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
             this.InitializeComponent();
@@ -79,8 +80,10 @@ namespace GKUI
 
             this.fBase = baseWin;
             this.fPerson = startPerson;
+            this.fGensLimit = -1;
 
-            this.fTreeBox = new TreeChartBox();
+            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
+            this.fTreeBox.Name = "fTreeBox";
             this.fTreeBox.Base = this.fBase;
             this.fTreeBox.Dock = DockStyle.Fill;
             this.fTreeBox.DragOver += this.ImageTree_DragOver;
@@ -94,7 +97,6 @@ namespace GKUI
             base.Controls.SetChildIndex(this.fTreeBox, 0);
             base.Controls.SetChildIndex(this.ToolBar1, 1);
 
-            this.fGensLimit = -1;
             this.SetLang();
 
             this.miCertaintyIndex.Checked = this.fTreeBox.Options.CertaintyIndexVisible;
@@ -105,7 +107,7 @@ namespace GKUI
 
             this.miTraceKinships.Checked = this.fTreeBox.TraceKinships;
             this.miTraceKinships.Visible = false;
-            
+
             this.InitPrintDoc();
         }
 
@@ -220,7 +222,7 @@ namespace GKUI
 
                 case Keys.F:
                     if (e.Control) {
-                        this.QuickFind();
+                        this.QuickSearch();
                     }
                     break;
             }
@@ -575,10 +577,6 @@ namespace GKUI
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
         {
             Graphics gfx = e.Graphics;
-
-            //PrinterBounds objBounds = new PrinterBounds(e);
-            //Rectangle realMarginBounds = objBounds.Bounds;  // Get the REAL Margin Bounds !
-
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 
@@ -690,8 +688,6 @@ namespace GKUI
             this.miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             this.miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 
-            this.fTreeBox.ScaleControl.Tip = LangMan.LS(LSID.LSID_Scale);
-
             this.tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
             this.tbModes.ToolTipText = LangMan.LS(LSID.LSID_ModesTip);
         }
@@ -730,7 +726,7 @@ namespace GKUI
             return this.fTreeBox.NavCanForward();
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return true;
         }
@@ -748,15 +744,15 @@ namespace GKUI
             this.fTreeBox.SelectByRec(iRec);
         }
 
-        public void QuickFind()
+        public void QuickSearch()
         {
-            SearchPanel panel = new SearchPanel(this);
+            QuickSearchDlg qsDlg = new QuickSearchDlg(this);
             
             Rectangle client = this.ClientRectangle;
-            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
-            panel.Location = pt;
+            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            qsDlg.Location = pt;
 
-            panel.Show();
+            qsDlg.Show();
         }
 
         public bool AllowFilter()

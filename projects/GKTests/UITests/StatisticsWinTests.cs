@@ -20,7 +20,10 @@
 
 #if !__MonoCS__
 
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
@@ -56,7 +59,17 @@ namespace GKTests.UITests
 
             for (int i = 0; i < cbType.Properties.Items.Count; i++) {
                 cbType.Select(i);
+
+                if (i == 0) {
+                    //ModalFormHandler = GenerateExcel_Handler;
+                    //ClickToolStripButton("tbExcelExport", fDialog);
+                }
             }
+        }
+
+        private void GenerateExcel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.xls", hWnd);
         }
     }
 }
