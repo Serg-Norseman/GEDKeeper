@@ -47,16 +47,18 @@ namespace GKCore.Options
             Color.PaleGreen // lines
         };
 
+        public bool ArcText;
         public Color[] BrushColor = new Color[MAX_BRUSHES];
         public bool HideEmptySegments;
 
         public AncestorsCircleOptions()
         {
             for (int i = 0; i < MAX_BRUSHES; i++) {
-                this.BrushColor[i] = DefBrushColor[i];
+                BrushColor[i] = DefBrushColor[i];
             }
 
-            this.HideEmptySegments = false;
+            ArcText = false;
+            HideEmptySegments = false;
         }
 
         public void Assign(IOptions source)
@@ -65,10 +67,11 @@ namespace GKCore.Options
             if (srcOptions == null) return;
 
             for (int i = 0; i < MAX_BRUSHES; i++) {
-                this.BrushColor[i] = srcOptions.BrushColor[i];
+                BrushColor[i] = srcOptions.BrushColor[i];
             }
 
-            this.HideEmptySegments = srcOptions.HideEmptySegments;
+            ArcText = srcOptions.ArcText;
+            HideEmptySegments = srcOptions.HideEmptySegments;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -79,10 +82,10 @@ namespace GKCore.Options
             try
             {
                 for (int i = 0; i < MAX_BRUSHES; i++) {
-                    this.BrushColor[i] = Color.FromArgb(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i].ToArgb()));
+                    BrushColor[i] = Color.FromArgb(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i].ToArgb()));
                 }
 
-                this.HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);
+                HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);
             }
             catch (Exception)
             {
@@ -99,7 +102,7 @@ namespace GKCore.Options
                 iniFile.WriteInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), BrushColor[i].ToArgb());
             }
 
-            iniFile.WriteBool("AncestorsCircle", "HideEmptySegments", this.HideEmptySegments);
+            iniFile.WriteBool("AncestorsCircle", "HideEmptySegments", HideEmptySegments);
         }
     }
 }

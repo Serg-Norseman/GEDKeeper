@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//define FUN_ANIM
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -88,6 +90,9 @@ namespace GKUI.Charts
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;
 
+        /* This chart's GDI+ paths boundary (in the following order: left, top,
+         * right and bottom). */
+        private float[] fBounds;
         protected int fGenWidth;
         private string fHint;
         protected int fIndividualsCount;
@@ -109,15 +114,14 @@ namespace GKUI.Charts
         protected CircleSegment fSelected;
         protected ShieldState fShieldState;
 
-        private bool ArcText = false;
-        /* This chart's GDI+ paths boundary (in the following order: left, top,
-         * right and bottom). */
-        private float[] fBounds;
         /* Animation timer. */
+        #if FUN_ANIM
+        //private float fAnimationAngle;
         private Timer fAnimationTimer;
-        private UInt64 fAnimationTime;
-        private float fAnimationAngle;
-        const UInt64 fAnimationTimeLimit = 17;
+        #endif
+        private UInt64 fAnimationTime = 0;
+        private const UInt64 fAnimationTimeLimit = 17;
+
 
         public int GenWidth
         {
@@ -154,12 +158,17 @@ namespace GKUI.Charts
                 return fRootPerson;
             }
             set {
+                if (fRootPerson == value) return;
                 fRootPerson = value;
 
                 NavAdd(value);
                 Changed();
 
                 DoRootChanged(value);
+
+                #if FUN_ANIM
+                InitTimer();
+                #endif
             }
         }
 
@@ -189,7 +198,10 @@ namespace GKUI.Charts
             fSelected = null;
             fShieldState = baseWin.ShieldState;
             fBounds = new float[4];
+
+            #if FUN_ANIM
             InitTimer();
+            #endif
 
             BackColor = fOptions.BrushColor[9];
         }
@@ -381,7 +393,13 @@ namespace GKUI.Charts
             PointF center = GetCenter(target);
             context.TranslateTransform(center.X, center.Y);
             if (RenderTarget.rtScreen == target) {
-                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) * Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
+                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
+                                                Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
+                float zoomX = 1.0f + ((0 != fAnimationTime) ?
+                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                float zoomY = 1.0f - ((0 != fAnimationTime) ?
+                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
+                context.ScaleTransform(zoomX, zoomY);
             }
             InternalDraw(context);
             context.ResetTransform();
@@ -461,7 +479,7 @@ namespace GKUI.Charts
 
                     } else if (wedgeAngle < 180) {
 
-                        if (ArcText) {
+                        if (fOptions.ArcText) {
                             if (gen == 2) {
                                 SizeF sizeF = gfx.MeasureString(surn, Font);
                                 DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
@@ -502,7 +520,7 @@ namespace GKUI.Charts
 
                     } else if (wedgeAngle < 361) {
 
-                        if (ArcText) {
+                        if (fOptions.ArcText) {
                             SizeF sizeF = gfx.MeasureString(surn, Font);
                             DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
@@ -583,14 +601,17 @@ namespace GKUI.Charts
             gfx.Transform = previousTransformation;
         }
 
+        #if FUN_ANIM
         private void InitTimer()
         {
-            fAnimationAngle = 0.0f;
-            fAnimationTime = 0;
-            fAnimationTimer = new Timer();
-            fAnimationTimer.Interval = 1;
-            fAnimationTimer.Tick += AnimationTimerTick;
-            fAnimationTimer.Start();
+            if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
+                fAnimationAngle = 0.0f;
+                fAnimationTime = 0;
+                fAnimationTimer = new Timer();
+                fAnimationTimer.Interval = 1;
+                fAnimationTimer.Tick += AnimationTimerTick;
+                fAnimationTimer.Start();
+            }
         }
 
         private void AnimationTimerTick(object sender, EventArgs e)
@@ -602,6 +623,7 @@ namespace GKUI.Charts
             }
             Invalidate();
         }
+        #endif
 
         #region Protected inherited methods
 
@@ -640,7 +662,6 @@ namespace GKUI.Charts
 
             if (selected != null && selected.IRec != null) {
                 RootPerson = selected.IRec;
-                InitTimer();
             }
         }
 
