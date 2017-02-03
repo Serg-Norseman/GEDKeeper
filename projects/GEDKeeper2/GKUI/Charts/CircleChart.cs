@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
+using System.Windows.Forms.VisualStyles;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -116,6 +117,8 @@ namespace GKUI.Charts
         /* Zoom factors */
         private float fZoomX = 1.0f;
         private float fZoomY = 1.0f;
+        private float fZoomLowLimit = 0.0125f;
+        private float fZoomHighLimit = 1000.0f;
         /* Mouse capturing. */
         private int fMouseCaptured;
         private int fMouseCaptureX;
@@ -671,19 +674,21 @@ namespace GKUI.Charts
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.KeyCode) {
-                case Keys.W:
+                case Keys.Add:
+                case Keys.Oemplus:
                 {
-                    fZoomX += fZoomX * 0.05f;
-                    fZoomY += fZoomY * 0.05f;
+                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
                     Size boundary = GetPathsBoundaryI();
                     AdjustViewPort(boundary, true);
                     Invalidate();
                     break;
                 }
-                case Keys.S:
+                case Keys.Subtract:
+                case Keys.OemMinus:
                 {
-                    fZoomX -= fZoomX * 0.05f;
-                    fZoomY -= fZoomY * 0.05f;
+                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
                     Size boundary = GetPathsBoundaryI();
                     AdjustViewPort(boundary, true);
                     Invalidate();
@@ -711,9 +716,11 @@ namespace GKUI.Charts
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            fMouseCaptured = 1;
-            fMouseCaptureX = e.X;
-            fMouseCaptureY = e.Y;
+            if (HorizontalScroll.Visible || VerticalScroll.Visible) {
+                fMouseCaptured = 1;
+                fMouseCaptureX = e.X;
+                fMouseCaptureY = e.Y;
+            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -769,11 +776,11 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
-                    fZoomX -= fZoomX * 0.05f;
-                    fZoomY -= fZoomY * 0.05f;
+                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
                 } else {
-                    fZoomX += fZoomX * 0.05f;
-                    fZoomY += fZoomY * 0.05f;
+                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
                 }
                 Size boundary = GetPathsBoundaryI();
                 AdjustViewPort(boundary, true);
