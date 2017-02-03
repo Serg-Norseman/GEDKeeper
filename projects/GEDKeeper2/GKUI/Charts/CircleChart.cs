@@ -405,6 +405,10 @@ namespace GKUI.Charts
                 context.ScaleTransform(zoomX, zoomY);
             }
 #endif
+            context.SmoothingMode = SmoothingMode.AntiAlias;
+            if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
+                context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            }
             InternalDraw(context);
             context.ResetTransform();
         }
@@ -664,18 +668,18 @@ namespace GKUI.Charts
                 {
                     fZoomX += fZoomX * 0.05f;
                     fZoomY += fZoomY * 0.05f;
-                    Invalidate();
                     Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, false);
+                    AdjustViewPort(boundary, true);
+                    Invalidate();
                     break;
                 }
                 case Keys.S:
                 {
                     fZoomX -= fZoomX * 0.05f;
                     fZoomY -= fZoomY * 0.05f;
-                    Invalidate();
                     Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, false);
+                    AdjustViewPort(boundary, true);
+                    Invalidate();
                     break;
                 }
                 case Keys.D0:
@@ -683,9 +687,9 @@ namespace GKUI.Charts
                     if (e.Control) {
                         fZoomX = 1.0f;
                         fZoomY = 1.0f;
-                        Invalidate();
                         Size boundary = GetPathsBoundaryI();
-                        AdjustViewPort(boundary, false);
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
                     }
                     break;
                 }
@@ -732,7 +736,6 @@ namespace GKUI.Charts
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            base.OnMouseWheel(e);
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
                     fZoomX -= fZoomX * 0.05f;
@@ -741,9 +744,12 @@ namespace GKUI.Charts
                     fZoomX += fZoomX * 0.05f;
                     fZoomY += fZoomY * 0.05f;
                 }
-                Invalidate();
                 Size boundary = GetPathsBoundaryI();
-                AdjustViewPort(boundary, false);
+                AdjustViewPort(boundary, true);
+                Invalidate();
+            }
+            else {
+                base.OnMouseWheel(e);
             }
         }
 

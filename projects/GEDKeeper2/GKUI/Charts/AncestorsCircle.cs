@@ -198,8 +198,6 @@ namespace GKUI.Charts
 
         protected override void InternalDraw(Graphics gfx)
         {
-            gfx.SmoothingMode = SmoothingMode.AntiAlias;
-
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
