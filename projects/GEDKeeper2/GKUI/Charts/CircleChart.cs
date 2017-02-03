@@ -27,7 +27,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using System.Windows.Forms.VisualStyles;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
