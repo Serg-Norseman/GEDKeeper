@@ -116,6 +116,10 @@ namespace GKUI.Charts
         /* Zoom factors */
         private float fZoomX = 1.0f;
         private float fZoomY = 1.0f;
+        /* Mouse capturing. */
+        private int fMouseCaptured;
+        private int fMouseCaptureX;
+        private int fMouseCaptureY;
         /* Animation timer. */
         #if FUN_ANIM
         private Timer fAnimationTimer;
@@ -199,6 +203,7 @@ namespace GKUI.Charts
             fSelected = null;
             fShieldState = baseWin.ShieldState;
             fBounds = new float[4];
+            fMouseCaptured = 0;
 
             #if FUN_ANIM
             InitTimer();
@@ -693,44 +698,68 @@ namespace GKUI.Charts
                     }
                     break;
                 }
+                default:
+                {
+                    base.OnKeyDown(e);
+                    break;
+                }
             }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            fMouseCaptured = 1;
+            fMouseCaptureX = e.X;
+            fMouseCaptureY = e.Y;
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
+            base.OnMouseUp(e);
+            if (2 > fMouseCaptured) {
+                CircleSegment selected = FindSegment(e.X, e.Y);
 
-            CircleSegment selected = FindSegment(e.X, e.Y);
-
-            if (selected != null && selected.IRec != null) {
-                RootPerson = selected.IRec;
+                if (selected != null && selected.IRec != null) {
+                    RootPerson = selected.IRec;
+                }
             }
+            fMouseCaptured = 0;
+            Cursor = Cursors.Default;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+            if (0 == fMouseCaptured) {
+                CircleSegment selected = FindSegment(e.X, e.Y);
 
-            CircleSegment selected = FindSegment(e.X, e.Y);
+                string hint = "";
+                if (!Equals(fSelected, selected)) {
+                    fSelected = selected;
 
-            string hint = "";
-            if (!Equals(fSelected, selected)) {
-                fSelected = selected;
+                    if (selected != null && selected.IRec != null) {
+                        string name = GKUtils.GetNameString(selected.IRec, true, false);
+                        hint = /*selected.Gen.ToString() + ", " + */name;
+                    }
 
-                if (selected != null && selected.IRec != null) {
-                    string name = GKUtils.GetNameString(selected.IRec, true, false);
-                    hint = /*selected.Gen.ToString() + ", " + */name;
+                    Invalidate();
                 }
 
-                Invalidate();
-            }
+                if (!Equals(fHint, hint)) {
+                    fHint = hint;
 
-            if (!Equals(fHint, hint)) {
-                fHint = hint;
-
-                if (!string.IsNullOrEmpty(hint)) {
-                    fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                    if (!string.IsNullOrEmpty(hint)) {
+                        fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                    }
                 }
+            } else {
+                AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
+                                               -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
+                fMouseCaptured = 2;
+                fMouseCaptureX = e.X;
+                fMouseCaptureY = e.Y;
+                Cursor = Cursors.SizeAll;
             }
         }
 
