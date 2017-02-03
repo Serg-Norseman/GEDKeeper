@@ -116,6 +116,12 @@ namespace GKUI.Charts
         /* Zoom factors */
         private float fZoomX = 1.0f;
         private float fZoomY = 1.0f;
+        private float fZoomLowLimit = 0.0125f;
+        private float fZoomHighLimit = 1000.0f;
+        /* Mouse capturing. */
+        private int fMouseCaptured;
+        private int fMouseCaptureX;
+        private int fMouseCaptureY;
         /* Animation timer. */
         #if FUN_ANIM
         private Timer fAnimationTimer;
@@ -199,6 +205,7 @@ namespace GKUI.Charts
             fSelected = null;
             fShieldState = baseWin.ShieldState;
             fBounds = new float[4];
+            fMouseCaptured = 0;
 
             #if FUN_ANIM
             InitTimer();
@@ -393,9 +400,12 @@ namespace GKUI.Charts
         private void Render(Graphics context, RenderTarget target)
         {
             PointF center = GetCenter(target);
-            context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
-#if FUN_ANIM
             if (RenderTarget.rtScreen == target) {
+                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
+                if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
+                    context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                }
+#if FUN_ANIM
                 context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
                                                 Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
                 float zoomX = fZoomX + ((0 != fAnimationTime) ?
@@ -403,12 +413,11 @@ namespace GKUI.Charts
                 float zoomY = fZoomY - ((0 != fAnimationTime) ?
                                         (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
                 context.ScaleTransform(zoomX, zoomY);
-            }
 #endif
-            context.SmoothingMode = SmoothingMode.AntiAlias;
-            if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
-                context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            } else {
+                context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
             }
+            context.SmoothingMode = SmoothingMode.AntiAlias;
             InternalDraw(context);
             context.ResetTransform();
         }
@@ -664,19 +673,21 @@ namespace GKUI.Charts
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.KeyCode) {
-                case Keys.W:
+                case Keys.Add:
+                case Keys.Oemplus:
                 {
-                    fZoomX += fZoomX * 0.05f;
-                    fZoomY += fZoomY * 0.05f;
+                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
                     Size boundary = GetPathsBoundaryI();
                     AdjustViewPort(boundary, true);
                     Invalidate();
                     break;
                 }
-                case Keys.S:
+                case Keys.Subtract:
+                case Keys.OemMinus:
                 {
-                    fZoomX -= fZoomX * 0.05f;
-                    fZoomY -= fZoomY * 0.05f;
+                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
                     Size boundary = GetPathsBoundaryI();
                     AdjustViewPort(boundary, true);
                     Invalidate();
@@ -693,44 +704,70 @@ namespace GKUI.Charts
                     }
                     break;
                 }
+                default:
+                {
+                    base.OnKeyDown(e);
+                    break;
+                }
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (HorizontalScroll.Visible || VerticalScroll.Visible) {
+                fMouseCaptured = 1;
+                fMouseCaptureX = e.X;
+                fMouseCaptureY = e.Y;
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
+            base.OnMouseUp(e);
+            if (2 > fMouseCaptured) {
+                CircleSegment selected = FindSegment(e.X, e.Y);
 
-            CircleSegment selected = FindSegment(e.X, e.Y);
-
-            if (selected != null && selected.IRec != null) {
-                RootPerson = selected.IRec;
+                if (selected != null && selected.IRec != null) {
+                    RootPerson = selected.IRec;
+                }
             }
+            fMouseCaptured = 0;
+            Cursor = Cursors.Default;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+            if (0 == fMouseCaptured) {
+                CircleSegment selected = FindSegment(e.X, e.Y);
 
-            CircleSegment selected = FindSegment(e.X, e.Y);
+                string hint = "";
+                if (!Equals(fSelected, selected)) {
+                    fSelected = selected;
 
-            string hint = "";
-            if (!Equals(fSelected, selected)) {
-                fSelected = selected;
+                    if (selected != null && selected.IRec != null) {
+                        string name = GKUtils.GetNameString(selected.IRec, true, false);
+                        hint = /*selected.Gen.ToString() + ", " + */name;
+                    }
 
-                if (selected != null && selected.IRec != null) {
-                    string name = GKUtils.GetNameString(selected.IRec, true, false);
-                    hint = /*selected.Gen.ToString() + ", " + */name;
+                    Invalidate();
                 }
 
-                Invalidate();
-            }
+                if (!Equals(fHint, hint)) {
+                    fHint = hint;
 
-            if (!Equals(fHint, hint)) {
-                fHint = hint;
-
-                if (!string.IsNullOrEmpty(hint)) {
-                    fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                    if (!string.IsNullOrEmpty(hint)) {
+                        fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                    }
                 }
+            } else {
+                AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
+                                               -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
+                fMouseCaptured = 2;
+                fMouseCaptureX = e.X;
+                fMouseCaptureY = e.Y;
+                Cursor = Cursors.SizeAll;
             }
         }
 
@@ -738,11 +775,11 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
-                    fZoomX -= fZoomX * 0.05f;
-                    fZoomY -= fZoomY * 0.05f;
+                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
                 } else {
-                    fZoomX += fZoomX * 0.05f;
-                    fZoomY += fZoomY * 0.05f;
+                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
                 }
                 Size boundary = GetPathsBoundaryI();
                 AdjustViewPort(boundary, true);
