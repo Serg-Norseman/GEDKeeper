@@ -393,8 +393,7 @@ namespace GKUI.Charts
         private void Render(Graphics context, RenderTarget target)
         {
             PointF center = GetCenter(target);
-            context.TranslateTransform(center.X, center.Y);
-            context.ScaleTransform(fZoomX, fZoomY);
+            context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
 #if FUN_ANIM
             if (RenderTarget.rtScreen == target) {
                 context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
