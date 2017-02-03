@@ -19,8 +19,10 @@
  */
 
 using System;
+using System.IO;
+using System.Net;
 using System.Windows.Forms;
-
+using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -202,6 +204,32 @@ namespace GKUI.Dialogs
             this.lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
             this.lblFile.Text = LangMan.LS(LSID.LSID_File);
             this.btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
+        }
+        
+        private void MediaEditDlgShown(object sender, EventArgs e)
+        {
+            if (txtFile.Text == "")
+                btnFileSelect_Click(sender, e);
+            if (txtFile.Text != "") {
+                
+                if (txtFile.Text.Contains("stg:") || 0==2) {
+                    GEDCOMFileReferenceWithTitle fileRef  = fMediaRec.FileReferences[0];
+                    MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+                    if (mmKind == MultimediaKind.mkImage) {
+                        Image img = this.fBase.Context.LoadMediaImage(fileRef, false);
+                        picBox.Image = img;
+                    }
+                }
+                string ext = Path.GetExtension(txtFile.Text);
+                if (ext == ".jpg" || ext == ".png" || ext == ".bmp") {
+                    Image img = Image.FromFile(txtFile.Text);
+                    picBox.Image = img;
+                    if (cmbStoreType.Enabled)
+                        cmbStoreType.SelectedIndex = 1;
+                }
+                if (txtName.Text == "")
+                    txtName.Text = Path.GetFileNameWithoutExtension(txtFile.Text);
+            }
         }
     }
 }

@@ -218,9 +218,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Controls\GKPortrait.cs" />
-    <Compile Include="GKUI\Controls\GKPortrait.Designer.cs">
-      <DependentUpon>GKPortrait.cs</DependentUpon>
-    </Compile>
+    <Compile Include="GKUI\Controls\GKPortrait.Designer.cs" />
     <Compile Include="GKUI\Controls\GKTreeNode.cs" />
     <Compile Include="GKUI\Controls\GKMapBrowser.cs">
       <SubType>Component</SubType>

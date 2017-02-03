@@ -86,6 +86,7 @@ namespace GKUI.Controls
         {
             InitializeComponent();
             btnPanel.Top = this.Height;
+            timer.Interval = 1;
             timer.Stop();
         }
         
@@ -101,16 +102,14 @@ namespace GKUI.Controls
 
             btnPanel.Controls.Clear();
 
-            for (int i = 0, c = fBtnsList.Count; i < c; i++)
-            {
+            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
                 lenwagon += (i != c) ? (fBtnsList[i].Width + 8) : fBtnsList[i].Width;
             }
 
             int center = lenwagon / 2;
             int startPosition = btnPanel.Width / 2 - center;
             
-            for (int i = 0, c = fBtnsList.Count; i < c; i++)
-            {
+            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
                 int heightCenter = btnPanel.Height / 2;
                 int btnCenter = fBtnsList[i].Height / 2;
                 
@@ -126,40 +125,19 @@ namespace GKUI.Controls
             if (btnPanel.Top <= this.Height - btnPanel.Height)
                 timer.Stop();
             else 
-                btnPanel.Top -= (btnPanel.Top - 5 > this.Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
+                btnPanel.Top -= (btnPanel.Top - fPixelSpeed > this.Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
         }
         
-        private void PictureBox1MouseHover(object sender, EventArgs e)
-        {
-            this.CheckCursorPosition(sender, e);
-        }
-        
-        private void Panel1MouseHover(object sender, EventArgs e)
-        {
-            this.CheckCursorPosition(sender, e);
-        }
-        
-        private void PictureBox1MouseLeave(object sender, EventArgs e)
-        {
-            this.CheckCursorPosition(sender, e);
-        }
-        
-        private void Panel1MouseLeave(object sender, EventArgs e)
-        {
-            this.CheckCursorPosition(sender, e);
-        }
-        
-        private void CheckCursorPosition(object sender, EventArgs e)
+        private void MouseHoverOrLeave(object sender, EventArgs e)
         {
             Point p = this.PointToClient(Cursor.Position);
-            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
-            if (!buf) {
-                timer.Start();
-                timer.Interval = 1;
-            }
-            else {
+
+            if (p.X <= 0 || p.Y <= 0 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height) {
                 btnPanel.Top = this.Height;
                 timer.Stop();
+            }
+            else {
+                timer.Start();
             }
         }
         
@@ -167,7 +145,7 @@ namespace GKUI.Controls
         {
             base.OnResize(e);
             btnPanel.Width = this.Width;
-            this.CheckCursorPosition(this, e);
+            this.MouseHoverOrLeave(this, e);
         }
     }
 }
