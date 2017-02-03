@@ -24,6 +24,7 @@ using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Charts;
 using GKUI.Dialogs;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests
@@ -63,6 +64,15 @@ namespace GKTests.UITests
         {
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.IsNotNull(fDialog.Filter);
+
+            var rbCutPersons = new RadioButtonTester("rbCutPersons", fDialog);
+            rbCutPersons.Click();
+
+            var rbCutYears = new RadioButtonTester("rbCutYears", fDialog);
+            rbCutYears.Click();
+
+            var rbCutNone = new RadioButtonTester("rbCutNone", fDialog);
+            rbCutNone.Click();
 
             ClickButton("btnAccept", fDialog);
         }

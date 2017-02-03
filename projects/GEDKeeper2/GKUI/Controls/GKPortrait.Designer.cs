@@ -7,7 +7,7 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Panel btnPanel;    
+        private System.Windows.Forms.Panel btnPanel;
         private System.Windows.Forms.Timer timer;
         /// <summary>
         /// Disposes resources used by the control.
@@ -75,7 +75,6 @@
             this.Size = new System.Drawing.Size(178, 188);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-
         }
     }
 }

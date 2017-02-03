@@ -30,16 +30,16 @@ ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
-./FlowInputDlg.Designer.cs \
 ./FlowInputDlg.cs \
+./FlowInputDlg.Designer.cs \
 ./GKFlowInputPlugin.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
-./FlowInputDlg.Designer.cs \
 ./FlowInputDlg.cs \
+./FlowInputDlg.Designer.cs \
 ./GKFlowInputPlugin.cs
 
 endif

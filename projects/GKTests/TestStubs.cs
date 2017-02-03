@@ -27,12 +27,12 @@ namespace GKTests
 {
     public static class TestStubs
     {
-        public static BaseContext CreateContext()
+        public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
         {
             GEDCOMTree tree = new GEDCOMTree();
             Assert.IsNotNull(tree);
 
-            BaseContext context = new BaseContext(tree, null);
+            BaseContext context = new BaseContext(tree, /*baseWin*/null);
             return context;
         }
 

@@ -29,7 +29,7 @@ using GKCommon;
 
 namespace GKCore.Geocoding
 {
-    public class GoogleGeocoder : IGeocoder
+    public sealed class GoogleGeocoder : IGeocoder
     {
         private const string REQUEST_URL = "https://maps.googleapis.com/maps/api/geocode/xml?address={0}&language={1}";
 

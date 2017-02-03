@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Translation guidelines and rules</title>
+</head>
+<body>
+
+<h1>Translation guidelines and rules</h1>
+
+<p><ol>
+<li>To allow use of national characters please create files with UTF-8 encoding.<ol>
+
+<li>One good example of a perfect editor supporting creation and modification UTF-8 encoded files is Notepad++ editor (available at <a href="https://notepad-plus-plus.org/" target="_blank">https://notepad-plus-plus.org/</a>). Notepad++ can automatically recognizes opening file encoding. We also recommend tool WinMerge, which displays strict correspondence of lines of two files with texts in two different languages. Please, never use office program, like Microsoft Word or Writer -- they create overweighted files.
+<li>To compile a good translation toolset under Linux, you can use programs like Meld or KDiff3 (instead of WinMerge) and GEdit.</ol>
+
+<li>There is the reference text stored in files russian.lng and english.sample. To begin creation of a new language file, you can copy any of the reference files into the new one, and then translate content of the new file line by line starting from the second line. Translator may choose any of the files he or she likes as a source (russian.lng or english.sample). Selection depends on translator experience and knowledges.<ol>
+
+<li>To make translation more easy, some translators do the following: they load complete content of the file they have chosen into an online translating service, translate the text into the target language, and then store the result into the final file. After that, translator processes the file line by line, referring to the original. This technique dramatically decreases translation time.
+<li>There is an alternative technique of partial translation. One inserts the original file content into the final file and then translates the latter gradually, from line to line, starting from translation of most known (or easy) text.</ol>
+
+<li>The first line in a language file is the header that contains language code, signature and name. Please be careful and avoid corruption of the header. The header line must start with the character &quot;;&quot;. If you have started new translation, but you are in doubt or you do not know which language code and symbols you should specify, please contact the developers.
+<li>You must never change lines order in the files!
+<li>You must remain duplicated lines existing (if you found such lines, be sure -- this is by design).
+<li>You must not change <i>placeholders</i> like %s, %n, {0}, {1} -- they are places for missing text or numbers.
+<li>You must remain lines like &lt;reserved&gt;, &lt;?&gt; or &lt;-&gt; existing -- such lines are reserved.
+<li>You may check your translation at any time. The program loads a language file every time you change language in the program. Therefore, you may update your file while GEDKeeper is running, and change program language to view your modifications in GEDKeeper on the fly.
+<li>If you require to clear context of using of a word or phrase you are translating, please contact the developers.
+</ol></p>
+
+<p>Every translation author gets a place in the program history as the translation&#39;s author. Enter your name in the chronicle of the program 😄</p>
+
+</body>
+</html>

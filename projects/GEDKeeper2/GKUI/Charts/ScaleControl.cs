@@ -18,95 +18,101 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GKCore;
 
 namespace GKUI.Charts
 {
     /// <summary>
-    /// 
+    /// Non-windowed scaling control.
+    /// Uses a resource bitmap to draw itself on the parent's context.
     /// </summary>
     public sealed class ScaleControl : ITreeControl
     {
         #region Private fields
         
-        private static readonly Rectangle ControlsScaleRect = new Rectangle(0, 0, 26, 320);
-        private static readonly Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 11);
-
+        /* Define areas within the resource bitmap. */
+        private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26, 320);
+        private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26, 11);
+        /* Range [`SCALE_Y1`, `SCALE_Y2`) is available range for the thumb. */
         private const int SCALE_Y1 = 22;
         private const int SCALE_Y2 = 297;
+        /* Padding for this control within the owner client area. */
+        private const int PADDING_X = 10;
+        private const int PADDING_Y = 10;
+        /* Shadow spaces after/before `SCALE_Y1` and `SCALE_Y2`. */
+        private const int SHADOW_TOP = 4;
+        private const int SHADOW_BOTTOM = 1;
 
         private readonly Bitmap fControlsImage;
-        private readonly TreeChartBox fChart;
 
-        private int fDCount = 11;
-        private int fThumbPos = 5;
-        private bool fVisible;
-        private bool fThumbCaptured;
-        private string fTip;
-        private Rectangle fDestRect;
+        private int fDCount = 10;
+        private int fThumbPos = 5; /* Counts from zero. */
+        /* Set member `fGrowOver` or property `GrowOver` to `true` if you want
+         * to have the control with height exceeds height of `SCALE_RECT`
+         * (i.e. height of the original image). */
+        private bool fGrowOver = false;
 
         #endregion
-        
+
         #region Public properties
-        
-        public int Width
+
+        public override int Width
         {
-            get { return 26; }
+            get { return SCALE_RECT.Width; }
         }
 
-        public int Height
+        public override int Height
         {
-            get { return 320; }
+            get { return SCALE_RECT.Height; }
         }
 
         public int DCount
         {
-            get { return this.fDCount; }
-            set { this.fDCount = value; }
+            get { return fDCount; }
+            set { fDCount = value; }
         }
 
-        public int ThumbPos
+        public bool GrowOver
         {
-            get { return this.fThumbPos; }
-            set { this.fThumbPos = value; }
+            get { return fGrowOver; }
+            set { fGrowOver = value; }
         }
-        
-        public string Tip
+
+        public override string Tip
         {
-            get { return this.fTip; }
-            set { this.fTip = value; }
-        }
-        
-        public bool Visible
-        {
-            get { return this.fVisible; }
-            set {
-                this.fVisible = value;
-                this.fChart.Invalidate();
-            }
+            get { return LangMan.LS(LSID.LSID_Scale); }
         }
 
         #endregion
-        
-        public ScaleControl(TreeChartBox chart)
+
+        public ScaleControl(TreeChartBox chart) : base(chart)
         {
-            this.fChart = chart;
-            this.fControlsImage = GKResources.iChartControls;
+            fControlsImage = GKResources.iChartControls;
         }
 
-        public void Dispose()
-        {
-            // dummy
-        }
-
-        public void Update()
+        public override void UpdateView()
         {
             Rectangle cr = fChart.ClientRectangle;
-            this.fDestRect = new Rectangle(cr.Right - (10 + this.Width), 10, this.Width, this.Height);
+            if (fGrowOver) {
+                int height = cr.Height - (PADDING_Y << 1);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), PADDING_Y, Width, height);
+            } else {
+                int height = Math.Min(cr.Height - (PADDING_Y << 1), Height);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
+                                          Math.Max(PADDING_Y, (cr.Height - height) >> 1),
+                                          Width, height);
+            }
         }
 
-        public void Draw(Graphics gfx)
+        public override void UpdateState()
+        {
+            fThumbPos = (int)Math.Round((fChart.Scale - 0.5f) * fDCount);
+        }
+
+        public override void Draw(Graphics gfx)
         {
             if (gfx == null) return;
 
@@ -114,47 +120,67 @@ namespace GKUI.Charts
             gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
             gfx.CompositingQuality = CompositingQuality.HighQuality;
-            gfx.DrawImage(fControlsImage, fDestRect, ControlsScaleRect, GraphicsUnit.Pixel);
 
-            if (this.fDCount == 0) return;
-            gfx.DrawImage(fControlsImage, this.GetDRect(fThumbPos), ControlsThumbRect, GraphicsUnit.Pixel);
+            /* Render the top icon without scaling. */
+            Rectangle sourceRect = new Rectangle(0, 0, Width, SCALE_Y1 + SHADOW_TOP);
+            Rectangle destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top,
+                                                      Width, SCALE_Y1 + SHADOW_TOP);
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect,
+                          GraphicsUnit.Pixel);
+            /* Render the bottom icon without scaling. */
+            sourceRect = new Rectangle(0, SCALE_Y2, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destinationRect = new Rectangle(fDestRect.Left,
+                                            fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)),
+                                            Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
+            /* Render the vertical bar with scaling of Y's (there's still no
+             * scaling for X's). Image source must ignore some shadows at the
+             * top and bottom. */
+            sourceRect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
+            destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
+                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
+            gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
+            if (0 < fDCount)
+            {
+                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT, GraphicsUnit.Pixel);
+            }
         }
 
-        private Rectangle GetDRect(int d)
+        private Rectangle GetDRect(int stepIndex)
         {
-            int dH = ((SCALE_Y2 - SCALE_Y1) - ControlsThumbRect.Height) / (this.fDCount - 1);
-            int thumbY = fDestRect.Top + SCALE_Y1 + (d - 1) * dH;
-            return new Rectangle(fDestRect.Left, thumbY, fDestRect.Width, ControlsThumbRect.Height);
+            int availableHeight = fDestRect.Height - (SCALE_Y1 + (Height - SCALE_Y2));
+            int step = availableHeight / fDCount;
+            int thumpTop = System.Math.Min(fDestRect.Top + SCALE_Y1 + stepIndex * step,
+                                           fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
+            return new Rectangle(fDestRect.Left, thumpTop, fDestRect.Width, THUMB_RECT.Height);
         }
 
-        public bool Contains(int x, int y)
+        public override void MouseDown(int x, int y)
         {
-            return fDestRect.Contains(x, y);
+            fMouseCaptured = (GetDRect(fThumbPos).Contains(x, y) && !fMouseCaptured);
         }
 
-        public void MouseDown(int x, int y)
+        public override void MouseMove(int x, int y)
         {
-            fThumbCaptured = (this.GetDRect(fThumbPos).Contains(x, y) && !fThumbCaptured);
-        }
-
-        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
-        {
-            if (!fThumbCaptured) return;
-            
-            for (int i = 1; i <= fDCount; i++) {
+            if (!fMouseCaptured) return;
+            /* The thumb is drawn on top of a "step", therefore to take the last
+             * step into account I have to check non-existent step under the
+             * last one. */
+            for (int i = 0; fDCount >= i; ++i) {
                 Rectangle r = GetDRect(i);
-                if (r.Contains(x, y)) {
-                    fThumbPos = i;
-                    fChart.Invalidate();
-                    if (thumbMoved != null) thumbMoved(i);
+                if ((r.Top <= y) && (r.Bottom > y)) {
+                    if (i != fThumbPos) {
+                        fThumbPos = i;
+                        fChart.SetScale(0.5f + (((float)(i)) / fDCount));
+                    }
                     break;
                 }
             }
         }
 
-        public void MouseUp(int x, int y)
+        public override void MouseUp(int x, int y)
         {
-            if (fThumbCaptured) fThumbCaptured = false;
+            fMouseCaptured = false;
         }
     }
 }

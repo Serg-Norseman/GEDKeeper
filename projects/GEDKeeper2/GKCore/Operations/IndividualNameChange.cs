@@ -35,29 +35,29 @@ namespace GKCore.Operations
         public IndividualNameChange(UndoManager manager, GEDCOMIndividualRecord person,
                                     string surname, string name, string patronymic) : base(manager)
         {
-            this.fPerson = person;
-            this.fNewSurname = surname;
-            this.fNewName = name;
-            this.fNewPatronymic = patronymic;
+            fPerson = person;
+            fNewSurname = surname;
+            fNewName = name;
+            fNewPatronymic = patronymic;
         }
 
         public override bool Redo()
         {
             bool result = true;
 
-            if (this.fPerson == null) {
+            if (fPerson == null) {
                 result = false;
             } else {
-                GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
+                GEDCOMPersonalName np = fPerson.PersonalNames[0];
 
                 string surname, name, patr;
                 GKUtils.GetRusNameParts(np, out surname, out name, out patr);
 
-                this.fOldSurname = surname;
-                this.fOldName = name;
-                this.fOldPatronymic = patr;
+                fOldSurname = surname;
+                fOldName = name;
+                fOldPatronymic = patr;
 
-                GKUtils.SetRusNameParts(np, this.fNewSurname, this.fNewName, this.fNewPatronymic);
+                GKUtils.SetRusNameParts(np, fNewSurname, fNewName, fNewPatronymic);
             }
 
             return result;
@@ -65,9 +65,9 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            if (this.fPerson != null) {
-                GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-                GKUtils.SetRusNameParts(np, this.fOldSurname, this.fOldName, this.fOldPatronymic);
+            if (fPerson != null) {
+                GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                GKUtils.SetRusNameParts(np, fOldSurname, fOldName, fOldPatronymic);
             }
         }
     }

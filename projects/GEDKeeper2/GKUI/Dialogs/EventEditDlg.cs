@@ -62,16 +62,16 @@ namespace GKUI.Dialogs
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)
             {
-                this.cmbEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
+                cmbEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
             }
 
             for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++)
             {
                 GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
-                if (cdr.HasSupport) {
-                    this.cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
-                    this.cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
-                }
+                if (!cdr.HasSupport) continue;
+
+                this.cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
+                this.cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
             }
 
             this.cmbDate1Calendar.SelectedIndex = 0;

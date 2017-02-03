@@ -222,7 +222,7 @@ namespace GKUI
             return false;
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return false;
         }
@@ -236,7 +236,7 @@ namespace GKUI
         {
         }
 
-        public void QuickFind()
+        public void QuickSearch()
         {
         }
 

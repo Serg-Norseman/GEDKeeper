@@ -117,6 +117,11 @@ namespace GKTests.GKCore
 
             //Graph patrGraph = fContext.GetPatriarchsGraph(1, true, false);
             //Assert.IsNotNull(patrGraph);
+
+            fContext.DoUndo();
+            fContext.DoRedo();
+            fContext.DoCommit();
+            fContext.DoRollback();
         }
 
         [Test]
@@ -663,6 +668,26 @@ namespace GKTests.GKCore
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
             Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
+
+            //
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.German;
+            Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Polish;
+            Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Swedish;
+            Assert.IsInstanceOf(typeof(SwedishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Icelandic;
+            Assert.IsInstanceOf(typeof(IcelandCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Russian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Ukrainian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
         }
 
         [Test]
@@ -734,6 +759,8 @@ namespace GKTests.GKCore
             GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord otherRec = this.fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
 
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchKinshipsGraph(this.fContext, null); });
+
             using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(this.fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
 
@@ -798,7 +825,6 @@ namespace GKTests.GKCore
         [Test]
         public void Lists_Tests()
         {
-            //
             ColumnProps colProps = new ColumnProps();
             Assert.IsNotNull(colProps);
 
@@ -861,9 +887,18 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*";
             listManager.AddCondition(GroupColumnType.gctName, ConditionKind.ck_Contains, "*roup*");
             Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+        }
 
-            //
-            listManager = new CommunicationListMan(this.fContext.Tree);
+        [Test]
+        public void LM_Tests()
+        {
+            
+        }
+
+        [Test]
+        public void LMCommunication_Tests()
+        {
+            var listManager = new CommunicationListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(CommunicationColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -880,12 +915,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new FamilyListMan(this.fContext.Tree);
+        [Test]
+        public void LMFamily_Tests()
+        {
+            var listManager = new FamilyListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(FamilyColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -899,12 +938,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new IndividualListMan(this.fContext.Tree);
+        [Test]
+        public void LMIndividual_Tests()
+        {
+            var listManager = new IndividualListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(PersonColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -923,9 +966,11 @@ namespace GKTests.GKCore
             listManager.InitFilter();
             listManager.ExternalFilter = ExtFilterHandler;
 
+            var lvMock = new ListViewMock();
+
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
@@ -937,9 +982,12 @@ namespace GKTests.GKCore
             listManager.UpdateColumns(lvMock, true);
             listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new LocationListMan(this.fContext.Tree);
+        [Test]
+        public void LMLocation_Tests()
+        {
+            var listManager = new LocationListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(LocationColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -953,12 +1001,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new MultimediaListMan(this.fContext.Tree);
+        [Test]
+        public void LMMultimedia_Tests()
+        {
+            var listManager = new MultimediaListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(MultimediaColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -972,12 +1024,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new NoteListMan(this.fContext.Tree);
+        [Test]
+        public void LMNote_Tests()
+        {
+            var listManager = new NoteListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(NoteColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -992,14 +1048,18 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
             noteRec.Clear();
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new RepositoryListMan(this.fContext.Tree);
+        [Test]
+        public void LMRepository_Tests()
+        {
+            var listManager = new RepositoryListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(RepositoryColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1013,12 +1073,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new ResearchListMan(this.fContext.Tree);
+        [Test]
+        public void LMResearch_Tests()
+        {
+            var listManager = new ResearchListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(ResearchColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1032,12 +1096,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new SourceListMan(this.fContext.Tree);
+        [Test]
+        public void LMSource_Tests()
+        {
+            var listManager = new SourceListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(SourceColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1051,12 +1119,16 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
+        }
 
-            //
-            listManager = new TaskListMan(this.fContext.Tree);
+        [Test]
+        public void LMTask_Tests()
+        {
+            var listManager = new TaskListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(TaskColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1070,8 +1142,9 @@ namespace GKTests.GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
 
+            var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(listItem, true);
         }
 
@@ -1374,6 +1447,9 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
+            //string filename = GKUtils.GetTempDir() + "test.gvf";
+            //if (File.Exists(filename)) File.Delete(filename); // for local tests!
+            //TreeTools.GenPatriarchsGraphviz(baseWin, filename, 0, false);
 
             //
 
@@ -1397,11 +1473,14 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
+            List<GEDCOMRecord> splitList = new List<GEDCOMRecord>();
+            splitList.Add(iRec);
+            TreeTools.CheckRelations(splitList);
 
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null); });
-            //TreeTools.GetUnlinkedNamesakes(baseWin);
+            List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(baseWin);
 
             //
 
@@ -1417,6 +1496,8 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext, null, null); });
 
             //
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch_Clear(null); });
 
             StringList placesList = new StringList();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(null, null, null); });

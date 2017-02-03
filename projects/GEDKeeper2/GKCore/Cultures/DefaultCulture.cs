@@ -29,7 +29,7 @@ namespace GKCore.Cultures
     /// </summary>
     public abstract class DefaultCulture : ICulture
     {
-        public DefaultCulture()
+        protected DefaultCulture()
         {
         }
 

@@ -1,3 +1,17 @@
+# Common requirements
+
+Platform for all projects should be strictly .NET 3.0 - to ensure maximum coverage of users,
+without forcing inexperienced or conservative to do the platform upgrade on both old
+and not updated versions of Windows. The exception is the sub-project GKTests, which allowed
+more high platform.
+
+Using Linq in the project is prohibited.
+
+On the levels of implementation below the UI is not advisable to use the foreach operator.
+
+Features available in only one specific platform (Windows/Linux) and unavailable to another,
+can be developed only in agreement with the project's lead.
+
 # C# Coding Standards and Naming Conventions
 
 ## Namespace
@@ -9,7 +23,7 @@ However, are allowed capitalized acronyms (`MyXMLNamespace`).
 ## Assemblies
 
 If an assembly contains only one namespace, they should use the same name. 
-Otherwise, Assemblies should follow the normal Pascal Case format.
+Otherwise, assemblies should follow the normal Pascal Case format.
 
 ## Classes and Structures
 

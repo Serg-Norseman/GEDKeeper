@@ -1736,10 +1736,10 @@ namespace GKCommon.GEDCOM
         {
             if (famRec == null) return;
 
-            int num = famRec.Childrens.Count;
+            int num = famRec.Children.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)famRec.Childrens[i].Value;
+                GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)famRec.Children[i].Value;
                 child.DeleteChildToFamilyLink(famRec);
             }
 

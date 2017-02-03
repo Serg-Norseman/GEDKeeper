@@ -117,7 +117,7 @@ Family
 Husband
 Wife
 Status
-Childs
+Children
 Are you sure you want to detach link to husband?
 Are you sure you want to detach link to wife?
 Are you sure you want to detach link to child?
@@ -148,7 +148,7 @@ Are you sure you want to detach link to repository?
 Store type
 File
 View
-Extension mode is not enabled for selected store type
+Fragment {0}: {1} person(s)
 Father
 Mother
 Parents

@@ -488,11 +488,11 @@ namespace GKCore
             rec.Sex = sex;
         }
 
-        public object gt_create_person(string name, string patronymic, string family, string strSex)
+        public object gt_create_person(string name, string patronymic, string surname, string strSex)
         {
             GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
 
-            GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, family, sex, false);
+            GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, surname, sex, false);
             return iRec;
         }
 
@@ -645,18 +645,20 @@ namespace GKCore
         public int gt_get_family_childs_count(object recPtr)
         {
             GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
-            return (fam == null) ? -1 : fam.Childrens.Count;
+            return (fam == null) ? -1 : fam.Children.Count;
         }
 
         public object gt_get_family_child(object recPtr, int childIndex)
         {
             GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
-            return (fam == null) ? null : fam.Childrens[childIndex].Value;
+            return (fam == null) ? null : fam.Children[childIndex].Value;
         }
 
         public int gt_get_location_usages(object recPtr)
         {
             GEDCOMLocationRecord loc = recPtr as GEDCOMLocationRecord;
+            if (loc == null) return -1;
+
             int usages;
 
             StringList linkList = new StringList();

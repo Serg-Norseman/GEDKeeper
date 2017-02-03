@@ -26,7 +26,7 @@ using System.Xml;
 
 namespace GKCore.Geocoding
 {
-    public class YandexGeocoder : IGeocoder
+    public sealed class YandexGeocoder : IGeocoder
     {
         private const string REQUEST_URL = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&results={1}&lang={2}";
         //const string REQUEST_URL = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&lang={2}";
@@ -67,7 +67,7 @@ namespace GKCore.Geocoding
                         //var boundsNode = node.SelectSingleNode("opengis:boundedBy/opengis:Envelope", ns);
                         var metaNode = node.SelectSingleNode("opengis:metaDataProperty/geocoder:GeocoderMetaData", ns);
 
-                        string[] splitted = pointNode.InnerText.Split(new char[] { ' ' }, count: 2);
+                        string[] splitted = pointNode.InnerText.Split(new char[] { ' ' }, 2);
                         double lng = double.Parse(splitted[0], CultureInfo.InvariantCulture);
                         double lat = double.Parse(splitted[1], CultureInfo.InvariantCulture);
                         string ptHint = (metaNode == null) ? string.Empty : metaNode["text"].InnerText;

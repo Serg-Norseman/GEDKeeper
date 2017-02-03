@@ -32,66 +32,66 @@ namespace GKCore
 
         public SearchResult(GEDCOMObject result)
         {
-            this.Result = result;
+            Result = result;
         }
     }
 
     public class BaseSearchStrategy : ISearchStrategy
     {
-        private readonly string searchPattern;
-        private readonly IWorkWindow workWindow;
+        private readonly string fSearchPattern;
+        private readonly IWorkWindow fWorkWindow;
 
-        private IList<ISearchResult> currentResults;
-        private ISearchResult curResult;
+        private IList<ISearchResult> fCurrentResults;
+        private ISearchResult fCurResult;
 
         public BaseSearchStrategy(IWorkWindow workWindow, string searchPattern)
         {
             if (searchPattern == null)
                 throw new ArgumentNullException("searchPattern");
 
-            this.searchPattern = searchPattern;
-            this.workWindow = workWindow;
-            this.currentResults = this.FindAll();
+            fSearchPattern = searchPattern;
+            fWorkWindow = workWindow;
+            fCurrentResults = FindAll();
         }
 
         public IList<ISearchResult> FindAll()
         {
-            return this.workWindow.FindAll(this.searchPattern);
+            return fWorkWindow.FindAll(fSearchPattern);
         }
 
         public bool HasResults()
         {
-            return (currentResults != null && currentResults.Count > 0);
+            return (fCurrentResults != null && fCurrentResults.Count > 0);
         }
 
         public ISearchResult FindNext()
         {
-            if (curResult == null) {
-                if (currentResults == null) currentResults = this.FindAll();
+            if (fCurResult == null) {
+                if (fCurrentResults == null) fCurrentResults = FindAll();
 
-                curResult = SysUtils.FirstOrDefault(currentResults);
+                fCurResult = SysUtils.FirstOrDefault(fCurrentResults);
             } else {
-                int idx = currentResults.IndexOf(curResult) + 1;
+                int idx = fCurrentResults.IndexOf(fCurResult) + 1;
 
-                curResult = (idx < currentResults.Count) ? currentResults[idx] : null;
+                fCurResult = (idx < fCurrentResults.Count) ? fCurrentResults[idx] : null;
             }
 
-            return curResult;
+            return fCurResult;
         }
 
         public ISearchResult FindPrev()
         {
-            if (curResult == null) {
-                if (currentResults == null) currentResults = this.FindAll();
+            if (fCurResult == null) {
+                if (fCurrentResults == null) fCurrentResults = FindAll();
 
-                curResult = SysUtils.LastOrDefault(currentResults);
+                fCurResult = SysUtils.LastOrDefault(fCurrentResults);
             } else {
-                int idx = currentResults.IndexOf(curResult) - 1;
+                int idx = fCurrentResults.IndexOf(fCurResult) - 1;
 
-                curResult = (idx >= 0) ? currentResults[idx] : null;
+                fCurResult = (idx >= 0) ? fCurrentResults[idx] : null;
             }
 
-            return curResult;
+            return fCurResult;
         }
     }
 }

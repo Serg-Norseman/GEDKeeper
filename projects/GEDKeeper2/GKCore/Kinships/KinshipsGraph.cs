@@ -24,7 +24,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Kinships
@@ -41,37 +40,37 @@ namespace GKCore.Kinships
 
         public KinshipsGraph(IBaseContext context)
         {
-            this.fContext = context;
-            this.fGraph = new Graph();
+            fContext = context;
+            fGraph = new Graph();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fGraph.Dispose();
+                fGraph.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public bool IsEmpty()
         {
-            return this.fGraph.IsEmpty();
+            return fGraph.IsEmpty();
         }
 
         public void Clear()
         {
-            this.fGraph.Clear();
+            fGraph.Clear();
         }
 
         public IVertex AddIndividual(GEDCOMIndividualRecord iRec)
         {
-            return (iRec == null) ? null : this.fGraph.AddVertex(iRec.XRef, iRec);
+            return (iRec == null) ? null : fGraph.AddVertex(iRec.XRef, iRec);
         }
 
         public IVertex FindVertex(string sign)
         {
-            return this.fGraph.FindVertex(sign);
+            return fGraph.FindVertex(sign);
         }
 
         /// <summary>
@@ -84,27 +83,27 @@ namespace GKCore.Kinships
         /// <returns></returns>
         public bool AddRelation(IVertex source, IVertex target, RelationKind tsRel, RelationKind stRel)
         {
-            return this.fGraph.AddUndirectedEdge(source, target, 1, (int)tsRel, (int)stRel);
+            return fGraph.AddUndirectedEdge(source, target, 1, (int)tsRel, (int)stRel);
         }
 
         public void SetTreeRoot(GEDCOMIndividualRecord rootRec)
         {
             if (rootRec == null) return;
-            IVertex root = this.fGraph.FindVertex(rootRec.XRef);
+            IVertex root = fGraph.FindVertex(rootRec.XRef);
             if (root == null) return;
 
-            this.fGraph.FindPathTree(root);
+            fGraph.FindPathTree(root);
         }
 
         public string GetRelationship(GEDCOMIndividualRecord targetRec, bool fullFormat = false)
         {
             if (targetRec == null) return "???";
-            IVertex target = this.fGraph.FindVertex(targetRec.XRef);
+            IVertex target = fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";
 
             try
             {
-                IEnumerable<IEdge> edgesPath = this.fGraph.GetPath(target);
+                IEnumerable<IEdge> edgesPath = fGraph.GetPath(target);
 
                 string tmp = "";
                 RelationKind prevRel = RelationKind.rkNone;
@@ -175,16 +174,15 @@ namespace GKCore.Kinships
 
         private string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
         {
-            if (ind1 == null || ind2 == null) {
+            if (ind1 == null || ind2 == null)
                 return "???";
-            } else {
-                string rel = FixRelation(ind2, xrel, great);
-                string name1 = GKUtils.GetNameString(ind1, true, false);
-                string name2 = GKUtils.GetNameString(ind2, true, false);
 
-                rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
-                return name2 + " " + rel + " " + fContext.Culture.GetPossessiveName(name1);
-            }
+            string rel = FixRelation(ind2, xrel, great);
+            string name1 = GKUtils.GetNameString(ind1, true, false);
+            string name2 = GKUtils.GetNameString(ind2, true, false);
+
+            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
+            return name2 + " " + rel + " " + fContext.Culture.GetPossessiveName(name1);
         }
 
         private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)

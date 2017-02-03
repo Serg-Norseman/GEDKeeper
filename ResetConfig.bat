@@ -26,4 +26,3 @@ echo Fail deleting config file.
 echo.
 
 :END
-pause

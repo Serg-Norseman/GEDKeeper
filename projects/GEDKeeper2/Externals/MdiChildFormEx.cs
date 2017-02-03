@@ -35,13 +35,13 @@ namespace Externals
             base.WndProc(ref m);
 
             if (this.WindowState != prevState)
-                this.OnFormWindowStateChanged(prevState, this.WindowState);
+                OnFormWindowStateChanged(prevState, this.WindowState);
         }
 
         protected virtual void OnFormWindowStateChanged(FormWindowState oldState, FormWindowState newState)
         {
             if (oldState == FormWindowState.Maximized && newState == FormWindowState.Normal) {
-                this.AdjustMdiChild();
+                AdjustMdiChild();
             }
         }
 
@@ -68,7 +68,7 @@ namespace Externals
 
             Rectangle formRect = this.Bounds;
             formRect.Intersect(client.ClientRectangle);
-            this.SetBounds(formRect.Left, formRect.Top, formRect.Width, formRect.Height, BoundsSpecified.All);
+            SetBounds(formRect.Left, formRect.Top, formRect.Width, formRect.Height, BoundsSpecified.All);
         }
     }
 }

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Options;
 
 namespace GKCore.Stats
 {

@@ -85,24 +85,24 @@ namespace GKUI.Charts
 
         public Bitmap Portrait
         {
-            get { return this.fPortrait; }
+            get { return fPortrait; }
         }
 
         public int PortraitWidth
         {
-            get { return this.fPortraitWidth; }
+            get { return fPortraitWidth; }
         }
 
         public bool Divorced
         {
             get {
-                return this.fFlags.Contains(PersonFlag.pfDivorced);
+                return fFlags.Contains(PersonFlag.pfDivorced);
             }
             set {
                 if (value) {
-                    this.fFlags.Include(PersonFlag.pfDivorced);
+                    fFlags.Include(PersonFlag.pfDivorced);
                 } else {
-                    this.fFlags.Exclude(PersonFlag.pfDivorced);
+                    fFlags.Exclude(PersonFlag.pfDivorced);
                 }
             }
         }
@@ -110,61 +110,61 @@ namespace GKUI.Charts
         public bool IsDup
         {
             get {
-                return this.fFlags.Contains(PersonFlag.pfIsDup);
+                return fFlags.Contains(PersonFlag.pfIsDup);
             }
             set {
                 if (value) {
-                    this.fFlags.Include(PersonFlag.pfIsDup);
+                    fFlags.Include(PersonFlag.pfIsDup);
                 } else {
-                    this.fFlags.Exclude(PersonFlag.pfIsDup);
+                    fFlags.Exclude(PersonFlag.pfIsDup);
                 }
             }
         }
 
         public int Height
         {
-            get { return this.fHeight; }
+            get { return fHeight; }
         }
 
         public bool IsDead
         {
             get {
-                return this.fFlags.Contains(PersonFlag.pfIsDead);
+                return fFlags.Contains(PersonFlag.pfIsDead);
             }
             set {
                 if (value) {
-                    this.fFlags.Include(PersonFlag.pfIsDead);
+                    fFlags.Include(PersonFlag.pfIsDead);
                 } else {
-                    this.fFlags.Exclude(PersonFlag.pfIsDead);
+                    fFlags.Exclude(PersonFlag.pfIsDead);
                 }
             }
         }
 
         public int PtX
         {
-            get { return this.fPtX; }
-            set { this.fPtX = value; }
+            get { return fPtX; }
+            set { fPtX = value; }
         }
 
         public int PtY
         {
-            get { return this.fPtY; }
-            set { this.fPtY = value; }
+            get { return fPtY; }
+            set { fPtY = value; }
         }
 
         public GEDCOMIndividualRecord Rec
         {
-            get { return this.fRec; }
+            get { return fRec; }
         }
 
         public ExtRect Rect
         {
             get {
                 ExtRect result;
-                result.Left = this.fPtX - this.fWidth / 2;
-                result.Right = result.Left + this.fWidth - 1;
-                result.Top = this.fPtY;
-                result.Bottom = result.Top + this.fHeight - 1;
+                result.Left = fPtX - fWidth / 2;
+                result.Right = result.Left + fWidth - 1;
+                result.Top = fPtY;
+                result.Bottom = result.Top + fHeight - 1;
                 return result;
             }
         }
@@ -172,84 +172,84 @@ namespace GKUI.Charts
         public bool Selected
         {
             get {
-                return this.fFlags.Contains(PersonFlag.pfSelected);
+                return fFlags.Contains(PersonFlag.pfSelected);
             }
             set {
                 if (value) {
-                    this.fFlags.Include(PersonFlag.pfSelected);
+                    fFlags.Include(PersonFlag.pfSelected);
                 } else {
-                    this.fFlags.Exclude(PersonFlag.pfSelected);
+                    fFlags.Exclude(PersonFlag.pfSelected);
                 }
             }
         }
 
         public GEDCOMSex Sex
         {
-            get { return this.fSex; }
-            set { this.fSex = value; }
+            get { return fSex; }
+            set { fSex = value; }
         }
 
         public EnumSet<SpecialUserRef> Signs
         {
-            get { return this.fSigns; }
+            get { return fSigns; }
         }
 
         public int Width
         {
-            get { return this.fWidth; }
+            get { return fWidth; }
         }
 
         public TreeChartPerson(TreeChartBox chart)
         {
-            this.fChart = chart;
+            fChart = chart;
 
-            this.fFlags = EnumSet<PersonFlag>.Create();
-            this.fPortrait = null;
-            this.fSpouses = null;
-            this.fChilds = null;
+            fFlags = EnumSet<PersonFlag>.Create();
+            fPortrait = null;
+            fSpouses = null;
+            fChilds = null;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (this.fPortrait != null) this.fPortrait.Dispose();
-                if (this.fChilds != null) this.fChilds.Dispose();
-                if (this.fSpouses != null) this.fSpouses.Dispose();
+                if (fPortrait != null) fPortrait.Dispose();
+                if (fChilds != null) fChilds.Dispose();
+                if (fSpouses != null) fSpouses.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public bool HasFlag(PersonFlag flag)
         {
-            return this.fFlags.Contains(flag);
+            return fFlags.Contains(flag);
         }
 
         public void SetFlag(PersonFlag flag)
         {
-            this.fFlags.Include(flag);
+            fFlags.Include(flag);
         }
 
         public TreeChartPerson GetChild(int index)
         {
-            TreeChartPerson result = ((this.fChilds == null) ? null : this.fChilds[index]);
+            TreeChartPerson result = ((fChilds == null) ? null : fChilds[index]);
             return result;
         }
 
         public int GetChildsCount()
         {
-            int result = ((this.fChilds == null) ? 0 : this.fChilds.Count);
+            int result = ((fChilds == null) ? 0 : fChilds.Count);
             return result;
         }
 
         public TreeChartPerson GetSpouse(int index)
         {
-            TreeChartPerson result = ((this.fSpouses == null) ? null : this.fSpouses[index]);
+            TreeChartPerson result = ((fSpouses == null) ? null : fSpouses[index]);
             return result;
         }
 
         public int GetSpousesCount()
         {
-            int result = ((this.fSpouses == null) ? 0 : this.fSpouses.Count);
+            int result = ((fSpouses == null) ? 0 : fSpouses.Count);
             return result;
         }
 
@@ -257,75 +257,71 @@ namespace GKUI.Charts
         {
             if (child == null) return;
 
-            if (this.fChilds == null) this.fChilds = new PersonList(false);
+            if (fChilds == null) fChilds = new PersonList(false);
 
-            this.fChilds.Add(child);
+            fChilds.Add(child);
         }
 
         public void AddSpouse(TreeChartPerson spouse)
         {
             if (spouse == null) return;
 
-            if (this.fSpouses == null) this.fSpouses = new PersonList(false);
+            if (fSpouses == null) fSpouses = new PersonList(false);
 
-            this.fSpouses.Add(spouse);
+            fSpouses.Add(spouse);
         }
 
         public void BuildBy(GEDCOMIndividualRecord iRec, ref bool hasMediaFail)
         {
             try
             {
-                this.fRec = iRec;
+                fRec = iRec;
 
                 if (iRec != null) {
-                    if (this.fChart.fPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
-                        this.fChart.fPreparedIndividuals.Add(iRec.XRef);
+                    if (fChart.fPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+                        fChart.fPreparedIndividuals.Add(iRec.XRef);
                     }
 
                     string fam, nam, pat;
                     GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-                    this.fSurname = fam;
-                    this.fName = nam;
-                    this.fPatronymic = pat;
-                    this.fNick = GKUtils.GetNickString(iRec);
-                    this.fSex = iRec.Sex;
+                    fSurname = fam;
+                    fName = nam;
+                    fPatronymic = pat;
+                    fNick = GKUtils.GetNickString(iRec);
+                    fSex = iRec.Sex;
 
                     GEDCOMCustomEvent birthEvent, deathEvent;
                     iRec.GetLifeDates(out birthEvent, out deathEvent);
-                    DateFormat dateFormat = (this.fChart.Options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                    DateFormat dateFormat = (fChart.Options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
 
-                    this.IsDead = (deathEvent != null);
-                    this.fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, false);
-                    this.fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, false);
+                    IsDead = (deathEvent != null);
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, false);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, false);
 
-                    if (this.fChart.Options.SignsVisible) {
+                    if (fChart.Options.SignsVisible) {
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
 
-                        int num = this.fRec.UserReferences.Count;
+                        int num = fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++)
                         {
-                            string rs = this.fRec.UserReferences[i].StringValue;
-                            for (SpecialUserRef cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
+                            string rs = fRec.UserReferences[i].StringValue;
+                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
                             {
                                 if (rs == GKData.SpecialUserRefs[(int)cps]) signs.Include(cps);
                             }
                         }
 
-                        this.fSigns = signs;
+                        fSigns = signs;
                     } else {
-                        this.fSigns = EnumSet<SpecialUserRef>.Create();
+                        fSigns = EnumSet<SpecialUserRef>.Create();
                     }
 
-                    if (this.fChart.Options.PortraitsVisible) {
+                    if (fChart.Options.PortraitsVisible) {
                         try
                         {
-                            this.fPortrait = this.fChart.Base.Context.GetPrimaryBitmap(iRec, -1, -1, true);
-                            if (this.fPortrait == null && this.fChart.Options.DefaultPortraits) {
-                                if (this.fSex == GEDCOMSex.svFemale) {
-                                    this.fPortrait = GKResources.piFemale140;
-                                } else {
-                                    this.fPortrait = GKResources.piMale140;
-                                }
+                            fPortrait = fChart.Base.Context.GetPrimaryBitmap(iRec, -1, -1, true);
+                            if (fPortrait == null && fChart.Options.DefaultPortraits) {
+                                fPortrait = (fSex == GEDCOMSex.svFemale) ? GKResources.piFemale140 : GKResources.piMale140;
                             }
                         }
                         catch (MediaFileNotFoundException)
@@ -337,138 +333,135 @@ namespace GKUI.Charts
                         }
                     }
 
-                    this.CertaintyAssessment = iRec.GetCertaintyAssessment();
+                    CertaintyAssessment = iRec.GetCertaintyAssessment();
                 } else {
-                    this.fSurname = "";
-                    this.fName = "< ? >";
-                    this.fPatronymic = "";
-                    this.fNick = "";
-                    this.fBirthDate = "";
-                    this.fDeathDate = "";
-                    this.IsDead = false;
-                    this.fSex = GEDCOMSex.svNone;
-                    this.fSigns = EnumSet<SpecialUserRef>.Create();
+                    fSurname = "";
+                    fName = "< ? >";
+                    fPatronymic = "";
+                    fNick = "";
+                    fBirthDate = "";
+                    fDeathDate = "";
+                    IsDead = false;
+                    fSex = GEDCOMSex.svNone;
+                    fSigns = EnumSet<SpecialUserRef>.Create();
 
-                    this.CertaintyAssessment = 0.0f;
+                    CertaintyAssessment = 0.0f;
                 }
             }
             catch (Exception ex)
             {
-                this.fChart.Base.Host.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
+                fChart.Base.Host.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
                 throw;
             }
         }
 
         private void InitInfo(int lines)
         {
-            this.Lines = new string[lines];
+            Lines = new string[lines];
 
             try
             {
                 // prepare
-                string nameLine = this.fName;
-                if (this.fChart.Options.NickVisible && !string.IsNullOrEmpty(this.fNick)) {
-                    nameLine += " \"" + this.fNick + "\"";
+                string nameLine = fName;
+                if (fChart.Options.NickVisible && !string.IsNullOrEmpty(fNick)) {
+                    nameLine += " \"" + fNick + "\"";
                 }
 
                 // create lines
                 int idx = 0;
 
-                if (this.fChart.Options.FamilyVisible) {
-                    this.Lines[idx] = this.fSurname;
+                if (fChart.Options.FamilyVisible) {
+                    Lines[idx] = fSurname;
                     idx++;
                 }
 
-                if (!this.fChart.Options.DiffLines) {
-                    this.Lines[idx] = nameLine + " " + this.fPatronymic; // attention: "Name" is combined property
+                if (!fChart.Options.DiffLines) {
+                    Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
                     idx++;
                 } else {
-                    this.Lines[idx] = nameLine;
+                    Lines[idx] = nameLine;
                     idx++;
 
-                    this.Lines[idx] = this.fPatronymic;
+                    Lines[idx] = fPatronymic;
                     idx++;
                 }
 
-                if (!this.fChart.Options.OnlyYears) {
-                    if (this.fChart.Options.BirthDateVisible) {
-                        this.Lines[idx] = this.fBirthDate;
+                if (!fChart.Options.OnlyYears) {
+                    if (fChart.Options.BirthDateVisible) {
+                        Lines[idx] = fBirthDate;
                         idx++;
                     }
 
-                    if (this.fChart.Options.DeathDateVisible) {
-                        this.Lines[idx] = this.fDeathDate;
+                    if (fChart.Options.DeathDateVisible) {
+                        Lines[idx] = fDeathDate;
                         idx++;
                     }
                 } else {
                     string lifeYears = "[ ";
-                    lifeYears += (this.fBirthDate == "") ? "?" : this.fBirthDate;
-                    if (this.IsDead) {
-                        lifeYears += (this.fDeathDate == "") ? " - ?" : " - " + this.fDeathDate;
+                    lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
+                    if (IsDead) {
+                        lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
                     }
                     lifeYears += " ]";
 
-                    this.Lines[idx] = lifeYears;
+                    Lines[idx] = lifeYears;
                     idx++;
                 }
 
-                if (this.fChart.Options.Kinship) {
-                    this.Lines[idx] = this.Kinship;
+                if (fChart.Options.Kinship) {
+                    Lines[idx] = Kinship;
                     idx++;
                 }
 
-                if (this.fChart.PathDebug) {
-                    this.Lines[idx] = this.PathDebug;
+                if (fChart.PathDebug) {
+                    Lines[idx] = PathDebug;
                     //idx++;
                 }
             }
             catch (Exception ex)
             {
-                this.fChart.Base.Host.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
+                fChart.Base.Host.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
 
         private void DefineExpands()
         {
-            if (this.fFlags.Contains(PersonFlag.pfAncWalk) && this.fFlags.Contains(PersonFlag.pfDescWalk)
-                && this.fFlags.Contains(PersonFlag.pfHasInvDesc))
+            if (fFlags.Contains(PersonFlag.pfAncWalk) && fFlags.Contains(PersonFlag.pfDescWalk)
+                && fFlags.Contains(PersonFlag.pfHasInvDesc))
             {
                 // it's hack
-                this.fFlags.Exclude(PersonFlag.pfHasInvDesc);
+                fFlags.Exclude(PersonFlag.pfHasInvDesc);
             }
 
-            if (this.fFlags.Contains(PersonFlag.pfHasInvAnc)) {
-                this.CanExpand = true;
+            if (fFlags.Contains(PersonFlag.pfHasInvAnc)) {
+                CanExpand = true;
             }
 
-            if (this.fFlags.Contains(PersonFlag.pfHasInvDesc)) {
-                this.CanExpand = true;
+            if (fFlags.Contains(PersonFlag.pfHasInvDesc)) {
+                CanExpand = true;
             }
         }
 
-        private int TextWidth(Graphics gfx, string st)
-        {
-            return gfx.MeasureString(st, this.fChart.DrawFont).ToSize().Width;
-        }
-
-        public void CalcBounds(int lines, Graphics gfx)
+        public void CalcBounds(int lines, TreeChartRenderer renderer)
         {
             try
             {
-                this.InitInfo(lines);
-                this.DefineExpands();
+                InitInfo(lines);
+                DefineExpands();
 
                 int maxwid = 0;
                 for (int k = 0; k < lines; k++) {
-                    int wt = this.TextWidth(gfx, this.Lines[k]);
+                    int wt = renderer.GetTextWidth(Lines[k], fChart.DrawFont);
                     if (maxwid < wt) maxwid = wt;
                 }
 
-                this.fWidth = maxwid + 20;
-                this.fHeight = gfx.MeasureString("A", this.fChart.DrawFont).ToSize().Height * lines + 20;
+                int pad2side = (fChart.NodePadding * 2);
 
-                if (this.fPortrait != null) {
-                    ExtRect portRt = ExtRect.Create(0, 0, this.fHeight - 1, this.fHeight - 1);
+                fWidth = pad2side + maxwid;
+                fHeight = pad2side + renderer.GetTextHeight(fChart.DrawFont) * lines;
+
+                if (fPortrait != null) {
+                    ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);
                     portRt.Inflate(3, 3);
 
                     int rtW = portRt.GetWidth();
@@ -479,16 +472,66 @@ namespace GKUI.Charts
                     imgW = (int)Math.Round(imgW * ratio);
                     imgH = (int)Math.Round(imgH * ratio);
 
-                    this.PortraitArea = ExtRect.CreateBounds(portRt.Left, portRt.Top, imgW, imgH);
-                    this.fPortraitWidth = imgW;
+                    PortraitArea = ExtRect.CreateBounds(portRt.Left, portRt.Top, imgW, imgH);
+                    fPortraitWidth = imgW;
 
-                    this.fWidth += imgW;
+                    fWidth += imgW;
                 }
             }
             catch (Exception ex)
             {
-                this.fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
+                fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
+        }
+
+        public Color GetSelectedColor()
+        {
+            Color result;
+
+            switch (fSex) {
+                case GEDCOMSex.svMale:
+                    result = Color.Blue;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    result = Color.Red;
+                    break;
+
+                default:
+                    result = Color.Black;
+                    break;
+            }
+
+            return result;
+        }
+
+        public Color GetFillColor(bool dead)
+        {
+            Color result;
+
+            if (dead) {
+                result = Color.Black;
+            } else {
+                if (IsDup) {
+                    result = Color.FromArgb(192, 192, 192);
+                } else {
+                    switch (fSex) {
+                        case GEDCOMSex.svMale:
+                            result = this.Divorced ? fChart.Options.UnHusbandColor : fChart.Options.MaleColor;
+                            break;
+
+                        case GEDCOMSex.svFemale:
+                            result = this.Divorced ? fChart.Options.UnWifeColor : fChart.Options.FemaleColor;
+                            break;
+
+                        default:
+                            result = fChart.Options.UnkSexColor;
+                            break;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

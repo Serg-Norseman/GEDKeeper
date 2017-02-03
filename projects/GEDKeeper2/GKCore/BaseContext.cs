@@ -316,10 +316,10 @@ namespace GKCore
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -345,10 +345,10 @@ namespace GKCore
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0) {
@@ -368,11 +368,6 @@ namespace GKCore
         #endregion
 
         #region Patriarchs Search
-
-        private static int PatriarchsCompare(object item1, object item2)
-        {
-            return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
-        }
 
         public ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck)
         {
@@ -423,8 +418,6 @@ namespace GKCore
 
                     pctl.ProgressStep();
                 }
-
-                patList.QuickSort(PatriarchsCompare);
             }
             finally
             {
@@ -512,9 +505,9 @@ namespace GKCore
                     prevNode = node;
                 }
 
-                for (int k = 0, count2 = family.Childrens.Count; k < count2; k++)
+                for (int k = 0, count2 = family.Children.Count; k < count2; k++)
                 {
-                    GEDCOMIndividualRecord child = family.Childrens[k].Value as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord child = family.Children[k].Value as GEDCOMIndividualRecord;
                     PL_WalkDescLinks(graph, prevNode, child);
                 }
             }
@@ -1204,16 +1197,18 @@ namespace GKCore
 
         public void DoUndo()
         {
-            this.fUndoman.Undo();
-            this.fViewer.RefreshLists(false);
-            this.fHost.UpdateControls(false);
+            fUndoman.Undo();
+
+            if (fViewer != null) fViewer.RefreshLists(false);
+            if (fHost != null) fHost.UpdateControls(false);
         }
 
         public void DoRedo()
         {
-            this.fUndoman.Redo();
-            this.fViewer.RefreshLists(false);
-            this.fHost.UpdateControls(false);
+            fUndoman.Redo();
+
+            if (fViewer != null) fViewer.RefreshLists(false);
+            if (fHost != null) fHost.UpdateControls(false);
         }
 
         public void DoCommit()

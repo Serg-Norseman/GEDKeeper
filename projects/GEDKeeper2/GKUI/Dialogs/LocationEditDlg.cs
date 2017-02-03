@@ -156,7 +156,7 @@ namespace GKUI.Dialogs
             {
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
-                GKMapBrowser.RequestGeoCoords(this.txtName.Text, searchPoints);
+                MainWin.Instance.RequestGeoCoords(this.txtName.Text, searchPoints);
                 this.ListGeoCoords.Items.Clear();
                 this.fMapBrowser.ClearPoints();
 

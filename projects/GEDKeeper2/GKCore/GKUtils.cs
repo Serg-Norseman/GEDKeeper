@@ -197,6 +197,9 @@ namespace GKCore
                     case GEDCOMRecordType.rtFamily:
                         st = GetFamilyString((GEDCOMFamilyRecord)record);
                         break;
+                    case GEDCOMRecordType.rtNote:
+                        st = ((GEDCOMNoteRecord)record).Note[0]; // TODO: bad solution?!
+                        break;
                     case GEDCOMRecordType.rtMultimedia:
                         st = ((GEDCOMMultimediaRecord)record).FileReferences[0].Title;
                         break;
@@ -1086,10 +1089,10 @@ namespace GKCore
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                        int num2 = family.Childrens.Count;
+                        int num2 = family.Children.Count;
                         for (int j = 0; j < num2; j++)
                         {
-                            GEDCOMIndividualRecord iChild = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                            GEDCOMIndividualRecord iChild = family.Children[j].Value as GEDCOMIndividualRecord;
                             val += GetDescendantsCount(iChild);
                         }
                     }
@@ -1114,10 +1117,10 @@ namespace GKCore
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                    int num2 = family.Childrens.Count;
+                    int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord iChild = family.Childrens[j].Value as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord iChild = family.Children[j].Value as GEDCOMIndividualRecord;
                         int res = GetDescGens_Recursive(iChild);
                         if (max < res)
                         {
@@ -1189,10 +1192,10 @@ namespace GKCore
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                        int num2 = family.Childrens.Count;
+                        int num2 = family.Children.Count;
                         for (int j = 0; j < num2; j++)
                         {
-                            GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+                            GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
 
                             evt = child.FindEvent("BIRT");
                             if (evt != null)
@@ -1430,6 +1433,12 @@ namespace GKCore
         {
             string appPath = GetAppPath();
             return appPath + "backgrounds" + Path.DirectorySeparatorChar;
+        }
+
+        public static string GetHomePath()
+        {
+            string homePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            return homePath + Path.DirectorySeparatorChar;
         }
 
         #endregion
@@ -2015,15 +2024,15 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GetLifeStr(irec));
 
                         summary.Add("");
-                        if (familyRec.Childrens.Count != 0)
+                        if (familyRec.Children.Count != 0)
                         {
                             summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
                         }
 
-                        int num = familyRec.Childrens.Count;
+                        int num = familyRec.Children.Count;
                         for (int i = 0; i < num; i++)
                         {
-                            irec = (GEDCOMIndividualRecord)familyRec.Childrens[i].Value;
+                            irec = (GEDCOMIndividualRecord)familyRec.Children[i].Value;
                             
                             summary.Add("    " + HyperLink(irec.XRef, GKUtils.GetNameString(irec, true, false), 0) + GetLifeStr(irec));
                         }
@@ -2264,16 +2273,16 @@ namespace GKCore
                                         }
                                         summary.Add(st);
                                         
-                                        if (family.Childrens.Count != 0)
+                                        if (family.Children.Count != 0)
                                         {
                                             summary.Add("");
                                             summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
                                         }
 
-                                        int num2 = family.Childrens.Count;
+                                        int num2 = family.Children.Count;
                                         for (int k = 0; k < num2; k++)
                                         {
-                                            relPerson = (GEDCOMIndividualRecord)family.Childrens[k].Value;
+                                            relPerson = (GEDCOMIndividualRecord)family.Children[k].Value;
                                             
                                             summary.Add("    " + HyperLink(relPerson.XRef, GKUtils.GetNameString(relPerson, true, false), 0) + GetLifeStr(relPerson));
                                         }

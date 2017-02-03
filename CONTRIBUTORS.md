@@ -1,6 +1,6 @@
 ﻿## GEDKeeper contributors
 
-* **[Serg V. Zhdanovskih](https://github.com/serg-norseman)**
+* **[Sergey Zhdanovskih](https://github.com/serg-norseman)**
 
   * Lead developer, maintainer
 
@@ -10,6 +10,11 @@
   * UDN format and sorter
   * Makefiles
   * Debugging and bug reports
+
+* **[Igor Tyulyakov](https://github.com/g10101k)**
+
+  * Debugging and bug reports
+  * Improvement of UI features
 
 
 ## External components

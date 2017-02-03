@@ -66,18 +66,14 @@ namespace GKUI.Dialogs
             this.lstLanguages.Items.Clear();
             this.lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
-            //int idx = 0;
+            int idx = 0;
             int num = GlobalOptions.Instance.GetLangsCount();
             for (int i = 0; i < num; i++)
             {
                 LangRecord lngRec = GlobalOptions.Instance.GetLang(i);
-                //if (GlobalOptions.Instance.InterfaceLang == lngRec.Code)
-                //{
-                //    idx = i + 1;
-                //}
                 this.lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            //this.lstLanguages.SelectedIndex = idx;
+            this.lstLanguages.SelectedIndex = idx;
         }
     }
 }

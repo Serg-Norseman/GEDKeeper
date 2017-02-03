@@ -282,6 +282,16 @@ namespace GKUI
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12) {
+            #if __MonoCS__
+            this.ShowWarning(@"This function is not supported in Linux");
+            #else
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (TreesAlbumExporter fb = new TreesAlbumExporter(curBase)) {
+                fb.Generate(true);
+            }
+            #endif
             }
         }
 
@@ -498,6 +508,26 @@ namespace GKUI
             return form.ShowDialog();
         }
 
+        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+                throw new ArgumentNullException("searchValue");
+
+            if (pointsList == null)
+                throw new ArgumentNullException("pointsList");
+
+            try
+            {
+                IEnumerable<GeoPoint> geoPoints = Geocoder.Geocode(searchValue, 1);
+                foreach (GeoPoint pt in geoPoints)
+                {
+                    pointsList.Add(pt);
+                }
+            } catch (Exception ex) {
+                LogWrite("MainWin.RequestGeoCoords(): " + ex.Message);
+            }
+        }
+
         #endregion
 
         #region MRU functions
@@ -614,7 +644,7 @@ namespace GKUI
                 this.miFilter.Enabled = (workWin != null && workWin.AllowFilter());
                 this.tbFilter.Enabled = this.miFilter.Enabled;
 
-                this.miSearch.Enabled = (workWin != null && workWin.AllowQuickFind());
+                this.miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
 
                 this.tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
                 this.tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
@@ -755,19 +785,17 @@ namespace GKUI
         private void miUndoClick(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile();
-            if (curBase != null)
-            {
-                curBase.Context.DoUndo();
-            }
+            if (curBase == null) return;
+
+            curBase.Context.DoUndo();
         }
 
         private void miRedoClick(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile();
-            if (curBase != null)
-            {
-                curBase.Context.DoRedo();
-            }
+            if (curBase == null) return;
+
+            curBase.Context.DoRedo();
         }
 
         private void miExportToFamilyBookClick(object sender, EventArgs e)
@@ -884,11 +912,39 @@ namespace GKUI
             this.CreateBase("");
         }
 
+        public string GetUserFilesPath(string filePath)
+        {
+            string ufPath = filePath;
+            if (!Directory.Exists(ufPath)) {
+                ufPath = this.fOptions.LastDir;
+                if (!Directory.Exists(ufPath)) {
+                    ufPath = GKUtils.GetHomePath();
+                }
+            }
+
+            return ufPath;
+        }
+
         private void miFileLoadClick(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", this.fOptions.LastDir, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string homePath = GetUserFilesPath("");
+
+            string fileName = UIHelper.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 this.CreateBase(fileName);
+            }
+        }
+
+        private void miFileSaveAs_Click(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile(true);
+            if (curBase == null) return;
+
+            string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
+
+            string fileName = UIHelper.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
+            if (!string.IsNullOrEmpty(fileName)) {
+                curBase.FileSave(fileName);
             }
         }
 
@@ -901,17 +957,6 @@ namespace GKUI
                 curBase.FileSave(curBase.Tree.FileName);
             } else {
                 this.miFileSaveAs_Click(sender, e);
-            }
-        }
-
-        private void miFileSaveAs_Click(object sender, EventArgs e)
-        {
-            IBaseWindow curBase = this.GetCurrentFile(true);
-            if (curBase == null) return;
-
-            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
-            if (!string.IsNullOrEmpty(fileName)) {
-                curBase.FileSave(fileName);
             }
         }
 
@@ -944,7 +989,7 @@ namespace GKUI
             IWorkWindow win = this.GetWorkWindow();
             if (win == null) return;
 
-            win.QuickFind();
+            win.QuickSearch();
         }
 
         private void miFilterClick(object sender, EventArgs e)
@@ -1462,7 +1507,7 @@ namespace GKUI
 
         public void ShowWarning(string msg)
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            GKUtils.ShowWarning(msg);
         }
 
         public ILangMan CreateLangMan(object sender)

@@ -568,7 +568,7 @@ namespace GKTreeVizPlugin
                     if (!alreadyPrepared)
                     {
                         // processing children of the current family
-                        foreach (GEDCOMPointer childPtr in famRec.Childrens)
+                        foreach (GEDCOMPointer childPtr in famRec.Children)
                         {
                             GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)childPtr.Value;
 

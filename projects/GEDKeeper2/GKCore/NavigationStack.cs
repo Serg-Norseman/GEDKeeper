@@ -35,32 +35,32 @@ namespace GKCore
 
         public bool Busy
         {
-            get { return this.fNavBusy; }
+            get { return fNavBusy; }
         }
 
         public object Current
         {
-            get { return this.fCurrent; }
-            set { this.SetCurrent(value); }
+            get { return fCurrent; }
+            set { SetCurrent(value); }
         }
 
         private void SetCurrent(object value)
         {
-            if (this.fCurrent == value) return;
+            if (fCurrent == value) return;
 
-            if (this.fCurrent != null)
+            if (fCurrent != null)
             {
-                this.fStackBackward.Push(this.fCurrent);
+                fStackBackward.Push(fCurrent);
             }
-            this.fCurrent = value;
-            this.fStackForward.Clear();
+            fCurrent = value;
+            fStackForward.Clear();
         }
 
         public NavigationStack()
         {
-            this.fStackBackward = new Stack();
-            this.fStackForward = new Stack();
-            this.fCurrent = null;
+            fStackBackward = new Stack();
+            fStackForward = new Stack();
+            fCurrent = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -75,49 +75,49 @@ namespace GKCore
 
         public object Back()
         {
-            if (this.fCurrent != null)
+            if (fCurrent != null)
             {
-                this.fStackForward.Push(this.fCurrent);
+                fStackForward.Push(fCurrent);
             }
-            this.fCurrent = (this.fStackBackward.Count > 0) ? this.fStackBackward.Pop() : null;
-            return this.fCurrent;
+            fCurrent = (fStackBackward.Count > 0) ? fStackBackward.Pop() : null;
+            return fCurrent;
         }
 
         public object Next()
         {
-            if (this.fCurrent != null)
+            if (fCurrent != null)
             {
-                this.fStackBackward.Push(this.fCurrent);
+                fStackBackward.Push(fCurrent);
             }
-            this.fCurrent = (this.fStackForward.Count > 0) ? this.fStackForward.Pop() : null;
-            return this.fCurrent;
+            fCurrent = (fStackForward.Count > 0) ? fStackForward.Pop() : null;
+            return fCurrent;
         }
 
         public void Clear()
         {
-            this.fStackBackward.Clear();
-            this.fStackForward.Clear();
-            this.fCurrent = null;
+            fStackBackward.Clear();
+            fStackForward.Clear();
+            fCurrent = null;
         }
 
         public void BeginNav()
         {
-            this.fNavBusy = true;
+            fNavBusy = true;
         }
 
         public void EndNav()
         {
-            this.fNavBusy = false;
+            fNavBusy = false;
         }
 
         public bool CanBackward()
         {
-            return this.fStackBackward.Count > 0;
+            return fStackBackward.Count > 0;
         }
 
         public bool CanForward()
         {
-            return this.fStackForward.Count > 0;
+            return fStackForward.Count > 0;
         }
     }
 }

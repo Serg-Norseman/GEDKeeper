@@ -416,9 +416,9 @@ namespace GKUI
             GEDCOMRecord rec = ((GKRecordsView) sender).GetSelectedRecord();
             if (rec != null)
             {
-                this.NavAdd(rec);
+                NavAdd(rec);
             }
-            this.ShowRecordInfo(rec);
+            ShowRecordInfo(rec);
         }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
@@ -1305,7 +1305,7 @@ namespace GKUI
             return this.fNavman.CanForward();
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return true;
         }
@@ -1347,15 +1347,15 @@ namespace GKUI
             this.SelectRecordByXRef(iRec.XRef);
         }
 
-        void IWorkWindow.QuickFind()
+        void IWorkWindow.QuickSearch()
         {
-            SearchPanel panel = new SearchPanel(this);
+            QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
             Rectangle client = this.ClientRectangle;
-            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
-            panel.Location = pt;
+            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            qsDlg.Location = pt;
 
-            panel.Show();
+            qsDlg.Show();
         }
 
         #endregion

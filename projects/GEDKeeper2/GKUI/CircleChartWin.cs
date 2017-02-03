@@ -20,8 +20,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -34,6 +37,8 @@ namespace GKUI
         private readonly CircleChart fCircleChart;
         private readonly IBaseWindow fBaseWin;
         private readonly CircleChartType fType;
+
+        private PrintDocument fPrintDoc;
 
         public IBaseWindow Base
         {
@@ -55,12 +60,15 @@ namespace GKUI
                 this.fCircleChart = new DescendantsCircle(this.fBaseWin);
             }
 
+            this.fCircleChart.Name = "fCircleChart";
             this.fCircleChart.Dock = DockStyle.Fill;
             this.fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             this.fCircleChart.RootChanged += CircleChartWin_RootChanged;
             this.fCircleChart.RootPerson = startPerson;
 
             this.Controls.Add(this.fCircleChart);
+
+            this.InitPrintDoc();
 
             this.SetLang();
         }
@@ -84,6 +92,61 @@ namespace GKUI
                     break;
             }
         }
+
+        #region Print support
+
+        private void InitPrintDoc()
+        {
+            this.fPrintDoc = new PrintDocument();
+            this.fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
+            this.fPrintDoc.BeginPrint += printDocument1_BeginPrint;
+            this.fPrintDoc.PrintPage += printDocument1_PrintPage;
+        }
+
+        private void InitCurDoc()
+        {
+            this.fPrintDoc.DocumentName = this.Text;
+            this.fPrintDoc.DefaultPageSettings.Landscape = fCircleChart.IsLandscape();
+            this.fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
+        }
+
+        private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
+        {
+        }
+
+        private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
+        {
+            e.PageSettings.Landscape = fCircleChart.IsLandscape();
+            e.PageSettings.Margins = new Margins(25, 25, 25, 25);
+        }
+
+        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Graphics gfx = e.Graphics;
+            Rectangle marginBounds = e.MarginBounds;
+            Rectangle pageBounds = e.PageBounds;
+
+            #if DEBUG_PRINT
+            gfx.DrawRectangle(Pens.Gray, marginBounds);
+            #endif
+
+            Image img = fCircleChart.GetPrintableImage();
+
+            int imgW = img.Width;
+            int imgH = img.Height;
+            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+            if (factor > 1.0f) factor = 1.0f;
+            imgW = (int)(imgW * factor);
+            imgH = (int)(imgH * factor);
+            int x = (pageBounds.Width - imgW) / 2;
+            int y = (pageBounds.Height - imgH) / 2;
+
+            gfx.DrawImage(img, x, y, imgW, imgH);
+
+            e.HasMorePages = false;
+        }
+
+        #endregion
 
         #region ILocalization implementation
         
@@ -110,17 +173,32 @@ namespace GKUI
 
         public bool AllowPrint()
         {
-            return false;
+            return true;
         }
 
         public void DoPrint()
         {
-            // dummy
+            this.InitCurDoc();
+
+            using (PrintDialog printDlg = new PrintDialog()) {
+                printDlg.Document = this.fPrintDoc;
+
+                if (printDlg.ShowDialog() == DialogResult.OK) {
+                    this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+                    this.fPrintDoc.Print();
+                }
+            }
         }
 
         public void DoPrintPreview()
         {
-            // dummy
+            this.InitCurDoc();
+
+            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
+                previewDlg.WindowState = FormWindowState.Maximized;
+                previewDlg.Document = this.fPrintDoc;
+                previewDlg.ShowDialog();
+            }
         }
 
         #endregion
@@ -158,7 +236,7 @@ namespace GKUI
             this.fCircleChart.NavPrev();
         }
 
-        public bool AllowQuickFind()
+        public bool AllowQuickSearch()
         {
             return false;
         }
@@ -168,7 +246,7 @@ namespace GKUI
             return null;
         }
 
-        public void QuickFind()
+        public void QuickSearch()
         {
         }
 

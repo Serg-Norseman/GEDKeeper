@@ -31,12 +31,12 @@ namespace GKCommon
         public GKResourceManager(string baseName, Assembly assembly)
             : base(baseName, assembly)
         {
-            this.fNeutralResourcesLanguage = GetNeutralResourcesLanguage(assembly);
+            fNeutralResourcesLanguage = GetNeutralResourcesLanguage(assembly);
         }
 
         public object GetObjectEx(string name)
         {
-            return base.GetObject(name, this.fNeutralResourcesLanguage);
+            return GetObject(name, fNeutralResourcesLanguage);
         }
     }
 }

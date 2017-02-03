@@ -11,7 +11,7 @@
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
 
 
-[GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=500&user=serg-norseman)
+[GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
 
 ## English
 GEDKeeper program is developed for work with personal genealogical database.

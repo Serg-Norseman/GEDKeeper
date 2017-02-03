@@ -26,7 +26,7 @@ namespace GKCore.Operations
 
         protected CustomOperation(UndoManager manager)
         {
-            this.fManager = manager;
+            fManager = manager;
         }
 
         public abstract bool Redo();

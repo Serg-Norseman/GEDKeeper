@@ -40,9 +40,9 @@ namespace GKTests.Mocks
         public bool NavCanForward() { return false; }
         public void NavNext() {}
         public void NavPrev() {}
-        public bool AllowQuickFind() { return false; }
+        public bool AllowQuickSearch() { return false; }
         public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
-        public void QuickFind() {}
+        public void QuickSearch() {}
         public void SelectByRec(GEDCOMIndividualRecord iRec) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
@@ -65,7 +65,7 @@ namespace GKTests.Mocks
 
         public BaseWindowMock()
         {
-            this.fContext = TestStubs.CreateContext();
+            this.fContext = TestStubs.CreateContext(/*this*/);
             TestStubs.FillContext(this.fContext as BaseContext);
             this.fTree = fContext.Tree;
         }
@@ -159,6 +159,7 @@ namespace GKTests.Mocks
         public IBaseWindow GetCurrentFile(bool extMode = false) { return null; }
         public IWorkWindow GetWorkWindow() { return null; }
 
+        public string GetUserFilesPath(string filePath) { return string.Empty; }
         public IBaseWindow CreateBase(string fileName) { return null; }
         public IBaseWindow FindBase(string fileName) { return null; }
         public void BaseChanged(IBaseWindow baseWin) {}

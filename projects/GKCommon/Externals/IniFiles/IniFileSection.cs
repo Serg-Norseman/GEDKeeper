@@ -64,7 +64,8 @@ namespace Externals.IniFiles
             int index = parent.elements.IndexOf(el);
             if (index != 0 && parent.elements[index - 1] is IniFileCommentary)
                 return ((IniFileCommentary)parent.elements[index - 1]).Comment;
-            else return "";
+
+            return "";
         }
         
         private IniFileValue GetValue(string key)
@@ -74,11 +75,10 @@ namespace Externals.IniFiles
             for (int i = 0; i < elements.Count; i++)
             {
                 IniFileValue value = elements[i] as IniFileValue;
-                if (value != null)
-                {
-                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
-                        return value;
-                }
+                if (value == null) continue;
+
+                if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
+                    return value;
             }
 
             return null;
