@@ -398,9 +398,12 @@ namespace GKUI.Charts
         private void Render(Graphics context, RenderTarget target)
         {
             PointF center = GetCenter(target);
-            context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
-#if FUN_ANIM
             if (RenderTarget.rtScreen == target) {
+                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
+                if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
+                    context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                }
+#if FUN_ANIM
                 context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
                                                 Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
                 float zoomX = fZoomX + ((0 != fAnimationTime) ?
@@ -408,12 +411,11 @@ namespace GKUI.Charts
                 float zoomY = fZoomY - ((0 != fAnimationTime) ?
                                         (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
                 context.ScaleTransform(zoomX, zoomY);
-            }
 #endif
-            context.SmoothingMode = SmoothingMode.AntiAlias;
-            if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
-                context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            } else {
+                context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
             }
+            context.SmoothingMode = SmoothingMode.AntiAlias;
             InternalDraw(context);
             context.ResetTransform();
         }
