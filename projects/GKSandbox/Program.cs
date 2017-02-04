@@ -12,6 +12,5 @@ namespace GKSandbox
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
-        
     }
 }
