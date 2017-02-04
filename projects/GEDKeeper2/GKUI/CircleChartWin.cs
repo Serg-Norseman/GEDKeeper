@@ -93,6 +93,11 @@ namespace GKUI
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            this.fCircleChart.Select();
+        }
+
         #region Print support
 
         private void InitPrintDoc()

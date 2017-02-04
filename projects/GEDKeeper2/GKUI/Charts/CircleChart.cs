@@ -124,9 +124,9 @@ namespace GKUI.Charts
         private int fMouseCaptureY;
         /* Animation timer. */
         #if FUN_ANIM
-        private Timer fAnimationTimer;
-        private UInt64 fAnimationTime = 0;
-        private const UInt64 fAnimationTimeLimit = 17;
+        private Timer fAppearingAnimationTimer;
+        private UInt64 fAppearingAnimationTime = 0;
+        private const UInt64 fAppearingAnimationTimeLimit = 17;
         #endif
 
 
@@ -401,18 +401,24 @@ namespace GKUI.Charts
         {
             PointF center = GetCenter(target);
             if (RenderTarget.rtScreen == target) {
-                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
                 if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
                     context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 }
-#if FUN_ANIM
-                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
-                                                Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
-                float zoomX = fZoomX + ((0 != fAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                float zoomY = fZoomY - ((0 != fAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                context.ScaleTransform(zoomX, zoomY);
+#if !FUN_ANIM
+                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
+#else
+                float angle = (float)(3.5f * Math.Sin(fAppearingAnimationTime) *
+                                      Math.Exp(-1.0 * fAppearingAnimationTime / fAppearingAnimationTimeLimit));
+                float rotation = (float)(angle * Math.PI / 180.0f);
+                float cosine = (float)(Math.Cos(rotation));
+                float sine = (float)(Math.Sin(rotation));
+                Matrix m = new Matrix(cosine, sine, -sine, cosine, center.X, center.Y);
+                float zoomX = fZoomX + ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                float zoomY = fZoomY - ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                m.Scale(zoomX, zoomY);
+                context.Transform = m;
 #endif
             } else {
                 context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
@@ -621,21 +627,21 @@ namespace GKUI.Charts
         #if FUN_ANIM
         private void InitTimer()
         {
-            if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
-                fAnimationTime = 0;
-                fAnimationTimer = new Timer();
-                fAnimationTimer.Interval = 1;
-                fAnimationTimer.Tick += AnimationTimerTick;
-                fAnimationTimer.Start();
+            if ((null == fAppearingAnimationTimer) || !fAppearingAnimationTimer.Enabled) {
+                fAppearingAnimationTime = 0;
+                fAppearingAnimationTimer = new Timer();
+                fAppearingAnimationTimer.Interval = 1;
+                fAppearingAnimationTimer.Tick += AnimationTimerTick;
+                fAppearingAnimationTimer.Start();
             }
         }
 
         private void AnimationTimerTick(object sender, EventArgs e)
         {
-            ++fAnimationTime;
-            if (fAnimationTimeLimit < fAnimationTime) {
-                fAnimationTimer.Stop();
-                fAnimationTime = 0;
+            ++fAppearingAnimationTime;
+            if (fAppearingAnimationTimeLimit < fAppearingAnimationTime) {
+                fAppearingAnimationTimer.Stop();
+                fAppearingAnimationTime = 0;
             }
             Invalidate();
         }
