@@ -95,7 +95,8 @@ namespace GKUI
 
         protected override void OnLoad(EventArgs e)
         {
-            this.fCircleChart.Select();
+            base.OnLoad(e);
+            fCircleChart.Select();
         }
 
         #region Print support

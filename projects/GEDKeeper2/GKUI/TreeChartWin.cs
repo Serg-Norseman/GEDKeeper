@@ -228,6 +228,12 @@ namespace GKUI
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fTreeBox.Select();
+        }
+
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
