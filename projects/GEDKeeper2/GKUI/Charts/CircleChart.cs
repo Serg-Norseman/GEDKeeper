@@ -124,9 +124,9 @@ namespace GKUI.Charts
         private int fMouseCaptureY;
         /* Animation timer. */
         #if FUN_ANIM
-        private Timer fAnimationTimer;
-        private UInt64 fAnimationTime = 0;
-        private const UInt64 fAnimationTimeLimit = 17;
+        private Timer fAppearingAnimationTimer;
+        private UInt64 fAppearingAnimationTime = 0;
+        private const UInt64 fAppearingAnimationTimeLimit = 17;
         #endif
 
 
@@ -401,18 +401,24 @@ namespace GKUI.Charts
         {
             PointF center = GetCenter(target);
             if (RenderTarget.rtScreen == target) {
-                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
                 if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
                     context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 }
-#if FUN_ANIM
-                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
-                                                Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
-                float zoomX = fZoomX + ((0 != fAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                float zoomY = fZoomY - ((0 != fAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                context.ScaleTransform(zoomX, zoomY);
+#if !FUN_ANIM
+                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
+#else
+                float angle = (float)(3.5f * Math.Sin(fAppearingAnimationTime) *
+                                      Math.Exp(-1.0 * fAppearingAnimationTime / fAppearingAnimationTimeLimit));
+                float rotation = (float)(angle * Math.PI / 180.0f);
+                float cosine = (float)(Math.Cos(rotation));
+                float sine = (float)(Math.Sin(rotation));
+                Matrix m = new Matrix(cosine, sine, -sine, cosine, center.X, center.Y);
+                float zoomX = fZoomX + ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                float zoomY = fZoomY - ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                m.Scale(zoomX, zoomY);
+                context.Transform = m;
 #endif
             } else {
                 context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
@@ -621,21 +627,21 @@ namespace GKUI.Charts
         #if FUN_ANIM
         private void InitTimer()
         {
-            if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
-                fAnimationTime = 0;
-                fAnimationTimer = new Timer();
-                fAnimationTimer.Interval = 1;
-                fAnimationTimer.Tick += AnimationTimerTick;
-                fAnimationTimer.Start();
+            if ((null == fAppearingAnimationTimer) || !fAppearingAnimationTimer.Enabled) {
+                fAppearingAnimationTime = 0;
+                fAppearingAnimationTimer = new Timer();
+                fAppearingAnimationTimer.Interval = 1;
+                fAppearingAnimationTimer.Tick += AnimationTimerTick;
+                fAppearingAnimationTimer.Start();
             }
         }
 
         private void AnimationTimerTick(object sender, EventArgs e)
         {
-            ++fAnimationTime;
-            if (fAnimationTimeLimit < fAnimationTime) {
-                fAnimationTimer.Stop();
-                fAnimationTime = 0;
+            ++fAppearingAnimationTime;
+            if (fAppearingAnimationTimeLimit < fAppearingAnimationTime) {
+                fAppearingAnimationTimer.Stop();
+                fAppearingAnimationTime = 0;
             }
             Invalidate();
         }
@@ -715,7 +721,7 @@ namespace GKUI.Charts
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (HorizontalScroll.Visible || VerticalScroll.Visible) {
+            if ((MouseButtons.Left == e.Button) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
                 fMouseCaptured = 1;
                 fMouseCaptureX = e.X;
                 fMouseCaptureY = e.Y;
@@ -725,49 +731,56 @@ namespace GKUI.Charts
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (2 > fMouseCaptured) {
-                CircleSegment selected = FindSegment(e.X, e.Y);
-
-                if (selected != null && selected.IRec != null) {
-                    RootPerson = selected.IRec;
+            if (MouseButtons.Left == e.Button) {
+                if (2 > fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
+                    if (selected != null && selected.IRec != null) {
+                        RootPerson = selected.IRec;
+                    }
                 }
+                fMouseCaptured = 0;
+                Cursor = Cursors.Default;
+            } else if (MouseButtons.XButton1 == e.Button) {
+                NavPrev();
+            } else if (MouseButtons.XButton2 == e.Button) {
+                NavNext();
             }
-            fMouseCaptured = 0;
-            Cursor = Cursors.Default;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (0 == fMouseCaptured) {
-                CircleSegment selected = FindSegment(e.X, e.Y);
+            if (MouseButtons.Left == e.Button) {
+                if (0 == fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
 
-                string hint = "";
-                if (!Equals(fSelected, selected)) {
-                    fSelected = selected;
+                    string hint = "";
+                    if (!Equals(fSelected, selected)) {
+                        fSelected = selected;
 
-                    if (selected != null && selected.IRec != null) {
-                        string name = GKUtils.GetNameString(selected.IRec, true, false);
-                        hint = /*selected.Gen.ToString() + ", " + */name;
+                        if (selected != null && selected.IRec != null) {
+                            string name = GKUtils.GetNameString(selected.IRec, true, false);
+                            hint = /*selected.Gen.ToString() + ", " + */name;
+                        }
+
+                        Invalidate();
                     }
 
-                    Invalidate();
-                }
+                    if (!Equals(fHint, hint)) {
+                        fHint = hint;
 
-                if (!Equals(fHint, hint)) {
-                    fHint = hint;
-
-                    if (!string.IsNullOrEmpty(hint)) {
-                        fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                        if (!string.IsNullOrEmpty(hint)) {
+                            fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                        }
                     }
+                } else {
+                    AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
+                                                   -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
+                    fMouseCaptured = 2;
+                    fMouseCaptureX = e.X;
+                    fMouseCaptureY = e.Y;
+                    Cursor = Cursors.SizeAll;
                 }
-            } else {
-                AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
-                                               -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
-                fMouseCaptured = 2;
-                fMouseCaptureX = e.X;
-                fMouseCaptureY = e.Y;
-                Cursor = Cursors.SizeAll;
             }
         }
 
