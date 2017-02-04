@@ -721,7 +721,7 @@ namespace GKUI.Charts
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (HorizontalScroll.Visible || VerticalScroll.Visible) {
+            if ((MouseButtons.Left == e.Button) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
                 fMouseCaptured = 1;
                 fMouseCaptureX = e.X;
                 fMouseCaptureY = e.Y;
@@ -731,49 +731,56 @@ namespace GKUI.Charts
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (2 > fMouseCaptured) {
-                CircleSegment selected = FindSegment(e.X, e.Y);
-
-                if (selected != null && selected.IRec != null) {
-                    RootPerson = selected.IRec;
+            if (MouseButtons.Left == e.Button) {
+                if (2 > fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
+                    if (selected != null && selected.IRec != null) {
+                        RootPerson = selected.IRec;
+                    }
                 }
+                fMouseCaptured = 0;
+                Cursor = Cursors.Default;
+            } else if (MouseButtons.XButton1 == e.Button) {
+                NavPrev();
+            } else if (MouseButtons.XButton2 == e.Button) {
+                NavNext();
             }
-            fMouseCaptured = 0;
-            Cursor = Cursors.Default;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (0 == fMouseCaptured) {
-                CircleSegment selected = FindSegment(e.X, e.Y);
+            if (MouseButtons.Left == e.Button) {
+                if (0 == fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
 
-                string hint = "";
-                if (!Equals(fSelected, selected)) {
-                    fSelected = selected;
+                    string hint = "";
+                    if (!Equals(fSelected, selected)) {
+                        fSelected = selected;
 
-                    if (selected != null && selected.IRec != null) {
-                        string name = GKUtils.GetNameString(selected.IRec, true, false);
-                        hint = /*selected.Gen.ToString() + ", " + */name;
+                        if (selected != null && selected.IRec != null) {
+                            string name = GKUtils.GetNameString(selected.IRec, true, false);
+                            hint = /*selected.Gen.ToString() + ", " + */name;
+                        }
+
+                        Invalidate();
                     }
 
-                    Invalidate();
-                }
+                    if (!Equals(fHint, hint)) {
+                        fHint = hint;
 
-                if (!Equals(fHint, hint)) {
-                    fHint = hint;
-
-                    if (!string.IsNullOrEmpty(hint)) {
-                        fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                        if (!string.IsNullOrEmpty(hint)) {
+                            fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                        }
                     }
+                } else {
+                    AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
+                                                   -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
+                    fMouseCaptured = 2;
+                    fMouseCaptureX = e.X;
+                    fMouseCaptureY = e.Y;
+                    Cursor = Cursors.SizeAll;
                 }
-            } else {
-                AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
-                                               -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
-                fMouseCaptured = 2;
-                fMouseCaptureX = e.X;
-                fMouseCaptureY = e.Y;
-                Cursor = Cursors.SizeAll;
             }
         }
 
