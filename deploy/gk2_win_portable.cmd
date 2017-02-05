@@ -1,11 +1,11 @@
 @echo off
 cls
 rem "GEDKeeper", the personal genealogical database editor.
-rem Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+rem Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
 rem This file is part of "GEDKeeper".
 
 set lstfile=".\listfile.txt"
-set out_fn="GEDKeeper2-v2.10.0-win-portable"
+set out_fn="GEDKeeper-v2.11.0-win-portable"
 set zip_fn=".\%out_fn%.zip"
 set log_fn=".\%out_fn%.log"
 

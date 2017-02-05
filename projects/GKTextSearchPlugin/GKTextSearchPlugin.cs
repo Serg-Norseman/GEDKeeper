@@ -28,11 +28,11 @@ using GKCore.Interfaces;
 using GKCore.Types;
 
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 TextSearch plugin")]
+[assembly: AssemblyDescription("GEDKeeper TextSearch plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

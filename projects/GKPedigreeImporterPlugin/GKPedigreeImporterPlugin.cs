@@ -26,11 +26,11 @@ using System.Runtime.InteropServices;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 PedigreeImporter plugin")]
+[assembly: AssemblyDescription("GEDKeeper PedigreeImporter plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014,2016, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2014,2016 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

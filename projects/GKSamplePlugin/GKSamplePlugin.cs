@@ -25,11 +25,11 @@ using System.Runtime.InteropServices;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKSamplePlugin1")]
-[assembly: AssemblyDescription("GEDKeeper2 sample plugin")]
+[assembly: AssemblyDescription("GEDKeeper sample plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

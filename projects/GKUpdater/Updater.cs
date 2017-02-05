@@ -27,7 +27,7 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("GKUpdater")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
+[assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2016 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyVersion("1.0.0.0")]

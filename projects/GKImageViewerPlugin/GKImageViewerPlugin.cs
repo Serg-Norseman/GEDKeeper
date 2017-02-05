@@ -27,11 +27,11 @@ using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKImageViewerPlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 ImageViewer plugin")]
+[assembly: AssemblyDescription("GEDKeeper ImageViewer plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2015, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2015 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

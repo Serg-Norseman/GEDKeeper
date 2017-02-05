@@ -27,11 +27,11 @@ using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKNamesBookPlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 NamesBook plugin")]
+[assembly: AssemblyDescription("GEDKeeper NamesBook plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

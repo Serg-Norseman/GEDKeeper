@@ -26,11 +26,11 @@ using ConwayLife;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKLifePlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 LifeGame plugin")]
+[assembly: AssemblyDescription("GEDKeeper LifeGame plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2009, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2009 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

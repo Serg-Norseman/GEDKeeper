@@ -27,11 +27,11 @@ using GKCore.Interfaces;
 using GKCore.Types;
 
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 Navigator plugin")]
+[assembly: AssemblyDescription("GEDKeeper Navigator plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2016, Sergey V. Zhdanovskih")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2016 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]
