@@ -682,21 +682,25 @@ namespace GKUI.Charts
                 case Keys.Add:
                 case Keys.Oemplus:
                 {
-                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
-                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
-                    Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, true);
-                    Invalidate();
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                        fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
                     break;
                 }
                 case Keys.Subtract:
                 case Keys.OemMinus:
                 {
-                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
-                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
-                    Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, true);
-                    Invalidate();
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                        fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
                     break;
                 }
                 case Keys.D0:
