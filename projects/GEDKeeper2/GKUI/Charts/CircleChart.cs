@@ -784,11 +784,14 @@ namespace GKUI.Charts
                     PerformLayout();
                     break;
                 }
+
+                case Keys.Back:
+                    NavPrev();
+                    return;
+
                 default:
-                {
                     base.OnKeyDown(e);
                     break;
-                }
             }
         }
 

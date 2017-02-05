@@ -235,18 +235,6 @@ namespace GKUI.Charts
 
             e.Handled = false;
             switch (e.KeyCode) {
-                case Keys.Add:
-                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
-                        GenWidth += 10;
-                    }
-                    break;
-
-                case Keys.Subtract:
-                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
-                        GenWidth -= 10;
-                    }
-                    break;
-
                 case Keys.Left:
                     if (fRootPerson != null) {
                         GEDCOMIndividualRecord father, mother;
@@ -268,10 +256,6 @@ namespace GKUI.Charts
                         }
                     }
                     break;
-
-                case Keys.Back:
-                    NavPrev();
-                    return;
 
                 default:
                     e.Handled = true;

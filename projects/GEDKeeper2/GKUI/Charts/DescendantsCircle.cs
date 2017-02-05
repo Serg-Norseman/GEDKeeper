@@ -171,28 +171,12 @@ namespace GKUI.Charts
         {
             base.OnKeyDown(e);
 
-            e.Handled = false;
+            /*e.Handled = false;
             switch (e.KeyCode) {
-                case Keys.Add:
-                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
-                        GenWidth += 10;
-                    }
-                    break;
-
-                case Keys.Subtract:
-                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
-                        GenWidth -= 10;
-                    }
-                    break;
-
-                case Keys.Back:
-                    NavPrev();
-                    return;
-
                 default:
                     e.Handled = true;
                     break;
-            }
+            }*/
         }
     }
 }
