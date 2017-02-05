@@ -158,6 +158,8 @@ namespace GKUI.Dialogs
             this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
             this.chkAutosave.Checked = this.fOptions.Autosave;
             this.numASMin.Value = this.fOptions.AutosaveInterval;
+            this.chkRemovableMediaWarning.Checked = this.fOptions.RemovableMediaWarning;
+            this.chkLoadRecentFiles.Checked = this.fOptions.LoadRecentFiles;
 
             this.chkSurname.Checked = this.fOptions.ChartOptions.FamilyVisible;
             this.chkName.Checked = this.fOptions.ChartOptions.NameVisible;
@@ -361,6 +363,8 @@ namespace GKUI.Dialogs
             this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
             this.fOptions.Autosave = this.chkAutosave.Checked;
             this.fOptions.AutosaveInterval = (int)this.numASMin.Value;
+            this.fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
+            this.fOptions.LoadRecentFiles = this.chkLoadRecentFiles.Checked;
 
             this.fOptions.ChartOptions.FamilyVisible = this.chkSurname.Checked;
             this.fOptions.ChartOptions.NameVisible = this.chkName.Checked;
@@ -577,6 +581,8 @@ namespace GKUI.Dialogs
             this.radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
 
             this.lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
+            this.chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
+            this.chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
         }
     }
 }

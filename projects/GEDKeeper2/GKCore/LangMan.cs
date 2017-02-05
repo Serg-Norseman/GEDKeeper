@@ -802,8 +802,11 @@ namespace GKCore
         /* 743 */ LSID_FatherAdd,
         /* 744 */ LSID_MotherAdd,
         /* 745 */ LSID_DefaultPortraits,
+        /* 746 */ LSID_RemovableMediaWarningMessage,
+        /* 747 */ LSID_RemovableMediaWarningOption,
+        /* 748 */ LSID_LoadRecentFiles,
 
-        /* 000 */ LSID_Last = LSID_DefaultPortraits
+        /* 000 */ LSID_Last = LSID_LoadRecentFiles
     }
 
     // TODO: remove and merge with LangManager
@@ -1559,7 +1562,10 @@ namespace GKCore
             /* 742 */ "Geocoder",
             /* 743 */ "Add father",
             /* 744 */ "Add mother",
-            /* 745 */ "Show default portraits"
+            /* 745 */ "Show default portraits",
+            /* 746 */ "A media file is added from the removable media. Continue?",
+            /* 747 */ "Warn when adding media files from removable media",
+            /* 748 */ "Load at startup recent opened files",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -198,11 +198,15 @@ namespace GKUI
             }
         }
 
-        private void ReloadLastBases()
+        /// <summary>
+        /// Reload at startup recent opened files.
+        /// </summary>
+        private void ReloadRecentBases()
         {
+            if (!GlobalOptions.Instance.LoadRecentFiles) return;
+
             this.BeginLoading();
 
-            // reload last open databases
             int num = this.fOptions.GetLastBasesCount();
             for (int i = 0; i < num; i++) {
                 string lb = this.fOptions.GetLastBase(i);
@@ -297,7 +301,7 @@ namespace GKUI
 
         private void Form_Show(object sender, EventArgs e)
         {
-            this.ReloadLastBases();
+            this.ReloadRecentBases();
         }
 
         private void Form_Resize(object sender, EventArgs e)

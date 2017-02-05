@@ -141,6 +141,13 @@ namespace GKCommon
             }
         }
 
+        public static bool IsRemovableDrive(string filePath)
+        {
+            string pathRoot = Path.GetPathRoot(filePath);
+            var driveInfo = new DriveInfo(pathRoot);
+            return (driveInfo.DriveType == DriveType.Removable);
+        }
+
         #endregion
 
         #region KeyLayout functions
