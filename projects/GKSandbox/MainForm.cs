@@ -12,8 +12,6 @@ namespace GKSandbox
         {
             InitializeComponent();
 
-            SerializeTests.TestSerializes();
-
             fDatabase = new GKDatabase();
             fDatabase.Connect();
         }
