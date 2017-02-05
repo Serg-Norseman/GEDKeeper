@@ -236,11 +236,15 @@ namespace GKUI.Charts
             e.Handled = false;
             switch (e.KeyCode) {
                 case Keys.Add:
-                    GenWidth += 10;
+                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
+                        GenWidth += 10;
+                    }
                     break;
 
                 case Keys.Subtract:
-                    GenWidth -= 10;
+                    if (Keys.None != (Keys.Shift & ModifierKeys)) {
+                        GenWidth -= 10;
+                    }
                     break;
 
                 case Keys.Left:

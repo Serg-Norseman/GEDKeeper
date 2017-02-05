@@ -656,6 +656,8 @@ namespace GKUI.Charts
                 case Keys.Subtract:
                 case Keys.Left:
                 case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
                 case Keys.Back:
                     return true;
             }
@@ -682,21 +684,25 @@ namespace GKUI.Charts
                 case Keys.Add:
                 case Keys.Oemplus:
                 {
-                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
-                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
-                    Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, true);
-                    Invalidate();
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                        fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
                     break;
                 }
                 case Keys.Subtract:
                 case Keys.OemMinus:
                 {
-                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
-                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
-                    Size boundary = GetPathsBoundaryI();
-                    AdjustViewPort(boundary, true);
-                    Invalidate();
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                        fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
                     break;
                 }
                 case Keys.D0:
@@ -708,6 +714,74 @@ namespace GKUI.Charts
                         AdjustViewPort(boundary, true);
                         Invalidate();
                     }
+                    break;
+                }
+                case Keys.Left:
+                {
+                    HorizontalScroll.Value =
+                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Right:
+                {
+                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Up:
+                {
+                    VerticalScroll.Value =
+                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Down:
+                {
+                    VerticalScroll.Value += VerticalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+                }
+                case Keys.PageUp:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value =
+                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value =
+                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.PageDown:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value += VerticalScroll.LargeChange;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Home:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = 0;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = 0;
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.End:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = VerticalScroll.Maximum;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = HorizontalScroll.Maximum;
+                    }
+                    PerformLayout();
                     break;
                 }
                 default:
