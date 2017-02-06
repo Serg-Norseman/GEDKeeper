@@ -649,22 +649,6 @@ namespace GKUI.Charts
 
         #region Protected inherited methods
 
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Add:
-                case Keys.Subtract:
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Back:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             Render(e.Graphics, RenderTarget.rtScreen);
@@ -683,7 +667,6 @@ namespace GKUI.Charts
             switch (e.KeyCode) {
                 case Keys.Add:
                 case Keys.Oemplus:
-                {
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
                         fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
@@ -692,10 +675,9 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
+
                 case Keys.Subtract:
                 case Keys.OemMinus:
-                {
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
                         fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
@@ -704,9 +686,8 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
+
                 case Keys.D0:
-                {
                     if (e.Control) {
                         fZoomX = 1.0f;
                         fZoomY = 1.0f;
@@ -715,79 +696,6 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
-                case Keys.Left:
-                {
-                    HorizontalScroll.Value =
-                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
-                    PerformLayout();
-                    break;
-                }
-                case Keys.Right:
-                {
-                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
-                    PerformLayout();
-                    break;
-                }
-                case Keys.Up:
-                {
-                    VerticalScroll.Value =
-                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
-                    PerformLayout();
-                    break;
-                }
-                case Keys.Down:
-                {
-                    VerticalScroll.Value += VerticalScroll.SmallChange;
-                    PerformLayout();
-                    break;
-                }
-                case Keys.PageUp:
-                {
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value =
-                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value =
-                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
-                    }
-                    PerformLayout();
-                    break;
-                }
-                case Keys.PageDown:
-                {
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value += VerticalScroll.LargeChange;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
-                    }
-                    PerformLayout();
-                    break;
-                }
-                case Keys.Home:
-                {
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = 0;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = 0;
-                    }
-                    PerformLayout();
-                    break;
-                }
-                case Keys.End:
-                {
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = VerticalScroll.Maximum;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = HorizontalScroll.Maximum;
-                    }
-                    PerformLayout();
-                    break;
-                }
-
-                case Keys.Back:
-                    NavPrev();
-                    return;
 
                 default:
                     base.OnKeyDown(e);
@@ -797,17 +705,17 @@ namespace GKUI.Charts
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
             if ((MouseButtons.Left == e.Button) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
                 fMouseCaptured = 1;
                 fMouseCaptureX = e.X;
                 fMouseCaptureY = e.Y;
+            } else {
+                base.OnMouseDown(e);
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseUp(e);
             if (MouseButtons.Left == e.Button) {
                 if (2 > fMouseCaptured) {
                     CircleSegment selected = FindSegment(e.X, e.Y);
@@ -817,16 +725,13 @@ namespace GKUI.Charts
                 }
                 fMouseCaptured = 0;
                 Cursor = Cursors.Default;
-            } else if (MouseButtons.XButton1 == e.Button) {
-                NavPrev();
-            } else if (MouseButtons.XButton2 == e.Button) {
-                NavNext();
+            } else {
+                base.OnMouseUp(e);
             }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
             if (MouseButtons.Left == e.Button) {
                 if (0 == fMouseCaptured) {
                     CircleSegment selected = FindSegment(e.X, e.Y);
@@ -858,6 +763,8 @@ namespace GKUI.Charts
                     fMouseCaptureY = e.Y;
                     Cursor = Cursors.SizeAll;
                 }
+            } else {
+                base.OnMouseMove(e);
             }
         }
 
