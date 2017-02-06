@@ -1789,38 +1789,23 @@ namespace GKUI.Charts
 
         #region Protected methods
 
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Add:
-                case Keys.Subtract:
-                case Keys.Back:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown(e);
-
-            e.Handled = false;
             switch (e.KeyCode) {
                 case Keys.Add:
+                case Keys.Oemplus:
                     SetScale(fScale + 0.05f);
+                    e.Handled = true;
                     break;
 
                 case Keys.Subtract:
+                case Keys.OemMinus:
                     SetScale(fScale - 0.05f);
+                    e.Handled = true;
                     break;
 
-                case Keys.Back:
-                    NavPrev();
-                    return;
-
                 default:
-                    e.Handled = true;
+                    base.OnKeyDown(e);
                     break;
             }
         }
@@ -1857,19 +1842,11 @@ namespace GKUI.Charts
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            //base.OnMouseWheel(e);
             if (ModifierKeys == Keys.Control) {
-                float newScale = (e.Delta > 0) ? fScale - 0.05f : fScale + 0.05f;
-
+                float newScale = (e.Delta > 0) ? fScale + 0.05f : fScale - 0.05f;
                 SetScale(newScale);
             } else {
-                int dx = 0, dy = 0;
-                if (ModifierKeys == Keys.Shift) {
-                    dx = -e.Delta;
-                } else {
-                    dy = -e.Delta;
-                }
-                AdjustScroll(dx, dy);
+                base.OnMouseWheel(e);
             }
         }
 
@@ -1905,8 +1882,6 @@ namespace GKUI.Charts
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (!Focused) Focus();
-
             fMouseX = e.X;
             fMouseY = e.Y;
 
@@ -1998,6 +1973,7 @@ namespace GKUI.Charts
 
                     switch (mAct) {
                         case MouseAction.maNone:
+                            base.OnMouseUp(e);
                             break;
 
                         case MouseAction.maProperties:
