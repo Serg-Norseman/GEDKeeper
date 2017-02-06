@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
@@ -61,6 +62,138 @@ namespace GKUI.Charts
                 if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData) {
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Back:
+                {
+                    return true;
+                    break;
+                }
+                default:
+                {
+                    return base.IsInputKey(keyData);
+                    break;
+                }
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            e.Handled = true;
+            switch (e.KeyCode) {
+                case Keys.Left:
+                {
+                    HorizontalScroll.Value =
+                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Right:
+                {
+                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Up:
+                {
+                    VerticalScroll.Value =
+                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Down:
+                {
+                    VerticalScroll.Value += VerticalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+                }
+                case Keys.PageUp:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value =
+                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value =
+                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.PageDown:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value += VerticalScroll.LargeChange;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Home:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = 0;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = 0;
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.End:
+                {
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = VerticalScroll.Maximum;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = HorizontalScroll.Maximum;
+                    }
+                    PerformLayout();
+                    break;
+                }
+                case Keys.Back:
+                {
+                    NavPrev();
+                    break;
+                }
+                default:
+                {
+                    base.OnKeyDown(e);
+                    break;
+                }
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (MouseButtons.XButton1 == e.Button) {
+                NavPrev();
+            } else if (MouseButtons.XButton2 == e.Button) {
+                NavNext();
+            } else {
+                base.OnMouseUp(e);
+            }
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (Keys.None == ModifierKeys) {
+                VerticalScroll.Value =
+                    Math.Max(VerticalScroll.Value - e.Delta, 0);
+                PerformLayout();
+            } else if (Keys.Shift == ModifierKeys) {
+                HorizontalScroll.Value =
+                    Math.Max(HorizontalScroll.Value - e.Delta, 0);
+                PerformLayout();
+            }
+            else {
+                base.OnMouseWheel(e);
+            }
         }
 
         #region Print and snaphots support
