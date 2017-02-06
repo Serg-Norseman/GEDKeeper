@@ -1301,13 +1301,16 @@ namespace GKUI
             this.miTreeAncestors.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
             this.miTreeDescendants.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
             this.miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
-
             this.miPedigreeAscend.Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
             this.miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
             this.miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
 
             this.miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
             this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
+            this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
+            this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            this.miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+            this.miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
 
             this.miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
             this.miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
@@ -1322,19 +1325,11 @@ namespace GKUI
             this.miWinMinimize.Text = LangMan.LS(LSID.LSID_MIWinMinimize);
             this.miWinArrange.Text = LangMan.LS(LSID.LSID_MIWinArrange);
 
-            //this.miGenResources.Text = LangMan.LS(LSID.LSID_MIGenResources);
-            //this.miKinshipTerms.Text = LangMan.LS(LSID.LSID_MIKinshipTerms);
-            //this.miFAQ.Text = LangMan.LS(LSID.LSID_MIFAQ);
             this.miContext.Text = LangMan.LS(LSID.LSID_MIContext);
             this.miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
-
             this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
             this.miLogView.Text = LangMan.LS(LSID.LSID_LogView);
             this.miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-
-            this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
-            this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            this.miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
 
             this.tbFileNew.ToolTipText = LangMan.LS(LSID.LSID_FileNewTip);
             this.tbFileLoad.ToolTipText = LangMan.LS(LSID.LSID_FileLoadTip);
@@ -1356,8 +1351,6 @@ namespace GKUI
 
             this.tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
             this.tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
-
-            this.miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
         }
 
         #endregion

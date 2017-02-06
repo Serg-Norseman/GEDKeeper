@@ -42,20 +42,20 @@ namespace GKCore.Stats
         
         public CommonStats()
         {
-            this.persons = 0;
-            this.persons_m = 0;
-            this.persons_f = 0;
-            this.lives = 0;
-            this.lives_m = 0;
-            this.lives_f = 0;
+            persons = 0;
+            persons_m = 0;
+            persons_f = 0;
+            lives = 0;
+            lives_m = 0;
+            lives_f = 0;
 
-            this.age = new CompositeItem();
-            this.life = new CompositeItem();
-            this.childs = new CompositeItem();
-            this.fba = new CompositeItem();
-            this.marr = new CompositeItem();
-            this.mage = new CompositeItem();
-            this.cIndex = new CompositeItem();
+            age = new CompositeItem();
+            life = new CompositeItem();
+            childs = new CompositeItem();
+            fba = new CompositeItem();
+            marr = new CompositeItem();
+            mage = new CompositeItem();
+            cIndex = new CompositeItem();
         }
     }
 }

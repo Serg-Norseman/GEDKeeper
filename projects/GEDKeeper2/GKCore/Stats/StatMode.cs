@@ -21,7 +21,7 @@
 namespace GKCore.Stats
 {
     /// <summary>
-    /// 
+    /// Types of statistics.
     /// </summary>
     public enum StatsMode
     {

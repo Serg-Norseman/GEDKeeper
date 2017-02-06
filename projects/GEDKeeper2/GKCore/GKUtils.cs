@@ -2200,6 +2200,7 @@ namespace GKCore
 
                         summary.Add("");
                         summary.Add("~ub+1~" + GKUtils.GetNameString(iRec, true, true) + "~bu-1~");
+                        //summary.Add("~r~");
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
                         try
                         {

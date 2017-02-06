@@ -768,6 +768,51 @@ namespace GKUI.Charts
             }
         }
 
+        private bool CheckDescendantFilter(GEDCOMIndividualRecord person, int level)
+        {
+            bool result = true;
+
+            switch (fFilter.SourceMode)
+            {
+                case FilterGroupMode.All:
+                    break;
+
+                case FilterGroupMode.None:
+                    if (person.SourceCitations.Count != 0) {
+                        result = false;
+                    }
+                    break;
+
+                case FilterGroupMode.Any:
+                    if (person.SourceCitations.Count == 0) {
+                        result = false;
+                    }
+                    break;
+
+                case FilterGroupMode.Selected:
+                    GEDCOMSourceRecord filterSource;
+                    if (fFilter.SourceRef == "") {
+                        filterSource = null;
+                    } else {
+                        filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
+                    }
+                    if (person.IndexOfSource(filterSource) < 0) {
+                        result = false;
+                    }
+                    break;
+            }
+
+            if (fFilter.BranchCut != ChartFilter.BranchCutType.None)
+            {
+                if (!(bool)person.ExtData)
+                {
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
         private TreeChartPerson DoDescendantsStep(TreeChartPerson parent, GEDCOMIndividualRecord person, int level)
         {
             try
@@ -775,46 +820,8 @@ namespace GKUI.Charts
                 TreeChartPerson result = null;
                 if (person != null && (!fOptions.ChildlessExclude || level <= 1 || person.SpouseToFamilyLinks.Count != 0 || !fBase.Context.IsChildless(person)))
                 {
-                    FilterGroupMode sourceMode = fFilter.SourceMode;
-
-                    switch (sourceMode)
-                    {
-                        case FilterGroupMode.All:
-                            break;
-
-                        case FilterGroupMode.None:
-                            if (person.SourceCitations.Count != 0) {
-                                return null;
-                            }
-                            break;
-                            
-                        case FilterGroupMode.Any:
-                            if (person.SourceCitations.Count == 0) {
-                                return null;
-                            }
-                            break;
-
-                        case FilterGroupMode.Selected:
-                            GEDCOMSourceRecord filterSource;
-                            if (fFilter.SourceRef == "") {
-                                filterSource = null;
-                            } else {
-                                filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
-                            }
-                            if (person.IndexOfSource(filterSource) < 0) {
-                                return null;
-                            }
-                            break;
-                    }
-
-                    ChartFilter.BranchCutType branchCut = fFilter.BranchCut;
-                    if (branchCut != ChartFilter.BranchCutType.None)
-                    {
-                        if (!(bool)person.ExtData)
-                        {
-                            return null;
-                        }
-                    }
+                    if (!CheckDescendantFilter(person, level))
+                        return null;
 
                     TreeChartPerson res = AddDescPerson(parent, person, false, level);
                     result = res;
