@@ -72,15 +72,12 @@ namespace GKUI.Charts
                 case Keys.Up:
                 case Keys.Down:
                 case Keys.Back:
-                {
                     return true;
                     break;
-                }
+
                 default:
-                {
                     return base.IsInputKey(keyData);
                     break;
-                }
             }
         }
 
@@ -89,33 +86,28 @@ namespace GKUI.Charts
             e.Handled = true;
             switch (e.KeyCode) {
                 case Keys.Left:
-                {
                     HorizontalScroll.Value =
                         Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
                     PerformLayout();
                     break;
-                }
+
                 case Keys.Right:
-                {
                     HorizontalScroll.Value += HorizontalScroll.SmallChange;
                     PerformLayout();
                     break;
-                }
+
                 case Keys.Up:
-                {
                     VerticalScroll.Value =
                         Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
                     PerformLayout();
                     break;
-                }
+
                 case Keys.Down:
-                {
                     VerticalScroll.Value += VerticalScroll.SmallChange;
                     PerformLayout();
                     break;
-                }
+
                 case Keys.PageUp:
-                {
                     if (Keys.None == ModifierKeys) {
                         VerticalScroll.Value =
                             Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
@@ -125,9 +117,8 @@ namespace GKUI.Charts
                     }
                     PerformLayout();
                     break;
-                }
+
                 case Keys.PageDown:
-                {
                     if (Keys.None == ModifierKeys) {
                         VerticalScroll.Value += VerticalScroll.LargeChange;
                     } else if (Keys.Shift == ModifierKeys) {
@@ -135,9 +126,8 @@ namespace GKUI.Charts
                     }
                     PerformLayout();
                     break;
-                }
+
                 case Keys.Home:
-                {
                     if (Keys.None == ModifierKeys) {
                         VerticalScroll.Value = 0;
                     } else if (Keys.Shift == ModifierKeys) {
@@ -145,9 +135,8 @@ namespace GKUI.Charts
                     }
                     PerformLayout();
                     break;
-                }
+
                 case Keys.End:
-                {
                     if (Keys.None == ModifierKeys) {
                         VerticalScroll.Value = VerticalScroll.Maximum;
                     } else if (Keys.Shift == ModifierKeys) {
@@ -155,17 +144,14 @@ namespace GKUI.Charts
                     }
                     PerformLayout();
                     break;
-                }
+
                 case Keys.Back:
-                {
                     NavPrev();
                     break;
-                }
+
                 default:
-                {
                     base.OnKeyDown(e);
                     break;
-                }
             }
         }
 

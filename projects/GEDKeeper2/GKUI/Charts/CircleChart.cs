@@ -667,7 +667,6 @@ namespace GKUI.Charts
             switch (e.KeyCode) {
                 case Keys.Add:
                 case Keys.Oemplus:
-                {
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
                         fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
@@ -676,10 +675,9 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
+
                 case Keys.Subtract:
                 case Keys.OemMinus:
-                {
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
                         fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
@@ -688,9 +686,8 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
+
                 case Keys.D0:
-                {
                     if (e.Control) {
                         fZoomX = 1.0f;
                         fZoomY = 1.0f;
@@ -699,12 +696,10 @@ namespace GKUI.Charts
                         Invalidate();
                     }
                     break;
-                }
+
                 default:
-                {
                     base.OnKeyDown(e);
                     break;
-                }
             }
         }
 

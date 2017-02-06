@@ -1794,23 +1794,19 @@ namespace GKUI.Charts
             switch (e.KeyCode) {
                 case Keys.Add:
                 case Keys.Oemplus:
-                {
                     SetScale(fScale + 0.05f);
                     e.Handled = true;
                     break;
-                }
+
                 case Keys.Subtract:
                 case Keys.OemMinus:
-                {
                     SetScale(fScale - 0.05f);
                     e.Handled = true;
                     break;
-                }
+
                 default:
-                {
                     base.OnKeyDown(e);
                     break;
-                }
             }
         }
 
