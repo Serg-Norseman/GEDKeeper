@@ -67,7 +67,20 @@ The use of "m_" and "_" as prefixes for instance members is highly discouraged.
 
 ## Class members order
 
-Declare all member variables at the top of a class, with static variables at the very top.
+Declare all member variables at the top of a class, with static variables at the very top:
+
+- private static fields;
+- protected and public static fields;
+- private and public consts;
+- private member fields;
+- protected member fields (private and protected may be mixed);
+- public member fields;
+- properties;
+- instance's control (constructor, destructor, static create methods if needs);
+- private methods and public methods usually are mixed grouped by meaning and functions.
+
+In old and very old classes, the order of the sections may be absent, for example constructors can be at the end of class.
+But this is valid only before the refactoring. Not supposed to do in the new classes.
 
 ## Indentation
 
