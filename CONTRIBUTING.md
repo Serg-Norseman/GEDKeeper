@@ -116,14 +116,12 @@ One blank line should always be used between:
 
 ## Wrapping Lines
 
-When an expression will not fit on a single line, break it up according to these general principles:
+Preferred line length is 80 characters, taking into consideration the recommendations below:
 
 - Break after a comma.
 - Break after an operator.
 - Prefer higher-level breaks to lower-level breaks.
 - Align the new line with the beginning of the expression at the same level on the previous line.
-
-Preferred line length is 80 characters, taking into consideration the above recommendations.
 
 ## Where to put spaces
 
