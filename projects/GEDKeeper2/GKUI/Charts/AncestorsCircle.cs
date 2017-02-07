@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,12 +75,12 @@ namespace GKUI.Charts
         {
             fSegments.Clear();
 
-            int inRad = CENTER_RAD - 50;
+            float inRad = CENTER_RAD - 50;
 
             PersonSegment segment = new PersonSegment(0);
             GraphicsPath path = segment.Path;
             path.StartFigure();
-            path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
+            path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
             path.CloseFigure();
             fSegments.Add(segment);
 
@@ -88,14 +88,14 @@ namespace GKUI.Charts
             for (int gen = 1; gen <= fMaxGenerations; gen++) {
                 inRad = (CENTER_RAD - 50) + ((gen - 1) * fGenWidth);
 
-                int extRad = inRad + fGenWidth;
+                float extRad = inRad + fGenWidth;
                 maxSteps *= 2;
 
                 float stepAngle = (360.0f / maxSteps);
 
-                for (int stp = 0; stp < maxSteps; stp++)
+                for (int step = 0; step < maxSteps; step++)
                 {
-                    float ang1 = (stp * stepAngle) - 90.0f;
+                    float ang1 = (step * stepAngle) - 90.0f;
                     float ang2 = ang1 + stepAngle;
 
                     segment = new PersonSegment(gen);
@@ -127,7 +127,7 @@ namespace GKUI.Charts
             }
         }
 
-        private PersonSegment SetSegmentParams(int index, GEDCOMIndividualRecord rec, int rad, int groupIndex)
+        private PersonSegment SetSegmentParams(int index, GEDCOMIndividualRecord rec, float rad, int groupIndex)
         {
             if (index < 0 || index >= fSegments.Count) {
                 return null;
@@ -140,7 +140,7 @@ namespace GKUI.Charts
             }
         }
 
-        private PersonSegment TraverseAncestors(GEDCOMIndividualRecord iRec, float v, int gen, int rad, float ro, int prevSteps, int groupIndex)
+        private PersonSegment TraverseAncestors(GEDCOMIndividualRecord iRec, float v, int gen, float rad, float ro, int prevSteps, int groupIndex)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace GKUI.Charts
                     }
                 }
 
-                int genSize = (int)Math.Pow(2.0, gen);
+                int genSize = 1 << gen;
                 float ang = (360.0f / genSize);
 
                 int idx = prevSteps + (int)(v / ang);
@@ -198,8 +198,6 @@ namespace GKUI.Charts
 
         protected override void InternalDraw(Graphics gfx)
         {
-            gfx.SmoothingMode = SmoothingMode.AntiAlias;
-
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
@@ -237,14 +235,6 @@ namespace GKUI.Charts
 
             e.Handled = false;
             switch (e.KeyCode) {
-                case Keys.Add:
-                    GenWidth += 10;
-                    break;
-
-                case Keys.Subtract:
-                    GenWidth -= 10;
-                    break;
-
                 case Keys.Left:
                     if (fRootPerson != null) {
                         GEDCOMIndividualRecord father, mother;
@@ -266,10 +256,6 @@ namespace GKUI.Charts
                         }
                     }
                     break;
-
-                case Keys.Back:
-                    NavPrev();
-                    return;
 
                 default:
                     e.Handled = true;

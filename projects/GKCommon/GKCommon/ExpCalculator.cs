@@ -4,7 +4,7 @@
  *  Patched: Sergey Pedora (mailto:Sergey@mail.fact400.ru)
  *
  *  C# implementation:
- *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2011 by Sergey V. Zhdanovskih.
  */
 
 using System;

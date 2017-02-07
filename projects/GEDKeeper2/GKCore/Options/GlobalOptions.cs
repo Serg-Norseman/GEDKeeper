@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -69,6 +69,8 @@ namespace GKCore.Options
         private WomanSurnameFormat fWomanSurnameFormat;
         private readonly AncestorsCircleOptions fAncestorsCircleOptions;
         private string fGeocoder;
+        private bool fRemovableMediaWarning;
+        private bool fLoadRecentFiles;
 
 
         public static GlobalOptions Instance
@@ -85,18 +87,18 @@ namespace GKCore.Options
 
         public TreeChartOptions ChartOptions
         {
-            get { return this.fChartOptions; }
+            get { return fChartOptions; }
         }
 
         public AncestorsCircleOptions AncestorsCircleOptions
         {
-            get { return this.fAncestorsCircleOptions; }
+            get { return fAncestorsCircleOptions; }
         }
 
         /*public GEDCOMCharacterSet DefCharacterSet
         {
-            get { return this.fDefCharacterSet; }
-            set { this.fDefCharacterSet = value; }
+            get { return fDefCharacterSet; }
+            set { fDefCharacterSet = value; }
         }*/
 
         public GEDCOMCharacterSet DefCharacterSet
@@ -106,134 +108,134 @@ namespace GKCore.Options
 
         public DateFormat DefDateFormat
         {
-            get { return this.fDefDateFormat; }
-            set { this.fDefDateFormat = value; }
+            get { return fDefDateFormat; }
+            set { fDefDateFormat = value; }
         }
 
         public bool ShowDatesSign
         {
-            get { return this.fShowDatesSign; }
-            set { this.fShowDatesSign = value; }
+            get { return fShowDatesSign; }
+            set { fShowDatesSign = value; }
         }
 
         public NameFormat DefNameFormat
         {
-            get { return this.fDefNameFormat; }
-            set { this.fDefNameFormat = value; }
+            get { return fDefNameFormat; }
+            set { fDefNameFormat = value; }
         }
 
         public StringList EventFilters
         {
-            get { return this.fEventFilters; }
+            get { return fEventFilters; }
         }
 
         public ushort InterfaceLang
         {
-            get { return this.fInterfaceLang; }
-            set { this.fInterfaceLang = value; }
+            get { return fInterfaceLang; }
+            set { fInterfaceLang = value; }
         }
 
         public string LastDir
         {
-            get { return this.fLastDir; }
-            set { this.fLastDir = value; }
+            get { return fLastDir; }
+            set { fLastDir = value; }
         }
 
         public List<MRUFile> MRUFiles
         {
-            get { return this.fMRUFiles; }
+            get { return fMRUFiles; }
         }
 
         public ExtRect MWinRect
         {
-            get { return this.fMWinRect; }
-            set { this.fMWinRect = value; }
+            get { return fMWinRect; }
+            set { fMWinRect = value; }
         }
 
         public FormWindowState MWinState
         {
-            get { return this.fMWinState; }
-            set { this.fMWinState = value; }
+            get { return fMWinState; }
+            set { fMWinState = value; }
         }
 
         public StringList NameFilters
         {
-            get { return this.fNameFilters; }
+            get { return fNameFilters; }
         }
 
         public PedigreeOptions PedigreeOptions
         {
-            get { return this.fPedigreeOptions; }
+            get { return fPedigreeOptions; }
         }
 
         public bool PlacesWithAddress
         {
-            get { return this.fPlacesWithAddress; }
-            set { this.fPlacesWithAddress = value; }
+            get { return fPlacesWithAddress; }
+            set { fPlacesWithAddress = value; }
         }
 
         public ProxyOptions Proxy
         {
-            get { return this.fProxy; }
+            get { return fProxy; }
         }
 
         public StringList Relations
         {
-            get { return this.fRelations; }
+            get { return fRelations; }
         }
 
         public StringList ResidenceFilters
         {
-            get { return this.fResidenceFilters; }
+            get { return fResidenceFilters; }
         }
 
         public FileBackup FileBackup
         {
-            get { return this.fFileBackup; }
-            set { this.fFileBackup = value; }
+            get { return fFileBackup; }
+            set { fFileBackup = value; }
         }
 
         public bool ShowTips
         {
-            get { return this.fShowTips; }
-            set { this.fShowTips = value; }
+            get { return fShowTips; }
+            set { fShowTips = value; }
         }
 
         public bool ListHighlightUnmarriedPersons
         {
-            get { return this.fListHighlightUnmarriedPersons; }
-            set { this.fListHighlightUnmarriedPersons = value; }
+            get { return fListHighlightUnmarriedPersons; }
+            set { fListHighlightUnmarriedPersons = value; }
         }
 
         public bool ListHighlightUnparentedPersons
         {
-            get { return this.fListHighlightUnparentedPersons; }
-            set { this.fListHighlightUnparentedPersons = value; }
+            get { return fListHighlightUnparentedPersons; }
+            set { fListHighlightUnparentedPersons = value; }
         }
 
         public IndividualListColumns IndividualListColumns
         {
-            get { return this.fIndividualListColumns; }
+            get { return fIndividualListColumns; }
         }
 
         public bool ShowDatesCalendar
         {
-            get { return this.fShowDatesCalendar; }
-            set { this.fShowDatesCalendar = value; }
+            get { return fShowDatesCalendar; }
+            set { fShowDatesCalendar = value; }
         }
 
 
 
         public bool Autosave
         {
-            get { return this.fAutosave; }
-            set { this.fAutosave = value; }
+            get { return fAutosave; }
+            set { fAutosave = value; }
         }
 
         public int AutosaveInterval
         {
-            get { return this.fAutosaveInterval; }
-            set { this.fAutosaveInterval = value; }
+            get { return fAutosaveInterval; }
+            set { fAutosaveInterval = value; }
         }
 
 
@@ -241,36 +243,49 @@ namespace GKCore.Options
         // religious and according to the census (see GEDCOMPersonalNamePieces)
         public bool ExtendedNames
         {
-            get { return this.fExtendedNames; }
-            set { this.fExtendedNames = value; }
+            get { return fExtendedNames; }
+            set { fExtendedNames = value; }
         }
 
         public WomanSurnameFormat WomanSurnameFormat
         {
-            get { return this.fWomanSurnameFormat; }
-            set { this.fWomanSurnameFormat = value; }
+            get { return fWomanSurnameFormat; }
+            set { fWomanSurnameFormat = value; }
         }
 
         public string Geocoder
         {
-            get { return this.fGeocoder; }
-            set { this.fGeocoder = value; }
+            get { return fGeocoder; }
+            set { fGeocoder = value; }
+        }
+
+
+        public bool RemovableMediaWarning
+        {
+            get { return fRemovableMediaWarning; }
+            set { fRemovableMediaWarning = value; }
+        }
+
+        public bool LoadRecentFiles
+        {
+            get { return fLoadRecentFiles; }
+            set { fLoadRecentFiles = value; }
         }
 
 
         public int GetLangsCount()
         {
-            return this.fLanguages.Count;
+            return fLanguages.Count;
         }
 
         public LangRecord GetLang(int index)
         {
-            return this.fLanguages[index];
+            return fLanguages[index];
         }
 
         public LangRecord GetLangByCode(int code)
         {
-            foreach (LangRecord lngRec in this.fLanguages) {
+            foreach (LangRecord lngRec in fLanguages) {
                 if (lngRec.Code == code) {
                     return lngRec;
                 }
@@ -282,29 +297,29 @@ namespace GKCore.Options
         // TODO: rework it
         public GEDCOMLanguageID GetCurrentItfLang()
         {
-            if (this.InterfaceLang == LangMan.LS_DEF_CODE) {
+            if (InterfaceLang == LangMan.LS_DEF_CODE) {
                 return GEDCOMLanguageID.English;
             } else {
-                LangRecord langRec = this.GetLangByCode(this.InterfaceLang);
+                LangRecord langRec = GetLangByCode(InterfaceLang);
                 return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
             }
         }
 
         public string GetLastBase(int index)
         {
-            return this.fLastBases[index];
+            return fLastBases[index];
         }
 
         public int GetLastBasesCount()
         {
-            return this.fLastBases.Count;
+            return fLastBases.Count;
         }
 
         public int MRUFiles_IndexOf(string fileName)
         {
-            int num = this.fMRUFiles.Count;
+            int num = fMRUFiles.Count;
             for (int i = 0; i < num; i++) {
-                if (this.fMRUFiles[i].FileName == fileName) {
+                if (fMRUFiles[i].FileName == fileName) {
                     return i;
                 }
             }
@@ -314,43 +329,45 @@ namespace GKCore.Options
 
         private GlobalOptions()
         {
-            this.fChartOptions = new TreeChartOptions();
-            this.fEventFilters = new StringList();
-            this.fMRUFiles = new List<MRUFile>();
-            this.fNameFilters = new StringList();
-            this.fResidenceFilters = new StringList();
-            this.fPedigreeOptions = new PedigreeOptions();
-            this.fProxy = new ProxyOptions();
-            this.fRelations = new StringList();
-            this.fAncestorsCircleOptions = new AncestorsCircleOptions();
-            this.fGeocoder = "Google";
+            fChartOptions = new TreeChartOptions();
+            fEventFilters = new StringList();
+            fMRUFiles = new List<MRUFile>();
+            fNameFilters = new StringList();
+            fResidenceFilters = new StringList();
+            fPedigreeOptions = new PedigreeOptions();
+            fProxy = new ProxyOptions();
+            fRelations = new StringList();
+            fAncestorsCircleOptions = new AncestorsCircleOptions();
+            fGeocoder = "Google";
+            fRemovableMediaWarning = true;
+            fLoadRecentFiles = true;
 
-            this.fIndividualListColumns = new IndividualListColumns();
-            this.fIndividualListColumns.ResetDefaults();
+            fIndividualListColumns = new IndividualListColumns();
+            fIndividualListColumns.ResetDefaults();
 
-            this.fLanguages = new List<LangRecord>();
-            this.fLastBases = new StringList();
+            fLanguages = new List<LangRecord>();
+            fLastBases = new StringList();
 
-            this.fAutosave = false;
-            this.fAutosaveInterval = 10;
+            fAutosave = false;
+            fAutosaveInterval = 10;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fLastBases.Dispose();
-                //this.fLanguages.Dispose();
-                this.fRelations.Dispose();
+                fLastBases.Dispose();
+                //fLanguages.Dispose();
+                fRelations.Dispose();
 
-                this.fResidenceFilters.Dispose();
-                this.fNameFilters.Dispose();
-                //this.FMRUFiles.Dispose();
-                this.fEventFilters.Dispose();
+                fResidenceFilters.Dispose();
+                fNameFilters.Dispose();
+                //FMRUFiles.Dispose();
+                fEventFilters.Dispose();
 
-                this.fProxy.Dispose();
-                this.fPedigreeOptions.Dispose();
-                this.fChartOptions.Dispose();
+                fProxy.Dispose();
+                fPedigreeOptions.Dispose();
+                fChartOptions.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -372,7 +389,7 @@ namespace GKCore.Options
                         string lngName = lngParams[2];
 
                         LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngSign, lngName, fileName);
-                        this.fLanguages.Add(lngRec);
+                        fLanguages.Add(lngRec);
                     }
                 }
             }
@@ -388,7 +405,7 @@ namespace GKCore.Options
             try {
                 string path = GKUtils.GetLangsPath();
                 string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < langFiles.Length; i++) this.LngPrepareProc(langFiles[i]);
+                for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
             } catch (Exception ex) {
                 Logger.LogWrite("GlobalOptions.FindLanguages(): " + ex.Message);
             }
@@ -396,12 +413,12 @@ namespace GKCore.Options
 
         public void AddLastBase(string fileName)
         {
-            this.fLastBases.Add(fileName);
+            fLastBases.Add(fileName);
         }
 
         public void ClearLastBases()
         {
-            this.fLastBases.Clear();
+            fLastBases.Clear();
         }
 
 
@@ -410,49 +427,51 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            /*this.fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);*/
-            this.fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
-            this.fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
-            this.fLastDir = ini.ReadString("Common", "LastDir", "");
-            this.fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
-            this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
-            this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
-            this.fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
-            this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
-            this.fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
+            /*fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);*/
+            fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
+            fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
+            fLastDir = ini.ReadString("Common", "LastDir", "");
+            fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
+            fShowTips = ini.ReadBool("Common", "ShowTips", true);
+            fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
+            fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
+            fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
+            fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
+            fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
+            fLoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
 
-            this.fAutosave = ini.ReadBool("Common", "Autosave", false);
-            this.fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
+            fAutosave = ini.ReadBool("Common", "Autosave", false);
+            fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
 
-            this.fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
-            this.fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
+            fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
+            fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
 
-            this.fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
+            fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
 
             int kl = ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
             SysUtils.SetKeyLayout(kl);
 
-            this.fChartOptions.LoadFromFile(ini);
-            this.fPedigreeOptions.LoadFromFile(ini);
-            this.fProxy.LoadFromFile(ini);
+            fChartOptions.LoadFromFile(ini);
+            fPedigreeOptions.LoadFromFile(ini);
+            fProxy.LoadFromFile(ini);
 
             int cnt = ini.ReadInteger("NameFilters", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
                 string st = ini.ReadString("NameFilters", "Filter_" + i.ToString(), "");
-                if (st != "") this.fNameFilters.Add(st);
+                if (st != "") fNameFilters.Add(st);
             }
 
             cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
-                this.fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
+                fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
             }
 
             cnt = ini.ReadInteger("EventFilters", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
-                this.fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
+                fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
             }
 
             cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
@@ -463,7 +482,7 @@ namespace GKCore.Options
                 if (File.Exists(fn)) {
                     MRUFile mf = new MRUFile();
                     mf.LoadFromFile(ini, sect);
-                    this.fMRUFiles.Add(mf);
+                    fMRUFiles.Add(mf);
                 } else {
                     MRUFile.DeleteKeys(ini, sect);
                 }
@@ -472,30 +491,30 @@ namespace GKCore.Options
             cnt = ini.ReadInteger("Relations", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
-                this.fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
+                fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
             }
 
-            this.fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
+            fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
 
-            this.fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
-            this.fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
+            fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
+            fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
 
-            this.fMWinRect.Left = ini.ReadInteger("Common", "MWinL", -1);
-            this.fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
-            this.fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
-            this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
-            this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
+            fMWinRect.Left = ini.ReadInteger("Common", "MWinL", -1);
+            fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
+            fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
+            fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
+            fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
-            UIHelper.NormalizeFormRect(ref this.fMWinRect);
+            UIHelper.NormalizeFormRect(ref fMWinRect);
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)
             {
                 string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
-                this.AddLastBase(st);
+                AddLastBase(st);
             }
 
-            this.fAncestorsCircleOptions.LoadFromFile(ini);
+            fAncestorsCircleOptions.LoadFromFile(ini);
         }
 
         public void LoadFromFile(string fileName)
@@ -505,7 +524,7 @@ namespace GKCore.Options
                 IniFile ini = new IniFile(fileName);
                 try
                 {
-                    this.LoadFromFile(ini);
+                    LoadFromFile(ini);
                 } finally {
                     ini.Dispose();
                 }
@@ -520,73 +539,75 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            /*ini.WriteInteger("Common", "DefCharacterSet", (int)this.fDefCharacterSet);*/
-            ini.WriteInteger("Common", "DefNameFormat", (int)this.fDefNameFormat);
-            ini.WriteInteger("Common", "DefDateFormat", (int)this.fDefDateFormat);
-            ini.WriteString("Common", "LastDir", this.fLastDir);
-            ini.WriteBool("Common", "PlacesWithAddress", this.fPlacesWithAddress);
-            ini.WriteBool("Common", "ShowTips", this.fShowTips);
-            ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
-            ini.WriteInteger("Common", "FileBackup", (int)this.fFileBackup);
-            ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
-            ini.WriteBool("Common", "ShowDatesSigns", this.fShowDatesSign);
+            /*ini.WriteInteger("Common", "DefCharacterSet", (int)fDefCharacterSet);*/
+            ini.WriteInteger("Common", "DefNameFormat", (int)fDefNameFormat);
+            ini.WriteInteger("Common", "DefDateFormat", (int)fDefDateFormat);
+            ini.WriteString("Common", "LastDir", fLastDir);
+            ini.WriteBool("Common", "PlacesWithAddress", fPlacesWithAddress);
+            ini.WriteBool("Common", "ShowTips", fShowTips);
+            ini.WriteInteger("Common", "InterfaceLang", fInterfaceLang);
+            ini.WriteInteger("Common", "FileBackup", (int)fFileBackup);
+            ini.WriteBool("Common", "ShowDatesCalendar", fShowDatesCalendar);
+            ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
+            ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);
+            ini.WriteBool("Common", "LoadRecentFiles", fLoadRecentFiles);
 
             ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
 
-            ini.WriteBool("Common", "Autosave", this.fAutosave);
-            ini.WriteInteger("Common", "AutosaveInterval", this.fAutosaveInterval);
+            ini.WriteBool("Common", "Autosave", fAutosave);
+            ini.WriteInteger("Common", "AutosaveInterval", fAutosaveInterval);
 
-            ini.WriteBool("Common", "ExtendedNames", this.fExtendedNames);
-            ini.WriteInteger("Common", "WomanSurnameFormat", (int)this.fWomanSurnameFormat);
+            ini.WriteBool("Common", "ExtendedNames", fExtendedNames);
+            ini.WriteInteger("Common", "WomanSurnameFormat", (int)fWomanSurnameFormat);
 
-            ini.WriteString("Common", "Geocoder", this.fGeocoder);
+            ini.WriteString("Common", "Geocoder", fGeocoder);
 
-            this.fChartOptions.SaveToFile(ini);
-            this.fPedigreeOptions.SaveToFile(ini);
-            this.fProxy.SaveToFile(ini);
+            fChartOptions.SaveToFile(ini);
+            fPedigreeOptions.SaveToFile(ini);
+            fProxy.SaveToFile(ini);
 
-            this.fNameFilters.Sort();
+            fNameFilters.Sort();
 
-            int cnt = this.fNameFilters.Count;
+            int cnt = fNameFilters.Count;
             ini.WriteInteger("NameFilters", "Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                ini.WriteString("NameFilters", "Filter_" + i.ToString(), this.fNameFilters[i]);
+                ini.WriteString("NameFilters", "Filter_" + i.ToString(), fNameFilters[i]);
             }
 
-            cnt = this.fResidenceFilters.Count;
+            cnt = fResidenceFilters.Count;
             ini.WriteInteger("ResidenceFilters", "Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), this.fResidenceFilters[i]);
+                ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), fResidenceFilters[i]);
             }
 
-            cnt = this.fEventFilters.Count;
+            cnt = fEventFilters.Count;
             ini.WriteInteger("EventFilters", "Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                ini.WriteString("EventFilters", "EventVal_" + i.ToString(), this.fEventFilters[i]);
+                ini.WriteString("EventFilters", "EventVal_" + i.ToString(), fEventFilters[i]);
             }
 
-            cnt = this.fMRUFiles.Count;
+            cnt = fMRUFiles.Count;
             ini.WriteInteger("Common", "MRUFiles_Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                this.fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
+                fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
             }
-            //this.FMRUFiles.Sort();
+            //FMRUFiles.Sort();
 
-            cnt = this.fRelations.Count;
+            cnt = fRelations.Count;
             ini.WriteInteger("Relations", "Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                ini.WriteString("Relations", "Relation_" + i.ToString(), this.fRelations[i]);
+                ini.WriteString("Relations", "Relation_" + i.ToString(), fRelations[i]);
             }
 
-            this.fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
+            fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
 
-            ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
-            ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
+            ini.WriteBool("ListPersons", "HighlightUnmarried", fListHighlightUnmarriedPersons);
+            ini.WriteBool("ListPersons", "HighlightUnparented", fListHighlightUnparentedPersons);
 
             //------------------------------------------------------------------
             // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
@@ -599,20 +620,20 @@ namespace GKCore.Options
             // true. See also implementation of `GKCore::GKUtils::GetFormRect`
             // member.
             //------------------------------------------------------------------
-            ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
-            ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
-            ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);
-            ini.WriteInteger("Common", "MWinH", this.fMWinRect.Bottom);
-            ini.WriteInteger("Common", "MWinState", (int)this.fMWinState);
+            ini.WriteInteger("Common", "MWinL", fMWinRect.Left);
+            ini.WriteInteger("Common", "MWinT", fMWinRect.Top);
+            ini.WriteInteger("Common", "MWinW", fMWinRect.Right);
+            ini.WriteInteger("Common", "MWinH", fMWinRect.Bottom);
+            ini.WriteInteger("Common", "MWinState", (int)fMWinState);
 
-            cnt = this.fLastBases.Count;
+            cnt = fLastBases.Count;
             ini.WriteInteger("LastBases", "Count", cnt);
             for (int i = 0; i < cnt; i++)
             {
-                ini.WriteString("LastBases", "LB" + i.ToString(), this.GetLastBase(i));
+                ini.WriteString("LastBases", "LB" + i.ToString(), GetLastBase(i));
             }
 
-            this.fAncestorsCircleOptions.SaveToFile(ini);
+            fAncestorsCircleOptions.SaveToFile(ini);
         }
 
         public void SaveToFile(string fileName)
@@ -622,7 +643,7 @@ namespace GKCore.Options
 
                 try
                 {
-                    this.SaveToFile(ini);
+                    SaveToFile(ini);
                 }
                 finally
                 {

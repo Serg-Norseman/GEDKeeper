@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,13 +42,13 @@ namespace GKCore.Stats
 
         public CompositeItem()
         {
-            this.CommonSum = 0;
-            this.MaleSum = 0;
-            this.FemaleSum = 0;
+            CommonSum = 0;
+            MaleSum = 0;
+            FemaleSum = 0;
 
-            this.CommonCount = 0;
-            this.MaleCount = 0;
-            this.FemaleCount = 0;
+            CommonCount = 0;
+            MaleCount = 0;
+            FemaleCount = 0;
         }
 
         public void TakeVal(float val, GEDCOMSex sex, bool ignoreZero)

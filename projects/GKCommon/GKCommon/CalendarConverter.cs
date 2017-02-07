@@ -5,7 +5,7 @@
  *  This program is in the public domain.
  *
  *  C# implementation:
- *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2011 by Sergey V. Zhdanovskih.
  *
  *  Additional methods for transformations:
  *  Copyright (C) 2016 by Ruslan Garipov.

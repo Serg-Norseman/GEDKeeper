@@ -83,6 +83,7 @@
     <Compile Include="PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SCCTests.cs" />
+    <Compile Include="SerializeTests.cs" />
     <Compile Include="Service\DataGridViewTester.cs" />
     <Compile Include="Service\GKRecordsViewTester.cs" />
     <Compile Include="Service\GKSheetListTester.cs" />

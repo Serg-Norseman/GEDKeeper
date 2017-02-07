@@ -65,6 +65,10 @@ having the same name).
 
 The use of "m_" and "_" as prefixes for instance members is highly discouraged.
 
+## Class members order
+
+Declare all member variables at the top of a class, with static variables at the very top.
+
 ## Indentation
 
 Use spaces (and configure your IDE to show a size of 4 spaces for them) for writing your code. 
@@ -80,6 +84,33 @@ switch (x) {
        ...
 }
 ```
+
+## Blank lines
+
+Blank lines improve readability. They set off blocks of code which are in themselves logically related.
+
+Two blank lines should always be used between:
+
+- Logical sections of a source file
+- Class and interface definitions (try one class/interface per file to prevent this case)
+
+One blank line should always be used between:
+
+- Methods
+- Properties
+- Local variables in a method and its first statement
+- Logical sections inside a method to improve readability.
+
+## Wrapping Lines
+
+When an expression will not fit on a single line, break it up according to these general principles:
+
+- Break after a comma.
+- Break after an operator.
+- Prefer higher-level breaks to lower-level breaks.
+- Align the new line with the beginning of the expression at the same level on the previous line.
+
+Preferred line length is 80 characters, taking into consideration the above recommendations.
 
 ## Where to put spaces
 
