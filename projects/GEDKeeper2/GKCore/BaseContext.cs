@@ -84,6 +84,14 @@ namespace GKCore
                         culture = new IcelandCulture();
                         break;
 
+                    case GEDCOMLanguageID.Armenian:
+                        culture = new ArmenianCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Turkish:
+                        culture = new TurkishCulture();
+                        break;
+
                     case GEDCOMLanguageID.English:
                     default:
                         culture = new BritishCulture();

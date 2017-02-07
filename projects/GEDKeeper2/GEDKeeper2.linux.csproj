@@ -518,6 +518,8 @@
     <Compile Include="GKCore\Export\RTFWriter.cs" />
     <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
+    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
+    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
     <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
