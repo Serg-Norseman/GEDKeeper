@@ -28,17 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.gkComboBox1 = new GKCommon.Controls.GKComboBox();
             this.SuspendLayout();
+            // 
+            // gkComboBox1
+            // 
+            this.gkComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.gkComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gkComboBox1.FormattingEnabled = true;
+            this.gkComboBox1.Location = new System.Drawing.Point(85, 93);
+            this.gkComboBox1.Name = "gkComboBox1";
+            this.gkComboBox1.Size = new System.Drawing.Size(289, 23);
+            this.gkComboBox1.TabIndex = 0;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(590, 334);
+            this.Controls.Add(this.gkComboBox1);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "GKSandbox";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormFormClosed);
             this.ResumeLayout(false);
         }
+        private GKCommon.Controls.GKComboBox gkComboBox1;
     }
 }

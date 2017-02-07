@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using GKCommon;
+using GKCommon.Controls;
 using GKCommon.Database;
 
 namespace GKSandbox
@@ -14,6 +16,10 @@ namespace GKSandbox
 
             fDatabase = new GKDatabase();
             fDatabase.Connect();
+
+            gkComboBox1.Items.Add(new DropDownItem("female", Resources.symbol_female));
+            gkComboBox1.Items.Add(new DropDownItem("male", Resources.symbol_male));
+            gkComboBox1.Items.Add(new DropDownItem("undefined"));
         }
 
         private void MainFormFormClosed(object sender, FormClosedEventArgs e)

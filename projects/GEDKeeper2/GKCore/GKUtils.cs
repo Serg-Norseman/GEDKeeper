@@ -766,7 +766,7 @@ namespace GKCore
                         }
                         if (ds != "")
                         {
-                            ds = "*" + ds;
+                            ds = ImportUtils.STD_BIRTH_SIGN + ds;
                         }
                         resStr += ds;
                         ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
@@ -781,7 +781,7 @@ namespace GKCore
                         }
                         if (ds != "")
                         {
-                            ds = "+" + ds;
+                            ds = ImportUtils.STD_DEATH_SIGN + ds;
                         }
                         if (ds != "")
                         {
