@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define FUN_ANIM
+// #define FUN_ANIM
 
 using System;
 using System.Collections.Generic;
@@ -50,7 +50,7 @@ namespace GKUI.Charts
             public int Gen;
             public GEDCOMIndividualRecord IRec;
             public GraphicsPath Path;
-            public int Rad;
+            public float Rad;
             public float StartAngle;
             public float WedgeAngle;
 
@@ -79,8 +79,8 @@ namespace GKUI.Charts
 
         protected static readonly object EventRootChanged;
 
-        protected const int CENTER_RAD = 90;
-        protected const int DEFAULT_GEN_WIDTH = 60;
+        protected const float CENTER_RAD = 90;
+        protected const float DEFAULT_GEN_WIDTH = 60;
 
         protected readonly SolidBrush[] fCircleBrushes;
         protected readonly SolidBrush[] fDarkBrushes;
@@ -93,7 +93,7 @@ namespace GKUI.Charts
         /* This chart's GDI+ paths boundary (in the following order: left, top,
          * right and bottom). */
         private float[] fBounds;
-        protected int fGenWidth;
+        protected float fGenWidth;
         private string fHint;
         protected int fIndividualsCount;
         /* TODO(brigadir15@gmail.com): Member `fMaxGenerations` should be a
@@ -107,23 +107,30 @@ namespace GKUI.Charts
          * Therefore, to avoid someone's tendency to change initial values of
          * member `fMaxGenerations`, the member should be a const field. */
         protected int fMaxGenerations;
-        protected int fOffsetX = 0;
-        protected int fOffsetY = 0;
+        protected float fOffsetX = 0;
+        protected float fOffsetY = 0;
         protected Pen fPen;
         protected GEDCOMIndividualRecord fRootPerson;
         protected CircleSegment fSelected;
         protected ShieldState fShieldState;
-
+        /* Zoom factors */
+        private float fZoomX = 1.0f;
+        private float fZoomY = 1.0f;
+        private float fZoomLowLimit = 0.0125f;
+        private float fZoomHighLimit = 1000.0f;
+        /* Mouse capturing. */
+        private int fMouseCaptured;
+        private int fMouseCaptureX;
+        private int fMouseCaptureY;
         /* Animation timer. */
         #if FUN_ANIM
-        //private float fAnimationAngle;
-        private Timer fAnimationTimer;
+        private Timer fAppearingAnimationTimer;
+        private UInt64 fAppearingAnimationTime = 0;
+        private const UInt64 fAppearingAnimationTimeLimit = 17;
         #endif
-        private UInt64 fAnimationTime = 0;
-        private const UInt64 fAnimationTimeLimit = 17;
 
 
-        public int GenWidth
+        public float GenWidth
         {
             get {
                 return fGenWidth;
@@ -198,6 +205,7 @@ namespace GKUI.Charts
             fSelected = null;
             fShieldState = baseWin.ShieldState;
             fBounds = new float[4];
+            fMouseCaptured = 0;
 
             #if FUN_ANIM
             InitTimer();
@@ -292,14 +300,14 @@ namespace GKUI.Charts
         private SizeF GetPathsBoundaryF()
         {
             /* Add double width of the pen -- adjust both sides. */
-            return new SizeF(fBounds[2] - fBounds[0] + (fPen.Width * 2),
-                             fBounds[3] - fBounds[1] + (fPen.Width * 2));
+            return new SizeF((fBounds[2] - fBounds[0] + (fPen.Width * 2)) * fZoomX,
+                             (fBounds[3] - fBounds[1] + (fPen.Width * 2)) * fZoomY);
         }
         private Size GetPathsBoundaryI()
         {
             /* Add double width of the pen -- adjust both sides. */
-            return new Size((int)(fBounds[2] - fBounds[0] + (fPen.Width * 2)),
-                            (int)(fBounds[3] - fBounds[1] + (fPen.Width * 2)));
+            return new Size((int)((fBounds[2] - fBounds[0] + (fPen.Width * 2)) * fZoomX),
+                            (int)((fBounds[3] - fBounds[1] + (fPen.Width * 2)) * fZoomY));
         }
 
         /// <summary>
@@ -322,16 +330,16 @@ namespace GKUI.Charts
                 PointF center = new PointF();
                 SizeF boundary = GetPathsBoundaryF();
                 if (ClientSize.Width > boundary.Width) {
-                    center.X = Math.Min(ClientSize.Width - fBounds[2], ClientSize.Width >> 1);
+                    center.X = Math.Min(ClientSize.Width - fBounds[2] * fZoomX, ClientSize.Width >> 1);
                 }
                 else {
-                    center.X = AutoScrollPosition.X + fOffsetX - fBounds[0];
+                    center.X = AutoScrollPosition.X + fOffsetX - fBounds[0] * fZoomX;
                 }
                 if (ClientSize.Height > boundary.Height) {
-                    center.Y = Math.Min(ClientSize.Height - fBounds[3], ClientSize.Height >> 1);
+                    center.Y = Math.Min(ClientSize.Height - fBounds[3] * fZoomY, ClientSize.Height >> 1);
                 }
                 else {
-                    center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1];
+                    center.Y = AutoScrollPosition.Y + fOffsetY - fBounds[1] * fZoomY;
                 }
                 return center;
 
@@ -339,8 +347,8 @@ namespace GKUI.Charts
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0],
-                                  AutoScrollPosition.Y + fOffsetY - fBounds[1]);
+                return new PointF(AutoScrollPosition.X + fOffsetX - fBounds[0] * fZoomX,
+                                  AutoScrollPosition.Y + fOffsetY - fBounds[1] * fZoomY);
 
             }
         }
@@ -362,18 +370,19 @@ namespace GKUI.Charts
             return result;
         }
 
-        protected CircleSegment FindSegment(int mX, int mY)
+        protected CircleSegment FindSegment(float mX, float mY)
         {
             PointF center = GetCenter(RenderTarget.rtScreen);
-            mX -= (int)(center.X);
-            mY -= (int)(center.Y);
+            mX -= center.X;
+            mY -= center.Y;
             CircleSegment result = null;
 
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fSegments[i];
-
-                if (segment.Path.IsVisible(mX, mY)) {
+                /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
+                 * const Graphics*)` doesn't work for me. */
+                if (segment.Path.IsVisible(mX / fZoomX, mY / fZoomY)) {
                     result = segment;
                     break;
                 }
@@ -391,16 +400,30 @@ namespace GKUI.Charts
         private void Render(Graphics context, RenderTarget target)
         {
             PointF center = GetCenter(target);
-            context.TranslateTransform(center.X, center.Y);
             if (RenderTarget.rtScreen == target) {
-                context.RotateTransform((float)(3.5f * Math.Sin(fAnimationTime) *
-                                                Math.Exp(-1.0 * fAnimationTime / fAnimationTimeLimit)));
-                float zoomX = 1.0f + ((0 != fAnimationTime) ?
-                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                float zoomY = 1.0f - ((0 != fAnimationTime) ?
-                                      (float)(Math.Exp(-1.0 * (fAnimationTime + 50.0f) / fAnimationTimeLimit)) : 0);
-                context.ScaleTransform(zoomX, zoomY);
+                if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
+                    context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                }
+#if !FUN_ANIM
+                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
+#else
+                float angle = (float)(3.5f * Math.Sin(fAppearingAnimationTime) *
+                                      Math.Exp(-1.0 * fAppearingAnimationTime / fAppearingAnimationTimeLimit));
+                float rotation = (float)(angle * Math.PI / 180.0f);
+                float cosine = (float)(Math.Cos(rotation));
+                float sine = (float)(Math.Sin(rotation));
+                Matrix m = new Matrix(cosine, sine, -sine, cosine, center.X, center.Y);
+                float zoomX = fZoomX + ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                float zoomY = fZoomY - ((0 != fAppearingAnimationTime) ?
+                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
+                m.Scale(zoomX, zoomY);
+                context.Transform = m;
+#endif
+            } else {
+                context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
             }
+            context.SmoothingMode = SmoothingMode.AntiAlias;
             InternalDraw(context);
             context.ResetTransform();
         }
@@ -432,7 +455,7 @@ namespace GKUI.Charts
                 GKUtils.GetNameParts(iRec, out surn, out givn, out dummy);
             }
 
-            int rad = segment.Rad - 20;
+            float rad = segment.Rad - 20;
             float angle = segment.StartAngle + 90.0f + segment.WedgeAngle / 2;
             float wedgeAngle = segment.WedgeAngle;
 
@@ -440,10 +463,10 @@ namespace GKUI.Charts
             Matrix previousTransformation = gfx.Transform;
             if (gen == 0) {
 
-                SizeF sizeF = gfx.MeasureString(surn, Font);
-                gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
-                sizeF = gfx.MeasureString(givn, Font);
-                gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, 0f);
+                SizeF size = gfx.MeasureString(surn, Font);
+                gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
+                size = gfx.MeasureString(givn, Font);
+                gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, 0f);
 
             } else {
 
@@ -481,12 +504,12 @@ namespace GKUI.Charts
 
                         if (fOptions.ArcText) {
                             if (gen == 2) {
-                                SizeF sizeF = gfx.MeasureString(surn, Font);
-                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
+                                SizeF size = gfx.MeasureString(surn, Font);
+                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                                sizeF = gfx.MeasureString(givn, Font);
-                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
+                                size = gfx.MeasureString(givn, Font);
+                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
                                 DrawArcText(gfx, givn, 0.0f, 0.0f, rad,
@@ -506,27 +529,27 @@ namespace GKUI.Charts
                             Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            SizeF sizeF2 = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
-                            sizeF2 = gfx.MeasureString(givn, Font);
-                            dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
-                            dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - sizeF2.Height);
+                            size = gfx.MeasureString(givn, Font);
+                            dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
+                            dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
                             m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
                         }
 
                     } else if (wedgeAngle < 361) {
 
                         if (fOptions.ArcText) {
-                            SizeF sizeF = gfx.MeasureString(surn, Font);
-                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + sizeF.Height / 2f,
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                            sizeF = gfx.MeasureString(givn, Font);
-                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - sizeF.Height / 2f,
+                            size = gfx.MeasureString(givn, Font);
+                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
@@ -538,10 +561,10 @@ namespace GKUI.Charts
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
 
-                            SizeF sizeF = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
-                            sizeF = gfx.MeasureString(givn, Font);
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
+                            SizeF size = gfx.MeasureString(surn, Font);
+                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            size = gfx.MeasureString(givn, Font);
+                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f + size.Height);
                         }
 
                     }
@@ -552,7 +575,7 @@ namespace GKUI.Charts
 
         private static bool IsNarrowSegment(Graphics gfx, string text, float radius, float wedgeAngle, Font font)
         {
-            var size = gfx.MeasureString(text, font);
+            SizeF size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
             float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
@@ -564,7 +587,7 @@ namespace GKUI.Charts
                                         float startAngle, float wedgeAngle,
                                         bool inside, bool clockwise, Font font, Brush brush)
         {
-            var size = gfx.MeasureString(text, font);
+            SizeF size = gfx.MeasureString(text, font);
             radius = radius + size.Height / 2.0f;
 
             float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
@@ -604,42 +627,27 @@ namespace GKUI.Charts
         #if FUN_ANIM
         private void InitTimer()
         {
-            if ((null == fAnimationTimer) || !fAnimationTimer.Enabled) {
-                fAnimationAngle = 0.0f;
-                fAnimationTime = 0;
-                fAnimationTimer = new Timer();
-                fAnimationTimer.Interval = 1;
-                fAnimationTimer.Tick += AnimationTimerTick;
-                fAnimationTimer.Start();
+            if ((null == fAppearingAnimationTimer) || !fAppearingAnimationTimer.Enabled) {
+                fAppearingAnimationTime = 0;
+                fAppearingAnimationTimer = new Timer();
+                fAppearingAnimationTimer.Interval = 1;
+                fAppearingAnimationTimer.Tick += AnimationTimerTick;
+                fAppearingAnimationTimer.Start();
             }
         }
 
         private void AnimationTimerTick(object sender, EventArgs e)
         {
-            ++fAnimationTime;
-            if (fAnimationTimeLimit < fAnimationTime) {
-                fAnimationTimer.Stop();
-                fAnimationTime = 0;
+            ++fAppearingAnimationTime;
+            if (fAppearingAnimationTimeLimit < fAppearingAnimationTime) {
+                fAppearingAnimationTimer.Stop();
+                fAppearingAnimationTime = 0;
             }
             Invalidate();
         }
         #endif
 
         #region Protected inherited methods
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Add:
-                case Keys.Subtract:
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Back:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
-        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -654,41 +662,128 @@ namespace GKUI.Charts
             Changed();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.KeyCode) {
+                case Keys.Add:
+                case Keys.Oemplus:
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                        fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
+                    break;
+
+                case Keys.Subtract:
+                case Keys.OemMinus:
+                    if (Keys.None == ModifierKeys) {
+                        fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                        fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
+                    break;
+
+                case Keys.D0:
+                    if (e.Control) {
+                        fZoomX = 1.0f;
+                        fZoomY = 1.0f;
+                        Size boundary = GetPathsBoundaryI();
+                        AdjustViewPort(boundary, true);
+                        Invalidate();
+                    }
+                    break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if ((MouseButtons.Left == e.Button) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
+                fMouseCaptured = 1;
+                fMouseCaptureX = e.X;
+                fMouseCaptureY = e.Y;
+            } else {
+                base.OnMouseDown(e);
+            }
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
-            CircleSegment selected = FindSegment(e.X, e.Y);
-
-            if (selected != null && selected.IRec != null) {
-                RootPerson = selected.IRec;
+            if (MouseButtons.Left == e.Button) {
+                if (2 > fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
+                    if (selected != null && selected.IRec != null) {
+                        RootPerson = selected.IRec;
+                    }
+                }
+                fMouseCaptured = 0;
+                Cursor = Cursors.Default;
+            } else {
+                base.OnMouseUp(e);
             }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
+            if (MouseButtons.Left == e.Button) {
+                if (0 == fMouseCaptured) {
+                    CircleSegment selected = FindSegment(e.X, e.Y);
 
-            CircleSegment selected = FindSegment(e.X, e.Y);
+                    string hint = "";
+                    if (!Equals(fSelected, selected)) {
+                        fSelected = selected;
 
-            string hint = "";
-            if (!Equals(fSelected, selected)) {
-                fSelected = selected;
+                        if (selected != null && selected.IRec != null) {
+                            string name = GKUtils.GetNameString(selected.IRec, true, false);
+                            hint = /*selected.Gen.ToString() + ", " + */name;
+                        }
 
-                if (selected != null && selected.IRec != null) {
-                    string name = GKUtils.GetNameString(selected.IRec, true, false);
-                    hint = /*selected.Gen.ToString() + ", " + */name;
+                        Invalidate();
+                    }
+
+                    if (!Equals(fHint, hint)) {
+                        fHint = hint;
+
+                        if (!string.IsNullOrEmpty(hint)) {
+                            fToolTip.Show(hint, this, e.X, e.Y, 3000);
+                        }
+                    }
+                } else {
+                    AutoScrollPosition = new Point(-AutoScrollPosition.X - (e.X - fMouseCaptureX),
+                                                   -AutoScrollPosition.Y - (e.Y - fMouseCaptureY));
+                    fMouseCaptured = 2;
+                    fMouseCaptureX = e.X;
+                    fMouseCaptureY = e.Y;
+                    Cursor = Cursors.SizeAll;
                 }
+            } else {
+                base.OnMouseMove(e);
+            }
+        }
 
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (Keys.None != (Keys.Control & ModifierKeys)) {
+                if (0 > e.Delta) {
+                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
+                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                } else {
+                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
+                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                }
+                Size boundary = GetPathsBoundaryI();
+                AdjustViewPort(boundary, true);
                 Invalidate();
             }
-
-            if (!Equals(fHint, hint)) {
-                fHint = hint;
-
-                if (!string.IsNullOrEmpty(hint)) {
-                    fToolTip.Show(hint, this, e.X, e.Y, 3000);
-                }
+            else {
+                base.OnMouseWheel(e);
             }
         }
 

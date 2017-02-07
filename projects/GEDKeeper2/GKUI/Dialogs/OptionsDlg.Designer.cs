@@ -110,6 +110,7 @@ namespace GKUI.Dialogs
         {
             this.PageControl1 = new System.Windows.Forms.TabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
+            this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblMinutes = new System.Windows.Forms.Label();
             this.numASMin = new System.Windows.Forms.NumericUpDown();
@@ -212,6 +213,7 @@ namespace GKUI.Dialogs
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.chkLoadRecentFiles = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -261,6 +263,8 @@ namespace GKUI.Dialogs
             // 
             // pageCommon
             // 
+            this.pageCommon.Controls.Add(this.chkLoadRecentFiles);
+            this.pageCommon.Controls.Add(this.chkRemovableMediaWarning);
             this.pageCommon.Controls.Add(this.groupBox1);
             this.pageCommon.Controls.Add(this.lblGeocoder);
             this.pageCommon.Controls.Add(this.lblLanguage);
@@ -274,6 +278,15 @@ namespace GKUI.Dialogs
             this.pageCommon.Size = new System.Drawing.Size(741, 479);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
+            // 
+            // chkRemovableMediaWarning
+            // 
+            this.chkRemovableMediaWarning.AutoSize = true;
+            this.chkRemovableMediaWarning.Location = new System.Drawing.Point(22, 298);
+            this.chkRemovableMediaWarning.Name = "chkRemovableMediaWarning";
+            this.chkRemovableMediaWarning.Size = new System.Drawing.Size(206, 21);
+            this.chkRemovableMediaWarning.TabIndex = 7;
+            this.chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
             // 
             // groupBox1
             // 
@@ -1312,6 +1325,15 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // chkLoadRecentFiles
+            // 
+            this.chkLoadRecentFiles.AutoSize = true;
+            this.chkLoadRecentFiles.Location = new System.Drawing.Point(22, 325);
+            this.chkLoadRecentFiles.Name = "chkLoadRecentFiles";
+            this.chkLoadRecentFiles.Size = new System.Drawing.Size(149, 21);
+            this.chkLoadRecentFiles.TabIndex = 7;
+            this.chkLoadRecentFiles.Text = "chkLoadRecentFiles";
+            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1368,6 +1390,8 @@ namespace GKUI.Dialogs
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+        private System.Windows.Forms.CheckBox chkLoadRecentFiles;
+        private System.Windows.Forms.CheckBox chkRemovableMediaWarning;
         private System.Windows.Forms.CheckBox chkDefaultPortraits;
         private System.Windows.Forms.ComboBox cmbGeocoder;
         private System.Windows.Forms.Label lblGeocoder;

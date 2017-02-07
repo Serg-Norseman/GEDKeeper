@@ -62,12 +62,18 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LinqBridge">
+      <HintPath>libs\LinqBridge.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlSerializer">
+      <HintPath>libs\YamlSerializer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -207,6 +213,7 @@
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\Tween.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
+    <Compile Include="GKCommon\YamlHelper.cs" />
     <Compile Include="GKCore\GKConsts.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />

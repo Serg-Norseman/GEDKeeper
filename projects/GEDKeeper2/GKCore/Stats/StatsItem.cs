@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,21 +34,21 @@ namespace GKCore.Stats
 
         public StatsItem(string caption, bool isCombo)
         {
-            this.Caption = caption;
-            this.Value = 0;
-            this.IsCombo = isCombo;
+            Caption = caption;
+            Value = 0;
+            IsCombo = isCombo;
         }
 
         public StatsItem(string caption, int value)
         {
-            this.Caption = caption;
-            this.Value = value;
-            this.IsCombo = false;
+            Caption = caption;
+            Value = value;
+            IsCombo = false;
         }
 
         public override string ToString()
         {
-            return this.Caption;
+            return Caption;
         }
     }
 }

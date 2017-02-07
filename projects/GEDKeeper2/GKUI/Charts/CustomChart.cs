@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
@@ -61,6 +62,124 @@ namespace GKUI.Charts
                 if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData) {
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Back:
+                    return true;
+                    break;
+
+                default:
+                    return base.IsInputKey(keyData);
+                    break;
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            e.Handled = true;
+            switch (e.KeyCode) {
+                case Keys.Left:
+                    HorizontalScroll.Value =
+                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+
+                case Keys.Right:
+                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+
+                case Keys.Up:
+                    VerticalScroll.Value =
+                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
+                    PerformLayout();
+                    break;
+
+                case Keys.Down:
+                    VerticalScroll.Value += VerticalScroll.SmallChange;
+                    PerformLayout();
+                    break;
+
+                case Keys.PageUp:
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value =
+                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value =
+                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
+                    }
+                    PerformLayout();
+                    break;
+
+                case Keys.PageDown:
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value += VerticalScroll.LargeChange;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
+                    }
+                    PerformLayout();
+                    break;
+
+                case Keys.Home:
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = 0;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = 0;
+                    }
+                    PerformLayout();
+                    break;
+
+                case Keys.End:
+                    if (Keys.None == ModifierKeys) {
+                        VerticalScroll.Value = VerticalScroll.Maximum;
+                    } else if (Keys.Shift == ModifierKeys) {
+                        HorizontalScroll.Value = HorizontalScroll.Maximum;
+                    }
+                    PerformLayout();
+                    break;
+
+                case Keys.Back:
+                    NavPrev();
+                    break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (MouseButtons.XButton1 == e.Button) {
+                NavPrev();
+            } else if (MouseButtons.XButton2 == e.Button) {
+                NavNext();
+            } else {
+                base.OnMouseUp(e);
+            }
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (Keys.None == ModifierKeys) {
+                VerticalScroll.Value =
+                    Math.Max(VerticalScroll.Value - e.Delta, 0);
+                PerformLayout();
+            } else if (Keys.Shift == ModifierKeys) {
+                HorizontalScroll.Value =
+                    Math.Max(HorizontalScroll.Value - e.Delta, 0);
+                PerformLayout();
+            }
+            else {
+                base.OnMouseWheel(e);
+            }
         }
 
         #region Print and snaphots support
@@ -203,34 +322,33 @@ namespace GKUI.Charts
         #region Static drawing methods
 
         internal static void CreateCircleSegment(GraphicsPath path,
-                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
         }
 
         internal static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                                 int inRad, int extRad, float wedgeAngle,
+                                                 float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            int px1 = ctX + (int)(inRad * Math.Cos(angval1));
-            int py1 = ctY + (int)(inRad * Math.Sin(angval1));
-            int px2 = ctX + (int)(extRad * Math.Cos(angval1));
-            int py2 = ctY + (int)(extRad * Math.Sin(angval1));
-
+            float px1 = ctX + (float)(inRad * Math.Cos(angval1));
+            float py1 = ctY + (float)(inRad * Math.Sin(angval1));
+            float px2 = ctX + (float)(extRad * Math.Cos(angval1));
+            float py2 = ctY + (float)(extRad * Math.Sin(angval1));
             float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
-            int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
-            int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
-            int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
+            float nx1 = ctX + (float)(inRad * Math.Cos(angval2));
+            float ny1 = ctY + (float)(inRad * Math.Sin(angval2));
+            float nx2 = ctX + (float)(extRad * Math.Cos(angval2));
+            float ny2 = ctY + (float)(extRad * Math.Sin(angval2));
 
-            int ir2 = inRad * 2;
-            int er2 = extRad * 2;
+            float ir2 = inRad * 2.0f;
+            float er2 = extRad * 2.0f;
 
             path.StartFigure();
             path.AddLine(px2, py2, px1, py1);
-            if (ir2 != 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            if (0 < ir2) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
             path.AddLine(nx1, ny1, nx2, ny2);
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();

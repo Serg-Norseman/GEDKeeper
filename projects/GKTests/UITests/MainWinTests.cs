@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -318,6 +318,7 @@ namespace GKTests.UITests
             // IHost tests
             IHost host = fMainWin;
 
+            fMainWin.Options.LastDir = "";
             string ufPath = host.GetUserFilesPath("");
             Assert.AreEqual(GKUtils.GetHomePath(), ufPath);
             Assert.IsFalse(string.IsNullOrEmpty(ufPath));

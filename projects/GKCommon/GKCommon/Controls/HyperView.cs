@@ -19,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *  C# implementation:
- *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2011 by Sergey V. Zhdanovskih.
  */
 
 using System;
@@ -30,6 +30,12 @@ using System.Windows.Forms;
 namespace GKCommon.Controls
 {
     public delegate void LinkEventHandler(object sender, string linkName);
+
+    public enum RuleStyle
+    {
+        rsLowered,
+        rsRaised
+    }
 
     /// <summary>
     /// 
@@ -44,22 +50,16 @@ namespace GKCommon.Controls
 
             public HyperLink(string name, int x, int y, int w, int h)
             {
-                this.Name = name;
-                this.fRect = ExtRect.CreateBounds(x, y, w, h);
+                Name = name;
+                fRect = ExtRect.CreateBounds(x, y, w, h);
             }
 
             public bool HasCoord(int x, int y, int xOffset, int yOffset)
             {
-                return x >= this.fRect.Left + xOffset && x <= this.fRect.Right + xOffset
-                    && y >= this.fRect.Top + yOffset && y <= this.fRect.Bottom + yOffset;
+                return x >= fRect.Left + xOffset && x <= fRect.Right + xOffset
+                    && y >= fRect.Top + yOffset && y <= fRect.Bottom + yOffset;
             }
         }
-
-        /*public enum TRuleStyle
-		{
-			rsLowered,
-			rsRaised
-		}*/
 
         //private bool fAcceptFontChange;
         private int fBorderWidth;
@@ -72,12 +72,10 @@ namespace GKCommon.Controls
         private int fLink;
         private Color fLinkColor;
         private Font fTextFont;
-        
+
         private static readonly object EventLink;
 
-        //private TRuleStyle FRuleStyle;
-        //private Color FDwnColor;
-        //private Color FUpColor;
+        private RuleStyle fRuleStyle;
 
         static HyperView()
         {
@@ -124,11 +122,17 @@ namespace GKCommon.Controls
             set { fLinkColor = value; }
         }
 
-        /*public TRuleStyle RuleStyle
-		{
-			get { return this.FRuleStyle; }
-			set { this.SetRuleStyle(value); }
-		}*/
+        public RuleStyle RuleStyle
+        {
+            get { return fRuleStyle; }
+            set {
+                if (fRuleStyle == value) return;
+
+                fRuleStyle = value;
+                base.Invalidate();
+            }
+        }
+
 
         public HyperView() : base()
         {
@@ -139,28 +143,26 @@ namespace GKCommon.Controls
             base.DoubleBuffered = true;
             base.TabStop = true;
 
-            //this.fAcceptFontChange = false;
-            this.fLines = new StringList();
-            this.fLines.OnChange += this.LinesChanged;
-            this.fHeights = new int[0];
-            this.fColor = SystemColors.Control;
-            this.fLinks = new List<HyperLink>();
-            this.fLinkColor = Color.Blue;
-            this.fLink = -1;
-            this.fTextSize = Size.Empty;
-
-            //this.FUpColor = Color.Gray;
-            //this.FDwnColor = Color.White;
+            //fAcceptFontChange = false;
+            fLines = new StringList();
+            fLines.OnChange += LinesChanged;
+            fHeights = new int[0];
+            fColor = SystemColors.Control;
+            fLinks = new List<HyperLink>();
+            fLinkColor = Color.Blue;
+            fLink = -1;
+            fTextSize = Size.Empty;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.ClearLinks();
-                //this.FLinks.Dispose();
-                this.fHeights = null;
-                this.fLines.Dispose();
+                fLinks.Clear();
+                //FLinks.Dispose();
+
+                fHeights = null;
+                fLines.Dispose();
 
                 if (fDefBrush != null) fDefBrush.Dispose();
                 if (fTextFont != null) fTextFont.Dispose();
@@ -168,34 +170,10 @@ namespace GKCommon.Controls
             base.Dispose(disposing);
         }
 
-        /*private void SetRuleStyle(TRuleStyle value)
-		{
-			if (this.FRuleStyle != value)
-			{
-				this.FRuleStyle = value;
-				if (this.FRuleStyle == TRuleStyle.rsRaised)
-				{
-					this.FUpColor = Color.White;
-					this.FDwnColor = Color.Gray;
-				}
-				else
-				{
-					this.FUpColor = Color.Gray;
-					this.FDwnColor = Color.White;
-				}
-				base.Invalidate();
-			}
-		}*/
-
         private void LinesChanged(object sender)
         {
-            this.AutoScrollPosition = new Point(0, 0);
-            this.ArrangeText();
-        }
-
-        private void ClearLinks()
-        {
-            this.fLinks.Clear();
+            AutoScrollPosition = new Point(0, 0);
+            ArrangeText();
         }
 
         private static int GetFontSize(string s, ref int i)
@@ -228,7 +206,7 @@ namespace GKCommon.Controls
         private void MeasureText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
         {
             if (yPos >= -hMax && ss != "") {
-                Size strSize = grx.MeasureString(ss, this.fTextFont).ToSize();
+                Size strSize = grx.MeasureString(ss, fTextFont).ToSize();
                 xPos += strSize.Width;
 
                 if (xPos > xMax) xMax = xPos;
@@ -240,9 +218,9 @@ namespace GKCommon.Controls
         private void OutText(Graphics gfx, string ss, ref int xPos, ref int yPos, ref int hMax)
         {
             if (yPos >= -hMax && ss != "") {
-                gfx.DrawString(ss, this.fTextFont, this.fDefBrush, xPos, yPos);
+                gfx.DrawString(ss, fTextFont, fDefBrush, xPos, yPos);
 
-                Size strSize = gfx.MeasureString(ss, this.fTextFont).ToSize();
+                Size strSize = gfx.MeasureString(ss, fTextFont).ToSize();
                 xPos += strSize.Width;
             }
         }
@@ -250,26 +228,25 @@ namespace GKCommon.Controls
         private void ArrangeText()
         {
             try {
-                this.fTextFont = (base.Parent.Font.Clone() as Font);
-                this.fDefBrush = new SolidBrush(Color.Black);
+                fTextFont = (base.Parent.Font.Clone() as Font);
+                fDefBrush = new SolidBrush(Color.Black);
+                fHeights = new int[fLines.Count];
+                //fAcceptFontChange = false;
+                fLinks.Clear();
 
-                this.fHeights = new int[this.fLines.Count];
-                //this.fAcceptFontChange = false;
                 Graphics gfx = base.CreateGraphics();
                 try
                 {
-                    this.ClearLinks();
-
                     int yPos = 0;
                     int xMax = 0;
 
-                    int num = this.fLines.Count;
+                    int num = fLines.Count;
                     for (int line = 0; line < num; line++)
                     {
                         int xPos = 0;
-                        int lineHeight = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
+                        int lineHeight = gfx.MeasureString("A", fTextFont).ToSize().Height;
 
-                        string s = this.fLines[line];
+                        string s = fLines[line];
 
                         int i = 1;
                         string ss = "";
@@ -281,7 +258,7 @@ namespace GKCommon.Controls
                                     ss += "~";
                                 }
 
-                                this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+                                MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
                                 i++;
 
                                 while (s[i - 1] != '~')
@@ -291,23 +268,23 @@ namespace GKCommon.Controls
                                     switch (c)
                                     {
                                         case '+':
-                                            this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
+                                            SetFontSize((fTextFont.Size + GetFontSize(s, ref i)));
                                             break;
 
                                         case '-':
-                                            this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
+                                            SetFontSize((fTextFont.Size - GetFontSize(s, ref i)));
                                             break;
 
                                         case '0':
-                                            this.fTextFont = (base.Parent.Font.Clone() as Font);
+                                            fTextFont = (base.Parent.Font.Clone() as Font);
                                             break;
 
                                         case 'B':
-                                            this.SetFontStyle(FontStyle.Bold);
+                                            SetFontStyle(FontStyle.Bold);
                                             break;
 
                                         case 'I':
-                                            this.SetFontStyle(FontStyle.Italic);
+                                            SetFontStyle(FontStyle.Italic);
                                             break;
 
                                         case 'R':
@@ -315,11 +292,11 @@ namespace GKCommon.Controls
                                             break;
 
                                         case 'S':
-                                            this.SetFontStyle(FontStyle.Strikeout);
+                                            SetFontStyle(FontStyle.Strikeout);
                                             break;
 
                                         case 'U':
-                                            this.SetFontStyle(FontStyle.Underline);
+                                            SetFontStyle(FontStyle.Underline);
                                             break;
 
                                         case '^':
@@ -336,9 +313,9 @@ namespace GKCommon.Controls
                                                     ss += s[i - 1];
                                                 }
 
-                                                int ssWidth = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
-                                                this.fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
-                                                this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+                                                int ssWidth = gfx.MeasureString(ss, fTextFont).ToSize().Width;
+                                                fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
+                                                MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
 
                                                 break;
                                             }
@@ -360,22 +337,20 @@ namespace GKCommon.Controls
                             i++;
                         }
 
-                        this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+                        MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
                         yPos += lineHeight;
-                        this.fHeights[line] = lineHeight;
+                        fHeights[line] = lineHeight;
                     }
 
-                    int textWidth = xMax + 2 * this.fBorderWidth;
-                    int textHeight = yPos + 2 * this.fBorderWidth;
-                    this.fTextSize = new Size(textWidth, textHeight);
+                    fTextSize = new Size(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
                 }
                 finally
                 {
                     gfx.Dispose();
-                    //this.fAcceptFontChange = true;
                 }
 
-                this.AdjustViewPort(this.fTextSize);
+                //fAcceptFontChange = true;
+                AdjustViewPort(fTextSize);
             }
             catch (Exception ex)
             {
@@ -388,20 +363,21 @@ namespace GKCommon.Controls
             try {
                 if (fHeights.Length != fLines.Count) return;
 
-                //this.fAcceptFontChange = false;
+                //fAcceptFontChange = false;
                 try
                 {
-                    gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
+                    Rectangle clientRect = base.ClientRectangle;
+                    gfx.FillRectangle(new SolidBrush(SystemColors.Control), clientRect);
 
-                    int yOffset = this.fBorderWidth - -this.AutoScrollPosition.Y;
+                    int yOffset = fBorderWidth - -AutoScrollPosition.Y;
 
-                    int num = this.fLines.Count;
+                    int num = fLines.Count;
                     for (int line = 0; line < num; line++)
                     {
-                        int xOffset = this.fBorderWidth - -this.AutoScrollPosition.X;
-                        int lineHeight = this.fHeights[line];
+                        int xOffset = fBorderWidth - -AutoScrollPosition.X;
+                        int lineHeight = fHeights[line];
 
-                        string s = this.fLines[line];
+                        string s = fLines[line];
 
                         int i = 1;
                         string ss = "";
@@ -413,7 +389,7 @@ namespace GKCommon.Controls
                                     ss += "~";
                                 }
 
-                                this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+                                OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
                                 i++;
 
                                 while (s[i - 1] != '~')
@@ -423,35 +399,40 @@ namespace GKCommon.Controls
                                     switch (c)
                                     {
                                         case '+':
-                                            this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
+                                            SetFontSize((fTextFont.Size + GetFontSize(s, ref i)));
                                             break;
 
                                         case '-':
-                                            this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
+                                            SetFontSize((fTextFont.Size - GetFontSize(s, ref i)));
                                             break;
 
                                         case '0':
-                                            this.fTextFont = (base.Parent.Font.Clone() as Font);
+                                            fTextFont = (base.Parent.Font.Clone() as Font);
                                             break;
 
                                         case 'B':
-                                            this.SetFontStyle(FontStyle.Bold);
+                                            SetFontStyle(FontStyle.Bold);
                                             break;
 
                                         case 'I':
-                                            this.SetFontStyle(FontStyle.Italic);
+                                            SetFontStyle(FontStyle.Italic);
                                             break;
 
                                         case 'R':
-                                            // need to realize
+                                            int rulerWidth = clientRect.Width - (xOffset * 2);
+                                            ControlPaint.DrawBorder3D(gfx, 
+                                                                      xOffset,
+                                                                      yOffset + (lineHeight - 3) / 2,
+                                                                      rulerWidth, 3,
+                                                                      Border3DStyle.Bump, Border3DSide.All);
                                             break;
 
                                         case 'S':
-                                            this.SetFontStyle(FontStyle.Strikeout);
+                                            SetFontStyle(FontStyle.Strikeout);
                                             break;
 
                                         case 'U':
-                                            this.SetFontStyle(FontStyle.Underline);
+                                            SetFontStyle(FontStyle.Underline);
                                             break;
 
                                         case '^':
@@ -468,14 +449,14 @@ namespace GKCommon.Controls
                                                     ss += s[i - 1];
                                                 }
 
-                                                Color saveColor = this.fDefBrush.Color;
-                                                this.fDefBrush.Color = this.fLinkColor;
-                                                this.SetFontStyle(FontStyle.Underline);
+                                                Color saveColor = fDefBrush.Color;
+                                                fDefBrush.Color = fLinkColor;
+                                                SetFontStyle(FontStyle.Underline);
 
-                                                this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+                                                OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
 
-                                                this.fDefBrush.Color = saveColor;
-                                                this.SetFontStyle(FontStyle.Underline);
+                                                fDefBrush.Color = saveColor;
+                                                SetFontStyle(FontStyle.Underline);
 
                                                 break;
                                             }
@@ -497,13 +478,13 @@ namespace GKCommon.Controls
                             i++;
                         }
 
-                        this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+                        OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
                         yOffset += lineHeight;
                     }
                 }
                 finally
                 {
-                    //this.fAcceptFontChange = true;
+                    //fAcceptFontChange = true;
                 }
             }
             catch (Exception ex)
@@ -514,12 +495,12 @@ namespace GKCommon.Controls
 
         private void SetFontSize(float size)
         {
-            this.fTextFont = new Font(this.fTextFont.Name, size, this.fTextFont.Style, this.fTextFont.Unit, this.fTextFont.GdiCharSet, this.fTextFont.GdiVerticalFont);
+            fTextFont = new Font(fTextFont.Name, size, fTextFont.Style, fTextFont.Unit, fTextFont.GdiCharSet, fTextFont.GdiVerticalFont);
         }
 
         private void SetFontStyle(FontStyle style)
         {
-            FontStyle fontStyle = this.fTextFont.Style;
+            FontStyle fontStyle = fTextFont.Style;
             if ((fontStyle & style) == FontStyle.Regular)
             {
                 fontStyle |= style;
@@ -528,42 +509,41 @@ namespace GKCommon.Controls
             {
                 fontStyle &= ~style;
             }
-            this.fTextFont = new Font(this.fTextFont, fontStyle);
+            fTextFont = new Font(fTextFont, fontStyle);
         }
 
         private void GotoLink(int linkIndex)
         {
-            HyperLink hLink = this.fLinks[linkIndex];
+            HyperLink hLink = fLinks[linkIndex];
             string lnk = "~@" + hLink.Name + "~";
-            int h = this.fBorderWidth;
+            int h = fBorderWidth;
 
-            int num = this.fLines.Count;
+            int num = fLines.Count;
             for (int j = 0; j < num; j++) {
-                if (this.fLines[j].IndexOf(lnk) >= 0) {
-                    this.AutoScrollPosition = new Point(0, h);
-                    //this.ScrollTo(0, h);
+                if (fLines[j].IndexOf(lnk) >= 0) {
+                    AutoScrollPosition = new Point(0, h);
+                    //ScrollTo(0, h);
                     return;
                 }
 
-                h += this.fHeights[j];
+                h += fHeights[j];
             }
 
-            this.DoLink(hLink.Name);
+            DoLink(hLink.Name);
         }
 
         private void DoLink(string linkName)
         {
             LinkEventHandler eventHandler = (LinkEventHandler)base.Events[HyperView.EventLink];
-            if (eventHandler == null) return;
-
-            eventHandler(this, linkName);
+            if (eventHandler != null)
+                eventHandler(this, linkName);
         }
 
         #region Protected methods
 
         protected override void OnFontChanged(EventArgs e)
         {
-            this.ArrangeText();
+            ArrangeText();
             base.OnFontChanged(e);
         }
 
@@ -574,35 +554,35 @@ namespace GKCommon.Controls
             switch (e.KeyCode)
             {
                 case Keys.Prior:
-                    this.AdjustScroll(0, -this.VerticalScroll.LargeChange);
+                    AdjustScroll(0, -VerticalScroll.LargeChange);
                     break;
 
                 case Keys.Next:
-                    this.AdjustScroll(0, this.VerticalScroll.LargeChange);
+                    AdjustScroll(0, VerticalScroll.LargeChange);
                     break;
 
                 case Keys.Home:
-                    this.AdjustScroll(-this.HorizontalScroll.Maximum, -this.VerticalScroll.Maximum);
+                    AdjustScroll(-HorizontalScroll.Maximum, -VerticalScroll.Maximum);
                     break;
 
                 case Keys.End:
-                    this.AdjustScroll(-this.HorizontalScroll.Maximum, this.VerticalScroll.Maximum);
+                    AdjustScroll(-HorizontalScroll.Maximum, VerticalScroll.Maximum);
                     break;
 
                 case Keys.Left:
-                    this.AdjustScroll(-(e.Modifiers == Keys.None ? this.HorizontalScroll.SmallChange : this.HorizontalScroll.LargeChange), 0);
+                    AdjustScroll(-(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange), 0);
                     break;
 
                 case Keys.Right:
-                    this.AdjustScroll(e.Modifiers == Keys.None ? this.HorizontalScroll.SmallChange : this.HorizontalScroll.LargeChange, 0);
+                    AdjustScroll(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange, 0);
                     break;
 
                 case Keys.Up:
-                    this.AdjustScroll(0, -(e.Modifiers == Keys.None ? this.VerticalScroll.SmallChange : this.VerticalScroll.LargeChange));
+                    AdjustScroll(0, -(e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange));
                     break;
 
                 case Keys.Down:
-                    this.AdjustScroll(0, e.Modifiers == Keys.None ? this.VerticalScroll.SmallChange : this.VerticalScroll.LargeChange);
+                    AdjustScroll(0, e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange);
                     break;
             }
         }
@@ -626,38 +606,37 @@ namespace GKCommon.Controls
         {
             base.OnMouseDown(e);
 
-            if (this.fLink >= 0) this.GotoLink(this.fLink);
+            if (fLink >= 0) GotoLink(fLink);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
-            int yOffset = (this.fBorderWidth - -this.AutoScrollPosition.Y);
-            int xOffset = (this.fBorderWidth - -this.AutoScrollPosition.X);
-            
-            int num = this.fLinks.Count;
+            int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
+            int xOffset = (fBorderWidth - -AutoScrollPosition.X);
+
+            int num = fLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                if (this.fLinks[i].HasCoord(e.X, e.Y, xOffset, yOffset))
+                if (fLinks[i].HasCoord(e.X, e.Y, xOffset, yOffset))
                 {
-                    this.fLink = i;
-                    this.Cursor = Cursors.Hand;
+                    fLink = i;
+                    Cursor = Cursors.Hand;
                     return;
                 }
             }
 
-            if (this.fLink >= 0)
+            if (fLink >= 0)
             {
-                this.Cursor = Cursors.Default;
-                this.fLink = -1;
+                Cursor = Cursors.Default;
+                fLink = -1;
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.DoPaint(e.Graphics);
-
+            DoPaint(e.Graphics);
             base.OnPaint(e);
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Sheets;
 
@@ -146,6 +147,12 @@ namespace GKUI.Dialogs
             string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (!string.IsNullOrEmpty(fileName))
             {
+                if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
+                    if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == DialogResult.No) {
+                        return;
+                    }
+                }
+
                 this.txtFile.Text = fileName;
                 bool canArc = GKUtils.FileCanBeArchived(fileName);
                 this.StoreTypesRefresh(canArc, MediaStoreType.mstReference);

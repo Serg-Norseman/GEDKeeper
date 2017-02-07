@@ -935,7 +935,7 @@ namespace GKUI
             this.MainMenuStrip = this.MainMenu1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainWin";
-            this.Text = "GEDKeeper2";
+            this.Text = "GEDKeeper";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.Load += new System.EventHandler(this.Form_Load);

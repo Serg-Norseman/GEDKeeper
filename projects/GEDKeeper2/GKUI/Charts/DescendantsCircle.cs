@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,23 +60,23 @@ namespace GKUI.Charts
             if (fRootPerson != null) {
                 rootSegment = TraverseDescendants(fRootPerson, 0);
 
-                const int inRad = CENTER_RAD - 50;
+                const float inRad = CENTER_RAD - 50;
                 float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
                 CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
             }
         }
 
-        private void CalcDescendants(PersonSegment segment, int inRad, float startAngle, float stepAngle)
+        private void CalcDescendants(PersonSegment segment, float inRad, float startAngle, float stepAngle)
         {
             GraphicsPath path = segment.Path;
 
-            int extRad;
+            float extRad;
             if (segment.Gen == 0) {
                 segment.WedgeAngle = 360.0f;
 
                 path.StartFigure();
-                path.AddEllipse(-inRad, -inRad, inRad << 1, inRad << 1);
+                path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
                 path.CloseFigure();
 
                 extRad = inRad;
@@ -151,8 +151,6 @@ namespace GKUI.Charts
 
         protected override void InternalDraw(Graphics gfx)
         {
-            gfx.SmoothingMode = SmoothingMode.AntiAlias;
-
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
@@ -173,24 +171,12 @@ namespace GKUI.Charts
         {
             base.OnKeyDown(e);
 
-            e.Handled = false;
+            /*e.Handled = false;
             switch (e.KeyCode) {
-                case Keys.Add:
-                    GenWidth += 10;
-                    break;
-
-                case Keys.Subtract:
-                    GenWidth -= 10;
-                    break;
-
-                case Keys.Back:
-                    NavPrev();
-                    return;
-
                 default:
                     e.Handled = true;
                     break;
-            }
+            }*/
         }
     }
 }
