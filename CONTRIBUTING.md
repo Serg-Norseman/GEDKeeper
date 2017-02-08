@@ -111,7 +111,7 @@ One blank line should always be used between:
 
 - Methods
 - Properties
-- Local variables in a method and its first statement
+- Local variables in a method and its first statement (necessarily only if the variable is in front of a large block of logically related statements)
 - Logical sections inside a method to improve readability.
 
 ## Wrapping Lines
