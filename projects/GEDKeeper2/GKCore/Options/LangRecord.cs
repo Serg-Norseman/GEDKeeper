@@ -34,13 +34,13 @@ namespace GKCore.Options
 
         public LangRecord(ushort code, string sign, string name, string fileName)
         {
-            this.Code = code;
-            this.Sign = sign;
-            this.Name = name;
-            this.FileName = fileName;
+            Code = code;
+            Sign = sign;
+            Name = name;
+            FileName = fileName;
 
             string engLangName = SysUtils.NormalizeName(Path.GetFileNameWithoutExtension(fileName));
-            this.LangID = GEDCOMLanguage.GetLIDByName(engLangName);
+            LangID = GEDCOMLanguage.GetLIDByName(engLangName);
         }
     }
 }

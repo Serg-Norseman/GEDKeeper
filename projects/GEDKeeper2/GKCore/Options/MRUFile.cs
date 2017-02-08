@@ -36,7 +36,7 @@ namespace GKCore.Options
 
         public MRUFile(string fileName)
         {
-            this.FileName = fileName;
+            FileName = fileName;
         }
 
         public void LoadFromFile(IniFile iniFile, string section)
@@ -44,12 +44,12 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            this.FileName = iniFile.ReadString(section, "FileName", "");
-            this.WinRect.Left = iniFile.ReadInteger(section, "WinL", 10);
-            this.WinRect.Top = iniFile.ReadInteger(section, "WinT", 10);
-            this.WinRect.Right = iniFile.ReadInteger(section, "WinR", 778);
-            this.WinRect.Bottom = iniFile.ReadInteger(section, "WinB", 312);
-            this.WinState = (FormWindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
+            FileName = iniFile.ReadString(section, "FileName", "");
+            WinRect.Left = iniFile.ReadInteger(section, "WinL", 10);
+            WinRect.Top = iniFile.ReadInteger(section, "WinT", 10);
+            WinRect.Right = iniFile.ReadInteger(section, "WinR", 778);
+            WinRect.Bottom = iniFile.ReadInteger(section, "WinB", 312);
+            WinState = (FormWindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
         }
 
         public void SaveToFile(IniFile iniFile, string section)
@@ -57,12 +57,12 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            iniFile.WriteString(section, "FileName", this.FileName);
-            iniFile.WriteInteger(section, "WinL", this.WinRect.Left);
-            iniFile.WriteInteger(section, "WinT", this.WinRect.Top);
-            iniFile.WriteInteger(section, "WinR", this.WinRect.Right);
-            iniFile.WriteInteger(section, "WinB", this.WinRect.Bottom);
-            iniFile.WriteInteger(section, "WinState", (int)this.WinState);
+            iniFile.WriteString(section, "FileName", FileName);
+            iniFile.WriteInteger(section, "WinL", WinRect.Left);
+            iniFile.WriteInteger(section, "WinT", WinRect.Top);
+            iniFile.WriteInteger(section, "WinR", WinRect.Right);
+            iniFile.WriteInteger(section, "WinB", WinRect.Bottom);
+            iniFile.WriteInteger(section, "WinState", (int)WinState);
         }
 
         public static void DeleteKeys(IniFile iniFile, string section)

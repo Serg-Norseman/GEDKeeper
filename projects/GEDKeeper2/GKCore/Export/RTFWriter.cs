@@ -44,8 +44,8 @@ namespace GKCore.Export
 
         public RTFWriter()
         {
-            PaperOrientation po = (this.fAlbumPage) ? PaperOrientation.Landscape : PaperOrientation.Portrait;
-            this.fDocument = new RtfDocument(PaperSize.A4, po, Lcid.English);
+            PaperOrientation po = (fAlbumPage) ? PaperOrientation.Landscape : PaperOrientation.Portrait;
+            fDocument = new RtfDocument(PaperSize.A4, po, Lcid.English);
         }
 
         public override void beginWrite()
@@ -54,7 +54,7 @@ namespace GKCore.Export
 
         public override void endWrite()
         {
-            this.fDocument.save(this.fFileName);
+            fDocument.save(fFileName);
         }
 
         private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, object font)
@@ -79,27 +79,27 @@ namespace GKCore.Export
 
         public override void addParagraph(string text, object font, TextAlignment alignment)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
             par.Alignment = iAlignments[(int)alignment];
             addParagraphChunk(par, text, font);
         }
 
         public override void addParagraph(string text, object font)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
             addParagraphChunk(par, text, font);
         }
 
         public override void addParagraphAnchor(string text, object font, string anchor)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
             RtfCharFormat fmt = addParagraphChunk(par, text, font);
             fmt.Bookmark = anchor;
         }
 
         public override void addParagraphLink(string text, object font, string link, object linkFont)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
             RtfCharFormat fmt = addParagraphChunk(par, text, font);
             fmt.LocalHyperlink = link;
         }
@@ -109,9 +109,9 @@ namespace GKCore.Export
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
             FontStruct fntStr = new FontStruct();
-            fntStr.FD = this.fDocument.createFont(name);
+            fntStr.FD = fDocument.createFont(name);
             fntStr.OriginalColor = color;
-            fntStr.Color = this.fDocument.createColor(new RtfColor(color));
+            fntStr.Color = fDocument.createColor(new RtfColor(color));
             fntStr.Size = size;
             fntStr.Bold = bold;
             fntStr.Underline = underline;
@@ -129,10 +129,10 @@ namespace GKCore.Export
 
         public override void addListItem(string text, object font)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
 
             FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)this.CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct symFont = (FontStruct)CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
@@ -140,10 +140,10 @@ namespace GKCore.Export
 
         public override void addListItemLink(string text, object font, string link, object linkFont)
         {
-            RtfParagraph par = this.fDocument.addParagraph();
+            RtfParagraph par = fDocument.addParagraph();
 
             FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)this.CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct symFont = (FontStruct)CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
@@ -156,10 +156,10 @@ namespace GKCore.Export
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
         {
-            this.fParagraph = this.fDocument.addParagraph();
-            this.fParagraph.Alignment = iAlignments[(int)alignment];
+            fParagraph = fDocument.addParagraph();
+            fParagraph.Alignment = iAlignments[(int)alignment];
             
-            Margins margins = this.fParagraph.Margins;
+            Margins margins = fParagraph.Margins;
             margins[Direction.Top] = spacingBefore;
             margins[Direction.Bottom] = spacingAfter;
         }
@@ -170,18 +170,18 @@ namespace GKCore.Export
 
         public override void addParagraphChunk(string text, object font)
         {
-            addParagraphChunk(this.fParagraph, text, font);
+            addParagraphChunk(fParagraph, text, font);
         }
 
         public override void addParagraphChunkAnchor(string text, object font, string anchor)
         {
-            RtfCharFormat fmt = addParagraphChunk(this.fParagraph, text, font);
+            RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             fmt.Bookmark = anchor;
         }
 
         public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
         {
-            RtfCharFormat fmt = addParagraphChunk(this.fParagraph, text, font);
+            RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
             fmt.LocalHyperlink = link;
         }

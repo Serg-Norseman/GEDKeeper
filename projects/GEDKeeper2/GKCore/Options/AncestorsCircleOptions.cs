@@ -47,7 +47,7 @@ namespace GKCore.Options
             Color.PaleGreen // lines
         };
 
-        public bool ArcText;
+        public bool ArcText; // TODO: to OptionsDlg
         public Color[] BrushColor = new Color[MAX_BRUSHES];
         public bool HideEmptySegments;
 

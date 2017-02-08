@@ -34,8 +34,8 @@ namespace GKCore.Tools
 
         public PlaceObj(string name)
         {
-            this.Name = name;
-            this.Facts = new List<GEDCOMCustomEvent>();
+            Name = name;
+            Facts = new List<GEDCOMCustomEvent>();
         }
 
         protected override void Dispose(bool disposing)

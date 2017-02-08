@@ -31,9 +31,9 @@ namespace GKCore.Geocoding
 
         public GeoPoint(double latitude, double longitude, string hint)
         {
-            this.Latitude = latitude;
-            this.Longitude = longitude;
-            this.Hint = hint;
+            Latitude = latitude;
+            Longitude = longitude;
+            Hint = hint;
         }
     }
 }

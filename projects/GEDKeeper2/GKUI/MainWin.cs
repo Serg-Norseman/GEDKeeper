@@ -717,37 +717,37 @@ namespace GKUI
 
         public void ShowTips()
         {
-            if (this.fBirthDays.Count > 0) {
+            if (fBirthDays.Count > 0) {
                 MainWin.Instance.Options.ShowTips =
                     DayTipsDlg.ShowTipsEx(
                         LangMan.LS(LSID.LSID_BirthDays),
                         MainWin.Instance.Options.ShowTips,
                         fBirthDays, this.Handle);
 
-                this.fBirthDays.Clear();
+                fBirthDays.Clear();
             }
         }
 
         private void BeginLoading()
         {
-            this.fLoadingCount++;
+            fLoadingCount++;
         }
 
         private void EndLoading()
         {
-            this.fLoadingCount--;
+            fLoadingCount--;
 
-            if (this.fLoadingCount == 0)
+            if (fLoadingCount == 0)
             {
-                this.ShowTips();
+                ShowTips();
             }
         }
 
         public IBaseWindow CreateBase(string fileName)
         {
-            this.BeginLoading();
+            BeginLoading();
 
-            IBaseWindow result = this.FindBase(fileName);
+            IBaseWindow result = FindBase(fileName);
             if (result != null) {
                 result.Activate();
                 return result;
@@ -758,14 +758,14 @@ namespace GKUI
 
             if (fileName != "" && File.Exists(fileName)) {
                 result.FileLoad(fileName);
-                result.CollectTips(this.fBirthDays);
+                result.CollectTips(fBirthDays);
             } else {
                 result.FileNew();
             }
 
-            this.RestoreMRU(result, fileName);
+            RestoreMRU(result, fileName);
 
-            this.EndLoading();
+            EndLoading();
 
             return result;
         }
@@ -782,13 +782,13 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                this.LogWrite("MainWin.CriticalSave(): " + ex.Message);
+                LogWrite("MainWin.CriticalSave(): " + ex.Message);
             }
         }
 
         private void miUndoClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Context.DoUndo();
@@ -796,7 +796,7 @@ namespace GKUI
 
         private void miRedoClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Context.DoRedo();
@@ -807,7 +807,7 @@ namespace GKUI
             #if __MonoCS__
             this.ShowWarning(@"This function is not supported in Linux");
             #else
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             using (FamilyBookExporter fb = new FamilyBookExporter(curBase)) {
@@ -818,18 +818,18 @@ namespace GKUI
 
         private void miExportToExcelFileClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             using (ExcelExporter exExp = new ExcelExporter(curBase)) {
-                exExp.Options = this.fOptions;
+                exExp.Options = fOptions;
                 exExp.Generate(true);
             }
         }
 
         private void miFilePropertiesClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             try {
@@ -845,14 +845,14 @@ namespace GKUI
 
         private void miScriptsClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             try {
                 curBase.Context.BeginUpdate();
 
                 using (ScriptEditWin dmn = new ScriptEditWin(curBase)) {
-                    this.ShowModalEx(dmn, false);
+                    ShowModalEx(dmn, false);
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -861,14 +861,14 @@ namespace GKUI
 
         private void miTreeToolsClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             try {
                 curBase.Context.BeginUpdate();
 
                 using (TreeToolsWin fmTreeTools = new TreeToolsWin(curBase)) {
-                    this.ShowModalEx(fmTreeTools, false);
+                    ShowModalEx(fmTreeTools, false);
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -891,7 +891,7 @@ namespace GKUI
 
                 if (dlgOptions.ShowDialog() == DialogResult.OK)
                 {
-                    this.ApplyOptions();
+                    ApplyOptions();
 
                     foreach (Form child in base.MdiChildren)
                     {
@@ -905,7 +905,7 @@ namespace GKUI
 
         private void miFileCloseClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Close();
@@ -913,14 +913,14 @@ namespace GKUI
 
         private void miFileNewClick(object sender, EventArgs e)
         {
-            this.CreateBase("");
+            CreateBase("");
         }
 
         public string GetUserFilesPath(string filePath)
         {
             string ufPath = filePath;
             if (!Directory.Exists(ufPath)) {
-                ufPath = this.fOptions.LastDir;
+                ufPath = fOptions.LastDir;
                 if (!Directory.Exists(ufPath)) {
                     ufPath = GKUtils.GetHomePath();
                 }
@@ -935,13 +935,13 @@ namespace GKUI
 
             string fileName = UIHelper.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
-                this.CreateBase(fileName);
+                CreateBase(fileName);
             }
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile(true);
+            IBaseWindow curBase = GetCurrentFile(true);
             if (curBase == null) return;
 
             string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
@@ -954,19 +954,19 @@ namespace GKUI
 
         public void miFileSave_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile(true);
+            IBaseWindow curBase = GetCurrentFile(true);
             if (curBase == null) return;
 
             if (!curBase.IsUnknown()) {
                 curBase.FileSave(curBase.Tree.FileName);
             } else {
-                this.miFileSaveAs_Click(sender, e);
+                miFileSaveAs_Click(sender, e);
             }
         }
 
         private void miRecordAddClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.RecordAdd();
@@ -974,7 +974,7 @@ namespace GKUI
 
         private void miRecordEditClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.RecordEdit(sender, e);
@@ -982,7 +982,7 @@ namespace GKUI
 
         private void miRecordDeleteClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             curBase.RecordDelete();
@@ -990,7 +990,7 @@ namespace GKUI
 
         private void miSearchClick(object sender, EventArgs e)
         {
-            IWorkWindow win = this.GetWorkWindow();
+            IWorkWindow win = GetWorkWindow();
             if (win == null) return;
 
             win.QuickSearch();
@@ -998,7 +998,7 @@ namespace GKUI
 
         private void miFilterClick(object sender, EventArgs e)
         {
-            IWorkWindow win = this.GetWorkWindow();
+            IWorkWindow win = GetWorkWindow();
             if (win == null) return;
 
             win.SetFilter();
@@ -1006,7 +1006,7 @@ namespace GKUI
 
         private void tbPrevClick(object sender, EventArgs e)
         {
-            IWorkWindow win = this.GetWorkWindow();
+            IWorkWindow win = GetWorkWindow();
             if (win == null) return;
 
             win.NavPrev();
@@ -1014,7 +1014,7 @@ namespace GKUI
 
         private void tbNextClick(object sender, EventArgs e)
         {
-            IWorkWindow win = this.GetWorkWindow();
+            IWorkWindow win = GetWorkWindow();
             if (win == null) return;
 
             win.NavNext();
@@ -1022,7 +1022,7 @@ namespace GKUI
 
         private void tbDocPrintClick(object sender, EventArgs e)
         {
-            IChartWindow chartWin = this.GetWorkWindow() as IChartWindow;
+            IChartWindow chartWin = GetWorkWindow() as IChartWindow;
             if (chartWin != null && chartWin.AllowPrint()) {
                 chartWin.DoPrint();
             }
@@ -1062,7 +1062,7 @@ namespace GKUI
 
         private void miRelationshipCalculator_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(curBase)) {
@@ -1072,7 +1072,7 @@ namespace GKUI
 
         private void miSlideshowClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             SlideshowWin win = new SlideshowWin(curBase);
@@ -1081,7 +1081,7 @@ namespace GKUI
 
         private void miStatsClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
@@ -1092,12 +1092,12 @@ namespace GKUI
 
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             using (PedigreeExporter p = new PedigreeExporter(curBase)) {
                 p.Root = curBase.GetSelectedPerson();
-                p.Options = this.fOptions;
+                p.Options = fOptions;
                 p.ShieldState = curBase.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
@@ -1106,22 +1106,22 @@ namespace GKUI
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
         }
 
         private void miPedigree_dAbovilleClick(object sender, EventArgs e)
         {
-            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
         }
 
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
         }
 
         private void miTreeAncestorsClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors)) {
@@ -1133,7 +1133,7 @@ namespace GKUI
 
         private void miTreeDescendantsClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants)) {
@@ -1145,7 +1145,7 @@ namespace GKUI
 
         private void miTreeBothClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckBoth)) {
@@ -1157,7 +1157,7 @@ namespace GKUI
 
         private void miAncestorsCircleClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Ancestors);
@@ -1166,7 +1166,7 @@ namespace GKUI
 
         private void miDescendantsCircleClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
+            IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Descendants);

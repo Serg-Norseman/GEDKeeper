@@ -42,17 +42,17 @@ namespace GKUI
 
         public GEDCOMFileReferenceWithTitle FileRef
         {
-            get { return this.fFileRef; }
-            set { this.SetFileRef(value); }
+            get { return fFileRef; }
+            set { SetFileRef(value); }
         }
 
         private void SetFileRef(GEDCOMFileReferenceWithTitle value)
         {
-            this.fFileRef = value;
-            this.Text = this.fFileRef.Title;
+            fFileRef = value;
+            Text = fFileRef.Title;
             Control ctl = null;
 
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(this.fFileRef.MultimediaFormat);
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
 
             try
             {
@@ -60,24 +60,25 @@ namespace GKUI
                 {
                     case MultimediaKind.mkImage:
                         {
-                            Image img = this.fBase.Context.LoadMediaImage(this.fFileRef, false);
-                            this.SetViewImage(img);
+                            Image img = fBase.Context.LoadMediaImage(fFileRef, false);
+                            SetViewImage(img);
                             break;
                         }
 
                     case MultimediaKind.mkAudio:
                     case MultimediaKind.mkVideo:
-                        // error
+                        // TODO: embedded MediaPlayer (vlc?)
                         break;
 
                     case MultimediaKind.mkText:
                         {
                             Stream fs;
-                            this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
+                            fBase.Context.MediaLoad(fFileRef, out fs, false);
 
-                            switch (this.fFileRef.MultimediaFormat)
+                            switch (fFileRef.MultimediaFormat)
                             {
                                 case GEDCOMMultimediaFormat.mfTXT:
+                                    // FIXME: fix encoding! and test other!!!
                                     using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
                                         TextBox txtBox = new TextBox();
                                         txtBox.Multiline = true;
@@ -85,7 +86,7 @@ namespace GKUI
                                         txtBox.ScrollBars = ScrollBars.Both;
                                         txtBox.Text = strd.ReadToEnd();
                                         ctl = txtBox;
-                                        this.SetViewControl(ctl);
+                                        SetViewControl(ctl);
                                     }
                                     break;
 
@@ -95,14 +96,14 @@ namespace GKUI
                                         rtfBox.ReadOnly = true;
                                         rtfBox.Text = strd.ReadToEnd();
                                         ctl = rtfBox;
-                                        this.SetViewControl(ctl);
+                                        SetViewControl(ctl);
                                     }
                                     break;
 
                                 case GEDCOMMultimediaFormat.mfHTM:
                                     ctl = new WebBrowser();
                                     (ctl as WebBrowser).DocumentStream = fs;
-                                    this.SetViewControl(ctl);
+                                    SetViewControl(ctl);
                                     break;
                             }
                             break;
@@ -113,7 +114,7 @@ namespace GKUI
             {
                 if (ctl != null) ctl.Dispose();
 
-                this.fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
+                fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
             }
         }
 
@@ -125,13 +126,13 @@ namespace GKUI
             imageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
             imageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
 
-            this.SetViewControl(imageCtl);
+            SetViewControl(imageCtl);
         }
 
         private void SetViewControl(Control ctl)
         {
             if (ctl != null) {
-                this.SuspendLayout();
+                SuspendLayout();
 
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
@@ -139,16 +140,16 @@ namespace GKUI
                 base.Controls.Add(ctl);
                 base.Controls.SetChildIndex(ctl, 0);
 
-                this.ResumeLayout(false);
+                ResumeLayout(false);
             }
         }
 
         public MediaViewerWin(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
-            this.fBase = baseWin;
+            InitializeComponent();
 
-            this.SetLang();
+            fBase = baseWin;
+            SetLang();
         }
 
         public void SetLang()
@@ -158,7 +159,7 @@ namespace GKUI
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) {
-                base.Close();
+                Close();
             }
         }
     }

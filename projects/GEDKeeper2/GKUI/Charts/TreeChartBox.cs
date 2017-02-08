@@ -1896,7 +1896,7 @@ namespace GKUI.Charts
                 case ChartControlMode.ccmDefault:
                     SelectBy(e.X, e.Y, (e.Button == MouseButtons.Left));
 
-                    if (fSelected == null && e.Button == MouseButtons.Right)
+                    if (fSelected == null && e.Button == GlobalOptions.Instance.ChartsDragMouseButton)
                     {
                         Cursor = Cursors.SizeAll;
                         fMode = ChartControlMode.ccmDragImage;
