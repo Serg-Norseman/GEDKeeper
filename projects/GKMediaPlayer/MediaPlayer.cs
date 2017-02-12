@@ -40,6 +40,13 @@ namespace GKMediaPlayer
         private readonly IMediaPlayerFactory fFactory;
         private readonly IDiskPlayer fPlayer;
         private IMedia fMedia;
+        private string fMediaFile;
+
+        public string MediaFile
+        {
+            get { return fMediaFile; }
+            set { fMediaFile = value; }
+        }
 
         public MediaPlayer()
         {
@@ -68,6 +75,15 @@ namespace GKMediaPlayer
             base.Dispose(disposing);
         }
 
+        private void InitControls()
+        {
+            trkPosition.Value = 0;
+            lblTime.Text = @"00:00:00";
+            lblDuration.Text = @"00:00:00";
+        }
+
+        #region Event handlers
+
         private void Events_PlayerStopped(object sender, EventArgs e)
         {
             UISync.Execute(InitControls);
@@ -76,13 +92,6 @@ namespace GKMediaPlayer
         private void Events_MediaEnded(object sender, EventArgs e)
         {
             UISync.Execute(InitControls);
-        }
-
-        private void InitControls()
-        {
-            trkPosition.Value = 0;
-            lblTime.Text = @"00:00:00";
-            lblDuration.Text = @"00:00:00";
         }
 
         private void Events_TimeChanged(object sender, MediaPlayerTimeChanged e)
@@ -99,17 +108,6 @@ namespace GKMediaPlayer
                            });
         }
 
-        private void LoadMedia()
-        {
-            using (var ofd = new OpenFileDialog())
-            {
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    txtFileName.Text = ofd.FileName;
-                }
-            }
-        }
-
         private void Events_StateChanged(object sender, MediaStateChange e)
         {
             UISync.Execute(() => label1.Text = e.NewState.ToString());
@@ -120,16 +118,20 @@ namespace GKMediaPlayer
             UISync.Execute(() => lblDuration.Text = TimeSpan.FromMilliseconds(e.NewDuration).ToString().Substring(0, 8));
         }
 
-        private void btnOpen_Click(object sender, EventArgs e)
+        private void Events_ParsedChanged(object sender, MediaParseChange e)
         {
-            LoadMedia();
+            Console.WriteLine(e.Parsed);
         }
+
+        #endregion
+
+        #region Controls handlers
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtFileName.Text))
+            if (!string.IsNullOrEmpty(fMediaFile))
             {
-                fMedia = fFactory.CreateMedia<IMedia>(txtFileName.Text);
+                fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
                 fMedia.Events.DurationChanged += Events_DurationChanged;
                 fMedia.Events.StateChanged += Events_StateChanged;
                 fMedia.Events.ParsedChanged += Events_ParsedChanged;
@@ -141,13 +143,8 @@ namespace GKMediaPlayer
             }
             else
             {
-                errorProvider1.SetError(txtFileName, "Please select media path first !");
+                MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Events_ParsedChanged(object sender, MediaParseChange e)
-        {
-            Console.WriteLine(e.Parsed);
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)
@@ -177,10 +174,9 @@ namespace GKMediaPlayer
             btnMute.Text = fPlayer.Mute ? "Unmute" : "Mute";
         }
 
-        private void txtFileName_TextChanged(object sender, EventArgs e)
-        {
-            errorProvider1.Clear();
-        }
+        #endregion
+
+        #region UI synchronization
 
         private static class UISync
         {
@@ -196,5 +192,7 @@ namespace GKMediaPlayer
                 fSync.BeginInvoke(action, null);
             }
         }
+
+        #endregion
     }
 }

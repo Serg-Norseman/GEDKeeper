@@ -8,12 +8,9 @@
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.TrackBar trkPosition;
         private System.Windows.Forms.TrackBar trkVolume;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtFileName;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Label label2;
@@ -21,25 +18,20 @@
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.pnlVideo = new System.Windows.Forms.Panel();
             this.btnMute = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
-            this.btnOpen = new System.Windows.Forms.Button();
             this.trkPosition = new System.Windows.Forms.TrackBar();
             this.trkVolume = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtFileName = new System.Windows.Forms.TextBox();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.lblTime = new System.Windows.Forms.Label();
             this.lblDuration = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.pnlControls = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.trkPosition)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.pnlControls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +47,7 @@
             // 
             // btnMute
             // 
-            this.btnMute.Location = new System.Drawing.Point(150, 90);
+            this.btnMute.Location = new System.Drawing.Point(151, 72);
             this.btnMute.Margin = new System.Windows.Forms.Padding(4);
             this.btnMute.Name = "btnMute";
             this.btnMute.Size = new System.Drawing.Size(53, 28);
@@ -66,7 +58,7 @@
             // 
             // btnPause
             // 
-            this.btnPause.Location = new System.Drawing.Point(358, 90);
+            this.btnPause.Location = new System.Drawing.Point(359, 72);
             this.btnPause.Margin = new System.Windows.Forms.Padding(4);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(65, 28);
@@ -77,7 +69,7 @@
             // 
             // btnPlay
             // 
-            this.btnPlay.Location = new System.Drawing.Point(431, 90);
+            this.btnPlay.Location = new System.Drawing.Point(432, 72);
             this.btnPlay.Margin = new System.Windows.Forms.Padding(4);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(65, 28);
@@ -88,7 +80,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(504, 90);
+            this.btnStop.Location = new System.Drawing.Point(505, 72);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(65, 28);
@@ -96,17 +88,6 @@
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnOpen
-            // 
-            this.btnOpen.Location = new System.Drawing.Point(150, 144);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(71, 28);
-            this.btnOpen.TabIndex = 5;
-            this.btnOpen.Text = "Open";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // trkPosition
             // 
@@ -121,7 +102,7 @@
             // 
             // trkVolume
             // 
-            this.trkVolume.Location = new System.Drawing.Point(211, 90);
+            this.trkVolume.Location = new System.Drawing.Point(212, 72);
             this.trkVolume.Margin = new System.Windows.Forms.Padding(4);
             this.trkVolume.Maximum = 100;
             this.trkVolume.Name = "trkVolume";
@@ -138,23 +119,10 @@
             this.label1.Size = new System.Drawing.Size(0, 17);
             this.label1.TabIndex = 8;
             // 
-            // txtFileName
-            // 
-            this.txtFileName.Location = new System.Drawing.Point(228, 147);
-            this.txtFileName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtFileName.Name = "txtFileName";
-            this.txtFileName.Size = new System.Drawing.Size(576, 22);
-            this.txtFileName.TabIndex = 9;
-            this.txtFileName.TextChanged += new System.EventHandler(this.txtFileName_TextChanged);
-            // 
-            // errorProvider1
-            // 
-            this.errorProvider1.ContainerControl = this;
-            // 
             // lblTime
             // 
             this.lblTime.AutoSize = true;
-            this.lblTime.Location = new System.Drawing.Point(644, 109);
+            this.lblTime.Location = new System.Drawing.Point(647, 78);
             this.lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(64, 17);
@@ -164,7 +132,7 @@
             // lblDuration
             // 
             this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(742, 109);
+            this.lblDuration.Location = new System.Drawing.Point(745, 78);
             this.lblDuration.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDuration.Name = "lblDuration";
             this.lblDuration.Size = new System.Drawing.Size(64, 17);
@@ -174,7 +142,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(718, 109);
+            this.label2.Location = new System.Drawing.Point(721, 78);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(12, 17);
@@ -189,17 +157,15 @@
             this.pnlControls.Controls.Add(this.btnMute);
             this.pnlControls.Controls.Add(this.lblTime);
             this.pnlControls.Controls.Add(this.btnPause);
-            this.pnlControls.Controls.Add(this.txtFileName);
             this.pnlControls.Controls.Add(this.btnPlay);
             this.pnlControls.Controls.Add(this.btnStop);
             this.pnlControls.Controls.Add(this.trkVolume);
-            this.pnlControls.Controls.Add(this.btnOpen);
             this.pnlControls.Controls.Add(this.label1);
             this.pnlControls.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlControls.Location = new System.Drawing.Point(0, 378);
+            this.pnlControls.Location = new System.Drawing.Point(0, 422);
             this.pnlControls.Name = "pnlControls";
             this.pnlControls.Padding = new System.Windows.Forms.Padding(8);
-            this.pnlControls.Size = new System.Drawing.Size(1026, 184);
+            this.pnlControls.Size = new System.Drawing.Size(1026, 140);
             this.pnlControls.TabIndex = 13;
             // 
             // MediaPlayer
@@ -213,7 +179,6 @@
             this.Size = new System.Drawing.Size(1026, 562);
             ((System.ComponentModel.ISupportInitialize)(this.trkPosition)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.pnlControls.ResumeLayout(false);
             this.pnlControls.PerformLayout();
             this.ResumeLayout(false);

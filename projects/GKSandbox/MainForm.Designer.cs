@@ -30,6 +30,8 @@
         {
             this.gkComboBox1 = new GKCommon.Controls.GKComboBox();
             this.mediaPlayer1 = new GKMediaPlayer.MediaPlayer();
+            this.txtFileName = new System.Windows.Forms.TextBox();
+            this.btnOpen = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // gkComboBox1
@@ -51,11 +53,32 @@
             this.mediaPlayer1.Size = new System.Drawing.Size(1022, 531);
             this.mediaPlayer1.TabIndex = 1;
             // 
+            // txtFileName
+            // 
+            this.txtFileName.Location = new System.Drawing.Point(433, 12);
+            this.txtFileName.Margin = new System.Windows.Forms.Padding(4);
+            this.txtFileName.Name = "txtFileName";
+            this.txtFileName.Size = new System.Drawing.Size(576, 22);
+            this.txtFileName.TabIndex = 11;
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.Location = new System.Drawing.Point(355, 9);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(71, 28);
+            this.btnOpen.TabIndex = 10;
+            this.btnOpen.Text = "Open";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1022, 587);
+            this.Controls.Add(this.txtFileName);
+            this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.mediaPlayer1);
             this.Controls.Add(this.gkComboBox1);
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -63,7 +86,10 @@
             this.Text = "GKSandbox";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormFormClosed);
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
+        private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.TextBox txtFileName;
         private GKMediaPlayer.MediaPlayer mediaPlayer1;
         private GKCommon.Controls.GKComboBox gkComboBox1;
     }
