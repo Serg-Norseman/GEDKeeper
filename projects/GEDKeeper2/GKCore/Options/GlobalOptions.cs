@@ -277,7 +277,12 @@ namespace GKCore.Options
         public MouseButtons ChartsDragMouseButton
         {
             get { return fChartsDragMouseButton; }
-            set { fChartsDragMouseButton = value; }
+            set {
+                if (fChartsDragMouseButton == value) return;
+                if (fChartsDragMouseButton != MouseButtons.Left && fChartsDragMouseButton != MouseButtons.Right) return;
+
+                fChartsDragMouseButton = value;
+            }
         }
 
 
