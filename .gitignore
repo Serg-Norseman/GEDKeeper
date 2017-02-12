@@ -19,6 +19,9 @@ code_heat.sh
 /projects/GKCommon/bin/
 /projects/GKCommon/obj/
 
+/projects/GKMediaPlayer/bin/
+/projects/GKMediaPlayer/obj/
+
 /projects/GKIntl/bin/
 /projects/GKIntl/obj/
 
