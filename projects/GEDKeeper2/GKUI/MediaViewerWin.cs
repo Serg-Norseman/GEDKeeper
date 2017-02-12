@@ -29,6 +29,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKMediaPlayer;
 
 namespace GKUI
 {
@@ -67,8 +68,12 @@ namespace GKUI
 
                     case MultimediaKind.mkAudio:
                     case MultimediaKind.mkVideo:
-                        // TODO: embedded MediaPlayer (vlc?)
-                        break;
+                        {
+                            string targetFile = "";
+                            fBase.Context.MediaLoad(fFileRef, ref targetFile);
+                            SetViewMedia(targetFile);
+                            break;
+                        }
 
                     case MultimediaKind.mkText:
                         {
@@ -116,6 +121,14 @@ namespace GKUI
 
                 fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
             }
+        }
+
+        public void SetViewMedia(string mediaFile)
+        {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.MediaFile = mediaFile;
+
+            SetViewControl(mediaPlayer);
         }
 
         public void SetViewImage(Image img)

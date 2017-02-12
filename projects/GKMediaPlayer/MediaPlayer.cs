@@ -70,6 +70,7 @@ namespace GKMediaPlayer
         {
             if (disposing && (components != null))
             {
+                fPlayer.Stop();
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -189,6 +190,8 @@ namespace GKMediaPlayer
 
             public static void Execute(Action action)
             {
+                // TODO: to rework this part, because there is a critical error
+                // when closing window during playback
                 fSync.BeginInvoke(action, null);
             }
         }

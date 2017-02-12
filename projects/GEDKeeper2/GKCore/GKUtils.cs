@@ -2676,6 +2676,8 @@ namespace GKCore
                 case GEDCOMMultimediaFormat.mfAVI:
                 case GEDCOMMultimediaFormat.mfMPG:
                 case GEDCOMMultimediaFormat.mfWMA:
+                case GEDCOMMultimediaFormat.mfMP4:
+                case GEDCOMMultimediaFormat.mfOGV:
                     return MultimediaKind.mkVideo;
 
                 case GEDCOMMultimediaFormat.mfOLE:

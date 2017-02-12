@@ -733,6 +733,10 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.mswin.csproj">
+      <Project>0B9F856F-4E88-47ED-9364-B9770FC7E6E3</Project>
+      <Name>GKMediaPlayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sandbox\" />

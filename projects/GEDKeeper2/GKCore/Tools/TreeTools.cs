@@ -441,6 +441,20 @@ namespace GKCore.Tools
             }
         }
 
+        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec)
+        {
+            for (int i = 0; i < mmRec.FileReferences.Count; i++) {
+                GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
+
+                GEDCOMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
+                if (mmFormat == GEDCOMMultimediaFormat.mfUnknown || mmFormat == GEDCOMMultimediaFormat.mfNone) {
+                    // tag "FORM" can be corrupted or GEDCOMCore in past not recognize format
+                    // attempt recovery
+                    fileRef.MultimediaFormat = GEDCOMFileReferenceWithTitle.RecognizeFormat(fileRef.StringValue);
+                }
+            }
+        }
+
         private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec, GEDCOMFormat format, ValuesCollection valuesCollection)
         {
             rec.RequireUID();
@@ -484,6 +498,10 @@ namespace GKCore.Tools
 
                 case GEDCOMRecordType.rtSource:
                     CheckRecord_Source(rec as GEDCOMSourceRecord);
+                    break;
+
+                case GEDCOMRecordType.rtMultimedia:
+                    CheckRecord_Multimedia(rec as GEDCOMMultimediaRecord);
                     break;
             }
         }

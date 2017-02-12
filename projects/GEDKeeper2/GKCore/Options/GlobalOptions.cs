@@ -73,6 +73,7 @@ namespace GKCore.Options
         private bool fLoadRecentFiles;
 
         private MouseButtons fChartsDragMouseButton; // TODO: to OptionsDlg
+        private bool fEmbeddedMediaPlayer; // TODO: to OptionsDlg
 
 
         public static GlobalOptions Instance
@@ -285,6 +286,12 @@ namespace GKCore.Options
             }
         }
 
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
 
         public int GetLangsCount()
         {
@@ -355,6 +362,12 @@ namespace GKCore.Options
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
             fChartsDragMouseButton = MouseButtons.Left;
+
+            #if RELEASE
+            fEmbeddedMediaPlayer = false;
+            #else
+            fEmbeddedMediaPlayer = true;
+            #endif
 
             fIndividualListColumns = new IndividualListColumns();
             fIndividualListColumns.ResetDefaults();
