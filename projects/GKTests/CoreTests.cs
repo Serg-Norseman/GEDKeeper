@@ -492,8 +492,8 @@ namespace GKTests.GKCore
             //
 
             #if !__MonoCS__
-            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true));
-            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false));
+            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
+            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
             #endif
 
             //
