@@ -271,9 +271,7 @@
   <ItemGroup>
     <Folder Include="GKCommon\" />
     <Folder Include="Externals\SingleInstancing\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GEDCOM\Extensions" />
+    <Folder Include="GEDCOM\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

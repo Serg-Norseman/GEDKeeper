@@ -36,29 +36,29 @@ namespace GKCommon.Controls
         public new int ItemHeight
         {
             get {
-                return this.fItemHeight;
+                return fItemHeight;
             }
             set {
-                this.fItemHeight = value;
-                this.RefreshItems();
+                fItemHeight = value;
+                RefreshItems();
             }
         }
         
         public SlideList()
         {
-            this.DrawMode = DrawMode.OwnerDrawVariable;
+            DrawMode = DrawMode.OwnerDrawVariable;
 
             ComponentResourceManager resources = new ComponentResourceManager(typeof(SlideList));
             fCollapseIcon = (Bitmap)(resources.GetObject("CollapseIcon"));
             fExpandIcon = (Bitmap)(resources.GetObject("ExpandIcon"));
 
-            base.DoubleBuffered = true;
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            base.UpdateStyles();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            UpdateStyles();
             
-            this.fProcessing = false;
-            this.fItemHeight = 30;
+            fProcessing = false;
+            fItemHeight = 30;
         }
 
         #region Public members
@@ -66,21 +66,21 @@ namespace GKCommon.Controls
         public SlideListItem AddItem(string text)
         {
             SlideListItem item = new SlideListItem(text);
-            this.Items.Add(item);
+            Items.Add(item);
             return item;
         }
 
         public SlideListItem AddItem(string text, object data)
         {
             SlideListItem item = new SlideListItem(text, data);
-            this.Items.Add(item);
+            Items.Add(item);
             return item;
         }
 
         public SlideListItem AddGroupItem(string text, object data)
         {
             SlideListItem item = new SlideListItem(text, true, data);
-            this.Items.Add(item);
+            Items.Add(item);
             return item;
         }
 
@@ -90,24 +90,23 @@ namespace GKCommon.Controls
 
             bool hasGroup = false;
             
-            int num = this.Items.Count;
+            int num = Items.Count;
             for (int i = 0; i < num; i++) {
-                SlideListItem itm = (SlideListItem)this.Items[i];
+                SlideListItem itm = (SlideListItem)Items[i];
+                if (!itm.IsGroup) continue;
 
-                if (itm.IsGroup) {
-                    if (itm.Text == group) {
-                        hasGroup = true;
-                    } else {
-                        if (hasGroup) {
-                            this.Items.Insert(i, item);
-                            return item;
-                        }
+                if (itm.Text == @group) {
+                    hasGroup = true;
+                } else {
+                    if (hasGroup) {
+                        Items.Insert(i, item);
+                        return item;
                     }
                 }
             }
             
             if (hasGroup) {
-                this.Items.Add(item);
+                Items.Add(item);
                 return item;
             }
 
@@ -116,19 +115,19 @@ namespace GKCommon.Controls
 
         public void SetItemSelected(int index)
         {
-            if (this.fProcessing) return;
-            this.fProcessing = true;
+            if (fProcessing) return;
+            fProcessing = true;
 
-            SlideListItem item = (SlideListItem)this.Items[index];
+            SlideListItem item = (SlideListItem)Items[index];
 
             if (item.IsGroup) {
-                int count = this.Items.Count;
+                int count = Items.Count;
                 SetItemsExpanded(0, count - 1, false);
                 SetItemsVisible(0, count - 1, false);
 
                 int nextIdx = count - 1;
                 for (int i = index + 1; i < count; i++) {
-                    SlideListItem itm = (SlideListItem)this.Items[i];
+                    SlideListItem itm = (SlideListItem)Items[i];
                     if (itm.IsGroup) {
                         nextIdx = i - 1;
                         break;
@@ -138,13 +137,13 @@ namespace GKCommon.Controls
                 item.IsExpanded = true;
                 SetItemsVisible(index + 1, nextIdx, true);
 
-                this.RefreshItems();
-                this.SelectedIndex = index + 1;
+                RefreshItems();
+                SelectedIndex = index + 1;
             } else {
-                this.SelectedIndex = index;
+                SelectedIndex = index;
             }
 
-            this.fProcessing = false;
+            fProcessing = false;
         }
         
         #endregion
@@ -154,7 +153,7 @@ namespace GKCommon.Controls
         private void SetItemsVisible(int startIndex, int endIndex, bool val)
         {
             for (int i = startIndex; i <= endIndex; i++) {
-                SlideListItem item = (SlideListItem)this.Items[i];
+                SlideListItem item = (SlideListItem)Items[i];
                 if (!item.IsGroup) item.IsVisible = val;
             }
         }
@@ -162,7 +161,7 @@ namespace GKCommon.Controls
         private void SetItemsExpanded(int startIndex, int endIndex, bool val)
         {
             for (int i = startIndex; i <= endIndex; i++) {
-                SlideListItem item = (SlideListItem)this.Items[i];
+                SlideListItem item = (SlideListItem)Items[i];
                 if (item.IsGroup) item.IsExpanded = val;
             }
         }
@@ -173,20 +172,20 @@ namespace GKCommon.Controls
         
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
-            if (e.Index < 0 || e.Index >= this.Items.Count) return;
+            if (e.Index < 0 || e.Index >= Items.Count) return;
 
-            SlideListItem itm = (SlideListItem)this.Items[e.Index];
+            SlideListItem itm = (SlideListItem)Items[e.Index];
 
-            e.ItemHeight = (!itm.IsVisible) ? 0 : this.fItemHeight;
+            e.ItemHeight = (!itm.IsVisible) ? 0 : fItemHeight;
 
             base.OnMeasureItem(e);
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            if (e.Index < 0 || e.Index >= this.Items.Count) return;
+            if (e.Index < 0 || e.Index >= Items.Count) return;
 
-            SlideListItem item = (SlideListItem)this.Items[e.Index];
+            SlideListItem item = (SlideListItem)Items[e.Index];
             Rectangle rt = e.Bounds;
 
             if (item.IsGroup) {
@@ -212,7 +211,7 @@ namespace GKCommon.Controls
 
             rt.Inflate(-5, -2);
 
-            Font fnt = this.Font;
+            Font fnt = Font;
             if (item.IsGroup) {
                 fnt = new Font(fnt, FontStyle.Bold);
             }
@@ -220,16 +219,16 @@ namespace GKCommon.Controls
             StringFormat fmt = new StringFormat();
             fmt.Alignment = StringAlignment.Near;
             fmt.LineAlignment = StringAlignment.Center;
-            e.Graphics.DrawString(this.Items[e.Index].ToString(), fnt, Brushes.Black, rt, fmt);
+            e.Graphics.DrawString(Items[e.Index].ToString(), fnt, Brushes.Black, rt, fmt);
 
             base.OnDrawItem(e);
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
-            int idx = this.SelectedIndex;
+            int idx = SelectedIndex;
             if (idx >= 0) {
-                this.SetItemSelected(idx);
+                SetItemSelected(idx);
             }
 
             base.OnSelectedIndexChanged(e);
@@ -252,28 +251,28 @@ namespace GKCommon.Controls
 
         public SlideListItem(string text)
         {
-            this.Text = text;
-            this.Data = null;
-            this.IsGroup = false;
+            Text = text;
+            Data = null;
+            IsGroup = false;
         }
 
         public SlideListItem(string text, object data)
         {
-            this.Text = text;
-            this.Data = data;
-            this.IsGroup = false;
+            Text = text;
+            Data = data;
+            IsGroup = false;
         }
 
         public SlideListItem(string text, bool isGroup, object data)
         {
-            this.Text = text;
-            this.Data = data;
-            this.IsGroup = isGroup;
+            Text = text;
+            Data = data;
+            IsGroup = isGroup;
         }
 
         public override string ToString()
         {
-            return this.Text;
+            return Text;
         }
     }
 }

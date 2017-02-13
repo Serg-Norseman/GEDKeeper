@@ -8,6 +8,8 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
+		private GKCommon.Controls.ImageView imageView1;
+		private System.Windows.Forms.Panel panel1;
 
 		private void InitializeComponent()
 		{
@@ -89,7 +91,5 @@ namespace GKUI.Dialogs
 		    this.panel1.ResumeLayout(false);
 		    this.ResumeLayout(false);
 		}
-		private GKCommon.Controls.ImageView imageView1;
-		private System.Windows.Forms.Panel panel1;
 	}
 }

@@ -72,6 +72,9 @@ namespace GKCore.Options
         private bool fRemovableMediaWarning;
         private bool fLoadRecentFiles;
 
+        private MouseButtons fChartsDragMouseButton; // TODO: to OptionsDlg
+        private bool fEmbeddedMediaPlayer; // TODO: to OptionsDlg
+
 
         public static GlobalOptions Instance
         {
@@ -272,6 +275,23 @@ namespace GKCore.Options
             set { fLoadRecentFiles = value; }
         }
 
+        public MouseButtons ChartsDragMouseButton
+        {
+            get { return fChartsDragMouseButton; }
+            set {
+                if (fChartsDragMouseButton == value) return;
+                if (fChartsDragMouseButton != MouseButtons.Left && fChartsDragMouseButton != MouseButtons.Right) return;
+
+                fChartsDragMouseButton = value;
+            }
+        }
+
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
 
         public int GetLangsCount()
         {
@@ -341,6 +361,13 @@ namespace GKCore.Options
             fGeocoder = "Google";
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
+            fChartsDragMouseButton = MouseButtons.Left;
+
+            #if RELEASE
+            fEmbeddedMediaPlayer = false;
+            #else
+            fEmbeddedMediaPlayer = true;
+            #endif
 
             fIndividualListColumns = new IndividualListColumns();
             fIndividualListColumns.ResetDefaults();

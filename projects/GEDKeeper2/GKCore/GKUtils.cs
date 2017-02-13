@@ -261,7 +261,7 @@ namespace GKCore
 
             if (corresponder != null)
             {
-                string nm = GKUtils.GetNameString(corresponder, true, false);
+                string nm = GetNameString(corresponder, true, false);
                 if (aLink)
                 {
                     nm = HyperLink(corresponder.XRef, nm, 0);
@@ -308,7 +308,7 @@ namespace GKCore
             switch (gt)
             {
                 case GKGoalType.gtIndividual:
-                    return GKUtils.GetNameString(((GEDCOMIndividualRecord)tempRec), true, false);
+                    return GetNameString(((GEDCOMIndividualRecord)tempRec), true, false);
 
                 case GKGoalType.gtFamily:
                     return GetFamilyString(tempRec as GEDCOMFamilyRecord);
@@ -766,7 +766,7 @@ namespace GKCore
                         }
                         if (ds != "")
                         {
-                            ds = "*" + ds;
+                            ds = ImportUtils.STD_BIRTH_SIGN + ds;
                         }
                         resStr += ds;
                         ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
@@ -781,7 +781,7 @@ namespace GKCore
                         }
                         if (ds != "")
                         {
-                            ds = "+" + ds;
+                            ds = ImportUtils.STD_DEATH_SIGN + ds;
                         }
                         if (ds != "")
                         {
@@ -2676,6 +2676,8 @@ namespace GKCore
                 case GEDCOMMultimediaFormat.mfAVI:
                 case GEDCOMMultimediaFormat.mfMPG:
                 case GEDCOMMultimediaFormat.mfWMA:
+                case GEDCOMMultimediaFormat.mfMP4:
+                case GEDCOMMultimediaFormat.mfOGV:
                     return MultimediaKind.mkVideo;
 
                 case GEDCOMMultimediaFormat.mfOLE:
@@ -2720,7 +2722,7 @@ namespace GKCore
             if (family == null)
                 throw new ArgumentNullException("family");
 
-            return GKUtils.GetFamilyString(family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
+            return GetFamilyString(family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
         }
 
         public static string GetFamilyString(GEDCOMFamilyRecord family, string unkHusband, string unkWife)
@@ -2738,7 +2740,7 @@ namespace GKCore
             }
             else
             {
-                result += GKUtils.GetNameString(spouse, true, false);
+                result += GetNameString(spouse, true, false);
             }
 
             result += " - ";
@@ -2751,7 +2753,7 @@ namespace GKCore
             }
             else
             {
-                result += GKUtils.GetNameString(spouse, true, false);
+                result += GetNameString(spouse, true, false);
             }
 
             return result;
@@ -2920,7 +2922,7 @@ namespace GKCore
 
             if (iRec.PersonalNames.Count > 0) {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
-                GKUtils.GetRusNameParts(np, out surname, out name, out patronymic);
+                GetRusNameParts(np, out surname, out name, out patronymic);
 
                 if (formatted) {
                     surname = GetFmtSurname(iRec, np, surname);

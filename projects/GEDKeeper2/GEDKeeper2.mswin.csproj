@@ -128,6 +128,8 @@
     <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
+    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
     <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
@@ -728,6 +730,10 @@
     <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.mswin.csproj">
+      <Project>0B9F856F-4E88-47ED-9364-B9770FC7E6E3</Project>
+      <Name>GKMediaPlayer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

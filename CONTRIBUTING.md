@@ -67,7 +67,20 @@ The use of "m_" and "_" as prefixes for instance members is highly discouraged.
 
 ## Class members order
 
-Declare all member variables at the top of a class, with static variables at the very top.
+Declare all member variables at the top of a class, with static variables at the very top:
+
+- private static fields;
+- protected and public static fields;
+- private and public consts;
+- private member fields;
+- protected member fields (private and protected may be mixed);
+- public member fields;
+- properties;
+- instance's control (constructor, destructor, static create methods if needs);
+- private methods and public methods usually are mixed grouped by meaning and functions.
+
+In old and very old classes, the order of the sections may be absent, for example constructors can be at the end of class.
+But this is valid only before the refactoring. Not supposed to do in the new classes.
 
 ## Indentation
 
@@ -98,19 +111,17 @@ One blank line should always be used between:
 
 - Methods
 - Properties
-- Local variables in a method and its first statement
+- Local variables in a method and its first statement (necessarily only if the variable is in front of a large block of logically related statements)
 - Logical sections inside a method to improve readability.
 
 ## Wrapping Lines
 
-When an expression will not fit on a single line, break it up according to these general principles:
+Preferred line length is 80 characters, taking into consideration the recommendations below:
 
 - Break after a comma.
 - Break after an operator.
 - Prefer higher-level breaks to lower-level breaks.
 - Align the new line with the beginning of the expression at the same level on the previous line.
-
-Preferred line length is 80 characters, taking into consideration the above recommendations.
 
 ## Where to put spaces
 

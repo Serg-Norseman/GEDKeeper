@@ -40,30 +40,30 @@ namespace GKUI.Dialogs
 
         public GEDCOMMultimediaLink MultimediaLink
         {
-            get { return this.fMultimediaLink; }
-            set { this.SetMultimediaLink(value); }
+            get { return fMultimediaLink; }
+            set { SetMultimediaLink(value); }
         }
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         private void SetMultimediaLink(GEDCOMMultimediaLink value)
         {
-            this.fMultimediaLink = value;
+            fMultimediaLink = value;
 
-            if (this.fMultimediaLink != null && this.fMultimediaLink.Value != null)
+            if (fMultimediaLink != null && fMultimediaLink.Value != null)
             {
-                GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)this.fMultimediaLink.Value;
-                Image img = this.fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
+                GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
+                Image img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
 
                 if (img != null) {
-                    this.imageView1.OpenImage(img);
+                    imageView1.OpenImage(img);
 
-                    if (this.fMultimediaLink.IsPrimaryCutout) {
-                        ExtRect rt = this.fMultimediaLink.CutoutPosition.Value;
-                        this.imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
+                    if (fMultimediaLink.IsPrimaryCutout) {
+                        ExtRect rt = fMultimediaLink.CutoutPosition.Value;
+                        imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
                     }
                 }
             }
@@ -73,40 +73,40 @@ namespace GKUI.Dialogs
         {
             try
             {
-                RectangleF selectRegion = this.imageView1.SelectionRegion;
+                RectangleF selectRegion = imageView1.SelectionRegion;
 
                 if (!selectRegion.IsEmpty) {
-                    this.fMultimediaLink.IsPrimaryCutout = true;
-                    this.fMultimediaLink.CutoutPosition.Value =
+                    fMultimediaLink.IsPrimaryCutout = true;
+                    fMultimediaLink.CutoutPosition.Value =
                         ExtRect.Create((int)selectRegion.Left, (int)selectRegion.Top, (int)selectRegion.Right, (int)selectRegion.Bottom);
                 } else {
-                    this.fMultimediaLink.IsPrimaryCutout = false;
-                    this.fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
+                    fMultimediaLink.IsPrimaryCutout = false;
+                    fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
                 }
 
                 base.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
+                fBase.Host.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
 
         public PortraitSelectDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
-            this.imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
+            fBase = baseWin;
+            imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_PortraitSelect);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_PortraitSelect);
         }
     }
 }

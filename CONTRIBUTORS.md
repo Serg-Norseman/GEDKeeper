@@ -77,7 +77,7 @@ iTextSharp
 
 
 Life
-    Licensed under <something similar to zlib License>.
+    Licensed under (something similar to zlib License).
     (C) 1998 Ian Lane
     (C) 2011 Serg V. Zhdanovskih (fork to C#)
     https://github.com/Serg-Norseman/ConwayLifeGame
@@ -93,6 +93,12 @@ CsGL for OpenGL
     (C) 2001, Lloyd Dupont <lloyd@galador.net>
 
 
+nVLC
+    Licensed under GPLv3
+    (C) Roman Ginzburg, http://www.codeproject.com/Articles/109639/nVLC
+    (C) fork Sergey Zhdanovskih, https://github.com/serg-norseman/nVLC
+
+
 SingleInstance
     Licensed under The Code Project Open License (CPOL).
     (C) 2007 Shy Agam
@@ -100,7 +106,7 @@ SingleInstance
 
 
 StringTokenizer
-    Licensed under <something similar to zlib License>.
+    Licensed under (something similar to zlib License).
     (C) 2004 Andrew Deren
 
 
@@ -124,4 +130,10 @@ ZipStorer
     (C) 2010 Jaime Olivares
     https://zipstorer.codeplex.com
     https://github.com/jaime-olivares/zipstorer
+
+
+YamlSerializer
+    Licensed under The MIT License (MIT).
+    (C) Osamu TAKEUCHI, https://yamlserializer.codeplex.com/
+    (C) fork Sergey Zhdanovskih, https://github.com/serg-norseman/YamlSerializer
 ```

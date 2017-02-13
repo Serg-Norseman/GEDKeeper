@@ -231,8 +231,8 @@ namespace GKPedigreeImporterPlugin
             bd = "";
             dd = "";
 
-            int b_pos = tmp.IndexOf("*");
-            int d_pos = tmp.IndexOf("+");
+            int b_pos = tmp.IndexOf(ImportUtils.STD_BIRTH_SIGN);
+            int d_pos = tmp.IndexOf(ImportUtils.STD_DEATH_SIGN);
 
             if (d_pos >= 0 && d_pos > b_pos) {
                 dd = tmp.Substring(d_pos + 1, tmp.Length - d_pos - 1);
@@ -275,8 +275,8 @@ namespace GKPedigreeImporterPlugin
             // if not Special or SpecialNotFound, then classic
             if (string.IsNullOrEmpty(dates))
             {
-                int bd_pos = tmp.IndexOf("*");
-                int dd_pos = tmp.IndexOf("+");
+                int bd_pos = tmp.IndexOf(ImportUtils.STD_BIRTH_SIGN);
+                int dd_pos = tmp.IndexOf(ImportUtils.STD_DEATH_SIGN);
                 
                 int datesPos = -1;
                 if (bd_pos >= 0 && (dd_pos < 0 || dd_pos > bd_pos)) {

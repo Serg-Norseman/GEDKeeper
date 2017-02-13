@@ -56,69 +56,11 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
 
             string ext = SysUtils.GetFileExtension(fileName);
-
-            GEDCOMMultimediaFormat result;
-            if (ext == ".bmp")
-            {
-                result = GEDCOMMultimediaFormat.mfBMP;
-            }
-            else if (ext == ".gif")
-            {
-                result = GEDCOMMultimediaFormat.mfGIF;
-            }
-            else if (ext == ".jpg" || ext == ".jpeg")
-            {
-                result = GEDCOMMultimediaFormat.mfJPG;
-            }
-            else if (ext == ".ole")
-            {
-                result = GEDCOMMultimediaFormat.mfOLE;
-            }
-            else if (ext == ".pcx")
-            {
-                result = GEDCOMMultimediaFormat.mfPCX;
-            }
-            else if (ext == ".tif" || ext == ".tiff")
-            {
-                result = GEDCOMMultimediaFormat.mfTIF;
-            }
-            else if (ext == ".wav")
-            {
-                result = GEDCOMMultimediaFormat.mfWAV;
-            }
-            else if (ext == ".txt")
-            {
-                result = GEDCOMMultimediaFormat.mfTXT;
-            }
-            else if (ext == ".rtf")
-            {
-                result = GEDCOMMultimediaFormat.mfRTF;
-            }
-            else if (ext == ".avi")
-            {
-                result = GEDCOMMultimediaFormat.mfAVI;
-            }
-            else if (ext == ".tga")
-            {
-                result = GEDCOMMultimediaFormat.mfTGA;
-            }
-            else if (ext == ".png")
-            {
-                result = GEDCOMMultimediaFormat.mfPNG;
-            }
-            else if (ext == ".mpg" || ext == ".mpeg")
-            {
-                result = GEDCOMMultimediaFormat.mfMPG;
-            }
-            else if (ext == ".htm" || ext == ".html")
-            {
-                result = GEDCOMMultimediaFormat.mfHTM;
-            }
-            else
-            {
-                result = GEDCOMMultimediaFormat.mfUnknown;
+            if (!string.IsNullOrEmpty(ext) && ext[0] == '.') {
+                ext = ext.Remove(0, 1);
             }
 
+            GEDCOMMultimediaFormat result = GEDCOMUtils.GetMultimediaFormatVal(ext);
             return result;
         }
 
