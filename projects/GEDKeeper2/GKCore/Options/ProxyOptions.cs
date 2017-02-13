@@ -44,11 +44,11 @@ namespace GKCore.Options
             ProxyOptions srcOptions = source as ProxyOptions;
             if (srcOptions == null) return;
 
-            this.Server = srcOptions.Server;
-            this.Port = srcOptions.Port;
-            this.Login = srcOptions.Login;
-            this.Password = srcOptions.Password;
-            this.UseProxy = srcOptions.UseProxy;
+            Server = srcOptions.Server;
+            Port = srcOptions.Port;
+            Login = srcOptions.Login;
+            Password = srcOptions.Password;
+            UseProxy = srcOptions.UseProxy;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -56,11 +56,11 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            this.UseProxy = iniFile.ReadBool("Proxy", "UseProxy", false);
-            this.Server = iniFile.ReadString("Proxy", "Server", "");
-            this.Port = iniFile.ReadString("Proxy", "Port", "");
-            this.Login = iniFile.ReadString("Proxy", "Login", "");
-            this.Password = SCCrypt.scDecrypt(iniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
+            UseProxy = iniFile.ReadBool("Proxy", "UseProxy", false);
+            Server = iniFile.ReadString("Proxy", "Server", "");
+            Port = iniFile.ReadString("Proxy", "Port", "");
+            Login = iniFile.ReadString("Proxy", "Login", "");
+            Password = SCCrypt.scDecrypt(iniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -68,12 +68,12 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            iniFile.WriteBool("Proxy", "UseProxy", this.UseProxy);
-            iniFile.WriteString("Proxy", "Server", this.Server);
-            iniFile.WriteString("Proxy", "Port", this.Port);
-            iniFile.WriteString("Proxy", "Login", this.Login);
+            iniFile.WriteBool("Proxy", "UseProxy", UseProxy);
+            iniFile.WriteString("Proxy", "Server", Server);
+            iniFile.WriteString("Proxy", "Port", Port);
+            iniFile.WriteString("Proxy", "Login", Login);
 
-            string pw = SCCrypt.scEncrypt(this.Password, unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
+            string pw = SCCrypt.scEncrypt(Password, unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
             iniFile.WriteString("Proxy", "Password", pw);
         }
     }

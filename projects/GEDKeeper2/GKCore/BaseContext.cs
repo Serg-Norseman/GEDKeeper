@@ -59,7 +59,7 @@ namespace GKCore
         public ICulture Culture
         {
             get {
-                GEDCOMLanguageID langID = this.fTree.Header.Language.Value;
+                GEDCOMLanguageID langID = fTree.Header.Language.Value;
                 ICulture culture;
 
                 switch (langID) {
@@ -84,6 +84,14 @@ namespace GKCore
                         culture = new IcelandCulture();
                         break;
 
+                    case GEDCOMLanguageID.Armenian:
+                        culture = new ArmenianCulture();
+                        break;
+
+                    case GEDCOMLanguageID.Turkish:
+                        culture = new TurkishCulture();
+                        break;
+
                     case GEDCOMLanguageID.English:
                     default:
                         culture = new BritishCulture();
@@ -96,17 +104,17 @@ namespace GKCore
 
         public GEDCOMTree Tree
         {
-            get { return this.fTree; }
+            get { return fTree; }
         }
 
         public ChangeTracker Undoman
         {
-            get { return this.fUndoman; }
+            get { return fUndoman; }
         }
 
         public ValuesCollection ValuesCollection
         {
-            get { return this.fValuesCollection; }
+            get { return fValuesCollection; }
         }
 
         #endregion
@@ -115,17 +123,17 @@ namespace GKCore
 
         public BaseContext(GEDCOMTree tree, IBaseWindow viewer)
         {
-            this.fTree = tree;
-            this.fViewer = viewer;
-            this.fHost = (viewer == null) ? null : viewer.Host;
-            this.fUndoman = new ChangeTracker(this.fTree);
-            this.fValuesCollection = new ValuesCollection();
+            fTree = tree;
+            fViewer = viewer;
+            fHost = (viewer == null) ? null : viewer.Host;
+            fUndoman = new ChangeTracker(fTree);
+            fValuesCollection = new ValuesCollection();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                this.fUndoman.Dispose();
+                fUndoman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -138,10 +146,10 @@ namespace GKCore
         {
             GEDCOMSourceRecord result = null;
 
-            int num = this.fTree.RecordsCount;
+            int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this.fTree[i];
+                GEDCOMRecord rec = fTree[i];
 
                 if (rec is GEDCOMSourceRecord && (rec as GEDCOMSourceRecord).FiledByEntry == sourceName)
                 {
@@ -159,10 +167,10 @@ namespace GKCore
 
             sources.Clear();
 
-            int num = this.fTree.RecordsCount;
+            int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this.fTree[i];
+                GEDCOMRecord rec = fTree[i];
                 if (rec is GEDCOMSourceRecord)
                 {
                     sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
@@ -176,7 +184,7 @@ namespace GKCore
 
         public void CollectEventValues(GEDCOMCustomEvent evt)
         {
-            GKUtils.CollectEventValues(evt, this.fValuesCollection);
+            GKUtils.CollectEventValues(evt, fValuesCollection);
         }
 
         public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
@@ -187,12 +195,12 @@ namespace GKCore
 
             if (aRec is GEDCOMIndividualRecord) {
                 if (GKUtils.GetPersonEventKindBySign(evSign) == PersonEventKind.ekEvent) {
-                    result = new GEDCOMIndividualEvent(this.fTree, aRec, "", "");
+                    result = new GEDCOMIndividualEvent(fTree, aRec, "", "");
                 } else {
-                    result = new GEDCOMIndividualAttribute(this.fTree, aRec, "", "");
+                    result = new GEDCOMIndividualAttribute(fTree, aRec, "", "");
                 }
             } else if (aRec is GEDCOMFamilyRecord) {
-                result = new GEDCOMFamilyEvent(this.fTree, aRec, "", "");
+                result = new GEDCOMFamilyEvent(fTree, aRec, "", "");
             } else {
                 return null;
             }
@@ -214,13 +222,13 @@ namespace GKCore
 
         public GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent)
         {
-            GEDCOMIndividualRecord iRec = this.fTree.CreateIndividual();
+            GEDCOMIndividualRecord iRec = fTree.CreateIndividual();
             iRec.Sex = iSex;
 
-            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(this.fTree, iRec, "", ""));
+            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(fTree, iRec, "", ""));
             GKUtils.SetRusNameParts(pName, iSurname, iName, iPatronymic);
 
-            if (birthEvent) this.CreateEventEx(iRec, "BIRT", "", "");
+            if (birthEvent) CreateEventEx(iRec, "BIRT", "", "");
 
             return iRec;
         }
@@ -232,56 +240,56 @@ namespace GKCore
             if (record != null)
             {
                 try {
-                    this.BeginUpdate();
+                    BeginUpdate();
 
                     switch (record.RecordType)
                     {
                         case GEDCOMRecordType.rtIndividual:
-                            result = this.fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
+                            result = fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
                             break;
 
                         case GEDCOMRecordType.rtFamily:
-                            result = this.fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
+                            result = fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
                             break;
 
                         case GEDCOMRecordType.rtNote:
-                            result = this.fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
+                            result = fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
                             break;
 
                         case GEDCOMRecordType.rtMultimedia:
-                            result = this.fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
+                            result = fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
                             break;
 
                         case GEDCOMRecordType.rtSource:
-                            result = this.fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
+                            result = fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
                             break;
 
                         case GEDCOMRecordType.rtRepository:
-                            result = this.fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
+                            result = fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
                             break;
 
                         case GEDCOMRecordType.rtGroup:
-                            result = this.fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
+                            result = fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
                             break;
 
                         case GEDCOMRecordType.rtResearch:
-                            result = this.fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
+                            result = fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
                             break;
 
                         case GEDCOMRecordType.rtTask:
-                            result = this.fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
+                            result = fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
                             break;
 
                         case GEDCOMRecordType.rtCommunication:
-                            result = this.fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
+                            result = fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
                             break;
 
                         case GEDCOMRecordType.rtLocation:
-                            result = this.fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
+                            result = fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
                             break;
                     }
                 } finally {
-                    this.EndUpdate();
+                    EndUpdate();
                 }
             }
 
@@ -373,7 +381,7 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
 
-            IProgressController pctl = this.fViewer;
+            IProgressController pctl = fViewer;
 
             pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), fTree.RecordsCount);
 
@@ -392,7 +400,7 @@ namespace GKCore
                         string nf, nn, np;
                         GKUtils.GetNameParts(iRec, out nf, out nn, out np);
 
-                        int birthDate = this.FindBirthYear(iRec);
+                        int birthDate = FindBirthYear(iRec);
                         int descGens = GKUtils.GetDescGenerations(iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
@@ -431,7 +439,7 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = GetPatriarchsList(gensMin, datesCheck);
 
-            IProgressController pctl = this.fViewer;
+            IProgressController pctl = fViewer;
 
             pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
             try
@@ -519,9 +527,9 @@ namespace GKCore
 
             try
             {
-                using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
+                using (ExtList<PatriarchObj> patList = GetPatriarchsList(gensMin, datesCheck))
                 {
-                    IProgressController pctl = this.fViewer;
+                    IProgressController pctl = fViewer;
 
                     // init
                     GKUtils.InitExtData(fTree);
@@ -599,7 +607,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.GetPatriarchsGraph(): " + ex.Message);
+                fHost.LogWrite("BaseContext.GetPatriarchsGraph(): " + ex.Message);
             }
 
             return graph;
@@ -616,14 +624,14 @@ namespace GKCore
 
         private string GetArcFileName()
         {
-            string treeName = this.fTree.FileName;
+            string treeName = fTree.FileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
             return result;
         }
 
         private string GetStgFolder(bool create)
         {
-            string treeName = this.fTree.FileName;
+            string treeName = fTree.FileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + Path.DirectorySeparatorChar;
             if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
             return result;
@@ -633,7 +641,7 @@ namespace GKCore
         {
             targetFn = targetFn.Replace('\\', '/');
 
-            using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read))
             {
                 ZipStorer.ZipFileEntry? entry = zip.FindFile(targetFn);
                 if (entry != null) {
@@ -644,7 +652,7 @@ namespace GKCore
 
         private void ArcFileSave(string fileName, string sfn)
         {
-            string arcFn = this.GetArcFileName();
+            string arcFn = GetArcFileName();
             ZipStorer zip = null;
 
             try
@@ -667,8 +675,8 @@ namespace GKCore
             // do nothing if file name is not changed
             if (string.Equals(oldFileName, newFileName)) return;
 
-            bool hasArc = File.Exists(this.GetArcFileName());
-            bool hasStg = Directory.Exists(this.GetStgFolder(false));
+            bool hasArc = File.Exists(GetArcFileName());
+            bool hasStg = Directory.Exists(GetStgFolder(false));
 
             string newPath = Path.GetDirectoryName(newFileName);
             string newName = Path.GetFileName(newFileName);
@@ -676,12 +684,12 @@ namespace GKCore
             // move the archive and the storage folder to a new location
             if (hasArc) {
                 string newArc = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, true);
-                File.Move(this.GetArcFileName(), newArc);
+                File.Move(GetArcFileName(), newArc);
             }
 
             if (hasStg) {
                 string newStg = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, false);
-                Directory.Move(this.GetStgFolder(false), newStg);
+                Directory.Move(GetStgFolder(false), newStg);
             }
         }
 
@@ -691,7 +699,7 @@ namespace GKCore
 
         public bool CheckBasePath()
         {
-            string path = Path.GetDirectoryName(this.fTree.FileName);
+            string path = Path.GetDirectoryName(fTree.FileName);
 
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
@@ -738,11 +746,11 @@ namespace GKCore
             if (fileReference == null) return;
 
             string targetFn = "";
-            MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
+            MediaStoreType gst = GetStoreType(fileReference, ref targetFn);
 
             switch (gst) {
                 case MediaStoreType.mstStorage:
-                    targetFn = this.GetStgFolder(false) + targetFn;
+                    targetFn = GetStgFolder(false) + targetFn;
                     if (!File.Exists(targetFn))
                     {
                         if (throwException) {
@@ -758,7 +766,7 @@ namespace GKCore
 
                 case MediaStoreType.mstArchive:
                     stream = new MemoryStream();
-                    if (!File.Exists(this.GetArcFileName()))
+                    if (!File.Exists(GetArcFileName()))
                     {
                         if (throwException) {
                             throw new MediaFileNotFoundException();
@@ -767,7 +775,7 @@ namespace GKCore
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
-                        this.ArcFileLoad(targetFn, stream);
+                        ArcFileLoad(targetFn, stream);
                         stream.Seek(0, SeekOrigin.Begin);
                     }
                     break;
@@ -781,16 +789,16 @@ namespace GKCore
         public void MediaLoad(GEDCOMFileReference fileReference, ref string fileName)
         {
             if (fileReference == null) return;
-            
+
             try
             {
                 string targetFn = "";
-                MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
+                MediaStoreType gst = GetStoreType(fileReference, ref targetFn);
 
                 switch (gst)
                 {
                     case MediaStoreType.mstStorage:
-                        fileName = this.GetStgFolder(false) + targetFn;
+                        fileName = GetStgFolder(false) + targetFn;
                         break;
 
                     case MediaStoreType.mstArchive:
@@ -798,11 +806,11 @@ namespace GKCore
                         FileStream fs = new FileStream(fileName, FileMode.Create);
                         try
                         {
-                            if (!File.Exists(this.GetArcFileName())) {
+                            if (!File.Exists(GetArcFileName())) {
                                 GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
                                 targetFn = targetFn.Replace('\\', '/');
-                                this.ArcFileLoad(targetFn, fs);
+                                ArcFileLoad(targetFn, fs);
                             }
                         }
                         finally
@@ -819,7 +827,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
+                fHost.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
                 fileName = "";
             }
         }
@@ -834,36 +842,25 @@ namespace GKCore
             string storePath = "";
             string refPath = "";
 
-            switch (GEDCOMFileReference.RecognizeFormat(fileName))
+            switch (GKUtils.GetMultimediaKind(GEDCOMFileReference.RecognizeFormat(fileName)))
             {
-                case GEDCOMMultimediaFormat.mfNone:
-                case GEDCOMMultimediaFormat.mfOLE:
-                case GEDCOMMultimediaFormat.mfUnknown:
+                case MultimediaKind.mkNone:
                     storePath = "unknown";
                     break;
 
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                case GEDCOMMultimediaFormat.mfPNG:
+                case MultimediaKind.mkImage:
                     storePath = "images";
                     break;
 
-                case GEDCOMMultimediaFormat.mfWAV:
+                case MultimediaKind.mkAudio:
                     storePath = "audio";
                     break;
 
-                case GEDCOMMultimediaFormat.mfTXT:
-                case GEDCOMMultimediaFormat.mfRTF:
-                case GEDCOMMultimediaFormat.mfHTM:
+                case MultimediaKind.mkText:
                     storePath = "texts";
                     break;
 
-                case GEDCOMMultimediaFormat.mfAVI:
-                case GEDCOMMultimediaFormat.mfMPG:
+                case MultimediaKind.mkVideo:
                     storePath = "video";
                     break;
             }
@@ -878,14 +875,14 @@ namespace GKCore
 
                 case MediaStoreType.mstArchive:
                     refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-                    this.ArcFileSave(fileName, storePath + storeFile);
+                    ArcFileSave(fileName, storePath + storeFile);
                     break;
 
                 case MediaStoreType.mstStorage:
                     refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
                     try
                     {
-                        string targetDir = this.GetStgFolder(true) + storePath;
+                        string targetDir = GetStgFolder(true) + storePath;
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
@@ -914,8 +911,7 @@ namespace GKCore
             try
             {
                 Stream stm;
-
-                this.MediaLoad(fileReference, out stm, throwException);
+                MediaLoad(fileReference, out stm, throwException);
 
                 if (stm != null)
                 {
@@ -935,7 +931,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
+                fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -949,8 +945,7 @@ namespace GKCore
             try
             {
                 Stream stm;
-
-                this.MediaLoad(fileReference, out stm, throwException);
+                MediaLoad(fileReference, out stm, throwException);
 
                 if (stm != null)
                 {
@@ -995,7 +990,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
+                fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -1019,7 +1014,7 @@ namespace GKCore
                     }
 
                     GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
-                    result = this.LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
+                    result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             }
             catch (MediaFileNotFoundException)
@@ -1028,7 +1023,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.GetPrimaryBitmap(): " + ex.Message);
+                fHost.LogWrite("BaseContext.GetPrimaryBitmap(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -1040,22 +1035,22 @@ namespace GKCore
 
         public void Clear()
         {
-            this.fTree.Clear();
-            this.fUndoman.Clear();
+            fTree.Clear();
+            fUndoman.Clear();
         }
 
         public void FileLoad(string fileName, string password = null)
         {
             if (string.IsNullOrEmpty(password)) {
-                this.fTree.LoadFromFile(fileName);
+                fTree.LoadFromFile(fileName);
             } else {
-                this.LoadFromSecFile(fileName, password);
+                LoadFromSecFile(fileName, password);
             }
         }
 
         public void FileSave(string fileName, string password = null)
         {
-            string oldFileName = this.Tree.FileName;
+            string oldFileName = fTree.FileName;
 
             switch (GlobalOptions.Instance.FileBackup)
             {
@@ -1077,7 +1072,7 @@ namespace GKCore
                 case FileBackup.fbEachRevision:
                     if (File.Exists(fileName))
                     {
-                        int rev = this.Tree.Header.FileRevision;
+                        int rev = fTree.Header.FileRevision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
                         string bakFile = Path.GetFileName(fileName) + "." + SysUtils.AdjustNum(rev, 3);
 
@@ -1088,13 +1083,13 @@ namespace GKCore
             }
 
             // check for archive and storage, move them if the file changes location
-            this.MoveMediaContainers(oldFileName, fileName);
+            MoveMediaContainers(oldFileName, fileName);
 
             if (string.IsNullOrEmpty(password)) {
-                GKUtils.PrepareHeader(this.fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
-                this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
+                GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
+                fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
-                this.SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
+                SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
             }
         }
 
@@ -1133,7 +1128,7 @@ namespace GKCore
 
                 using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    this.fTree.LoadFromStreamExt(fileStream, crStream, fileName);
+                    fTree.LoadFromStreamExt(fileStream, crStream, fileName);
                 }
 
                 SCCrypt.ClearBytes(pwd);
@@ -1161,8 +1156,8 @@ namespace GKCore
 
                 using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
                 {
-                    GKUtils.PrepareHeader(this.fTree, fileName, charSet, false);
-                    this.fTree.SaveToStreamExt(crStream, fileName, charSet);
+                    GKUtils.PrepareHeader(fTree, fileName, charSet, false);
+                    fTree.SaveToStreamExt(crStream, fileName, charSet);
                     crStream.Flush();
                 }
 
@@ -1178,17 +1173,17 @@ namespace GKCore
 
         public bool IsUpdated()
         {
-            return this.fTree.IsUpdated();
+            return fTree.IsUpdated();
         }
 
         public void BeginUpdate()
         {
-            this.fTree.BeginUpdate();
+            fTree.BeginUpdate();
         }
 
         public void EndUpdate()
         {
-            this.fTree.EndUpdate();
+            fTree.EndUpdate();
         }
 
         #endregion
@@ -1213,16 +1208,16 @@ namespace GKCore
 
         public void DoCommit()
         {
-            this.fUndoman.Commit();
-            //this.fViewer.RefreshLists(false);
-            //this.fHost.UpdateControls(false);
+            fUndoman.Commit();
+            //fViewer.RefreshLists(false);
+            //fHost.UpdateControls(false);
         }
 
         public void DoRollback()
         {
-            this.fUndoman.Rollback();
-            //this.fViewer.RefreshLists(false);
-            //this.fHost.UpdateControls(false);
+            fUndoman.Rollback();
+            //fViewer.RefreshLists(false);
+            //fHost.UpdateControls(false);
         }
 
         #endregion

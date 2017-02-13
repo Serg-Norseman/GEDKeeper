@@ -25,6 +25,18 @@ namespace GKCommon
     /// </summary>
     public static class ImportUtils
     {
+        /// <summary>
+        /// Text modules used to refer to events in the pedigree documents.
+        /// </summary>
+        public const string STD_BIRTH_SIGN = "*";
+        public const string STD_DEATH_SIGN = "+";
+        public const string STD_BAPTISM_SIGN = "~";
+        public const string STD_BURIED_SIGN = "[]";
+        public const string STD_MARRIED_SIGN = "oo";
+        public const string STD_MARRIED2_SIGN = "o-o";
+        public const string STD_DIVORCED_SIGN = "o|o";
+
+
         private const string ROME_CHARS = "IVXLCDM";
 
         private static bool IsRomeChar(char c)

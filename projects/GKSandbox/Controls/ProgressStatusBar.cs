@@ -1,5 +1,4 @@
-using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace GKCommon.Controls
@@ -9,7 +8,7 @@ namespace GKCommon.Controls
         private delegate void StatusTextSetter(string msg);
         private delegate void StatusProgressSetter(int val);
 
-        private ProgressBar progressBar;
+        private readonly ProgressBar fProgressBar;
         
         public string StatusText
         {
@@ -25,7 +24,7 @@ namespace GKCommon.Controls
         
         public int Progress
         {
-            get { return progressBar.Value; }
+            get { return fProgressBar.Value; }
             set
             {
                 if (InvokeRequired)
@@ -43,12 +42,12 @@ namespace GKCommon.Controls
             Panels[0].Width = 150;
             Panels[0].Text = "Progress";
             Panels[1].AutoSize = StatusBarPanelAutoSize.Spring;
-            DrawItem += new StatusBarDrawItemEventHandler(Reposition);
+            DrawItem += Reposition;
 
-            progressBar = new ProgressBar();
-            progressBar.Value = 0;
-            progressBar.Hide();
-            Controls.Add(progressBar);
+            fProgressBar = new ProgressBar();
+            fProgressBar.Value = 0;
+            fProgressBar.Hide();
+            Controls.Add(fProgressBar);
         }
 
         private void ThreadSafeInfoSetter(string msg)
@@ -61,21 +60,21 @@ namespace GKCommon.Controls
             if (val == 0)
             {
                 Panels[1].Style = StatusBarPanelStyle.Text;
-                progressBar.Hide();
+                fProgressBar.Hide();
             }
             else
             {
                 Panels[1].Style = StatusBarPanelStyle.OwnerDraw;
-                progressBar.Show();
+                fProgressBar.Show();
             }
-            progressBar.Value = val;
+            fProgressBar.Value = val;
         }
 
         private void Reposition(object sender, StatusBarDrawItemEventArgs eArgs)
         {
-            progressBar.Location = new System.Drawing.Point(eArgs.Bounds.X, eArgs.Bounds.Y);
-            progressBar.Size = new System.Drawing.Size(eArgs.Bounds.Width, eArgs.Bounds.Height);
-            progressBar.Show();
+            fProgressBar.Location = new Point(eArgs.Bounds.X, eArgs.Bounds.Y);
+            fProgressBar.Size = new Size(eArgs.Bounds.Width, eArgs.Bounds.Height);
+            fProgressBar.Show();
         }
     }
 }

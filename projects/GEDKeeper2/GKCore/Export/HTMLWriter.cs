@@ -35,37 +35,37 @@ namespace GKCore.Export
 
         public HTMLWriter()
         {
-            this.fStyles = new Dictionary<string, string>();
+            fStyles = new Dictionary<string, string>();
         }
 
         public override void beginWrite()
         {
-            this.fStream = new StreamWriter(new FileStream(this.fFileName, FileMode.Create), Encoding.UTF8);
+            fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create), Encoding.UTF8);
 
-            this.fStream.WriteLine("<html>");
-            this.fStream.WriteLine("<head>");
-            this.fStream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
-            this.fStream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
-            this.fStream.WriteLine("<title>" + this.fDocumentTitle + "</title>");
+            fStream.WriteLine("<html>");
+            fStream.WriteLine("<head>");
+            fStream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
+            fStream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
+            fStream.WriteLine("<title>" + fDocumentTitle + "</title>");
 
-            this.fStream.WriteLine("<style type=\"text/css\">");
-            foreach (KeyValuePair<string, string> entry in this.fStyles)
+            fStream.WriteLine("<style type=\"text/css\">");
+            foreach (KeyValuePair<string, string> entry in fStyles)
             {
-                this.fStream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
+                fStream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
             }
-            this.fStream.WriteLine("</style>");
+            fStream.WriteLine("</style>");
 
-            this.fStream.WriteLine("</head>");
-            this.fStream.WriteLine("<body>");
+            fStream.WriteLine("</head>");
+            fStream.WriteLine("<body>");
         }
 
         public override void endWrite()
         {
-            this.fStream.WriteLine("</body>");
-            this.fStream.WriteLine("</html>");
+            fStream.WriteLine("</body>");
+            fStream.WriteLine("</html>");
 
-            this.fStream.Flush();
-            this.fStream.Close();
+            fStream.Flush();
+            fStream.Close();
         }
 
         public override void addParagraph(string text, object font, TextAlignment alignment)
@@ -98,9 +98,9 @@ namespace GKCore.Export
             if (bold) style += "; font-weight: bold";
             if (underline) style += "; text-decoration: underline";
             
-            int index = this.fStyles.Count;
+            int index = fStyles.Count;
             string key = "style_" + index;
-            this.fStyles.Add(key, style);
+            fStyles.Add(key, style);
 
             return key;
         }

@@ -35,11 +35,11 @@ namespace GKCore.Kinships
 
         public KinshipRec(EnumSet<RelationKind> prevRels, EnumSet<RelationKind> currRels, RelationKind finRel, sbyte great, sbyte level)
         {
-            this.PrevRels = prevRels;
-            this.CurrRels = currRels;
-            this.FinRel = finRel;
-            this.Great = great;
-            this.Level = level;
+            PrevRels = prevRels;
+            CurrRels = currRels;
+            FinRel = finRel;
+            Great = great;
+            Level = level;
         }
     }
 }

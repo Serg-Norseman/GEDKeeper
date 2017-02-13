@@ -73,11 +73,9 @@ namespace GKUI.Charts
                 case Keys.Down:
                 case Keys.Back:
                     return true;
-                    break;
 
                 default:
                     return base.IsInputKey(keyData);
-                    break;
             }
         }
 

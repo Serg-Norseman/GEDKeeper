@@ -518,6 +518,8 @@
     <Compile Include="GKCore\Export\RTFWriter.cs" />
     <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
+    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
+    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
     <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
@@ -726,7 +728,11 @@
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon.linux</Name>
+      <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.linux.csproj">
+      <Project>{3C9C706D-A5B2-48FB-BE5E-DCC372F84622}</Project>
+      <Name>GKMediaPlayer</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

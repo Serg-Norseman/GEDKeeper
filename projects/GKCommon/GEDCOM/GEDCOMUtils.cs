@@ -597,7 +597,7 @@ namespace GKCommon.GEDCOM
             {
                 result = GEDCOMMultimediaFormat.mfGIF;
             }
-            else if (str == "JPG")
+            else if (str == "JPG" || str == "JPEG")
             {
                 result = GEDCOMMultimediaFormat.mfJPG;
             }
@@ -609,7 +609,7 @@ namespace GKCommon.GEDCOM
             {
                 result = GEDCOMMultimediaFormat.mfPCX;
             }
-            else if (str == "TIF")
+            else if (str == "TIF" || str == "TIFF")
             {
                 result = GEDCOMMultimediaFormat.mfTIF;
             }
@@ -637,11 +637,11 @@ namespace GKCommon.GEDCOM
             {
                 result = GEDCOMMultimediaFormat.mfPNG;
             }
-            else if (str == "MPG")
+            else if (str == "MPG" || str == "MPEG")
             {
                 result = GEDCOMMultimediaFormat.mfMPG;
             }
-            else if (str == "HTM")
+            else if (str == "HTM" || str == "HTML")
             {
                 result = GEDCOMMultimediaFormat.mfHTM;
             }
@@ -664,6 +664,14 @@ namespace GKCommon.GEDCOM
             else if (str == "PDF")
             {
                 result = GEDCOMMultimediaFormat.mfPDF;
+            }
+            else if (str == "MP4")
+            {
+                result = GEDCOMMultimediaFormat.mfMP4;
+            }
+            else if (str == "OGV")
+            {
+                result = GEDCOMMultimediaFormat.mfOGV;
             }
             else
             {
@@ -732,6 +740,12 @@ namespace GKCommon.GEDCOM
                     break;
                 case GEDCOMMultimediaFormat.mfPDF:
                     s = "pdf";
+                    break;
+                case GEDCOMMultimediaFormat.mfMP4:
+                    s = "mp4";
+                    break;
+                case GEDCOMMultimediaFormat.mfOGV:
+                    s = "ogv";
                     break;
                 default:
                     s = "";

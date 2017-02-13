@@ -251,6 +251,8 @@ namespace GKCommon.GEDCOM
         mfAVI,
         mfMPG,
         mfWMA,
+        mfMP4,
+        mfOGV,
 
         mfOLE,
         mfUnknown

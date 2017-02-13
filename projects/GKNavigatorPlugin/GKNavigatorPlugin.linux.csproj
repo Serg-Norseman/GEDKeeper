@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{BD2B94CA-5913-415B-9428-ED3C6D270602}</ProjectGuid>
+    <ProjectGuid>{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GKNavigatorPlugin</RootNamespace>
@@ -100,17 +100,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PluginForm.cs">
+    <Compile Include="NavigatorData.cs" />
+    <Compile Include="NavigatorWidget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PluginForm.Designer.cs">
-      <DependentUpon>PluginForm.cs</DependentUpon>
+    <Compile Include="NavigatorWidget.Designer.cs">
+      <DependentUpon>NavigatorWidget.cs</DependentUpon>
     </Compile>
     <Compile Include="GKNavigatorPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PluginForm.resx">
-      <DependentUpon>PluginForm.cs</DependentUpon>
+    <EmbeddedResource Include="NavigatorWidget.resx">
+      <DependentUpon>NavigatorWidget.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +119,17 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon.linux</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GKNavigatorPlugin.eng">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKNavigatorPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKNavigatorPlugin.ukr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

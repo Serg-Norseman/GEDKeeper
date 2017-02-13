@@ -212,17 +212,17 @@ namespace GKCore.Operations
 
             if (iRec == null || familyRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otIndividualParentsDetach) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    familyRec.AddChild(iRec);
-                } else {
-                    familyRec.RemoveChild(iRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otIndividualParentsDetach) {
+                redo = !redo;
+            }
+            if (redo) {
+                familyRec.AddChild(iRec);
+            } else {
+                familyRec.RemoveChild(iRec);
+            }
+            return true;
         }
 
         private bool ProcessFamilySpouse(bool redo)
@@ -232,17 +232,17 @@ namespace GKCore.Operations
 
             if (famRec == null || spouseRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otFamilySpouseDetach) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    famRec.AddSpouse(spouseRec);
-                } else {
-                    famRec.RemoveSpouse(spouseRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otFamilySpouseDetach) {
+                redo = !redo;
+            }
+            if (redo) {
+                famRec.AddSpouse(spouseRec);
+            } else {
+                famRec.RemoveSpouse(spouseRec);
+            }
+            return true;
         }
 
         private bool ProcessGroupMember(bool redo)
@@ -252,17 +252,17 @@ namespace GKCore.Operations
 
             if (grpRec == null || mbrRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otGroupMemberDetach) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    grpRec.AddMember(mbrRec);
-                } else {
-                    grpRec.RemoveMember(mbrRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otGroupMemberDetach) {
+                redo = !redo;
+            }
+            if (redo) {
+                grpRec.AddMember(mbrRec);
+            } else {
+                grpRec.RemoveMember(mbrRec);
+            }
+            return true;
         }
 
         private bool ProcessSourceRepositoryCitation(bool redo)
@@ -272,17 +272,17 @@ namespace GKCore.Operations
 
             if (srcRec == null || repRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otSourceRepositoryCitationRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    srcRec.AddRepository(repRec);
-                } else {
-                    srcRec.RemoveRepository(repRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otSourceRepositoryCitationRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                srcRec.AddRepository(repRec);
+            } else {
+                srcRec.RemoveRepository(repRec);
+            }
+            return true;
         }
 
         private bool ProcessResearchTask(bool redo)
@@ -292,17 +292,17 @@ namespace GKCore.Operations
 
             if (resRec == null || taskRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otResearchTaskRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    resRec.AddTask(taskRec);
-                } else {
-                    resRec.RemoveTask(taskRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otResearchTaskRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                resRec.AddTask(taskRec);
+            } else {
+                resRec.RemoveTask(taskRec);
+            }
+            return true;
         }
 
         private bool ProcessResearchCommunication(bool redo)
@@ -312,17 +312,17 @@ namespace GKCore.Operations
 
             if (resRec == null || commRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otResearchCommunicationRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    resRec.AddCommunication(commRec);
-                } else {
-                    resRec.RemoveCommunication(commRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otResearchCommunicationRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                resRec.AddCommunication(commRec);
+            } else {
+                resRec.RemoveCommunication(commRec);
+            }
+            return true;
         }
 
         private bool ProcessResearchGroup(bool redo)
@@ -332,17 +332,17 @@ namespace GKCore.Operations
 
             if (resRec == null || grpRec == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otResearchGroupRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    resRec.AddGroup(grpRec);
-                } else {
-                    resRec.RemoveGroup(grpRec);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otResearchGroupRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                resRec.AddGroup(grpRec);
+            } else {
+                resRec.RemoveGroup(grpRec);
+            }
+            return true;
         }
 
         private bool ProcessRecordNoteAdd(bool redo)
@@ -420,17 +420,17 @@ namespace GKCore.Operations
 
             if (swl == null || sourceCit == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otRecordSourceCitRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    swl.SourceCitations.Add(sourceCit);
-                } else {
-                    swl.SourceCitations.Extract(sourceCit); // bugfix(no delete!)
-                }
-                return true;
             }
+
+            if (fType == OperationType.otRecordSourceCitRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                swl.SourceCitations.Add(sourceCit);
+            } else {
+                swl.SourceCitations.Extract(sourceCit); // bugfix(no delete!)
+            }
+            return true;
         }
 
         private bool ProcessRecordEvent(bool redo)
@@ -440,17 +440,17 @@ namespace GKCore.Operations
 
             if (rwe == null || evt == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otRecordEventRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    rwe.AddEvent(evt);
-                } else {
-                    rwe.Events.Extract(evt); // bugfix(no delete!)
-                }
-                return true;
             }
+
+            if (fType == OperationType.otRecordEventRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                rwe.AddEvent(evt);
+            } else {
+                rwe.Events.Extract(evt); // bugfix(no delete!)
+            }
+            return true;
         }
 
         private bool ProcessIndividualAssociation(bool redo)
@@ -460,17 +460,17 @@ namespace GKCore.Operations
 
             if (iRec == null || asso == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otIndividualAssociationRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    iRec.Associations.Add(asso);
-                } else {
-                    iRec.Associations.Extract(asso);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otIndividualAssociationRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                iRec.Associations.Add(asso);
+            } else {
+                iRec.Associations.Extract(asso);
+            }
+            return true;
         }
 
         private bool ProcessIndividualName(bool redo)
@@ -480,17 +480,17 @@ namespace GKCore.Operations
 
             if (iRec == null || persName == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otIndividualNameRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    iRec.PersonalNames.Add(persName);
-                } else {
-                    iRec.PersonalNames.Extract(persName);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otIndividualNameRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                iRec.PersonalNames.Add(persName);
+            } else {
+                iRec.PersonalNames.Extract(persName);
+            }
+            return true;
         }
 
         private bool ProcessIndividualURef(bool redo)
@@ -500,17 +500,17 @@ namespace GKCore.Operations
 
             if (iRec == null || uRef == null) {
                 return false;
-            } else {
-                if (fType == OperationType.otIndividualURefRemove) {
-                    redo = !redo;
-                }
-                if (redo) {
-                    iRec.UserReferences.Add(uRef);
-                } else {
-                    iRec.UserReferences.Extract(uRef);
-                }
-                return true;
             }
+
+            if (fType == OperationType.otIndividualURefRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                iRec.UserReferences.Add(uRef);
+            } else {
+                iRec.UserReferences.Extract(uRef);
+            }
+            return true;
         }
 
         /// <summary>
@@ -524,15 +524,15 @@ namespace GKCore.Operations
 
             if (iRec == null || fNewVal == null) {
                 return false;
-            } else {
-                if (redo) {
-                    fOldVal = iRec.Bookmark;
-                    iRec.Bookmark = (bool) fNewVal;
-                } else {
-                    iRec.Bookmark = (bool) fOldVal;
-                }
-                return true;
             }
+
+            if (redo) {
+                fOldVal = iRec.Bookmark;
+                iRec.Bookmark = (bool) fNewVal;
+            } else {
+                iRec.Bookmark = (bool) fOldVal;
+            }
+            return true;
         }
 
         /// <summary>
@@ -546,15 +546,15 @@ namespace GKCore.Operations
 
             if (iRec == null || fNewVal == null) {
                 return false;
-            } else {
-                if (redo) {
-                    fOldVal = iRec.Patriarch;
-                    iRec.Patriarch = (bool) fNewVal;
-                } else {
-                    iRec.Patriarch = (bool) fOldVal;
-                }
-                return true;
             }
+
+            if (redo) {
+                fOldVal = iRec.Patriarch;
+                iRec.Patriarch = (bool) fNewVal;
+            } else {
+                iRec.Patriarch = (bool) fOldVal;
+            }
+            return true;
         }
 
         /// <summary>
@@ -568,15 +568,15 @@ namespace GKCore.Operations
 
             if (iRec == null || fNewVal == null) {
                 return false;
-            } else {
-                if (redo) {
-                    fOldVal = iRec.Sex;
-                    iRec.Sex = (GEDCOMSex) fNewVal;
-                } else {
-                    iRec.Sex = (GEDCOMSex) fOldVal;
-                }
-                return true;
             }
+
+            if (redo) {
+                fOldVal = iRec.Sex;
+                iRec.Sex = (GEDCOMSex) fNewVal;
+            } else {
+                iRec.Sex = (GEDCOMSex) fOldVal;
+            }
+            return true;
         }
     }
 }

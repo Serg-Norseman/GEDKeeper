@@ -18,22 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
-namespace GKCore.Geocoding
+namespace GKCore.Cultures
 {
-    public sealed class GeoPoint
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class TurkishCulture : DefaultCulture
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string Hint { get; set; }
-        public DateTime Date { get; set; }
-
-        public GeoPoint(double latitude, double longitude, string hint)
+        public TurkishCulture()
         {
-            Latitude = latitude;
-            Longitude = longitude;
-            Hint = hint;
+        }
+
+        public override bool HasPatronymic()
+        {
+            return false;
+        }
+
+        public override bool HasSurname()
+        {
+            return true;
         }
     }
 }

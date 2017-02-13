@@ -151,7 +151,7 @@ namespace GKCore.Cultures
                 int p = surname.IndexOf('(');
                 if (p >= 0) {
                     string part = surname.Substring(0, p).Trim();
-                    result[0] = this.NormalizeSurname(part, female);
+                    result[0] = NormalizeSurname(part, female);
                     part = surname.Substring(p).Trim();
                     part = part.Substring(1, part.Length-2);
 
@@ -160,10 +160,10 @@ namespace GKCore.Cultures
                         string[] newres = new string[result.Length+1];
                         result.CopyTo(newres, 0);
                         result = newres;
-                        result[result.Length-1] = this.NormalizeSurname(parts[i].Trim(), female);
+                        result[result.Length-1] = NormalizeSurname(parts[i].Trim(), female);
                     }
                 } else {
-                    result[0] = this.NormalizeSurname(surname, female);
+                    result[0] = NormalizeSurname(surname, female);
                 }
             } else {
                 result[0] = surname;
