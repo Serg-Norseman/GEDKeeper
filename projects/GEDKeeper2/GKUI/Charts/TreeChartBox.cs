@@ -517,10 +517,10 @@ namespace GKUI.Charts
             DateTime cur = DateTime.Now;
             TimeSpan d = cur - st;
 
-            if (d.Seconds >= 1/* && !this.fPersonControl.Visible*/)
+            if (d.Seconds >= 1/* && !fPersonControl.Visible*/)
             {
                 fHighlightedPerson = null;
-                //this.fPersonControl.Visible = true;
+                //fPersonControl.Visible = true;
                 Invalidate();
             }
         }
@@ -1238,24 +1238,24 @@ namespace GKUI.Charts
 
         private void DrawBackground(BackgroundMode background)
         {
-            if (background != BackgroundMode.bmNone) {
-                bool bgImage = ((BackgroundImage != null) &&
-                                (background == BackgroundMode.bmAny ||
-                                 background == BackgroundMode.bmImage));
+            if (background == BackgroundMode.bmNone) return;
 
-                if (bgImage) {
-                    /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
+            bool bgImage = ((BackgroundImage != null) &&
+                            (background == BackgroundMode.bmAny ||
+                             background == BackgroundMode.bmImage));
+
+            if (bgImage) {
+                /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
 
                     using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
                         gfx.FillRectangle(textureBrush, imgRect);
                     }*/
-                } else {
-                    bool bgFill = (background == BackgroundMode.bmAny ||
-                                   background == BackgroundMode.bmImage);
+            } else {
+                bool bgFill = (background == BackgroundMode.bmAny ||
+                               background == BackgroundMode.bmImage);
 
-                    if (bgFill) {
-                        fRenderer.DrawRectangle(null, BackColor, 0, 0, fImageWidth, fImageHeight);
-                    }
+                if (bgFill) {
+                    fRenderer.DrawRectangle(null, BackColor, 0, 0, fImageWidth, fImageHeight);
                 }
             }
         }
@@ -1268,9 +1268,9 @@ namespace GKUI.Charts
             fSPY = 0;
 
             if (drawMode == DrawMode.dmInteractive) {
-                /*Rectangle viewPort = this.GetImageViewPort();
-                this.fSPX = -viewPort.Left;
-                this.fSPY = -viewPort.Top;*/
+                /*Rectangle viewPort = GetImageViewPort();
+                fSPX = -viewPort.Left;
+                fSPY = -viewPort.Top;*/
 
                 fSPX += fBorderWidth - -AutoScrollPosition.X;
                 fSPY += fBorderWidth - -AutoScrollPosition.Y;
@@ -1935,18 +1935,18 @@ namespace GKUI.Charts
                             fHighlightedStart = DateTime.Now.ToBinary();
 
                             if (p == null) {
-                                //this.fPersonControl.Visible = false;
+                                //fPersonControl.Visible = false;
                             } else {
-                                //this.fPersonControl.SetPerson(p);
+                                //fPersonControl.SetPerson(p);
                             }
 
                             Invalidate();
                         }
 //
-//                      if (p != null && e.Button == MouseButtons.Left)
-//                      {
-//                          this.fTreeBox.DoDragDrop(p.Rec.XRef, DragDropEffects.Move);
-//                      }
+                        //                      if (p != null && e.Button == MouseButtons.Left)
+                        //                      {
+                        //                          fTreeBox.DoDragDrop(p.Rec.XRef, DragDropEffects.Move);
+                        //                      }
                     }
                     break;
 
@@ -2050,7 +2050,7 @@ namespace GKUI.Charts
             TreeChartPerson p = FindPersonByCoords(aX, aY);
             SetSelected(p);
 
-            //if (this.FTraceKinships && this.fOptions.Kinship) this.RebuildKinships(true);
+            //if (FTraceKinships && fOptions.Kinship) RebuildKinships(true);
 
             if (p != null && needCenter && fTraceSelected) CenterPerson(p);
         }
@@ -2106,45 +2106,45 @@ namespace GKUI.Charts
             if (root == null)
                 throw new ArgumentNullException("root");
 
-            if (fFilter.BranchCut != ChartFilter.BranchCutType.None) {
-                GKUtils.InitExtCounts(fTree, 0);
-                DoDescendantsFilter(root);
-                root.ExtData = true;
-            }
+            if (fFilter.BranchCut == ChartFilter.BranchCutType.None) return;
+
+            GKUtils.InitExtCounts(fTree, 0);
+            DoDescendantsFilter(root);
+            root.ExtData = true;
         }
 
         private bool DoDescendantsFilter(GEDCOMIndividualRecord person)
         {
             bool result = false;
-            if (person != null)
-            {
-                ChartFilter.BranchCutType branchCut = fFilter.BranchCut;
-                switch (branchCut) {
-                    case ChartFilter.BranchCutType.Years:
-                        int birthYear = GEDCOMUtils.GetRelativeYear(person, "BIRT");
-                        result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
-                        break;
+            if (person == null) return result;
 
-                    case ChartFilter.BranchCutType.Persons:
-                        result = (fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
-                        break;
-                }
+            ChartFilter.BranchCutType branchCut = fFilter.BranchCut;
+            switch (branchCut) {
+                case ChartFilter.BranchCutType.Years:
+                    int birthYear = GEDCOMUtils.GetRelativeYear(person, "BIRT");
+                    result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
+                    break;
 
-                int num = person.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
-
-                    int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
-                        bool resChild = DoDescendantsFilter(child);
-                        result |= resChild;
-                    }
-                }
-                person.ExtData = result;
+                case ChartFilter.BranchCutType.Persons:
+                    result = (fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
+                    break;
             }
+
+            int num = person.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+
+                int num2 = family.Children.Count;
+                for (int j = 0; j < num2; j++)
+                {
+                    GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                    bool resChild = DoDescendantsFilter(child);
+                    result |= resChild;
+                }
+            }
+
+            person.ExtData = result;
             return result;
         }
 

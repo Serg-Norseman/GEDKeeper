@@ -263,160 +263,156 @@ namespace GKFlowInputPlugin
         {
             string tmp = this.EditName.Text.ToLower();
             string[] tokens = tmp.Split(' ');
-            if (tokens.Length < 3)
-            {
-                this.ShowError(fLangMan.LS(FLS.LSID_NameInvalid));
+            if (tokens.Length < 3) {
+                ShowError(fLangMan.LS(FLS.LSID_NameInvalid));
+                return;
             }
-            else
-            {
-                string fam = SysUtils.NormalizeName(tokens[0]);
-                string nam = SysUtils.NormalizeName(tokens[1]);
-                string pat = SysUtils.NormalizeName(tokens[2]);
 
-                GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
-                if (this.CheckBirth.Checked) {
-                    this.fBase.Context.CreateEventEx(iRec, "BIRT", GEDCOMUtils.StrToGEDCOMDate(this.EditBirthDate.Text, true), this.EditBirthPlace.Text);
-                }
+            string fam = SysUtils.NormalizeName(tokens[0]);
+            string nam = SysUtils.NormalizeName(tokens[1]);
+            string pat = SysUtils.NormalizeName(tokens[2]);
 
-                if (this.CheckDeath.Checked) {
-                    this.fBase.Context.CreateEventEx(iRec, "DEAT", GEDCOMUtils.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
-                }
-
-                if (!string.IsNullOrEmpty(this.MemoNote.Text)) {
-                    GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
-                    noteRec.SetNoteText(MemoNote.Text);
-                    iRec.AddNote(noteRec);
-                }
-
-                this.fBase.ChangeRecord(iRec);
-
-                this.InitSimpleControls();
+            GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
+            if (this.CheckBirth.Checked) {
+                this.fBase.Context.CreateEventEx(iRec, "BIRT", GEDCOMUtils.StrToGEDCOMDate(this.EditBirthDate.Text, true), this.EditBirthPlace.Text);
             }
+
+            if (this.CheckDeath.Checked) {
+                this.fBase.Context.CreateEventEx(iRec, "DEAT", GEDCOMUtils.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
+            }
+
+            if (!string.IsNullOrEmpty(this.MemoNote.Text)) {
+                GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                noteRec.SetNoteText(MemoNote.Text);
+                iRec.AddNote(noteRec);
+            }
+
+            fBase.ChangeRecord(iRec);
+
+            InitSimpleControls();
         }
 
         private void ParseSource()
         {
-            string srcName = this.cbSource.Text;
-            string srcPage = this.edPage.Text;
             int srcYear;
-            string place = this.edPlace.Text;
-
-            if (!int.TryParse(this.edSourceYear.Text, out srcYear))
-            {
-                this.ShowError(fLangMan.LS(FLS.LSID_SourceYearInvalid));
+            if (!int.TryParse(this.edSourceYear.Text, out srcYear)) {
+                ShowError(fLangMan.LS(FLS.LSID_SourceYearInvalid));
+                return;
             }
-            else
+
+            try
             {
+                string srcName = this.cbSource.Text;
+                string srcPage = this.edPage.Text;
+                string place = this.edPlace.Text;
+
                 GEDCOMIndividualRecord iMain = null;
-                try
+
+                int num = dataGridView1.Rows.Count;
+                for (int r = 0; r < num; r++)
                 {
-                    int num = dataGridView1.Rows.Count;
-                    for (int r = 0; r < num; r++)
-                    {
-                        DataGridViewRow row = dataGridView1.Rows[r];
+                    DataGridViewRow row = dataGridView1.Rows[r];
 
-                        string lnk = (string)row.Cells[0].Value;
-                        string nm = (string)row.Cells[1].Value;
-                        string pt = (string)row.Cells[2].Value;
-                        string fm = (string)row.Cells[3].Value;
-                        string age = (string)row.Cells[4].Value;
-                        string comment = (string)row.Cells[5].Value;
+                    string lnk = (string)row.Cells[0].Value;
+                    string nm = (string)row.Cells[1].Value;
+                    string pt = (string)row.Cells[2].Value;
+                    string fm = (string)row.Cells[3].Value;
+                    string age = (string)row.Cells[4].Value;
+                    string comment = (string)row.Cells[5].Value;
 
-                        if (!string.IsNullOrEmpty(lnk)) {
-                            PersonLink link = GetLinkByName(lnk);
+                    if (!string.IsNullOrEmpty(lnk)) {
+                        PersonLink link = GetLinkByName(lnk);
 
-                            GEDCOMSex sx = this.fBase.DefineSex(nm, pt);
-                            GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
+                        GEDCOMSex sx = this.fBase.DefineSex(nm, pt);
+                        GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
-                            if (!string.IsNullOrEmpty(age) && GEDCOMUtils.IsDigits(age)) {
-                                int birthYear = srcYear - int.Parse(age);
-                                this.fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
+                        if (!string.IsNullOrEmpty(age) && GEDCOMUtils.IsDigits(age)) {
+                            int birthYear = srcYear - int.Parse(age);
+                            this.fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
+                        }
+
+                        if (!string.IsNullOrEmpty(place)) {
+                            GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(iRec, "RESI", "", "");
+                            evt.Detail.Place.StringValue = place;
+                        }
+
+                        if (!string.IsNullOrEmpty(comment)) {
+                            GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                            noteRec.SetNoteText(comment);
+                            iRec.AddNote(noteRec);
+                        }
+
+                        if (!string.IsNullOrEmpty(srcName)) {
+                            GEDCOMSourceRecord srcRec = this.fBase.Context.FindSource(srcName);
+                            if (srcRec == null) {
+                                srcRec = fBase.Tree.CreateSource();
+                                srcRec.FiledByEntry = srcName;
                             }
+                            iRec.AddSource(srcRec, srcPage, 0);
+                        }
 
-                            if (!string.IsNullOrEmpty(place)) {
-                                GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(iRec, "RESI", "", "");
-                                evt.Detail.Place.StringValue = place;
-                            }
+                        fBase.ChangeRecord(iRec);
 
-                            if (!string.IsNullOrEmpty(comment)) {
-                                GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
-                                noteRec.SetNoteText(comment);
-                                iRec.AddNote(noteRec);
-                            }
+                        GEDCOMFamilyRecord family = null;
 
-                            if (!string.IsNullOrEmpty(srcName)) {
-                                GEDCOMSourceRecord srcRec = this.fBase.Context.FindSource(srcName);
-                                if (srcRec == null) {
-                                    srcRec = fBase.Tree.CreateSource();
-                                    srcRec.FiledByEntry = srcName;
-                                }
-                                iRec.AddSource(srcRec, srcPage, 0);
-                            }
+                        switch (link) {
+                            case PersonLink.plNone:
+                                break;
 
-                            fBase.ChangeRecord(iRec);
+                            case PersonLink.plPerson:
+                                {
+                                    iMain = iRec;
+                                    string evName = "";
 
-                            GEDCOMFamilyRecord family = null;
-
-                            switch (link) {
-                                case PersonLink.plNone:
-                                    break;
-
-                                case PersonLink.plPerson:
-                                    {
-                                        iMain = iRec;
-                                        string evName = "";
-
-                                        if (rbSK_Met.Checked) {
-                                            switch (cbEventType.SelectedIndex) {
-                                                    case  0: evName = "BIRT"; break;
-                                                    case  1: evName = "DEAT"; break;
-                                                    case  2: evName = "MARR"; break;
-                                            }
-                                        }
-
-                                        if (evName == "BIRT" || evName == "DEAT") {
-                                            GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(iRec, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
-                                            evt.Detail.Place.StringValue = place;
-                                        } else if (evName == "MARR") {
-                                            family = iRec.GetMarriageFamily(true);
-                                            GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(family, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
-                                            evt.Detail.Place.StringValue = place;
+                                    if (rbSK_Met.Checked) {
+                                        switch (cbEventType.SelectedIndex) {
+                                                case  0: evName = "BIRT"; break;
+                                                case  1: evName = "DEAT"; break;
+                                                case  2: evName = "MARR"; break;
                                         }
                                     }
-                                    break;
 
-                                case PersonLink.plFather:
-                                case PersonLink.plMother:
-                                    CheckMain(iMain);
-                                    family = iMain.GetParentsFamily(true);
-                                    family.AddSpouse(iRec);
-                                    break;
+                                    if (evName == "BIRT" || evName == "DEAT") {
+                                        GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(iRec, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
+                                        evt.Detail.Place.StringValue = place;
+                                    } else if (evName == "MARR") {
+                                        family = iRec.GetMarriageFamily(true);
+                                        GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(family, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
+                                        evt.Detail.Place.StringValue = place;
+                                    }
+                                }
+                                break;
 
-                                case PersonLink.plGodparent:
-                                    CheckMain(iMain);
-                                    iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
-                                    break;
+                            case PersonLink.plFather:
+                            case PersonLink.plMother:
+                                CheckMain(iMain);
+                                family = iMain.GetParentsFamily(true);
+                                family.AddSpouse(iRec);
+                                break;
 
-                                case PersonLink.plSpouse:
-                                    CheckMain(iMain);
-                                    family = iMain.GetMarriageFamily(true);
-                                    family.AddSpouse(iRec);
-                                    break;
+                            case PersonLink.plGodparent:
+                                CheckMain(iMain);
+                                iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
+                                break;
 
-                                case PersonLink.plChild:
-                                    CheckMain(iMain);
-                                    family = iMain.GetMarriageFamily(true);
-                                    family.AddChild(iRec);
-                                    break;
-                            }
+                            case PersonLink.plSpouse:
+                                CheckMain(iMain);
+                                family = iMain.GetMarriageFamily(true);
+                                family.AddSpouse(iRec);
+                                break;
+
+                            case PersonLink.plChild:
+                                CheckMain(iMain);
+                                family = iMain.GetMarriageFamily(true);
+                                family.AddChild(iRec);
+                                break;
                         }
                     }
                 }
-                finally
-                {
-                }
-
-                this.InitSourceControls();
+            }
+            finally
+            {
+                InitSourceControls();
             }
         }
 
@@ -438,7 +434,7 @@ namespace GKFlowInputPlugin
             this.fBase.RefreshLists(false);
         }
 
-        void BtnMaleClick(object sender, EventArgs e)
+        private void BtnMaleClick(object sender, EventArgs e)
         {
             switch (fSimpleTempSex) {
                 case GEDCOMSex.svMale:
@@ -452,17 +448,17 @@ namespace GKFlowInputPlugin
             }
         }
 
-        void EditBirthDateTextChanged(object sender, EventArgs e)
+        private void EditBirthDateTextChanged(object sender, EventArgs e)
         {
             this.CheckBirth.Checked = true;
         }
 
-        void EditDeathDateTextChanged(object sender, EventArgs e)
+        private void EditDeathDateTextChanged(object sender, EventArgs e)
         {
             this.CheckDeath.Checked = true;
         }
 
-        void RadioButton1CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             gbMetrics.Enabled = (rbSK_Met.Checked);
         }

@@ -129,19 +129,19 @@ namespace GKCommon.Controls
                 if (fRuleStyle == value) return;
 
                 fRuleStyle = value;
-                base.Invalidate();
+                Invalidate();
             }
         }
 
 
         public HyperView() : base()
         {
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            base.UpdateStyles();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            UpdateStyles();
 
-            base.BorderStyle = BorderStyle.Fixed3D;
-            base.DoubleBuffered = true;
-            base.TabStop = true;
+            BorderStyle = BorderStyle.Fixed3D;
+            DoubleBuffered = true;
+            TabStop = true;
 
             //fAcceptFontChange = false;
             fLines = new StringList();

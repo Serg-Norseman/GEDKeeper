@@ -55,39 +55,39 @@ namespace GKUI
 
         public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.tbExcelExport.Image = GKResources.iExcel;
+            tbExcelExport.Image = GKResources.iExcel;
 
-            this.fGraph = new ZedGraphControl();
-            this.fGraph.IsShowPointValues = true;
-            this.fGraph.Dock = DockStyle.Right;
-            this.fGraph.Size = new Size(400, 200);
+            fGraph = new ZedGraphControl();
+            fGraph.IsShowPointValues = true;
+            fGraph.Dock = DockStyle.Right;
+            fGraph.Size = new Size(400, 200);
 
             Splitter spl = new Splitter();
             spl.Dock = DockStyle.Right;
             spl.Size = new Size(4, 290);
             spl.MinExtra = 100;
             spl.MinSize = 100;
-            this.Panel1.Controls.Add(this.fGraph);
-            this.Panel1.Controls.Add(spl);
+            Panel1.Controls.Add(fGraph);
+            Panel1.Controls.Add(spl);
 
-            this.fListStats = GKUtils.CreateListView(this.Panel1);
-            this.fListStats.AddListColumn("-", 250, false);
-            this.fListStats.AddListColumn("-", 150, false);
+            fListStats = GKUtils.CreateListView(Panel1);
+            fListStats.AddListColumn("-", 250, false);
+            fListStats.AddListColumn("-", 150, false);
 
-            this.Panel1.Controls.SetChildIndex(this.fListStats, 0);
-            this.Panel1.Controls.SetChildIndex(spl, 2);
-            this.Panel1.Controls.SetChildIndex(this.fGraph, 3);
-            this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
+            Panel1.Controls.SetChildIndex(fListStats, 0);
+            Panel1.Controls.SetChildIndex(spl, 2);
+            Panel1.Controls.SetChildIndex(fGraph, 3);
+            Panel1.Controls.SetChildIndex(ToolBar1, 4);
 
-            this.fBase = baseWin;
-            this.fSelectedRecords = selectedRecords;
-            this.fTreeStats = new TreeStats(this.fBase.Context, this.fSelectedRecords);
+            fBase = baseWin;
+            fSelectedRecords = selectedRecords;
+            fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
 
-            this.UpdateStatsTypes();
+            UpdateStatsTypes();
 
-            this.SetLang();
+            SetLang();
         }
 
         private static string GetPercent(int dividend, int divisor)
@@ -106,10 +106,10 @@ namespace GKUI
             {
                 PointPairList ppList = new PointPairList();
 
-                int num = this.fListStats.Items.Count;
+                int num = fListStats.Items.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    ListViewItem item = this.fListStats.Items[i];
+                    ListViewItem item = fListStats.Items[i];
 
                     string s = item.Text;
                     double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
@@ -138,20 +138,20 @@ namespace GKUI
                 gPane.CurveList.Clear();
                 
                 int itemscount = vals.Count;
-                double[] YValuesF = new double[itemscount];
-                double[] YValuesM = new double[itemscount];
-                double[] XValues = new double[itemscount];
+                double[] yValuesF = new double[itemscount];
+                double[] yValuesM = new double[itemscount];
+                double[] xValues = new double[itemscount];
 
                 for (int i = 0; i < itemscount; i++)
                 {
                     StatsItem sti = vals[i];
-                    XValues[i] = SysUtils.ParseInt(sti.Caption, 0);
-                    YValuesF[i] = sti.ValF;
-                    YValuesM[i] = sti.ValM;
+                    xValues[i] = SysUtils.ParseInt(sti.Caption, 0);
+                    yValuesF[i] = sti.ValF;
+                    yValuesM[i] = sti.ValM;
                 }
 
-                /*BarItem bar1 = */gPane.AddBar("F", XValues, YValuesF, Color.Red);
-                /*BarItem bar2 = */gPane.AddBar("M", XValues, YValuesM, Color.Blue);
+                /*BarItem bar1 = */gPane.AddBar("F", xValues, yValuesF, Color.Red);
+                /*BarItem bar2 = */gPane.AddBar("M", xValues, yValuesM, Color.Blue);
 
                 gPane.BarSettings.MinBarGap = 0.0f;
                 gPane.BarSettings.MinClusterGap = 2.5f;
@@ -166,14 +166,14 @@ namespace GKUI
 
         private void CalcStats(StatsMode mode)
         {
-            this.fListStats.SortColumn = 0;
-            this.fListStats.Columns[0].Text = LangMan.LS(GKData.StatsTitles[(int)mode].Cap);
-            this.fListStats.Columns[1].Text = LangMan.LS(LSID.LSID_Value);
+            fListStats.SortColumn = 0;
+            fListStats.Columns[0].Text = LangMan.LS(GKData.StatsTitles[(int)mode].Cap);
+            fListStats.Columns[1].Text = LangMan.LS(LSID.LSID_Value);
 
-            this.fListStats.Sorting = SortOrder.None;
-            this.fListStats.SortColumn = -1;
-            this.fListStats.BeginUpdate();
-            this.fListStats.Items.Clear();
+            fListStats.Sorting = SortOrder.None;
+            fListStats.SortColumn = -1;
+            fListStats.BeginUpdate();
+            fListStats.Items.Clear();
 
             List<StatsItem> vals = new List<StatsItem>();
             try
@@ -193,30 +193,30 @@ namespace GKUI
                     i++;
                 }
 
-                this.fListStats.Items.AddRange(items);
+                fListStats.Items.AddRange(items);
             }
             finally
             {
-                this.fListStats.EndUpdate();
+                fListStats.EndUpdate();
             }
 
-            GraphPane gPane = this.fGraph.GraphPane;
+            GraphPane gPane = fGraph.GraphPane;
             try
             {
                 gPane.CurveList.Clear();
-                this.fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
+                fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
 
                 switch (mode) {
                     case StatsMode.smAge:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_Age);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-                        this.PrepareArray(gPane, ChartStyle.Point, true);
+                        fChartXTitle = LangMan.LS(LSID.LSID_Age);
+                        fChartYTitle = LangMan.LS(LSID.LSID_People);
+                        PrepareArray(gPane, ChartStyle.Point, true);
                         break;
 
                     case StatsMode.smLifeExpectancy:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-                        this.PrepareArray(gPane, ChartStyle.Point, true);
+                        fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
+                        fChartYTitle = LangMan.LS(LSID.LSID_People);
+                        PrepareArray(gPane, ChartStyle.Point, true);
                         break;
 
                     case StatsMode.smBirthYears:
@@ -226,53 +226,53 @@ namespace GKUI
                             switch (mode) {
                                 case StatsMode.smBirthYears:
                                 case StatsMode.smDeathYears:
-                                    this.fChartXTitle = LangMan.LS(LSID.LSID_Years);
+                                    fChartXTitle = LangMan.LS(LSID.LSID_Years);
                                     break;
 
                                 case StatsMode.smBirthTenYears:
                                 case StatsMode.smDeathTenYears:
-                                    this.fChartXTitle = LangMan.LS(LSID.LSID_Decennial);
+                                    fChartXTitle = LangMan.LS(LSID.LSID_Decennial);
                                     break;
                             }
 
                             switch (mode) {
                                 case StatsMode.smBirthYears:
                                 case StatsMode.smBirthTenYears:
-                                    this.fChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
+                                    fChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
                                     break;
 
                                 case StatsMode.smDeathYears:
                                 case StatsMode.smDeathTenYears:
-                                    this.fChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
+                                    fChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
                                     break;
                             }
 
-                            this.PrepareArray(gPane, ChartStyle.Point, true);
+                            PrepareArray(gPane, ChartStyle.Point, true);
                             break;
                         }
 
                     case StatsMode.smChildsDistribution:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_Childs);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_Parents);
-                        this.PrepareArray(gPane, ChartStyle.Bar, true);
+                        fChartXTitle = LangMan.LS(LSID.LSID_Childs);
+                        fChartYTitle = LangMan.LS(LSID.LSID_Parents);
+                        PrepareArray(gPane, ChartStyle.Bar, true);
                         break;
 
                     case StatsMode.smCertaintyIndex:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-                        this.PrepareArray(gPane, ChartStyle.Bar, true);
+                        fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
+                        fChartYTitle = LangMan.LS(LSID.LSID_People);
+                        PrepareArray(gPane, ChartStyle.Bar, true);
                         break;
 
                     case StatsMode.smBirthByMonth:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_Month);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-                        this.PrepareArray(gPane, ChartStyle.Bar, true);
+                        fChartXTitle = LangMan.LS(LSID.LSID_Month);
+                        fChartYTitle = LangMan.LS(LSID.LSID_People);
+                        PrepareArray(gPane, ChartStyle.Bar, true);
                         break;
 
                     case StatsMode.smDemography:
-                        this.fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                        this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-                        this.PrepareArray(gPane, ChartStyle.ClusterBar, true, vals);
+                        fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
+                        fChartYTitle = LangMan.LS(LSID.LSID_People);
+                        PrepareArray(gPane, ChartStyle.ClusterBar, true, vals);
                         break;
                 }
             }
@@ -287,19 +287,19 @@ namespace GKUI
         {
             CommonStats stats = fTreeStats.GetCommonStats();
 
-            this.lvSummary.Items.Clear();
+            lvSummary.Items.Clear();
 
-            ListViewItem item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_People));
+            ListViewItem item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_People));
             item.SubItems.Add(stats.persons.ToString());
             item.SubItems.Add(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
             item.SubItems.Add(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
-            item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_Living));
+            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Living));
             item.SubItems.Add(stats.lives.ToString());
             item.SubItems.Add(stats.lives_m.ToString());
             item.SubItems.Add(stats.lives_f.ToString());
 
-            item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_Deads));
+            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Deads));
             item.SubItems.Add((stats.persons - stats.lives).ToString());
             item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
             item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
@@ -315,7 +315,7 @@ namespace GKUI
         
         private void AddCompositeItem(LSID name, CompositeItem item)
         {
-            ListViewItem lvItem = this.lvSummary.Items.Add(LangMan.LS(name));
+            ListViewItem lvItem = lvSummary.Items.Add(LangMan.LS(name));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.CommonVal));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.MaleVal));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.FemaleVal));
@@ -328,46 +328,46 @@ namespace GKUI
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.CalcStats((StatsMode)this.cbType.SelectedIndex);
+            CalcStats((StatsMode)cbType.SelectedIndex);
         }
 
         private void UpdateStatsTypes()
         {
-            ICulture culture = this.fBase.Context.Culture;
+            ICulture culture = fBase.Context.Culture;
 
-            this.cbType.BeginUpdate();
-            this.cbType.Items.Clear();
+            cbType.BeginUpdate();
+            cbType.Items.Clear();
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
             {
                 if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                this.cbType.Items.Add(LangMan.LS(tr.Title));
+                cbType.Items.Add(LangMan.LS(tr.Title));
             }
-            this.cbType.EndUpdate();
+            cbType.EndUpdate();
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
-            this.UpdateCommonStats();
+            UpdateCommonStats();
         }
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_MIStats);
-            this.grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+            Text = LangMan.LS(LSID.LSID_MIStats);
+            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
 
-            this.ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter);
-            this.ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total);
-            this.ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
-            this.ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
+            ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter);
+            ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total);
+            ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
+            ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
 
-            this.tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            this.UpdateCommonStats();
+            tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            UpdateCommonStats();
 
-            int oldIndex = this.cbType.SelectedIndex;
-            this.UpdateStatsTypes();
-            this.cbType.SelectedIndex = oldIndex;
+            int oldIndex = cbType.SelectedIndex;
+            UpdateStatsTypes();
+            cbType.SelectedIndex = oldIndex;
         }
 
         // TODO: localize?
@@ -378,21 +378,21 @@ namespace GKUI
 
             try
             {
-                int rowsCount = this.fListStats.Items.Count;
-                this.fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
+                int rowsCount = fListStats.Items.Count;
+                fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
 
                 try
                 {
                     Workbook workbook = new Workbook();
-                    Worksheet worksheet = new Worksheet(this.cbType.Text);
+                    Worksheet worksheet = new Worksheet(cbType.Text);
 
-                    worksheet.Cells[1,  1] = new Cell(this.fListStats.Columns[0].Text);
-                    worksheet.Cells[1,  2] = new Cell(this.fListStats.Columns[1].Text);
+                    worksheet.Cells[1,  1] = new Cell(fListStats.Columns[0].Text);
+                    worksheet.Cells[1,  2] = new Cell(fListStats.Columns[1].Text);
 
                     int row = 1;
                     for (int i = 0; i < rowsCount; i++)
                     {
-                        ListViewItem item = this.fListStats.Items[i];
+                        ListViewItem item = fListStats.Items[i];
 
                         worksheet.Cells[row, 1] = new Cell(item.Text);
 
@@ -405,7 +405,7 @@ namespace GKUI
                         }
 
                         row++;
-                        this.fBase.ProgressStep();
+                        fBase.ProgressStep();
                     }
 
                     workbook.Worksheets.Add(worksheet);
@@ -417,12 +417,12 @@ namespace GKUI
                 }
                 finally
                 {
-                    this.fBase.ProgressDone();
+                    fBase.ProgressDone();
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("StatisticsWin.ExcelExport(): " + ex.Message);
+                fBase.Host.LogWrite("StatisticsWin.ExcelExport(): " + ex.Message);
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }

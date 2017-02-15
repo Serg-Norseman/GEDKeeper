@@ -353,9 +353,9 @@ namespace GKCommon.GEDCOM
             string xref = this.XRef;
 
             int i = 0;
-            int last = xref.Length - 1;
-            while (i <= last && (xref[i] < '0' || xref[i] > '9')) i++;
-            xref = ((i <= last) ? xref.Substring(i) : "");
+            int last = xref.Length;
+            while (i < last && (xref[i] < '0' || xref[i] > '9')) i++;
+            xref = ((i < last) ? xref.Substring(i) : "");
             return xref;
         }
 

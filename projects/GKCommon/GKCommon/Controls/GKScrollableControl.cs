@@ -29,8 +29,8 @@ namespace GKCommon.Controls
 
         public GKScrollableControl()
         {
-            base.AutoScroll = true;
-            base.ResizeRedraw = true;
+            AutoScroll = true;
+            ResizeRedraw = true;
 
             #if __MonoCS__
             ScrollBar obj = SysUtils.GetFieldValue(this, "hscrollbar") as ScrollBar;

@@ -131,13 +131,13 @@ namespace GKUI.Charts
         {
             if (index < 0 || index >= fSegments.Count) {
                 return null;
-            } else {
-                PersonSegment segment = (PersonSegment)fSegments[index];
-                segment.IRec = rec;
-                segment.Rad = rad;
-                segment.GroupIndex = groupIndex;
-                return segment;
             }
+
+            PersonSegment segment = (PersonSegment)fSegments[index];
+            segment.IRec = rec;
+            segment.Rad = rad;
+            segment.GroupIndex = groupIndex;
+            return segment;
         }
 
         private PersonSegment TraverseAncestors(GEDCOMIndividualRecord iRec, float v, int gen, float rad, float ro, int prevSteps, int groupIndex)

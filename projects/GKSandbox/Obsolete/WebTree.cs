@@ -104,7 +104,7 @@ namespace GKCore.Export
 
         private void WideTable(ExtList<ExtList<TreeCell>> table, int cols)
         {
-            for (int i = 0; i <= table.Count - 1; i++) {
+            for (int i = 0; i < table.Count; i++) {
                 var row = table[i];
                 while (row.Count < cols) {
                     this.AddCell(row, null, CellKind.ckSpace);
@@ -123,13 +123,13 @@ namespace GKCore.Export
 
                     writer.WriteLine("<table border=\"0\" cellspacing=\"0\">");
 
-                    int num = table_rows.Count - 1;
-                    for (int r = 0; r <= num; r++) {
+                    int num = table_rows.Count;
+                    for (int r = 0; r < num; r++) {
                         var row = table_rows[r];
                         writer.WriteLine("<tr>");
 
-                        int num2 = row.Count - 1;
-                        for (int c = 0; c <= num2; c++) {
+                        int num2 = row.Count;
+                        for (int c = 0; c < num2; c++) {
                             TreeCell cell = row[c] as TreeCell;
                             string nm = "&nbsp;";
                             string st = "";

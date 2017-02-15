@@ -44,43 +44,40 @@ namespace GKUI
         public string FileName
         {
             get {
-                return this.fFileName;
+                return fFileName;
             }
             set {
-                this.fFileName = value;
-                this.SetTitle();
+                fFileName = value;
+                SetTitle();
             }
         }
 
         public bool Modified
         {
             get {
-                return this.fModified;
+                return fModified;
             }
             set {
-                this.fModified = value;
-                this.SetTitle();
+                fModified = value;
+                SetTitle();
             }
         }
 
         private bool CheckModified()
         {
             bool result = true;
+            if (!Modified) return result;
 
-            if (this.Modified)
-            {
-                DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                switch (dialogResult) {
-                    case DialogResult.Yes:
-                        this.tbSaveScript_Click(this, null);
-                        break;
-                    case DialogResult.No:
-                        break;
-                    case DialogResult.Cancel:
-                        result = false;
-                        break;
-                }
+            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            switch (dialogResult) {
+                case DialogResult.Yes:
+                    tbSaveScript_Click(this, null);
+                    break;
+                case DialogResult.No:
+                    break;
+                case DialogResult.Cancel:
+                    result = false;
+                    break;
             }
 
             return result;
@@ -88,10 +85,10 @@ namespace GKUI
 
         private void SetTitle()
         {
-            this.Text = Path.GetFileName(this.fFileName);
-            if (this.fModified)
+            Text = Path.GetFileName(fFileName);
+            if (fModified)
             {
-                this.Text = @"* " + this.Text;
+                Text = @"* " + Text;
             }
         }
 
@@ -99,9 +96,9 @@ namespace GKUI
         {
             if (!CheckModified()) return;
 
-            this.txtScriptText.Clear();
-            this.FileName = "unknown.lua";
-            this.Modified = false;
+            txtScriptText.Clear();
+            FileName = "unknown.lua";
+            Modified = false;
         }
 
         private void tbLoadScript_Click(object sender, EventArgs e)
@@ -109,30 +106,28 @@ namespace GKUI
             if (!CheckModified()) return;
 
             string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
-            if (!string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
             {
-                using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
-                {
-                    this.txtScriptText.Text = strd.ReadToEnd();
-                    this.FileName = fileName;
-                    this.Modified = false;
-                    strd.Close();
-                }
+                txtScriptText.Text = strd.ReadToEnd();
+                FileName = fileName;
+                Modified = false;
+                strd.Close();
             }
         }
 
         private void tbSaveScript_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, this.FileName);
-            if (!string.IsNullOrEmpty(fileName))
+            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
             {
-                using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
-                {
-                    strd.Write(this.txtScriptText.Text);
-                    this.FileName = fileName;
-                    this.Modified = false;
-                    strd.Close();
-                }
+                strd.Write(txtScriptText.Text);
+                FileName = fileName;
+                Modified = false;
+                strd.Close();
             }
         }
 
@@ -140,52 +135,52 @@ namespace GKUI
         {
             try
             {
-                this.txtDebugOutput.Clear();
+                txtDebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(this.txtScriptText.Text, this.fBase, this.txtDebugOutput);
+                    scrEngine.lua_run(txtScriptText.Text, fBase, txtDebugOutput);
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.Message);
-                this.fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace.ToString());
+                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.Message);
+                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace.ToString());
             }
         }
 
         private void ScriptEditWin_Closing(object sender, CancelEventArgs e)
         {
-            e.Cancel = !this.CheckModified();
+            e.Cancel = !CheckModified();
         }
 
         private void mmScriptText_TextChanged(object sender, EventArgs e)
         {
-            this.Modified = true;
+            Modified = true;
         }
 
         public ScriptEditWin(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.tbNewScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iCreateNew");
-            this.tbLoadScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLoad");
-            this.tbSaveScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iSave");
-            this.tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
+            tbNewScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iCreateNew");
+            tbLoadScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLoad");
+            tbSaveScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iSave");
+            tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
-            this.txtScriptText.TextChanged += mmScriptText_TextChanged;
+            txtScriptText.TextChanged += mmScriptText_TextChanged;
             
-            this.tbNewScript_Click(this, null);
+            tbNewScript_Click(this, null);
 
-            this.SetLang();
+            SetLang();
         }
 
         public void SetLang()
         {
-            this.tbNewScript.ToolTipText = LangMan.LS(LSID.LSID_NewScriptTip);
-            this.tbLoadScript.ToolTipText = LangMan.LS(LSID.LSID_LoadScriptTip);
-            this.tbSaveScript.ToolTipText = LangMan.LS(LSID.LSID_SaveScriptTip);
-            this.tbRun.ToolTipText = LangMan.LS(LSID.LSID_RunScriptTip);
+            tbNewScript.ToolTipText = LangMan.LS(LSID.LSID_NewScriptTip);
+            tbLoadScript.ToolTipText = LangMan.LS(LSID.LSID_LoadScriptTip);
+            tbSaveScript.ToolTipText = LangMan.LS(LSID.LSID_SaveScriptTip);
+            tbRun.ToolTipText = LangMan.LS(LSID.LSID_RunScriptTip);
         }
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)
@@ -193,7 +188,7 @@ namespace GKUI
             switch (e.KeyCode)
             {
                 case Keys.Escape:
-                    base.Close();
+                    Close();
                     break;
             }
         }

@@ -212,7 +212,7 @@ namespace GKCommon.GEDCOM
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fPhoneList.Count == 0 && this.fEmailList.Count == 0 && this.fFaxList.Count == 0 && this.fWWWList.Count == 0;
+            return base.IsEmpty() && fPhoneList.Count == 0 && fEmailList.Count == 0 && fFaxList.Count == 0 && fWWWList.Count == 0;
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)

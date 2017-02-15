@@ -93,41 +93,41 @@ namespace GKUI
 
         public IBaseContext Context
         {
-            get { return this.fContext; }
+            get { return fContext; }
         }
 
         public NavigationStack Navman
         {
-            get { return this.fNavman; }
+            get { return fNavman; }
         }
 
 
         public bool Modified
         {
             get {
-                return this.fModified;
+                return fModified;
             }
             set {
-                this.fModified = value;
-                this.SetMainTitle();
+                fModified = value;
+                SetMainTitle();
             }
         }
 
         public ShieldState ShieldState
         {
             get {
-                return this.fShieldState;
+                return fShieldState;
             }
             set {
-                if (this.fShieldState == value) return;
-                this.fShieldState = value;
-                this.RefreshLists(false);
+                if (fShieldState == value) return;
+                fShieldState = value;
+                RefreshLists(false);
             }
         }
 
         public GEDCOMTree Tree
         {
-            get { return this.fTree; }
+            get { return fTree; }
         }
 
         #endregion
@@ -136,27 +136,27 @@ namespace GKUI
 
         public BaseWin()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.fLockedRecords = new List<GEDCOMRecord>();
+            fLockedRecords = new List<GEDCOMRecord>();
 
-            this.fTree = new GEDCOMTree();
-            this.fContext = new BaseContext(this.fTree, this);
+            fTree = new GEDCOMTree();
+            fContext = new BaseContext(fTree, this);
 
-            this.fNavman = new NavigationStack();
+            fNavman = new NavigationStack();
 
-            this.CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out this.ListPersons, out this.mPersonSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily, out this.ListFamilies, out this.mFamilySummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote, out this.ListNotes, out this.mNoteSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GEDCOMRecordType.rtMultimedia, out this.ListMultimedia, out this.mMediaSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPSources), GEDCOMRecordType.rtSource, out this.ListSources, out this.mSourceSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GEDCOMRecordType.rtRepository, out this.ListRepositories, out this.mRepositorySummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPGroups), GEDCOMRecordType.rtGroup, out this.ListGroups, out this.mGroupSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPResearches), GEDCOMRecordType.rtResearch, out this.ListResearches, out this.mResearchSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask, out this.ListTasks, out this.mTaskSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out this.ListCommunications, out this.mCommunicationSummary);
-            this.CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out this.ListLocations, out this.mLocationSummary);
-            this.tabsRecords.SelectedIndex = 0;
+            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out ListPersons, out mPersonSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily, out ListFamilies, out mFamilySummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote, out ListNotes, out mNoteSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GEDCOMRecordType.rtMultimedia, out ListMultimedia, out mMediaSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPSources), GEDCOMRecordType.rtSource, out ListSources, out mSourceSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GEDCOMRecordType.rtRepository, out ListRepositories, out mRepositorySummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GEDCOMRecordType.rtGroup, out ListGroups, out mGroupSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GEDCOMRecordType.rtResearch, out ListResearches, out mResearchSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask, out ListTasks, out mTaskSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out ListCommunications, out mCommunicationSummary);
+            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out ListLocations, out mLocationSummary);
+            tabsRecords.SelectedIndex = 0;
 
             (this as ILocalization).SetLang();
         }
@@ -166,14 +166,14 @@ namespace GKUI
             if (disposing)
             {
                 #if !__MonoCS__
-                this.fNavman.Dispose();
+                fNavman.Dispose();
 
-                if (this.fTree != null) {
-                    this.fTree.Dispose();
-                    this.fTree = null;
+                if (fTree != null) {
+                    fTree.Dispose();
+                    fTree = null;
                 }
 
-                /*this.fLockedRecords.Dispose();*/
+                /*fLockedRecords.Dispose();*/
 
                 if (components != null) components.Dispose();
                 #endif
@@ -204,12 +204,12 @@ namespace GKUI
 
         private void Form_Closing(object sender, CancelEventArgs e)
         {
-            e.Cancel = !this.CheckModified();
+            e.Cancel = !CheckModified();
 
             if (!e.Cancel)
             {
                 MainWin.Instance.BaseClosed(this);
-                MainWin.Instance.CheckMRUWin(this.fTree.FileName, this);
+                MainWin.Instance.CheckMRUWin(fTree.FileName, this);
             }
         }
 
@@ -217,15 +217,15 @@ namespace GKUI
         {
             switch (e.KeyCode) {
                     /*case Keys.I:
-						this.ItemAdd();
+						ItemAdd();
 						break;
 					case Keys.D:
-						this.ItemDelete();
+						ItemDelete();
 						break;*/
 
                 case Keys.Return:
                     if (e.Control) {
-                        this.RecordEdit(null, null);
+                        RecordEdit(null, null);
                     }
                     break;
 
@@ -234,7 +234,7 @@ namespace GKUI
 
                     /*case Keys.F:
         			if (e.Control) {
-        				this.QuickFind();
+        				QuickFind();
         			}
         			break;*/
             }
@@ -244,27 +244,27 @@ namespace GKUI
         {
             GKRecordsView recView = contextMenu.SourceControl as GKRecordsView;
 
-            this.miRecordDuplicate.Visible = (recView == this.ListPersons);
+            miRecordDuplicate.Visible = (recView == ListPersons);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
         {
-            this.RecordAdd();
+            RecordAdd();
         }
         
         private void miRecordEdit_Click(object sender, EventArgs e)
         {
-            this.RecordEdit(null, null);
+            RecordEdit(null, null);
         }
 
         private void miRecordDelete_Click(object sender, EventArgs e)
         {
-            this.RecordDelete();
+            RecordDelete();
         }
 
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
-            this.RecordDuplicate();
+            RecordDuplicate();
         }
 
         #endregion
@@ -273,7 +273,7 @@ namespace GKUI
 
         public GEDCOMRecordType GetSelectedRecordType()
         {
-            return (GEDCOMRecordType)(this.tabsRecords.SelectedIndex + 1);
+            return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
         }
 
         public GKRecordsView GetRecordsViewByType(GEDCOMRecordType recType)
@@ -282,47 +282,47 @@ namespace GKUI
 
             switch (recType) {
                 case GEDCOMRecordType.rtIndividual:
-                    list = this.ListPersons;
+                    list = ListPersons;
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    list = this.ListFamilies;
+                    list = ListFamilies;
                     break;
 
                 case GEDCOMRecordType.rtNote:
-                    list = this.ListNotes;
+                    list = ListNotes;
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
-                    list = this.ListMultimedia;
+                    list = ListMultimedia;
                     break;
 
                 case GEDCOMRecordType.rtSource:
-                    list = this.ListSources;
+                    list = ListSources;
                     break;
 
                 case GEDCOMRecordType.rtRepository:
-                    list = this.ListRepositories;
+                    list = ListRepositories;
                     break;
 
                 case GEDCOMRecordType.rtGroup:
-                    list = this.ListGroups;
+                    list = ListGroups;
                     break;
 
                 case GEDCOMRecordType.rtResearch:
-                    list = this.ListResearches;
+                    list = ListResearches;
                     break;
 
                 case GEDCOMRecordType.rtTask:
-                    list = this.ListTasks;
+                    list = ListTasks;
                     break;
 
                 case GEDCOMRecordType.rtCommunication:
-                    list = this.ListCommunications;
+                    list = ListCommunications;
                     break;
 
                 case GEDCOMRecordType.rtLocation:
-                    list = this.ListLocations;
+                    list = ListLocations;
                     break;
             }
 
@@ -393,20 +393,20 @@ namespace GKUI
 
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = this.GetRecordsViewByType(recType);
+            GKRecordsView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan;
         }
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
-            GEDCOMRecordType rt = this.GetSelectedRecordType();
-            GKRecordsView rView = this.GetRecordsViewByType(rt);
+            GEDCOMRecordType rt = GetSelectedRecordType();
+            GKRecordsView rView = GetRecordsViewByType(rt);
             return (rView == null) ? null : rView.GetSelectedRecord();
         }
 
         public GEDCOMIndividualRecord GetSelectedPerson()
         {
-            return this.ListPersons.GetSelectedRecord() as GEDCOMIndividualRecord;
+            return ListPersons.GetSelectedRecord() as GEDCOMIndividualRecord;
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
@@ -423,16 +423,16 @@ namespace GKUI
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = this.GetRecordsViewByType(recType);
+            GKRecordsView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.GetContentList();
         }
 
         private void SetMainTitle()
         {
-            this.Text = Path.GetFileName(this.Tree.FileName);
-            if (this.fModified)
+            Text = Path.GetFileName(fTree.FileName);
+            if (fModified)
             {
-                this.Text = @"* " + this.Text;
+                Text = @"* " + Text;
             }
         }
 
@@ -441,15 +441,15 @@ namespace GKUI
             if (linkName.StartsWith("view_"))
             {
                 string xref = linkName.Remove(0, 5);
-                GEDCOMMultimediaRecord mmRec = this.fTree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
+                GEDCOMMultimediaRecord mmRec = fTree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
                 if (mmRec != null)
                 {
-                    this.ShowMedia(mmRec, false);
+                    ShowMedia(mmRec, false);
                 }
             }
             else
             {
-                this.SelectRecordByXRef(linkName);
+                SelectRecordByXRef(linkName);
             }
         }
 
@@ -460,17 +460,17 @@ namespace GKUI
 
         public void ApplyFilter()
         {
-            if (this.fTree.RecordsCount > 0)
+            if (fTree.RecordsCount > 0)
             {
-                this.RefreshLists(false);
+                RefreshLists(false);
             }
         }
 
         public void ApplyFilter(GEDCOMRecordType recType)
         {
-            if (this.fTree.RecordsCount > 0)
+            if (fTree.RecordsCount > 0)
             {
-                this.RefreshRecordsView(recType);
+                RefreshRecordsView(recType);
             }
         }
 
@@ -480,8 +480,8 @@ namespace GKUI
 
             record.ChangeDate.ChangeDateTime = DateTime.Now;
 
-            this.Modified = true;
-            this.fTree.Header.TransmissionDateTime = DateTime.Now;
+            Modified = true;
+            fTree.Header.TransmissionDateTime = DateTime.Now;
 
             MainWin.Instance.NotifyRecord(this, record, RecordAction.raEdit);
         }
@@ -489,21 +489,18 @@ namespace GKUI
         public bool CheckModified()
         {
             bool result = true;
+            if (!Modified) return result;
 
-            if (this.Modified)
-            {
-                DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                switch (dialogResult) {
-                    case DialogResult.Yes:
-                        MainWin.Instance.miFileSave_Click(null, null);
-                        break;
-                    case DialogResult.No:
-                        break;
-                    case DialogResult.Cancel:
-                        result = false;
-                        break;
-                }
+            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            switch (dialogResult) {
+                case DialogResult.Yes:
+                    MainWin.Instance.miFileSave_Click(null, null);
+                    break;
+                case DialogResult.No:
+                    break;
+                case DialogResult.Cancel:
+                    result = false;
+                    break;
             }
 
             return result;
@@ -511,16 +508,16 @@ namespace GKUI
 
         private void CreatePage(string pageText, GEDCOMRecordType recType, out GKRecordsView recView, out HyperView summary)
         {
-            this.tabsRecords.SuspendLayout();
+            tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
-            this.tabsRecords.Controls.Add(sheet);
-            this.tabsRecords.ResumeLayout(false);
+            tabsRecords.Controls.Add(sheet);
+            tabsRecords.ResumeLayout(false);
 
             summary = new HyperView();
             summary.BorderWidth = 4;
             summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
-            summary.OnLink += this.mPersonSummaryLink;
+            summary.OnLink += mPersonSummaryLink;
 
             Splitter spl = new Splitter();
             spl.Dock = DockStyle.Right;
@@ -531,12 +528,12 @@ namespace GKUI
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            recView = GKUtils.CreateRecordsView(sheet, this.fTree, recType);
+            recView = GKUtils.CreateRecordsView(sheet, fTree, recType);
             recView.IsMainList = true;
-            recView.DoubleClick += this.RecordEdit;
-            recView.SelectedIndexChanged += this.List_SelectedIndexChanged;
+            recView.DoubleClick += RecordEdit;
+            recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateTitles();
-            recView.ContextMenuStrip = this.contextMenu;
+            recView.ContextMenuStrip = contextMenu;
 
             sheet.Controls.SetChildIndex(spl, 1);
             sheet.Controls.SetChildIndex(summary, 2);
@@ -544,37 +541,37 @@ namespace GKUI
 
         private void ChangeFileName()
         {
-            this.SetMainTitle();
-            MainWin.Instance.Options.LastDir = Path.GetDirectoryName(this.fTree.FileName);
-            MainWin.Instance.AddMRU(this.fTree.FileName);
+            SetMainTitle();
+            MainWin.Instance.Options.LastDir = Path.GetDirectoryName(fTree.FileName);
+            MainWin.Instance.AddMRU(fTree.FileName);
         }
 
         public void Clear()
         {
-            this.fNavman.Clear();
-            this.fContext.Clear();
+            fNavman.Clear();
+            fContext.Clear();
         }
 
         public bool IsUnknown()
         {
-            string fileName = this.fTree.FileName;
+            string fileName = fTree.FileName;
 
             return string.IsNullOrEmpty(fileName) || !File.Exists(fileName);
         }
 
         public void FileNew()
         {
-            this.Clear();
-            this.RefreshLists(false);
-            GKUtils.ShowPersonInfo(null, this.mPersonSummary.Lines, this.fShieldState);
-            this.fTree.SetFileName(LangMan.LS(LSID.LSID_Unknown));
-            this.fTree.Header.Language.Value = MainWin.Instance.Options.GetCurrentItfLang();
-            this.Modified = false;
+            Clear();
+            RefreshLists(false);
+            GKUtils.ShowPersonInfo(null, mPersonSummary.Lines, fShieldState);
+            fTree.SetFileName(LangMan.LS(LSID.LSID_Unknown));
+            fTree.Header.Language.Value = MainWin.Instance.Options.GetCurrentItfLang();
+            Modified = false;
         }
 
         public void FileLoad(string fileName)
         {
-            this.Clear();
+            Clear();
 
             string pw = null;
             string ext = SysUtils.GetFileExtension(fileName);
@@ -587,29 +584,29 @@ namespace GKUI
 
             try
             {
-                this.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
-                this.fTree.OnProgress += LoadProgress;
+                ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+                fTree.OnProgress += LoadProgress;
                 try
                 {
-                    this.fContext.FileLoad(fileName, pw);
+                    fContext.FileLoad(fileName, pw);
                 }
                 finally
                 {
-                    this.fTree.OnProgress -= LoadProgress;
-                    this.ProgressDone();
+                    fTree.OnProgress -= LoadProgress;
+                    ProgressDone();
                 }
 
-                TreeTools.CheckGEDCOMFormat(this.fTree, this.fContext.ValuesCollection, this);
-                this.Modified = false;
+                TreeTools.CheckGEDCOMFormat(fTree, fContext.ValuesCollection, this);
+                Modified = false;
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.FileLoad(): " + ex.Message);
+                Host.LogWrite("BaseWin.FileLoad(): " + ex.Message);
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
-            this.ChangeFileName();
-            this.RefreshLists(false);
+            ChangeFileName();
+            RefreshLists(false);
         }
 
         public void FileSave(string fileName)
@@ -625,10 +622,10 @@ namespace GKUI
                     }
                 }
 
-                this.fContext.FileSave(fileName, pw);
-                this.Modified = false;
+                fContext.FileSave(fileName, pw);
+                Modified = false;
 
-                this.ChangeFileName();
+                ChangeFileName();
             }
             catch (UnauthorizedAccessException)
             {
@@ -637,7 +634,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
-                this.Host.LogWrite("BaseWin.FileSave(): " + ex.Message);
+                Host.LogWrite("BaseWin.FileSave(): " + ex.Message);
             }
         }
 
@@ -645,11 +642,11 @@ namespace GKUI
         {
             try
             {
-                string rfn = Path.ChangeExtension(this.fTree.FileName, ".restore");
+                string rfn = Path.ChangeExtension(fTree.FileName, ".restore");
                 // TODO: PrepareHeader or not?
-                this.fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
+                fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
             } catch (Exception ex) {
-                this.Host.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
+                Host.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
             }
         }
 
@@ -657,10 +654,10 @@ namespace GKUI
         {
             GEDCOMFamilyRecord result = null;
 
-            int num = this.fTree.RecordsCount;
+            int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this.fTree[i];
+                GEDCOMRecord rec = fTree[i];
 
                 if (rec is GEDCOMFamilyRecord)
                 {
@@ -696,10 +693,10 @@ namespace GKUI
                 {
                     if (canCreate)
                     {
-                        GEDCOMFamilyRecord fam = this.GetFamilyBySpouse(newParent);
+                        GEDCOMFamilyRecord fam = GetFamilyBySpouse(newParent);
                         if (fam == null)
                         {
-                            fam = this.fTree.CreateFamily();
+                            fam = fTree.CreateFamily();
                         }
                         fam.AddChild(iChild);
                         result = fam;
@@ -722,7 +719,7 @@ namespace GKUI
                 return null;
             }
 
-            GEDCOMFamilyRecord family = this.fTree.CreateFamily();
+            GEDCOMFamilyRecord family = fTree.CreateFamily();
             family.AddSpouse(spouse);
             return family;
         }
@@ -745,7 +742,7 @@ namespace GKUI
                     {
                         //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
 
-                        family = this.AddFamilyForSpouse(parent);
+                        family = AddFamilyForSpouse(parent);
                         if (family == null) {
                             return null;
                         }
@@ -753,13 +750,13 @@ namespace GKUI
                         family = parent.SpouseToFamilyLinks[0].Family;
                     }
 
-                    GEDCOMIndividualRecord child = this.SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+                    GEDCOMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child))
                     {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        this.ImportNames(child);
+                        ImportNames(child);
 
                         resultChild = child;
                     }
@@ -794,35 +791,35 @@ namespace GKUI
                 targetMode = TargetMode.tmWife;
             }
 
-            GEDCOMIndividualRecord result = this.SelectPerson(target, targetMode, needSex);
+            GEDCOMIndividualRecord result = SelectPerson(target, targetMode, needSex);
             return result;
         }
 
         public void RefreshLists(bool titles)
         {
-            this.ListPersons.UpdateContents(this.fShieldState, titles, 2);
-            this.ListFamilies.UpdateContents(this.fShieldState, titles, 1);
-            this.ListNotes.UpdateContents(this.fShieldState, titles, -1);
-            this.ListMultimedia.UpdateContents(this.fShieldState, titles, 1);
-            this.ListSources.UpdateContents(this.fShieldState, titles, 1);
-            this.ListRepositories.UpdateContents(this.fShieldState, titles, 1);
-            this.ListGroups.UpdateContents(this.fShieldState, titles, 1);
-            this.ListResearches.UpdateContents(this.fShieldState, titles, 1);
-            this.ListTasks.UpdateContents(this.fShieldState, titles, 1);
-            this.ListCommunications.UpdateContents(this.fShieldState, titles, 1);
-            this.ListLocations.UpdateContents(this.fShieldState, titles, 1);
+            ListPersons.UpdateContents(fShieldState, titles, 2);
+            ListFamilies.UpdateContents(fShieldState, titles, 1);
+            ListNotes.UpdateContents(fShieldState, titles, -1);
+            ListMultimedia.UpdateContents(fShieldState, titles, 1);
+            ListSources.UpdateContents(fShieldState, titles, 1);
+            ListRepositories.UpdateContents(fShieldState, titles, 1);
+            ListGroups.UpdateContents(fShieldState, titles, 1);
+            ListResearches.UpdateContents(fShieldState, titles, 1);
+            ListTasks.UpdateContents(fShieldState, titles, 1);
+            ListCommunications.UpdateContents(fShieldState, titles, 1);
+            ListLocations.UpdateContents(fShieldState, titles, 1);
 
-            this.PageRecords_SelectedIndexChanged(null, null);
+            PageRecords_SelectedIndexChanged(null, null);
         }
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = this.GetRecordsViewByType(recType);
+            GKRecordsView rView = GetRecordsViewByType(recType);
             if (rView == null) return;
 
-            rView.UpdateContents(this.fShieldState, false, -1);
+            rView.UpdateContents(fShieldState, false, -1);
 
-            this.PageRecords_SelectedIndexChanged(null, null);
+            PageRecords_SelectedIndexChanged(null, null);
         }
 
         public void RecordNotify(GEDCOMRecord record, RecordAction action)
@@ -865,7 +862,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.SelectFamily(): " + ex.Message);
+                Host.LogWrite("BaseWin.SelectFamily(): " + ex.Message);
                 result = null;
             }
 
@@ -893,7 +890,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.SelectPerson(): " + ex.Message);
+                Host.LogWrite("BaseWin.SelectPerson(): " + ex.Message);
                 result = null;
             }
 
@@ -923,7 +920,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.SelectRecord(): " + ex.Message);
+                Host.LogWrite("BaseWin.SelectRecord(): " + ex.Message);
                 result = null;
             }
 
@@ -937,15 +934,15 @@ namespace GKUI
 
         public void SetFilter()
         {
-            GEDCOMRecordType rt = this.GetSelectedRecordType();
-            IListManager listMan = this.GetRecordsListManByType(rt);
+            GEDCOMRecordType rt = GetSelectedRecordType();
+            IListManager listMan = GetRecordsListManByType(rt);
             if (listMan == null) return;
 
             switch (rt) {
                 case GEDCOMRecordType.rtIndividual:
                     using (PersonsFilterDlg fmFilter = new PersonsFilterDlg(this, listMan)) {
                         DialogResult res = MainWin.Instance.ShowModalEx(fmFilter, false);
-                        if (res == DialogResult.OK) this.ApplyFilter(rt);
+                        if (res == DialogResult.OK) ApplyFilter(rt);
                     }
                     break;
 
@@ -961,7 +958,7 @@ namespace GKUI
                 case GEDCOMRecordType.rtLocation:
                     using (CommonFilterDlg fmComFilter = new CommonFilterDlg(this, listMan)) {
                         DialogResult res = MainWin.Instance.ShowModalEx(fmComFilter, false);
-                        if (res == DialogResult.OK) this.ApplyFilter(rt);
+                        if (res == DialogResult.OK) ApplyFilter(rt);
                     }
                     break;
             }
@@ -969,11 +966,10 @@ namespace GKUI
 
         private void NavAdd(GEDCOMRecord aRec)
         {
-            if (aRec != null && !this.fNavman.Busy)
-            {
-                this.fNavman.Current = aRec;
-                MainWin.Instance.UpdateControls(false);
-            }
+            if (aRec == null || fNavman.Busy) return;
+
+            fNavman.Current = aRec;
+            MainWin.Instance.UpdateControls(false);
         }
 
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
@@ -988,7 +984,7 @@ namespace GKUI
 
             if (externalViewer) {
                 string targetFile = "";
-                this.fContext.MediaLoad(fileRef, ref targetFile);
+                fContext.MediaLoad(fileRef, ref targetFile);
                 SysUtils.LoadExtFile(targetFile);
             } else {
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
@@ -1020,10 +1016,10 @@ namespace GKUI
                 {
                     try
                     {
-                        int num = this.fTree.RecordsCount;
+                        int num = fTree.RecordsCount;
                         for (int i = 0; i < num; i++)
                         {
-                            GEDCOMRecord rec = this.fTree[i];
+                            GEDCOMRecord rec = fTree[i];
                             if (rec is GEDCOMIndividualRecord) {
                                 GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
@@ -1064,7 +1060,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.ShowTips(): " + ex.Message);
+                Host.LogWrite("BaseWin.ShowTips(): " + ex.Message);
             }
         }
 
@@ -1075,17 +1071,17 @@ namespace GKUI
         // may be move to host (MainWin)?
         public void ImportNames(GEDCOMIndividualRecord iRec)
         {
-            if (MainWin.Instance != null) {
-                INamesTable namesTable = MainWin.Instance.NamesTable;
-                if (namesTable != null) {
-                    namesTable.ImportNames(iRec);
-                }
-            }
+            if (MainWin.Instance == null) return;
+
+            INamesTable namesTable = MainWin.Instance.NamesTable;
+            if (namesTable == null) return;
+
+            namesTable.ImportNames(iRec);
         }
 
         public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
         {
-            ICulture culture = this.fContext.Culture;
+            ICulture culture = fContext.Culture;
             if (!culture.HasPatronymic()) return string.Empty;
 
             string result = "";
@@ -1116,7 +1112,7 @@ namespace GKUI
                     return result;
                 }
 
-                this.ModifyName(ref n);
+                ModifyName(ref n);
             }
 
             switch (sex) {
@@ -1135,7 +1131,7 @@ namespace GKUI
 
         public GEDCOMSex DefineSex(string iName, string iPatr)
         {
-            //ICulture culture = this.fContext.Culture;
+            //ICulture culture = fContext.Culture;
             INamesTable namesTable = MainWin.Instance.NamesTable;
 
             GEDCOMSex result = namesTable.GetSexByName(iName);
@@ -1169,16 +1165,16 @@ namespace GKUI
                 throw new ArgumentNullException("iRec");
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
                 {
                     string fFam, fName, fPatr;
                     GKUtils.GetNameParts(iRec, out fFam, out fName, out fPatr);
-                    iRec.Sex = this.DefineSex(fName, fPatr);
+                    iRec.Sex = DefineSex(fName, fPatr);
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
         }
 
@@ -1188,22 +1184,22 @@ namespace GKUI
         
         void ILocalization.SetLang()
         {
-            this.tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            this.tabsRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
-            this.tabsRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.tabsRecords.TabPages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.tabsRecords.TabPages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
-            this.tabsRecords.TabPages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
-            this.tabsRecords.TabPages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.tabsRecords.TabPages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
-            this.tabsRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
-            this.tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
-            this.tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
+            tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
+            tabsRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
+            tabsRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
+            tabsRecords.TabPages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            tabsRecords.TabPages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
+            tabsRecords.TabPages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
+            tabsRecords.TabPages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
+            tabsRecords.TabPages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
+            tabsRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
+            tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
+            tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
 
-            this.miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            this.miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            this.miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            this.miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
+            miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+            miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+            miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
         }
         
         #endregion
@@ -1243,8 +1239,8 @@ namespace GKUI
         {
             string res = "";
 
-            GEDCOMRecordType rt = this.GetSelectedRecordType();
-            GKRecordsView rView = this.GetRecordsViewByType(rt);
+            GEDCOMRecordType rt = GetSelectedRecordType();
+            GKRecordsView rView = GetRecordsViewByType(rt);
 
             if (rView != null)
             {
@@ -1257,53 +1253,53 @@ namespace GKUI
 
         void IWorkWindow.UpdateView()
         {
-            this.RefreshLists(true);
+            RefreshLists(true);
         }
 
         void IWorkWindow.NavNext()
         {
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                GEDCOMRecord rec = this.fNavman.Next() as GEDCOMRecord;
+                GEDCOMRecord rec = fNavman.Next() as GEDCOMRecord;
                 if (rec != null)
                 {
-                    this.SelectRecordByXRef(rec.XRef);
+                    SelectRecordByXRef(rec.XRef);
                     MainWin.Instance.UpdateControls(false);
                 }
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
 
         void IWorkWindow.NavPrev()
         {
-            this.fNavman.BeginNav();
+            fNavman.BeginNav();
             try
             {
-                GEDCOMRecord rec = this.fNavman.Back() as GEDCOMRecord;
+                GEDCOMRecord rec = fNavman.Back() as GEDCOMRecord;
                 if (rec != null)
                 {
-                    this.SelectRecordByXRef(rec.XRef);
+                    SelectRecordByXRef(rec.XRef);
                     MainWin.Instance.UpdateControls(false);
                 }
             }
             finally
             {
-                this.fNavman.EndNav();
+                fNavman.EndNav();
             }
         }
 
         bool IWorkWindow.NavCanBackward()
         {
-            return this.fNavman.CanBackward();
+            return fNavman.CanBackward();
         }
 
         bool IWorkWindow.NavCanForward()
         {
-            return this.fNavman.CanForward();
+            return fNavman.CanForward();
         }
 
         public bool AllowQuickSearch()
@@ -1317,9 +1313,9 @@ namespace GKUI
 
             Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
-            int num = this.fTree.RecordsCount;
+            int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = this.fTree[i];
+                GEDCOMRecord rec = fTree[i];
 
                 if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
                     GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
@@ -1342,18 +1338,18 @@ namespace GKUI
 
             // platform: In Windows works without it
             #if __MonoCS__
-            this.Activate();
+            Activate();
             #endif
 
-            this.SelectRecordByXRef(iRec.XRef);
+            SelectRecordByXRef(iRec.XRef);
         }
 
         void IWorkWindow.QuickSearch()
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
-            Rectangle client = this.ClientRectangle;
-            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            Rectangle client = ClientRectangle;
+            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
             qsDlg.Location = pt;
 
             qsDlg.Show();
@@ -1365,7 +1361,7 @@ namespace GKUI
 
         public void RecordDuplicate()
         {
-            GEDCOMRecord source = this.GetSelectedRecordEx();
+            GEDCOMRecord source = GetSelectedRecordEx();
             if (source == null) return;
             if (source.RecordType != GEDCOMRecordType.rtIndividual) return;
 
@@ -1373,18 +1369,18 @@ namespace GKUI
 
             GEDCOMIndividualRecord target;
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
-                target = this.fContext.Tree.CreateIndividual();
+                target = fContext.Tree.CreateIndividual();
                 target.Assign(source);
 
-                this.ChangeRecord(target);
+                ChangeRecord(target);
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
-            this.RefreshLists(false);
-            this.SelectRecordByXRef(target.XRef);
+            RefreshLists(false);
+            SelectRecordByXRef(target.XRef);
         }
 
         public void RecordAdd()
@@ -1392,14 +1388,14 @@ namespace GKUI
             bool result = false;
 
             GEDCOMRecord rec = null;
-            GEDCOMRecordType rt = this.GetSelectedRecordType();
+            GEDCOMRecordType rt = GetSelectedRecordType();
 
             switch (rt)
             {
                 case GEDCOMRecordType.rtIndividual:
                     {
                         GEDCOMIndividualRecord indivRec = null;
-                        result = this.ModifyPerson(ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
+                        result = ModifyPerson(ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
                         rec = indivRec;
                         break;
                     }
@@ -1407,78 +1403,78 @@ namespace GKUI
                 case GEDCOMRecordType.rtFamily:
                     {
                         GEDCOMFamilyRecord fam = null;
-                        result = this.ModifyFamily(ref fam, FamilyTarget.None, null);
+                        result = ModifyFamily(ref fam, FamilyTarget.None, null);
                         rec = fam;
                         break;
                     }
                 case GEDCOMRecordType.rtNote:
                     {
                         GEDCOMNoteRecord note = null;
-                        result = this.ModifyNote(ref note);
+                        result = ModifyNote(ref note);
                         rec = note;
                         break;
                     }
                 case GEDCOMRecordType.rtMultimedia:
                     {
                         GEDCOMMultimediaRecord mmRec = null;
-                        result = this.ModifyMedia(ref mmRec);
+                        result = ModifyMedia(ref mmRec);
                         rec = mmRec;
                         break;
                     }
                 case GEDCOMRecordType.rtSource:
                     {
                         GEDCOMSourceRecord src = null;
-                        result = this.ModifySource(ref src);
+                        result = ModifySource(ref src);
                         rec = src;
                         break;
                     }
                 case GEDCOMRecordType.rtRepository:
                     {
                         GEDCOMRepositoryRecord rep = null;
-                        result = this.ModifyRepository(ref rep);
+                        result = ModifyRepository(ref rep);
                         rec = rep;
                         break;
                     }
                 case GEDCOMRecordType.rtGroup:
                     {
                         GEDCOMGroupRecord grp = null;
-                        result = this.ModifyGroup(ref grp);
+                        result = ModifyGroup(ref grp);
                         rec = grp;
                         break;
                     }
                 case GEDCOMRecordType.rtResearch:
                     {
                         GEDCOMResearchRecord rsr = null;
-                        result = this.ModifyResearch(ref rsr);
+                        result = ModifyResearch(ref rsr);
                         rec = rsr;
                         break;
                     }
                 case GEDCOMRecordType.rtTask:
                     {
                         GEDCOMTaskRecord tsk = null;
-                        result = this.ModifyTask(ref tsk);
+                        result = ModifyTask(ref tsk);
                         rec = tsk;
                         break;
                     }
                 case GEDCOMRecordType.rtCommunication:
                     {
                         GEDCOMCommunicationRecord comm = null;
-                        result = this.ModifyCommunication(ref comm);
+                        result = ModifyCommunication(ref comm);
                         rec = comm;
                         break;
                     }
                 case GEDCOMRecordType.rtLocation:
                     {
                         GEDCOMLocationRecord loc = null;
-                        result = this.ModifyLocation(ref loc);
+                        result = ModifyLocation(ref loc);
                         rec = loc;
                         break;
                     }
             }
 
             if (result) {
-                this.RefreshLists(false);
-                this.SelectRecordByXRef(rec.XRef);
+                RefreshLists(false);
+                SelectRecordByXRef(rec.XRef);
             }
         }
 
@@ -1547,13 +1543,13 @@ namespace GKUI
                 if (confirm && GKUtils.ShowQuestion(msg) != DialogResult.Yes)
                     return false;
 
-                this.RecordNotify(record, RecordAction.raDelete);
+                RecordNotify(record, RecordAction.raDelete);
 
-                result = this.fContext.DeleteRecord(record);
+                result = fContext.DeleteRecord(record);
 
                 if (result) {
-                    this.Modified = true;
-                    this.fTree.Header.TransmissionDateTime = DateTime.Now;
+                    Modified = true;
+                    fTree.Header.TransmissionDateTime = DateTime.Now;
                 }
             }
 
@@ -1562,19 +1558,19 @@ namespace GKUI
 
         public void RecordDelete()
         {
-            GEDCOMRecord record = this.GetSelectedRecordEx();
+            GEDCOMRecord record = GetSelectedRecordEx();
             if (record == null) return;
 
-            bool result = this.RecordDelete(record, true);
+            bool result = RecordDelete(record, true);
 
             if (result) {
-                this.RefreshLists(false);
+                RefreshLists(false);
             }
         }
 
         public void RecordEdit(object sender, EventArgs e)
         {
-            GEDCOMRecord rec = this.GetSelectedRecordEx();
+            GEDCOMRecord rec = GetSelectedRecordEx();
             if (rec == null) return;
 
             bool result = false;
@@ -1582,83 +1578,83 @@ namespace GKUI
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
                     GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                    result = this.ModifyPerson(ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    result = ModifyPerson(ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
                     GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-                    result = this.ModifyFamily(ref fam, FamilyTarget.None, null);
+                    result = ModifyFamily(ref fam, FamilyTarget.None, null);
                     break;
 
                 case GEDCOMRecordType.rtNote:
                     GEDCOMNoteRecord note = rec as GEDCOMNoteRecord;
-                    result = this.ModifyNote(ref note);
+                    result = ModifyNote(ref note);
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
                     GEDCOMMultimediaRecord mmRec = rec as GEDCOMMultimediaRecord;
-                    result = this.ModifyMedia(ref mmRec);
+                    result = ModifyMedia(ref mmRec);
                     break;
 
                 case GEDCOMRecordType.rtSource:
                     GEDCOMSourceRecord src = rec as GEDCOMSourceRecord;
-                    result = this.ModifySource(ref src);
+                    result = ModifySource(ref src);
                     break;
 
                 case GEDCOMRecordType.rtRepository:
                     GEDCOMRepositoryRecord rep = rec as GEDCOMRepositoryRecord;
-                    result = this.ModifyRepository(ref rep);
+                    result = ModifyRepository(ref rep);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
                     GEDCOMGroupRecord grp = rec as GEDCOMGroupRecord;
-                    result = this.ModifyGroup(ref grp);
+                    result = ModifyGroup(ref grp);
                     break;
 
                 case GEDCOMRecordType.rtResearch:
                     GEDCOMResearchRecord rsr = rec as GEDCOMResearchRecord;
-                    result = this.ModifyResearch(ref rsr);
+                    result = ModifyResearch(ref rsr);
                     break;
 
                 case GEDCOMRecordType.rtTask:
                     GEDCOMTaskRecord tsk = rec as GEDCOMTaskRecord;
-                    result = this.ModifyTask(ref tsk);
+                    result = ModifyTask(ref tsk);
                     break;
 
                 case GEDCOMRecordType.rtCommunication:
                     GEDCOMCommunicationRecord comm = rec as GEDCOMCommunicationRecord;
-                    result = this.ModifyCommunication(ref comm);
+                    result = ModifyCommunication(ref comm);
                     break;
 
                 case GEDCOMRecordType.rtLocation:
                     GEDCOMLocationRecord loc = rec as GEDCOMLocationRecord;
-                    result = this.ModifyLocation(ref loc);
+                    result = ModifyLocation(ref loc);
                     break;
             }
 
             if (result)
             {
-                this.RefreshLists(false);
-                this.ShowRecordInfo(rec);
+                RefreshLists(false);
+                ShowRecordInfo(rec);
             }
         }
 
         public void ShowRecordsTab(GEDCOMRecordType recType)
         {
-            this.tabsRecords.SelectedIndex = (int)recType - 1;
-            this.PageRecords_SelectedIndexChanged(null, null);
+            tabsRecords.SelectedIndex = (int)recType - 1;
+            PageRecords_SelectedIndexChanged(null, null);
         }
 
         public void SelectRecordByXRef(string xref)
         {
-            GEDCOMRecord record = this.fTree.XRefIndex_Find(xref);
+            GEDCOMRecord record = fTree.XRefIndex_Find(xref);
             if (record == null) return;
 
-            GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
+            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
             if (rView == null) return;
 
-            this.ShowRecordsTab(record.RecordType);
-            this.ActiveControl = rView;
+            ShowRecordsTab(record.RecordType);
+            ActiveControl = rView;
             //aList.Focus();
             rView.SelectItemByRec(record);
         }
@@ -1672,53 +1668,53 @@ namespace GKUI
                 switch (record.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, this.mPersonSummary.Lines, this.fShieldState);
+                        GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, mPersonSummary.Lines, fShieldState);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, this.mFamilySummary.Lines, this.fShieldState);
+                        GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, mFamilySummary.Lines, fShieldState);
                         break;
 
                     case GEDCOMRecordType.rtNote:
-                        GKUtils.ShowNoteInfo(record as GEDCOMNoteRecord, this.mNoteSummary.Lines);
+                        GKUtils.ShowNoteInfo(record as GEDCOMNoteRecord, mNoteSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtMultimedia:
-                        GKUtils.ShowMultimediaInfo(record as GEDCOMMultimediaRecord, this.mMediaSummary.Lines);
+                        GKUtils.ShowMultimediaInfo(record as GEDCOMMultimediaRecord, mMediaSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtSource:
-                        GKUtils.ShowSourceInfo(record as GEDCOMSourceRecord, this.mSourceSummary.Lines);
+                        GKUtils.ShowSourceInfo(record as GEDCOMSourceRecord, mSourceSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtRepository:
-                        GKUtils.ShowRepositoryInfo(record as GEDCOMRepositoryRecord, this.mRepositorySummary.Lines);
+                        GKUtils.ShowRepositoryInfo(record as GEDCOMRepositoryRecord, mRepositorySummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtGroup:
-                        GKUtils.ShowGroupInfo(record as GEDCOMGroupRecord, this.mGroupSummary.Lines);
+                        GKUtils.ShowGroupInfo(record as GEDCOMGroupRecord, mGroupSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtResearch:
-                        GKUtils.ShowResearchInfo(record as GEDCOMResearchRecord, this.mResearchSummary.Lines);
+                        GKUtils.ShowResearchInfo(record as GEDCOMResearchRecord, mResearchSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtTask:
-                        GKUtils.ShowTaskInfo(record as GEDCOMTaskRecord, this.mTaskSummary.Lines);
+                        GKUtils.ShowTaskInfo(record as GEDCOMTaskRecord, mTaskSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtCommunication:
-                        GKUtils.ShowCommunicationInfo(record as GEDCOMCommunicationRecord, this.mCommunicationSummary.Lines);
+                        GKUtils.ShowCommunicationInfo(record as GEDCOMCommunicationRecord, mCommunicationSummary.Lines);
                         break;
 
                     case GEDCOMRecordType.rtLocation:
-                        GKUtils.ShowLocationInfo(record as GEDCOMLocationRecord, this.mLocationSummary.Lines);
+                        GKUtils.ShowLocationInfo(record as GEDCOMLocationRecord, mLocationSummary.Lines);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
+                Host.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
             }
         }
 
@@ -1733,11 +1729,11 @@ namespace GKUI
                     switch (record.RecordType)
                     {
                         case GEDCOMRecordType.rtIndividual:
-                            GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, ctx, this.fShieldState);
+                            GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, ctx, fShieldState);
                             break;
 
                         case GEDCOMRecordType.rtFamily:
-                            GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, ctx, this.fShieldState);
+                            GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, ctx, fShieldState);
                             break;
 
                         case GEDCOMRecordType.rtNote:
@@ -1779,7 +1775,7 @@ namespace GKUI
                 }
                 catch (Exception ex)
                 {
-                    this.Host.LogWrite("BaseWin.GetRecordContext(): " + ex.Message);
+                    Host.LogWrite("BaseWin.GetRecordContext(): " + ex.Message);
                 }
             }
 
@@ -1796,7 +1792,7 @@ namespace GKUI
             bool result = false;
             if (record != null)
             {
-                GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
+                GKRecordsView rView = GetRecordsViewByType(record.RecordType);
                 result = (rView != null && rView.IndexOfRecord(record) >= 0);
             }
             return result;
@@ -1819,17 +1815,17 @@ namespace GKUI
         /// <param name="record"></param>
         public void LockRecord(GEDCOMRecord record)
         {
-            this.fLockedRecords.Add(record);
+            fLockedRecords.Add(record);
         }
 
         public void UnlockRecord(GEDCOMRecord record)
         {
-            this.fLockedRecords.Remove(record);
+            fLockedRecords.Remove(record);
         }
 
         public bool IsAvailableRecord(GEDCOMRecord record)
         {
-            bool result = this.fLockedRecords.IndexOf(record) < 0;
+            bool result = fLockedRecords.IndexOf(record) < 0;
 
             if (!result) {
                 // message, for exclude of duplication
@@ -1844,29 +1840,29 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (MediaEditDlg dlg = new MediaEditDlg(this))
                 {
                     bool exists = mediaRec != null;
                     if (!exists) {
-                        mediaRec = new GEDCOMMultimediaRecord(this.fTree, this.fTree, "", "");
-                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(this.fTree, mediaRec, "", ""));
+                        mediaRec = new GEDCOMMultimediaRecord(fTree, fTree, "", "");
+                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(fTree, mediaRec, "", ""));
                         mediaRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(mediaRec);
+                        LockRecord(mediaRec);
 
                         dlg.MediaRec = mediaRec;
                         result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(mediaRec);
+                        UnlockRecord(mediaRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(mediaRec);
+                            fTree.AddRecord(mediaRec);
                         } else {
                             mediaRec.Dispose();
                             mediaRec = null;
@@ -1874,7 +1870,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -1885,28 +1881,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (NoteEditDlg dlg = new NoteEditDlg(this))
                 {
                     bool exists = noteRec != null;
                     if (!exists) {
-                        noteRec = new GEDCOMNoteRecord(this.fTree, this.fTree, "", "");
+                        noteRec = new GEDCOMNoteRecord(fTree, fTree, "", "");
                         noteRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(noteRec);
+                        LockRecord(noteRec);
 
                         dlg.NoteRecord = noteRec;
                         result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(noteRec);
+                        UnlockRecord(noteRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(noteRec);
+                            fTree.AddRecord(noteRec);
                         } else {
                             noteRec.Dispose();
                             noteRec = null;
@@ -1914,7 +1910,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -1925,28 +1921,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (SourceEditDlg fmSrcEdit = new SourceEditDlg(this))
                 {
                     bool exists = sourceRec != null;
                     if (!exists) {
-                        sourceRec = new GEDCOMSourceRecord(this.fTree, this.fTree, "", "");
+                        sourceRec = new GEDCOMSourceRecord(fTree, fTree, "", "");
                         sourceRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(sourceRec);
+                        LockRecord(sourceRec);
 
                         fmSrcEdit.SourceRecord = sourceRec;
                         result = (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(sourceRec);
+                        UnlockRecord(sourceRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(sourceRec);
+                            fTree.AddRecord(sourceRec);
                         } else {
                             sourceRec.Dispose();
                             sourceRec = null;
@@ -1954,7 +1950,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -1965,13 +1961,13 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (SourceCitEditDlg fmSrcCitEdit = new SourceCitEditDlg(this))
                 {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GEDCOMSourceCitation(this.Tree, _struct as GEDCOMObject, "", "");
+                        cit = new GEDCOMSourceCitation(Tree, _struct as GEDCOMObject, "", "");
                     }
 
                     fmSrcCitEdit.SourceCitation = cit;
@@ -1987,7 +1983,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -1998,28 +1994,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (RepositoryEditDlg fmRepEdit = new RepositoryEditDlg(this))
                 {
                     bool exists = repRec != null;
                     if (!exists) {
-                        repRec = new GEDCOMRepositoryRecord(this.fTree, this.fTree, "", "");
+                        repRec = new GEDCOMRepositoryRecord(fTree, fTree, "", "");
                         repRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(repRec);
+                        LockRecord(repRec);
 
                         fmRepEdit.Repository = repRec;
                         result = MainWin.Instance.ShowModalEx(fmRepEdit, false) == DialogResult.OK;
                     } finally {
-                        this.UnlockRecord(repRec);
+                        UnlockRecord(repRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(repRec);
+                            fTree.AddRecord(repRec);
                         } else {
                             repRec.Dispose();
                             repRec = null;
@@ -2027,7 +2023,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2038,28 +2034,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (GroupEditDlg fmGrpEdit = new GroupEditDlg(this))
                 {
                     bool exists = groupRec != null;
                     if (!exists) {
-                        groupRec = new GEDCOMGroupRecord(this.fTree, this.fTree, "", "");
+                        groupRec = new GEDCOMGroupRecord(fTree, fTree, "", "");
                         groupRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(groupRec);
+                        LockRecord(groupRec);
 
                         fmGrpEdit.Group = groupRec;
                         result = (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(groupRec);
+                        UnlockRecord(groupRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(groupRec);
+                            fTree.AddRecord(groupRec);
                         } else {
                             groupRec.Dispose();
                             groupRec = null;
@@ -2067,7 +2063,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2078,28 +2074,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (ResearchEditDlg fmResEdit = new ResearchEditDlg(this))
                 {
                     bool exists = researchRec != null;
                     if (!exists) {
-                        researchRec = new GEDCOMResearchRecord(this.fTree, this.fTree, "", "");
+                        researchRec = new GEDCOMResearchRecord(fTree, fTree, "", "");
                         researchRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(researchRec);
+                        LockRecord(researchRec);
 
                         fmResEdit.Research = researchRec;
                         result = MainWin.Instance.ShowModalEx(fmResEdit, false) == DialogResult.OK;
                     } finally {
-                        this.UnlockRecord(researchRec);
+                        UnlockRecord(researchRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(researchRec);
+                            fTree.AddRecord(researchRec);
                         } else {
                             researchRec.Dispose();
                             researchRec = null;
@@ -2107,7 +2103,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2118,28 +2114,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (TaskEditDlg fmTaskEdit = new TaskEditDlg(this))
                 {
                     bool exists = taskRec != null;
                     if (!exists) {
-                        taskRec = new GEDCOMTaskRecord(this.fTree, this.fTree, "", "");
+                        taskRec = new GEDCOMTaskRecord(fTree, fTree, "", "");
                         taskRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(taskRec);
+                        LockRecord(taskRec);
 
                         fmTaskEdit.Task = taskRec;
                         result = MainWin.Instance.ShowModalEx(fmTaskEdit, false) == DialogResult.OK;
                     } finally {
-                        this.UnlockRecord(taskRec);
+                        UnlockRecord(taskRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(taskRec);
+                            fTree.AddRecord(taskRec);
                         } else {
                             taskRec.Dispose();
                             taskRec = null;
@@ -2147,7 +2143,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2158,28 +2154,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (CommunicationEditDlg fmCorrEdit = new CommunicationEditDlg(this))
                 {
                     bool exists = commRec != null;
                     if (!exists) {
-                        commRec = new GEDCOMCommunicationRecord(this.fTree, this.fTree, "", "");
+                        commRec = new GEDCOMCommunicationRecord(fTree, fTree, "", "");
                         commRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(commRec);
+                        LockRecord(commRec);
 
                         fmCorrEdit.Communication = commRec;
                         result = MainWin.Instance.ShowModalEx(fmCorrEdit, false) == DialogResult.OK;
                     } finally {
-                        this.UnlockRecord(commRec);
+                        UnlockRecord(commRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(commRec);
+                            fTree.AddRecord(commRec);
                         } else {
                             commRec.Dispose();
                             commRec = null;
@@ -2187,7 +2183,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2198,28 +2194,28 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (LocationEditDlg fmLocEdit = new LocationEditDlg(this))
                 {
                     bool exists = locRec != null;
                     if (!exists) {
-                        locRec = new GEDCOMLocationRecord(this.fTree, this.fTree, "", "");
+                        locRec = new GEDCOMLocationRecord(fTree, fTree, "", "");
                         locRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(locRec);
+                        LockRecord(locRec);
 
                         fmLocEdit.LocationRecord = locRec;
                         result = MainWin.Instance.ShowModalEx(fmLocEdit, false) == DialogResult.OK;
                     } finally {
-                        this.UnlockRecord(locRec);
+                        UnlockRecord(locRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(locRec);
+                            fTree.AddRecord(locRec);
                         } else {
                             locRec.Dispose();
                             locRec = null;
@@ -2227,7 +2223,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2238,14 +2234,14 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (NameEditDlg dlg = new NameEditDlg(this)) {
                     dlg.IName = nameEntry;
                     result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2253,13 +2249,13 @@ namespace GKUI
 
         private void PostProcessPerson(GEDCOMIndividualRecord indivRec)
         {
-            this.ImportNames(indivRec);
+            ImportNames(indivRec);
 
-            IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
+            IndividualListFilter iFilter = (IndividualListFilter)ListPersons.ListMan.Filter;
 
             if (iFilter.SourceMode == FilterGroupMode.Selected)
             {
-                GEDCOMSourceRecord src = this.fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                GEDCOMSourceRecord src = fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
                 if (src != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == DialogResult.Yes)
                 {
                     indivRec.AddSource(src, "", 0);
@@ -2268,7 +2264,7 @@ namespace GKUI
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
             {
-                GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                GEDCOMGroupRecord grp = fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
                 if (grp != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == DialogResult.Yes)
                 {
                     grp.AddMember(indivRec);
@@ -2282,20 +2278,20 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (PersonEditDlg dlg = new PersonEditDlg(this)) {
                     bool exists = (indivRec != null);
                     if (!exists) {
-                        indivRec = new GEDCOMIndividualRecord(this.fTree, this.fTree, "", "");
+                        indivRec = new GEDCOMIndividualRecord(fTree, fTree, "", "");
                         indivRec.InitNew();
 
-                        indivRec.AddPersonalName(new GEDCOMPersonalName(this.fTree, indivRec, "", ""));
-                        this.fContext.CreateEventEx(indivRec, "BIRT", "", "");
+                        indivRec.AddPersonalName(new GEDCOMPersonalName(fTree, indivRec, "", ""));
+                        fContext.CreateEventEx(indivRec, "BIRT", "", "");
                     }
 
                     try {
-                        this.LockRecord(indivRec);
+                        LockRecord(indivRec);
 
                         dlg.Person = indivRec;
 
@@ -2309,14 +2305,14 @@ namespace GKUI
 
                         result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(indivRec);
+                        UnlockRecord(indivRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.PostProcessPerson(indivRec);
+                            PostProcessPerson(indivRec);
 
-                            this.fTree.AddRecord(indivRec);
+                            fTree.AddRecord(indivRec);
                         } else {
                             GEDCOMUtils.CleanIndividual(indivRec);
                             indivRec.Dispose();
@@ -2325,7 +2321,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2336,7 +2332,7 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 if (targetType == FamilyTarget.Spouse && target != null) {
                     GEDCOMSex sex = target.Sex;
@@ -2349,12 +2345,12 @@ namespace GKUI
                 using (FamilyEditDlg dlg = new FamilyEditDlg(this)) {
                     bool exists = (familyRec != null);
                     if (!exists) {
-                        familyRec = new GEDCOMFamilyRecord(this.fTree, this.fTree, "", "");
+                        familyRec = new GEDCOMFamilyRecord(fTree, fTree, "", "");
                         familyRec.InitNew();
                     }
 
                     try {
-                        this.LockRecord(familyRec);
+                        LockRecord(familyRec);
 
                         dlg.Family = familyRec;
 
@@ -2364,12 +2360,12 @@ namespace GKUI
 
                         result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                     } finally {
-                        this.UnlockRecord(familyRec);
+                        UnlockRecord(familyRec);
                     }
 
                     if (!exists) {
                         if (result) {
-                            this.fTree.AddRecord(familyRec);
+                            fTree.AddRecord(familyRec);
                         } else {
                             GEDCOMUtils.CleanFamily(familyRec);
                             familyRec.Dispose();
@@ -2378,7 +2374,7 @@ namespace GKUI
                     }
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;
@@ -2389,14 +2385,14 @@ namespace GKUI
             bool result;
 
             try {
-                this.fContext.BeginUpdate();
+                fContext.BeginUpdate();
 
                 using (AddressEditDlg dlg = new AddressEditDlg(this)) {
                     dlg.Address = address;
                     result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                 }
             } finally {
-                this.fContext.EndUpdate();
+                fContext.EndUpdate();
             }
 
             return result;

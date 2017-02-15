@@ -152,8 +152,8 @@ namespace GKTextSearchPlugin
                         indexer.SetStemmer(stemmer);
 
                         baseWin.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Tree.RecordsCount);
-                        int num = baseWin.Tree.RecordsCount - 1;
-                        for (int i = 0; i <= num; i++)
+                        int num = baseWin.Tree.RecordsCount;
+                        for (int i = 0; i < num; i++)
                         {
                             GEDCOMRecord record = baseWin.Tree[i];
                             if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);

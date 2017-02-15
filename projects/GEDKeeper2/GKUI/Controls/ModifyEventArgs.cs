@@ -33,8 +33,8 @@ namespace GKUI.Controls
 
         public ModifyEventArgs(RecordAction action, object itemData)
         {
-            this.Action = action;
-            this.ItemData = itemData;
+            Action = action;
+            ItemData = itemData;
         }
     }
 }

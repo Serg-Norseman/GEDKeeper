@@ -26,20 +26,20 @@ namespace GKCommon
 {
     public static class Logger
     {
-        private static string LogFilename;
+        private static string fLogFilename;
 
         public static void LogInit(string fileName)
         {
-            LogFilename = fileName;
+            fLogFilename = fileName;
         }
 
         public static void LogWrite(string msg)
         {
-            using (StreamWriter Log = new StreamWriter(LogFilename, true, Encoding.UTF8))
+            using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8))
             {
-                Log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
-                Log.Flush();
-                Log.Close();
+                log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
+                log.Flush();
+                log.Close();
             }
         }
     }

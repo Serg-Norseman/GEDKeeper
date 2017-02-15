@@ -29,7 +29,7 @@ namespace GKUI.Controls
     {
         public GKToolStripMenuItem(string text, object tag) : base(text)
         {
-            this.Tag = tag;
+            Tag = tag;
         }
     }
 }

@@ -39,14 +39,14 @@ namespace GKUI.Controls
 
         public bool IsAvailable
         {
-            get { return this.fIsAvailable; }
-            set { this.fIsAvailable = value; }
+            get { return fIsAvailable; }
+            set { fIsAvailable = value; }
         }
 
         public object Item
         {
-            get { return this.fItem; }
-            set { this.fItem = value; }
+            get { return fItem; }
+            set { fItem = value; }
         }
 
         public ItemValidatingEventArgs() : this(null)
@@ -55,7 +55,7 @@ namespace GKUI.Controls
 
         public ItemValidatingEventArgs(object item)
         {
-            this.fItem = item;
+            fItem = item;
         }
     }
 
@@ -103,14 +103,14 @@ namespace GKUI.Controls
 
         public EnumSet<SheetButton> Buttons
         {
-            get { return this.fButtons; }
-            set { this.SetButtons(value); }
+            get { return fButtons; }
+            set { SetButtons(value); }
         }
 
         public bool ReadOnly
         {
-            get { return this.fReadOnly; }
-            set { this.SetReadOnly(value); }
+            get { return fReadOnly; }
+            set { SetReadOnly(value); }
         }
 
         static GKSheetList()
@@ -124,94 +124,94 @@ namespace GKUI.Controls
             if (owner == null)
                 throw new ArgumentNullException("owner");
 
-            this.fBtnMoveDown = new ToolStripButton();
-            this.fBtnMoveDown.Image = GKResources.iDown;
-            this.fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
-            this.fBtnMoveDown.Click += this.ItemMoveDown;
+            fBtnMoveDown = new ToolStripButton();
+            fBtnMoveDown.Image = GKResources.iDown;
+            fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
+            fBtnMoveDown.Click += ItemMoveDown;
 
-            this.fBtnMoveUp = new ToolStripButton();
-            this.fBtnMoveUp.Image = GKResources.iUp;
-            this.fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
-            this.fBtnMoveUp.Click += this.ItemMoveUp;
+            fBtnMoveUp = new ToolStripButton();
+            fBtnMoveUp.Image = GKResources.iUp;
+            fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
+            fBtnMoveUp.Click += ItemMoveUp;
 
-            this.fBtnLinkJump = new ToolStripButton();
-            this.fBtnLinkJump.Image = GKResources.iToMan;
-            this.fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
-            this.fBtnLinkJump.Click += this.ItemJump;
+            fBtnLinkJump = new ToolStripButton();
+            fBtnLinkJump.Image = GKResources.iToMan;
+            fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
+            fBtnLinkJump.Click += ItemJump;
 
-            this.fBtnDelete = new ToolStripButton();
-            this.fBtnDelete.Name = "btnDelete";
-            this.fBtnDelete.Image = GKResources.iRecDelete;
-            this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
-            this.fBtnDelete.Click += this.ItemDelete;
+            fBtnDelete = new ToolStripButton();
+            fBtnDelete.Name = "btnDelete";
+            fBtnDelete.Image = GKResources.iRecDelete;
+            fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
+            fBtnDelete.Click += ItemDelete;
 
-            this.fBtnEdit = new ToolStripButton();
-            this.fBtnEdit.Name = "btnEdit";
-            this.fBtnEdit.Image = GKResources.iRecEdit;
-            this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
-            this.fBtnEdit.Click += this.ItemEdit;
+            fBtnEdit = new ToolStripButton();
+            fBtnEdit.Name = "btnEdit";
+            fBtnEdit.Image = GKResources.iRecEdit;
+            fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
+            fBtnEdit.Click += ItemEdit;
 
-            this.fBtnAdd = new ToolStripButton();
-            this.fBtnAdd.Name = "btnAdd";
-            this.fBtnAdd.Image = GKResources.iRecNew;
-            this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
-            this.fBtnAdd.Click += this.ItemAdd;
+            fBtnAdd = new ToolStripButton();
+            fBtnAdd.Name = "btnAdd";
+            fBtnAdd.Image = GKResources.iRecNew;
+            fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
+            fBtnAdd.Click += ItemAdd;
 
-            this.fToolBar = new ToolStrip();
-            this.fToolBar.Name = "ToolBar";
-            this.fToolBar.Dock = DockStyle.Right;
-            //this.fToolBar.Appearance = ToolBarAppearance.Flat;
-            this.fToolBar.Items.AddRange(new ToolStripItem[] {
-                                             this.fBtnAdd,
-                                             this.fBtnEdit,
-                                             this.fBtnDelete,
-                                             this.fBtnLinkJump,
-                                             this.fBtnMoveUp,
-                                             this.fBtnMoveDown});
-            this.fToolBar.GripStyle = ToolStripGripStyle.Hidden;
-            this.fToolBar.ImageScalingSize = new System.Drawing.Size(24, 20);
-            //this.fToolBar.AutoSize = true;
-            //this.fToolBar.ShowToolTips = true;
+            fToolBar = new ToolStrip();
+            fToolBar.Name = "ToolBar";
+            fToolBar.Dock = DockStyle.Right;
+            //fToolBar.Appearance = ToolBarAppearance.Flat;
+            fToolBar.Items.AddRange(new ToolStripItem[] {
+                                        fBtnAdd,
+                                        fBtnEdit,
+                                        fBtnDelete,
+                                        fBtnLinkJump,
+                                        fBtnMoveUp,
+                                        fBtnMoveDown});
+            fToolBar.GripStyle = ToolStripGripStyle.Hidden;
+            fToolBar.ImageScalingSize = new Size(24, 20);
+            //fToolBar.AutoSize = true;
+            //fToolBar.ShowToolTips = true;
 
-            this.fList = new GKListView();
-            this.fList.Dock = DockStyle.Fill;
-            this.fList.Location = new Point(0, 0);
-            this.fList.Size = new Size(500, 290);
-            this.fList.HideSelection = false;
-            this.fList.LabelEdit = false;
-            this.fList.FullRowSelect = true;
-            this.fList.View = View.Details;
-            this.fList.DoubleClick += this.List_DoubleClick;
-            this.fList.KeyDown += this.List_KeyDown;
+            fList = new GKListView();
+            fList.Dock = DockStyle.Fill;
+            fList.Location = new Point(0, 0);
+            fList.Size = new Size(500, 290);
+            fList.HideSelection = false;
+            fList.LabelEdit = false;
+            fList.FullRowSelect = true;
+            fList.View = View.Details;
+            fList.DoubleClick += List_DoubleClick;
+            fList.KeyDown += List_KeyDown;
 
-            this.SuspendLayout();
-            this.Controls.Add(this.fList);
-            this.Controls.Add(this.fToolBar);
-            //this.Controls.SetChildIndex(this.fList, 1);
-            //this.Controls.SetChildIndex(this.fToolBar, 0);
-            this.ResumeLayout(false);
+            SuspendLayout();
+            Controls.Add(fList);
+            Controls.Add(fToolBar);
+            //Controls.SetChildIndex(fList, 1);
+            //Controls.SetChildIndex(fToolBar, 0);
+            ResumeLayout(false);
 
-            this.Dock = DockStyle.Fill;
+            Dock = DockStyle.Fill;
 
             owner.SuspendLayout();
             owner.Controls.Add(this);
             owner.ResumeLayout(false);
 
-            this.SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
+            SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fList.Dispose();
-                this.fBtnLinkJump.Dispose();
-                this.fBtnMoveUp.Dispose();
-                this.fBtnMoveDown.Dispose();
-                this.fBtnDelete.Dispose();
-                this.fBtnEdit.Dispose();
-                this.fBtnAdd.Dispose();
-                this.fToolBar.Dispose();
+                fList.Dispose();
+                fBtnLinkJump.Dispose();
+                fBtnMoveUp.Dispose();
+                fBtnMoveDown.Dispose();
+                fBtnDelete.Dispose();
+                fBtnEdit.Dispose();
+                fBtnAdd.Dispose();
+                fToolBar.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -224,42 +224,42 @@ namespace GKUI.Controls
         /// <param name="name"></param>
         public void SetControlName(string name)
         {
-            this.Name = name;
-            this.fToolBar.Name = name + "_ToolBar";
-            this.fBtnAdd.Name = this.fToolBar.Name + "_btnAdd";
-            this.fBtnEdit.Name = this.fToolBar.Name + "_btnEdit";
-            this.fBtnDelete.Name = this.fToolBar.Name + "_btnDelete";
-            this.fBtnMoveUp.Name = this.fToolBar.Name + "_btnMoveUp";
-            this.fBtnMoveDown.Name = this.fToolBar.Name + "_btnMoveDown";
+            Name = name;
+            fToolBar.Name = name + "_ToolBar";
+            fBtnAdd.Name = fToolBar.Name + "_btnAdd";
+            fBtnEdit.Name = fToolBar.Name + "_btnEdit";
+            fBtnDelete.Name = fToolBar.Name + "_btnDelete";
+            fBtnMoveUp.Name = fToolBar.Name + "_btnMoveUp";
+            fBtnMoveDown.Name = fToolBar.Name + "_btnMoveDown";
         }
 
         private void SetButtons(EnumSet<SheetButton> value)
         {
-            this.fButtons = value;
-            this.fBtnAdd.Visible = this.fButtons.Contains(SheetButton.lbAdd);
-            this.fBtnDelete.Visible = this.fButtons.Contains(SheetButton.lbDelete);
-            this.fBtnEdit.Visible = this.fButtons.Contains(SheetButton.lbEdit);
-            this.fBtnLinkJump.Visible = this.fButtons.Contains(SheetButton.lbJump);
-            this.fBtnMoveUp.Visible = this.fButtons.Contains(SheetButton.lbMoveUp);
-            this.fBtnMoveDown.Visible = this.fButtons.Contains(SheetButton.lbMoveDown);
-            this.fToolBar.Visible = !this.fButtons.IsEmpty();
+            fButtons = value;
+            fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
+            fBtnDelete.Visible = fButtons.Contains(SheetButton.lbDelete);
+            fBtnEdit.Visible = fButtons.Contains(SheetButton.lbEdit);
+            fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
+            fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
+            fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
+            fToolBar.Visible = !fButtons.IsEmpty();
         }
 
         private void SetReadOnly(bool value)
         {
-            this.fReadOnly = value;
-            this.fBtnAdd.Enabled = !this.fReadOnly;
-            this.fBtnDelete.Enabled = !this.fReadOnly;
-            this.fBtnEdit.Enabled = !this.fReadOnly;
-            this.fBtnMoveUp.Enabled = !this.fReadOnly;
-            this.fBtnMoveDown.Enabled = !this.fReadOnly;
+            fReadOnly = value;
+            fBtnAdd.Enabled = !fReadOnly;
+            fBtnDelete.Enabled = !fReadOnly;
+            fBtnEdit.Enabled = !fReadOnly;
+            fBtnMoveUp.Enabled = !fReadOnly;
+            fBtnMoveDown.Enabled = !fReadOnly;
 
-            this.fList.BackColor = (this.fReadOnly) ? SystemColors.Control : SystemColors.Window;
+            fList.BackColor = (fReadOnly) ? SystemColors.Control : SystemColors.Window;
         }
 
         private void List_DoubleClick(object sender, EventArgs e)
         {
-            this.ItemEdit(sender, e);
+            ItemEdit(sender, e);
         }
 
         private void List_KeyDown(object sender, KeyEventArgs e)
@@ -268,13 +268,13 @@ namespace GKUI.Controls
             {
                 switch (e.KeyCode) {
                     case Keys.I:
-                        this.ItemAdd(sender, e);
+                        ItemAdd(sender, e);
                         break;
                     case Keys.D:
-                        this.ItemDelete(sender, e);
+                        ItemDelete(sender, e);
                         break;
                     case Keys.Return:
-                        this.ItemEdit(sender, e);
+                        ItemEdit(sender, e);
                         break;
                 }
             }
@@ -282,18 +282,18 @@ namespace GKUI.Controls
 
         public object GetSelectedData()
         {
-            GKListItem item = this.fList.GetSelectedItem();
+            GKListItem item = fList.GetSelectedItem();
             return (item != null) ? item.Data : null;
         }
 
         private void RestoreSelected(object itemData)
         {
-            if (itemData != null) this.fList.SelectItem(itemData);
+            if (itemData != null) fList.SelectItem(itemData);
         }
 
         private void DoModify(ModifyEventArgs eArgs)
         {
-            ModifyEventHandler eventHandler = (ModifyEventHandler)base.Events[GKSheetList.EventModify];
+            var eventHandler = (ModifyEventHandler)base.Events[GKSheetList.EventModify];
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -303,98 +303,92 @@ namespace GKUI.Controls
         {
             var args = new ItemValidatingEventArgs(item);
 
-            ItemValidatingEventHandler eventHandler = (ItemValidatingEventHandler)base.Events[GKSheetList.EventItemValidating];
-            if (eventHandler != null) {
-                eventHandler(this, args);
-
-                return args.IsAvailable;
-            } else {
+            var eventHandler = (ItemValidatingEventHandler)base.Events[GKSheetList.EventItemValidating];
+            if (eventHandler == null)
+            {
                 return true;
             }
+
+            eventHandler(this, args);
+            return args.IsAvailable;
         }
 
         private void ItemAdd(object sender, EventArgs e)
         {
-            if (!this.fReadOnly)
-            {
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raAdd, null);
-                this.DoModify(eArgs);
-                this.RestoreSelected(eArgs.ItemData);
-            }
+            if (fReadOnly) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raAdd, null);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
         }
 
         private void ItemEdit(object sender, EventArgs e)
         {
-            object itemData = this.GetSelectedData();
-            if (!this.fReadOnly && itemData != null)
-            {
-                if (!this.ValidateItem(itemData)) return;
+            object itemData = GetSelectedData();
+            if (fReadOnly || itemData == null) return;
 
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raEdit, itemData);
-                this.DoModify(eArgs);
-                this.RestoreSelected(eArgs.ItemData);
-            }
+            if (!ValidateItem(itemData)) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raEdit, itemData);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
         }
 
         private void ItemDelete(object sender, EventArgs e)
         {
-            object itemData = this.GetSelectedData();
-            if (!this.fReadOnly && itemData != null)
-            {
-                if (!this.ValidateItem(itemData)) return;
+            object itemData = GetSelectedData();
+            if (fReadOnly || itemData == null) return;
 
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raDelete, itemData);
-                this.DoModify(eArgs);
-            }
+            if (!ValidateItem(itemData)) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raDelete, itemData);
+            DoModify(eArgs);
         }
 
         private void ItemJump(object sender, EventArgs e)
         {
-            object itemData = this.GetSelectedData();
-            if (itemData != null)
-            {
-                if (!this.ValidateItem(itemData)) return;
+            object itemData = GetSelectedData();
+            if (itemData == null) return;
 
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raJump, itemData);
-                this.DoModify(eArgs);
-            }
+            if (!ValidateItem(itemData)) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raJump, itemData);
+            DoModify(eArgs);
         }
 
         private void ItemMoveUp(object sender, EventArgs e)
         {
-            object itemData = this.GetSelectedData();
-            if (!this.fReadOnly && itemData != null)
-            {
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raMoveUp, itemData);
-                this.DoModify(eArgs);
-                this.RestoreSelected(eArgs.ItemData);
-            }
+            object itemData = GetSelectedData();
+            if (fReadOnly || itemData == null) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raMoveUp, itemData);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
         }
 
         private void ItemMoveDown(object sender, EventArgs e)
         {
-            object itemData = this.GetSelectedData();
-            if (!this.fReadOnly && itemData != null)
-            {
-                ModifyEventArgs eArgs = new ModifyEventArgs(RecordAction.raMoveDown, itemData);
-                this.DoModify(eArgs);
-                this.RestoreSelected(eArgs.ItemData);
-            }
+            object itemData = GetSelectedData();
+            if (fReadOnly || itemData == null) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raMoveDown, itemData);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
         }
 
         public void ClearColumns()
         {
-            this.fList.Columns.Clear();
+            fList.Columns.Clear();
         }
 
         public void ResizeColumn(int columnIndex)
         {
-            this.fList.ResizeColumn(columnIndex);
+            fList.ResizeColumn(columnIndex);
         }
 
         public void AddColumn(string caption, int width, bool autoSize)
         {
-            this.fList.AddListColumn(caption, width, autoSize);
+            fList.AddListColumn(caption, width, autoSize);
         }
 
         public void Columns_BeginUpdate()
@@ -407,32 +401,32 @@ namespace GKUI.Controls
 
         public void BeginUpdate()
         {
-            this.fList.BeginUpdate();
+            fList.BeginUpdate();
         }
 
         public void EndUpdate()
         {
-            this.fList.EndUpdate();
+            fList.EndUpdate();
         }
 
         public GKListItem AddItem(object itemValue, object data)
         {
-            return this.fList.AddItem(itemValue, data);
+            return fList.AddItem(itemValue, data);
         }
 
         public void ClearItems()
         {
-            this.fList.Items.Clear();
+            fList.Items.Clear();
         }
 
         public void SwitchSorter()
         {
-            this.fList.SwitchSorter();
+            fList.SwitchSorter();
         }
 
         public void SelectItem(int index)
         {
-            this.fList.SelectItem(index);
+            fList.SelectItem(index);
         }
     }
 }
