@@ -18,9 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GKCommon.GEDCOM;
-
 namespace GKCommon.GEDCOM.Extensions
 {
     public enum BloodGroup
@@ -45,15 +42,15 @@ namespace GKCommon.GEDCOM.Extensions
 
         public BloodGroup Value
         {
-            get { return this.fValue; }
-            set { this.fValue = value; }
+            get { return fValue; }
+            set { fValue = value; }
         }
 
         protected override string GetStringValue()
         {
             string result = "";
 
-            switch (this.fValue) {
+            switch (fValue) {
                 case BloodGroup.APositive:
                     result = "A+";
                     break;
@@ -92,27 +89,27 @@ namespace GKCommon.GEDCOM.Extensions
 
         public override string ParseString(string strValue)
         {
-            this.fValue = BloodGroup.Unknown;
+            fValue = BloodGroup.Unknown;
 
             string result = strValue.Trim().ToUpperInvariant();
             if (!string.IsNullOrEmpty(result))
             {
                 if (result == "A+") {
-                    this.fValue = BloodGroup.APositive;
+                    fValue = BloodGroup.APositive;
                 } else if (result == "A-") {
-                    this.fValue = BloodGroup.ANegative;
+                    fValue = BloodGroup.ANegative;
                 } else if (result == "B+") {
-                    this.fValue = BloodGroup.BPositive;
+                    fValue = BloodGroup.BPositive;
                 } else if (result == "B-") {
-                    this.fValue = BloodGroup.BNegative;
+                    fValue = BloodGroup.BNegative;
                 } else if (result == "AB+") {
-                    this.fValue = BloodGroup.ABPositive;
+                    fValue = BloodGroup.ABPositive;
                 } else if (result == "AB-") {
-                    this.fValue = BloodGroup.ABNegative;
+                    fValue = BloodGroup.ABNegative;
                 } else if (result == "O+") {
-                    this.fValue = BloodGroup.OPositive;
+                    fValue = BloodGroup.OPositive;
                 } else if (result == "O-") {
-                    this.fValue = BloodGroup.ONegative;
+                    fValue = BloodGroup.ONegative;
                 }
             }
 
@@ -122,18 +119,18 @@ namespace GKCommon.GEDCOM.Extensions
         public override void Clear()
         {
             base.Clear();
-            this.fValue = BloodGroup.Unknown;
+            fValue = BloodGroup.Unknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fValue == BloodGroup.Unknown);
+            return base.IsEmpty() && (fValue == BloodGroup.Unknown);
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetName("_BGRO");
+            SetName("_BGRO");
         }
 
         public GEDCOMBloodGroup(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

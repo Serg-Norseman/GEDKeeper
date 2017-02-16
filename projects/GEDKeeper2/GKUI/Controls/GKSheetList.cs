@@ -91,14 +91,14 @@ namespace GKUI.Controls
 
         public event ModifyEventHandler OnModify
         {
-            add { base.Events.AddHandler(GKSheetList.EventModify, value); }
-            remove { base.Events.RemoveHandler(GKSheetList.EventModify, value); }
+            add { Events.AddHandler(EventModify, value); }
+            remove { Events.RemoveHandler(EventModify, value); }
         }
 
         public event ItemValidatingEventHandler OnItemValidating
         {
-            add { base.Events.AddHandler(GKSheetList.EventItemValidating, value); }
-            remove { base.Events.RemoveHandler(GKSheetList.EventItemValidating, value); }
+            add { Events.AddHandler(EventItemValidating, value); }
+            remove { Events.RemoveHandler(EventItemValidating, value); }
         }
 
         public EnumSet<SheetButton> Buttons
@@ -115,8 +115,8 @@ namespace GKUI.Controls
 
         static GKSheetList()
         {
-            GKSheetList.EventModify = new object();
-            GKSheetList.EventItemValidating = new object();
+            EventModify = new object();
+            EventItemValidating = new object();
         }
 
         public GKSheetList(Control owner)
@@ -293,7 +293,7 @@ namespace GKUI.Controls
 
         private void DoModify(ModifyEventArgs eArgs)
         {
-            var eventHandler = (ModifyEventHandler)base.Events[GKSheetList.EventModify];
+            var eventHandler = (ModifyEventHandler)Events[EventModify];
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -303,7 +303,7 @@ namespace GKUI.Controls
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)base.Events[GKSheetList.EventItemValidating];
+            var eventHandler = (ItemValidatingEventHandler)Events[EventItemValidating];
             if (eventHandler == null)
             {
                 return true;

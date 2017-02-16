@@ -36,41 +36,41 @@ namespace GKUI.Sheets
     {
         public GKSourcesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
-            this.Columns_BeginUpdate();
-            this.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
-            this.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
-            this.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
-            this.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
-            this.Columns_EndUpdate();
+            Columns_BeginUpdate();
+            AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
+            AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
+            AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
+            AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
+            Columns_EndUpdate();
 
-            this.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                       SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-            this.OnModify += this.ListModify;
+            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                                                  SheetButton.lbMoveUp, SheetButton.lbMoveDown);
+            OnModify += ListModify;
         }
 
         public override void UpdateSheet()
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
 
             try
             {
-                this.ClearItems();
+                ClearItems();
 
-                this.DataList.Reset();
-                while (this.DataList.MoveNext()) {
-                    GEDCOMSourceCitation cit = this.DataList.Current as GEDCOMSourceCitation;
+                DataList.Reset();
+                while (DataList.MoveNext()) {
+                    GEDCOMSourceCitation cit = DataList.Current as GEDCOMSourceCitation;
                     if (cit == null) continue;
 
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    GKListItem item = this.AddItem(sourceRec.Originator.Text.Trim(), cit);
+                    GKListItem item = AddItem(sourceRec.Originator.Text.Trim(), cit);
                     item.AddSubItem(sourceRec.FiledByEntry);
                     item.AddSubItem(cit.Page);
                     item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
                 }
 
-                this.ResizeColumn(1);
+                ResizeColumn(1);
             }
             catch (Exception ex)
             {
@@ -80,12 +80,12 @@ namespace GKUI.Sheets
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
 
-            IBaseWindow baseWin = this.Editor.Base;
+            IBaseWindow baseWin = Editor.Base;
             if (baseWin == null) return;
 
-            IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
+            IGEDCOMStructWithLists _struct = DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
 
             GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
@@ -96,7 +96,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = ((BaseWin) baseWin).ModifySourceCitation(this.fUndoman, _struct, ref aCit);
+                    result = ((BaseWin) baseWin).ModifySourceCitation(fUndoman, _struct, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
@@ -104,7 +104,7 @@ namespace GKUI.Sheets
                     {
                         //_struct.SourceCitations.Delete(aCit);
                         //result = true;
-                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, (GEDCOMObject)_struct, aCit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, (GEDCOMObject)_struct, aCit);
                     }
                     break;
 
@@ -132,7 +132,7 @@ namespace GKUI.Sheets
             if (result)
             {
                 baseWin.Modified = true;
-                this.UpdateSheet();
+                UpdateSheet();
             }
         }
     }

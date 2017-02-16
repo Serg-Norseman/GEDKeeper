@@ -25,32 +25,31 @@ using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
 {
-    public partial class TVSettingsDlg : Form
+    public sealed partial class TVSettingsDlg : Form
     {
         private readonly IPlugin fPlugin;
 
         public int MinGens
         {
-        	get { return decimal.ToInt32(this.edMinGens.Value); }
+            get { return decimal.ToInt32(edMinGens.Value); }
         }
         
         public TVSettingsDlg(IPlugin plugin)
         {
             InitializeComponent();
             
-            this.fPlugin = plugin;
-            this.Text = fPlugin.DisplayName;
+            fPlugin = plugin;
+            Text = fPlugin.DisplayName;
             
             // SetLang()
-        	this.chkWithoutDates.Text = fPlugin.LangMan.LS(TVLS.LSID_WithoutDates);
-        	this.lblMinGens.Text = fPlugin.LangMan.LS(TVLS.LSID_MinGens);
-        	this.btnAccept.Text = fPlugin.LangMan.LS(TVLS.LSID_Accept);
-        	this.btnCancel.Text = fPlugin.LangMan.LS(TVLS.LSID_Cancel);
+            chkWithoutDates.Text = fPlugin.LangMan.LS(TVLS.LSID_WithoutDates);
+            lblMinGens.Text = fPlugin.LangMan.LS(TVLS.LSID_MinGens);
+            btnAccept.Text = fPlugin.LangMan.LS(TVLS.LSID_Accept);
+            btnCancel.Text = fPlugin.LangMan.LS(TVLS.LSID_Cancel);
         }
         
-        private void BtnAcceptClick(object sender, EventArgs e)
+        private void btnAccept_Click(object sender, EventArgs e)
         {
-        	
         }
     }
 }

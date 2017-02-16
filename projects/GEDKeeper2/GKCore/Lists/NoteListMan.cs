@@ -40,11 +40,11 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Note, DataType.dtString, 400, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Note, DataType.dtString, 400, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public NoteListColumns() : base()
+        public NoteListColumns()
         {
             InitData(typeof(NoteColumnType));
         }
@@ -59,16 +59,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.Note.Text, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.Note.Text, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMNoteRecord);
+            fRec = (aRec as GEDCOMNoteRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -76,13 +76,13 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    string noteText = GKUtils.MergeStrings(this.fRec.Note);
-                    //string noteText = GKUtils.TruncateStrings(this.fRec.Note, GKData.NoteNameMaxLength);
+                    string noteText = GKUtils.MergeStrings(fRec.Note);
+                    //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
                     result = noteText;
                     break;
 
                 case 1:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

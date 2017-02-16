@@ -41,45 +41,45 @@ namespace GKImageViewerPlugin
 
         public ImageViewerWin(Plugin plugin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             GKResourceManager resMgr = new GKResourceManager("IVPResource", typeof(ImageViewerWin).Assembly);
-            this.tbFileLoad.Image = (Bitmap)resMgr.GetObjectEx("iLoad");
+            tbFileLoad.Image = (Bitmap)resMgr.GetObjectEx("iLoad");
 
-            this.fPlugin = plugin;
+            fPlugin = plugin;
 
-            this.SetLang();
+            SetLang();
         }
 
         private void ImageViewerWin_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.fPlugin.frm = null;
+            fPlugin.fForm = null;
         }
 
         private void ImageViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
-                base.Close();
+                Close();
             }
         }
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            if (sender == this.tbFileLoad) {
-                string fileName = UIHelper.GetOpenFile("", "", this.fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+            if (sender == tbFileLoad) {
+                string fileName = UIHelper.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
-                    this.SetFileRef(fileName);
+                    SetFileRef(fileName);
                 }
             }
         }
 
         private void SetFileRef(string fileName)
         {
-            this.Text = fileName;
+            Text = fileName;
             Control ctl = null;
-            this.fImageCtl = null;
+            fImageCtl = null;
 
             GEDCOMMultimediaFormat fmt = GEDCOMFileReference.RecognizeFormat(fileName);
 
@@ -96,9 +96,9 @@ namespace GKImageViewerPlugin
                     case GEDCOMMultimediaFormat.mfPNG:
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
-                            this.fImageCtl = new ImageView();
-                            this.fImageCtl.OpenImage(new Bitmap(fs));
-                            ctl = this.fImageCtl;
+                            fImageCtl = new ImageView();
+                            fImageCtl.OpenImage(new Bitmap(fs));
+                            ctl = fImageCtl;
                         }
                         break;
 
@@ -139,29 +139,29 @@ namespace GKImageViewerPlugin
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             ctl = new WebBrowser();
-                            (ctl as WebBrowser).DocumentStream = fs;
+                            ((WebBrowser) ctl).DocumentStream = fs;
                         }
                         break;
                 }
 
                 if (ctl != null) {
-                    this.SuspendLayout();
+                    SuspendLayout();
 
                     ctl.Dock = DockStyle.Fill;
                     ctl.Location = new Point(0, 50);
                     ctl.Size = new Size(100, 100);
-                    base.Controls.Add(ctl);
-                    base.Controls.SetChildIndex(ctl, 0);
+                    Controls.Add(ctl);
+                    Controls.SetChildIndex(ctl, 0);
 
-                    this.ResumeLayout(false);
-                    this.PerformLayout();
+                    ResumeLayout(false);
+                    PerformLayout();
                 }
             }
             catch (Exception ex)
             {
                 if (ctl != null) ctl.Dispose();
 
-                this.fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
+                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
             }
         }
 
@@ -169,13 +169,13 @@ namespace GKImageViewerPlugin
 
         public void SetLang()
         {
-            this.Text = this.fPlugin.LangMan.LS(IVLS.LSID_ImgViewer);
-            this.tbFileLoad.ToolTipText = this.fPlugin.LangMan.LS(IVLS.LSID_FileLoad);
+            Text = fPlugin.LangMan.LS(IVLS.LSID_ImgViewer);
+            tbFileLoad.ToolTipText = fPlugin.LangMan.LS(IVLS.LSID_FileLoad);
 
-            /*if (this.fImageCtl != null) {
-                this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-                this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-                this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            /*if (fImageCtl != null) {
+                fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+                fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+                fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
             }*/
         }
 

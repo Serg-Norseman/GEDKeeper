@@ -31,21 +31,23 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class AboutDlg : Form
+    public sealed partial class AboutDlg : Form
     {
         public AboutDlg()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnClose.Image = GKResources.iBtnAccept;
+            btnClose.Image = GKResources.iBtnAccept;
 
-            this.Text = LangMan.LS(LSID.LSID_MIAbout);
-            this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            Text = LangMan.LS(LSID.LSID_MIAbout);
+            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
         }
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
             Label lbl = sender as Label;
+            if (lbl == null) return;
+
             Process.Start(lbl.Text);
         }
 

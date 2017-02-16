@@ -114,9 +114,9 @@ namespace GKCommon
         {
             if (fOwnsObjects && action == ListNotification.Deleted)
             {
-                if (instance is IDisposable)
-                {
-                    (instance as IDisposable).Dispose();
+                var disposable = instance as IDisposable;
+                if (disposable != null) {
+                    disposable.Dispose();
                 }
             }
         }

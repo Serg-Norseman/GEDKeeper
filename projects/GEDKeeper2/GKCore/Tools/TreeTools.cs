@@ -450,7 +450,7 @@ namespace GKCore.Tools
                 if (mmFormat == GEDCOMMultimediaFormat.mfUnknown || mmFormat == GEDCOMMultimediaFormat.mfNone) {
                     // tag "FORM" can be corrupted or GEDCOMCore in past not recognize format
                     // attempt recovery
-                    fileRef.MultimediaFormat = GEDCOMFileReferenceWithTitle.RecognizeFormat(fileRef.StringValue);
+                    fileRef.MultimediaFormat = GEDCOMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
             }
         }
@@ -839,23 +839,23 @@ namespace GKCore.Tools
 
             public CheckObj(GEDCOMRecord rec, CheckDiag diag, CheckSolve solve)
             {
-                this.Rec = rec;
-                this.Diag = diag;
-                this.Solve = solve;
+                Rec = rec;
+                Diag = diag;
+                Solve = solve;
             }
 
             public string GetRecordName()
             {
-                string result = "[" + this.Rec.XRef + "] ";
+                string result = "[" + Rec.XRef + "] ";
 
-                switch (this.Rec.RecordType)
+                switch (Rec.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        result = result + GKUtils.GetNameString(((GEDCOMIndividualRecord)this.Rec), true, false);
+                        result = result + GKUtils.GetNameString(((GEDCOMIndividualRecord)Rec), true, false);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        result = result + GKUtils.GetFamilyString((GEDCOMFamilyRecord)this.Rec);
+                        result = result + GKUtils.GetFamilyString((GEDCOMFamilyRecord)Rec);
                         break;
                 }
 
@@ -1325,8 +1325,8 @@ namespace GKCore.Tools
                         for (int k = 0; k < treeB.RecordsCount; k++) {
                             GEDCOMRecord recB = treeB[k];
                             if (recB is GEDCOMIndividualRecord) {
-                                GEDCOMIndividualRecord indivA = recA as GEDCOMIndividualRecord;
-                                GEDCOMIndividualRecord indivB = recB as GEDCOMIndividualRecord;
+                                GEDCOMIndividualRecord indivA = (GEDCOMIndividualRecord) recA;
+                                GEDCOMIndividualRecord indivB = (GEDCOMIndividualRecord) recB;
 
                                 if (indivA != indivB && indivA.IsMatch(indivB, mParams) >= matchThreshold)
                                 {
@@ -1531,7 +1531,7 @@ namespace GKCore.Tools
                     GEDCOMRecord record = tree[i];
 
                     if (record is GEDCOMRecordWithEvents) {
-                        GEDCOMRecordWithEvents evsRec = record as GEDCOMRecordWithEvents;
+                        GEDCOMRecordWithEvents evsRec = (GEDCOMRecordWithEvents) record;
 
                         int num2 = evsRec.Events.Count;
                         for (int j = 0; j < num2; j++) {

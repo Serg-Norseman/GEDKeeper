@@ -107,7 +107,7 @@ namespace GKUI
 
                                 case GEDCOMMultimediaFormat.mfHTM:
                                     ctl = new WebBrowser();
-                                    (ctl as WebBrowser).DocumentStream = fs;
+                                    ((WebBrowser) ctl).DocumentStream = fs;
                                     SetViewControl(ctl);
                                     break;
                             }
@@ -150,8 +150,8 @@ namespace GKUI
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
                 ctl.Size = new Size(100, 100);
-                base.Controls.Add(ctl);
-                base.Controls.SetChildIndex(ctl, 0);
+                Controls.Add(ctl);
+                Controls.SetChildIndex(ctl, 0);
 
                 ResumeLayout(false);
             }

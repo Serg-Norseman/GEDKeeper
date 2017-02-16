@@ -33,7 +33,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class RecordSelectDlg : Form
+    public sealed partial class RecordSelectDlg : Form
     {
         private readonly IBaseWindow fBase;
 
@@ -49,7 +49,7 @@ namespace GKUI.Dialogs
 
         public string Filter
         {
-            get { return this.fFilter; }
+            get { return fFilter; }
             set {
                 string flt = value;
                 if (flt == "") {
@@ -57,42 +57,42 @@ namespace GKUI.Dialogs
                 } else if (flt != "*") {
                     flt = "*" + flt + "*";
                 }
-                this.fFilter = flt;
-                this.DataRefresh();
+                fFilter = flt;
+                DataRefresh();
             }
         }
 
         public GEDCOMRecordType Mode
         {
-            get { return this.fMode; }
+            get { return fMode; }
             set {
-                this.fMode = value;
-                this.DataRefresh();
+                fMode = value;
+                DataRefresh();
             }
         }
 
         public TargetMode TargetMode
         {
-            get { return this.fTargetMode; }
-            set { this.fTargetMode = value; }
+            get { return fTargetMode; }
+            set { fTargetMode = value; }
         }
 
 
         public RecordSelectDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnSelect.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnSelect.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
-            this.fFilter = "*";
+            fBase = baseWin;
+            fFilter = "*";
 
             // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_WinRecordSelect);
-            this.btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
-            this.btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinRecordSelect);
+            btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
+            btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
 
         protected override void Dispose(bool disposing)
@@ -105,27 +105,27 @@ namespace GKUI.Dialogs
 
         private void DataRefresh()
         {
-            if (this.fListRecords != null)
+            if (fListRecords != null)
             {
-                this.fListRecords.Dispose();
-                this.fListRecords = null;
+                fListRecords.Dispose();
+                fListRecords = null;
             }
 
-            this.fListRecords = GKUtils.CreateRecordsView(this.panList, this.fBase.Tree, this.fMode);
-            this.fListRecords.Name = "fListRecords";
-            this.fListRecords.ListMan.Filter.Clear();
-            this.fListRecords.ListMan.QuickFilter = this.fFilter;
+            fListRecords = GKUtils.CreateRecordsView(panList, fBase.Tree, fMode);
+            fListRecords.Name = "fListRecords";
+            fListRecords.ListMan.Filter.Clear();
+            fListRecords.ListMan.QuickFilter = fFilter;
 
-            if (this.fMode == GEDCOMRecordType.rtIndividual) {
-                IndividualListFilter iFilter = (IndividualListFilter)this.fListRecords.ListMan.Filter;
-                iFilter.Sex = this.NeedSex;
+            if (fMode == GEDCOMRecordType.rtIndividual) {
+                IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;
+                iFilter.Sex = NeedSex;
                 
-                if (this.fTargetMode == TargetMode.tmParent) {
-                    this.fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
+                if (fTargetMode == TargetMode.tmParent) {
+                    fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
                 }
             }
 
-            this.fListRecords.UpdateContents(this.fBase.ShieldState, true, 1);
+            fListRecords.UpdateContents(fBase.ShieldState, true, 1);
         }
 
         private static bool ChildSelectorHandler(GEDCOMRecord record)
@@ -140,14 +140,14 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.ResultRecord = this.fListRecords.GetSelectedRecord();
-                base.DialogResult = DialogResult.OK;
+                ResultRecord = fListRecords.GetSelectedRecord();
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
-                this.ResultRecord = null;
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
+                ResultRecord = null;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -155,13 +155,13 @@ namespace GKUI.Dialogs
         {
             try
             {
-                switch (this.fMode) {
+                switch (fMode) {
                     case GEDCOMRecordType.rtIndividual:
                         {
                             GEDCOMIndividualRecord iRec = null;
-                            if (this.fBase.ModifyPerson(ref iRec, this.Target, this.fTargetMode, this.NeedSex)) {
-                                this.ResultRecord = iRec;
-                                base.DialogResult = DialogResult.OK;
+                            if (fBase.ModifyPerson(ref iRec, Target, fTargetMode, NeedSex)) {
+                                ResultRecord = iRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -170,12 +170,12 @@ namespace GKUI.Dialogs
                         {
                             GEDCOMFamilyRecord famRec = null;
 
-                            FamilyTarget famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
+                            FamilyTarget famTarget = (fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
 
-                            if (this.fBase.ModifyFamily(ref famRec, famTarget, this.Target))
+                            if (fBase.ModifyFamily(ref famRec, famTarget, Target))
                             {
-                                this.ResultRecord = famRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = famRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -183,10 +183,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtNote:
                         {
                             GEDCOMNoteRecord noteRec = null;
-                            if (this.fBase.ModifyNote(ref noteRec))
+                            if (fBase.ModifyNote(ref noteRec))
                             {
-                                this.ResultRecord = noteRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = noteRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -194,10 +194,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtMultimedia:
                         {
                             GEDCOMMultimediaRecord mmRec = null;
-                            if (this.fBase.ModifyMedia(ref mmRec))
+                            if (fBase.ModifyMedia(ref mmRec))
                             {
-                                this.ResultRecord = mmRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = mmRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -205,10 +205,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtSource:
                         {
                             GEDCOMSourceRecord sourceRec = null;
-                            if (this.fBase.ModifySource(ref sourceRec))
+                            if (fBase.ModifySource(ref sourceRec))
                             {
-                                this.ResultRecord = sourceRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = sourceRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -216,10 +216,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtRepository:
                         {
                             GEDCOMRepositoryRecord repRec = null;
-                            if (this.fBase.ModifyRepository(ref repRec))
+                            if (fBase.ModifyRepository(ref repRec))
                             {
-                                this.ResultRecord = repRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = repRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -227,10 +227,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtGroup:
                         {
                             GEDCOMGroupRecord groupRec = null;
-                            if (this.fBase.ModifyGroup(ref groupRec))
+                            if (fBase.ModifyGroup(ref groupRec))
                             {
-                                this.ResultRecord = groupRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = groupRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -238,10 +238,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtTask:
                         {
                             GEDCOMTaskRecord taskRec = null;
-                            if (this.fBase.ModifyTask(ref taskRec))
+                            if (fBase.ModifyTask(ref taskRec))
                             {
-                                this.ResultRecord = taskRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = taskRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -249,10 +249,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtCommunication:
                         {
                             GEDCOMCommunicationRecord corrRec = null;
-                            if (this.fBase.ModifyCommunication(ref corrRec))
+                            if (fBase.ModifyCommunication(ref corrRec))
                             {
-                                this.ResultRecord = corrRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = corrRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -260,10 +260,10 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtLocation:
                         {
                             GEDCOMLocationRecord locRec = null;
-                            if (this.fBase.ModifyLocation(ref locRec))
+                            if (fBase.ModifyLocation(ref locRec))
                             {
-                                this.ResultRecord = locRec;
-                                base.DialogResult = DialogResult.OK;
+                                ResultRecord = locRec;
+                                DialogResult = DialogResult.OK;
                             }
                             break;
                         }
@@ -271,15 +271,15 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
-                this.ResultRecord = null;
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
+                ResultRecord = null;
+                DialogResult = DialogResult.None;
             }
         }
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            this.Filter = this.txtFastFilter.Text;
+            Filter = txtFastFilter.Text;
         }
     }
 }

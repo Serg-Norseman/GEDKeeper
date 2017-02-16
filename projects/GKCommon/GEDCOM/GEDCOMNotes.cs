@@ -18,33 +18,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMNotes : GEDCOMPointer
     {
         public bool IsPointer
         {
-            get { return (!string.IsNullOrEmpty(base.XRef)); }
+            get { return (!string.IsNullOrEmpty(XRef)); }
         }
 
         public StringList Notes
         {
-            get { return this.GetNotes(); }
-            set { this.SetNotes(value); }
+            get { return GetNotes(); }
+            set { SetNotes(value); }
         }
 
         private StringList GetNotes()
         {
             StringList notes;
 
-            if (!this.IsPointer)
+            if (!IsPointer)
             {
-                notes = base.GetTagStrings(this);
+                notes = GetTagStrings(this);
             }
             else
             {
-                GEDCOMRecord notesRecord = base.Value;
+                GEDCOMRecord notesRecord = Value;
                 if (notesRecord is GEDCOMNoteRecord) {
                     notes = ((notesRecord as GEDCOMNoteRecord).Note);
                 } else {
@@ -57,45 +56,45 @@ namespace GKCommon.GEDCOM
 
         private void SetNotes(StringList value)
         {
-            this.Clear();
-            base.SetTagStrings(this, value);
+            Clear();
+            SetTagStrings(this, value);
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("NOTE");
+            SetName("NOTE");
         }
 
         protected override string GetStringValue()
         {
-            string result = this.IsPointer ? base.GetStringValue() : this.fStringValue;
+            string result = IsPointer ? base.GetStringValue() : fStringValue;
             return result;
         }
 
         public override bool IsEmpty()
         {
             bool result;
-            if (this.IsPointer) {
+            if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (this.fStringValue == "" && base.Count == 0);
+                result = (fStringValue == "" && Count == 0);
             }
             return result;
         }
 
         public override string ParseString(string strValue)
         {
-            this.fStringValue = "";
-            base.XRef = "";
+            fStringValue = "";
+            XRef = "";
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
             {
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
                 result = base.ParseString(result);
-                if (!this.IsPointer)
+                if (!IsPointer)
                 {
-                    this.fStringValue = result;
+                    fStringValue = result;
                     result = "";
                 }
             }

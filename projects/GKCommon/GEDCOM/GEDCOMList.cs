@@ -38,36 +38,36 @@ namespace GKCommon.GEDCOM
 
             public GEDCOMListEnumerator(GEDCOMList<T> list)
             {
-                this.fOwnList = list;
+                fOwnList = list;
 
-                this.fIndex = -1;
+                fIndex = -1;
 
                 List<T> dataList = list.fDataList;
-                this.fSize = ((dataList == null) ? 0 : dataList.Count);
+                fSize = ((dataList == null) ? 0 : dataList.Count);
             }
 
             void IEnumerator.Reset()
             {
-                this.fIndex = -1;
+                fIndex = -1;
 
-                List<T> dataList = this.fOwnList.fDataList;
-                this.fSize = ((dataList == null) ? 0 : dataList.Count);
+                List<T> dataList = fOwnList.fDataList;
+                fSize = ((dataList == null) ? 0 : dataList.Count);
             }
 
             bool IEnumerator.MoveNext()
             {
-                this.fIndex++;
-                return (this.fIndex < this.fSize);
+                fIndex++;
+                return (fIndex < fSize);
             }
 
             object IEnumerator.Current
             {
-                get { return this.fOwnList.fDataList[this.fIndex]; }
+                get { return fOwnList.fDataList[fIndex]; }
             }
 
             GEDCOMObject IGEDCOMListEnumerator.Owner
             {
-                get { return this.fOwnList.fOwner; }
+                get { return fOwnList.fOwner; }
             }
         }
 
@@ -81,37 +81,37 @@ namespace GKCommon.GEDCOM
         public int Count
         {
             get {
-                return ((this.fDataList == null) ? 0 : this.fDataList.Count);
+                return ((fDataList == null) ? 0 : fDataList.Count);
             }
         }
 
         public T this[int index]
         {
             get {
-                return ((this.fDataList == null) ? default(T) : this.fDataList[index]);
+                return ((fDataList == null) ? default(T) : fDataList[index]);
             }
         }
 
         public GEDCOMObject Owner
         {
             get {
-                return this.fOwner;
+                return fOwner;
             }
         }
         
         public GEDCOMList(GEDCOMObject owner)
         {
-            this.fOwner = owner;
-            this.fDataList = null;
+            fOwner = owner;
+            fDataList = null;
         }
 
         public void Dispose()
         {
-            if (!this.fDisposed)
+            if (!fDisposed)
             {
-                this.Clear();
+                Clear();
                 //this.fList.Free(); isnot IDisposable
-                this.fDisposed = true;
+                fDisposed = true;
             }
         }
 
@@ -129,12 +129,12 @@ namespace GKCommon.GEDCOM
         {
             if (item != null)
             {
-                if (this.fDataList == null)
+                if (fDataList == null)
                 {
-                    this.fDataList = new List<T>();
+                    fDataList = new List<T>();
                 }
 
-                this.fDataList.Add(item);
+                fDataList.Add(item);
             }
 
             return item;
@@ -142,67 +142,67 @@ namespace GKCommon.GEDCOM
 
         public void Clear()
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            for (int i = this.fDataList.Count - 1; i >= 0; i--)
+            for (int i = fDataList.Count - 1; i >= 0; i--)
             {
-                this.fDataList[i].Dispose();
+                fDataList[i].Dispose();
             }
-            this.fDataList.Clear();
+            fDataList.Clear();
         }
 
         public int IndexOf(T item)
         {
-            return (this.fDataList == null) ? -1 : this.fDataList.IndexOf(item);
+            return (fDataList == null) ? -1 : fDataList.IndexOf(item);
         }
 
         public void DeleteAt(int index)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
             
-            this.fDataList[index].Dispose();
-            this.fDataList.RemoveAt(index);
+            fDataList[index].Dispose();
+            fDataList.RemoveAt(index);
         }
 
         public void Delete(T item)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            int index = this.fDataList.IndexOf(item);
+            int index = fDataList.IndexOf(item);
             if (index >= 0) {
-                this.fDataList[index].Dispose();
-                this.fDataList.RemoveAt(index);
+                fDataList[index].Dispose();
+                fDataList.RemoveAt(index);
             }
         }
 
         public void Exchange(int index1, int index2)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            if (index1 >= 0 && index1 < this.fDataList.Count && index2 >= 0 && index2 < this.fDataList.Count)
+            if (index1 >= 0 && index1 < fDataList.Count && index2 >= 0 && index2 < fDataList.Count)
             {
-                T tmp = this.fDataList[index1];
-                this.fDataList[index1] = this.fDataList[index2];
-                this.fDataList[index2] = tmp;
+                T tmp = fDataList[index1];
+                fDataList[index1] = fDataList[index2];
+                fDataList[index2] = tmp;
             }
         }
 
         public T Extract(int index)
         {
-            if (this.fDataList == null) return default(T);
+            if (fDataList == null) return default(T);
 
-            T result = this.fDataList[index];
-            this.fDataList.RemoveAt(index);
+            T result = fDataList[index];
+            fDataList.RemoveAt(index);
             return result;
         }
 
         public T Extract(T item)
         {
-            if (this.fDataList == null) return default(T);
+            if (fDataList == null) return default(T);
 
-            int index = this.fDataList.IndexOf(item);
+            int index = fDataList.IndexOf(item);
             if (index >= 0) {
-                this.fDataList.RemoveAt(index);
+                fDataList.RemoveAt(index);
                 return item;
             } else {
                 return default(T);
@@ -211,11 +211,11 @@ namespace GKCommon.GEDCOM
 
         public void SaveToStream(StreamWriter stream)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            int num = this.fDataList.Count;
+            int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                T item = this.fDataList[i];
+                T item = fDataList[i];
                 if (item is GEDCOMTag) {
                     (item as GEDCOMTag).SaveToStream(stream);
                 }
@@ -224,11 +224,11 @@ namespace GKCommon.GEDCOM
 
         public void ReplaceXRefs(XRefReplacer map)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            int num = this.fDataList.Count;
+            int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                T item = this.fDataList[i];
+                T item = fDataList[i];
                 if (item is GEDCOMTag) {
                     (item as GEDCOMTag).ReplaceXRefs(map);
                 }
@@ -237,12 +237,12 @@ namespace GKCommon.GEDCOM
 
         public void ResetOwner(GEDCOMTree newOwner)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            int num = this.fDataList.Count;
+            int num = fDataList.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMTag item = this.fDataList[i] as GEDCOMTag;
+                GEDCOMTag item = fDataList[i] as GEDCOMTag;
                 if (item != null)
                 {
                     item.ResetOwner(newOwner);
@@ -254,15 +254,15 @@ namespace GKCommon.GEDCOM
 
         public void Pack()
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            for (int i = this.fDataList.Count - 1; i >= 0; i--) {
-                T item = this.fDataList[i];
+            for (int i = fDataList.Count - 1; i >= 0; i--) {
+                T item = fDataList[i];
                 if (item is GEDCOMTag) {
                     GEDCOMTag tag = item as GEDCOMTag;
                     tag.Pack();
                     if (tag.IsEmpty() && tag.IsEmptySkip()) {
-                        this.DeleteAt(i);
+                        DeleteAt(i);
                     }
                 }
             }
@@ -270,9 +270,9 @@ namespace GKCommon.GEDCOM
 
         public void Sort(Comparison<T> comparer)
         {
-            if (this.fDataList == null) return;
+            if (fDataList == null) return;
 
-            ListTimSort<T>.Sort(this.fDataList, comparer);
+            ListTimSort<T>.Sort(fDataList, comparer);
         }
     }
 }

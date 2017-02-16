@@ -24,20 +24,20 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMAddress Address
         {
-            get { return base.TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public string RepositoryName
         {
-            get { return base.GetTagStringValue("NAME"); }
-            set { base.SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue("NAME"); }
+            set { SetTagStringValue("NAME", value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtRepository);
-            base.SetName("REPO");
+            SetRecordType(GEDCOMRecordType.rtRepository);
+            SetName("REPO");
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
             {
-                result = this.Address.AddTag(tagName, tagValue, tagConstructor);
+                result = Address.AddTag(tagName, tagValue, tagConstructor);
             }
             else
             {

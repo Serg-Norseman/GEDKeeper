@@ -35,7 +35,7 @@ namespace GKCore.Types
 
         public PatriarchObj()
         {
-            this.Links = new List<PatriarchObj>();
+            Links = new List<PatriarchObj>();
         }
     }
 }

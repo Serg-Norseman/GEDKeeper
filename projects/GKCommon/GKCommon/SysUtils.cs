@@ -180,21 +180,21 @@ namespace GKCommon
 
         public static void SendMail(string address, string subject, string body, string attach)
         {
-            if (File.Exists(attach)) {
-                #if __MonoCS__
+            if (!File.Exists(attach)) return;
 
-                string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + "");
-                Process.Start(mailto);
+            #if __MonoCS__
 
-                #else
+            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + "");
+            Process.Start(mailto);
 
-                MapiMailMessage message = new MapiMailMessage(subject, body);
-                message.Recipients.Add(address);
-                message.Files.Add(attach);
-                message.ShowDialog();
+            #else
 
-                #endif
-            }
+            MapiMailMessage message = new MapiMailMessage(subject, body);
+            message.Recipients.Add(address);
+            message.Files.Add(attach);
+            message.ShowDialog();
+
+            #endif
         }
 
         public static bool IsNetworkAvailable()
@@ -570,7 +570,7 @@ namespace GKCommon
             if (string.IsNullOrEmpty(s)) return "";
 
             StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
-            stb[0] = Char.ToUpperInvariant(stb[0]);
+            stb[0] = char.ToUpperInvariant(stb[0]);
             return stb.ToString();
         }
 
@@ -578,7 +578,7 @@ namespace GKCommon
 
         #region CRC32
 
-        private const uint DefaultPolynomial = 0xedb88320u;
+        private const uint DEFAULT_POLYNOMIAL = 0xedb88320u;
         private static uint[] CCITT32_TABLE;
 
         private static void InitCRC32()
@@ -591,7 +591,7 @@ namespace GKCommon
 
                 for (uint j = 0; j < 8; j++)
                     if ((val & 1) == 1)
-                        val = (val >> 1) ^ DefaultPolynomial;
+                        val = (val >> 1) ^ DEFAULT_POLYNOMIAL;
                     else
                         val = val >> 1;
 

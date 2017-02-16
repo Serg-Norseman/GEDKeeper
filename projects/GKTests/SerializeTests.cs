@@ -15,13 +15,13 @@ namespace GKTests.GKCommon
             var dtx = new DateTime(2009, 01, 08);
             var person = new Person() { Name = "test test test", BirthDay = dtx };
 
-            var yaml = YamlHelper.Serialize(person);
+            string yaml = YamlHelper.Serialize(person);
             using (var writer = new StreamWriter("test.yaml")) {
                 writer.WriteLine(yaml);
             }
 
             using (var reader = new StreamReader("test.yaml")) {
-                var content = reader.ReadToEnd();
+                string content = reader.ReadToEnd();
                 var obj = YamlHelper.Deserialize(content) as Dictionary<object, object>;
                 Assert.IsNotNull(obj);
                 Assert.AreEqual("test test test", obj["Name"]);

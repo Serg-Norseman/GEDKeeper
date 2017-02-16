@@ -46,10 +46,10 @@ namespace GKCore.Lists
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
 
-            this.AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            this.AddStatic(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            AddStatic(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
         public LocationListColumns()
@@ -67,16 +67,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.LocationName, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.LocationName, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMLocationRecord);
+            fRec = (aRec as GEDCOMLocationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -84,16 +84,16 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = this.fRec.LocationName;
+                    result = fRec.LocationName;
                     break;
                 case 1:
-                    result = this.fRec.Map.Lati;
+                    result = fRec.Map.Lati;
                     break;
                 case 2:
-                    result = this.fRec.Map.Long;
+                    result = fRec.Map.Long;
                     break;
                 case 3:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

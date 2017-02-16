@@ -31,9 +31,9 @@ namespace GKCommon.GEDCOM
             public readonly string NewXRef;
 
             public XRefEntry(GEDCOMRecord rec, string oldXRef, string newXRef) {
-                this.Rec = rec;
-                this.OldXRef = oldXRef;
-                this.NewXRef = newXRef;
+                Rec = rec;
+                OldXRef = oldXRef;
+                NewXRef = newXRef;
             }
         }
 
@@ -41,29 +41,29 @@ namespace GKCommon.GEDCOM
 
         public int Count
         {
-            get	{ return this.fList.Count; }
+            get	{ return fList.Count; }
         }
 
         public XRefEntry this[int index]
         {
-            get { return this.fList[index]; }
+            get { return fList[index]; }
         }
 
         public XRefReplacer()
         {
-            this.fList = new List<XRefEntry>();
+            fList = new List<XRefEntry>();
         }
 
         public void AddXRef(GEDCOMRecord rec, string oldXRef, string newXRef)
         {
-            this.fList.Add(new XRefEntry(rec, oldXRef, newXRef));
+            fList.Add(new XRefEntry(rec, oldXRef, newXRef));
         }
 
         public string FindNewXRef(string oldXRef)
         {
             string result = oldXRef;
 
-            foreach (XRefEntry entry in this.fList)
+            foreach (XRefEntry entry in fList)
             {
                 if (GEDCOMUtils.CleanXRef(entry.OldXRef) == GEDCOMUtils.CleanXRef(oldXRef))
                 {

@@ -26,8 +26,8 @@ namespace GKCommon.GEDCOM
 
         public string DatePhrase
         {
-            get	{ return this.fDatePhrase; }
-            set	{ this.SetDatePhrase(value); }
+            get	{ return fDatePhrase; }
+            set	{ SetDatePhrase(value); }
         }
 
         private void SetDatePhrase(string value)
@@ -46,18 +46,18 @@ namespace GKCommon.GEDCOM
                 }
             }
             
-            this.fDatePhrase = phrase;
+            fDatePhrase = phrase;
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fDatePhrase = "";
+            fDatePhrase = "";
         }
 
         protected override string GetStringValue()
         {
-            return ("INT " + base.GetStringValue() + " " + "(" + this.fDatePhrase + ")");
+            return ("INT " + base.GetStringValue() + " " + "(" + fDatePhrase + ")");
         }
 
         private string ExtractPhrase(string str)
@@ -84,11 +84,11 @@ namespace GKCommon.GEDCOM
                             {
                                 if (result[I - 1] == ')')
                                 {
-                                    this.fDatePhrase = result.Substring(0, I - 1);
+                                    fDatePhrase = result.Substring(0, I - 1);
                                 }
                                 else
                                 {
-                                    this.fDatePhrase = result.Substring(0, I);
+                                    fDatePhrase = result.Substring(0, I);
                                 }
                                 result = result.Remove(0, I);
                                 break;
@@ -113,7 +113,7 @@ namespace GKCommon.GEDCOM
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
                 result = base.ParseString(result);
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                result = this.ExtractPhrase(result);
+                result = ExtractPhrase(result);
             }
             return result;
         }

@@ -109,21 +109,21 @@ namespace GKUI.Charts
             // traverse tree
             fGroupCount = -1;
             fIndividualsCount = 0;
-            if (fRootPerson != null) {
-                fIndividualsCount++;
-                PersonSegment rootSegment = SetSegmentParams(0, fRootPerson, 0, -1);
-                rootSegment.WedgeAngle = 360.0f;
+            if (fRootPerson == null) return;
 
-                GEDCOMIndividualRecord father, mother;
-                fRootPerson.GetParents(out father, out mother);
+            fIndividualsCount++;
+            PersonSegment rootSegment = SetSegmentParams(0, fRootPerson, 0, -1);
+            rootSegment.WedgeAngle = 360.0f;
 
-                if (mother != null) {
-                    rootSegment.MotherSegment = TraverseAncestors(mother, 90f, 1, CENTER_RAD, 90.0f, 1, -1);
-                }
+            GEDCOMIndividualRecord father, mother;
+            fRootPerson.GetParents(out father, out mother);
 
-                if (father != null) {
-                    rootSegment.FatherSegment = TraverseAncestors(father, 270.0f, 1, CENTER_RAD, 90.0f, 1, -1);
-                }
+            if (mother != null) {
+                rootSegment.MotherSegment = TraverseAncestors(mother, 90f, 1, CENTER_RAD, 90.0f, 1, -1);
+            }
+
+            if (father != null) {
+                rootSegment.FatherSegment = TraverseAncestors(father, 270.0f, 1, CENTER_RAD, 90.0f, 1, -1);
             }
         }
 
@@ -187,7 +187,7 @@ namespace GKUI.Charts
             }
         }
 
-        private void TraverseGroups(PersonSegment segment, int groupIndex)
+        private static void TraverseGroups(PersonSegment segment, int groupIndex)
         {
             if (segment == null) return;
 

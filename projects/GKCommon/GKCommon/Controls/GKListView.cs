@@ -44,7 +44,7 @@ namespace GKCommon.Controls
         public GKListItem(object itemValue, object data)
         {
             fValue = itemValue;
-            Text = this.ToString();
+            Text = ToString();
             Data = data;
         }
 
@@ -97,7 +97,7 @@ namespace GKCommon.Controls
         public GKListSubItem(object itemValue)
         {
             fValue = itemValue;
-            Text = this.ToString();
+            Text = ToString();
         }
 
         public override string ToString()
@@ -283,14 +283,14 @@ namespace GKCommon.Controls
         public virtual void BeginUpdates()
         {
             fUpdateCount++;
-            base.BeginUpdate();
+            BeginUpdate();
             //this.SwitchSorter();
         }
 
         public virtual void EndUpdates()
         {
             //this.SwitchSorter();
-            base.EndUpdate();
+            EndUpdate();
             fUpdateCount--;
         }
 

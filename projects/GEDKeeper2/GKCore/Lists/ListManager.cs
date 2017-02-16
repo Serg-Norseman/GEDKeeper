@@ -41,8 +41,8 @@ namespace GKCore.Lists
             
             public MapColumnRec(byte colType, byte colSubtype)
             {
-                this.ColType = colType;
-                this.ColSubtype = colSubtype;
+                ColType = colType;
+                ColSubtype = colSubtype;
             }
         }
 
@@ -57,25 +57,25 @@ namespace GKCore.Lists
 
         public ExternalFilterHandler ExternalFilter
         {
-            get { return this.fExternalFilter; }
-            set { this.fExternalFilter = value; }
+            get { return fExternalFilter; }
+            set { fExternalFilter = value; }
         }
 
         public IListFilter Filter
         {
-            get { return this.fFilter; }
+            get { return fFilter; }
         }
 
         public IListColumns ListColumns
         {
-            get { return this.fListColumns; }
+            get { return fListColumns; }
         }
 
         protected ListManager(GEDCOMTree tree, ListColumns defaultListColumns)
         {
-            this.fTree = tree;
-            this.fListColumns = defaultListColumns;
-            this.fColumnsMap = new List<MapColumnRec>();
+            fTree = tree;
+            fListColumns = defaultListColumns;
+            fColumnsMap = new List<MapColumnRec>();
 
             CreateFilter();
         }
@@ -95,7 +95,7 @@ namespace GKCore.Lists
                 throw new ArgumentNullException("list");
 
             list.AddListColumn(caption, width, autoSize);
-            this.fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
+            fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
         }
 
         protected void ColumnsMap_Clear()
@@ -105,23 +105,21 @@ namespace GKCore.Lists
 
         protected virtual void CreateFilter()
         {
-            this.fFilter = new ListFilter();
+            fFilter = new ListFilter();
         }
 
         protected static bool IsMatchesMask(string str, string mask)
         {
             bool result = false;
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
 
-            if (str != null && mask != null && str != "" && mask != "")
+            string stx = str.ToLower();
+            string[] masks = mask.ToLower().Split('|');
+
+            int num = masks.Length;
+            for (int i = 0; i < num; i++)
             {
-                string stx = str.ToLower();
-                string[] masks = mask.ToLower().Split('|');
-
-                int num = masks.Length;
-                for (int i = 0; i < num; i++)
-                {
-                    result = (result || GKUtils.MatchesMask(stx, masks[i]));
-                }
+                result = result || GKUtils.MatchesMask(stx, masks[i]);
             }
 
             return result;
@@ -160,8 +158,8 @@ namespace GKCore.Lists
         public object GetColumnInternalValue(int colIndex)
         {
             // col_index - from 1
-            MapColumnRec colrec = this.fColumnsMap[colIndex];
-            return this.GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
+            MapColumnRec colrec = fColumnsMap[colIndex];
+            return GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
         }
 
         protected virtual object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -177,13 +175,13 @@ namespace GKCore.Lists
         {
             if (item == null) return;
 
-            int num = this.fColumnsMap.Count;
+            int num = fColumnsMap.Count;
             for (int i = 1; i < num; i++)
             {
-                MapColumnRec colrec = this.fColumnsMap[i];
+                MapColumnRec colrec = fColumnsMap[i];
 
                 // aColIndex - from 1
-                ColumnStatic cs = this.fListColumns.ColumnStatics[colrec.ColType];
+                ColumnStatic cs = fListColumns.ColumnStatics[colrec.ColType];
                 object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
                 string res = ConvertColumnValue(val, cs);
 
@@ -195,14 +193,14 @@ namespace GKCore.Lists
         {
             if (listView == null) return;
 
-            this.ColumnsMap_Clear();
-            this.AddListColumn(listView, "№", 50, false, 0, 0);
+            ColumnsMap_Clear();
+            AddListColumn(listView, "№", 50, false, 0, 0);
 
-            int num = this.fListColumns.ColumnStatics.Count;
+            int num = fListColumns.ColumnStatics.Count;
             for (int i = 0; i < num; i++) {
-                ColumnStatic cs = this.fListColumns.ColumnStatics[i];
+                ColumnStatic cs = fListColumns.ColumnStatics[i];
 
-                this.AddListColumn(listView, LangMan.LS(cs.ColName), cs.Width, false, (byte)i, 0);
+                AddListColumn(listView, LangMan.LS(cs.ColName), cs.Width, false, (byte)i, 0);
             }
         }
 
@@ -280,10 +278,10 @@ namespace GKCore.Lists
         public void AddCondition(Enum column, ConditionKind condition, string value)
         {
             int col = (column as IConvertible).ToByte(null);
-            object condValue = ConvertColumnStr(value, this.GetColumnDataType(col));
+            object condValue = ConvertColumnStr(value, GetColumnDataType(col));
 
             FilterCondition fltCond = new FilterCondition(col, condition, condValue);
-            this.fFilter.Conditions.Add(fltCond);
+            fFilter.Conditions.Add(fltCond);
         }
 
         private bool CheckCondition(FilterCondition fcond)
@@ -292,7 +290,7 @@ namespace GKCore.Lists
 
             try
             {
-                object dataval = this.GetColumnValueEx(fcond.ColumnIndex, -1, false);
+                object dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
                 if (dataval == null) return true;
 
                 int compRes = 0;
@@ -326,11 +324,11 @@ namespace GKCore.Lists
                         break;
 
                     case ConditionKind.ck_Contains:
-                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value.ToString() + "*");
+                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
 
                     case ConditionKind.ck_NotContains:
-                        res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value.ToString() + "*");
+                        res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
             }
@@ -349,10 +347,10 @@ namespace GKCore.Lists
 
             try
             {
-                int num = this.Filter.Conditions.Count;
+                int num = Filter.Conditions.Count;
                 for (int i = 0; i < num; i++) {
-                    FilterCondition fcond = this.Filter.Conditions[i];
-                    res = res && this.CheckCondition(fcond);
+                    FilterCondition fcond = Filter.Conditions[i];
+                    res = res && CheckCondition(fcond);
                 }
             }
             catch (Exception ex)
@@ -366,9 +364,9 @@ namespace GKCore.Lists
 
         private ColumnProps FindColumnProps(int colType)
         {
-            int num = this.fListColumns.Count;
+            int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
-                ColumnProps props = this.fListColumns[i];
+                ColumnProps props = fListColumns[i];
                 
                 if (props.ColType == colType) {
                     return props;
@@ -382,8 +380,8 @@ namespace GKCore.Lists
         {
             if (colIndex <= 0) return;
 
-            MapColumnRec colrec = this.fColumnsMap[colIndex];
-            ColumnProps props = this.FindColumnProps(colrec.ColType);
+            MapColumnRec colrec = fColumnsMap[colIndex];
+            ColumnProps props = FindColumnProps(colrec.ColType);
 
             if (props != null) {
                 props.ColWidth = colWidth;

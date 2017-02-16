@@ -37,7 +37,7 @@ namespace GKCommon.GEDCOM
             }
             else
             {
-                result = base.Detail.AddTag(tagName, tagValue, tagConstructor);
+                result = Detail.AddTag(tagName, tagValue, tagConstructor);
             }
 
             return result;

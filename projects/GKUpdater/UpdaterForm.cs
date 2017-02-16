@@ -28,7 +28,7 @@ using GKCommon;
 
 namespace GKUpdater
 {
-    public class UpdaterForm : Form
+    public sealed class UpdaterForm : Form
     {
         private ProgressBar pgStatus;
         private Label lblStatus;
@@ -110,7 +110,7 @@ namespace GKUpdater
         private void OnUpdateMessage(object sender, UpdateEventArgs uea)
         {
             if (InvokeRequired)
-                this.Invoke(new ProgressHandler(ThreadSafeProgress), new object[] {uea});
+                Invoke(new ProgressHandler(ThreadSafeProgress), new object[] {uea});
             else
                 ThreadSafeProgress(uea);
         }
@@ -123,7 +123,7 @@ namespace GKUpdater
         private void ThreadedClose()
         {
             if (InvokeRequired)
-                this.Invoke(new CloseHandler(ThreadSafeClose), new object[] {});
+                Invoke(new CloseHandler(ThreadSafeClose), new object[] {});
             else
                 ThreadSafeClose();
         }

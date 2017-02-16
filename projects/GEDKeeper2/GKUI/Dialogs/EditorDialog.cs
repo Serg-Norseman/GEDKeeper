@@ -34,11 +34,11 @@ namespace GKUI.Dialogs
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         /// <summary>
-        /// For the working state of the form designer, 
+        /// For the working state of the form designer,
         /// it is essential that existed a simple constructor.
         /// </summary>
         public EditorDialog()
@@ -47,18 +47,18 @@ namespace GKUI.Dialogs
 
         public EditorDialog(IBaseWindow baseWin)
         {
-            this.fBase = baseWin;
-            this.fLocalUndoman = new ChangeTracker(this.fBase.Tree);
+            fBase = baseWin;
+            fLocalUndoman = new ChangeTracker(fBase.Tree);
         }
 
         protected void CommitChanges()
         {
-            this.fLocalUndoman.Commit();
+            fLocalUndoman.Commit();
         }
 
         protected void RollbackChanges()
         {
-            this.fLocalUndoman.Rollback();
+            fLocalUndoman.Rollback();
         }
     }
 }

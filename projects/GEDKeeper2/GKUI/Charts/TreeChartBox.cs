@@ -101,7 +101,7 @@ namespace GKUI.Charts
                 if (gfx == null) return;
 
                 for (int i = 0; i < Count; i++) {
-                    var ctl = this[i];
+                    T ctl = this[i];
                     if (ctl.Visible) ctl.Draw(gfx);
                 }
             }
@@ -133,7 +133,7 @@ namespace GKUI.Charts
             public void MouseDown(int x, int y)
             {
                 for (int i = 0; i < Count; i++) {
-                    var ctl = this[i];
+                    T ctl = this[i];
                     if (ctl.Visible) ctl.MouseDown(x, y);
                 }
             }
@@ -141,7 +141,7 @@ namespace GKUI.Charts
             public void MouseMove(int x, int y, bool defaultChartMode)
             {
                 for (int i = 0; i < Count; i++) {
-                    var ctl = this[i];
+                    T ctl = this[i];
                     if (ctl.Visible) ctl.MouseMove(x, y);
                 }
             }
@@ -149,7 +149,7 @@ namespace GKUI.Charts
             public void MouseUp(int x, int y)
             {
                 for (int i = 0; i < Count; i++) {
-                    var ctl = this[i];
+                    T ctl = this[i];
                     if (ctl.Visible) ctl.MouseUp(x, y);
                 }
             }
@@ -237,20 +237,20 @@ namespace GKUI.Charts
         
         public event PersonModifyEventHandler PersonModify
         {
-            add { base.Events.AddHandler(TreeChartBox.EventPersonModify, value); }
-            remove { base.Events.RemoveHandler(TreeChartBox.EventPersonModify, value); }
+            add { Events.AddHandler(EventPersonModify, value); }
+            remove { Events.RemoveHandler(EventPersonModify, value); }
         }
 
         public event RootChangedEventHandler RootChanged
         {
-            add { base.Events.AddHandler(TreeChartBox.EventRootChanged, value); }
-            remove { base.Events.RemoveHandler(TreeChartBox.EventRootChanged, value); }
+            add { Events.AddHandler(EventRootChanged, value); }
+            remove { Events.RemoveHandler(EventRootChanged, value); }
         }
 
         public event MouseEventHandler PersonProperties
         {
-            add { base.Events.AddHandler(TreeChartBox.EventPersonProperties, value); }
-            remove { base.Events.RemoveHandler(TreeChartBox.EventPersonProperties, value); }
+            add { Events.AddHandler(EventPersonProperties, value); }
+            remove { Events.RemoveHandler(EventPersonProperties, value); }
         }
 
         public IBaseWindow Base
@@ -349,7 +349,7 @@ namespace GKUI.Charts
             get { return fRoot; }
         }
 
-        public new float Scale
+        public float Scale
         {
             get { return fScale; }
         }
@@ -384,20 +384,20 @@ namespace GKUI.Charts
 
         static TreeChartBox()
         {
-            TreeChartBox.EventPersonModify = new object();
-            TreeChartBox.EventRootChanged = new object();
-            TreeChartBox.EventPersonProperties = new object();
+            EventPersonModify = new object();
+            EventRootChanged = new object();
+            EventPersonProperties = new object();
         }
 
         public TreeChartBox(TreeChartRenderer renderer) : base()
         {
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            base.UpdateStyles();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            UpdateStyles();
 
-            base.BorderStyle = BorderStyle.Fixed3D;
-            base.DoubleBuffered = true;
-            base.TabStop = true;
-            base.BackColor = Color.White;
+            BorderStyle = BorderStyle.Fixed3D;
+            DoubleBuffered = true;
+            TabStop = true;
+            BackColor = Color.White;
 
             InitSigns();
 
@@ -840,114 +840,111 @@ namespace GKUI.Charts
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
-                        if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
-                        {
-                            TreeChartPerson resParent = null;
-                            GEDCOMSex sex = person.Sex;
-                            TreeChartPerson ft = null;
-                            TreeChartPerson mt = null;
-                            PersonFlag descFlag = PersonFlag.pfDescByFather;
+                        if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
 
-                            bool invalidSpouse = false;
+                        TreeChartPerson resParent = null;
+                        GEDCOMSex sex = person.Sex;
+                        TreeChartPerson ft = null;
+                        TreeChartPerson mt = null;
+                        PersonFlag descFlag = PersonFlag.pfDescByFather;
 
-                            switch (sex) {
-                                case GEDCOMSex.svFemale:
-                                    {
-                                        GEDCOMIndividualRecord sp = family.GetHusband();
-                                        resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GEDCOMSex.svMale;
-                                        ft = resParent;
-                                        mt = res;
-                                        descFlag = PersonFlag.pfDescByFather;
-                                        break;
-                                    }
+                        bool invalidSpouse = false;
 
-                                case GEDCOMSex.svMale:
-                                    {
-                                        GEDCOMIndividualRecord sp = family.GetWife();
-                                        resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GEDCOMSex.svFemale;
-                                        ft = res;
-                                        mt = resParent;
-                                        descFlag = PersonFlag.pfDescByMother;
-                                        break;
-                                    }
-
-                                case GEDCOMSex.svNone:
-                                case GEDCOMSex.svUndetermined:
-                                    invalidSpouse = true;
-                                    fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): sex of spouse is undetermined");
+                        switch (sex) {
+                            case GEDCOMSex.svFemale:
+                                {
+                                    GEDCOMIndividualRecord sp = family.GetHusband();
+                                    resParent = AddDescPerson(null, sp, true, level);
+                                    resParent.Sex = GEDCOMSex.svMale;
+                                    ft = resParent;
+                                    mt = res;
+                                    descFlag = PersonFlag.pfDescByFather;
                                     break;
+                                }
+
+                            case GEDCOMSex.svMale:
+                                {
+                                    GEDCOMIndividualRecord sp = family.GetWife();
+                                    resParent = AddDescPerson(null, sp, true, level);
+                                    resParent.Sex = GEDCOMSex.svFemale;
+                                    ft = res;
+                                    mt = resParent;
+                                    descFlag = PersonFlag.pfDescByMother;
+                                    break;
+                                }
+
+                            case GEDCOMSex.svNone:
+                            case GEDCOMSex.svUndetermined:
+                                invalidSpouse = true;
+                                fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): sex of spouse is undetermined");
+                                break;
+                        }
+
+                        if (resParent != null)
+                        {
+                            if (fOptions.Kinship)
+                            {
+                                fGraph.AddRelation(res.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                             }
 
-                            if (resParent != null)
+                            res.AddSpouse(resParent);
+                            resParent.BaseSpouse = res;
+                            resParent.BaseFamily = family;
+                            
+                            if (resParent.Rec != null) {
+                                if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
+                                    resParent.SetFlag(PersonFlag.pfHasInvAnc);
+                                }
+
+                                if (resParent.Rec.SpouseToFamilyLinks.Count > 1) {
+                                    resParent.SetFlag(PersonFlag.pfHasInvDesc);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            resParent = res;
+                        }
+
+                        if (invalidSpouse) {
+                            continue;
+                        }
+
+                        ft.IsDup = isDup;
+                        mt.IsDup = isDup;
+
+                        if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
+                        {
+                            int num2 = family.Children.Count;
+                            for (int j = 0; j < num2; j++)
                             {
+                                var childRec = family.Children[j].Value as GEDCOMIndividualRecord;
+
+                                // protection against invalid third-party files
+                                if (childRec == null) {
+                                    fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to child");
+                                    continue;
+                                }
+
+                                if (!GKUtils.IsRecordAccess(childRec.Restriction, fShieldState)) continue;
+
+                                TreeChartPerson child = DoDescendantsStep(resParent, childRec, level + 1);
+                                if (child == null) continue;
+
+                                child.Father = ft;
+                                child.Mother = mt;
+                                //int d = (int)desc_flag;
+                                child.SetFlag(descFlag);
                                 if (fOptions.Kinship)
                                 {
-                                    fGraph.AddRelation(res.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
-                                }
-
-                                res.AddSpouse(resParent);
-                                resParent.BaseSpouse = res;
-                                resParent.BaseFamily = family;
-                                
-                                if (resParent.Rec != null) {
-                                    if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
-                                        resParent.SetFlag(PersonFlag.pfHasInvAnc);
-                                    }
-
-                                    if (resParent.Rec.SpouseToFamilyLinks.Count > 1) {
-                                        resParent.SetFlag(PersonFlag.pfHasInvDesc);
-                                    }
+                                    fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                    fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
                                 }
                             }
-                            else
-                            {
-                                resParent = res;
-                            }
-
-                            if (invalidSpouse) {
-                                continue;
-                            }
-
-                            ft.IsDup = isDup;
-                            mt.IsDup = isDup;
-
-                            if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
-                            {
-                                int num2 = family.Children.Count;
-                                for (int j = 0; j < num2; j++)
-                                {
-                                    var childRec = family.Children[j].Value as GEDCOMIndividualRecord;
-
-                                    // protection against invalid third-party files
-                                    if (childRec == null) {
-                                        fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to child");
-                                        continue;
-                                    }
-
-                                    if (GKUtils.IsRecordAccess(childRec.Restriction, fShieldState))
-                                    {
-                                        TreeChartPerson child = DoDescendantsStep(resParent, childRec, level + 1);
-                                        if (child != null)
-                                        {
-                                            child.Father = ft;
-                                            child.Mother = mt;
-                                            //int d = (int)desc_flag;
-                                            child.SetFlag(descFlag);
-                                            if (fOptions.Kinship)
-                                            {
-                                                fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                                fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (family.Children.Count > 0) {
-                                    ft.SetFlag(PersonFlag.pfHasInvDesc);
-                                    mt.SetFlag(PersonFlag.pfHasInvDesc);
-                                }
+                        } else {
+                            if (family.Children.Count > 0) {
+                                ft.SetFlag(PersonFlag.pfHasInvDesc);
+                                mt.SetFlag(PersonFlag.pfHasInvDesc);
                             }
                         }
                     }
@@ -968,7 +965,9 @@ namespace GKUI.Charts
 
         private void FindRelationship(TreeChartPerson target)
         {
-            if (target == null || target.Node == null || target.Rec == null) {
+            if (target == null) return;
+
+            if (target.Node == null || target.Rec == null) {
                 target.Kinship = "";
             } else {
                 target.Kinship = "[" + fGraph.GetRelationship(target.Rec) + "]";
@@ -1770,7 +1769,7 @@ namespace GKUI.Charts
         
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)base.Events[TreeChartBox.EventPersonModify];
+            var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
             if (eventHandler == null) return;
 
             eventHandler(this, eArgs);
@@ -1778,7 +1777,7 @@ namespace GKUI.Charts
         
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)base.Events[TreeChartBox.EventRootChanged];
+            var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler == null) return;
 
             eventHandler(this, person);
@@ -1786,7 +1785,7 @@ namespace GKUI.Charts
         
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (MouseEventHandler)base.Events[TreeChartBox.EventPersonProperties];
+            var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
             if (eventHandler == null) return;
 
             eventHandler(this, eArgs);
@@ -2148,7 +2147,7 @@ namespace GKUI.Charts
             return result;
         }
 
-        public IList<ISearchResult> FindAll(String searchPattern)
+        public IList<ISearchResult> FindAll(string searchPattern)
         {
             var result = new List<ISearchResult>();
             

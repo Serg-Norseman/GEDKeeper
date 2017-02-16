@@ -104,20 +104,19 @@ namespace GKCommon.Controls
 
         private void ScrollByOffset(Size offset)
         {
-            if (!offset.IsEmpty)
-            {
-                SuspendLayout();
-                foreach (Control child in Controls) {
-                    child.Location -= offset;
-                }
+            if (offset.IsEmpty) return;
 
-                AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
-
-                ResumeLayout();
-                Invalidate();
-                //Update();
-                //Refresh();
+            SuspendLayout();
+            foreach (Control child in Controls) {
+                child.Location -= offset;
             }
+
+            AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
+
+            ResumeLayout();
+            Invalidate();
+            //Update();
+            //Refresh();
         }
 
         /// <summary>

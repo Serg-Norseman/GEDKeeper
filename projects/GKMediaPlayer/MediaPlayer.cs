@@ -103,7 +103,7 @@ namespace GKMediaPlayer
         private void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChanged e)
         {
             UISync.Execute(() => {
-                               var newPos = (int)(e.NewPosition * 100);
+                               int newPos = (int)(e.NewPosition * 100);
                                if (newPos > trkPosition.Maximum) return;
                                trkPosition.Value = newPos;
                            });

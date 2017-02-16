@@ -39,41 +39,41 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                GKComboItem item = this.lstLanguages.Items[this.lstLanguages.SelectedIndex] as GKComboItem;
+                GKComboItem item = lstLanguages.Items[lstLanguages.SelectedIndex] as GKComboItem;
                 if (item != null) {
                     SelectedLanguage = (int)item.Tag;
                 }
 
-                this.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("LanguageSelectDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
         private void LanguageSelectDlg_Load(object sender, EventArgs e)
         {
-            this.lstLanguages.Items.Clear();
-            this.lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
+            lstLanguages.Items.Clear();
+            lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
             int idx = 0;
             int num = GlobalOptions.Instance.GetLangsCount();
             for (int i = 0; i < num; i++)
             {
                 LangRecord lngRec = GlobalOptions.Instance.GetLang(i);
-                this.lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
+                lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            this.lstLanguages.SelectedIndex = idx;
+            lstLanguages.SelectedIndex = idx;
         }
     }
 }

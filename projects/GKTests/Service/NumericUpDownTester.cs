@@ -14,12 +14,12 @@ namespace NUnit.Extensions.Forms
 
         public new NumericUpDown Properties
         {
-            get { return (NumericUpDown) base.TheObject; }
+            get { return (NumericUpDown) TheObject; }
         }
 
         public void EnterValue(decimal value)
         {
-            this.Properties.Value = value;
+            Properties.Value = value;
         }
     }
 }

@@ -51,31 +51,31 @@ namespace GKNavigatorPlugin
         private string fDisplayName = "GKNavigatorPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
-        private NavigatorData fData;
+        private readonly NavigatorData fData;
 
         public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private NavigatorWidget frm;
+        private NavigatorWidget fForm;
 
         internal NavigatorData Data
         {
-            get { return this.fData; }
+            get { return fData; }
         }
 
         public Plugin()
         {
-            this.fData = new NavigatorData();
+            fData = new NavigatorData();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) {
-                    frm.Dispose();
-                    frm = null;
+                if (fForm != null) {
+                    fForm.Dispose();
+                    fForm = null;
                 }
             }
             base.Dispose(disposing);
@@ -85,12 +85,12 @@ namespace GKNavigatorPlugin
 
         public void Execute()
         {
-            if (!this.fHost.IsWidgetActive(this)) {
-                frm = new NavigatorWidget(this);
-                frm.Show();
+            if (!fHost.IsWidgetActive(this)) {
+                fForm = new NavigatorWidget(this);
+                fForm.Show();
             } else {
-                frm.Close();
-                frm = null;
+                fForm.Close();
+                fForm = null;
             }
         }
 
@@ -102,10 +102,10 @@ namespace GKNavigatorPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(PLS.LSID_Navigator);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_Navigator);
 
-                if (frm != null) frm.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace GKNavigatorPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
                 // Implement any startup code here
             }
             catch (Exception ex)
@@ -152,21 +152,21 @@ namespace GKNavigatorPlugin
 
         void IWidget.BaseChanged(IBaseWindow baseWin)
         {
-            if (frm != null) {
-                frm.BaseChanged(baseWin);
+            if (fForm != null) {
+                fForm.BaseChanged(baseWin);
             }
         }
 
         void IWidget.BaseClosed(IBaseWindow baseWin)
         {
-            if (frm != null) {
-                frm.BaseClosed(baseWin);
+            if (fForm != null) {
+                fForm.BaseClosed(baseWin);
             }
         }
 
         void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
         {
-            this.fData.RenameBase(oldName, newName);
+            fData.RenameBase(oldName, newName);
         }
 
         void IWidget.WidgetEnable() {}

@@ -80,14 +80,14 @@ namespace GKCommon.GEDCOM
 
         public DateTime Date
         {
-            get { return this.GetDateTime(); }
-            set { this.SetDateTime(value); }
+            get { return GetDateTime(); }
+            set { SetDateTime(value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("DATE");
+            SetName("DATE");
         }
 
         protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -108,7 +108,7 @@ namespace GKCommon.GEDCOM
             GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
 
             if (otherDate != null) {
-                UDN abs1 = this.GetUDN();
+                UDN abs1 = GetUDN();
                 UDN abs2 = otherDate.GetUDN();
                 return abs1.CompareTo(abs2);
             }

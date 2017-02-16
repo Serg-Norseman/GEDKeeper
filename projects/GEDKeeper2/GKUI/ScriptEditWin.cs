@@ -143,7 +143,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.Message);
-                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace.ToString());
+                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
             }
         }
 

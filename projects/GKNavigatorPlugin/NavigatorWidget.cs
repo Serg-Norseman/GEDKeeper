@@ -57,17 +57,17 @@ namespace GKNavigatorPlugin
         {
             InitializeComponent();
 
-            this.fPlugin = plugin;
+            fPlugin = plugin;
 
-            this.InitControls();
-            this.SetLang();
+            InitControls();
+            SetLang();
         }
 
         private void InitControls()
         {
-            this.treeView1.Nodes.Clear();
+            treeView1.Nodes.Clear();
 
-            tnRoot = this.treeView1.Nodes.Add("root");
+            tnRoot = treeView1.Nodes.Add("root");
 
             tnRecAct = tnRoot.Nodes.Add("Recent Activity");
             tnJumpHist = tnRecAct.Nodes.Add("Jump history");
@@ -94,53 +94,53 @@ namespace GKNavigatorPlugin
 
         public void SetLang()
         {
-            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_Navigator);
+            Text = fPlugin.LangMan.LS(PLS.LSID_Navigator);
 
             // FIXME: translations
-            this.tnRecAct.Text = "Recent Activity";
-            this.tnJumpHist.Text = "Jump history";
-            this.tnProblems.Text = "Potencial problems";
-            this.tnFilters.Text = "Filters";
-            this.tnBookmarks.Text = "Bookmarks";
+            tnRecAct.Text = "Recent Activity";
+            tnJumpHist.Text = "Jump history";
+            tnProblems.Text = "Potencial problems";
+            tnFilters.Text = "Filters";
+            tnBookmarks.Text = "Bookmarks";
         }
 
         #endregion
 
         private void NavigatorWidget_Load(object sender, EventArgs e)
         {
-            this.fPlugin.Host.WidgetShow(this.fPlugin);
-            this.BaseChanged(this.fPlugin.Host.GetCurrentFile());
+            fPlugin.Host.WidgetShow(fPlugin);
+            BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
         private void NavigatorWidget_Closed(object sender, EventArgs e)
         {
-            this.BaseChanged(null);
-            this.fPlugin.Host.WidgetClose(this.fPlugin);
+            BaseChanged(null);
+            fPlugin.Host.WidgetClose(fPlugin);
         }
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (this.fBase != baseWin && this.fBase != null)
+            if (fBase != baseWin && fBase != null)
             {
             }
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
-            if (this.fBase != null) {
-                this.fDatabaseName = Path.GetFileName(this.fBase.Tree.FileName);
+            if (fBase != null) {
+                fDatabaseName = Path.GetFileName(fBase.Tree.FileName);
             } else {
-                this.fDatabaseName = "";
+                fDatabaseName = "";
             }
 
-            this.UpdateControls();
+            UpdateControls();
         }
 
         public void BaseClosed(IBaseWindow baseWin)
         {
             fPlugin.Data.CloseBase(baseWin.Context.Tree.FileName);
-            this.fDatabaseName = "";
-            this.fBase = null;
-            this.UpdateControls(true);
+            fDatabaseName = "";
+            fBase = null;
+            UpdateControls(true);
         }
 
         private static string FmtTitle(string title, int count)
@@ -154,16 +154,16 @@ namespace GKNavigatorPlugin
                 string dbName;
                 int[] stats;
 
-                if (this.fBase == null) {
+                if (fBase == null) {
                     dbName = "";
                     stats = new int[((int)GEDCOMRecordType.rtLast)];
                 } else {
-                    dbName = this.fDatabaseName;
-                    stats = this.fBase.Tree.GetRecordStats();
+                    dbName = fDatabaseName;
+                    stats = fBase.Tree.GetRecordStats();
                 }
 
                 try {
-                    this.treeView1.BeginUpdate();
+                    treeView1.BeginUpdate();
 
                     tnRoot.Text = dbName;
                     tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GEDCOMRecordType.rtIndividual]);
@@ -178,14 +178,14 @@ namespace GKNavigatorPlugin
                     tnRecsCommunication.Text = FmtTitle("Communications", stats[(int)GEDCOMRecordType.rtCommunication]);
                     tnRecsLocation.Text = FmtTitle("Locations", stats[(int)GEDCOMRecordType.rtLocation]);
 
-                    this.treeView1.ExpandAll();
+                    treeView1.ExpandAll();
                 } finally {
-                    this.treeView1.EndUpdate();
+                    treeView1.EndUpdate();
                 }
             }
             catch (Exception ex)
             {
-                this.fPlugin.Host.LogWrite("GKNavigatorPlugin.UpdateControls(): " + ex.Message);
+                fPlugin.Host.LogWrite("GKNavigatorPlugin.UpdateControls(): " + ex.Message);
             }
         }
 
@@ -217,7 +217,7 @@ namespace GKNavigatorPlugin
         {
             object tag = e.Node.Tag;
             if (tag != null && tag.GetType() == typeof(GEDCOMRecordType)) {
-                this.fBase.ShowRecordsTab((GEDCOMRecordType)tag);
+                fBase.ShowRecordsTab((GEDCOMRecordType)tag);
             }
         }
     }

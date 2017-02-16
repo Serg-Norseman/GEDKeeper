@@ -33,18 +33,18 @@ namespace GKCore.Lists
 
         public GEDCOMDateItem(GEDCOMCustomDate date)
         {
-            this.fDate = date;
+            fDate = date;
         }
 
         public override string ToString()
         {
             string strVal;
 
-            if (this.fDate == null) {
+            if (fDate == null) {
                 strVal = "";
             } else {
                 GlobalOptions glob = GlobalOptions.Instance;
-                strVal = GKUtils.GetCustomDateFmtString(this.fDate, glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                strVal = GKUtils.GetCustomDateFmtString(fDate, glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
             }
 
             return strVal;
@@ -57,7 +57,7 @@ namespace GKCore.Lists
                 return -1;
             }
 
-            IComparable cv1 = this.fDate;
+            IComparable cv1 = fDate;
             IComparable cv2 = otherItem.fDate;
 
             int compRes;

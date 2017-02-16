@@ -46,7 +46,7 @@ namespace GKCore
         public const string GEDCOM_SEC_EXT = "geds";
         public const string LUA_EXT = "lua";
 
-        public const int NoteNameMaxLength = 64;
+        public const int NOTE_NAME_MAX_LENGTH = 64;
 
         public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
 
@@ -64,8 +64,8 @@ namespace GKCore
             public string Sign;
 
             public SexStruct(LSID name, string sign) {
-                this.NameId = name;
-                this.Sign = sign;
+                NameId = name;
+                Sign = sign;
             }
         }
 
@@ -75,8 +75,8 @@ namespace GKCore
             public string StatSign;
 
             public MarStatusStruct(LSID name, string sign) {
-                this.Name = name;
-                this.StatSign = sign;
+                Name = name;
+                StatSign = sign;
             }
         }
 
@@ -87,9 +87,9 @@ namespace GKCore
             public PersonEventKind Kind;
 
             public PersonEventStruct(LSID name, string sign, PersonEventKind kind) {
-                this.Name = name;
-                this.Sign = sign;
-                this.Kind = kind;
+                Name = name;
+                Sign = sign;
+                Kind = kind;
             }
         }
 
@@ -99,8 +99,8 @@ namespace GKCore
             public byte Dates;
 
             public DateKindStruct(LSID name, byte dates) {
-                this.Name = name;
-                this.Dates = dates;
+                Name = name;
+                Dates = dates;
             }
         }
 
@@ -110,8 +110,8 @@ namespace GKCore
             public string Sign;
 
             public FamilyEventStruct(LSID name, string sign) {
-                this.Name = name;
-                this.Sign = sign;
+                Name = name;
+                Sign = sign;
             }
         }
 
@@ -122,9 +122,9 @@ namespace GKCore
             public bool HasSupport;
 
             public CalendarStruct(LSID name, string sign, bool hasSupport) {
-                this.Name = name;
-                this.Sign = sign;
-                this.HasSupport = hasSupport;
+                Name = name;
+                Sign = sign;
+                HasSupport = hasSupport;
             }
         }
 
@@ -134,8 +134,8 @@ namespace GKCore
             public string Sign;
 
             public StoreTypeRec(LSID name, string sign) {
-                this.Name = name;
-                this.Sign = sign;
+                Name = name;
+                Sign = sign;
             }
         }
 
@@ -145,8 +145,8 @@ namespace GKCore
             public LSID Cap;
 
             public StatsTitleStruct(LSID title, LSID cap) {
-                this.Title = title;
-                this.Cap = cap;
+                Title = title;
+                Cap = cap;
             }
         }
 
@@ -379,7 +379,7 @@ namespace GKCore
                 LSID.LSID_MT_12,
                 LSID.LSID_MT_13,
                 LSID.LSID_MT_14
-                //LSID.LSID_MT_15 <Unknown removed to first position>
+                    //LSID.LSID_MT_15 <Unknown removed to first position>
             };
 
 

@@ -27,7 +27,7 @@ namespace GKUI.Controls
     /// <summary>
     /// 
     /// </summary>
-    public partial class GKInputBox : Form
+    public sealed partial class GKInputBox : Form
     {
         private enum NumbersMode { nmNone, nmInt, nmFloat }
 
@@ -77,11 +77,11 @@ namespace GKUI.Controls
                         break;
 
                     case NumbersMode.nmInt:
-                        int.Parse(this.Value);
+                        int.Parse(Value);
                         break;
 
                     case NumbersMode.nmFloat:
-                        double.Parse(this.Value);
+                        double.Parse(Value);
                         break;
                 }
 

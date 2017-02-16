@@ -58,7 +58,7 @@ namespace GKLifePlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
@@ -86,8 +86,8 @@ namespace GKLifePlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(LLS.LSID_LifeGame);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(LLS.LSID_LifeGame);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace GKLifePlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {

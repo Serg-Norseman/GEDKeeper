@@ -29,56 +29,56 @@ namespace GKCommon.GEDCOM
 
         public ushort X1
         {
-            get { return this.fX1; }
-            set { this.fX1 = value; }
+            get { return fX1; }
+            set { fX1 = value; }
         }
 
         public ushort Y1
         {
-            get { return this.fY1; }
-            set { this.fY1 = value; }
+            get { return fY1; }
+            set { fY1 = value; }
         }
 
         public ushort X2
         {
-            get { return this.fX2; }
-            set { this.fX2 = value; }
+            get { return fX2; }
+            set { fX2 = value; }
         }
 
         public ushort Y2
         {
-            get { return this.fY2; }
-            set { this.fY2 = value; }
+            get { return fY2; }
+            set { fY2 = value; }
         }
 
 
         public ExtRect Value
         {
             get {
-                return ExtRect.Create(this.fX1, this.fY1, this.fX2, this.fY2);
+                return ExtRect.Create(fX1, fY1, fX2, fY2);
             }
             set {
-                this.fX1 = (ushort)value.Left;
-                this.fY1 = (ushort)value.Top;
-                this.fX2 = (ushort)value.Right;
-                this.fY2 = (ushort)value.Bottom;
+                fX1 = (ushort)value.Left;
+                fY1 = (ushort)value.Top;
+                fX2 = (ushort)value.Right;
+                fY2 = (ushort)value.Bottom;
             }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetName("_POSITION");
+            SetName("_POSITION");
         }
 
         protected override string GetStringValue()
         {
             string result;
 
-            if (this.fX1 == 0 && this.fY1 == 0 && this.fX2 == 0 && this.fY2 == 0) {
+            if (fX1 == 0 && fY1 == 0 && fX2 == 0 && fY2 == 0) {
                 result = "";
             } else {
-                result = string.Format("{0} {1} {2} {3}", new object[] { this.fX1, this.fY1, this.fX2, this.fY2 });
+                result = string.Format("{0} {1} {2} {3}", new object[] { fX1, fY1, fX2, fY2 });
             }
 
             return result;
@@ -88,23 +88,23 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            this.fX1 = 0;
-            this.fY1 = 0;
-            this.fX2 = 0;
-            this.fY2 = 0;
+            fX1 = 0;
+            fY1 = 0;
+            fX2 = 0;
+            fY2 = 0;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fX1 == 0 && this.fY1 == 0 && this.fX2 == 0 && this.fY2 == 0;
+            return base.IsEmpty() && fX1 == 0 && fY1 == 0 && fX2 == 0 && fY2 == 0;
         }
 
         public override string ParseString(string strValue)
         {
-            this.fX1 = 0;
-            this.fY1 = 0;
-            this.fX2 = 0;
-            this.fY2 = 0;
+            fX1 = 0;
+            fY1 = 0;
+            fX2 = 0;
+            fY2 = 0;
 
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
@@ -114,13 +114,13 @@ namespace GKCommon.GEDCOM
                 strTok.RecognizeDecimals = false;
 
                 Token token = strTok.Next();
-                this.fX1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fX1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
                 token = strTok.Next();
-                this.fY1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fY1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
                 token = strTok.Next();
-                this.fX2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fX2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
                 token = strTok.Next();
-                this.fY2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fY2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
             }
 
             return result;

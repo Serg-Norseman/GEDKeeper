@@ -147,13 +147,11 @@ namespace GKCommon.Controls
             get { return fAllowDoubleClick; }
             set
             {
-                if (fAllowDoubleClick != value)
-                {
-                    fAllowDoubleClick = value;
+                if (fAllowDoubleClick == value) return;
+                fAllowDoubleClick = value;
 
-                    SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                    UpdateStyles();
-                }
+                SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
+                UpdateStyles();
             }
         }
 
@@ -447,12 +445,11 @@ namespace GKCommon.Controls
                 else if (value > MAX_ZOOM)
                     value = MAX_ZOOM;
 
-                if (fZoom != value)
-                {
-                    fZoom = value;
-                    UpdateParams();
-                    OnZoomChanged(EventArgs.Empty);
-                }
+                if (fZoom == value) return;
+                fZoom = value;
+
+                UpdateParams();
+                OnZoomChanged(EventArgs.Empty);
             }
         }
 

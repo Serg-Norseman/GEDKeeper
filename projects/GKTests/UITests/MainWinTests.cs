@@ -360,7 +360,7 @@ namespace GKTests.UITests
         {
             ClickToolStripMenuItem("miSearch", fMainWin);
 
-            var searchPanel = new FormTester("SearchPanel");
+            var searchPanel = new FormTester("QuickSearchDlg");
             // handlers for empty text
             ClickButton("btnPrev", searchPanel.Properties);
             ClickButton("btnNext", searchPanel.Properties);
@@ -830,42 +830,42 @@ namespace GKTests.UITests
         public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             if (FamilyEditDlg_FirstCall && form is FamilyEditDlg) {
-                FamilyEditDlg_Handler(form as FamilyEditDlg);
+                FamilyEditDlg_Handler((FamilyEditDlg) form);
                 FamilyEditDlg_FirstCall = false;
             }
 
             if (GroupEditDlg_FirstCall && form is GroupEditDlg) {
-                GroupEditDlg_Handler(form as GroupEditDlg);
+                GroupEditDlg_Handler((GroupEditDlg) form);
                 GroupEditDlg_FirstCall = false;
             }
 
             if (PersonEditDlg_FirstCall && form is PersonEditDlg) {
-                PersonEditDlg_Handler(form as PersonEditDlg);
+                PersonEditDlg_Handler((PersonEditDlg) form);
                 PersonEditDlg_FirstCall = false;
             }
 
             if (ResearchEditDlg_FirstCall && form is ResearchEditDlg) {
-                ResearchEditDlg_Handler(form as ResearchEditDlg);
+                ResearchEditDlg_Handler((ResearchEditDlg) form);
                 ResearchEditDlg_FirstCall = false;
             }
 
             if (LocationEditDlg_FirstCall && form is LocationEditDlg) {
-                LocationEditDlg_Handler(form as LocationEditDlg);
+                LocationEditDlg_Handler((LocationEditDlg) form);
                 LocationEditDlg_FirstCall = false;
             }
 
             if (SourceEditDlg_FirstCall && form is SourceEditDlg) {
-                SourceEditDlg_Handler(form as SourceEditDlg);
+                SourceEditDlg_Handler((SourceEditDlg) form);
                 SourceEditDlg_FirstCall = false;
             }
 
             if (CommunicationEditDlg_FirstCall && form is CommunicationEditDlg) {
-                CommunicationEditDlg_Handler(form as CommunicationEditDlg);
+                CommunicationEditDlg_Handler((CommunicationEditDlg) form);
                 CommunicationEditDlg_FirstCall = false;
             }
 
             if (TaskEditDlg_FirstCall && form is TaskEditDlg) {
-                TaskEditDlg_Handler(form as TaskEditDlg);
+                TaskEditDlg_Handler((TaskEditDlg) form);
                 TaskEditDlg_FirstCall = false;
             }
 

@@ -40,14 +40,14 @@ namespace GKUI.Charts
 
         public event EventHandler NavRefresh
         {
-            add { base.Events.AddHandler(CustomChart.EventNavRefresh, value); }
-            remove { base.Events.RemoveHandler(CustomChart.EventNavRefresh, value); }
+            add { Events.AddHandler(EventNavRefresh, value); }
+            remove { Events.RemoveHandler(EventNavRefresh, value); }
         }
 
 
         static CustomChart()
         {
-            CustomChart.EventNavRefresh = new object();
+            EventNavRefresh = new object();
         }
 
         protected CustomChart() : base()
@@ -256,7 +256,7 @@ namespace GKUI.Charts
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
+            var eventHandler = (EventHandler)Events[EventNavRefresh];
             if (eventHandler == null) return;
 
             eventHandler(this, null);

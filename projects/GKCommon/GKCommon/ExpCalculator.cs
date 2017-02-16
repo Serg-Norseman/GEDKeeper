@@ -29,12 +29,8 @@ namespace GKCommon
 
         private class NamedVar
         {
-            public string Name;
+            public readonly string Name;
             public double Value;
-
-            public NamedVar()
-            {
-            }
 
             public NamedVar(string name)
             {
@@ -95,8 +91,8 @@ namespace GKCommon
 
         public bool CaseSensitive
         {
-            get { return this.fCaseSensitive; }
-            set { this.fCaseSensitive = value; }
+            get { return fCaseSensitive; }
+            set { fCaseSensitive = value; }
         }
 
         public event GetVarEventHandler OnGetVar;/*
@@ -112,8 +108,8 @@ namespace GKCommon
 
         public ExpCalculator()
         {
-            this.fVars = new List<NamedVar>();
-            this.fCaseSensitive = false;
+            fVars = new List<NamedVar>();
+            fCaseSensitive = false;
         }
 
         /*protected override void Dispose(bool disposing)
@@ -127,7 +123,7 @@ namespace GKCommon
 
         public void ClearVars()
         {
-            this.fVars.Clear();
+            fVars.Clear();
         }
 
         #endregion
@@ -251,17 +247,17 @@ namespace GKCommon
 
         private bool DoGetVar(string varName, ref double varValue)
         {
-            GetVarEventHandler eventHandler = this.OnGetVar; //base.Events[ExpCalculator.EventGetVar];
+            GetVarEventHandler eventHandler = OnGetVar; //base.Events[ExpCalculator.EventGetVar];
             return (eventHandler != null) && eventHandler(this, varName, ref varValue);
         }
 
         private bool ConvertNumber(int first, int last, ushort numBase)
         {
-            this.fValue = 0.0;
+            fValue = 0.0;
 
             while (first < last)
             {
-                char ch = this.fExpression[first];
+                char ch = fExpression[first];
                 byte c = (byte)((int)ch - 48);
                 if (c > 9)
                 {
@@ -276,7 +272,7 @@ namespace GKCommon
                     break;
                 }
 
-                this.fValue = (this.fValue * numBase + c);
+                fValue = (fValue * numBase + c);
                 first++;
             }
 
@@ -285,82 +281,82 @@ namespace GKCommon
 
         private void lex()
         {
-            while (this.fExpression[this.fPtr] != '\0' && this.fExpression[this.fPtr] <= ' ')
+            while (fExpression[fPtr] != '\0' && fExpression[fPtr] <= ' ')
             {
-                this.fPtr++;
+                fPtr++;
             }
 
-            if (this.fExpression[this.fPtr] == '\0')
+            if (fExpression[fPtr] == '\0')
             {
-                this.fToken = ExpToken.tkEOF;
+                fToken = ExpToken.tkEOF;
                 return;
             }
 
-            int s_pos = this.fPtr;
-            this.fToken = ExpToken.tkNUMBER;
+            int s_pos = fPtr;
+            fToken = ExpToken.tkNUMBER;
 
             char lc;
-            if (this.fExpression[this.fPtr] == '$')
+            if (fExpression[fPtr] == '$')
             {
                 // hex numbers
-                this.fPtr++;
-                s_pos = this.fPtr;
+                fPtr++;
+                s_pos = fPtr;
                 while (true)
                 {
-                    lc = this.fExpression[this.fPtr];
+                    lc = fExpression[fPtr];
                     if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                         break;
                     }
-                    this.fPtr++;
+                    fPtr++;
                 }
-                if (this.ConvertNumber(s_pos, this.fPtr, 16)) {
+                if (ConvertNumber(s_pos, fPtr, 16)) {
                     return;
                 }
             }
             else
             {
-                lc = this.fExpression[this.fPtr];
+                lc = fExpression[fPtr];
                 if (lc >= '0' && lc <= '9')
                 {
                     if (lc == '0')
                     {
-                        this.fPtr++;
-                        lc = this.fExpression[this.fPtr];
+                        fPtr++;
+                        lc = fExpression[fPtr];
                         if (lc == 'X' || lc == 'x')
                         {
                             // hex numbers
-                            this.fPtr++;
-                            s_pos = this.fPtr;
+                            fPtr++;
+                            s_pos = fPtr;
                             while (true)
                             {
-                                lc = this.fExpression[this.fPtr];
+                                lc = fExpression[fPtr];
                                 if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                                     break;
                                 }
-                                this.fPtr++;
+                                fPtr++;
                             }
-                            if (this.ConvertNumber(s_pos, this.fPtr, 16)) {
+                            if (ConvertNumber(s_pos, fPtr, 16)) {
                                 return;
                             }
                             goto Error;
                         }
                         else
                         {
-                            lc = this.fExpression[this.fPtr];
+                            lc = fExpression[fPtr];
                             if (lc == 'B' || lc == 'b')
                             {
                                 // binary numbers
-                                this.fPtr++;
-                                s_pos = this.fPtr;
+                                fPtr++;
+                                s_pos = fPtr;
                                 while (true)
                                 {
-                                    lc = this.fExpression[this.fPtr];
+                                    lc = fExpression[fPtr];
                                     if (lc < '0' || lc > '1') {
                                         break;
                                     }
-                                    this.fPtr++;
+                                    fPtr++;
                                 }
-                                if (this.ConvertNumber(s_pos, this.fPtr, 2)) {
+                                if (ConvertNumber(s_pos, fPtr, 2)) {
                                     return;
                                 }
                                 goto Error;
@@ -370,112 +366,112 @@ namespace GKCommon
 
                     while (true)
                     {
-                        lc = this.fExpression[this.fPtr];
+                        lc = fExpression[fPtr];
                         if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                             break;
                         }
-                        this.fPtr++;
+                        fPtr++;
                     }
 
-                    lc = this.fExpression[this.fPtr];
+                    lc = fExpression[fPtr];
                     if (lc == 'H' || lc == 'h')
                     {
-                        if (this.ConvertNumber(s_pos, this.fPtr, 16)) {
-                            this.fPtr++;
+                        if (ConvertNumber(s_pos, fPtr, 16)) {
+                            fPtr++;
                             return;
                         }
                     }
                     else
                     {
-                        lc = this.fExpression[this.fPtr];
+                        lc = fExpression[fPtr];
                         if (lc == 'B' || lc == 'b')
                         {
-                            if (this.ConvertNumber(s_pos, this.fPtr, 2)) {
-                                this.fPtr++;
+                            if (ConvertNumber(s_pos, fPtr, 2)) {
+                                fPtr++;
                                 return;
                             }
                         }
                         else
                         {
-                            if (this.ConvertNumber(s_pos, this.fPtr, 10))
+                            if (ConvertNumber(s_pos, fPtr, 10))
                             {
-                                if (this.fExpression[this.fPtr] == '`')
+                                if (fExpression[fPtr] == '`')
                                 {
-                                    this.fValue = (this.fValue * Math.PI / 180.0);
-                                    this.fPtr++;
+                                    fValue = (fValue * Math.PI / 180.0);
+                                    fPtr++;
                                     double frac = 0.0;
                                     while (true)
                                     {
-                                        lc = this.fExpression[this.fPtr];
+                                        lc = fExpression[fPtr];
                                         if (lc < '0' || lc > '9')
                                         {
                                             break;
                                         }
-                                        frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
-                                        this.fPtr++;
+                                        frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
+                                        fPtr++;
                                     }
-                                    this.fValue = (this.fValue + frac * Math.PI / 180.0 / 60.0);
-                                    if (this.fExpression[this.fPtr] == '`')
+                                    fValue = (fValue + frac * Math.PI / 180.0 / 60.0);
+                                    if (fExpression[fPtr] == '`')
                                     {
-                                        this.fPtr++;
+                                        fPtr++;
                                         frac = 0.0;
                                         while (true)
                                         {
-                                            lc = this.fExpression[this.fPtr];
+                                            lc = fExpression[fPtr];
                                             if (lc < '0' || lc > '9')
                                             {
                                                 break;
                                             }
-                                            frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
-                                            this.fPtr++;
+                                            frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
+                                            fPtr++;
                                         }
-                                        this.fValue = (this.fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
+                                        fValue = (fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
                                     }
-                                    this.fValue = fmod(this.fValue, 6.2831853071795862);
+                                    fValue = fmod(fValue, 6.2831853071795862);
                                     return;
                                 }
 
-                                if (this.fExpression[this.fPtr] == '.')
+                                if (fExpression[fPtr] == '.')
                                 {
-                                    this.fPtr++;
+                                    fPtr++;
                                     double frac = 1.0;
                                     while (true)
                                     {
-                                        lc = this.fExpression[this.fPtr];
+                                        lc = fExpression[fPtr];
                                         if (lc < '0' || lc > '9')
                                         {
                                             break;
                                         }
                                         frac = (frac / 10.0);
-                                        this.fValue = (this.fValue + frac * ((int)this.fExpression[this.fPtr] - 48));
-                                        this.fPtr++;
+                                        fValue = (fValue + frac * ((int)fExpression[fPtr] - 48));
+                                        fPtr++;
                                     }
                                 }
 
-                                lc = this.fExpression[this.fPtr];
+                                lc = fExpression[fPtr];
                                 if (lc != 'E' && lc != 'e')
                                 {
                                     return;
                                 }
 
-                                this.fPtr++;
+                                fPtr++;
                                 int exp = 0;
-                                char sign = this.fExpression[this.fPtr];
+                                char sign = fExpression[fPtr];
                                 if (sign == '+' || sign == '-') {
-                                    this.fPtr++;
+                                    fPtr++;
                                 }
 
-                                lc = this.fExpression[this.fPtr];
+                                lc = fExpression[fPtr];
                                 if (lc >= '0' && lc <= '9')
                                 {
                                     while (true)
                                     {
-                                        lc = this.fExpression[this.fPtr];
+                                        lc = fExpression[fPtr];
                                         if (lc < '0' || lc > '9') {
                                             break;
                                         }
-                                        exp = exp * 10 + (int)this.fExpression[this.fPtr] - 48;
-                                        this.fPtr++;
+                                        exp = exp * 10 + (int)fExpression[fPtr] - 48;
+                                        fPtr++;
                                     }
 
                                     if (exp == 0) {
@@ -486,7 +482,7 @@ namespace GKCommon
                                     {
                                         while (exp > 0)
                                         {
-                                            this.fValue = (this.fValue / 10.0);
+                                            fValue = (fValue / 10.0);
                                             exp--;
                                         }
                                         return;
@@ -495,7 +491,7 @@ namespace GKCommon
                                     {
                                         while (exp > 0)
                                         {
-                                            this.fValue = (this.fValue * 10.0);
+                                            fValue = (fValue * 10.0);
                                             exp--;
                                         }
                                         return;
@@ -507,145 +503,145 @@ namespace GKCommon
                 }
                 else
                 {
-                    lc = this.fExpression[this.fPtr];
+                    lc = fExpression[fPtr];
                     if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
                     {
-                        this.fIdent = new string(this.fExpression[this.fPtr], 1);
-                        this.fPtr++;
+                        fIdent = new string(fExpression[fPtr], 1);
+                        fPtr++;
                         while (true)
                         {
-                            lc = this.fExpression[this.fPtr];
+                            lc = fExpression[fPtr];
                             if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc > 'z')))))
                             {
                                 break;
                             }
-                            string text = this.fIdent;
+                            string text = fIdent;
                             if (((text != null) ? text.Length : 0) >= 32)
                             {
                                 break;
                             }
-                            this.fIdent += this.fExpression[this.fPtr];
-                            this.fPtr++;
+                            fIdent += fExpression[fPtr];
+                            fPtr++;
                         }
-                        this.fToken = ExpToken.tkIDENT;
+                        fToken = ExpToken.tkIDENT;
                         return;
                     }
 
-                    char c = this.fExpression[this.fPtr];
-                    this.fPtr++;
+                    char c = fExpression[fPtr];
+                    fPtr++;
 
                     switch (c)
                     {
                         case '!':
-                            this.fToken = ExpToken.tkNOT;
-                            if (this.fExpression[this.fPtr] == '=')
+                            fToken = ExpToken.tkNOT;
+                            if (fExpression[fPtr] == '=')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkNE;
+                                fPtr++;
+                                fToken = ExpToken.tkNE;
                                 return;
                             }
                             return;
 
                         case '%':
-                            this.fToken = ExpToken.tkMOD;
-                            if (this.fExpression[this.fPtr] == '%')
+                            fToken = ExpToken.tkMOD;
+                            if (fExpression[fPtr] == '%')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkPER;
+                                fPtr++;
+                                fToken = ExpToken.tkPER;
                                 return;
                             }
                             return;
 
                         case '&':
-                            this.fToken = ExpToken.tkAND;
+                            fToken = ExpToken.tkAND;
                             return;
 
                         case '(':
-                            this.fToken = ExpToken.tkLBRACE;
+                            fToken = ExpToken.tkLBRACE;
                             return;
 
                         case ')':
-                            this.fToken = ExpToken.tkRBRACE;
+                            fToken = ExpToken.tkRBRACE;
                             return;
 
                         case '*':
-                            this.fToken = ExpToken.tkMUL;
-                            if (this.fExpression[this.fPtr] == '*')
+                            fToken = ExpToken.tkMUL;
+                            if (fExpression[fPtr] == '*')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkPOW;
+                                fPtr++;
+                                fToken = ExpToken.tkPOW;
                                 return;
                             }
                             return;
 
                         case '+':
-                            this.fToken = ExpToken.tkADD;
+                            fToken = ExpToken.tkADD;
                             return;
 
                         case '-':
-                            this.fToken = ExpToken.tkSUB;
+                            fToken = ExpToken.tkSUB;
                             return;
 
                         case '/':
-                            this.fToken = ExpToken.tkDIV;
+                            fToken = ExpToken.tkDIV;
                             return;
 
                         case ';':
-                            this.fToken = ExpToken.tkSEMICOLON;
+                            fToken = ExpToken.tkSEMICOLON;
                             return;
 
                         case '<':
-                            this.fToken = ExpToken.tkLT;
-                            if (this.fExpression[this.fPtr] == '=')
+                            fToken = ExpToken.tkLT;
+                            if (fExpression[fPtr] == '=')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkLE;
+                                fPtr++;
+                                fToken = ExpToken.tkLE;
                                 return;
                             }
                             return;
 
                         case '=':
-                            this.fToken = ExpToken.tkASSIGN;
-                            if (this.fExpression[this.fPtr] == '=')
+                            fToken = ExpToken.tkASSIGN;
+                            if (fExpression[fPtr] == '=')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkEQ;
+                                fPtr++;
+                                fToken = ExpToken.tkEQ;
                                 return;
                             }
                             return;
 
                         case '>':
-                            this.fToken = ExpToken.tkGT;
-                            if (this.fExpression[this.fPtr] == '=')
+                            fToken = ExpToken.tkGT;
+                            if (fExpression[fPtr] == '=')
                             {
-                                this.fPtr++;
-                                this.fToken = ExpToken.tkGE;
+                                fPtr++;
+                                fToken = ExpToken.tkGE;
                                 return;
                             }
                             return;
 
                         case '^':
-                            this.fToken = ExpToken.tkXOR;
+                            fToken = ExpToken.tkXOR;
                             return;
 
                         case '|':
-                            this.fToken = ExpToken.tkOR;
+                            fToken = ExpToken.tkOR;
                             return;
 
                         case '~':
-                            this.fToken = ExpToken.tkINV;
+                            fToken = ExpToken.tkINV;
                             return;
 
                         default:
-                            this.fToken = ExpToken.tkERROR;
-                            this.fPtr--;
+                            fToken = ExpToken.tkERROR;
+                            fPtr--;
                             return;
                     }
                 }
             }
 
         Error:
-            this.fToken = ExpToken.tkERROR;
+            fToken = ExpToken.tkERROR;
         }
 
         private void checkToken(ExpToken expected)
@@ -656,50 +652,50 @@ namespace GKCommon
 
         private void term(ref double R)
         {
-            switch (this.fToken)
+            switch (fToken)
             {
                 case ExpToken.tkLBRACE:
-                    this.lex();
-                    this.expr6(ref R);
-                    this.checkToken(ExpToken.tkRBRACE);
-                    this.lex();
+                    lex();
+                    expr6(ref R);
+                    checkToken(ExpToken.tkRBRACE);
+                    lex();
                     break;
 
                 case ExpToken.tkNUMBER:
-                    R = this.fValue;
-                    this.lex();
+                    R = fValue;
+                    lex();
                     break;
 
                 case ExpToken.tkIDENT:
                     {
-                        string st = this.fIdent;
-                        if (!this.fCaseSensitive) {
+                        string st = fIdent;
+                        if (!fCaseSensitive) {
                             st = st.ToLower();
                         }
 
-                        this.lex();
-                        switch (this.fToken)
+                        lex();
+                        switch (fToken)
                         {
                             case ExpToken.tkLBRACE:
-                                this.lex();
+                                lex();
                                 if (st == "if") {
-                                    this.exprIf(out R);
+                                    exprIf(out R);
                                 } else {
-                                    this.expr6(ref R);
-                                    this.DefaultCallback(CallbackType.Function, st, ref R);
+                                    expr6(ref R);
+                                    DefaultCallback(CallbackType.Function, st, ref R);
                                 }
-                                this.checkToken(ExpToken.tkRBRACE);
-                                this.lex();
+                                checkToken(ExpToken.tkRBRACE);
+                                lex();
                                 break;
 
                             case ExpToken.tkASSIGN:
-                                this.lex();
-                                this.expr6(ref R);
-                                this.DefaultCallback(CallbackType.SetValue, st, ref R);
+                                lex();
+                                expr6(ref R);
+                                DefaultCallback(CallbackType.SetValue, st, ref R);
                                 break;
 
                             default:
-                                this.DefaultCallback(CallbackType.GetValue, st, ref R);
+                                DefaultCallback(CallbackType.GetValue, st, ref R);
                                 break;
                         }
                     }
@@ -715,15 +711,15 @@ namespace GKCommon
         {
             double resCond = 0.0d, resThen = 0.0d, resElse = 0.0d;
 
-            this.expr6(ref resCond);
+            expr6(ref resCond);
 
-            this.checkToken(ExpToken.tkSEMICOLON);
-            this.lex();
-            this.expr6(ref resThen);
+            checkToken(ExpToken.tkSEMICOLON);
+            lex();
+            expr6(ref resThen);
 
-            this.checkToken(ExpToken.tkSEMICOLON);
-            this.lex();
-            this.expr6(ref resElse);
+            checkToken(ExpToken.tkSEMICOLON);
+            lex();
+            expr6(ref resElse);
 
             R = (resCond == 1.0d) ? resThen : resElse;
         }
@@ -745,9 +741,9 @@ namespace GKCommon
         {
             if (fToken >= ExpToken.tkINV && (fToken < ExpToken.tkMUL || (fToken >= ExpToken.tkADD && fToken < ExpToken.tkLT)))
             {
-                ExpToken oldt = this.fToken;
-                this.lex();
-                this.expr2(ref R);
+                ExpToken oldt = fToken;
+                lex();
+                expr2(ref R);
 
                 switch (oldt) {
                     case ExpToken.tkINV:
@@ -763,21 +759,21 @@ namespace GKCommon
                         break;
                 }
             } else {
-                this.expr1(ref R);
+                expr1(ref R);
             }
         }
 
         private void expr3(ref double R)
         {
-            this.expr2(ref R);
+            expr2(ref R);
             while (true)
             {
-                if (this.fToken < ExpToken.tkMUL || this.fToken > ExpToken.tkPER) break;
+                if (fToken < ExpToken.tkMUL || fToken > ExpToken.tkPER) break;
 
-                ExpToken oldt = this.fToken;
-                this.lex();
+                ExpToken oldt = fToken;
+                lex();
                 double V = 0.0;
-                this.expr2(ref V);
+                expr2(ref V);
 
                 switch (oldt) {
                     case ExpToken.tkMUL:
@@ -801,15 +797,15 @@ namespace GKCommon
 
         private void expr4(ref double R)
         {
-            this.expr3(ref R);
+            expr3(ref R);
             while (true)
             {
-                if (this.fToken < ExpToken.tkADD || this.fToken > ExpToken.tkSUB) break;
+                if (fToken < ExpToken.tkADD || fToken > ExpToken.tkSUB) break;
 
-                ExpToken oldt = this.fToken;
-                this.lex();
+                ExpToken oldt = fToken;
+                lex();
                 double V = 0.0;
-                this.expr3(ref V);
+                expr3(ref V);
 
                 switch (oldt) {
                     case ExpToken.tkADD:
@@ -825,15 +821,15 @@ namespace GKCommon
 
         private void expr5(ref double R)
         {
-            this.expr4(ref R);
+            expr4(ref R);
             while (true)
             {
-                if (this.fToken < ExpToken.tkLT || this.fToken > ExpToken.tkGT) break;
+                if (fToken < ExpToken.tkLT || fToken > ExpToken.tkGT) break;
 
-                ExpToken oldt = this.fToken;
-                this.lex();
+                ExpToken oldt = fToken;
+                lex();
                 double V = 0.0;
-                this.expr4(ref V);
+                expr4(ref V);
 
                 switch (oldt) {
                     case ExpToken.tkLT:
@@ -865,15 +861,15 @@ namespace GKCommon
 
         private void expr6(ref double R)
         {
-            this.expr5(ref R);
+            expr5(ref R);
             while (true)
             {
-                if (this.fToken < ExpToken.tkOR || this.fToken > ExpToken.tkAND) break;
+                if (fToken < ExpToken.tkOR || fToken > ExpToken.tkAND) break;
 
-                ExpToken oldt = this.fToken;
-                this.lex();
+                ExpToken oldt = fToken;
+                lex();
                 double V = 0.0;
-                this.expr5(ref V);
+                expr5(ref V);
 
                 switch (oldt) {
                     case ExpToken.tkOR:

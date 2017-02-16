@@ -1,17 +1,12 @@
-﻿using System;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 
 namespace GKCommon
 {
     /// <summary>
     /// Description of Utils.
     /// </summary>
-    public class Utils
+    public static class Utils
     {
-        public Utils()
-        {
-        }
-
         /// <summary>
         /// Gets whether the current process (and, by extension, the user) have admin privileges
         /// </summary>

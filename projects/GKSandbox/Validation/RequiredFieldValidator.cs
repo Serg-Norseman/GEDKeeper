@@ -1,20 +1,18 @@
-﻿using System;
-
-namespace GKCommon.Validation
+﻿namespace GKCommon.Validation
 {
     public class RequiredFieldValidator : ValidatorBase
     {
-        internal const string TextFieldRequire = "Require text value";
+        internal const string TEXT_FIELD_REQUIRE = "Require text value";
 
         public RequiredFieldValidator()
         {
-            base.ErrorMessage = TextFieldRequire;
+            ErrorMessage = TEXT_FIELD_REQUIRE;
         }
 
         protected override bool EvaluateIsValid()
         {
-            string text = base.ControlToValidate.Text.Trim();
-            return text != null && !(text == string.Empty);
+            string text = ControlToValidate.Text.Trim();
+            return !string.IsNullOrEmpty(text);
         }
     }
 }

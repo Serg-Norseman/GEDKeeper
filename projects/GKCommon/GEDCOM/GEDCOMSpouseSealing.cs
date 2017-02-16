@@ -24,35 +24,35 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDateValue Date
         {
-            get { return base.TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public string TempleCode
         {
-            get { return base.GetTagStringValue("TEMP"); }
-            set { base.SetTagStringValue("TEMP", value); }
+            get { return GetTagStringValue("TEMP"); }
+            set { SetTagStringValue("TEMP", value); }
         }
 
         public string Place
         {
-            get { return base.GetTagStringValue("PLAC"); }
-            set { base.SetTagStringValue("PLAC", value); }
+            get { return GetTagStringValue("PLAC"); }
+            set { SetTagStringValue("PLAC", value); }
         }
 
         public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus
         {
-            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(base.GetTagStringValue("STAT")); }
-            set { base.SetTagStringValue("STAT", GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(GetTagStringValue("STAT")); }
+            set { SetTagStringValue("STAT", GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
         }
 
         public GEDCOMDateExact SpouseSealingChangeDate
         {
-            get { return this.DateStatus.TagClass("CHAN", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return DateStatus.TagClass("CHAN", GEDCOMDateExact.Create) as GEDCOMDateExact; }
         }
 
         public GEDCOMDateStatus DateStatus
         {
-            get { return base.TagClass("STAT", GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
+            get { return TagClass("STAT", GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

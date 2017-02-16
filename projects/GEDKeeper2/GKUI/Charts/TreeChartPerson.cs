@@ -517,11 +517,11 @@ namespace GKUI.Charts
                 } else {
                     switch (fSex) {
                         case GEDCOMSex.svMale:
-                            result = this.Divorced ? fChart.Options.UnHusbandColor : fChart.Options.MaleColor;
+                            result = Divorced ? fChart.Options.UnHusbandColor : fChart.Options.MaleColor;
                             break;
 
                         case GEDCOMSex.svFemale:
-                            result = this.Divorced ? fChart.Options.UnWifeColor : fChart.Options.FemaleColor;
+                            result = Divorced ? fChart.Options.UnWifeColor : fChart.Options.FemaleColor;
                             break;
 
                         default:

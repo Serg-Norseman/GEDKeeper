@@ -56,9 +56,9 @@ namespace GKUI
         }
 
         private NamesTable fNamesTable;
-        private GlobalOptions fOptions;
+        private readonly GlobalOptions fOptions;
         private List<IPlugin> fPlugins;
-        private Timer fAutosaveTimer;
+        private readonly Timer fAutosaveTimer;
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
@@ -160,7 +160,7 @@ namespace GKUI
                     Form child = MdiChildren[i];
 
                     if (child is IBaseWindow) {
-                        IBaseWindow baseWin = child as IBaseWindow;
+                        IBaseWindow baseWin = (IBaseWindow) child;
 
                         // file is modified, isn't updated now, and isn't now created (exists)
                         if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.IsUnknown()) {
@@ -228,10 +228,10 @@ namespace GKUI
             ApplyOptions();
 
             if (!fOptions.MWinRect.IsEmpty()) {
-                base.Left = fOptions.MWinRect.Left;
-                base.Top = fOptions.MWinRect.Top;
-                base.Width = fOptions.MWinRect.Right - fOptions.MWinRect.Left + 1;
-                base.Height = fOptions.MWinRect.Bottom - fOptions.MWinRect.Top + 1;
+                Left = fOptions.MWinRect.Left;
+                Top = fOptions.MWinRect.Top;
+                Width = fOptions.MWinRect.Right - fOptions.MWinRect.Left + 1;
+                Height = fOptions.MWinRect.Bottom - fOptions.MWinRect.Top + 1;
             } else {
                 //--------------------------------------------------------------
                 // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
@@ -241,10 +241,10 @@ namespace GKUI
                 // DPI) to convert logical size to physical. At least you have
                 // to do this in native win32 world.
                 //--------------------------------------------------------------
-                base.Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
-                base.Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
-                base.Width = 800;
-                base.Height = 600;
+                Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
+                Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
+                Width = 800;
+                Height = 600;
             }
             WindowState = fOptions.MWinState;
 
@@ -442,7 +442,7 @@ namespace GKUI
 
         #region Misc functions
 
-        private ushort RequestLanguage()
+        private static ushort RequestLanguage()
         {
             using (LanguageSelectDlg dlg = new LanguageSelectDlg())
             {
@@ -623,7 +623,7 @@ namespace GKUI
             try
             {
                 IBaseWindow curBase = ((forceDeactivate) ? null : GetCurrentFile());
-                IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? (ActiveMdiChild as IChartWindow) : null);
+                IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
 
                 IWorkWindow workWin = GetWorkWindow();
 
@@ -700,13 +700,12 @@ namespace GKUI
             for (int i = 0; i < num; i++) {
                 Form child = MdiChildren[i];
 
-                if (child is IBaseWindow) {
-                    IBaseWindow baseWin = (child as IBaseWindow);
+                IBaseWindow baseWin = child as IBaseWindow;
+                if (baseWin == null) continue;
 
-                    if (string.Equals(baseWin.Tree.FileName, fileName)) {
-                        result = baseWin;
-                        break;
-                    }
+                if (string.Equals(baseWin.Tree.FileName, fileName)) {
+                    result = baseWin;
+                    break;
                 }
             }
 
@@ -750,7 +749,7 @@ namespace GKUI
             }
 
             result = new BaseWin();
-            ShowMDI(result as Form);
+            ShowMDI((Form) result);
 
             if (fileName != "" && File.Exists(fileName)) {
                 result.FileLoad(fileName);
@@ -889,7 +888,7 @@ namespace GKUI
                 {
                     ApplyOptions();
 
-                    foreach (Form child in base.MdiChildren)
+                    foreach (Form child in MdiChildren)
                     {
                         if (child is IWorkWindow) {
                             (child as IWorkWindow).UpdateView();
@@ -1521,13 +1520,13 @@ namespace GKUI
 
         public IBaseWindow GetCurrentFile(bool extMode = false)
         {
-            IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? (ActiveMdiChild as IChartWindow) : null);
+            IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
             IBaseWindow result;
 
             if (extMode && curChart != null) {
                 result = curChart.Base;
             } else {
-                result = ((ActiveMdiChild is IBaseWindow) ? (ActiveMdiChild as IBaseWindow) : null);
+                result = ((ActiveMdiChild is IBaseWindow) ? ((IBaseWindow) ActiveMdiChild) : null);
             }
 
             return result;
@@ -1536,7 +1535,7 @@ namespace GKUI
         public IWorkWindow GetWorkWindow()
         {
             Form activeForm = ActiveMdiChild;
-            return (activeForm is IWorkWindow) ? activeForm as IWorkWindow : null;
+            return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
         }
 
         public void LogWrite(string msg)

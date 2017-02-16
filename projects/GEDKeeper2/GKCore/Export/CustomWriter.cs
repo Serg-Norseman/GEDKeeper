@@ -29,7 +29,7 @@ namespace GKCore.Export
     /// </summary>
     public abstract class CustomWriter : BaseObject
     {
-        public enum TextAlignment { taLeft, taCenter, taRight, taJustify };
+        public enum TextAlignment { taLeft, taCenter, taRight, taJustify }
 
         protected bool fAlbumPage;
         protected string fDocumentTitle;

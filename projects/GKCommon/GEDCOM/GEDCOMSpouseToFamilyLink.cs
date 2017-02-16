@@ -24,14 +24,14 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMFamilyRecord Family
         {
-            get { return (base.Value as GEDCOMFamilyRecord); }
-            set { base.Value = value; }
+            get { return (Value as GEDCOMFamilyRecord); }
+            set { Value = value; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("FAMS");
+            SetName("FAMS");
         }
 
         public GEDCOMSpouseToFamilyLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

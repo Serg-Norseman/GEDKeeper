@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommunicationEditDlg : EditorDialog
+    public sealed partial class CommunicationEditDlg : EditorDialog
     {
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
@@ -42,50 +42,50 @@ namespace GKUI.Dialogs
 
         public GEDCOMCommunicationRecord Communication
         {
-            get { return this.fCommunication; }
-            set { this.SetCommunication(value); }
+            get { return fCommunication; }
+            set { SetCommunication(value); }
         }
 
         private void SetCommunication(GEDCOMCommunicationRecord value)
         {
-            this.fCommunication = value;
+            fCommunication = value;
             try
             {
-                if (this.fCommunication == null)
+                if (fCommunication == null)
                 {
-                    this.txtName.Text = "";
-                    this.cmbCorrType.SelectedIndex = -1;
-                    this.txtDate.Text = "";
-                    this.txtDir.SelectedIndex = 0;
-                    this.txtCorresponder.Text = "";
+                    txtName.Text = "";
+                    cmbCorrType.SelectedIndex = -1;
+                    txtDate.Text = "";
+                    txtDir.SelectedIndex = 0;
+                    txtCorresponder.Text = "";
                 }
                 else
                 {
-                    this.txtName.Text = this.fCommunication.CommName;
-                    this.cmbCorrType.SelectedIndex = (int)this.fCommunication.CommunicationType;
-                    this.txtDate.Text = GKUtils.GetDateFmtString(this.fCommunication.Date, DateFormat.dfDD_MM_YYYY);
+                    txtName.Text = fCommunication.CommName;
+                    cmbCorrType.SelectedIndex = (int)fCommunication.CommunicationType;
+                    txtDate.Text = GKUtils.GetDateFmtString(fCommunication.Date, DateFormat.dfDD_MM_YYYY);
 
                     GKCommunicationDir dir;
-                    this.fCommunication.GetCorresponder(out dir, out this.fTempInd);
+                    fCommunication.GetCorresponder(out dir, out fTempInd);
 
-                    if (this.fTempInd != null)
+                    if (fTempInd != null)
                     {
-                        this.txtDir.SelectedIndex = (int)dir;
-                        this.txtCorresponder.Text = GKUtils.GetNameString(this.fTempInd, true, false);
+                        txtDir.SelectedIndex = (int)dir;
+                        txtCorresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
                     }
                     else
                     {
-                        this.txtDir.SelectedIndex = 0;
-                        this.txtCorresponder.Text = "";
+                        txtDir.SelectedIndex = 0;
+                        txtCorresponder.Text = "";
                     }
 
-                    this.fNotesList.DataList = this.fCommunication.Notes.GetEnumerator();
-                    this.fMediaList.DataList = this.fCommunication.MultimediaLinks.GetEnumerator();
+                    fNotesList.DataList = fCommunication.Notes.GetEnumerator();
+                    fMediaList.DataList = fCommunication.MultimediaLinks.GetEnumerator();
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("CommunicationEditDlg.SetCommunication(): " + ex.Message);
+                fBase.Host.LogWrite("CommunicationEditDlg.SetCommunication(): " + ex.Message);
             }
         }
 
@@ -93,21 +93,21 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fCommunication.CommName = this.txtName.Text;
-                this.fCommunication.CommunicationType = (GKCommunicationType)this.cmbCorrType.SelectedIndex;
-                this.fCommunication.Date.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtDate.Text, true));
-                this.fCommunication.SetCorresponder((GKCommunicationDir)this.txtDir.SelectedIndex, this.fTempInd);
+                fCommunication.CommName = txtName.Text;
+                fCommunication.CommunicationType = (GKCommunicationType)cmbCorrType.SelectedIndex;
+                fCommunication.Date.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtDate.Text, true));
+                fCommunication.SetCorresponder((GKCommunicationDir)txtDir.SelectedIndex, fTempInd);
 
-                base.CommitChanges();
+                CommitChanges();
 
-                this.fBase.ChangeRecord(this.fCommunication);
+                fBase.ChangeRecord(fCommunication);
 
-                base.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("CommunicationEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("CommunicationEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -115,53 +115,53 @@ namespace GKUI.Dialogs
         {
             try
             {
-                base.RollbackChanges();
+                RollbackChanges();
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
+                fBase.Host.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
-            this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            this.txtCorresponder.Text = ((this.fTempInd == null) ? "" : GKUtils.GetNameString(this.fTempInd, true, false));
+            fTempInd = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            txtCorresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
 
         public CommunicationEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnPersonAdd.Image = GKResources.iRecNew;
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnPersonAdd.Image = GKResources.iRecNew;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fTempInd = null;
+            fTempInd = null;
 
             for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++)
             {
-                this.cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
+                cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_WinCommunicationEdit);
-            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.lblTheme.Text = LangMan.LS(LSID.LSID_Theme);
-            this.lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
-            this.lblType.Text = LangMan.LS(LSID.LSID_Type);
-            this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinCommunicationEdit);
+            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            lblTheme.Text = LangMan.LS(LSID.LSID_Theme);
+            lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
+            lblType.Text = LangMan.LS(LSID.LSID_Type);
+            lblDate.Text = LangMan.LS(LSID.LSID_Date);
 
-            this.toolTip1.SetToolTip(this.btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
+            toolTip1.SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
-            this.txtDir.Items.Clear();
-            this.txtDir.Items.AddRange(new object[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) });
+            txtDir.Items.Clear();
+            txtDir.Items.AddRange(new object[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) });
         }
     }
 }

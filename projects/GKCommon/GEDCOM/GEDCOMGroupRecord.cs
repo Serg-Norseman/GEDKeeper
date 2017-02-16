@@ -28,29 +28,29 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMPointer> Members
         {
-            get { return this.fMembers; }
+            get { return fMembers; }
         }
 
         public string GroupName
         {
-            get { return base.GetTagStringValue("NAME"); }
-            set { base.SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue("NAME"); }
+            set { SetTagStringValue("NAME", value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtGroup);
-            base.SetName("_GROUP");
+            SetRecordType(GEDCOMRecordType.rtGroup);
+            SetName("_GROUP");
 
-            this.fMembers = new GEDCOMList<GEDCOMPointer>(this);
+            fMembers = new GEDCOMList<GEDCOMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fMembers.Dispose();
+                fMembers.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -65,7 +65,7 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "_MEMBER")
             {
-                result = this.fMembers.Add(new GEDCOMPointer(base.Owner, this, tagName, tagValue));
+                result = fMembers.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -78,30 +78,30 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fMembers.Clear();
+            fMembers.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fMembers.Count == 0;
+            return base.IsEmpty() && fMembers.Count == 0;
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fMembers.ReplaceXRefs(map);
+            fMembers.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fMembers.ResetOwner(newOwner);
+            fMembers.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fMembers.SaveToStream(stream);
+            fMembers.SaveToStream(stream);
         }
 
         public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -118,10 +118,10 @@ namespace GKCommon.GEDCOM
         public int IndexOfMember(GEDCOMIndividualRecord member)
         {
             if (member != null) {
-                int num = this.fMembers.Count;
+                int num = fMembers.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    if (this.fMembers[i].XRef == member.XRef) {
+                    if (fMembers[i].XRef == member.XRef) {
                         return i;
                     }
                 }
@@ -134,11 +134,11 @@ namespace GKCommon.GEDCOM
         {
             if (member == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
+            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
             ptr.SetNamedValue("_MEMBER", member);
-            this.fMembers.Add(ptr);
+            fMembers.Add(ptr);
 
-            ptr = new GEDCOMPointer(this.Owner, member, "", "");
+            ptr = new GEDCOMPointer(Owner, member, "", "");
             ptr.SetNamedValue("_GROUP", this);
             member.Groups.Add(ptr);
 
@@ -149,7 +149,7 @@ namespace GKCommon.GEDCOM
         {
             if (member == null) return false;
 
-            this.fMembers.DeleteAt(this.IndexOfMember(member));
+            fMembers.DeleteAt(IndexOfMember(member));
             member.Groups.DeleteAt(member.IndexOfGroup(this));
 
             return true;

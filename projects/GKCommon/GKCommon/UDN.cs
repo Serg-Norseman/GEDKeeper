@@ -203,48 +203,48 @@ namespace GKCommon
         private static int CompareVal(uint l, uint r)
         {
             int result = 0;
-            if (0 == (UDN.IgnoreYear & l))
+            if (0 == (IgnoreYear & l))
             {
-                if (0 == (UDN.IgnoreYear & r))
+                if (0 == (IgnoreYear & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreYear & r))
+            else if (0 == (IgnoreYear & r))
             {
                 result = -1;
             }
-            else if (0 == (UDN.IgnoreMonth & l))
+            else if (0 == (IgnoreMonth & l))
             {
-                if (0 == (UDN.IgnoreMonth & r))
+                if (0 == (IgnoreMonth & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreMonth & r))
+            else if (0 == (IgnoreMonth & r))
             {
                 result = -1;
             }
-            else if (0 == (UDN.IgnoreDay & l))
+            else if (0 == (IgnoreDay & l))
             {
-                if (0 == (UDN.IgnoreDay & r))
+                if (0 == (IgnoreDay & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreDay & r))
+            else if (0 == (IgnoreDay & r))
             {
                 result = -1;
             }
@@ -580,7 +580,7 @@ namespace GKCommon
         /// <returns></returns>
         public uint GetUnmaskedValue()
         {
-            return (UDN.ValueMask & fValue);
+            return (ValueMask & fValue);
         }
     }
 }

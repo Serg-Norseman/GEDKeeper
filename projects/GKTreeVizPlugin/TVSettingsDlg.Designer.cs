@@ -81,7 +81,7 @@
         	this.btnAccept.TabIndex = 2;
         	this.btnAccept.Text = "btnAccept";
         	this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-        	this.btnAccept.Click += new System.EventHandler(this.BtnAcceptClick);
+        	this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
         	// 
         	// btnCancel
         	// 

@@ -192,7 +192,7 @@ namespace Externals.IniFiles
 
         /// <summary>Writes INI file element to the file.</summary>
         /// <param name="element">Element to write.</param>
-        private void WriteElement(StreamWriter writer, IniFileElement element)
+        private static void WriteElement(StreamWriter writer, IniFileElement element)
         {
             if (!IniFileSettings.PreserveFormatting)
                 element.FormatDefault();

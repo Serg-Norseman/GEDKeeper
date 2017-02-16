@@ -31,38 +31,38 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class NameEditDlg : Form
+    public sealed partial class NameEditDlg : Form
     {
         private readonly IBaseWindow fBase;
         private NameEntry fNameEntry;
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         public NameEntry IName
         {
-            get { return this.fNameEntry; }
-            set { this.SetIName(value); }
+            get { return fNameEntry; }
+            set { SetIName(value); }
         }
 
         private void SetIName(NameEntry value)
         {
-            this.fNameEntry = value;
-            if (this.fNameEntry == null)
+            fNameEntry = value;
+            if (fNameEntry == null)
             {
-                this.txtName.Text = "";
-                this.cmbSex.SelectedIndex = 0;
-                this.txtFPatr.Text = "";
-                this.txtMPatr.Text = "";
+                txtName.Text = "";
+                cmbSex.SelectedIndex = 0;
+                txtFPatr.Text = "";
+                txtMPatr.Text = "";
             }
             else
             {
-                this.txtName.Text = this.fNameEntry.Name;
-                this.cmbSex.SelectedIndex = (sbyte)this.fNameEntry.Sex;
-                this.txtFPatr.Text = this.fNameEntry.F_Patronymic;
-                this.txtMPatr.Text = this.fNameEntry.M_Patronymic;
+                txtName.Text = fNameEntry.Name;
+                cmbSex.SelectedIndex = (sbyte)fNameEntry.Sex;
+                txtFPatr.Text = fNameEntry.F_Patronymic;
+                txtMPatr.Text = fNameEntry.M_Patronymic;
             }
         }
 
@@ -70,16 +70,16 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fNameEntry.Name = this.txtName.Text;
-                this.fNameEntry.Sex = (GEDCOMSex)this.cmbSex.SelectedIndex;
-                this.fNameEntry.F_Patronymic = this.txtFPatr.Text;
-                this.fNameEntry.M_Patronymic = this.txtMPatr.Text;
-                base.DialogResult = DialogResult.OK;
+                fNameEntry.Name = txtName.Text;
+                fNameEntry.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
+                fNameEntry.F_Patronymic = txtFPatr.Text;
+                fNameEntry.M_Patronymic = txtMPatr.Text;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -93,27 +93,27 @@ namespace GKUI.Dialogs
 
         public NameEditDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
             {
-                this.cmbSex.Items.Add(GKUtils.SexStr(sx));
+                cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_Name);
-            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
-            this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            this.grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
-            this.lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_Name);
+            lblName.Text = LangMan.LS(LSID.LSID_Name);
+            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
+            grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
+            lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
+            lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
         }
     }
 }

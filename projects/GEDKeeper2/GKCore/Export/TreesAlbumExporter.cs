@@ -34,8 +34,8 @@ namespace GKCore.Export
 
     public sealed class TreesAlbumExporter : PDFExporter
     {
-        private ShieldState fShieldState;
-        private StringList fPatList;
+        private readonly ShieldState fShieldState;
+        private readonly StringList fPatList;
 
         private itFont fTitleFont;
         private itFont fChapFont;
@@ -80,7 +80,7 @@ namespace GKCore.Export
 
                     PreparePatriarchs();
 
-                    var itPS = fDocument.PageSize;
+                    Rectangle itPS = fDocument.PageSize;
                     float pageHeight = itPS.Height;
                     float pageWidth = itPS.Width;
 

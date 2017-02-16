@@ -205,12 +205,10 @@ namespace GKUI
         private void Form_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = !CheckModified();
+            if (e.Cancel) return;
 
-            if (!e.Cancel)
-            {
-                MainWin.Instance.BaseClosed(this);
-                MainWin.Instance.CheckMRUWin(fTree.FileName, this);
-            }
+            MainWin.Instance.BaseClosed(this);
+            MainWin.Instance.CheckMRUWin(fTree.FileName, this);
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -659,9 +657,9 @@ namespace GKUI
             {
                 GEDCOMRecord rec = fTree[i];
 
-                if (rec is GEDCOMFamilyRecord)
+                if (rec.RecordType == GEDCOMRecordType.rtFamily)
                 {
-                    GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
+                    GEDCOMFamilyRecord fam = (GEDCOMFamilyRecord) rec;
                     GEDCOMIndividualRecord husb = fam.GetHusband();
                     GEDCOMIndividualRecord wife = fam.GetWife();
                     if (husb == newParent || wife == newParent)
@@ -1010,52 +1008,51 @@ namespace GKUI
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");
 
+            if (!MainWin.Instance.Options.ShowTips) return;
+
             try
             {
-                if (MainWin.Instance.Options.ShowTips)
+                try
                 {
-                    try
+                    int num = fTree.RecordsCount;
+                    for (int i = 0; i < num; i++)
                     {
-                        int num = fTree.RecordsCount;
-                        for (int i = 0; i < num; i++)
+                        GEDCOMRecord rec = fTree[i];
+                        if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+
+                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
+
+                        uint days;
+                        if (GKUtils.GetDaysForBirth(iRec, out days))
                         {
-                            GEDCOMRecord rec = fTree[i];
-                            if (rec is GEDCOMIndividualRecord) {
-                                GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                            string nm = GKUtils.GetNameString(iRec, true, false);
+                            nm = fContext.Culture.GetPossessiveName(nm);
 
-                                uint days;
-                                if (GKUtils.GetDaysForBirth(iRec, out days))
-                                {
-                                    string nm = GKUtils.GetNameString(iRec, true, false);
-                                    nm = fContext.Culture.GetPossessiveName(nm);
-
-                                    if (0 == days)
-                                    {
-                                        tipsList.Add(string.Format(
-                                            LangMan.LS(LSID.LSID_BirthdayToday),
-                                            nm));
-                                    }
-                                    else if (1 == days)
-                                    {
-                                        tipsList.Add(string.Format(
-                                            LangMan.LS(
-                                                LSID.LSID_BirthdayTomorrow),
-                                            nm));
-                                    }
-                                    else if (3 > days)
-                                    {
-                                        tipsList.Add(string.Format(
-                                            LangMan.LS(LSID.LSID_DaysRemained),
-                                            nm, days));
-                                    }
-                                }
+                            if (0 == days)
+                            {
+                                tipsList.Add(string.Format(
+                                    LangMan.LS(LSID.LSID_BirthdayToday),
+                                    nm));
+                            }
+                            else if (1 == days)
+                            {
+                                tipsList.Add(string.Format(
+                                    LangMan.LS(
+                                        LSID.LSID_BirthdayTomorrow),
+                                    nm));
+                            }
+                            else if (3 > days)
+                            {
+                                tipsList.Add(string.Format(
+                                    LangMan.LS(LSID.LSID_DaysRemained),
+                                    nm, days));
                             }
                         }
                     }
-                    finally
-                    {
-                        // temp stub, remove try/finally here?
-                    }
+                }
+                finally
+                {
+                    // temp stub, remove try/finally here?
                 }
             }
             catch (Exception ex)
@@ -1498,7 +1495,7 @@ namespace GKUI
 
                     case GEDCOMRecordType.rtNote:
                         {
-                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NoteNameMaxLength);
+                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
                             if (string.IsNullOrEmpty(value))
                             {
                                 value = string.Format("#{0}", record.GetId().ToString());
@@ -1790,11 +1787,10 @@ namespace GKUI
         public bool RecordIsFiltered(GEDCOMRecord record)
         {
             bool result = false;
-            if (record != null)
-            {
-                GKRecordsView rView = GetRecordsViewByType(record.RecordType);
-                result = (rView != null && rView.IndexOfRecord(record) >= 0);
-            }
+            if (record == null) return result;
+
+            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+            result = (rView != null && rView.IndexOfRecord(record) >= 0);
             return result;
         }
 

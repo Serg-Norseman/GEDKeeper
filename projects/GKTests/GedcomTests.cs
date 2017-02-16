@@ -36,7 +36,7 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class GedcomTests
     {
-        BaseContext _context;
+        private BaseContext _context;
 
         [TestFixtureSetUp]
         public void SetUp()

@@ -28,38 +28,38 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class SexCheckDlg : Form
+    public sealed partial class SexCheckDlg : Form
     {
         public SexCheckDlg()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_WinCheckSex);
-            this.grpSex.Text = LangMan.LS(LSID.LSID_Sex);
-            this.rbMale.Text = LangMan.LS(LSID.LSID_SexM);
-            this.rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinCheckSex);
+            grpSex.Text = LangMan.LS(LSID.LSID_Sex);
+            rbMale.Text = LangMan.LS(LSID.LSID_SexM);
+            rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
         }
 
         public string IndividualName
         {
-            get { return this.txtName.Text; }
-            set { this.txtName.Text = value; }
+            get { return txtName.Text; }
+            set { txtName.Text = value; }
         }
 
         public GEDCOMSex Sex
         {
             get
             {
-                if (this.rbMale.Checked) {
+                if (rbMale.Checked) {
                     return GEDCOMSex.svMale;
                 }
-                if (this.rbFemale.Checked) {
+                if (rbFemale.Checked) {
                     return GEDCOMSex.svFemale;
                 }
                 return GEDCOMSex.svNone;
@@ -70,15 +70,15 @@ namespace GKUI.Dialogs
                 {
                     case GEDCOMSex.svNone:
                     case GEDCOMSex.svUndetermined:
-                        this.rbNone.Checked = true;
+                        rbNone.Checked = true;
                         break;
 
                     case GEDCOMSex.svMale:
-                        this.rbMale.Checked = true;
+                        rbMale.Checked = true;
                         break;
 
                     case GEDCOMSex.svFemale:
-                        this.rbFemale.Checked = true;
+                        rbFemale.Checked = true;
                         break;
                 }
             }

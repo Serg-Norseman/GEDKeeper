@@ -68,13 +68,13 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPersonalNamePieces Pieces
         {
-            get { return this.fPieces; }
+            get { return fPieces; }
         }
 
         public GEDCOMNameType NameType
         {
-            get { return GEDCOMUtils.GetNameTypeVal(base.GetTagStringValue("TYPE")); }
-            set { base.SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
+            get { return GEDCOMUtils.GetNameTypeVal(GetTagStringValue("TYPE")); }
+            set { SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
         }
 
         protected override string GetStringValue()
@@ -124,29 +124,29 @@ namespace GKCommon.GEDCOM
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            this.fFirstPart = firstPart.Trim();
-            this.fSurname = surname.Trim();
-            this.fLastPart = lastPart.Trim();
+            fFirstPart = firstPart.Trim();
+            fSurname = surname.Trim();
+            fLastPart = lastPart.Trim();
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("NAME");
+            SetName("NAME");
 
-            this.fPieces = new GEDCOMPersonalNamePieces(owner, this, "", "");
-            this.fPieces.SetLevel(base.Level);
+            fPieces = new GEDCOMPersonalNamePieces(owner, this, "", "");
+            fPieces.SetLevel(Level);
 
-            this.fFirstPart = "";
-            this.fSurname = "";
-            this.fLastPart = "";
+            fFirstPart = "";
+            fSurname = "";
+            fLastPart = "";
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fPieces.Dispose();
+                fPieces.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -161,7 +161,7 @@ namespace GKCommon.GEDCOM
             }
             else
             {
-                result = this.fPieces.AddTag(tagName, tagValue, tagConstructor);
+                result = fPieces.AddTag(tagName, tagValue, tagConstructor);
             }
 
             return result;
@@ -172,56 +172,55 @@ namespace GKCommon.GEDCOM
             base.Assign(source);
 
             GEDCOMPersonalName otherName = (source as GEDCOMPersonalName);
-            if (otherName != null)
-            {
-                this.fFirstPart = otherName.fFirstPart;
-                this.fSurname = otherName.fSurname;
-                this.fLastPart = otherName.fLastPart;
+            if (otherName == null) return;
 
-                this.fPieces.Assign(otherName.Pieces);
-            }
+            fFirstPart = otherName.fFirstPart;
+            fSurname = otherName.fSurname;
+            fLastPart = otherName.fLastPart;
+
+            fPieces.Assign(otherName.Pieces);
         }
 
         public override void Clear()
         {
             base.Clear();
 
-            this.fFirstPart = "";
-            this.fSurname = "";
-            this.fLastPart = "";
+            fFirstPart = "";
+            fSurname = "";
+            fLastPart = "";
 
-            if (this.fPieces != null) this.fPieces.Clear();
+            if (fPieces != null) fPieces.Clear();
         }
 
         public override bool IsEmpty()
         {
             return base.IsEmpty()
                 && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
-                && this.fPieces.IsEmpty();
+                && fPieces.IsEmpty();
         }
 
         public override void Pack()
         {
             base.Pack();
-            this.fPieces.Pack();
+            fPieces.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fPieces.ReplaceXRefs(map);
+            fPieces.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fPieces.ResetOwner(newOwner);
+            fPieces.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fPieces.SaveToStream(stream);
+            fPieces.SaveToStream(stream);
         }
 
         public float IsMatch(GEDCOMPersonalName otherName, bool onlyFirstPart)
@@ -232,17 +231,17 @@ namespace GKCommon.GEDCOM
             float matches = 0;
             bool surnameMatched = false;
 
-            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(this.FirstPart)))
+            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(fFirstPart)))
             {
                 parts++;
-                if (otherName.FirstPart == this.FirstPart) matches++;
+                if (otherName.FirstPart == fFirstPart) matches++;
             }
 
-            if (!(string.IsNullOrEmpty(otherName.Surname) && string.IsNullOrEmpty(this.Surname)))
+            if (!(string.IsNullOrEmpty(otherName.Surname) && string.IsNullOrEmpty(fSurname)))
             {
-                if ((otherName.Surname == "?" && this.Surname == "?") ||
+                if ((otherName.Surname == "?" && fSurname == "?") ||
                     ((string.Compare(otherName.Surname, "unknown", true) == 0) &&
-                     (string.Compare(this.Surname, "unknown", true) == 0)))
+                     (string.Compare(fSurname, "unknown", true) == 0)))
                 {
                     // not really matched, surname isn't known,
                     // don't count as part being checked, and don't penalize
@@ -251,7 +250,7 @@ namespace GKCommon.GEDCOM
                 else
                 {
                     parts++;
-                    if (otherName.Surname == this.Surname) {
+                    if (otherName.Surname == fSurname) {
                         matches++;
                         surnameMatched = true;
                     }
@@ -263,10 +262,10 @@ namespace GKCommon.GEDCOM
                 surnameMatched = true;
             }
 
-            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(this.Pieces.Nickname)))
+            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(fPieces.Nickname)))
             {
                 parts++;
-                if (otherName.Pieces.Nickname == this.Pieces.Nickname) matches++;
+                if (otherName.Pieces.Nickname == fPieces.Nickname) matches++;
             }
 
             float match = (parts == 0) ? 0.0f : (matches / parts) * 100.0f;

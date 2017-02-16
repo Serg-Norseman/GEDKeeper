@@ -511,21 +511,18 @@ namespace GKUI
             else
             {
                 GEDCOMLocationRecord loc = Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                if (loc == null) return;
 
-                if (loc != null)
+                int num = pObj.Facts.Count;
+                for (int i = 0; i < num; i++)
                 {
-                    int num = pObj.Facts.Count;
-                    for (int i = 0; i < num; i++)
-                    {
-                        GEDCOMCustomEvent evt = pObj.Facts[i];
-                        evt.Detail.Place.StringValue = loc.LocationName;
-                        evt.Detail.Place.Location.Value = loc;
-                    }
-
-                    CheckPlaces();
-
-                    Base.RefreshLists(false);
+                    GEDCOMCustomEvent evt = pObj.Facts[i];
+                    evt.Detail.Place.StringValue = loc.LocationName;
+                    evt.Detail.Place.Location.Value = loc;
                 }
+
+                CheckPlaces();
+                Base.RefreshLists(false);
             }
         }
 
@@ -619,17 +616,16 @@ namespace GKUI
         private void btnSave_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
-            if (!string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            TreeTools.CheckRelations(fSplitList);
+
+            GKUtils.PrepareHeader(fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
+
+            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet)))
             {
-                TreeTools.CheckRelations(fSplitList);
-
-                GKUtils.PrepareHeader(fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
-
-                using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet)))
-                {
-                    fTree.SaveToStream(fs, fSplitList);
-                    fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-                }
+                fTree.SaveToStream(fs, fSplitList);
+                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
 

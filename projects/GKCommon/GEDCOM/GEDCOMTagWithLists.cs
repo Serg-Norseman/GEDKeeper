@@ -30,35 +30,35 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMNotes> Notes
         {
-            get { return this.fNotes; }
+            get { return fNotes; }
         }
 
         public GEDCOMList<GEDCOMSourceCitation> SourceCitations
         {
-            get { return this.fSourceCitations; }
+            get { return fSourceCitations; }
         }
 
         public GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks
         {
-            get { return this.fMultimediaLinks; }
+            get { return fMultimediaLinks; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
 
-            this.fNotes = new GEDCOMList<GEDCOMNotes>(this);
-            this.fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
-            this.fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
+            fNotes = new GEDCOMList<GEDCOMNotes>(this);
+            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
+            fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fNotes.Dispose();
-                this.fSourceCitations.Dispose();
-                this.fMultimediaLinks.Dispose();
+                fNotes.Dispose();
+                fSourceCitations.Dispose();
+                fMultimediaLinks.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -67,36 +67,36 @@ namespace GKCommon.GEDCOM
         {
             base.Pack();
 
-            this.fNotes.Pack();
-            this.fSourceCitations.Pack();
-            this.fMultimediaLinks.Pack();
+            fNotes.Pack();
+            fSourceCitations.Pack();
+            fMultimediaLinks.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            this.fNotes.ReplaceXRefs(map);
-            this.fSourceCitations.ReplaceXRefs(map);
-            this.fMultimediaLinks.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
+            fSourceCitations.ReplaceXRefs(map);
+            fMultimediaLinks.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
 
-            this.fNotes.ResetOwner(newOwner);
-            this.fSourceCitations.ResetOwner(newOwner);
-            this.fMultimediaLinks.ResetOwner(newOwner);
+            fNotes.ResetOwner(newOwner);
+            fSourceCitations.ResetOwner(newOwner);
+            fMultimediaLinks.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
 
-            this.fNotes.SaveToStream(stream);
-            this.fSourceCitations.SaveToStream(stream);
-            this.fMultimediaLinks.SaveToStream(stream);
+            fNotes.SaveToStream(stream);
+            fSourceCitations.SaveToStream(stream);
+            fMultimediaLinks.SaveToStream(stream);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -105,15 +105,15 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "NOTE")
             {
-                result = this.fNotes.Add(new GEDCOMNotes(base.Owner, this, tagName, tagValue));
+                result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
             }
             else if (tagName == "SOUR")
             {
-                result = this.fSourceCitations.Add(new GEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
+                result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
             }
             else if (tagName == "OBJE")
             {
-                result = this.fMultimediaLinks.Add(new GEDCOMMultimediaLink(base.Owner, this, tagName, tagValue));
+                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -127,14 +127,14 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            this.fNotes.Clear();
-            this.fSourceCitations.Clear();
-            this.fMultimediaLinks.Clear();
+            fNotes.Clear();
+            fSourceCitations.Clear();
+            fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fNotes.Count == 0 && this.fSourceCitations.Count == 0 && this.fMultimediaLinks.Count == 0;
+            return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0;
         }
 
         protected GEDCOMTagWithLists(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -149,9 +149,9 @@ namespace GKCommon.GEDCOM
             
             if (noteRec != null)
             {
-                note = new GEDCOMNotes(this.Owner, this, "", "");
+                note = new GEDCOMNotes(Owner, this, "", "");
                 note.Value = noteRec;
-                this.Notes.Add(note);
+                Notes.Add(note);
             }
             
             return note;
@@ -163,11 +163,11 @@ namespace GKCommon.GEDCOM
             
             if (sourceRec != null)
             {
-                cit = new GEDCOMSourceCitation(this.Owner, this, "", "");
+                cit = new GEDCOMSourceCitation(Owner, this, "", "");
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
-                this.SourceCitations.Add(cit);
+                SourceCitations.Add(cit);
             }
             
             return cit;
@@ -179,9 +179,9 @@ namespace GKCommon.GEDCOM
 
             if (mediaRec != null)
             {
-                result = new GEDCOMMultimediaLink(this.Owner, this, "", "");
+                result = new GEDCOMMultimediaLink(Owner, this, "", "");
                 result.Value = mediaRec;
-                this.MultimediaLinks.Add(result);
+                MultimediaLinks.Add(result);
             }
 
             return result;

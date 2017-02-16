@@ -42,13 +42,13 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
-            this.AddStatic(LSID.LSID_Author, DataType.dtString, 200, true);
-            this.AddStatic(LSID.LSID_Title, DataType.dtString, 200, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
+            AddStatic(LSID.LSID_Author, DataType.dtString, 200, true);
+            AddStatic(LSID.LSID_Title, DataType.dtString, 200, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public SourceListColumns() : base()
+        public SourceListColumns()
         {
             InitData(typeof(SourceColumnType));
         }
@@ -63,16 +63,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.FiledByEntry, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.FiledByEntry, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMSourceRecord);
+            fRec = (aRec as GEDCOMSourceRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -80,16 +80,16 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = this.fRec.FiledByEntry.Trim();
+                    result = fRec.FiledByEntry.Trim();
                     break;
                 case 1:
-                    result = this.fRec.Originator.Text.Trim();
+                    result = fRec.Originator.Text.Trim();
                     break;
                 case 2:
-                    result = this.fRec.Title.Text.Trim();
+                    result = fRec.Title.Text.Trim();
                     break;
                 case 3:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

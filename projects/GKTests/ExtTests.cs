@@ -162,7 +162,7 @@ namespace GKTests.GKCommon
 
                     csvStream.Seek(0, SeekOrigin.Begin);
                     using (var reader = new StreamReader(csvStream, Encoding.ASCII)) {
-                        var text = reader.ReadToEnd();
+                        string text = reader.ReadToEnd();
                         Assert.AreEqual(CSVData, text);
                     }
                 }

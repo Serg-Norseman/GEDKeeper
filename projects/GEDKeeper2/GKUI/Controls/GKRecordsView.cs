@@ -109,7 +109,7 @@ namespace GKUI.Controls
             fSortColumn = 0;
             fSortOrder = SortOrder.Ascending;
             VirtualMode = true;
-            //base.ColumnWidthChanged += this.List_ColumnWidthChanged;
+            //ColumnWidthChanged += this.List_ColumnWidthChanged;
         }
 
         protected override void Dispose(bool disposing)

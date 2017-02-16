@@ -40,47 +40,47 @@ namespace GKUI.Sheets
 
         public GKEventsSheet(IBaseEditor baseEditor, Control owner, bool personsMode, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
-            this.fPersonsMode = personsMode;
+            fPersonsMode = personsMode;
 
-            this.Columns_BeginUpdate();
-            this.AddColumn("№", 25, false);
-            this.AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
-            this.AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
+            Columns_BeginUpdate();
+            AddColumn("№", 25, false);
+            AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
+            AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
             if (!fPersonsMode) {
-                this.AddColumn(LangMan.LS(LSID.LSID_Place), 200, false);
+                AddColumn(LangMan.LS(LSID.LSID_Place), 200, false);
             } else {
-                this.AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
+                AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
             }
-            this.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
-            this.Columns_EndUpdate();
+            AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
+            Columns_EndUpdate();
 
-            this.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                       SheetButton.lbMoveUp, SheetButton.lbMoveDown);
+            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                                                  SheetButton.lbMoveUp, SheetButton.lbMoveDown);
 
-            this.OnModify += this.ListModify;
+            OnModify += ListModify;
         }
 
         public override void UpdateSheet()
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
 
             try
             {
-                this.ClearItems();
+                ClearItems();
 
                 int idx = 0;
-                this.DataList.Reset();
-                while (this.DataList.MoveNext()) {
-                    GEDCOMCustomEvent evt = this.DataList.Current as GEDCOMCustomEvent;
+                DataList.Reset();
+                while (DataList.MoveNext()) {
+                    GEDCOMCustomEvent evt = DataList.Current as GEDCOMCustomEvent;
                     if (evt == null) continue;
 
                     idx += 1;
                     
-                    GKListItem item = this.AddItem(idx, evt);
+                    GKListItem item = AddItem(idx, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
                     item.AddSubItem(new GEDCOMDateItem(evt.Detail.Date.Value));
 
-                    if (this.fPersonsMode) {
+                    if (fPersonsMode) {
                         string st = evt.Detail.Place.StringValue;
                         if (evt.StringValue != "") {
                             st = st + " [" + evt.StringValue + "]";
@@ -93,9 +93,9 @@ namespace GKUI.Sheets
                     item.AddSubItem(GKUtils.GetEventCause(evt));
                 }
 
-                this.ResizeColumn(1);
-                this.ResizeColumn(2);
-                this.ResizeColumn(3);
+                ResizeColumn(1);
+                ResizeColumn(2);
+                ResizeColumn(3);
             }
             catch (Exception ex)
             {
@@ -105,20 +105,20 @@ namespace GKUI.Sheets
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
 
-            IBaseWindow baseWin = this.Editor.Base;
+            IBaseWindow baseWin = Editor.Base;
             if (baseWin == null) return;
 
             GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
 
-            bool result = ModifyRecEvent(baseWin, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
+            bool result = ModifyRecEvent(baseWin, DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
 
             if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
 
             if (result) {
                 baseWin.Modified = true;
-                this.UpdateSheet();
+                UpdateSheet();
             }
         }
 
@@ -159,13 +159,13 @@ namespace GKUI.Sheets
 
                                 if (!exists) {
                                     //record.AddEvent(newEvent);
-                                    result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
+                                    result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                 } else {
                                     if (record is GEDCOMIndividualRecord && newEvent != aEvent) {
                                         //record.Events.Delete(aEvent);
                                         //record.AddEvent(newEvent);
-                                        this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
-                                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
+                                        fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
+                                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                     }
                                 }
 
@@ -179,7 +179,7 @@ namespace GKUI.Sheets
                         if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
                             //record.Events.Delete(aEvent);
                             //result = true;
-                            result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
                             aEvent = null;
                         }
                         break;

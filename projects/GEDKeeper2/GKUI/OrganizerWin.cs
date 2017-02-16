@@ -33,7 +33,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public partial class OrganizerWin : Form
+    public sealed partial class OrganizerWin : Form
     {
         private readonly IBaseWindow fBase;
         private readonly GKSheetList fAdrList;

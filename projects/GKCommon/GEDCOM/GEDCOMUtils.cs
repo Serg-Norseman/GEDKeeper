@@ -44,14 +44,14 @@ namespace GKCommon.GEDCOM
                 throw new ArgumentException("Arguments are not compatible");
             }
 
-            this.fStrValues = strValues;
-            this.fDefaultValue = defaultValue;
-            this.fCaseSensitive = caseSensitive;
+            fStrValues = strValues;
+            fDefaultValue = defaultValue;
+            fCaseSensitive = caseSensitive;
 
-            this.fValues = new Dictionary<string, int>(enums.Length);
+            fValues = new Dictionary<string, int>(enums.Length);
             for (int i = 0; i < enums.Length; i++)
             {
-                this.fValues.Add(strValues[i], i);
+                fValues.Add(strValues[i], i);
             }
         }
 
@@ -59,24 +59,24 @@ namespace GKCommon.GEDCOM
         {
             int idx = (int)((IConvertible)enumVal);
 
-            if (idx < 0 || idx >= this.fStrValues.Length) {
+            if (idx < 0 || idx >= fStrValues.Length) {
                 return string.Empty;
             } else {
-                return this.fStrValues[idx];
+                return fStrValues[idx];
             }
         }
 
         public T GetEnumValue(string key)
         {
-            if (!this.fCaseSensitive) {
+            if (!fCaseSensitive) {
                 key = key.Trim().ToLowerInvariant();
             }
 
             int result;
-            if (this.fValues.TryGetValue(key, out result)) {
+            if (fValues.TryGetValue(key, out result)) {
                 return (T)((IConvertible)result);
             } else {
-                return this.fDefaultValue;
+                return fDefaultValue;
             }
         }
     }
@@ -96,9 +96,9 @@ namespace GKCommon.GEDCOM
 
             public TagProperties(string name, bool emptySkip, bool extend)
             {
-                this.Name = name;
-                this.EmptySkip = emptySkip;
-                this.GKExtend = extend;
+                Name = name;
+                EmptySkip = emptySkip;
+                GKExtend = extend;
             }
         }
 

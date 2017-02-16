@@ -927,9 +927,9 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 GEDCOMRecord rec = this[i];
-                if (rec is GEDCOMSourceRecord)
+                if (rec.RecordType == GEDCOMRecordType.rtSource)
                 {
-                    GEDCOMSourceRecord srcRec = rec as GEDCOMSourceRecord;
+                    GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord) rec;
                     for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--)
                     {
                         if (srcRec.RepositoryCitations[j].Value == repRec)
@@ -981,9 +981,9 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 GEDCOMRecord rec = this[i];
-                if (rec is GEDCOMResearchRecord)
+                if (rec.RecordType == GEDCOMRecordType.rtResearch)
                 {
-                    GEDCOMResearchRecord resRec = rec as GEDCOMResearchRecord;
+                    GEDCOMResearchRecord resRec = (GEDCOMResearchRecord) rec;
                     for (int j = resRec.Tasks.Count - 1; j >= 0; j--)
                     {
                         if (resRec.Tasks[j].Value == taskRec)
@@ -1006,9 +1006,9 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 GEDCOMRecord rec = this[i];
-                if (rec is GEDCOMResearchRecord)
+                if (rec.RecordType == GEDCOMRecordType.rtResearch)
                 {
-                    GEDCOMResearchRecord resRec = rec as GEDCOMResearchRecord;
+                    GEDCOMResearchRecord resRec = (GEDCOMResearchRecord) rec;
                     for (int j = resRec.Communications.Count - 1; j >= 0; j--)
                     {
                         if (resRec.Communications[j].Value == commRec)
@@ -1034,7 +1034,7 @@ namespace GKCommon.GEDCOM
 
                 if (rec is GEDCOMRecordWithEvents)
                 {
-                    GEDCOMRecordWithEvents evsRec = rec as GEDCOMRecordWithEvents;
+                    GEDCOMRecordWithEvents evsRec = (GEDCOMRecordWithEvents) rec;
 
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--)
                     {

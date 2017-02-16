@@ -26,7 +26,7 @@ using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {
-    public partial class PedigreeImporterDlg : Form
+    public sealed partial class PedigreeImporterDlg : Form
     {
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
@@ -39,58 +39,58 @@ namespace GKPedigreeImporterPlugin
         {
             InitializeComponent();
 
-            this.fPlugin = plugin;
-            this.fLangMan = fPlugin.LangMan;
+            fPlugin = plugin;
+            fLangMan = fPlugin.LangMan;
 
-            this.cbDatesFormat.Items.Clear();
-            this.cbDatesFormat.Items.AddRange(new object[] { "DD/MM/YYYY", "YYYY/MM/DD" });
+            cbDatesFormat.Items.Clear();
+            cbDatesFormat.Items.AddRange(new object[] { "DD/MM/YYYY", "YYYY/MM/DD" });
 
-            this.cbGenerationFormat.Items.Clear();
-            this.cbGenerationFormat.Items.AddRange(new object[] {
-                                                       "I, II, III, IV...",
-                                                       fLangMan.LS(ILS.LSID_Generation) + " N"});
+            cbGenerationFormat.Items.Clear();
+            cbGenerationFormat.Items.AddRange(new object[] {
+                                                  "I, II, III, IV...",
+                                                  fLangMan.LS(ILS.LSID_Generation) + " N"});
 
-            this.cbNameFormat.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
+            cbNameFormat.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
 
-            this.cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
+            cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
 
-            this.fBase = curBase;
-            this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
-            this.fCurrentStage = 0;
-            this.fAvailableStage = 0;
+            fBase = curBase;
+            fImporter = new Importer(fBase, fLangMan, lbLog.Items);
+            fCurrentStage = 0;
+            fAvailableStage = 0;
 
-            this.cbPersonSeparator.SelectedIndex = 0;
-            this.cbNameFormat.SelectedIndex = 0;
-            this.cbGenerationFormat.SelectedIndex = 0;
-            this.cbDatesFormat.SelectedIndex = 0;
-            this.cbDateSeparator.SelectedIndex = 0;
+            cbPersonSeparator.SelectedIndex = 0;
+            cbNameFormat.SelectedIndex = 0;
+            cbGenerationFormat.SelectedIndex = 0;
+            cbDatesFormat.SelectedIndex = 0;
+            cbDateSeparator.SelectedIndex = 0;
 
             // SetLang()
-            this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
-            this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
-            this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
+            Text = fLangMan.LS(ILS.LSID_PluginTitle);
+            lblFile.Text = fLangMan.LS(ILS.LSID_File);
+            btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
 
-            this.grpPersonIdFormat.Text = fLangMan.LS(ILS.LSID_PersonIdFormat);
-            this.rbNumsDAboville.Text = fLangMan.LS(ILS.LSID_NumsDAboville);
-            this.rbNumsKonovalov.Text = fLangMan.LS(ILS.LSID_NumsKonovalov);
-            this.rbNumsUnknown.Text = fLangMan.LS(ILS.LSID_NumsUnknown);
+            grpPersonIdFormat.Text = fLangMan.LS(ILS.LSID_PersonIdFormat);
+            rbNumsDAboville.Text = fLangMan.LS(ILS.LSID_NumsDAboville);
+            rbNumsKonovalov.Text = fLangMan.LS(ILS.LSID_NumsKonovalov);
+            rbNumsUnknown.Text = fLangMan.LS(ILS.LSID_NumsUnknown);
 
-            this.grpTextPedigreesParams.Text = fLangMan.LS(ILS.LSID_TextPedigreesParams);
-            this.lblPersonLineSeparator.Text = fLangMan.LS(ILS.LSID_PersonLineSeparator);
-            this.lblSurnameFormat.Text = fLangMan.LS(ILS.LSID_SurnameFormat);
-            this.lblGenerationFormat.Text = fLangMan.LS(ILS.LSID_GenerationFormat);
-            this.lblDateSeparator.Text = fLangMan.LS(ILS.LSID_DateSeparator);
-            this.lblDateFormat.Text = fLangMan.LS(ILS.LSID_DateFormat);
+            grpTextPedigreesParams.Text = fLangMan.LS(ILS.LSID_TextPedigreesParams);
+            lblPersonLineSeparator.Text = fLangMan.LS(ILS.LSID_PersonLineSeparator);
+            lblSurnameFormat.Text = fLangMan.LS(ILS.LSID_SurnameFormat);
+            lblGenerationFormat.Text = fLangMan.LS(ILS.LSID_GenerationFormat);
+            lblDateSeparator.Text = fLangMan.LS(ILS.LSID_DateSeparator);
+            lblDateFormat.Text = fLangMan.LS(ILS.LSID_DateFormat);
 
-            this.grpConversionParams.Text = fLangMan.LS(ILS.LSID_ConversionParams);
-            this.chkSurnamesNormalize.Text = fLangMan.LS(ILS.LSID_SurnamesNormalize);
+            grpConversionParams.Text = fLangMan.LS(ILS.LSID_ConversionParams);
+            chkSurnamesNormalize.Text = fLangMan.LS(ILS.LSID_SurnamesNormalize);
 
-            this.btnNext.Text = fLangMan.LS(ILS.LSID_Next);
-            this.btnBack.Text = fLangMan.LS(ILS.LSID_Back);
-            this.btnClose.Text = fLangMan.LS(ILS.LSID_Close);
+            btnNext.Text = fLangMan.LS(ILS.LSID_Next);
+            btnBack.Text = fLangMan.LS(ILS.LSID_Back);
+            btnClose.Text = fLangMan.LS(ILS.LSID_Close);
 
-            this.grpPersonLineSpecials.Text = fLangMan.LS(ILS.LSID_PersonLineSpecials);
-            this.chkSpecial_1.Text = fLangMan.LS(ILS.LSID_Special_1);
+            grpPersonLineSpecials.Text = fLangMan.LS(ILS.LSID_PersonLineSpecials);
+            chkSpecial_1.Text = fLangMan.LS(ILS.LSID_Special_1);
         }
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
@@ -103,72 +103,71 @@ namespace GKPedigreeImporterPlugin
             #endif
 
             string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
-            if (!string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            edImportFile.Text = fileName;
+
+            try
             {
-                this.edImportFile.Text = fileName;
+                bool res = fImporter.LoadRawData(edImportFile.Text);
+                if (res) {
+                    fAvailableStage++;
 
-                try
-                {
-                    bool res = this.fImporter.LoadRawData(this.edImportFile.Text);
-                    if (res) {
-                        this.fAvailableStage++;
-
-                        switch (this.fImporter.CanNumbersType)
-                        {
-                            case PersonNumbersType.pnUndefined:
-                                rbNumsUnknown.Checked = true;
-                                break;
-                            case PersonNumbersType.pnKonovalov:
-                                rbNumsKonovalov.Checked = true;
-                                break;
-                            case PersonNumbersType.pnDAboville:
-                                rbNumsDAboville.Checked = true;
-                                break;
-                        }
-
+                    switch (fImporter.CanNumbersType)
+                    {
+                        case PersonNumbersType.pnUndefined:
+                            rbNumsUnknown.Checked = true;
+                            break;
+                        case PersonNumbersType.pnKonovalov:
+                            rbNumsKonovalov.Checked = true;
+                            break;
+                        case PersonNumbersType.pnDAboville:
+                            rbNumsDAboville.Checked = true;
+                            break;
                     }
 
-                    this.UpdateNavigation();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
+                UpdateNavigation();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void ChangeStage()
         {
-            switch (this.fCurrentStage)
+            switch (fCurrentStage)
             {
                 case 1:
                     {
                         if (rbNumsUnknown.Checked) {
-                            this.fImporter.NumbersType = PersonNumbersType.pnUndefined;
+                            fImporter.NumbersType = PersonNumbersType.pnUndefined;
                         } else if (rbNumsKonovalov.Checked) {
-                            this.fImporter.NumbersType = PersonNumbersType.pnKonovalov;
+                            fImporter.NumbersType = PersonNumbersType.pnKonovalov;
                         } else if (rbNumsDAboville.Checked) {
-                            this.fImporter.NumbersType = PersonNumbersType.pnDAboville;
+                            fImporter.NumbersType = PersonNumbersType.pnDAboville;
                         }
 
                         if (cbPersonSeparator.SelectedIndex == 0) {
-                            this.fImporter.PersonLineSeparator = (char)0;
+                            fImporter.PersonLineSeparator = (char)0;
                         } else {
-                            this.fImporter.PersonLineSeparator = cbPersonSeparator.Text[0];
+                            fImporter.PersonLineSeparator = cbPersonSeparator.Text[0];
                         }
 
-                        this.fImporter.NameFormat = (NameFormat)cbNameFormat.SelectedIndex;
-                        this.fImporter.GenerationFormat = (GenerationFormat)cbGenerationFormat.SelectedIndex;
-                        this.fImporter.DateFormat = (DateFormat)cbDatesFormat.SelectedIndex;
-                        this.fImporter.PersonLineSeparator = cbDateSeparator.Text[0];
+                        fImporter.NameFormat = (NameFormat)cbNameFormat.SelectedIndex;
+                        fImporter.GenerationFormat = (GenerationFormat)cbGenerationFormat.SelectedIndex;
+                        fImporter.DateFormat = (DateFormat)cbDatesFormat.SelectedIndex;
+                        fImporter.PersonLineSeparator = cbDateSeparator.Text[0];
 
-                        this.fImporter.SurnamesNormalize = chkSurnamesNormalize.Checked;
+                        fImporter.SurnamesNormalize = chkSurnamesNormalize.Checked;
 
-                        this.fImporter.SpecialFormat_1 = chkSpecial_1.Checked;
+                        fImporter.SpecialFormat_1 = chkSpecial_1.Checked;
 
-                        this.fImporter.ImportContent();
+                        fImporter.ImportContent();
 
-                        this.fBase.RefreshLists(false);
+                        fBase.RefreshLists(false);
                     }
                     break;
             }
@@ -176,36 +175,38 @@ namespace GKPedigreeImporterPlugin
 
         private void UpdateNavigation()
         {
-            btnBack.Enabled = (this.fCurrentStage > 0);
-            btnNext.Enabled = (this.fCurrentStage < this.fAvailableStage);
+            btnBack.Enabled = (fCurrentStage > 0);
+            btnNext.Enabled = (fCurrentStage < fAvailableStage);
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            this.fCurrentStage--;
-            this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
-            this.UpdateNavigation();
+            fCurrentStage--;
+            tabControl1.SelectedTab = tabControl1.TabPages[fCurrentStage];
+            UpdateNavigation();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            this.fCurrentStage++;
-            this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
-            this.UpdateNavigation();
-            this.ChangeStage();
+            fCurrentStage++;
+            tabControl1.SelectedTab = tabControl1.TabPages[fCurrentStage];
+            UpdateNavigation();
+            ChangeStage();
         }
 
         private void rbNums_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = sender as RadioButton;
-            if (rb == this.rbNumsUnknown && rb.Checked) {
+            if (rb == null) return;
+
+            if (rb == rbNumsUnknown && rb.Checked) {
                 
             }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

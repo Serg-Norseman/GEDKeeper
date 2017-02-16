@@ -520,12 +520,11 @@ namespace GKCommon
 
         public void Sort()
         {
-            if (!fSorted && fList.Count > 1)
-            {
-                Changing();
-                SysUtils.QuickSort(fList, CompareItems);
-                Changed();
-            }
+            if (fSorted || fList.Count <= 1) return;
+
+            Changing();
+            SysUtils.QuickSort(fList, CompareItems);
+            Changed();
         }
 
         #endregion

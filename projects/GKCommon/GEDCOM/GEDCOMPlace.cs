@@ -24,24 +24,24 @@ namespace GKCommon.GEDCOM
     {
         public string Form
         {
-            get { return base.GetTagStringValue("FORM"); }
-            set { base.SetTagStringValue("FORM", value); }
+            get { return GetTagStringValue("FORM"); }
+            set { SetTagStringValue("FORM", value); }
         }
 
         public GEDCOMPointer Location
         {
-            get { return base.TagClass("_LOC", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass("_LOC", GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMMap Map
         {
-            get { return base.TagClass("MAP", GEDCOMMap.Create) as GEDCOMMap; }
+            get { return TagClass("MAP", GEDCOMMap.Create) as GEDCOMMap; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("PLAC");
+            SetName("PLAC");
         }
 
         /*public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

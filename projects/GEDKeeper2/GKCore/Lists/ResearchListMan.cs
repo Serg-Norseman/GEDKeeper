@@ -45,16 +45,16 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_Status, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_Percent, DataType.dtInteger, 90, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_Status, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_Percent, DataType.dtInteger, 90, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public ResearchListColumns() : base()
+        public ResearchListColumns()
         {
             InitData(typeof(ResearchColumnType));
         }
@@ -69,16 +69,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.ResearchName, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ResearchName, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMResearchRecord);
+            fRec = (aRec as GEDCOMResearchRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -86,25 +86,25 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = this.fRec.ResearchName;
+                    result = fRec.ResearchName;
                     break;
                 case 1:
-                    result = LangMan.LS(GKData.PriorityNames[(int)this.fRec.Priority]);
+                    result = LangMan.LS(GKData.PriorityNames[(int)fRec.Priority]);
                     break;
                 case 2:
-                    result = LangMan.LS(GKData.StatusNames[(int)this.fRec.Status]);
+                    result = LangMan.LS(GKData.StatusNames[(int)fRec.Status]);
                     break;
                 case 3:
-                    result = GetDateValue(this.fRec.StartDate, isVisible);
+                    result = GetDateValue(fRec.StartDate, isVisible);
                     break;
                 case 4:
-                    result = GetDateValue(this.fRec.StopDate, isVisible);
+                    result = GetDateValue(fRec.StopDate, isVisible);
                     break;
                 case 5:
-                    result = this.fRec.Percent;
+                    result = fRec.Percent;
                     break;
                 case 6:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

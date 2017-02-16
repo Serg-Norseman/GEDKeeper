@@ -24,20 +24,20 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMMap Map
         {
-            get { return base.TagClass("MAP", GEDCOMMap.Create) as GEDCOMMap; }
+            get { return TagClass("MAP", GEDCOMMap.Create) as GEDCOMMap; }
         }
 
         public string LocationName
         {
-            get { return base.GetTagStringValue("NAME"); }
-            set { base.SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue("NAME"); }
+            set { SetTagStringValue("NAME", value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtLocation);
-            base.SetName("_LOC");
+            SetRecordType(GEDCOMRecordType.rtLocation);
+            SetName("_LOC");
         }
 
         /*public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

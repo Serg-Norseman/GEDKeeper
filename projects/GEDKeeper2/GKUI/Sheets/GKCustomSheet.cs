@@ -35,23 +35,23 @@ namespace GKUI.Sheets
 
         public IGEDCOMListEnumerator DataList
         {
-            get { return this.fDataList; }
+            get { return fDataList; }
             set {
-                this.fDataList = value;
-                this.UpdateSheet();
+                fDataList = value;
+                UpdateSheet();
             }
         }
 
         public IBaseEditor Editor
         {
-            get { return this.fBaseEditor; }
+            get { return fBaseEditor; }
         }
 
         protected GKCustomSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(owner)
         {
-            this.fBaseEditor = baseEditor;
-            this.fDataList = null;
-            this.fUndoman = undoman;
+            fBaseEditor = baseEditor;
+            fDataList = null;
+            fUndoman = undoman;
         }
 
         public abstract void UpdateSheet();

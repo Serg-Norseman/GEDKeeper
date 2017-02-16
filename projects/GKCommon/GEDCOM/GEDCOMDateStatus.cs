@@ -24,13 +24,13 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDateExact ChangeDate
         {
-            get { return base.TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("STAT");
+            SetName("STAT");
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

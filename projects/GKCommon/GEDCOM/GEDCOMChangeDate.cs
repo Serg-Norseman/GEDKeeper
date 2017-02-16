@@ -27,14 +27,14 @@ namespace GKCommon.GEDCOM
         public GEDCOMDateExact ChangeDate
         {
             get {
-                return base.TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact;
+                return TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact;
             }
         }
 
         public GEDCOMTime ChangeTime
         {
             get {
-                GEDCOMTag dateTag = this.ChangeDate;
+                GEDCOMTag dateTag = ChangeDate;
                 return dateTag.TagClass("TIME", GEDCOMTime.Create) as GEDCOMTime;
             }
         }
@@ -42,23 +42,23 @@ namespace GKCommon.GEDCOM
         public DateTime ChangeDateTime
         {
             get {
-                return this.ChangeDate.Date + this.ChangeTime.Value;
+                return ChangeDate.Date + ChangeTime.Value;
             }
             set {
-                this.ChangeDate.Date = value.Date;
-                this.ChangeTime.Value = value.TimeOfDay;
+                ChangeDate.Date = value.Date;
+                ChangeTime.Value = value.TimeOfDay;
             }
         }
 
         public GEDCOMNotes Notes
         {
-            get { return base.TagClass("NOTE", GEDCOMNotes.Create) as GEDCOMNotes; }
+            get { return TagClass("NOTE", GEDCOMNotes.Create) as GEDCOMNotes; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("CHAN");
+            SetName("CHAN");
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -83,7 +83,7 @@ namespace GKCommon.GEDCOM
 
         public override string ToString()
         {
-            DateTime cdt = this.ChangeDateTime;
+            DateTime cdt = ChangeDateTime;
             string result = ((cdt.Ticks == 0) ? "" : cdt.ToString("yyyy.MM.dd HH:mm:ss", null));
             return result;
         }

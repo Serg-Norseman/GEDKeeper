@@ -26,23 +26,23 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMApproximated Approximated
         {
-            get { return this.fDateApproximated; }
-            set { this.fDateApproximated = value; }
+            get { return fDateApproximated; }
+            set { fDateApproximated = value; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fDateApproximated = GEDCOMApproximated.daExact;
+            fDateApproximated = GEDCOMApproximated.daExact;
         }
 
         protected override string GetStringValue()
         {
             string prefix;
-            if (this.fDateApproximated == GEDCOMApproximated.daExact) {
+            if (fDateApproximated == GEDCOMApproximated.daExact) {
                 prefix = "";
             } else {
-                prefix = GEDCOMDateApproximatedArray[(int)this.fDateApproximated];
+                prefix = GEDCOMDateApproximatedArray[(int)fDateApproximated];
                 prefix += " ";
             }
 
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
             {
                 if (su == GEDCOMDateApproximatedArray[(int)i])
                 {
-                    this.fDateApproximated = i;
+                    fDateApproximated = i;
                     result = result.Remove(0, 3);
                     break;
                 }
@@ -70,7 +70,7 @@ namespace GKCommon.GEDCOM
         public override string ParseString(string strValue)
         {
             string result = GEDCOMUtils.ExtractDelimiter(strValue, 0);
-            result = this.ExtractApproximated(result);
+            result = ExtractApproximated(result);
             result = GEDCOMUtils.ExtractDelimiter(result, 0);
             return base.ParseString(result);
         }

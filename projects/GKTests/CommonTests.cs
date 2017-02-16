@@ -749,7 +749,7 @@ namespace GKTests.GKCommon
             FilterCondition cond = new FilterCondition(0, ConditionKind.ck_Contains, null);
             Assert.IsNotNull(cond);
 
-            ExternalFilterHandler handler = this.TestExternalFilterHandler;
+            ExternalFilterHandler handler = TestExternalFilterHandler;
             Assert.IsFalse(handler.Invoke(null));
         }
 

@@ -24,20 +24,20 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMMultimediaFormat MultimediaFormat
         {
-            get { return GEDCOMUtils.GetMultimediaFormatVal(base.GetTagStringValue("FORM")); }
-            set { base.SetTagStringValue("FORM", GEDCOMUtils.GetMultimediaFormatStr(value)); }
+            get { return GEDCOMUtils.GetMultimediaFormatVal(GetTagStringValue("FORM")); }
+            set { SetTagStringValue("FORM", GEDCOMUtils.GetMultimediaFormatStr(value)); }
         }
 
         public GEDCOMMediaType MediaType
         {
-            get { return GEDCOMUtils.GetMediaTypeVal(base.GetTagStringValue(this.MediaTypeTagName())); }
-            set { base.SetTagStringValue(this.MediaTypeTagName(), GEDCOMUtils.GetMediaTypeStr(value)); }
+            get { return GEDCOMUtils.GetMediaTypeVal(GetTagStringValue(MediaTypeTagName())); }
+            set { SetTagStringValue(MediaTypeTagName(), GEDCOMUtils.GetMediaTypeStr(value)); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("FILE");
+            SetName("FILE");
         }
 
         protected virtual string MediaTypeTagName()
@@ -47,8 +47,8 @@ namespace GKCommon.GEDCOM
 
         public void LinkFile(string fileName)
         {
-            this.fStringValue = fileName;
-            this.MultimediaFormat = RecognizeFormat(fileName);
+            fStringValue = fileName;
+            MultimediaFormat = RecognizeFormat(fileName);
         }
 
         public static GEDCOMMultimediaFormat RecognizeFormat(string fileName)

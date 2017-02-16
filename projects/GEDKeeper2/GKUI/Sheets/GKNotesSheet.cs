@@ -35,27 +35,27 @@ namespace GKUI.Sheets
     {
         public GKNotesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
         {
-            this.Columns_BeginUpdate();
-            this.AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
-            this.Columns_EndUpdate();
+            Columns_BeginUpdate();
+            AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
+            Columns_EndUpdate();
 
-            this.OnModify += this.ListModify;
+            OnModify += ListModify;
         }
 
         public override void UpdateSheet()
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
             
             try
             {
-                this.ClearItems();
+                ClearItems();
 
-                this.DataList.Reset();
-                while (this.DataList.MoveNext()) {
-                    GEDCOMNotes note = this.DataList.Current as GEDCOMNotes;
+                DataList.Reset();
+                while (DataList.MoveNext()) {
+                    GEDCOMNotes note = DataList.Current as GEDCOMNotes;
                     if (note == null) continue;
 
-                    this.AddItem(note.Notes.Text.Trim(), note);
+                    AddItem(note.Notes.Text.Trim(), note);
                 }
             }
             catch (Exception ex)
@@ -66,12 +66,12 @@ namespace GKUI.Sheets
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
-            if (this.DataList == null) return;
+            if (DataList == null) return;
             
-            IBaseWindow baseWin = this.Editor.Base;
+            IBaseWindow baseWin = Editor.Base;
             if (baseWin == null) return;
 
-            IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
+            IGEDCOMStructWithLists _struct = DataList.Owner as IGEDCOMStructWithLists;
             if (_struct == null) return;
 
             GEDCOMNotes notes = eArgs.ItemData as GEDCOMNotes;
@@ -85,7 +85,7 @@ namespace GKUI.Sheets
                     noteRec = baseWin.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null) {
                         //result = (_struct.AddNote(noteRec) != null);
-                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)_struct, noteRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)_struct, noteRec);
                     }
                     break;
 
@@ -102,7 +102,7 @@ namespace GKUI.Sheets
                     {
                         //_struct.Notes.Delete(notes);
                         //result = true;
-                        result = this.fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)_struct, notes);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)_struct, notes);
                     }
                     break;
             }
@@ -110,7 +110,7 @@ namespace GKUI.Sheets
             if (result)
             {
                 baseWin.Modified = true;
-                this.UpdateSheet();
+                UpdateSheet();
             }
         }
     }

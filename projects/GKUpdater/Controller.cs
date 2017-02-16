@@ -40,8 +40,8 @@ namespace GKUpdater
 
         public UpdateEventArgs(string message, int progress)
         {
-            this.Message = message;
-            this.Progress = progress;
+            Message = message;
+            Progress = progress;
         }
     }
 
@@ -68,8 +68,7 @@ namespace GKUpdater
         {
             get
             {
-                if (fInstance == null)
-                    fInstance = new Controller();
+                if (fInstance == null) fInstance = new Controller();
                 return fInstance;
             }
         }
@@ -97,7 +96,7 @@ namespace GKUpdater
             WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
             // TODO: Temp or AppData?
-            this.fUpdatesPath = Path.Combine(GetAppPath(), "updates");
+            fUpdatesPath = Path.Combine(GetAppPath(), "updates");
         }
 
         private void OnUpdateMessage(UpdateEventArgs uea)
@@ -124,12 +123,11 @@ namespace GKUpdater
                 {
                     doc.LoadXml(xml);
                     XmlNode updateInfo = doc.SelectSingleNode("/UpdateInfo");
+                    if (updateInfo == null) return;
 
-                    if (updateInfo != null) {
-                        fApplicationUpdates = CheckApplicationUpdates(doc, "/UpdateInfo/Application");
-                        fPluginUpdates = CheckApplicationUpdates(doc, "/UpdateInfo/Plugin");
-                        fExtensionUpdates = CheckExtensions(doc, "/UpdateInfo/Extension");
-                    }
+                    fApplicationUpdates = CheckApplicationUpdates(doc, "/UpdateInfo/Application");
+                    fPluginUpdates = CheckApplicationUpdates(doc, "/UpdateInfo/Plugin");
+                    fExtensionUpdates = CheckExtensions(doc, "/UpdateInfo/Extension");
                 }
                 catch (XmlException ex)
                 {
@@ -199,8 +197,8 @@ namespace GKUpdater
 
         public bool Update()
         {
-            if (!Directory.Exists(this.fUpdatesPath))
-                Directory.CreateDirectory(this.fUpdatesPath);
+            if (!Directory.Exists(fUpdatesPath))
+                Directory.CreateDirectory(fUpdatesPath);
 
             foreach (string key in fApplicationUpdates.Keys)
                 if (!DownloadFile(key))
@@ -214,7 +212,7 @@ namespace GKUpdater
                 if (!DownloadFile(key))
                     return false;
 
-            string[] files = Directory.GetFiles(this.fUpdatesPath);
+            string[] files = Directory.GetFiles(fUpdatesPath);
             foreach (string source in files)
             {
                 string target = Path.GetFileName(source);
@@ -229,9 +227,9 @@ namespace GKUpdater
 
         private bool DownloadFile(string url)
         {
-            string localName = Path.Combine(this.fUpdatesPath, Path.GetFileName(url));
+            string localName = Path.Combine(fUpdatesPath, Path.GetFileName(url));
 
-            int size = this.InternalDownload(url, localName);
+            int size = InternalDownload(url, localName);
 
             if (size <= 0) return false;
 
@@ -240,7 +238,7 @@ namespace GKUpdater
                 ZipStorer zip = ZipStorer.Open(localName, FileAccess.Read);
                 try
                 {
-                    zip.ExtractFiles(this.fUpdatesPath);
+                    zip.ExtractFiles(fUpdatesPath);
                     zip.Close();
 
                     File.Delete(localName);
@@ -264,7 +262,7 @@ namespace GKUpdater
             WebRequest  request = WebRequest.Create(url);
             try
             {
-                request.Timeout = Controller.Timeout;
+                request.Timeout = Timeout;
                 request.Credentials = CredentialCache.DefaultCredentials;
 
                 response = request.GetResponse();
@@ -375,7 +373,7 @@ namespace GKUpdater
 
         public static void StartMainApp()
         {
-            string mainApp = Path.Combine(GetAppPath(), Controller.MainApp);
+            string mainApp = Path.Combine(GetAppPath(), MainApp);
 
             if (!string.IsNullOrEmpty(mainApp) && File.Exists(mainApp))
                 Process.Start(mainApp);
@@ -383,7 +381,7 @@ namespace GKUpdater
 
         public static DateTime LoadLastCheck()
         {
-            string iniName = Path.Combine(GetAppPath(), Controller.OptionsFileName);
+            string iniName = Path.Combine(GetAppPath(), OptionsFileName);
 
             try
             {
@@ -402,7 +400,7 @@ namespace GKUpdater
 
         public static void SaveLastCheck(DateTime lastCheck)
         {
-            string iniName = Path.Combine(GetAppPath(), Controller.OptionsFileName);
+            string iniName = Path.Combine(GetAppPath(), OptionsFileName);
 
             try {
                 IniFile ini = new IniFile(iniName);

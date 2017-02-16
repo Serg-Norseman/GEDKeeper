@@ -14,12 +14,12 @@ namespace NUnit.Extensions.Forms
 
         public new DataGridView Properties
         {
-            get { return (DataGridView) base.TheObject; }
+            get { return (DataGridView) TheObject; }
         }
 
         public void SelectCell(int row, int col)
         {
-            this.Properties.CurrentCell = this.Properties.Rows[row].Cells[col];
+            Properties.CurrentCell = Properties.Rows[row].Cells[col];
         }
     }
 }
