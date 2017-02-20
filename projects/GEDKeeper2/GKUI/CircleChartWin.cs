@@ -20,25 +20,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Charts;
+using GKUI.Forms;
 
 namespace GKUI
 {
-    public partial class CircleChartWin : Form, IChartWindow
+    public partial class CircleChartWin : PrintableForm, IChartWindow
     {
         private readonly CircleChart fCircleChart;
         private readonly IBaseWindow fBaseWin;
         private readonly CircleChartType fType;
 
-        private PrintDocument fPrintDoc;
 
         public IBaseWindow Base
         {
@@ -68,9 +65,12 @@ namespace GKUI
 
             Controls.Add(fCircleChart);
 
-            InitPrintDoc();
-
             SetLang();
+        }
+
+        protected override IPrintable GetPrintable()
+        {
+            return fCircleChart;
         }
 
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
@@ -99,61 +99,6 @@ namespace GKUI
             fCircleChart.Select();
         }
 
-        #region Print support
-
-        private void InitPrintDoc()
-        {
-            fPrintDoc = new PrintDocument();
-            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
-            fPrintDoc.PrintPage += printDocument1_PrintPage;
-        }
-
-        private void InitCurDoc()
-        {
-            fPrintDoc.DocumentName = Text;
-            fPrintDoc.DefaultPageSettings.Landscape = fCircleChart.IsLandscape();
-            fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
-        }
-
-        private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
-        {
-        }
-
-        private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
-        {
-            e.PageSettings.Landscape = fCircleChart.IsLandscape();
-            e.PageSettings.Margins = new Margins(25, 25, 25, 25);
-        }
-
-        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            Graphics gfx = e.Graphics;
-            Rectangle marginBounds = e.MarginBounds;
-            Rectangle pageBounds = e.PageBounds;
-
-            #if DEBUG_PRINT
-            gfx.DrawRectangle(Pens.Gray, marginBounds);
-            #endif
-
-            Image img = fCircleChart.GetPrintableImage();
-
-            int imgW = img.Width;
-            int imgH = img.Height;
-            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
-            if (factor > 1.0f) factor = 1.0f;
-            imgW = (int)(imgW * factor);
-            imgH = (int)(imgH * factor);
-            int x = (pageBounds.Width - imgW) / 2;
-            int y = (pageBounds.Height - imgH) / 2;
-
-            gfx.DrawImage(img, x, y, imgW, imgH);
-
-            e.HasMorePages = false;
-        }
-
-        #endregion
-
         #region ILocalization implementation
         
         public void SetLang()
@@ -175,36 +120,6 @@ namespace GKUI
             if (show) base.Show();
 
             MainWin.Instance.UpdateControls(false);
-        }
-
-        public bool AllowPrint()
-        {
-            return true;
-        }
-
-        public void DoPrint()
-        {
-            InitCurDoc();
-
-            using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = fPrintDoc;
-
-                if (printDlg.ShowDialog() == DialogResult.OK) {
-                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    fPrintDoc.Print();
-                }
-            }
-        }
-
-        public void DoPrintPreview()
-        {
-            InitCurDoc();
-
-            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
-                previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = fPrintDoc;
-                previewDlg.ShowDialog();
-            }
         }
 
         #endregion

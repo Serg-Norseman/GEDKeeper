@@ -27,10 +27,11 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.Controls;
 using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Charts
 {
-    public abstract class CustomChart : GKScrollableControl
+    public abstract class CustomChart : GKScrollableControl, IPrintable
     {
         private static readonly object EventNavRefresh;
 

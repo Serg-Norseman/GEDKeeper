@@ -18,12 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_PRINT
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -34,13 +31,14 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Dialogs;
+using GKUI.Forms;
 
 namespace GKUI
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class TreeChartWin : Form, IChartWindow
+    public partial class TreeChartWin : PrintableForm, IChartWindow
     {
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
@@ -48,7 +46,6 @@ namespace GKUI
         private TreeChartBox.ChartKind fChartKind;
         private int fGensLimit;
         private GEDCOMIndividualRecord fPerson;
-        private PrintDocument fPrintDoc;
 
 
         public IBaseWindow Base
@@ -107,8 +104,6 @@ namespace GKUI
 
             miTraceKinships.Checked = fTreeBox.TraceKinships;
             miTraceKinships.Visible = false;
-
-            InitPrintDoc();
         }
 
         protected override void Dispose(bool disposing)
@@ -118,6 +113,11 @@ namespace GKUI
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override IPrintable GetPrintable()
+        {
+            return fTreeBox;
         }
 
         public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartBox.ChartKind chartKind)
@@ -532,91 +532,7 @@ namespace GKUI
 
         #endregion
 
-        #region Print support
-
-        private void InitPrintDoc()
-        {
-            fPrintDoc = new PrintDocument();
-            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
-            fPrintDoc.PrintPage += printDocument1_PrintPage;
-        }
-
-        private void InitCurDoc()
-        {
-            fPrintDoc.DocumentName = Text;
-            fPrintDoc.DefaultPageSettings.Landscape = fTreeBox.IsLandscape();
-            fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
-        }
-
-        private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
-        {
-        }
-
-        private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
-        {
-            e.PageSettings.Landscape = fTreeBox.IsLandscape();
-            e.PageSettings.Margins = new Margins(25, 25, 25, 25);
-        }
-
-        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            Graphics gfx = e.Graphics;
-            Rectangle marginBounds = e.MarginBounds;
-            Rectangle pageBounds = e.PageBounds;
-
-            #if DEBUG_PRINT
-            gfx.DrawRectangle(Pens.Gray, marginBounds);
-            #endif
-
-            Image img = fTreeBox.GetPrintableImage();
-
-            int imgW = img.Width;
-            int imgH = img.Height;
-            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
-            imgW = (int)(imgW * factor);
-            imgH = (int)(imgH * factor);
-            int x = (pageBounds.Width - imgW) / 2;
-            int y = (pageBounds.Height - imgH) / 2;
-
-            gfx.DrawImage(img, x, y, imgW, imgH);
-
-            e.HasMorePages = false;
-        }
-
-        #endregion
-
         #region IChartWindow implementation
-
-        public bool AllowPrint()
-        {
-            return true;
-        }
-
-        public void DoPrint()
-        {
-            InitCurDoc();
-
-            using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = fPrintDoc;
-
-                if (printDlg.ShowDialog() == DialogResult.OK) {
-                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    fPrintDoc.Print();
-                }
-            }
-        }
-
-        public void DoPrintPreview()
-        {
-            InitCurDoc();
-
-            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
-                previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = fPrintDoc;
-                previewDlg.ShowDialog();
-            }
-        }
 
         public void GenChart(bool show)
         {

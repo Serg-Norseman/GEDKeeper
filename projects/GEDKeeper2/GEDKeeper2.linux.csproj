@@ -403,6 +403,8 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
+    <Compile Include="GKUI\Forms\PrintableForm.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -507,7 +509,6 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Externals\MdiChildFormEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
