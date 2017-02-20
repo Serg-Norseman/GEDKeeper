@@ -33,18 +33,18 @@ namespace GKCore.Options
         public const int MAX_BRUSHES = 12;
 
         private static Color[] DefBrushColor = new Color[] {
-            Color.Coral,
-            Color.CadetBlue,
-            Color.DarkGray,
-            Color.Khaki,
-            Color./*CadetBlue,*/LawnGreen,
-            Color./*DarkGray,*/Khaki,
-            Color./*Khaki,*/HotPink,
-            Color./*CadetBlue,*/Ivory,
-            Color.Black, // text
-            Color.Moccasin, // background
-            Color.Black, // lines
-            Color.PaleGreen // lines
+            /* 00 */ Color.Coral,
+            /* 01 */ Color.CadetBlue,
+            /* 02 */ Color.DarkGray,
+            /* 03 */ Color.Khaki,
+            /* 04 */ Color./*CadetBlue,*/LawnGreen,
+            /* 05 */ Color./*DarkGray,*/Khaki,
+            /* 06 */ Color./*Khaki,*/HotPink,
+            /* 07 */ Color./*CadetBlue,*/Ivory,
+            /* 08 */ Color.Black, // text
+            /* 09 */ Color.Moccasin, // background and central
+            /* 10 */ Color.Black, // lines
+            /* 11 */ Color.PaleGreen // lines?
         };
 
         public bool ArcText; // TODO: to OptionsDlg

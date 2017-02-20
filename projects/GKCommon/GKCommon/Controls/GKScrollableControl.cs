@@ -50,7 +50,7 @@ namespace GKCommon.Controls
         }
 
         #if __MonoCS__
-        private void HandleHScrollEvent (object sender, ScrollEventArgs args)
+        private void HandleHScrollEvent(object sender, ScrollEventArgs args)
         {
             //fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.HorizontalScroll);
@@ -58,7 +58,7 @@ namespace GKCommon.Controls
             //fValidEvent = false;
         }
 
-        private void HandleVScrollEvent (object sender, ScrollEventArgs args)
+        private void HandleVScrollEvent(object sender, ScrollEventArgs args)
         {
             //fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.VerticalScroll);
