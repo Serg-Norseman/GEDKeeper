@@ -79,10 +79,7 @@ namespace GKCore.Options
         public static GlobalOptions Instance
         {
             get {
-                if (fInstance == null) {
-                    fInstance = new GlobalOptions();
-                }
-
+                if (fInstance == null) fInstance = new GlobalOptions();
                 return fInstance;
             }
         }

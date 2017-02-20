@@ -28,29 +28,29 @@ namespace GKCommon.GEDCOM
 
         public string XRef
         {
-            get { return this.fXRef; }
+            get { return fXRef; }
             set {
-                string oldXRef = this.fXRef;
-                this.fXRef = value;
-                if (this.Owner != null) {
-                    this.Owner.SetXRef(oldXRef, this);
+                string oldXRef = fXRef;
+                fXRef = value;
+                if (Owner != null) {
+                    Owner.SetXRef(oldXRef, this);
                 }
             }
         }
 
         protected override void SaveValueToStream(StreamWriter stream)
         {
-            string str = base.Level.ToString();
+            string str = Level.ToString();
 
-            if (!string.IsNullOrEmpty(this.fXRef))
+            if (!string.IsNullOrEmpty(fXRef))
             {
-                str = str + " " + "@" + this.fXRef + "@";
+                str = str + " " + "@" + fXRef + "@";
             }
-            str = str + " " + base.Name;
+            str = str + " " + Name;
 
-            if (base.StringValue != "")
+            if (StringValue != "")
             {
-                str = str + " " + base.StringValue;
+                str = str + " " + StringValue;
             }
 
             stream.Write(str + GEDCOM_NEWLINE);

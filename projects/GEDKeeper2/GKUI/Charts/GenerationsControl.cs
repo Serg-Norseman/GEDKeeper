@@ -71,7 +71,7 @@ namespace GKUI.Charts
             fThumbPos = (fChart.DepthLimit >= -1) ? fChart.DepthLimit - 1 : 9;
         }
 
-        private float GetChordLength(float radius, float radianAngle)
+        private static float GetChordLength(float radius, float radianAngle)
         {
             return (float)(2.0f * radius * Math.Sin(radianAngle / 2.0f));
         }

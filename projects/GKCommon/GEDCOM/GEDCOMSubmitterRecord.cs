@@ -26,58 +26,57 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAddress Address
         {
-            get { return base.TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMList<GEDCOMLanguage> Languages
         {
-            get { return this.fLanguages; }
+            get { return fLanguages; }
         }
 
         public new GEDCOMPersonalName Name
         {
-            get { return base.TagClass("NAME", GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
+            get { return TagClass("NAME", GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
         }
 
         public string RegisteredReference
         {
-            get { return base.GetTagStringValue("RFN"); }
-            set { base.SetTagStringValue("RFN", value); }
+            get { return GetTagStringValue("RFN"); }
+            set { SetTagStringValue("RFN", value); }
         }
 
         public void SetLanguage(int index, string value)
         {
-            if (index >= 0)
+            if (index < 0) return;
+
+            while (index >= fLanguages.Count)
             {
-                while (index >= this.fLanguages.Count)
-                {
-                    this.fLanguages.Add(new GEDCOMLanguage(base.Owner, this, "LANG", ""));
-                }
-                this.fLanguages[index].StringValue = value;
+                fLanguages.Add(new GEDCOMLanguage(Owner, this, "LANG", ""));
             }
+            fLanguages[index].StringValue = value;
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtSubmitter);
-            base.SetName("SUBM");
+            SetRecordType(GEDCOMRecordType.rtSubmitter);
+            SetName("SUBM");
 
-            this.fLanguages = new GEDCOMList<GEDCOMLanguage>(this);
+            fLanguages = new GEDCOMList<GEDCOMLanguage>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fLanguages.Dispose();
+                fLanguages.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public GEDCOMLanguage AddLanguage(GEDCOMLanguage value)
         {
-            this.fLanguages.Add(value);
+            fLanguages.Add(value);
             return value;
         }
 
@@ -91,11 +90,11 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
             {
-                result = this.Address.AddTag(tagName, tagValue, tagConstructor);
+                result = Address.AddTag(tagName, tagValue, tagConstructor);
             }
             else if (tagName == "LANG")
             {
-                result = this.AddLanguage(new GEDCOMLanguage(base.Owner, this, tagName, tagValue));
+                result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -109,24 +108,24 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fLanguages.Clear();
+            fLanguages.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fLanguages.Count == 0);
+            return base.IsEmpty() && (fLanguages.Count == 0);
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fLanguages.ReplaceXRefs(map);
+            fLanguages.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fLanguages.ResetOwner(newOwner);
+            fLanguages.ResetOwner(newOwner);
         }
 
         public GEDCOMSubmitterRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

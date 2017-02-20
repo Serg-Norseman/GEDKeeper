@@ -25,8 +25,8 @@ namespace GKCommon.GEDCOM
     {
         public StringList PhysicalDescription
         {
-            get { return base.GetTagStrings(this); }
-            set { base.SetTagStrings(this, value); }
+            get { return GetTagStrings(this); }
+            set { SetTagStrings(this, value); }
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -39,7 +39,7 @@ namespace GKCommon.GEDCOM
             }
             else
             {
-                result = base.Detail.AddTag(tagName, tagValue, tagConstructor);
+                result = Detail.AddTag(tagName, tagValue, tagConstructor);
             }
 
             return result;

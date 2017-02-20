@@ -80,7 +80,7 @@ namespace GKCommon
         /// <param name="value"></param>
         private UDN(uint value)
         {
-            this.fValue = value;
+            fValue = value;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace GKCommon
         /// <param name="day"></param>
         public UDN(UDNCalendarType calendar, int year, int month, int day)
         {
-            this.fValue = CreateVal(calendar, year, month, day);
+            fValue = CreateVal(calendar, year, month, day);
         }
 
         #region Object overrides
@@ -103,7 +103,7 @@ namespace GKCommon
                 int y = 0, m = 0, d = 0;
 
                 if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
-                    uint unmaskedVal = this.GetUnmaskedValue();
+                    uint unmaskedVal = GetUnmaskedValue();
                     CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
                 }
 
@@ -116,11 +116,11 @@ namespace GKCommon
                 string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
 
                 string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
-                if (this.IsApproximateDate()) {
+                if (IsApproximateDate()) {
                     result = "~" + result;
-                } else if (this.IsDateBefore()) {
+                } else if (IsDateBefore()) {
                     result = "<" + result;
-                } else if (this.IsDateAfter()) {
+                } else if (IsDateAfter()) {
                     result = ">" + result;
                 }
 
@@ -132,7 +132,7 @@ namespace GKCommon
 
         public override int GetHashCode()
         {
-            return (int)this.fValue;
+            return (int)fValue;
         }
 
         #endregion
@@ -145,7 +145,7 @@ namespace GKCommon
         /// <returns></returns>
         public object Clone()
         {
-            return new UDN(this.fValue);
+            return new UDN(fValue);
         }
 
         #endregion
@@ -160,7 +160,7 @@ namespace GKCommon
         public int CompareTo(object obj)
         {
             if (obj is UDN) {
-                return CompareVal(this.fValue, ((UDN)obj).fValue);
+                return CompareVal(fValue, ((UDN)obj).fValue);
             }
             return -1;
         }
@@ -172,7 +172,7 @@ namespace GKCommon
         /// <returns></returns>
         public int CompareTo(UDN other)
         {
-            return CompareVal(this.fValue, other.fValue);
+            return CompareVal(fValue, other.fValue);
         }
 
         #endregion
@@ -186,7 +186,7 @@ namespace GKCommon
         /// <returns></returns>
         public bool Equals(UDN other)
         {
-            return (this.fValue == other.fValue);
+            return (fValue == other.fValue);
         }
 
         #endregion
@@ -203,48 +203,48 @@ namespace GKCommon
         private static int CompareVal(uint l, uint r)
         {
             int result = 0;
-            if (0 == (UDN.IgnoreYear & l))
+            if (0 == (IgnoreYear & l))
             {
-                if (0 == (UDN.IgnoreYear & r))
+                if (0 == (IgnoreYear & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreYear & r))
+            else if (0 == (IgnoreYear & r))
             {
                 result = -1;
             }
-            else if (0 == (UDN.IgnoreMonth & l))
+            else if (0 == (IgnoreMonth & l))
             {
-                if (0 == (UDN.IgnoreMonth & r))
+                if (0 == (IgnoreMonth & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreMonth & r))
+            else if (0 == (IgnoreMonth & r))
             {
                 result = -1;
             }
-            else if (0 == (UDN.IgnoreDay & l))
+            else if (0 == (IgnoreDay & l))
             {
-                if (0 == (UDN.IgnoreDay & r))
+                if (0 == (IgnoreDay & r))
                 {
-                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
+                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
                     result = 1;
                 }
             }
-            else if (0 == (UDN.IgnoreDay & r))
+            else if (0 == (IgnoreDay & r))
             {
                 result = -1;
             }
@@ -571,7 +571,7 @@ namespace GKCommon
 
         public bool IsEmpty()
         {
-            return this.fValue == 0;
+            return fValue == 0;
         }
 
         /// <summary>
@@ -580,7 +580,7 @@ namespace GKCommon
         /// <returns></returns>
         public uint GetUnmaskedValue()
         {
-            return (UDN.ValueMask & this.fValue);
+            return (ValueMask & fValue);
         }
     }
 }

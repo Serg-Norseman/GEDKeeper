@@ -50,51 +50,50 @@ namespace GKCore.Stats
             for (int i = 0; i < num; i++)
             {
                 GEDCOMRecord rec = fSelectedRecords[i];
-                if (rec is GEDCOMIndividualRecord)
-                {
-                    GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                    stats.persons++;
+                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
-                    switch (ind.Sex) {
-                        case GEDCOMSex.svFemale:
-                            stats.persons_f++;
-                            if (ind.IsLive()) {
-                                stats.lives_f++;
-                                stats.lives++;
-                            }
-                            break;
+                GEDCOMIndividualRecord ind = (GEDCOMIndividualRecord) rec;
+                stats.persons++;
 
-                        case GEDCOMSex.svMale:
-                            stats.persons_m++;
-                            if (ind.IsLive()) {
-                                stats.lives_m++;
-                                stats.lives++;
-                            }
-                            break;
-                    }
+                switch (ind.Sex) {
+                    case GEDCOMSex.svFemale:
+                        stats.persons_f++;
+                        if (ind.IsLive()) {
+                            stats.lives_f++;
+                            stats.lives++;
+                        }
+                        break;
 
-                    string vAge = GKUtils.GetAgeStr(ind, -1);
-                    stats.age.TakeVal(vAge, ind.Sex, true);
-
-                    string vLife = GKUtils.GetLifeExpectancyStr(ind);
-                    stats.life.TakeVal(vLife, ind.Sex, true);
-
-                    int chCnt = ind.GetTotalChildsCount();
-                    stats.childs.TakeVal(chCnt, ind.Sex, true);
-
-                    GEDCOMIndividualRecord iDummy;
-                    int vFba = GKUtils.GetFirstbornAge(ind, out iDummy);
-                    stats.fba.TakeVal(vFba, ind.Sex, true);
-
-                    int mCnt = GKUtils.GetMarriagesCount(ind);
-                    stats.marr.TakeVal(mCnt, ind.Sex, true);
-
-                    int vMAge = GKUtils.GetMarriageAge(ind);
-                    stats.mage.TakeVal(vMAge, ind.Sex, true);
-
-                    float vCI = ind.GetCertaintyAssessment();
-                    stats.cIndex.TakeVal(vCI, ind.Sex, false);
+                    case GEDCOMSex.svMale:
+                        stats.persons_m++;
+                        if (ind.IsLive()) {
+                            stats.lives_m++;
+                            stats.lives++;
+                        }
+                        break;
                 }
+
+                string vAge = GKUtils.GetAgeStr(ind, -1);
+                stats.age.TakeVal(vAge, ind.Sex, true);
+
+                string vLife = GKUtils.GetLifeExpectancyStr(ind);
+                stats.life.TakeVal(vLife, ind.Sex, true);
+
+                int chCnt = ind.GetTotalChildsCount();
+                stats.childs.TakeVal(chCnt, ind.Sex, true);
+
+                GEDCOMIndividualRecord iDummy;
+                int vFba = GKUtils.GetFirstbornAge(ind, out iDummy);
+                stats.fba.TakeVal(vFba, ind.Sex, true);
+
+                int mCnt = GKUtils.GetMarriagesCount(ind);
+                stats.marr.TakeVal(mCnt, ind.Sex, true);
+
+                int vMAge = GKUtils.GetMarriageAge(ind);
+                stats.mage.TakeVal(vMAge, ind.Sex, true);
+
+                float vCI = ind.GetCertaintyAssessment();
+                stats.cIndex.TakeVal(vCI, ind.Sex, false);
             }
             
             return stats;

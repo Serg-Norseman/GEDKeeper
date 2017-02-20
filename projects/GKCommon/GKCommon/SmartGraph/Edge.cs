@@ -22,70 +22,70 @@ using System;
 
 namespace GKCommon.SmartGraph
 {
-	public class Edge : IEdge
-	{
-		#region Private fields
+    public class Edge : IEdge
+    {
+        #region Private fields
 
-		private readonly int fCost;
-		private readonly Vertex fSource;
-		private readonly Vertex fTarget;
-		private readonly object fValue;
+        private readonly int fCost;
+        private readonly Vertex fSource;
+        private readonly Vertex fTarget;
+        private readonly object fValue;
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public int Cost
-		{
-			get { return this.fCost; }
-		}
+        public int Cost
+        {
+            get { return fCost; }
+        }
 
-		public object Value
-		{
-			get { return this.fValue; }
-		}
+        public object Value
+        {
+            get { return fValue; }
+        }
 
-		public Vertex Source
-		{
-			get { return this.fSource; }
-		}
+        public Vertex Source
+        {
+            get { return fSource; }
+        }
 
-		IVertex IEdge.Source
-		{
-			get { return this.fSource; }
-		}
+        IVertex IEdge.Source
+        {
+            get { return fSource; }
+        }
 
-		public Vertex Target
-		{
-			get { return this.fTarget; }
-		}
+        public Vertex Target
+        {
+            get { return fTarget; }
+        }
 
-		IVertex IEdge.Target
-		{
-			get { return this.fTarget; }
-		}
+        IVertex IEdge.Target
+        {
+            get { return fTarget; }
+        }
 
-		#endregion
+        #endregion
 
-		public Edge(Vertex source, Vertex target, int cost, object value)
-		{
-			if (source == null)
-				throw new ArgumentNullException("source");
-			if (target == null)
-				throw new ArgumentNullException("target");
+        public Edge(Vertex source, Vertex target, int cost, object value)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (target == null)
+                throw new ArgumentNullException("target");
 
-			this.fSource = source;
-			this.fTarget = target;
-			this.fCost = cost;
-			this.fValue = value;
-		}
+            fSource = source;
+            fTarget = target;
+            fCost = cost;
+            fValue = value;
+        }
 
-		public int CompareTo(object obj)
-		{
-			if (!(obj is Edge))
-				throw new ArgumentException("Cannot compare two objects");
+        public int CompareTo(object obj)
+        {
+            if (!(obj is Edge))
+                throw new ArgumentException("Cannot compare two objects");
 
-			return GetHashCode().CompareTo(obj.GetHashCode());
-		}
-	}
+            return GetHashCode().CompareTo(obj.GetHashCode());
+        }
+    }
 }

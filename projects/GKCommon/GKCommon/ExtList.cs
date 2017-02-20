@@ -53,53 +53,51 @@ namespace GKCommon
 
         public int Count
         {
-            get { return this.fList.Count; }
+            get { return fList.Count; }
         }
 
         public bool OwnsObjects
         {
-            get { return this.fOwnsObjects; }
-            set { this.fOwnsObjects = value; }
+            get { return fOwnsObjects; }
+            set { fOwnsObjects = value; }
         }
 
         public T this[int index]
         {
             get {
-                return this.fList[index];
+                return fList[index];
             }
             set {
-                if (index < 0 || index >= this.Count)
-                {
+                if (index < 0 || index >= fList.Count)
                     throw new ListException(string.Format("List index out of bounds ({0})", index));
-                }
 
-                if (Equals(value, this.fList[index])) return;
+                if (Equals(value, fList[index])) return;
 
-                T temp = this.fList[index];
-                this.fList[index] = value;
+                T temp = fList[index];
+                fList[index] = value;
 
                 if (temp != null)
                 {
-                    this.Notify(temp, ListNotification.Deleted);
+                    Notify(temp, ListNotification.Deleted);
                 }
 
                 if (value != null)
                 {
-                    this.Notify(value, ListNotification.Added);
+                    Notify(value, ListNotification.Added);
                 }
             }
         }
 
         public ExtList()
         {
-            this.fList = new List<T>();
-            this.fOwnsObjects = false;
+            fList = new List<T>();
+            fOwnsObjects = false;
         }
 
         public ExtList(bool ownsObjects)
         {
-            this.fList = new List<T>();
-            this.fOwnsObjects = ownsObjects;
+            fList = new List<T>();
+            fOwnsObjects = ownsObjects;
         }
 
         protected override void Dispose(bool disposing)
@@ -107,101 +105,100 @@ namespace GKCommon
             if (disposing)
             {
                 //if (this.fList != null) this.fList = null;
-                this.Clear();
+                Clear();
             }
             base.Dispose(disposing);
         }
 
         private void Notify(object instance, ListNotification action)
         {
-            if (this.fOwnsObjects && action == ListNotification.Deleted)
+            if (fOwnsObjects && action == ListNotification.Deleted)
             {
-                if (instance is IDisposable)
-                {
-                    (instance as IDisposable).Dispose();
+                var disposable = instance as IDisposable;
+                if (disposable != null) {
+                    disposable.Dispose();
                 }
             }
         }
 
         public int Add(T item)
         {
-            int result = this.fList.Count;
-            this.fList.Add(item);
+            int result = fList.Count;
+            fList.Add(item);
             if (item != null)
             {
-                this.Notify(item, ListNotification.Added);
+                Notify(item, ListNotification.Added);
             }
             return result;
         }
 
         public void Clear()
         {
-            for (int i = this.fList.Count - 1; i >= 0; i--) this.Notify(fList[i], ListNotification.Deleted);
-            this.fList.Clear();
+            for (int i = fList.Count - 1; i >= 0; i--) Notify(fList[i], ListNotification.Deleted);
+            fList.Clear();
         }
 
         public void Delete(int index)
         {
-            object temp = this.fList[index];
+            object temp = fList[index];
 
-            this.fList.RemoveAt(index);
+            fList.RemoveAt(index);
 
             if (temp != null)
             {
-                this.Notify(temp, ListNotification.Deleted);
+                Notify(temp, ListNotification.Deleted);
             }
         }
 
         public void Exchange(int index1, int index2)
         {
-            T item = this.fList[index1];
-            this.fList[index1] = this.fList[index2];
-            this.fList[index2] = item;
+            T item = fList[index1];
+            fList[index1] = fList[index2];
+            fList[index2] = item;
         }
 
         public object Extract(T item)
         {
             object result = null;
-            int I = this.IndexOf(item);
+            int I = IndexOf(item);
             if (I >= 0)
             {
                 result = item;
-                this.fList.RemoveAt(I);
-                this.Notify(result, ListNotification.Extracted);
+                fList.RemoveAt(I);
+                Notify(result, ListNotification.Extracted);
             }
             return result;
         }
 
         public int IndexOf(T item)
         {
-            return this.fList.IndexOf(item);
+            return fList.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            this.fList.Insert(index, item);
-            if (item != null)
-            {
-                this.Notify(item, ListNotification.Added);
-            }
+            fList.Insert(index, item);
+            if (item == null) return;
+
+            Notify(item, ListNotification.Added);
         }
 
         public int Remove(T item)
         {
-            int result = this.IndexOf(item);
+            int result = IndexOf(item);
             if (result >= 0)
             {
-                this.Delete(result);
+                Delete(result);
             }
             return result;
         }
 
         public void Pack()
         {
-            for (int I = this.Count - 1; I >= 0; I--)
+            for (int I = fList.Count - 1; I >= 0; I--)
             {
                 if (this[I] == null)
-                    this.Delete(I);
+                    Delete(I);
             }
         }
 

@@ -569,6 +569,9 @@ namespace GKTests.GKCommon
             val = calc.Calc("601h");
             Assert.AreEqual(1537, Math.Round(val, 0));
 
+            val = calc.Calc("1`"); // 1` = 0,01745 rad
+            Assert.AreEqual(0.01745, Math.Round(val, 5));
+
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0x15j"); });
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0b015"); });
 
@@ -749,7 +752,7 @@ namespace GKTests.GKCommon
             FilterCondition cond = new FilterCondition(0, ConditionKind.ck_Contains, null);
             Assert.IsNotNull(cond);
 
-            ExternalFilterHandler handler = this.TestExternalFilterHandler;
+            ExternalFilterHandler handler = TestExternalFilterHandler;
             Assert.IsFalse(handler.Invoke(null));
         }
 
@@ -990,6 +993,9 @@ namespace GKTests.GKCommon
             item2 = new GKListItem(20, null);
             Assert.AreEqual(1, item1.CompareTo(item2));
 
+            Assert.AreEqual(0, item1.CompareTo(item1));
+            Assert.AreEqual(-1, item1.CompareTo(null));
+
 
             var subitem1 = new GKListSubItem(10);
             var subitem2 = new GKListSubItem(20);
@@ -1002,6 +1008,9 @@ namespace GKTests.GKCommon
             subitem1 = new GKListSubItem(null);
             subitem2 = new GKListSubItem(20);
             Assert.AreEqual(1, subitem1.CompareTo(subitem2));
+
+            Assert.AreEqual(0, subitem1.CompareTo(subitem1));
+            Assert.AreEqual(-1, subitem1.CompareTo(null));
         }
     }
 }

@@ -53,17 +53,17 @@ namespace GKTimeLinePlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private TimeLineWidget frm;
+        private TimeLineWidget fForm;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) frm.Dispose();
+                if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -72,12 +72,12 @@ namespace GKTimeLinePlugin
 
         public void Execute()
         {
-            if (!this.fHost.IsWidgetActive(this)) {
-                frm = new TimeLineWidget(this);
-                frm.Show();
+            if (!fHost.IsWidgetActive(this)) {
+                fForm = new TimeLineWidget(this);
+                fForm.Show();
             } else {
-                frm.Close();
-                frm = null;
+                fForm.Close();
+                fForm = null;
             }
         }
 
@@ -89,10 +89,10 @@ namespace GKTimeLinePlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MITimeLine);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_MITimeLine);
 
-                if (frm != null) frm.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace GKTimeLinePlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {
@@ -137,15 +137,15 @@ namespace GKTimeLinePlugin
 
         void IWidget.BaseChanged(IBaseWindow baseWin)
         {
-            if (frm != null) {
-                frm.BaseChanged(baseWin);
+            if (fForm != null) {
+                fForm.BaseChanged(baseWin);
             }
         }
 
         void IWidget.BaseClosed(IBaseWindow baseWin)
         {
-            if (frm != null) {
-                frm.BaseChanged(null);
+            if (fForm != null) {
+                fForm.BaseChanged(null);
             }
         }
 

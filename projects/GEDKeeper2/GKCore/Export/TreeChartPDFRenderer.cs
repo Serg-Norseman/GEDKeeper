@@ -39,8 +39,8 @@ namespace GKCore.Export
     public sealed class TreeChartPDFRenderer : TreeChartRenderer
     {
         private PdfContentByte fCanvas;
-        private float fPageHeight;
-        private float fPageWidth;
+        private readonly float fPageHeight;
+        private readonly float fPageWidth;
 
         public TreeChartPDFRenderer(float pageWidth, float pageHeight) : base()
         {
@@ -59,7 +59,7 @@ namespace GKCore.Export
 
         #region Private methods
 
-        private void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
+        private static void GetFontInfo(sdFont font, out BaseFont baseFont, out float fontSize)
         {
             string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\"+font.FontFamily.Name+".ttf");
 

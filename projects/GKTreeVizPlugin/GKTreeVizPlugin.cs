@@ -54,27 +54,26 @@ namespace GKTreeVizPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
-        public IHost Host { get { return this.fHost; } }
+        public string DisplayName { get { return fDisplayName; } }
+        public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
         public void Execute()
         {
-            if (this.fHost.IsUnix()) {
-                this.fHost.ShowWarning(@"This function is not supported in Linux");
+            if (fHost.IsUnix()) {
+                fHost.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 
             using (TVSettingsDlg dlg = new TVSettingsDlg(this))
             {
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    IBaseWindow curBase = this.fHost.GetCurrentFile(true);
+                if (dlg.ShowDialog() != DialogResult.OK) return;
 
-                    using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
-                    {
-                        viewer.ShowDialog();
-                    }
+                IBaseWindow curBase = fHost.GetCurrentFile(true);
+
+                using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
+                {
+                    viewer.ShowDialog();
                 }
             }
         }
@@ -87,8 +86,8 @@ namespace GKTreeVizPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(TVLS.LSID_DisplayName);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(TVLS.LSID_DisplayName);
             }
             catch (Exception ex)
             {
@@ -101,7 +100,7 @@ namespace GKTreeVizPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
                 // Implement any startup code here
             }
             catch (Exception ex)

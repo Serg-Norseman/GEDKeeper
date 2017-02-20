@@ -40,11 +40,11 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Group, DataType.dtString, 400, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Group, DataType.dtString, 400, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public GroupListColumns() : base()
+        public GroupListColumns()
         {
             InitData(typeof(GroupColumnType));
         }
@@ -59,16 +59,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.GroupName, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.GroupName, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMGroupRecord);
+            fRec = (aRec as GEDCOMGroupRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -76,10 +76,10 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = this.fRec.GroupName;
+                    result = fRec.GroupName;
                     break;
                 case 1:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

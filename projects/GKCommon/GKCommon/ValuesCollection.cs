@@ -33,16 +33,16 @@ namespace GKCommon
 
         public void Clear()
         {
-            base.BaseClear();
+            BaseClear();
         }
 
         public void Add(string name, string value, bool excludeDuplicates = false)
         {
-            ArrayList arrayList = (ArrayList)base.BaseGet(name);
+            ArrayList arrayList = (ArrayList)BaseGet(name);
 
             if (arrayList == null) {
                 arrayList = new ArrayList(1);
-                base.BaseAdd(name, arrayList);
+                BaseAdd(name, arrayList);
             }
 
             if (value == null) return;
@@ -56,12 +56,12 @@ namespace GKCommon
 
         public void Remove(string name)
         {
-            base.BaseRemove(name);
+            BaseRemove(name);
         }
 
         public string[] GetValues(string name)
         {
-            ArrayList list = (ArrayList)base.BaseGet(name);
+            ArrayList list = (ArrayList)BaseGet(name);
             if (list == null) {
                 return null;
             }

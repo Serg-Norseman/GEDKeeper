@@ -42,12 +42,12 @@ namespace GKCommon
     ///</summary>
     public sealed class TweenLibrary : BaseObject
     {
-        private bool busy;
-        private int counter;
-        private int timeStart;
-        private int timeDest;
+        private bool fBusy;
+        private int fCounter;
+        private int fTimeStart;
+        private int fTimeDest;
         private int fDestX, fDestY;
-        private int curX, curY;
+        private int fCurX, fCurY;
 
         private TweenAnimation fAnimation;
         private IContainer fComponents;
@@ -57,9 +57,9 @@ namespace GKCommon
 
         public TweenLibrary()
         {
-            this.busy = false;
-            this.counter = 0;
-            this.fStartPos = new float[] { 0, 0 };
+            fBusy = false;
+            fCounter = 0;
+            fStartPos = new float[] { 0, 0 };
         }
 
         protected override void Dispose(bool disposing)
@@ -77,27 +77,27 @@ namespace GKCommon
         ///</summary>
         public void StartTween(TweenDelegate tweenDelegate, int srcX, int srcY, int destX, int destY, TweenAnimation animType, int timeInterval)
         {
-            if (busy) return;
-            busy = true;
+            if (fBusy) return;
+            fBusy = true;
 
-            this.fTweenDelegate = tweenDelegate;
-            this.counter = 0;
-            this.timeStart = counter;
-            this.timeDest = timeInterval;
-            this.fAnimation = animType;
-            this.fStartPos[0] = srcX;
-            this.fStartPos[1] = srcY;
-            this.curX = srcX;
-            this.curY = srcY;
-            this.fDestX = destX;
-            this.fDestY = destY;
+            fTweenDelegate = tweenDelegate;
+            fCounter = 0;
+            fTimeStart = fCounter;
+            fTimeDest = timeInterval;
+            fAnimation = animType;
+            fStartPos[0] = srcX;
+            fStartPos[1] = srcY;
+            fCurX = srcX;
+            fCurY = srcY;
+            fDestX = destX;
+            fDestY = destY;
 
-            this.fComponents = new Container();
-            this.fTimer = new Timer(this.fComponents);
-            this.fTimer.Interval = 1;
-            this.fTimer.Tick += this.timer_Tick;
-            this.fTimer.Stop();
-            this.fTimer.Start();
+            fComponents = new Container();
+            fTimer = new Timer(fComponents);
+            fTimer.Interval = 1;
+            fTimer.Tick += timer_Tick;
+            fTimer.Stop();
+            fTimer.Start();
         }
 
         ///<summary>
@@ -105,18 +105,18 @@ namespace GKCommon
         ///</summary>
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (curX == fDestX && curY == fDestY) {
-                this.fTimer.Stop();
-                this.fTimer.Enabled = false;
+            if (fCurX == fDestX && fCurY == fDestY) {
+                fTimer.Stop();
+                fTimer.Enabled = false;
                 
-                busy = false;
+                fBusy = false;
             } else {
-                curX = this.Tween(0);
-                curY = this.Tween(1);
+                fCurX = Tween(0);
+                fCurY = Tween(1);
 
-                if (this.fTweenDelegate != null) this.fTweenDelegate(curX, curY);
+                if (fTweenDelegate != null) fTweenDelegate(fCurX, fCurY);
                 
-                counter++;
+                fCounter++;
             }
         }
 
@@ -132,10 +132,10 @@ namespace GKCommon
                 c = fDestY - fStartPos[prop];
             }
 
-            float t = (float)counter - timeStart;
-            float d = (float)timeDest - timeStart;
+            float t = (float)fCounter - fTimeStart;
+            float d = (float)fTimeDest - fTimeStart;
 
-            return this.GetFormula(t, fStartPos[prop], d, c);
+            return GetFormula(t, fStartPos[prop], d, c);
         }
 
         ///<summary>

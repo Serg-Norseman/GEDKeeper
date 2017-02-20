@@ -28,23 +28,23 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMFileReferenceWithTitle> FileReferences
         {
-            get { return this.fFileReferences; }
+            get { return fFileReferences; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtMultimedia);
-            base.SetName("OBJE");
+            SetRecordType(GEDCOMRecordType.rtMultimedia);
+            SetName("OBJE");
 
-            this.fFileReferences = new GEDCOMList<GEDCOMFileReferenceWithTitle>(this);
+            fFileReferences = new GEDCOMList<GEDCOMFileReferenceWithTitle>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fFileReferences.Dispose();
+                fFileReferences.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -55,7 +55,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "FILE")
             {
-                result = this.fFileReferences.Add(new GEDCOMFileReferenceWithTitle(base.Owner, this, tagName, tagValue));
+                result = fFileReferences.Add(new GEDCOMFileReferenceWithTitle(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -68,36 +68,36 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fFileReferences.Clear();
+            fFileReferences.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fFileReferences.Count == 0;
+            return base.IsEmpty() && fFileReferences.Count == 0;
         }
 
         public override void Pack()
         {
             base.Pack();
-            this.fFileReferences.Pack();
+            fFileReferences.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fFileReferences.ReplaceXRefs(map);
+            fFileReferences.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fFileReferences.ResetOwner(newOwner);
+            fFileReferences.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fFileReferences.SaveToStream(stream);
+            fFileReferences.SaveToStream(stream);
         }
 
         public GEDCOMMultimediaRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -113,12 +113,10 @@ namespace GKCommon.GEDCOM
 
         public string GetFileTitle()
         {
-            if (this.fFileReferences.Count > 0) {
-                GEDCOMFileReferenceWithTitle fileRef = this.fFileReferences[0];
-                return fileRef.Title;
-            }
-            
-            return string.Empty;
+            if (fFileReferences.Count <= 0) return string.Empty;
+
+            GEDCOMFileReferenceWithTitle fileRef = fFileReferences[0];
+            return fileRef.Title;
         }
         
         #endregion

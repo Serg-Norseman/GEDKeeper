@@ -31,8 +31,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLanguageID Value
         {
-            get { return this.fValue; }
-            set { this.fValue = value; }
+            get { return fValue; }
+            set { fValue = value; }
         }
 
         static GEDCOMLanguage()
@@ -43,12 +43,12 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fValue = GEDCOMLanguageID.Unknown;
+            fValue = GEDCOMLanguageID.Unknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fValue == GEDCOMLanguageID.Unknown);
+            return base.IsEmpty() && (fValue == GEDCOMLanguageID.Unknown);
         }
 
         public override void Assign(GEDCOMTag source)
@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
             GEDCOMLanguage srcLang = (source as GEDCOMLanguage);
 
             if (srcLang != null) {
-                this.fValue = srcLang.fValue;
+                fValue = srcLang.fValue;
             } else {
                 base.Assign(source);
             }
@@ -66,7 +66,7 @@ namespace GKCommon.GEDCOM
         {
             if (!string.IsNullOrEmpty(strValue))
             {
-                this.fValue = LangEnumHelper.GetEnumValue(strValue);
+                fValue = LangEnumHelper.GetEnumValue(strValue);
             }
 
             return strValue;
@@ -74,13 +74,13 @@ namespace GKCommon.GEDCOM
 
         protected override string GetStringValue()
         {
-            return LangEnumHelper.GetStrValue(this.fValue);
+            return LangEnumHelper.GetStrValue(fValue);
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("LANG");
+            SetName("LANG");
         }
 
         public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

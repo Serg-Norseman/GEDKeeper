@@ -31,62 +31,62 @@ namespace GKCommon.GEDCOM
 
         public ushort Fraction
         {
-            get { return this.fFraction; }
-            set { this.fFraction = value; }
+            get { return fFraction; }
+            set { fFraction = value; }
         }
 
         public ushort Hour
         {
-            get { return this.fHour; }
-            set { this.fHour = value; }
+            get { return fHour; }
+            set { fHour = value; }
         }
 
         public ushort Minutes
         {
-            get { return this.fMinutes; }
-            set { this.fMinutes = value; }
+            get { return fMinutes; }
+            set { fMinutes = value; }
         }
 
         public ushort Seconds
         {
-            get { return this.fSeconds; }
-            set { this.fSeconds = value; }
+            get { return fSeconds; }
+            set { fSeconds = value; }
         }
 
         public TimeSpan Value
         {
             get {
-                return new TimeSpan(0, this.fHour, this.fMinutes, this.fSeconds, (int)(100u * this.fFraction));
+                return new TimeSpan(0, fHour, fMinutes, fSeconds, (int)(100u * fFraction));
             }
             set {
-                this.fHour = (ushort)value.Hours;
-                this.fMinutes = (ushort)value.Minutes;
-                this.fSeconds = (ushort)value.Seconds;
+                fHour = (ushort)value.Hours;
+                fMinutes = (ushort)value.Minutes;
+                fSeconds = (ushort)value.Seconds;
                 ushort mSec = (ushort)value.Milliseconds;
-                this.fFraction = (ushort)Math.Truncate(mSec / 100.0);
+                fFraction = (ushort)Math.Truncate(mSec / 100.0);
             }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetName("TIME");
+            SetName("TIME");
         }
 
         protected override string GetStringValue()
         {
             string result;
-            if (this.fHour == 0 && this.fMinutes == 0 && this.fSeconds == 0)
+            if (fHour == 0 && fMinutes == 0 && fSeconds == 0)
             {
                 result = "";
             }
             else
             {
-                result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { this.fHour, this.fMinutes, this.fSeconds });
+                result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { fHour, fMinutes, fSeconds });
 
-                if (this.fFraction > 0)
+                if (fFraction > 0)
                 {
-                    result = result + "." + this.fFraction.ToString();
+                    result = result + "." + fFraction.ToString();
                 }
             }
             return result;
@@ -95,23 +95,23 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fHour = 0;
-            this.fMinutes = 0;
-            this.fSeconds = 0;
-            this.fFraction = 0;
+            fHour = 0;
+            fMinutes = 0;
+            fSeconds = 0;
+            fFraction = 0;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fHour == 0 && this.fMinutes == 0 && this.fSeconds == 0;
+            return base.IsEmpty() && fHour == 0 && fMinutes == 0 && fSeconds == 0;
         }
 
         public override string ParseString(string strValue)
         {
-            this.fHour = 0;
-            this.fMinutes = 0;
-            this.fSeconds = 0;
-            this.fFraction = 0;
+            fHour = 0;
+            fMinutes = 0;
+            fSeconds = 0;
+            fFraction = 0;
 
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
@@ -120,26 +120,26 @@ namespace GKCommon.GEDCOM
 
                 int tmp;
                 result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                this.fHour = (ushort)tmp;
+                fHour = (ushort)tmp;
                 if (result != "" && result[0] == ':')
                 {
                     result = result.Remove(0, 1);
                 }
 
                 result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                this.fMinutes = (ushort)tmp;
+                fMinutes = (ushort)tmp;
                 if (result != "" && result[0] == ':')
                 {
                     result = result.Remove(0, 1);
 
                     result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                    this.fSeconds = (ushort)tmp;
+                    fSeconds = (ushort)tmp;
                     if (result != "" && result[0] == '.')
                     {
                         result = result.Remove(0, 1);
 
                         result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                        this.fFraction = (ushort)tmp;
+                        fFraction = (ushort)tmp;
                     }
                 }
             }

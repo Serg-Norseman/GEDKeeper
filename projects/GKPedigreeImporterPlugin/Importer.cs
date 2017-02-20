@@ -101,7 +101,7 @@ namespace GKPedigreeImporterPlugin
 
         public RawLine(int sourceNum)
         {
-            this.SourceNum = sourceNum;
+            SourceNum = sourceNum;
         }
     }
 
@@ -137,31 +137,31 @@ namespace GKPedigreeImporterPlugin
 
         public StringList RawContents
         {
-            get { return this.fRawContents; }
+            get { return fRawContents; }
         }
 
         public Importer(IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
-            this.fBase = baseWin;
-            this.fTree = baseWin.Tree;
-            this.fLog = aLog;
-            this.fLangMan = langMan;
+            fBase = baseWin;
+            fTree = baseWin.Tree;
+            fLog = aLog;
+            fLangMan = langMan;
 
-            this.NumbersType = PersonNumbersType.pnKonovalov;
-            this.CanNumbersType = PersonNumbersType.pnUndefined;
-            this.PersonLineSeparator = (char)0;
-            this.SurnamesNormalize = false;
+            NumbersType = PersonNumbersType.pnKonovalov;
+            CanNumbersType = PersonNumbersType.pnUndefined;
+            PersonLineSeparator = (char)0;
+            SurnamesNormalize = false;
 
-            this.fPersonsList = new Dictionary<string, GEDCOMIndividualRecord>();
-            this.fRawContents = new StringList();
+            fPersonsList = new Dictionary<string, GEDCOMIndividualRecord>();
+            fRawContents = new StringList();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (this.fRawContents != null) this.fRawContents.Dispose();
-                this.fPersonsList = null;
+                if (fRawContents != null) fRawContents.Dispose();
+                fPersonsList = null;
             }
             base.Dispose(disposing);
         }
@@ -177,7 +177,7 @@ namespace GKPedigreeImporterPlugin
 
             while (parent.SpouseToFamilyLinks.Count < marrNum)
             {
-                GEDCOMFamilyRecord fam = this.fTree.CreateFamily();
+                GEDCOMFamilyRecord fam = fTree.CreateFamily();
                 fam.AddSpouse(parent);
             }
 
@@ -261,7 +261,7 @@ namespace GKPedigreeImporterPlugin
             string tmp = str;
 
             string dates = "";
-            if (this.SpecialFormat_1) {
+            if (SpecialFormat_1) {
                 int ob_pos = tmp.IndexOf("(*");
                 if (ob_pos >= 0) {
                     int cb_pos = tmp.IndexOf(")", ob_pos);
@@ -297,7 +297,7 @@ namespace GKPedigreeImporterPlugin
 
             string[] tokens = tmp.Split(new char[] { ' ' }, 3);
 
-            switch (this.NameFormat) {
+            switch (NameFormat) {
                 case NameFormat.nfIOF:
                     if (tokens.Length > 0) f_name = RemoveDot(tokens[0]);
                     if (tokens.Length > 1) f_pat = RemoveDot(tokens[1]);
@@ -311,7 +311,7 @@ namespace GKPedigreeImporterPlugin
                     break;
             }
 
-            if (this.SurnamesNormalize) {
+            if (SurnamesNormalize) {
                 f_fam = SysUtils.NormalizeName(f_fam);
             }
 
@@ -320,7 +320,7 @@ namespace GKPedigreeImporterPlugin
 
         private bool IsPersonLine(string str, ref string p_id)
         {
-            switch (this.NumbersType) {
+            switch (NumbersType) {
                 case PersonNumbersType.pnDAboville:
                     return ImportUtils.IsPersonLine_DAboville(str, out p_id);
 
@@ -335,7 +335,7 @@ namespace GKPedigreeImporterPlugin
         private bool ParsePersonLine(string str, out string persId, out string parentId, out string marNum,
                                      out string extData, out int pos)
         {
-            switch (this.NumbersType) {
+            switch (NumbersType) {
                 case PersonNumbersType.pnDAboville:
                     return ImportUtils.ParsePersonLine_DAboville(str, out persId, out parentId, out marNum, out extData, out pos);
 
@@ -355,7 +355,7 @@ namespace GKPedigreeImporterPlugin
         private void SetEvent(GEDCOMRecordWithEvents record, string evName, string date)
         {
             int[] val = new int[3];
-            GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(record, evName, "", "");
+            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(record, evName, "", "");
             try
             {
                 string prefix = "";
@@ -438,23 +438,23 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception)
             {
-                this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
+                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
             }
         }
 
         private GEDCOMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
         {
             string iName, iPatr, iSurname, bd, dd;
-            this.DefinePersonName(str, out iName, out iPatr, out iSurname, out bd, out dd);
+            DefinePersonName(str, out iName, out iPatr, out iSurname, out bd, out dd);
 
-            GEDCOMIndividualRecord result = this.fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
+            GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
 
             if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
-                this.fBase.CheckPersonSex(result);
+                fBase.CheckPersonSex(result);
             }
 
-            if (bd != "") this.SetEvent(result, "BIRT", bd);
-            if (dd != "") this.SetEvent(result, "DEAT", dd);
+            if (bd != "") SetEvent(result, "BIRT", bd);
+            if (dd != "") SetEvent(result, "DEAT", dd);
 
             return result;
         }
@@ -468,38 +468,38 @@ namespace GKPedigreeImporterPlugin
                 int pid_end = 0;
 
                 string persId, parentId, marNum, extData;
-                bool res = this.ParsePersonLine(str, out persId, out parentId, out marNum, out extData, out pid_end);
+                bool res = ParsePersonLine(str, out persId, out parentId, out marNum, out extData, out pid_end);
                 // extData - (в/б)
 
                 if (!res) {
                     return null;
                 }
 
-                if (this.fPersonsList.ContainsKey(persId)) {
-                    this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + persId + "\".");
+                if (fPersonsList.ContainsKey(persId)) {
+                    fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + persId + "\".");
                     return null;
                 }
 
-                if (this.NumbersType == PersonNumbersType.pnKonovalov) {
+                if (NumbersType == PersonNumbersType.pnKonovalov) {
                     selfId = int.Parse(persId);
                     int.TryParse(marNum, out marrNum);
                 }
 
                 str = str.Substring(pid_end).Trim();
 
-                GEDCOMSex proposeSex = this.GetProposeSex(buffer);
+                GEDCOMSex proposeSex = GetProposeSex(buffer);
 
-                GEDCOMIndividualRecord result = this.DefinePerson(str, proposeSex);
+                GEDCOMIndividualRecord result = DefinePerson(str, proposeSex);
 
-                this.fPersonsList.Add(persId, result);
+                fPersonsList.Add(persId, result);
 
                 if (!string.IsNullOrEmpty(parentId))
                 {
                     GEDCOMIndividualRecord parent;
-                    if (this.fPersonsList.TryGetValue(parentId, out parent)) {
-                        this.AddChild(parent, marrNum, result);
+                    if (fPersonsList.TryGetValue(parentId, out parent)) {
+                        AddChild(parent, marrNum, result);
                     } else {
-                        this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parentId + "\".");
+                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parentId + "\".");
                     }
                 }
 
@@ -507,7 +507,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("Importer.ParsePerson(): " + ex.Message);
+                fBase.Host.LogWrite("Importer.ParsePerson(): " + ex.Message);
                 throw;
             }
         }
@@ -523,23 +523,22 @@ namespace GKPedigreeImporterPlugin
                 for (int i = 0; i < num; i++)
                 {
                     string line = buffer[i];
+                    if (line.Length <= 2) continue;
 
-                    if (line.Length > 2) {
-                        char c1 = line[0];
-                        char c2 = line[1];
-                        if ((c1 == 'М' || c1 == 'Ж') && ((c2 == ' ') || (c2 >= '1' && c2 <= '9'))) {
-                            // define sex (if spouse is male, then result = female, else result = male)
-                            GEDCOMSex res = (c1 == 'М') ? GEDCOMSex.svFemale : GEDCOMSex.svMale;
+                    char c1 = line[0];
+                    char c2 = line[1];
+                    if ((c1 == 'М' || c1 == 'Ж') && ((c2 == ' ') || (c2 >= '1' && c2 <= '9'))) {
+                        // define sex (if spouse is male, then result = female, else result = male)
+                        GEDCOMSex res = (c1 == 'М') ? GEDCOMSex.svFemale : GEDCOMSex.svMale;
 
-                            if (result == GEDCOMSex.svNone) {
-                                result = res;
+                        if (result == GEDCOMSex.svNone) {
+                            result = res;
+                        } else {
+                            if (result != res) {
+                                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
+                                return GEDCOMSex.svNone;
                             } else {
-                                if (result != res) {
-                                    this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
-                                    return GEDCOMSex.svNone;
-                                } else {
-                                    // matched, checked
-                                }
+                                // matched, checked
                             }
                         }
                     }
@@ -547,7 +546,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("Importer.GetProposeSex(): " + ex.Message);
+                fBase.Host.LogWrite("Importer.GetProposeSex(): " + ex.Message);
             }
 
             return result;
@@ -576,7 +575,7 @@ namespace GKPedigreeImporterPlugin
 
                         if (!string.IsNullOrEmpty(line))
                         {
-                            GEDCOMIndividualRecord spouse = this.DefinePerson(line, sx);
+                            GEDCOMIndividualRecord spouse = DefinePerson(line, sx);
 
                             GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, marrNum);
                             family.AddSpouse(spouse);
@@ -585,33 +584,32 @@ namespace GKPedigreeImporterPlugin
                             if (!string.IsNullOrEmpty(extData)) {
                                 string marrDate = extData.Substring(1, extData.Length - 2).Trim();
 
-                                if (marrDate != "") this.SetEvent(family, "MARR", marrDate);
+                                if (marrDate != "") SetEvent(family, "MARR", marrDate);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.fBase.Host.LogWrite("Importer.CheckSpouses(): " + ex.Message);
+                    fBase.Host.LogWrite("Importer.CheckSpouses(): " + ex.Message);
                 }
             }
         }
 
         private void CheckBuffer(StringList buffer, GEDCOMIndividualRecord curPerson)
         {
-            if (!buffer.IsEmpty())
+            if (buffer.IsEmpty()) return;
+
+            if (curPerson != null)
             {
-                if (curPerson != null)
-                {
-                    this.CheckSpouses(buffer, curPerson);
-                }
-
-                GEDCOMNoteRecord noteRec = this.fTree.CreateNote();
-                noteRec.Note = buffer;
-                if (curPerson != null) curPerson.AddNote(noteRec);
-
-                buffer.Clear();
+                CheckSpouses(buffer, curPerson);
             }
+
+            GEDCOMNoteRecord noteRec = fTree.CreateNote();
+            noteRec.Note = buffer;
+            if (curPerson != null) curPerson.AddNote(noteRec);
+
+            buffer.Clear();
         }
 
         private void ParseBuffer(StringList buffer, ref int prevId)
@@ -624,33 +622,33 @@ namespace GKPedigreeImporterPlugin
 
                 string personId = "";
                 string s = buffer[0];
-                if (this.IsPersonLine(s, ref personId))
+                if (IsPersonLine(s, ref personId))
                 {
-                    this.fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
+                    fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
 
                     int selfId = 0;
-                    GEDCOMIndividualRecord curPerson = this.ParsePerson(buffer, s, ref selfId);
+                    GEDCOMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
 
-                    if (this.NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1)
+                    if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1)
                     {
-                        this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
+                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
                     }
 
                     prevId = selfId;
 
-                    this.CheckBuffer(buffer, curPerson);
+                    CheckBuffer(buffer, curPerson);
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("Importer.ParseBuffer(): " + ex.Message);
+                fBase.Host.LogWrite("Importer.ParseBuffer(): " + ex.Message);
                 throw;
             }
         }
 
         private bool IsGenerationLine(string str)
         {
-            switch (this.GenerationFormat)
+            switch (GenerationFormat)
             {
                 case GenerationFormat.gfRome:
                     return ImportUtils.IsRomeLine(str);
@@ -675,7 +673,7 @@ namespace GKPedigreeImporterPlugin
 
         private bool AnalyseRaw()
         {
-            if (this.SourceType == SourceType.stTable) {
+            if (SourceType == SourceType.stTable) {
                 return false;
             }
 
@@ -685,15 +683,15 @@ namespace GKPedigreeImporterPlugin
                 {
                     int[] numberStats = new int[3];
 
-                    int num = this.fRawContents.Count;
-                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
+                    int num = fRawContents.Count;
+                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
 
                     for (int i = 0; i < num; i++) {
-                        string txt = this.fRawContents[i].Trim();
-                        RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
+                        string txt = fRawContents[i].Trim();
+                        RawLine rawLine = (RawLine)fRawContents.GetObject(i);
 
                         if (!string.IsNullOrEmpty(txt)) {
-                            if (this.IsGenerationLine(txt)) {
+                            if (IsGenerationLine(txt)) {
                                 rawLine.Type = RawLineType.rltRomeGeneration;
                             } else {
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
@@ -718,41 +716,41 @@ namespace GKPedigreeImporterPlugin
                             rawLine.Type = RawLineType.rltEOF;
                         }
 
-                        this.fBase.ProgressStep(i + 1);
+                        fBase.ProgressStep(i + 1);
                     }
 
                     if (numberStats[1] > numberStats[2]) {
-                        this.CanNumbersType = PersonNumbersType.pnDAboville;
+                        CanNumbersType = PersonNumbersType.pnDAboville;
                     } else {
-                        this.CanNumbersType = PersonNumbersType.pnKonovalov;
+                        CanNumbersType = PersonNumbersType.pnKonovalov;
                     }
 
                     return true;
                 }
                 finally
                 {
-                    this.fBase.ProgressDone();
+                    fBase.ProgressDone();
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("Importer.AnalyseRaw(): " + ex.Message);
+                fBase.Host.LogWrite("Importer.AnalyseRaw(): " + ex.Message);
                 return false;
             }
         }
 
         public bool ImportContent()
         {
-            this.AnalyseRaw();
+            AnalyseRaw();
 
-            switch (this.SourceType)
+            switch (SourceType)
             {
                 case SourceType.stText:
-                    return this.ImportTextContent();
+                    return ImportTextContent();
 
                 case SourceType.stTable:
                     #if !NO_DEPEND
-                    return this.ImportTableContent();
+                    return ImportTableContent();
                     #else
                     return false;
                     #endif
@@ -766,18 +764,18 @@ namespace GKPedigreeImporterPlugin
         {
             try
             {
-                this.fLog.Clear();
+                fLog.Clear();
 
                 StringList buffer = new StringList();
                 try
                 {
                     int prev_id = 0;
 
-                    int num = this.fRawContents.Count;
+                    int num = fRawContents.Count;
                     for (int i = 0; i < num; i++)
                     {
-                        string line = PrepareLine(this.fRawContents[i]);
-                        RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
+                        string line = PrepareLine(fRawContents[i]);
+                        RawLine rawLine = (RawLine)fRawContents.GetObject(i);
 
                         switch (rawLine.Type) {
                             case RawLineType.rltComment:
@@ -788,7 +786,7 @@ namespace GKPedigreeImporterPlugin
                             case RawLineType.rltRomeGeneration:
                             case RawLineType.rltEOF:
                                 {
-                                    this.ParseBuffer(buffer, ref prev_id);
+                                    ParseBuffer(buffer, ref prev_id);
                                     buffer.Clear();
 
                                     switch (rawLine.Type) {
@@ -796,10 +794,10 @@ namespace GKPedigreeImporterPlugin
                                             buffer.Add(line);
                                             break;
                                         case RawLineType.rltRomeGeneration:
-                                            this.fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                            fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
                                             break;
                                         case RawLineType.rltEOF:
-                                            this.fLog.Add("> EOF.");
+                                            fLog.Add("> EOF.");
                                             break;
                                     }
                                 }
@@ -816,7 +814,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("Importer.ImportTextContent(): " + ex.Message);
+                fBase.Host.LogWrite("Importer.ImportTextContent(): " + ex.Message);
                 throw;
             }
         }
@@ -847,7 +845,7 @@ namespace GKPedigreeImporterPlugin
                 excel.Visible = DEBUG_EXCEL;
                 excel.DisplayAlerts = false;
                 excel.WindowState = MSOExcel.XlWindowState.xlMaximized;
-                excel.Workbooks.Open(this.fFileName);
+                excel.Workbooks.Open(fFileName);
                 MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
                 //sheet.Activate();
 
@@ -857,7 +855,7 @@ namespace GKPedigreeImporterPlugin
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
-                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
+                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
@@ -887,7 +885,7 @@ namespace GKPedigreeImporterPlugin
                         string line, p_id = "";
                         RawLineType lineType = RawLineType.rltComment;
 
-                        if (this.IsGenerationLine(s123)) {
+                        if (IsGenerationLine(s123)) {
                             line = s123;
                             lineType = RawLineType.rltRomeGeneration;
                         } else {
@@ -913,7 +911,7 @@ namespace GKPedigreeImporterPlugin
                             case RawLineType.rltRomeGeneration:
                             case RawLineType.rltEOF:
                                 {
-                                    this.ParseBuffer(buffer, ref prevId);
+                                    ParseBuffer(buffer, ref prevId);
                                     buffer.Clear();
 
                                     switch (lineType) {
@@ -921,27 +919,27 @@ namespace GKPedigreeImporterPlugin
                                             buffer.Add(line);
                                             break;
                                         case RawLineType.rltRomeGeneration:
-                                            this.fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                            fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
                                             break;
                                         case RawLineType.rltEOF:
-                                            this.fLog.Add("> EOF.");
+                                            fLog.Add("> EOF.");
                                             break;
                                     }
                                 }
                                 break;
                         }
 
-                        this.fBase.ProgressStep(row);
+                        fBase.ProgressStep(row);
                     }
 
                     // hack: processing last items before end
-                    this.ParseBuffer(buffer, ref prevId);
+                    ParseBuffer(buffer, ref prevId);
 
                     return true;
                 }
                 finally
                 {
-                    this.fBase.ProgressDone();
+                    fBase.ProgressDone();
 
                     buffer.Dispose();
 
@@ -951,8 +949,8 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.ImportTableContent(): " + ex.Message);
+                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fBase.Host.LogWrite("Importer.ImportTableContent(): " + ex.Message);
                 return false;
             }
         }
@@ -960,40 +958,40 @@ namespace GKPedigreeImporterPlugin
 
         private bool LoadRawText()
         {
-            this.SourceType = SourceType.stText;
+            SourceType = SourceType.stText;
 
             try
             {
-                using (StreamReader strd = new StreamReader(this.fFileName, Encoding.GetEncoding(1251))) {
+                using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251))) {
                     try
                     {
-                        this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
+                        fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
                         while (strd.Peek() != -1) {
                             string txt = strd.ReadLine().Trim();
 
                             if (!string.IsNullOrEmpty(txt)) {
-                                this.fRawContents.AddObject(txt, new RawLine(lineNum));
+                                fRawContents.AddObject(txt, new RawLine(lineNum));
                             }
 
-                            this.fBase.ProgressStep((int)strd.BaseStream.Position);
+                            fBase.ProgressStep((int)strd.BaseStream.Position);
                             lineNum++;
                         }
-                        this.fRawContents.AddObject("", new RawLine(lineNum));
+                        fRawContents.AddObject("", new RawLine(lineNum));
                     }
                     finally
                     {
-                        this.fBase.ProgressDone();
+                        fBase.ProgressDone();
                     }
                 }
 
-                return this.AnalyseRaw();
+                return AnalyseRaw();
             }
             catch (Exception ex)
             {
-                this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.LoadRawText(): " + ex.Message);
+                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fBase.Host.LogWrite("Importer.LoadRawText(): " + ex.Message);
                 return false;
             }
         }
@@ -1001,7 +999,7 @@ namespace GKPedigreeImporterPlugin
         #if !NO_DEPEND
         private bool LoadRawWord()
         {
-            this.SourceType = SourceType.stText;
+            SourceType = SourceType.stText;
 
             try
             {
@@ -1020,9 +1018,9 @@ namespace GKPedigreeImporterPlugin
                     wordApp.Visible = DEBUG_WORD;
                     wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
 
-                    MSOWord.Document doc = wordApp.Documents.Open(this.fFileName);
+                    MSOWord.Document doc = wordApp.Documents.Open(fFileName);
 
-                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
+                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
                     for (int i = 0; i < doc.Paragraphs.Count; i++)
@@ -1031,19 +1029,19 @@ namespace GKPedigreeImporterPlugin
                         txt = txt.Trim();
 
                         if (!string.IsNullOrEmpty(txt)) {
-                            this.fRawContents.AddObject(txt, new RawLine(lineNum));
+                            fRawContents.AddObject(txt, new RawLine(lineNum));
                         }
 
-                        this.fBase.ProgressStep(i + 1);
+                        fBase.ProgressStep(i + 1);
                         lineNum++;
                     }
-                    this.fRawContents.AddObject("", new RawLine(lineNum));
+                    fRawContents.AddObject("", new RawLine(lineNum));
 
-                    return this.AnalyseRaw();
+                    return AnalyseRaw();
                 }
                 finally
                 {
-                    this.fBase.ProgressDone();
+                    fBase.ProgressDone();
 
                     object saveOptionsObject = MSOWord.WdSaveOptions.wdDoNotSaveChanges;
                     wordApp.Quit(ref saveOptionsObject);
@@ -1052,8 +1050,8 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.LoadRawWord(): " + ex.Message);
+                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fBase.Host.LogWrite("Importer.LoadRawWord(): " + ex.Message);
                 return false;
             }
         }
@@ -1061,26 +1059,26 @@ namespace GKPedigreeImporterPlugin
 
         private bool LoadRawExcel()
         {
-            this.SourceType = SourceType.stTable;
+            SourceType = SourceType.stTable;
 
-            return this.AnalyseRaw();
+            return AnalyseRaw();
         }
 
         public bool LoadRawData(string fileName)
         {
-            this.fRawContents.Clear();
+            fRawContents.Clear();
 
-            this.fFileName = fileName;
+            fFileName = fileName;
             string ext = SysUtils.GetFileExtension(fileName);
 
             if (ext == ".txt")
             {
-                return this.LoadRawText();
+                return LoadRawText();
             }
             else if (ext == ".doc")
             {
                 #if !NO_DEPEND
-                return this.LoadRawWord();
+                return LoadRawWord();
                 #else
                 return false;
                 #endif
@@ -1088,7 +1086,7 @@ namespace GKPedigreeImporterPlugin
             else if (ext == ".xls")
             {
                 #if !NO_DEPEND
-                return this.LoadRawExcel();
+                return LoadRawExcel();
                 #else
                 return false;
                 #endif

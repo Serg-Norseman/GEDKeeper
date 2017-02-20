@@ -282,7 +282,7 @@ namespace Externals.Linguistics
             return s.IndexOf(match) + 1;
         }
 
-        static int MinMax(int x, int min, int max)
+        private static int MinMax(int x, int min, int max)
         {
             return Math.Max(Math.Min(x, max), min);
         }

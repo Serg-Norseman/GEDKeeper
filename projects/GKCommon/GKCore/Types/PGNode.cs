@@ -31,16 +31,16 @@ namespace GKCore.Types
 
         public PGNode(string label, PGNodeType type)
         {
-            this.FamilyXRef = label;
-            this.Type = type;
-            this.Size = 1;
+            FamilyXRef = label;
+            Type = type;
+            Size = 1;
         }
 
         public PGNode(string label, PGNodeType type, int size)
         {
-            this.FamilyXRef = label;
-            this.Type = type;
-            this.Size = size;
+            FamilyXRef = label;
+            Type = type;
+            Size = size;
         }
     }
 }

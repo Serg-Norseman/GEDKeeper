@@ -29,39 +29,39 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate After
         {
-            get { return this.fDateAfter; }
+            get { return fDateAfter; }
         }
 
         public GEDCOMDate Before
         {
-            get { return this.fDateBefore; }
+            get { return fDateBefore; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fDateAfter = new GEDCOMDate(owner, parent, "", "");
-            this.fDateBefore = new GEDCOMDate(owner, parent, "", "");
+            fDateAfter = new GEDCOMDate(owner, parent, "", "");
+            fDateBefore = new GEDCOMDate(owner, parent, "", "");
         }
 
         protected override string GetStringValue()
         {
             string result;
-            if (!this.fDateAfter.IsEmpty() && !this.fDateBefore.IsEmpty())
+            if (!fDateAfter.IsEmpty() && !fDateBefore.IsEmpty())
             {
-                result = string.Concat(GEDCOMDateRangeArray[2], " ", this.fDateAfter.StringValue, " ", GEDCOMDateRangeArray[3], " ", this.fDateBefore.StringValue);
+                result = string.Concat(GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
             }
             else
             {
-                if (!this.fDateAfter.IsEmpty())
+                if (!fDateAfter.IsEmpty())
                 {
-                    result = GEDCOMDateRangeArray[0] + " " + this.fDateAfter.StringValue;
+                    result = GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
                 }
                 else
                 {
-                    if (!this.fDateBefore.IsEmpty())
+                    if (!fDateBefore.IsEmpty())
                     {
-                        result = GEDCOMDateRangeArray[1] + " " + this.fDateBefore.StringValue;
+                        result = GEDCOMDateRangeArray[1] + " " + fDateBefore.StringValue;
                     }
                     else
                     {
@@ -75,15 +75,15 @@ namespace GKCommon.GEDCOM
         public override DateTime GetDateTime()
         {
             DateTime result;
-            if (this.fDateAfter.IsEmpty())
+            if (fDateAfter.IsEmpty())
             {
-                result = this.fDateBefore.GetDateTime();
+                result = fDateBefore.GetDateTime();
             }
             else
             {
-                if (this.fDateBefore.IsEmpty())
+                if (fDateBefore.IsEmpty())
                 {
-                    result = this.fDateAfter.GetDateTime();
+                    result = fDateAfter.GetDateTime();
                 }
                 else
                 {
@@ -103,8 +103,8 @@ namespace GKCommon.GEDCOM
         {
             if (disposing)
             {
-                this.fDateAfter.Dispose();
-                this.fDateBefore.Dispose();
+                fDateAfter.Dispose();
+                fDateBefore.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -113,19 +113,19 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            this.fDateAfter.Clear();
-            this.fDateBefore.Clear();
+            fDateAfter.Clear();
+            fDateBefore.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fDateAfter.IsEmpty() && this.fDateBefore.IsEmpty();
+            return base.IsEmpty() && fDateAfter.IsEmpty() && fDateBefore.IsEmpty();
         }
 
         public override string ParseString(string strValue)
         {
-            this.fDateAfter.Clear();
-            this.fDateBefore.Clear();
+            fDateAfter.Clear();
+            fDateBefore.Clear();
 
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
@@ -136,7 +136,7 @@ namespace GKCommon.GEDCOM
                 {
                     result = result.Remove(0, 3);
                     result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                    result = this.fDateAfter.ParseString(result);
+                    result = fDateAfter.ParseString(result);
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace GKCommon.GEDCOM
                     {
                         result = result.Remove(0, 3);
                         result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                        result = this.fDateBefore.ParseString(result);
+                        result = fDateBefore.ParseString(result);
                     }
                     else
                     {
@@ -153,7 +153,7 @@ namespace GKCommon.GEDCOM
                             result = result.Remove(0, 3);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
                             result = GEDCOMUtils.FixFTB(result);
-                            result = this.fDateAfter.ParseString(result);
+                            result = fDateAfter.ParseString(result);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
                             su = result.Substring(0, 3).ToUpper();
@@ -163,7 +163,7 @@ namespace GKCommon.GEDCOM
                                 result = result.Remove(0, 3);
                                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
                                 result = GEDCOMUtils.FixFTB(result);
-                                result = this.fDateBefore.ParseString(result);
+                                result = fDateBefore.ParseString(result);
                             }
                         }
                     }
@@ -175,8 +175,8 @@ namespace GKCommon.GEDCOM
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            if (this.fDateAfter != null) this.fDateAfter.ResetOwner(newOwner);
-            if (this.fDateBefore != null) this.fDateBefore.ResetOwner(newOwner);
+            if (fDateAfter != null) fDateAfter.ResetOwner(newOwner);
+            if (fDateBefore != null) fDateBefore.ResetOwner(newOwner);
         }
 
         public GEDCOMDateRange(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -190,17 +190,17 @@ namespace GKCommon.GEDCOM
             day = 0;
             yearBC = false;
 
-            if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
+            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "")
             {
-                this.fDateBefore.GetDateParts(out year, out month, out day, out yearBC);
+                fDateBefore.GetDateParts(out year, out month, out day, out yearBC);
             }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "")
             {
-                this.fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
+                fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
             }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "")
             {
-                this.fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
+                fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
             }
         }
 
@@ -208,17 +208,17 @@ namespace GKCommon.GEDCOM
         {
             UDN result;
 
-            if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
+            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "")
             {
-                result = UDN.CreateBefore(this.fDateBefore.GetUDN());
+                result = UDN.CreateBefore(fDateBefore.GetUDN());
             }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "")
             {
-                result = UDN.CreateAfter(this.fDateAfter.GetUDN());
+                result = UDN.CreateAfter(fDateAfter.GetUDN());
             }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "")
             {
-                result = UDN.CreateBetween(this.fDateAfter.GetUDN(), this.fDateBefore.GetUDN());
+                result = UDN.CreateBetween(fDateAfter.GetUDN(), fDateBefore.GetUDN());
             }
             else
             {

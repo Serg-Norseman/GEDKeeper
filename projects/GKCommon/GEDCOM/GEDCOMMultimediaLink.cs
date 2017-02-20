@@ -28,18 +28,18 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMFileReference> FileReferences
         {
-            get { return this.fFileReferences; }
+            get { return fFileReferences; }
         }
 
         public bool IsPointer
         {
-            get { return (!string.IsNullOrEmpty(base.XRef)); }
+            get { return (!string.IsNullOrEmpty(XRef)); }
         }
 
         public string Title
         {
-            get { return base.GetTagStringValue("TITL"); }
-            set { base.SetTagStringValue("TITL", value); }
+            get { return GetTagStringValue("TITL"); }
+            set { SetTagStringValue("TITL", value); }
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace GKCommon.GEDCOM
         /// </summary>
         public bool IsPrimary
         {
-            get { return base.GetTagYNValue("_PRIM"); }
-            set { base.SetTagYNValue("_PRIM", value); }
+            get { return GetTagYNValue("_PRIM"); }
+            set { SetTagYNValue("_PRIM", value); }
         }
 
         /// <summary>
@@ -60,26 +60,26 @@ namespace GKCommon.GEDCOM
         /// </summary>
         public bool IsPrimaryCutout
         {
-            get { return base.GetTagYNValue("_PRIM_CUTOUT"); }
-            set { base.SetTagYNValue("_PRIM_CUTOUT", value); }
+            get { return GetTagYNValue("_PRIM_CUTOUT"); }
+            set { SetTagYNValue("_PRIM_CUTOUT", value); }
         }
 
         public GEDCOMCutoutPosition CutoutPosition
         {
-            get { return base.TagClass("_POSITION", GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+            get { return TagClass("_POSITION", GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
         }
 
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("OBJE");
-            this.fFileReferences = new GEDCOMList<GEDCOMFileReference>(this);
+            SetName("OBJE");
+            fFileReferences = new GEDCOMList<GEDCOMFileReference>(this);
         }
 
         protected override string GetStringValue()
         {
-            string result = this.IsPointer ? base.GetStringValue() : this.fStringValue;
+            string result = IsPointer ? base.GetStringValue() : fStringValue;
             return result;
         }
 
@@ -87,7 +87,7 @@ namespace GKCommon.GEDCOM
         {
             if (disposing)
             {
-                this.fFileReferences.Dispose();
+                fFileReferences.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -97,7 +97,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == "FILE") {
-                result = this.fFileReferences.Add(new GEDCOMFileReference(base.Owner, this, tagName, tagValue));
+                result = fFileReferences.Add(new GEDCOMFileReference(Owner, this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -108,36 +108,36 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fFileReferences.Clear();
+            fFileReferences.Clear();
         }
 
         public override bool IsEmpty()
         {
             bool result;
-            if (this.IsPointer) {
+            if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (base.Count == 0 && (this.fFileReferences.Count == 0));
+                result = (Count == 0 && (fFileReferences.Count == 0));
             }
             return result;
         }
 
         public override string ParseString(string strValue)
         {
-            this.fStringValue = "";
+            fStringValue = "";
             return base.ParseString(strValue);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fFileReferences.ResetOwner(newOwner);
+            fFileReferences.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fFileReferences.SaveToStream(stream);
+            fFileReferences.SaveToStream(stream);
         }
 
         public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

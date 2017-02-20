@@ -44,21 +44,21 @@ namespace GKTextSearchPlugin
         {
             InitializeComponent();
 
-            this.fPlugin = plugin;
-            this.fBase = baseWin;
-            this.Text = string.Format(fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]", Path.GetFileName(fBase.Tree.FileName));
+            fPlugin = plugin;
+            fBase = baseWin;
+            Text = string.Format(fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]", Path.GetFileName(fBase.Tree.FileName));
 
-            this.SuspendLayout();
-            this.fResultsText = new HyperView();
-            this.fResultsText.Dock = DockStyle.Fill;
-            this.fResultsText.Location = new Point(0, 0);
-            this.fResultsText.Size = new Size(300, 200);
-            this.fResultsText.OnLink += mTextLink;
-            this.Controls.Add(this.fResultsText);
-            this.ResumeLayout(false);
-            this.Controls.SetChildIndex(this.fResultsText, 0);
+            SuspendLayout();
+            fResultsText = new HyperView();
+            fResultsText.Dock = DockStyle.Fill;
+            fResultsText.Location = new Point(0, 0);
+            fResultsText.Size = new Size(300, 200);
+            fResultsText.OnLink += mTextLink;
+            Controls.Add(fResultsText);
+            ResumeLayout(false);
+            Controls.SetChildIndex(fResultsText, 0);
 
-            this.SetLang();
+            SetLang();
         }
 
         private void Write(string text)
@@ -75,7 +75,7 @@ namespace GKTextSearchPlugin
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            this.btnSearch.Enabled = false;
+            btnSearch.Enabled = false;
             fResultsText.Lines.BeginUpdate();
             try
             {
@@ -91,7 +91,7 @@ namespace GKTextSearchPlugin
                     Write("");
 
                     SearchManager.SearchEntry entry = searchResults[i];
-                    Write(String.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
+                    Write(string.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
 
                     GEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);
                     StringList ctx = fBase.GetRecordContent(rec);
@@ -102,7 +102,7 @@ namespace GKTextSearchPlugin
             finally
             {
                 fResultsText.Lines.EndUpdate();
-                this.btnSearch.Enabled = true;
+                btnSearch.Enabled = true;
             }
         }
 
@@ -113,14 +113,14 @@ namespace GKTextSearchPlugin
 
         private void TextSearchWin_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.fPlugin.tsWin = null;
+            fPlugin.fForm = null;
         }
 
         #region ILocalization support
 
         public void SetLang()
         {
-            this.btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
+            btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
         }
 
         #endregion

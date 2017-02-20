@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class EventEditDlg : EditorDialog
+    public sealed partial class EventEditDlg : EditorDialog
     {
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
@@ -46,18 +46,18 @@ namespace GKUI.Dialogs
 
         public GEDCOMCustomEvent Event
         {
-            get { return this.fEvent; }
-            set { this.SetEvent(value); }
+            get { return fEvent; }
+            set { SetEvent(value); }
         }
 
         public EventEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
-            this.btnPlaceAdd.Image = GKResources.iRecNew;
-            this.btnPlaceDelete.Image = GKResources.iRecDelete;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnPlaceAdd.Image = GKResources.iRecNew;
+            btnPlaceDelete.Image = GKResources.iRecDelete;
 
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)
@@ -70,37 +70,37 @@ namespace GKUI.Dialogs
                 GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
                 if (!cdr.HasSupport) continue;
 
-                this.cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
-                this.cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
+                cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
+                cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
             }
 
-            this.cmbDate1Calendar.SelectedIndex = 0;
-            this.cmbDate2Calendar.SelectedIndex = 0;
+            cmbDate1Calendar.SelectedIndex = 0;
+            cmbDate2Calendar.SelectedIndex = 0;
 
-            this.fLocation = null;
+            fLocation = null;
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
+            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
 
             // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_Event);
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
-            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.lblEvent.Text = LangMan.LS(LSID.LSID_Event);
-            this.lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
-            this.lblPlace.Text = LangMan.LS(LSID.LSID_Place);
-            this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
-            this.lblCause.Text = LangMan.LS(LSID.LSID_Cause);
-            this.lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
+            Text = LangMan.LS(LSID.LSID_Event);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            lblEvent.Text = LangMan.LS(LSID.LSID_Event);
+            lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
+            lblPlace.Text = LangMan.LS(LSID.LSID_Place);
+            lblDate.Text = LangMan.LS(LSID.LSID_Date);
+            lblCause.Text = LangMan.LS(LSID.LSID_Cause);
+            lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
 
-            this.toolTip1.SetToolTip(this.btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
-            this.toolTip1.SetToolTip(this.btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
+            toolTip1.SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
+            toolTip1.SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
         }
 
         private static GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
@@ -127,11 +127,11 @@ namespace GKUI.Dialogs
         {
             string result = "";
 
-            GEDCOMCalendar cal1 = GetComboCalendar(this.cmbDate1Calendar);
-            GEDCOMCalendar cal2 = GetComboCalendar(this.cmbDate2Calendar);
+            GEDCOMCalendar cal1 = GetComboCalendar(cmbDate1Calendar);
+            GEDCOMCalendar cal2 = GetComboCalendar(cmbDate2Calendar);
 
-            string gcd1 = GEDCOMUtils.StrToGEDCOMDate(this.txtEventDate1.Text, true);
-            string gcd2 = GEDCOMUtils.StrToGEDCOMDate(this.txtEventDate2.Text, true);
+            string gcd1 = GEDCOMUtils.StrToGEDCOMDate(txtEventDate1.Text, true);
+            string gcd2 = GEDCOMUtils.StrToGEDCOMDate(txtEventDate2.Text, true);
 
             if (cal1 != GEDCOMCalendar.dcGregorian) {
                 gcd1 = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal1] + " " + gcd1;
@@ -149,7 +149,7 @@ namespace GKUI.Dialogs
                 gcd2 = gcd2 + GEDCOMObject.GEDCOM_YEAR_BC;
             }
 
-            switch (this.cmbEventDateType.SelectedIndex) {
+            switch (cmbEventDateType.SelectedIndex) {
                 case 0:
                     result = gcd1;
                     break;
@@ -196,127 +196,127 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            this.fEvent.Detail.Place.StringValue = this.txtEventPlace.Text;
-            this.fEvent.Detail.Place.Location.Value = this.fLocation;
-            this.fEvent.Detail.Classification = this.txtEventName.Text;
-            this.fEvent.Detail.Cause = this.txtEventCause.Text;
-            this.fEvent.Detail.Agency = this.txtEventOrg.Text;
+            fEvent.Detail.Place.StringValue = txtEventPlace.Text;
+            fEvent.Detail.Place.Location.Value = fLocation;
+            fEvent.Detail.Classification = txtEventName.Text;
+            fEvent.Detail.Cause = txtEventCause.Text;
+            fEvent.Detail.Agency = txtEventOrg.Text;
 
-            string dt = this.AssembleDate();
-            this.fEvent.Detail.Date.ParseString(dt);
+            string dt = AssembleDate();
+            fEvent.Detail.Date.ParseString(dt);
 
-            if (this.fEvent is GEDCOMFamilyEvent)
+            if (fEvent is GEDCOMFamilyEvent)
             {
-                this.fEvent.SetName(GKData.FamilyEvents[this.cmbEventType.SelectedIndex].Sign);
+                fEvent.SetName(GKData.FamilyEvents[cmbEventType.SelectedIndex].Sign);
             }
             else
             {
-                int id = this.cmbEventType.SelectedIndex;
-                this.fEvent.SetName(GKData.PersonEvents[id].Sign);
+                int id = cmbEventType.SelectedIndex;
+                fEvent.SetName(GKData.PersonEvents[id].Sign);
                 if (GKData.PersonEvents[id].Kind == PersonEventKind.ekFact)
                 {
-                    this.fEvent.StringValue = this.txtAttribute.Text;
+                    fEvent.StringValue = txtAttribute.Text;
                 }
                 else
                 {
-                    this.fEvent.StringValue = "";
+                    fEvent.StringValue = "";
                 }
             }
 
-            if (this.fEvent is GEDCOMIndividualEvent)
+            if (fEvent is GEDCOMIndividualEvent)
             {
-                int id = this.cmbEventType.SelectedIndex;
+                int id = cmbEventType.SelectedIndex;
                 if (GKData.PersonEvents[id].Kind == PersonEventKind.ekFact)
                 {
-                    GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(this.fEvent.Owner, this.fEvent.Parent, "", "");
-                    attr.Assign(this.fEvent);
-                    this.fEvent = attr;
+                    GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner, fEvent.Parent, "", "");
+                    attr.Assign(fEvent);
+                    fEvent = attr;
                 }
             }
 
-            base.CommitChanges();
+            CommitChanges();
         }
 
         private void ControlsRefresh()
         {
-            if (this.fLocation != null) {
-                this.txtEventPlace.Text = this.fLocation.LocationName;
-                this.txtEventPlace.ReadOnly = true;
-                this.txtEventPlace.BackColor = SystemColors.Control;
-                this.btnPlaceAdd.Enabled = false;
-                this.btnPlaceDelete.Enabled = true;
+            if (fLocation != null) {
+                txtEventPlace.Text = fLocation.LocationName;
+                txtEventPlace.ReadOnly = true;
+                txtEventPlace.BackColor = SystemColors.Control;
+                btnPlaceAdd.Enabled = false;
+                btnPlaceDelete.Enabled = true;
             } else {
-                this.txtEventPlace.Text = this.fEvent.Detail.Place.StringValue;
-                this.txtEventPlace.ReadOnly = false;
-                this.txtEventPlace.BackColor = SystemColors.Window;
-                this.btnPlaceAdd.Enabled = true;
-                this.btnPlaceDelete.Enabled = false;
+                txtEventPlace.Text = fEvent.Detail.Place.StringValue;
+                txtEventPlace.ReadOnly = false;
+                txtEventPlace.BackColor = SystemColors.Window;
+                btnPlaceAdd.Enabled = true;
+                btnPlaceDelete.Enabled = false;
             }
 
-            this.fNotesList.DataList = this.fEvent.Detail.Notes.GetEnumerator();
-            this.fMediaList.DataList = this.fEvent.Detail.MultimediaLinks.GetEnumerator();
-            this.fSourcesList.DataList = this.fEvent.Detail.SourceCitations.GetEnumerator();
+            fNotesList.DataList = fEvent.Detail.Notes.GetEnumerator();
+            fMediaList.DataList = fEvent.Detail.MultimediaLinks.GetEnumerator();
+            fSourcesList.DataList = fEvent.Detail.SourceCitations.GetEnumerator();
         }
 
         private void SetEvent(GEDCOMCustomEvent value)
         {
-            this.fEvent = value;
+            fEvent = value;
 
-            if (this.fEvent is GEDCOMFamilyEvent)
+            if (fEvent is GEDCOMFamilyEvent)
             {
                 int num = GKData.FamilyEvents.Length;
                 for (int i = 0; i < num; i++)
                 {
-                    this.cmbEventType.Items.Add(LangMan.LS(GKData.FamilyEvents[i].Name));
+                    cmbEventType.Items.Add(LangMan.LS(GKData.FamilyEvents[i].Name));
                 }
 
-                int idx = GKUtils.GetFamilyEventIndex(this.fEvent.Name);
+                int idx = GKUtils.GetFamilyEventIndex(fEvent.Name);
                 if (idx < 0) idx = 0;
-                this.cmbEventType.SelectedIndex = idx;
+                cmbEventType.SelectedIndex = idx;
             }
             else
             {
                 int num = GKData.PersonEvents.Length;
                 for (int i = 0; i < num; i++)
                 {
-                    this.cmbEventType.Items.Add(LangMan.LS(GKData.PersonEvents[i].Name));
+                    cmbEventType.Items.Add(LangMan.LS(GKData.PersonEvents[i].Name));
                 }
 
-                int idx = GKUtils.GetPersonEventIndex(this.fEvent.Name);
+                int idx = GKUtils.GetPersonEventIndex(fEvent.Name);
                 if (idx < 0) idx = 0;
-                this.cmbEventType.SelectedIndex = idx;
+                cmbEventType.SelectedIndex = idx;
 
                 if (idx >= 0 && GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact)
                 {
-                    this.txtAttribute.Text = this.fEvent.StringValue;
+                    txtAttribute.Text = fEvent.StringValue;
                 }
             }
 
-            this.EditEventType_SelectedIndexChanged(null, null);
+            EditEventType_SelectedIndexChanged(null, null);
 
-            GEDCOMCustomDate date = this.fEvent.Detail.Date.Value;
+            GEDCOMCustomDate date = fEvent.Detail.Date.Value;
             if (date is GEDCOMDateApproximated)
             {
                 GEDCOMApproximated approximated = (date as GEDCOMDateApproximated).Approximated;
 
                 switch (approximated) {
                     case GEDCOMApproximated.daExact:
-                        this.cmbEventDateType.SelectedIndex = 0;
+                        cmbEventDateType.SelectedIndex = 0;
                         break;
                     case GEDCOMApproximated.daAbout:
-                        this.cmbEventDateType.SelectedIndex = 7;
+                        cmbEventDateType.SelectedIndex = 7;
                         break;
                     case GEDCOMApproximated.daCalculated:
-                        this.cmbEventDateType.SelectedIndex = 8;
+                        cmbEventDateType.SelectedIndex = 8;
                         break;
                     case GEDCOMApproximated.daEstimated:
-                        this.cmbEventDateType.SelectedIndex = 9;
+                        cmbEventDateType.SelectedIndex = 9;
                         break;
                 }
 
-                this.txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
-                SetComboCalendar(this.cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
-                this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
+                txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+                SetComboCalendar(cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
+                btnBC1.Checked = (date as GEDCOMDate).YearBC;
             }
             else
             {
@@ -325,29 +325,29 @@ namespace GKUI.Dialogs
                     GEDCOMDateRange dtRange = date as GEDCOMDateRange;
                     if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "")
                     {
-                        this.cmbEventDateType.SelectedIndex = 1;
+                        cmbEventDateType.SelectedIndex = 1;
                     }
                     else
                     {
                         if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "")
                         {
-                            this.cmbEventDateType.SelectedIndex = 2;
+                            cmbEventDateType.SelectedIndex = 2;
                         }
                         else
                         {
                             if (dtRange.After.StringValue != "" && dtRange.Before.StringValue != "")
                             {
-                                this.cmbEventDateType.SelectedIndex = 3;
+                                cmbEventDateType.SelectedIndex = 3;
                             }
                         }
                     }
 
-                    this.txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
-                    this.txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
-                    SetComboCalendar(this.cmbDate1Calendar, dtRange.After.DateCalendar);
-                    SetComboCalendar(this.cmbDate2Calendar, dtRange.Before.DateCalendar);
-                    this.btnBC1.Checked = dtRange.After.YearBC;
-                    this.btnBC2.Checked = dtRange.Before.YearBC;
+                    txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
+                    txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
+                    SetComboCalendar(cmbDate1Calendar, dtRange.After.DateCalendar);
+                    SetComboCalendar(cmbDate2Calendar, dtRange.Before.DateCalendar);
+                    btnBC1.Checked = dtRange.After.YearBC;
+                    btnBC2.Checked = dtRange.Before.YearBC;
                 }
                 else
                 {
@@ -356,71 +356,71 @@ namespace GKUI.Dialogs
                         GEDCOMDatePeriod dtPeriod = date as GEDCOMDatePeriod;
                         if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "")
                         {
-                            this.cmbEventDateType.SelectedIndex = 4;
+                            cmbEventDateType.SelectedIndex = 4;
                         }
                         else
                         {
                             if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "")
                             {
-                                this.cmbEventDateType.SelectedIndex = 5;
+                                cmbEventDateType.SelectedIndex = 5;
                             }
                             else
                             {
                                 if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue != "")
                                 {
-                                    this.cmbEventDateType.SelectedIndex = 6;
+                                    cmbEventDateType.SelectedIndex = 6;
                                 }
                             }
                         }
 
-                        this.txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
-                        this.txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
-                        SetComboCalendar(this.cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
-                        SetComboCalendar(this.cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
-                        this.btnBC1.Checked = dtPeriod.DateFrom.YearBC;
-                        this.btnBC2.Checked = dtPeriod.DateTo.YearBC;
+                        txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
+                        txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
+                        SetComboCalendar(cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
+                        SetComboCalendar(cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
+                        btnBC1.Checked = dtPeriod.DateFrom.YearBC;
+                        btnBC2.Checked = dtPeriod.DateTo.YearBC;
                     }
                     else
                     {
                         if (date is GEDCOMDate)
                         {
-                            this.cmbEventDateType.SelectedIndex = 0;
-                            this.txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
-                            SetComboCalendar(this.cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
-                            this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
+                            cmbEventDateType.SelectedIndex = 0;
+                            txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+                            SetComboCalendar(cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
+                            btnBC1.Checked = (date as GEDCOMDate).YearBC;
                         }
                         else
                         {
-                            this.cmbEventDateType.SelectedIndex = 0;
-                            this.txtEventDate1.Text = "";
-                            this.cmbDate1Calendar.SelectedIndex = 0;
-                            this.btnBC1.Checked = false;
+                            cmbEventDateType.SelectedIndex = 0;
+                            txtEventDate1.Text = "";
+                            cmbDate1Calendar.SelectedIndex = 0;
+                            btnBC1.Checked = false;
                         }
                     }
                 }
             }
 
-            this.EditEventDateType_SelectedIndexChanged(null, null);
-            this.txtEventName.Text = this.fEvent.Detail.Classification;
-            this.txtEventCause.Text = this.fEvent.Detail.Cause;
-            this.txtEventOrg.Text = this.fEvent.Detail.Agency;
-            this.fLocation = (this.fEvent.Detail.Place.Location.Value as GEDCOMLocationRecord);
-            this.ControlsRefresh();
+            EditEventDateType_SelectedIndexChanged(null, null);
+            txtEventName.Text = fEvent.Detail.Classification;
+            txtEventCause.Text = fEvent.Detail.Cause;
+            txtEventOrg.Text = fEvent.Detail.Agency;
+            fLocation = (fEvent.Detail.Place.Location.Value as GEDCOMLocationRecord);
+            ControlsRefresh();
 
-            this.ActiveControl = this.cmbEventType;
+            ActiveControl = cmbEventType;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.AcceptChanges();
-                base.DialogResult = DialogResult.OK;
+                AcceptChanges();
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("EventEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("EventEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -428,37 +428,37 @@ namespace GKUI.Dialogs
         {
             try
             {
-                base.RollbackChanges();
+                RollbackChanges();
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
+                fBase.Host.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            this.fBase.ModifyAddress(this.fEvent.Detail.Address);
+            fBase.ModifyAddress(fEvent.Detail.Address);
         }
 
         private void EditEventPlace_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down && e.Control)
             {
-                this.txtEventPlace.Text = this.txtEventPlace.Text.ToLower();
+                txtEventPlace.Text = txtEventPlace.Text.ToLower();
             }
         }
 
         private void btnPlaceAdd_Click(object sender, EventArgs e)
         {
-            this.fLocation = (this.fBase.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
-            this.ControlsRefresh();
+            fLocation = (fBase.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
+            ControlsRefresh();
         }
 
         private void btnPlaceDelete_Click(object sender, EventArgs e)
         {
-            this.fLocation = null;
-            this.ControlsRefresh();
+            fLocation = null;
+            ControlsRefresh();
         }
 
         private void EditEventDate1_DragOver(object sender, DragEventArgs e)
@@ -479,38 +479,38 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
+                fBase.Host.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
             }
         }
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.fEvent is GEDCOMFamilyEvent)
+            if (fEvent is GEDCOMFamilyEvent)
             {
-                this.txtAttribute.Enabled = false;
-                this.txtAttribute.BackColor = SystemColors.Control;
+                txtAttribute.Enabled = false;
+                txtAttribute.BackColor = SystemColors.Control;
             }
             else
             {
-                int idx = this.cmbEventType.SelectedIndex;
+                int idx = cmbEventType.SelectedIndex;
                 if (idx >= 0) {
                     if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent)
                     {
-                        this.txtAttribute.Enabled = false;
-                        this.txtAttribute.BackColor = SystemColors.Control;
-                        this.txtAttribute.Text = "";
+                        txtAttribute.Enabled = false;
+                        txtAttribute.BackColor = SystemColors.Control;
+                        txtAttribute.Text = "";
                     }
                     else
                     {
-                        this.txtAttribute.Enabled = true;
-                        this.txtAttribute.BackColor = SystemColors.Window;
+                        txtAttribute.Enabled = true;
+                        txtAttribute.BackColor = SystemColors.Window;
                     }
                 }
             }
 
             string evName;
-            int id = this.cmbEventType.SelectedIndex;
-            if (this.fEvent is GEDCOMFamilyEvent) {
+            int id = cmbEventType.SelectedIndex;
+            if (fEvent is GEDCOMFamilyEvent) {
                 evName = GKData.FamilyEvents[id].Sign;
             } else {
                 evName = GKData.PersonEvents[id].Sign;
@@ -525,22 +525,22 @@ namespace GKUI.Dialogs
                 canbeSorted = false;
                 userInput = false;
             } else {
-                vals = this.fBase.Context.ValuesCollection.GetValues(evName);
+                vals = fBase.Context.ValuesCollection.GetValues(evName);
                 canbeSorted = true;
                 userInput = true;
             }
 
             if (vals != null) {
-                string tmp = this.txtAttribute.Text;
-                this.txtAttribute.Sorted = false;
+                string tmp = txtAttribute.Text;
+                txtAttribute.Sorted = false;
 
-                this.txtAttribute.Items.Clear();
-                this.txtAttribute.Items.AddRange(vals);
+                txtAttribute.Items.Clear();
+                txtAttribute.Items.AddRange(vals);
 
-                this.txtAttribute.Sorted = canbeSorted;
-                this.txtAttribute.Text = tmp;
+                txtAttribute.Sorted = canbeSorted;
+                txtAttribute.Text = tmp;
 
-                this.txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
+                txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
             }
         }
 
@@ -554,18 +554,18 @@ namespace GKUI.Dialogs
 
         private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int idx = this.cmbEventDateType.SelectedIndex;
+            int idx = cmbEventDateType.SelectedIndex;
             if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
             byte dates = GKData.DateKinds[idx].Dates;
-            this.txtEventDate1.Enabled = SysUtils.IsSetBit(dates, 0);
-            this.txtEventDate2.Enabled = SysUtils.IsSetBit(dates, 1);
+            txtEventDate1.Enabled = SysUtils.IsSetBit(dates, 0);
+            txtEventDate2.Enabled = SysUtils.IsSetBit(dates, 1);
 
-            this.cmbDate1Calendar.Enabled = this.txtEventDate1.Enabled;
-            this.cmbDate2Calendar.Enabled = this.txtEventDate2.Enabled;
+            cmbDate1Calendar.Enabled = txtEventDate1.Enabled;
+            cmbDate2Calendar.Enabled = txtEventDate2.Enabled;
 
-            this.btnBC1.Enabled = this.txtEventDate1.Enabled;
-            this.btnBC2.Enabled = this.txtEventDate2.Enabled;
+            btnBC1.Enabled = txtEventDate1.Enabled;
+            btnBC2.Enabled = txtEventDate2.Enabled;
         }
     }
 }

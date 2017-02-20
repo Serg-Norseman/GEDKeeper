@@ -65,10 +65,10 @@ namespace GKCore.Operations
 
         public override void Undo()
         {
-            if (fPerson != null) {
-                GEDCOMPersonalName np = fPerson.PersonalNames[0];
-                GKUtils.SetRusNameParts(np, fOldSurname, fOldName, fOldPatronymic);
-            }
+            if (fPerson == null) return;
+
+            GEDCOMPersonalName np = fPerson.PersonalNames[0];
+            GKUtils.SetRusNameParts(np, fOldSurname, fOldName, fOldPatronymic);
         }
     }
 }

@@ -34,13 +34,13 @@ namespace GKTextSearchPlugin
     /// </summary>
     public class SearchManager
     {
-        private readonly object xdbLock;
+        private readonly object fLock;
         private readonly Plugin fPlugin;
 
         public SearchManager(Plugin plugin)
         {
-            this.fPlugin = plugin;
-            this.xdbLock = new object();
+            fPlugin = plugin;
+            fLock = new object();
         }
 
         #region Private methods
@@ -143,7 +143,7 @@ namespace GKTextSearchPlugin
 
             try
             {
-                lock (xdbLock)
+                lock (fLock)
                 {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
                         using (TermGenerator indexer = new TermGenerator())
@@ -152,8 +152,8 @@ namespace GKTextSearchPlugin
                         indexer.SetStemmer(stemmer);
 
                         baseWin.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Tree.RecordsCount);
-                        int num = baseWin.Tree.RecordsCount - 1;
-                        for (int i = 0; i <= num; i++)
+                        int num = baseWin.Tree.RecordsCount;
+                        for (int i = 0; i < num; i++)
                         {
                             GEDCOMRecord record = baseWin.Tree[i];
                             if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);
@@ -181,7 +181,7 @@ namespace GKTextSearchPlugin
 
             try
             {
-                lock (xdbLock)
+                lock (fLock)
                 {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
                         using (TermGenerator indexer = new TermGenerator())
@@ -207,7 +207,7 @@ namespace GKTextSearchPlugin
 
             try
             {
-                lock (xdbLock)
+                lock (fLock)
                 {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
                     {
@@ -245,7 +245,7 @@ namespace GKTextSearchPlugin
 
             try
             {
-                lock (xdbLock)
+                lock (fLock)
                 {
                     using (Database database = new Database(GetXDBFolder()))
                         using (Enquire enquire = new Enquire(database))

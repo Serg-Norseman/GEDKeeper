@@ -26,7 +26,7 @@ namespace GKCommon
 {
     public static class YamlHelper
     {
-        private static YamlSerializer serializer;
+        private static readonly YamlSerializer serializer;
 
         static YamlHelper()
         {

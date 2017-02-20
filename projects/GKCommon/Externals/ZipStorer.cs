@@ -75,7 +75,7 @@ namespace Externals
         #region Private fields
 
         // Static CRC32 Table
-        private static readonly UInt32[] fCrcTable = null;
+        private static readonly uint[] fCrcTable = null;
         // Default filename encoder
         private static readonly Encoding fDefaultEncoding = Encoding.GetEncoding(/*437*/866);
 
@@ -263,33 +263,32 @@ namespace Externals
         /// <remarks>This is a required step, unless automatic dispose is used</remarks>
         public void Close()
         {
-            if (fZipFileStream != null)
+            if (fZipFileStream == null) return;
+
+            if (fAccess != FileAccess.Read)
             {
-                if (fAccess != FileAccess.Read)
+                uint centralOffset = (uint)fZipFileStream.Position;
+                uint centralSize = 0;
+
+                if (fCentralDirImage != null)
+                    fZipFileStream.Write(fCentralDirImage, 0, fCentralDirImage.Length);
+
+                for (int i = 0; i < fFiles.Count; i++)
                 {
-                    uint centralOffset = (uint)fZipFileStream.Position;
-                    uint centralSize = 0;
-
-                    if (fCentralDirImage != null)
-                        fZipFileStream.Write(fCentralDirImage, 0, fCentralDirImage.Length);
-
-                    for (int i = 0; i < fFiles.Count; i++)
-                    {
-                        long pos = fZipFileStream.Position;
-                        WriteCentralDirRecord(fFiles[i]);
-                        centralSize += (uint)(fZipFileStream.Position - pos);
-                    }
-
-                    if (fCentralDirImage != null)
-                        WriteEndRecord(centralSize + (uint)fCentralDirImage.Length, centralOffset);
-                    else
-                        WriteEndRecord(centralSize, centralOffset);
+                    long pos = fZipFileStream.Position;
+                    WriteCentralDirRecord(fFiles[i]);
+                    centralSize += (uint)(fZipFileStream.Position - pos);
                 }
 
-                fZipFileStream.Flush();
-                fZipFileStream.Dispose();
-                fZipFileStream = null;
+                if (fCentralDirImage != null)
+                    WriteEndRecord(centralSize + (uint)fCentralDirImage.Length, centralOffset);
+                else
+                    WriteEndRecord(centralSize, centralOffset);
             }
+
+            fZipFileStream.Flush();
+            fZipFileStream.Dispose();
+            fZipFileStream = null;
         }
 
         /// <summary>
@@ -380,7 +379,7 @@ namespace Externals
 
             bool result;
             using (Stream output = new FileStream(filename, FileMode.Create, FileAccess.Write)) {
-                result = ExtractFile(zfe, output);
+                result = ExtractStream(zfe, output);
             }
 
             if (result) {
@@ -429,7 +428,7 @@ namespace Externals
         /// <param name="stream">Stream to store the uncompressed data</param>
         /// <returns>True if success, false if not.</returns>
         /// <remarks>Unique compression methods are Store and Deflate</remarks>
-        public bool ExtractFile(ZipFileEntry zfe, Stream stream)
+        public bool ExtractStream(ZipFileEntry zfe, Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -503,7 +502,7 @@ namespace Externals
 
             try
             {
-                using (var tempZip = ZipStorer.Create(tempZipName, string.Empty)) {
+                using (var tempZip = Create(tempZipName, string.Empty)) {
                     foreach (ZipFileEntry zfe in fullList)
                     {
                         if (!zfes.Contains(zfe))
@@ -520,7 +519,7 @@ namespace Externals
                 File.Delete(zip.fFileName);
                 File.Move(tempZipName, zip.fFileName);
 
-                zip = ZipStorer.Open(zip.fFileName, zip.fAccess);
+                zip = Open(zip.fFileName, zip.fAccess);
             }
             catch
             {
@@ -696,7 +695,7 @@ namespace Externals
 
                     for (uint i = 0; i < bytesRead; i++)
                     {
-                        zfe.Crc32 = ZipStorer.fCrcTable[(zfe.Crc32 ^ buffer[i]) & 0xFF] ^ (zfe.Crc32 >> 8);
+                        zfe.Crc32 = fCrcTable[(zfe.Crc32 ^ buffer[i]) & 0xFF] ^ (zfe.Crc32 >> 8);
                     }
                 }
             } while (bytesRead == buffer.Length);
@@ -811,10 +810,10 @@ namespace Externals
                     {
                         fZipFileStream.Seek(6, SeekOrigin.Current);
 
-                        UInt16 entries = br.ReadUInt16();
-                        Int32 centralSize = br.ReadInt32();
-                        UInt32 centralDirOffset = br.ReadUInt32();
-                        UInt16 commentSize = br.ReadUInt16();
+                        ushort entries = br.ReadUInt16();
+                        int centralSize = br.ReadInt32();
+                        uint centralDirOffset = br.ReadUInt32();
+                        ushort commentSize = br.ReadUInt16();
 
                         // check if comment field is the very last data in file
                         if (fZipFileStream.Position + commentSize != fZipFileStream.Length)

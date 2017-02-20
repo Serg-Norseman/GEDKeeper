@@ -6,21 +6,21 @@ namespace GKCommon.Validation
 {
     public abstract class ValidatorBase : Component
     {
-        private Control _controlToValidate;
-        private string _errorMessage = "";
-        private ErrorProvider _errorProvider = new ErrorProvider();
-        private bool _isValid;
+        private Control fControlToValidate;
+        private string fErrorMessage = "";
+        private readonly ErrorProvider fErrorProvider;
+        private bool fIsValid;
 
         [Description("Gets or sets the text for the error message."), DefaultValue(""), Category("Appearance")]
         public string ErrorMessage
         {
             get
             {
-                return this._errorMessage;
+                return fErrorMessage;
             }
             set
             {
-                this._errorMessage = value;
+                fErrorMessage = value;
             }
         }
 
@@ -29,16 +29,15 @@ namespace GKCommon.Validation
         {
             get
             {
-                return this._controlToValidate;
+                return fControlToValidate;
             }
             set
             {
-                this._controlToValidate = value;
-                if (this._controlToValidate != null && !base.DesignMode)
-                {
-                    this._controlToValidate.Validating += new CancelEventHandler(this.ControlToValidate_Validating);
-                    this._controlToValidate.Validated += new EventHandler(this.ControlToValidate_Validated);
-                }
+                fControlToValidate = value;
+                if (fControlToValidate == null || DesignMode) return;
+
+                fControlToValidate.Validating += ControlToValidate_Validating;
+                fControlToValidate.Validated += ControlToValidate_Validated;
             }
         }
 
@@ -47,34 +46,34 @@ namespace GKCommon.Validation
         {
             get
             {
-                return this._isValid;
+                return fIsValid;
             }
             set
             {
-                this._isValid = value;
+                fIsValid = value;
             }
         }
 
-        public ValidatorBase()
+        protected ValidatorBase()
         {
-            this._errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            fErrorProvider = new ErrorProvider();
+            fErrorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
         }
 
         protected abstract bool EvaluateIsValid();
 
         private void ControlToValidate_Validating(object sender, CancelEventArgs e)
         {
-            this._isValid = this.EvaluateIsValid();
-            if (!this._isValid)
-            {
-                this._errorProvider.SetError(this._controlToValidate, this.ErrorMessage);
-                e.Cancel = true;
-            }
+            fIsValid = EvaluateIsValid();
+            if (fIsValid) return;
+
+            fErrorProvider.SetError(fControlToValidate, ErrorMessage);
+            e.Cancel = true;
         }
 
         private void ControlToValidate_Validated(object sender, EventArgs e)
         {
-            this._errorProvider.SetError(this._controlToValidate, "");
+            fErrorProvider.SetError(fControlToValidate, "");
         }
     }
 }

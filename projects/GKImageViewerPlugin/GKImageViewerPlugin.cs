@@ -55,17 +55,17 @@ namespace GKImageViewerPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        internal ImageViewerWin frm;
+        internal ImageViewerWin fForm;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) frm.Dispose();
+                if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -74,8 +74,8 @@ namespace GKImageViewerPlugin
         {
             try
             {
-                frm = new ImageViewerWin(this);
-                this.fHost.ShowMDI(frm);
+                fForm = new ImageViewerWin(this);
+                fHost.ShowMDI(fForm);
             }
             catch (Exception ex)
             {
@@ -91,10 +91,10 @@ namespace GKImageViewerPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(IVLS.LSID_ImgViewer);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(IVLS.LSID_ImgViewer);
 
-                if (frm != null) frm.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace GKImageViewerPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {

@@ -30,13 +30,13 @@ namespace GKUI.Controls
 
         public GKComboItem(string caption, object tag)
         {
-            this.Caption = caption;
-            this.Tag = tag;
+            Caption = caption;
+            Tag = tag;
         }
 
         public override string ToString()
         {
-            return this.Caption;
+            return Caption;
         }
     }
 }

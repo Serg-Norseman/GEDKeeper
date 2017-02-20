@@ -28,36 +28,36 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCustomDate Value
         {
-            get { return this.fValue; }
+            get { return fValue; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fValue = null;
+            fValue = null;
         }
 
         protected override string GetStringValue()
         {
-            return ((this.fValue == null) ? "" : this.fValue.StringValue);
+            return ((fValue == null) ? "" : fValue.StringValue);
         }
 
         public override DateTime GetDateTime()
         {
-            DateTime result = ((this.fValue == null) ? new DateTime(0) : this.fValue.GetDateTime());
+            DateTime result = ((fValue == null) ? new DateTime(0) : fValue.GetDateTime());
             return result;
         }
 
         public override void SetDateTime(DateTime value)
         {
-            if (this.fValue != null)
+            if (fValue != null)
             {
-                this.fValue.SetDateTime(value);
+                fValue.SetDateTime(value);
             }
             else
             {
-                this.fValue = new GEDCOMDateExact(base.Owner, this, "", "");
-                this.fValue.Date = value;
+                fValue = new GEDCOMDateExact(Owner, this, "", "");
+                fValue.Date = value;
             }
         }
 
@@ -65,21 +65,21 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            if (this.fValue != null) this.fValue.Clear();
+            if (fValue != null) fValue.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fValue == null || this.fValue.IsEmpty());
+            return base.IsEmpty() && (fValue == null || fValue.IsEmpty());
         }
 
         public override string ParseString(string strValue)
         {
             try
             {
-                if (this.fValue != null) {
-                    this.fValue.Dispose();
-                    this.fValue = null;
+                if (fValue != null) {
+                    fValue.Dispose();
+                    fValue = null;
                 }
 
                 if (string.IsNullOrEmpty(strValue)) {
@@ -90,26 +90,26 @@ namespace GKCommon.GEDCOM
 
                 if (su == GEDCOMDateApproximatedArray[1] || su == GEDCOMDateApproximatedArray[2] || su == GEDCOMDateApproximatedArray[3])
                 {
-                    this.fValue = new GEDCOMDateApproximated(base.Owner, this, "", "");
+                    fValue = new GEDCOMDateApproximated(Owner, this, "", "");
                 }
                 else if (su == "INT")
                 {
-                    this.fValue = new GEDCOMDateInterpreted(base.Owner, this, "", "");
+                    fValue = new GEDCOMDateInterpreted(Owner, this, "", "");
                 }
                 else if (su == GEDCOMDateRangeArray[0] || su == GEDCOMDateRangeArray[1] || su == GEDCOMDateRangeArray[2])
                 {
-                    this.fValue = new GEDCOMDateRange(base.Owner, this, "", "");
+                    fValue = new GEDCOMDateRange(Owner, this, "", "");
                 }
                 else if (strValue.StartsWith("FROM", StringComparison.InvariantCulture) || strValue.StartsWith("TO", StringComparison.InvariantCulture))
                 {
-                    this.fValue = new GEDCOMDatePeriod(base.Owner, this, "", "");
+                    fValue = new GEDCOMDatePeriod(Owner, this, "", "");
                 }
                 else
                 {
-                    this.fValue = new GEDCOMDate(base.Owner, this, "", "");
+                    fValue = new GEDCOMDate(Owner, this, "", "");
                 }
 
-                return this.fValue.ParseString(strValue);
+                return fValue.ParseString(strValue);
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace GKCommon.GEDCOM
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            if (this.fValue != null) this.fValue.ResetOwner(newOwner);
+            if (fValue != null) fValue.ResetOwner(newOwner);
         }
 
         public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -140,7 +140,7 @@ namespace GKCommon.GEDCOM
             if (tag == null) return 0.0f;
             GEDCOMDateValue date = (GEDCOMDateValue)tag;
 
-            if (this.IsEmpty() || date.IsEmpty()) return 0.0f;
+            if (IsEmpty() || date.IsEmpty()) return 0.0f;
 
             int absVal1 = GEDCOMUtils.GetRelativeYear(this);
             int absVal2 = GEDCOMUtils.GetRelativeYear(date);
@@ -159,19 +159,19 @@ namespace GKCommon.GEDCOM
 
         public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
         {
-            if (this.fValue == null) {
+            if (fValue == null) {
                 year = -1;
                 month = 0;
                 day = 0;
                 yearBC = false;
             } else {
-                this.fValue.GetDateParts(out year, out month, out day, out yearBC);
+                fValue.GetDateParts(out year, out month, out day, out yearBC);
             }
         }
 
         public override UDN GetUDN()
         {
-            return (this.fValue == null) ? UDN.CreateEmpty() : this.fValue.GetUDN();
+            return (fValue == null) ? UDN.CreateEmpty() : fValue.GetUDN();
         }
 
         #endregion

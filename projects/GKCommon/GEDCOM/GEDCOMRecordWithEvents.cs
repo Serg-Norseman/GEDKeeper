@@ -28,7 +28,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMCustomEvent> Events
         {
-            get { return this.fEvents; }
+            get { return fEvents; }
         }
 
         protected GEDCOMRecordWithEvents(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -38,13 +38,13 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fEvents = new GEDCOMList<GEDCOMCustomEvent>(this);
+            fEvents = new GEDCOMList<GEDCOMCustomEvent>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                this.fEvents.Dispose();
+                fEvents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -52,12 +52,12 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fEvents.Clear();
+            fEvents.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (this.fEvents.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0);
         }
 
         public override void Assign(GEDCOMTag source)
@@ -70,9 +70,9 @@ namespace GKCommon.GEDCOM
 
             foreach (GEDCOMCustomEvent sourceEvent in sourceRec.fEvents)
             {
-                GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this.Owner, this, "", "" });
+                GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { Owner, this, "", "" });
                 copy.Assign(sourceEvent);
-                this.AddEvent(copy);
+                AddEvent(copy);
             }
         }
 
@@ -84,9 +84,9 @@ namespace GKCommon.GEDCOM
 
             base.MoveTo(targetRecord, clearDest);
 
-            while (this.fEvents.Count > 0)
+            while (fEvents.Count > 0)
             {
-                GEDCOMCustomEvent obj = this.fEvents.Extract(0);
+                GEDCOMCustomEvent obj = fEvents.Extract(0);
                 obj.ResetParent(target);
                 target.AddEvent(obj);
             }
@@ -95,29 +95,29 @@ namespace GKCommon.GEDCOM
         public override void Pack()
         {
             base.Pack();
-            this.fEvents.Pack();
+            fEvents.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fEvents.ReplaceXRefs(map);
+            fEvents.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fEvents.ResetOwner(newOwner);
+            fEvents.ResetOwner(newOwner);
         }
 
         public GEDCOMCustomEvent FindEvent(string eventName)
         {
             GEDCOMCustomEvent result = null;
 
-            int num = this.fEvents.Count;
+            int num = fEvents.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMCustomEvent evt = this.fEvents[i];
+                GEDCOMCustomEvent evt = fEvents[i];
 
                 if (evt.Name == eventName) {
                     result = evt;
@@ -139,9 +139,9 @@ namespace GKCommon.GEDCOM
             float result = 0;
             float wsum = 0;
 
-            int num1 = this.fEvents.Count;
+            int num1 = fEvents.Count;
             for (int i = 0; i < num1; i++) {
-                GEDCOMCustomEvent evt = this.fEvents[i];
+                GEDCOMCustomEvent evt = fEvents[i];
 
                 int num2 = evt.Detail.SourceCitations.Count;
                 for (int k = 0; k < num2; k++) {
@@ -155,9 +155,9 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            int num3 = this.SourceCitations.Count;
+            int num3 = SourceCitations.Count;
             for (int i = 0; i < num3; i++) {
-                GEDCOMSourceCitation cit = this.SourceCitations[i];
+                GEDCOMSourceCitation cit = SourceCitations[i];
 
                 int ca = cit.CertaintyAssessment;
                 int weight = (ca + 1);

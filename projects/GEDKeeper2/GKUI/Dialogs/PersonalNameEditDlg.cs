@@ -37,32 +37,32 @@ namespace GKUI.Dialogs
 
         public GEDCOMPersonalName PersonalName
         {
-            get { return this.fPersonalName; }
-            set { this.SetPersonalName(value); }
+            get { return fPersonalName; }
+            set { SetPersonalName(value); }
         }
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
 
         private void SetPersonalName(GEDCOMPersonalName value)
         {
-            this.fPersonalName = value;
+            fPersonalName = value;
             try
             {
-                this.UpdateControls();
+                UpdateControls();
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
+                fBase.Host.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
-            GEDCOMIndividualRecord iRec = this.fPersonalName.Parent as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
 
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
                 (iRec.Sex == GEDCOMSex.svFemale);
@@ -72,57 +72,57 @@ namespace GKUI.Dialogs
         private void UpdateControls()
         {
             string surname, name, patronymic;
-            GKUtils.GetRusNameParts(this.fPersonalName, out surname, out name, out patronymic);
+            GKUtils.GetRusNameParts(fPersonalName, out surname, out name, out patronymic);
 
-            this.txtSurname.Text = surname;
-            this.txtName.Text = name;
-            this.txtPatronymic.Text = patronymic;
-            this.cmbNameType.SelectedIndex = (sbyte)this.fPersonalName.NameType;
+            txtSurname.Text = surname;
+            txtName.Text = name;
+            txtPatronymic.Text = patronymic;
+            cmbNameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
-            this.txtNamePrefix.Text = fPersonalName.Pieces.Prefix;
-            this.txtNickname.Text = fPersonalName.Pieces.Nickname;
-            this.txtSurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
-            this.txtNameSuffix.Text = fPersonalName.Pieces.Suffix;
+            txtNamePrefix.Text = fPersonalName.Pieces.Prefix;
+            txtNickname.Text = fPersonalName.Pieces.Nickname;
+            txtSurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
+            txtNameSuffix.Text = fPersonalName.Pieces.Suffix;
 
-            this.txtMarriedSurname.Text = fPersonalName.Pieces.MarriedName;
+            txtMarriedSurname.Text = fPersonalName.Pieces.MarriedName;
 
-            if (!this.IsExtendedWomanSurname()) {
-                this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-                this.txtMarriedSurname.Enabled = false;
+            if (!IsExtendedWomanSurname()) {
+                lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+                txtMarriedSurname.Enabled = false;
             } else {
-                this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
-                this.txtMarriedSurname.Enabled = true;
+                lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                txtMarriedSurname.Enabled = true;
             }
 
-            ICulture culture = this.fBase.Context.Culture;
-            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
-            this.txtPatronymic.Enabled = this.txtPatronymic.Enabled && culture.HasPatronymic();
+            ICulture culture = fBase.Context.Culture;
+            txtSurname.Enabled = txtSurname.Enabled && culture.HasSurname();
+            txtPatronymic.Enabled = txtPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void AcceptChanges()
         {
-            GKUtils.SetRusNameParts(fPersonalName, this.txtSurname.Text, this.txtName.Text, this.txtPatronymic.Text);
+            GKUtils.SetRusNameParts(fPersonalName, txtSurname.Text, txtName.Text, txtPatronymic.Text);
 
             GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
-            pieces.Nickname = this.txtNickname.Text;
-            pieces.Prefix = this.txtNamePrefix.Text;
-            pieces.SurnamePrefix = this.txtSurnamePrefix.Text;
-            pieces.Suffix = this.txtNameSuffix.Text;
+            pieces.Nickname = txtNickname.Text;
+            pieces.Prefix = txtNamePrefix.Text;
+            pieces.SurnamePrefix = txtSurnamePrefix.Text;
+            pieces.Suffix = txtNameSuffix.Text;
 
-            this.fPersonalName.NameType = (GEDCOMNameType)this.cmbNameType.SelectedIndex;
+            fPersonalName.NameType = (GEDCOMNameType)cmbNameType.SelectedIndex;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.AcceptChanges();
-                base.DialogResult = DialogResult.OK;
+                AcceptChanges();
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -130,33 +130,33 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)
             {
-                this.cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
+                cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            this.SetLang();
+            SetLang();
         }
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_Name);
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            this.lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
-            this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            this.lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            this.lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            this.lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            this.lblType.Text = LangMan.LS(LSID.LSID_Type);
+            Text = LangMan.LS(LSID.LSID_Name);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
+            lblName.Text = LangMan.LS(LSID.LSID_Name);
+            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
+            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
+            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
+            lblType.Text = LangMan.LS(LSID.LSID_Type);
         }
     }
 }

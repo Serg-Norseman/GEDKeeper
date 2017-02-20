@@ -8,7 +8,7 @@ namespace GKSandbox
 {
     public partial class MainForm : Form
     {
-        GKDatabase fDatabase;
+        private GKDatabase fDatabase;
 
         public MainForm()
         {

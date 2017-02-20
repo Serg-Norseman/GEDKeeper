@@ -65,7 +65,7 @@ namespace Externals
             if (csvFileInfo == null)
                 throw new ArgumentNullException("csvFileInfo", @"Null FileInfo passed to CSVReader");
 
-            this.reader = new BinaryReader(File.OpenRead(csvFileInfo.FullName));
+            reader = new BinaryReader(File.OpenRead(csvFileInfo.FullName));
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Externals
             if (csvData == null)
                 throw new ArgumentNullException("csvData", @"Null string passed to CSVReader");
 
-            this.reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(csvData)));
+            reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(csvData)));
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Externals
 
         #region Data reading
 
-        string currentLine = "";
+        private string currentLine = "";
 
         /// <summary>
         /// Read the next row from the CSV data
@@ -404,7 +404,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing short
@@ -419,7 +419,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing int
@@ -434,7 +434,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing long
@@ -449,7 +449,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing ulong
@@ -464,7 +464,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing float
@@ -479,7 +479,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing double
@@ -494,7 +494,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing decimal
@@ -509,7 +509,7 @@ namespace Externals
                                 { typeof(decimal), typeof(decimal) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing bool
@@ -524,7 +524,7 @@ namespace Externals
                                 { typeof(decimal), typeof(string) },
                                 { typeof(bool), typeof(bool) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing char
@@ -539,7 +539,7 @@ namespace Externals
                                 { typeof(decimal), typeof(string) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(char) },
-                                { typeof(string), typeof(string) },
+                                { typeof(string), typeof(string) }
                             }},
 
                         // Comparing string
@@ -554,8 +554,8 @@ namespace Externals
                                 { typeof(decimal), typeof(string) },
                                 { typeof(bool), typeof(string) },
                                 { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) },
-                            }},
+                                { typeof(string), typeof(string) }
+                            }}
                     };
                 }
             }

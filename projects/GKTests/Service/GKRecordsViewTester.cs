@@ -36,7 +36,7 @@ namespace GKTests.Service
 
         public new GKRecordsView Properties
         {
-            get { return (GKRecordsView) base.TheObject; }
+            get { return (GKRecordsView) TheObject; }
         }
     }
 }

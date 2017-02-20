@@ -47,49 +47,49 @@ namespace GKUI.Dialogs
         
         private void InitializeComponent()
         {
-            this.txtSearchPattern = new TextBox();
-            this.btnPrev = new Button();
-            this.btnNext = new Button();
-            this.SuspendLayout();
+            txtSearchPattern = new TextBox();
+            btnPrev = new Button();
+            btnNext = new Button();
+            SuspendLayout();
 
-            this.txtSearchPattern.Location = new System.Drawing.Point(3, 3);
-            this.txtSearchPattern.Width = 150;
-            this.txtSearchPattern.Height = 24;
-            this.txtSearchPattern.Margin = new Padding(3, 3, 3, 0);
-            this.txtSearchPattern.TextChanged += this.SearchPattern_TextChanged;
-            this.txtSearchPattern.Name = "txtSearchPattern";
+            txtSearchPattern.Location = new System.Drawing.Point(3, 3);
+            txtSearchPattern.Width = 150;
+            txtSearchPattern.Height = 24;
+            txtSearchPattern.Margin = new Padding(3, 3, 3, 0);
+            txtSearchPattern.TextChanged += SearchPattern_TextChanged;
+            txtSearchPattern.Name = "txtSearchPattern";
             
-            this.btnPrev.Location = new System.Drawing.Point(156, 3);
-            this.btnPrev.Margin = new Padding(3);
-            this.btnPrev.Height = 24;
-            this.btnPrev.Width = 24;
-            this.btnPrev.Click += FindPrev_Click;
-            this.btnPrev.Image = GKResources.iLeft1;
-            this.btnPrev.Name = "btnPrev";
+            btnPrev.Location = new System.Drawing.Point(156, 3);
+            btnPrev.Margin = new Padding(3);
+            btnPrev.Height = 24;
+            btnPrev.Width = 24;
+            btnPrev.Click += FindPrev_Click;
+            btnPrev.Image = GKResources.iLeft1;
+            btnPrev.Name = "btnPrev";
             
-            this.btnNext.Location = new System.Drawing.Point(156+27, 3);
-            this.btnNext.Margin = new Padding(3);
-            this.btnNext.Height = 24;
-            this.btnNext.Width = 24;
-            this.btnNext.Click += FindNext_Click;
-            this.btnNext.Image = GKResources.iRight1;
-            this.btnNext.Name = "btnNext";
+            btnNext.Location = new System.Drawing.Point(156+27, 3);
+            btnNext.Margin = new Padding(3);
+            btnNext.Height = 24;
+            btnNext.Width = 24;
+            btnNext.Click += FindNext_Click;
+            btnNext.Image = GKResources.iRight1;
+            btnNext.Name = "btnNext";
             
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(210, 30);
-            this.Controls.Add(this.txtSearchPattern);
-            this.Controls.Add(this.btnPrev);
-            this.Controls.Add(this.btnNext);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
-            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            this.KeyPreview = true;
-            this.KeyDown += this.SearchPanel_KeyDown;
-            this.Name = "SearchPanel";
-            this.ShowInTaskbar = false;
-            this.StartPosition = FormStartPosition.Manual;
-            this.TopMost = true;
+            AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            ClientSize = new System.Drawing.Size(210, 30);
+            Controls.Add(txtSearchPattern);
+            Controls.Add(btnPrev);
+            Controls.Add(btnNext);
+            Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            KeyPreview = true;
+            KeyDown += SearchPanel_KeyDown;
+            Name = "QuickSearchDlg";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
+            TopMost = true;
 
-            this.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -99,14 +99,14 @@ namespace GKUI.Dialogs
 
         private void FindNext_Click(object sender, EventArgs e)
         {
-            if (this.fStrategy == null) return;
+            if (fStrategy == null) return;
 
-            if (!this.fStrategy.HasResults()) {
+            if (!fStrategy.HasResults()) {
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 
-            ISearchResult result = this.fStrategy.FindNext();
+            ISearchResult result = fStrategy.FindNext();
             if (result != null) {
                 SelectResult(result as SearchResult);
             }
@@ -114,14 +114,14 @@ namespace GKUI.Dialogs
 
         private void FindPrev_Click(object sender, EventArgs e)
         {
-            if (this.fStrategy == null) return;
+            if (fStrategy == null) return;
 
-            if (!this.fStrategy.HasResults()) {
+            if (!fStrategy.HasResults()) {
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 
-            ISearchResult result = this.fStrategy.FindPrev();
+            ISearchResult result = fStrategy.FindPrev();
             if (result != null) {
                 SelectResult(result as SearchResult);
             }
@@ -154,7 +154,7 @@ namespace GKUI.Dialogs
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_Search);
+            Text = LangMan.LS(LSID.LSID_Search);
             //this.txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
             //this.btnPrev.Text = LangMan.LS(LSID.LSID_FindPrevious);
             //this.btnNext.Text = LangMan.LS(LSID.LSID_FindNext);

@@ -14,18 +14,18 @@ namespace GKTests.GKCommon
 
         public UDNRecord(UDNCalendarType calendar, int year, int month, int day, string description)
         {
-            this.Calendar = calendar;
-            this.Description = description;
-            this.Value = new UDN(calendar, year, month, day);
-            this.StrVal = this.Value.ToString();
+            Calendar = calendar;
+            Description = description;
+            Value = new UDN(calendar, year, month, day);
+            StrVal = Value.ToString();
         }
 
         public UDNRecord(UDN udn, UDNCalendarType calendar, string description)
         {
-            this.Calendar = calendar;
-            this.Description = description;
-            this.Value = udn;
-            this.StrVal = this.Value.ToString();
+            Calendar = calendar;
+            Description = description;
+            Value = udn;
+            StrVal = Value.ToString();
         }
     }
 

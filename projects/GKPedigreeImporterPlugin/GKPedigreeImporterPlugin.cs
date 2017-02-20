@@ -88,8 +88,8 @@ namespace GKPedigreeImporterPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
-        public IHost Host { get { return this.fHost; } }
+        public string DisplayName { get { return fDisplayName; } }
+        public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
         public void Execute()
@@ -109,8 +109,8 @@ namespace GKPedigreeImporterPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(ILS.LSID_PluginTitle);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace GKPedigreeImporterPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {

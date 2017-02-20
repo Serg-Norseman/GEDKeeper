@@ -23,7 +23,7 @@ namespace GKCore.Export
         {
         }
 
-        private TreeCell AddCell(ExtList<TreeCell> row, GEDCOMIndividualRecord iRec, CellKind cellKind)
+        private static TreeCell AddCell(ExtList<TreeCell> row, GEDCOMIndividualRecord iRec, CellKind cellKind)
         {
             TreeCell result = new TreeCell();
             result.ColIndex = row.Add(result);
@@ -34,14 +34,14 @@ namespace GKCore.Export
             return result;
         }
 
-        private ExtList<TreeCell> AddRow(ExtList<ExtList<TreeCell>> table, int rowIndex, int spaces)
+        private static ExtList<TreeCell> AddRow(ExtList<ExtList<TreeCell>> table, int rowIndex, int spaces)
         {
             ExtList<TreeCell> result = new ExtList<TreeCell>(true);
             table.Insert(rowIndex, result);
             return result;
         }
 
-        private void DrawLine(ExtList<ExtList<TreeCell>> table, TreeCell cellAncestor, TreeCell cellDescendant)
+        private static void DrawLine(ExtList<ExtList<TreeCell>> table, TreeCell cellAncestor, TreeCell cellDescendant)
         {
             int r = table.IndexOf(cellDescendant.Row);
             int r2 = table.IndexOf(cellAncestor.Row);
@@ -64,50 +64,49 @@ namespace GKCore.Export
         private void Step(ExtList<ExtList<TreeCell>> table, int rowIndex, int colIndex,
                           TreeCell prev, GEDCOMIndividualRecord cur, int gen)
         {
-            if (cur != null)
+            if (cur == null) return;
+
+            if (rowIndex < 0) rowIndex = 0;
+            if (rowIndex > table.Count) rowIndex = table.Count;
+
+            var row = AddRow(table, rowIndex, 0);
+
+            int num = (colIndex - 1) << 1;
+            for (int i = 0; i <= num; i++) AddCell(row, null, CellKind.ckSpace);
+
+            if (prev != null) AddCell(row, null, CellKind.ckLine);
+
+            TreeCell curCell = AddCell(row, cur, CellKind.ckPerson);
+            if (cur.ChildToFamilyLinks.Count > 0 && gen < 5)
             {
-                if (rowIndex < 0) rowIndex = 0;
-                if (rowIndex > table.Count) rowIndex = table.Count;
-
-                var row = this.AddRow(table, rowIndex, 0);
-
-                int num = (colIndex - 1) << 1;
-                for (int i = 0; i <= num; i++) this.AddCell(row, null, CellKind.ckSpace);
-
-                if (prev != null) this.AddCell(row, null, CellKind.ckLine);
-
-                TreeCell cur_cell = this.AddCell(row, cur, CellKind.ckPerson);
-                if (cur.ChildToFamilyLinks.Count > 0 && gen < 5)
+                GEDCOMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
+                GEDCOMIndividualRecord iFather = family.Husband.Value as GEDCOMIndividualRecord;
+                GEDCOMIndividualRecord iMother = family.Wife.Value as GEDCOMIndividualRecord;
+                if (iFather != null || iMother != null)
                 {
-                    GEDCOMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
-                    GEDCOMIndividualRecord iFather = family.Husband.Value as GEDCOMIndividualRecord;
-                    GEDCOMIndividualRecord iMother = family.Wife.Value as GEDCOMIndividualRecord;
-                    if (iFather != null || iMother != null)
-                    {
-                        this.AddCell(row, null, CellKind.ckLine);
-                        this.AddCell(row, null, CellKind.ckSpace);
+                    AddCell(row, null, CellKind.ckLine);
+                    AddCell(row, null, CellKind.ckSpace);
 
-                        rowIndex = table.IndexOf(row);
-                        if (iFather != null) this.AddRow(table, rowIndex, colIndex + 1);
-                        this.Step(table, rowIndex, colIndex + 1, cur_cell, iFather, gen + 1);
+                    rowIndex = table.IndexOf(row);
+                    if (iFather != null) AddRow(table, rowIndex, colIndex + 1);
+                    Step(table, rowIndex, colIndex + 1, curCell, iFather, gen + 1);
 
-                        rowIndex = table.IndexOf(row);
-                        if (iMother != null) this.AddRow(table, rowIndex + 1, colIndex + 1);
-                        this.Step(table, rowIndex + 2, colIndex + 1, cur_cell, iMother, gen + 1);
-                    }
+                    rowIndex = table.IndexOf(row);
+                    if (iMother != null) AddRow(table, rowIndex + 1, colIndex + 1);
+                    Step(table, rowIndex + 2, colIndex + 1, curCell, iMother, gen + 1);
                 }
-
-                this.WideTable(table, cur_cell.ColIndex + 1);
-                if (prev != null) this.DrawLine(table, prev, cur_cell);
             }
+
+            WideTable(table, curCell.ColIndex + 1);
+            if (prev != null) DrawLine(table, prev, curCell);
         }
 
         private void WideTable(ExtList<ExtList<TreeCell>> table, int cols)
         {
-            for (int i = 0; i <= table.Count - 1; i++) {
+            for (int i = 0; i < table.Count; i++) {
                 var row = table[i];
                 while (row.Count < cols) {
-                    this.AddCell(row, null, CellKind.ckSpace);
+                    AddCell(row, null, CellKind.ckSpace);
                 }
             }
         }
@@ -116,21 +115,21 @@ namespace GKCore.Export
         {
             try
             {
-                var table_rows = new ExtList<ExtList<TreeCell>>(true);
+                var tableRows = new ExtList<ExtList<TreeCell>>(true);
                 try
                 {
-                    this.Step(table_rows, 0, 0, null, iRec, 1);
+                    Step(tableRows, 0, 0, null, iRec, 1);
 
                     writer.WriteLine("<table border=\"0\" cellspacing=\"0\">");
 
-                    int num = table_rows.Count - 1;
-                    for (int r = 0; r <= num; r++) {
-                        var row = table_rows[r];
+                    int num = tableRows.Count;
+                    for (int r = 0; r < num; r++) {
+                        var row = tableRows[r];
                         writer.WriteLine("<tr>");
 
-                        int num2 = row.Count - 1;
-                        for (int c = 0; c <= num2; c++) {
-                            TreeCell cell = row[c] as TreeCell;
+                        int num2 = row.Count;
+                        for (int c = 0; c < num2; c++) {
+                            TreeCell cell = row[c];
                             string nm = "&nbsp;";
                             string st = "";
                             if (cell.Kind != CellKind.ckSpace) {
@@ -147,12 +146,12 @@ namespace GKCore.Export
                 }
                 finally
                 {
-                    table_rows.Dispose();
+                    tableRows.Dispose();
                 }
             }
-            catch (Exception E)
+            catch (Exception ex)
             {
-                writer.WriteLine(E.Message);
+                writer.WriteLine(ex.Message);
             }
         }
 

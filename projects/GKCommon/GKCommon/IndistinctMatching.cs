@@ -93,7 +93,7 @@ namespace GKCommon
             // Ensure value2 (inner cycle) is longer
             if (value1.Length > value2.Length)
             {
-                var tmp = value1;
+                string tmp = value1;
                 value1 = value2;
                 value2 = tmp;
             }
@@ -102,26 +102,26 @@ namespace GKCommon
             if (value2.Contains(value1))
                 return value2.Length - value1.Length;
 
-            var length1 = value1.Length;
-            var length2 = value2.Length;
+            int length1 = value1.Length;
+            int length2 = value2.Length;
 
-            var d = new int[length1 + 1, length2 + 1];
+            int[,] d = new int[length1 + 1, length2 + 1];
 
-            for (var i = 0; i <= d.GetUpperBound(0); i++)
+            for (int i = 0; i <= d.GetUpperBound(0); i++)
                 d[i, 0] = i;
 
-            for (var i = 0; i <= d.GetUpperBound(1); i++)
+            for (int i = 0; i <= d.GetUpperBound(1); i++)
                 d[0, i] = i;
 
-            for (var i = 1; i <= d.GetUpperBound(0); i++)
+            for (int i = 1; i <= d.GetUpperBound(0); i++)
             {
-                for (var j = 1; j <= d.GetUpperBound(1); j++)
+                for (int j = 1; j <= d.GetUpperBound(1); j++)
                 {
-                    var cost = value1[i - 1] == value2[j - 1] ? 0 : 1;
+                    int cost = value1[i - 1] == value2[j - 1] ? 0 : 1;
 
-                    var del = d[i - 1, j] + 1;
-                    var ins = d[i, j - 1] + 1;
-                    var sub = d[i - 1, j - 1] + cost;
+                    int del = d[i - 1, j] + 1;
+                    int ins = d[i, j - 1] + 1;
+                    int sub = d[i - 1, j - 1] + cost;
 
                     d[i, j] = Math.Min(del, Math.Min(ins, sub));
 

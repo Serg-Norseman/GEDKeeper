@@ -79,13 +79,13 @@ namespace GKCommon.Controls
 
         static HyperView()
         {
-            HyperView.EventLink = new object();
+            EventLink = new object();
         }
 
         public event LinkEventHandler OnLink
         {
-            add { base.Events.AddHandler(HyperView.EventLink, value); }
-            remove { base.Events.RemoveHandler(HyperView.EventLink, value); }
+            add { Events.AddHandler(EventLink, value); }
+            remove { Events.RemoveHandler(EventLink, value); }
         }
 
         public int BorderWidth
@@ -129,19 +129,19 @@ namespace GKCommon.Controls
                 if (fRuleStyle == value) return;
 
                 fRuleStyle = value;
-                base.Invalidate();
+                Invalidate();
             }
         }
 
 
         public HyperView() : base()
         {
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            base.UpdateStyles();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            UpdateStyles();
 
-            base.BorderStyle = BorderStyle.Fixed3D;
-            base.DoubleBuffered = true;
-            base.TabStop = true;
+            BorderStyle = BorderStyle.Fixed3D;
+            DoubleBuffered = true;
+            TabStop = true;
 
             //fAcceptFontChange = false;
             fLines = new StringList();
@@ -228,13 +228,13 @@ namespace GKCommon.Controls
         private void ArrangeText()
         {
             try {
-                fTextFont = (base.Parent.Font.Clone() as Font);
+                fTextFont = (Parent.Font.Clone() as Font);
                 fDefBrush = new SolidBrush(Color.Black);
                 fHeights = new int[fLines.Count];
                 //fAcceptFontChange = false;
                 fLinks.Clear();
 
-                Graphics gfx = base.CreateGraphics();
+                Graphics gfx = CreateGraphics();
                 try
                 {
                     int yPos = 0;
@@ -276,7 +276,7 @@ namespace GKCommon.Controls
                                             break;
 
                                         case '0':
-                                            fTextFont = (base.Parent.Font.Clone() as Font);
+                                            fTextFont = (Parent.Font.Clone() as Font);
                                             break;
 
                                         case 'B':
@@ -366,7 +366,7 @@ namespace GKCommon.Controls
                 //fAcceptFontChange = false;
                 try
                 {
-                    Rectangle clientRect = base.ClientRectangle;
+                    Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(SystemColors.Control), clientRect);
 
                     int yOffset = fBorderWidth - -AutoScrollPosition.Y;
@@ -407,7 +407,7 @@ namespace GKCommon.Controls
                                             break;
 
                                         case '0':
-                                            fTextFont = (base.Parent.Font.Clone() as Font);
+                                            fTextFont = (Parent.Font.Clone() as Font);
                                             break;
 
                                         case 'B':
@@ -420,7 +420,7 @@ namespace GKCommon.Controls
 
                                         case 'R':
                                             int rulerWidth = clientRect.Width - (xOffset * 2);
-                                            ControlPaint.DrawBorder3D(gfx, 
+                                            ControlPaint.DrawBorder3D(gfx,
                                                                       xOffset,
                                                                       yOffset + (lineHeight - 3) / 2,
                                                                       rulerWidth, 3,
@@ -534,7 +534,7 @@ namespace GKCommon.Controls
 
         private void DoLink(string linkName)
         {
-            LinkEventHandler eventHandler = (LinkEventHandler)base.Events[HyperView.EventLink];
+            LinkEventHandler eventHandler = (LinkEventHandler)Events[EventLink];
             if (eventHandler != null)
                 eventHandler(this, linkName);
         }

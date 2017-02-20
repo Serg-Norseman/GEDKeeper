@@ -26,33 +26,33 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMIndividualRecord Individual
         {
-            get { return (base.Value as GEDCOMIndividualRecord); }
-            set { base.Value = value; }
+            get { return (Value as GEDCOMIndividualRecord); }
+            set { Value = value; }
         }
 
         public string Relation
         {
-            get { return base.GetTagStringValue("RELA"); }
-            set { base.SetTagStringValue("RELA", value); }
+            get { return GetTagStringValue("RELA"); }
+            set { SetTagStringValue("RELA", value); }
         }
 
         public GEDCOMList<GEDCOMSourceCitation> SourceCitations
         {
-            get { return this.fSourceCitations; }
+            get { return fSourceCitations; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.SetName("ASSO");
-            this.fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
+            SetName("ASSO");
+            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fSourceCitations.Dispose();
+                fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -62,7 +62,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
             if (tagName == "SOUR")
             {
-                result = this.fSourceCitations.Add(new GEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
+                result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -74,24 +74,24 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fSourceCitations.Clear();
+            fSourceCitations.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fSourceCitations.Count == 0;
+            return base.IsEmpty() && fSourceCitations.Count == 0;
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fSourceCitations.ReplaceXRefs(map);
+            fSourceCitations.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fSourceCitations.ResetOwner(newOwner);
+            fSourceCitations.ResetOwner(newOwner);
         }
 
         public GEDCOMAssociation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

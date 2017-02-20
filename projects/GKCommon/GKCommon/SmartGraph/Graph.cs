@@ -49,8 +49,8 @@ namespace GKCommon.SmartGraph
 
             public PathCandidate(IVertex node, PathCandidate next)
             {
-                this.Node = node;
-                this.Next = next;
+                Node = node;
+                Next = next;
             }
         }
 
@@ -65,12 +65,12 @@ namespace GKCommon.SmartGraph
 
         public IEnumerable<IVertex> Vertices
         {
-            get { return this.fVerticesList; }
+            get { return fVerticesList; }
         }
 
         public IEnumerable<IEdge> Edges
         {
-            get { return this.fEdgesList; }
+            get { return fEdgesList; }
         }
 
         #endregion
@@ -83,17 +83,17 @@ namespace GKCommon.SmartGraph
 
         public Graph(IDataProvider provider)
         {
-            this.fProvider = provider;
-            this.fVerticesList = new List<IVertex>();
-            this.fEdgesList = new List<IEdge>();
-            this.fVerticesDictionary = new Dictionary<string, IVertex>();
+            fProvider = provider;
+            fVerticesList = new List<IVertex>();
+            fEdgesList = new List<IEdge>();
+            fVerticesDictionary = new Dictionary<string, IVertex>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.Clear();
+                Clear();
             }
             base.Dispose(disposing);
         }
@@ -104,27 +104,27 @@ namespace GKCommon.SmartGraph
 
         public bool IsEmpty()
         {
-            return this.fVerticesList.Count == 0 && this.fEdgesList.Count == 0;
+            return fVerticesList.Count == 0 && fEdgesList.Count == 0;
         }
 
         public void Clear()
         {
-            foreach (IVertex vertex in this.fVerticesList)
+            foreach (IVertex vertex in fVerticesList)
             {
                 vertex.EdgeIn = null;
                 vertex.EdgesOut.Clear();
             }
 
-            this.fEdgesList.Clear();
-            this.fVerticesList.Clear();
-            this.fVerticesDictionary.Clear();
+            fEdgesList.Clear();
+            fVerticesList.Clear();
+            fVerticesDictionary.Clear();
         }
 
         public IVertex AddVertex(object data)
         {
-            IVertex result = this.fProvider.CreateVertex();
+            IVertex result = fProvider.CreateVertex();
             result.Value = data;
-            this.fVerticesList.Add(result);
+            fVerticesList.Add(result);
 
             return result;
         }
@@ -132,40 +132,40 @@ namespace GKCommon.SmartGraph
         public IVertex AddVertex(string sign, object data)
         {
             IVertex result;
-            if (this.fVerticesDictionary.TryGetValue(sign, out result)) {
+            if (fVerticesDictionary.TryGetValue(sign, out result)) {
                 return result;
             }
 
-            result = this.AddVertex(data);
+            result = AddVertex(data);
             result.Sign = sign;
-            this.fVerticesDictionary.Add(sign, result);
+            fVerticesDictionary.Add(sign, result);
 
             return result;
         }
 
         public bool AddUndirectedEdge(IVertex source, IVertex target, int cost, object srcValue, object tgtValue)
         {
-            IEdge edge1 = this.AddDirectedEdge(source, target, cost, srcValue);
-            IEdge edge2 = this.AddDirectedEdge(target, source, cost, tgtValue);
+            IEdge edge1 = AddDirectedEdge(source, target, cost, srcValue);
+            IEdge edge2 = AddDirectedEdge(target, source, cost, tgtValue);
 
             return (edge1 != null && edge2 != null);
         }
 
         public IEdge AddDirectedEdge(string sourceSign, string targetSign, int cost, object edgeValue)
         {
-            IVertex source = this.FindVertex(sourceSign);
-            IVertex target = this.FindVertex(targetSign);
+            IVertex source = FindVertex(sourceSign);
+            IVertex target = FindVertex(targetSign);
 
-            return this.AddDirectedEdge(source, target, cost, edgeValue);
+            return AddDirectedEdge(source, target, cost, edgeValue);
         }
 
         public IEdge AddDirectedEdge(IVertex source, IVertex target, int cost, object edgeValue)
         {
             if (source == null || target == null || source == target) return null;
 
-            IEdge resultEdge = this.fProvider.CreateEdge(source, target, cost, edgeValue);
+            IEdge resultEdge = fProvider.CreateEdge(source, target, cost, edgeValue);
             source.EdgesOut.Add(resultEdge);
-            this.fEdgesList.Add(resultEdge);
+            fEdgesList.Add(resultEdge);
 
             return resultEdge;
         }
@@ -174,17 +174,17 @@ namespace GKCommon.SmartGraph
         {
             if (vertex == null) return;
 
-            for (int i = this.fEdgesList.Count - 1; i >= 0; i--)
+            for (int i = fEdgesList.Count - 1; i >= 0; i--)
             {
-                IEdge edge = this.fEdgesList[i];
+                IEdge edge = fEdgesList[i];
 
                 if (edge.Source == vertex || edge.Target == vertex)
                 {
-                    this.DeleteEdge(edge);
+                    DeleteEdge(edge);
                 }
             }
 
-            this.fVerticesList.Remove(vertex);
+            fVerticesList.Remove(vertex);
         }
 
         public void DeleteEdge(IEdge edge)
@@ -194,13 +194,13 @@ namespace GKCommon.SmartGraph
             IVertex src = edge.Source;
             src.EdgesOut.Remove(edge);
 
-            this.fEdgesList.Remove(edge);
+            fEdgesList.Remove(edge);
         }
 
         public IVertex FindVertex(string sign)
         {
             IVertex result;
-            this.fVerticesDictionary.TryGetValue(sign, out result);
+            fVerticesDictionary.TryGetValue(sign, out result);
             return result;
         }
 
@@ -213,7 +213,7 @@ namespace GKCommon.SmartGraph
             if (root == null) return;
 
             // reset path tree
-            foreach (IVertex node in this.fVerticesList)
+            foreach (IVertex node in fVerticesList)
             {
                 node.Dist = int.MaxValue;
                 node.Visited = false;

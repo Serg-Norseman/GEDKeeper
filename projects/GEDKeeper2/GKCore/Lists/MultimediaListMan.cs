@@ -42,13 +42,13 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Title, DataType.dtString, 150, true);
-            this.AddStatic(LSID.LSID_Type, DataType.dtString, 85, true);
-            this.AddStatic(LSID.LSID_File, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Title, DataType.dtString, 150, true);
+            AddStatic(LSID.LSID_Type, DataType.dtString, 85, true);
+            AddStatic(LSID.LSID_File, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public MultimediaListColumns() : base()
+        public MultimediaListColumns()
         {
             InitData(typeof(MultimediaColumnType));
         }
@@ -63,23 +63,23 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            GEDCOMFileReferenceWithTitle fileRef = this.fRec.FileReferences[0];
+            GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(fileRef.Title, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fileRef.Title, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMMultimediaRecord);
+            fRec = (aRec as GEDCOMMultimediaRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            GEDCOMFileReferenceWithTitle fileRef = this.fRec.FileReferences[0];
+            GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 
             object result = null;
             switch (colType) {
@@ -93,7 +93,7 @@ namespace GKCore.Lists
                     result = fileRef.StringValue;
                     break;
                 case 3:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

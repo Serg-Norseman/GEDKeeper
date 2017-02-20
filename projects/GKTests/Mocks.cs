@@ -25,7 +25,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -65,9 +64,9 @@ namespace GKTests.Mocks
 
         public BaseWindowMock()
         {
-            this.fContext = TestStubs.CreateContext(/*this*/);
-            TestStubs.FillContext(this.fContext as BaseContext);
-            this.fTree = fContext.Tree;
+            fContext = TestStubs.CreateContext(/*this*/);
+            TestStubs.FillContext(fContext);
+            fTree = fContext.Tree;
         }
 
         public void ProgressInit(string title, int max) { }
@@ -79,11 +78,11 @@ namespace GKTests.Mocks
 
 
         public IHost Host { get { return fHost; } }
-        public IBaseContext Context { get { return this.fContext; } }
+        public IBaseContext Context { get { return fContext; } }
 
         public bool Modified { get { return false; } set {} }
         public ShieldState ShieldState { get { return ShieldState.None; } set {} }
-        public GEDCOMTree Tree { get { return this.fTree; } }
+        public GEDCOMTree Tree { get { return fTree; } }
         public ValuesCollection ValuesCollection { get { return null; } }
 
         public void Activate() { }
@@ -196,7 +195,7 @@ namespace GKTests.Mocks
 
         public ValItem(double value)
         {
-            this.Value = value;
+            Value = value;
         }
     }
 

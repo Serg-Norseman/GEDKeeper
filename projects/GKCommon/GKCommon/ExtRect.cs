@@ -45,69 +45,69 @@ namespace GKCommon
 
         public static ExtRect CreateBounds(int left, int top, int width, int height)
         {
-            return ExtRect.Create(left, top, left + width - 1, top + height - 1);
+            return Create(left, top, left + width - 1, top + height - 1);
         }
 
         public static ExtRect CreateEmpty()
         {
-            return ExtRect.Create(0, 0, 0, 0);
+            return Create(0, 0, 0, 0);
         }
 
         public int GetWidth()
         {
-            return (this.Right == this.Left) ? 0 : this.Right - this.Left + 1;
+            return (Right == Left) ? 0 : Right - Left + 1;
         }
 
         public int GetHeight()
         {
-            return (this.Bottom == this.Top) ? 0 : this.Bottom - this.Top + 1;
+            return (Bottom == Top) ? 0 : Bottom - Top + 1;
         }
 
         public bool IsEmpty()
         {
-            return this.Right <= this.Left || this.Bottom <= this.Top;
+            return Right <= Left || Bottom <= Top;
         }
 
         public bool Contains(int x, int y)
         {
-            return x >= this.Left && y >= this.Top && x <= this.Right && y <= this.Bottom;
+            return x >= Left && y >= Top && x <= Right && y <= Bottom;
         }
 
         public ExtRect GetOffset(int dX, int dY)
         {
-            return ExtRect.Create(this.Left + dX, this.Top + dY, this.Right + dX, this.Bottom + dY);
+            return Create(Left + dX, Top + dY, Right + dX, Bottom + dY);
         }
 
         public void Offset(int dX, int dY)
         {
-            this.Left += dX;
-            this.Right += dX;
-            this.Top += dY;
-            this.Bottom += dY;
+            Left += dX;
+            Right += dX;
+            Top += dY;
+            Bottom += dY;
         }
 
         public void Inflate(int dX, int dY)
         {
-            this.Left += dX;
-            this.Right -= dX;
-            this.Top += dY;
-            this.Bottom -= dY;
+            Left += dX;
+            Right -= dX;
+            Top += dY;
+            Bottom -= dY;
         }
 
         public bool IntersectsWith(ExtRect rect)
         {
-            return rect.Left < this.Right && this.Left < rect.Right && rect.Top < this.Bottom && this.Top < rect.Bottom;
+            return rect.Left < Right && Left < rect.Right && rect.Top < Bottom && Top < rect.Bottom;
         }
 
         public override string ToString()
         {
-            return string.Concat("{X=", this.Left.ToString(), ",Y=", this.Top.ToString(),
-                                 ",Width=", this.GetWidth().ToString(), ",Height=", this.GetHeight().ToString(), "}");
+            return string.Concat("{X=", Left.ToString(), ",Y=", Top.ToString(),
+                                 ",Width=", GetWidth().ToString(), ",Height=", GetHeight().ToString(), "}");
         }
 
         public Rectangle ToRectangle()
         {
-            return new Rectangle(this.Left, this.Top, this.GetWidth(), this.GetHeight());
+            return new Rectangle(Left, Top, GetWidth(), GetHeight());
         }
     }
 }

@@ -43,14 +43,14 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Goal, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Goal, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public TaskListColumns() : base()
+        public TaskListColumns()
         {
             InitData(typeof(TaskColumnType));
         }
@@ -65,16 +65,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(GKUtils.GetTaskGoalStr(this.fRec), this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(GKUtils.GetTaskGoalStr(fRec), QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMTaskRecord);
+            fRec = (aRec as GEDCOMTaskRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -82,19 +82,19 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = GKUtils.GetTaskGoalStr(this.fRec);
+                    result = GKUtils.GetTaskGoalStr(fRec);
                     break;
                 case 1:
-                    result = LangMan.LS(GKData.PriorityNames[(int)this.fRec.Priority]);
+                    result = LangMan.LS(GKData.PriorityNames[(int)fRec.Priority]);
                     break;
                 case 2:
-                    result = GetDateValue(this.fRec.StartDate, isVisible);
+                    result = GetDateValue(fRec.StartDate, isVisible);
                     break;
                 case 3:
-                    result = GetDateValue(this.fRec.StopDate, isVisible);
+                    result = GetDateValue(fRec.StopDate, isVisible);
                     break;
                 case 4:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

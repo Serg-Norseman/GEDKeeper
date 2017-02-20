@@ -29,8 +29,8 @@ namespace GKCommon.Controls
 
         public GKScrollableControl()
         {
-            base.AutoScroll = true;
-            base.ResizeRedraw = true;
+            AutoScroll = true;
+            ResizeRedraw = true;
 
             #if __MonoCS__
             ScrollBar obj = SysUtils.GetFieldValue(this, "hscrollbar") as ScrollBar;
@@ -104,20 +104,19 @@ namespace GKCommon.Controls
 
         private void ScrollByOffset(Size offset)
         {
-            if (!offset.IsEmpty)
-            {
-                SuspendLayout();
-                foreach (Control child in Controls) {
-                    child.Location -= offset;
-                }
+            if (offset.IsEmpty) return;
 
-                AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
-
-                ResumeLayout();
-                Invalidate();
-                //Update();
-                //Refresh();
+            SuspendLayout();
+            foreach (Control child in Controls) {
+                child.Location -= offset;
             }
+
+            AutoScrollPosition = new Point(-(AutoScrollPosition.X - offset.Width), -(AutoScrollPosition.Y - offset.Height));
+
+            ResumeLayout();
+            Invalidate();
+            //Update();
+            //Refresh();
         }
 
         /// <summary>

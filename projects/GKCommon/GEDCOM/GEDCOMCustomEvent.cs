@@ -28,7 +28,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMEventDetail Detail
         {
-            get { return this.fDetail; }
+            get { return fDetail; }
         }
 
         protected GEDCOMCustomEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -38,15 +38,15 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fDetail = new GEDCOMEventDetail(base.Owner, this, "", "");
-            this.fDetail.SetLevel(base.Level);
+            fDetail = new GEDCOMEventDetail(Owner, this, "", "");
+            fDetail.SetLevel(Level);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fDetail.Dispose();
+                fDetail.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -55,34 +55,34 @@ namespace GKCommon.GEDCOM
         {
             base.Assign(source);
 
-            if (source is GEDCOMCustomEvent)
-            {
-                this.fDetail.Assign((source as GEDCOMCustomEvent).Detail);
+            GEDCOMCustomEvent evt = source as GEDCOMCustomEvent;
+            if (evt != null) {
+                fDetail.Assign(evt.Detail);
             }
         }
 
         public override void Pack()
         {
             base.Pack();
-            this.fDetail.Pack();
+            fDetail.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fDetail.ReplaceXRefs(map);
+            fDetail.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fDetail.ResetOwner(newOwner);
+            fDetail.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fDetail.SaveToStream(stream);
+            fDetail.SaveToStream(stream);
         }
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
 
             // match date
             float dateMatch = 0.0f;
-            GEDCOMDateValue dtVal = this.fDetail.Date;
+            GEDCOMDateValue dtVal = fDetail.Date;
             GEDCOMDateValue dtVal2 = ev.fDetail.Date;
 
             if (dtVal != null && dtVal2 != null) {

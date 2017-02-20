@@ -40,11 +40,11 @@ namespace GKUI
         {
             InitializeComponent();
 
-            this.fBase = baseWin;
-            this.fTip = new ToolTip();
-            this.fTipShow = false;
+            fBase = baseWin;
+            fTip = new ToolTip();
+            fTipShow = false;
 
-            using (Graph graph = this.fBase.Context.GetPatriarchsGraph(minGens, false)) {
+            using (Graph graph = fBase.Context.GetPatriarchsGraph(minGens, false)) {
                 PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
             }
 
@@ -65,10 +65,10 @@ namespace GKUI
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    //GEDCOMIndividualRecord iRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
+                    //GEDCOMIndividualRecord iRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
                     //string txt = iRec.GetNameString(true, false) + " [" + xref + "]";
 
-                    GEDCOMFamilyRecord famRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
+                    GEDCOMFamilyRecord famRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     fTip.Show(txt, arborViewer1, e.X + 24, e.Y);

@@ -31,8 +31,8 @@ namespace GKTreeVizPlugin
     /// 
     /// </summary>
     public sealed class TreeVizViewer : Form
-	{
-		private delegate void RenderDelegate();
+    {
+        private delegate void RenderDelegate();
 
         private readonly IBaseWindow fBase;
         private readonly int fMinGens;
@@ -43,35 +43,35 @@ namespace GKTreeVizPlugin
         private ulong fFramesDrawn;
         private double fCurrentFramerate;
 
-		private StatusBar fStatusBar;
-		private StatusBarPanel sbpCurrentFps;
-		private StatusBarPanel sbpKeysControl;
-		private StatusBarPanel sbpTimeControl;
-		private TreeVizControl fTreeVizView;
+        private StatusBar fStatusBar;
+        private StatusBarPanel sbpCurrentFps;
+        private StatusBarPanel sbpKeysControl;
+        private StatusBarPanel sbpTimeControl;
+        private TreeVizControl fTreeVizView;
 
-		public TreeVizViewer(IBaseWindow baseWin, int minGens)
-		{
-		    this.InitializeComponent();
+        public TreeVizViewer(IBaseWindow baseWin, int minGens)
+        {
+            InitializeComponent();
 
-            this.fBase = baseWin;
-            this.fMinGens = minGens;
+            fBase = baseWin;
+            fMinGens = minGens;
 
-            this.fHighresTimer = new HighResolutionTimer();
-			this.fBackThread = new Thread(DoRenderThread);
-			this.fBackThread.IsBackground = true;
-		}
+            fHighresTimer = new HighResolutionTimer();
+            fBackThread = new Thread(DoRenderThread);
+            fBackThread.IsBackground = true;
+        }
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing) {
-				this.fBackThread.Suspend();
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fBackThread.Suspend();
 
-				sbpCurrentFps.Dispose();
-				fTreeVizView.Dispose();
-			}
+                sbpCurrentFps.Dispose();
+                fTreeVizView.Dispose();
+            }
 
-			base.Dispose(disposing);
-		}
+            base.Dispose(disposing);
+        }
 
         private void InitializeComponent()
         {
@@ -80,7 +80,7 @@ namespace GKTreeVizPlugin
             sbpKeysControl = new StatusBarPanel();
             sbpTimeControl = new StatusBarPanel();
 
-            this.SuspendLayout();
+            SuspendLayout();
 
             sbpCurrentFps.Alignment = HorizontalAlignment.Center;
             sbpCurrentFps.AutoSize = StatusBarPanelAutoSize.Contents;
@@ -100,65 +100,65 @@ namespace GKTreeVizPlugin
             fTreeVizView = new TreeVizControl();
             fTreeVizView.Parent = this;
 
-            this.Controls.AddRange(new Control[] { fTreeVizView, fStatusBar });
+            Controls.AddRange(new Control[] { fTreeVizView, fStatusBar });
 
-            this.Size = new Size(800, 600);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.SizeChanged += Form_SizeChanged;
-            this.Activated += Form_Activated;
-            this.Load += Form_Load;
+            Size = new Size(800, 600);
+            StartPosition = FormStartPosition.CenterScreen;
+            SizeChanged += Form_SizeChanged;
+            Activated += Form_Activated;
+            Load += Form_Load;
 
-            this.ResumeLayout();
+            ResumeLayout();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-        	this.fBackThread.Start();
-			fTreeVizView.createArborGraph(this.fBase, this.fMinGens, true);
+            fBackThread.Start();
+            fTreeVizView.CreateArborGraph(fBase, fMinGens, true);
         }
 
-		private void DoRenderThread()
-		{
-			while (true) {
-				Invoke((RenderDelegate)this.RenderStep);
-			}
-		}
+        private void DoRenderThread()
+        {
+            while (true) {
+                Invoke((RenderDelegate)RenderStep);
+            }
+        }
 
-		private void RenderStep()
-		{
-			fTreeVizView.Invalidate(false);
+        private void RenderStep()
+        {
+            fTreeVizView.Invalidate(false);
 
-			this.fFramesDrawn++;
-			ulong currentFrameTime = this.fHighresTimer.Count;
-			ulong timerFrequency = this.fHighresTimer.Frequency;
+            fFramesDrawn++;
+            ulong currentFrameTime = fHighresTimer.Count;
+            ulong timerFrequency = fHighresTimer.Frequency;
 
-			if ((currentFrameTime - this.fLastCalculationTime) > timerFrequency) {
-				this.fCurrentFramerate = (fFramesDrawn * timerFrequency) / (currentFrameTime - this.fLastCalculationTime);
-				this.fLastCalculationTime = currentFrameTime;
-				this.fFramesDrawn = 0;
-			}
+            if ((currentFrameTime - fLastCalculationTime) > timerFrequency) {
+                fCurrentFramerate = (fFramesDrawn * timerFrequency) / (currentFrameTime - fLastCalculationTime);
+                fLastCalculationTime = currentFrameTime;
+                fFramesDrawn = 0;
+            }
 
-			sbpCurrentFps.Text = "Current: " + fCurrentFramerate.ToString() + " FPS; Selected: " + fTreeVizView.SelectedObject + 
-				"; Current year: " + this.fTreeVizView.CurYear;
+            sbpCurrentFps.Text = "Current: " + fCurrentFramerate.ToString() + " FPS; Selected: " + fTreeVizView.SelectedObject +
+                "; Current year: " + fTreeVizView.CurYear;
 
-			Application.DoEvents();
-		}
+            Application.DoEvents();
+        }
 
-		private void ResetFramerate()
-		{
-			this.fLastCalculationTime = this.fHighresTimer.Count;
-			this.fFramesDrawn = 0;
-			this.fCurrentFramerate = 0.0f;
-		}
+        private void ResetFramerate()
+        {
+            fLastCalculationTime = fHighresTimer.Count;
+            fFramesDrawn = 0;
+            fCurrentFramerate = 0.0f;
+        }
 
-		private void Form_Activated(object sender, EventArgs e)
-		{
-			this.ResetFramerate();
-		}
+        private void Form_Activated(object sender, EventArgs e)
+        {
+            ResetFramerate();
+        }
 
-		private void Form_SizeChanged(object sender, EventArgs e)
-		{
-			this.ResetFramerate();
-		}
-	}
+        private void Form_SizeChanged(object sender, EventArgs e)
+        {
+            ResetFramerate();
+        }
+    }
 }

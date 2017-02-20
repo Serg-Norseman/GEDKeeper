@@ -52,28 +52,28 @@ namespace GKCalculatorPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private CalcWidget frm;
+        private CalcWidget fForm;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) frm.Dispose();
+                if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public void Execute()
         {
-            if (!this.fHost.IsWidgetActive(this)) {
-                frm = new CalcWidget(this);
-                frm.Show();
+            if (!fHost.IsWidgetActive(this)) {
+                fForm = new CalcWidget(this);
+                fForm.Show();
             } else {
-                frm.Close();
+                fForm.Close();
             }
         }
 
@@ -85,10 +85,10 @@ namespace GKCalculatorPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalc);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_MICalc);
 
-                if (frm != null) frm.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace GKCalculatorPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {
@@ -134,8 +134,8 @@ namespace GKCalculatorPlugin
 
         void IWidget.WidgetEnable()
         {
-            if (frm != null) {
-                fHost.EnableWindow(this.frm, true);
+            if (fForm != null) {
+                fHost.EnableWindow(fForm, true);
             }
         }
 

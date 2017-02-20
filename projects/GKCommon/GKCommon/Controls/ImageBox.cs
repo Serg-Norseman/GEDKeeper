@@ -147,13 +147,11 @@ namespace GKCommon.Controls
             get { return fAllowDoubleClick; }
             set
             {
-                if (fAllowDoubleClick != value)
-                {
-                    fAllowDoubleClick = value;
+                if (fAllowDoubleClick == value) return;
+                fAllowDoubleClick = value;
 
-                    SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                    UpdateStyles();
-                }
+                SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
+                UpdateStyles();
             }
         }
 
@@ -447,12 +445,11 @@ namespace GKCommon.Controls
                 else if (value > MAX_ZOOM)
                     value = MAX_ZOOM;
 
-                if (fZoom != value)
-                {
-                    fZoom = value;
-                    UpdateParams();
-                    OnZoomChanged(EventArgs.Empty);
-                }
+                if (fZoom == value) return;
+                fZoom = value;
+
+                UpdateParams();
+                OnZoomChanged(EventArgs.Empty);
             }
         }
 
@@ -476,7 +473,8 @@ namespace GKCommon.Controls
         public ImageBox()
         {
             SetStyle(ControlStyles.StandardDoubleClick, false);
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
+                     ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
@@ -491,9 +489,9 @@ namespace GKCommon.Controls
             InterpolationMode = InterpolationMode.NearestNeighbor;
             AutoCenter = true;
             SelectionColor = SystemColors.Highlight;
-            ActualSize();
             ImageBorderColor = SystemColors.ControlDark;
 
+            ActualSize();
             UpdateParams();
         }
 

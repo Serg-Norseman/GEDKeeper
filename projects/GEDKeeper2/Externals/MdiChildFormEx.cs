@@ -30,12 +30,12 @@ namespace Externals
     {
         protected override void WndProc(ref Message m)
         {
-            FormWindowState prevState = this.WindowState;
+            FormWindowState prevState = WindowState;
 
             base.WndProc(ref m);
 
-            if (this.WindowState != prevState)
-                OnFormWindowStateChanged(prevState, this.WindowState);
+            if (WindowState != prevState)
+                OnFormWindowStateChanged(prevState, WindowState);
         }
 
         protected virtual void OnFormWindowStateChanged(FormWindowState oldState, FormWindowState newState)
@@ -54,7 +54,7 @@ namespace Externals
         private void AdjustMdiChild()
         {
             // Is it MdiChild form?
-            Form mdiParent = this.MdiParent;
+            Form mdiParent = MdiParent;
             if (mdiParent == null) return;
 
             MdiClient client = null;
@@ -66,7 +66,7 @@ namespace Externals
             }
             if (client == null) return;
 
-            Rectangle formRect = this.Bounds;
+            Rectangle formRect = Bounds;
             formRect.Intersect(client.ClientRectangle);
             SetBounds(formRect.Left, formRect.Top, formRect.Width, formRect.Height, BoundsSpecified.All);
         }

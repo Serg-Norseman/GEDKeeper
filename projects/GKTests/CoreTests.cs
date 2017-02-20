@@ -48,7 +48,7 @@ namespace GKTests.GKCore
     [TestFixture]
     public class CoreTests
     {
-        BaseContext fContext;
+        private BaseContext fContext;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -492,8 +492,8 @@ namespace GKTests.GKCore
             //
 
             #if !__MonoCS__
-            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true));
-            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false));
+            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
+            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
             #endif
 
             //
@@ -761,13 +761,13 @@ namespace GKTests.GKCore
             rel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out great, out level);
             Assert.AreEqual(RelationKind.rkSon, rel);
 
-            GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord otherRec = this.fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord otherRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchKinshipsGraph(this.fContext, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchKinshipsGraph(fContext, null); });
 
-            using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(this.fContext, indRec)) {
+            using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
 
                 Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));
@@ -863,7 +863,7 @@ namespace GKTests.GKCore
             GKListItem listItem;
 
             //
-            listManager = new GroupListMan(this.fContext.Tree);
+            listManager = new GroupListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(GroupColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -904,7 +904,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMCommunication_Tests()
         {
-            var listManager = new CommunicationListMan(this.fContext.Tree);
+            var listManager = new CommunicationListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(CommunicationColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -930,7 +930,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMFamily_Tests()
         {
-            var listManager = new FamilyListMan(this.fContext.Tree);
+            var listManager = new FamilyListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(FamilyColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -953,7 +953,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMIndividual_Tests()
         {
-            var listManager = new IndividualListMan(this.fContext.Tree);
+            var listManager = new IndividualListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(PersonColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -993,7 +993,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMLocation_Tests()
         {
-            var listManager = new LocationListMan(this.fContext.Tree);
+            var listManager = new LocationListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(LocationColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1016,7 +1016,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMMultimedia_Tests()
         {
-            var listManager = new MultimediaListMan(this.fContext.Tree);
+            var listManager = new MultimediaListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(MultimediaColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1039,7 +1039,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMNote_Tests()
         {
-            var listManager = new NoteListMan(this.fContext.Tree);
+            var listManager = new NoteListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(NoteColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1065,7 +1065,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMRepository_Tests()
         {
-            var listManager = new RepositoryListMan(this.fContext.Tree);
+            var listManager = new RepositoryListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(RepositoryColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1088,7 +1088,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMResearch_Tests()
         {
-            var listManager = new ResearchListMan(this.fContext.Tree);
+            var listManager = new ResearchListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(ResearchColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1111,7 +1111,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMSource_Tests()
         {
-            var listManager = new SourceListMan(this.fContext.Tree);
+            var listManager = new SourceListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(SourceColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1134,7 +1134,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMTask_Tests()
         {
-            var listManager = new TaskListMan(this.fContext.Tree);
+            var listManager = new TaskListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(TaskColumnType), listManager.ListColumns.GetColumnsEnum());
 
@@ -1733,57 +1733,57 @@ namespace GKTests.GKCore
 
             summary.Clear();
             GKUtils.ShowFamilyInfo(null, null, ShieldState.None);
-            GEDCOMFamilyRecord famRec = this.fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+            GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
             GKUtils.ShowFamilyInfo(famRec, summary, ShieldState.None);
 
             summary.Clear();
             GKUtils.ShowGroupInfo(null, null);
-            GEDCOMGroupRecord grpRec = this.fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
+            GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
             GKUtils.ShowGroupInfo(grpRec, summary);
 
             summary.Clear();
             GKUtils.ShowMultimediaInfo(null, null);
-            GEDCOMMultimediaRecord mmRec = this.fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
+            GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
             GKUtils.ShowMultimediaInfo(mmRec, summary);
 
             summary.Clear();
             GKUtils.ShowNoteInfo(null, null);
-            GEDCOMNoteRecord noteRec = this.fContext.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+            GEDCOMNoteRecord noteRec = fContext.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
             GKUtils.ShowNoteInfo(noteRec, summary);
 
             summary.Clear();
             GKUtils.ShowPersonInfo(null, null, ShieldState.None);
-            GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GKUtils.ShowPersonInfo(indRec, summary, ShieldState.None);
 
             summary.Clear();
             GKUtils.ShowSourceInfo(null, null);
-            GEDCOMSourceRecord srcRec = this.fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
+            GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
             GKUtils.ShowSourceInfo(srcRec, summary);
 
             summary.Clear();
             GKUtils.ShowRepositoryInfo(null, null);
-            GEDCOMRepositoryRecord repRec = this.fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
+            GEDCOMRepositoryRecord repRec = fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
             GKUtils.ShowRepositoryInfo(repRec, summary);
 
             summary.Clear();
             GKUtils.ShowResearchInfo(null, null);
-            GEDCOMResearchRecord resRec = this.fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
+            GEDCOMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
             GKUtils.ShowResearchInfo(resRec, summary);
 
             summary.Clear();
             GKUtils.ShowTaskInfo(null, null);
-            GEDCOMTaskRecord taskRec = this.fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
+            GEDCOMTaskRecord taskRec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
             GKUtils.ShowTaskInfo(taskRec, summary);
 
             summary.Clear();
             GKUtils.ShowCommunicationInfo(null, null);
-            GEDCOMCommunicationRecord commRec = this.fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord;
+            GEDCOMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord;
             GKUtils.ShowCommunicationInfo(commRec, summary);
 
             summary.Clear();
             GKUtils.ShowLocationInfo(null, null);
-            GEDCOMLocationRecord locRec = this.fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
+            GEDCOMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
             GKUtils.ShowLocationInfo(locRec, summary);
         }
 
@@ -1913,14 +1913,18 @@ namespace GKTests.GKCore
             geocoder.SetProxy(null);
             geocoder.SetLang("");
 
-            geocoder = IGeocoder.Create("Google");
-            geocoder.SetKey(GKData.GAPI_KEY);
-            geoPoints = geocoder.Geocode("New York", 1);
-            //Assert.IsTrue(geoPoints.Count > 0);
+            try {
+                geocoder = IGeocoder.Create("Google");
+                geocoder.SetKey(GKData.GAPI_KEY);
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
 
-            geocoder = IGeocoder.Create("Yandex");
-            geoPoints = geocoder.Geocode("New York", 1);
-            //Assert.IsTrue(geoPoints.Count > 0);
+                geocoder = IGeocoder.Create("Yandex");
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
+            } catch (Exception ex) {
+                Assert.Fail();
+            }
         }
     }
 }

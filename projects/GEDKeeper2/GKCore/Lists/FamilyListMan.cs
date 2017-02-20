@@ -41,12 +41,12 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Spouses, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Spouses, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public FamilyListColumns() : base()
+        public FamilyListColumns()
         {
             InitData(typeof(FamilyColumnType));
         }
@@ -61,17 +61,17 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (GKUtils.IsRecordAccess(this.fRec.Restriction, shieldState)
-                        && (this.QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(this.fRec), this.QuickFilter)));
+            bool res = (GKUtils.IsRecordAccess(fRec.Restriction, shieldState)
+                        && (QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter)));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMFamilyRecord);
+            fRec = (aRec as GEDCOMFamilyRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -79,13 +79,13 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = GKUtils.GetFamilyString(this.fRec);
+                    result = GKUtils.GetFamilyString(fRec);
                     break;
                 case 1:
-                    result = GetDateValue(GKUtils.GetMarriageDate(this.fRec), isVisible);
+                    result = GetDateValue(GKUtils.GetMarriageDate(fRec), isVisible);
                     break;
                 case 2:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

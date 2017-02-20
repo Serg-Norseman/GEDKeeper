@@ -32,8 +32,8 @@ namespace GKCommon.GEDCOM
             
             public GEDCOMAppFormat(string sign, string name)
             {
-                this.Sign = sign;
-                this.Name = name;
+                Sign = sign;
+                Name = name;
             }
         }
 
