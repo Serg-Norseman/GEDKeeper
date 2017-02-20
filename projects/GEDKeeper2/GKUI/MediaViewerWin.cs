@@ -40,7 +40,8 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private GEDCOMFileReferenceWithTitle fFileRef;
-
+        private Control fMediaControl;
+        
         public GEDCOMFileReferenceWithTitle FileRef
         {
             get { return fFileRef; }
@@ -146,7 +147,7 @@ namespace GKUI
         {
             if (ctl != null) {
                 SuspendLayout();
-
+                fMediaControl = ctl;
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
                 ctl.Size = new Size(100, 100);
@@ -175,5 +176,18 @@ namespace GKUI
                 Close();
             }
         }
+        void MediaViewerWinFormClosing(object sender, FormClosingEventArgs e)
+        {
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
+            switch (mmKind)
+            {
+                case MultimediaKind.mkVideo:
+                    {
+                        ((MediaPlayer)fMediaControl).btnStop_Click(null, null);
+                        break;
+                    }
+            }
+        }
+        
     }
 }

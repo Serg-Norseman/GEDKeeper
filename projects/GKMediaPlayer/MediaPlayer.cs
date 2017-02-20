@@ -158,7 +158,7 @@ namespace GKMediaPlayer
             fPlayer.Position = (float)trkPosition.Value / 100;
         }
 
-        private void btnStop_Click(object sender, EventArgs e)
+        public void btnStop_Click(object sender, EventArgs e)
         {
             fPlayer.Stop();
         }
@@ -173,6 +173,10 @@ namespace GKMediaPlayer
             fPlayer.ToggleMute();
 
             btnMute.Text = fPlayer.Mute ? "Unmute" : "Mute";
+        }
+        void PnlControlsResize(object sender, EventArgs e)
+        {
+            //panel3.Left = (this.ClientSize.Width - panel3.Width) / 2;
         }
 
         #endregion
@@ -197,5 +201,7 @@ namespace GKMediaPlayer
         }
 
         #endregion
+        
+        
     }
 }
