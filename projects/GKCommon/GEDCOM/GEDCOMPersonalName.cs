@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 
 namespace GKCommon.GEDCOM
@@ -169,10 +170,11 @@ namespace GKCommon.GEDCOM
 
         public override void Assign(GEDCOMTag source)
         {
-            base.Assign(source);
-
             GEDCOMPersonalName otherName = (source as GEDCOMPersonalName);
-            if (otherName == null) return;
+            if (otherName == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherName);
 
             fFirstPart = otherName.fFirstPart;
             fSurname = otherName.fSurname;

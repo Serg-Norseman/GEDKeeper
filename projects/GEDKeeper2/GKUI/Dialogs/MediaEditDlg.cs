@@ -89,11 +89,11 @@ namespace GKUI.Dialogs
             txtFile.Text = fileRef.StringValue;
 
             if (fIsNew) {
-                StoreTypesRefresh(true, MediaStoreType.mstReference);
+                RefreshStoreTypes(true, MediaStoreType.mstReference);
             } else {
                 string dummy = "";
                 MediaStoreType gst = fBase.Context.GetStoreType(fileRef, ref dummy);
-                StoreTypesRefresh((gst == MediaStoreType.mstArchive), gst);
+                RefreshStoreTypes((gst == MediaStoreType.mstArchive), gst);
             }
 
             btnFileSelect.Enabled = fIsNew;
@@ -155,7 +155,7 @@ namespace GKUI.Dialogs
 
             txtFile.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
-            StoreTypesRefresh(canArc, MediaStoreType.mstReference);
+            RefreshStoreTypes(canArc, MediaStoreType.mstReference);
             cmbStoreType.Enabled = true;
         }
 
@@ -170,7 +170,7 @@ namespace GKUI.Dialogs
             Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
         }
 
-        private void StoreTypesRefresh(bool allowArc, MediaStoreType select)
+        private void RefreshStoreTypes(bool allowArc, MediaStoreType selectType)
         {
             cmbStoreType.Items.Clear();
             cmbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name));
@@ -178,7 +178,7 @@ namespace GKUI.Dialogs
             if (allowArc) {
                 cmbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name));
             }
-            cmbStoreType.SelectedIndex = (int)select;
+            cmbStoreType.SelectedIndex = (int)selectType;
         }
 
         public MediaEditDlg(IBaseWindow baseWin) : base(baseWin)

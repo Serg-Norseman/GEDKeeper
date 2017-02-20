@@ -25,7 +25,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Types;

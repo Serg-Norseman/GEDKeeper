@@ -1913,14 +1913,18 @@ namespace GKTests.GKCore
             geocoder.SetProxy(null);
             geocoder.SetLang("");
 
-            geocoder = IGeocoder.Create("Google");
-            geocoder.SetKey(GKData.GAPI_KEY);
-            geoPoints = geocoder.Geocode("New York", 1);
-            //Assert.IsTrue(geoPoints.Count > 0);
+            try {
+                geocoder = IGeocoder.Create("Google");
+                geocoder.SetKey(GKData.GAPI_KEY);
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
 
-            geocoder = IGeocoder.Create("Yandex");
-            geoPoints = geocoder.Geocode("New York", 1);
-            //Assert.IsTrue(geoPoints.Count > 0);
+                geocoder = IGeocoder.Create("Yandex");
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
+            } catch (Exception ex) {
+                Assert.Fail();
+            }
         }
     }
 }

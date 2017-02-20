@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 
 namespace GKCommon.GEDCOM
@@ -156,15 +157,16 @@ namespace GKCommon.GEDCOM
 
         public override void Assign(GEDCOMTag source)
         {
+            GEDCOMAddress otherAddr = source as GEDCOMAddress;
+            if (otherAddr == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
             base.Assign(source);
 
-            GEDCOMAddress srcaddr = source as GEDCOMAddress;
-            if (srcaddr == null) return;
-
-            AssignList(srcaddr.fPhoneList, fPhoneList);
-            AssignList(srcaddr.fEmailList, fEmailList);
-            AssignList(srcaddr.fFaxList, fFaxList);
-            AssignList(srcaddr.fWWWList, fWWWList);
+            AssignList(otherAddr.fPhoneList, fPhoneList);
+            AssignList(otherAddr.fEmailList, fEmailList);
+            AssignList(otherAddr.fFaxList, fFaxList);
+            AssignList(otherAddr.fWWWList, fWWWList);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

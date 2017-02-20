@@ -643,7 +643,7 @@ namespace GKCore
             {
                 ZipStorer.ZipFileEntry? entry = zip.FindFile(targetFn);
                 if (entry != null) {
-                    zip.ExtractFile(entry.Value, toStream);
+                    zip.ExtractStream(entry.Value, toStream);
                 }
             }
         }

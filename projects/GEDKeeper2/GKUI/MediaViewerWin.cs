@@ -40,6 +40,7 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private GEDCOMFileReferenceWithTitle fFileRef;
+        private Control fViewer;
 
         public GEDCOMFileReferenceWithTitle FileRef
         {
@@ -154,6 +155,8 @@ namespace GKUI
                 Controls.SetChildIndex(ctl, 0);
 
                 ResumeLayout(false);
+
+                fViewer = ctl;
             }
         }
 
@@ -167,6 +170,12 @@ namespace GKUI
 
         public void SetLang()
         {
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (fViewer != null) fViewer.Select();
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)

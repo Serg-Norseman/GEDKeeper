@@ -1266,6 +1266,8 @@ namespace GKTests.GKCommon
 
                 using (GEDCOMAddress addr2 = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress)
                 {
+                    Assert.Throws(typeof(ArgumentException), () => { addr2.Assign(null); });
+
                     addr2.Assign(addr);
 
                     Assert.AreEqual("This\r\naddress\r\ntest", addr2.Address.Text.Trim());
@@ -1492,17 +1494,38 @@ namespace GKTests.GKCommon
                 Assert.AreEqual(i, idx);
             }
 
-            tree.DeleteFamilyRecord(famRec);
-            tree.DeleteNoteRecord(noteRec);
-            tree.DeleteSourceRecord(srcRec);
-            tree.DeleteGroupRecord(groupRec);
-            tree.DeleteLocationRecord(locRec);
-            tree.DeleteResearchRecord(resRec);
-            tree.DeleteCommunicationRecord(commRec);
-            tree.DeleteTaskRecord(taskRec);
-            tree.DeleteMediaRecord(mmRec);
-            tree.DeleteIndividualRecord(iRec);
-            tree.DeleteRepositoryRecord(repRec);
+            Assert.IsFalse(tree.DeleteFamilyRecord(null));
+            Assert.IsTrue(tree.DeleteFamilyRecord(famRec));
+
+            Assert.IsFalse(tree.DeleteNoteRecord(null));
+            Assert.IsTrue(tree.DeleteNoteRecord(noteRec));
+
+            Assert.IsFalse(tree.DeleteSourceRecord(null));
+            Assert.IsTrue(tree.DeleteSourceRecord(srcRec));
+
+            Assert.IsFalse(tree.DeleteGroupRecord(null));
+            Assert.IsTrue(tree.DeleteGroupRecord(groupRec));
+
+            Assert.IsFalse(tree.DeleteLocationRecord(null));
+            Assert.IsTrue(tree.DeleteLocationRecord(locRec));
+
+            Assert.IsFalse(tree.DeleteResearchRecord(null));
+            Assert.IsTrue(tree.DeleteResearchRecord(resRec));
+
+            Assert.IsFalse(tree.DeleteCommunicationRecord(null));
+            Assert.IsTrue(tree.DeleteCommunicationRecord(commRec));
+
+            Assert.IsFalse(tree.DeleteTaskRecord(null));
+            Assert.IsTrue(tree.DeleteTaskRecord(taskRec));
+
+            Assert.IsFalse(tree.DeleteMediaRecord(null));
+            Assert.IsTrue(tree.DeleteMediaRecord(mmRec));
+
+            Assert.IsFalse(tree.DeleteIndividualRecord(null));
+            Assert.IsTrue(tree.DeleteIndividualRecord(iRec));
+
+            Assert.IsFalse(tree.DeleteRepositoryRecord(null));
+            Assert.IsTrue(tree.DeleteRepositoryRecord(repRec));
 
             tree.Clear();
             Assert.AreEqual(0, tree.RecordsCount);
@@ -1857,6 +1880,8 @@ namespace GKTests.GKCommon
                             "2 _CENN CensusName\r\n", buf);
 
             using (GEDCOMPersonalName nameCopy = new GEDCOMPersonalName(iRec.Owner, iRec, "", "")) {
+                Assert.Throws(typeof(ArgumentException), () => { nameCopy.Assign(null); });
+
                 iRec.AddPersonalName(nameCopy);
                 nameCopy.Assign(persName);
 
@@ -2012,6 +2037,13 @@ namespace GKTests.GKCommon
             using (GEDCOMList<GEDCOMObject> list = new GEDCOMList<GEDCOMObject>(null)) {
                 Assert.IsNull(list.Owner);
 
+                // internal list is null (all routines instant returned)
+                list.Delete(null);
+                list.Exchange(0, 1);
+                Assert.IsNull(list.Extract(0));
+                Assert.IsNull(list.Extract(null));
+
+                // normal checks
                 list.Add(obj1);
                 list.Add(obj2);
                 Assert.AreEqual(0, list.IndexOf(obj1));
@@ -2344,6 +2376,8 @@ namespace GKTests.GKCommon
             using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMSourceRecord)
             {
                 Assert.IsNotNull(src1, "src1 != null");
+
+                Assert.Throws(typeof(ArgumentNullException), () => { src1.RemoveRepository(null); });
 
                 using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree, "", ""))
                 {
@@ -2739,6 +2773,8 @@ namespace GKTests.GKCommon
 
                 subrRec.AddTag("LANG", "Russian", null);
                 Assert.AreEqual("Russian", subrRec.Languages[0].StringValue);
+
+                subrRec.SetLanguage(0, "nothing"); // return without exceptions
 
                 subrRec.SetLanguage(1, "English");
                 Assert.AreEqual("English", subrRec.Languages[1].StringValue);

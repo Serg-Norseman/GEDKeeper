@@ -379,7 +379,7 @@ namespace Externals
 
             bool result;
             using (Stream output = new FileStream(filename, FileMode.Create, FileAccess.Write)) {
-                result = ExtractFile(zfe, output);
+                result = ExtractStream(zfe, output);
             }
 
             if (result) {
@@ -428,7 +428,7 @@ namespace Externals
         /// <param name="stream">Stream to store the uncompressed data</param>
         /// <returns>True if success, false if not.</returns>
         /// <remarks>Unique compression methods are Store and Deflate</remarks>
-        public bool ExtractFile(ZipFileEntry zfe, Stream stream)
+        public bool ExtractStream(ZipFileEntry zfe, Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
