@@ -57,26 +57,30 @@ namespace GKCore
 
         public void Load(string fileName)
         {
-            using (var reader = new StreamReader(fileName)) {
-                string content = reader.ReadToEnd();
-                var rawData = YamlHelper.Deserialize(content, typeof(HolidaysList));
-                fHolidays = rawData[0] as HolidaysList;
-            }
-
-            ProcessDates();
-        }
-
-        public void ProcessDates()
-        {
-            for (int i = 0; i < fHolidays.Holidays.Length; i++) {
-                var holiday = fHolidays.Holidays[i];
-                string sdt = holiday.Date;
-                DateTime dtx;
-                if (DateTime.TryParse(sdt, out dtx)) {
-                    holiday.XDate = dtx;
-                } else {
-                    holiday.XDate = DateTime.FromBinary(0);
+            try
+            {
+                // loading database
+                using (var reader = new StreamReader(fileName)) {
+                    string content = reader.ReadToEnd();
+                    var rawData = YamlHelper.Deserialize(content, typeof(HolidaysList));
+                    fHolidays = rawData[0] as HolidaysList;
                 }
+
+                // processing dates
+                for (int i = 0; i < fHolidays.Holidays.Length; i++) {
+                    var holiday = fHolidays.Holidays[i];
+                    string sdt = holiday.Date;
+                    DateTime dtx;
+                    if (DateTime.TryParse(sdt, out dtx)) {
+                        holiday.XDate = dtx;
+                    } else {
+                        holiday.XDate = DateTime.FromBinary(0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("Holidays.Load(): " + ex.Message);
             }
         }
 
