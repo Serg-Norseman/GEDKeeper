@@ -244,6 +244,7 @@
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
+    <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />

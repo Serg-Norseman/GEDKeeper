@@ -27,15 +27,10 @@ namespace GKSandbox
             fDatabase.Disconnect();
         }
 
-        private void btnOpen_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            using (var ofd = new OpenFileDialog())
-            {
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    txtFileName.Text = ofd.FileName;
-                    mediaPlayer1.MediaFile = ofd.FileName;
-                }
+            using (var frm = new MPlayerTest()) {
+                frm.ShowDialog();
             }
         }
     }

@@ -151,9 +151,8 @@ namespace GKUI.Charts
             for (int i = 0; i < numberOfSegments; i++) {
                 PersonSegment segment = (PersonSegment)fSegments[i];
                 if (segment.IRec == null) continue;
-                /* FIXME(brigadir15@gmail.com): Replace literal `9` below with a
-                 * const. */
-                int brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+
+                int brIndex = (segment.Gen == 0) ? CENTRAL_INDEX : segment.Gen - 1;
                 SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
                 GraphicsPath path = segment.Path;

@@ -116,9 +116,6 @@
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
-    <Compile Include="Externals\MdiChildFormEx.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
@@ -441,6 +438,8 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
+    <Compile Include="GKUI\Forms\PrintableForm.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -737,6 +736,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GKUI\Forms" />
     <Folder Include="Sandbox\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
