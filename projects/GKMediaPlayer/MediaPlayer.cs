@@ -190,8 +190,7 @@ namespace GKMediaPlayer
             }
             else{
                 trkVolume_Scroll(sender, e);
-            }
-            
+            }            
         }
 
         #endregion
@@ -215,7 +214,6 @@ namespace GKMediaPlayer
             }
         }
 
-        #endregion        
-        
+        #endregion       
     }
 }
