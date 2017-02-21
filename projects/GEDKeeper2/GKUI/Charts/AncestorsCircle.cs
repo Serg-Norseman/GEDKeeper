@@ -209,7 +209,7 @@ namespace GKUI.Charts
                     if (fGroupsMode) {
                         brIndex = (segment.GroupIndex == -1) ? 11 : segment.GroupIndex;
                     } else {
-                        brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                        brIndex = (segment.Gen == 0) ? CENTRAL_INDEX : segment.Gen - 1;
                     }
 
                     SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];

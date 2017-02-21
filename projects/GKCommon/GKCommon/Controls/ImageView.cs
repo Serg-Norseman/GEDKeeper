@@ -112,7 +112,7 @@ namespace GKCommon.Controls
         }
 
         protected override void Select(bool directed, bool forward)
-		{
+        {
             base.Select(directed, forward);
             imageBox.Select();
         }
