@@ -125,27 +125,7 @@ namespace GKUI.Controls
             if (btnPanel.Top <= Height - btnPanel.Height)
                 timer.Stop();
             else
-                btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
-        }
-        
-        private void PictureBox1MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void Panel1MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void PictureBox1MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void Panel1MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
+                btnPanel.Top -= (btnPanel.Top - fPixelSpeed > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
         }
 
         private void CheckCursorPosition(object sender, EventArgs e)

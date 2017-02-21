@@ -50,7 +50,7 @@
             // 
             // btnMute
             // 
-            this.btnMute.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMute.BackgroundImage")));
+            this.btnMute.BackgroundImage = global::GKMediaPlayer.GKMediaPlayerResources.btnVolumeMute;
             this.btnMute.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMute.ImageKey = "(none)";
             this.btnMute.Location = new System.Drawing.Point(7, 3);
@@ -62,7 +62,7 @@
             // 
             // btnPause
             // 
-            this.btnPause.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPause.BackgroundImage")));
+            this.btnPause.BackgroundImage = global::GKMediaPlayer.GKMediaPlayerResources.btnPause;
             this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPause.Location = new System.Drawing.Point(3, 3);
             this.btnPause.Name = "btnPause";
@@ -73,7 +73,7 @@
             // 
             // btnPlay
             // 
-            this.btnPlay.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPlay.BackgroundImage")));
+            this.btnPlay.BackgroundImage = global::GKMediaPlayer.GKMediaPlayerResources.btnPlay;
             this.btnPlay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPlay.Location = new System.Drawing.Point(49, 3);
             this.btnPlay.Name = "btnPlay";
@@ -84,13 +84,13 @@
             // 
             // btnStop
             // 
-            this.btnStop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStop.BackgroundImage")));
+            this.btnStop.BackgroundImage = global::GKMediaPlayer.GKMediaPlayerResources.btnStop;
             this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnStop.Location = new System.Drawing.Point(95, 3);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(40, 40);
             this.btnStop.TabIndex = 4;
-            this.btnStop.UseVisualStyleBackColor = false;
+            this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // trkVolume

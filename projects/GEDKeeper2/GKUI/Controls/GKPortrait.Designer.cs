@@ -48,8 +48,8 @@
             this.pictureBox1.Size = new System.Drawing.Size(178, 188);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseLeave += new System.EventHandler(this.MouseHoverOrLeave);
-            this.pictureBox1.MouseHover += new System.EventHandler(this.MouseHoverOrLeave);
+            this.pictureBox1.MouseLeave += new System.EventHandler(this.CheckCursorPosition);
+            this.pictureBox1.MouseHover += new System.EventHandler(this.CheckCursorPosition);
             // 
             // panel1
             // 
@@ -58,8 +58,8 @@
             this.btnPanel.Name = "panel1";
             this.btnPanel.Size = new System.Drawing.Size(178, 36);
             this.btnPanel.TabIndex = 1;
-            this.btnPanel.MouseLeave += new System.EventHandler(this.MouseHoverOrLeave);
-            this.btnPanel.MouseHover += new System.EventHandler(this.MouseHoverOrLeave);
+            this.btnPanel.MouseLeave += new System.EventHandler(this.CheckCursorPosition);
+            this.btnPanel.MouseHover += new System.EventHandler(this.CheckCursorPosition);
             // 
             // timer1
             // 

@@ -148,7 +148,7 @@ namespace GKUI
         {
             if (ctl != null) {
                 SuspendLayout();
-                fMediaControl = ctl;
+                fViewer = ctl;
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
                 ctl.Size = new Size(100, 100);
@@ -193,7 +193,7 @@ namespace GKUI
             {
                 case MultimediaKind.mkVideo:
                     {
-                        ((MediaPlayer)fMediaControl).btnStop_Click(null, null);
+                        ((MediaPlayer)fViewer).btnStop_Click(null, null);
                         break;
                     }
             }

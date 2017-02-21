@@ -62,7 +62,7 @@ namespace GKMediaPlayer
 
             fPlayer.WindowHandle = pnlVideo.Handle;
             trkVolume.Value = fPlayer.Volume > 0 ? fPlayer.Volume : 0;
-
+            trkVolume_Scroll(null, null);
             UISync.Init(this);
         }
 
@@ -150,7 +150,21 @@ namespace GKMediaPlayer
 
         private void trkVolume_Scroll(object sender, EventArgs e)
         {
+            
             fPlayer.Volume = trkVolume.Value;
+            fPlayer.Mute = false;
+            if (100 >=  fPlayer.Volume && fPlayer.Volume > 50){
+                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMax;
+            } 
+            if (50 >=  fPlayer.Volume && fPlayer.Volume > 5){ 
+                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMiddle;
+            }
+            if (5 >=  fPlayer.Volume && fPlayer.Volume > 0){
+                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMin;
+            }            
+            if (fPlayer.Volume == 0){
+                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
+            }
         }
 
         private void trkPosition_Scroll(object sender, EventArgs e)
@@ -171,8 +185,13 @@ namespace GKMediaPlayer
         private void btnMute_Click(object sender, EventArgs e)
         {
             fPlayer.ToggleMute();
-
-            btnMute.Text = fPlayer.Mute ? "Unmute" : "Mute";
+            if (fPlayer.Mute){
+                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
+            }
+            else{
+                trkVolume_Scroll(sender, e);
+            }
+            
         }
         void PnlControlsResize(object sender, EventArgs e)
         {
@@ -200,8 +219,7 @@ namespace GKMediaPlayer
             }
         }
 
-        #endregion
-        
+        #endregion        
         
     }
 }
