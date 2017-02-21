@@ -747,3 +747,6 @@ Show default portraits
 A media file is added from the removable media. Continue?
 Warn when adding media files from removable media
 Load at startup recent opened files
+Today is holiday "{0}"
+Tomorrow is holiday "{0}"
+{1} days remain before the holiday "{0}"

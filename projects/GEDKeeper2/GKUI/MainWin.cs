@@ -65,7 +65,7 @@ namespace GKUI
         private string fLogFilename;
 
         private int fLoadingCount;
-        private readonly StringList fBirthDays;
+        private readonly StringList fTips;
 
         private static MainWin fInstance = null;
         private static GKResourceManager fResourceManager;
@@ -135,7 +135,7 @@ namespace GKUI
             fAutosaveTimer.Interval = 10 * 60 * 1000;
             fAutosaveTimer.Tick += AutosaveTimer_Tick;
 
-            fBirthDays = new StringList();
+            fTips = new StringList();
 
             //LangMan.SaveDefaultLanguage();
         }
@@ -301,7 +301,16 @@ namespace GKUI
 
         private void Form_Show(object sender, EventArgs e)
         {
-            ReloadRecentBases();
+            try {
+                BeginLoading();
+
+                ReloadRecentBases();
+
+                Holidays holidays = GetHolidays();
+                holidays.CollectTips(fTips);
+            } finally {
+                EndLoading();
+            }
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -496,6 +505,15 @@ namespace GKUI
             } catch (Exception ex) {
                 LogWrite("MainWin.LoadLanguage(): " + ex.Message);
             }
+        }
+
+        private Holidays GetHolidays()
+        {
+            Holidays holidays = new Holidays();
+            if (fOptions.InterfaceLang == 1049) {
+                holidays.Load(GKUtils.GetLangsPath() + "holidays_rus.yaml");
+            }
+            return holidays;
         }
 
         public DialogResult ShowModalEx(Form form, bool keepModeless)
@@ -714,13 +732,13 @@ namespace GKUI
 
         public void ShowTips()
         {
-            if (fBirthDays.Count <= 0) return;
+            if (fTips.Count <= 0) return;
 
             fOptions.ShowTips =
                 DayTipsDlg.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays),
-                                      fOptions.ShowTips, fBirthDays, Handle);
+                                      fOptions.ShowTips, fTips, Handle);
 
-            fBirthDays.Clear();
+            fTips.Clear();
         }
 
         private void BeginLoading()
@@ -753,7 +771,7 @@ namespace GKUI
 
             if (fileName != "" && File.Exists(fileName)) {
                 result.FileLoad(fileName);
-                result.CollectTips(fBirthDays);
+                result.CollectTips(fTips);
             } else {
                 result.FileNew();
             }
