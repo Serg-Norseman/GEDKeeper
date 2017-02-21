@@ -108,7 +108,6 @@ namespace GKUI
 
                                 case GEDCOMMultimediaFormat.mfHTM:
                                     ctl = new WebBrowser();
-
                                     ((WebBrowser) ctl).DocumentStream = fs;
                                     SetViewControl(ctl);
                                     break;
@@ -148,11 +147,10 @@ namespace GKUI
         {
             if (ctl != null) {
                 SuspendLayout();
-                fViewer = ctl;
+
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
                 ctl.Size = new Size(100, 100);
-
                 Controls.Add(ctl);
                 Controls.SetChildIndex(ctl, 0);
 
@@ -186,18 +184,5 @@ namespace GKUI
                 Close();
             }
         }
-        void MediaViewerWinFormClosing(object sender, FormClosingEventArgs e)
-        {
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
-            switch (mmKind)
-            {
-                case MultimediaKind.mkVideo:
-                    {
-                        ((MediaPlayer)fViewer).btnStop_Click(null, null);
-                        break;
-                    }
-            }
-        }
-        
     }
 }
