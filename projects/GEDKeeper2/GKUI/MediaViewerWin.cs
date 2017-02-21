@@ -147,7 +147,7 @@ namespace GKUI
         {
             if (ctl != null) {
                 SuspendLayout();
-
+                fViewer = ctl;
                 ctl.Dock = DockStyle.Fill;
                 ctl.Location = new Point(0, 0);
                 ctl.Size = new Size(100, 100);
@@ -184,5 +184,18 @@ namespace GKUI
                 Close();
             }
         }
+        void MediaViewerWinFormClosing(object sender, FormClosingEventArgs e)
+        {
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
+            switch (mmKind)
+            {
+                case MultimediaKind.mkVideo:
+                    {
+                        ((MediaPlayer)fViewer).btnStop_Click(null, null);
+                        break;
+                    }
+            }
+        }
+        
     }
 }
