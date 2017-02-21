@@ -214,6 +214,6 @@ namespace GKMediaPlayer
             }
         }
 
-        #endregion       
+        #endregion
     }
 }
