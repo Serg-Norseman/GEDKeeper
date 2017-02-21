@@ -151,7 +151,6 @@
             this.pnlControls.Padding = new System.Windows.Forms.Padding(6);
             this.pnlControls.Size = new System.Drawing.Size(770, 88);
             this.pnlControls.TabIndex = 13;
-            this.pnlControls.Resize += new System.EventHandler(this.PnlControlsResize);
             // 
             // panel4
             // 

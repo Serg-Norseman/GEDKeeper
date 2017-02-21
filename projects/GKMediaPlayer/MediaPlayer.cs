@@ -193,10 +193,6 @@ namespace GKMediaPlayer
             }
             
         }
-        void PnlControlsResize(object sender, EventArgs e)
-        {
-            //panel3.Left = (this.ClientSize.Width - panel3.Width) / 2;
-        }
 
         #endregion
 
