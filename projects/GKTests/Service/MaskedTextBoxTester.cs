@@ -14,7 +14,7 @@ namespace NUnit.Extensions.Forms
 
         public void Enter(string text)
         {
-            this.EnterText(text);
+            EnterText(text);
         }
     }
 }

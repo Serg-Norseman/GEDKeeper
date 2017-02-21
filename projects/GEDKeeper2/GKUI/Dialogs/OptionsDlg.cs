@@ -47,193 +47,193 @@ namespace GKUI.Dialogs
 
         public GlobalOptions Options
         {
-            get { return this.fOptions; }
-            set { this.fOptions = value; }
+            get { return fOptions; }
+            set { fOptions = value; }
         }
 
         public OptionsDlg(IHost aHost)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
-            this.btnColumnUp.Image = GKResources.iUp;
-            this.btnColumnDown.Image = GKResources.iDown;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnColumnUp.Image = GKResources.iUp;
+            btnColumnDown.Image = GKResources.iDown;
 
-            this.fHost = aHost;
-            this.fOptions = GlobalOptions.Instance;
-            this.fTempColumns = new IndividualListColumns();
+            fHost = aHost;
+            fOptions = GlobalOptions.Instance;
+            fTempColumns = new IndividualListColumns();
 
-            this.SetLang();
-            this.UpdateForm();
+            SetLang();
+            UpdateForm();
         }
 
         private void UpdateColumnsList()
         {
-            this.lstPersonColumns.ItemCheck -= this.ListPersonColumns_ItemCheck;
-            this.lstPersonColumns.BeginUpdate();
+            lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
+            lstPersonColumns.BeginUpdate();
             try
             {
-                this.lstPersonColumns.Items.Clear();
+                lstPersonColumns.Items.Clear();
 
-                int num = this.fTempColumns.Count;
+                int num = fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
                     ColumnProps colProps = fTempColumns[i];
 
                     string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.ColType].ColName);
 
-                    this.lstPersonColumns.Items.Add(colName, colProps.ColActive);
+                    lstPersonColumns.Items.Add(colName, colProps.ColActive);
                 }
             }
             finally
             {
-                this.lstPersonColumns.EndUpdate();
+                lstPersonColumns.EndUpdate();
             }
-            this.lstPersonColumns.ItemCheck += this.ListPersonColumns_ItemCheck;
+            lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
         }
 
         private void UpdateControls()
         {
-            this.lblChartFont.Text = this.fOptions.ChartOptions.DefFontName + @", " + this.fOptions.ChartOptions.DefFontSize.ToString();
+            lblChartFont.Text = fOptions.ChartOptions.DefFontName + @", " + fOptions.ChartOptions.DefFontSize.ToString();
         }
 
         private void UpdateLangs()
         {
-            this.cmbLanguages.Items.Clear();
-            this.cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
+            cmbLanguages.Items.Clear();
+            cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
             int idx = 0;
-            int num = this.fOptions.GetLangsCount();
+            int num = fOptions.GetLangsCount();
             for (int i = 0; i < num; i++)
             {
-                LangRecord lngRec = this.fOptions.GetLang(i);
-                if (this.fOptions.InterfaceLang == lngRec.Code)
+                LangRecord lngRec = fOptions.GetLang(i);
+                if (fOptions.InterfaceLang == lngRec.Code)
                 {
                     idx = i + 1;
                 }
-                this.cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
+                cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            this.cmbLanguages.SelectedIndex = idx;
+            cmbLanguages.SelectedIndex = idx;
         }
 
         private void UpdateForm()
         {
-            /*switch (this.fOptions.DefCharacterSet)
+            /*switch (fOptions.DefCharacterSet)
             {
                 case GEDCOMCharacterSet.csASCII:
-                    this.radASCII.Checked = true;
+                    radASCII.Checked = true;
                     break;
                 case GEDCOMCharacterSet.csUTF8:
-                    this.radUTF.Checked = true;
+                    radUTF.Checked = true;
                     break;
             }*/
 
-            switch (this.fOptions.DefNameFormat)
+            switch (fOptions.DefNameFormat)
             {
                 case NameFormat.nfFNP:
-                    this.radSNP.Checked = true;
+                    radSNP.Checked = true;
                     break;
                 case NameFormat.nfF_NP:
-                    this.radS_NP.Checked = true;
+                    radS_NP.Checked = true;
                     break;
                 case NameFormat.nfF_N_P:
-                    this.radS_N_P.Checked = true;
+                    radS_N_P.Checked = true;
                     break;
             }
 
-            switch (this.fOptions.DefDateFormat)
+            switch (fOptions.DefDateFormat)
             {
                 case DateFormat.dfDD_MM_YYYY:
-                    this.radDMY.Checked = true;
+                    radDMY.Checked = true;
                     break;
                 case DateFormat.dfYYYY_MM_DD:
-                    this.radYMD.Checked = true;
+                    radYMD.Checked = true;
                     break;
             }
 
-            this.chkPlacesWithAddress.Checked = this.fOptions.PlacesWithAddress;
-            this.chkHighlightUnparented.Checked = this.fOptions.ListHighlightUnparentedPersons;
-            this.chkHighlightUnmarried.Checked = this.fOptions.ListHighlightUnmarriedPersons;
-            this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
-            this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
-            this.chkAutosave.Checked = this.fOptions.Autosave;
-            this.numASMin.Value = this.fOptions.AutosaveInterval;
-            this.chkRemovableMediaWarning.Checked = this.fOptions.RemovableMediaWarning;
-            this.chkLoadRecentFiles.Checked = this.fOptions.LoadRecentFiles;
+            chkPlacesWithAddress.Checked = fOptions.PlacesWithAddress;
+            chkHighlightUnparented.Checked = fOptions.ListHighlightUnparentedPersons;
+            chkHighlightUnmarried.Checked = fOptions.ListHighlightUnmarriedPersons;
+            chkShowDatesCalendar.Checked = fOptions.ShowDatesCalendar;
+            chkShowDatesSigns.Checked = fOptions.ShowDatesSign;
+            chkAutosave.Checked = fOptions.Autosave;
+            numASMin.Value = fOptions.AutosaveInterval;
+            chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
+            chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
 
-            this.chkSurname.Checked = this.fOptions.ChartOptions.FamilyVisible;
-            this.chkName.Checked = this.fOptions.ChartOptions.NameVisible;
-            this.chkPatronymic.Checked = this.fOptions.ChartOptions.PatronymicVisible;
-            this.chkDiffLines.Checked = this.fOptions.ChartOptions.DiffLines;
-            this.chkBirthDate.Checked = this.fOptions.ChartOptions.BirthDateVisible;
-            this.chkDeathDate.Checked = this.fOptions.ChartOptions.DeathDateVisible;
-            this.chkOnlyYears.Checked = this.fOptions.ChartOptions.OnlyYears;
-            this.chkKinship.Checked = this.fOptions.ChartOptions.Kinship;
-            this.chkSignsVisible.Checked = this.fOptions.ChartOptions.SignsVisible;
-            this.chkChildlessExclude.Checked = this.fOptions.ChartOptions.ChildlessExclude;
-            this.chkTreeDecorative.Checked = this.fOptions.ChartOptions.Decorative;
-            this.chkPortraitsVisible.Checked = this.fOptions.ChartOptions.PortraitsVisible;
-            this.chkDefaultPortraits.Checked = this.fOptions.ChartOptions.DefaultPortraits;
-            this.lblMaleColor.BackColor = this.fOptions.ChartOptions.MaleColor;
-            this.lblFemaleColor.BackColor = this.fOptions.ChartOptions.FemaleColor;
-            this.lblUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
-            this.lblUnHusbandColor.BackColor = this.fOptions.ChartOptions.UnHusbandColor;
-            this.lblUnWifeColor.BackColor = this.fOptions.ChartOptions.UnWifeColor;
+            chkSurname.Checked = fOptions.ChartOptions.FamilyVisible;
+            chkName.Checked = fOptions.ChartOptions.NameVisible;
+            chkPatronymic.Checked = fOptions.ChartOptions.PatronymicVisible;
+            chkDiffLines.Checked = fOptions.ChartOptions.DiffLines;
+            chkBirthDate.Checked = fOptions.ChartOptions.BirthDateVisible;
+            chkDeathDate.Checked = fOptions.ChartOptions.DeathDateVisible;
+            chkOnlyYears.Checked = fOptions.ChartOptions.OnlyYears;
+            chkKinship.Checked = fOptions.ChartOptions.Kinship;
+            chkSignsVisible.Checked = fOptions.ChartOptions.SignsVisible;
+            chkChildlessExclude.Checked = fOptions.ChartOptions.ChildlessExclude;
+            chkTreeDecorative.Checked = fOptions.ChartOptions.Decorative;
+            chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
+            chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
+            lblMaleColor.BackColor = fOptions.ChartOptions.MaleColor;
+            lblFemaleColor.BackColor = fOptions.ChartOptions.FemaleColor;
+            lblUnkSexColor.BackColor = fOptions.ChartOptions.UnkSexColor;
+            lblUnHusbandColor.BackColor = fOptions.ChartOptions.UnHusbandColor;
+            lblUnWifeColor.BackColor = fOptions.ChartOptions.UnWifeColor;
 
-            this.chkUseProxy.Checked = this.fOptions.Proxy.UseProxy;
-            this.txtProxyServer.Text = this.fOptions.Proxy.Server;
-            this.txtProxyPort.Text = this.fOptions.Proxy.Port;
-            this.txtProxyLogin.Text = this.fOptions.Proxy.Login;
-            this.txtProxyPass.Text = this.fOptions.Proxy.Password;
+            chkUseProxy.Checked = fOptions.Proxy.UseProxy;
+            txtProxyServer.Text = fOptions.Proxy.Server;
+            txtProxyPort.Text = fOptions.Proxy.Port;
+            txtProxyLogin.Text = fOptions.Proxy.Login;
+            txtProxyPass.Text = fOptions.Proxy.Password;
 
-            this.chkAttributes.Checked = this.fOptions.PedigreeOptions.IncludeAttributes;
-            this.chkNotes.Checked = this.fOptions.PedigreeOptions.IncludeNotes;
-            this.chkSources.Checked = this.fOptions.PedigreeOptions.IncludeSources;
-            this.chkGenerations.Checked = this.fOptions.PedigreeOptions.IncludeGenerations;
+            chkAttributes.Checked = fOptions.PedigreeOptions.IncludeAttributes;
+            chkNotes.Checked = fOptions.PedigreeOptions.IncludeNotes;
+            chkSources.Checked = fOptions.PedigreeOptions.IncludeSources;
+            chkGenerations.Checked = fOptions.PedigreeOptions.IncludeGenerations;
 
-            switch (this.fOptions.PedigreeOptions.Format)
+            switch (fOptions.PedigreeOptions.Format)
             {
                 case PedigreeFormat.Excess:
-                    this.radExcess.Checked = true;
+                    radExcess.Checked = true;
                     break;
                 case PedigreeFormat.Compact:
-                    this.radCompact.Checked = true;
+                    radCompact.Checked = true;
                     break;
             }
 
-            this.chkShowOnStart.Checked = this.fOptions.ShowTips;
+            chkShowOnStart.Checked = fOptions.ShowTips;
 
-            switch (this.fOptions.FileBackup)
+            switch (fOptions.FileBackup)
             {
                 case FileBackup.fbNone:
-                    this.radFBNone.Checked = true;
+                    radFBNone.Checked = true;
                     break;
                 case FileBackup.fbOnlyPrev:
-                    this.radFBOnlyPrev.Checked = true;
+                    radFBOnlyPrev.Checked = true;
                     break;
                 case FileBackup.fbEachRevision:
-                    this.radFBEachRevision.Checked = true;
+                    radFBEachRevision.Checked = true;
                     break;
             }
 
-            this.fOptions.IndividualListColumns.CopyTo(fTempColumns);
-            this.UpdateColumnsList();
+            fOptions.IndividualListColumns.CopyTo(fTempColumns);
+            UpdateColumnsList();
 
-            this.UpdateControls();
-            this.UpdateLangs();
+            UpdateControls();
+            UpdateLangs();
 
-            this.UpdatePlugins();
-            this.UpdateWomanSurnameFormat();
+            UpdatePlugins();
+            UpdateWomanSurnameFormat();
 
-            this.ancOptionsControl1.Options = this.fOptions.AncestorsCircleOptions;
-            this.ancOptionsControl1.UpdateControls();
+            ancOptionsControl1.Options = fOptions.AncestorsCircleOptions;
+            ancOptionsControl1.UpdateControls();
 
-            this.cmbGeocoder.Text = this.fOptions.Geocoder;
+            cmbGeocoder.Text = fOptions.Geocoder;
         }
 
         private void UpdateWomanSurnameFormat()
         {
-            WomanSurnameFormat wsFmt = this.fOptions.WomanSurnameFormat;
+            WomanSurnameFormat wsFmt = fOptions.WomanSurnameFormat;
             bool isExtend = wsFmt != WomanSurnameFormat.wsfNotExtend;
 
             chkExtendWomanSurnames.Checked = isExtend;
@@ -264,8 +264,8 @@ namespace GKUI.Dialogs
         private void chkExtendWomanSurnames_CheckedChanged(object sender, EventArgs e)
         {
             if (!chkExtendWomanSurnames.Checked) {
-                this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
-                this.UpdateWomanSurnameFormat();
+                fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+                UpdateWomanSurnameFormat();
             } else {
                 radMaiden_Married.Enabled = true;
                 radMarried_Maiden.Enabled = true;
@@ -278,13 +278,13 @@ namespace GKUI.Dialogs
         {
             if (MainWin.Instance == null) return;
 
-            this.lvPlugins.Items.Clear();
+            lvPlugins.Items.Clear();
 
             foreach (IPlugin plugin in MainWin.Instance.Plugins)
             {
                 PluginInfo pInfo = MainWin.GetPluginAttributes(plugin);
                 
-                ListViewItem item = this.lvPlugins.Items.Add(pInfo.Title);
+                ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
                 item.SubItems.Add(pInfo.Version);
                 item.SubItems.Add(pInfo.Copyright);
                 item.SubItems.Add(pInfo.Description);
@@ -296,16 +296,16 @@ namespace GKUI.Dialogs
             Label pan = (sender as Label);
             if (pan == null) return;
 
-            this.ColorDialog1.FullOpen = true;
-            this.ColorDialog1.Color = pan.BackColor;
-            if (this.ColorDialog1.ShowDialog() == DialogResult.OK) {
-                pan.BackColor = this.ColorDialog1.Color;
+            ColorDialog1.FullOpen = true;
+            ColorDialog1.Color = pan.BackColor;
+            if (ColorDialog1.ShowDialog() == DialogResult.OK) {
+                pan.BackColor = ColorDialog1.Color;
             }
         }
 
         private void panDefFont_Click(object sender, EventArgs e)
         {
-            TreeChartOptions chartOptions = this.fOptions.ChartOptions;
+            TreeChartOptions chartOptions = fOptions.ChartOptions;
 
             var font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
             font = UIHelper.SelectFont(font);
@@ -315,104 +315,104 @@ namespace GKUI.Dialogs
                 chartOptions.DefFontSize = (int)(Math.Round(font.Size));
             }
 
-            this.UpdateControls();
+            UpdateControls();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.AcceptChanges();
-                base.DialogResult = DialogResult.OK;
+                AcceptChanges();
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fHost.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
         private void AcceptChanges()
         {
-            this.fTempColumns.CopyTo(this.fOptions.IndividualListColumns);
+            fTempColumns.CopyTo(fOptions.IndividualListColumns);
 
-            /*if (this.radASCII.Checked) {
-                this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
-            } else if (this.radUTF.Checked) {
-                this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
+            /*if (radASCII.Checked) {
+                fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
+            } else if (radUTF.Checked) {
+                fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
             }*/
 
-            if (this.radSNP.Checked) {
-                this.fOptions.DefNameFormat = NameFormat.nfFNP;
-            } else if (this.radS_NP.Checked) {
-                this.fOptions.DefNameFormat = NameFormat.nfF_NP;
-            } else if (this.radS_N_P.Checked) {
-                this.fOptions.DefNameFormat = NameFormat.nfF_N_P;
+            if (radSNP.Checked) {
+                fOptions.DefNameFormat = NameFormat.nfFNP;
+            } else if (radS_NP.Checked) {
+                fOptions.DefNameFormat = NameFormat.nfF_NP;
+            } else if (radS_N_P.Checked) {
+                fOptions.DefNameFormat = NameFormat.nfF_N_P;
             }
 
-            if (this.radDMY.Checked) {
-                this.fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
-            } else if (this.radYMD.Checked) {
-                this.fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
+            if (radDMY.Checked) {
+                fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
+            } else if (radYMD.Checked) {
+                fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
 
-            this.fOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;
-            this.fOptions.ListHighlightUnparentedPersons = this.chkHighlightUnparented.Checked;
-            this.fOptions.ListHighlightUnmarriedPersons = this.chkHighlightUnmarried.Checked;
-            this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
-            this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
-            this.fOptions.Autosave = this.chkAutosave.Checked;
-            this.fOptions.AutosaveInterval = (int)this.numASMin.Value;
-            this.fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
-            this.fOptions.LoadRecentFiles = this.chkLoadRecentFiles.Checked;
+            fOptions.PlacesWithAddress = chkPlacesWithAddress.Checked;
+            fOptions.ListHighlightUnparentedPersons = chkHighlightUnparented.Checked;
+            fOptions.ListHighlightUnmarriedPersons = chkHighlightUnmarried.Checked;
+            fOptions.ShowDatesCalendar = chkShowDatesCalendar.Checked;
+            fOptions.ShowDatesSign = chkShowDatesSigns.Checked;
+            fOptions.Autosave = chkAutosave.Checked;
+            fOptions.AutosaveInterval = (int)numASMin.Value;
+            fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
+            fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
 
-            this.fOptions.ChartOptions.FamilyVisible = this.chkSurname.Checked;
-            this.fOptions.ChartOptions.NameVisible = this.chkName.Checked;
-            this.fOptions.ChartOptions.PatronymicVisible = this.chkPatronymic.Checked;
-            this.fOptions.ChartOptions.DiffLines = this.chkDiffLines.Checked;
-            this.fOptions.ChartOptions.BirthDateVisible = this.chkBirthDate.Checked;
-            this.fOptions.ChartOptions.DeathDateVisible = this.chkDeathDate.Checked;
-            this.fOptions.ChartOptions.OnlyYears = this.chkOnlyYears.Checked;
-            this.fOptions.ChartOptions.Kinship = this.chkKinship.Checked;
-            this.fOptions.ChartOptions.SignsVisible = this.chkSignsVisible.Checked;
-            this.fOptions.ChartOptions.ChildlessExclude = this.chkChildlessExclude.Checked;
-            this.fOptions.ChartOptions.Decorative = this.chkTreeDecorative.Checked;
-            this.fOptions.ChartOptions.PortraitsVisible = this.chkPortraitsVisible.Checked;
-            this.fOptions.ChartOptions.DefaultPortraits = this.chkDefaultPortraits.Checked;
-            this.fOptions.ChartOptions.MaleColor = this.lblMaleColor.BackColor;
-            this.fOptions.ChartOptions.FemaleColor = this.lblFemaleColor.BackColor;
-            this.fOptions.ChartOptions.UnkSexColor = this.lblUnkSexColor.BackColor;
-            this.fOptions.ChartOptions.UnHusbandColor = this.lblUnHusbandColor.BackColor;
-            this.fOptions.ChartOptions.UnWifeColor = this.lblUnWifeColor.BackColor;
+            fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
+            fOptions.ChartOptions.NameVisible = chkName.Checked;
+            fOptions.ChartOptions.PatronymicVisible = chkPatronymic.Checked;
+            fOptions.ChartOptions.DiffLines = chkDiffLines.Checked;
+            fOptions.ChartOptions.BirthDateVisible = chkBirthDate.Checked;
+            fOptions.ChartOptions.DeathDateVisible = chkDeathDate.Checked;
+            fOptions.ChartOptions.OnlyYears = chkOnlyYears.Checked;
+            fOptions.ChartOptions.Kinship = chkKinship.Checked;
+            fOptions.ChartOptions.SignsVisible = chkSignsVisible.Checked;
+            fOptions.ChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
+            fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked;
+            fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
+            fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
+            fOptions.ChartOptions.MaleColor = lblMaleColor.BackColor;
+            fOptions.ChartOptions.FemaleColor = lblFemaleColor.BackColor;
+            fOptions.ChartOptions.UnkSexColor = lblUnkSexColor.BackColor;
+            fOptions.ChartOptions.UnHusbandColor = lblUnHusbandColor.BackColor;
+            fOptions.ChartOptions.UnWifeColor = lblUnWifeColor.BackColor;
 
-            this.fOptions.Proxy.UseProxy = this.chkUseProxy.Checked;
-            this.fOptions.Proxy.Server = this.txtProxyServer.Text;
-            this.fOptions.Proxy.Port = this.txtProxyPort.Text;
-            this.fOptions.Proxy.Login = this.txtProxyLogin.Text;
-            this.fOptions.Proxy.Password = this.txtProxyPass.Text;
+            fOptions.Proxy.UseProxy = chkUseProxy.Checked;
+            fOptions.Proxy.Server = txtProxyServer.Text;
+            fOptions.Proxy.Port = txtProxyPort.Text;
+            fOptions.Proxy.Login = txtProxyLogin.Text;
+            fOptions.Proxy.Password = txtProxyPass.Text;
 
-            this.fOptions.PedigreeOptions.IncludeAttributes = this.chkAttributes.Checked;
-            this.fOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
-            this.fOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
-            this.fOptions.PedigreeOptions.IncludeGenerations = this.chkGenerations.Checked;
+            fOptions.PedigreeOptions.IncludeAttributes = chkAttributes.Checked;
+            fOptions.PedigreeOptions.IncludeNotes = chkNotes.Checked;
+            fOptions.PedigreeOptions.IncludeSources = chkSources.Checked;
+            fOptions.PedigreeOptions.IncludeGenerations = chkGenerations.Checked;
 
-            if (this.radExcess.Checked) {
-                this.fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
-            } else if (this.radCompact.Checked) {
-                this.fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
+            if (radExcess.Checked) {
+                fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
+            } else if (radCompact.Checked) {
+                fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
 
-            this.fOptions.ShowTips = this.chkShowOnStart.Checked;
+            fOptions.ShowTips = chkShowOnStart.Checked;
 
-            if (this.radFBNone.Checked) {
-                this.fOptions.FileBackup = FileBackup.fbNone;
-            } else if (this.radFBOnlyPrev.Checked) {
-                this.fOptions.FileBackup = FileBackup.fbOnlyPrev;
-            } else if (this.radFBEachRevision.Checked) {
-                this.fOptions.FileBackup = FileBackup.fbEachRevision;
+            if (radFBNone.Checked) {
+                fOptions.FileBackup = FileBackup.fbNone;
+            } else if (radFBOnlyPrev.Checked) {
+                fOptions.FileBackup = FileBackup.fbOnlyPrev;
+            } else if (radFBEachRevision.Checked) {
+                fOptions.FileBackup = FileBackup.fbEachRevision;
             }
 
-            GKComboItem item = this.cmbLanguages.Items[this.cmbLanguages.SelectedIndex] as GKComboItem;
+            GKComboItem item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem;
             if (item != null) {
                 MainWin.Instance.LoadLanguage((int)item.Tag);
             }
@@ -420,52 +420,52 @@ namespace GKUI.Dialogs
             ancOptionsControl1.AcceptChanges();
 
             if (!chkExtendWomanSurnames.Checked) {
-                this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+                fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             } else {
                 if (radMaiden_Married.Checked) {
-                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
+                    fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
                 } else if (radMarried_Maiden.Checked) {
-                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
+                    fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
                 } else if (radMaiden.Checked) {
-                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
+                    fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
                 } else if (radMarried.Checked) {
-                    this.fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
+                    fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
                 }
             }
 
-            this.fOptions.Geocoder = this.cmbGeocoder.Text; 
+            fOptions.Geocoder = cmbGeocoder.Text;
 
-            base.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)
         {
-            int idx = this.lstPersonColumns.SelectedIndex;
-            if (this.fTempColumns.MoveColumn(idx, true)) {
-                this.UpdateColumnsList();
-                this.lstPersonColumns.SelectedIndex = idx - 1;
+            int idx = lstPersonColumns.SelectedIndex;
+            if (fTempColumns.MoveColumn(idx, true)) {
+                UpdateColumnsList();
+                lstPersonColumns.SelectedIndex = idx - 1;
             }
         }
 
         private void btnColumnDown_Click(object sender, EventArgs e)
         {
-            int idx = this.lstPersonColumns.SelectedIndex;
-            if (this.fTempColumns.MoveColumn(idx, false)) {
-                this.UpdateColumnsList();
-                this.lstPersonColumns.SelectedIndex = idx + 1;
+            int idx = lstPersonColumns.SelectedIndex;
+            if (fTempColumns.MoveColumn(idx, false)) {
+                UpdateColumnsList();
+                lstPersonColumns.SelectedIndex = idx + 1;
             }
         }
 
         private void btnDefList_Click(object sender, EventArgs e)
         {
-            this.fTempColumns.ResetDefaults();
-            this.UpdateColumnsList();
+            fTempColumns.ResetDefaults();
+            UpdateColumnsList();
         }
 
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             bool cs = (e.NewValue == CheckState.Checked);
-            this.fTempColumns[e.Index].ColActive = cs;
+            fTempColumns[e.Index].ColActive = cs;
         }
 
         private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
@@ -477,112 +477,112 @@ namespace GKUI.Dialogs
         {
             switch (page) {
                 case OptionsPage.opCommon:
-                    this.PageControl1.SelectTab(0);
+                    PageControl1.SelectTab(0);
                     break;
                 case OptionsPage.opTreeChart:
-                    this.PageControl1.SelectTab(1);
-                    this.tabsCharts.SelectTab(0);
+                    PageControl1.SelectTab(1);
+                    tabsCharts.SelectTab(0);
                     break;
                 case OptionsPage.opAncestorsCircle:
-                    this.PageControl1.SelectTab(1);
-                    this.tabsCharts.SelectTab(1);
+                    PageControl1.SelectTab(1);
+                    tabsCharts.SelectTab(1);
                     break;
                 case OptionsPage.opInterface:
-                    this.PageControl1.SelectTab(2);
+                    PageControl1.SelectTab(2);
                     break;
                 case OptionsPage.opPedigree:
-                    this.PageControl1.SelectTab(3);
+                    PageControl1.SelectTab(3);
                     break;
             }
         }
 
         public void SetLang()
         {
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_MIOptions);
-            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
-            this.pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
-            this.pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
-            /*this.grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);*/
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_MIOptions);
+            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
+            pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
+            pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
+            /*grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);*/
 
-            this.grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
-            this.chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);
-            this.lblProxyServer.Text = LangMan.LS(LSID.LSID_ProxyServer);
-            this.lblProxyPort.Text = LangMan.LS(LSID.LSID_ProxyPort);
-            this.lblProxyLogin.Text = LangMan.LS(LSID.LSID_ProxyLogin);
-            this.lblProxyPassword.Text = LangMan.LS(LSID.LSID_Password);
+            grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
+            chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);
+            lblProxyServer.Text = LangMan.LS(LSID.LSID_ProxyServer);
+            lblProxyPort.Text = LangMan.LS(LSID.LSID_ProxyPort);
+            lblProxyLogin.Text = LangMan.LS(LSID.LSID_ProxyLogin);
+            lblProxyPassword.Text = LangMan.LS(LSID.LSID_Password);
 
-            this.grpOther.Text = LangMan.LS(LSID.LSID_Other);
+            grpOther.Text = LangMan.LS(LSID.LSID_Other);
 
-            this.chkShowOnStart.Text = LangMan.LS(LSID.LSID_StartupTips);
-            this.lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
-            this.pageViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
-            this.pageViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
-            this.rgFNPFormat.Text = LangMan.LS(LSID.LSID_NamesFormat);
-            this.radSNP.Text = LangMan.LS(LSID.LSID_NF1);
-            this.radS_NP.Text = LangMan.LS(LSID.LSID_NF2);
-            this.radS_N_P.Text = LangMan.LS(LSID.LSID_NF3);
-            this.grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
-            this.chkPlacesWithAddress.Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
-            this.chkHighlightUnparented.Text = LangMan.LS(LSID.LSID_HighlightUnparented);
-            this.chkHighlightUnmarried.Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
-            this.btnDefList.Text = LangMan.LS(LSID.LSID_DefList);
-            this.grpTreePersons.Text = LangMan.LS(LSID.LSID_ViewTree);
-            this.chkSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            this.chkName.Text = LangMan.LS(LSID.LSID_Name);
-            this.chkPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.chkDiffLines.Text = LangMan.LS(LSID.LSID_DiffLines);
-            this.chkBirthDate.Text = LangMan.LS(LSID.LSID_BirthDate);
-            this.chkDeathDate.Text = LangMan.LS(LSID.LSID_DeathDate);
-            this.chkOnlyYears.Text = LangMan.LS(LSID.LSID_OnlyYears);
-            this.chkKinship.Text = LangMan.LS(LSID.LSID_Kinship);
-            this.chkSignsVisible.Text = LangMan.LS(LSID.LSID_SignsVisible);
-            this.chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
-            this.chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
-            this.chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
-            this.chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
-            this.grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
-            this.lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
-            this.lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
-            this.lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
-            this.lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
-            this.lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
-            this.lblFont.Text = LangMan.LS(LSID.LSID_Font);
-            this.grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
-            this.chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
-            this.chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);
-            this.chkSources.Text = LangMan.LS(LSID.LSID_IncludeSources);
-            this.grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
-            this.radExcess.Text = LangMan.LS(LSID.LSID_PF1);
-            this.radCompact.Text = LangMan.LS(LSID.LSID_PF2);
-            this.pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
-            this.pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-            this.chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
-            this.chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
+            chkShowOnStart.Text = LangMan.LS(LSID.LSID_StartupTips);
+            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+            pageViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
+            pageViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
+            rgFNPFormat.Text = LangMan.LS(LSID.LSID_NamesFormat);
+            radSNP.Text = LangMan.LS(LSID.LSID_NF1);
+            radS_NP.Text = LangMan.LS(LSID.LSID_NF2);
+            radS_N_P.Text = LangMan.LS(LSID.LSID_NF3);
+            grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
+            chkPlacesWithAddress.Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
+            chkHighlightUnparented.Text = LangMan.LS(LSID.LSID_HighlightUnparented);
+            chkHighlightUnmarried.Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
+            btnDefList.Text = LangMan.LS(LSID.LSID_DefList);
+            grpTreePersons.Text = LangMan.LS(LSID.LSID_ViewTree);
+            chkSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            chkName.Text = LangMan.LS(LSID.LSID_Name);
+            chkPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            chkDiffLines.Text = LangMan.LS(LSID.LSID_DiffLines);
+            chkBirthDate.Text = LangMan.LS(LSID.LSID_BirthDate);
+            chkDeathDate.Text = LangMan.LS(LSID.LSID_DeathDate);
+            chkOnlyYears.Text = LangMan.LS(LSID.LSID_OnlyYears);
+            chkKinship.Text = LangMan.LS(LSID.LSID_Kinship);
+            chkSignsVisible.Text = LangMan.LS(LSID.LSID_SignsVisible);
+            chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
+            chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
+            chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
+            chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
+            grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
+            lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
+            lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
+            lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
+            lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
+            lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
+            lblFont.Text = LangMan.LS(LSID.LSID_Font);
+            grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
+            chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
+            chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);
+            chkSources.Text = LangMan.LS(LSID.LSID_IncludeSources);
+            grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
+            radExcess.Text = LangMan.LS(LSID.LSID_PF1);
+            radCompact.Text = LangMan.LS(LSID.LSID_PF2);
+            pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
+            pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+            chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
+            chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
 
-            this.grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
-            this.radFBNone.Text = LangMan.LS(LSID.LSID_Not);
-            this.radFBOnlyPrev.Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
-            this.radFBEachRevision.Text = LangMan.LS(LSID.LSID_BackupEachRevision);
+            grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
+            radFBNone.Text = LangMan.LS(LSID.LSID_Not);
+            radFBOnlyPrev.Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
+            radFBEachRevision.Text = LangMan.LS(LSID.LSID_BackupEachRevision);
 
-            this.chkAutosave.Text = LangMan.LS(LSID.LSID_Autosave);
-            this.lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
+            chkAutosave.Text = LangMan.LS(LSID.LSID_Autosave);
+            lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
 
-            this.chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
-            this.pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
+            pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 
-            this.grpAdvancedNames.Text = LangMan.LS(LSID.LSID_AdditionalNames);
-            this.chkExtendWomanSurnames.Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);
-            this.radMaiden_Married.Text = LangMan.LS(LSID.LSID_WSF_Maiden_Married);
-            this.radMarried_Maiden.Text = LangMan.LS(LSID.LSID_WSF_Married_Maiden);
-            this.radMaiden.Text = LangMan.LS(LSID.LSID_WSF_Maiden);
-            this.radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
+            grpAdvancedNames.Text = LangMan.LS(LSID.LSID_AdditionalNames);
+            chkExtendWomanSurnames.Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);
+            radMaiden_Married.Text = LangMan.LS(LSID.LSID_WSF_Maiden_Married);
+            radMarried_Maiden.Text = LangMan.LS(LSID.LSID_WSF_Married_Maiden);
+            radMaiden.Text = LangMan.LS(LSID.LSID_WSF_Maiden);
+            radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
 
-            this.lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
-            this.chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
-            this.chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
+            lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
+            chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
+            chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
         }
     }
 }

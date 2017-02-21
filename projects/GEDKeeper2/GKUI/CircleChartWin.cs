@@ -42,35 +42,35 @@ namespace GKUI
 
         public IBaseWindow Base
         {
-            get { return this.fBaseWin; }
+            get { return fBaseWin; }
         }
 
         public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
         {
-            this.InitializeComponent();
-            this.MdiParent = MainWin.Instance;
-            this.ShowInTaskbar = true;
+            InitializeComponent();
+            MdiParent = MainWin.Instance;
+            ShowInTaskbar = true;
 
-            this.fBaseWin = baseWin;
-            this.fType = type;
+            fBaseWin = baseWin;
+            fType = type;
 
             if (type == CircleChartType.Ancestors) {
-                this.fCircleChart = new AncestorsCircle(this.fBaseWin);
+                fCircleChart = new AncestorsCircle(fBaseWin);
             } else {
-                this.fCircleChart = new DescendantsCircle(this.fBaseWin);
+                fCircleChart = new DescendantsCircle(fBaseWin);
             }
 
-            this.fCircleChart.Name = "fCircleChart";
-            this.fCircleChart.Dock = DockStyle.Fill;
-            this.fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
-            this.fCircleChart.RootChanged += CircleChartWin_RootChanged;
-            this.fCircleChart.RootPerson = startPerson;
+            fCircleChart.Name = "fCircleChart";
+            fCircleChart.Dock = DockStyle.Fill;
+            fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
+            fCircleChart.RootChanged += CircleChartWin_RootChanged;
+            fCircleChart.RootPerson = startPerson;
 
-            this.Controls.Add(this.fCircleChart);
+            Controls.Add(fCircleChart);
 
-            this.InitPrintDoc();
+            InitPrintDoc();
 
-            this.SetLang();
+            SetLang();
         }
 
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
@@ -88,7 +88,7 @@ namespace GKUI
             switch (e.KeyCode)
             {
                 case Keys.Escape:
-                    base.Close();
+                    Close();
                     break;
             }
         }
@@ -103,17 +103,17 @@ namespace GKUI
 
         private void InitPrintDoc()
         {
-            this.fPrintDoc = new PrintDocument();
-            this.fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            this.fPrintDoc.BeginPrint += printDocument1_BeginPrint;
-            this.fPrintDoc.PrintPage += printDocument1_PrintPage;
+            fPrintDoc = new PrintDocument();
+            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
+            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
+            fPrintDoc.PrintPage += printDocument1_PrintPage;
         }
 
         private void InitCurDoc()
         {
-            this.fPrintDoc.DocumentName = this.Text;
-            this.fPrintDoc.DefaultPageSettings.Landscape = fCircleChart.IsLandscape();
-            this.fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
+            fPrintDoc.DocumentName = Text;
+            fPrintDoc.DefaultPageSettings.Landscape = fCircleChart.IsLandscape();
+            fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
         }
 
         private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
@@ -158,10 +158,10 @@ namespace GKUI
         
         public void SetLang()
         {
-            if (this.fType == CircleChartType.Ancestors) {
-                this.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            if (fType == CircleChartType.Ancestors) {
+                Text = LangMan.LS(LSID.LSID_AncestorsCircle);
             } else {
-                this.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+                Text = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
             
         }
@@ -184,25 +184,25 @@ namespace GKUI
 
         public void DoPrint()
         {
-            this.InitCurDoc();
+            InitCurDoc();
 
             using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = this.fPrintDoc;
+                printDlg.Document = fPrintDoc;
 
                 if (printDlg.ShowDialog() == DialogResult.OK) {
-                    this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    this.fPrintDoc.Print();
+                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+                    fPrintDoc.Print();
                 }
             }
         }
 
         public void DoPrintPreview()
         {
-            this.InitCurDoc();
+            InitCurDoc();
 
             using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
                 previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = this.fPrintDoc;
+                previewDlg.Document = fPrintDoc;
                 previewDlg.ShowDialog();
             }
         }
@@ -218,28 +218,28 @@ namespace GKUI
 
         public void UpdateView()
         {
-            this.fCircleChart.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
-            this.fCircleChart.Changed();
+            fCircleChart.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
+            fCircleChart.Changed();
         }
 
         public bool NavCanBackward()
         {
-            return this.fCircleChart.NavCanBackward();
+            return fCircleChart.NavCanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fCircleChart.NavCanForward();
+            return fCircleChart.NavCanForward();
         }
 
         public void NavNext()
         {
-            this.fCircleChart.NavNext();
+            fCircleChart.NavNext();
         }
 
         public void NavPrev()
         {
-            this.fCircleChart.NavPrev();
+            fCircleChart.NavPrev();
         }
 
         public bool AllowQuickSearch()

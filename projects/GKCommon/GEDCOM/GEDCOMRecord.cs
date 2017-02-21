@@ -37,44 +37,44 @@ namespace GKCommon.GEDCOM
 
         public string AutomatedRecordID
         {
-            get { return base.GetTagStringValue("RIN"); }
-            set { base.SetTagStringValue("RIN", value); }
+            get { return GetTagStringValue("RIN"); }
+            set { SetTagStringValue("RIN", value); }
         }
 
         public GEDCOMChangeDate ChangeDate
         {
-            get { return base.TagClass("CHAN", GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
+            get { return TagClass("CHAN", GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
         }
 
         public GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks
         {
-            get	{ return this.fMultimediaLinks; }
+            get	{ return fMultimediaLinks; }
         }
 
         public GEDCOMList<GEDCOMNotes> Notes
         {
-            get { return this.fNotes; }
+            get { return fNotes; }
         }
 
         public GEDCOMRecordType RecordType
         {
-            get { return this.fRecordType; }
+            get { return fRecordType; }
         }
 
         public GEDCOMList<GEDCOMSourceCitation> SourceCitations
         {
-            get { return this.fSourceCitations; }
+            get { return fSourceCitations; }
         }
 
         public string UID
         {
-            get { return base.GetTagStringValue("_UID"); }
-            set { base.SetTagStringValue("_UID", value); }
+            get { return GetTagStringValue("_UID"); }
+            set { SetTagStringValue("_UID", value); }
         }
 
         public GEDCOMList<GEDCOMUserReference> UserReferences
         {
-            get { return this.fUserReferences; }
+            get { return fUserReferences; }
         }
 
         private static string CreateUID()
@@ -101,38 +101,38 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fRecordType = GEDCOMRecordType.rtNone;
+            fRecordType = GEDCOMRecordType.rtNone;
 
-            this.fNotes = new GEDCOMList<GEDCOMNotes>(this);
-            this.fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
-            this.fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
-            this.fUserReferences = new GEDCOMList<GEDCOMUserReference>(this);
+            fNotes = new GEDCOMList<GEDCOMNotes>(this);
+            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
+            fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
+            fUserReferences = new GEDCOMList<GEDCOMUserReference>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fNotes.Dispose();
-                this.fSourceCitations.Dispose();
-                this.fMultimediaLinks.Dispose();
-                this.fUserReferences.Dispose();
+                fNotes.Dispose();
+                fSourceCitations.Dispose();
+                fMultimediaLinks.Dispose();
+                fUserReferences.Dispose();
             }
             base.Dispose(disposing);
         }
 
         protected void SetRecordType(GEDCOMRecordType type)
         {
-            this.fRecordType = type;
+            fRecordType = type;
         }
 
         public int IndexOfSource(GEDCOMSourceRecord sourceRec)
         {
             if (sourceRec != null) {
-                int num = this.fSourceCitations.Count;
+                int num = fSourceCitations.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    if (this.fSourceCitations[i].XRef == sourceRec.XRef) {
+                    if (fSourceCitations[i].XRef == sourceRec.XRef) {
                         return i;
                     }
                 }
@@ -151,30 +151,30 @@ namespace GKCommon.GEDCOM
 
             foreach (GEDCOMNotes sourceNote in sourceRec.fNotes)
             {
-                GEDCOMNotes copy = (GEDCOMNotes)GEDCOMNotes.Create(this.Owner, this, "", "");
+                GEDCOMNotes copy = (GEDCOMNotes)GEDCOMNotes.Create(Owner, this, "", "");
                 copy.Assign(sourceNote);
-                this.Notes.Add(copy);
+                Notes.Add(copy);
             }
 
             foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks)
             {
-                GEDCOMMultimediaLink copy = (GEDCOMMultimediaLink)GEDCOMMultimediaLink.Create(this.Owner, this, "", "");
+                GEDCOMMultimediaLink copy = (GEDCOMMultimediaLink)GEDCOMMultimediaLink.Create(Owner, this, "", "");
                 copy.Assign(sourceMediaLink);
-                this.MultimediaLinks.Add(copy);
+                MultimediaLinks.Add(copy);
             }
 
             foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations)
             {
-                GEDCOMSourceCitation copy = (GEDCOMSourceCitation)GEDCOMSourceCitation.Create(this.Owner, this, "", "");
+                GEDCOMSourceCitation copy = (GEDCOMSourceCitation)GEDCOMSourceCitation.Create(Owner, this, "", "");
                 copy.Assign(sourceSrcCit);
-                this.SourceCitations.Add(copy);
+                SourceCitations.Add(copy);
             }
 
             foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences)
             {
-                GEDCOMUserReference copy = (GEDCOMUserReference)GEDCOMUserReference.Create(this.Owner, this, "", "");
+                GEDCOMUserReference copy = (GEDCOMUserReference)GEDCOMUserReference.Create(Owner, this, "", "");
                 copy.Assign(sourceUserRef);
-                this.UserReferences.Add(copy);
+                UserReferences.Add(copy);
             }
         }
 
@@ -185,11 +185,11 @@ namespace GKCommon.GEDCOM
                 targetRecord.Clear();
             }
 
-            if (this.fTags != null)
+            if (fTags != null)
             {
-                while (this.fTags.Count > 0)
+                while (fTags.Count > 0)
                 {
-                    GEDCOMTag tag = this.fTags.Extract(0);
+                    GEDCOMTag tag = fTags.Extract(0);
                     if (tag.Name == "CHAN" && !clearDest)
                     {
                         tag.Dispose();
@@ -202,32 +202,32 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            while (this.fNotes.Count > 0)
+            while (fNotes.Count > 0)
             {
-                GEDCOMTag tag = this.fNotes.Extract(0);
+                GEDCOMTag tag = fNotes.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.Notes.Add(tag as GEDCOMNotes);
+                targetRecord.Notes.Add((GEDCOMNotes) tag);
             }
 
-            while (this.fMultimediaLinks.Count > 0)
+            while (fMultimediaLinks.Count > 0)
             {
-                GEDCOMTag tag = this.fMultimediaLinks.Extract(0);
+                GEDCOMTag tag = fMultimediaLinks.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.MultimediaLinks.Add(tag as GEDCOMMultimediaLink);
+                targetRecord.MultimediaLinks.Add((GEDCOMMultimediaLink) tag);
             }
 
-            while (this.fSourceCitations.Count > 0)
+            while (fSourceCitations.Count > 0)
             {
-                GEDCOMTag tag = this.fSourceCitations.Extract(0);
+                GEDCOMTag tag = fSourceCitations.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.SourceCitations.Add(tag as GEDCOMSourceCitation);
+                targetRecord.SourceCitations.Add((GEDCOMSourceCitation) tag);
             }
 
-            while (this.fUserReferences.Count > 0)
+            while (fUserReferences.Count > 0)
             {
-                GEDCOMTag tag = this.fUserReferences.Extract(0);
+                GEDCOMTag tag = fUserReferences.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.UserReferences.Add(tag as GEDCOMUserReference);
+                targetRecord.UserReferences.Add((GEDCOMUserReference) tag);
             }
         }
 
@@ -235,40 +235,40 @@ namespace GKCommon.GEDCOM
         {
             base.Pack();
 
-            this.fNotes.Pack();
-            this.fSourceCitations.Pack();
-            this.fMultimediaLinks.Pack();
-            this.fUserReferences.Pack();
+            fNotes.Pack();
+            fSourceCitations.Pack();
+            fMultimediaLinks.Pack();
+            fUserReferences.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            this.fNotes.ReplaceXRefs(map);
-            this.fSourceCitations.ReplaceXRefs(map);
-            this.fMultimediaLinks.ReplaceXRefs(map);
-            this.fUserReferences.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
+            fSourceCitations.ReplaceXRefs(map);
+            fMultimediaLinks.ReplaceXRefs(map);
+            fUserReferences.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
 
-            this.fNotes.ResetOwner(newOwner);
-            this.fSourceCitations.ResetOwner(newOwner);
-            this.fMultimediaLinks.ResetOwner(newOwner);
-            this.fUserReferences.ResetOwner(newOwner);
+            fNotes.ResetOwner(newOwner);
+            fSourceCitations.ResetOwner(newOwner);
+            fMultimediaLinks.ResetOwner(newOwner);
+            fUserReferences.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
 
-            this.fNotes.SaveToStream(stream);
-            this.fSourceCitations.SaveToStream(stream);
-            this.fMultimediaLinks.SaveToStream(stream);
-            this.fUserReferences.SaveToStream(stream);
+            fNotes.SaveToStream(stream);
+            fSourceCitations.SaveToStream(stream);
+            fMultimediaLinks.SaveToStream(stream);
+            fUserReferences.SaveToStream(stream);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -281,19 +281,19 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "NOTE")
             {
-                result = this.fNotes.Add(new GEDCOMNotes(base.Owner, this, tagName, tagValue));
+                result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
             }
             else if (tagName == "SOUR")
             {
-                result = this.fSourceCitations.Add(new GEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
+                result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
             }
             else if (tagName == "OBJE")
             {
-                result = this.fMultimediaLinks.Add(new GEDCOMMultimediaLink(base.Owner, this, tagName, tagValue));
+                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(Owner, this, tagName, tagValue));
             }
             else if (tagName == "REFN")
             {
-                result = this.fUserReferences.Add(new GEDCOMUserReference(base.Owner, this, tagName, tagValue));
+                result = fUserReferences.Add(new GEDCOMUserReference(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -307,39 +307,39 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            this.fNotes.Clear();
-            this.fSourceCitations.Clear();
-            this.fMultimediaLinks.Clear();
-            this.fUserReferences.Clear();
+            fNotes.Clear();
+            fSourceCitations.Clear();
+            fMultimediaLinks.Clear();
+            fUserReferences.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fNotes.Count == 0 && this.fSourceCitations.Count == 0 && this.fMultimediaLinks.Count == 0 && this.fUserReferences.Count == 0;
+            return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0 && fUserReferences.Count == 0;
         }
 
         public string NewXRef()
         {
-            if (this.Owner != null)
+            if (Owner != null)
             {
-                string newXRef = this.Owner.XRefIndex_NewXRef(this);
-                this.XRef = newXRef;
+                string newXRef = Owner.XRefIndex_NewXRef(this);
+                XRef = newXRef;
             }
-            return this.XRef;
+            return XRef;
         }
 
         public void RequireUID()
         {
-            if (string.IsNullOrEmpty(this.UID))
+            if (string.IsNullOrEmpty(UID))
             {
-                this.UID = CreateUID();
+                UID = CreateUID();
             }
         }
 
         public void InitNew()
         {
-            this.NewXRef();
-            this.RequireUID();
+            NewXRef();
+            RequireUID();
         }
 
         protected GEDCOMRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -350,12 +350,12 @@ namespace GKCommon.GEDCOM
 
         public string GetXRefNum()
         {
-            string xref = this.XRef;
+            string xref = XRef;
 
             int i = 0;
-            int last = xref.Length - 1;
-            while (i <= last && (xref[i] < '0' || xref[i] > '9')) i++;
-            xref = ((i <= last) ? xref.Substring(i) : "");
+            int last = xref.Length;
+            while (i < last && (xref[i] < '0' || xref[i] > '9')) i++;
+            xref = ((i < last) ? xref.Substring(i) : "");
             return xref;
         }
 
@@ -364,7 +364,7 @@ namespace GKCommon.GEDCOM
             int result;
             try
             {
-                string xref = this.GetXRefNum();
+                string xref = GetXRefNum();
                 result = SysUtils.ParseInt(xref, 0);
             }
             catch (Exception)
@@ -380,9 +380,9 @@ namespace GKCommon.GEDCOM
 
             if (noteRec != null)
             {
-                note = new GEDCOMNotes(this.Owner, this, "", "");
+                note = new GEDCOMNotes(Owner, this, "", "");
                 note.Value = noteRec;
-                this.Notes.Add(note);
+                Notes.Add(note);
             }
 
             return note;
@@ -393,11 +393,11 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceCitation cit = null;
 
             if (sourceRec != null) {
-                cit = new GEDCOMSourceCitation(this.Owner, this, "", "");
+                cit = new GEDCOMSourceCitation(Owner, this, "", "");
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
-                this.SourceCitations.Add(cit);
+                SourceCitations.Add(cit);
             }
 
             return cit;
@@ -408,9 +408,9 @@ namespace GKCommon.GEDCOM
             GEDCOMMultimediaLink mmLink = null;
 
             if (mediaRec != null) {
-                mmLink = new GEDCOMMultimediaLink(this.Owner, this, "", "");
+                mmLink = new GEDCOMMultimediaLink(Owner, this, "", "");
                 mmLink.Value = mediaRec;
-                this.MultimediaLinks.Add(mmLink);
+                MultimediaLinks.Add(mmLink);
             }
 
             return mmLink;
@@ -418,9 +418,9 @@ namespace GKCommon.GEDCOM
 
         public void AddUserRef(string reference)
         {
-            GEDCOMUserReference uRef = new GEDCOMUserReference(this.Owner, this, "", "");
+            GEDCOMUserReference uRef = new GEDCOMUserReference(Owner, this, "", "");
             uRef.StringValue = reference;
-            this.UserReferences.Add(uRef);
+            UserReferences.Add(uRef);
         }
 
         #endregion

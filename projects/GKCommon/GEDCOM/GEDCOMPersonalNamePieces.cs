@@ -29,76 +29,76 @@ namespace GKCommon.GEDCOM
     {
         public string Prefix
         {
-            get { return base.GetTagStringValue("NPFX"); }
-            set { base.SetTagStringValue("NPFX", value); }
+            get { return GetTagStringValue("NPFX"); }
+            set { SetTagStringValue("NPFX", value); }
         }
 
         public string Given
         {
-            get { return base.GetTagStringValue("GIVN"); }
-            set { base.SetTagStringValue("GIVN", value); }
+            get { return GetTagStringValue("GIVN"); }
+            set { SetTagStringValue("GIVN", value); }
         }
 
         public string Nickname
         {
-            get { return base.GetTagStringValue("NICK"); }
-            set { base.SetTagStringValue("NICK", value); }
+            get { return GetTagStringValue("NICK"); }
+            set { SetTagStringValue("NICK", value); }
         }
 
         public string SurnamePrefix
         {
-            get { return base.GetTagStringValue("SPFX"); }
-            set { base.SetTagStringValue("SPFX", value); }
+            get { return GetTagStringValue("SPFX"); }
+            set { SetTagStringValue("SPFX", value); }
         }
 
         public string Surname
         {
-            get { return base.GetTagStringValue("SURN"); }
-            set { base.SetTagStringValue("SURN", value); }
+            get { return GetTagStringValue("SURN"); }
+            set { SetTagStringValue("SURN", value); }
         }
 
         public string Suffix
         {
-            get { return base.GetTagStringValue("NSFX"); }
-            set { base.SetTagStringValue("NSFX", value); }
+            get { return GetTagStringValue("NSFX"); }
+            set { SetTagStringValue("NSFX", value); }
         }
 
 
 
         public string PatronymicName
         {
-            get { return base.GetTagStringValue("_PATN"); }
-            set { base.SetTagStringValue("_PATN", value); }
+            get { return GetTagStringValue("_PATN"); }
+            set { SetTagStringValue("_PATN", value); }
         }
 
         // as BKW6
         public string MarriedName
         {
-            get { return base.GetTagStringValue("_MARN"); }
-            set { base.SetTagStringValue("_MARN", value); }
+            get { return GetTagStringValue("_MARN"); }
+            set { SetTagStringValue("_MARN", value); }
         }
 
         // as BKW6
         public string ReligiousName
         {
-            get { return base.GetTagStringValue("_RELN"); }
-            set { base.SetTagStringValue("_RELN", value); }
+            get { return GetTagStringValue("_RELN"); }
+            set { SetTagStringValue("_RELN", value); }
         }
 
         // as BKW6
         public string CensusName
         {
-            get { return base.GetTagStringValue("_CENN"); }
-            set { base.SetTagStringValue("_CENN", value); }
+            get { return GetTagStringValue("_CENN"); }
+            set { SetTagStringValue("_CENN", value); }
         }
 
 
         public override void SaveToStream(StreamWriter stream)
         {
-            this.SaveTagsToStream(stream);
+            SaveTagsToStream(stream);
 
-            this.fNotes.SaveToStream(stream);
-            this.fSourceCitations.SaveToStream(stream);
+            fNotes.SaveToStream(stream);
+            fSourceCitations.SaveToStream(stream);
         }
 
         public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

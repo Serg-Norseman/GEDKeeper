@@ -247,12 +247,16 @@ namespace GKCommon.GEDCOM
 
         mfWAV,
         mfMP3,
+        mfWMA,
+        mfMKA,
 
         mfAVI,
         mfMPG,
-        mfWMA,
+        mfWMV,
         mfMP4,
         mfOGV,
+        mfMKV,
+        mfMOV,
 
         mfOLE,
         mfUnknown

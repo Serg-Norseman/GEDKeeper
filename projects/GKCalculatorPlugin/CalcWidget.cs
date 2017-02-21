@@ -35,38 +35,38 @@ namespace GKCalculatorPlugin
         private readonly Plugin fPlugin;
         private readonly ExpCalculator fCalc;
 
-        public CalcWidget(Plugin plugin) : base()
+        public CalcWidget(Plugin plugin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.fPlugin = plugin;
+            fPlugin = plugin;
 
             Screen scr = Screen.PrimaryScreen;
-            this.Location = new Point(scr.WorkingArea.Width - this.Width - 10, scr.WorkingArea.Height - this.Height - 10);
+            Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
 
-            this.fCalc = new ExpCalculator();
-            this.lbOutput.Items.Clear();
+            fCalc = new ExpCalculator();
+            lbOutput.Items.Clear();
 
-            this.SetLang();
+            SetLang();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                //this.fCalc.Dispose();
+                //fCalc.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void CalcWidget_Load(object sender, EventArgs e)
         {
-            this.fPlugin.Host.WidgetShow(this.fPlugin);
+            fPlugin.Host.WidgetShow(fPlugin);
         }
 
         private void CalcWidget_Closed(object sender, EventArgs e)
         {
-            this.fPlugin.Host.WidgetClose(this.fPlugin);
+            fPlugin.Host.WidgetClose(fPlugin);
         }
 
         private void edExpression_KeyDown(object sender, KeyEventArgs e)
@@ -76,8 +76,8 @@ namespace GKCalculatorPlugin
                 string res;
                 try
                 {
-                    res = this.fCalc.Calc(this.edExpression.Text).ToString();
-                    if (this.chkPutToClipboard.Checked)
+                    res = fCalc.Calc(edExpression.Text).ToString();
+                    if (chkPutToClipboard.Checked)
                     {
                         Clipboard.SetDataObject(res);
                     }
@@ -86,10 +86,10 @@ namespace GKCalculatorPlugin
                 {
                     res = "[ ??? ]";
                 }
-                this.lbOutput.Items.Add("> " + this.edExpression.Text);
-                this.lbOutput.Items.Add("= " + res);
-                this.lbOutput.SelectedIndex = this.lbOutput.Items.Count - 1;
-                this.edCalcResult.Text = res;
+                lbOutput.Items.Add("> " + edExpression.Text);
+                lbOutput.Items.Add("= " + res);
+                lbOutput.SelectedIndex = lbOutput.Items.Count - 1;
+                edCalcResult.Text = res;
             }
         }
 
@@ -97,7 +97,7 @@ namespace GKCalculatorPlugin
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.edCalcResult.DoDragDrop(this.edCalcResult.Text, DragDropEffects.Move);
+                edCalcResult.DoDragDrop(edCalcResult.Text, DragDropEffects.Move);
             }
         }
 
@@ -108,12 +108,12 @@ namespace GKCalculatorPlugin
 
         private void lbOutput_DoubleClick(object sender, EventArgs e)
         {
-            if (this.lbOutput.SelectedIndex < 0 || this.lbOutput.SelectedIndex >= this.lbOutput.Items.Count) return;
+            if (lbOutput.SelectedIndex < 0 || lbOutput.SelectedIndex >= lbOutput.Items.Count) return;
 
-            string line = (string)this.lbOutput.Items[this.lbOutput.SelectedIndex];
+            string line = (string)lbOutput.Items[lbOutput.SelectedIndex];
             if (line.StartsWith("> ", StringComparison.Ordinal)) {
                 line = line.Substring(2);
-                this.edExpression.Text = line;
+                edExpression.Text = line;
             }
         }
 
@@ -121,8 +121,8 @@ namespace GKCalculatorPlugin
 
         public void SetLang()
         {
-            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalc);
-            this.chkPutToClipboard.Text = this.fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
+            Text = fPlugin.LangMan.LS(PLS.LSID_MICalc);
+            chkPutToClipboard.Text = fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
         }
 
         #endregion

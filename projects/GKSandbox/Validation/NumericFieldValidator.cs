@@ -1,20 +1,17 @@
-﻿using System;
-using GKCommon;
-
-namespace GKCommon.Validation
+﻿namespace GKCommon.Validation
 {
     public class NumericFieldValidator : ValidatorBase
     {
-        internal const string NumericFieldRequire = "Require numeric value";
+        internal const string NUMERIC_FIELD_REQUIRE = "Require numeric value";
 
         public NumericFieldValidator()
         {
-            base.ErrorMessage = NumericFieldRequire;
+            ErrorMessage = NUMERIC_FIELD_REQUIRE;
         }
 
         protected override bool EvaluateIsValid()
         {
-            string text = base.ControlToValidate.Text;
+            string text = ControlToValidate.Text;
             bool result;
             try
             {

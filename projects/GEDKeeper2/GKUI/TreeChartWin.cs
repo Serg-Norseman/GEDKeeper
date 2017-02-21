@@ -53,14 +53,14 @@ namespace GKUI
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         public TreeChartBox.ChartKind ChartKind
         {
-            get { return this.fChartKind; }
+            get { return fChartKind; }
             set {
-                this.fChartKind = value;
+                fChartKind = value;
                 UpdateModesMenu();
             }
         }
@@ -68,47 +68,47 @@ namespace GKUI
 
         public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
-            this.InitializeComponent();
-            base.MdiParent = MainWin.Instance;
+            InitializeComponent();
+            MdiParent = MainWin.Instance;
 
-            this.tbImageSave.Image = GKResources.iSaveImage;
-            this.tbModes.Image = GKResources.iTools;
+            tbImageSave.Image = GKResources.iSaveImage;
+            tbModes.Image = GKResources.iTools;
 
-            this.miModeBoth.Tag = TreeChartBox.ChartKind.ckBoth;
-            this.miModeAncestors.Tag = TreeChartBox.ChartKind.ckAncestors;
-            this.miModeDescendants.Tag = TreeChartBox.ChartKind.ckDescendants;
+            miModeBoth.Tag = TreeChartBox.ChartKind.ckBoth;
+            miModeAncestors.Tag = TreeChartBox.ChartKind.ckAncestors;
+            miModeDescendants.Tag = TreeChartBox.ChartKind.ckDescendants;
 
-            this.fBase = baseWin;
-            this.fPerson = startPerson;
-            this.fGensLimit = -1;
+            fBase = baseWin;
+            fPerson = startPerson;
+            fGensLimit = -1;
 
-            this.fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
-            this.fTreeBox.Name = "fTreeBox";
-            this.fTreeBox.Base = this.fBase;
-            this.fTreeBox.Dock = DockStyle.Fill;
-            this.fTreeBox.DragOver += this.ImageTree_DragOver;
-            this.fTreeBox.PersonModify += this.ImageTree_PersonModify;
-            this.fTreeBox.RootChanged += ImageTree_RootChanged;
-            this.fTreeBox.PersonProperties += this.ImageTree_PersonProperties;
-            this.fTreeBox.Options = MainWin.Instance.Options.ChartOptions;
-            this.fTreeBox.NavRefresh += this.ImageTree_NavRefresh;
+            fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
+            fTreeBox.Name = "fTreeBox";
+            fTreeBox.Base = fBase;
+            fTreeBox.Dock = DockStyle.Fill;
+            fTreeBox.DragOver += ImageTree_DragOver;
+            fTreeBox.PersonModify += ImageTree_PersonModify;
+            fTreeBox.RootChanged += ImageTree_RootChanged;
+            fTreeBox.PersonProperties += ImageTree_PersonProperties;
+            fTreeBox.Options = MainWin.Instance.Options.ChartOptions;
+            fTreeBox.NavRefresh += ImageTree_NavRefresh;
 
-            base.Controls.Add(this.fTreeBox);
-            base.Controls.SetChildIndex(this.fTreeBox, 0);
-            base.Controls.SetChildIndex(this.ToolBar1, 1);
+            Controls.Add(fTreeBox);
+            Controls.SetChildIndex(fTreeBox, 0);
+            Controls.SetChildIndex(ToolBar1, 1);
 
-            this.SetLang();
+            SetLang();
 
-            this.miCertaintyIndex.Checked = this.fTreeBox.Options.CertaintyIndexVisible;
-            this.fTreeBox.CertaintyIndex = this.fTreeBox.Options.CertaintyIndexVisible;
+            miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
+            fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
 
-            this.miTraceSelected.Checked = this.fTreeBox.Options.TraceSelected;
-            this.fTreeBox.TraceSelected = this.fTreeBox.Options.TraceSelected;
+            miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
+            fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
-            this.miTraceKinships.Checked = this.fTreeBox.TraceKinships;
-            this.miTraceKinships.Visible = false;
+            miTraceKinships.Checked = fTreeBox.TraceKinships;
+            miTraceKinships.Visible = false;
 
-            this.InitPrintDoc();
+            InitPrintDoc();
         }
 
         protected override void Dispose(bool disposing)
@@ -151,51 +151,51 @@ namespace GKUI
 
         private void UpdateTitle()
         {
-            switch (this.fChartKind)
+            switch (fChartKind)
             {
                 case TreeChartBox.ChartKind.ckAncestors:
-                    this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
+                    Text = LangMan.LS(LSID.LSID_MITreeAncestors);
                     break;
                 case TreeChartBox.ChartKind.ckDescendants:
-                    this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
+                    Text = LangMan.LS(LSID.LSID_MITreeDescendants);
                     break;
                 case TreeChartBox.ChartKind.ckBoth:
-                    this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
+                    Text = LangMan.LS(LSID.LSID_MITreeBoth);
                     break;
             }
 
-            this.Text = string.Format("{0} \"{1}\"", this.Text, Path.GetFileName(fBase.Tree.FileName));
+            Text = string.Format("{0} \"{1}\"", Text, Path.GetFileName(fBase.Tree.FileName));
         }
 
         #region Interface handlers
 
         private void UpdateChart()
         {
-            if (this.fBase != null) {
-                this.fBase.RefreshLists(false);
+            if (fBase != null) {
+                fBase.RefreshLists(false);
             }
 
-            this.fTreeBox.RefreshTree();
+            fTreeBox.RefreshTree();
         }
 
         private void UpdateModesMenu()
         {
-            this.miModeBoth.Checked = false;
-            this.miModeAncestors.Checked = false;
-            this.miModeDescendants.Checked = false;
+            miModeBoth.Checked = false;
+            miModeAncestors.Checked = false;
+            miModeDescendants.Checked = false;
 
-            switch (this.fChartKind)
+            switch (fChartKind)
             {
                 case TreeChartBox.ChartKind.ckAncestors:
-                    this.miModeAncestors.Checked = true;
+                    miModeAncestors.Checked = true;
                     break;
 
                 case TreeChartBox.ChartKind.ckDescendants:
-                    this.miModeDescendants.Checked = true;
+                    miModeDescendants.Checked = true;
                     break;
 
                 case TreeChartBox.ChartKind.ckBoth:
-                    this.miModeBoth.Checked = true;
+                    miModeBoth.Checked = true;
                     break;
             }
         }
@@ -205,24 +205,24 @@ namespace GKUI
             switch (e.KeyCode)
             {
                 case Keys.F5:
-                    this.GenChart(true);
+                    GenChart(true);
                     break;
 
                 case Keys.F6:
-                    this.miRebuildTree_Click(null, null);
+                    miRebuildTree_Click(null, null);
                     break;
 
                 case Keys.F7:
-                    this.fTreeBox.RebuildKinships();
+                    fTreeBox.RebuildKinships();
                     break;
 
                 case Keys.Escape:
-                    base.Close();
+                    Close();
                     break;
 
                 case Keys.F:
                     if (e.Control) {
-                        this.QuickSearch();
+                        QuickSearch();
                     }
                     break;
             }
@@ -239,7 +239,7 @@ namespace GKUI
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
-                this.fTreeBox.SaveSnapshot(fileName);
+                fTreeBox.SaveSnapshot(fileName);
             }
         }
 
@@ -257,14 +257,14 @@ namespace GKUI
 
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)
         {
-            this.MenuPerson.Show(this.fTreeBox, new Point(e.X, e.Y));
+            MenuPerson.Show(fTreeBox, new Point(e.X, e.Y));
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
         {
             if (person == null || person.Rec == null) return;
 
-            this.fPerson = person.Rec;
+            fPerson = person.Rec;
 
             MainWin.Instance.UpdateControls(false);
         }
@@ -282,8 +282,8 @@ namespace GKUI
             if (person.Rec != null) {
                 GEDCOMIndividualRecord iRec = person.Rec;
 
-                if (this.fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
-                    this.UpdateChart();
+                if (fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+                    UpdateChart();
                 }
             } else {
                 // this is "stub" person, only in descendant tree
@@ -292,11 +292,11 @@ namespace GKUI
                 GEDCOMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = this.fBase.SelectSpouseFor(person.BaseSpouse.Rec);
+                    GEDCOMIndividualRecord iSpouse = fBase.SelectSpouseFor(person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         baseFamily.AddSpouse(iSpouse);
-                        this.UpdateChart();
+                        UpdateChart();
                     }
                 }
             }
@@ -304,96 +304,84 @@ namespace GKUI
 
         private void miGens9_Click(object sender, EventArgs e)
         {
-            this.miGensInf.Checked = false;
-            this.miGens1.Checked = false;
-            this.miGens2.Checked = false;
-            this.miGens3.Checked = false;
-            this.miGens4.Checked = false;
-            this.miGens5.Checked = false;
-            this.miGens6.Checked = false;
-            this.miGens7.Checked = false;
-            this.miGens8.Checked = false;
-            this.miGens9.Checked = false;
+            miGensInf.Checked = false;
+            miGens1.Checked = false;
+            miGens2.Checked = false;
+            miGens3.Checked = false;
+            miGens4.Checked = false;
+            miGens5.Checked = false;
+            miGens6.Checked = false;
+            miGens7.Checked = false;
+            miGens8.Checked = false;
+            miGens9.Checked = false;
             ((ToolStripMenuItem)sender).Checked = true;
 
-            if (sender == this.miGensInf) this.fGensLimit = -1;
-            if (sender == this.miGens1) this.fGensLimit = 1;
-            if (sender == this.miGens2) this.fGensLimit = 2;
-            if (sender == this.miGens3) this.fGensLimit = 3;
-            if (sender == this.miGens4) this.fGensLimit = 4;
-            if (sender == this.miGens5) this.fGensLimit = 5;
-            if (sender == this.miGens6) this.fGensLimit = 6;
-            if (sender == this.miGens7) this.fGensLimit = 7;
-            if (sender == this.miGens8) this.fGensLimit = 8;
-            if (sender == this.miGens9) this.fGensLimit = 9;
+            if (sender == miGensInf) fGensLimit = -1;
+            if (sender == miGens1) fGensLimit = 1;
+            if (sender == miGens2) fGensLimit = 2;
+            if (sender == miGens3) fGensLimit = 3;
+            if (sender == miGens4) fGensLimit = 4;
+            if (sender == miGens5) fGensLimit = 5;
+            if (sender == miGens6) fGensLimit = 6;
+            if (sender == miGens7) fGensLimit = 7;
+            if (sender == miGens8) fGensLimit = 8;
+            if (sender == miGens9) fGensLimit = 9;
 
-            this.GenChart(true);
+            GenChart(true);
         }
 
         private void miEdit_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null)
-            {
-                GEDCOMIndividualRecord iRec = p.Rec;
-                if (this.fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
-                    this.UpdateChart();
-                }
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            GEDCOMIndividualRecord iRec = p.Rec;
+            if (fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+                UpdateChart();
             }
         }
 
         private bool ParentIsRequired(GEDCOMSex needSex)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return false;
 
-            if (p != null && p.Rec != null)
-            {
-                bool needParent = false;
-                bool familyExist = p.Rec.GetParentsFamily() != null;
+            bool familyExist = p.Rec.GetParentsFamily() != null;
+            if (!familyExist) return true;
 
-                if (familyExist) {
-                    GEDCOMIndividualRecord mother, father;
-                    p.Rec.GetParents(out father, out mother);
+            GEDCOMIndividualRecord mother, father;
+            p.Rec.GetParents(out father, out mother);
 
-                    needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                        (mother == null && needSex == GEDCOMSex.svFemale);
-
-                    return needParent;
-                }
-
-                return true;
-            }
-
-            return false;
+            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                (mother == null && needSex == GEDCOMSex.svFemale);
+            return needParent;
         }
 
         private void ParentAdd(GEDCOMSex needSex)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return;
 
-            if (p != null && p.Rec != null)
-            {
-                bool needParent = false;
-                bool familyExist = p.Rec.GetParentsFamily() != null;
+            bool needParent = false;
+            bool familyExist = p.Rec.GetParentsFamily() != null;
 
-                if (familyExist) {
-                    GEDCOMIndividualRecord mother, father;
-                    p.Rec.GetParents(out father, out mother);
-                    needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                        (mother == null && needSex == GEDCOMSex.svFemale);
-                }
+            if (familyExist) {
+                GEDCOMIndividualRecord mother, father;
+                p.Rec.GetParents(out father, out mother);
+                needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                    (mother == null && needSex == GEDCOMSex.svFemale);
+            }
 
-                if (!familyExist || needParent) {
-                    GEDCOMIndividualRecord child = p.Rec;
-                    GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : this.fBase.Tree.CreateFamily();
-                    GEDCOMIndividualRecord parent = this.fBase.SelectPerson(null, TargetMode.tmParent, needSex);
-                    if (parent != null) {
-                        fam.AddSpouse(parent);
-                        if (!familyExist)
-                            fam.AddChild(child);
-                        
-                        this.UpdateChart();
-                    }
+            if (!familyExist || needParent) {
+                GEDCOMIndividualRecord child = p.Rec;
+                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Tree.CreateFamily();
+                GEDCOMIndividualRecord parent = fBase.SelectPerson(null, TargetMode.tmParent, needSex);
+                if (parent != null) {
+                    fam.AddSpouse(parent);
+                    if (!familyExist)
+                        fam.AddChild(child);
+                    
+                    UpdateChart();
                 }
             }
         }
@@ -410,138 +398,129 @@ namespace GKUI
 
         private void miSpouseAdd_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null)
-            {
-                GEDCOMIndividualRecord iRec = p.Rec;
-                GEDCOMIndividualRecord iSpouse = this.fBase.SelectSpouseFor(iRec);
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return;
 
-                if (iSpouse != null) {
-                    GEDCOMFamilyRecord fam = this.fBase.Tree.CreateFamily();
-                    fam.AddSpouse(iRec);
-                    fam.AddSpouse(iSpouse);
-                    this.UpdateChart();
-                }
-            }
+            GEDCOMIndividualRecord iRec = p.Rec;
+            GEDCOMIndividualRecord iSpouse = fBase.SelectSpouseFor(iRec);
+            if (iSpouse == null) return;
+
+            GEDCOMFamilyRecord fam = fBase.Tree.CreateFamily();
+            fam.AddSpouse(iRec);
+            fam.AddSpouse(iSpouse);
+            UpdateChart();
         }
 
         private void InternalChildAdd(GEDCOMSex needSex)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null) {
-                GEDCOMIndividualRecord child = this.fBase.AddChildForParent(p.Rec, needSex);
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return;
 
-                if (child != null) {
-                    this.UpdateChart();
-                }
-            }
+            GEDCOMIndividualRecord child = fBase.AddChildForParent(p.Rec, needSex);
+            if (child == null) return;
+
+            UpdateChart();
         }
 
         private void miSonAdd_Click(object sender, EventArgs e)
         {
-            this.InternalChildAdd(GEDCOMSex.svMale);
+            InternalChildAdd(GEDCOMSex.svMale);
         }
 
         private void miDaughterAdd_Click(object sender, EventArgs e)
         {
-            this.InternalChildAdd(GEDCOMSex.svFemale);
+            InternalChildAdd(GEDCOMSex.svFemale);
         }
 
         private void miFamilyAdd_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null)
-            {
-                GEDCOMFamilyRecord fam = this.fBase.AddFamilyForSpouse(p.Rec);
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return;
 
-                if (fam != null) {
-                    this.UpdateChart();
-                }
-            }
+            GEDCOMFamilyRecord fam = fBase.AddFamilyForSpouse(p.Rec);
+            if (fam == null) return;
+
+            UpdateChart();
         }
 
         private void miDelete_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null && p != this.fTreeBox.Root)
-            {
-                this.fBase.RecordDelete(p.Rec, true);
-                this.GenChart(true);
-            }
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null || p == fTreeBox.Root) return;
+
+            fBase.RecordDelete(p.Rec, true);
+            GenChart(true);
         }
 
         private void miRebuildKinships_Click(object sender, EventArgs e)
         {
-            this.fTreeBox.RebuildKinships();
+            fTreeBox.RebuildKinships();
         }
 
         private void miTraceSelected_Click(object sender, EventArgs e)
         {
-            this.miTraceSelected.Checked = !this.miTraceSelected.Checked;
+            miTraceSelected.Checked = !miTraceSelected.Checked;
             
-            this.fTreeBox.Options.TraceSelected = this.miTraceSelected.Checked;
-            this.fTreeBox.TraceSelected = this.miTraceSelected.Checked;
+            fTreeBox.Options.TraceSelected = miTraceSelected.Checked;
+            fTreeBox.TraceSelected = miTraceSelected.Checked;
         }
 
         private void miTraceKinships_Click(object sender, EventArgs e)
         {
-            this.miTraceKinships.Checked = !this.miTraceKinships.Checked;
-            this.fTreeBox.TraceKinships = this.miTraceKinships.Checked;
+            miTraceKinships.Checked = !miTraceKinships.Checked;
+            fTreeBox.TraceKinships = miTraceKinships.Checked;
         }
 
         private void miCertaintyIndex_Click(object sender, EventArgs e)
         {
-            this.miCertaintyIndex.Checked = !this.miCertaintyIndex.Checked;
+            miCertaintyIndex.Checked = !miCertaintyIndex.Checked;
             
-            this.fTreeBox.Options.CertaintyIndexVisible = this.miCertaintyIndex.Checked;
-            this.fTreeBox.CertaintyIndex = this.miCertaintyIndex.Checked;
+            fTreeBox.Options.CertaintyIndexVisible = miCertaintyIndex.Checked;
+            fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
         }
 
         private void miFillColor_Click(object sender, EventArgs e)
         {
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
-            {
-                this.fTreeBox.BackgroundImage = null;
-                this.fTreeBox.BackColor = colorDialog1.Color;
-                this.fTreeBox.Invalidate();
-            }
+            if (colorDialog1.ShowDialog() != DialogResult.OK) return;
+
+            fTreeBox.BackgroundImage = null;
+            fTreeBox.BackColor = colorDialog1.Color;
+            fTreeBox.Invalidate();
         }
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                Image img = new Bitmap(fileName);
-                this.fTreeBox.BackgroundImage = img;
-                this.fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
-                this.fTreeBox.Invalidate();
-            }
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            Image img = new Bitmap(fileName);
+            fTreeBox.BackgroundImage = img;
+            fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
+            fTreeBox.Invalidate();
         }
 
         private void miModeItem_Click(object sender, EventArgs e)
         {
             TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)((ToolStripMenuItem)sender).Tag;
-            if (this.fChartKind == newMode) return;
+            if (fChartKind == newMode) return;
 
-            this.ChartKind = newMode;
-            this.GenChart(true);
+            ChartKind = newMode;
+            GenChart(true);
         }
 
         private void miRebuildTree_Click(object sender, EventArgs e)
         {
             try
             {
-                TreeChartPerson p = this.fTreeBox.Selected;
-                if (p != null && p.Rec != null)
-                {
-                    this.fPerson = p.Rec;
-                    this.GenChart(true);
-                }
+                TreeChartPerson p = fTreeBox.Selected;
+                if (p == null || p.Rec == null) return;
+
+                fPerson = p.Rec;
+                GenChart(true);
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
+                fBase.Host.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
 
@@ -557,17 +536,17 @@ namespace GKUI
 
         private void InitPrintDoc()
         {
-            this.fPrintDoc = new PrintDocument();
-            this.fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            this.fPrintDoc.BeginPrint += printDocument1_BeginPrint;
-            this.fPrintDoc.PrintPage += printDocument1_PrintPage;
+            fPrintDoc = new PrintDocument();
+            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
+            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
+            fPrintDoc.PrintPage += printDocument1_PrintPage;
         }
 
         private void InitCurDoc()
         {
-            this.fPrintDoc.DocumentName = this.Text;
-            this.fPrintDoc.DefaultPageSettings.Landscape = this.fTreeBox.IsLandscape();
-            this.fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
+            fPrintDoc.DocumentName = Text;
+            fPrintDoc.DefaultPageSettings.Landscape = fTreeBox.IsLandscape();
+            fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
         }
 
         private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
@@ -576,7 +555,7 @@ namespace GKUI
 
         private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
         {
-            e.PageSettings.Landscape = this.fTreeBox.IsLandscape();
+            e.PageSettings.Landscape = fTreeBox.IsLandscape();
             e.PageSettings.Margins = new Margins(25, 25, 25, 25);
         }
 
@@ -590,7 +569,7 @@ namespace GKUI
             gfx.DrawRectangle(Pens.Gray, marginBounds);
             #endif
 
-            Image img = this.fTreeBox.GetPrintableImage();
+            Image img = fTreeBox.GetPrintableImage();
 
             int imgW = img.Width;
             int imgH = img.Height;
@@ -616,25 +595,25 @@ namespace GKUI
 
         public void DoPrint()
         {
-            this.InitCurDoc();
+            InitCurDoc();
 
             using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = this.fPrintDoc;
+                printDlg.Document = fPrintDoc;
 
                 if (printDlg.ShowDialog() == DialogResult.OK) {
-                    this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    this.fPrintDoc.Print();
+                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+                    fPrintDoc.Print();
                 }
             }
         }
 
         public void DoPrintPreview()
         {
-            this.InitCurDoc();
+            InitCurDoc();
 
             using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
                 previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = this.fPrintDoc;
+                previewDlg.Document = fPrintDoc;
                 previewDlg.ShowDialog();
             }
         }
@@ -643,25 +622,25 @@ namespace GKUI
         {
             try
             {
-                if (this.fPerson == null)
+                if (fPerson == null)
                 {
                     GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 }
                 else
                 {
-                    this.UpdateTitle();
+                    UpdateTitle();
                     if (show) base.Show();
 
-                    this.fTreeBox.DepthLimit = this.fGensLimit;
-                    this.fTreeBox.ShieldState = this.fBase.ShieldState;
-                    this.fTreeBox.GenChart(this.fPerson, this.fChartKind, true);
+                    fTreeBox.DepthLimit = fGensLimit;
+                    fTreeBox.ShieldState = fBase.ShieldState;
+                    fTreeBox.GenChart(fPerson, fChartKind, true);
 
                     MainWin.Instance.UpdateControls(false);
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
+                fBase.Host.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
             }
         }
 
@@ -671,31 +650,31 @@ namespace GKUI
         
         public void SetLang()
         {
-            this.tbGens.Text = LangMan.LS(LSID.LSID_Generations);
+            tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
-            this.miGensInf.Text = LangMan.LS(LSID.LSID_Unlimited);
-            this.miGensInf.Checked = true;
-            this.miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
-            this.miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
-            this.miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
-            this.miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
-            this.miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
-            this.miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
-            this.miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
-            this.miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
-            this.miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
-            this.miDaughterAdd.Text = LangMan.LS(LSID.LSID_DaughterAdd);
-            this.miDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            this.miRebuildTree.Text = LangMan.LS(LSID.LSID_RebuildTree);
-            this.miRebuildKinships.Text = LangMan.LS(LSID.LSID_RebuildKinships);
-            this.miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
-            this.miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
-            this.miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
-            this.miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
-            this.miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
+            miGensInf.Text = LangMan.LS(LSID.LSID_Unlimited);
+            miGensInf.Checked = true;
+            miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
+            miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
+            miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
+            miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
+            miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
+            miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
+            miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
+            miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
+            miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
+            miDaughterAdd.Text = LangMan.LS(LSID.LSID_DaughterAdd);
+            miDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
+            miRebuildTree.Text = LangMan.LS(LSID.LSID_RebuildTree);
+            miRebuildKinships.Text = LangMan.LS(LSID.LSID_RebuildKinships);
+            miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
+            miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
+            miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
+            miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
+            miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 
-            this.tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
-            this.tbModes.ToolTipText = LangMan.LS(LSID.LSID_ModesTip);
+            tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
+            tbModes.ToolTipText = LangMan.LS(LSID.LSID_ModesTip);
         }
 
         #endregion
@@ -709,27 +688,27 @@ namespace GKUI
 
         public void UpdateView()
         {
-            this.GenChart(false);
+            GenChart(false);
         }
 
         public void NavNext()
         {
-            this.fTreeBox.NavNext();
+            fTreeBox.NavNext();
         }
 
         public void NavPrev()
         {
-            this.fTreeBox.NavPrev();
+            fTreeBox.NavPrev();
         }
 
         public bool NavCanBackward()
         {
-            return this.fTreeBox.NavCanBackward();
+            return fTreeBox.NavCanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fTreeBox.NavCanForward();
+            return fTreeBox.NavCanForward();
         }
 
         public bool AllowQuickSearch()
@@ -739,7 +718,7 @@ namespace GKUI
 
         public IList<ISearchResult> FindAll(string searchPattern)
         {
-            return this.fTreeBox.FindAll(searchPattern);
+            return fTreeBox.FindAll(searchPattern);
         }
 
         public void SelectByRec(GEDCOMIndividualRecord iRec)
@@ -747,15 +726,15 @@ namespace GKUI
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            this.fTreeBox.SelectByRec(iRec);
+            fTreeBox.SelectByRec(iRec);
         }
 
         public void QuickSearch()
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
             
-            Rectangle client = this.ClientRectangle;
-            Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            Rectangle client = ClientRectangle;
+            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
             qsDlg.Location = pt;
 
             qsDlg.Show();
@@ -768,12 +747,12 @@ namespace GKUI
 
         public void SetFilter()
         {
-            using (TreeFilterDlg dlgFilter = new TreeFilterDlg(this.fBase)) {
-                dlgFilter.Filter = this.fTreeBox.Filter;
+            using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
+                dlgFilter.Filter = fTreeBox.Filter;
 
                 if (dlgFilter.ShowDialog() == DialogResult.OK)
                 {
-                    this.GenChart(true);
+                    GenChart(true);
                 }
             }
         }

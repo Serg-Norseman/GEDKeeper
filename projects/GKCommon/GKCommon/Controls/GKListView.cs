@@ -18,9 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//#define DEFAULT_HEADER
+
 using System;
 using System.Collections;
+using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 using GKCore.Interfaces;
 
@@ -38,14 +43,14 @@ namespace GKCommon.Controls
 
         public GKListItem(object itemValue, object data)
         {
-            this.fValue = itemValue;
-            base.Text = this.ToString();
-            this.Data = data;
+            fValue = itemValue;
+            Text = ToString();
+            Data = data;
         }
 
         public override string ToString()
         {
-            return (this.fValue == null) ? string.Empty : this.fValue.ToString();
+            return (fValue == null) ? string.Empty : fValue.ToString();
         }
 
         public int CompareTo(object obj)
@@ -55,7 +60,7 @@ namespace GKCommon.Controls
                 return -1;
             }
 
-            IComparable cv1 = this.fValue as IComparable;
+            IComparable cv1 = fValue as IComparable;
             IComparable cv2 = otherItem.fValue as IComparable;
 
             int compRes;
@@ -80,7 +85,7 @@ namespace GKCommon.Controls
         public void AddSubItem(object itemValue)
         {
             GKListSubItem subItem = new GKListSubItem(itemValue);
-            this.SubItems.Add(subItem);
+            SubItems.Add(subItem);
         }
     }
 
@@ -91,13 +96,13 @@ namespace GKCommon.Controls
 
         public GKListSubItem(object itemValue)
         {
-            this.fValue = itemValue;
-            base.Text = this.ToString();
+            fValue = itemValue;
+            Text = ToString();
         }
 
         public override string ToString()
         {
-            return (this.fValue == null) ? string.Empty : this.fValue.ToString();
+            return (fValue == null) ? string.Empty : fValue.ToString();
         }
 
         public int CompareTo(object obj)
@@ -107,7 +112,7 @@ namespace GKCommon.Controls
                 return -1;
             }
 
-            IComparable cv1 = this.fValue as IComparable;
+            IComparable cv1 = fValue as IComparable;
             IComparable cv2 = otherItem.fValue as IComparable;
 
             int compRes;
@@ -137,59 +142,48 @@ namespace GKCommon.Controls
     {
         private class LVColumnSorter : IComparer
         {
-            private int fSortColumn;
-            private SortOrder fSortOrder;
+            private readonly GKListView fOwner;
 
-            public int SortColumn
+            public LVColumnSorter(GKListView owner)
             {
-                get { return this.fSortColumn; }
-                set { this.fSortColumn = value; }
-            }
-
-            public SortOrder Order
-            {
-                get { return this.fSortOrder; }
-                set { this.fSortOrder = value; }
-            }
-
-            public LVColumnSorter()
-            {
-                this.fSortColumn = 0;
-                this.fSortOrder = SortOrder.None;
+                fOwner = owner;
             }
 
             public int Compare(object x, object y)
             {
                 int result = 0;
 
-                if (this.fSortOrder != SortOrder.None && this.fSortColumn >= 0)
+                int sortColumn = fOwner.fSortColumn;
+                SortOrder sortOrder = fOwner.fSortOrder;
+
+                if (sortOrder != SortOrder.None && sortColumn >= 0)
                 {
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
                     if (item1 is IComparable && item2 is IComparable) {
-                        if (this.fSortColumn == 0) {
+                        if (sortColumn == 0) {
                             IComparable eitem1 = (IComparable)x;
                             IComparable eitem2 = (IComparable)y;
 
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            if (this.fSortColumn < item1.SubItems.Count && this.fSortColumn < item2.SubItems.Count)
+                            if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
                             {
-                                IComparable sub1 = (IComparable)item1.SubItems[this.fSortColumn];
-                                IComparable sub2 = (IComparable)item2.SubItems[this.fSortColumn];
+                                IComparable sub1 = (IComparable)item1.SubItems[sortColumn];
+                                IComparable sub2 = (IComparable)item2.SubItems[sortColumn];
 
                                 result = sub1.CompareTo(sub2);
                             }
                         }
                     } else {
-                        if (this.fSortColumn < item1.SubItems.Count && this.fSortColumn < item2.SubItems.Count)
+                        if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
                         {
-                            result = agCompare(item1.SubItems[this.fSortColumn].Text, item2.SubItems[this.fSortColumn].Text);
+                            result = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
                         }
                     }
 
-                    if (this.fSortOrder == SortOrder.Descending)
+                    if (sortOrder == SortOrder.Descending)
                     {
                         result = -result;
                     }
@@ -235,97 +229,196 @@ namespace GKCommon.Controls
         private readonly LVColumnSorter fColumnSorter;
         private SortOrder fOldSortOrder;
 
+        protected int fSortColumn;
+        protected SortOrder fSortOrder;
+        protected int fUpdateCount;
+
         public int SortColumn
         {
-            get { return this.fColumnSorter.SortColumn; }
-            set { this.fColumnSorter.SortColumn = value; }
+            get { return fSortColumn; }
+            set { fSortColumn = value; }
+        }
+
+        public SortOrder Order
+        {
+            get { return fSortOrder; }
+            set { fSortOrder = value; }
         }
 
         public GKListView()
         {
-            base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-
+            SetStyle(ControlStyles.DoubleBuffer, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             // Enable the OnNotifyMessage event so we get a chance to filter out
             // Windows messages before they get to the form's WndProc
-            base.SetStyle(ControlStyles.EnableNotifyMessage, true);
+            SetStyle(ControlStyles.EnableNotifyMessage, true);
 
-            base.DoubleBuffered = true;
+            OwnerDraw = true;
+            HideSelection = false;
+            LabelEdit = false;
+            FullRowSelect = true;
+            View = View.Details;
 
-            this.HideSelection = false;
-            this.LabelEdit = false;
-            this.FullRowSelect = true;
-            this.View = View.Details;
+            fSortColumn = 0;
+            fSortOrder = SortOrder.None;
+            fOldSortOrder = SortOrder.None;
+            fColumnSorter = new LVColumnSorter(this);
 
-            this.fOldSortOrder = SortOrder.None;
-            this.fColumnSorter = new LVColumnSorter();
-
-            base.ListViewItemSorter = this.fColumnSorter;
-            base.ColumnClick += this.LVColumnClick;
-        }
-
-        public void UnsetSorter()
-        {
-            base.ColumnClick -= this.LVColumnClick;
+            ListViewItemSorter = fColumnSorter;
         }
 
         public void SwitchSorter()
         {
             if (fOldSortOrder == SortOrder.None) {
-                fOldSortOrder = this.fColumnSorter.Order;
-                this.fColumnSorter.Order = SortOrder.None;
+                fOldSortOrder = fSortOrder;
+                fSortOrder = SortOrder.None;
             } else {
-                this.fColumnSorter.Order = fOldSortOrder;
+                fSortOrder = fOldSortOrder;
                 fOldSortOrder = SortOrder.None;
-                base.Sort();
+                Sort();
             }
         }
 
         public virtual void BeginUpdates()
         {
-            base.BeginUpdate();
+            fUpdateCount++;
+            BeginUpdate();
             //this.SwitchSorter();
         }
 
         public virtual void EndUpdates()
         {
             //this.SwitchSorter();
-            base.EndUpdate();
+            EndUpdate();
+            fUpdateCount--;
         }
 
-        private void LVColumnClick(object sender, ColumnClickEventArgs e)
+        protected SortOrder GetColumnSortOrder(int columnIndex)
         {
-            if (e.Column == this.fColumnSorter.SortColumn)
+            return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
+        }
+
+        protected virtual void InternalColumnClick(ColumnClickEventArgs e)
+        {
+            SortOrder prevOrder = GetColumnSortOrder(e.Column);
+            fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+            fSortColumn = e.Column;
+
+            Sort();
+        }
+
+        protected override void OnColumnClick(ColumnClickEventArgs e)
+        {
+            InternalColumnClick(e);
+
+            // we use Refresh() because only Invalidate() isn't update header's area
+            Refresh();
+
+            base.OnColumnClick(e);
+        }
+
+        protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
+        {
+            #if DEFAULT_HEADER
+
+            e.DrawDefault = true;
+
+            #else
+
+            using (var sf = new StringFormat())
             {
-                if (this.fColumnSorter.Order == SortOrder.Ascending) {
-                    this.fColumnSorter.Order = SortOrder.Descending;
-                } else {
-                    this.fColumnSorter.Order = SortOrder.Ascending;
+                Graphics gfx = e.Graphics;
+                Rectangle rt = e.Bounds;
+
+                VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
+                if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
+                    element = VisualStyleElement.Header.Item.Hot;
+                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
+                    element = VisualStyleElement.Header.Item.Pressed;
+
+                var visualStyleRenderer = new VisualStyleRenderer(element);
+                visualStyleRenderer.DrawBackground(gfx, rt);
+
+                switch (e.Header.TextAlign)
+                {
+                    case HorizontalAlignment.Left:
+                        sf.Alignment = StringAlignment.Near;
+                        break;
+
+                    case HorizontalAlignment.Right:
+                        sf.Alignment = StringAlignment.Far;
+                        break;
+
+                    case HorizontalAlignment.Center:
+                        sf.Alignment = StringAlignment.Center;
+                        break;
                 }
-            } else {
-                this.fColumnSorter.SortColumn = e.Column;
-                this.fColumnSorter.Order = SortOrder.Ascending;
+
+                sf.LineAlignment = StringAlignment.Center;
+                sf.Trimming = StringTrimming.EllipsisCharacter;
+                sf.FormatFlags = StringFormatFlags.NoWrap;
+
+                int w = TextRenderer.MeasureText(" ", Font).Width;
+                rt.Inflate(-(w / 5), 0);
+
+                gfx.DrawString(e.Header.Text, Font, Brushes.Black, rt, sf);
+
+                string arrow = "";
+                switch (GetColumnSortOrder(e.ColumnIndex)) {
+                    case SortOrder.Ascending:
+                        arrow = "▲";
+                        break;
+                    case SortOrder.Descending:
+                        arrow = "▼";
+                        break;
+                }
+
+                if (arrow != "") {
+                    using (var fnt = new Font(Font.FontFamily, Font.SizeInPoints * 0.6f, FontStyle.Regular)) {
+                        float aw = gfx.MeasureString(arrow, fnt).Width;
+                        float x = rt.Left + (rt.Width - aw) / 2.0f;
+                        gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+                        gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
+                    }
+                }
             }
 
-            base.Sort();
+            #endif
+
+            base.OnDrawColumnHeader(e);
         }
+
+        protected override void OnDrawItem(DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+            base.OnDrawItem(e);
+        }
+
+        protected override void OnDrawSubItem(DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
+            base.OnDrawSubItem(e);
+        }
+
+        #region Public methods
 
         public void AddListColumn(string caption, int width, bool autoSize)
         {
             if (autoSize) width = -1;
-            base.Columns.Add(caption, width, HorizontalAlignment.Left);
+            Columns.Add(caption, width, HorizontalAlignment.Left);
         }
 
         public void ResizeColumn(int columnIndex)
         {
             try {
-                if (columnIndex >= 0 && this.Items.Count > 0)
+                if (columnIndex >= 0 && Items.Count > 0)
                 {
-                    this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
+                    AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-                    if (this.Columns[columnIndex].Width < 20)
+                    if (Columns[columnIndex].Width < 20)
                     {
-                        this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
+                        AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
                 }
             } catch (Exception ex) {
@@ -335,8 +428,8 @@ namespace GKCommon.Controls
 
         public GKListItem AddItem(object itemValue, object data)
         {
-            GKListItem result = new GKListItem(itemValue, data);
-            base.Items.Add(result);
+            var result = new GKListItem(itemValue, data);
+            Items.Add(result);
             return result;
         }
 
@@ -344,10 +437,10 @@ namespace GKCommon.Controls
         {
             GKListItem result;
 
-            if (base.SelectedItems.Count <= 0) {
+            if (SelectedItems.Count <= 0) {
                 result = null;
             } else {
-                result = (base.SelectedItems[0] as GKListItem);
+                result = (SelectedItems[0] as GKListItem);
             }
 
             return result;
@@ -357,30 +450,32 @@ namespace GKCommon.Controls
         {
             if (item == null) return;
 
-            this.SelectedIndices.Clear();
+            SelectedIndices.Clear();
             item.Selected = true;
             item.EnsureVisible();
         }
 
         public void SelectItem(int index)
         {
-            if (index >= 0 && index < this.Items.Count) {
-                ListViewItem item = this.Items[index];
-                this.SelectItem(item);
+            if (index >= 0 && index < Items.Count) {
+                ListViewItem item = Items[index];
+                SelectItem(item);
             }
         }
 
         public void SelectItem(object data)
         {
-            int num = this.Items.Count;
+            int num = Items.Count;
             for (int i = 0; i < num; i++) {
-                GKListItem item = (GKListItem)this.Items[i];
+                var item = (GKListItem)Items[i];
 
                 if (item.Data == data) {
-                    this.SelectItem(item);
+                    SelectItem(item);
                     return;
                 }
             }
         }
+
+        #endregion
     }
 }

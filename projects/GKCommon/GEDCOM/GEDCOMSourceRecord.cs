@@ -29,58 +29,58 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMData Data
         {
-            get { return base.TagClass("DATA", GEDCOMData.Create) as GEDCOMData; }
+            get { return TagClass("DATA", GEDCOMData.Create) as GEDCOMData; }
         }
 
         public StringList Originator
         {
-            get { return base.GetTagStrings(base.TagClass("AUTH", GEDCOMTag.Create)); }
-            set { base.SetTagStrings(base.TagClass("AUTH", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass("AUTH", GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass("AUTH", GEDCOMTag.Create), value); }
         }
 
         public StringList Title
         {
-            get { return base.GetTagStrings(base.TagClass("TITL", GEDCOMTag.Create)); }
-            set { base.SetTagStrings(base.TagClass("TITL", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass("TITL", GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass("TITL", GEDCOMTag.Create), value); }
         }
 
         public string FiledByEntry
         {
-            get { return base.GetTagStringValue("ABBR"); }
-            set { base.SetTagStringValue("ABBR", value); }
+            get { return GetTagStringValue("ABBR"); }
+            set { SetTagStringValue("ABBR", value); }
         }
 
         public StringList Publication
         {
-            get { return base.GetTagStrings(base.TagClass("PUBL", GEDCOMTag.Create)); }
-            set { base.SetTagStrings(base.TagClass("PUBL", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass("PUBL", GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass("PUBL", GEDCOMTag.Create), value); }
         }
 
         public StringList Text
         {
-            get { return base.GetTagStrings(base.TagClass("TEXT", GEDCOMTag.Create)); }
-            set { base.SetTagStrings(base.TagClass("TEXT", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass("TEXT", GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass("TEXT", GEDCOMTag.Create), value); }
         }
 
         public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
         {
-            get { return this.fRepositoryCitations; }
+            get { return fRepositoryCitations; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtSource);
-            base.SetName("SOUR");
+            SetRecordType(GEDCOMRecordType.rtSource);
+            SetName("SOUR");
 
-            this.fRepositoryCitations = new GEDCOMList<GEDCOMRepositoryCitation>(this);
+            fRepositoryCitations = new GEDCOMList<GEDCOMRepositoryCitation>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fRepositoryCitations.Dispose();
+                fRepositoryCitations.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -91,7 +91,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "REPO")
             {
-                result = this.fRepositoryCitations.Add(new GEDCOMRepositoryCitation(base.Owner, this, tagName, tagValue));
+                result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(Owner, this, tagName, tagValue));
             }
             else if (tagName == "DATA")
             {
@@ -108,12 +108,12 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fRepositoryCitations.Clear();
+            fRepositoryCitations.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && this.fRepositoryCitations.Count == 0;
+            return base.IsEmpty() && fRepositoryCitations.Count == 0;
         }
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -128,16 +128,16 @@ namespace GKCommon.GEDCOM
             StringList text = new StringList();
             try
             {
-                titl.Text = (targetSource.Title.Text + "\n" + this.Title.Text).Trim();
-                orig.Text = (targetSource.Originator.Text + "\n" + this.Originator.Text).Trim();
-                publ.Text = (targetSource.Publication.Text + "\n" + this.Publication.Text).Trim();
-                text.Text = (targetSource.Text.Text + "\n" + this.Text.Text).Trim();
+                titl.Text = (targetSource.Title.Text + "\n" + Title.Text).Trim();
+                orig.Text = (targetSource.Originator.Text + "\n" + Originator.Text).Trim();
+                publ.Text = (targetSource.Publication.Text + "\n" + Publication.Text).Trim();
+                text.Text = (targetSource.Text.Text + "\n" + Text.Text).Trim();
 
-                base.DeleteTag("TITL");
-                base.DeleteTag("TEXT");
-                base.DeleteTag("ABBR");
-                base.DeleteTag("PUBL");
-                base.DeleteTag("AUTH");
+                DeleteTag("TITL");
+                DeleteTag("TEXT");
+                DeleteTag("ABBR");
+                DeleteTag("PUBL");
+                DeleteTag("AUTH");
 
                 base.MoveTo(targetRecord, clearDest);
 
@@ -146,9 +146,9 @@ namespace GKCommon.GEDCOM
                 targetSource.Publication = publ;
                 targetSource.Text = text;
 
-                while (this.fRepositoryCitations.Count > 0)
+                while (fRepositoryCitations.Count > 0)
                 {
-                    GEDCOMRepositoryCitation obj = this.fRepositoryCitations.Extract(0);
+                    GEDCOMRepositoryCitation obj = fRepositoryCitations.Extract(0);
                     obj.ResetParent(targetSource);
                     targetSource.RepositoryCitations.Add(obj);
                 }
@@ -165,46 +165,46 @@ namespace GKCommon.GEDCOM
         public override void Pack()
         {
             base.Pack();
-            this.fRepositoryCitations.Pack();
+            fRepositoryCitations.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fRepositoryCitations.ReplaceXRefs(map);
+            fRepositoryCitations.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fRepositoryCitations.ResetOwner(newOwner);
+            fRepositoryCitations.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
-            this.fRepositoryCitations.SaveToStream(stream);
+            fRepositoryCitations.SaveToStream(stream);
         }
 
 
         public void SetOriginatorArray(params string[] value)
         {
-            base.SetTagStrings(base.TagClass("AUTH", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass("AUTH", GEDCOMTag.Create), value);
         }
 
         public void SetTitleArray(params string[] value)
         {
-            base.SetTagStrings(base.TagClass("TITL", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass("TITL", GEDCOMTag.Create), value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
-            base.SetTagStrings(base.TagClass("PUBL", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass("PUBL", GEDCOMTag.Create), value);
         }
 
         public void SetTextArray(params string[] value)
         {
-            base.SetTagStrings(base.TagClass("TEXT", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass("TEXT", GEDCOMTag.Create), value);
         }
 
 
@@ -224,7 +224,7 @@ namespace GKCommon.GEDCOM
 
             float match = 0.0f;
 
-            if (string.Compare(this.FiledByEntry, otherSource.FiledByEntry, true) == 0)
+            if (string.Compare(FiledByEntry, otherSource.FiledByEntry, true) == 0)
             {
                 match = 100.0f;
             }
@@ -239,9 +239,9 @@ namespace GKCommon.GEDCOM
             GEDCOMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GEDCOMRepositoryCitation(this.Owner, this, "", "");
+                cit = new GEDCOMRepositoryCitation(Owner, this, "", "");
                 cit.Value = repRec;
-                this.RepositoryCitations.Add(cit);
+                RepositoryCitations.Add(cit);
             }
             
             return cit;
@@ -252,11 +252,11 @@ namespace GKCommon.GEDCOM
             if (repRec == null)
                 throw new ArgumentNullException("repRec");
 
-            foreach (GEDCOMRepositoryCitation repCit in this.fRepositoryCitations) {
+            foreach (GEDCOMRepositoryCitation repCit in fRepositoryCitations) {
                 GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
 
                 if (rep == repRec) {
-                    this.fRepositoryCitations.Delete(repCit);
+                    fRepositoryCitations.Delete(repCit);
                     break;
                 }
             }

@@ -35,10 +35,10 @@ namespace GKNavigatorPlugin
 
         public RecordInfo(RecordAction action, string name, GEDCOMRecord record)
         {
-            this.Action = action;
-            this.Name = name;
-            this.Record = record;
-            this.Time = DateTime.Now;
+            Action = action;
+            Name = name;
+            Record = record;
+            Time = DateTime.Now;
         }
     }
 
@@ -49,14 +49,14 @@ namespace GKNavigatorPlugin
 
         public BaseData()
         {
-            this.fChangedRecords = new List<RecordInfo>();
+            fChangedRecords = new List<RecordInfo>();
         }
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-            if (record == null || !(record is GEDCOMRecord)) return;
-
             GEDCOMRecord gRecord = record as GEDCOMRecord;
+            if (gRecord == null) return;
+
             string recName = baseWin.GetRecordName(gRecord, false);
 
             int index = Find(gRecord);
@@ -67,11 +67,11 @@ namespace GKNavigatorPlugin
             switch (action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    this.fChangedRecords.Add(new RecordInfo(action, recName, gRecord));
+                    fChangedRecords.Add(new RecordInfo(action, recName, gRecord));
                     break;
 
                 case RecordAction.raDelete:
-                    this.fChangedRecords.Add(new RecordInfo(action, recName, null));
+                    fChangedRecords.Add(new RecordInfo(action, recName, null));
                     break;
             }
         }
@@ -109,7 +109,7 @@ namespace GKNavigatorPlugin
 
         public NavigatorData()
         {
-            this.fBases = new Dictionary<string, BaseData>();
+            fBases = new Dictionary<string, BaseData>();
         }
 
         public void CloseBase(string name)

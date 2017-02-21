@@ -153,18 +153,17 @@ namespace GKCommon
         public static void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
         {
             // check for new and empty struct
-            if (form != null && !rt.IsEmpty())
-            {
-                if (winState != FormWindowState.Minimized) {
-                    form.Left = rt.Left;
-                    form.Top = rt.Top;
-                    form.Width = rt.GetWidth();
-                    form.Height = rt.GetHeight();
+            if (form == null || rt.IsEmpty()) return;
 
-                    form.WindowState = winState;
-                } else {
-                    form.WindowState = FormWindowState.Maximized;
-                }
+            if (winState != FormWindowState.Minimized) {
+                form.Left = rt.Left;
+                form.Top = rt.Top;
+                form.Width = rt.GetWidth();
+                form.Height = rt.GetHeight();
+
+                form.WindowState = winState;
+            } else {
+                form.WindowState = FormWindowState.Maximized;
             }
         }
 

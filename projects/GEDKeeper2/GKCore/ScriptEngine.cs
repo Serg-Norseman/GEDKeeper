@@ -69,8 +69,8 @@ namespace GKCore
 
         public void lua_run(string script, IBaseWindow baseWin, TextBox debugOutput)
         {
-            this.fDebugOutput = debugOutput;
-            this.fBase = baseWin;
+            fDebugOutput = debugOutput;
+            fBase = baseWin;
 
             using (Lua lvm = new Lua())
             {
@@ -87,20 +87,20 @@ namespace GKCore
 
         private void lua_print(object text)
         {
-            if (this.fDebugOutput == null) return;
+            if (fDebugOutput == null) return;
 
-            this.fDebugOutput.Text += (text.ToString() + "\r\n");
+            fDebugOutput.Text += (text + @"\r\n");
         }
 
         private void lua_register(Lua lvm, string funcName)
         {
-            MethodInfo mInfo = this.GetType().GetMethod(funcName);
+            MethodInfo mInfo = GetType().GetMethod(funcName);
             if (mInfo != null) {
                 lvm.RegisterFunction(funcName, this, mInfo);
             }
             else
             {
-                this.fBase.Host.LogWrite("ScriptEngine.lua_register(" + funcName + "): fail");
+                fBase.Host.LogWrite("ScriptEngine.lua_register(" + funcName + "): fail");
             }
         }
 
@@ -249,17 +249,17 @@ namespace GKCore
 
         public void gk_progress_init(int length, string title)
         {
-            this.fBase.ProgressInit(title, length);
+            fBase.ProgressInit(title, length);
         }
 
         public void gk_progress_done()
         {
-            this.fBase.ProgressDone();
+            fBase.ProgressDone();
         }
 
         public void gk_progress_step()
         {
-            this.fBase.ProgressStep();
+            fBase.ProgressStep();
         }
 
         public void gk_update_view()
@@ -577,21 +577,21 @@ namespace GKCore
 
         public string gt_define_sex(string name, string patr)
         {
-            GEDCOMSex sx = this.fBase.DefineSex(name, patr);
+            GEDCOMSex sx = fBase.DefineSex(name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
 
         public object gt_find_source(string name)
         {
-            GEDCOMSourceRecord srcRec = this.fBase.Context.FindSource(name);
+            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(name);
             return srcRec;
         }
 
         public object gt_create_event(object recPtr, string sign)
         {
             GEDCOMRecordWithEvents rec = recPtr as GEDCOMRecordWithEvents;
-            GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(rec, sign, "", "");
+            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(rec, sign, "", "");
 
             return evt;
         }
@@ -710,22 +710,20 @@ namespace GKCore
 
         public bool csv_load(string fileName, bool hasHeader)
         {
-            bool res = false;
+            bool result = false;
+            if (!File.Exists(fileName)) return result;
 
-            if (File.Exists(fileName))
+            try
             {
-                try
-                {
-                    fCSVData = CSVReader.ReadCSVFile(fileName, hasHeader);
-                    res = true;
-                }
-                catch
-                {
-                    res = false;
-                }
+                fCSVData = CSVReader.ReadCSVFile(fileName, hasHeader);
+                result = true;
+            }
+            catch
+            {
+                result = false;
             }
 
-            return res;
+            return result;
         }
 
         public void csv_close()

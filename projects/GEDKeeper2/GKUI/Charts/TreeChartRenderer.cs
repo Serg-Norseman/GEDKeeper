@@ -19,7 +19,6 @@
  */
 
 using System.Drawing;
-using GKCommon;
 
 namespace GKUI.Charts
 {

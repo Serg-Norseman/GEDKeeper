@@ -35,9 +35,8 @@ namespace GKCommon.GEDCOM
         public GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
         {
             Type enumType = typeof(T);
-            if (!enumType.IsEnum) {
+            if (!enumType.IsEnum)
                 throw new ArgumentException(string.Format("{0} is not of type Enum", enumType.Name));
-            }
 
             T[] enums = (T[]) Enum.GetValues(enumType);
 
@@ -45,14 +44,14 @@ namespace GKCommon.GEDCOM
                 throw new ArgumentException("Arguments are not compatible");
             }
 
-            this.fStrValues = strValues;
-            this.fDefaultValue = defaultValue;
-            this.fCaseSensitive = caseSensitive;
+            fStrValues = strValues;
+            fDefaultValue = defaultValue;
+            fCaseSensitive = caseSensitive;
 
-            this.fValues = new Dictionary<string, int>(enums.Length);
+            fValues = new Dictionary<string, int>(enums.Length);
             for (int i = 0; i < enums.Length; i++)
             {
-                this.fValues.Add(strValues[i], i);
+                fValues.Add(strValues[i], i);
             }
         }
 
@@ -60,24 +59,24 @@ namespace GKCommon.GEDCOM
         {
             int idx = (int)((IConvertible)enumVal);
 
-            if (idx < 0 || idx >= this.fStrValues.Length) {
+            if (idx < 0 || idx >= fStrValues.Length) {
                 return string.Empty;
             } else {
-                return this.fStrValues[idx];
+                return fStrValues[idx];
             }
         }
 
         public T GetEnumValue(string key)
         {
-            if (!this.fCaseSensitive) {
+            if (!fCaseSensitive) {
                 key = key.Trim().ToLowerInvariant();
             }
 
             int result;
-            if (this.fValues.TryGetValue(key, out result)) {
+            if (fValues.TryGetValue(key, out result)) {
                 return (T)((IConvertible)result);
             } else {
-                return this.fDefaultValue;
+                return fDefaultValue;
             }
         }
     }
@@ -97,9 +96,9 @@ namespace GKCommon.GEDCOM
 
             public TagProperties(string name, bool emptySkip, bool extend)
             {
-                this.Name = name;
-                this.EmptySkip = emptySkip;
-                this.GKExtend = extend;
+                Name = name;
+                EmptySkip = emptySkip;
+                GKExtend = extend;
             }
         }
 
@@ -587,91 +586,107 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(str)) return GEDCOMMultimediaFormat.mfNone;
 
             GEDCOMMultimediaFormat result;
-            str = str.Trim().ToUpperInvariant();
+            str = str.Trim().ToLowerInvariant();
             
-            if (str == "BMP")
+            if (str == "bmp")
             {
                 result = GEDCOMMultimediaFormat.mfBMP;
             }
-            else if (str == "GIF")
+            else if (str == "gif")
             {
                 result = GEDCOMMultimediaFormat.mfGIF;
             }
-            else if (str == "JPG" || str == "JPEG")
+            else if (str == "jpg" || str == "jpeg")
             {
                 result = GEDCOMMultimediaFormat.mfJPG;
             }
-            else if (str == "OLE")
+            else if (str == "ole")
             {
                 result = GEDCOMMultimediaFormat.mfOLE;
             }
-            else if (str == "PCX")
+            else if (str == "pcx")
             {
                 result = GEDCOMMultimediaFormat.mfPCX;
             }
-            else if (str == "TIF" || str == "TIFF")
+            else if (str == "tif" || str == "tiff")
             {
                 result = GEDCOMMultimediaFormat.mfTIF;
             }
-            else if (str == "WAV")
+            else if (str == "wav")
             {
                 result = GEDCOMMultimediaFormat.mfWAV;
             }
-            else if (str == "TXT")
+            else if (str == "txt")
             {
                 result = GEDCOMMultimediaFormat.mfTXT;
             }
-            else if (str == "RTF")
+            else if (str == "rtf")
             {
                 result = GEDCOMMultimediaFormat.mfRTF;
             }
-            else if (str == "AVI")
+            else if (str == "avi")
             {
                 result = GEDCOMMultimediaFormat.mfAVI;
             }
-            else if (str == "TGA")
+            else if (str == "tga")
             {
                 result = GEDCOMMultimediaFormat.mfTGA;
             }
-            else if (str == "PNG")
+            else if (str == "png")
             {
                 result = GEDCOMMultimediaFormat.mfPNG;
             }
-            else if (str == "MPG" || str == "MPEG")
+            else if (str == "mpg" || str == "mpeg")
             {
                 result = GEDCOMMultimediaFormat.mfMPG;
             }
-            else if (str == "HTM" || str == "HTML")
+            else if (str == "htm" || str == "html")
             {
                 result = GEDCOMMultimediaFormat.mfHTM;
             }
-            else if (str == "RAW")
+            else if (str == "raw")
             {
                 result = GEDCOMMultimediaFormat.mfRAW;
             }
-            else if (str == "MP3")
+            else if (str == "mp3")
             {
                 result = GEDCOMMultimediaFormat.mfMP3;
             }
-            else if (str == "WMA")
+            else if (str == "wma")
             {
                 result = GEDCOMMultimediaFormat.mfWMA;
             }
-            else if (str == "PSD")
+            else if (str == "psd")
             {
                 result = GEDCOMMultimediaFormat.mfPSD;
             }
-            else if (str == "PDF")
+            else if (str == "pdf")
             {
                 result = GEDCOMMultimediaFormat.mfPDF;
             }
-            else if (str == "MP4")
+            else if (str == "mp4")
             {
                 result = GEDCOMMultimediaFormat.mfMP4;
             }
-            else if (str == "OGV")
+            else if (str == "ogv")
             {
                 result = GEDCOMMultimediaFormat.mfOGV;
+            }
+            else if (str == "mka")
+            {
+                result = GEDCOMMultimediaFormat.mfMKA;
+            }
+            else if (str == "wmv")
+            {
+                result = GEDCOMMultimediaFormat.mfWMV;
+            }
+            else if (str == "mkv")
+            {
+                result = GEDCOMMultimediaFormat.mfMKV;
+            }
+            else if (str == "mov")
+            {
+                result = GEDCOMMultimediaFormat.mfMOV;
             }
             else
             {
@@ -746,6 +761,18 @@ namespace GKCommon.GEDCOM
                     break;
                 case GEDCOMMultimediaFormat.mfOGV:
                     s = "ogv";
+                    break;
+                case GEDCOMMultimediaFormat.mfMKA:
+                    s = "mka";
+                    break;
+                case GEDCOMMultimediaFormat.mfWMV:
+                    s = "wmv";
+                    break;
+                case GEDCOMMultimediaFormat.mfMKV:
+                    s = "mkv";
+                    break;
+                case GEDCOMMultimediaFormat.mfMOV:
+                    s = "mov";
                     break;
                 default:
                     s = "";

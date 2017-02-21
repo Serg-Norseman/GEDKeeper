@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace GKCommon.Controls
@@ -55,6 +56,7 @@ namespace GKCommon.Controls
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.AllowDoubleClick = false;
             imageBox.AllowZoom = true;
+            imageBox.InterpolationMode = InterpolationMode.HighQualityBicubic;
         }
 
         public void OpenImage(Image image)
@@ -107,6 +109,12 @@ namespace GKCommon.Controls
         {
             int zoom = Convert.ToInt32(zoomLevelsToolStripComboBox.Text.Substring(0, zoomLevelsToolStripComboBox.Text.Length - 1));
             imageBox.Zoom = zoom;
+        }
+
+        protected override void Select(bool directed, bool forward)
+		{
+            base.Select(directed, forward);
+            imageBox.Select();
         }
     }
 }

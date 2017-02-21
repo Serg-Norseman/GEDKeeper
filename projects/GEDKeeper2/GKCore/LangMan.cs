@@ -1577,7 +1577,7 @@ namespace GKCore
 
         public static void DefInit()
         {
-            fLangMan.DefInit(LangMan.LSDefList);
+            fLangMan.DefInit(LSDefList);
         }
 
         public static bool LoadFromFile(string fileName)

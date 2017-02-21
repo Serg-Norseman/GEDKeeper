@@ -155,8 +155,8 @@ namespace GKUI.Charts
 
         public event ARootChangedEventHandler RootChanged
         {
-            add { base.Events.AddHandler(CircleChart.EventRootChanged, value); }
-            remove { base.Events.RemoveHandler(CircleChart.EventRootChanged, value); }
+            add { Events.AddHandler(EventRootChanged, value); }
+            remove { Events.RemoveHandler(EventRootChanged, value); }
         }
 
         public GEDCOMIndividualRecord RootPerson
@@ -182,7 +182,7 @@ namespace GKUI.Charts
 
         static CircleChart()
         {
-            CircleChart.EventRootChanged = new object();
+            EventRootChanged = new object();
         }
 
         protected CircleChart(IBaseWindow baseWin)
@@ -284,7 +284,7 @@ namespace GKUI.Charts
 
         protected void DoRootChanged(GEDCOMIndividualRecord person)
         {
-            var eventHandler = (ARootChangedEventHandler)base.Events[CircleChart.EventRootChanged];
+            var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler == null) return;
 
             eventHandler(this, person);
@@ -404,9 +404,9 @@ namespace GKUI.Charts
                 if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
                     context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 }
-#if !FUN_ANIM
+                #if !FUN_ANIM
                 context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
-#else
+                #else
                 float angle = (float)(3.5f * Math.Sin(fAppearingAnimationTime) *
                                       Math.Exp(-1.0 * fAppearingAnimationTime / fAppearingAnimationTimeLimit));
                 float rotation = (float)(angle * Math.PI / 180.0f);
@@ -419,7 +419,7 @@ namespace GKUI.Charts
                                         (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
                 m.Scale(zoomX, zoomY);
                 context.Transform = m;
-#endif
+                #endif
             } else {
                 context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
             }
@@ -601,7 +601,7 @@ namespace GKUI.Charts
             startAngle = -startAngle;
 
             Matrix previousTransformation = gfx.Transform;
-            for (var i = 0; i < text.Length; ++i)
+            for (int i = 0; i < text.Length; ++i)
             {
                 float offset = (textAngle * ((float)(i) / text.Length));
                 float angle = clockwise ? startAngle - offset : startAngle + offset;
@@ -618,7 +618,7 @@ namespace GKUI.Charts
                 m.Multiply(previousTransformation, MatrixOrder.Append);
                 gfx.Transform = m;
 
-                string chr = new String(text[i], 1);
+                string chr = new string(text[i], 1);
                 gfx.DrawString(chr, font, brush, 0, 0);
             }
             gfx.Transform = previousTransformation;

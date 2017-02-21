@@ -39,7 +39,7 @@ namespace GKCore.Export
         protected Document fDocument;
         protected PdfWriter fPdfWriter;
 
-        public PDFExporter(IBaseWindow baseWin) : base(baseWin)
+        protected PDFExporter(IBaseWindow baseWin) : base(baseWin)
         {
             fMargins = new Padding(20);
             fAlbumPage = true;

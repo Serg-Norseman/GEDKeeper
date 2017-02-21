@@ -97,7 +97,7 @@ namespace GKFlowInputPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
@@ -120,8 +120,8 @@ namespace GKFlowInputPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(FLS.LSID_PluginTitle);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(FLS.LSID_PluginTitle);
             }
             catch (Exception ex)
             {
@@ -134,7 +134,7 @@ namespace GKFlowInputPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {

@@ -33,7 +33,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class PortraitSelectDlg : Form, IBaseEditor
+    public sealed partial class PortraitSelectDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
         private GEDCOMMultimediaLink fMultimediaLink;
@@ -52,20 +52,17 @@ namespace GKUI.Dialogs
         private void SetMultimediaLink(GEDCOMMultimediaLink value)
         {
             fMultimediaLink = value;
+            if (fMultimediaLink == null || fMultimediaLink.Value == null) return;
 
-            if (fMultimediaLink != null && fMultimediaLink.Value != null)
-            {
-                GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
-                Image img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
+            GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
 
-                if (img != null) {
-                    imageView1.OpenImage(img);
+            Image img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
+            if (img == null) return;
+            imageView1.OpenImage(img);
 
-                    if (fMultimediaLink.IsPrimaryCutout) {
-                        ExtRect rt = fMultimediaLink.CutoutPosition.Value;
-                        imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
-                    }
-                }
+            if (fMultimediaLink.IsPrimaryCutout) {
+                ExtRect rt = fMultimediaLink.CutoutPosition.Value;
+                imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
             }
         }
 
@@ -84,12 +81,12 @@ namespace GKUI.Dialogs
                     fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
                 }
 
-                base.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
                 fBase.Host.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

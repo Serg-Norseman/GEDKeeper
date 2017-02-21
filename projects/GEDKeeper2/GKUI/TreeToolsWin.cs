@@ -61,126 +61,126 @@ namespace GKUI
 
         public IBaseWindow Base
         {
-            get	{ return this.fBase; }
+            get { return fBase; }
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                //this.fChecksList.Dispose();
-                TreeTools.PlacesSearch_Clear(this.fPlaces);
-                this.fPlaces.Dispose();
-                this.fRMSkip.Dispose();
-                //this.fSplitList.Dispose();
+                //fChecksList.Dispose();
+                TreeTools.PlacesSearch_Clear(fPlaces);
+                fPlaces.Dispose();
+                fRMSkip.Dispose();
+                //fSplitList.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public TreeToolsWin(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+            btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
 
-            this.fBase = baseWin;
-            this.fTree = this.Base.Tree;
+            fBase = baseWin;
+            fTree = Base.Tree;
 
-            this.tabsTools.SelectedIndex = 0;
+            tabsTools.SelectedIndex = 0;
 
-            this.fSplitList = new List<GEDCOMRecord>();
-            this.fRMSkip = new StringList();
-            this.fRMMode = GEDCOMRecordType.rtIndividual;
+            fSplitList = new List<GEDCOMRecord>();
+            fRMSkip = new StringList();
+            fRMMode = GEDCOMRecordType.rtIndividual;
 
-            this.MergeCtl.Base = this.fBase;
-            this.MergeCtl.MergeMode = this.fRMMode;
+            MergeCtl.Base = fBase;
+            MergeCtl.MergeMode = fRMMode;
 
-            this.fPlaces = new StringList();
-            this.fPlaces.Sorted = true;
-            this.fChecksList = new List<TreeTools.CheckObj>();
-            this.gkLogChart1.OnHintRequest += HintRequestEventHandler;
+            fPlaces = new StringList();
+            fPlaces.Sorted = true;
+            fChecksList = new List<TreeTools.CheckObj>();
+            gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
-            this.PrepareChecksList();
-            this.PreparePatriarchsList();
-            this.PreparePlacesList();
+            PrepareChecksList();
+            PreparePatriarchsList();
+            PreparePlacesList();
 
-            this.SetLang();
+            SetLang();
         }
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Text = LangMan.LS(LSID.LSID_MITreeTools);
 
-            this.pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            this.pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            this.pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            this.pageRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-            this.pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            this.pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            this.pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            this.pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
+            pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
+            pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            pageRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
+            pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
+            pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
 
-            this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            this.lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
+            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
 
-            this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            this.btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
 
-            this.btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
-            this.btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
-            this.btnSelectAncestors.Text = LangMan.LS(LSID.LSID_SelAncestors);
-            this.btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
-            this.btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            this.btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
-            this.pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
-            this.pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
-            this.btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
-            this.btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
-            this.rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
-            this.radPersons.Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            this.radNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.radFamilies.Text = LangMan.LS(LSID.LSID_RPFamilies);
-            this.radSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.grpSearchPersons.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
-            this.chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
-            this.chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
-            this.lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
-            this.lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
-            this.btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
-            this.lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);
-            this.btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
-            this.btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
-            this.btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
+            btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
+            btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
+            btnSelectAncestors.Text = LangMan.LS(LSID.LSID_SelAncestors);
+            btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
+            btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
+            btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+            pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
+            pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
+            btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
+            btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
+            rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
+            radPersons.Text = LangMan.LS(LSID.LSID_RPIndividuals);
+            radNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            radFamilies.Text = LangMan.LS(LSID.LSID_RPFamilies);
+            radSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            grpSearchPersons.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
+            chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
+            chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
+            lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
+            lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
+            btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
+            lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);
+            btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
+            btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
+            btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
 
-            this.grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
-            this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
+            grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
+            chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
 
-            this.lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
-            this.lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
-            this.edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
+            lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
+            lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
+            edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
 
-            this.grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
-            this.radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
-            this.radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
-            this.radAnalysis.Text = LangMan.LS(LSID.LSID_Analysis);
-            this.btnMatch.Text = LangMan.LS(LSID.LSID_Match);
-            this.chkWithoutDates.Text = LangMan.LS(LSID.LSID_WithoutDates);
-            this.btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
+            grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
+            radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
+            radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
+            radAnalysis.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnMatch.Text = LangMan.LS(LSID.LSID_Match);
+            chkWithoutDates.Text = LangMan.LS(LSID.LSID_WithoutDates);
+            btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
         }
 
         private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.tabsTools.SelectedTab == this.pageFamilyGroups)
+            if (tabsTools.SelectedTab == pageFamilyGroups)
             {
-                this.CheckGroups();
+                CheckGroups();
             }
-            else if (this.tabsTools.SelectedTab == this.pageTreeCheck)
+            else if (tabsTools.SelectedTab == pageTreeCheck)
             {
-                this.CheckBase();
+                CheckBase();
             }
-            else if (this.tabsTools.SelectedTab == this.pagePlaceManage)
+            else if (tabsTools.SelectedTab == pagePlaceManage)
             {
-                this.CheckPlaces();
+                CheckPlaces();
             }
         }
 
@@ -189,12 +189,11 @@ namespace GKUI
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                this.edUpdateBase.Text = fileName;
-                TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
-                this.Base.RefreshLists(false);
-            }
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            edUpdateBase.Text = fileName;
+            TreeTools.TreeMerge(Base.Tree, edUpdateBase.Text, mSyncRes);
+            Base.RefreshLists(false);
         }
 
         #endregion
@@ -203,7 +202,7 @@ namespace GKUI
 
         private void SheetMergeResize(object sender, EventArgs e)
         {
-            //this.MergeCtl.Height = SheetMerge.Height - btnSearch.Top - 20;
+            //MergeCtl.Height = SheetMerge.Height - btnSearch.Top - 20;
         }
 
         private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
@@ -216,55 +215,55 @@ namespace GKUI
 
         private void SearchDups()
         {
-            this.MergeCtl.Base = this.fBase;
-            this.MergeCtl.MergeMode = this.fRMMode;
+            MergeCtl.Base = fBase;
+            MergeCtl.MergeMode = fRMMode;
             
-            this.MergeCtl.SetRec1(null);
-            this.MergeCtl.SetRec2(null);
+            MergeCtl.SetRec1(null);
+            MergeCtl.SetRec2(null);
             
             MatchParams mParams;
-            //mParams.IndistinctNameMatching = this.chkIndistinctMatching.Checked;
-            mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(this.edNameAccuracy.Value) / 100.0f;
-            mParams.DatesCheck = this.chkBirthYear.Checked;
-            mParams.YearsInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
+            //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
+            mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(edNameAccuracy.Value) / 100.0f;
+            mParams.DatesCheck = chkBirthYear.Checked;
+            mParams.YearsInaccuracy = decimal.ToInt32(edYearInaccuracy.Value);
 
             bool res = false;
-            this.btnSkip.Enabled = false;
+            btnSkip.Enabled = false;
 
             try
             {
-                this.ProgressBar1.Minimum = 0;
-                this.ProgressBar1.Maximum = this.fTree.RecordsCount;
-                this.ProgressBar1.Value = this.fRMIndex;
+                ProgressBar1.Minimum = 0;
+                ProgressBar1.Maximum = fTree.RecordsCount;
+                ProgressBar1.Value = fRMIndex;
 
-                int recNum = this.fTree.RecordsCount;
-                for (int i = this.fRMIndex; i < recNum; i++)
+                int recNum = fTree.RecordsCount;
+                for (int i = fRMIndex; i < recNum; i++)
                 {
-                    this.fRMIndex = i;
-                    this.ProgressBar1.Increment(1);
+                    fRMIndex = i;
+                    ProgressBar1.Increment(1);
 
-                    GEDCOMRecord iRec = this.fTree[i];
-                    if (iRec.RecordType != this.fRMMode) continue;
+                    GEDCOMRecord iRec = fTree[i];
+                    if (iRec.RecordType != fRMMode) continue;
 
                     for (int j = i + 1; j < recNum; j++)
                     {
-                        GEDCOMRecord kRec = this.fTree[j];
-                        if (kRec.RecordType != this.fRMMode) continue;
+                        GEDCOMRecord kRec = fTree[j];
+                        if (kRec.RecordType != fRMMode) continue;
 
                         if (iRec == kRec) continue;
-                        if (this.fRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
+                        if (fRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
 
                         res = iRec.IsMatch(kRec, mParams) >= 100.0f;
 
-                        if (res && this.fRMMode == GEDCOMRecordType.rtIndividual)
+                        if (res && fRMMode == GEDCOMRecordType.rtIndividual)
                         {
                             res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
                         }
 
                         if (res)
                         {
-                            this.MergeCtl.SetRec1(iRec);
-                            this.MergeCtl.SetRec2(kRec);
+                            MergeCtl.SetRec1(iRec);
+                            MergeCtl.SetRec2(kRec);
                             break;
                         }
                     }
@@ -274,39 +273,39 @@ namespace GKUI
             }
             finally
             {
-                this.btnSkip.Enabled = true;
+                btnSkip.Enabled = true;
             }
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (this.radPersons.Checked) this.fRMMode = GEDCOMRecordType.rtIndividual;
-            if (this.radNotes.Checked) this.fRMMode = GEDCOMRecordType.rtNote;
-            if (this.radFamilies.Checked) this.fRMMode = GEDCOMRecordType.rtFamily;
-            if (this.radSources.Checked) this.fRMMode = GEDCOMRecordType.rtSource;
+            if (radPersons.Checked) fRMMode = GEDCOMRecordType.rtIndividual;
+            if (radNotes.Checked) fRMMode = GEDCOMRecordType.rtNote;
+            if (radFamilies.Checked) fRMMode = GEDCOMRecordType.rtFamily;
+            if (radSources.Checked) fRMMode = GEDCOMRecordType.rtSource;
 
-            this.MergeCtl.MergeMode = this.fRMMode;
+            MergeCtl.MergeMode = fRMMode;
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            this.MergeCtl.Bookmark = chkBookmarkMerged.Checked;
+            MergeCtl.Bookmark = chkBookmarkMerged.Checked;
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
         {
-            if (this.MergeCtl.Rec1 != null && this.MergeCtl.Rec2 != null)
+            if (MergeCtl.Rec1 != null && MergeCtl.Rec2 != null)
             {
-                this.fRMSkip.Add(this.MergeCtl.Rec1.XRef + "-" + this.MergeCtl.Rec2.XRef);
+                fRMSkip.Add(MergeCtl.Rec1.XRef + "-" + MergeCtl.Rec2.XRef);
             }
-            this.SearchDups();
+            SearchDups();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            this.fRMIndex = 0;
-            this.fRMSkip.Clear();
-            this.SearchDups();
+            fRMIndex = 0;
+            fRMSkip.Clear();
+            SearchDups();
         }
 
         #endregion
@@ -316,18 +315,18 @@ namespace GKUI
         private void CheckGroups()
         {
             gkLogChart1.Clear();
-            fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), this.fTree.RecordsCount);
+            fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
             {
                 int groupNum = 0;
-                this.tvGroups.Nodes.Clear();
+                tvGroups.Nodes.Clear();
 
-                int num = this.fTree.RecordsCount;
+                int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = this.fTree[i];
+                    GEDCOMRecord rec = fTree[i];
 
                     if (rec is GEDCOMIndividualRecord)
                     {
@@ -341,7 +340,7 @@ namespace GKUI
 
                             int cnt = groupRecords.Count;
 
-                            TreeNode root = this.tvGroups.Nodes.Add(
+                            TreeNode root = tvGroups.Nodes.Add(
                                 groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
 
                             for (int j = 0; j < cnt; j++)
@@ -376,14 +375,14 @@ namespace GKUI
 
         private void tvGroups_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = this.tvGroups.SelectedNode as GKTreeNode;
+            GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
             if (node == null) return;
             
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
             
-            this.Base.SelectRecordByXRef(iRec.XRef);
-            base.Close();
+            Base.SelectRecordByXRef(iRec.XRef);
+            Close();
         }
 
         private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
@@ -399,61 +398,61 @@ namespace GKUI
 
         private void PrepareChecksList()
         {
-            this.ListChecks = GKUtils.CreateListView(this.Panel1);
-            this.ListChecks.CheckBoxes = true;
-            this.ListChecks.DoubleClick += this.ListChecks_DblClick;
-            this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            ListChecks = GKUtils.CreateListView(Panel1);
+            ListChecks.CheckBoxes = true;
+            ListChecks.DoubleClick += ListChecks_DblClick;
+            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Record), 400, false);
+            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
+            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
         }
 
         private void CheckBase()
         {
-            TreeTools.CheckBase(this.fBase, this.fChecksList);
+            TreeTools.CheckBase(fBase, fChecksList);
 
-            this.ListChecks.Items.Clear();
+            ListChecks.Items.Clear();
 
-            foreach (TreeTools.CheckObj checkObj in this.fChecksList)
+            foreach (TreeTools.CheckObj checkObj in fChecksList)
             {
-                GKListItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
+                GKListItem item = ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
                 item.AddSubItem(checkObj.Comment);
                 item.AddSubItem(LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
             }
 
-            this.ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
         {
             try
             {
-                int num = this.ListChecks.Items.Count;
+                int num = ListChecks.Items.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GKListItem item = (GKListItem)this.ListChecks.Items[i];
+                    GKListItem item = (GKListItem)ListChecks.Items[i];
                     if (!item.Checked) continue;
 
                     TreeTools.CheckObj checkObj = item.Data as TreeTools.CheckObj;
-                    TreeTools.RepairProblem(this.fBase, checkObj);
+                    TreeTools.RepairProblem(fBase, checkObj);
                 }
             }
             finally
             {
-                this.Base.RefreshLists(false);
-                this.CheckBase();
+                Base.RefreshLists(false);
+                CheckBase();
             }
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListChecks.GetSelectedItem();
+            GKListItem item = ListChecks.GetSelectedItem();
             if (item == null) return;
 
             GEDCOMIndividualRecord iRec = ((TreeTools.CheckObj)item.Data).Rec as GEDCOMIndividualRecord;
             if (iRec == null) return;
 
-            this.Base.SelectRecordByXRef(iRec.XRef);
-            this.Close();
+            Base.SelectRecordByXRef(iRec.XRef);
+            Close();
         }
 
         #endregion
@@ -462,44 +461,44 @@ namespace GKUI
 
         private void PreparePlacesList()
         {
-            this.ListPlaces = GKUtils.CreateListView(this.Panel4);
-            this.ListPlaces.DoubleClick += this.ListPlaces_DblClick;
-            this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_Place), 400, false);
-            this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+            ListPlaces = GKUtils.CreateListView(Panel4);
+            ListPlaces.DoubleClick += ListPlaces_DblClick;
+            ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_Place), 400, false);
+            ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
 
         private void CheckPlaces()
         {
-            this.ListPlaces.BeginUpdate();
+            ListPlaces.BeginUpdate();
             try
             {
-                TreeTools.PlacesSearch(this.fTree, this.fPlaces, fBase);
+                TreeTools.PlacesSearch(fTree, fPlaces, fBase);
 
-                this.ListPlaces.Items.Clear();
+                ListPlaces.Items.Clear();
 
-                int num4 = this.fPlaces.Count;
+                int num4 = fPlaces.Count;
                 for (int i = 0; i < num4; i++)
                 {
-                    PlaceObj placeObj = (PlaceObj)this.fPlaces.GetObject(i);
+                    PlaceObj placeObj = (PlaceObj)fPlaces.GetObject(i);
 
-                    GKListItem item = this.ListPlaces.AddItem(this.fPlaces[i], placeObj);
+                    GKListItem item = ListPlaces.AddItem(fPlaces[i], placeObj);
                     item.AddSubItem(placeObj.Facts.Count);
                 }
             }
             finally
             {
-                this.ListPlaces.EndUpdate();
+                ListPlaces.EndUpdate();
             }
         }
 
         private void btnIntoList_Click(object sender, EventArgs e)
         {
-            this.ListPlaces_DblClick(null, null);
+            ListPlaces_DblClick(null, null);
         }
 
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListPlaces.GetSelectedItem();
+            GKListItem item = ListPlaces.GetSelectedItem();
             if (item == null) return;
             
             PlaceObj pObj = item.Data as PlaceObj;
@@ -511,22 +510,19 @@ namespace GKUI
             }
             else
             {
-                GEDCOMLocationRecord loc = this.Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                GEDCOMLocationRecord loc = Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                if (loc == null) return;
 
-                if (loc != null)
+                int num = pObj.Facts.Count;
+                for (int i = 0; i < num; i++)
                 {
-                    int num = pObj.Facts.Count;
-                    for (int i = 0; i < num; i++)
-                    {
-                        GEDCOMCustomEvent evt = pObj.Facts[i];
-                        evt.Detail.Place.StringValue = loc.LocationName;
-                        evt.Detail.Place.Location.Value = loc;
-                    }
-
-                    this.CheckPlaces();
-
-                    this.Base.RefreshLists(false);
+                    GEDCOMCustomEvent evt = pObj.Facts[i];
+                    evt.Detail.Place.StringValue = loc.LocationName;
+                    evt.Detail.Place.Location.Value = loc;
                 }
+
+                CheckPlaces();
+                Base.RefreshLists(false);
             }
         }
 
@@ -536,101 +532,100 @@ namespace GKUI
 
         private void UpdateSplitLists()
         {
-            this.ListSelected.BeginUpdate();
-            this.ListSelected.Items.Clear();
-            this.ListSkipped.BeginUpdate();
-            this.ListSkipped.Items.Clear();
+            ListSelected.BeginUpdate();
+            ListSelected.Items.Clear();
+            ListSkipped.BeginUpdate();
+            ListSkipped.Items.Clear();
             try
             {
                 int cnt = 0;
 
-                int num = this.fTree.RecordsCount;
+                int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = this.fTree[i];
+                    GEDCOMRecord rec = fTree[i];
                     if (rec is GEDCOMIndividualRecord)
                     {
                         cnt++;
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
                         string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
 
-                        if (this.fSplitList.IndexOf(iRec) < 0) {
-                            this.ListSkipped.Items.Add(st);
+                        if (fSplitList.IndexOf(iRec) < 0) {
+                            ListSkipped.Items.Add(st);
                         } else {
-                            this.ListSelected.Items.Add(st);
+                            ListSelected.Items.Add(st);
                         }
                     }
                 }
-                this.Text = this.fSplitList.Count.ToString() + @" / " + cnt.ToString();
+                Text = fSplitList.Count.ToString() + @" / " + cnt.ToString();
             }
             finally
             {
-                this.ListSelected.EndUpdate();
-                this.ListSkipped.EndUpdate();
+                ListSelected.EndUpdate();
+                ListSkipped.EndUpdate();
             }
         }
 
         private void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
         {
-            this.fSplitList.Clear();
-            TreeTools.TreeWalk(startPerson, walkMode, this.fSplitList);
-            this.UpdateSplitLists();
+            fSplitList.Clear();
+            TreeTools.TreeWalk(startPerson, walkMode, fSplitList);
+            UpdateSplitLists();
         }
 
         private void btnSelectFamily_Click(object sender, EventArgs e)
         {
-            this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
+            Select(Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
         }
 
         private void btnSelectAncestors_Click(object sender, EventArgs e)
         {
-            this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
+            Select(Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
         }
 
         private void btnSelectDescendants_Click(object sender, EventArgs e)
         {
-            this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
+            Select(Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
+            Select(Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int num = this.fSplitList.Count;
+            int num = fSplitList.Count;
             for (int i = 0; i < num; i++)
             {
-                object obj = this.fSplitList[i];
+                object obj = fSplitList[i];
 
                 if (obj is GEDCOMIndividualRecord)
                 {
-                    this.Base.RecordDelete(obj as GEDCOMIndividualRecord, false);
+                    Base.RecordDelete(obj as GEDCOMIndividualRecord, false);
                 }
             }
 
             GKUtils.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
-            this.fSplitList.Clear();
-            this.UpdateSplitLists();
+            fSplitList.Clear();
+            UpdateSplitLists();
 
-            this.Base.RefreshLists(false);
+            Base.RefreshLists(false);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
-            if (!string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            TreeTools.CheckRelations(fSplitList);
+
+            GKUtils.PrepareHeader(fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
+
+            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet)))
             {
-                TreeTools.CheckRelations(fSplitList);
-
-                GKUtils.PrepareHeader(this.fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
-
-                using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(this.fTree.Header.CharacterSet)))
-                {
-                    this.fTree.SaveToStream(fs, this.fSplitList);
-                    this.fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-                }
+                fTree.SaveToStream(fs, fSplitList);
+                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
 
@@ -640,24 +635,24 @@ namespace GKUI
 
         private void PreparePatriarchsList()
         {
-            this.ListPatriarchs = GKUtils.CreateListView(this.Panel3);
-            this.ListPatriarchs.DoubleClick += this.ListPatriarchs_DblClick;
-            this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
-            this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
-            this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
-            this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
+            ListPatriarchs = GKUtils.CreateListView(Panel3);
+            ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
+            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
+            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
+            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
+            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = this.ListPatriarchs.GetSelectedItem();
+            GKListItem item = ListPatriarchs.GetSelectedItem();
             if (item == null) return;
 
             GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
             if (iRec == null) return;
 
-            this.Base.SelectRecordByXRef(iRec.XRef);
-            this.Close();
+            Base.SelectRecordByXRef(iRec.XRef);
+            Close();
         }
 
         private static int PatriarchsCompare(object item1, object item2)
@@ -667,12 +662,12 @@ namespace GKUI
 
         private void btnPatSearch_Click(object sender, EventArgs e)
         {
-            this.ListPatriarchs.BeginUpdate();
+            ListPatriarchs.BeginUpdate();
             ExtList<PatriarchObj> lst = null;
             try
             {
-                this.ListPatriarchs.Items.Clear();
-                lst = this.fBase.Context.GetPatriarchsList(decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+                ListPatriarchs.Items.Clear();
+                lst = fBase.Context.GetPatriarchsList(decimal.ToInt32(edMinGens.Value), !chkWithoutDates.Checked);
                 lst.QuickSort(PatriarchsCompare);
 
                 int num = lst.Count;
@@ -681,7 +676,7 @@ namespace GKUI
                     PatriarchObj pObj = lst[i];
                     string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
-                    GKListItem item = this.ListPatriarchs.AddItem(pSign + GKUtils.GetNameString(pObj.IRec, true, false), pObj.IRec);
+                    GKListItem item = ListPatriarchs.AddItem(pSign + GKUtils.GetNameString(pObj.IRec, true, false), pObj.IRec);
                     item.AddSubItem(pObj.BirthYear);
                     item.AddSubItem(pObj.DescendantsCount);
                     item.AddSubItem(pObj.DescGenerations);
@@ -690,7 +685,7 @@ namespace GKUI
             finally
             {
                 if (lst != null) lst.Dispose();
-                this.ListPatriarchs.EndUpdate();
+                ListPatriarchs.EndUpdate();
             }
         }
 
@@ -698,7 +693,7 @@ namespace GKUI
         {
             try
             {
-                GKListItem item = this.ListPatriarchs.GetSelectedItem();
+                GKListItem item = ListPatriarchs.GetSelectedItem();
                 if (item == null) return;
 
                 GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
@@ -707,17 +702,17 @@ namespace GKUI
                     iRec.Patriarch = true;
                 }
 
-                this.Base.RefreshLists(false);
+                Base.RefreshLists(false);
             }
             finally
             {
-                this.btnPatSearch_Click(null, null);
+                btnPatSearch_Click(null, null);
             }
         }
 
         private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
         {
-            PatriarchsViewerWin wnd = new PatriarchsViewerWin(this.fBase, decimal.ToInt32(this.edMinGens.Value));
+            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fBase, decimal.ToInt32(edMinGens.Value));
             wnd.Show();
         }
 
@@ -731,18 +726,17 @@ namespace GKUI
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                external_match_db = fileName;
-                this.txtCompareFile.Text = Path.GetFileName(external_match_db);
-            }
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            external_match_db = fileName;
+            txtCompareFile.Text = Path.GetFileName(external_match_db);
         }
 
         private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
         {
-            this.ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
-            this.ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
-            //this.ListCompare.AppendText("\r\n");
+            ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
+            ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+            //ListCompare.AppendText("\r\n");
         }
 
         private TreeMatchType GetTreeMatchType()
@@ -759,33 +753,33 @@ namespace GKUI
         {
             TreeMatchType type = GetTreeMatchType();
 
-            this.ListCompare.Clear();
+            ListCompare.Clear();
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(this.fTree, this.fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, fBase);
+                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, fBase);
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(this.fBase.Context, external_match_db, this.ListCompare);
+                    TreeTools.TreeCompare(fBase.Context, external_match_db, ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:
                     {
                         List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
 
-                        this.ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
+                        ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0)
                         {
                             int num = uln.Count;
                             foreach (TreeTools.ULIndividual indiv in uln)
                             {
-                                this.ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");
+                                ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");
                             }
                         }
                         else
                         {
-                            this.ListCompare.AppendText("    - not found.");
+                            ListCompare.AppendText("    - not found.");
                         }
                         break;
                     }
@@ -796,9 +790,9 @@ namespace GKUI
         {
             TreeMatchType type = GetTreeMatchType();
 
-            this.lblFile.Enabled = (type == TreeMatchType.tmtExternal);
-            this.txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
-            this.btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
+            lblFile.Enabled = (type == TreeMatchType.tmtExternal);
+            txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
+            btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
         }
 
         #endregion

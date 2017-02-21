@@ -20,7 +20,7 @@ namespace Externals.IniFiles
             if (IniFileSettings.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
 
-            fCommentChar = IniFileElement.StartsWith(Content, IniFileSettings.CommentChars);
+            fCommentChar = StartsWith(Content, IniFileSettings.CommentChars);
 
             if (fCommentChar != null && Content.Length > fCommentChar.Length)
                 fComment = Content.Substring(fCommentChar.Length);
@@ -52,7 +52,7 @@ namespace Externals.IniFiles
             }
         }
 
-        void Rewrite()
+        private void Rewrite()
         {
             StringBuilder newContent = new StringBuilder();
             string[] lines = fComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
@@ -66,7 +66,7 @@ namespace Externals.IniFiles
         /// <param name="testLine">Trimmed test string.</param>
         public static bool IsLineValid(string testLine)
         {
-            return IniFileElement.StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
+            return StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
         }
 
         /// <summary>Gets a string representation of this IniFileCommentary object.</summary>

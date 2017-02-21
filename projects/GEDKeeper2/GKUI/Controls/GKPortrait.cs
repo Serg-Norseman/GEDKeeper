@@ -17,10 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
 
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -34,14 +32,14 @@ namespace GKUI.Controls
     {
         public Image Image
         {
-            get { return this.pictureBox1.Image; }
-            set { this.pictureBox1.Image = value; }
+            get { return pictureBox1.Image; }
+            set { pictureBox1.Image = value; }
         }
 
         public override Image BackgroundImage
         {
-            get { return this.pictureBox1.BackgroundImage; }
-            set { this.pictureBox1.BackgroundImage = value; }
+            get { return pictureBox1.BackgroundImage; }
+            set { pictureBox1.BackgroundImage = value; }
         }
 
         public int SlidePanelHeight
@@ -86,8 +84,7 @@ namespace GKUI.Controls
         public GKPortrait()
         {
             InitializeComponent();
-            btnPanel.Top = this.Height;
-            timer.Interval = 1;
+            btnPanel.Top = Height;
             timer.Stop();
         }
 
@@ -103,18 +100,20 @@ namespace GKUI.Controls
 
             btnPanel.Controls.Clear();
 
-            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
+            for (int i = 0, c = fBtnsList.Count; i < c; i++)
+            {
                 lenwagon += (i != c) ? (fBtnsList[i].Width + 8) : fBtnsList[i].Width;
             }
 
             int center = lenwagon / 2;
             int startPosition = btnPanel.Width / 2 - center;
             
-            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
+            for (int i = 0, c = fBtnsList.Count; i < c; i++)
+            {
                 int heightCenter = btnPanel.Height / 2;
                 int btnCenter = fBtnsList[i].Height / 2;
                 
-                fBtnsList[i].Location = new System.Drawing.Point(startPosition, heightCenter - btnCenter);
+                fBtnsList[i].Location = new Point(startPosition, heightCenter - btnCenter);
                 btnPanel.Controls.Add(fBtnsList[i]);
                 startPosition += fBtnsList[i].Width + 8;
             }
@@ -123,30 +122,51 @@ namespace GKUI.Controls
 
         private void MoveSlidePanel(object sender, EventArgs e)
         {
-            if (btnPanel.Top <= this.Height - btnPanel.Height)
+            if (btnPanel.Top <= Height - btnPanel.Height)
                 timer.Stop();
             else
-                btnPanel.Top -= (btnPanel.Top - fPixelSpeed > this.Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (this.Height - btnPanel.Height);
+                btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
         }
         
-        private void MouseHoverOrLeave(object sender, EventArgs e)
+        private void PictureBox1MouseHover(object sender, EventArgs e)
         {
-            Point p = this.PointToClient(Cursor.Position);
+            CheckCursorPosition(sender, e);
+        }
 
-            if (p.X <= 0 || p.Y <= 0 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height) {
-                btnPanel.Top = this.Height;
-                timer.Stop();
+        private void Panel1MouseHover(object sender, EventArgs e)
+        {
+            CheckCursorPosition(sender, e);
+        }
+
+        private void PictureBox1MouseLeave(object sender, EventArgs e)
+        {
+            CheckCursorPosition(sender, e);
+        }
+
+        private void Panel1MouseLeave(object sender, EventArgs e)
+        {
+            CheckCursorPosition(sender, e);
+        }
+
+        private void CheckCursorPosition(object sender, EventArgs e)
+        {
+            Point p = PointToClient(Cursor.Position);
+            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
+            if (!buf) {
+                timer.Start();
+                timer.Interval = 1;
             }
             else {
-                timer.Start();
+                btnPanel.Top = Height;
+                timer.Stop();
             }
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            btnPanel.Width = this.Width;
-            this.MouseHoverOrLeave(this, e);
+            btnPanel.Width = Width;
+            CheckCursorPosition(this, e);
         }
     }
 }

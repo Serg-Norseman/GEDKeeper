@@ -151,7 +151,7 @@ namespace GKCore
             {
                 GEDCOMRecord rec = fTree[i];
 
-                if (rec is GEDCOMSourceRecord && (rec as GEDCOMSourceRecord).FiledByEntry == sourceName)
+                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).FiledByEntry == sourceName)
                 {
                     result = (rec as GEDCOMSourceRecord);
                     break;
@@ -236,61 +236,59 @@ namespace GKCore
         public bool DeleteRecord(GEDCOMRecord record)
         {
             bool result = false;
+            if (record == null) return result;
 
-            if (record != null)
-            {
-                try {
-                    BeginUpdate();
+            try {
+                BeginUpdate();
 
-                    switch (record.RecordType)
-                    {
-                        case GEDCOMRecordType.rtIndividual:
-                            result = fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
-                            break;
+                switch (record.RecordType)
+                {
+                    case GEDCOMRecordType.rtIndividual:
+                        result = fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtFamily:
-                            result = fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
-                            break;
+                    case GEDCOMRecordType.rtFamily:
+                        result = fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtNote:
-                            result = fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
-                            break;
+                    case GEDCOMRecordType.rtNote:
+                        result = fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtMultimedia:
-                            result = fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
-                            break;
+                    case GEDCOMRecordType.rtMultimedia:
+                        result = fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtSource:
-                            result = fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
-                            break;
+                    case GEDCOMRecordType.rtSource:
+                        result = fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtRepository:
-                            result = fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
-                            break;
+                    case GEDCOMRecordType.rtRepository:
+                        result = fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtGroup:
-                            result = fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
-                            break;
+                    case GEDCOMRecordType.rtGroup:
+                        result = fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtResearch:
-                            result = fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
-                            break;
+                    case GEDCOMRecordType.rtResearch:
+                        result = fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtTask:
-                            result = fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
-                            break;
+                    case GEDCOMRecordType.rtTask:
+                        result = fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtCommunication:
-                            result = fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
-                            break;
+                    case GEDCOMRecordType.rtCommunication:
+                        result = fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
+                        break;
 
-                        case GEDCOMRecordType.rtLocation:
-                            result = fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
-                            break;
-                    }
-                } finally {
-                    EndUpdate();
+                    case GEDCOMRecordType.rtLocation:
+                        result = fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
+                        break;
                 }
+            } finally {
+                EndUpdate();
             }
 
             return result;
@@ -645,7 +643,7 @@ namespace GKCore
             {
                 ZipStorer.ZipFileEntry? entry = zip.FindFile(targetFn);
                 if (entry != null) {
-                    zip.ExtractFile(entry.Value, toStream);
+                    zip.ExtractStream(entry.Value, toStream);
                 }
             }
         }

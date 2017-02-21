@@ -480,7 +480,7 @@ namespace GKUI
             this.miFileNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.miFileNew.Size = new System.Drawing.Size(175, 22);
             this.miFileNew.Text = "miFileNew";
-            this.miFileNew.Click += new System.EventHandler(this.miFileNewClick);
+            this.miFileNew.Click += new System.EventHandler(this.miFileNew_Click);
             // 
             // miFileLoad
             // 
@@ -488,7 +488,7 @@ namespace GKUI
             this.miFileLoad.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.miFileLoad.Size = new System.Drawing.Size(175, 22);
             this.miFileLoad.Text = "miFileLoad";
-            this.miFileLoad.Click += new System.EventHandler(this.miFileLoadClick);
+            this.miFileLoad.Click += new System.EventHandler(this.miFileLoad_Click);
             // 
             // miMRUFiles
             // 
@@ -509,7 +509,7 @@ namespace GKUI
             this.miFileClose.Name = "miFileClose";
             this.miFileClose.Size = new System.Drawing.Size(175, 22);
             this.miFileClose.Text = "miFileClose";
-            this.miFileClose.Click += new System.EventHandler(this.miFileCloseClick);
+            this.miFileClose.Click += new System.EventHandler(this.miFileClose_Click);
             // 
             // N1
             // 
@@ -521,7 +521,7 @@ namespace GKUI
             this.miFileProperties.Name = "miFileProperties";
             this.miFileProperties.Size = new System.Drawing.Size(175, 22);
             this.miFileProperties.Text = "miFileProperties";
-            this.miFileProperties.Click += new System.EventHandler(this.miFilePropertiesClick);
+            this.miFileProperties.Click += new System.EventHandler(this.miFileProperties_Click);
             // 
             // N2
             // 
@@ -541,7 +541,7 @@ namespace GKUI
             this.miExportToExcelFile.Name = "miExportToExcelFile";
             this.miExportToExcelFile.Size = new System.Drawing.Size(179, 22);
             this.miExportToExcelFile.Text = "miExportToExcelFile";
-            this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFileClick);
+            this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFile_Click);
             // 
             // N3
             // 
@@ -575,14 +575,14 @@ namespace GKUI
             this.miRecordAdd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.miRecordAdd.Size = new System.Drawing.Size(198, 22);
             this.miRecordAdd.Text = "miRecordAdd";
-            this.miRecordAdd.Click += new System.EventHandler(this.miRecordAddClick);
+            this.miRecordAdd.Click += new System.EventHandler(this.miRecordAdd_Click);
             // 
             // miRecordEdit
             // 
             this.miRecordEdit.Name = "miRecordEdit";
             this.miRecordEdit.Size = new System.Drawing.Size(198, 22);
             this.miRecordEdit.Text = "miRecordEdit";
-            this.miRecordEdit.Click += new System.EventHandler(this.miRecordEditClick);
+            this.miRecordEdit.Click += new System.EventHandler(this.miRecordEdit_Click);
             // 
             // miRecordDelete
             // 
@@ -590,7 +590,7 @@ namespace GKUI
             this.miRecordDelete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
             this.miRecordDelete.Size = new System.Drawing.Size(198, 22);
             this.miRecordDelete.Text = "miRecordDelete";
-            this.miRecordDelete.Click += new System.EventHandler(this.miRecordDeleteClick);
+            this.miRecordDelete.Click += new System.EventHandler(this.miRecordDelete_Click);
             // 
             // N15
             // 
@@ -602,7 +602,7 @@ namespace GKUI
             this.miSearch.Name = "miSearch";
             this.miSearch.Size = new System.Drawing.Size(198, 22);
             this.miSearch.Text = "miSearch";
-            this.miSearch.Click += new System.EventHandler(this.miSearchClick);
+            this.miSearch.Click += new System.EventHandler(this.miSearch_Click);
             // 
             // miFilter
             // 
@@ -610,7 +610,7 @@ namespace GKUI
             this.miFilter.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             this.miFilter.Size = new System.Drawing.Size(198, 22);
             this.miFilter.Text = "miFilter";
-            this.miFilter.Click += new System.EventHandler(this.miFilterClick);
+            this.miFilter.Click += new System.EventHandler(this.miFilter_Click);
             // 
             // miPedigree
             // 
@@ -641,7 +641,7 @@ namespace GKUI
             this.miTreeAncestors.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.miTreeAncestors.Size = new System.Drawing.Size(236, 22);
             this.miTreeAncestors.Text = "miTreeAncestors";
-            this.miTreeAncestors.Click += new System.EventHandler(this.miTreeAncestorsClick);
+            this.miTreeAncestors.Click += new System.EventHandler(this.miTreeAncestors_Click);
             // 
             // miTreeDescendants
             // 
@@ -649,28 +649,28 @@ namespace GKUI
             this.miTreeDescendants.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
             this.miTreeDescendants.Size = new System.Drawing.Size(236, 22);
             this.miTreeDescendants.Text = "miTreeDescendants";
-            this.miTreeDescendants.Click += new System.EventHandler(this.miTreeDescendantsClick);
+            this.miTreeDescendants.Click += new System.EventHandler(this.miTreeDescendants_Click);
             // 
             // miTreeBoth
             // 
             this.miTreeBoth.Name = "miTreeBoth";
             this.miTreeBoth.Size = new System.Drawing.Size(236, 22);
             this.miTreeBoth.Text = "miTreeBoth";
-            this.miTreeBoth.Click += new System.EventHandler(this.miTreeBothClick);
+            this.miTreeBoth.Click += new System.EventHandler(this.miTreeBoth_Click);
             // 
             // miAncestorsCircle
             // 
             this.miAncestorsCircle.Name = "miAncestorsCircle";
             this.miAncestorsCircle.Size = new System.Drawing.Size(236, 22);
             this.miAncestorsCircle.Text = "miAncestorsCircle";
-            this.miAncestorsCircle.Click += new System.EventHandler(this.miAncestorsCircleClick);
+            this.miAncestorsCircle.Click += new System.EventHandler(this.miAncestorsCircle_Click);
             // 
             // miDescendantsCircle
             // 
             this.miDescendantsCircle.Name = "miDescendantsCircle";
             this.miDescendantsCircle.Size = new System.Drawing.Size(236, 22);
             this.miDescendantsCircle.Text = "miDescendantsCircle";
-            this.miDescendantsCircle.Click += new System.EventHandler(this.miDescendantsCircleClick);
+            this.miDescendantsCircle.Click += new System.EventHandler(this.miDescendantsCircle_Click);
             // 
             // N6
             // 
@@ -705,7 +705,7 @@ namespace GKUI
             this.miExportToFamilyBook.Name = "miExportToFamilyBook";
             this.miExportToFamilyBook.Size = new System.Drawing.Size(236, 22);
             this.miExportToFamilyBook.Text = "miExportToFamilyBook";
-            this.miExportToFamilyBook.Click += new System.EventHandler(this.miExportToFamilyBookClick);
+            this.miExportToFamilyBook.Click += new System.EventHandler(this.miExportToFamilyBook_Click);
             // 
             // N7
             // 
@@ -718,7 +718,7 @@ namespace GKUI
             this.miMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             this.miMap.Size = new System.Drawing.Size(236, 22);
             this.miMap.Text = "miMap";
-            this.miMap.Click += new System.EventHandler(this.miMapClick);
+            this.miMap.Click += new System.EventHandler(this.miMap_Click);
             // 
             // N8
             // 
@@ -731,7 +731,7 @@ namespace GKUI
             this.miStats.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             this.miStats.Size = new System.Drawing.Size(236, 22);
             this.miStats.Text = "miStats";
-            this.miStats.Click += new System.EventHandler(this.miStatsClick);
+            this.miStats.Click += new System.EventHandler(this.miStats_Click);
             // 
             // toolStripSeparator1
             // 
@@ -764,14 +764,14 @@ namespace GKUI
             this.miOrganizer.Name = "miOrganizer";
             this.miOrganizer.Size = new System.Drawing.Size(175, 22);
             this.miOrganizer.Text = "miOrganizer";
-            this.miOrganizer.Click += new System.EventHandler(this.miOrganizerClick);
+            this.miOrganizer.Click += new System.EventHandler(this.miOrganizer_Click);
             // 
             // miSlideshow
             // 
             this.miSlideshow.Name = "miSlideshow";
             this.miSlideshow.Size = new System.Drawing.Size(175, 22);
             this.miSlideshow.Text = "miSlideshow";
-            this.miSlideshow.Click += new System.EventHandler(this.miSlideshowClick);
+            this.miSlideshow.Click += new System.EventHandler(this.miSlideshow_Click);
             // 
             // N9
             // 
@@ -784,14 +784,14 @@ namespace GKUI
             this.miScripts.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F11)));
             this.miScripts.Size = new System.Drawing.Size(175, 22);
             this.miScripts.Text = "miScripts";
-            this.miScripts.Click += new System.EventHandler(this.miScriptsClick);
+            this.miScripts.Click += new System.EventHandler(this.miScripts_Click);
             // 
             // miTreeTools
             // 
             this.miTreeTools.Name = "miTreeTools";
             this.miTreeTools.Size = new System.Drawing.Size(175, 22);
             this.miTreeTools.Text = "miTreeTools";
-            this.miTreeTools.Click += new System.EventHandler(this.miTreeToolsClick);
+            this.miTreeTools.Click += new System.EventHandler(this.miTreeTools_Click);
             // 
             // N10
             // 
@@ -803,7 +803,7 @@ namespace GKUI
             this.miOptions.Name = "miOptions";
             this.miOptions.Size = new System.Drawing.Size(175, 22);
             this.miOptions.Text = "miOptions";
-            this.miOptions.Click += new System.EventHandler(this.miOptionsClick);
+            this.miOptions.Click += new System.EventHandler(this.miOptions_Click);
             // 
             // miPlugins
             // 
@@ -822,42 +822,42 @@ namespace GKUI
             this.miWindow.Name = "miWindow";
             this.miWindow.Size = new System.Drawing.Size(63, 20);
             this.miWindow.Text = "Window";
-            this.miWindow.DropDownOpening += new System.EventHandler(this.miWindowDropDownOpening);
+            this.miWindow.DropDownOpening += new System.EventHandler(this.miWindow_DropDownOpening);
             // 
             // miWinCascade
             // 
             this.miWinCascade.Name = "miWinCascade";
             this.miWinCascade.Size = new System.Drawing.Size(158, 22);
             this.miWinCascade.Text = "miWinCascade";
-            this.miWinCascade.Click += new System.EventHandler(this.miWinCascadeClick);
+            this.miWinCascade.Click += new System.EventHandler(this.miWinCascade_Click);
             // 
             // miWinHTile
             // 
             this.miWinHTile.Name = "miWinHTile";
             this.miWinHTile.Size = new System.Drawing.Size(158, 22);
             this.miWinHTile.Text = "miWinHTile";
-            this.miWinHTile.Click += new System.EventHandler(this.miWinHTileClick);
+            this.miWinHTile.Click += new System.EventHandler(this.miWinHTile_Click);
             // 
             // miWinVTile
             // 
             this.miWinVTile.Name = "miWinVTile";
             this.miWinVTile.Size = new System.Drawing.Size(158, 22);
             this.miWinVTile.Text = "miWinVTile";
-            this.miWinVTile.Click += new System.EventHandler(this.miWinVTileClick);
+            this.miWinVTile.Click += new System.EventHandler(this.miWinVTile_Click);
             // 
             // miWinMinimize
             // 
             this.miWinMinimize.Name = "miWinMinimize";
             this.miWinMinimize.Size = new System.Drawing.Size(158, 22);
             this.miWinMinimize.Text = "miWinMinimize";
-            this.miWinMinimize.Click += new System.EventHandler(this.miWinMinimizeClick);
+            this.miWinMinimize.Click += new System.EventHandler(this.miWinMinimize_Click);
             // 
             // miWinArrange
             // 
             this.miWinArrange.Name = "miWinArrange";
             this.miWinArrange.Size = new System.Drawing.Size(158, 22);
             this.miWinArrange.Text = "miWinArrange";
-            this.miWinArrange.Click += new System.EventHandler(this.miWinArrangeClick);
+            this.miWinArrange.Click += new System.EventHandler(this.miWinArrange_Click);
             // 
             // miHelp
             // 
@@ -878,7 +878,7 @@ namespace GKUI
             this.miContext.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.miContext.Size = new System.Drawing.Size(148, 22);
             this.miContext.Text = "miContext";
-            this.miContext.Click += new System.EventHandler(this.miContextClick);
+            this.miContext.Click += new System.EventHandler(this.miContext_Click);
             // 
             // N12
             // 
@@ -890,14 +890,14 @@ namespace GKUI
             this.miLogSend.Name = "miLogSend";
             this.miLogSend.Size = new System.Drawing.Size(148, 22);
             this.miLogSend.Text = "miLogSend";
-            this.miLogSend.Click += new System.EventHandler(this.miLogSendClick);
+            this.miLogSend.Click += new System.EventHandler(this.miLogSend_Click);
             // 
             // miLogView
             // 
             this.miLogView.Name = "miLogView";
             this.miLogView.Size = new System.Drawing.Size(148, 22);
             this.miLogView.Text = "miLogView";
-            this.miLogView.Click += new System.EventHandler(this.miLogViewClick);
+            this.miLogView.Click += new System.EventHandler(this.miLogView_Click);
             // 
             // N13
             // 
@@ -909,7 +909,7 @@ namespace GKUI
             this.miAbout.Name = "miAbout";
             this.miAbout.Size = new System.Drawing.Size(148, 22);
             this.miAbout.Text = "miAbout";
-            this.miAbout.Click += new System.EventHandler(this.miAboutClick);
+            this.miAbout.Click += new System.EventHandler(this.miAbout_Click);
             // 
             // miFileSave
             // 

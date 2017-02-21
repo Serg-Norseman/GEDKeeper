@@ -34,7 +34,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class RelationshipCalculatorDlg : Form
+    public sealed partial class RelationshipCalculatorDlg : Form
     {
         private readonly IBaseWindow fBase;
 
@@ -45,67 +45,67 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
-            this.btnClose.Image = GKResources.iBtnCancel;
+            btnClose.Image = GKResources.iBtnCancel;
 
             // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
-            this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            this.btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            this.btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            this.lblKinship.Text = LangMan.LS(LSID.LSID_Kinship);
+            Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
+            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            lblKinship.Text = LangMan.LS(LSID.LSID_Kinship);
 
-            this.SetRec1(null);
-            this.SetRec2(null);
+            SetRec1(null);
+            SetRec2(null);
         }
 
         private void SetRec1(GEDCOMIndividualRecord value)
         {
-            this.fRec1 = value;
-            this.Solve();
+            fRec1 = value;
+            Solve();
         }
 
         private void SetRec2(GEDCOMIndividualRecord value)
         {
-            this.fRec2 = value;
-            this.Solve();
+            fRec2 = value;
+            Solve();
         }
 
         private void Solve()
         {
-            if (this.fRec1 == null) {
-                this.Lab1.Text = @"XXX1";
-                this.Edit1.Text = "";
+            if (fRec1 == null) {
+                Lab1.Text = @"XXX1";
+                Edit1.Text = "";
             } else {
-                this.Lab1.Text = this.fRec1.XRef;
-                this.Edit1.Text = GKUtils.GetNameString(this.fRec1, true, false);
+                Lab1.Text = fRec1.XRef;
+                Edit1.Text = GKUtils.GetNameString(fRec1, true, false);
             }
 
-            if (this.fRec2 == null) {
-                this.Lab2.Text = @"XXX2";
-                this.Edit2.Text = "";
+            if (fRec2 == null) {
+                Lab2.Text = @"XXX2";
+                Edit2.Text = "";
             } else {
-                this.Lab2.Text = this.fRec2.XRef;
-                this.Edit2.Text = GKUtils.GetNameString(this.fRec2, true, false);
+                Lab2.Text = fRec2.XRef;
+                Edit2.Text = GKUtils.GetNameString(fRec2, true, false);
             }
 
-            if (this.fRec1 != null && this.fRec2 != null) {
+            if (fRec1 != null && fRec2 != null) {
                 txtResult.Text = "???";
 
-                using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(fBase.Context, this.fRec1)) {
+                using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(fBase.Context, fRec1)) {
                     if (kinsGraph.IsEmpty()) {
                         txtResult.Text = "Empty graph.";
                         return;
                     }
 
-                    if (kinsGraph.FindVertex(this.fRec2.XRef) == null) {
+                    if (kinsGraph.FindVertex(fRec2.XRef) == null) {
                         txtResult.Text = "These individuals have no common relatives.";
                         return;
                     }
 
-                    kinsGraph.SetTreeRoot(this.fRec1);
-                    txtResult.Text = kinsGraph.GetRelationship(this.fRec2, true);
+                    kinsGraph.SetTreeRoot(fRec1);
+                    txtResult.Text = kinsGraph.GetRelationship(fRec2, true);
 
                     #if DEBUG_SOLVE
                     txtResult.Text += "\r\n" + kinsGraph.IndividualsPath;
@@ -116,14 +116,14 @@ namespace GKUI.Dialogs
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
-            if (iRec != null) this.SetRec1(iRec);
+            GEDCOMIndividualRecord iRec = fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            if (iRec != null) SetRec1(iRec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
-            if (iRec != null) this.SetRec2(iRec);
+            GEDCOMIndividualRecord iRec = fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            if (iRec != null) SetRec2(iRec);
         }
     }
 }

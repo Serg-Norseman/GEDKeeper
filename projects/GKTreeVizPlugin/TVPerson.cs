@@ -26,117 +26,117 @@ using GKCommon.GEDCOM;
 
 namespace GKTreeVizPlugin
 {
-	internal enum TVPersonType
-	{
-		Patriarch,
-		Spouse,
-		Child
-	}
+    internal enum TVPersonType
+    {
+        Patriarch,
+        Spouse,
+        Child
+    }
 
-	internal class TVPerson
-	{
-		private static int NextIdx = 1;
-		private static readonly Random random = new Random();
-		
-		public readonly int Idx;
+    internal class TVPerson
+    {
+        private static int NextIdx = 1;
+        private static readonly Random random = new Random();
+        
+        public readonly int Idx;
 
-		public TVPerson Parent;
-		public int BirthYear, DeathYear;
-		public int DescGenerations;
-		public TVPersonType Type;
+        public TVPerson Parent;
+        public int BirthYear, DeathYear;
+        public int DescGenerations;
+        public TVPersonType Type;
 
-		public readonly GEDCOMIndividualRecord IRec;
-		public readonly GEDCOMSex Sex;
-		public readonly List<TVPerson> Spouses;
-		public readonly List<TVPerson> Childs;
+        public readonly GEDCOMIndividualRecord IRec;
+        public readonly GEDCOMSex Sex;
+        public readonly List<TVPerson> Spouses;
+        public readonly List<TVPerson> Childs;
 
-		public readonly int BeautySpouses;
-		public readonly int BeautyChilds;
+        public readonly int BeautySpouses;
+        public readonly int BeautyChilds;
 
-		public float BaseRadius;
-		public float GenSlice;
-		public bool IsVisible;
-		public PointF Pt;
-		
-		public TVStem Stem;
+        public float BaseRadius;
+        public float GenSlice;
+        public bool IsVisible;
+        public PointF Pt;
+        
+        public TVStem Stem;
 
-		public TVPerson(TVPerson parent, GEDCOMIndividualRecord iRec)
-		{
-			this.Idx = NextIdx++;
+        public TVPerson(TVPerson parent, GEDCOMIndividualRecord iRec)
+        {
+            Idx = NextIdx++;
 
-			this.Parent = parent;
-			this.IRec = iRec;
-			this.Sex = iRec.Sex;
+            Parent = parent;
+            IRec = iRec;
+            Sex = iRec.Sex;
 
-			this.Spouses = new List<TVPerson>();
-			this.Childs = new List<TVPerson>();
-			this.BeautySpouses = random.Next(0, 360);
-			this.BeautyChilds = random.Next(0, 360);
-		}
-	}
+            Spouses = new List<TVPerson>();
+            Childs = new List<TVPerson>();
+            BeautySpouses = random.Next(0, 360);
+            BeautyChilds = random.Next(0, 360);
+        }
+    }
 
-	internal class TVStem
-	{
-		private static readonly Random random = new Random();
+    internal class TVStem
+    {
+        private static readonly Random random = new Random();
 
-		public readonly List<TVPerson> Spouses;
-		public readonly List<TVPerson> Childs;
+        public readonly List<TVPerson> Spouses;
+        public readonly List<TVPerson> Childs;
 
-		public readonly int BeautySpouses;
-		public readonly int BeautyChilds;
+        public readonly int BeautySpouses;
+        public readonly int BeautyChilds;
 
-		public PointF Pt;
-		public float BaseRadius;
-		public float GenSlice;
-		//public bool IsFixedIntersection;
+        public PointF Pt;
+        public float BaseRadius;
+        public float GenSlice;
+        //public bool IsFixedIntersection;
 
-		public TVStem()
-		{
-			this.Spouses = new List<TVPerson>();
-			this.Childs = new List<TVPerson>();
+        public TVStem()
+        {
+            Spouses = new List<TVPerson>();
+            Childs = new List<TVPerson>();
 
-			this.BeautySpouses = random.Next(0, 360);
-			this.BeautyChilds = random.Next(0, 360);
-		}
+            BeautySpouses = random.Next(0, 360);
+            BeautyChilds = random.Next(0, 360);
+        }
 
-		public void addSpouse(TVPerson spouse)
-		{
-			// first item
-			if (this.Spouses.Count == 0)
-			{
-				this.BaseRadius = spouse.BaseRadius;
-				this.GenSlice = spouse.GenSlice;
-				this.Pt = spouse.Pt;
-			}
+        public void AddSpouse(TVPerson spouse)
+        {
+            // first item
+            if (Spouses.Count == 0)
+            {
+                BaseRadius = spouse.BaseRadius;
+                GenSlice = spouse.GenSlice;
+                Pt = spouse.Pt;
+            }
 
-			spouse.Stem = this;
-			this.Spouses.Add(spouse);
-		}
+            spouse.Stem = this;
+            Spouses.Add(spouse);
+        }
 
-		public void addChild(TVPerson child)
-		{
-			child.Stem = this;
-			this.Childs.Add(child);
-		}
+        public void AddChild(TVPerson child)
+        {
+            child.Stem = this;
+            Childs.Add(child);
+        }
 
-		public void update()
-		{
-			// to recalculate the coordinates of the spouses, because the coordinates of this person could change
-			// "genSlice / 3" - it's radius of spouses
-			PointF[] pts = TreeVizControl.getCirclePoints(this.BeautySpouses, this.Pt, this.Spouses.Count, this.GenSlice / 3);
-			for (int i = 0, count = this.Spouses.Count; i < count; i++)
-			{
-				TVPerson spp = this.Spouses[i];
-				spp.Pt = pts[i];
-			}
+        public void Update()
+        {
+            // to recalculate the coordinates of the spouses, because the coordinates of this person could change
+            // "genSlice / 3" - it's radius of spouses
+            PointF[] pts = TreeVizControl.GetCirclePoints(BeautySpouses, Pt, Spouses.Count, GenSlice / 3);
+            for (int i = 0, count = Spouses.Count; i < count; i++)
+            {
+                TVPerson spp = Spouses[i];
+                spp.Pt = pts[i];
+            }
 
-			// recalculate coordinates of visible children
-			pts = TreeVizControl.getCirclePoints(this.BeautyChilds, this.Pt, this.Childs.Count, this.BaseRadius / 2);
-			for (int i = 0, count = this.Childs.Count; i < count; i++)
-			{
-				TVPerson chp = this.Childs[i];
-				chp.Pt = pts[i];
-			}
-		}
-	}
+            // recalculate coordinates of visible children
+            pts = TreeVizControl.GetCirclePoints(BeautyChilds, Pt, Childs.Count, BaseRadius / 2);
+            for (int i = 0, count = Childs.Count; i < count; i++)
+            {
+                TVPerson chp = Childs[i];
+                chp.Pt = pts[i];
+            }
+        }
+    }
 }

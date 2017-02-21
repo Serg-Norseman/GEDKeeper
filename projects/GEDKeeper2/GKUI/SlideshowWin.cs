@@ -44,45 +44,45 @@ namespace GKUI
 
         public SlideshowWin(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.tbStart.Image = GKResources.iStart;
-            this.tbPrev.Image = GKResources.iLeft1;
-            this.tbNext.Image = GKResources.iRight1;
+            tbStart.Image = GKResources.iStart;
+            tbPrev.Image = GKResources.iLeft1;
+            tbNext.Image = GKResources.iRight1;
 
-            this.SuspendLayout();
-            this.fImageCtl = new ImageBox();
-            this.fImageCtl.Dock = DockStyle.Fill;
-            this.fImageCtl.Location = new Point(0, 0);
-            this.fImageCtl.Size = new Size(100, 100);
-            base.Controls.Add(this.fImageCtl);
-            base.Controls.SetChildIndex(this.fImageCtl, 0);
-            this.ResumeLayout(false);
+            SuspendLayout();
+            fImageCtl = new ImageBox();
+            fImageCtl.Dock = DockStyle.Fill;
+            fImageCtl.Location = new Point(0, 0);
+            fImageCtl.Size = new Size(100, 100);
+            Controls.Add(fImageCtl);
+            Controls.SetChildIndex(fImageCtl, 0);
+            ResumeLayout(false);
 
-            this.fImageCtl.BackColor = SystemColors.ControlDark;
-            this.fImageCtl.Margin = new Padding(4);
-            this.fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            this.fImageCtl.ImageBorderColor = Color.AliceBlue;
-            this.fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
+            fImageCtl.BackColor = SystemColors.ControlDark;
+            fImageCtl.Margin = new Padding(4);
+            fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
+            fImageCtl.ImageBorderColor = Color.AliceBlue;
+            fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
 
-            this.WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Maximized;
 
-            this.SetLang();
+            SetLang();
 
-            this.fBase = baseWin;
-            this.fFileRefs = new List<GEDCOMFileReferenceWithTitle>();
-            this.fCurrentIndex = -1;
+            fBase = baseWin;
+            fFileRefs = new List<GEDCOMFileReferenceWithTitle>();
+            fCurrentIndex = -1;
 
-            this.LoadList();
+            LoadList();
         }
 
         private void SlideshowWin_Load(object sender, System.EventArgs e)
         {
-            if (this.fFileRefs.Count > 0) {
-                this.fCurrentIndex = 0;
-                this.SetFileRef();
+            if (fFileRefs.Count > 0) {
+                fCurrentIndex = 0;
+                SetFileRef();
             } else {
-                this.UpdateControls();
+                UpdateControls();
             }
         }
 
@@ -94,36 +94,36 @@ namespace GKUI
         private void LoadList()
         {
             GEDCOMRecord record;
-            var enumerator = this.fBase.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
+            var enumerator = fBase.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
             while (enumerator.MoveNext(out record)) {
                 GEDCOMMultimediaRecord mediaRec = (GEDCOMMultimediaRecord)record;
                 GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
                 MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
                 if (mmKind == MultimediaKind.mkImage) {
-                    this.fFileRefs.Add(fileRef);
+                    fFileRefs.Add(fileRef);
                 }
             }
         }
 
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_Slideshow);
-            this.tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
-            this.tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
+            Text = LangMan.LS(LSID.LSID_Slideshow);
+            tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
 
-            //this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-            //this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-            //this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            //fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+            //fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+            //fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
         private void SetFileRef()
         {
             if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
 
-            GEDCOMFileReferenceWithTitle fileRef = this.fFileRefs[this.fCurrentIndex];
+            GEDCOMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
 
-            this.fCurrentText = fileRef.Title;
+            fCurrentText = fileRef.Title;
 
             switch (fileRef.MultimediaFormat)
             {
@@ -135,16 +135,16 @@ namespace GKUI
                 case GEDCOMMultimediaFormat.mfTGA:
                 case GEDCOMMultimediaFormat.mfPNG:
                     {
-                        Image img = this.fBase.Context.LoadMediaImage(fileRef, false);
+                        Image img = fBase.Context.LoadMediaImage(fileRef, false);
                         if (img != null) {
-                            this.fImageCtl.Image = img;
-                            this.fImageCtl.ZoomToFit();
+                            fImageCtl.Image = img;
+                            fImageCtl.ZoomToFit();
                         }
                         break;
                     }
             }
 
-            this.UpdateControls();
+            UpdateControls();
         }
 
         private void tsbStart_Click(object sender, System.EventArgs e)
@@ -162,41 +162,41 @@ namespace GKUI
 
         private void tsbPrev_Click(object sender, System.EventArgs e)
         {
-            this.fCurrentIndex--;
-            this.SetFileRef();
+            fCurrentIndex--;
+            SetFileRef();
         }
 
         private void tsbNext_Click(object sender, System.EventArgs e)
         {
-            this.fCurrentIndex++;
-            this.SetFileRef();
+            fCurrentIndex++;
+            SetFileRef();
         }
 
         private void UpdateControls()
         {
-            tbStart.Enabled = (this.fFileRefs.Count > 0);
-            tbPrev.Enabled = (this.fCurrentIndex > 0);
-            tbNext.Enabled = (this.fCurrentIndex < this.fFileRefs.Count - 1);
+            tbStart.Enabled = (fFileRefs.Count > 0);
+            tbPrev.Enabled = (fCurrentIndex > 0);
+            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
 
             MainWin.Instance.UpdateControls(false);
         }
 
         private void Timer1Tick(object sender, System.EventArgs e)
         {
-            if (this.fCurrentIndex < this.fFileRefs.Count - 1) {
-                this.fCurrentIndex++;
+            if (fCurrentIndex < fFileRefs.Count - 1) {
+                fCurrentIndex++;
             } else {
-                this.fCurrentIndex = 0;
+                fCurrentIndex = 0;
             }
 
-            this.SetFileRef();
+            SetFileRef();
         }
 
         #region IWorkWindow implementation
 
         public string GetStatusString()
         {
-            return string.Format("{0} / {1} [{2}]", this.fCurrentIndex + 1, this.fFileRefs.Count, this.fCurrentText);
+            return string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
         }
 
         public void UpdateView()

@@ -30,26 +30,26 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class NoteEditDlg : Form, IBaseEditor
+    public sealed partial class NoteEditDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
         private GEDCOMNoteRecord fNoteRecord;
 
         public GEDCOMNoteRecord NoteRecord
         {
-            get { return this.fNoteRecord; }
-            set { this.SetNoteRecord(value); }
+            get { return fNoteRecord; }
+            set { SetNoteRecord(value); }
         }
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         private void SetNoteRecord(GEDCOMNoteRecord value)
         {
-            this.fNoteRecord = value;
-            this.txtNote.Text = this.fNoteRecord.Note.Text.Trim();
+            fNoteRecord = value;
+            txtNote.Text = fNoteRecord.Note.Text.Trim();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -63,35 +63,35 @@ namespace GKUI.Dialogs
                 }
                 if (0 != length)
                 {
-                    this.fNoteRecord.SetNotesArray(this.txtNote.Lines);
-                    this.fBase.ChangeRecord(this.fNoteRecord);
-                    base.DialogResult = DialogResult.OK;
+                    fNoteRecord.SetNotesArray(txtNote.Lines);
+                    fBase.ChangeRecord(fNoteRecord);
+                    DialogResult = DialogResult.OK;
                 }
                 else
                 {
-                    base.DialogResult = DialogResult.Cancel;
+                    DialogResult = DialogResult.Cancel;
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
         public NoteEditDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_Note);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_Note);
         }
     }
 }

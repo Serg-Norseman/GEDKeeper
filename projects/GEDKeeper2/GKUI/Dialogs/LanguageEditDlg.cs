@@ -30,7 +30,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class LanguageEditDlg : Form
+    public sealed partial class LanguageEditDlg : Form
     {
         private GEDCOMLanguageID fLanguageID;
 

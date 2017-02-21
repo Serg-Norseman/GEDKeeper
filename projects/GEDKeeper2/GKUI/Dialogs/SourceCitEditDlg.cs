@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class SourceCitEditDlg : Form, IBaseEditor
+    public sealed partial class SourceCitEditDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
@@ -41,36 +41,36 @@ namespace GKUI.Dialogs
 
         public GEDCOMSourceCitation SourceCitation
         {
-            get { return this.fSourceCitation; }
-            set { this.SetSourceCitation(value); }
+            get { return fSourceCitation; }
+            set { SetSourceCitation(value); }
         }
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                int idx = this.fSourcesList.IndexOf(this.cmbSource.Text);
-                GEDCOMSourceRecord src = ((idx < 0) ? null : (this.fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
+                int idx = fSourcesList.IndexOf(cmbSource.Text);
+                GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
                 if (src == null) {
                     GKUtils.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
-                    base.DialogResult = DialogResult.None;
+                    DialogResult = DialogResult.None;
                 } else {
-                    this.fSourceCitation.Value = src;
-                    this.fSourceCitation.Page = this.txtPage.Text;
-                    this.fSourceCitation.CertaintyAssessment = this.txtCertainty.SelectedIndex;
-                    base.DialogResult = DialogResult.OK;
+                    fSourceCitation.Value = src;
+                    fSourceCitation.Page = txtPage.Text;
+                    fSourceCitation.CertaintyAssessment = txtCertainty.SelectedIndex;
+                    DialogResult = DialogResult.OK;
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -80,9 +80,9 @@ namespace GKUI.Dialogs
             GEDCOMSourceRecord src = fBase.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
             if (src == null) return;
             
-            this.fBase.Context.GetSourcesList(this.fSourcesList);
-            this.RefreshSourcesList("");
-            this.cmbSource.Text = src.FiledByEntry;
+            fBase.Context.GetSourcesList(fSourcesList);
+            RefreshSourcesList("");
+            cmbSource.Text = src.FiledByEntry;
         }
 
         // FIXME
@@ -93,84 +93,84 @@ namespace GKUI.Dialogs
 
         private void cbSource_KeyUp(object sender, KeyEventArgs e)
         {
-            this.RefreshSourcesList(this.cmbSource.Text);
-            this.cmbSource.SelectionStart = this.cmbSource.Text.Length;
+            RefreshSourcesList(cmbSource.Text);
+            cmbSource.SelectionStart = cmbSource.Text.Length;
         }
 
         private void RefreshSourcesList(string filter)
         {
-            this.cmbSource.BeginUpdate();
+            cmbSource.BeginUpdate();
             try
             {
-                this.cmbSource.Items.Clear();
+                cmbSource.Items.Clear();
 
                 string flt = "*" + filter + "*";
 
-                int num = this.fSourcesList.Count;
+                int num = fSourcesList.Count;
                 for (int i = 0; i < num; i++) {
-                    string st = this.fSourcesList[i];
+                    string st = fSourcesList[i];
 
                     if (filter == "" || GKUtils.MatchesMask(st, flt))
                     {
-                        this.cmbSource.Items.Add(new GKComboItem(st, this.fSourcesList.GetObject(i)));
+                        cmbSource.Items.Add(new GKComboItem(st, fSourcesList.GetObject(i)));
                     }
                 }
             }
             finally
             {
-                this.cmbSource.EndUpdate();
+                cmbSource.EndUpdate();
             }
         }
 
         private void SetSourceCitation(GEDCOMSourceCitation value)
         {
-            this.fSourceCitation = value;
+            fSourceCitation = value;
 
-            GEDCOMSourceRecord src = (this.fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null) this.cmbSource.Text = src.FiledByEntry;
+            GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
+            if (src != null) cmbSource.Text = src.FiledByEntry;
 
-            this.txtPage.Text = this.fSourceCitation.Page;
-            this.txtCertainty.SelectedIndex = this.fSourceCitation.CertaintyAssessment;
+            txtPage.Text = fSourceCitation.Page;
+            txtCertainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fSourcesList.Dispose();
-                if (this.components != null) this.components.Dispose();
+                fSourcesList.Dispose();
+                if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public SourceCitEditDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
-            this.btnSourceAdd.Image = GKResources.iRecNew;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnSourceAdd.Image = GKResources.iRecNew;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
             {
-                this.txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
+                txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
 
-            this.fSourcesList = new StringList();
-            this.fBase.Context.GetSourcesList(this.fSourcesList);
-            this.RefreshSourcesList("");
+            fSourcesList = new StringList();
+            fBase.Context.GetSourcesList(fSourcesList);
+            RefreshSourcesList("");
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_WinSourceCitEdit);
-            this.lblSource.Text = LangMan.LS(LSID.LSID_Source);
-            this.lblPage.Text = LangMan.LS(LSID.LSID_Page);
-            this.lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinSourceCitEdit);
+            lblSource.Text = LangMan.LS(LSID.LSID_Source);
+            lblPage.Text = LangMan.LS(LSID.LSID_Page);
+            lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
 
-            this.toolTip1.SetToolTip(this.btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
+            toolTip1.SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
         }
     }
 }

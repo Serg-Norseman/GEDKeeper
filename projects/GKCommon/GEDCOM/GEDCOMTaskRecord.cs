@@ -24,31 +24,31 @@ namespace GKCommon.GEDCOM
     {
         public string Goal
         {
-            get { return base.GetTagStringValue("_GOAL"); }
-            set { base.SetTagStringValue("_GOAL", value); }
+            get { return GetTagStringValue("_GOAL"); }
+            set { SetTagStringValue("_GOAL", value); }
         }
 
         public GKResearchPriority Priority
         {
-            get { return GEDCOMUtils.GetPriorityVal(base.GetTagStringValue("_PRIORITY")); }
-            set { base.SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
+            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue("_PRIORITY")); }
+            set { SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
         }
 
         public GEDCOMDateExact StartDate
         {
-            get { return base.TagClass("_STARTDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STARTDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
         }
 
         public GEDCOMDateExact StopDate
         {
-            get { return base.TagClass("_STOPDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STOPDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtTask);
-            base.SetName("_TASK");
+            SetRecordType(GEDCOMRecordType.rtTask);
+            SetName("_TASK");
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -80,8 +80,8 @@ namespace GKCommon.GEDCOM
 
         public void GetTaskGoal(out GKGoalType goalType, out GEDCOMRecord goalRec)
         {
-            GEDCOMTree tree = this.Owner;
-            goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(this.Goal));
+            GEDCOMTree tree = Owner;
+            goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             if (goalRec is GEDCOMIndividualRecord)
             {

@@ -65,7 +65,7 @@ namespace GKSamplePlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
+                fLangMan = fHost.CreateLangMan(this);
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace GKSamplePlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
                 // Implement any startup code here
             }
             catch (Exception ex)

@@ -58,59 +58,59 @@ namespace GKUI.Dialogs
 
         public GEDCOMIndividualRecord Person
         {
-            get { return this.fPerson; }
-            set { this.SetPerson(value); }
+            get { return fPerson; }
+            set { SetPerson(value); }
         }
 
         public GEDCOMIndividualRecord Target
         {
-            get { return this.fTarget; }
-            set { this.SetTarget(value); }
+            get { return fTarget; }
+            set { SetTarget(value); }
         }
 
         public TargetMode TargetMode
         {
-            get { return this.fTargetMode; }
-            set { this.fTargetMode = value; }
+            get { return fTargetMode; }
+            set { fTargetMode = value; }
         }
 
 
         private void SetPerson(GEDCOMIndividualRecord value)
         {
-            this.fPerson = value;
+            fPerson = value;
 
             try
             {
                 string fam, nam, pat;
-                GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat, false);
-                this.txtSurname.Text = fam;
-                this.txtName.Text = nam;
-                this.cmbPatronymic.Text = pat;
+                GKUtils.GetNameParts(fPerson, out fam, out nam, out pat, false);
+                txtSurname.Text = fam;
+                txtName.Text = nam;
+                cmbPatronymic.Text = pat;
 
-                this.cmbSex.SelectedIndex = (sbyte)this.fPerson.Sex;
-                this.chkPatriarch.Checked = this.fPerson.Patriarch;
-                this.chkBookmark.Checked = this.fPerson.Bookmark;
+                cmbSex.SelectedIndex = (sbyte)fPerson.Sex;
+                chkPatriarch.Checked = fPerson.Patriarch;
+                chkBookmark.Checked = fPerson.Bookmark;
 
-                this.cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
-                this.cmbRestriction.SelectedIndex = (sbyte)this.fPerson.Restriction;
-                this.cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+                cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
+                cmbRestriction.SelectedIndex = (sbyte)fPerson.Restriction;
+                cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
-                if (this.fPerson.PersonalNames.Count > 0)
+                if (fPerson.PersonalNames.Count > 0)
                 {
-                    GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-                    this.txtNamePrefix.Text = np.Pieces.Prefix;
-                    this.txtNickname.Text = np.Pieces.Nickname;
-                    this.txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
-                    this.txtNameSuffix.Text = np.Pieces.Suffix;
+                    GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                    txtNamePrefix.Text = np.Pieces.Prefix;
+                    txtNickname.Text = np.Pieces.Nickname;
+                    txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
+                    txtNameSuffix.Text = np.Pieces.Suffix;
 
-                    this.txtMarriedSurname.Text = np.Pieces.MarriedName;
+                    txtMarriedSurname.Text = np.Pieces.MarriedName;
                 }
 
-                this.UpdateControls(true);
+                UpdateControls(true);
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
+                fBase.Host.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
             }
         }
 
@@ -118,27 +118,27 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fTarget = value;
+                fTarget = value;
 
-                if (this.fTarget != null)
+                if (fTarget != null)
                 {
-                    ICulture culture = this.fBase.Context.Culture;
+                    ICulture culture = fBase.Context.Culture;
                     INamesTable namesTable = MainWin.Instance.NamesTable;
 
                     string surname, name, patronymic;
-                    GKUtils.GetNameParts(this.fTarget, out surname, out name, out patronymic);
-                    this.txtSurname.Text = surname;
-                    GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
+                    GKUtils.GetNameParts(fTarget, out surname, out name, out patronymic);
+                    txtSurname.Text = surname;
+                    GEDCOMSex sx = (GEDCOMSex)cmbSex.SelectedIndex;
 
-                    switch (this.fTargetMode) {
+                    switch (fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                this.SetMarriedSurname(surname);
+                                SetMarriedSurname(surname);
                             }
                             if (culture.HasPatronymic()) {
-                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
-                                this.cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
-                                this.cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
+                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
+                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
+                                cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
                             }
                             break;
 
@@ -146,171 +146,171 @@ namespace GKUI.Dialogs
                             switch (sx) {
                                 case GEDCOMSex.svMale:
                                     if (culture.HasPatronymic()) {
-                                        this.txtName.Text = namesTable.GetNameByPatronymic(patronymic);
+                                        txtName.Text = namesTable.GetNameByPatronymic(patronymic);
                                     }
                                     break;
 
                                 case GEDCOMSex.svFemale:
-                                    this.SetMarriedSurname(surname);
+                                    SetMarriedSurname(surname);
                                     break;
                             }
                             break;
 
                         case TargetMode.tmWife:
-                            this.SetMarriedSurname(surname);
+                            SetMarriedSurname(surname);
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonEditDlg.SetTarget("+this.fTargetMode.ToString()+"): " + ex.Message);
+                fBase.Host.LogWrite("PersonEditDlg.SetTarget("+fTargetMode.ToString()+"): " + ex.Message);
             }
         }
 
         private void SetMarriedSurname(string husbSurname)
         {
             string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
-            if (this.IsExtendedWomanSurname()) {
-                this.txtMarriedSurname.Text = surname;
+            if (IsExtendedWomanSurname()) {
+                txtMarriedSurname.Text = surname;
             } else {
-                this.txtSurname.Text = '(' + surname + ')';
+                txtSurname.Text = '(' + surname + ')';
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (this.cmbSex.SelectedIndex == (sbyte)GEDCOMSex.svFemale);
+                (cmbSex.SelectedIndex == (sbyte)GEDCOMSex.svFemale);
             return result;
         }
 
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!this.IsExtendedWomanSurname()) {
-                this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-                this.txtMarriedSurname.Enabled = false;
+            if (!IsExtendedWomanSurname()) {
+                lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+                txtMarriedSurname.Enabled = false;
             } else {
-                this.lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
-                this.txtMarriedSurname.Enabled = true;
+                lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                txtMarriedSurname.Enabled = true;
             }
 
-            this.UpdatePortrait(true);
+            UpdatePortrait(true);
         }
 
         private void UpdateControls(bool totalUpdate = false)
         {
-            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            bool locked = (cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
 
-            if (this.fPerson.ChildToFamilyLinks.Count != 0)
+            if (fPerson.ChildToFamilyLinks.Count != 0)
             {
-                GEDCOMFamilyRecord family = this.fPerson.ChildToFamilyLinks[0].Family;
-                this.btnParentsAdd.Enabled = false;
-                this.btnParentsEdit.Enabled = true && !locked;
-                this.btnParentsDelete.Enabled = true && !locked;
+                GEDCOMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                btnParentsAdd.Enabled = false;
+                btnParentsEdit.Enabled = true && !locked;
+                btnParentsDelete.Enabled = true && !locked;
 
                 GEDCOMIndividualRecord relPerson = family.GetHusband();
                 if (relPerson != null)
                 {
-                    this.btnFatherAdd.Enabled = false;
-                    this.btnFatherDelete.Enabled = true && !locked;
-                    this.btnFatherSel.Enabled = true && !locked;
-                    this.txtFather.Text = GKUtils.GetNameString(relPerson, true, false);
+                    btnFatherAdd.Enabled = false;
+                    btnFatherDelete.Enabled = true && !locked;
+                    btnFatherSel.Enabled = true && !locked;
+                    txtFather.Text = GKUtils.GetNameString(relPerson, true, false);
                 }
                 else
                 {
-                    this.btnFatherAdd.Enabled = true && !locked;
-                    this.btnFatherDelete.Enabled = false;
-                    this.btnFatherSel.Enabled = false;
-                    this.txtFather.Text = "";
+                    btnFatherAdd.Enabled = true && !locked;
+                    btnFatherDelete.Enabled = false;
+                    btnFatherSel.Enabled = false;
+                    txtFather.Text = "";
                 }
 
                 relPerson = family.GetWife();
                 if (relPerson != null)
                 {
-                    this.btnMotherAdd.Enabled = false;
-                    this.btnMotherDelete.Enabled = true && !locked;
-                    this.btnMotherSel.Enabled = true && !locked;
-                    this.txtMother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    btnMotherAdd.Enabled = false;
+                    btnMotherDelete.Enabled = true && !locked;
+                    btnMotherSel.Enabled = true && !locked;
+                    txtMother.Text = GKUtils.GetNameString(relPerson, true, false);
                 }
                 else
                 {
-                    this.btnMotherAdd.Enabled = true && !locked;
-                    this.btnMotherDelete.Enabled = false;
-                    this.btnMotherSel.Enabled = false;
-                    this.txtMother.Text = "";
+                    btnMotherAdd.Enabled = true && !locked;
+                    btnMotherDelete.Enabled = false;
+                    btnMotherSel.Enabled = false;
+                    txtMother.Text = "";
                 }
             }
             else
             {
-                this.btnParentsAdd.Enabled = true && !locked;
-                this.btnParentsEdit.Enabled = false;
-                this.btnParentsDelete.Enabled = false;
+                btnParentsAdd.Enabled = true && !locked;
+                btnParentsEdit.Enabled = false;
+                btnParentsDelete.Enabled = false;
 
-                this.btnFatherAdd.Enabled = true && !locked;
-                this.btnFatherDelete.Enabled = false;
-                this.btnFatherSel.Enabled = false;
+                btnFatherAdd.Enabled = true && !locked;
+                btnFatherDelete.Enabled = false;
+                btnFatherSel.Enabled = false;
 
-                this.btnMotherAdd.Enabled = true && !locked;
-                this.btnMotherDelete.Enabled = false;
-                this.btnMotherSel.Enabled = false;
+                btnMotherAdd.Enabled = true && !locked;
+                btnMotherDelete.Enabled = false;
+                btnMotherSel.Enabled = false;
 
-                this.txtFather.Text = "";
-                this.txtMother.Text = "";
+                txtFather.Text = "";
+                txtMother.Text = "";
             }
 
             if (totalUpdate) {
-                this.fEventsList.DataList = this.fPerson.Events.GetEnumerator();
-                this.fNotesList.DataList = this.fPerson.Notes.GetEnumerator();
-                this.fMediaList.DataList = this.fPerson.MultimediaLinks.GetEnumerator();
-                this.fSourcesList.DataList = this.fPerson.SourceCitations.GetEnumerator();
-                this.UpdateSpousesSheet();
-                this.UpdateAssociationsSheet();
-                this.UpdateGroupsSheet();
-                this.UpdateURefsSheet();
-                this.UpdateNamesSheet();
+                fEventsList.DataList = fPerson.Events.GetEnumerator();
+                fNotesList.DataList = fPerson.Notes.GetEnumerator();
+                fMediaList.DataList = fPerson.MultimediaLinks.GetEnumerator();
+                fSourcesList.DataList = fPerson.SourceCitations.GetEnumerator();
+                UpdateSpousesSheet();
+                UpdateAssociationsSheet();
+                UpdateGroupsSheet();
+                UpdateURefsSheet();
+                UpdateNamesSheet();
             }
 
-            this.UpdatePortrait(totalUpdate);
+            UpdatePortrait(totalUpdate);
 
             // controls lock
-            this.txtName.Enabled = !locked;
-            this.cmbPatronymic.Enabled = !locked;
-            this.txtSurname.Enabled = !locked;
+            txtName.Enabled = !locked;
+            cmbPatronymic.Enabled = !locked;
+            txtSurname.Enabled = !locked;
 
-            this.cmbSex.Enabled = !locked;
-            this.chkPatriarch.Enabled = !locked;
-            this.chkBookmark.Enabled = !locked;
+            cmbSex.Enabled = !locked;
+            chkPatriarch.Enabled = !locked;
+            chkBookmark.Enabled = !locked;
 
-            this.txtNamePrefix.Enabled = !locked;
-            this.txtNickname.Enabled = !locked;
-            this.txtSurnamePrefix.Enabled = !locked;
-            this.txtNameSuffix.Enabled = !locked;
+            txtNamePrefix.Enabled = !locked;
+            txtNickname.Enabled = !locked;
+            txtSurnamePrefix.Enabled = !locked;
+            txtNameSuffix.Enabled = !locked;
 
-            this.fEventsList.ReadOnly = locked;
-            this.fNotesList.ReadOnly = locked;
-            this.fMediaList.ReadOnly = locked;
-            this.fSourcesList.ReadOnly = locked;
-            this.fSpousesList.ReadOnly = locked;
-            this.fAssociationsList.ReadOnly = locked;
-            this.fGroupsList.ReadOnly = locked;
-            this.fUserRefList.ReadOnly = locked;
+            fEventsList.ReadOnly = locked;
+            fNotesList.ReadOnly = locked;
+            fMediaList.ReadOnly = locked;
+            fSourcesList.ReadOnly = locked;
+            fSpousesList.ReadOnly = locked;
+            fAssociationsList.ReadOnly = locked;
+            fGroupsList.ReadOnly = locked;
+            fUserRefList.ReadOnly = locked;
 
-            ICulture culture = this.fBase.Context.Culture;
-            this.txtSurname.Enabled = this.txtSurname.Enabled && culture.HasSurname();
-            this.cmbPatronymic.Enabled = this.cmbPatronymic.Enabled && culture.HasPatronymic();
+            ICulture culture = fBase.Context.Culture;
+            txtSurname.Enabled = txtSurname.Enabled && culture.HasSurname();
+            cmbPatronymic.Enabled = cmbPatronymic.Enabled && culture.HasPatronymic();
         }
 
         private void UpdatePortrait(bool totalUpdate)
         {
             if (fPortraitImg == null || totalUpdate) {
-                fPortraitImg = this.fBase.Context.GetPrimaryBitmap(this.fPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
+                fPortraitImg = fBase.Context.GetPrimaryBitmap(fPerson, imgPortrait.Width, imgPortrait.Height, false);
             }
 
             Image img = fPortraitImg;
             if (img == null) {
                 // using avatar's image
-                GEDCOMSex curSex = (GEDCOMSex)this.cmbSex.SelectedIndex;
+                GEDCOMSex curSex = (GEDCOMSex)cmbSex.SelectedIndex;
 
                 switch (curSex) {
                     case GEDCOMSex.svMale:
@@ -325,58 +325,58 @@ namespace GKUI.Dialogs
                         break;
                 }
             }
-            this.imgPortrait.Image = img;
+            imgPortrait.Image = img;
 
-            bool locked = (this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
-            this.btnPortraitAdd.Enabled = !locked;
-            this.btnPortraitDelete.Enabled = fPortraitImg != null && !locked;
+            bool locked = (cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            btnPortraitAdd.Enabled = !locked;
+            btnPortraitDelete.Enabled = fPortraitImg != null && !locked;
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.UpdateControls();
+            UpdateControls();
         }
 
         private void AcceptChanges()
         {
-            GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-            GKUtils.SetRusNameParts(np, this.txtSurname.Text, this.txtName.Text, this.cmbPatronymic.Text);
+            GEDCOMPersonalName np = fPerson.PersonalNames[0];
+            GKUtils.SetRusNameParts(np, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
 
             GEDCOMPersonalNamePieces pieces = np.Pieces;
-            pieces.Nickname = this.txtNickname.Text;
-            pieces.Prefix = this.txtNamePrefix.Text;
-            pieces.SurnamePrefix = this.txtSurnamePrefix.Text;
-            pieces.Suffix = this.txtNameSuffix.Text;
-            if (this.IsExtendedWomanSurname()) {
+            pieces.Nickname = txtNickname.Text;
+            pieces.Prefix = txtNamePrefix.Text;
+            pieces.SurnamePrefix = txtSurnamePrefix.Text;
+            pieces.Suffix = txtNameSuffix.Text;
+            if (IsExtendedWomanSurname()) {
                 pieces.MarriedName = txtMarriedSurname.Text;
             }
 
-            this.fPerson.Sex = (GEDCOMSex)this.cmbSex.SelectedIndex;
-            this.fPerson.Patriarch = this.chkPatriarch.Checked;
-            this.fPerson.Bookmark = this.chkBookmark.Checked;
-            this.fPerson.Restriction = (GEDCOMRestriction)this.cmbRestriction.SelectedIndex;
+            fPerson.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
+            fPerson.Patriarch = chkPatriarch.Checked;
+            fPerson.Bookmark = chkBookmark.Checked;
+            fPerson.Restriction = (GEDCOMRestriction)cmbRestriction.SelectedIndex;
 
-            if (this.fPerson.ChildToFamilyLinks.Count > 0)
+            if (fPerson.ChildToFamilyLinks.Count > 0)
             {
-                this.fPerson.ChildToFamilyLinks[0].Family.SortChilds();
+                fPerson.ChildToFamilyLinks[0].Family.SortChilds();
             }
 
-            this.fLocalUndoman.Commit();
+            fLocalUndoman.Commit();
 
-            this.fBase.ChangeRecord(this.fPerson);
+            fBase.ChangeRecord(fPerson);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.AcceptChanges();
-                base.DialogResult = DialogResult.OK;
+                AcceptChanges();
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -384,11 +384,11 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fLocalUndoman.Rollback();
+                fLocalUndoman.Rollback();
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
+                fBase.Host.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -398,8 +398,8 @@ namespace GKUI.Dialogs
             // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
             // And we need to have actual name's value for visible it in FamilyEditDlg
 
-            this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, this.fPerson, (GEDCOMSex)this.cmbSex.SelectedIndex);
-            this.fLocalUndoman.DoIndividualNameChange(this.fPerson, this.txtSurname.Text, this.txtName.Text, this.cmbPatronymic.Text);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fPerson, (GEDCOMSex)cmbSex.SelectedIndex);
+            fLocalUndoman.DoIndividualNameChange(fPerson, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
         }
 
         private GKSheetList CreateAssociationsSheet(Control owner)
@@ -412,7 +412,7 @@ namespace GKUI.Dialogs
             sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += this.ModifyAssociationsSheet;
+            sheet.OnModify += ModifyAssociationsSheet;
 
             return sheet;
         }
@@ -423,7 +423,7 @@ namespace GKUI.Dialogs
             {
                 fAssociationsList.ClearItems();
 
-                foreach (GEDCOMAssociation ast in this.fPerson.Associations) {
+                foreach (GEDCOMAssociation ast in fPerson.Associations) {
                     string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
 
                     GKListItem item = fAssociationsList.AddItem(ast.Relation, ast);
@@ -446,11 +446,11 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg(this.fBase))
+                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg(fBase))
                     {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GEDCOMAssociation(this.fBase.Tree, this.fPerson, "", "");
+                            ast = new GEDCOMAssociation(fBase.Tree, fPerson, "", "");
                         }
 
                         fmAstEdit.Association = ast;
@@ -459,7 +459,7 @@ namespace GKUI.Dialogs
                         if (!exists) {
                             if (result) {
                                 //this.fPerson.Associations.Add(ast);
-                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, this.fPerson, ast);
+                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, fPerson, ast);
                             } else {
                                 ast.Dispose();
                             }
@@ -472,21 +472,21 @@ namespace GKUI.Dialogs
                     {
                         //this.fPerson.Associations.Delete(ast);
                         //result = true;
-                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, this.fPerson, ast);
-                        this.fBase.Modified = true;
+                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, fPerson, ast);
+                        fBase.Modified = true;
                     }
                     break;
 
                 case RecordAction.raJump:
                     if (ast != null) {
-                        this.AcceptChanges();
-                        this.fBase.SelectRecordByXRef(ast.Individual.XRef);
-                        base.Close();
+                        AcceptChanges();
+                        fBase.SelectRecordByXRef(ast.Individual.XRef);
+                        Close();
                     }
                     break;
             }
 
-            if (result) this.UpdateAssociationsSheet();
+            if (result) UpdateAssociationsSheet();
         }
 
         private GKSheetList CreateURefsSheet(Control owner)
@@ -498,7 +498,7 @@ namespace GKUI.Dialogs
             sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
             sheet.Columns_EndUpdate();
 
-            sheet.OnModify += this.ModifyURefsSheet;
+            sheet.OnModify += ModifyURefsSheet;
 
             return sheet;
         }
@@ -507,10 +507,10 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fUserRefList.ClearItems();
+                fUserRefList.ClearItems();
 
-                foreach (GEDCOMUserReference uref in this.fPerson.UserReferences) {
-                    GKListItem item = this.fUserRefList.AddItem(uref.StringValue, uref);
+                foreach (GEDCOMUserReference uref in fPerson.UserReferences) {
+                    GKListItem item = fUserRefList.AddItem(uref.StringValue, uref);
                     item.AddSubItem(uref.ReferenceType);
                 }
             }
@@ -529,11 +529,11 @@ namespace GKUI.Dialogs
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (UserRefEditDlg dlg = new UserRefEditDlg(this.fBase))
+                    using (UserRefEditDlg dlg = new UserRefEditDlg(fBase))
                     {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GEDCOMUserReference(this.fBase.Tree, this.fPerson, "", "");
+                            userRef = new GEDCOMUserReference(fBase.Tree, fPerson, "", "");
                         }
 
                         dlg.UserRef = userRef;
@@ -542,7 +542,7 @@ namespace GKUI.Dialogs
                         if (!exists) {
                             if (result) {
                                 //this.fPerson.UserReferences.Add(userRef);
-                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, this.fPerson, userRef);
+                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, fPerson, userRef);
                             } else {
                                 userRef.Dispose();
                             }
@@ -561,14 +561,14 @@ namespace GKUI.Dialogs
                         {
                             //this.fPerson.UserReferences.Delete(userRef);
                             //result = true;
-                            result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, this.fPerson, userRef);
-                            this.fBase.Modified = true;
+                            result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, fPerson, userRef);
+                            fBase.Modified = true;
                         }
                         break;
                     }
             }
 
-            if (result) this.UpdateURefsSheet();
+            if (result) UpdateURefsSheet();
         }
 
         private GKSheetList CreateSpousesSheet(Control owner)
@@ -583,7 +583,7 @@ namespace GKUI.Dialogs
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                         SheetButton.lbJump, SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-            sheet.OnModify += this.ModifySpousesSheet;
+            sheet.OnModify += ModifySpousesSheet;
 
             return sheet;
         }
@@ -592,35 +592,33 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fSpousesList.ClearItems();
+                fSpousesList.ClearItems();
 
                 int idx = 0;
-                foreach (GEDCOMSpouseToFamilyLink spLink in this.fPerson.SpouseToFamilyLinks) {
+                foreach (GEDCOMSpouseToFamilyLink spLink in fPerson.SpouseToFamilyLinks) {
                     idx += 1;
 
                     GEDCOMFamilyRecord family = spLink.Family;
-                    if (family != null)
-                    {
-                        GEDCOMIndividualRecord relPerson;
-                        string relName;
+                    if (family == null) continue;
 
-                        if (this.fPerson.Sex == GEDCOMSex.svMale) {
-                            relPerson = family.GetWife();
-                            relName = LangMan.LS(LSID.LSID_UnkFemale);
-                        } else {
-                            relPerson = family.GetHusband();
-                            relName = LangMan.LS(LSID.LSID_UnkMale);
-                        }
+                    GEDCOMIndividualRecord relPerson;
+                    string relName;
 
-                        if (relPerson != null) {
-                            relName = GKUtils.GetNameString(relPerson, true, false);
-                        }
-
-                        GKListItem item = this.fSpousesList.AddItem(idx, family);
-                        item.AddSubItem(relName);
-                        item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
+                    if (fPerson.Sex == GEDCOMSex.svMale) {
+                        relPerson = family.GetWife();
+                        relName = LangMan.LS(LSID.LSID_UnkFemale);
+                    } else {
+                        relPerson = family.GetHusband();
+                        relName = LangMan.LS(LSID.LSID_UnkMale);
                     }
 
+                    if (relPerson != null) {
+                        relName = GKUtils.GetNameString(relPerson, true, false);
+                    }
+
+                    GKListItem item = fSpousesList.AddItem(idx, family);
+                    item.AddSubItem(relName);
+                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
                 }
             }
             catch (Exception ex)
@@ -638,16 +636,16 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    this.AcceptTempData();
-                    result = (this.fBase.ModifyFamily(ref family, FamilyTarget.Spouse, this.fPerson));
+                    AcceptTempData();
+                    result = (fBase.ModifyFamily(ref family, FamilyTarget.Spouse, fPerson));
                     if (result) {
                         eArgs.ItemData = family;
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    this.AcceptTempData();
-                    result = (this.fBase.ModifyFamily(ref family, FamilyTarget.None, null));
+                    AcceptTempData();
+                    result = (fBase.ModifyFamily(ref family, FamilyTarget.None, null));
                     break;
 
                 case RecordAction.raDelete:
@@ -655,23 +653,23 @@ namespace GKUI.Dialogs
                     {
                         //family.RemoveSpouse(this.fPerson);
                         //result = true;
-                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, this.fPerson);
+                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, fPerson);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = this.fPerson.IndexOfSpouse(family);
+                        int idx = fPerson.IndexOfSpouse(family);
 
                         switch (eArgs.Action)
                         {
                             case RecordAction.raMoveUp:
-                                this.fPerson.ExchangeSpouses(idx - 1, idx);
+                                fPerson.ExchangeSpouses(idx - 1, idx);
                                 break;
 
                             case RecordAction.raMoveDown:
-                                this.fPerson.ExchangeSpouses(idx, idx + 1);
+                                fPerson.ExchangeSpouses(idx, idx + 1);
                                 break;
                         }
 
@@ -680,10 +678,10 @@ namespace GKUI.Dialogs
                     }
 
                 case RecordAction.raJump:
-                    if (family != null && (this.fPerson.Sex == GEDCOMSex.svMale || this.fPerson.Sex == GEDCOMSex.svFemale))
+                    if (family != null && (fPerson.Sex == GEDCOMSex.svMale || fPerson.Sex == GEDCOMSex.svFemale))
                     {
                         GEDCOMPointer sp = null;
-                        switch (this.fPerson.Sex) {
+                        switch (fPerson.Sex) {
                             case GEDCOMSex.svMale:
                                 sp = family.Wife;
                                 break;
@@ -696,15 +694,15 @@ namespace GKUI.Dialogs
                         if (sp != null)
                         {
                             GEDCOMIndividualRecord spouse = (GEDCOMIndividualRecord)sp.Value;
-                            this.AcceptChanges();
-                            this.fBase.SelectRecordByXRef(spouse.XRef);
-                            base.Close();
+                            AcceptChanges();
+                            fBase.SelectRecordByXRef(spouse.XRef);
+                            Close();
                         }
                     }
                     break;
             }
 
-            if (result) this.UpdateSpousesSheet();
+            if (result) UpdateSpousesSheet();
         }
 
         private GKSheetList CreateGroupsSheet(Control owner)
@@ -716,7 +714,7 @@ namespace GKUI.Dialogs
             sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += this.ModifyGroupsSheet;
+            sheet.OnModify += ModifyGroupsSheet;
             
             return sheet;
         }
@@ -725,13 +723,13 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fGroupsList.ClearItems();
+                fGroupsList.ClearItems();
 
-                foreach (GEDCOMPointer ptr in this.fPerson.Groups) {
+                foreach (GEDCOMPointer ptr in fPerson.Groups) {
                     GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
 
                     if (grp != null) {
-                        this.fGroupsList.AddItem(grp.GroupName, grp);
+                        fGroupsList.AddItem(grp.GroupName, grp);
                     }
                 }
             }
@@ -750,11 +748,11 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    groupRec = this.fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    groupRec = fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
                         //result = groupRec.AddMember(this.fPerson);
-                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, this.fPerson);
+                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, fPerson);
                     }
                     break;
 
@@ -762,20 +760,20 @@ namespace GKUI.Dialogs
                     result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No);
                     if (result) {
                         //result = groupRec.RemoveMember(this.fPerson);
-                        result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, this.fPerson);
+                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, fPerson);
                     }
                     break;
                     
                 case RecordAction.raJump:
                     if (groupRec != null) {
-                        this.AcceptChanges();
-                        this.fBase.SelectRecordByXRef(groupRec.XRef);
-                        base.Close();
+                        AcceptChanges();
+                        fBase.SelectRecordByXRef(groupRec.XRef);
+                        Close();
                     }
                     break;
             }
 
-            if (result) this.UpdateGroupsSheet();
+            if (result) UpdateGroupsSheet();
         }
 
         private GKSheetList CreateNamesSheet(Control owner)
@@ -789,7 +787,7 @@ namespace GKUI.Dialogs
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                         SheetButton.lbMoveDown, SheetButton.lbMoveUp);
-            sheet.OnModify += this.ModifyNamesSheet;
+            sheet.OnModify += ModifyNamesSheet;
             
             return sheet;
         }
@@ -798,11 +796,11 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fNamesList.ClearItems();
+                fNamesList.ClearItems();
 
-                foreach (GEDCOMPersonalName pn in this.fPerson.PersonalNames)
+                foreach (GEDCOMPersonalName pn in fPerson.PersonalNames)
                 {
-                    GKListItem item = this.fNamesList.AddItem(pn.FullName, pn);
+                    GKListItem item = fNamesList.AddItem(pn.FullName, pn);
                     item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
                 }
             }
@@ -822,11 +820,11 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg(this.fBase))
+                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg(fBase))
                     {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GEDCOMPersonalName(this.fBase.Tree, this.fPerson, "", "");
+                            persName = new GEDCOMPersonalName(fBase.Tree, fPerson, "", "");
                         }
 
                         dlg.PersonalName = persName;
@@ -835,7 +833,7 @@ namespace GKUI.Dialogs
                         if (!exists) {
                             if (result) {
                                 //this.fPerson.PersonalNames.Add(persName);
-                                result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, this.fPerson, persName);
+                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, fPerson, persName);
                             } else {
                                 persName.Dispose();
                             }
@@ -844,11 +842,11 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (this.fPerson.PersonalNames.Count > 1) {
+                    if (fPerson.PersonalNames.Count > 1) {
                         result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveNameQuery)) != DialogResult.No);
                         if (result) {
                             //this.fPerson.PersonalNames.Delete(persName);
-                            result = this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, this.fPerson, persName);
+                            result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, fPerson, persName);
                         }
                     } else {
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
@@ -857,160 +855,154 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    int idx = this.fPerson.PersonalNames.IndexOf(persName);
+                    int idx = fPerson.PersonalNames.IndexOf(persName);
                     switch (eArgs.Action)
                     {
                         case RecordAction.raMoveUp:
-                            this.fPerson.PersonalNames.Exchange(idx - 1, idx);
+                            fPerson.PersonalNames.Exchange(idx - 1, idx);
                             break;
 
                         case RecordAction.raMoveDown:
-                            this.fPerson.PersonalNames.Exchange(idx, idx + 1);
+                            fPerson.PersonalNames.Exchange(idx, idx + 1);
                             break;
                     }
                     result = true;
                     break;
             }
 
-            if (result) this.UpdateNamesSheet();
+            if (result) UpdateNamesSheet();
         }
 
         private void SetTitle()
         {
-            this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.txtSurname.Text, this.txtName.Text,
-                                      this.cmbPatronymic.Text, this.fPerson.GetXRefNum());
+            Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
+                                 cmbPatronymic.Text, fPerson.GetXRefNum());
         }
 
         private void edSurname_TextChanged(object sender, EventArgs e)
         {
-            this.SetTitle();
+            SetTitle();
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord father = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
+            GEDCOMIndividualRecord father = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father == null) return;
 
-            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, father);
             if (family != null && family.Husband.Value == null) {
                 //family.AddSpouse(father);
-                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
-                this.UpdateControls();
+                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
+                UpdateControls();
             } else {
-                this.fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
+                fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) != DialogResult.No)
-            {
-                GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-                if (family != null)
-                {
-                    GEDCOMIndividualRecord father = family.GetHusband();
-                    //family.RemoveSpouse(father);
-                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
-                    this.UpdateControls();
-                }
-            }
+            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) == DialogResult.No) return;
+
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            GEDCOMIndividualRecord father = family.GetHusband();
+            //family.RemoveSpouse(father);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
+            UpdateControls();
         }
 
         private void btnFatherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            this.AcceptChanges();
+            AcceptChanges();
             GEDCOMIndividualRecord father = family.GetHusband();
-            this.fBase.SelectRecordByXRef(father.XRef);
-            base.Close();
+            fBase.SelectRecordByXRef(father.XRef);
+            Close();
         }
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord mother = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svFemale);
+            GEDCOMIndividualRecord mother = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svFemale);
             if (mother == null) return;
 
-            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, mother);
             if (family != null && family.Wife.Value == null) {
                 //family.AddSpouse(mother);
-                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
-                this.UpdateControls();
+                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
+                UpdateControls();
             } else {
-                this.fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
+                fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
             }
         }
 
         private void btnMotherDelete_Click(object sender, EventArgs e)
         {
-            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMotherQuery)) != DialogResult.No)
-            {
-                GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-                if (family != null)
-                {
-                    GEDCOMIndividualRecord mother = family.GetWife();
-                    //family.RemoveSpouse(mother);
-                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
-                    this.UpdateControls();
-                }
-            }
+            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMotherQuery)) == DialogResult.No) return;
+
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            GEDCOMIndividualRecord mother = family.GetWife();
+            //family.RemoveSpouse(mother);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
+            UpdateControls();
         }
 
         private void btnMotherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            this.AcceptChanges();
+            AcceptChanges();
             GEDCOMIndividualRecord mother = family.GetWife();
-            this.fBase.SelectRecordByXRef(mother.XRef);
-            base.Close();
+            fBase.SelectRecordByXRef(mother.XRef);
+            Close();
         }
 
         private void btnParentsAdd_Click(object sender, EventArgs e)
         {
-            this.AcceptTempData();
+            AcceptTempData();
 
-            GEDCOMFamilyRecord family = this.fBase.SelectFamily(this.fPerson);
+            GEDCOMFamilyRecord family = fBase.SelectFamily(fPerson);
             if (family == null) return;
 
-            if (family.IndexOfChild(this.fPerson) < 0)
+            if (family.IndexOfChild(fPerson) < 0)
             {
                 //family.AddChild(this.fPerson);
-                this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, this.fPerson, family);
+                fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
             }
-            this.UpdateControls();
+            UpdateControls();
         }
 
         private void btnParentsEdit_Click(object sender, EventArgs e)
         {
-            this.AcceptTempData();
+            AcceptTempData();
 
-            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-            if (family != null && this.fBase.ModifyFamily(ref family, FamilyTarget.None, null))
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            if (family != null && fBase.ModifyFamily(ref family, FamilyTarget.None, null))
             {
-                this.UpdateControls();
+                UpdateControls();
             }
         }
 
         private void btnParentsDelete_Click(object sender, EventArgs e)
         {
-            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery)) != DialogResult.No)
-            {
-                GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-                if (family != null)
-                {
-                    //family.RemoveChild(this.fPerson);
-                    this.fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, this.fPerson, family);
-                    this.UpdateControls();
-                }
-            }
+            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery)) == DialogResult.No) return;
+
+            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            //family.RemoveChild(this.fPerson);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
+            UpdateControls();
         }
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(GKUtils.GetNameString(this.fPerson, true, false));
+            Clipboard.SetDataObject(GKUtils.GetNameString(fPerson, true, false));
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
@@ -1019,31 +1011,31 @@ namespace GKUI.Dialogs
             if (mmRec == null) return;
 
             // remove previous portrait link
-            GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
+            GEDCOMMultimediaLink mmLink = fPerson.GetPrimaryMultimediaLink();
             if (mmLink != null) {
                 mmLink.IsPrimary = false;
             }
 
             // set new portrait link
-            mmLink = this.fPerson.SetPrimaryMultimediaLink(mmRec);
+            mmLink = fPerson.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg(this.fBase)) {
+            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg(fBase)) {
                 selectDlg.MultimediaLink = mmLink;
                 selectDlg.ShowDialog();
             }
 
-            this.fMediaList.UpdateSheet();
-            this.UpdatePortrait(true);
+            fMediaList.UpdateSheet();
+            UpdatePortrait(true);
         }
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
         {
-            GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
+            GEDCOMMultimediaLink mmLink = fPerson.GetPrimaryMultimediaLink();
             if (mmLink == null) return;
 
             mmLink.IsPrimary = false;
-            this.UpdatePortrait(true);
+            UpdatePortrait(true);
         }
 
         private void edSurname_KeyDown(object sender, KeyEventArgs e)
@@ -1064,119 +1056,119 @@ namespace GKUI.Dialogs
 
         public PersonEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
-            this.btnPortraitAdd.Image = GKResources.iRecNew;
-            this.btnPortraitDelete.Image = GKResources.iRecDelete;
-            this.btnParentsAdd.Image = GKResources.iRecNew;
-            this.btnParentsEdit.Image = GKResources.iRecEdit;
-            this.btnParentsDelete.Image = GKResources.iRecDelete;
-            this.btnFatherAdd.Image = GKResources.iRecNew;
-            this.btnFatherDelete.Image = GKResources.iRecEdit;
-            this.btnFatherSel.Image = GKResources.iRecDelete;
-            this.btnMotherAdd.Image = GKResources.iRecNew;
-            this.btnMotherDelete.Image = GKResources.iRecEdit;
-            this.btnMotherSel.Image = GKResources.iRecDelete;
-            this.btnNameCopy.Image = GKResources.iCopy;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnPortraitAdd.Image = GKResources.iRecNew;
+            btnPortraitDelete.Image = GKResources.iRecDelete;
+            btnParentsAdd.Image = GKResources.iRecNew;
+            btnParentsEdit.Image = GKResources.iRecEdit;
+            btnParentsDelete.Image = GKResources.iRecDelete;
+            btnFatherAdd.Image = GKResources.iRecNew;
+            btnFatherDelete.Image = GKResources.iRecEdit;
+            btnFatherSel.Image = GKResources.iRecDelete;
+            btnMotherAdd.Image = GKResources.iRecNew;
+            btnMotherDelete.Image = GKResources.iRecEdit;
+            btnMotherSel.Image = GKResources.iRecDelete;
+            btnNameCopy.Image = GKResources.iCopy;
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {
-                this.cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
             {
-                this.cmbSex.Items.Add(GKUtils.SexStr(sx));
+                cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
-            this.fEventsList = new GKEventsSheet(this, this.pageEvents, true, this.fLocalUndoman);
-            this.fEventsList.SetControlName("fEventsList"); // for purpose of tests
+            fEventsList = new GKEventsSheet(this, pageEvents, true, fLocalUndoman);
+            fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
-            this.fSpousesList = this.CreateSpousesSheet(this.pageSpouses);
-            this.fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
+            fSpousesList = CreateSpousesSheet(pageSpouses);
+            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
 
-            this.fNamesList = this.CreateNamesSheet(this.pageNames);
-            this.fNamesList.SetControlName("fNamesList"); // for purpose of tests
+            fNamesList = CreateNamesSheet(pageNames);
+            fNamesList.SetControlName("fNamesList"); // for purpose of tests
 
-            this.fAssociationsList = this.CreateAssociationsSheet(this.pageAssociations);
-            this.fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
+            fAssociationsList = CreateAssociationsSheet(pageAssociations);
+            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
 
-            this.fGroupsList = this.CreateGroupsSheet(this.pageGroups);
-            this.fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
+            fGroupsList = CreateGroupsSheet(pageGroups);
+            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
-            this.fNotesList.SetControlName("fNotesList"); // for purpose of tests
+            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fNotesList.SetControlName("fNotesList"); // for purpose of tests
 
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
-            this.fMediaList.SetControlName("fMediaList"); // for purpose of tests
+            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fMediaList.SetControlName("fMediaList"); // for purpose of tests
 
-            this.fSourcesList = new GKSourcesSheet(this, this.pageSources, this.fLocalUndoman);
-            this.fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
+            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
+            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
-            this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
-            this.fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
+            fUserRefList = CreateURefsSheet(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
-            this.btnPortraitAdd.Image = GKResources.iRecNew;
-            this.btnPortraitDelete.Image = GKResources.iRecDelete;
-            this.btnFatherAdd.Image = GKResources.iRecNew;
-            this.btnFatherDelete.Image = GKResources.iRecDelete;
-            this.btnFatherSel.Image = GKResources.iToMan;
-            this.btnMotherAdd.Image = GKResources.iRecNew;
-            this.btnMotherDelete.Image = GKResources.iRecDelete;
-            this.btnMotherSel.Image = GKResources.iToMan;
-            this.btnParentsAdd.Image = GKResources.iRecNew;
-            this.btnParentsEdit.Image = GKResources.iRecEdit;
-            this.btnParentsDelete.Image = GKResources.iRecDelete;
+            btnPortraitAdd.Image = GKResources.iRecNew;
+            btnPortraitDelete.Image = GKResources.iRecDelete;
+            btnFatherAdd.Image = GKResources.iRecNew;
+            btnFatherDelete.Image = GKResources.iRecDelete;
+            btnFatherSel.Image = GKResources.iToMan;
+            btnMotherAdd.Image = GKResources.iRecNew;
+            btnMotherDelete.Image = GKResources.iRecDelete;
+            btnMotherSel.Image = GKResources.iToMan;
+            btnParentsAdd.Image = GKResources.iRecNew;
+            btnParentsEdit.Image = GKResources.iRecEdit;
+            btnParentsDelete.Image = GKResources.iRecDelete;
 
-            this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
+            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
-            this.SetLang();
+            SetLang();
         }
 
         public void SetLang()
         {
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_WinPersonEdit);
-            this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            this.lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
-            this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            this.lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            this.lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            this.lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            this.lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            this.chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
-            this.chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            this.lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            this.pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            this.pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            this.pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            this.pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            this.lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-            this.pageNames.Text = LangMan.LS(LSID.LSID_Names);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
+            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
+            lblName.Text = LangMan.LS(LSID.LSID_Name);
+            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
+            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
+            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
+            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
+            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
+            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
+            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
+            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
+            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
+            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
+            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
+            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
+            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
+            pageNames.Text = LangMan.LS(LSID.LSID_Names);
 
-            this.toolTip1.SetToolTip(this.btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            this.toolTip1.SetToolTip(this.btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            this.toolTip1.SetToolTip(this.btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            this.toolTip1.SetToolTip(this.btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            this.toolTip1.SetToolTip(this.btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            this.toolTip1.SetToolTip(this.btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            this.toolTip1.SetToolTip(this.btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            this.toolTip1.SetToolTip(this.btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            this.toolTip1.SetToolTip(this.btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            this.toolTip1.SetToolTip(this.btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            this.toolTip1.SetToolTip(this.btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            this.toolTip1.SetToolTip(this.btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+            toolTip1.SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
+            toolTip1.SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            toolTip1.SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
+            toolTip1.SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
+            toolTip1.SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            toolTip1.SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+            toolTip1.SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+            toolTip1.SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+            toolTip1.SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+            toolTip1.SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+            toolTip1.SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+            toolTip1.SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

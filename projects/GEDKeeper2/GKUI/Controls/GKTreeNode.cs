@@ -31,7 +31,7 @@ namespace GKUI.Controls
     {
         public GKTreeNode(string text, object tag) : base(text)
         {
-            this.Tag = tag;
+            Tag = tag;
         }
     }
 }

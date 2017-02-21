@@ -26,20 +26,20 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMList<GEDCOMNotes> Notes
         {
-            get { return this.fNotes; }
+            get { return fNotes; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fNotes = new GEDCOMList<GEDCOMNotes>(this);
+            fNotes = new GEDCOMList<GEDCOMNotes>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fNotes.Dispose();
+                fNotes.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -50,7 +50,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "NOTE")
             {
-                result = this.fNotes.Add(new GEDCOMNotes(base.Owner, this, tagName, tagValue));
+                result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
             }
             else
             {
@@ -63,24 +63,24 @@ namespace GKCommon.GEDCOM
         public override void Clear()
         {
             base.Clear();
-            this.fNotes.Clear();
+            fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && base.Count == 0 && this.fNotes.Count == 0;
+            return base.IsEmpty() && Count == 0 && fNotes.Count == 0;
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.fNotes.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            this.fNotes.ResetOwner(newOwner);
+            fNotes.ResetOwner(newOwner);
         }
 
         public GEDCOMPointerWithNotes(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

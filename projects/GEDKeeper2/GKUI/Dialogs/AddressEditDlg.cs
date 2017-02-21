@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class AddressEditDlg : Form, IBaseEditor
+    public sealed partial class AddressEditDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
         private GEDCOMAddress fAddress;
@@ -41,13 +41,13 @@ namespace GKUI.Dialogs
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         public GEDCOMAddress Address
         {
-            get { return this.fAddress; }
-            set { this.SetAddress(value); }
+            get { return fAddress; }
+            set { SetAddress(value); }
         }
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
@@ -56,13 +56,13 @@ namespace GKUI.Dialogs
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
             string val;
-            if (sender == this.fPhonesList)
+            if (sender == fPhonesList)
             {
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
                         if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
-                            this.fAddress.AddPhoneNumber(val);
+                            fAddress.AddPhoneNumber(val);
                         }
                         break;
 
@@ -74,17 +74,17 @@ namespace GKUI.Dialogs
                         break;
 
                     case RecordAction.raDelete:
-                        this.fAddress.PhoneNumbers.Delete(itemTag);
+                        fAddress.PhoneNumbers.Delete(itemTag);
                         break;
                 }
             }
-            else if (sender == this.fMailsList)
+            else if (sender == fMailsList)
             {
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
                         if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
-                            this.fAddress.AddEmailAddress(val);
+                            fAddress.AddEmailAddress(val);
                         }
                         break;
 
@@ -96,17 +96,17 @@ namespace GKUI.Dialogs
                         break;
 
                     case RecordAction.raDelete:
-                        this.fAddress.EmailAddresses.Delete(itemTag);
+                        fAddress.EmailAddresses.Delete(itemTag);
                         break;
                 }
             }
-            else if (sender == this.fWebsList)
+            else if (sender == fWebsList)
             {
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
                         if (GKUtils.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
-                            this.fAddress.AddWebPage(val);
+                            fAddress.AddWebPage(val);
                         }
                         break;
 
@@ -118,45 +118,45 @@ namespace GKUI.Dialogs
                         break;
 
                     case RecordAction.raDelete:
-                        this.fAddress.WebPages.Delete(itemTag);
+                        fAddress.WebPages.Delete(itemTag);
                         break;
                 }
             }
 
-            this.UpdateLists();
+            UpdateLists();
         }
 
         private void SetAddress(GEDCOMAddress value)
         {
-            this.fAddress = value;
+            fAddress = value;
 
-            this.txtCountry.Text = this.fAddress.AddressCountry;
-            this.txtState.Text = this.fAddress.AddressState;
-            this.txtCity.Text = this.fAddress.AddressCity;
-            this.txtPostalCode.Text = this.fAddress.AddressPostalCode;
-            this.txtAddress.Text = this.fAddress.Address.Text.Trim();
+            txtCountry.Text = fAddress.AddressCountry;
+            txtState.Text = fAddress.AddressState;
+            txtCity.Text = fAddress.AddressCity;
+            txtPostalCode.Text = fAddress.AddressPostalCode;
+            txtAddress.Text = fAddress.Address.Text.Trim();
 
-            this.UpdateLists();
+            UpdateLists();
         }
 
         private void UpdateLists()
         {
-            this.fPhonesList.ClearItems();
-            foreach (GEDCOMTag tag in this.fAddress.PhoneNumbers)
+            fPhonesList.ClearItems();
+            foreach (GEDCOMTag tag in fAddress.PhoneNumbers)
             {
-                this.fPhonesList.AddItem(tag.StringValue, tag);
+                fPhonesList.AddItem(tag.StringValue, tag);
             }
 
-            this.fMailsList.ClearItems();
-            foreach (GEDCOMTag tag in this.fAddress.EmailAddresses)
+            fMailsList.ClearItems();
+            foreach (GEDCOMTag tag in fAddress.EmailAddresses)
             {
-                this.fMailsList.AddItem(tag.StringValue, tag);
+                fMailsList.AddItem(tag.StringValue, tag);
             }
 
-            this.fWebsList.ClearItems();
-            foreach (GEDCOMTag tag in this.fAddress.WebPages)
+            fWebsList.ClearItems();
+            foreach (GEDCOMTag tag in fAddress.WebPages)
             {
-                this.fWebsList.AddItem(tag.StringValue, tag);
+                fWebsList.AddItem(tag.StringValue, tag);
             }
         }
 
@@ -164,59 +164,59 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fAddress.AddressCountry = this.txtCountry.Text;
-                this.fAddress.AddressState = this.txtState.Text;
-                this.fAddress.AddressCity = this.txtCity.Text;
-                this.fAddress.AddressPostalCode = this.txtPostalCode.Text;
+                fAddress.AddressCountry = txtCountry.Text;
+                fAddress.AddressState = txtState.Text;
+                fAddress.AddressCity = txtCity.Text;
+                fAddress.AddressPostalCode = txtPostalCode.Text;
 
-                this.fAddress.SetAddressText(this.txtAddress.Text);
+                fAddress.SetAddressText(txtAddress.Text);
 
-                base.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("AddressEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("AddressEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
         public AddressEditDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
-            this.fPhonesList = new GKSheetList(this.pagePhones);
-            this.fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
-            this.fPhonesList.OnModify += this.ListModify;
-            this.fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
+            fPhonesList = new GKSheetList(pagePhones);
+            fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
+            fPhonesList.OnModify += ListModify;
+            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
-            this.fMailsList = new GKSheetList(this.pageEmails);
-            this.fMailsList.SetControlName("fMailsList"); // for purpose of tests
-            this.fMailsList.OnModify += this.ListModify;
-            this.fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
+            fMailsList = new GKSheetList(pageEmails);
+            fMailsList.SetControlName("fMailsList"); // for purpose of tests
+            fMailsList.OnModify += ListModify;
+            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
-            this.fWebsList = new GKSheetList(this.pageWebPages);
-            this.fWebsList.SetControlName("fWebsList"); // for purpose of tests
-            this.fWebsList.OnModify += this.ListModify;
-            this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
+            fWebsList = new GKSheetList(pageWebPages);
+            fWebsList.SetControlName("fWebsList"); // for purpose of tests
+            fWebsList.OnModify += ListModify;
+            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_Address);
-            this.pageCommon.Text = LangMan.LS(LSID.LSID_Address);
-            this.lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
-            this.lblState.Text = LangMan.LS(LSID.LSID_AdState);
-            this.lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
-            this.lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            this.lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            this.pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
-            this.pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
-            this.pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_Address);
+            pageCommon.Text = LangMan.LS(LSID.LSID_Address);
+            lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
+            lblState.Text = LangMan.LS(LSID.LSID_AdState);
+            lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
+            lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
+            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
+            pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
+            pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
+            pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
         }
     }
 }

@@ -35,42 +35,42 @@ namespace GKUI.Dialogs
 
         public DayTipsDlg()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.Image1.Image = GKResources.iTipsLight;
-            this.btnClose.Image = GKResources.iBtnCancel;
+            Image1.Image = GKResources.iTipsLight;
+            btnClose.Image = GKResources.iBtnCancel;
 
-            this.fTips = new StringList();
+            fTips = new StringList();
 
             // SetLang()
-            this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            this.chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
-            this.btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
-            this.lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
+            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
+            btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
+            lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.fTips.Dispose();
+                fTips.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void GetNextTip()
         {
-            if (this.fTips.Count > 0)
+            if (fTips.Count > 0)
             {
-                this.txtTip.Text = this.fTips[0];
-                this.fTips.Delete(0);
+                txtTip.Text = fTips[0];
+                fTips.Delete(0);
             }
-            this.btnNextTip.Enabled = (this.fTips.Count > 0);
+            btnNextTip.Enabled = (fTips.Count > 0);
         }
 
         private void btnNextTip_Click(object sender, EventArgs e)
         {
-            this.GetNextTip();
+            GetNextTip();
         }
 
         /// <summary>

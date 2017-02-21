@@ -57,18 +57,18 @@ namespace GKTextSearchPlugin
         private ILangMan fLangMan;
         private SearchManager fSearchMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
-        public IHost Host { get { return this.fHost; } }
-        public ILangMan LangMan { get { return this.fLangMan; } }
-        public SearchManager SearchMan { get { return this.fSearchMan; } }
+        public string DisplayName { get { return fDisplayName; } }
+        public IHost Host { get { return fHost; } }
+        public ILangMan LangMan { get { return fLangMan; } }
+        public SearchManager SearchMan { get { return fSearchMan; } }
 
-        internal TextSearchWin tsWin;
+        internal TextSearchWin fForm;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (tsWin != null) tsWin.Dispose();
+                if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -77,16 +77,16 @@ namespace GKTextSearchPlugin
 
         public void Execute()
         {
-            if (this.fHost.IsUnix()) {
-                this.fHost.ShowWarning(@"This function is not supported in Linux");
+            if (fHost.IsUnix()) {
+                fHost.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 
             IBaseWindow curBase = fHost.GetCurrentFile();
             if (curBase == null) return;
 
-            tsWin = new TextSearchWin(this, curBase);
-            tsWin.Show();
+            fForm = new TextSearchWin(this, curBase);
+            fForm.Show();
         }
         
         public void OnHostClosing(ref bool cancelClosing) {}
@@ -97,10 +97,10 @@ namespace GKTextSearchPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(TLS.LSID_PluginTitle);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(TLS.LSID_PluginTitle);
 
-                if (tsWin != null) tsWin.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -113,8 +113,8 @@ namespace GKTextSearchPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
-                this.fSearchMan = new SearchManager(this);
+                fHost = host;
+                fSearchMan = new SearchManager(this);
             }
             catch (Exception ex)
             {
@@ -147,15 +147,15 @@ namespace GKTextSearchPlugin
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
             #if !__MonoCS__
-            if (baseWin == null || record == null || this.fSearchMan == null) return;
+            if (baseWin == null || record == null || fSearchMan == null) return;
 
             switch (action) {
                 case RecordAction.raEdit:
-                    this.fSearchMan.UpdateRecord(baseWin, (GEDCOMRecord)record);
+                    fSearchMan.UpdateRecord(baseWin, (GEDCOMRecord)record);
                     break;
 
                 case RecordAction.raDelete:
-                    this.fSearchMan.DeleteRecord(baseWin, ((GEDCOMRecord)record).XRef);
+                    fSearchMan.DeleteRecord(baseWin, ((GEDCOMRecord)record).XRef);
                     break;
             }
             #endif

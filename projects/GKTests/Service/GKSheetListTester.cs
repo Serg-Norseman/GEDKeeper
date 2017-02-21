@@ -43,7 +43,7 @@ namespace GKTests.Service
 
         public new GKSheetList Properties
         {
-            get { return (GKSheetList) base.TheObject; }
+            get { return (GKSheetList) TheObject; }
         }
     }
 }

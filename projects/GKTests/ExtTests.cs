@@ -158,11 +158,13 @@ namespace GKTests.GKCommon
                 Assert.IsNotNull(entry);
 
                 using (MemoryStream csvStream = new MemoryStream()) {
-                    zip.ExtractFile(entry.Value, csvStream);
+                    Assert.Throws(typeof(ArgumentNullException), () => { zip.ExtractStream(entry.Value, null); });
+
+                    zip.ExtractStream(entry.Value, csvStream);
 
                     csvStream.Seek(0, SeekOrigin.Begin);
                     using (var reader = new StreamReader(csvStream, Encoding.ASCII)) {
-                        var text = reader.ReadToEnd();
+                        string text = reader.ReadToEnd();
                         Assert.AreEqual(CSVData, text);
                     }
                 }

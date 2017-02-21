@@ -197,7 +197,7 @@ namespace GKCommon
 
                 default:
                     {
-                        if (Char.IsLetter(ch) || ch == '_')
+                        if (char.IsLetter(ch) || ch == '_')
                             return ReadWord();
                         
                         if (IsSymbol(ch))
@@ -263,7 +263,7 @@ namespace GKCommon
             while (true)
             {
                 char ch = LA(0);
-                if (Char.IsDigit(ch))
+                if (char.IsDigit(ch))
                     Consume();
                 else if (ch == '.' && fRecognizeDecimals && !hadDot)
                 {
@@ -289,7 +289,7 @@ namespace GKCommon
             while (true)
             {
                 char ch = LA(0);
-                if (Char.IsLetter(ch) || ch == '_')
+                if (char.IsLetter(ch) || ch == '_')
                     Consume();
                 else
                     break;

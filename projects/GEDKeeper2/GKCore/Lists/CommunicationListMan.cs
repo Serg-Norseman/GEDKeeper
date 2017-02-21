@@ -43,14 +43,14 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            this.AddStatic(LSID.LSID_Theme, DataType.dtString, 300, true);
-            this.AddStatic(LSID.LSID_Corresponder, DataType.dtString, 200, true);
-            this.AddStatic(LSID.LSID_Type, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_Date, DataType.dtString, 90, true);
-            this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddStatic(LSID.LSID_Theme, DataType.dtString, 300, true);
+            AddStatic(LSID.LSID_Corresponder, DataType.dtString, 200, true);
+            AddStatic(LSID.LSID_Type, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_Date, DataType.dtString, 90, true);
+            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
 
-        public CommunicationListColumns() : base()
+        public CommunicationListColumns()
         {
             InitData(typeof(CommunicationColumnType));
         }
@@ -65,16 +65,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter(ShieldState shieldState)
         {
-            bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.CommName, this.QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.CommName, QuickFilter));
 
-            res = res && base.CheckCommonFilter();
+            res = res && CheckCommonFilter();
 
             return res;
         }
 
         public override void Fetch(GEDCOMRecord aRec)
         {
-            this.fRec = (aRec as GEDCOMCommunicationRecord);
+            fRec = (aRec as GEDCOMCommunicationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -82,19 +82,19 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = this.fRec.CommName;
+                    result = fRec.CommName;
                     break;
                 case 1:
-                    result = GKUtils.GetCorresponderStr(this.fTree, this.fRec, false);
+                    result = GKUtils.GetCorresponderStr(fTree, fRec, false);
                     break;
                 case 2:
-                    result = LangMan.LS(GKData.CommunicationNames[(int)this.fRec.CommunicationType]);
+                    result = LangMan.LS(GKData.CommunicationNames[(int)fRec.CommunicationType]);
                     break;
                 case 3:
-                    result = GetDateValue(this.fRec.Date, isVisible);
+                    result = GetDateValue(fRec.Date, isVisible);
                     break;
                 case 4:
-                    result = this.fRec.ChangeDate.ChangeDateTime;
+                    result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

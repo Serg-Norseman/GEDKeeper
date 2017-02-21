@@ -39,7 +39,7 @@ namespace GKTests.UITests
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
-        GEDCOMFileReferenceWithTitle fileRef;
+        private GEDCOMFileReferenceWithTitle fileRef;
 
         public override void Setup()
         {

@@ -28,7 +28,7 @@ namespace GKCore
 
             GEDCOMTree extTree = new GEDCOMTree();
             XRefReplacer repMap = new XRefReplacer();
-            ExtList<SyncRecord> sync_list = new ExtList<SyncRecord>(true);
+            ExtList<SyncRecord> syncList = new ExtList<SyncRecord>(true);
             try
             {
                 extTree.LoadFromFile(fileName);
@@ -38,29 +38,29 @@ namespace GKCore
                 for (int i = 0; i < num; i++)
                 {
                     GEDCOMRecord rec = extTree[i];
-                    sync_list.Add(new SyncRecord
-                                  {
-                                      MasterRecord = null,
-                                      UpdateRecord = rec,
-                                      State = SyncState.ssUndefined,
-                                      UpdateOldXRef = "",
-                                      UpdateNewXRef = ""
-                                  });
+                    syncList.Add(new SyncRecord
+                                 {
+                                     MasterRecord = null,
+                                     UpdateRecord = rec,
+                                     State = SyncState.ssUndefined,
+                                     UpdateOldXRef = "",
+                                     UpdateNewXRef = ""
+                                 });
                 }
 
-                int num2 = sync_list.Count;
+                int num2 = syncList.Count;
                 for (int i = 0; i < num2; i++)
                 {
-                    SyncRecord sync_rec = sync_list[i];
+                    SyncRecord syncRec = syncList[i];
 
-                    GEDCOMRecord rec = mainTree.FindUID(sync_rec.UpdateRecord.UID);
+                    GEDCOMRecord rec = mainTree.FindUID(syncRec.UpdateRecord.UID);
 
                     if (rec != null) {
-                        sync_rec.MasterRecord = rec;
-                        sync_rec.State = SyncState.ssHasMaster;
+                        syncRec.MasterRecord = rec;
+                        syncRec.State = SyncState.ssHasMaster;
                     } else {
-                        sync_rec.State = SyncState.ssNoMaster;
-                        rec = extTree.Extract(extTree.IndexOf(sync_rec.UpdateRecord));
+                        syncRec.State = SyncState.ssNoMaster;
+                        rec = extTree.Extract(extTree.IndexOf(syncRec.UpdateRecord));
                         string newXRef = mainTree.XRefIndex_NewXRef(rec);
                         repMap.AddXRef(rec, rec.XRef, newXRef);
                         rec.XRef = newXRef;
@@ -83,19 +83,19 @@ namespace GKCore
                     rec.ReplaceXRefs(repMap);
                 }
 
-                int num5 = sync_list.Count;
+                int num5 = syncList.Count;
                 for (int i = 0; i < num5; i++)
                 {
-                    SyncRecord sync_rec = sync_list[i] as SyncRecord;
-                    if (sync_rec.State == SyncState.ssHasMaster)
+                    SyncRecord syncRec = syncList[i];
+                    if (syncRec.State == SyncState.ssHasMaster)
                     {
-                        GEDCOMRecord rec = extTree.Extract(extTree.IndexOf(sync_rec.UpdateRecord));
+                        GEDCOMRecord rec = extTree.Extract(extTree.IndexOf(syncRec.UpdateRecord));
                         rec.XRef = mainTree.XRefIndex_NewXRef(rec);
                         rec.ResetOwner(mainTree);
                         mainTree.AddRecord(rec);
-                        string backUID = sync_rec.MasterRecord.UID;
-                        sync_rec.UpdateRecord.MoveTo(sync_rec.MasterRecord, true);
-                        sync_rec.MasterRecord.UID = backUID;
+                        string backUID = syncRec.MasterRecord.UID;
+                        syncRec.UpdateRecord.MoveTo(syncRec.MasterRecord, true);
+                        syncRec.MasterRecord.UID = backUID;
                         mainTree.DeleteRecord(rec);
                     }
                 }
@@ -104,7 +104,7 @@ namespace GKCore
             }
             finally
             {
-                sync_list.Dispose();
+                syncList.Dispose();
                 repMap.Dispose();
                 extTree.Dispose();
             }

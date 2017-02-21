@@ -32,6 +32,7 @@ using iTextSharp.text.pdf;
 namespace GKCore.Export
 {
     using itFont = iTextSharp.text.Font;
+    using itImage = iTextSharp.text.Image;
 
     /// <summary>
     /// 
@@ -142,13 +143,13 @@ namespace GKCore.Export
                 fDocument.Open();
 
                 BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), "CP1251", BaseFont.EMBEDDED);
-                fTitleFont = new Font(baseFont, 30f, Font.BOLD);
-                fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
-                fSubchapFont = new Font(baseFont, 14f, Font.BOLD, BaseColor.BLACK);
-                fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
-                fTextFont = new Font(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
-                fBoldFont = new Font(baseFont, 8f, Font.BOLD, BaseColor.BLACK);
-                fSymFont = new Font(baseFont, 12f, Font.BOLD, BaseColor.BLACK);
+                fTitleFont = new itFont(baseFont, 30f, Font.BOLD);
+                fChapFont = new itFont(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
+                fSubchapFont = new itFont(baseFont, 14f, Font.BOLD, BaseColor.BLACK);
+                fLinkFont = new itFont(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
+                fTextFont = new itFont(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
+                fBoldFont = new itFont(baseFont, 8f, Font.BOLD, BaseColor.BLACK);
+                fSymFont = new itFont(baseFont, 12f, Font.BOLD, BaseColor.BLACK);
 
                 baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
                 //Font page_font = new Font(base_font, 9f, Font.NORMAL);
@@ -289,52 +290,50 @@ namespace GKCore.Export
                 for (int k = 0; k < evNum; k++)
                 {
                     GEDCOMCustomEvent evt = iRec.Events[k];
+                    if (evt == null) continue;
 
-                    if (evt != null)
+                    int srcNum2 = evt.Detail.SourceCitations.Count;
+                    for (int m = 0; m < srcNum2; m++)
                     {
-                        int srcNum2 = evt.Detail.SourceCitations.Count;
-                        for (int m = 0; m < srcNum2; m++)
-                        {
-                            GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
-                            if (src == null) continue;
+                        GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
+                        if (src == null) continue;
 
-                            st = src.FiledByEntry;
-                            if (string.IsNullOrEmpty(st)) st = src.Title.Text;
-                            PrepareSpecIndex(sourcesIndex, st, iRec);
-                        }
+                        st = src.FiledByEntry;
+                        if (string.IsNullOrEmpty(st)) st = src.Title.Text;
+                        PrepareSpecIndex(sourcesIndex, st, iRec);
+                    }
 
-                        // The analysis places
+                    // The analysis places
 //						st = ev.Detail.Place.StringValue;
 //						if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
 
-                        if (evt.Name == "BIRT") {
-                            // Analysis on births
-                            PrepareEventYear(byIndex, evt, iRec);
-                            st = GKUtils.GetPlaceStr(evt, false);
-                            if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(bpIndex, st, iRec);
-                        }
-                        else if (evt.Name == "DEAT")
-                        {
-                            // Analysis by causes of death
-                            PrepareEventYear(dyIndex, evt, iRec);
-                            st = GKUtils.GetPlaceStr(evt, false);
-                            if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
+                    if (evt.Name == "BIRT") {
+                        // Analysis on births
+                        PrepareEventYear(byIndex, evt, iRec);
+                        st = GKUtils.GetPlaceStr(evt, false);
+                        if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(bpIndex, st, iRec);
+                    }
+                    else if (evt.Name == "DEAT")
+                    {
+                        // Analysis by causes of death
+                        PrepareEventYear(dyIndex, evt, iRec);
+                        st = GKUtils.GetPlaceStr(evt, false);
+                        if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
 
-                            st = evt.Detail.Cause;
-                            if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(deathCauses, st, iRec);
-                        }
-                        else if (evt.Name == "OCCU")
-                        {
-                            // Analysis by occupation
-                            st = evt.StringValue;
-                            if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(occuIndex, st, iRec);
-                        }
-                        else if (evt.Name == "RELI")
-                        {
-                            // Analysis by religion
-                            st = evt.StringValue;
-                            if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(reliIndex, st, iRec);
-                        }
+                        st = evt.Detail.Cause;
+                        if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(deathCauses, st, iRec);
+                    }
+                    else if (evt.Name == "OCCU")
+                    {
+                        // Analysis by occupation
+                        st = evt.StringValue;
+                        if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(occuIndex, st, iRec);
+                    }
+                    else if (evt.Name == "RELI")
+                    {
+                        // Analysis by religion
+                        st = evt.StringValue;
+                        if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(reliIndex, st, iRec);
                     }
                 }
 
@@ -376,7 +375,7 @@ namespace GKCore.Export
             var bmp = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
             if (bmp != null)
             {
-                iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
+                itImage img = itImage.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
 
                 float fitWidth = colWidth * 0.5f;
                 img.ScaleToFit(fitWidth, fitWidth);
@@ -514,11 +513,11 @@ namespace GKCore.Export
 
         private static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
         {
-            if (evt != null) {
-                int dtY = GEDCOMUtils.GetRelativeYear(evt);
-                if (dtY != 0) {
-                    PrepareSpecIndex(index, dtY.ToString(), iRec);
-                }
+            if (evt == null) return;
+
+            int dtY = GEDCOMUtils.GetRelativeYear(evt);
+            if (dtY != 0) {
+                PrepareSpecIndex(index, dtY.ToString(), iRec);
             }
         }
     }
@@ -563,7 +562,7 @@ namespace GKCore.Export
         void IPdfPageEvent.OnChapterEnd(PdfWriter writer, Document document, float paragraphPosition) { }
         void IPdfPageEvent.OnSection(PdfWriter writer, Document document, float paragraphPosition, int depth, Paragraph title) { }
         void IPdfPageEvent.OnSectionEnd(PdfWriter writer, Document document, float paragraphPosition) { }
-        void IPdfPageEvent.OnGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) { }
+        void IPdfPageEvent.OnGenericTag(PdfWriter writer, Document document, Rectangle rect, string text) { }
     }
 
     public class SimpleColumnText : ColumnText
@@ -603,21 +602,21 @@ namespace GKCore.Export
 
             int status = 0;
             if (fCurrentColumn == 0) {
-                status = ColumnText.NO_MORE_COLUMN;
+                status = NO_MORE_COLUMN;
             }
 
             do {
-                if (status == ColumnText.NO_MORE_COLUMN) {
+                if (status == NO_MORE_COLUMN) {
                     if (fCurrentColumn == fColumns.Count) {
                         fDocument.NewPage();
                         fCurrentColumn = 0;
                     }
-                    base.SetSimpleColumn(fColumns[fCurrentColumn]);
+                    SetSimpleColumn(fColumns[fCurrentColumn]);
                     fCurrentColumn += 1;
                 }
 
-                status = base.Go();
-            } while (ColumnText.HasMoreText(status));
+                status = Go();
+            } while (HasMoreText(status));
         }
     }
 }

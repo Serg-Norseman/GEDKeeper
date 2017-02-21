@@ -180,21 +180,21 @@ namespace GKCommon
 
         public static void SendMail(string address, string subject, string body, string attach)
         {
-            if (File.Exists(attach)) {
-                #if __MonoCS__
+            if (!File.Exists(attach)) return;
 
-                string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + "");
-                Process.Start(mailto);
+            #if __MonoCS__
 
-                #else
+            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + "");
+            Process.Start(mailto);
 
-                MapiMailMessage message = new MapiMailMessage(subject, body);
-                message.Recipients.Add(address);
-                message.Files.Add(attach);
-                message.ShowDialog();
+            #else
 
-                #endif
-            }
+            MapiMailMessage message = new MapiMailMessage(subject, body);
+            message.Recipients.Add(address);
+            message.Files.Add(attach);
+            message.ShowDialog();
+
+            #endif
         }
 
         public static bool IsNetworkAvailable()
@@ -570,7 +570,7 @@ namespace GKCommon
             if (string.IsNullOrEmpty(s)) return "";
 
             StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
-            stb[0] = Char.ToUpperInvariant(stb[0]);
+            stb[0] = char.ToUpperInvariant(stb[0]);
             return stb.ToString();
         }
 
@@ -578,7 +578,7 @@ namespace GKCommon
 
         #region CRC32
 
-        private const uint DefaultPolynomial = 0xedb88320u;
+        private const uint DEFAULT_POLYNOMIAL = 0xedb88320u;
         private static uint[] CCITT32_TABLE;
 
         private static void InitCRC32()
@@ -591,7 +591,7 @@ namespace GKCommon
 
                 for (uint j = 0; j < 8; j++)
                     if ((val & 1) == 1)
-                        val = (val >> 1) ^ DefaultPolynomial;
+                        val = (val >> 1) ^ DEFAULT_POLYNOMIAL;
                     else
                         val = val >> 1;
 
@@ -866,6 +866,48 @@ namespace GKCommon
 
                 alpha += delta;
             }
+        }
+
+        public enum Direction {
+            Up,
+            Right,
+            Down,
+            Left
+        }
+
+        public static void DrawTriangle(Graphics gfx, Rectangle rect, Direction direction)
+        {
+            int halfWidth = rect.Width / 2;
+            int halfHeight = rect.Height / 2;
+            Point p0 = Point.Empty;
+            Point p1 = Point.Empty;
+            Point p2 = Point.Empty;
+
+            switch (direction)
+            {
+                case Direction.Up:
+                    p0 = new Point(rect.Left + halfWidth, rect.Top);
+                    p1 = new Point(rect.Left, rect.Bottom);
+                    p2 = new Point(rect.Right, rect.Bottom);
+                    break;
+                case Direction.Down:
+                    p0 = new Point(rect.Left + halfWidth, rect.Bottom);
+                    p1 = new Point(rect.Left, rect.Top);
+                    p2 = new Point(rect.Right, rect.Top);
+                    break;
+                case Direction.Left:
+                    p0 = new Point(rect.Left, rect.Top + halfHeight);
+                    p1 = new Point(rect.Right, rect.Top);
+                    p2 = new Point(rect.Right, rect.Bottom);
+                    break;
+                case Direction.Right:
+                    p0 = new Point(rect.Right, rect.Top + halfHeight);
+                    p1 = new Point(rect.Left, rect.Bottom);
+                    p2 = new Point(rect.Left, rect.Top);
+                    break;
+            }
+
+            gfx.FillPolygon(Brushes.Black, new Point[] { p0, p1, p2 });
         }
 
         #endregion

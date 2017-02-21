@@ -54,28 +54,28 @@ namespace GKNamesBookPlugin
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private NamesBookWidget frm;
+        private NamesBookWidget fForm;
         
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (frm != null) frm.Dispose();
+                if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public void Execute()
         {
-            if (!this.fHost.IsWidgetActive(this)) {
-                frm = new NamesBookWidget(this);
-                frm.Show();
+            if (!fHost.IsWidgetActive(this)) {
+                fForm = new NamesBookWidget(this);
+                fForm.Show();
             } else {
-                frm.Close();
+                fForm.Close();
             }
         }
 
@@ -87,10 +87,10 @@ namespace GKNamesBookPlugin
         {
             try
             {
-                this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(NLS.LSID_MINamesBook);
+                fLangMan = fHost.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(NLS.LSID_MINamesBook);
 
-                if (frm != null) frm.SetLang();
+                if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace GKNamesBookPlugin
             bool result = true;
             try
             {
-                this.fHost = host;
+                fHost = host;
             }
             catch (Exception ex)
             {

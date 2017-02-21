@@ -36,7 +36,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class LocationEditDlg : EditorDialog
+    public sealed partial class LocationEditDlg : EditorDialog
     {
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKMediaSheet fMediaList;
@@ -46,75 +46,75 @@ namespace GKUI.Dialogs
 
         public GEDCOMLocationRecord LocationRecord
         {
-            get { return this.fLocationRecord; }
-            set { this.SetLocationRecord(value); }
+            get { return fLocationRecord; }
+            set { SetLocationRecord(value); }
         }
 
         public LocationEditDlg(IBaseWindow baseWin) : base(baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fMapBrowser = new GKMapBrowser();
-            this.fMapBrowser.InitMap();
-            this.fMapBrowser.Dock = DockStyle.Fill;
-            this.fMapBrowser.ShowLines = false;
-            this.panMap.Controls.Add(this.fMapBrowser);
+            fMapBrowser = new GKMapBrowser();
+            fMapBrowser.InitMap();
+            fMapBrowser.Dock = DockStyle.Fill;
+            fMapBrowser.ShowLines = false;
+            panMap.Controls.Add(fMapBrowser);
 
-            this.fNotesList = new GKNotesSheet(this, this.pageNotes, this.fLocalUndoman);
-            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia, this.fLocalUndoman);
+            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
 
             // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_Location);
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
-            this.lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
-            this.lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            this.ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
-            this.ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
-            this.ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);
-            this.btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
-            this.grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
-            this.btnSearch.Text = LangMan.LS(LSID.LSID_Search);
-            this.btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
-            this.btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
+            Text = LangMan.LS(LSID.LSID_Location);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            lblName.Text = LangMan.LS(LSID.LSID_Title);
+            lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
+            lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
+            ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
+            ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
+            ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);
+            btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
+            grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
+            btnSearch.Text = LangMan.LS(LSID.LSID_Search);
+            btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
+            btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
 
-            this.toolTip1.SetToolTip(this.btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
+            toolTip1.SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (this.components != null) this.components.Dispose();
+                if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void SetLocationRecord(GEDCOMLocationRecord value)
         {
-            this.fLocationRecord = value;
-            this.txtName.Text = this.fLocationRecord.LocationName;
-            this.txtLatitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Lati);
-            this.txtLongitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Long);
+            fLocationRecord = value;
+            txtName.Text = fLocationRecord.LocationName;
+            txtLatitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Lati);
+            txtLongitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Long);
 
-            this.fNotesList.DataList = this.fLocationRecord.Notes.GetEnumerator();
-            this.fMediaList.DataList = this.fLocationRecord.MultimediaLinks.GetEnumerator();
+            fNotesList.DataList = fLocationRecord.Notes.GetEnumerator();
+            fMediaList.DataList = fLocationRecord.MultimediaLinks.GetEnumerator();
 
-            this.ActiveControl = this.txtName;
+            ActiveControl = txtName;
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down && e.Control)
             {
-                this.txtName.Text = this.txtName.Text.ToLower();
+                txtName.Text = txtName.Text.ToLower();
             }
         }
 
@@ -122,17 +122,17 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fLocationRecord.LocationName = this.txtName.Text;
-                this.fLocationRecord.Map.Lati = SysUtils.ParseFloat(this.txtLatitude.Text, 0.0);
-                this.fLocationRecord.Map.Long = SysUtils.ParseFloat(this.txtLongitude.Text, 0.0);
-                base.CommitChanges();
-                this.fBase.ChangeRecord(this.fLocationRecord);
-                base.DialogResult = DialogResult.OK;
+                fLocationRecord.LocationName = txtName.Text;
+                fLocationRecord.Map.Lati = SysUtils.ParseFloat(txtLatitude.Text, 0.0);
+                fLocationRecord.Map.Long = SysUtils.ParseFloat(txtLongitude.Text, 0.0);
+                CommitChanges();
+                fBase.ChangeRecord(fLocationRecord);
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -140,25 +140,25 @@ namespace GKUI.Dialogs
         {
             try
             {
-                base.RollbackChanges();
+                RollbackChanges();
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
+                fBase.Host.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            this.ListGeoCoords.BeginUpdate();
-            this.fMapBrowser.BeginUpdate();
+            ListGeoCoords.BeginUpdate();
+            fMapBrowser.BeginUpdate();
             try
             {
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
-                MainWin.Instance.RequestGeoCoords(this.txtName.Text, searchPoints);
-                this.ListGeoCoords.Items.Clear();
-                this.fMapBrowser.ClearPoints();
+                MainWin.Instance.RequestGeoCoords(txtName.Text, searchPoints);
+                ListGeoCoords.Items.Clear();
+                fMapBrowser.ClearPoints();
 
                 int num = searchPoints.Count;
                 for (int i = 0; i < num; i++)
@@ -168,12 +168,12 @@ namespace GKUI.Dialogs
                     GKListItem item = new GKListItem(pt.Hint, pt);
                     item.AddSubItem(GKMapBrowser.CoordToStr(pt.Latitude));
                     item.AddSubItem(GKMapBrowser.CoordToStr(pt.Longitude));
-                    this.ListGeoCoords.Items.Add(item);
+                    ListGeoCoords.Items.Add(item);
 
-                    this.fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
+                    fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
                     if (i == 0) {
-                        this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+                        fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
                 }
 
@@ -181,57 +181,57 @@ namespace GKUI.Dialogs
             }
             finally
             {
-                this.fMapBrowser.EndUpdate();
-                this.ListGeoCoords.EndUpdate();
+                fMapBrowser.EndUpdate();
+                ListGeoCoords.EndUpdate();
             }
         }
 
         private GKListItem GetSelectedGeoItem()
         {
-            if (this.ListGeoCoords.SelectedItems.Count <= 0) return null;
+            if (ListGeoCoords.SelectedItems.Count <= 0) return null;
 
-            GKListItem item = (GKListItem)this.ListGeoCoords.SelectedItems[0];
+            GKListItem item = (GKListItem)ListGeoCoords.SelectedItems[0];
             return item;
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            GKListItem item = this.GetSelectedGeoItem();
+            GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
-            this.txtLatitude.Text = item.SubItems[1].Text;
-            this.txtLongitude.Text = item.SubItems[2].Text;
+            txtLatitude.Text = item.SubItems[1].Text;
+            txtLongitude.Text = item.SubItems[2].Text;
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
         {
-            GKListItem item = this.GetSelectedGeoItem();
+            GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
-            this.txtName.Text = item.Text;
+            txtName.Text = item.Text;
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)
         {
-            GKListItem item = this.GetSelectedGeoItem();
+            GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
             GeoPoint pt = item.Data as GeoPoint;
             if (pt == null) return;
 
-            this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
         private void EditName_TextChanged(object sender, EventArgs e)
         {
-            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), this.txtName.Text);
+            Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), txtName.Text);
         }
 
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
-            if (this.txtLatitude.Text != "" && this.txtLongitude.Text != "")
+            if (txtLatitude.Text != "" && txtLongitude.Text != "")
             {
-                this.fMapBrowser.SetCenter(SysUtils.ParseFloat(this.txtLatitude.Text, 0), SysUtils.ParseFloat(this.txtLongitude.Text, 0), -1);
+                fMapBrowser.SetCenter(SysUtils.ParseFloat(txtLatitude.Text, 0), SysUtils.ParseFloat(txtLongitude.Text, 0), -1);
             }
         }
     }

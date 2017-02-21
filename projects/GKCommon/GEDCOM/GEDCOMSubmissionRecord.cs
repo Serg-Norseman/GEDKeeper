@@ -24,44 +24,44 @@ namespace GKCommon.GEDCOM
     {
         public string FamilyFileName
         {
-            get { return base.GetTagStringValue("FAMF"); }
-            set { base.SetTagStringValue("FAMF", value); }
+            get { return GetTagStringValue("FAMF"); }
+            set { SetTagStringValue("FAMF", value); }
         }
 
         public string TempleCode
         {
-            get { return base.GetTagStringValue("TEMP"); }
-            set { base.SetTagStringValue("TEMP", value); }
+            get { return GetTagStringValue("TEMP"); }
+            set { SetTagStringValue("TEMP", value); }
         }
 
         public int GenerationsOfAncestors
         {
-            get { return base.GetTagIntegerValue("ANCE", 0); }
-            set { base.SetTagIntegerValue("ANCE", value); }
+            get { return GetTagIntegerValue("ANCE", 0); }
+            set { SetTagIntegerValue("ANCE", value); }
         }
 
         public int GenerationsOfDescendants
         {
-            get { return base.GetTagIntegerValue("DESC", 0); }
-            set { base.SetTagIntegerValue("DESC", value); }
+            get { return GetTagIntegerValue("DESC", 0); }
+            set { SetTagIntegerValue("DESC", value); }
         }
 
         public GEDCOMOrdinanceProcessFlag OrdinanceProcessFlag
         {
-            get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(base.GetTagStringValue("ORDI")); }
-            set { base.SetTagStringValue("ORDI", GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
+            get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(GetTagStringValue("ORDI")); }
+            set { SetTagStringValue("ORDI", GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
         }
 
         public GEDCOMPointer Submitter
         {
-            get { return base.TagClass("SUBM", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass("SUBM", GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            base.SetRecordType(GEDCOMRecordType.rtSubmission);
-            base.SetName("SUBN");
+            SetRecordType(GEDCOMRecordType.rtSubmission);
+            SetName("SUBN");
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

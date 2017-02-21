@@ -29,58 +29,58 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class FilePropertiesDlg : Form, IBaseEditor
+    public sealed partial class FilePropertiesDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         public FilePropertiesDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
             btnLangEdit.Image = GKResources.iRecEdit;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
-            this.UpdateControls();
+            UpdateControls();
 
             // SetLang()
-            this.Text = LangMan.LS(LSID.LSID_MIFileProperties);
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
-            this.lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            this.lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
-            this.pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            this.lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
-            this.lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+            Text = LangMan.LS(LSID.LSID_MIFileProperties);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
+            lblName.Text = LangMan.LS(LSID.LSID_Name);
+            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
+            lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
+            pageOther.Text = LangMan.LS(LSID.LSID_Other);
+            lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
+            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 
         private void UpdateControls()
         {
-            txtLanguage.Text = this.fBase.Tree.Header.Language.StringValue;
+            txtLanguage.Text = fBase.Tree.Header.Language.StringValue;
 
-            GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
-            this.txtName.Text = submitter.Name.FullName;
-            this.txtAddress.Text = submitter.Address.Address.Text;
+            GEDCOMSubmitterRecord submitter = fBase.Tree.GetSubmitter();
+            txtName.Text = submitter.Name.FullName;
+            txtAddress.Text = submitter.Address.Address.Text;
 
             if (submitter.Address.PhoneNumbers.Count > 0) {
-                this.txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
+                txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
             }
 
-            this.UpdateStats();
+            UpdateStats();
         }
 
         private void UpdateStats()
         {
-            int[] stats = this.fBase.Tree.GetRecordStats();
+            int[] stats = fBase.Tree.GetRecordStats();
 
             lvRecordStats.Items.Clear();
             for (int i = 1; i < stats.Length; i++)
@@ -94,39 +94,39 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fBase.Tree.Header.Language.ParseString(txtLanguage.Text);
+                fBase.Tree.Header.Language.ParseString(txtLanguage.Text);
 
-                GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
-                submitter.Name.StringValue = this.txtName.Text;
-                submitter.Address.SetAddressArray(this.txtAddress.Lines);
+                GEDCOMSubmitterRecord submitter = fBase.Tree.GetSubmitter();
+                submitter.Name.StringValue = txtName.Text;
+                submitter.Address.SetAddressArray(txtAddress.Lines);
 
                 if (submitter.Address.PhoneNumbers.Count > 0) {
-                    submitter.Address.PhoneNumbers[0].StringValue = this.txtTel.Text;
+                    submitter.Address.PhoneNumbers[0].StringValue = txtTel.Text;
                 } else {
-                    submitter.Address.AddPhoneNumber(this.txtTel.Text);
+                    submitter.Address.AddPhoneNumber(txtTel.Text);
                 }
 
                 submitter.ChangeDate.ChangeDateTime = DateTime.Now;
-                this.fBase.Modified = true;
-                base.DialogResult = DialogResult.OK;
+                fBase.Modified = true;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
-		private void btnLangEdit_Click(object sender, EventArgs e)
-		{
-		    using (var dlg = new LanguageEditDlg()) {
-		        dlg.LanguageID = this.fBase.Tree.Header.Language.Value;
+        private void btnLangEdit_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new LanguageEditDlg()) {
+                dlg.LanguageID = fBase.Tree.Header.Language.Value;
 
-		        if (dlg.ShowDialog() == DialogResult.OK) {
-		            // Assignment in control, instead of the header's property to work Cancel.
-		            txtLanguage.Text = GEDCOMLanguage.GetNameByLID(dlg.LanguageID);
-		        }
-		    }
-		}
+                if (dlg.ShowDialog() == DialogResult.OK) {
+                    // Assignment in control, instead of the header's property to work Cancel.
+                    txtLanguage.Text = GEDCOMLanguage.GetNameByLID(dlg.LanguageID);
+                }
+            }
+        }
     }
 }

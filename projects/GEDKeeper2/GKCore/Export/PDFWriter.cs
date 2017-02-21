@@ -34,21 +34,21 @@ namespace GKCore.Export
 
     public class PDFWriter : CustomWriter
     {
-        private int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
+        private readonly int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
         
         private Document fDocument;
         private PdfWriter fWriter;
-        private it.List list;
+        private List fList;
         private Paragraph p;
-        private BaseFont baseFont;
+        private BaseFont fBaseFont;
 
         public PDFWriter()
         {
             #if !__MonoCS__
-            this.baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             #else
             //BaseFont.TIMES_ROMAN, "Cp1251"
-            this.baseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            this.fBaseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             #endif
         }
 
@@ -63,21 +63,21 @@ namespace GKCore.Export
 
         public override void beginWrite()
         {
-            iTextSharp.text.Rectangle pageSize = !this.fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
+            iTextSharp.text.Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
-            this.fDocument = new Document(pageSize, this.fMargins.Left, this.fMargins.Right, this.fMargins.Top, this.fMargins.Bottom);
-            this.fWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fFileName, FileMode.Create));
+            fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
+            fWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
 
-            this.fDocument.AddTitle(this.fDocumentTitle);
-            this.fDocument.AddSubject("");
-            this.fDocument.AddAuthor("");
-            this.fDocument.AddCreator(GKData.APP_TITLE);
-            this.fDocument.Open();
+            fDocument.AddTitle(fDocumentTitle);
+            fDocument.AddSubject("");
+            fDocument.AddAuthor("");
+            fDocument.AddCreator(GKData.APP_TITLE);
+            fDocument.Open();
         }
 
         public override void endWrite()
         {
-            this.fDocument.Close();
+            fDocument.Close();
         }
 
         public override object CreateFont(string name, float size, bool bold, bool underline, Color color)
@@ -88,19 +88,19 @@ namespace GKCore.Export
 
             BaseColor clr = new BaseColor(color.ToArgb());
 
-            return new it.Font(baseFont, size, style, clr);
+            return new it.Font(fBaseFont, size, style, clr);
         }
 
         public override void addParagraph(string text, object font)
         {
-            this.fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = Element.ALIGN_LEFT });
+            fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = Element.ALIGN_LEFT });
         }
 
         public override void addParagraph(string text, object font, TextAlignment alignment)
         {
             int al = iAlignments[(int)alignment];
             
-            this.fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = al });
+            fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = al });
         }
 
         public override void addParagraphAnchor(string text, object font, string anchor)
@@ -120,19 +120,19 @@ namespace GKCore.Export
 
         public override void beginList()
         {
-            list = new it.List(it.List.UNORDERED);
-            list.SetListSymbol("\u2022");
-            list.IndentationLeft = 10f;
+            fList = new List(List.UNORDERED);
+            fList.SetListSymbol("\u2022");
+            fList.IndentationLeft = 10f;
         }
 
         public override void endList()
         {
-            fDocument.Add(list);
+            fDocument.Add(fList);
         }
 
         public override void addListItem(string text, object font)
         {
-            list.Add(new it.ListItem(new Chunk(text, (iTextSharp.text.Font)font)));
+            fList.Add(new ListItem(new Chunk(text, (iTextSharp.text.Font)font)));
         }
 
         public override void addListItemLink(string text, object font, string link, object linkFont)
@@ -144,7 +144,7 @@ namespace GKCore.Export
                 p1.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
             }
 
-            list.Add(new it.ListItem(p1));
+            fList.Add(new ListItem(p1));
         }
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)

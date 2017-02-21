@@ -46,9 +46,9 @@ namespace GKCore.Interfaces
         
         public FilterCondition(int columnIndex, ConditionKind condition, object value)
         {
-            this.ColumnIndex = columnIndex;
-            this.Condition = condition;
-            this.Value = value;
+            ColumnIndex = columnIndex;
+            Condition = condition;
+            Value = value;
         }
     }
 

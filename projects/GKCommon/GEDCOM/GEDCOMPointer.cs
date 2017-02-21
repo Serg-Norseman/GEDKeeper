@@ -27,48 +27,47 @@ namespace GKCommon.GEDCOM
         // TODO: need to do a protection test on the proper records (with XRef)
         public GEDCOMRecord Value
         {
-            get	{
-                return base.FindRecord(this.XRef);
+            get {
+                return FindRecord(XRef);
             }
-            set	{
-                this.fXRef = "";
-                if (value != null)
+            set {
+                fXRef = "";
+                if (value == null) return;
+
+                string xrf = value.XRef;
+                if (string.IsNullOrEmpty(xrf))
                 {
-                    string xrf = value.XRef;
-                    if (string.IsNullOrEmpty(xrf))
-                    {
-                        xrf = value.NewXRef();
-                    }
-                    this.XRef = xrf;
+                    xrf = value.NewXRef();
                 }
+                XRef = xrf;
             }
         }
 
         public string XRef
         {
-            get { return GEDCOMUtils.CleanXRef(this.fXRef); }
-            set { this.fXRef = GEDCOMUtils.EncloseXRef(value); }
+            get { return GEDCOMUtils.CleanXRef(fXRef); }
+            set { fXRef = GEDCOMUtils.EncloseXRef(value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            this.fXRef = "";
+            fXRef = "";
         }
 
         protected override string GetStringValue()
         {
-            return this.fXRef;
+            return fXRef;
         }
 
         public override bool IsEmpty()
         {
-            return (base.IsEmpty() && string.IsNullOrEmpty(this.fXRef));
+            return (base.IsEmpty() && string.IsNullOrEmpty(fXRef));
         }
 
         public override string ParseString(string strValue)
         {
-            this.fXRef = "";
+            fXRef = "";
             string result = strValue;
             result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
@@ -78,7 +77,7 @@ namespace GKCommon.GEDCOM
                 if (pos > 0)
                 {
                     pos++;
-                    this.fXRef = result.Substring(0, pos);
+                    fXRef = result.Substring(0, pos);
                     result = result.Remove(0, pos);
                 }
             }
@@ -88,13 +87,13 @@ namespace GKCommon.GEDCOM
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            this.XRef = map.FindNewXRef(this.XRef);
+            XRef = map.FindNewXRef(XRef);
         }
 
         public void SetNamedValue(string name, GEDCOMRecord record)
         {
-            base.SetName(name);
-            this.Value = record;
+            SetName(name);
+            Value = record;
         }
 
         public GEDCOMPointer(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

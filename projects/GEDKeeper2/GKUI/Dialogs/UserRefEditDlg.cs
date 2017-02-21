@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class UserRefEditDlg : Form, IBaseEditor
+    public sealed partial class UserRefEditDlg : Form, IBaseEditor
     {
         private readonly IBaseWindow fBase;
 
@@ -39,57 +39,57 @@ namespace GKUI.Dialogs
 
         public GEDCOMUserReference UserRef
         {
-            get { return this.fUserRef; }
-            set { this.SetUserRef(value); }
+            get { return fUserRef; }
+            set { SetUserRef(value); }
         }
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return fBase; }
         }
 
         private void SetUserRef(GEDCOMUserReference value)
         {
-            this.fUserRef = value;
-            this.cmbRef.Text = this.fUserRef.StringValue;
-            this.cmbRefType.Text = this.fUserRef.ReferenceType;
+            fUserRef = value;
+            cmbRef.Text = fUserRef.StringValue;
+            cmbRefType.Text = fUserRef.ReferenceType;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.fUserRef.StringValue = this.cmbRef.Text;
-                this.fUserRef.ReferenceType = this.cmbRefType.Text;
-                base.DialogResult = DialogResult.OK;
+                fUserRef.StringValue = cmbRef.Text;
+                fUserRef.ReferenceType = cmbRefType.Text;
+                DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
-                base.DialogResult = DialogResult.None;
+                fBase.Host.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
+                DialogResult = DialogResult.None;
             }
         }
 
         public UserRefEditDlg(IBaseWindow baseWin)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.btnAccept.Image = GKResources.iBtnAccept;
-            this.btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
 
-            this.fBase = baseWin;
+            fBase = baseWin;
 
             for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
             {
-                this.cmbRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
+                cmbRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
             }
 
             // SetLang()
-            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Text = LangMan.LS(LSID.LSID_WinUserRefEdit);
-            this.lblReference.Text = LangMan.LS(LSID.LSID_Reference);
-            this.lblRefType.Text = LangMan.LS(LSID.LSID_Type);
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinUserRefEdit);
+            lblReference.Text = LangMan.LS(LSID.LSID_Reference);
+            lblRefType.Text = LangMan.LS(LSID.LSID_Type);
         }
     }
 }

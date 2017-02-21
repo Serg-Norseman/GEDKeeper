@@ -140,13 +140,13 @@ namespace GKUI
             return new MainWin();
         }
 
-        static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
+        private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
         {
             Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
             Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace);
         }
 
-        static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
         {
             // saving restore copies
             MainWin.Instance.CriticalSave();

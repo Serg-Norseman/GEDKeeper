@@ -22,7 +22,7 @@ namespace Externals.IniFiles
             fFormatting = ExtractFormat(content);
             content = content.TrimStart();
             if (IniFileSettings.AllowInlineComments) {
-                IndexOfAnyResult result = IniFileElement.IndexOfAny(content, IniFileSettings.CommentChars);
+                IndexOfAnyResult result = IndexOfAny(content, IniFileSettings.CommentChars);
                 if (result.Index > content.IndexOf(IniFileSettings.SectionCloseBracket)) {
                     fInlineComment = content.Substring(result.Index + result.Any.Length);
                     content = content.Substring(0, result.Index);
@@ -89,7 +89,7 @@ namespace Externals.IniFiles
             }
             else
                 ret.Format();
- 
+
             return ret;
         }
 
@@ -118,7 +118,7 @@ namespace Externals.IniFiles
                     form.Append(insideWhiteChars);
                     afterS = false; form.Append(IniFileSettings.SectionCloseBracket);
                 }
-                else if ((IniFileElement.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((OfAny(i, content, IniFileSettings.CommentChars)) != null) {
                     form.Append(';');
                 }
                 else if (char.IsWhiteSpace(currC)) {

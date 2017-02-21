@@ -138,7 +138,7 @@ namespace GKUI.Charts
              * top and bottom. */
             sourceRect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
             destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
-                fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
+                                            fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
             gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
             if (0 < fDCount)
             {
@@ -150,8 +150,8 @@ namespace GKUI.Charts
         {
             int availableHeight = fDestRect.Height - (SCALE_Y1 + (Height - SCALE_Y2));
             int step = availableHeight / fDCount;
-            int thumpTop = System.Math.Min(fDestRect.Top + SCALE_Y1 + stepIndex * step,
-                                           fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
+            int thumpTop = Math.Min(fDestRect.Top + SCALE_Y1 + stepIndex * step,
+                                    fDestRect.Bottom - (Height - SCALE_Y2) - THUMB_RECT.Height);
             return new Rectangle(fDestRect.Left, thumpTop, fDestRect.Width, THUMB_RECT.Height);
         }
 

@@ -33,8 +33,8 @@ namespace GKCommon.Controls
 
         public HintRequestEventArgs(int fragmentNumber, int size)
         {
-            this.FragmentNumber = fragmentNumber;
-            this.Size = size;
+            FragmentNumber = fragmentNumber;
+            Size = size;
         }
     }
 
@@ -70,13 +70,13 @@ namespace GKCommon.Controls
 
         public LogChart()
         {
-            this.fList = new List<Fragment>();
+            fList = new List<Fragment>();
 
-            this.fToolTip = new ToolTip();
-            this.fToolTip.AutoPopDelay = 5000;
-            this.fToolTip.InitialDelay = 250;
-            this.fToolTip.ReshowDelay = 50;
-            this.fToolTip.ShowAlways = true;
+            fToolTip = new ToolTip();
+            fToolTip.AutoPopDelay = 5000;
+            fToolTip.InitialDelay = 250;
+            fToolTip.ReshowDelay = 50;
+            fToolTip.ShowAlways = true;
         }
 
         protected override void Dispose(bool disposing)
@@ -91,7 +91,7 @@ namespace GKCommon.Controls
         public void Clear()
         {
             fList.Clear();
-            this.UpdateContents();
+            UpdateContents();
         }
 
         public void AddFragment(int val)
@@ -106,7 +106,7 @@ namespace GKCommon.Controls
 
             fList.Add(frag);
 
-            this.UpdateContents();
+            UpdateContents();
         }
 
         private void UpdateContents()
@@ -114,7 +114,7 @@ namespace GKCommon.Controls
             int count = fList.Count;
             if (count == 0) return;
             
-            int wid = this.Width - (count - 1);
+            int wid = Width - (count - 1);
 
             Fragment frag;
 
@@ -148,7 +148,7 @@ namespace GKCommon.Controls
             int d = wid - resWidth;
             if (d > 0) {
                 // the difference distribute between the highest allocated fragments
-                List<Fragment> ordList = new List<Fragment>(this.fList);
+                List<Fragment> ordList = new List<Fragment>(fList);
                 ordList.Sort(new FragmentComparer());
 
                 int idx = 0;
@@ -170,11 +170,11 @@ namespace GKCommon.Controls
                 frag = fList[i];
 
                 frag.X = x;
-                frag.Rect = new Rectangle(x, 0, frag.Width, this.Height);
+                frag.Rect = new Rectangle(x, 0, frag.Width, Height);
                 x = x + (frag.Width + 1);
             }
 
-            base.Invalidate();
+            Invalidate();
         }
 
         private class FragmentComparer: IComparer<Fragment>
@@ -189,7 +189,7 @@ namespace GKCommon.Controls
         {
             base.OnPaint(e);
             
-            if (this.Width <= 0 || this.Height <= 0) return;
+            if (Width <= 0 || Height <= 0) return;
 
             Graphics gfx = e.Graphics;
 
@@ -197,24 +197,24 @@ namespace GKCommon.Controls
             if (count > 0) {
                 for (int i = 0; i < count; i++) {
                     Fragment frag = fList[i];
-                    this.DrawRect(gfx, frag.X, frag.Width, FRAG_BRUSH);
+                    DrawRect(gfx, frag.X, frag.Width, FRAG_BRUSH);
                 }
             } else {
-                this.DrawRect(gfx, 0, this.Width, EMPTY_BRUSH);
+                DrawRect(gfx, 0, Width, EMPTY_BRUSH);
             }
         }
 
         private void DrawRect(Graphics gfx, int x, int width, Brush lb)
         {
-            gfx.FillRectangle(lb, x, 0, width, this.Height);
+            gfx.FillRectangle(lb, x, 0, width, Height);
         }
 
         private string HintRequest(int fragmentNumber, int size)
         {
-            if (this.OnHintRequest == null) return string.Empty;
+            if (OnHintRequest == null) return string.Empty;
 
             HintRequestEventArgs args = new HintRequestEventArgs(fragmentNumber, size);
-            this.OnHintRequest(this, args);
+            OnHintRequest(this, args);
             return args.Hint;
         }
 
@@ -233,8 +233,8 @@ namespace GKCommon.Controls
                 }
             }
 
-            if (this.fHint != hint) {
-                this.fHint = hint;
+            if (fHint != hint) {
+                fHint = hint;
                 fToolTip.Show(hint, this, e.X, e.Y, 3000);
             }
         }

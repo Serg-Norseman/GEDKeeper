@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public string Title
         {
-            get { return base.GetTagStringValue("TITL"); }
-            set { base.SetTagStringValue("TITL", value); }
+            get { return GetTagStringValue("TITL"); }
+            set { SetTagStringValue("TITL", value); }
         }
 
         protected override string MediaTypeTagName()

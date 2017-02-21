@@ -52,19 +52,16 @@ namespace GKUI.Charts
         protected override void BuildPathTree()
         {
             fSegments.Clear();
+            fIndividualsCount = 0;
+            if (fRootPerson == null) return;
 
             // traverse tree
-            fIndividualsCount = 0;
+            PersonSegment rootSegment = TraverseDescendants(fRootPerson, 0);
 
-            PersonSegment rootSegment;
-            if (fRootPerson != null) {
-                rootSegment = TraverseDescendants(fRootPerson, 0);
+            const float inRad = CENTER_RAD - 50;
+            float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
-                const float inRad = CENTER_RAD - 50;
-                float stepAngle = (360.0f / rootSegment.TotalSubSegments);
-
-                CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
-            }
+            CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
         }
 
         private void CalcDescendants(PersonSegment segment, float inRad, float startAngle, float stepAngle)
@@ -122,21 +119,20 @@ namespace GKUI.Charts
                     for (int j = 0; j < numberOfFamilyLinks; j++)
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-                        if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
+                        if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
+
+                        family.SortChilds();
+
+                        int numberOfChildren = family.Children.Count;
+                        for (int i = 0; i < numberOfChildren; i++)
                         {
-                            family.SortChilds();
+                            GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
+                            PersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
-                            int numberOfChildren = family.Children.Count;
-                            for (int i = 0; i < numberOfChildren; i++)
-                            {
-                                GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
-                                PersonSegment childSegment = TraverseDescendants(child, gen + 1);
+                            int size = Math.Max(1, childSegment.TotalSubSegments);
+                            resultSegment.TotalSubSegments += size;
 
-                                int size = Math.Max(1, childSegment.TotalSubSegments);
-                                resultSegment.TotalSubSegments += size;
-
-                                resultSegment.ChildSegments.Add(childSegment);
-                            }
+                            resultSegment.ChildSegments.Add(childSegment);
                         }
                     }
                 }

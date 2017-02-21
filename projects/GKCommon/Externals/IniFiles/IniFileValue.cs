@@ -27,7 +27,7 @@ namespace Externals.IniFiles
             
             if (split0.Length > 0) {
                 if (IniFileSettings.AllowInlineComments) {
-                    IndexOfAnyResult result = IniFileElement.IndexOfAny(split1, IniFileSettings.CommentChars);
+                    IndexOfAnyResult result = IndexOfAny(split1, IniFileSettings.CommentChars);
                     if (result.Index != -1) {
                         fInlineComment = split1.Substring(result.Index + result.Any.Length);
                         split1 = split1.Substring(0, result.Index).TrimEnd();
@@ -68,7 +68,7 @@ namespace Externals.IniFiles
         public string Value
         {
             get { return fValue; }
-            set { this.fValue = value; Format(); }
+            set { fValue = value; Format(); }
         }
 
         /// <summary>Gets or sets an inline comment, which appear after the value.</summary>
@@ -85,7 +85,7 @@ namespace Externals.IniFiles
             }
         }
 
-        enum FEState // stare of format extractor (ExtractFormat method)
+        private enum FEState // stare of format extractor (ExtractFormat method)
         {
             BeforeEvery, AfterKey, BeforeVal, AfterVal
         }
@@ -119,7 +119,7 @@ namespace Externals.IniFiles
                     //afterKey = false; beforeVal = true;
                     form.Append('=');
                 }
-                else if ((IniFileElement.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((OfAny(i, content, IniFileSettings.CommentChars)) != null) {
                     form.Append(insideWhiteChars);
                     form.Append(';');
                 }

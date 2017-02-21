@@ -37,9 +37,9 @@ namespace GKCore.Export
             public bool Underline;
         }
 
-        private Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
+        private readonly Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
 
-        private RtfDocument fDocument;
+        private readonly RtfDocument fDocument;
         private RtfParagraph fParagraph;
 
         public RTFWriter()
