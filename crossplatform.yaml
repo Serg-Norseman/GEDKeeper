@@ -1,0 +1,7 @@
+---
+PathsMappings:
+  - Source: D:\VIRTS\shared\
+    Target: /home/norseman/share/
+  - Source: /home/norseman/share/
+    Target: D:\VIRTS\shared\
+...
