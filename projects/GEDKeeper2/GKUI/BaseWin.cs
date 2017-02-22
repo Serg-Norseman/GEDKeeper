@@ -1014,6 +1014,7 @@ namespace GKUI
             {
                 try
                 {
+                    bool firstTip = true;
                     int num = fTree.RecordsCount;
                     for (int i = 0; i < num; i++)
                     {
@@ -1028,24 +1029,32 @@ namespace GKUI
                             string nm = GKUtils.GetNameString(iRec, true, false);
                             nm = fContext.Culture.GetPossessiveName(nm);
 
-                            if (0 == days)
-                            {
-                                tipsList.Add(string.Format(
-                                    LangMan.LS(LSID.LSID_BirthdayToday),
-                                    nm));
-                            }
-                            else if (1 == days)
-                            {
-                                tipsList.Add(string.Format(
-                                    LangMan.LS(
-                                        LSID.LSID_BirthdayTomorrow),
-                                    nm));
-                            }
-                            else if (3 > days)
-                            {
-                                tipsList.Add(string.Format(
-                                    LangMan.LS(LSID.LSID_DaysRemained),
-                                    nm, days));
+                            if (3 > days) {
+                                string tip;
+
+                                if (firstTip) {
+                                    tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                                    firstTip = false;
+                                }
+
+                                if (0 == days)
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_BirthdayToday), nm);
+                                }
+                                else if (1 == days)
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
+                                }
+                                else
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_DaysRemained),
+                                        nm, days);
+                                }
+
+                                tipsList.Add(tip);
                             }
                         }
                     }

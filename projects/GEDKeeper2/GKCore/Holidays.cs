@@ -98,25 +98,37 @@ namespace GKCore
                 {
                     DateTime dtNow = DateTime.Now.Date;
 
+                    bool firstTip = true;
                     for (int i = 0; i < fHolidays.Holidays.Length; i++) {
                         var holiday = fHolidays.Holidays[i];
 
                         uint days = SysUtils.DaysBetween(dtNow, holiday.XDate);
 
-                        if (0 == days)
-                        {
-                            tipsList.Add(string.Format(
-                                LangMan.LS(LSID.LSID_HolidayToday), holiday.Name));
-                        }
-                        else if (1 == days)
-                        {
-                            tipsList.Add(string.Format(
-                                LangMan.LS(LSID.LSID_HolidayTomorrow), holiday.Name));
-                        }
-                        else if (3 > days)
-                        {
-                            tipsList.Add(string.Format(
-                                LangMan.LS(LSID.LSID_DaysRemainedBeforeHoliday), holiday.Name, days));
+                        if (3 > days) {
+                            string tip;
+
+                            if (firstTip) {
+                                tipsList.Add("#" + LangMan.LS(LSID.LSID_Holidays));
+                                firstTip = false;
+                            }
+
+                            if (0 == days)
+                            {
+                                tip = string.Format(
+                                    LangMan.LS(LSID.LSID_HolidayToday), holiday.Name);
+                            }
+                            else if (1 == days)
+                            {
+                                tip = string.Format(
+                                    LangMan.LS(LSID.LSID_HolidayTomorrow), holiday.Name);
+                            }
+                            else
+                            {
+                                tip = string.Format(
+                                    LangMan.LS(LSID.LSID_DaysRemainedBeforeHoliday), holiday.Name, days);
+                            }
+
+                            tipsList.Add(tip);
                         }
                     }
                 }

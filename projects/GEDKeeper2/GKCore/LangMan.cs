@@ -808,8 +808,9 @@ namespace GKCore
         /* 749 */ LSID_HolidayToday,
         /* 750 */ LSID_HolidayTomorrow,
         /* 751 */ LSID_DaysRemainedBeforeHoliday,
+        /* 752 */ LSID_Holidays,
 
-        /* 000 */ LSID_Last = LSID_DaysRemainedBeforeHoliday
+        /* 000 */ LSID_Last = LSID_Holidays
     }
 
     // TODO: remove and merge with LangManager
@@ -1572,6 +1573,7 @@ namespace GKCore
             /* 749 */ "Today is holiday \"{0}\"",
             /* 750 */ "Tomorrow is holiday \"{0}\"",
             /* 751 */ "{1} days remain before the holiday \"{0}\"",
+            /* 752 */ "Holidays",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

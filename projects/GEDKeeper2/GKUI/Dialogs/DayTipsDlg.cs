@@ -62,7 +62,18 @@ namespace GKUI.Dialogs
         {
             if (fTips.Count > 0)
             {
-                txtTip.Text = fTips[0];
+                string tip = fTips[0];
+
+                // processing "title's directives"
+                if (!string.IsNullOrEmpty(tip) && tip[0] == '#') {
+                    tip = tip.Substring(1);
+                    lblTitle.Text = tip;
+
+                    fTips.Delete(0);
+                    tip = fTips[0];
+                }
+
+                txtTip.Text = tip;
                 fTips.Delete(0);
             }
             btnNextTip.Enabled = (fTips.Count > 0);
