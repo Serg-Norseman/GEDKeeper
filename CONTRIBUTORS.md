@@ -10,11 +10,13 @@
   * UDN format and sorter
   * Makefiles
   * Debugging and bug reports
+  * Improvements of charts drawing and printing
 
 * **[Igor Tyulyakov](https://github.com/g10101k)**
 
   * Debugging and bug reports
   * Improvement of UI features
+  * Design solutions (MediaPlayer and portraits)
 
 
 ## External components

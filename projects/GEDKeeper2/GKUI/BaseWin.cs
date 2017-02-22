@@ -26,7 +26,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using Externals;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -39,6 +38,7 @@ using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
+using GKUI.Forms;
 
 namespace GKUI
 {

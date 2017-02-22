@@ -83,14 +83,14 @@ namespace GKUI.Forms
 
             Image img = GetPrintable().GetPrintableImage();
 
-            int imgW = img.Width;
-            int imgH = img.Height;
+            float imgW = img.Width;
+            float imgH = img.Height;
             float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
             if (factor > 1.0f) factor = 1.0f;
-            imgW = (int)(imgW * factor);
-            imgH = (int)(imgH * factor);
-            int x = (pageBounds.Width - imgW) / 2;
-            int y = (pageBounds.Height - imgH) / 2;
+            imgW = (imgW * factor);
+            imgH = (imgH * factor);
+            float x = (pageBounds.Width - imgW) / 2;
+            float y = (pageBounds.Height - imgH) / 2;
 
             gfx.DrawImage(img, x, y, imgW, imgH);
 
