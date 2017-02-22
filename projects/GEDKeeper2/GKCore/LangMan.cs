@@ -805,8 +805,11 @@ namespace GKCore
         /* 746 */ LSID_RemovableMediaWarningMessage,
         /* 747 */ LSID_RemovableMediaWarningOption,
         /* 748 */ LSID_LoadRecentFiles,
+        /* 749 */ LSID_HolidayToday,
+        /* 750 */ LSID_HolidayTomorrow,
+        /* 751 */ LSID_DaysRemainedBeforeHoliday,
 
-        /* 000 */ LSID_Last = LSID_LoadRecentFiles
+        /* 000 */ LSID_Last = LSID_DaysRemainedBeforeHoliday
     }
 
     // TODO: remove and merge with LangManager
@@ -1566,6 +1569,9 @@ namespace GKCore
             /* 746 */ "A media file is added from the removable media. Continue?",
             /* 747 */ "Warn when adding media files from removable media",
             /* 748 */ "Load at startup recent opened files",
+            /* 749 */ "Today is holiday \"{0}\"",
+            /* 750 */ "Tomorrow is holiday \"{0}\"",
+            /* 751 */ "{1} days remain before the holiday \"{0}\"",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -147,6 +147,7 @@
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
     <Compile Include="GKCore\GKData.cs" />
+    <Compile Include="GKCore\Holidays.cs" />
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
     <Compile Include="GKCore\LangMan.cs" />
