@@ -40,6 +40,7 @@ namespace GKCore
 
         public HolidaysList()
         {
+            Holidays = new Holiday[0];
         }
     }
 
@@ -57,6 +58,8 @@ namespace GKCore
 
         public void Load(string fileName)
         {
+            if (!File.Exists(fileName)) return;
+
             try
             {
                 // loading database
@@ -88,8 +91,6 @@ namespace GKCore
         {
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");
-
-            if (!GlobalOptions.Instance.ShowTips) return;
 
             try
             {

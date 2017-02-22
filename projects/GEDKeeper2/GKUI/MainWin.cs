@@ -306,8 +306,7 @@ namespace GKUI
 
                 ReloadRecentBases();
 
-                Holidays holidays = GetHolidays();
-                holidays.CollectTips(fTips);
+                ProcessHolidays();
             } finally {
                 EndLoading();
             }
@@ -451,6 +450,24 @@ namespace GKUI
 
         #region Misc functions
 
+        private string GetLanguageSign()
+        {
+            string lngSign;
+
+            LangRecord lngrec = fOptions.GetLangByCode(fOptions.InterfaceLang);
+            if (lngrec == null) {
+                if (fOptions.InterfaceLang == LangMan.LS_DEF_CODE) {
+                    lngSign = LangMan.LS_DEF_SIGN;
+                } else {
+                    lngSign = string.Empty;
+                }
+            } else {
+                lngSign = lngrec.Sign;
+            }
+
+            return lngSign;
+        }
+
         private static ushort RequestLanguage()
         {
             using (LanguageSelectDlg dlg = new LanguageSelectDlg())
@@ -507,13 +524,19 @@ namespace GKUI
             }
         }
 
-        private Holidays GetHolidays()
+        private void ProcessHolidays()
         {
+            if (!fOptions.ShowTips) return;
+
             Holidays holidays = new Holidays();
-            if (fOptions.InterfaceLang == 1049) {
-                holidays.Load(GKUtils.GetLangsPath() + "holidays_rus.yaml");
+
+            // TODO: We need a reference to the country, not the language
+            string lngSign = GetLanguageSign();
+            if (!string.IsNullOrEmpty(lngSign)) {
+                holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
             }
-            return holidays;
+
+            holidays.CollectTips(fTips);
         }
 
         public DialogResult ShowModalEx(Form form, bool keepModeless)
@@ -1206,18 +1229,8 @@ namespace GKUI
 
         public void ShowHelpTopic(string topic)
         {
-            string lngSign;
-
-            LangRecord lngrec = fOptions.GetLangByCode(fOptions.InterfaceLang);
-            if (lngrec == null) {
-                if (fOptions.InterfaceLang == LangMan.LS_DEF_CODE) {
-                    lngSign = LangMan.LS_DEF_SIGN;
-                } else {
-                    return;
-                }
-            } else {
-                lngSign = lngrec.Sign;
-            }
+            string lngSign = GetLanguageSign();
+            if (string.IsNullOrEmpty(lngSign)) return;
 
             string helpPath = GKUtils.GetHelpPath(lngSign);
 
