@@ -145,19 +145,18 @@ namespace GKUI
 
         private void SetViewControl(Control ctl)
         {
-            if (ctl != null) {
-                SuspendLayout();
-                fViewer = ctl;
-                ctl.Dock = DockStyle.Fill;
-                ctl.Location = new Point(0, 0);
-                ctl.Size = new Size(100, 100);
-                Controls.Add(ctl);
-                Controls.SetChildIndex(ctl, 0);
+            if (ctl == null) return;
+            fViewer = ctl;
 
-                ResumeLayout(false);
+            SuspendLayout();
 
-                fViewer = ctl;
-            }
+            ctl.Dock = DockStyle.Fill;
+            ctl.Location = new Point(0, 0);
+            ctl.Size = new Size(100, 100);
+            Controls.Add(ctl);
+            Controls.SetChildIndex(ctl, 0);
+
+            ResumeLayout(false);
         }
 
         public MediaViewerWin(IBaseWindow baseWin)
@@ -184,18 +183,12 @@ namespace GKUI
                 Close();
             }
         }
-        void MediaViewerWinFormClosing(object sender, FormClosingEventArgs e)
+
+        private void MediaViewerWin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
-            switch (mmKind)
-            {
-                case MultimediaKind.mkVideo:
-                    {
-                        ((MediaPlayer)fViewer).btnStop_Click(null, null);
-                        break;
-                    }
+            if (fViewer is MediaPlayer) {
+                ((MediaPlayer)fViewer).btnStop_Click(null, null);
             }
         }
-        
     }
 }

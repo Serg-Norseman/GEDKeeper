@@ -61,8 +61,12 @@ namespace GKMediaPlayer
             fPlayer.Events.PlayerStopped += Events_PlayerStopped;
 
             fPlayer.WindowHandle = pnlVideo.Handle;
-            trkVolume.Value = fPlayer.Volume > 0 ? fPlayer.Volume : 0;
+
+            trkVolume.Value = Math.Max(0, fPlayer.Volume);
             trkVolume_Scroll(null, null);
+
+            fMedia = null;
+
             UISync.Init(this);
         }
 
@@ -121,7 +125,7 @@ namespace GKMediaPlayer
 
         private void Events_ParsedChanged(object sender, MediaParseChange e)
         {
-            Console.WriteLine(e.Parsed);
+            //Console.WriteLine(e.Parsed);
         }
 
         #endregion
@@ -130,46 +134,45 @@ namespace GKMediaPlayer
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(fMediaFile))
-            {
-                fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
-                fMedia.Events.DurationChanged += Events_DurationChanged;
-                fMedia.Events.StateChanged += Events_StateChanged;
-                fMedia.Events.ParsedChanged += Events_ParsedChanged;
+            if (fMedia == null) {
+                if (!string.IsNullOrEmpty(fMediaFile)) {
+                    fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
+                    fMedia.Events.DurationChanged += Events_DurationChanged;
+                    fMedia.Events.StateChanged += Events_StateChanged;
+                    fMedia.Events.ParsedChanged += Events_ParsedChanged;
 
-                fPlayer.Open(fMedia);
-                fMedia.Parse(true);
+                    fPlayer.Open(fMedia);
+                    fMedia.Parse(true);
+                } else {
+                    MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
-                fPlayer.Play();
-            }
-            else
-            {
-                MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            fPlayer.Play();
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)
         {
-            
-            fPlayer.Volume = trkVolume.Value;
             fPlayer.Mute = false;
-            if (100 >=  fPlayer.Volume && fPlayer.Volume > 50){
+            fPlayer.Volume = trkVolume.Value;
+
+            if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
                 btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMax;
-            } 
-            if (50 >=  fPlayer.Volume && fPlayer.Volume > 5){ 
+            }
+            if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
                 btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMiddle;
             }
-            if (5 >=  fPlayer.Volume && fPlayer.Volume > 0){
+            if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
                 btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMin;
-            }            
-            if (fPlayer.Volume == 0){
+            }
+            if (fPlayer.Volume == 0) {
                 btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
             }
         }
 
         private void trkPosition_Scroll(object sender, EventArgs e)
         {
-            fPlayer.Position = (float)trkPosition.Value / 100;
+            fPlayer.Position = trkPosition.Value / 100.0f;
         }
 
         public void btnStop_Click(object sender, EventArgs e)
@@ -185,12 +188,12 @@ namespace GKMediaPlayer
         private void btnMute_Click(object sender, EventArgs e)
         {
             fPlayer.ToggleMute();
-            if (fPlayer.Mute){
+
+            if (fPlayer.Mute) {
                 btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
-            }
-            else{
+            } else {
                 trkVolume_Scroll(sender, e);
-            }            
+            }
         }
 
         #endregion
