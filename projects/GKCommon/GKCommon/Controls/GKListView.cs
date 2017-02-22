@@ -331,6 +331,7 @@ namespace GKCommon.Controls
                 Graphics gfx = e.Graphics;
                 Rectangle rt = e.Bounds;
 
+                #if !__MonoCS__
                 VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
                 if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
                     element = VisualStyleElement.Header.Item.Hot;
@@ -339,6 +340,9 @@ namespace GKCommon.Controls
 
                 var visualStyleRenderer = new VisualStyleRenderer(element);
                 visualStyleRenderer.DrawBackground(gfx, rt);
+                #else
+                e.DrawBackground();
+                #endif
 
                 switch (e.Header.TextAlign)
                 {

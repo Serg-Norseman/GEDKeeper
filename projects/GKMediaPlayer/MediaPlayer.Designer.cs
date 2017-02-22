@@ -22,7 +22,6 @@
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MediaPlayer));
             this.btnMute = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
@@ -218,8 +217,8 @@
             // 
             // MediaPlayer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.pnlVideo);
             this.Controls.Add(this.pnlControls);
             this.Name = "MediaPlayer";
@@ -236,7 +235,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-
         }
     }
 }
