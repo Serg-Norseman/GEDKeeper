@@ -87,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKMediaPlayerResources.Designer.cs">
+      <DependentUpon>GKMediaPlayerResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="MediaPlayer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -95,6 +99,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKMediaPlayerResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKMediaPlayerResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="MediaPlayer.resx">
       <DependentUpon>MediaPlayer.Designer.cs</DependentUpon>
     </EmbeddedResource>
