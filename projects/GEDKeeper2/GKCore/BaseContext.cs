@@ -637,7 +637,7 @@ namespace GKCore
 
         private void ArcFileLoad(string targetFn, Stream toStream)
         {
-            targetFn = targetFn.Replace('\\', '/');
+            targetFn = SysUtils.NormalizeFilename(targetFn);
 
             using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read))
             {
@@ -709,33 +709,7 @@ namespace GKCore
 
         public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
         {
-            if (fileReference == null)
-                throw new ArgumentNullException("fileReference");
-
-            string fileRef = fileReference.StringValue;
-
-            fileName = fileRef;
-            MediaStoreType result;
-
-            if (fileRef.IndexOf(GKData.GKStoreTypes[2].Sign) == 0)
-            {
-                result = MediaStoreType.mstArchive;
-                fileName = fileName.Remove(0, 4);
-            }
-            else
-            {
-                if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0)
-                {
-                    result = MediaStoreType.mstStorage;
-                    fileName = fileName.Remove(0, 4);
-                }
-                else
-                {
-                    result = MediaStoreType.mstReference;
-                }
-            }
-
-            return result;
+            return GKUtils.GetStoreType(fileReference, ref fileName);
         }
 
         public void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException)
@@ -807,7 +781,6 @@ namespace GKCore
                             if (!File.Exists(GetArcFileName())) {
                                 GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
-                                targetFn = targetFn.Replace('\\', '/');
                                 ArcFileLoad(targetFn, fs);
                             }
                         }
@@ -895,6 +868,7 @@ namespace GKCore
             }
 
             if (result) {
+                refPath = SysUtils.NormalizeFilename(refPath);
                 fileReference.LinkFile(refPath);
             }
 
@@ -916,7 +890,8 @@ namespace GKCore
                     if (stm.Length != 0) {
                         using (Bitmap bmp = new Bitmap(stm))
                         {
-                            // cloning is necessary to release the resource loaded from the image stream
+                            // cloning is necessary to release the resource
+                            // loaded from the image stream
                             result = (Bitmap)bmp.Clone();
                         }
                     }

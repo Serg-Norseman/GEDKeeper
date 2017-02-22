@@ -2680,6 +2680,39 @@ namespace GKCore
             }
         }
 
+        public static MediaStoreType GetStoreType(GEDCOMFileReference fileReference)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            string fileRef = fileReference.StringValue;
+
+            MediaStoreType result;
+            if (fileRef.IndexOf(GKData.GKStoreTypes[2].Sign) == 0) {
+                result = MediaStoreType.mstArchive;
+            } else if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0) {
+                result = MediaStoreType.mstStorage;
+            } else {
+                result = MediaStoreType.mstReference;
+            }
+            return result;
+        }
+
+        public static MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            fileName = fileReference.StringValue;
+            MediaStoreType result = GetStoreType(fileReference);
+
+            if (result != MediaStoreType.mstReference) {
+                fileName = fileName.Remove(0, 4);
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Archives support

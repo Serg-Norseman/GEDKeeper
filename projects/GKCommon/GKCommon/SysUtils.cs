@@ -148,6 +148,13 @@ namespace GKCommon
             return (driveInfo.DriveType == DriveType.Removable);
         }
 
+        // Replaces backslashes with slashes
+        public static string NormalizeFilename(string fileName)
+        {
+            string filename = fileName.Replace('\\', '/');
+            return filename.Trim('/');
+        }
+
         #endregion
 
         #region KeyLayout functions

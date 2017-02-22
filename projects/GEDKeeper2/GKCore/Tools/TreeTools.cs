@@ -441,7 +441,8 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec)
+        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec,
+                                                   GEDCOMFormat format, int fileVer)
         {
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
                 GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
@@ -452,10 +453,22 @@ namespace GKCore.Tools
                     // attempt recovery
                     fileRef.MultimediaFormat = GEDCOMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
+
+                if (format == GEDCOMFormat.gf_Native && fileVer == 39) {
+                    // the transition to normalized names after GKv39
+                    // only for not direct references (platform specific paths)
+
+                    MediaStoreType storeType = GKUtils.GetStoreType(fileRef);
+                    if (storeType != MediaStoreType.mstReference) {
+                        fileRef.StringValue = SysUtils.NormalizeFilename(fileRef.StringValue);
+                    }
+                }
             }
         }
 
-        private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec, GEDCOMFormat format, ValuesCollection valuesCollection)
+        private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec,
+                                        GEDCOMFormat format, int fileVer,
+                                        ValuesCollection valuesCollection)
         {
             rec.RequireUID();
 
@@ -501,7 +514,7 @@ namespace GKCore.Tools
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
-                    CheckRecord_Multimedia(rec as GEDCOMMultimediaRecord);
+                    CheckRecord_Multimedia(rec as GEDCOMMultimediaRecord, format, fileVer);
                     break;
             }
         }
@@ -563,6 +576,7 @@ namespace GKCore.Tools
                 {
                     GEDCOMFormat format = tree.GetGEDCOMFormat();
                     bool idCheck = true;
+                    int fileVer;
 
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native)
@@ -576,17 +590,16 @@ namespace GKCore.Tools
                         tag = header.FindTag("_EXT_NAME", 0);
                         if (tag != null) header.DeleteTag("_EXT_NAME");
 
-                        //int fileVer = ConvHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
-                        //if (fileVer == GKData.APP_FORMAT_DEFVER && header.Language.Value = GEDCOMLanguageID.Russian) {
-                        // TODO: make condition for languages with patronymics (Culture-depend)
-                        //}
+                        fileVer = SysUtils.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
+                    } else {
+                        fileVer = -1;
                     }
 
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++)
                     {
                         GEDCOMRecord rec = tree[i];
-                        CheckRecord(tree, rec, format, valuesCollection);
+                        CheckRecord(tree, rec, format, fileVer, valuesCollection);
 
                         if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0)
                         {
