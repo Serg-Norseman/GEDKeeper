@@ -207,7 +207,7 @@
             // pnlVideo
             // 
             this.pnlVideo.BackColor = System.Drawing.SystemColors.WindowText;
-            this.pnlVideo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlVideo.BackgroundImage")));
+            this.pnlVideo.BackgroundImage = global::GKMediaPlayer.GKMediaPlayerResources.pnlVideo;
             this.pnlVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pnlVideo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlVideo.Dock = System.Windows.Forms.DockStyle.Fill;
