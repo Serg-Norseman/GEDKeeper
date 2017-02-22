@@ -135,17 +135,18 @@ namespace GKMediaPlayer
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (fMedia == null) {
-                if (!string.IsNullOrEmpty(fMediaFile)) {
-                    fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
-                    fMedia.Events.DurationChanged += Events_DurationChanged;
-                    fMedia.Events.StateChanged += Events_StateChanged;
-                    fMedia.Events.ParsedChanged += Events_ParsedChanged;
-
-                    fPlayer.Open(fMedia);
-                    fMedia.Parse(true);
-                } else {
+                if (string.IsNullOrEmpty(fMediaFile)) {
                     MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
+                fMedia.Events.DurationChanged += Events_DurationChanged;
+                fMedia.Events.StateChanged += Events_StateChanged;
+                fMedia.Events.ParsedChanged += Events_ParsedChanged;
+
+                fPlayer.Open(fMedia);
+                fMedia.Parse(true);
             }
 
             fPlayer.Play();
