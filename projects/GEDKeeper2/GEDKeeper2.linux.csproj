@@ -156,6 +156,7 @@
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
+    <Compile Include="GKCore\PortraitsCache.cs" />
     <Compile Include="GKCore\Holidays.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
