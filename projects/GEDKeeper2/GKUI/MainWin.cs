@@ -1593,9 +1593,7 @@ namespace GKUI
 
         public string GetAppDataPath()
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + GKData.APP_TITLE + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path;
+            return GKUtils.GetAppDataPath();
         }
 
         private WidgetInfo FindWidgetInfo(IWidget widget)

@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -48,7 +49,26 @@ namespace GKCore
 
         public Image GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
         {
-            return context.GetPrimaryBitmap(iRec, -1, -1, true);
+            if (context == null || iRec == null) return null;
+
+            Image result = null;
+
+            // calculate file reference hash
+            string imageHash = GKUtils.GetFileReferenceHash(null);
+
+            // check cache folder by fileRef hash
+            string cachedFile = GKUtils.GetCachePath() + imageHash + ".bmp";
+            if (File.Exists(cachedFile)) {
+                
+            }
+
+            // if cache isn't contains image, then load and save to cache
+            if (result == null) {
+                result = context.GetPrimaryBitmap(iRec, -1, -1, true);
+            }
+
+            // return result image
+            return result;
         }
     }
 }

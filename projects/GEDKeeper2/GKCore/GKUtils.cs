@@ -1440,6 +1440,20 @@ namespace GKCore
             return homePath + Path.DirectorySeparatorChar;
         }
 
+        public static string GetAppDataPath()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + GKData.APP_TITLE + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public static string GetCachePath()
+        {
+            string path = GetAppDataPath() + "imagecache" + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
+        }
+
         #endregion
 
         #region UI functions
@@ -2711,6 +2725,11 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public static string GetFileReferenceHash(GEDCOMFileReference fileReference)
+        {
+            return "test";
         }
 
         #endregion
