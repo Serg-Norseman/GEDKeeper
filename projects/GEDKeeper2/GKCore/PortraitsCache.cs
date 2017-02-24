@@ -63,6 +63,11 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
+        private static string GetCachedFilename(string imageUID)
+        {
+            return GKUtils.GetCachePath() + imageUID + ".bmp";
+        }
+
         public Image GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return null;
@@ -75,7 +80,7 @@ namespace GKCore
             // portrait doesn't define for individual
             if (string.IsNullOrEmpty(imageUID)) return null;
 
-            string cachedFile = GKUtils.GetCachePath() + imageUID + ".bmp";
+            string cachedFile = GetCachedFilename(imageUID);
 
             // check in-memory cache
             if (fMemoryCache.TryGetValue(cachedFile, out result)) {
@@ -105,6 +110,26 @@ namespace GKCore
 
             // return result image
             return result;
+        }
+
+        public void RemoveObsolete(GEDCOMMultimediaRecord mmRec)
+        {
+            if (mmRec == null) return;
+
+            try {
+                string imageUID = mmRec.UID;
+                string cachedFile = GetCachedFilename(imageUID);
+
+                if (fMemoryCache.ContainsKey(cachedFile)) {
+                    fMemoryCache.Remove(cachedFile);
+                }
+
+                if (File.Exists(cachedFile)) {
+                    File.Delete(cachedFile);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("PortraitsCache.RemoveObsolete(): " + ex.Message);
+            }
         }
     }
 }
