@@ -102,9 +102,9 @@ namespace GKCore
                     for (int i = 0; i < fHolidays.Holidays.Length; i++) {
                         var holiday = fHolidays.Holidays[i];
 
-                        uint days = SysUtils.DaysBetween(dtNow, holiday.XDate);
+                        int days = SysUtils.DaysBetween(dtNow, holiday.XDate);
 
-                        if (3 > days) {
+                        if (days >= 0 && 3 > days) {
                             string tip;
 
                             if (firstTip) {

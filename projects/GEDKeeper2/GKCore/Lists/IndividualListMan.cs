@@ -77,7 +77,7 @@ namespace GKCore.Lists
             AddStatic(LSID.LSID_Residence, DataType.dtString, 100, true);
             AddStatic(LSID.LSID_Age, DataType.dtInteger, 100, false);
             AddStatic(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
-            AddStatic(LSID.LSID_DaysForBirth, DataType.dtString, 100, false);
+            AddStatic(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
             AddStatic(LSID.LSID_RPGroups, DataType.dtString, 200, false);
             AddStatic(LSID.LSID_Religion, DataType.dtString, 200, false);
             AddStatic(LSID.LSID_Nationality, DataType.dtString, 200, false);

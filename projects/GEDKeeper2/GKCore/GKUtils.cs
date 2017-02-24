@@ -916,7 +916,7 @@ namespace GKCore
         /// method failed, the caller must ignore value of the
         /// <paramref name="distance" />.</returns>
         public static bool GetDaysForBirth(GEDCOMIndividualRecord iRec,
-                                           out uint distance)
+                                           out int distance)
         {
             distance = 0;
             bool result = false;
@@ -981,16 +981,13 @@ namespace GKCore
         /// <returns>Number of days remained until the birthday of
         /// the <paramref name="iRec" />. On any error the method returns empty
         /// string.</returns>
-        public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
+        public static object GetDaysForBirth(GEDCOMIndividualRecord iRec)
         {
-            uint distance;
-            if (GetDaysForBirth(iRec, out distance))
-            {
-                return Convert.ToString(distance);
-            }
-            else
-            {
-                return string.Empty;
+            int distance;
+            if (GetDaysForBirth(iRec, out distance) && distance >= 0) {
+                return (object)distance;
+            } else {
+                return null;
             }
         }
 

@@ -102,10 +102,10 @@ namespace GKCommon
 
         #region Date functions
 
-        public static uint DaysBetween(DateTime now, DateTime then)
+        public static int DaysBetween(DateTime now, DateTime then)
         {
-            TimeSpan span = ((now < then) ? then - now : now - then);
-            return (uint) (span.Days);
+            TimeSpan span = then - now;
+            return span.Days;
         }
 
         private static readonly ushort[][] MONTH_DAYS = new ushort[][]

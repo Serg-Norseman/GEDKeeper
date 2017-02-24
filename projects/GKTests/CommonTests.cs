@@ -907,8 +907,11 @@ namespace GKTests.GKCommon
 
             //
 
-            uint days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
+            int days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
             Assert.AreEqual(3, days);
+
+            days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 02));
+            Assert.AreEqual(-8, days);
 
             Assert.AreEqual(31, SysUtils.DaysInAMonth(1990, 5));
 

@@ -1023,13 +1023,13 @@ namespace GKUI
 
                         GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
 
-                        uint days;
+                        int days;
                         if (GKUtils.GetDaysForBirth(iRec, out days))
                         {
                             string nm = GKUtils.GetNameString(iRec, true, false);
                             nm = fContext.Culture.GetPossessiveName(nm);
 
-                            if (3 > days) {
+                            if (days >= 0 && 3 > days) {
                                 string tip;
 
                                 if (firstTip) {

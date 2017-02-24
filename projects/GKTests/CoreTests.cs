@@ -326,7 +326,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
 
-            Assert.AreEqual("", GKUtils.GetDaysForBirth(null));
+            Assert.AreEqual(null, GKUtils.GetDaysForBirth(null));
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
             Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
 
