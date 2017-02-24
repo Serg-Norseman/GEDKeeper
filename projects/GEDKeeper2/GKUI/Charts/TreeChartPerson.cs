@@ -212,7 +212,9 @@ namespace GKUI.Charts
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fPortrait != null) fPortrait.Dispose();
+                // don't dispose portrait - he's from cache!
+                //if (fPortrait != null) fPortrait.Dispose();
+
                 if (fChilds != null) fChilds.Dispose();
                 if (fSpouses != null) fSpouses.Dispose();
             }

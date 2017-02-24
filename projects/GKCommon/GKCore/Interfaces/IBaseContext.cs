@@ -71,6 +71,7 @@ namespace GKCore.Interfaces
         Bitmap LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
         // Used in FamilyBookExporter, TreeChart and PersonEdit
         Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
+        string GetPrimaryBitmapUID(GEDCOMIndividualRecord iRec);
 
         bool IsUpdated();
         void BeginUpdate();

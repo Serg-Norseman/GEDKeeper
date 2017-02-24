@@ -19,8 +19,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -29,10 +33,9 @@ namespace GKCore
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PortraitsCache
+    public sealed class PortraitsCache : BaseObject
     {
         private static PortraitsCache fInstance = null;
-
 
         public static PortraitsCache Instance
         {
@@ -42,9 +45,22 @@ namespace GKCore
             }
         }
 
+        private Dictionary<string, Image> fMemoryCache;
 
         private PortraitsCache()
         {
+            fMemoryCache = new Dictionary<string, Image>();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                foreach (KeyValuePair<string, Image> pair in fMemoryCache)
+                {
+                    pair.Value.Dispose();
+                }
+            }
+            base.Dispose(disposing);
         }
 
         public Image GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
@@ -53,18 +69,38 @@ namespace GKCore
 
             Image result = null;
 
-            // calculate file reference hash
-            string imageHash = GKUtils.GetFileReferenceHash(null);
+            // get multimedia UID
+            string imageUID = context.GetPrimaryBitmapUID(iRec);
 
-            // check cache folder by fileRef hash
-            string cachedFile = GKUtils.GetCachePath() + imageHash + ".bmp";
-            if (File.Exists(cachedFile)) {
-                
+            // portrait doesn't define for individual
+            if (string.IsNullOrEmpty(imageUID)) return null;
+
+            string cachedFile = GKUtils.GetCachePath() + imageUID + ".bmp";
+
+            // check in-memory cache
+            if (fMemoryCache.TryGetValue(cachedFile, out result)) {
+                return result;
             }
 
-            // if cache isn't contains image, then load and save to cache
+            // in-memory cache doesn't contain image
+            // check cache folder by multimedia UID
+            if (File.Exists(cachedFile)) {
+                result = new Bitmap(cachedFile);
+            }
+
+            // if cache doesn't contain the image, then load and save it to cache
             if (result == null) {
                 result = context.GetPrimaryBitmap(iRec, -1, -1, true);
+
+                // save image to cache
+                if (result != null) {
+                    result.Save(cachedFile, ImageFormat.Bmp);
+                }
+            }
+
+            // put new image from disk's cache or storage to memory cache
+            if (result != null) {
+                fMemoryCache.Add(cachedFile, result);
             }
 
             // return result image

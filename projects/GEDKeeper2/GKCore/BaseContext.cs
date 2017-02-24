@@ -1002,6 +1002,28 @@ namespace GKCore
             return result;
         }
 
+        public string GetPrimaryBitmapUID(GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null) return null;
+
+            string result = null;
+            try
+            {
+                GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+                if (mmLink != null && mmLink.Value != null)
+                {
+                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
+                    result = mmRec.UID;
+                }
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("BaseContext.GetPrimaryBitmapUID(): " + ex.Message);
+                result = null;
+            }
+            return result;
+        }
+
         #endregion
 
         #region Files

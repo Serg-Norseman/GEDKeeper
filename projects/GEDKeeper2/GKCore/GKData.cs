@@ -36,7 +36,10 @@ namespace GKCore
     /// </summary>
     public static class GKData
     {
-        public const string APP_TITLE = "GEDKeeper";
+        // Until the next major version, we cannot change this line,
+        // because it including defines the path to the profile of the program.
+        public const string APP_TITLE = "GEDKeeper2";
+
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!

@@ -2727,11 +2727,6 @@ namespace GKCore
             return result;
         }
 
-        public static string GetFileReferenceHash(GEDCOMFileReference fileReference)
-        {
-            return "test";
-        }
-
         #endregion
 
         #region Archives support

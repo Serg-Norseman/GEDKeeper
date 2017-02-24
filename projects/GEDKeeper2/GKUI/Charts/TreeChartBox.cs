@@ -359,7 +359,7 @@ namespace GKUI.Charts
             get { return fRoot; }
         }
 
-        public float Scale
+        public new float Scale
         {
             get { return fScale; }
         }
