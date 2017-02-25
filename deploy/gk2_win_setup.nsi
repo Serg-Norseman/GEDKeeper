@@ -4,6 +4,7 @@
 
 !include "MUI2.nsh"
 
+Unicode true
 Name "GEDKeeper"
 OutFile "gedkeeper_2.11.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
@@ -22,6 +23,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "Russian"
 !insertmacro MUI_LANGUAGE "Ukrainian"
 !insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "French"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -40,98 +42,93 @@ LangString gkreq ${LANG_ENGLISH} "GEDKeeper2 (required)"
 LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
 LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
 LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
+LangString gkreq ${LANG_FRENCH} "GEDKeeper2 (obligatoire)"
 
 LangString gkscr ${LANG_ENGLISH} "Script samples"
 LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
 LangString gkscr ${LANG_UKRAINIAN} "Приклади скриптів"
 LangString gkscr ${LANG_POLISH} "Przykłady skryptów"
+LangString gkscr ${LANG_FRENCH} "Échantillons de script"
 
 LangString gkreg ${LANG_ENGLISH} "System registration"
 LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
 LangString gkreg ${LANG_UKRAINIAN} "Реєстрація в системі"
 LangString gkreg ${LANG_POLISH} "Rejestracja w systemie"
+LangString gkreg ${LANG_FRENCH} "Enregistrement du système"
 
 LangString gklang ${LANG_ENGLISH} "Languages"
 LangString gklang ${LANG_RUSSIAN} "Языки"
 LangString gklang ${LANG_UKRAINIAN} "Мови"
 LangString gklang ${LANG_POLISH} "Języki"
+LangString gklang ${LANG_FRENCH} "Langues"
 
 LangString gkplg ${LANG_ENGLISH} "Plugins"
 LangString gkplg ${LANG_RUSSIAN} "Плагины"
 LangString gkplg ${LANG_UKRAINIAN} "Плагіни"
 LangString gkplg ${LANG_POLISH} "Wtyczki"
+LangString gkplg ${LANG_FRENCH} "Plugins"
 
 
 LangString gkp_calc ${LANG_ENGLISH} "Expression calculator"
 LangString gkp_calc ${LANG_RUSSIAN} "Калькулятор выражений"
 LangString gkp_calc ${LANG_UKRAINIAN} "Калькулятор"
 LangString gkp_calc ${LANG_POLISH} "Kalkulator"
+LangString gkp_calc ${LANG_FRENCH} "Calculateur d'expression"
 
 LangString gkp_calendar ${LANG_ENGLISH} "Calendar"
 LangString gkp_calendar ${LANG_RUSSIAN} "Календарь"
 LangString gkp_calendar ${LANG_UKRAINIAN} "Календар"
 LangString gkp_calendar ${LANG_POLISH} "Kalendarz"
+LangString gkp_calendar ${LANG_FRENCH} "Calendrier"
 
 LangString gkp_nb ${LANG_ENGLISH} "Names book"
 LangString gkp_nb ${LANG_RUSSIAN} "Справочник имен"
 LangString gkp_nb ${LANG_UKRAINIAN} "Довідник імен"
 LangString gkp_nb ${LANG_POLISH} "Kieszonkowy nazw"
+LangString gkp_nb ${LANG_FRENCH} "Livre des noms"
 
 LangString gkp_timeline ${LANG_ENGLISH} "Time line"
 LangString gkp_timeline ${LANG_RUSSIAN} "Линия времени"
 LangString gkp_timeline ${LANG_UKRAINIAN} "Линія часу"
 LangString gkp_timeline ${LANG_POLISH} "Linia czasu"
+LangString gkp_timeline ${LANG_FRENCH} "Chronologie"
 
 LangString gkp_flowinput ${LANG_ENGLISH} "Flow input"
 LangString gkp_flowinput ${LANG_RUSSIAN} "Поточный ввод"
 LangString gkp_flowinput ${LANG_UKRAINIAN} "Поточне введення"
 LangString gkp_flowinput ${LANG_POLISH} "Źródło wejścia"
+LangString gkp_flowinput ${LANG_FRENCH} "Flux d'entrée"
 
 LangString gkp_pi ${LANG_ENGLISH} "Pedigrees importer"
 LangString gkp_pi ${LANG_RUSSIAN} "Импорт росписей"
 LangString gkp_pi ${LANG_UKRAINIAN} "Імпорт розписів"
 LangString gkp_pi ${LANG_POLISH} "Importuj rodowód"
+LangString gkp_pi ${LANG_FRENCH} "Pedigrees importateur"
 
 LangString gkp_ts ${LANG_ENGLISH} "Text search"
 LangString gkp_ts ${LANG_RUSSIAN} "Полнотекстовый поиск"
 LangString gkp_ts ${LANG_UKRAINIAN} "Повнотекстовий пошук"
 LangString gkp_ts ${LANG_POLISH} "Wyszukiwanie pełnotekstowe"
+LangString gkp_ts ${LANG_FRENCH} "Recherche de texte"
 
 LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
 LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
 LangString gkp_tv ${LANG_UKRAINIAN} "3D візуалізатор"
 LangString gkp_tv ${LANG_POLISH} "Wizualizacja 3D"
+LangString gkp_tv ${LANG_FRENCH} "3D TreeViz"
 
 LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
 LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
 LangString gkp_iv ${LANG_UKRAINIAN} "Перегляд зображень"
 LangString gkp_iv ${LANG_POLISH} "Podgląd zdjęcia"
+LangString gkp_iv ${LANG_FRENCH} "Visionneuse d'images"
 
 LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
 LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
 LangString gkp_cl ${LANG_UKRAINIAN} "Гра 'Життя Конвея'"
 LangString gkp_cl ${LANG_POLISH} "Gra w życie"
+LangString gkp_cl ${LANG_FRENCH} "Jeu de la vie"
 
-
-LangString gkl_eng ${LANG_ENGLISH} "English"
-LangString gkl_eng ${LANG_RUSSIAN} "Английский"
-LangString gkl_eng ${LANG_UKRAINIAN} "Англійська мова"
-LangString gkl_eng ${LANG_POLISH} "Angielski"
-
-LangString gkl_rus ${LANG_ENGLISH} "Russian"
-LangString gkl_rus ${LANG_RUSSIAN} "Русский"
-LangString gkl_rus ${LANG_UKRAINIAN} "Російська мова"
-LangString gkl_rus ${LANG_POLISH} "Rosyjski"
-
-LangString gkl_ukr ${LANG_ENGLISH} "Ukrainian"
-LangString gkl_ukr ${LANG_RUSSIAN} "Украинский"
-LangString gkl_ukr ${LANG_UKRAINIAN} "Українська мова"
-LangString gkl_ukr ${LANG_POLISH} "Ukraiński"
-
-LangString gkl_pol ${LANG_ENGLISH} "Polish"
-LangString gkl_pol ${LANG_RUSSIAN} "Польский"
-LangString gkl_pol ${LANG_UKRAINIAN} "Польська мова"
-LangString gkl_pol ${LANG_POLISH} "Polski"
 
 function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
@@ -158,7 +155,8 @@ Section "$(gkreq)"
 
   CreateDirectory "$INSTDIR\locales"
   SetOutPath "$INSTDIR\locales"
-  File "..\locales\readme_rus.txt"
+  File "..\locales\readme_rus.html"
+  File "..\locales\readme_eng.html"
   File "..\locales\english.sample"
 
   CreateDirectory "$INSTDIR\plugins"
@@ -220,7 +218,7 @@ Section "$(gkreg)"
 SectionEnd
 
 SectionGroup /e "$(gklang)"
-	Section "$(gkl_rus)"
+	Section "Русский"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\russian.lng"
 
@@ -236,14 +234,19 @@ SectionGroup /e "$(gklang)"
 		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Род Пушкиных (пример).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
 	SectionEnd
 
-	Section "$(gkl_ukr)"
+	Section "Українська"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\ukrainian.lng"
 	SectionEnd
 
-	Section "$(gkl_pol)"
+	Section "Polski"
 		SetOutPath "$INSTDIR\locales"
 		File "..\locales\polish.lng"
+	SectionEnd
+
+	Section "Français"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\french.lng"
 	SectionEnd
 SectionGroupEnd
 

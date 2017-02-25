@@ -4,6 +4,7 @@ Comment=Personal genealogical database editor
 Comment[ru]=Редактор персональной генеалогической базы данных
 Comment[uk]=Редактор персональної генеалогічної бази даних
 Comment[pl]=Edytor osobista baza genealogiczna
+Comment[fr]=L'éditeur personnelle généalogique de la base de données
 Path=/usr/lib/gedkeeper/
 Exec=mono GEDKeeper2.exe %U
 MimeType=application/x-gedkeeper
