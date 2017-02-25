@@ -1,1 +1,753 @@
 ﻿;1036,fra,Français
+Fichier
+Modification
+Pedigree
+Service
+&Windows
+Aide
+Nouveau
+Ouvrir...
+Rouvrir
+Enregistrer
+Fermer
+Propriétés...
+Exporter
+Livret des familles...
+Enregistrer sous...
+Exporter vers Excel...
+Quitter
+<?>
+<?>
+Ajouter l'enregistrement
+Modifier l’enregistrement
+Supprimer l'enregistrement
+<?>
+Arbre d'ancêtres
+Arbre de descendants
+Arbre complet
+ascendant pedigree D'Aboville 
+descendant pedigree de Konovalov 
+Cartes
+Statistiques
+Ascendant pedigree
+<?>
+<?>
+<?>
+Organizer
+Scripts...
+<?>
+Outils...
+Filtre
+Options
+&Cascade
+&Tuile horizontale
+&Tuile verticale
+&Réduire tout
+&Réorganiser tout
+Ressources Internet
+Terms
+FAQ
+Contenu
+À  propos de nous
+Records
+filtré
+Personnes
+Familles
+Notes
+Multimédia
+Sources
+Archives
+Groupes
+Recherches
+Tâches
+Communications
+Emplacements
+Inconnue
+Inconnu
+?
+Masculin
+Féminin
+Indétérminé
+Voulez-vous enregistrer les modifications du fichier modifié?
+Le parent spécifié a une famille existait "{0}". Voulez-vous ajouter l'enfant à cette famille?
+Etes-vous sûr de vouloir supprimer une personne "{0}"?
+Etes-vous sûr de vouloir supprimer la famille "{0}"?
+Êtes-vous sûr de vouloir supprimer la note "{0}"?
+Etes-vous sûr de vouloir supprimer la source "{0}"?
+Êtes-vous sûr de vouloir supprimer multimédia "{0}"?
+Etes-vous sûr de vouloir supprimer archives "{0}"?
+Êtes-vous sûr de vouloir supprimer le groupe "{0}"?
+Etes-vous sûr de vouloir supprimer la recherche "{0}"?
+Etes-vous sûr de vouloir supprimer la tâche "{0}"?
+Etes-vous sûr de vouloir supprimer la communication "{0}"?
+Etes-vous sûr de vouloir supprimer l'emplacement"{0}"?
+Adresse
+Faits
+Nom
+Prénom
+Patronyme
+Sexe
+Surnom
+Préfixe du nom de famille
+Préfixe du nom
+Suffixe du nom
+Patriarche
+Signet
+Association
+Relations
+Individuel
+Appliquer
+Annuler
+Fermer
+Choisir
+Ajouter
+Nouvelle personne
+Modifier la personne
+Vérification du sexe
+Sélection d'un dossier
+Citation de la source
+Renvoi de l'utilisateur
+Note
+Source
+Page
+Certitude
+Référence
+Type
+La famille
+Mari
+Femme
+Statut
+Enfants
+Etes-vous sûr de vouloir supprimer le lien au mari?
+Etes-vous sûr de vouloir supprimer le lien pour femme?
+Etes-vous sûr de vouloir supprimer le lien à l'enfant?
+Date de naissance
+Date de mort
+Restriction de sécurité
+Titre
+Membres
+Modifier le groupe
+Etes-vous sûr de vouloir détacher le lien à un membre?
+Vision
+Étape
+Numéro de téléphone
+E-mail
+Site Web
+Archives
+Progrès
+Temps écoulé
+Temps restant
+Temps total
+Date
+Texte
+Titre court
+Auteur
+Publié
+Commun
+Êtes-vous sûr de vouloir détacher le lien aux archives?
+Mode de stockage 
+Fichier
+Vision
+Fragment {0}: {1} personne(s)
+Père
+Mère
+Parents
+Epoux
+Associations
+Référence
+Grégorien
+Julien
+Juif
+Islamique (De L'Hégire)
+Perse 
+Indien
+Bahai
+Français
+Romain
+Inconnu
+Résumé
+Autre
+Disposition
+Dispensateur
+Emplacement
+Latitude
+Longitude
+Montrer
+Recherche des coords
+Recherche
+Choisir les coords
+Choisir le nom
+Priorité
+Pourcentage
+Commencé
+Terminé
+Cible
+Thème
+Correspondant
+Groupe
+Êtes-vous sûr de vouloir détacher le lien à la tâche
+Êtes-vous sûr de vouloir détacher le lien à la correspondance
+Êtes-vous sûr de vouloir détacher le lien au groupe^
+Modification de recherche
+Modifier la tâche
+Modifier la communication
+Erreur
+Erreur lors du démarrage Lua!
+Format de date incorrect
+Pays
+État
+Ville
+Code postal
+Numéro de téléphones
+E-mails
+Sites Web
+Signification
+événement
+Place
+Raison
+Agence
+Féminin 
+Masculin
+Record personnel n'est pas sélectionné
+Cette personne n'a pas de sexe défini.
+Cette personne n'a pas de famille.
+Nombre estimatif d'ancêtres {0} est plus que les limites admissibles.
+Nombre estimatif des descendants {0} est plus que les limites admissibles.
+Générations visibles:
+illimité
+Époux(-se)
+Date de mariage
+Etes-vous sûr de vouloir détacher lien vers le père?
+Etes-vous sûr de vouloir détacher lien vers la mère?
+Etes-vous sûr de vouloir détacher lien vers l'époux?
+Etes-vous sûr de vouloir détacher lien vers les parents?
+Tous
+Seulement les ancêtres
+Seulement les descendants
+Autochange du centre
+Modifier
+Ajouter une famille
+Ajouter un époux
+Ajouter un fils
+Ajouter une fille
+Supprimer
+Reconstruire l'arbre
+Reconstruire les parentés
+Liens
+Lieu et attribut
+marriage
+famille
+Homonymes
+Supprimer le fait?
+Etes-vous sûr de vouloir détacher le lien vers la note?
+Êtes-vous sûr de vouloir détacher le lien vers multimédia?
+Êtes-vous sûr de vouloir détacher lien vers la source?
+Etes-vous sûr de vouloir supprimer l'association?
+Êtes-vous sûr de vouloir supprimer la référence "{0}"?
+Erreur de chargement des fichiers
+Erreur de vérification du format
+Anniversaires
+{1} jours avant l'anniversaire de "{0}"
+Interface
+Arbres généalogiques
+Pedigrees
+Encodage pour enregistrer les fichiers
+Adresses
+Emails
+Sites
+Téléchargement à partir de l'Internet
+Utiliser un serveur proxy
+Serveur
+Port
+Login
+Mot de passe
+Mot de passe n'est pas défini
+Afficher les infobulles lors du démarrage
+Langue
+Toutes les listes
+Liste des personnes
+Format des noms dans les listes
+Nom_Prénom_Patronyme
+Nom; Prénom_Patronyme
+Nom; Prénom; Patronyme
+Format de la date dans les listes
+Inclure l'adresse dans la ligne de places
+Mettre en surbrillance la personne sans parents
+Mettre en surbrillance une personne sans famille
+Valeur par défaut
+Affichage des personnes dans l'arbre
+Lignes séparés (prénom et patronyme)
+Seulement des années
+Degré de parenté
+Symboles supplémentaires
+Décoration
+Afficher les portraits
+Exclure décédés dans l'enfance
+Enregistrement
+Homme
+Femme
+Sexe inconnu
+Conjoint divorcé
+Conjointe divorcé
+Fonte
+Pedigree génération
+Y compris les attributs des personnes
+Y compris les notes
+Y compris des sources
+Pedigree format
+Excès
+Traditionnel
+Aller au record
+Lever
+Placez ci-dessous
+Nom et prénom
+Lieu de naissance
+Lieu de décès
+Résidence
+âge
+Espérance de vie
+Jours avant l'anniversaire
+Religion
+Nationalité
+Formation
+Profession
+Statut social
+Service militaire
+Appelé au service militaire
+Rejeté du Service militaire
+Rang au service militaire
+Modifié
+Le mariage est enregistré
+Le mariage est pas enregistré
+Divorcé
+Naissance
+Adoption
+Baptême
+L'obtention du diplôme
+Retraite
+Naturalisation
+émigration
+Immigration
+Recensement
+Testament
+Homologuer le testament
+Mort
+Funérailles
+Crémation
+Fait
+Description physique
+Numéro d'identification
+Code de sécurité sociale
+Nombre d'enfants
+Nombre de mariages
+Propriété
+Titre
+Tournée
+Hobby
+Récompense
+?
+père
+mère
+mari
+femme
+fils
+fille
+grand-père
+grand-mère
+petit-fils
+petite fille
+frère
+sœur
+gendre
+belle-sœur
+beau-père
+belle-mère
+beau-père
+belle-mère
+oncle
+tante
+neveu
+nièce
+cousin
+cousin
+beau-frère
+belle-sœur
+beau-frère
+belle-sœur
+grand
+<?>
+<?>
+<?>
+<?>
+Largeur de l'image est plus de 65,000 pixels. Impossible à enregistrer.
+Retour
+Suivant
+<?>
+Suivant
+Vous savez que ...
+Charger et rechercher des lieux
+( non sélectionné )
+échantillonnage
+Pour toutes les personnes
+Lieux de naissance
+Lieux de mort
+Lieux de résidence
+Seulement les choisis
+Enregistrer l'image ...
+Format n'est pas pris en charge
+Erreur de chargement des données.
+Imprimer
+Avant-première
+Génération
+contient
+ne contient pas
+Exactement
+Avant
+Après
+Entre
+Période avant
+Période après
+Période entre
+Environ
+D'après le calcul
+D'après
+Fiançailles
+Mariage
+L'annonce publique du mariage
+La conclusion d'un contrat de mariage
+Obtenir la permission de se marier
+Conclusion de l'accord de mariage
+Annulation du mariage
+Demande de divorce
+Divorce
+Lien vers le fichier
+Placement dans l'archive
+Placement dans le stockage
+-
+Audio
+Livre
+Carte
+électronique
+Microfiche
+Film
+Magazine
+Manuscrit
+Map
+Journal
+Photo
+Pierre tombale
+Vidéo
+- Autres -
+Non spécifié
+Bas
+normal
+Haut
+Urgent
+Défini
+En course
+Détenu
+Complications
+Terminé
+Retiré
+Appel
+EMail
+Fax
+Lettre
+Cassette
+Visite
+à partir de
+à
+personne
+famille
+source
+autre
+Preuves non fiables
+Vérification de la fiabilité douteuse
+Preuves circonstancielles
+Preuves directes et primaires
+Recherche
+Tâche
+Correspondance
+Correction de ID  
+Vérifier le format
+Nécessite de correction des ids, continuer?
+Le nombre d'objets dans une base de données principale: {0}
+Sync terminée.
+Recherche patriarches
+Rechercher des liens
+Archive non trouvée, les données ne sont pas chargés
+échelle
+Fichiers GEDCOM GEDKeeper (*.ged)|*.ged|GEDKeeper crypté les fichiers GEDCOM (*.geds)|*.geds
+Tous les fichiers (*.*)|*.*
+Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+Scripts (*.lua)|*.lua
+Les fichiers BMP(*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
+Les causes de décès
+Pedigree
+Paramètre
+Total
+Hommes
+Femmes
+Champs de filtrage
+Année
+Fichiers PDF (*.pdf)|*.pdf
+Fichiers RTF (*.rtf)|*.rtf
+Fichiers HTML (*.html)|*.html
+Sauvegarde des fichiers (sauvegarde)
+seulement le fichier précédent
+Couper les branches
+non
+à la frontière des années
+par des personnes sélectionnés
+- tous -
+- non -
+- chaque -
+Base de données principale
+Аctualisation de la base de données
+[base de données en cours]
+Un filtre selon la source. Voulez-vous ajouter la source à un nouvel individu?
+Un filtre dans le groupe. Voulez-vous ajouter le group à un nouvel individu?
+Recherche les doublons
+Valeur incorrecte
+Opération
+Comparer les bases de données
+Fusionner les bases de données
+Diviser les bases de données
+Fusionner les doublons
+Rechercher homonymes indépendants
+Vérifiez la connexion des familles
+Vérifier la base de données
+Recherche des patriarches
+Gestion des places
+Recherche des coïncidences...
+Vérifiez la connexion des familles
+tous
+seulement vivant 
+seulement mort
+En vivant jusqu'à
+seulement les hommes
+seulement les femmes
+Masque de nom 
+Masque de résidence
+Masque des faits
+Seulement les chefs de famille
+Date incorrecte
+Personnes
+Années
+Décennie
+Né
+Décédés
+Vivant
+Décédé
+âge moyen
+L'espérance de vie
+Nombre moyen d'enfants
+L'âge moyen de la naissance du premier enfant
+Moyen nombre de mariages
+L'âge moyen du mariage
+Nombre d'ancêtres
+Nombre de descendants
+Le nombre de générations de descendants
+Années de naissance
+Années de naissance (décennies)
+Années de la mort
+Années de la mort (décennies)
+Répartition du nombre d'enfants
+l'âge de la naissance du premier enfant
+Âge du mariage
+La différence d'âges des conjoints
+Sélectionner tous les liens
+Sélectionner la famille
+Sélectionner des ancêtres
+Sélectionner des descendants
+Union
+Auto recherche
+Passer
+Enregistrements
+Recherche de personnes
+Comparaison directe
+Comparaison floue de noms
+Seulement par le nom / patronymique (femmes seulement)
+Inclure l'année de naissance
+Précision du nom, %
+écart des années
+Сorriger
+Générations de descendants d'au moins
+établir une signe
+Modifier la référence
+Noms similaires:
+Prénoms similaires:
+Dossiers personnels sélectionnés sont supprimés
+Record
+Problème
+Solution
+Peut-être la personne décédée (âge {0})
+Sexe n'est pas defini
+Années de naissance sont plus qu'années de mort
+Le premier mariage à l'âge de {0} ans?
+Le premier enfant est né à l'âge de {0} ans?
+Progéniture
+Générations
+Nombre de liens
+Traitement de places
+La place est déjà dans le répertoire
+Marqueurs d'ADN
+L'âge moyen des parents au moment où premier-né est apparu, par rapport à l'âge des parents
+L'âge moyen des parents au moment du premier-né est apparu, par rapport à l'âge des enfants
+Livret de famille vide
+stocker chaque version du fichier
+Chargement
+Erreur Enregistrement de fichiers
+Couleur de fond...
+Image de fond...
+Personnes dans l'arbre: {0}
+Voir le journal d'erreurs
+Cercle d'aïeux
+Cercle
+Couleur du texte
+Couleur du fond
+Couleur de ligne
+aucun
+fermé
+confidentiellement
+privé
+Envoyer le journal d'erreurs
+Diagrammes
+Ajusté à la taille de la fenêtre
+Zoom avant
+Zoom arrière	 
+Vérifier le fait de la mort
+Déterminer le sexe
+Plug-in
+Autoconversion de la parenté 
+Correspondances non trouvé
+Trouver le précédent
+Trouver la prochaine
+Indice de fiabilité
+Mois de naissance
+Mois
+Remettre
+Champ
+Condition
+Source non spécifiée
+Diapos
+Le post précédent
+Le post suivant
+Generation a échoué
+Début
+Stop
+Demographie
+Noms
+Faux nom 
+Nom de naissance
+A l'immigration
+Nom de jeune fille
+Mariée
+Supprimez le nom?
+Vous ne pouvez pas supprimer un seul nom
+Citation
+Placer un signet sur les enregistrements fusionnés
+Montrer le calendrier à côté des dates
+Enregistrement en double
+Attention: si vous dupliquez un individu, les liens familiaux et les associations ne sont pas copiés
+Afficher le type de date
+Créer un nouveau fichier arborescent
+Ouvrir le fichier arborescent
+Enregistrer le fichier arborescent
+Ajouter un enregistrement (Ctrl + I)
+Modifier l'enregistrement (Ctrl + Enter)
+Supprimer l'enregistrement (Ctrl + L)
+Filtrage de la liste des enregistrements
+Montrer un arbre d'ancêtres
+Montrer un arbre de descendants
+Afficher l'arbre complet
+Pedigree
+Pedigree par d'Aboville
+Pedigree par Konovalov
+Analyse statistique des données
+Enregistrer l'image
+Modes d'affichage
+Créer un nouveau script
+Ouvrir un script
+Enregistrer le script
+Exécuter le script
+Attacher le portrait
+Détacher le portrait
+Rejoigner la famille des parents
+Modifier la famille des parents
+Déconnecter les parents de la famille
+Sélectionner ou ajoutez le père
+Déconnecter le père
+Aller au dossier du père
+Sélectionnerou ajouter la mère
+Déconnecter la mère
+Aller au dossier de la mère
+Copier le nom dans le presse-papiers
+Sélectionner ou ajoutez le mari
+Déconnecter le mari
+Aller au dossier du mari
+Sélectionner ou ajouter la femme
+Déconnecter la femme
+Aller au dossier de la femme
+Sélectionner une personne
+Sélectionner ou ajouter un emplacement
+Supprimer le lien vers le lieu
+Voir la carte
+Sélectionner ou ajouter un enregistrement de source
+Sélectionner l'enregistrement cible
+Si vous utilisez "fichier" ou "stockage" type de stockage, vous devez enregistrer le fichier nouvelle base de données avant de continuer
+Un fichier portant le même nom existe déjà dans le référentiel
+Ce n'est pas un fichier compatible GEDSEC
+Cet individu a quelques familles. Les enfants doivent être ajoutés par l'intermédiaire des conjoints.
+Échec de l'exportation vers Excel
+Filtre spécifique
+Lignes d'affichage
+Type de comparaison
+Comparaison interne (recherche de doublons)
+Comparaison avec une autre base de données
+Analyse (expérimentale)
+Comparer
+Ignorer les dates
+Graphique
+Livre de famille
+Table des matières
+Dossiers de personnes
+Répertoires
+Impossible de détecter automatiquement le sexe en utilisant le nom "{1}". S'agit-il du sexe masculin?
+Sauvegarde automatique de chaque
+minutes
+Y compris le nombre de générations
+Masquer les segments vides
+Cercle de Descendants 
+Choix du portrait
+Calculateur de relation
+{0}
+Aujourd'hui est l'anniversaire de {0}
+Demain est l'anniversaire de {0}
+Groupe sanguin
+Couleur des cheveux
+Couleur des yeux
+MtDNA haplogroup
+Y-ADN haplogroup
+L'enregistrement est verrouillé par l'éditeur
+Nom de jeune fille
+Nom de famille marié
+Autres noms
+Les noms de famille des femmes étendues
+Format "Jeune fille (marié)"
+Format "Marié (jeune fille)"
+Format "Jeune fille"
+Format "Marié"
+H
+F
+Géocodeur
+Ajouter un père
+Ajouter une mère
+Afficher les portraits défectueux 
+Un fichier multimédia est ajouté de la média amovible . Continuer?
+Avertir lors de l'ajout des fichiers multimédias de la média amovible
+Charge des fichiers récemment ouverts au démarrage
+Aujourd'hui c'est une fête "{0}"
+Demain c'est une fête "{0}"
+{1} jours restent avant la fête"{0}"
+Fêtes
