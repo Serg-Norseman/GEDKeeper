@@ -1170,34 +1170,33 @@ namespace GKUI.Charts
 
         private void DrawDescendants(TreeChartPerson person, DrawMode drawMode)
         {
-            int num = person.GetChildsCount();
-            for (int i = 0; i < num; i++) {
+            int spousesCount = person.GetSpousesCount();
+            int childrenCount = person.GetChildsCount();
+
+            for (int i = 0; i < childrenCount; i++) {
                 Draw(person.GetChild(i), ChartKind.ckDescendants, drawMode);
             }
 
-            int spbOfs = (person.Height - 10) / (person.GetSpousesCount() + 1);
-            int spbBeg = person.PtY + (person.Height - spbOfs * (person.GetSpousesCount() - 1)) / 2;
+            int spbOfs = (person.Height - 10) / (spousesCount + 1);
+            int spbBeg = person.PtY + (person.Height - spbOfs * (spousesCount - 1)) / 2;
 
             switch (person.Sex) {
                 case GEDCOMSex.svMale:
-                    int num3 = person.GetSpousesCount();
-                    for (int i = 0; i < num3; i++) {
+                    for (int i = 0; i < spousesCount; i++) {
                         int spbV = spbBeg + spbOfs * i;
                         DrawLine(person.Rect.Right + 1, spbV, person.GetSpouse(i).Rect.Left, spbV);
                     }
                     break;
 
                 case GEDCOMSex.svFemale:
-                    int num2 = person.GetSpousesCount();
-                    for (int i = 0; i < num2; i++) {
+                    for (int i = 0; i < spousesCount; i++) {
                         int spbV = spbBeg + spbOfs * i;
                         DrawLine(person.GetSpouse(i).Rect.Right + 1, spbV, person.Rect.Left, spbV);
                     }
                     break;
             }
 
-            int num4 = person.GetSpousesCount();
-            for (int i = 0; i < num4; i++) {
+            for (int i = 0; i < spousesCount; i++) {
                 Draw(person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
             }
 
@@ -1223,10 +1222,10 @@ namespace GKUI.Charts
                 spbBeg -= spbOfs / 2;
             }
 
-            if (person.GetChildsCount() != 0)
+            if (childrenCount != 0)
             {
                 DrawLine(cx, spbBeg, cx, crY);
-                if (person.GetChildsCount() == 1)
+                if (childrenCount == 1)
                 {
                     TreeChartPerson child = person.GetChild(0);
                     DrawLine(child.PtX, crY, child.PtX, child.PtY);
@@ -1234,10 +1233,10 @@ namespace GKUI.Charts
                 else
                 {
                     int bpx = person.GetChild(0).PtX;
-                    int epx = person.GetChild(person.GetChildsCount() - 1).PtX;
+                    int epx = person.GetChild(childrenCount - 1).PtX;
                     DrawLine(bpx, crY, epx, crY);
-                    int num5 = person.GetChildsCount();
-                    for (int i = 0; i < num5; i++) {
+
+                    for (int i = 0; i < childrenCount; i++) {
                         TreeChartPerson child = person.GetChild(i);
                         DrawLine(child.PtX, crY, child.PtX, child.PtY);
                     }
@@ -1583,10 +1582,8 @@ namespace GKUI.Charts
                 } else {
                     if (person.HasFlag(PersonFlag.pfDescByFather)) {
                         ShiftDesc(person.Father, offset, true);
-                    } else {
-                        if (person.HasFlag(PersonFlag.pfDescByMother)) {
-                            ShiftDesc(person.Mother, offset, true);
-                        }
+                    } else if (person.HasFlag(PersonFlag.pfDescByMother)) {
+                        ShiftDesc(person.Mother, offset, true);
                     }
                 }
             }
@@ -1594,7 +1591,8 @@ namespace GKUI.Charts
 
         private void RecalcDescChilds(ref int[] edges, TreeChartPerson person)
         {
-            if (person.GetChildsCount() == 0) return;
+            int childrenCount = person.GetChildsCount();
+            if (childrenCount == 0) return;
 
             bool fixPair = person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() == 1;
             int centX = 0;
@@ -1614,26 +1612,26 @@ namespace GKUI.Charts
                 centX = person.PtX;
             }
 
-            int curY = person.PtY + fLevelDistance + person.Height;
-            int childsWidth = (person.GetChildsCount() - 1) * fBranchDistance;
-
-            int num = person.GetChildsCount();
-            for (int i = 0; i < num; i++) {
-                childsWidth += person.GetChild(i).Width;
+            int childrenWidth = 0;
+            for (int i = 0; i < childrenCount; i++) {
+                childrenWidth += person.GetChild(i).Width;
+            }
+            if (childrenCount > 1) {
+                childrenWidth += (childrenCount - 1) * fBranchDistance;
             }
 
-            int curX = centX - childsWidth / 2;
+            int curX = centX - childrenWidth / 2;
+            int curY = person.PtY + fLevelDistance + person.Height;
 
-            int num2 = person.GetChildsCount();
-            for (int i = 0; i < num2; i++) {
+            for (int i = 0; i < childrenCount; i++) {
                 TreeChartPerson child = person.GetChild(i);
                 RecalcDesc(ref edges, child, new Point(curX + child.Width / 2, curY), true);
                 curX = child.Rect.Right + fBranchDistance;
             }
 
             curX = person.GetChild(0).PtX;
-            if (person.GetChildsCount() > 1) {
-                curX += (person.GetChild(person.GetChildsCount() - 1).PtX - curX) / 2;
+            if (childrenCount > 1) {
+                curX += (person.GetChild(childrenCount - 1).PtX - curX) / 2;
             }
 
             if (fixPair) {
@@ -1701,6 +1699,12 @@ namespace GKUI.Charts
 
             if (person.Sex == GEDCOMSex.svFemale) {
                 RecalcDescChilds(ref edges, person);
+                edges[gen] = person.Rect.Right;
+            }
+
+            // FIXME: Temporary hack: if this person does not specify a particular sex,
+            // then breaks the normal sequence of formation of coordinates.
+            if (person.Sex == GEDCOMSex.svNone || person.Sex == GEDCOMSex.svUndetermined) {
                 edges[gen] = person.Rect.Right;
             }
         }
