@@ -96,7 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKTimeLinePlugin.eng">
+    <None Include="GKTimeLinePlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKTimeLinePlugin.pol">

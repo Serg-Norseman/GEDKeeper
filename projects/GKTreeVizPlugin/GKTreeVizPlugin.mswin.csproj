@@ -118,7 +118,7 @@
     <None Include="csgl.native.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKTreeVizPlugin.eng">
+    <None Include="GKTreeVizPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKTreeVizPlugin.pol">

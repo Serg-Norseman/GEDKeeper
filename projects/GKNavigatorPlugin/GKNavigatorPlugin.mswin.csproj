@@ -102,7 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKNavigatorPlugin.eng">
+    <None Include="GKNavigatorPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKNavigatorPlugin.rus">

@@ -109,7 +109,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKPedigreeImporterPlugin.eng">
+    <None Include="GKPedigreeImporterPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKPedigreeImporterPlugin.pol">

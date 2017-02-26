@@ -72,10 +72,9 @@ namespace GKCommon.Controls
         private int fLink;
         private Color fLinkColor;
         private Font fTextFont;
+        private RuleStyle fRuleStyle;
 
         private static readonly object EventLink;
-
-        private RuleStyle fRuleStyle;
 
         static HyperView()
         {
@@ -239,6 +238,7 @@ namespace GKCommon.Controls
                 {
                     int yPos = 0;
                     int xMax = 0;
+                    //▼▲↔∟←→↓↑↨▬§¶‼↕◄►☼♫♪♀♂◙○◘◄•♠♣♦♥☻☺
 
                     int num = fLines.Count;
                     for (int line = 0; line < num; line++)
@@ -280,10 +280,12 @@ namespace GKCommon.Controls
                                             break;
 
                                         case 'B':
+                                            // [b][/b]
                                             SetFontStyle(FontStyle.Bold);
                                             break;
 
                                         case 'I':
+                                            // [i][/i]
                                             SetFontStyle(FontStyle.Italic);
                                             break;
 
@@ -292,14 +294,17 @@ namespace GKCommon.Controls
                                             break;
 
                                         case 'S':
+                                            // [s][/s]
                                             SetFontStyle(FontStyle.Strikeout);
                                             break;
 
                                         case 'U':
+                                            // [u][/u]
                                             SetFontStyle(FontStyle.Underline);
                                             break;
 
                                         case '^':
+                                            // [url][/url] or [url=...][/url]
                                             {
                                                 string sn = "";
                                                 while (s[i] != ':') {

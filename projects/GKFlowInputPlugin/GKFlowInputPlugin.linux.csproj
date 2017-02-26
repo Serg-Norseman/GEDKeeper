@@ -118,7 +118,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKFlowInputPlugin.eng">
+    <None Include="GKFlowInputPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKFlowInputPlugin.pol">

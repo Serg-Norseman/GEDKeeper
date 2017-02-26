@@ -128,7 +128,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKImageViewerPlugin.eng">
+    <None Include="GKImageViewerPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GKImageViewerPlugin.pol">
