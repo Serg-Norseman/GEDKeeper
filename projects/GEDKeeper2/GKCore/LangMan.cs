@@ -809,8 +809,9 @@ namespace GKCore
         /* 750 */ LSID_HolidayTomorrow,
         /* 751 */ LSID_DaysRemainedBeforeHoliday,
         /* 752 */ LSID_Holidays,
+        /* 753 */ LSID_EmbeddedMediaPlayer,
 
-        /* 000 */ LSID_Last = LSID_Holidays
+        /* 000 */ LSID_Last = LSID_EmbeddedMediaPlayer
     }
 
     // TODO: remove and merge with LangManager
@@ -1574,6 +1575,7 @@ namespace GKCore
             /* 750 */ "Tomorrow is holiday \"{0}\"",
             /* 751 */ "{1} days remain before the holiday \"{0}\"",
             /* 752 */ "Holidays",
+            /* 753 */ "Use embedded MediaPlayer"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

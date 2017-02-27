@@ -346,12 +346,7 @@ namespace GKCore.Options
             fGeocoder = "Google";
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
-
-            #if RELEASE
-            fEmbeddedMediaPlayer = false;
-            #else
             fEmbeddedMediaPlayer = true;
-            #endif
 
             fIndividualListColumns = new IndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -450,6 +445,7 @@ namespace GKCore.Options
             fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
             fLoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
+            fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -562,6 +558,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);
             ini.WriteBool("Common", "LoadRecentFiles", fLoadRecentFiles);
+            ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
 
             ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
 

@@ -160,6 +160,7 @@ namespace GKUI.Dialogs
             numASMin.Value = fOptions.AutosaveInterval;
             chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
             chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
+            chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
 
             chkSurname.Checked = fOptions.ChartOptions.FamilyVisible;
             chkName.Checked = fOptions.ChartOptions.NameVisible;
@@ -365,6 +366,7 @@ namespace GKUI.Dialogs
             fOptions.AutosaveInterval = (int)numASMin.Value;
             fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
             fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
+            fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
 
             fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
             fOptions.ChartOptions.NameVisible = chkName.Checked;
@@ -583,6 +585,7 @@ namespace GKUI.Dialogs
             lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
             chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
             chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
+            chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
         }
     }
 }
