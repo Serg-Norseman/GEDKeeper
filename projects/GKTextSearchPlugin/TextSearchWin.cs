@@ -91,7 +91,8 @@ namespace GKTextSearchPlugin
                     Write("");
 
                     SearchManager.SearchEntry entry = searchResults[i];
-                    Write(string.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
+                    Write(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][size=-1]",
+                                        entry.Rank, entry.Percent, entry.XRef));
 
                     GEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);
                     StringList ctx = fBase.GetRecordContent(rec);

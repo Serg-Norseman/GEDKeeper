@@ -1,13 +1,13 @@
 ﻿/*
- *  An HyperText (readonly) Memo for Delphi
- *    from TJumpMemo by Alexander Kuznetsov (sanhome@hotmail.com)
- *  Copyright (C) 1997 Paul Toth (TothPaul@Mygale.org)
- *  http://www.mygale.org/~tothpaul
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2011, 2017 by Sergey V. Zhdanovskih.
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or (at your option) any later version.
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,11 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  C# implementation:
- *  Copyright (C) 2011 by Sergey V. Zhdanovskih.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 using System;
@@ -42,37 +38,64 @@ namespace GKCommon.Controls
     /// </summary>
     public class HyperView : GKScrollableControl
     {
-        private sealed class HyperLink
+        private sealed class TextChunk : BaseObject
         {
-            private readonly ExtRect fRect;
+            public int Line;
+            public Font Font;
+            public string Text;
+            public Color Color;
 
-            public readonly string Name;
+            public string URL;
+            public ExtRect LinkRect;
 
-            public HyperLink(string name, int x, int y, int w, int h)
+            public TextChunk(int line)
             {
-                Name = name;
-                fRect = ExtRect.CreateBounds(x, y, w, h);
+                Line = line;
+                Font = null;
+                Text = string.Empty;
+                Color = Color.Black;
+                URL = string.Empty;
+            }
+
+            public TextChunk(int line, Font font)
+            {
+                Line = line;
+                Font = font;
+                Text = string.Empty;
+                Color = Color.Black;
+                URL = string.Empty;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing) {
+                    if (Font != null) {
+                        Font.Dispose();
+                        Font = null;
+                    }
+                }
+                base.Dispose(disposing);
             }
 
             public bool HasCoord(int x, int y, int xOffset, int yOffset)
             {
-                return x >= fRect.Left + xOffset && x <= fRect.Right + xOffset
-                    && y >= fRect.Top + yOffset && y <= fRect.Bottom + yOffset;
+                return x >= LinkRect.Left + xOffset && x <= LinkRect.Right + xOffset
+                    && y >= LinkRect.Top + yOffset && y <= LinkRect.Bottom + yOffset;
             }
         }
 
-        //private bool fAcceptFontChange;
+        private bool fAcceptFontChange;
         private int fBorderWidth;
         private Color fColor;
         private SolidBrush fDefBrush;
         private int[] fHeights;
         private Size fTextSize;
         private readonly StringList fLines;
-        private readonly List<HyperLink> fLinks;
-        private int fLink;
+        private TextChunk fCurrentLink;
         private Color fLinkColor;
         private Font fTextFont;
         private RuleStyle fRuleStyle;
+        private List<TextChunk> fChunks;
 
         private static readonly object EventLink;
 
@@ -142,14 +165,14 @@ namespace GKCommon.Controls
             DoubleBuffered = true;
             TabStop = true;
 
-            //fAcceptFontChange = false;
+            fAcceptFontChange = true;
+            fChunks = new List<TextChunk>();
+            fColor = SystemColors.Control;
+            fCurrentLink = null;
+            fHeights = new int[0];
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
-            fHeights = new int[0];
-            fColor = SystemColors.Control;
-            fLinks = new List<HyperLink>();
             fLinkColor = Color.Blue;
-            fLink = -1;
             fTextSize = Size.Empty;
         }
 
@@ -157,9 +180,7 @@ namespace GKCommon.Controls
         {
             if (disposing)
             {
-                fLinks.Clear();
-                //FLinks.Dispose();
-
+                fChunks.Clear();
                 fHeights = null;
                 fLines.Dispose();
 
@@ -175,174 +196,238 @@ namespace GKCommon.Controls
             ArrangeText();
         }
 
-        private static int GetFontSize(string s, ref int i)
-        {
-            int result = 0;
-
-            while (true)
-            {
-                char c = s[i];
-                if (c < '0' || c > '9') break;
-
-                i++;
-                result = 10 * result + (int)s[i - 1] - 48;
-            }
-
-            return result;
-        }
-
-        /*private Color GetFontColor(string s, ref int i)
-		{
-			string ss = new string(s[i - 1], 1);
-			while (s[i] != '~')
-			{
-				i++;
-				ss += s[i - 1];
-			}
-			return Color.FromName(ss);
-		}*/
-
-        private void MeasureText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
+        private void MeasureText(Graphics grx, string ss, Font font, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
         {
             if (yPos >= -hMax && ss != "") {
-                Size strSize = grx.MeasureString(ss, fTextFont).ToSize();
-                xPos += strSize.Width;
+                SizeF strSize = grx.MeasureString(ss, font);
+                xPos += (int)strSize.Width;
 
                 if (xPos > xMax) xMax = xPos;
-                int h = strSize.Height;
+                int h = (int)strSize.Height;
                 if (h > hMax) hMax = h;
             }
         }
 
-        private void OutText(Graphics gfx, string ss, ref int xPos, ref int yPos, ref int hMax)
+        private void OutText(Graphics gfx, string ss, Font font, Color color, ref int xPos, ref int yPos, ref int hMax)
         {
             if (yPos >= -hMax && ss != "") {
-                gfx.DrawString(ss, fTextFont, fDefBrush, xPos, yPos);
+                using (var brush = new SolidBrush(color)) {
+                    gfx.DrawString(ss, font, brush, xPos, yPos);
+                }
 
-                Size strSize = gfx.MeasureString(ss, fTextFont).ToSize();
-                xPos += strSize.Width;
+                SizeF strSize = gfx.MeasureString(ss, font);
+                xPos += (int)strSize.Width;
+            }
+        }
+
+        private void SetChunkColor(int line, ref TextChunk chunk, Font font, Color color)
+        {
+            if (chunk == null || chunk.Text.Length != 0) {
+                chunk = new TextChunk(line, font);
+                fChunks.Add(chunk);
+            }
+
+            chunk.Font = font;
+            chunk.Color = color;
+        }
+
+        private void SetChunkFont(int line, ref TextChunk chunk, Font font)
+        {
+            if (chunk == null || chunk.Text.Length != 0) {
+                chunk = new TextChunk(line, font);
+                fChunks.Add(chunk);
+            }
+
+            chunk.Font = font;
+        }
+
+        private void SetChunkText(int line, ref TextChunk chunk, Font font, string text)
+        {
+            if (chunk == null) {
+                chunk = new TextChunk(line, font);
+                fChunks.Add(chunk);
+            }
+
+            chunk.Text += text;
+        }
+
+        private static Font SetFontSize(Font font, float size)
+        {
+            return new Font(font.Name, size, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
+        }
+
+        private static Font SetFontStyle(Font font, FontStyle style)
+        {
+            FontStyle fontStyle = font.Style;
+            if ((fontStyle & style) == FontStyle.Regular) {
+                fontStyle |= style;
+            } else {
+                fontStyle &= ~style;
+            }
+            return new Font(font, fontStyle);
+        }
+
+        private void ParseLine(int line, string lineText, Font currentFont)
+        {
+            TextChunk lastChunk = null;
+            Font lastFont = (Font)currentFont.Clone();
+
+            if (string.IsNullOrEmpty(lineText)) {
+                lineText = " ";
+                SetChunkText(line, ref lastChunk, currentFont, lineText);
+                return;
+            }
+
+            StringTokenizer strTok = new StringTokenizer(lineText);
+            strTok.IgnoreWhiteSpace = false;
+            strTok.RecognizeDecimals = false;
+
+            Token tok = strTok.Next();
+            while (tok.Kind != TokenKind.EOF) {
+                if (tok.Kind == TokenKind.Symbol && tok.Value == "[") {
+                    string temp = tok.Value;
+                    tok = strTok.Next();
+
+                    bool closeTag;
+                    // closed tag
+                    if (tok.Kind == TokenKind.Symbol && tok.Value == "/") {
+                        closeTag = true;
+                        temp += tok.Value;
+                        tok = strTok.Next();
+                    } else {
+                        closeTag = false;
+                    }
+
+                    if (tok.Kind != TokenKind.Word) {
+                        // not tag
+                        SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
+                    } else {
+                        string tag = tok.Value;
+                        bool skipTag = false;
+
+                        if (tag == "size") {
+                            // [size={+/-x}]
+                            tok = strTok.Next();
+                            if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
+                                tok = strTok.Next();
+                                int factor = 0;
+                                if (tok.Kind == TokenKind.Symbol) {
+                                    if (tok.Value == "+") {
+                                        factor = +1;
+                                    } else if (tok.Value == "-") {
+                                        factor = -1;
+                                    }
+                                    tok = strTok.Next();
+                                }
+                                if (tok.Kind == TokenKind.Number) {
+                                    lastFont = SetFontSize(lastFont, (lastFont.Size + factor * SysUtils.ParseInt(tok.Value, 0)));
+                                    tok = strTok.Next();
+                                }
+                            }
+                            SetChunkFont(line, ref lastChunk, lastFont);
+                            skipTag = true;
+                        }
+                        else if (tag == "b") {
+                            // [b][/b], but now it's switcher
+                            lastFont = SetFontStyle(lastFont, FontStyle.Bold);
+                            SetChunkFont(line, ref lastChunk, lastFont);
+                        }
+                        else if (tag == "i") {
+                            // [i][/i], but now it's switcher
+                            lastFont = SetFontStyle(lastFont, FontStyle.Italic);
+                            SetChunkFont(line, ref lastChunk, lastFont);
+                        }
+                        else if (tag == "s") {
+                            // [s][/s], but now it's switcher
+                            lastFont = SetFontStyle(lastFont, FontStyle.Strikeout);
+                            SetChunkFont(line, ref lastChunk, lastFont);
+                        }
+                        else if (tag == "u") {
+                            // [u][/u], but now it's switcher
+                            lastFont = SetFontStyle(lastFont, FontStyle.Underline);
+                            SetChunkFont(line, ref lastChunk, lastFont);
+                        }
+                        else if (tag == "r") {
+                            // bad implementation
+                            lastChunk = null;
+                            SetChunkText(line, ref lastChunk, lastFont, "[rule]");
+                        }
+                        else if (tag == "url") {
+                            // bad impementation
+                            // [url][/url] and [url=...][/url], but now only [url=...][/url]
+                            string url = "";
+
+                            tok = strTok.Next();
+                            if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
+                                tok = strTok.Next();
+                                do {
+                                    url += tok.Value;
+                                    tok = strTok.Next();
+                                } while (tok.Kind != TokenKind.Symbol || tok.Value != "]");
+                            } else {
+                                //
+                            }
+
+                            lastFont = SetFontStyle(lastFont, FontStyle.Underline);
+                            Color color = (closeTag) ? Color.Black : fLinkColor;
+                            SetChunkColor(line, ref lastChunk, lastFont, color);
+                            if (!closeTag) {
+                                lastChunk.URL = url;
+                            }
+                            skipTag = true;
+                        }
+                        else {
+                            // not tag
+                            SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
+                        }
+
+                        if (!skipTag) tok = strTok.Next();
+
+                        //if (tok.Kind != TokenKind.Symbol || tok.Value != "]") throw new Exception("not bracket");
+                    }
+                } else {
+                    SetChunkText(line, ref lastChunk, lastFont, tok.Value);
+                }
+
+                tok = strTok.Next();
             }
         }
 
         private void ArrangeText()
         {
             try {
+                fAcceptFontChange = false;
+
                 fTextFont = (Parent.Font.Clone() as Font);
                 fDefBrush = new SolidBrush(Color.Black);
                 fHeights = new int[fLines.Count];
-                //fAcceptFontChange = false;
-                fLinks.Clear();
+                fChunks.Clear();
+
+                Font currentFont = fTextFont.Clone() as Font;
 
                 Graphics gfx = CreateGraphics();
                 try
                 {
                     int yPos = 0;
                     int xMax = 0;
-                    //▼▲↔∟←→↓↑↨▬§¶‼↕◄►☼♫♪♀♂◙○◘◄•♠♣♦♥☻☺
 
                     int num = fLines.Count;
                     for (int line = 0; line < num; line++)
                     {
                         int xPos = 0;
-                        int lineHeight = gfx.MeasureString("A", fTextFont).ToSize().Height;
+                        int lineHeight = (int)gfx.MeasureString("A", fTextFont).Height;
 
-                        string s = fLines[line];
+                        string str = fLines[line];
 
-                        int i = 1;
-                        string ss = "";
-                        while (i <= s.Length)
-                        {
-                            if (s[i - 1] == '~')
-                            {
-                                if (s[i] == '~') {
-                                    ss += "~";
-                                }
+                        int firstChunk = fChunks.Count;
+                        ParseLine(line, str, currentFont);
+                        int lastChunk = fChunks.Count - 1;
 
-                                MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
-                                i++;
-
-                                while (s[i - 1] != '~')
-                                {
-                                    char c = char.ToUpper(s[i - 1]);
-
-                                    switch (c)
-                                    {
-                                        case '+':
-                                            SetFontSize((fTextFont.Size + GetFontSize(s, ref i)));
-                                            break;
-
-                                        case '-':
-                                            SetFontSize((fTextFont.Size - GetFontSize(s, ref i)));
-                                            break;
-
-                                        case '0':
-                                            fTextFont = (Parent.Font.Clone() as Font);
-                                            break;
-
-                                        case 'B':
-                                            // [b][/b]
-                                            SetFontStyle(FontStyle.Bold);
-                                            break;
-
-                                        case 'I':
-                                            // [i][/i]
-                                            SetFontStyle(FontStyle.Italic);
-                                            break;
-
-                                        case 'R':
-                                            // dummy
-                                            break;
-
-                                        case 'S':
-                                            // [s][/s]
-                                            SetFontStyle(FontStyle.Strikeout);
-                                            break;
-
-                                        case 'U':
-                                            // [u][/u]
-                                            SetFontStyle(FontStyle.Underline);
-                                            break;
-
-                                        case '^':
-                                            // [url][/url] or [url=...][/url]
-                                            {
-                                                string sn = "";
-                                                while (s[i] != ':') {
-                                                    i++;
-                                                    sn += s[i - 1];
-                                                }
-                                                i++;
-                                                ss = "";
-                                                while (s[i] != '~') {
-                                                    i++;
-                                                    ss += s[i - 1];
-                                                }
-
-                                                int ssWidth = gfx.MeasureString(ss, fTextFont).ToSize().Width;
-                                                fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
-                                                MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
-
-                                                break;
-                                            }
-
-                                        default:
-                                            while (s[i] != '~') i++;
-                                            break;
-                                    }
-
-                                    i++;
-                                }
-                                ss = "";
-                            }
-                            else
-                            {
-                                ss += s[i - 1];
-                            }
-
-                            i++;
+                        for (int i = firstChunk; i <= lastChunk; i++) {
+                            TextChunk chunk = fChunks[i];
+                            MeasureText(gfx, chunk.Text, chunk.Font, ref xPos, ref yPos, ref lineHeight, ref xMax);
                         }
 
-                        MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
                         yPos += lineHeight;
                         fHeights[line] = lineHeight;
                     }
@@ -352,10 +437,9 @@ namespace GKCommon.Controls
                 finally
                 {
                     gfx.Dispose();
+                    fAcceptFontChange = true;
+                    AdjustViewPort(fTextSize);
                 }
-
-                //fAcceptFontChange = true;
-                AdjustViewPort(fTextSize);
             }
             catch (Exception ex)
             {
@@ -368,7 +452,7 @@ namespace GKCommon.Controls
             try {
                 if (fHeights.Length != fLines.Count) return;
 
-                //fAcceptFontChange = false;
+                fAcceptFontChange = false;
                 try
                 {
                     Rectangle clientRect = ClientRectangle;
@@ -382,114 +466,34 @@ namespace GKCommon.Controls
                         int xOffset = fBorderWidth - -AutoScrollPosition.X;
                         int lineHeight = fHeights[line];
 
-                        string s = fLines[line];
+                        int chunksCount = fChunks.Count;
+                        for (int k = 0; k < chunksCount; k++) {
+                            TextChunk chunk = fChunks[k];
+                            if (chunk.Line != line) continue;
 
-                        int i = 1;
-                        string ss = "";
-                        while (i <= s.Length)
-                        {
-                            if (s[i - 1] == '~')
-                            {
-                                if (s[i] == '~') {
-                                    ss += "~";
-                                }
-
-                                OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
-                                i++;
-
-                                while (s[i - 1] != '~')
-                                {
-                                    char c = char.ToUpper(s[i - 1]);
-
-                                    switch (c)
-                                    {
-                                        case '+':
-                                            SetFontSize((fTextFont.Size + GetFontSize(s, ref i)));
-                                            break;
-
-                                        case '-':
-                                            SetFontSize((fTextFont.Size - GetFontSize(s, ref i)));
-                                            break;
-
-                                        case '0':
-                                            fTextFont = (Parent.Font.Clone() as Font);
-                                            break;
-
-                                        case 'B':
-                                            SetFontStyle(FontStyle.Bold);
-                                            break;
-
-                                        case 'I':
-                                            SetFontStyle(FontStyle.Italic);
-                                            break;
-
-                                        case 'R':
-                                            int rulerWidth = clientRect.Width - (xOffset * 2);
-                                            ControlPaint.DrawBorder3D(gfx,
-                                                                      xOffset,
-                                                                      yOffset + (lineHeight - 3) / 2,
-                                                                      rulerWidth, 3,
-                                                                      Border3DStyle.Bump, Border3DSide.All);
-                                            break;
-
-                                        case 'S':
-                                            SetFontStyle(FontStyle.Strikeout);
-                                            break;
-
-                                        case 'U':
-                                            SetFontStyle(FontStyle.Underline);
-                                            break;
-
-                                        case '^':
-                                            {
-                                                string sn = "";
-                                                while (s[i] != ':') {
-                                                    i++;
-                                                    sn += s[i - 1];
-                                                }
-                                                i++;
-                                                ss = "";
-                                                while (s[i] != '~') {
-                                                    i++;
-                                                    ss += s[i - 1];
-                                                }
-
-                                                Color saveColor = fDefBrush.Color;
-                                                fDefBrush.Color = fLinkColor;
-                                                SetFontStyle(FontStyle.Underline);
-
-                                                OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
-
-                                                fDefBrush.Color = saveColor;
-                                                SetFontStyle(FontStyle.Underline);
-
-                                                break;
-                                            }
-
-                                        default:
-                                            while (s[i] != '~') i++;
-                                            break;
-                                    }
-
-                                    i++;
-                                }
-                                ss = "";
-                            }
-                            else
-                            {
-                                ss += s[i - 1];
+                            if (chunk.Text == "[rule]") {
+                                int rulerWidth = clientRect.Width - (xOffset * 2);
+                                ControlPaint.DrawBorder3D(gfx,
+                                                          xOffset, yOffset + (lineHeight - 3) / 2,
+                                                          rulerWidth, 3, Border3DStyle.Bump, Border3DSide.All);
+                                continue;
                             }
 
-                            i++;
+                            int oldXOffset = xOffset;
+                            int oldYOffset = yOffset;
+                            OutText(gfx, chunk.Text, chunk.Font, chunk.Color, ref xOffset, ref yOffset, ref lineHeight);
+
+                            if (!string.IsNullOrEmpty(chunk.URL)) {
+                                chunk.LinkRect = ExtRect.CreateBounds(oldXOffset, oldYOffset, xOffset - oldXOffset, lineHeight);
+                            }
                         }
 
-                        OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
                         yOffset += lineHeight;
                     }
                 }
                 finally
                 {
-                    //fAcceptFontChange = true;
+                    fAcceptFontChange = true;
                 }
             }
             catch (Exception ex)
@@ -498,64 +502,25 @@ namespace GKCommon.Controls
             }
         }
 
-        private void SetFontSize(float size)
-        {
-            fTextFont = new Font(fTextFont.Name, size, fTextFont.Style, fTextFont.Unit, fTextFont.GdiCharSet, fTextFont.GdiVerticalFont);
-        }
-
-        private void SetFontStyle(FontStyle style)
-        {
-            FontStyle fontStyle = fTextFont.Style;
-            if ((fontStyle & style) == FontStyle.Regular)
-            {
-                fontStyle |= style;
-            }
-            else
-            {
-                fontStyle &= ~style;
-            }
-            fTextFont = new Font(fTextFont, fontStyle);
-        }
-
-        private void GotoLink(int linkIndex)
-        {
-            HyperLink hLink = fLinks[linkIndex];
-            string lnk = "~@" + hLink.Name + "~";
-            int h = fBorderWidth;
-
-            int num = fLines.Count;
-            for (int j = 0; j < num; j++) {
-                if (fLines[j].IndexOf(lnk) >= 0) {
-                    AutoScrollPosition = new Point(0, h);
-                    //ScrollTo(0, h);
-                    return;
-                }
-
-                h += fHeights[j];
-            }
-
-            DoLink(hLink.Name);
-        }
-
         private void DoLink(string linkName)
         {
             LinkEventHandler eventHandler = (LinkEventHandler)Events[EventLink];
-            if (eventHandler != null)
-                eventHandler(this, linkName);
+            if (eventHandler != null) eventHandler(this, linkName);
         }
 
         #region Protected methods
 
         protected override void OnFontChanged(EventArgs e)
         {
-            ArrangeText();
+            if (fAcceptFontChange) {
+                ArrangeText();
+            }
+
             base.OnFontChanged(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown(e);
-
             switch (e.KeyCode)
             {
                 case Keys.Prior:
@@ -590,6 +555,8 @@ namespace GKCommon.Controls
                     AdjustScroll(0, e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange);
                     break;
             }
+
+            base.OnKeyDown(e);
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -611,7 +578,7 @@ namespace GKCommon.Controls
         {
             base.OnMouseDown(e);
 
-            if (fLink >= 0) GotoLink(fLink);
+            if (fCurrentLink != null) DoLink(fCurrentLink.URL);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -620,23 +587,20 @@ namespace GKCommon.Controls
 
             int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
             int xOffset = (fBorderWidth - -AutoScrollPosition.X);
+            fCurrentLink = null;
 
-            int num = fLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
-                if (fLinks[i].HasCoord(e.X, e.Y, xOffset, yOffset))
-                {
-                    fLink = i;
-                    Cursor = Cursors.Hand;
-                    return;
+            int num = fChunks.Count;
+            for (int i = 0; i < num; i++) {
+                TextChunk chunk = fChunks[i];
+                if (string.IsNullOrEmpty(chunk.URL)) continue;
+
+                if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset)) {
+                    fCurrentLink = chunk;
+                    break;
                 }
             }
 
-            if (fLink >= 0)
-            {
-                Cursor = Cursors.Default;
-                fLink = -1;
-            }
+            Cursor = (fCurrentLink == null) ? Cursors.Default : Cursors.Hand;
         }
 
         protected override void OnPaint(PaintEventArgs e)
