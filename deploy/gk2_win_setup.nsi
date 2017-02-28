@@ -144,6 +144,12 @@ Section "$(gkreq)"
 
   File "..\GEDKeeper2.exe"
   File "..\GKCommon.dll"
+  File "..\GKMediaPlayer.dll"
+
+  File "..\LinqBridge.dll"
+  File "..\NLog.dll"
+  File "..\nVLC.dll"
+  File "..\YamlSerializer.dll"
 
   File "..\ArborGVT.dll"
   File "..\DotNetRtfWriter.dll"
@@ -152,6 +158,8 @@ Section "$(gkreq)"
   File "..\lua51.dll"
   File "..\LuaInterface.dll"
   File "..\ZedGraph.dll"
+
+  File "..\LICENSE"
 
   CreateDirectory "$INSTDIR\locales"
   SetOutPath "$INSTDIR\locales"

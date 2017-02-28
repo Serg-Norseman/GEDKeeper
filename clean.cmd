@@ -19,6 +19,9 @@ rmdir .\projects\GEDKeeper2\obj /s /q
 rmdir .\projects\GKCommon\bin /s /q
 rmdir .\projects\GKCommon\obj /s /q
 
+rmdir .\projects\GKMediaPlayer\bin /s /q
+rmdir .\projects\GKMediaPlayer\obj /s /q
+
 rmdir .\projects\GKIntl\bin /s /q
 rmdir .\projects\GKIntl\obj /s /q
 

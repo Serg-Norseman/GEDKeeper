@@ -87,13 +87,11 @@ namespace GKCommon.Controls
         private bool fAcceptFontChange;
         private int fBorderWidth;
         private Color fColor;
-        private SolidBrush fDefBrush;
         private int[] fHeights;
         private Size fTextSize;
         private readonly StringList fLines;
         private TextChunk fCurrentLink;
         private Color fLinkColor;
-        private Font fTextFont;
         private RuleStyle fRuleStyle;
         private List<TextChunk> fChunks;
 
@@ -183,9 +181,6 @@ namespace GKCommon.Controls
                 fChunks.Clear();
                 fHeights = null;
                 fLines.Dispose();
-
-                if (fDefBrush != null) fDefBrush.Dispose();
-                if (fTextFont != null) fTextFont.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -397,14 +392,10 @@ namespace GKCommon.Controls
         {
             try {
                 fAcceptFontChange = false;
-
-                fTextFont = (Parent.Font.Clone() as Font);
-                fDefBrush = new SolidBrush(Color.Black);
                 fHeights = new int[fLines.Count];
                 fChunks.Clear();
 
-                Font currentFont = fTextFont.Clone() as Font;
-
+                Font currentFont = this.Font.Clone() as Font;
                 Graphics gfx = CreateGraphics();
                 try
                 {
@@ -414,14 +405,14 @@ namespace GKCommon.Controls
                     int num = fLines.Count;
                     for (int line = 0; line < num; line++)
                     {
-                        int xPos = 0;
-                        int lineHeight = (int)gfx.MeasureString("A", fTextFont).Height;
-
                         string str = fLines[line];
 
                         int firstChunk = fChunks.Count;
                         ParseLine(line, str, currentFont);
                         int lastChunk = fChunks.Count - 1;
+
+                        int xPos = 0;
+                        int lineHeight = (int)gfx.MeasureString("A", currentFont).Height;
 
                         for (int i = firstChunk; i <= lastChunk; i++) {
                             TextChunk chunk = fChunks[i];
@@ -458,37 +449,39 @@ namespace GKCommon.Controls
                     Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(SystemColors.Control), clientRect);
 
+                    int xOffset = fBorderWidth - -AutoScrollPosition.X;
                     int yOffset = fBorderWidth - -AutoScrollPosition.Y;
+                    int line = -1;
+                    int lineHeight = 0;
 
-                    int num = fLines.Count;
-                    for (int line = 0; line < num; line++)
-                    {
-                        int xOffset = fBorderWidth - -AutoScrollPosition.X;
-                        int lineHeight = fHeights[line];
+                    int chunksCount = fChunks.Count;
+                    for (int k = 0; k < chunksCount; k++) {
+                        TextChunk chunk = fChunks[k];
 
-                        int chunksCount = fChunks.Count;
-                        for (int k = 0; k < chunksCount; k++) {
-                            TextChunk chunk = fChunks[k];
-                            if (chunk.Line != line) continue;
+                        if (line != chunk.Line) {
+                            line = chunk.Line;
 
-                            if (chunk.Text == "[rule]") {
-                                int rulerWidth = clientRect.Width - (xOffset * 2);
-                                ControlPaint.DrawBorder3D(gfx,
-                                                          xOffset, yOffset + (lineHeight - 3) / 2,
-                                                          rulerWidth, 3, Border3DStyle.Bump, Border3DSide.All);
-                                continue;
-                            }
+                            lineHeight = fHeights[line];
+                            xOffset = fBorderWidth - -AutoScrollPosition.X;
 
-                            int oldXOffset = xOffset;
-                            int oldYOffset = yOffset;
-                            OutText(gfx, chunk.Text, chunk.Font, chunk.Color, ref xOffset, ref yOffset, ref lineHeight);
-
-                            if (!string.IsNullOrEmpty(chunk.URL)) {
-                                chunk.LinkRect = ExtRect.CreateBounds(oldXOffset, oldYOffset, xOffset - oldXOffset, lineHeight);
-                            }
+                            if (line > 0) yOffset += lineHeight;
                         }
 
-                        yOffset += lineHeight;
+                        if (chunk.Text == "[rule]") {
+                            int rulerWidth = clientRect.Width - (xOffset * 2);
+                            ControlPaint.DrawBorder3D(gfx,
+                                                      xOffset, yOffset + (lineHeight - 3) / 2,
+                                                      rulerWidth, 3, Border3DStyle.Bump, Border3DSide.All);
+                            continue;
+                        }
+
+                        int prevX = xOffset;
+                        int prevY = yOffset;
+                        OutText(gfx, chunk.Text, chunk.Font, chunk.Color, ref xOffset, ref yOffset, ref lineHeight);
+
+                        if (!string.IsNullOrEmpty(chunk.URL)) {
+                            chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xOffset - prevX, lineHeight);
+                        }
                     }
                 }
                 finally
@@ -585,8 +578,8 @@ namespace GKCommon.Controls
         {
             base.OnMouseMove(e);
 
-            int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
             int xOffset = (fBorderWidth - -AutoScrollPosition.X);
+            int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
             fCurrentLink = null;
 
             int num = fChunks.Count;
