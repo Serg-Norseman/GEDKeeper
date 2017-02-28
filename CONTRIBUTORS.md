@@ -60,13 +60,6 @@ ExpCalculator
     (C) 2011 by Serg V. Zhdanovskih  (fork to C#)
 
 
-HyperText Memo for Delphi
-    Licensed under GPLv2.
-    (C) Alexander Kuznetsov
-    (C) 1997 Paul Toth <http://www.mygale.org/~tothpaul/>
-    (C) 2011 Serg V. Zhdanovskih (fork to C#).
-
-
 IniFiles
     Licensed under The Code Project Open License (CPOL).
     (C) 2007 Gajatko
