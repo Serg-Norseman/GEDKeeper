@@ -298,7 +298,7 @@ namespace GKCommon.Controls
                         SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
                     } else {
                         string tag = tok.Value;
-                        bool skipTag = false;
+                        //bool skipTag = false;
 
                         if (tag == "size") {
                             // [size={+/-x}]
@@ -316,11 +316,9 @@ namespace GKCommon.Controls
                                 }
                                 if (tok.Kind == TokenKind.Number) {
                                     lastFont = SetFontSize(lastFont, (lastFont.Size + factor * SysUtils.ParseInt(tok.Value, 0)));
-                                    tok = strTok.Next();
                                 }
                             }
                             SetChunkFont(line, ref lastChunk, lastFont);
-                            skipTag = true;
                         }
                         else if (tag == "b") {
                             // [b][/b], but now it's switcher
@@ -369,16 +367,16 @@ namespace GKCommon.Controls
                             if (!closeTag) {
                                 lastChunk.URL = url;
                             }
-                            skipTag = true;
+                            //skipTag = true;
                         }
                         else {
                             // not tag
                             SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
                         }
 
-                        if (!skipTag) tok = strTok.Next();
-
-                        //if (tok.Kind != TokenKind.Symbol || tok.Value != "]") throw new Exception("not bracket");
+                        if (tok.Kind != TokenKind.Symbol || tok.Value != "]") {
+                            tok = strTok.Next();
+                        }
                     }
                 } else {
                     SetChunkText(line, ref lastChunk, lastFont, tok.Value);

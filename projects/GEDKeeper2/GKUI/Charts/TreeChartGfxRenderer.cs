@@ -75,28 +75,28 @@ namespace GKUI.Charts
         public override void DrawRectangle(Pen pen, Color fillColor,
                                            float x, float y, float width, float height)
         {
-            GraphicsPath path = SysUtils.CreateRectangle(x, y, width, height);
+            using (GraphicsPath path = SysUtils.CreateRectangle(x, y, width, height)) {
+                if (fillColor != Color.Transparent) {
+                    fCanvas.FillPath(new SolidBrush(fillColor), path);
+                }
 
-            if (fillColor != Color.Transparent) {
-                fCanvas.FillPath(new SolidBrush(fillColor), path);
-            }
-
-            if (pen != null) {
-                fCanvas.DrawPath(pen, path);
+                if (pen != null) {
+                    fCanvas.DrawPath(pen, path);
+                }
             }
         }
 
         public override void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
-            GraphicsPath path = SysUtils.CreateRoundedRectangle(x, y, width, height, radius);
+            using (GraphicsPath path = SysUtils.CreateRoundedRectangle(x, y, width, height, radius)) {
+                if (fillColor != Color.Transparent) {
+                    fCanvas.FillPath(new SolidBrush(fillColor), path);
+                }
 
-            if (fillColor != Color.Transparent) {
-                fCanvas.FillPath(new SolidBrush(fillColor), path);
-            }
-
-            if (pen != null) {
-                fCanvas.DrawPath(pen, path);
+                if (pen != null) {
+                    fCanvas.DrawPath(pen, path);
+                }
             }
         }
     }

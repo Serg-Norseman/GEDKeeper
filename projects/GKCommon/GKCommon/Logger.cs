@@ -35,11 +35,14 @@ namespace GKCommon
 
         public static void LogWrite(string msg)
         {
-            using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8))
-            {
-                log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
-                log.Flush();
-                log.Close();
+            try {
+                using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8))
+                {
+                    log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
+                    log.Flush();
+                    log.Close();
+                }
+            } catch (Exception ex) {
             }
         }
     }

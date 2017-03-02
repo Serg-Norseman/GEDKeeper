@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
             fFirstPart = sv.Substring(0, p);
             fFirstPart = GEDCOMUtils.TrimRight(fFirstPart);
 
-            int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
+            int p2 = sv.IndexOf('/', p + 1);
             if (p2 < 0) return string.Empty;
 
             p++;

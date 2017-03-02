@@ -102,7 +102,7 @@ namespace GKUI.Charts
             int ctX = fDestRect.Left + (fDestRect.Width / 2);
             int ctY = fDestRect.Top;
             int inRad = 0;
-            float ang1 = (180 - SEGMENT_ANGLE) / 2;
+            float ang1 = (180 - SEGMENT_ANGLE) / 2.0f;
             float ang2 = ang1 + SEGMENT_ANGLE;
 
             for (int i = 0; i <= 9; i++) {

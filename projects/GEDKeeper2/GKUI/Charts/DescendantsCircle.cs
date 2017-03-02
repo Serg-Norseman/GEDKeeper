@@ -57,6 +57,7 @@ namespace GKUI.Charts
 
             // traverse tree
             PersonSegment rootSegment = TraverseDescendants(fRootPerson, 0);
+            if (rootSegment == null) return;
 
             const float inRad = CENTER_RAD - 50;
             float stepAngle = (360.0f / rootSegment.TotalSubSegments);

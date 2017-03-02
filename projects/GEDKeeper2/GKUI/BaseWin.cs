@@ -988,17 +988,25 @@ namespace GKUI
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try
                 {
-                    mediaViewer.FileRef = fileRef;
-                    if (modal) {
-                        mediaViewer.ShowDialog();
-                    } else {
-                        mediaViewer.ShowInTaskbar = true;
-                        mediaViewer.Show();
+                    try
+                    {
+                        mediaViewer.FileRef = fileRef;
+                        if (modal) {
+                            mediaViewer.ShowDialog();
+                        } else {
+                            mediaViewer.ShowInTaskbar = true;
+                            mediaViewer.Show();
+                        }
+                    }
+                    finally
+                    {
+                        if (modal) mediaViewer.Dispose();
                     }
                 }
-                finally
+                catch (Exception ex)
                 {
-                    if (modal) mediaViewer.Dispose();
+                    if (mediaViewer != null) mediaViewer.Dispose();
+                    Host.LogWrite("BaseWin.ShowMedia(): " + ex.Message);
                 }
             }
         }

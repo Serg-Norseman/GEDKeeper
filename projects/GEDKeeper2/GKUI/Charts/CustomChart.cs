@@ -196,7 +196,11 @@ namespace GKUI.Charts
         {
             Size imageSize = GetImageSize();
             var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
-            Image image = new Metafile(CreateGraphics().GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
+
+            Image image;
+            using (var gfx = CreateGraphics()) {
+                image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
+            }
 
             using (Graphics gfx = Graphics.FromImage(image)) {
                 RenderStaticImage(gfx, true);
@@ -231,7 +235,9 @@ namespace GKUI.Charts
 
                 Image pic;
                 if (Equals(imFmt, ImageFormat.Emf)) {
-                    pic = new Metafile(fileName, CreateGraphics().GetHdc());
+                    using (var gfx = CreateGraphics()) {
+                        pic = new Metafile(fileName, gfx.GetHdc());
+                    }
                 } else {
                     pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 }

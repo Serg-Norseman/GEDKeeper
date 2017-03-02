@@ -94,10 +94,18 @@ namespace GKImageViewerPlugin
                     case GEDCOMMultimediaFormat.mfTIF:
                     case GEDCOMMultimediaFormat.mfTGA:
                     case GEDCOMMultimediaFormat.mfPNG:
-                        using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             fImageCtl = new ImageView();
-                            fImageCtl.OpenImage(new Bitmap(fs));
+
+                            try {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open))
+                                {
+                                    fImageCtl.OpenImage(new Bitmap(fs));
+                                }
+                            } catch (Exception ex) {
+                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.0(): " + ex.Message);
+                            }
+
                             ctl = fImageCtl;
                         }
                         break;
@@ -108,38 +116,61 @@ namespace GKImageViewerPlugin
                         break;
 
                     case GEDCOMMultimediaFormat.mfTXT:
-                        using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
-                            using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
-                            {
-                                TextBox txtBox = new TextBox();
-                                txtBox.Multiline = true;
-                                txtBox.ReadOnly = true;
-                                txtBox.ScrollBars = ScrollBars.Both;
-                                txtBox.Text = strd.ReadToEnd();
-                                ctl = txtBox;
+                            TextBox txtBox = new TextBox();
+                            txtBox.Multiline = true;
+                            txtBox.ReadOnly = true;
+                            txtBox.ScrollBars = ScrollBars.Both;
+
+                            try {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open))
+                                {
+                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
+                                    {
+                                        txtBox.Text = strd.ReadToEnd();
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.1(): " + ex.Message);
                             }
+
+                            ctl = txtBox;
                         }
                         break;
 
                     case GEDCOMMultimediaFormat.mfRTF:
-                        using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
-                            using (StreamReader strd = new StreamReader(fs))
-                            {
-                                RichTextBox txtBox = new RichTextBox();
-                                txtBox.ReadOnly = true;
-                                txtBox.Text = strd.ReadToEnd();
-                                ctl = txtBox;
+                            RichTextBox rtfBox = new RichTextBox();
+                            rtfBox.ReadOnly = true;
+
+                            try {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open))
+                                {
+                                    using (StreamReader strd = new StreamReader(fs))
+                                    {
+                                        rtfBox.Text = strd.ReadToEnd();
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
                             }
+
+                            ctl = rtfBox;
                         }
                         break;
 
                     case GEDCOMMultimediaFormat.mfHTM:
-                        using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
-                            ctl = new WebBrowser();
-                            ((WebBrowser) ctl).DocumentStream = fs;
+                            var browser = new WebBrowser();
+                            try {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open))
+                                {
+                                    browser.DocumentStream = fs;
+                                }
+                            } catch (Exception ex) {
+                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                            }
+                            ctl = browser;
                         }
                         break;
                 }

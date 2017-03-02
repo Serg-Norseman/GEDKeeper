@@ -84,34 +84,65 @@ namespace GKUI
                             switch (fFileRef.MultimediaFormat)
                             {
                                 case GEDCOMMultimediaFormat.mfTXT:
-                                    // FIXME: fix encoding! and test other!!!
-                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                    {
                                         TextBox txtBox = new TextBox();
                                         txtBox.Multiline = true;
                                         txtBox.ReadOnly = true;
                                         txtBox.ScrollBars = ScrollBars.Both;
-                                        txtBox.Text = strd.ReadToEnd();
+
+                                        try {
+                                            // FIXME: fix encoding! and test other!!!
+                                            using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                                txtBox.Text = strd.ReadToEnd();
+                                            }
+                                        } catch (Exception ex) {
+                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.1(): " + ex.Message);
+                                        }
+
                                         ctl = txtBox;
                                         SetViewControl(ctl);
                                     }
                                     break;
 
                                 case GEDCOMMultimediaFormat.mfRTF:
-                                    using (StreamReader strd = new StreamReader(fs)) {
+                                    {
                                         RichTextBox rtfBox = new RichTextBox();
                                         rtfBox.ReadOnly = true;
-                                        rtfBox.Text = strd.ReadToEnd();
+
+                                        try {
+                                            using (StreamReader strd = new StreamReader(fs)) {
+                                                rtfBox.Text = strd.ReadToEnd();
+                                            }
+                                        } catch (Exception ex) {
+                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.2(): " + ex.Message);
+                                        }
+
                                         ctl = rtfBox;
                                         SetViewControl(ctl);
                                     }
                                     break;
 
                                 case GEDCOMMultimediaFormat.mfHTM:
-                                    ctl = new WebBrowser();
-                                    ((WebBrowser) ctl).DocumentStream = fs;
-                                    SetViewControl(ctl);
+                                    {
+                                        var browser = new WebBrowser();
+
+                                        try {
+                                            browser.DocumentStream = fs;
+                                            /*using (StreamReader strd = new StreamReader(fs)) {
+                                                browser.DocumentText = strd.ReadToEnd();
+                                                // didn't work, because didn't defines codepage from page's header (?!)
+                                            }*/
+                                        } catch (Exception ex) {
+                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.3(): " + ex.Message);
+                                        }
+
+                                        ctl = browser;
+                                        SetViewControl(ctl);
+                                    }
                                     break;
                             }
+                            if (fs != null && !(ctl is WebBrowser)) fs.Dispose();
+                            
                             break;
                         }
                 }

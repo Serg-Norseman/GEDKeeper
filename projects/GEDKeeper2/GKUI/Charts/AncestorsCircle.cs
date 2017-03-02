@@ -113,6 +113,8 @@ namespace GKUI.Charts
 
             fIndividualsCount++;
             PersonSegment rootSegment = SetSegmentParams(0, fRootPerson, 0, -1);
+            if (rootSegment == null) return;
+
             rootSegment.WedgeAngle = 360.0f;
 
             GEDCOMIndividualRecord father, mother;
