@@ -81,8 +81,7 @@ namespace GKUI.Dialogs
                     fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
                 }
 
-                GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
-                PortraitsCache.Instance.RemoveObsolete(mmRec);
+                PortraitsCache.Instance.RemoveObsolete(fMultimediaLink);
 
                 DialogResult = DialogResult.OK;
             }

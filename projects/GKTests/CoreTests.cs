@@ -1926,5 +1926,13 @@ namespace GKTests.GKCore
                 Assert.Fail();
             }
         }
+
+        [Test]
+        public void PortraitsCache_Tests()
+        {
+            PortraitsCache cache = PortraitsCache.Instance;
+            Assert.IsNull(cache.GetImage(null, null));
+            cache.RemoveObsolete(null);
+        }
     }
 }

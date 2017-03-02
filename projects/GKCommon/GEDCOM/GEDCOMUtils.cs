@@ -1606,7 +1606,7 @@ namespace GKCommon.GEDCOM
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
+                Logger.LogWrite("GKUtils.FixFTBLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
             }
         }
 
@@ -1667,6 +1667,69 @@ namespace GKCommon.GEDCOM
             while (i > 0 && str[i - 1] <= ' ') i--;
 
             string result = ((i != len) ? str.Substring(0, i) : str);
+            return result;
+        }
+
+        public static string EncodeUID(byte[] binaryKey)
+        {
+            StringBuilder result = new StringBuilder(36);
+            byte checkA = 0;
+            byte checkB = 0;
+
+            int num = binaryKey.Length;
+            for (int i = 0; i < num; i++)
+            {
+                byte val = binaryKey[i];
+                checkA = unchecked((byte)(checkA + (uint)val));
+                checkB = unchecked((byte)(checkB + (uint)checkA));
+                result.Append(val.ToString("X2"));
+            }
+
+            result.Append(checkA.ToString("X2"));
+            result.Append(checkB.ToString("X2"));
+
+            return result.ToString();
+        }
+
+        public static string GetRectUID(int x1, int y1, int x2, int y2)
+        {
+            byte[] bx1 = BitConverter.GetBytes((ushort)x1);
+            byte[] by1 = BitConverter.GetBytes((ushort)y1);
+            byte[] bx2 = BitConverter.GetBytes((ushort)x2);
+            byte[] by2 = BitConverter.GetBytes((ushort)y2);
+
+            byte[] buffer = new byte[8];
+            Buffer.BlockCopy(bx1, 0, buffer, 0, 2);
+            Buffer.BlockCopy(by1, 0, buffer, 2, 2);
+            Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
+            Buffer.BlockCopy(by2, 0, buffer, 6, 2);
+
+            return EncodeUID(buffer);
+        }
+
+        public static string GetMultimediaLinkUID(GEDCOMMultimediaLink mmLink)
+        {
+            string result = null;
+            try
+            {
+                if (mmLink != null && mmLink.Value != null)
+                {
+                    ExtRect cutoutArea;
+                    if (mmLink.IsPrimaryCutout) {
+                        cutoutArea = mmLink.CutoutPosition.Value;
+                    } else {
+                        cutoutArea = ExtRect.CreateEmpty();
+                    }
+
+                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
+                    result = mmRec.UID + "-" + GEDCOMUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GEDCOMUtils.GetMultimediaLinkUID(): " + ex.Message);
+                result = null;
+            }
             return result;
         }
 

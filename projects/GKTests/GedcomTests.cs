@@ -204,6 +204,11 @@ namespace GKTests.GKCommon
 
             Assert.IsFalse(GEDCOMUtils.IsDigits("f09"), "IsDigits(f09)");
             Assert.IsTrue(GEDCOMUtils.IsDigits("99"), "IsDigits(99)");
+
+            //
+
+            Assert.AreEqual("0F000F00D700D700CCDC", GEDCOMUtils.GetRectUID(15, 15, 215, 215));
+            Assert.IsNull(GEDCOMUtils.GetMultimediaLinkUID(null));
         }
 
         [Test]

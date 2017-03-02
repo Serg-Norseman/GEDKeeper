@@ -1010,11 +1010,7 @@ namespace GKCore
             try
             {
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                if (mmLink != null && mmLink.Value != null)
-                {
-                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
-                    result = mmRec.UID;
-                }
+                result = GEDCOMUtils.GetMultimediaLinkUID(mmLink);
             }
             catch (Exception ex)
             {

@@ -79,22 +79,8 @@ namespace GKCommon.GEDCOM
 
         private static string CreateUID()
         {
-            string result = "";
-            byte checkA = 0;
-            byte checkB = 0;
-
             byte[] binary = Guid.NewGuid().ToByteArray();
-            int num = binary.Length;
-            for (int i = 0; i < num; i++)
-            {
-                byte val = binary[i];
-                checkA = unchecked((byte)(checkA + (uint)val));
-                checkB = unchecked((byte)(checkB + (uint)checkA));
-                result += string.Format("{0:X2}", val);
-            }
-
-            result += string.Format("{0:X2}", checkA);
-            result += string.Format("{0:X2}", checkB);
+            string result = GEDCOMUtils.EncodeUID(binary);
             return result;
         }
 

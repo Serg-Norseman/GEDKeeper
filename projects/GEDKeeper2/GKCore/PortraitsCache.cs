@@ -112,12 +112,12 @@ namespace GKCore
             return result;
         }
 
-        public void RemoveObsolete(GEDCOMMultimediaRecord mmRec)
+        public void RemoveObsolete(GEDCOMMultimediaLink mmLink)
         {
-            if (mmRec == null) return;
+            if (mmLink == null) return;
 
             try {
-                string imageUID = mmRec.UID;
+                string imageUID = GEDCOMUtils.GetMultimediaLinkUID(mmLink);
                 string cachedFile = GetCachedFilename(imageUID);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {
