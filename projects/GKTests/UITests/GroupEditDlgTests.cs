@@ -23,8 +23,8 @@
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests.ControlTesters;
 using GKTests.Mocks;
-using GKTests.Service;
 using GKUI.Controls;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;

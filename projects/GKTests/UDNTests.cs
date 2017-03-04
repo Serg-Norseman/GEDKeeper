@@ -113,7 +113,9 @@ namespace GKTests.GKCommon
             fDates.Add(new UDNRecord(UDN.CreateApproximate(
                 UDNCalendarType.ctGregorian, 2015, 2, 28), UDNCalendarType.ctGregorian, "~ 2015/02/28 [g]"));
 
-            fDates.Sort(delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
+            // standart sort for .NET and Mono gives different result at items 31 and 32
+            SysUtils.QuickSort(fDates, delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
+            //fDates.Sort(delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
 
             Assert.AreEqual("??/??/?? [g]", fDates[0].Description, "(00)");
             Assert.AreEqual("??/??/23 [g]", fDates[1].Description, "(01)");
@@ -149,8 +151,10 @@ namespace GKTests.GKCommon
             Assert.AreEqual("2016/??/10 [g]", fDates[29].Description, "(29)");
 
             Assert.AreEqual("2016/05/?? [g]", fDates[30].Description, "(30)");
-            Assert.AreEqual("2016/05/04 [g] = 2016/04/21 [j]", fDates[31].Description, "(31)");
-            Assert.AreEqual("2016/05/04 [g]", fDates[32].Description, "(32)");
+
+            Assert.AreEqual("2016/05/04 [g]", fDates[31].Description, "(31)");
+            Assert.AreEqual("2016/05/04 [g] = 2016/04/21 [j]", fDates[32].Description, "(32)");
+
             Assert.AreEqual("2016/05/05 [g]", fDates[33].Description, "(33)");
             Assert.AreEqual("2016/05/06 [g] = 2016/04/23 [j]", fDates[34].Description, "(34)");
             Assert.AreEqual("before 2016/05/31 [g]", fDates[35].Description, "(35)");
@@ -194,7 +198,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("~????/05/14", testUDN2.ToString());
             Assert.IsFalse(testUDN2.IsEmpty());
 
-            //Assert.IsTrue(testUDN2.GetHashCode() != 0);
+            Assert.IsTrue(testUDN2.GetHashCode() != 0);
 
             Assert.Throws(typeof(Exception), () => {
                               UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),

@@ -178,9 +178,9 @@ namespace GKCommon
         public void Insert(int index, T item)
         {
             fList.Insert(index, item);
-            if (item == null) return;
-
-            Notify(item, ListNotification.Added);
+            if (item != null) {
+                Notify(item, ListNotification.Added);
+            }
         }
 
         public int Remove(T item)

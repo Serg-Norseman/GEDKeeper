@@ -532,6 +532,8 @@
     <Compile Include="GKCore\Cultures\PolishCulture.cs" />
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
+    <Compile Include="GKCore\Cultures\FrenchCulture.cs" />
+    <Compile Include="GKCore\Cultures\ItalianCulture.cs" />
     <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>

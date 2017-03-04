@@ -67,10 +67,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalendarTests.cs" />
     <Compile Include="CommonTests.cs" />
     <Compile Include="CoreTests.cs" />
     <Compile Include="ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
+    <Compile Include="GKCommon\SmartGraphTests.cs" />
+    <Compile Include="GKExtTests.cs" />
     <Compile Include="GXResources.Designer.cs">
       <DependentUpon>GXResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -78,7 +81,50 @@
     <Compile Include="Mocks.cs" />
     <Compile Include="PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SCCTests.cs" />
+    <Compile Include="SerializeTests.cs" />
+    <Compile Include="ControlTesters\DataGridViewTester.cs" />
+    <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
+    <Compile Include="ControlTesters\GKSheetListTester.cs" />
+    <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
+    <Compile Include="ControlTesters\NumericUpDownTester.cs" />
     <Compile Include="TestStubs.cs" />
+    <Compile Include="UDNTests.cs" />
+    <Compile Include="UITests\AboutDlgTests.cs" />
+    <Compile Include="UITests\AddressEditDlgTests.cs" />
+    <Compile Include="UITests\AssociationEditDlgTests.cs" />
+    <Compile Include="UITests\CommonFilterDlgTests.cs" />
+    <Compile Include="UITests\CommunicationEditDlgTests.cs" />
+    <Compile Include="UITests\CustomWindowTest.cs" />
+    <Compile Include="UITests\DayTipsDlgTests.cs" />
+    <Compile Include="UITests\EventEditDlgTests.cs" />
+    <Compile Include="UITests\FamilyEditDlgTests.cs" />
+    <Compile Include="UITests\FilePropertiesDlgTests.cs" />
+    <Compile Include="UITests\GroupEditDlgTests.cs" />
+    <Compile Include="UITests\InputBoxTests.cs" />
+    <Compile Include="UITests\MainWinTests.cs" />
+    <Compile Include="UITests\MediaEditDlgTests.cs" />
+    <Compile Include="UITests\MediaViewerWinTests.cs" />
+    <Compile Include="UITests\NameEditDlgTests.cs" />
+    <Compile Include="UITests\NoteEditDlgTests.cs" />
+    <Compile Include="UITests\OptionsDlgTests.cs" />
+    <Compile Include="UITests\OrganizerWinTests.cs" />
+    <Compile Include="UITests\PersonalNameEditDlgTests.cs" />
+    <Compile Include="UITests\PersonEditDlgTests.cs" />
+    <Compile Include="UITests\PersonsFilterDlgTests.cs" />
+    <Compile Include="UITests\PortraitSelectDlgTests.cs" />
+    <Compile Include="UITests\ProgressDlgTests.cs" />
+    <Compile Include="UITests\RecordSelectDlgTests.cs" />
+    <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
+    <Compile Include="UITests\RepositoryEditDlgTests.cs" />
+    <Compile Include="UITests\ResearchEditDlgTests.cs" />
+    <Compile Include="UITests\SexCheckDlgTests.cs" />
+    <Compile Include="UITests\SourceCitEditDlgTests.cs" />
+    <Compile Include="UITests\SourceEditDlgTests.cs" />
+    <Compile Include="UITests\StatisticsWinTests.cs" />
+    <Compile Include="UITests\TaskEditDlgTests.cs" />
+    <Compile Include="UITests\TreeFilterDlgTests.cs" />
+    <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.linux.csproj">

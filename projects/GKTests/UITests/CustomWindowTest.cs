@@ -18,11 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.IO;
-using System.Windows.Forms;
+#if !__MonoCS__
 
-using GKCore;
+using System;
+using System.Windows.Forms;
 using NUnit.Extensions.Forms;
 
 namespace GKTests.UITests
@@ -70,8 +69,7 @@ namespace GKTests.UITests
 
         public static void PrepareFileSave(string fileName, IntPtr hWnd)
         {
-            fileName = GKUtils.GetTempDir() + fileName;
-            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+            fileName = TestStubs.GetTempFilePath(fileName);
 
             var saveDlg = new SaveFileDialogTester(hWnd);
             saveDlg.SaveFile(fileName);
@@ -79,3 +77,5 @@ namespace GKTests.UITests
         }
     }
 }
+
+#endif

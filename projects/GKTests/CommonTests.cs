@@ -20,6 +20,8 @@
 
 using System;
 using System.Drawing;
+using System.Reflection;
+
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -187,23 +189,31 @@ namespace GKTests.GKCommon
         {
             int res1, res2;
 
+            res1 = IndistinctMatching.LevenshteinDistance("", "");
+            Assert.AreEqual(0, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "");
             Assert.AreEqual(6, res1);
             res1 = IndistinctMatching.LevenshteinDistance("", "Petroff");
             Assert.AreEqual(7, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res1);
+            res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "IvanovTest");
+            Assert.AreEqual(4, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(2, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Petroff", "Pterov");
             Assert.AreEqual(4, res1); // permutation -fail
 
+            res1 = IndistinctMatching.DamerauLevenshteinDistance("", "");
+            Assert.AreEqual(0, res1);
             res1 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "");
             Assert.AreEqual(6, res1);
             res1 = IndistinctMatching.DamerauLevenshteinDistance("", "Petroff");
             Assert.AreEqual(7, res1);
             res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res2);
+            res1 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "IvanovTest");
+            Assert.AreEqual(4, res1);
             res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(1, res2);
             res1 = IndistinctMatching.DamerauLevenshteinDistance("Petroff", "Pterov");
@@ -239,11 +249,19 @@ namespace GKTests.GKCommon
         {
             string[] list = new string[] { "The", "string", "list", "test" };
 
+            using (var strList0 = new StringList()) {
+                strList0.Text = "The string list test";
+                Assert.AreEqual("The string list test\r\n", strList0.Text);
+            }
+
             StringList strList = new StringList(list);
+
             Assert.AreEqual("The", strList[0]);
             Assert.AreEqual("string", strList[1]);
             Assert.AreEqual("list", strList[2]);
             Assert.AreEqual("test", strList[3]);
+
+            Assert.AreEqual("The\r\nstring\r\nlist\r\ntest\r\n", strList.Text);
 
             StringList strList2 = new StringList();
             strList2.Assign(null);
@@ -295,7 +313,9 @@ namespace GKTests.GKCommon
 
             strList.DuplicateSolve = DuplicateSolve.Error;
             strList.Sorted = true;
+            Assert.AreEqual(true, strList.Sorted);
             Assert.Throws(typeof(StringListException), () => { strList.Add("The"); });
+            Assert.Throws(typeof(StringListException), () => { strList[0] = "The"; }); // property Sorted blocks
 
             Assert.Throws(typeof(StringListException), () => { strList.Insert(0, "insert test"); }); // Operation not allowed on sorted list
             strList.Sorted = false;
@@ -322,79 +342,6 @@ namespace GKTests.GKCommon
             Assert.AreEqual(3, strList.IndexOf("test"));
             Assert.AreEqual(4, strList.IndexOf("The"));
             Assert.AreEqual(-1, strList.IndexOf("abrakadabra"));
-        }
-
-        [Test]
-        public void Graph_Tests()
-        {
-            Vertex vertex = new Vertex();
-            Assert.IsNotNull(vertex);
-            
-            Vertex vertex2 = new Vertex();
-            Assert.AreNotEqual(0, vertex.CompareTo(vertex2));
-            Assert.Throws(typeof(ArgumentException), () => { vertex.CompareTo(null); });
-            
-            Assert.Throws(typeof(ArgumentNullException), () => { new Edge(null, vertex2, 1, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { new Edge(vertex, null, 1, null); });
-            
-            Edge edge = new Edge(vertex, vertex2, 1, null);
-            Assert.IsNotNull(edge);
-            Assert.AreEqual(1, edge.Cost);
-            Assert.AreEqual(vertex, edge.Source);
-            Assert.AreEqual(vertex2, edge.Target);
-            Assert.AreEqual(null, edge.Value);
-
-            IEdge idg = edge;
-            Assert.AreEqual(vertex, idg.Source);
-            Assert.AreEqual(vertex2, idg.Target);
-
-            Assert.AreNotEqual(0, edge.CompareTo(new Edge(vertex, vertex2, 1, null)));
-            Assert.Throws(typeof(ArgumentException), () => { edge.CompareTo(null); });
-            
-            IVertex vert1 = edge.Source;
-            Assert.AreEqual(vertex, vert1);
-            IVertex vert2 = edge.Target;
-            Assert.AreEqual(vertex2, vert2);
-            
-            using (Graph graph = new Graph())
-            {
-                Assert.IsNotNull(graph);
-                
-                /*vert1 = graph.AddVertex(null);
-				Assert.IsNotNull(vert1);
-				graph.DeleteVertex(vert1);*/
-                
-                vert1 = graph.AddVertex("test", null);
-                Assert.IsNotNull(vert1);
-                
-                vert2 = graph.FindVertex("test");
-                Assert.AreEqual(vert1, vert2);
-                
-                graph.DeleteVertex(vert1);
-                
-                vert1 = graph.AddVertex("src", null);
-                vert2 = graph.AddVertex("tgt", null);
-                IEdge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
-                Assert.IsNotNull(edge3);
-                graph.DeleteEdge(edge3);
-                
-                edge3 = graph.AddDirectedEdge("1", "2", 1, null);
-                Assert.IsNull(edge3);
-                
-                bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
-                Assert.AreEqual(true, res);
-
-                foreach (IVertex vtx in graph.Vertices) {
-                }
-
-                foreach (IEdge edg in graph.Edges) {
-                }
-
-                graph.Clear();
-
-                graph.DeleteVertex(null); // no exception
-                graph.DeleteEdge(null); // no exception
-            }
         }
 
         private static bool GetVarEventHandler(object sender, string varName, ref double varValue)
@@ -648,6 +595,8 @@ namespace GKTests.GKCommon
                 Assert.Throws(typeof(ListException), () => { list[-1] = null; });
 
                 object obj = new object();
+                object obj1 = new object();
+
                 list.Add(obj);
                 Assert.AreEqual(1, list.Count);
                 Assert.AreEqual(obj, list[0]);
@@ -666,6 +615,12 @@ namespace GKTests.GKCommon
 
                 list.Add(null);
                 Assert.AreEqual(2, list.Count);
+                Assert.AreEqual(null, list[1]);
+                list[1] = obj1;
+                Assert.AreEqual(obj1, list[1]);
+
+                list[1] = null;
+                Assert.AreEqual(2, list.Count);
                 list.Pack();
                 Assert.AreEqual(1, list.Count);
 
@@ -677,7 +632,6 @@ namespace GKTests.GKCommon
                 list.OwnsObjects = true;
                 Assert.AreEqual(true, list.OwnsObjects);
 
-                object obj1= new object();
                 list.Clear();
                 list.Add(obj);
                 list.Add(obj1);
@@ -1000,6 +954,19 @@ namespace GKTests.GKCommon
 
             st = SysUtils.NormalizeName(null);
             Assert.AreEqual("", st);
+
+            //
+            Assert.AreEqual("", SysUtils.GetFileExtension("testfile"));
+            Assert.AreEqual(".ext", SysUtils.GetFileExtension("testfile.eXt"));
+
+            Assert.IsFalse(SysUtils.IsRemovableDrive(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)));
+
+            Assembly asm = this.GetType().Assembly;
+            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
+            Assert.IsNotNull(attr1);
+            Assert.AreEqual("GKTests", attr1.Title);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
         }
 
         private void TweenHandler(int newX, int newY)
@@ -1023,6 +990,9 @@ namespace GKTests.GKCommon
 
             Assert.AreEqual(2.0, SysUtils.ZoomToFit(50, 20, 100, 50));
             Assert.AreEqual(3.0, SysUtils.ZoomToFit(15, 40, 45, 120));
+
+            Assert.AreEqual(1.0, SysUtils.ZoomToFit(0, 40, 45, 120));
+            Assert.AreEqual(1.0, SysUtils.ZoomToFit(15, 0, 45, 120));
 
             Assert.AreEqual(Color.FromArgb(50, 50, 50), SysUtils.Darker(Color.FromArgb(100, 100, 100), 0.5f));
             Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));

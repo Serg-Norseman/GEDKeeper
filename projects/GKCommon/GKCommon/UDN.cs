@@ -99,40 +99,36 @@ namespace GKCommon
 
         public override string ToString()
         {
-            try {
-                int y = 0, m = 0, d = 0;
+            int y = 0, m = 0, d = 0;
 
-                if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
-                    uint unmaskedVal = GetUnmaskedValue();
-                    CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
-                }
-
-                int sign = Math.Sign(y);
-                y = Math.Abs(y);
-                string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
-                if (sign == -1) sy = "-" + sy;
-
-                string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
-                string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
-
-                string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
-                if (IsApproximateDate()) {
-                    result = "~" + result;
-                } else if (IsDateBefore()) {
-                    result = "<" + result;
-                } else if (IsDateAfter()) {
-                    result = ">" + result;
-                }
-
-                return result;
-            } catch (Exception) {
-                return "<error>";
+            if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
+                uint unmaskedVal = GetUnmaskedValue();
+                CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
             }
+
+            int sign = Math.Sign(y);
+            y = Math.Abs(y);
+            string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
+            if (sign == -1) sy = "-" + sy;
+
+            string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
+            string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
+
+            string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+            if (IsApproximateDate()) {
+                result = "~" + result;
+            } else if (IsDateBefore()) {
+                result = "<" + result;
+            } else if (IsDateAfter()) {
+                result = ">" + result;
+            }
+
+            return result;
         }
 
         public override int GetHashCode()
         {
-            return (int)fValue;
+            return fValue.GetHashCode();
         }
 
         #endregion

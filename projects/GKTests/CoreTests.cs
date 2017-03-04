@@ -694,6 +694,12 @@ namespace GKTests.GKCore
 
             fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Turkish;
             Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.French;
+            Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Italian;
+            Assert.IsInstanceOf(typeof(ItalianCulture), fContext.Culture);
         }
 
         [Test]

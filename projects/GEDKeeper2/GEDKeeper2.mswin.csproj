@@ -136,6 +136,8 @@
     <Compile Include="GKCore\Cultures\PolishCulture.cs" />
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
+    <Compile Include="GKCore\Cultures\FrenchCulture.cs" />
+    <Compile Include="GKCore\Cultures\ItalianCulture.cs" />
     <Compile Include="GKCore\Export\CustomWriter.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />

@@ -18,11 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !__MonoCS__
+
 using System.Windows.Forms;
 using GKUI.Controls;
 using NUnit.Extensions.Forms;
 
-namespace GKTests.Service
+namespace GKTests.ControlTesters
 {
     public class GKRecordsViewTester : ControlTester<GKRecordsView, GKRecordsViewTester>
     {
@@ -40,3 +42,5 @@ namespace GKTests.Service
         }
     }
 }
+
+#endif

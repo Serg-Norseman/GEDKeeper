@@ -127,13 +127,7 @@ namespace GKTests.GKCommon
         {
             Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.Open("", FileAccess.Read); });
 
-            #if !__MonoCS__
-            string fileName = GKUtils.GetTempDir() + "test.zip";
-            #else
-            string fileName = GKUtils.GetHomePath() + "test.zip";
-            #endif
-
-            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+            string fileName = TestStubs.GetTempFilePath("test.zip");
 
             using (ZipStorer zip = ZipStorer.Create(fileName, "test")) {
                 using (MemoryStream csvStream = new MemoryStream(Encoding.ASCII.GetBytes(CSVData))) {
@@ -273,8 +267,10 @@ namespace GKTests.GKCommon
 
                 DateTime dtx = new DateTime(2016, 08, 11);
                 iniFile.WriteDateTime("test", "dtx", dtx);
-                Assert.AreEqual(dtx, iniFile.ReadDateTime("test", "dtx", new DateTime()));
+                Assert.AreEqual(dtx, iniFile.ReadDateTime("test", "dtx", new DateTime())); // writed value
 
+                dtx = new DateTime();
+                Assert.AreEqual(dtx, iniFile.ReadDateTime("test", "dtx2", dtx)); // default value
 
                 iniFile.DeleteKey("test", "str");
                 Assert.AreEqual("beta", iniFile.ReadString("test", "str", "beta"));

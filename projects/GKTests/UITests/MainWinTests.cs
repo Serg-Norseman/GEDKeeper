@@ -32,7 +32,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
-using GKTests.Service;
+using GKTests.ControlTesters;
 using GKUI;
 using GKUI.Charts;
 using GKUI.Dialogs;

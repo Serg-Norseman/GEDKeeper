@@ -23,44 +23,37 @@ using System.Text;
 
 namespace GKCommon.SmartGraph
 {
-	public sealed class GraphvizWriter
-	{
-		private readonly StringBuilder fBuffer;
+    public sealed class GraphvizWriter
+    {
+        private readonly StringBuilder fBuffer;
 
-		public GraphvizWriter(string name)
-		{
+        public GraphvizWriter(string name, params string[] options)
+        {
             fBuffer = new StringBuilder();
-			fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_') + "{");
-		}
+            fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_') + "{");
+            foreach (string option in options)
+            {
+                fBuffer.AppendLine("\t" + option + ";");
+            }
+        }
 
-		public GraphvizWriter(string name, string[] options) : this(name)
-		{
-			fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_') + "{");
-			foreach (string option in options)
-			{
-				fBuffer.AppendLine("\t" + option + ";");
-			}
-		}
+        public void WriteEdge(string frm, string to)
+        {
+            fBuffer.AppendLine(string.Format("\"{0}\" -> \"{1}\";", frm, to));
+        }
 
-		public void WriteEdge(string frm, string to)
-		{
-			fBuffer.AppendLine(string.Format("\"{0}\" -> \"{1}\";", frm, to));
-		}
+        public void WriteNode(string id, string name, string style, string color, string shape)
+        {
+            fBuffer.AppendLine(string.Format("\"{0}\" [ label=\"{1}\",shape=\"{2}\",style=\"{3}\",color=\"{4}\" ];", id, name, shape, style, color));
+        }
 
-		public void WriteNode(string id, string name, string style, string color, string shape)
-		{
-			fBuffer.AppendLine(string.Format("\"{0}\" [ label=\"{1}\",shape=\"{2}\",style=\"{3}\",color=\"{4}\" ];", id, name, shape, style, color));
-		}
-
-		public void SaveFile(string path)
-		{
-			fBuffer.AppendLine("}");
-			using (StreamWriter sw = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
-			{
-				sw.Write(fBuffer.ToString());
-				System.Console.Write(fBuffer.ToString());
-			}
-		}
-
-	}
+        public void SaveFile(string path)
+        {
+            fBuffer.AppendLine("}");
+            using (StreamWriter sw = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
+            {
+                sw.Write(fBuffer.ToString());
+            }
+        }
+    }
 }

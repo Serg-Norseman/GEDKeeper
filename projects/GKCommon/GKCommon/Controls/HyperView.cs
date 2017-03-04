@@ -86,7 +86,6 @@ namespace GKCommon.Controls
 
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private Color fColor;
         private int[] fHeights;
         private Size fTextSize;
         private readonly StringList fLines;
@@ -119,21 +118,9 @@ namespace GKCommon.Controls
             }
         }
 
-        public Color Color
-        {
-            get { return fColor; }
-            set {
-                if (fColor == value) return;
-
-                fColor = value;
-                Invalidate();
-            }
-        }
-
         public StringList Lines
         {
             get { return fLines; }
-            set { fLines.Assign(value); }
         }
 
         public Color LinkColor
@@ -165,7 +152,6 @@ namespace GKCommon.Controls
 
             fAcceptFontChange = true;
             fChunks = new List<TextChunk>();
-            fColor = SystemColors.Control;
             fCurrentLink = null;
             fHeights = new int[0];
             fLines = new StringList();
@@ -362,7 +348,7 @@ namespace GKCommon.Controls
                             }
 
                             lastFont = SetFontStyle(lastFont, FontStyle.Underline);
-                            Color color = (closeTag) ? Color.Black : fLinkColor;
+                            Color color = (closeTag) ? ForeColor : fLinkColor;
                             SetChunkColor(line, ref lastChunk, lastFont, color);
                             if (!closeTag) {
                                 lastChunk.URL = url;
@@ -445,7 +431,7 @@ namespace GKCommon.Controls
                 try
                 {
                     Rectangle clientRect = ClientRectangle;
-                    gfx.FillRectangle(new SolidBrush(SystemColors.Control), clientRect);
+                    gfx.FillRectangle(new SolidBrush(BackColor), clientRect);
 
                     int xOffset = fBorderWidth - -AutoScrollPosition.X;
                     int yOffset = fBorderWidth - -AutoScrollPosition.Y;

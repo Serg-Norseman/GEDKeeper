@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -146,6 +147,19 @@ namespace GKTests
             GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
             commRec.CommName = "Test communication";
             Assert.IsNotNull(commRec, "commRec != null");
+        }
+
+        public static string GetTempFilePath(string fileName)
+        {
+            #if !__MonoCS__
+            fileName = GKUtils.GetTempDir() + fileName;
+            #else
+            fileName = GKUtils.GetHomePath() + fileName;
+            #endif
+
+            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+
+            return fileName;
         }
     }
 }

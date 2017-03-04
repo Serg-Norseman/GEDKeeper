@@ -77,9 +77,11 @@ namespace GKCommon
                 return fCaseSensitive;
             }
             set {
-                if (value == fCaseSensitive) return;
-                fCaseSensitive = value;
-                if (fSorted) Sort();
+                if (fCaseSensitive != value)
+                {
+                    fCaseSensitive = value;
+                    if (fSorted) Sort();
+                }
             }
         }
 
@@ -134,9 +136,11 @@ namespace GKCommon
                 return fSorted;
             }
             set {
-                if (fSorted == value) return;
-                if (value) Sort();
-                fSorted = value;
+                if (fSorted != value)
+                {
+                    if (value) Sort();
+                    fSorted = value;
+                }
             }
         }
 

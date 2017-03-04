@@ -1397,7 +1397,10 @@ namespace GKCore
 
         public static string GetTempDir()
         {
-            return Environment.GetEnvironmentVariable("TEMP") + Path.DirectorySeparatorChar;
+            string tempPath;
+            tempPath = Environment.GetEnvironmentVariable("TEMP");
+            //tempPath = Path.GetTempPath();
+            return tempPath + Path.DirectorySeparatorChar;
         }
 
         public static string GetAppPath()

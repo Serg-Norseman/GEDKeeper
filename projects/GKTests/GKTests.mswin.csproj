@@ -74,6 +74,7 @@
     <Compile Include="CoreTests.cs" />
     <Compile Include="ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
+    <Compile Include="GKCommon\SmartGraphTests.cs" />
     <Compile Include="GKExtTests.cs" />
     <Compile Include="GXResources.Designer.cs">
       <DependentUpon>GXResources.resx</DependentUpon>
@@ -84,11 +85,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SCCTests.cs" />
     <Compile Include="SerializeTests.cs" />
-    <Compile Include="Service\DataGridViewTester.cs" />
-    <Compile Include="Service\GKRecordsViewTester.cs" />
-    <Compile Include="Service\GKSheetListTester.cs" />
-    <Compile Include="Service\MaskedTextBoxTester.cs" />
-    <Compile Include="Service\NumericUpDownTester.cs" />
+    <Compile Include="ControlTesters\DataGridViewTester.cs" />
+    <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
+    <Compile Include="ControlTesters\GKSheetListTester.cs" />
+    <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
+    <Compile Include="ControlTesters\NumericUpDownTester.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="UDNTests.cs" />
     <Compile Include="UITests\AboutDlgTests.cs" />
@@ -144,7 +145,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service" />
+    <Folder Include="ControlTesters" />
+    <Folder Include="GKCommon" />
     <Folder Include="UITests" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
