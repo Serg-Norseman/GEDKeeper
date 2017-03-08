@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Security.Permissions;
@@ -66,6 +65,7 @@ namespace GKUI
 
         private int fLoadingCount;
         private readonly StringList fTips;
+        private PathReplacer fPathReplacer;
 
         private static MainWin fInstance = null;
         private static GKResourceManager fResourceManager;
@@ -254,6 +254,9 @@ namespace GKUI
             fPlugins = new List<IPlugin>();
             LoadPlugins(GKUtils.GetPluginsPath());
             UpdatePluginsItems();
+
+            fPathReplacer = new PathReplacer();
+            fPathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml");
 
             LoadLanguage(fOptions.InterfaceLang);
 
