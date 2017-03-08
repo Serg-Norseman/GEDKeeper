@@ -27,12 +27,6 @@ namespace GKCommon.Controls
 {
     public delegate void LinkEventHandler(object sender, string linkName);
 
-    public enum RuleStyle
-    {
-        rsLowered,
-        rsRaised
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -41,29 +35,32 @@ namespace GKCommon.Controls
         private sealed class TextChunk : BaseObject
         {
             public int Line;
-            public Font Font;
             public string Text;
-            public Color Color;
 
             public string URL;
             public ExtRect LinkRect;
 
+            public Font Font;
+            public Color Color;
+
             public TextChunk(int line)
             {
                 Line = line;
-                Font = null;
                 Text = string.Empty;
-                Color = Color.Black;
                 URL = string.Empty;
+
+                Font = null;
+                Color = Color.Black;
             }
 
             public TextChunk(int line, Font font)
             {
                 Line = line;
-                Font = font;
                 Text = string.Empty;
-                Color = Color.Black;
                 URL = string.Empty;
+
+                Font = font;
+                Color = Color.Black;
             }
 
             protected override void Dispose(bool disposing)
@@ -91,7 +88,6 @@ namespace GKCommon.Controls
         private readonly StringList fLines;
         private TextChunk fCurrentLink;
         private Color fLinkColor;
-        private RuleStyle fRuleStyle;
         private List<TextChunk> fChunks;
 
         private static readonly object EventLink;
@@ -129,21 +125,11 @@ namespace GKCommon.Controls
             set { fLinkColor = value; }
         }
 
-        public RuleStyle RuleStyle
-        {
-            get { return fRuleStyle; }
-            set {
-                if (fRuleStyle == value) return;
-
-                fRuleStyle = value;
-                Invalidate();
-            }
-        }
-
 
         public HyperView() : base()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
+                     ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
             BorderStyle = BorderStyle.Fixed3D;
@@ -177,7 +163,9 @@ namespace GKCommon.Controls
             ArrangeText();
         }
 
-        private void MeasureText(Graphics grx, string ss, Font font, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
+        private void MeasureText(Graphics grx, string ss, Font font,
+                                 ref int xPos, ref int yPos,
+                                 ref int hMax, ref int xMax)
         {
             if (yPos >= -hMax && ss != "") {
                 SizeF strSize = grx.MeasureString(ss, font);
@@ -189,7 +177,8 @@ namespace GKCommon.Controls
             }
         }
 
-        private void OutText(Graphics gfx, string ss, Font font, Color color, ref int xPos, ref int yPos, ref int hMax)
+        private void OutText(Graphics gfx, string ss, Font font, Color color,
+                             ref int xPos, ref int yPos, ref int hMax)
         {
             if (yPos >= -hMax && ss != "") {
                 using (var brush = new SolidBrush(color)) {
@@ -237,15 +226,15 @@ namespace GKCommon.Controls
             return new Font(font.Name, size, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
         }
 
-        private static Font SetFontStyle(Font font, FontStyle style)
+        private static Font SetFontStyle(Font font, FontStyle style, bool active)
         {
-            FontStyle fontStyle = font.Style;
-            if ((fontStyle & style) == FontStyle.Regular) {
-                fontStyle |= style;
+            FontStyle newStyle = font.Style;
+            if (active /*(newStyle & style) == FontStyle.Regular*/) {
+                newStyle |= style;
             } else {
-                fontStyle &= ~style;
+                newStyle &= ~style;
             }
-            return new Font(font, fontStyle);
+            return new Font(font, newStyle);
         }
 
         private void ParseLine(int line, string lineText, Font currentFont)
@@ -286,7 +275,24 @@ namespace GKCommon.Controls
                         string tag = tok.Value;
                         //bool skipTag = false;
 
-                        if (tag == "size") {
+                        if (tag == "color") {
+                            // [color="{red|#ff0000}"][/color]
+                            Color color;
+                            color = ForeColor;
+                            if (!closeTag) {
+                                tok = strTok.Next();
+                                if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
+                                    tok = strTok.Next();
+                                    if (tok.Kind == TokenKind.Word) {
+                                        color = Color.FromName(tok.Value);
+                                    }
+                                }
+                            } else {
+                                color = ForeColor;
+                            }
+                            SetChunkColor(line, ref lastChunk, lastFont, color);
+                        }
+                        else if (tag == "size") {
                             // [size={+/-x}]
                             tok = strTok.Next();
                             if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
@@ -301,35 +307,31 @@ namespace GKCommon.Controls
                                     tok = strTok.Next();
                                 }
                                 if (tok.Kind == TokenKind.Number) {
-                                    lastFont = SetFontSize(lastFont, (lastFont.Size + factor * SysUtils.ParseInt(tok.Value, 0)));
+                                    float newSize = lastFont.Size + factor * SysUtils.ParseInt(tok.Value, 0);
+                                    lastFont = SetFontSize(lastFont, newSize);
                                 }
                             }
                             SetChunkFont(line, ref lastChunk, lastFont);
                         }
                         else if (tag == "b") {
-                            // [b][/b], but now it's switcher
-                            lastFont = SetFontStyle(lastFont, FontStyle.Bold);
+                            // [b][/b]
+                            lastFont = SetFontStyle(lastFont, FontStyle.Bold, !closeTag);
                             SetChunkFont(line, ref lastChunk, lastFont);
                         }
                         else if (tag == "i") {
-                            // [i][/i], but now it's switcher
-                            lastFont = SetFontStyle(lastFont, FontStyle.Italic);
+                            // [i][/i]
+                            lastFont = SetFontStyle(lastFont, FontStyle.Italic, !closeTag);
                             SetChunkFont(line, ref lastChunk, lastFont);
                         }
                         else if (tag == "s") {
-                            // [s][/s], but now it's switcher
-                            lastFont = SetFontStyle(lastFont, FontStyle.Strikeout);
+                            // [s][/s]
+                            lastFont = SetFontStyle(lastFont, FontStyle.Strikeout, !closeTag);
                             SetChunkFont(line, ref lastChunk, lastFont);
                         }
                         else if (tag == "u") {
-                            // [u][/u], but now it's switcher
-                            lastFont = SetFontStyle(lastFont, FontStyle.Underline);
+                            // [u][/u]
+                            lastFont = SetFontStyle(lastFont, FontStyle.Underline, !closeTag);
                             SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "r") {
-                            // bad implementation
-                            lastChunk = null;
-                            SetChunkText(line, ref lastChunk, lastFont, "[rule]");
                         }
                         else if (tag == "url") {
                             // bad impementation
@@ -347,7 +349,7 @@ namespace GKCommon.Controls
                                 //
                             }
 
-                            lastFont = SetFontStyle(lastFont, FontStyle.Underline);
+                            lastFont = SetFontStyle(lastFont, FontStyle.Underline, !closeTag);
                             Color color = (closeTag) ? ForeColor : fLinkColor;
                             SetChunkColor(line, ref lastChunk, lastFont, color);
                             if (!closeTag) {
@@ -449,14 +451,6 @@ namespace GKCommon.Controls
                             xOffset = fBorderWidth - -AutoScrollPosition.X;
 
                             if (line > 0) yOffset += lineHeight;
-                        }
-
-                        if (chunk.Text == "[rule]") {
-                            int rulerWidth = clientRect.Width - (xOffset * 2);
-                            ControlPaint.DrawBorder3D(gfx,
-                                                      xOffset, yOffset + (lineHeight - 3) / 2,
-                                                      rulerWidth, 3, Border3DStyle.Bump, Border3DSide.All);
-                            continue;
                         }
 
                         int prevX = xOffset;
