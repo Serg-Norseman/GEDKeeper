@@ -1,5 +1,5 @@
 
-## 28.02.2017 [v2.11.0]
+## 28.02.2017 [[v2.11.0](/releases/tag/v2.11.0)]
 
 - Added French localization (thanks to Diana Shilnikova).
 - Added images cache for portraits. This improves tree chart performance
@@ -20,18 +20,17 @@ databases on the program startup.
 configurations.
 - Added ability to print a circle chart with print preview available.
 - Improved charts rendering, zooming, scrolling and navigation inside
-circle and tree charts [ruslangaripov].
-- Added new control to manage number of visible generations in a tree
-chart.
-- Improved the popup control for tree chart zooming [ruslangaripov].
+circle and tree charts [@ruslangaripov].
+- Added new control to manage number of visible generations in a tree chart.
+- Improved the popup control for tree chart zooming [@ruslangaripov].
 - Fixed HOME directory processing error occurred after new operating
 system has been installed (both Linux and Microsoft Windows).
 - Added generating and exporting of a new document type -- &quot;Album of
 Trees&quot;.
 - &quot;GEDKeeper GUI localization manual&quot; was updated and translated
-to English [ruslangaripov].
+to English [@ruslangaripov].
 - GUI improved within tree editor, person portraits management and
-setting up default portraits showing in the tree [IT].
+setting up default portraits showing in the tree [@g10101k].
 - Made small improvements and optimizations.
 - Considered more national language features aware of name processing.
 
@@ -58,21 +57,21 @@ setting up default portraits showing in the tree [IT].
 - To improve modifications safety, GEDKeeper locks a record while user is changing it.
 - Implement modifications canceling after changes have been made in editing GUI dialogs.
 - Fix application behavior after clicking buttons that change parents or parents’ families while user is changing a person in the GUI editor.
-- Improve supporting of multi-monitor configurations.
+- Improve supporting of multi-monitor configurations [@ruslangaripov].
 - Made a static analysis of the source code – fix over 60 possible defects and errors.
 - Fix many small issues and improve overall application stability.
 - Fix some errors.
 - Add coding style guide.
 - Use Russian name declination in birthday notifications and calculator of relation degree.
-- Improve birthday notifications displaying.
+- Improve birthday notifications displaying [@ruslangaripov].
 - Fix behavior of child MDI (database) windows.
-- Improve calculation of UDN and dates sorting when mixing calendar types.
-- Improve English localization.
+- Improve calculation of UDN and dates sorting when mixing calendar types [@ruslangaripov].
+- Improve English localization [@ruslangaripov].
 - Add calculator of relation degree.
 
 ## 03.09.2016 [v2.8.1]
 
-- Correct English localization of the user interface.
+- Correct English localization of the user interface [@ruslangaripov].
 - Add preliminary version of demonstration database for USA users (President).
 - Refine and optimize the source code, fix some errors. GEDKeeper
 successfully passed a stress test processing a database with more than 60,000 people.
@@ -102,12 +101,12 @@ internationalization of GEDKeeper.
 
 ## 20.06.2016 [v2.6.0]
 
-- Added English localization of help.
+- Added English localization of help [@ruslangaripov].
 - Export pedigrees to RTF.
 - Add package for distribution on Debian/Ubuntu Linux.
 - Add Mono-supporting (Linux).
 - Add new unique framework for unified encoding and sorting dates
-in any calendar, with any precision.
+in any calendar, with any precision [@ruslangaripov].
 - Restore html-pedigree generation to be compatible with Linux.
 - Simplify help content down to html only to improve Linux
 compatible (help content has no CHM files).
