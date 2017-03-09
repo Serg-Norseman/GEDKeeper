@@ -27,6 +27,12 @@ The aim of the program is as quick and effective means of conducting personal ge
 
 Цель программы - максимально быстрое и эффективное средство ведения личной генеалогической базы данных - как вспомогательный инструмент к традиционной картотеке.
 
+## Docs & Help
+
+- [Contributing guide](/CONTRIBUTING.md)
+- [Coding style guide](/CODINGSTYLE.md)
+- [Changelog](/CHANGELOG.md)
+
 ## Links
 
 https://gedkeeper.github.io/
