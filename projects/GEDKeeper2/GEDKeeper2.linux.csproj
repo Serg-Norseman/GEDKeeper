@@ -512,7 +512,6 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />

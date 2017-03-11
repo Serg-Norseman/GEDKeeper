@@ -20,12 +20,10 @@
 
 using System;
 using System.Drawing;
-using System.Reflection;
 
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests.Mocks;
@@ -36,74 +34,6 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class CommonTests
     {
-        [Test]
-        public void ReflectionHelper_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetPropertyValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetFieldValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
-
-            using (StringList strList = new StringList()) {
-                strList.Text = "Test line";
-
-                object obj = SysUtils.GetPropertyValue(strList, "Text");
-                Assert.AreEqual("Test line\r\n", obj);
-
-                SysUtils.SetPropertyValue(strList, "Text", "Test2");
-                Assert.AreEqual("Test2\r\n", strList.Text);
-
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetPropertyValue(strList, "test"); });
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.SetPropertyValue(strList, "test", ""); });
-            }
-
-            Token tkn = new Token(TokenKind.Unknown, "", 111, 0);
-            object obj1 = SysUtils.GetFieldValue(tkn, "Line");
-            Assert.AreEqual(111, obj1);
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetFieldValue(tkn, "Lines"); });
-        }
-
-        [Test]
-        public void ConvHelper_Tests()
-        {
-            int ival = SysUtils.ParseInt("495", 0);
-            Assert.AreEqual(495, ival);
-
-            ival = SysUtils.ParseInt("asdfa", 11);
-            Assert.AreEqual(11, ival);
-
-            double fval = SysUtils.ParseFloat("495.575", 0);
-            Assert.AreEqual(495.575, fval);
-
-            fval = SysUtils.ParseFloat("575,495", 0, true);
-            Assert.AreEqual(575.495, fval);
-
-            fval = SysUtils.ParseFloat("", 22.1);
-            Assert.AreEqual(22.1, fval);
-
-            fval = SysUtils.ParseFloat("sdgfdf", 22.2);
-            Assert.AreEqual(22.2, fval);
-
-            string st = SysUtils.AdjustNum(9, 3);
-            Assert.AreEqual("009", st);
-        }
-
-        [Test]
-        public void RomeNumbers_Tests()
-        {
-            Assert.AreEqual("VI", SysUtils.GetRome(6), "RomeTest_00");
-            Assert.AreEqual("VIII", SysUtils.GetRome(8), "RomeTest_01");
-            Assert.AreEqual("IX", SysUtils.GetRome(9), "RomeTest_02");
-            Assert.AreEqual("XXXI", SysUtils.GetRome(31), "RomeTest_03");
-            Assert.AreEqual("XLVI", SysUtils.GetRome(46), "RomeTest_04");
-            Assert.AreEqual("XCIX", SysUtils.GetRome(99), "RomeTest_05");
-            Assert.AreEqual("DLXXXIII", SysUtils.GetRome(583), "RomeTest_06");
-            Assert.AreEqual("DCCCLXXXVIII", SysUtils.GetRome(888), "RomeTest_07");
-            Assert.AreEqual("MDCLXVIII", SysUtils.GetRome(1668), "RomeTest_08");
-            Assert.AreEqual("MCMLXXXIX", SysUtils.GetRome(1989), "RomeTest_09");
-            Assert.AreEqual("MMMCMXCIX", SysUtils.GetRome(3999), "RomeTest_10");
-        }
-
         private enum RestrictionEnum
         {
             rnNone,
@@ -896,79 +826,6 @@ namespace GKTests.GKCommon
             Assert.AreEqual(0, valsCol.Count);
         }
 
-        [Test]
-        public void SysUtils_Tests()
-        {
-            #if __MonoCS__
-            Assert.IsTrue(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
-            #else
-            Assert.IsFalse(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
-            #endif
-
-            //
-
-            int days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
-            Assert.AreEqual(3, days);
-
-            days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 02));
-            Assert.AreEqual(-8, days);
-
-            Assert.AreEqual(31, SysUtils.DaysInAMonth(1990, 5));
-
-            //
-
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
-            Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
-
-            //
-
-            Assert.AreEqual(495, SysUtils.Trunc(495.575));
-
-            Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
-            Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
-
-            //
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.FirstOrDefault<int>(null); });
-            int N = SysUtils.FirstOrDefault(new int[] { 5, 7, 10 });
-            Assert.AreEqual(5, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.LastOrDefault<int>(null); });
-            N = SysUtils.LastOrDefault(new int[] { 5, 7, 10 });
-            Assert.AreEqual(10, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SingleOrDefault<int>(null); });
-            N = SysUtils.SingleOrDefault(new int[] { 11 });
-            Assert.AreEqual(11, N);
-            N = SysUtils.SingleOrDefault(new int[] { });
-            Assert.AreEqual(0, N);
-            Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault(new int[] { 5, 7, 10 }); });
-
-            // other
-            string st = "ivan";
-            st = SysUtils.NormalizeName(st);
-            Assert.AreEqual("Ivan", st);
-
-            st = SysUtils.NormalizeName(null);
-            Assert.AreEqual("", st);
-
-            //
-            Assert.AreEqual("", SysUtils.GetFileExtension("testfile"));
-            Assert.AreEqual(".ext", SysUtils.GetFileExtension("testfile.eXt"));
-
-            Assert.IsFalse(SysUtils.IsRemovableDrive(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)));
-
-            Assembly asm = this.GetType().Assembly;
-            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
-            Assert.IsNotNull(attr1);
-            Assert.AreEqual("GKTests", attr1.Title);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
-        }
-
         private void TweenHandler(int newX, int newY)
         {
         }
@@ -981,23 +838,6 @@ namespace GKTests.GKCommon
             tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
             #endif
         }
-
-        [Test]
-        public void GfxHelper_Tests()
-        {
-            Assert.AreEqual(57.295779513, SysUtils.RadiansToDegrees(1.0), 0.0000000001);
-            Assert.AreEqual(1.0, SysUtils.DegreesToRadians(57.295779513), 0.0000000001);
-
-            Assert.AreEqual(2.0, SysUtils.ZoomToFit(50, 20, 100, 50));
-            Assert.AreEqual(3.0, SysUtils.ZoomToFit(15, 40, 45, 120));
-
-            Assert.AreEqual(1.0, SysUtils.ZoomToFit(0, 40, 45, 120));
-            Assert.AreEqual(1.0, SysUtils.ZoomToFit(15, 0, 45, 120));
-
-            Assert.AreEqual(Color.FromArgb(50, 50, 50), SysUtils.Darker(Color.FromArgb(100, 100, 100), 0.5f));
-            Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));
-        }
-
 
         [Test]
         public void ListItems_Tests()

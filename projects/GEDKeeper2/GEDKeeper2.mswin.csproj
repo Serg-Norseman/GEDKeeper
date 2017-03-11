@@ -116,7 +116,6 @@
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
-    <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
     <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
     <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />

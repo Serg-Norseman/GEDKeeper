@@ -85,6 +85,7 @@
     <Compile Include="Externals\IniFiles\IniFileValue.cs" />
     <Compile Include="Externals\IniFiles\IniFileElement.cs" />
     <Compile Include="Externals\IniFiles\IniFileEx.cs" />
+    <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />

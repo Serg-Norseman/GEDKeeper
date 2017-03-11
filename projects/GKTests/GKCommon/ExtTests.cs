@@ -25,9 +25,9 @@ using System.IO;
 using System.Text;
 
 using Externals;
+using Externals.Linguistics;
 using GKCommon;
 using GKCore;
-using GKTests.Mocks;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon
@@ -35,93 +35,6 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class ExtTests
     {
-        [Test]
-        public void Sort_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.QuickSort<ValItem>(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.MergeSort<ValItem>(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
-
-            Random rnd = new Random();
-
-            List<ValItem> listQS = new List<ValItem>();
-            List<ValItem> listMS = new List<ValItem>();
-            List<ValItem> listTS = new List<ValItem>();
-            List<ValItem> listCS = new List<ValItem>();
-
-            //const int MaxCount = 1000000; // for performance test
-            const int MaxCount = 1000; // for common test
-
-            for (int i = 0; i < MaxCount; i++)
-            {
-                double val = rnd.NextDouble();
-
-                listTS.Add(new ValItem(val));
-                listQS.Add(new ValItem(val));
-                listMS.Add(new ValItem(val));
-                listCS.Add(new ValItem(val));
-            }
-
-            listCS.Sort(CompareItems);
-
-            SysUtils.QuickSort(listQS, CompareItems);
-
-            SysUtils.MergeSort(listMS, CompareItems);
-
-            ListTimSort<ValItem>.Sort(listTS, CompareItems);
-
-            // test for sort valid
-            //(only for numbers, because some methods is with the permutations, and part - no)
-            for (int i = 0; i < MaxCount; i++)
-            {
-                Assert.AreEqual(listTS[i].Value, listQS[i].Value);
-                Assert.AreEqual(listQS[i].Value, listMS[i].Value);
-                Assert.AreEqual(listMS[i].Value, listCS[i].Value);
-            }
-        }
-
-        private static int CompareItems(ValItem item1, ValItem item2)
-        {
-            return item1.Value.CompareTo(item2.Value);
-        }
-
-
-        /*[Test]
-		public void Calendar_PerfTest()
-		{
-			int y = 1990, m = 10, d = 10;
-			double jd;
-
-			for (int i = 0; i < 1000000; i++) {
-				jd = CalendarConverter.gregorian_to_jd(y, m, d);
-				jd = CalendarConverter.gregorian_to_jd2(y, m, d);
-				jd = CalendarConverter.gregorian_to_jd3(y, m, d);
-			}
-		}*/
-
-//		public void MyTestFunc1(
-        //            [Values(1, 2, 5)]int x,
-        //            [Values("hello", "buy")]string s)
-//		{
-//			Assert.IsTrue(x < 10);
-//		}
-//
-//		[Test]
-        //        public void MyTestFunc2(
-        //            [Range(1, 100, 2)]int x,
-        //            [Values("hello", "buy")]string s)
-        //        {
-        //            Assert.IsTrue(x < 50);
-        //        }
-//
-//		public void MyTestFunc3(
-        //            [Random(100)]int x,
-        //            [Values("hello", "buy")]string s)
-//		{
-//
-//		}
-
-
         [Test]
         public void ZipStorer_Tests()
         {
@@ -283,6 +196,17 @@ namespace GKTests.GKCommon
                 iniFile.DeleteKey("test", "float");
                 Assert.AreEqual(0.3333d, iniFile.ReadFloat("test", "float", 0.3333d));
             }
+        }
+
+        [Test]
+        public void RusDeclension_Tests()
+        {
+            Assert.AreEqual("Иванова Ивана Ивановича", RusDeclension.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
+
+            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", RusDeclension.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
+
+            //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
+            //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));
         }
     }
 }

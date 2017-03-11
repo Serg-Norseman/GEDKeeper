@@ -21,7 +21,7 @@
 using GKCommon;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKTests.GKCommon
 {
     [TestFixture]
     public class PIPTests
