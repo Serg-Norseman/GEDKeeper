@@ -1526,15 +1526,35 @@ namespace GKCore
             return res && !string.IsNullOrEmpty(value);
         }
 
-        public static void SelectComboItem(ComboBox comboBox, object tag)
+        public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
         {
             for (int i = 0; i < comboBox.Items.Count; i++) {
                 GKComboItem item = comboBox.Items[i] as GKComboItem;
 
                 if (item != null && object.Equals(item.Tag, tag)) {
                     comboBox.SelectedIndex = i;
-                    break;
+                    return;
                 }
+            }
+
+            if (allowDefault) {
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
+        {
+            for (int i = 0; i < listBox.Items.Count; i++) {
+                GKComboItem item = listBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    listBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                listBox.SelectedIndex = 0;
             }
         }
 

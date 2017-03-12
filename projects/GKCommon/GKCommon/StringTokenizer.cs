@@ -46,33 +46,29 @@ namespace GKCommon
     {
         private const char EOF = (char)0;
 
-        private int fLine;
+        private readonly char[] fData;
+
         private int fColumn;
-        private int fPos;	// position within data
+        private int fLine;
+        private int fPos; // position within data
 
-        private readonly string fData;
-
+        private Token fCurrentToken;
         private bool fIgnoreWhiteSpace;
         private bool fRecognizeDecimals;
-        private char[] fSymbolChars;
-
-        private int fSaveLine;
         private int fSaveCol;
+        private int fSaveLine;
         private int fSavePos;
+        private char[] fSymbolChars;
 
         #region Properties
 
-        /// <summary>
-        /// gets or sets which characters are part of TokenKind.Symbol
-        /// </summary>
-        public char[] SymbolChars
+        public Token CurrentToken
         {
-            get { return fSymbolChars; }
-            set { fSymbolChars = value; }
+            get { return fCurrentToken; }
         }
 
         /// <summary>
-        /// if set to true, white space characters will be ignored,
+        /// If set to true, white space characters will be ignored,
         /// but EOL and whitespace inside of string will still be tokenized
         /// </summary>
         public bool IgnoreWhiteSpace
@@ -87,6 +83,15 @@ namespace GKCommon
             set { fRecognizeDecimals = value; }
         }
 
+        /// <summary>
+        /// Gets or sets which characters are part of TokenKind.Symbol
+        /// </summary>
+        public char[] SymbolChars
+        {
+            get { return fSymbolChars; }
+            set { fSymbolChars = value; }
+        }
+
         public int Position
         {
             get { return fPos; }
@@ -98,9 +103,10 @@ namespace GKCommon
 
         private void Reset()
         {
+            fCurrentToken = null;
             fIgnoreWhiteSpace = false;
             fRecognizeDecimals = true;
-            fSymbolChars = new char[]{'=', '+', '-', '/', ',', '.', '*', '~', '!', '@', '#', '$', '%', '^', '&', '(', ')', '{', '}', '[', ']', ':', ';', '<', '>', '?', '|', '\\'};
+            fSymbolChars = new char[] {'=', '+', '-', '/', ',', '.', '*', '~', '!', '@', '#', '$', '%', '^', '&', '(', ')', '{', '}', '[', ']', ':', ';', '<', '>', '?', '|', '\\'};
 
             fLine = 1;
             fColumn = 1;
@@ -112,8 +118,8 @@ namespace GKCommon
         /// </summary>
         private void StartRead()
         {
-            fSaveLine = fLine;
             fSaveCol = fColumn;
+            fSaveLine = fLine;
             fSavePos = fPos;
         }
 
@@ -133,13 +139,15 @@ namespace GKCommon
 
         protected Token CreateToken(TokenKind kind, string value)
         {
-            return new Token(kind, value, fLine, fColumn);
+            fCurrentToken = new Token(kind, value, fLine, fColumn);
+            return fCurrentToken;
         }
 
         protected Token CreateToken(TokenKind kind)
         {
-            string tokenData = fData.Substring(fSavePos, fPos-fSavePos);
-            return new Token(kind, tokenData, fSaveLine, fSaveCol);
+            string tokenData = new string(fData, fSavePos, fPos - fSavePos);
+            fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
+            return fCurrentToken;
         }
 
         /// <summary>
@@ -280,7 +288,9 @@ namespace GKCommon
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            fData = data;
+            // according to the profiler, "Next()" is faster (+7.1%)
+            fData = new char[data.Length];
+            data.CopyTo(0, fData, 0, data.Length);
 
             Reset();
         }
@@ -324,7 +334,7 @@ namespace GKCommon
                                 Consume();	// on DOS/Windows we have \r\n for new line
 
                             fLine++;
-                            fColumn=1;
+                            fColumn = 1;
 
                             return CreateToken(TokenKind.EOL);
                         }
@@ -334,7 +344,7 @@ namespace GKCommon
                             StartRead();
                             Consume();
                             fLine++;
-                            fColumn=1;
+                            fColumn = 1;
 
                             return CreateToken(TokenKind.EOL);
                         }
@@ -364,6 +374,11 @@ namespace GKCommon
                         }
                 }
             }
+        }
+
+        public bool RequireToken(TokenKind tokenKind)
+        {
+            return (fCurrentToken != null && fCurrentToken.Kind == tokenKind);
         }
     }
 }

@@ -193,7 +193,7 @@ namespace GKUI.Dialogs
                                     MediaStoreType.mstArchive));
             }
 
-            GKUtils.SelectComboItem(cmbStoreType, selectType);
+            GKUtils.SelectComboItem(cmbStoreType, selectType, true);
         }
 
         public MediaEditDlg(IBaseWindow baseWin) : base(baseWin)

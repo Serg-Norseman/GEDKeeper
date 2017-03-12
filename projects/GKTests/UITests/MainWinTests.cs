@@ -69,6 +69,10 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
+            // required for testing, otherwise the engine will require saving
+            // the database (requires path of files for the archive and storage)
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
+
             // Stage 1: call to AboutDlg, closing in AboutDlg_Handler
             ExpectModal("AboutDlg", "AboutDlg_Handler");
             ClickToolStripMenuItem("miAbout", fMainWin);

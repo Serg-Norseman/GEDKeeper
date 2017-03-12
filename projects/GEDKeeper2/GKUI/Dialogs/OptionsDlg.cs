@@ -104,7 +104,7 @@ namespace GKUI.Dialogs
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            GKUtils.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang);
+            GKUtils.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
         }
 
         private void UpdateForm()
