@@ -811,8 +811,9 @@ namespace GKCore
         /* 752 */ LSID_Holidays,
         /* 753 */ LSID_EmbeddedMediaPlayer,
         /* 754 */ LSID_AllowMediaDirectReferences,
+        /* 755 */ LSID_CopyingFile,
 
-        /* 000 */ LSID_Last = LSID_AllowMediaDirectReferences
+        /* 000 */ LSID_Last = LSID_CopyingFile
     }
 
     // TODO: remove and merge with LangManager
@@ -1578,6 +1579,7 @@ namespace GKCore
             /* 752 */ "Holidays",
             /* 753 */ "Use embedded MediaPlayer",
             /* 754 */ "Allow direct references to media files",
+            /* 755 */ "Copying file",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

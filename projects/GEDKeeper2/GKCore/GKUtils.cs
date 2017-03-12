@@ -30,6 +30,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
@@ -2737,6 +2738,29 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public static void CopyFile(FileInfo source, FileInfo target, IProgressController progressController)
+        {
+            const int bufferSize = 1024 * 1024; // 1MB
+            byte[] buffer = new byte[bufferSize];
+            int progress = 0, reportedProgress = 0, read = 0;
+            long len = source.Length;
+            float flen = len;
+
+            using (var sourceStm = source.OpenRead())
+                using (var targetStm = target.OpenWrite())
+            {
+                targetStm.SetLength(sourceStm.Length);
+                for (long size = 0; size < len; size += read)
+                {
+                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress)
+                        progressController.ProgressStep(reportedProgress = progress);
+
+                    read = sourceStm.Read(buffer, 0, bufferSize);
+                    targetStm.Write(buffer, 0, read);
+                }
+            }
         }
 
         #endregion

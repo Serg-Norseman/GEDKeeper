@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define FILECOPY_EX
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -865,7 +867,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
-                        File.Copy(fileName, targetFn, false);
+                        CopyFile(fileName, targetFn, false);
                     }
                     catch (IOException)
                     {
@@ -881,6 +883,28 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        private void CopyFile(string sourceFileName, string destFileName, bool overwrite)
+        {
+            #if FILECOPY_EX
+
+            IProgressController pctl = fViewer;
+            try {
+                fViewer.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
+
+                var source = new FileInfo(sourceFileName);
+                var target = new FileInfo(destFileName);
+                GKUtils.CopyFile(source, target, fViewer);
+            } finally {
+                fViewer.ProgressDone();
+            }
+
+            #else
+
+            File.Copy(sourceFileName, destFileName, overwrite);
+
+            #endif
         }
 
         public Bitmap LoadMediaImage(GEDCOMFileReference fileReference, bool throwException)
