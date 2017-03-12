@@ -1268,9 +1268,7 @@ namespace GKTests.GKCore
                 Assert.AreEqual("sample.ged", globalOptions.GetLastBase(0));
                 globalOptions.ClearLastBases();
 
-                Assert.AreEqual(0, globalOptions.GetLangsCount());
-                Assert.AreEqual(null, globalOptions.GetLangByCode(0));
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { globalOptions.GetLang(0); });
+                Assert.IsNotNull(globalOptions.Languages);
 
 
                 globalOptions.SaveToFile(iniFile);

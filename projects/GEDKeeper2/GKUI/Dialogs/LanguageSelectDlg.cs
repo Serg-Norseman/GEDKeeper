@@ -65,15 +65,9 @@ namespace GKUI.Dialogs
         {
             lstLanguages.Items.Clear();
             lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
-
-            int idx = 0;
-            int num = GlobalOptions.Instance.GetLangsCount();
-            for (int i = 0; i < num; i++)
-            {
-                LangRecord lngRec = GlobalOptions.Instance.GetLang(i);
+            foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            lstLanguages.SelectedIndex = idx;
         }
     }
 }

@@ -495,10 +495,9 @@ namespace GKUI
                 if (langCode != LangMan.LS_DEF_CODE) {
                     bool loaded = false;
 
-                    int num = fOptions.GetLangsCount();
-                    for (int i = 0; i < num; i++) {
-                        if (fOptions.GetLang(i).Code == langCode) {
-                            loaded = LangMan.LoadFromFile(fOptions.GetLang(i).FileName);
+                    foreach (LangRecord langRec in fOptions.Languages) {
+                        if (langRec.Code == langCode) {
+                            loaded = LangMan.LoadFromFile(langRec.FileName);
                             break;
                         }
                     }

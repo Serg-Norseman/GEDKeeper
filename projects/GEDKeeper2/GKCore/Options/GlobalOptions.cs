@@ -71,8 +71,8 @@ namespace GKCore.Options
         private string fGeocoder;
         private bool fRemovableMediaWarning;
         private bool fLoadRecentFiles;
-
-        private bool fEmbeddedMediaPlayer; // TODO: to OptionsDlg
+        private bool fEmbeddedMediaPlayer;
+        private bool fAllowMediaStoreReferences;
 
 
         public static GlobalOptions Instance
@@ -277,16 +277,17 @@ namespace GKCore.Options
             set { fEmbeddedMediaPlayer = value; }
         }
 
-
-        public int GetLangsCount()
+        public bool AllowMediaStoreReferences
         {
-            return fLanguages.Count;
+            get { return fAllowMediaStoreReferences; }
+            set { fAllowMediaStoreReferences = value; }
         }
 
-        public LangRecord GetLang(int index)
+        public IEnumerable<LangRecord> Languages
         {
-            return fLanguages[index];
+            get { return fLanguages; }
         }
+
 
         public LangRecord GetLangByCode(int code)
         {
@@ -347,6 +348,7 @@ namespace GKCore.Options
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
             fEmbeddedMediaPlayer = true;
+            fAllowMediaStoreReferences = false;
 
             fIndividualListColumns = new IndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -446,6 +448,7 @@ namespace GKCore.Options
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
             fLoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
+            fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -559,6 +562,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);
             ini.WriteBool("Common", "LoadRecentFiles", fLoadRecentFiles);
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
+            ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
 
             ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
 

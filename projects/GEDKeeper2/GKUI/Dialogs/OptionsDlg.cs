@@ -33,7 +33,7 @@ namespace GKUI.Dialogs
 {
     public enum OptionsPage
     {
-        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree
+        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree, opMultimedia
     }
 
     /// <summary>
@@ -101,19 +101,10 @@ namespace GKUI.Dialogs
         {
             cmbLanguages.Items.Clear();
             cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
-
-            int idx = 0;
-            int num = fOptions.GetLangsCount();
-            for (int i = 0; i < num; i++)
-            {
-                LangRecord lngRec = fOptions.GetLang(i);
-                if (fOptions.InterfaceLang == lngRec.Code)
-                {
-                    idx = i + 1;
-                }
+            foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            cmbLanguages.SelectedIndex = idx;
+            GKUtils.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang);
         }
 
         private void UpdateForm()
@@ -161,6 +152,7 @@ namespace GKUI.Dialogs
             chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
             chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
             chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
+            chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
 
             chkSurname.Checked = fOptions.ChartOptions.FamilyVisible;
             chkName.Checked = fOptions.ChartOptions.NameVisible;
@@ -367,6 +359,7 @@ namespace GKUI.Dialogs
             fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
             fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
+            fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
 
             fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
             fOptions.ChartOptions.NameVisible = chkName.Checked;
@@ -479,21 +472,29 @@ namespace GKUI.Dialogs
         {
             switch (page) {
                 case OptionsPage.opCommon:
-                    PageControl1.SelectTab(0);
+                    PageControl1.SelectedTab = pageCommon;
                     break;
+
                 case OptionsPage.opTreeChart:
-                    PageControl1.SelectTab(1);
+                    PageControl1.SelectedTab = pageCharts;
                     tabsCharts.SelectTab(0);
                     break;
+
                 case OptionsPage.opAncestorsCircle:
-                    PageControl1.SelectTab(1);
+                    PageControl1.SelectedTab = pageCharts;
                     tabsCharts.SelectTab(1);
                     break;
+
                 case OptionsPage.opInterface:
-                    PageControl1.SelectTab(2);
+                    PageControl1.SelectedTab = pageUIView;
                     break;
+
                 case OptionsPage.opPedigree:
-                    PageControl1.SelectTab(3);
+                    PageControl1.SelectedTab = pagePedigree;
+                    break;
+
+                case OptionsPage.opMultimedia:
+                    PageControl1.SelectedTab = pageMultimedia;
                     break;
             }
         }
@@ -586,6 +587,8 @@ namespace GKUI.Dialogs
             chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
             chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
             chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
         }
     }
 }

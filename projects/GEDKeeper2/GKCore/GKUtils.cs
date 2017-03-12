@@ -1525,6 +1525,18 @@ namespace GKCore
             return res && !string.IsNullOrEmpty(value);
         }
 
+        public static void SelectComboItem(ComboBox comboBox, object tag)
+        {
+            for (int i = 0; i < comboBox.Items.Count; i++) {
+                GKComboItem item = comboBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    comboBox.SelectedIndex = i;
+                    break;
+                }
+            }
+        }
+
         #endregion
 
         #region Show information summary
