@@ -100,6 +100,11 @@ namespace GKUI
             get { return fPlugins; }
         }
 
+        public PathReplacer PathReplacer
+        {
+            get { return fPathReplacer; }
+        }
+
         #region Instance control
 
         public MainWin()

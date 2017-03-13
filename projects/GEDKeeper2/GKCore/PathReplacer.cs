@@ -82,7 +82,7 @@ namespace GKCore
                     var pathsMapping = fPathsMappings.PathsMappings[i];
 
                     if (path.StartsWith(pathsMapping.Source)) {
-                        newPath = path.Replace(pathsMapping.Source, pathsMapping.Target);
+                        newPath = SysUtils.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
                         if (File.Exists(newPath)) {
                             return true;
                         }

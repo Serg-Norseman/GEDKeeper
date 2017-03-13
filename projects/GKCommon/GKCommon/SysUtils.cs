@@ -152,7 +152,7 @@ namespace GKCommon
         public static string NormalizeFilename(string fileName)
         {
             string filename = fileName.Replace('\\', '/');
-            return filename.Trim('/');
+            return filename;
         }
 
         #endregion

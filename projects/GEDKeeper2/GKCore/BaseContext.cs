@@ -38,6 +38,7 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using GKUI;
 
 namespace GKCore
 {
@@ -802,8 +803,16 @@ namespace GKCore
                         break;
 
                     case MediaStoreType.mstReference:
-                        fileName = targetFn;
-                        break;
+                        {
+                            fileName = targetFn;
+                            if (!File.Exists(fileName)) {
+                                string newPath;
+                                if (MainWin.Instance.PathReplacer.TryReplacePath(fileName, out newPath)) {
+                                    fileName = newPath;
+                                }
+                            }
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
