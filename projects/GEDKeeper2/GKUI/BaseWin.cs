@@ -1896,30 +1896,38 @@ namespace GKUI
             try {
                 fContext.BeginUpdate();
 
-                using (NoteEditDlg dlg = new NoteEditDlg(this))
-                {
-                    bool exists = noteRec != null;
-                    if (!exists) {
-                        noteRec = new GEDCOMNoteRecord(fTree, fTree, "", "");
-                        noteRec.InitNew();
-                    }
+                bool exists = noteRec != null;
+                if (!exists) {
+                    noteRec = new GEDCOMNoteRecord(fTree, fTree, "", "");
+                    noteRec.InitNew();
+                }
 
-                    try {
-                        LockRecord(noteRec);
+                try {
+                    LockRecord(noteRec);
 
-                        dlg.NoteRecord = noteRec;
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(noteRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(noteRec);
-                        } else {
-                            noteRec.Dispose();
-                            noteRec = null;
+                    if (GlobalOptions.Instance.UseExtendedNotes) {
+                        using (var dlg = new NoteEditDlgEx(this))
+                        {
+                            dlg.NoteRecord = noteRec;
+                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
                         }
+                    } else {
+                        using (var dlg = new NoteEditDlg(this))
+                        {
+                            dlg.NoteRecord = noteRec;
+                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        }
+                    }
+                } finally {
+                    UnlockRecord(noteRec);
+                }
+
+                if (!exists) {
+                    if (result) {
+                        fTree.AddRecord(noteRec);
+                    } else {
+                        noteRec.Dispose();
+                        noteRec = null;
                     }
                 }
             } finally {

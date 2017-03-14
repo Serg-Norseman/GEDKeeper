@@ -2108,7 +2108,7 @@ namespace GKCore
                     if (groupRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + groupRec.GroupName + "[size=-1][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + groupRec.GroupName + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Members) + " (" + groupRec.Members.Count.ToString() + "):");
 
@@ -2159,7 +2159,7 @@ namespace GKCore
                     if (mediaRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + mediaRec.FileReferences[0].Title + "[size=-1][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + mediaRec.FileReferences[0].Title + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add("[ " + HyperLink("view_" + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
                         summary.Add("");
@@ -2238,7 +2238,7 @@ namespace GKCore
                         GEDCOMTree tree = iRec.Owner;
 
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[size=-1][/u][/b]");
+                        summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
                         //summary.Add("[r]");
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
                         try
@@ -2368,7 +2368,7 @@ namespace GKCore
                     if (sourceRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + sourceRec.FiledByEntry + "[size=-1][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + sourceRec.FiledByEntry + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Text.Trim());
                         summary.Add(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Text.Trim() + "\"");
@@ -2436,7 +2436,7 @@ namespace GKCore
                     if (repositoryRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + repositoryRec.RepositoryName.Trim() + "[size=-1][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + repositoryRec.RepositoryName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
 
                         ShowAddressSummary(repositoryRec.Address, summary);
@@ -2493,7 +2493,7 @@ namespace GKCore
                     if (researchRec != null)
                     {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": [u][b][size=+1]\"" + researchRec.ResearchName.Trim() + "\"[size=-1][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": [u][b][size=+1]\"" + researchRec.ResearchName.Trim() + "\"[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
                         summary.Add(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
@@ -2567,7 +2567,7 @@ namespace GKCore
                     if (taskRec != null)
                     {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(taskRec) + "[size=-1][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(taskRec) + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
                         summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GetDateFmtString(taskRec.StartDate, DateFormat.dfDD_MM_YYYY));
@@ -2602,7 +2602,7 @@ namespace GKCore
                         GEDCOMTree tree = commRec.Owner;
 
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[size=-1][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.LSID_Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Corresponder) + ": " + GetCorresponderStr(tree, commRec, true));
                         summary.Add(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
@@ -2637,7 +2637,7 @@ namespace GKCore
                     if (locRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + locRec.LocationName.Trim() + "[size=-1][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + locRec.LocationName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long);

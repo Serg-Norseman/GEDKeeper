@@ -16,8 +16,8 @@ Book of families...
 Save As...
 Export to Excel workbook...
 Exit
-<?>
-<?>
+Import
+Clear
 Add record
 Edit record
 Delete record
@@ -754,3 +754,5 @@ Holidays
 Use embedded MediaPlayer
 Allow direct references to media files
 Copying file
+Actions
+Select and copy

@@ -16,8 +16,8 @@ Livret des familles...
 Enregistrer sous...
 Exporter vers Excel...
 Quitter
-<?>
-<?>
+Importer
+Nettoyer
 Ajouter l'enregistrement
 Modifier l’enregistrement
 Supprimer l'enregistrement
@@ -754,3 +754,5 @@ Fêtes
 Utiliser embedded MediaPlayer
 Permettre à des références directes à des fichiers de média
 Copie d'un fichier
+Actions
+Sélectionner et copier

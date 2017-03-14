@@ -136,6 +136,7 @@ namespace GKUI.Dialogs
             this.cmbGeocoder = new System.Windows.Forms.ComboBox();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
             this.pageMultimedia = new System.Windows.Forms.TabPage();
+            this.chkAllowMediaDirectRefs = new System.Windows.Forms.CheckBox();
             this.chkEmbeddedMediaPlayer = new System.Windows.Forms.CheckBox();
             this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
             this.pageCharts = new System.Windows.Forms.TabPage();
@@ -216,7 +217,6 @@ namespace GKUI.Dialogs
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.chkAllowMediaDirectRefs = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -520,7 +520,7 @@ namespace GKUI.Dialogs
             this.grpOther.Location = new System.Drawing.Point(11, 244);
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
-            this.grpOther.Padding = new System.Windows.Forms.Padding(2);
+            this.grpOther.Padding = new System.Windows.Forms.Padding(10);
             this.grpOther.Size = new System.Drawing.Size(715, 151);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
@@ -529,8 +529,8 @@ namespace GKUI.Dialogs
             // chkLoadRecentFiles
             // 
             this.chkLoadRecentFiles.AutoSize = true;
-            this.chkLoadRecentFiles.Location = new System.Drawing.Point(11, 47);
-            this.chkLoadRecentFiles.Margin = new System.Windows.Forms.Padding(2);
+            this.chkLoadRecentFiles.Location = new System.Drawing.Point(20, 68);
+            this.chkLoadRecentFiles.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkLoadRecentFiles.Name = "chkLoadRecentFiles";
             this.chkLoadRecentFiles.Size = new System.Drawing.Size(149, 21);
             this.chkLoadRecentFiles.TabIndex = 9;
@@ -539,8 +539,8 @@ namespace GKUI.Dialogs
             // chkShowOnStart
             // 
             this.chkShowOnStart.AutoSize = true;
-            this.chkShowOnStart.Location = new System.Drawing.Point(11, 22);
-            this.chkShowOnStart.Margin = new System.Windows.Forms.Padding(2);
+            this.chkShowOnStart.Location = new System.Drawing.Point(20, 37);
+            this.chkShowOnStart.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkShowOnStart.Name = "chkShowOnStart";
             this.chkShowOnStart.Size = new System.Drawing.Size(134, 21);
             this.chkShowOnStart.TabIndex = 0;
@@ -580,6 +580,16 @@ namespace GKUI.Dialogs
             this.pageMultimedia.TabIndex = 6;
             this.pageMultimedia.Text = "pageMultimedia";
             // 
+            // chkAllowMediaDirectRefs
+            // 
+            this.chkAllowMediaDirectRefs.AutoSize = true;
+            this.chkAllowMediaDirectRefs.Location = new System.Drawing.Point(20, 102);
+            this.chkAllowMediaDirectRefs.Margin = new System.Windows.Forms.Padding(10);
+            this.chkAllowMediaDirectRefs.Name = "chkAllowMediaDirectRefs";
+            this.chkAllowMediaDirectRefs.Size = new System.Drawing.Size(178, 21);
+            this.chkAllowMediaDirectRefs.TabIndex = 11;
+            this.chkAllowMediaDirectRefs.Text = "chkAllowMediaDirectRefs";
+            // 
             // chkEmbeddedMediaPlayer
             // 
             this.chkEmbeddedMediaPlayer.AutoSize = true;
@@ -602,26 +612,26 @@ namespace GKUI.Dialogs
             // 
             // pageCharts
             // 
+            this.pageCharts.BackColor = System.Drawing.SystemColors.Control;
             this.pageCharts.Controls.Add(this.tabsCharts);
             this.pageCharts.Location = new System.Drawing.Point(4, 26);
             this.pageCharts.Margin = new System.Windows.Forms.Padding(2);
             this.pageCharts.Name = "pageCharts";
-            this.pageCharts.Padding = new System.Windows.Forms.Padding(2);
+            this.pageCharts.Padding = new System.Windows.Forms.Padding(10);
             this.pageCharts.Size = new System.Drawing.Size(741, 479);
             this.pageCharts.TabIndex = 4;
             this.pageCharts.Text = "pageCharts";
-            this.pageCharts.UseVisualStyleBackColor = true;
             // 
             // tabsCharts
             // 
             this.tabsCharts.Controls.Add(this.pageTreeChart);
             this.tabsCharts.Controls.Add(this.pageAncCircle);
             this.tabsCharts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabsCharts.Location = new System.Drawing.Point(2, 2);
+            this.tabsCharts.Location = new System.Drawing.Point(10, 10);
             this.tabsCharts.Margin = new System.Windows.Forms.Padding(2);
             this.tabsCharts.Name = "tabsCharts";
             this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(737, 475);
+            this.tabsCharts.Size = new System.Drawing.Size(721, 459);
             this.tabsCharts.TabIndex = 0;
             // 
             // pageTreeChart
@@ -632,7 +642,7 @@ namespace GKUI.Dialogs
             this.pageTreeChart.Location = new System.Drawing.Point(4, 26);
             this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
             this.pageTreeChart.Name = "pageTreeChart";
-            this.pageTreeChart.Size = new System.Drawing.Size(729, 445);
+            this.pageTreeChart.Size = new System.Drawing.Size(713, 429);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
             // 
@@ -952,7 +962,7 @@ namespace GKUI.Dialogs
             this.pageAncCircle.Location = new System.Drawing.Point(4, 26);
             this.pageAncCircle.Margin = new System.Windows.Forms.Padding(2);
             this.pageAncCircle.Name = "pageAncCircle";
-            this.pageAncCircle.Size = new System.Drawing.Size(729, 445);
+            this.pageAncCircle.Size = new System.Drawing.Size(713, 429);
             this.pageAncCircle.TabIndex = 4;
             this.pageAncCircle.Text = "pageAncCircle";
             // 
@@ -964,7 +974,7 @@ namespace GKUI.Dialogs
             this.ancOptionsControl1.Margin = new System.Windows.Forms.Padding(2);
             this.ancOptionsControl1.Name = "ancOptionsControl1";
             this.ancOptionsControl1.Options = null;
-            this.ancOptionsControl1.Size = new System.Drawing.Size(729, 445);
+            this.ancOptionsControl1.Size = new System.Drawing.Size(713, 429);
             this.ancOptionsControl1.TabIndex = 0;
             // 
             // pageUIView
@@ -973,6 +983,7 @@ namespace GKUI.Dialogs
             this.pageUIView.Location = new System.Drawing.Point(4, 26);
             this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
             this.pageUIView.Name = "pageUIView";
+            this.pageUIView.Padding = new System.Windows.Forms.Padding(10);
             this.pageUIView.Size = new System.Drawing.Size(741, 479);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
@@ -982,11 +993,11 @@ namespace GKUI.Dialogs
             this.PageControl2.Controls.Add(this.pageViewCommon);
             this.PageControl2.Controls.Add(this.pageViewPersons);
             this.PageControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PageControl2.Location = new System.Drawing.Point(0, 0);
+            this.PageControl2.Location = new System.Drawing.Point(10, 10);
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl2.Name = "PageControl2";
             this.PageControl2.SelectedIndex = 0;
-            this.PageControl2.Size = new System.Drawing.Size(741, 479);
+            this.PageControl2.Size = new System.Drawing.Size(721, 459);
             this.PageControl2.TabIndex = 0;
             // 
             // pageViewCommon
@@ -1002,7 +1013,8 @@ namespace GKUI.Dialogs
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
-            this.pageViewCommon.Size = new System.Drawing.Size(733, 449);
+            this.pageViewCommon.Padding = new System.Windows.Forms.Padding(10);
+            this.pageViewCommon.Size = new System.Drawing.Size(713, 429);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
             // 
@@ -1017,7 +1029,7 @@ namespace GKUI.Dialogs
             this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(10);
             this.grpAdvancedNames.Name = "grpAdvancedNames";
             this.grpAdvancedNames.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdvancedNames.Size = new System.Drawing.Size(379, 198);
+            this.grpAdvancedNames.Size = new System.Drawing.Size(367, 198);
             this.grpAdvancedNames.TabIndex = 8;
             this.grpAdvancedNames.TabStop = false;
             this.grpAdvancedNames.Text = "AdvancedNames";
@@ -1208,7 +1220,7 @@ namespace GKUI.Dialogs
             this.pageViewPersons.Location = new System.Drawing.Point(4, 26);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
-            this.pageViewPersons.Size = new System.Drawing.Size(733, 449);
+            this.pageViewPersons.Size = new System.Drawing.Size(713, 429);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
             // 
@@ -1220,7 +1232,7 @@ namespace GKUI.Dialogs
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
-            this.panel1.Size = new System.Drawing.Size(488, 449);
+            this.panel1.Size = new System.Drawing.Size(488, 429);
             this.panel1.TabIndex = 2;
             // 
             // lstPersonColumns
@@ -1229,7 +1241,7 @@ namespace GKUI.Dialogs
             this.lstPersonColumns.Location = new System.Drawing.Point(10, 10);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
-            this.lstPersonColumns.Size = new System.Drawing.Size(468, 429);
+            this.lstPersonColumns.Size = new System.Drawing.Size(468, 409);
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
@@ -1427,16 +1439,6 @@ namespace GKUI.Dialogs
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // chkAllowMediaDirectRefs
-            // 
-            this.chkAllowMediaDirectRefs.AutoSize = true;
-            this.chkAllowMediaDirectRefs.Location = new System.Drawing.Point(20, 102);
-            this.chkAllowMediaDirectRefs.Margin = new System.Windows.Forms.Padding(10);
-            this.chkAllowMediaDirectRefs.Name = "chkAllowMediaDirectRefs";
-            this.chkAllowMediaDirectRefs.Size = new System.Drawing.Size(178, 21);
-            this.chkAllowMediaDirectRefs.TabIndex = 11;
-            this.chkAllowMediaDirectRefs.Text = "chkAllowMediaDirectRefs";
             // 
             // OptionsDlg
             // 

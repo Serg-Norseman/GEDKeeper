@@ -109,6 +109,7 @@
     <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />
     <Compile Include="UITests\NameEditDlgTests.cs" />
+    <Compile Include="UITests\NoteEditDlgExTests.cs" />
     <Compile Include="UITests\NoteEditDlgTests.cs" />
     <Compile Include="UITests\OptionsDlgTests.cs" />
     <Compile Include="UITests\OrganizerWinTests.cs" />

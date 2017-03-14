@@ -784,14 +784,26 @@ namespace GKTests.GKCommon
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.Symbol, tok.Kind);
             Assert.AreEqual(";", tok.Value);
+            Assert.AreEqual(1, tok.Line);
 
-            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
-            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
-            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.EOL, tok.Kind);
+            Assert.AreEqual(1, tok.Line);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.EOL, tok.Kind);
+            Assert.AreEqual(2, tok.Line);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.EOL, tok.Kind);
+            Assert.AreEqual(3, tok.Line);
+
 
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
             Assert.AreEqual("\"test quote\"", tok.Value);
+            Assert.AreEqual(4, tok.Line);
 
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.QuotedString, tok.Kind);

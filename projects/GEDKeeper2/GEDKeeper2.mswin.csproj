@@ -336,6 +336,12 @@
     <Compile Include="GKUI\Dialogs\NoteEditDlg.Designer.cs">
       <DependentUpon>NoteEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.Designer.cs">
+      <DependentUpon>NoteEditDlgEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\OptionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -612,6 +618,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\NoteEditDlg.resx">
       <DependentUpon>NoteEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\NoteEditDlgEx.resx">
+      <DependentUpon>NoteEditDlgEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\OptionsDlg.resx">
       <DependentUpon>OptionsDlg.cs</DependentUpon>

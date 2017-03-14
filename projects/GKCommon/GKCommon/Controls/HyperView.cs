@@ -32,58 +32,9 @@ namespace GKCommon.Controls
     /// </summary>
     public class HyperView : GKScrollableControl
     {
-        private sealed class TextChunk : BaseObject
-        {
-            public int Line;
-            public string Text;
-
-            public string URL;
-            public ExtRect LinkRect;
-
-            public Font Font;
-            public Color Color;
-
-            public TextChunk(int line)
-            {
-                Line = line;
-                Text = string.Empty;
-                URL = string.Empty;
-
-                Font = null;
-                Color = Color.Black;
-            }
-
-            public TextChunk(int line, Font font)
-            {
-                Line = line;
-                Text = string.Empty;
-                URL = string.Empty;
-
-                Font = font;
-                Color = Color.Black;
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing) {
-                    if (Font != null) {
-                        Font.Dispose();
-                        Font = null;
-                    }
-                }
-                base.Dispose(disposing);
-            }
-
-            public bool HasCoord(int x, int y, int xOffset, int yOffset)
-            {
-                return x >= LinkRect.Left + xOffset && x <= LinkRect.Right + xOffset
-                    && y >= LinkRect.Top + yOffset && y <= LinkRect.Bottom + yOffset;
-            }
-        }
-
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private int[] fHeights;
+        private List<int> fHeights;
         private Size fTextSize;
         private readonly StringList fLines;
         private TextChunk fCurrentLink;
@@ -139,7 +90,7 @@ namespace GKCommon.Controls
             fAcceptFontChange = true;
             fChunks = new List<TextChunk>();
             fCurrentLink = null;
-            fHeights = new int[0];
+            fHeights = new List<int>();
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
             fLinkColor = Color.Blue;
@@ -151,7 +102,7 @@ namespace GKCommon.Controls
             if (disposing)
             {
                 fChunks.Clear();
-                fHeights = null;
+                fHeights.Clear();
                 fLines.Dispose();
             }
             base.Dispose(disposing);
@@ -163,250 +114,54 @@ namespace GKCommon.Controls
             ArrangeText();
         }
 
-        private void MeasureText(Graphics grx, string ss, Font font,
-                                 ref int xPos, ref int yPos,
-                                 ref int hMax, ref int xMax)
-        {
-            if (yPos >= -hMax && ss != "") {
-                SizeF strSize = grx.MeasureString(ss, font);
-                xPos += (int)strSize.Width;
-
-                if (xPos > xMax) xMax = xPos;
-                int h = (int)strSize.Height;
-                if (h > hMax) hMax = h;
-            }
-        }
-
-        private void OutText(Graphics gfx, string ss, Font font, Color color,
-                             ref int xPos, ref int yPos, ref int hMax)
-        {
-            if (yPos >= -hMax && ss != "") {
-                using (var brush = new SolidBrush(color)) {
-                    gfx.DrawString(ss, font, brush, xPos, yPos);
-                }
-
-                SizeF strSize = gfx.MeasureString(ss, font);
-                xPos += (int)strSize.Width;
-            }
-        }
-
-        private void SetChunkColor(int line, ref TextChunk chunk, Font font, Color color)
-        {
-            if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new TextChunk(line, font);
-                fChunks.Add(chunk);
-            }
-
-            chunk.Font = font;
-            chunk.Color = color;
-        }
-
-        private void SetChunkFont(int line, ref TextChunk chunk, Font font)
-        {
-            if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new TextChunk(line, font);
-                fChunks.Add(chunk);
-            }
-
-            chunk.Font = font;
-        }
-
-        private void SetChunkText(int line, ref TextChunk chunk, Font font, string text)
-        {
-            if (chunk == null) {
-                chunk = new TextChunk(line, font);
-                fChunks.Add(chunk);
-            }
-
-            chunk.Text += text;
-        }
-
-        private static Font SetFontSize(Font font, float size)
-        {
-            return new Font(font.Name, size, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
-        }
-
-        private static Font SetFontStyle(Font font, FontStyle style, bool active)
-        {
-            FontStyle newStyle = font.Style;
-            if (active /*(newStyle & style) == FontStyle.Regular*/) {
-                newStyle |= style;
-            } else {
-                newStyle &= ~style;
-            }
-            return new Font(font, newStyle);
-        }
-
-        private void ParseLine(int line, string lineText, Font currentFont)
-        {
-            TextChunk lastChunk = null;
-            Font lastFont = (Font)currentFont.Clone();
-
-            if (string.IsNullOrEmpty(lineText)) {
-                lineText = " ";
-                SetChunkText(line, ref lastChunk, currentFont, lineText);
-                return;
-            }
-
-            StringTokenizer strTok = new StringTokenizer(lineText);
-            strTok.IgnoreWhiteSpace = false;
-            strTok.RecognizeDecimals = false;
-
-            Token tok = strTok.Next();
-            while (tok.Kind != TokenKind.EOF) {
-                if (tok.Kind == TokenKind.Symbol && tok.Value == "[") {
-                    string temp = tok.Value;
-                    tok = strTok.Next();
-
-                    bool closeTag;
-                    // closed tag
-                    if (tok.Kind == TokenKind.Symbol && tok.Value == "/") {
-                        closeTag = true;
-                        temp += tok.Value;
-                        tok = strTok.Next();
-                    } else {
-                        closeTag = false;
-                    }
-
-                    if (tok.Kind != TokenKind.Word) {
-                        // not tag
-                        SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
-                    } else {
-                        string tag = tok.Value;
-                        //bool skipTag = false;
-
-                        if (tag == "color") {
-                            // [color="{red|#ff0000}"][/color]
-                            Color color;
-                            color = ForeColor;
-                            if (!closeTag) {
-                                tok = strTok.Next();
-                                if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
-                                    tok = strTok.Next();
-                                    if (tok.Kind == TokenKind.Word) {
-                                        color = Color.FromName(tok.Value);
-                                    }
-                                }
-                            } else {
-                                color = ForeColor;
-                            }
-                            SetChunkColor(line, ref lastChunk, lastFont, color);
-                        }
-                        else if (tag == "size") {
-                            // [size={+/-x}]
-                            tok = strTok.Next();
-                            if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
-                                tok = strTok.Next();
-                                int factor = 0;
-                                if (tok.Kind == TokenKind.Symbol) {
-                                    if (tok.Value == "+") {
-                                        factor = +1;
-                                    } else if (tok.Value == "-") {
-                                        factor = -1;
-                                    }
-                                    tok = strTok.Next();
-                                }
-                                if (tok.Kind == TokenKind.Number) {
-                                    float newSize = lastFont.Size + factor * SysUtils.ParseInt(tok.Value, 0);
-                                    lastFont = SetFontSize(lastFont, newSize);
-                                }
-                            }
-                            SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "b") {
-                            // [b][/b]
-                            lastFont = SetFontStyle(lastFont, FontStyle.Bold, !closeTag);
-                            SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "i") {
-                            // [i][/i]
-                            lastFont = SetFontStyle(lastFont, FontStyle.Italic, !closeTag);
-                            SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "s") {
-                            // [s][/s]
-                            lastFont = SetFontStyle(lastFont, FontStyle.Strikeout, !closeTag);
-                            SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "u") {
-                            // [u][/u]
-                            lastFont = SetFontStyle(lastFont, FontStyle.Underline, !closeTag);
-                            SetChunkFont(line, ref lastChunk, lastFont);
-                        }
-                        else if (tag == "url") {
-                            // bad impementation
-                            // [url][/url] and [url=...][/url], but now only [url=...][/url]
-                            string url = "";
-
-                            tok = strTok.Next();
-                            if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
-                                tok = strTok.Next();
-                                do {
-                                    url += tok.Value;
-                                    tok = strTok.Next();
-                                } while (tok.Kind != TokenKind.Symbol || tok.Value != "]");
-                            } else {
-                                //
-                            }
-
-                            lastFont = SetFontStyle(lastFont, FontStyle.Underline, !closeTag);
-                            Color color = (closeTag) ? ForeColor : fLinkColor;
-                            SetChunkColor(line, ref lastChunk, lastFont, color);
-                            if (!closeTag) {
-                                lastChunk.URL = url;
-                            }
-                            //skipTag = true;
-                        }
-                        else {
-                            // not tag
-                            SetChunkText(line, ref lastChunk, lastFont, temp + tok.Value);
-                        }
-
-                        if (tok.Kind != TokenKind.Symbol || tok.Value != "]") {
-                            tok = strTok.Next();
-                        }
-                    }
-                } else {
-                    SetChunkText(line, ref lastChunk, lastFont, tok.Value);
-                }
-
-                tok = strTok.Next();
-            }
-        }
-
         private void ArrangeText()
         {
             try {
                 fAcceptFontChange = false;
-                fHeights = new int[fLines.Count];
-                fChunks.Clear();
+                fHeights.Clear();
 
-                Font currentFont = this.Font.Clone() as Font;
                 Graphics gfx = CreateGraphics();
                 try
                 {
+                    int xPos = 0;
                     int yPos = 0;
                     int xMax = 0;
+                    int lineHeight = 0;
 
-                    int num = fLines.Count;
-                    for (int line = 0; line < num; line++)
-                    {
-                        string str = fLines[line];
+                    string text = fLines.Text;
+                    Font defFont = this.Font;
+                    var parser = new BBTextParser(defFont.SizeInPoints, fLinkColor, ForeColor);
+                    parser.ParseText(fChunks, text);
 
-                        int firstChunk = fChunks.Count;
-                        ParseLine(line, str, currentFont);
-                        int lastChunk = fChunks.Count - 1;
+                    int line = -1;
+                    int chunksCount = fChunks.Count;
+                    for (int k = 0; k < chunksCount; k++) {
+                        TextChunk chunk = fChunks[k];
 
-                        int xPos = 0;
-                        int lineHeight = (int)gfx.MeasureString("A", currentFont).Height;
+                        if (line != chunk.Line) {
+                            line = chunk.Line;
 
-                        for (int i = firstChunk; i <= lastChunk; i++) {
-                            TextChunk chunk = fChunks[i];
-                            MeasureText(gfx, chunk.Text, chunk.Font, ref xPos, ref yPos, ref lineHeight, ref xMax);
+                            if (line > 0) {
+                                yPos += lineHeight;
+                                fHeights.Add(lineHeight);
+                            }
+
+                            xPos = 0;
+                            lineHeight = 0;
                         }
 
-                        yPos += lineHeight;
-                        fHeights[line] = lineHeight;
+                        if (!string.IsNullOrEmpty(chunk.Text)) {
+                            using (var font = new Font(defFont.Name, chunk.Size, chunk.Style, defFont.Unit)) {
+                                SizeF strSize = gfx.MeasureString(chunk.Text, font);
+                                chunk.Width = (int)strSize.Width;
+
+                                xPos += chunk.Width;
+                                if (xMax < xPos) xMax = xPos;
+
+                                int h = (int)strSize.Height;
+                                if (lineHeight < h) lineHeight = h;
+                            }
+                        }
                     }
 
                     fTextSize = new Size(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
@@ -427,19 +182,18 @@ namespace GKCommon.Controls
         private void DoPaint(Graphics gfx)
         {
             try {
-                if (fHeights.Length != fLines.Count) return;
-
                 fAcceptFontChange = false;
                 try
                 {
                     Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(BackColor), clientRect);
+                    Font defFont = this.Font;
 
                     int xOffset = fBorderWidth - -AutoScrollPosition.X;
                     int yOffset = fBorderWidth - -AutoScrollPosition.Y;
-                    int line = -1;
                     int lineHeight = 0;
 
+                    int line = -1;
                     int chunksCount = fChunks.Count;
                     for (int k = 0; k < chunksCount; k++) {
                         TextChunk chunk = fChunks[k];
@@ -447,18 +201,28 @@ namespace GKCommon.Controls
                         if (line != chunk.Line) {
                             line = chunk.Line;
 
-                            lineHeight = fHeights[line];
                             xOffset = fBorderWidth - -AutoScrollPosition.X;
+                            yOffset += lineHeight;
 
-                            if (line > 0) yOffset += lineHeight;
+                            lineHeight = fHeights[line];
                         }
 
                         int prevX = xOffset;
                         int prevY = yOffset;
-                        OutText(gfx, chunk.Text, chunk.Font, chunk.Color, ref xOffset, ref yOffset, ref lineHeight);
 
-                        if (!string.IsNullOrEmpty(chunk.URL)) {
-                            chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xOffset - prevX, lineHeight);
+                        string ct = chunk.Text;
+                        if (!string.IsNullOrEmpty(ct)) {
+                            using (var brush = new SolidBrush(chunk.Color)) {
+                                using (var font = new Font(defFont.Name, chunk.Size, chunk.Style, defFont.Unit)) {
+                                    gfx.DrawString(ct, font, brush, xOffset, yOffset);
+                                }
+                            }
+
+                            xOffset += chunk.Width;
+
+                            if (!string.IsNullOrEmpty(chunk.URL)) {
+                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xOffset - prevX, lineHeight);
+                            }
                         }
                     }
                 }

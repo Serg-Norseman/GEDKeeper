@@ -49,10 +49,8 @@ namespace GKCore
         /* 015 */ LSID_MIFileSaveAs,
         /* 016 */ LSID_MIExportToExcelFile,
         /* 017 */ LSID_MIExit,
-
-        /* 018 */ LSID_Deprecated_018, // deprecated
-        /* 019 */ LSID_Deprecated_019, // deprecated
-
+        /* 018 */ LSID_Import,
+        /* 019 */ LSID_Clear,
         /* 020 */ LSID_MIRecordAdd,
         /* 021 */ LSID_MIRecordEdit,
         /* 022 */ LSID_MIRecordDelete,
@@ -812,8 +810,10 @@ namespace GKCore
         /* 753 */ LSID_EmbeddedMediaPlayer,
         /* 754 */ LSID_AllowMediaDirectReferences,
         /* 755 */ LSID_CopyingFile,
+        /* 756 */ LSID_Actions,
+        /* 757 */ LSID_SelectAndCopy,
 
-        /* 000 */ LSID_Last = LSID_CopyingFile
+        /* 000 */ LSID_Last = LSID_SelectAndCopy
     }
 
     // TODO: remove and merge with LangManager
@@ -842,8 +842,8 @@ namespace GKCore
             /* 015 */ "Save As...",
             /* 016 */ "Export to Excel workbook...",
             /* 017 */ "Exit",
-            /* 018 */ "<?>",
-            /* 019 */ "<?>",
+            /* 018 */ "Import",
+            /* 019 */ "Clear",
             /* 020 */ "Add record",
             /* 021 */ "Edit record",
             /* 022 */ "Delete record",
@@ -1580,6 +1580,8 @@ namespace GKCore
             /* 753 */ "Use embedded MediaPlayer",
             /* 754 */ "Allow direct references to media files",
             /* 755 */ "Copying file",
+            /* 756 */ "Actions",
+            /* 757 */ "Select and copy",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

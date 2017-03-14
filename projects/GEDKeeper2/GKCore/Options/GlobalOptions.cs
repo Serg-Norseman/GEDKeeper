@@ -73,6 +73,7 @@ namespace GKCore.Options
         private bool fLoadRecentFiles;
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
+        private bool fUseExtendedNotes;
 
 
         public static GlobalOptions Instance
@@ -283,6 +284,13 @@ namespace GKCore.Options
             set { fAllowMediaStoreReferences = value; }
         }
 
+        public bool UseExtendedNotes
+        {
+            get { return fUseExtendedNotes; }
+            set { fUseExtendedNotes = value; }
+        }
+
+
         public IEnumerable<LangRecord> Languages
         {
             get { return fLanguages; }
@@ -349,6 +357,7 @@ namespace GKCore.Options
             fLoadRecentFiles = true;
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
+            fUseExtendedNotes = true;
 
             fIndividualListColumns = new IndividualListColumns();
             fIndividualListColumns.ResetDefaults();
