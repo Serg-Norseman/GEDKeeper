@@ -145,8 +145,9 @@ namespace GKCommon.GEDCOM
             TAGS_BASE.Add("_POSITION", new TagProperties("_POSITION", true,  true));
             TAGS_BASE.Add("ALIA", new TagProperties("ALIA", true, false));
 
-            //new TagProperties("HUSB", true, false));
-            //new TagProperties("WIFE", true, false));
+            // need for compatibility with Agelong Tree (ALTREE)
+            //TAGS_BASE.Add("HUSB", new TagProperties("HUSB", true, false));
+            //TAGS_BASE.Add("WIFE", new TagProperties("WIFE", true, false));
 
             TAGS_BASE.Add("_BGRO", new TagProperties("_BGRO", true,  true));
             TAGS_BASE.Add("_HAIR", new TagProperties("_HAIR", true,  true));

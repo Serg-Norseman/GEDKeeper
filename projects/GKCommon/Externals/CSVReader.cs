@@ -388,176 +388,175 @@ namespace Externals
         {
             lock (locker)
             {
-                if (typeMap == null)
+                if (typeMap != null) return;
+
+                typeMap = new Dictionary<Type, Dictionary<Type, Type>>()
                 {
-                    typeMap = new Dictionary<Type, Dictionary<Type, Type>>()
-                    {
-                        // Comparing byte
-                        {typeof(byte), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(byte) },
-                                { typeof(short), typeof(short) },
-                                { typeof(int), typeof(int) },
-                                { typeof(long), typeof(long) },
-                                { typeof(ulong), typeof(ulong) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing byte
+                    {typeof(byte), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(byte) },
+                            { typeof(short), typeof(short) },
+                            { typeof(int), typeof(int) },
+                            { typeof(long), typeof(long) },
+                            { typeof(ulong), typeof(ulong) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing short
-                        {typeof(short), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(short) },
-                                { typeof(short), typeof(short) },
-                                { typeof(int), typeof(int) },
-                                { typeof(long), typeof(long) },
-                                { typeof(ulong), typeof(ulong) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing short
+                    {typeof(short), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(short) },
+                            { typeof(short), typeof(short) },
+                            { typeof(int), typeof(int) },
+                            { typeof(long), typeof(long) },
+                            { typeof(ulong), typeof(ulong) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing int
-                        {typeof(int), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(int) },
-                                { typeof(short), typeof(int) },
-                                { typeof(int), typeof(int) },
-                                { typeof(long), typeof(long) },
-                                { typeof(ulong), typeof(ulong) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing int
+                    {typeof(int), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(int) },
+                            { typeof(short), typeof(int) },
+                            { typeof(int), typeof(int) },
+                            { typeof(long), typeof(long) },
+                            { typeof(ulong), typeof(ulong) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing long
-                        {typeof(long), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(long) },
-                                { typeof(short), typeof(long) },
-                                { typeof(int), typeof(long) },
-                                { typeof(long), typeof(long) },
-                                { typeof(ulong), typeof(ulong) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing long
+                    {typeof(long), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(long) },
+                            { typeof(short), typeof(long) },
+                            { typeof(int), typeof(long) },
+                            { typeof(long), typeof(long) },
+                            { typeof(ulong), typeof(ulong) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing ulong
-                        {typeof(ulong), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(ulong) },
-                                { typeof(short), typeof(ulong) },
-                                { typeof(int), typeof(ulong) },
-                                { typeof(long), typeof(ulong) },
-                                { typeof(ulong), typeof(ulong) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing ulong
+                    {typeof(ulong), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(ulong) },
+                            { typeof(short), typeof(ulong) },
+                            { typeof(int), typeof(ulong) },
+                            { typeof(long), typeof(ulong) },
+                            { typeof(ulong), typeof(ulong) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing float
-                        {typeof(float), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(float) },
-                                { typeof(short), typeof(float) },
-                                { typeof(int), typeof(float) },
-                                { typeof(long), typeof(float) },
-                                { typeof(ulong), typeof(float) },
-                                { typeof(float), typeof(float) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing float
+                    {typeof(float), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(float) },
+                            { typeof(short), typeof(float) },
+                            { typeof(int), typeof(float) },
+                            { typeof(long), typeof(float) },
+                            { typeof(ulong), typeof(float) },
+                            { typeof(float), typeof(float) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing double
-                        {typeof(double), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(double) },
-                                { typeof(short), typeof(double) },
-                                { typeof(int), typeof(double) },
-                                { typeof(long), typeof(double) },
-                                { typeof(ulong), typeof(double) },
-                                { typeof(float), typeof(double) },
-                                { typeof(double), typeof(double) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing double
+                    {typeof(double), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(double) },
+                            { typeof(short), typeof(double) },
+                            { typeof(int), typeof(double) },
+                            { typeof(long), typeof(double) },
+                            { typeof(ulong), typeof(double) },
+                            { typeof(float), typeof(double) },
+                            { typeof(double), typeof(double) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing decimal
-                        {typeof(decimal), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(decimal) },
-                                { typeof(short), typeof(decimal) },
-                                { typeof(int), typeof(decimal) },
-                                { typeof(long), typeof(decimal) },
-                                { typeof(ulong), typeof(decimal) },
-                                { typeof(float), typeof(decimal) },
-                                { typeof(double), typeof(decimal) },
-                                { typeof(decimal), typeof(decimal) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing decimal
+                    {typeof(decimal), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(decimal) },
+                            { typeof(short), typeof(decimal) },
+                            { typeof(int), typeof(decimal) },
+                            { typeof(long), typeof(decimal) },
+                            { typeof(ulong), typeof(decimal) },
+                            { typeof(float), typeof(decimal) },
+                            { typeof(double), typeof(decimal) },
+                            { typeof(decimal), typeof(decimal) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing bool
-                        {typeof(bool), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(string) },
-                                { typeof(short), typeof(string) },
-                                { typeof(int), typeof(string) },
-                                { typeof(long), typeof(string) },
-                                { typeof(ulong), typeof(string) },
-                                { typeof(float), typeof(string) },
-                                { typeof(double), typeof(string) },
-                                { typeof(decimal), typeof(string) },
-                                { typeof(bool), typeof(bool) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing bool
+                    {typeof(bool), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(string) },
+                            { typeof(short), typeof(string) },
+                            { typeof(int), typeof(string) },
+                            { typeof(long), typeof(string) },
+                            { typeof(ulong), typeof(string) },
+                            { typeof(float), typeof(string) },
+                            { typeof(double), typeof(string) },
+                            { typeof(decimal), typeof(string) },
+                            { typeof(bool), typeof(bool) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing char
-                        {typeof(char), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(string) },
-                                { typeof(short), typeof(string) },
-                                { typeof(int), typeof(string) },
-                                { typeof(long), typeof(string) },
-                                { typeof(ulong), typeof(string) },
-                                { typeof(float), typeof(string) },
-                                { typeof(double), typeof(string) },
-                                { typeof(decimal), typeof(string) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(char) },
-                                { typeof(string), typeof(string) }
-                            }},
+                    // Comparing char
+                    {typeof(char), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(string) },
+                            { typeof(short), typeof(string) },
+                            { typeof(int), typeof(string) },
+                            { typeof(long), typeof(string) },
+                            { typeof(ulong), typeof(string) },
+                            { typeof(float), typeof(string) },
+                            { typeof(double), typeof(string) },
+                            { typeof(decimal), typeof(string) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(char) },
+                            { typeof(string), typeof(string) }
+                        }},
 
-                        // Comparing string
-                        {typeof(string), new Dictionary<Type, Type>() {
-                                { typeof(byte), typeof(string) },
-                                { typeof(short), typeof(string) },
-                                { typeof(int), typeof(string) },
-                                { typeof(long), typeof(string) },
-                                { typeof(ulong), typeof(string) },
-                                { typeof(float), typeof(string) },
-                                { typeof(double), typeof(string) },
-                                { typeof(decimal), typeof(string) },
-                                { typeof(bool), typeof(string) },
-                                { typeof(char), typeof(string) },
-                                { typeof(string), typeof(string) }
-                            }}
-                    };
-                }
+                    // Comparing string
+                    {typeof(string), new Dictionary<Type, Type>() {
+                            { typeof(byte), typeof(string) },
+                            { typeof(short), typeof(string) },
+                            { typeof(int), typeof(string) },
+                            { typeof(long), typeof(string) },
+                            { typeof(ulong), typeof(string) },
+                            { typeof(float), typeof(string) },
+                            { typeof(double), typeof(string) },
+                            { typeof(decimal), typeof(string) },
+                            { typeof(bool), typeof(string) },
+                            { typeof(char), typeof(string) },
+                            { typeof(string), typeof(string) }
+                        }}
+                };
             }
         }
 

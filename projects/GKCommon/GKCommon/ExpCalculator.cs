@@ -296,11 +296,55 @@ namespace GKCommon
             fToken = ExpToken.tkNUMBER;
 
             char lc;
-            if (fExpression[fPtr] == '$')
+            lc = fExpression[fPtr];
+            if (lc >= '0' && lc <= '9')
             {
-                // hex numbers
-                fPtr++;
-                s_pos = fPtr;
+                if (lc == '0')
+                {
+                    fPtr++;
+                    lc = fExpression[fPtr];
+                    if (lc == 'X' || lc == 'x')
+                    {
+                        // hex numbers
+                        fPtr++;
+                        s_pos = fPtr;
+                        while (true)
+                        {
+                            lc = fExpression[fPtr];
+                            if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
+                                break;
+                            }
+                            fPtr++;
+                        }
+                        if (ConvertNumber(s_pos, fPtr, 16)) {
+                            return;
+                        }
+                        goto Error;
+                    }
+                    else
+                    {
+                        lc = fExpression[fPtr];
+                        if (lc == 'B' || lc == 'b')
+                        {
+                            // binary numbers
+                            fPtr++;
+                            s_pos = fPtr;
+                            while (true)
+                            {
+                                lc = fExpression[fPtr];
+                                if (lc < '0' || lc > '1') {
+                                    break;
+                                }
+                                fPtr++;
+                            }
+                            if (ConvertNumber(s_pos, fPtr, 2)) {
+                                return;
+                            }
+                            goto Error;
+                        }
+                    }
+                }
+
                 while (true)
                 {
                     lc = fExpression[fPtr];
@@ -309,334 +353,249 @@ namespace GKCommon
                     }
                     fPtr++;
                 }
-                if (ConvertNumber(s_pos, fPtr, 16)) {
-                    return;
+
+                lc = fExpression[fPtr];
+                if (ConvertNumber(s_pos, fPtr, 10))
+                {
+                    if (fExpression[fPtr] == '`')
+                    {
+                        fValue = (fValue * Math.PI / 180.0);
+                        fPtr++;
+                        double frac = 0.0;
+                        while (true)
+                        {
+                            lc = fExpression[fPtr];
+                            if (lc < '0' || lc > '9')
+                            {
+                                break;
+                            }
+                            frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
+                            fPtr++;
+                        }
+                        fValue = (fValue + frac * Math.PI / 180.0 / 60.0);
+                        if (fExpression[fPtr] == '`')
+                        {
+                            fPtr++;
+                            frac = 0.0;
+                            while (true)
+                            {
+                                lc = fExpression[fPtr];
+                                if (lc < '0' || lc > '9')
+                                {
+                                    break;
+                                }
+                                frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
+                                fPtr++;
+                            }
+                            fValue = (fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
+                        }
+                        fValue = fmod(fValue, 6.2831853071795862);
+                        return;
+                    }
+
+                    if (fExpression[fPtr] == '.')
+                    {
+                        fPtr++;
+                        double frac = 1.0;
+                        while (true)
+                        {
+                            lc = fExpression[fPtr];
+                            if (lc < '0' || lc > '9')
+                            {
+                                break;
+                            }
+                            frac = (frac / 10.0);
+                            fValue = (fValue + frac * ((int)fExpression[fPtr] - 48));
+                            fPtr++;
+                        }
+                    }
+
+                    lc = fExpression[fPtr];
+                    if (lc != 'E' && lc != 'e')
+                    {
+                        return;
+                    }
+
+                    fPtr++;
+                    int exp = 0;
+                    char sign = fExpression[fPtr];
+                    if (sign == '+' || sign == '-') {
+                        fPtr++;
+                    }
+
+                    lc = fExpression[fPtr];
+                    if (lc >= '0' && lc <= '9')
+                    {
+                        while (true)
+                        {
+                            lc = fExpression[fPtr];
+                            if (lc < '0' || lc > '9') {
+                                break;
+                            }
+                            exp = exp * 10 + (int)fExpression[fPtr] - 48;
+                            fPtr++;
+                        }
+
+                        if (exp == 0) {
+                            return;
+                        }
+
+                        if (sign == '-')
+                        {
+                            while (exp > 0)
+                            {
+                                fValue = (fValue / 10.0);
+                                exp--;
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            while (exp > 0)
+                            {
+                                fValue = (fValue * 10.0);
+                                exp--;
+                            }
+                            return;
+                        }
+                    }
                 }
             }
             else
             {
                 lc = fExpression[fPtr];
-                if (lc >= '0' && lc <= '9')
+                if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
                 {
-                    if (lc == '0')
-                    {
-                        fPtr++;
-                        lc = fExpression[fPtr];
-                        if (lc == 'X' || lc == 'x')
-                        {
-                            // hex numbers
-                            fPtr++;
-                            s_pos = fPtr;
-                            while (true)
-                            {
-                                lc = fExpression[fPtr];
-                                if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
-                                    break;
-                                }
-                                fPtr++;
-                            }
-                            if (ConvertNumber(s_pos, fPtr, 16)) {
-                                return;
-                            }
-                            goto Error;
-                        }
-                        else
-                        {
-                            lc = fExpression[fPtr];
-                            if (lc == 'B' || lc == 'b')
-                            {
-                                // binary numbers
-                                fPtr++;
-                                s_pos = fPtr;
-                                while (true)
-                                {
-                                    lc = fExpression[fPtr];
-                                    if (lc < '0' || lc > '1') {
-                                        break;
-                                    }
-                                    fPtr++;
-                                }
-                                if (ConvertNumber(s_pos, fPtr, 2)) {
-                                    return;
-                                }
-                                goto Error;
-                            }
-                        }
-                    }
-
+                    fIdent = new string(fExpression[fPtr], 1);
+                    fPtr++;
                     while (true)
                     {
                         lc = fExpression[fPtr];
-                        if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
+                        if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc > 'z')))))
+                        {
                             break;
                         }
+                        string text = fIdent;
+                        if (((text != null) ? text.Length : 0) >= 32)
+                        {
+                            break;
+                        }
+                        fIdent += fExpression[fPtr];
                         fPtr++;
                     }
-
-                    lc = fExpression[fPtr];
-                    if (lc == 'H' || lc == 'h')
-                    {
-                        if (ConvertNumber(s_pos, fPtr, 16)) {
-                            fPtr++;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        lc = fExpression[fPtr];
-                        if (lc == 'B' || lc == 'b')
-                        {
-                            if (ConvertNumber(s_pos, fPtr, 2)) {
-                                fPtr++;
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if (ConvertNumber(s_pos, fPtr, 10))
-                            {
-                                if (fExpression[fPtr] == '`')
-                                {
-                                    fValue = (fValue * Math.PI / 180.0);
-                                    fPtr++;
-                                    double frac = 0.0;
-                                    while (true)
-                                    {
-                                        lc = fExpression[fPtr];
-                                        if (lc < '0' || lc > '9')
-                                        {
-                                            break;
-                                        }
-                                        frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
-                                        fPtr++;
-                                    }
-                                    fValue = (fValue + frac * Math.PI / 180.0 / 60.0);
-                                    if (fExpression[fPtr] == '`')
-                                    {
-                                        fPtr++;
-                                        frac = 0.0;
-                                        while (true)
-                                        {
-                                            lc = fExpression[fPtr];
-                                            if (lc < '0' || lc > '9')
-                                            {
-                                                break;
-                                            }
-                                            frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
-                                            fPtr++;
-                                        }
-                                        fValue = (fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
-                                    }
-                                    fValue = fmod(fValue, 6.2831853071795862);
-                                    return;
-                                }
-
-                                if (fExpression[fPtr] == '.')
-                                {
-                                    fPtr++;
-                                    double frac = 1.0;
-                                    while (true)
-                                    {
-                                        lc = fExpression[fPtr];
-                                        if (lc < '0' || lc > '9')
-                                        {
-                                            break;
-                                        }
-                                        frac = (frac / 10.0);
-                                        fValue = (fValue + frac * ((int)fExpression[fPtr] - 48));
-                                        fPtr++;
-                                    }
-                                }
-
-                                lc = fExpression[fPtr];
-                                if (lc != 'E' && lc != 'e')
-                                {
-                                    return;
-                                }
-
-                                fPtr++;
-                                int exp = 0;
-                                char sign = fExpression[fPtr];
-                                if (sign == '+' || sign == '-') {
-                                    fPtr++;
-                                }
-
-                                lc = fExpression[fPtr];
-                                if (lc >= '0' && lc <= '9')
-                                {
-                                    while (true)
-                                    {
-                                        lc = fExpression[fPtr];
-                                        if (lc < '0' || lc > '9') {
-                                            break;
-                                        }
-                                        exp = exp * 10 + (int)fExpression[fPtr] - 48;
-                                        fPtr++;
-                                    }
-
-                                    if (exp == 0) {
-                                        return;
-                                    }
-
-                                    if (sign == '-')
-                                    {
-                                        while (exp > 0)
-                                        {
-                                            fValue = (fValue / 10.0);
-                                            exp--;
-                                        }
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        while (exp > 0)
-                                        {
-                                            fValue = (fValue * 10.0);
-                                            exp--;
-                                        }
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    fToken = ExpToken.tkIDENT;
+                    return;
                 }
-                else
+
+                char c = fExpression[fPtr];
+                fPtr++;
+
+                switch (c)
                 {
-                    lc = fExpression[fPtr];
-                    if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
-                    {
-                        fIdent = new string(fExpression[fPtr], 1);
-                        fPtr++;
-                        while (true)
+                    case '!':
+                        fToken = ExpToken.tkNOT;
+                        if (fExpression[fPtr] == '=')
                         {
-                            lc = fExpression[fPtr];
-                            if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc > 'z')))))
-                            {
-                                break;
-                            }
-                            string text = fIdent;
-                            if (((text != null) ? text.Length : 0) >= 32)
-                            {
-                                break;
-                            }
-                            fIdent += fExpression[fPtr];
                             fPtr++;
+                            fToken = ExpToken.tkNE;
+                            return;
                         }
-                        fToken = ExpToken.tkIDENT;
                         return;
-                    }
 
-                    char c = fExpression[fPtr];
-                    fPtr++;
-
-                    switch (c)
-                    {
-                        case '!':
-                            fToken = ExpToken.tkNOT;
-                            if (fExpression[fPtr] == '=')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkNE;
-                                return;
-                            }
+                    case '%':
+                        fToken = ExpToken.tkMOD;
+                        if (fExpression[fPtr] == '%')
+                        {
+                            fPtr++;
+                            fToken = ExpToken.tkPER;
                             return;
+                        }
+                        return;
 
-                        case '%':
-                            fToken = ExpToken.tkMOD;
-                            if (fExpression[fPtr] == '%')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkPER;
-                                return;
-                            }
-                            return;
+                    case '&':
+                        fToken = ExpToken.tkAND;
+                        return;
 
-                        case '&':
-                            fToken = ExpToken.tkAND;
-                            return;
+                    case '(':
+                        fToken = ExpToken.tkLBRACE;
+                        return;
 
-                        case '(':
-                            fToken = ExpToken.tkLBRACE;
-                            return;
+                    case ')':
+                        fToken = ExpToken.tkRBRACE;
+                        return;
 
-                        case ')':
-                            fToken = ExpToken.tkRBRACE;
+                    case '*':
+                        fToken = ExpToken.tkMUL;
+                        if (fExpression[fPtr] == '*')
+                        {
+                            fPtr++;
+                            fToken = ExpToken.tkPOW;
                             return;
+                        }
+                        return;
 
-                        case '*':
-                            fToken = ExpToken.tkMUL;
-                            if (fExpression[fPtr] == '*')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkPOW;
-                                return;
-                            }
-                            return;
+                    case '+':
+                        fToken = ExpToken.tkADD;
+                        return;
 
-                        case '+':
-                            fToken = ExpToken.tkADD;
-                            return;
+                    case '-':
+                        fToken = ExpToken.tkSUB;
+                        return;
 
-                        case '-':
-                            fToken = ExpToken.tkSUB;
-                            return;
+                    case '/':
+                        fToken = ExpToken.tkDIV;
+                        return;
 
-                        case '/':
-                            fToken = ExpToken.tkDIV;
-                            return;
+                    case ';':
+                        fToken = ExpToken.tkSEMICOLON;
+                        return;
 
-                        case ';':
-                            fToken = ExpToken.tkSEMICOLON;
+                    case '<':
+                        fToken = ExpToken.tkLT;
+                        if (fExpression[fPtr] == '=')
+                        {
+                            fPtr++;
+                            fToken = ExpToken.tkLE;
                             return;
+                        }
+                        return;
 
-                        case '<':
-                            fToken = ExpToken.tkLT;
-                            if (fExpression[fPtr] == '=')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkLE;
-                                return;
-                            }
+                    case '=':
+                        fToken = ExpToken.tkASSIGN;
+                        if (fExpression[fPtr] == '=')
+                        {
+                            fPtr++;
+                            fToken = ExpToken.tkEQ;
                             return;
+                        }
+                        return;
 
-                        case '=':
-                            fToken = ExpToken.tkASSIGN;
-                            if (fExpression[fPtr] == '=')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkEQ;
-                                return;
-                            }
+                    case '>':
+                        fToken = ExpToken.tkGT;
+                        if (fExpression[fPtr] == '=')
+                        {
+                            fPtr++;
+                            fToken = ExpToken.tkGE;
                             return;
+                        }
+                        return;
 
-                        case '>':
-                            fToken = ExpToken.tkGT;
-                            if (fExpression[fPtr] == '=')
-                            {
-                                fPtr++;
-                                fToken = ExpToken.tkGE;
-                                return;
-                            }
-                            return;
+                    case '^':
+                        fToken = ExpToken.tkXOR;
+                        return;
 
-                        case '^':
-                            fToken = ExpToken.tkXOR;
-                            return;
+                    case '|':
+                        fToken = ExpToken.tkOR;
+                        return;
 
-                        case '|':
-                            fToken = ExpToken.tkOR;
-                            return;
+                    case '~':
+                        fToken = ExpToken.tkINV;
+                        return;
 
-                        case '~':
-                            fToken = ExpToken.tkINV;
-                            return;
-
-                        default:
-                            fToken = ExpToken.tkERROR;
-                            fPtr--;
-                            return;
-                    }
+                    default:
+                        fToken = ExpToken.tkERROR;
+                        fPtr--;
+                        return;
                 }
             }
 

@@ -441,10 +441,6 @@ namespace GKTests.GKCommon
             Assert.AreEqual(1537, Math.Round(val, 0));
             val = calc.Calc("0x601");
             Assert.AreEqual(1537, Math.Round(val, 0));
-            val = calc.Calc("$601");
-            Assert.AreEqual(1537, Math.Round(val, 0));
-            val = calc.Calc("601h");
-            Assert.AreEqual(1537, Math.Round(val, 0));
 
             val = calc.Calc("1`"); // 1` = 0,01745 rad
             Assert.AreEqual(0.01745, Math.Round(val, 5));
