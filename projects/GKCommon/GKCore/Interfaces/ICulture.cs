@@ -23,8 +23,8 @@ using GKCommon.GEDCOM;
 namespace GKCore.Interfaces
 {
     /// <summary>
-    /// 
-    /// 
+    /// The main interface to culture-dependent processing of names.
+    /// <br/>
     /// In most languages, where there is a middle name, it consists of several parts.
     /// Since we do not introduce a separate field for storage of these parts - 
     /// we are also not going to control the middle names by the specific flag.

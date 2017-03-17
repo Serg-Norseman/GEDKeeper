@@ -22,6 +22,9 @@ using System;
 
 namespace GKCore.Interfaces
 {
+    /// <summary>
+    /// The interface for objects that provide localized resources.
+    /// </summary>
     public interface ILangMan
     {
         string LS(Enum lsid);

@@ -133,6 +133,55 @@ namespace GKCore.Stats
             }
         }
 
+        private void GetEventField(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec, string evtName)
+        {
+            string v = "?";
+            GEDCOMCustomEvent evt = iRec.FindEvent(evtName);
+            if (evt == null) return;
+
+            int dtY = GEDCOMUtils.GetRelativeYear(evt);
+            if (dtY == 0 && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) return;
+
+            switch (mode) {
+                case StatsMode.smBirthYears:
+                    v = Convert.ToString(dtY);
+                    break;
+
+                case StatsMode.smBirthTenYears:
+                    v = Convert.ToString(dtY / 10 * 10);
+                    break;
+
+                case StatsMode.smBirthPlaces:
+                    v = evt.Detail.Place.StringValue;
+                    break;
+            }
+
+            CheckVal(values, v);
+        }
+
+        private void GetIndiName(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
+        {
+            string v = "";
+            string fam, nam, pat;
+            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
+
+            switch (mode) {
+                case StatsMode.smSurnames:
+                    v = fContext.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                    break;
+
+                case StatsMode.smNames:
+                    v = nam;
+                    break;
+
+                case StatsMode.smPatronymics:
+                    v = pat;
+                    break;
+            }
+
+            CheckVal(values, v);
+        }
+
         private void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
         {
             string iName = GKUtils.GetNameString(iRec, true, false);
@@ -171,24 +220,8 @@ namespace GKCore.Stats
                 case StatsMode.smSurnames:
                 case StatsMode.smNames:
                 case StatsMode.smPatronymics:
-                    {
-                        string v = "";
-                        string fam, nam, pat;
-                        GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-                        switch (mode) {
-                            case StatsMode.smSurnames:
-                                v = fContext.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
-                                break;
-                            case StatsMode.smNames:
-                                v = nam;
-                                break;
-                            case StatsMode.smPatronymics:
-                                v = pat;
-                                break;
-                        }
-                        CheckVal(values, v);
-                        break;
-                    }
+                    GetIndiName(mode, values, iRec);
+                    break;
 
                 case StatsMode.smAge:
                     CheckVal(values, GKUtils.GetAgeStr(iRec, -1));
@@ -200,55 +233,15 @@ namespace GKCore.Stats
 
                 case StatsMode.smBirthYears:
                 case StatsMode.smBirthTenYears:
+                case StatsMode.smBirthPlaces:
+                    GetEventField(mode, values, iRec, "BIRT");
+                    break;
+
                 case StatsMode.smDeathYears:
                 case StatsMode.smDeathTenYears:
-                case StatsMode.smBirthPlaces:
                 case StatsMode.smDeathPlaces:
-                    {
-                        string v = "?";
-
-                        int num2 = iRec.Events.Count;
-                        for (int j = 0; j < num2; j++)
-                        {
-                            GEDCOMCustomEvent evt = iRec.Events[j];
-                            int dtY = GEDCOMUtils.GetRelativeYear(evt);
-                            if (dtY == 0 && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) continue;
-
-                            if (evt.Name == "BIRT")
-                            {
-                                switch (mode) {
-                                    case StatsMode.smBirthYears:
-                                        v = Convert.ToString(dtY);
-                                        break;
-                                    case StatsMode.smBirthTenYears:
-                                        v = Convert.ToString(dtY / 10 * 10);
-                                        break;
-                                    case StatsMode.smBirthPlaces:
-                                        v = evt.Detail.Place.StringValue;
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                if (evt.Name == "DEAT")
-                                {
-                                    switch (mode) {
-                                        case StatsMode.smDeathYears:
-                                            v = Convert.ToString(dtY);
-                                            break;
-                                        case StatsMode.smDeathTenYears:
-                                            v = Convert.ToString(dtY / 10 * 10);
-                                            break;
-                                        case StatsMode.smDeathPlaces:
-                                            v = evt.Detail.Place.StringValue;
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        CheckVal(values, v);
-                        break;
-                    }
+                    GetEventField(mode, values, iRec, "DEAT");
+                    break;
 
                 case StatsMode.smChildsDistribution:
                     CheckVal(values, iRec.GetTotalChildsCount().ToString());
@@ -351,7 +344,7 @@ namespace GKCore.Stats
             {
                 GEDCOMRecord rec = fTree[i];
 
-                if (rec is GEDCOMIndividualRecord && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
+                if (rec.RecordType == GEDCOMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
                 {
                     GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
@@ -367,7 +360,8 @@ namespace GKCore.Stats
                             string key;
                             List<int> valsList;
 
-                            switch (mode) {
+                            switch (mode)
+                            {
                                 case StatsMode.smAAF_1:
                                     int dty1 = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
                                     if (dty1 != 0) {
@@ -401,16 +395,13 @@ namespace GKCore.Stats
                         }
                     }
                 }
-                else
+                else if (rec.RecordType == GEDCOMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
                 {
-                    if (rec is GEDCOMFamilyRecord && mode == StatsMode.smSpousesDiff)
-                    {
-                        GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
+                    GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
 
-                        int diff = GKUtils.GetSpousesDiff(fRec);
-                        if (diff != -1) {
-                            values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), diff));
-                        }
+                    int diff = GKUtils.GetSpousesDiff(fRec);
+                    if (diff != -1) {
+                        values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), diff));
                     }
                 }
             }

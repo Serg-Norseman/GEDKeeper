@@ -157,6 +157,7 @@
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\PathReplacer.cs" />
+    <Compile Include="GKCore\Plugins\PluginInfo.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />
     <Compile Include="GKCore\Holidays.cs" />
     <Compile Include="GKCore\LangMan.cs" />

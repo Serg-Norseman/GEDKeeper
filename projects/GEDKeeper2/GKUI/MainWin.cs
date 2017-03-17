@@ -1389,30 +1389,6 @@ namespace GKUI
 
         #region Plugins support
 
-        public static PluginInfo GetPluginAttributes(IPlugin plugin)
-        {
-            if (plugin == null)
-                throw new ArgumentNullException("plugin");
-
-            PluginInfo info = new PluginInfo();
-
-            Assembly asm = plugin.GetType().Assembly;
-
-            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
-            if (attr1 != null) info.Title = attr1.Title;
-
-            var attr2 = SysUtils.GetAssemblyAttribute<AssemblyDescriptionAttribute>(asm);
-            if (attr2 != null) info.Description = attr2.Description;
-
-            var attr3 = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
-            if (attr3 != null) info.Copyright = attr3.Copyright;
-
-            var attr4 = SysUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
-            if (attr4 != null) info.Version = attr4.Version;
-
-            return info;
-        }
-
         private void UpdatePluginsLanguage()
         {
             if (fPlugins == null) return;

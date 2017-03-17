@@ -14,6 +14,34 @@ namespace Externals.MapiMail
     /// </summary>
     public class MapiMailMessage
     {
+        const int MAPI_USER_ABORT = 1;
+        const int MAPI_E_FAILURE = 2;
+        const int MAPI_E_LOGIN_FAILURE = 3;
+        const int MAPI_E_DISK_FULL = 4;
+        const int MAPI_E_INSUFFICIENT_MEMORY = 5;
+        const int MAPI_E_BLK_TOO_SMALL = 6;
+        const int MAPI_E_TOO_MANY_SESSIONS = 8;
+        const int MAPI_E_TOO_MANY_FILES = 9;
+        const int MAPI_E_TOO_MANY_RECIPIENTS = 10;
+        const int MAPI_E_ATTACHMENT_NOT_FOUND = 11;
+        const int MAPI_E_ATTACHMENT_OPEN_FAILURE = 12;
+        const int MAPI_E_ATTACHMENT_WRITE_FAILURE = 13;
+        const int MAPI_E_UNKNOWN_RECIPIENT = 14;
+        const int MAPI_E_BAD_RECIPTYPE = 15;
+        const int MAPI_E_NO_MESSAGES = 16;
+        const int MAPI_E_INVALID_MESSAGE = 17;
+        const int MAPI_E_TEXT_TOO_LARGE = 18;
+        const int MAPI_E_INVALID_SESSION = 19;
+        const int MAPI_E_TYPE_NOT_SUPPORTED = 20;
+        const int MAPI_E_AMBIGUOUS_RECIPIENT = 21;
+        const int MAPI_E_MESSAGE_IN_USE = 22;
+        const int MAPI_E_NETWORK_FAILURE = 23;
+        const int MAPI_E_INVALID_EDITFIELDS = 24;
+        const int MAPI_E_INVALID_RECIPS = 25;
+        const int MAPI_E_NOT_SUPPORTED = 26;
+        const int MAPI_E_NO_LIBRARY = 999;
+        const int MAPI_E_INVALID_PARAMETER = 998;
+
         /// <summary>
         /// Specifies the valid RecipientTypes for a Recipient.
         /// </summary>
@@ -232,40 +260,11 @@ namespace Externals.MapiMail
             ShowMail(null);
         }
 
-
         /// <summary>
         /// Logs any Mapi errors.
         /// </summary>
         public string LogErrorMapi(uint errorCode)
         {
-            const int MAPI_USER_ABORT = 1;
-            const int MAPI_E_FAILURE = 2;
-            const int MAPI_E_LOGIN_FAILURE = 3;
-            const int MAPI_E_DISK_FULL = 4;
-            const int MAPI_E_INSUFFICIENT_MEMORY = 5;
-            const int MAPI_E_BLK_TOO_SMALL = 6;
-            const int MAPI_E_TOO_MANY_SESSIONS = 8;
-            const int MAPI_E_TOO_MANY_FILES = 9;
-            const int MAPI_E_TOO_MANY_RECIPIENTS = 10;
-            const int MAPI_E_ATTACHMENT_NOT_FOUND = 11;
-            const int MAPI_E_ATTACHMENT_OPEN_FAILURE = 12;
-            const int MAPI_E_ATTACHMENT_WRITE_FAILURE = 13;
-            const int MAPI_E_UNKNOWN_RECIPIENT = 14;
-            const int MAPI_E_BAD_RECIPTYPE = 15;
-            const int MAPI_E_NO_MESSAGES = 16;
-            const int MAPI_E_INVALID_MESSAGE = 17;
-            const int MAPI_E_TEXT_TOO_LARGE = 18;
-            const int MAPI_E_INVALID_SESSION = 19;
-            const int MAPI_E_TYPE_NOT_SUPPORTED = 20;
-            const int MAPI_E_AMBIGUOUS_RECIPIENT = 21;
-            const int MAPI_E_MESSAGE_IN_USE = 22;
-            const int MAPI_E_NETWORK_FAILURE = 23;
-            const int MAPI_E_INVALID_EDITFIELDS = 24;
-            const int MAPI_E_INVALID_RECIPS = 25;
-            const int MAPI_E_NOT_SUPPORTED = 26;
-            const int MAPI_E_NO_LIBRARY = 999;
-            const int MAPI_E_INVALID_PARAMETER = 998;
-
             string error = string.Empty;
             switch (errorCode)
             {

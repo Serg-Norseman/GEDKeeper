@@ -23,7 +23,7 @@ using System;
 namespace GKCommon.GEDCOM
 {
     /// <summary>
-    /// 
+    /// Base class for all GEDCOM objects like tags, and tree and xref replacer.
     /// </summary>
     public class GEDCOMObject : IDisposable
     {

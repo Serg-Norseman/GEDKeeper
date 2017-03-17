@@ -21,7 +21,7 @@ namespace GKCommon
     public delegate bool GetVarEventHandler(object sender, string varName, ref double varValue);
 
     /// <summary>
-    /// 
+    /// The simple calculator for standard expressions.
     /// </summary>
     public sealed class ExpCalculator
     {
@@ -77,11 +77,10 @@ namespace GKCommon
 
         private double fValue;
         private string fIdent;
-        private string fExpression;
-        private int fPtr;
         private ExpToken fToken;
         private readonly List<NamedVar> fVars;
         private bool fCaseSensitive;
+        private StringTokenizer fTokenizer;
 
         //private static readonly object EventGetVar;
 
@@ -110,6 +109,7 @@ namespace GKCommon
         {
             fVars = new List<NamedVar>();
             fCaseSensitive = false;
+            fTokenizer = null;
         }
 
         /*protected override void Dispose(bool disposing)
@@ -135,10 +135,10 @@ namespace GKCommon
             return ((B) ? 1.0 : 0.0);
         }
 
-        private static double fmod(double x, double y)
+        /*private static double fmod(double x, double y)
         {
             return (x - fint((x / y)) * y);
-        }
+        }*/
 
         private static long trunc(double value)
         {
@@ -251,356 +251,150 @@ namespace GKCommon
             return (eventHandler != null) && eventHandler(this, varName, ref varValue);
         }
 
-        private bool ConvertNumber(int first, int last, ushort numBase)
-        {
-            fValue = 0.0;
-
-            while (first < last)
-            {
-                char ch = fExpression[first];
-                byte c = (byte)((int)ch - 48);
-                if (c > 9)
-                {
-                    c -= 7;
-
-                    if (c > 15) {
-                        c -= 32;
-                    }
-                }
-
-                if (c >= numBase) {
-                    break;
-                }
-
-                fValue = (fValue * numBase + c);
-                first++;
-            }
-
-            return (first == last);
-        }
-
         private void lex()
         {
-            while (fExpression[fPtr] != '\0' && fExpression[fPtr] <= ' ')
+            Token tok = fTokenizer.CurrentToken;
+
+            switch (tok.Kind)
             {
-                fPtr++;
-            }
+                case TokenKind.Number:
+                    fToken = ExpToken.tkNUMBER;
+                    fValue = SysUtils.ParseFloat(tok.Value, double.NaN);
+                    break;
 
-            if (fExpression[fPtr] == '\0')
-            {
-                fToken = ExpToken.tkEOF;
-                return;
-            }
-
-            int s_pos = fPtr;
-            fToken = ExpToken.tkNUMBER;
-
-            char lc;
-            lc = fExpression[fPtr];
-            if (lc >= '0' && lc <= '9')
-            {
-                if (lc == '0')
-                {
-                    fPtr++;
-                    lc = fExpression[fPtr];
-                    if (lc == 'X' || lc == 'x')
+                case TokenKind.Symbol:
                     {
-                        // hex numbers
-                        fPtr++;
-                        s_pos = fPtr;
-                        while (true)
+                        switch (tok.Value[0])
                         {
-                            lc = fExpression[fPtr];
-                            if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
+                            case '!':
+                                fToken = ExpToken.tkNOT;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '=') {
+                                    fToken = ExpToken.tkNE;
+                                } else return;
                                 break;
-                            }
-                            fPtr++;
-                        }
-                        if (ConvertNumber(s_pos, fPtr, 16)) {
-                            return;
-                        }
-                        goto Error;
-                    }
-                    else
-                    {
-                        lc = fExpression[fPtr];
-                        if (lc == 'B' || lc == 'b')
-                        {
-                            // binary numbers
-                            fPtr++;
-                            s_pos = fPtr;
-                            while (true)
-                            {
-                                lc = fExpression[fPtr];
-                                if (lc < '0' || lc > '1') {
-                                    break;
-                                }
-                                fPtr++;
-                            }
-                            if (ConvertNumber(s_pos, fPtr, 2)) {
-                                return;
-                            }
-                            goto Error;
-                        }
-                    }
-                }
 
-                while (true)
-                {
-                    lc = fExpression[fPtr];
-                    if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
-                        break;
-                    }
-                    fPtr++;
-                }
-
-                lc = fExpression[fPtr];
-                if (ConvertNumber(s_pos, fPtr, 10))
-                {
-                    if (fExpression[fPtr] == '`')
-                    {
-                        fValue = (fValue * Math.PI / 180.0);
-                        fPtr++;
-                        double frac = 0.0;
-                        while (true)
-                        {
-                            lc = fExpression[fPtr];
-                            if (lc < '0' || lc > '9')
-                            {
+                            case '%':
+                                fToken = ExpToken.tkMOD;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '%') {
+                                    fToken = ExpToken.tkPER;
+                                } else return;
                                 break;
-                            }
-                            frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
-                            fPtr++;
-                        }
-                        fValue = (fValue + frac * Math.PI / 180.0 / 60.0);
-                        if (fExpression[fPtr] == '`')
-                        {
-                            fPtr++;
-                            frac = 0.0;
-                            while (true)
-                            {
-                                lc = fExpression[fPtr];
-                                if (lc < '0' || lc > '9')
-                                {
-                                    break;
-                                }
-                                frac = (frac * 10.0 + ((int)fExpression[fPtr] - 48));
-                                fPtr++;
-                            }
-                            fValue = (fValue + frac * Math.PI / 180.0 / 60.0 / 60.0);
-                        }
-                        fValue = fmod(fValue, 6.2831853071795862);
-                        return;
-                    }
 
-                    if (fExpression[fPtr] == '.')
-                    {
-                        fPtr++;
-                        double frac = 1.0;
-                        while (true)
-                        {
-                            lc = fExpression[fPtr];
-                            if (lc < '0' || lc > '9')
-                            {
+                            case '&':
+                                fToken = ExpToken.tkAND;
                                 break;
-                            }
-                            frac = (frac / 10.0);
-                            fValue = (fValue + frac * ((int)fExpression[fPtr] - 48));
-                            fPtr++;
-                        }
-                    }
 
-                    lc = fExpression[fPtr];
-                    if (lc != 'E' && lc != 'e')
-                    {
-                        return;
-                    }
-
-                    fPtr++;
-                    int exp = 0;
-                    char sign = fExpression[fPtr];
-                    if (sign == '+' || sign == '-') {
-                        fPtr++;
-                    }
-
-                    lc = fExpression[fPtr];
-                    if (lc >= '0' && lc <= '9')
-                    {
-                        while (true)
-                        {
-                            lc = fExpression[fPtr];
-                            if (lc < '0' || lc > '9') {
+                            case '(':
+                                fToken = ExpToken.tkLBRACE;
                                 break;
-                            }
-                            exp = exp * 10 + (int)fExpression[fPtr] - 48;
-                            fPtr++;
-                        }
 
-                        if (exp == 0) {
-                            return;
-                        }
+                            case ')':
+                                fToken = ExpToken.tkRBRACE;
+                                break;
 
-                        if (sign == '-')
-                        {
-                            while (exp > 0)
-                            {
-                                fValue = (fValue / 10.0);
-                                exp--;
-                            }
-                            return;
-                        }
-                        else
-                        {
-                            while (exp > 0)
-                            {
-                                fValue = (fValue * 10.0);
-                                exp--;
-                            }
-                            return;
+                            case '*':
+                                fToken = ExpToken.tkMUL;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '*') {
+                                    fToken = ExpToken.tkPOW;
+                                } else return;
+                                break;
+
+                            case '+':
+                                fToken = ExpToken.tkADD;
+                                break;
+
+                            case '-':
+                                fToken = ExpToken.tkSUB;
+                                break;
+
+                            case '/':
+                                fToken = ExpToken.tkDIV;
+                                break;
+
+                            case ';':
+                                fToken = ExpToken.tkSEMICOLON;
+                                break;
+
+                            case '<':
+                                fToken = ExpToken.tkLT;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '=') {
+                                    fToken = ExpToken.tkLE;
+                                } else return;
+                                break;
+
+                            case '=':
+                                fToken = ExpToken.tkASSIGN;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '=') {
+                                    fToken = ExpToken.tkEQ;
+                                } else return;
+                                break;
+
+                            case '>':
+                                fToken = ExpToken.tkGT;
+                                tok = fTokenizer.Next();
+                                if (tok.Value[0] == '=') {
+                                    fToken = ExpToken.tkGE;
+                                } else return;
+                                break;
+
+                            case '^':
+                                fToken = ExpToken.tkXOR;
+                                break;
+
+                            case '|':
+                                fToken = ExpToken.tkOR;
+                                break;
+
+                            case '~':
+                                fToken = ExpToken.tkINV;
+                                break;
+
+                            default:
+                                fToken = ExpToken.tkERROR;
+                                break;
                         }
                     }
-                }
-            }
-            else
-            {
-                lc = fExpression[fPtr];
-                if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
-                {
-                    fIdent = new string(fExpression[fPtr], 1);
-                    fPtr++;
-                    while (true)
-                    {
-                        lc = fExpression[fPtr];
-                        if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc > 'z')))))
-                        {
-                            break;
-                        }
-                        string text = fIdent;
-                        if (((text != null) ? text.Length : 0) >= 32)
-                        {
-                            break;
-                        }
-                        fIdent += fExpression[fPtr];
-                        fPtr++;
-                    }
+                    break;
+
+                case TokenKind.Word:
+                case TokenKind.Ident:
+                    fIdent = tok.Value;
                     fToken = ExpToken.tkIDENT;
-                    return;
-                }
+                    break;
 
-                char c = fExpression[fPtr];
-                fPtr++;
-
-                switch (c)
-                {
-                    case '!':
-                        fToken = ExpToken.tkNOT;
-                        if (fExpression[fPtr] == '=')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkNE;
-                            return;
-                        }
-                        return;
-
-                    case '%':
-                        fToken = ExpToken.tkMOD;
-                        if (fExpression[fPtr] == '%')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkPER;
-                            return;
-                        }
-                        return;
-
-                    case '&':
-                        fToken = ExpToken.tkAND;
-                        return;
-
-                    case '(':
-                        fToken = ExpToken.tkLBRACE;
-                        return;
-
-                    case ')':
-                        fToken = ExpToken.tkRBRACE;
-                        return;
-
-                    case '*':
-                        fToken = ExpToken.tkMUL;
-                        if (fExpression[fPtr] == '*')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkPOW;
-                            return;
-                        }
-                        return;
-
-                    case '+':
-                        fToken = ExpToken.tkADD;
-                        return;
-
-                    case '-':
-                        fToken = ExpToken.tkSUB;
-                        return;
-
-                    case '/':
-                        fToken = ExpToken.tkDIV;
-                        return;
-
-                    case ';':
-                        fToken = ExpToken.tkSEMICOLON;
-                        return;
-
-                    case '<':
-                        fToken = ExpToken.tkLT;
-                        if (fExpression[fPtr] == '=')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkLE;
-                            return;
-                        }
-                        return;
-
-                    case '=':
-                        fToken = ExpToken.tkASSIGN;
-                        if (fExpression[fPtr] == '=')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkEQ;
-                            return;
-                        }
-                        return;
-
-                    case '>':
-                        fToken = ExpToken.tkGT;
-                        if (fExpression[fPtr] == '=')
-                        {
-                            fPtr++;
-                            fToken = ExpToken.tkGE;
-                            return;
-                        }
-                        return;
-
-                    case '^':
-                        fToken = ExpToken.tkXOR;
-                        return;
-
-                    case '|':
-                        fToken = ExpToken.tkOR;
-                        return;
-
-                    case '~':
-                        fToken = ExpToken.tkINV;
-                        return;
-
-                    default:
+                case TokenKind.HexNumber:
+                    try {
+                        fToken = ExpToken.tkNUMBER;
+                        fValue = Convert.ToInt32(tok.Value, 16);
+                    } catch {
                         fToken = ExpToken.tkERROR;
-                        fPtr--;
-                        return;
-                }
+                    }
+                    break;
+
+                case TokenKind.BinNumber:
+                    try {
+                        fToken = ExpToken.tkNUMBER;
+                        fValue = Convert.ToInt32(tok.Value.Substring(2), 2);
+                    } catch {
+                        fToken = ExpToken.tkERROR;
+                    }
+                    break;
+
+                case TokenKind.EOF:
+                    fToken = ExpToken.tkEOF;
+                    break;
+
+                default:
+                    fToken = ExpToken.tkERROR;
+                    break;
             }
 
-        Error:
-            fToken = ExpToken.tkERROR;
+            fTokenizer.Next();
         }
 
         private void checkToken(ExpToken expected)
@@ -864,8 +658,12 @@ namespace GKCommon
         {
             double result = 0.0;
 
-            fExpression = expression + "\0";
-            fPtr = 0;
+            fTokenizer = new StringTokenizer(expression);
+            fTokenizer.IgnoreWhiteSpace = true;
+            fTokenizer.RecognizeDecimals = true;
+            fTokenizer.RecognizeHex = true;
+            fTokenizer.RecognizeBin = true;
+            fTokenizer.Next();
 
             lex();
             expr7(ref result);

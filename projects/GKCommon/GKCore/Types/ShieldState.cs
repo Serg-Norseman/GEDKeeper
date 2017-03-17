@@ -20,6 +20,9 @@
 
 namespace GKCore.Types
 {
+    /// <summary>
+    /// Status display the protected information in lists, pedigrees and graphs.
+    /// </summary>
     public enum ShieldState
     {
         Maximum,

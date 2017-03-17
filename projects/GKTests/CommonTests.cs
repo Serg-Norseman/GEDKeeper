@@ -297,7 +297,7 @@ namespace GKTests.GKCommon
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("12+"); }); // syntax error
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("(12+"); }); // syntax error
-            //Assert.Throws(typeof(CalculateException), () => { calc.Calc("5 + 0x"); }); // syntax error
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("5 + 0x"); }); // syntax error
             Assert.Throws(typeof(CalculateException), () => { calc.Calc(")"); }); // syntax error
 
             double val = calc.Calc("2 + 7.703 - 3");
@@ -370,17 +370,17 @@ namespace GKTests.GKCommon
             val = calc.Calc("frac(12.578)");
             Assert.AreEqual(0.578, Math.Round(val, 3));
 
-            val = calc.Calc("sin(30`)");
-            Assert.AreEqual(0.500, Math.Round(val, 3));
+            val = calc.Calc("sin(2)");
+            Assert.AreEqual(0.909, Math.Round(val, 3));
 
-            val = calc.Calc("cos(30`)");
-            Assert.AreEqual(0.866, Math.Round(val, 3));
+            val = calc.Calc("cos(2)");
+            Assert.AreEqual(-0.416, Math.Round(val, 3));
 
-            val = calc.Calc("tan(30`)");
-            Assert.AreEqual(0.577, Math.Round(val, 3));
+            val = calc.Calc("tan(2)");
+            Assert.AreEqual(-2.185, Math.Round(val, 3));
 
-            val = calc.Calc("atan(30`)");
-            Assert.AreEqual(0.482, Math.Round(val, 3));
+            val = calc.Calc("atan(2)");
+            Assert.AreEqual(1.107, Math.Round(val, 3));
 
             val = calc.Calc("exp(5)");
             Assert.AreEqual(148.413, Math.Round(val, 3));
@@ -431,6 +431,9 @@ namespace GKTests.GKCommon
             Assert.AreEqual(0, Math.Round(val, 0));
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("15 - beta"); });
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("15\\"); });
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("15\"srfgsdf\""); });
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("abr(15)"); });
 
             calc.OnGetVar -= GetVarEventHandler;
 
@@ -442,8 +445,8 @@ namespace GKTests.GKCommon
             val = calc.Calc("0x601");
             Assert.AreEqual(1537, Math.Round(val, 0));
 
-            val = calc.Calc("1`"); // 1` = 0,01745 rad
-            Assert.AreEqual(0.01745, Math.Round(val, 5));
+            //val = calc.Calc("1`"); // 1` = 0,01745 rad
+            //Assert.AreEqual(0.01745, Math.Round(val, 5));
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0x15j"); });
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0b015"); });
@@ -804,6 +807,37 @@ namespace GKTests.GKCommon
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
             Assert.AreEqual("\"test \r \n quote2\"", tok.Value);
+
+            //
+
+            strTok = new StringTokenizer("alpha 0x601 0b11000000001 alg_123");
+            Assert.IsNotNull(strTok);
+            strTok.IgnoreWhiteSpace = true;
+
+            strTok.RecognizeHex = true;
+            Assert.IsTrue(strTok.RecognizeHex);
+
+            strTok.RecognizeBin = true;
+            Assert.IsTrue(strTok.RecognizeBin);
+
+            strTok.RecognizeIdents = true;
+            Assert.IsTrue(strTok.RecognizeIdents);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("alpha", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.HexNumber, tok.Kind);
+            Assert.AreEqual("0x601", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.BinNumber, tok.Kind);
+            Assert.AreEqual("0b11000000001", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Ident, tok.Kind);
+            Assert.AreEqual("alg_123", tok.Value);
         }
 
         [Test]

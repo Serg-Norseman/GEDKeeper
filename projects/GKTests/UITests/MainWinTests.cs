@@ -31,6 +31,7 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.Types;
 using GKTests.ControlTesters;
 using GKUI;
@@ -309,7 +310,7 @@ namespace GKTests.UITests
             fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
             DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { MainWin.GetPluginAttributes(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { PluginInfo.GetPluginInfo(null); });
 
             fMainWin.AddMRU("test.ged");
 
@@ -876,6 +877,62 @@ namespace GKTests.UITests
             ClickButton("btnAccept", form);
         }
 
+        private void StructsDlg_Handler(GEDCOMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
+        {
+            GKSheetListTester sheetTester;
+
+            // notes
+            Assert.AreEqual(0, record.Notes.Count);
+            tabs.SelectTab(tabIndexes[0]);
+            ModalFormHandler = RecordSelectDlg_Select_Handler;
+            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.Notes.Count);
+
+            sheetTester = new GKSheetListTester("fNotesList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.Notes.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.Notes.Count);
+
+            // media
+            Assert.AreEqual(0, record.MultimediaLinks.Count);
+            tabs.SelectTab(tabIndexes[1]);
+            ModalFormHandler = RecordSelectDlg_Select_Handler;
+            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.MultimediaLinks.Count);
+
+            sheetTester = new GKSheetListTester("fMediaList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.MultimediaLinks.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.MultimediaLinks.Count);
+
+            // sources
+            Assert.AreEqual(0, record.SourceCitations.Count);
+            tabs.SelectTab(tabIndexes[2]);
+            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
+            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.SourceCitations.Count);
+
+            sheetTester = new GKSheetListTester("fSourcesList");
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.SourceCitations.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            sheetTester.Properties.SelectItem(0);
+            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.SourceCitations.Count);
+        }
+
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
         {
             GEDCOMFamilyRecord familyRecord = dlg.Family;
@@ -937,56 +994,7 @@ namespace GKTests.UITests
             ClickToolStripButton("fEventsList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(0, familyRecord.Events.Count);
 
-            // notes
-            Assert.AreEqual(0, familyRecord.Notes.Count);
-            tabs.SelectTab(2);
-            ModalFormHandler = RecordSelectDlg_Select_Handler;
-            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.Notes.Count);
-
-            sheetTester = new GKSheetListTester("fNotesList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, familyRecord.Notes.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.Notes.Count);
-
-            // media
-            Assert.AreEqual(0, familyRecord.MultimediaLinks.Count);
-            tabs.SelectTab(3);
-            ModalFormHandler = RecordSelectDlg_Select_Handler;
-            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.MultimediaLinks.Count);
-
-            sheetTester = new GKSheetListTester("fMediaList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, familyRecord.MultimediaLinks.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.MultimediaLinks.Count);
-
-            // sources
-            Assert.AreEqual(0, familyRecord.SourceCitations.Count);
-            tabs.SelectTab(4);
-            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
-            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.SourceCitations.Count);
-
-            sheetTester = new GKSheetListTester("fSourcesList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, familyRecord.SourceCitations.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.SourceCitations.Count);
+            StructsDlg_Handler(familyRecord, dlg, tabs, new int[] { 2, 3, 4 });
         }
 
         private void PersonEditDlg_Handler(PersonEditDlg dlg)
@@ -1119,60 +1127,7 @@ namespace GKTests.UITests
             Assert.AreEqual(0, indiRecord.Groups.Count);
 
 
-
-            // notes
-            tabs.SelectTab(5);
-            Assert.AreEqual(0, indiRecord.Notes.Count);
-            RSD_SubHandler = NoteAdd_Mini_Handler;
-            ModalFormHandler = RecordSelectDlg_Create_Handler;
-            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.Notes.Count);
-
-            sheetTester = new GKSheetListTester("fNotesList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, indiRecord.Notes.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.Notes.Count);
-
-            // media
-            tabs.SelectTab(6);
-            Assert.AreEqual(0, indiRecord.MultimediaLinks.Count);
-            RSD_SubHandler = MediaAdd_Mini_Handler;
-            ModalFormHandler = RecordSelectDlg_Create_Handler;
-            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.MultimediaLinks.Count);
-
-            sheetTester = new GKSheetListTester("fMediaList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, indiRecord.MultimediaLinks.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.MultimediaLinks.Count);
-
-            // sources
-            /*tabs.SelectTab(7);
-            Assert.AreEqual(0, indiRecord.SourceCitations.Count);
-            RSD_SubHandler = SourceAdd_Mini_Handler;
-            ModalFormHandler = SourceCitEditDlg_Handler;
-            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.SourceCitations.Count);
-
-            sheetTester = new GKSheetListTester("fSourcesList");
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, indiRecord.SourceCitations.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            sheetTester.Properties.SelectItem(0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.SourceCitations.Count);*/
+            StructsDlg_Handler(indiRecord, dlg, tabs, new int[] { 5, 6, 7 });
 
 
             // userrefs

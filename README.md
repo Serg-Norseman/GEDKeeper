@@ -1,6 +1,7 @@
 # GEDKeeper
 
 [![License: GPL v3](https://img.shields.io/github/license/Serg-Norseman/GEDKeeper.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
 

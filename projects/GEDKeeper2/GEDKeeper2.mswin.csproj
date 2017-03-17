@@ -167,6 +167,7 @@
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\PathReplacer.cs" />
+    <Compile Include="GKCore\Plugins\PluginInfo.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />
     <Compile Include="GKCore\SCCrypt.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
@@ -751,6 +752,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GKCore\Plugins" />
     <Folder Include="GKUI\Forms" />
     <Folder Include="Sandbox\" />
   </ItemGroup>

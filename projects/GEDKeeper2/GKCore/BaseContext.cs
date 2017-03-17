@@ -706,6 +706,11 @@ namespace GKCore
 
         #region Public media support
 
+        /// <summary>
+        /// Check the status of the tree's file saving to define
+        /// the path where will be located a storage or archive.
+        /// </summary>
+        /// <returns>The status of the existence of the file path.</returns>
         public bool CheckBasePath()
         {
             string path = Path.GetDirectoryName(fTree.FileName);

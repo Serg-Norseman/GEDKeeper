@@ -20,8 +20,16 @@
 
 namespace GKCore.Interfaces
 {
+    /// <summary>
+    /// The interface for objects (dialogs, windows, components),
+    /// which should change content based on selected language of UI.
+    /// </summary>
     public interface ILocalization
     {
+        /// <summary>
+        /// The implementation of this method is required to replace
+        /// the all localizable resources of object.
+        /// </summary>
         void SetLang();
     }
 }

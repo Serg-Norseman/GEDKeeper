@@ -293,6 +293,53 @@ namespace GKCore.Lists
             return res;
         }
 
+        private object GetNameValueEx(int colSubtype)
+        {
+            object result = null;
+
+            if (colSubtype == -1) {
+                result = GKUtils.GetNameString(fRec, true, false);
+            } else {
+                NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
+                string f, i, p;
+
+                switch (defNameFormat) {
+                    case NameFormat.nfFNP:
+                        result = GKUtils.GetNameString(fRec, true, false);
+                        break;
+
+                    case NameFormat.nfF_NP:
+                        GKUtils.GetNameParts(fRec, out f, out i, out p);
+                        switch (colSubtype) {
+                            case 0:
+                                result = f;
+                                break;
+                            case 1:
+                                result = i + " " + p;
+                                break;
+                        }
+                        break;
+
+                    case NameFormat.nfF_N_P:
+                        GKUtils.GetNameParts(fRec, out f, out i, out p);
+                        switch (colSubtype) {
+                            case 0:
+                                result = f;
+                                break;
+                            case 1:
+                                result = i;
+                                break;
+                            case 2:
+                                result = p;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             PersonColumnType pct = (PersonColumnType)colType;
@@ -305,49 +352,8 @@ namespace GKCore.Lists
                     break;
 
                 case PersonColumnType.pctName:
-                    {
-                        if (colSubtype == -1) {
-                            result = GKUtils.GetNameString(fRec, true, false);
-                        } else {
-                            NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-                            string f, i, p;
-
-                            switch (defNameFormat) {
-                                case NameFormat.nfFNP:
-                                    result = GKUtils.GetNameString(fRec, true, false);
-                                    break;
-
-                                case NameFormat.nfF_NP:
-                                    GKUtils.GetNameParts(fRec, out f, out i, out p);
-                                    switch (colSubtype) {
-                                        case 0:
-                                            result = f;
-                                            break;
-                                        case 1:
-                                            result = i + " " + p;
-                                            break;
-                                    }
-                                    break;
-
-                                case NameFormat.nfF_N_P:
-                                    GKUtils.GetNameParts(fRec, out f, out i, out p);
-                                    switch (colSubtype) {
-                                        case 0:
-                                            result = f;
-                                            break;
-                                        case 1:
-                                            result = i;
-                                            break;
-                                        case 2:
-                                            result = p;
-                                            break;
-                                    }
-                                    break;
-                            }
-                        }
-                        
-                        break;
-                    }
+                    result = GetNameValueEx(colSubtype);
+                    break;
 
                 case PersonColumnType.pctNick:
                     result = GKUtils.GetNickString(fRec);
@@ -441,6 +447,7 @@ namespace GKCore.Lists
                     result = buf_title;
                     break;
             }
+
             return result;
         }
 

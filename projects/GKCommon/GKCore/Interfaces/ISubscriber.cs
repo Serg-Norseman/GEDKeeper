@@ -22,6 +22,9 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
+    /// <summary>
+    /// Interface for a widgets with support of notifications about records changes.
+    /// </summary>
     public interface ISubscriber
     {
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);

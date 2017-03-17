@@ -23,7 +23,7 @@ using GKCommon.GEDCOM;
 namespace GKCore.Types
 {
     /// <summary>
-    /// Description of NameEntry.
+    /// Entry of auto-updated book of names.
     /// </summary>
     public class NameEntry
     {

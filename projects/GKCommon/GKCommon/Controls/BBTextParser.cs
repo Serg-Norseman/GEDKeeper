@@ -193,14 +193,13 @@ namespace GKCommon.Controls
                     string temp = tok.Value;
                     tok = strTok.Next();
 
-                    bool closeTag;
-                    // closed tag
+                    bool closedTag;
                     if (tok.Kind == TokenKind.Symbol && tok.Value == "/") {
-                        closeTag = true;
+                        closedTag = true;
                         temp += tok.Value;
                         tok = strTok.Next();
                     } else {
-                        closeTag = false;
+                        closedTag = false;
                     }
 
                     if (tok.Kind != TokenKind.Word) {
@@ -212,24 +211,25 @@ namespace GKCommon.Controls
 
                         if (tag == "color") {
                             // [color="{red|#ff0000}"][/color]
-                            Color color;
-                            color = fTextColor;
-                            if (!closeTag) {
+                            Color color = fTextColor;
+                            if (!closedTag) {
                                 tok = strTok.Next();
                                 if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
                                     tok = strTok.Next();
                                     if (tok.Kind == TokenKind.Word) {
                                         color = Color.FromName(tok.Value);
+                                        SetChunkColor(tok.Line, ref lastChunk, color);
                                     }
                                 }
                             } else {
+                                // TODO: colorStack
                                 color = fTextColor;
+                                SetChunkColor(tok.Line, ref lastChunk, color);
                             }
-                            SetChunkColor(tok.Line, ref lastChunk, color);
                         }
                         else if (tag == "size") {
-                            // [size={+/-x}]
-                            if (!closeTag) {
+                            // [size={+/-x}][/size]
+                            if (!closedTag) {
                                 tok = strTok.Next();
                                 if (tok.Kind == TokenKind.Symbol && tok.Value == "=") {
                                     tok = strTok.Next();
@@ -259,19 +259,19 @@ namespace GKCommon.Controls
                         }
                         else if (tag == "b") {
                             // [b][/b]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Bold, !closeTag);
+                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Bold, !closedTag);
                         }
                         else if (tag == "i") {
                             // [i][/i]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Italic, !closeTag);
+                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Italic, !closedTag);
                         }
                         else if (tag == "s") {
                             // [s][/s]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Strikeout, !closeTag);
+                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Strikeout, !closedTag);
                         }
                         else if (tag == "u") {
                             // [u][/u]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Underline, !closeTag);
+                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Underline, !closedTag);
                         }
                         else if (tag == "url") {
                             // bad impementation
@@ -289,13 +289,12 @@ namespace GKCommon.Controls
                                 //
                             }
 
-                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Underline, !closeTag);
-                            Color color = (closeTag) ? fTextColor : fLinkColor;
+                            SetChunkFontStyle(tok.Line, ref lastChunk, FontStyle.Underline, !closedTag);
+                            Color color = (closedTag) ? fTextColor : fLinkColor;
                             SetChunkColor(tok.Line, ref lastChunk, color);
-                            if (!closeTag) {
+                            if (!closedTag) {
                                 lastChunk.URL = url;
                             }
-                            //skipTag = true;
                         }
                         else {
                             // not tag

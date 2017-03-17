@@ -45,7 +45,7 @@ namespace GKCommon
     }
 
     /// <summary>
-    /// 
+    /// General container for a list of strings with some additional features.
     /// </summary>
     public sealed class StringList : BaseObject
     {

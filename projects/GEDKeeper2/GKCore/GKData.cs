@@ -23,16 +23,8 @@ using GKCore.Types;
 
 namespace GKCore
 {
-    public struct PluginInfo
-    {
-        public string Title;
-        public string Description;
-        public string Copyright;
-        public string Version;
-    }
-
     /// <summary>
-    /// 
+    /// Global container for various constants.
     /// </summary>
     public static class GKData
     {
@@ -187,6 +179,7 @@ namespace GKCore
         {
             GreatPrefix = LSID.LSID_RK_GreatPrefix;
 
+            // TODO: need to find a way of localization
             NumKinship = new string[]
             {
                 "-",
@@ -195,6 +188,7 @@ namespace GKCore
                 ""
             };
 
+            // TODO: need to find a way of localization
             Numerals = new string[]
             {
                 "-",
@@ -284,8 +278,9 @@ namespace GKCore
                 LSID.LSID_RK_Unk
             };
 
-
-            SpecialUserRefs = new string[] {
+            // TODO: need to find a way of localization
+            SpecialUserRefs = new string[]
+            {
                 "",
                 "РИ:Георгиевский кавалер",
                 "СССР:ВОВ:Участник боевых действий",
@@ -386,14 +381,16 @@ namespace GKCore
             };
 
 
-            GKStoreTypes = new StoreTypeRec[] {
+            GKStoreTypes = new StoreTypeRec[]
+            {
                 new StoreTypeRec(LSID.LSID_STRef, ""),
                 new StoreTypeRec(LSID.LSID_STStg, "stg:"),
                 new StoreTypeRec(LSID.LSID_STArc, "arc:")
             };
 
 
-            FamilyEvents = new FamilyEventStruct[] {
+            FamilyEvents = new FamilyEventStruct[]
+            {
                 new FamilyEventStruct(LSID.LSID_Event, "EVEN"),
                 new FamilyEventStruct(LSID.LSID_FEvt_1, "ENGA"),
                 new FamilyEventStruct(LSID.LSID_FEvt_2, "MARR"),
@@ -482,7 +479,8 @@ namespace GKCore
             PersonEvents = array6;
 
 
-            MarriageStatus = new MarStatusStruct[] {
+            MarriageStatus = new MarStatusStruct[]
+            {
                 new MarStatusStruct(LSID.LSID_Unknown, ""),
                 new MarStatusStruct(LSID.LSID_MarrRegistered, "MARRIED"),
                 new MarStatusStruct(LSID.LSID_MarrNotRegistered, "MARRNOTREG"),
@@ -490,7 +488,8 @@ namespace GKCore
             };
 
 
-            SexData = new SexStruct[] {
+            SexData = new SexStruct[]
+            {
                 new SexStruct(LSID.LSID_SexN, "N"),
                 new SexStruct(LSID.LSID_SexM, "M"),
                 new SexStruct(LSID.LSID_SexF, "F"),
@@ -565,11 +564,13 @@ namespace GKCore
             StatsTitles[35] = new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth);
             StatsTitles[36] = new StatsTitleStruct(LSID.LSID_Demography, LSID.LSID_Demography);
 
-            CheckSolveNames = new LSID[4];
-            CheckSolveNames[0] = LSID.LSID_RM_Skip;
-            CheckSolveNames[1] = LSID.LSID_SetIsDead;
-            CheckSolveNames[2] = LSID.LSID_DefineSex;
-            CheckSolveNames[3] = LSID.LSID_DoDelete;
+            CheckSolveNames = new LSID[]
+            {
+                LSID.LSID_RM_Skip,
+                LSID.LSID_SetIsDead,
+                LSID.LSID_DefineSex,
+                LSID.LSID_DoDelete
+            };
 
             CondSigns = new string[]
             {

@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -275,7 +276,7 @@ namespace GKUI.Dialogs
 
             foreach (IPlugin plugin in MainWin.Instance.Plugins)
             {
-                PluginInfo pInfo = MainWin.GetPluginAttributes(plugin);
+                PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
                 
                 ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
                 item.SubItems.Add(pInfo.Version);

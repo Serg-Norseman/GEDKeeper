@@ -20,6 +20,9 @@
 
 namespace GKCore.Types
 {
+    /// <summary>
+    /// Typical operations available on the records in the lists.
+    /// </summary>
     public enum RecordAction
     {
         raAdd,

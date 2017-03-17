@@ -564,6 +564,19 @@ namespace GKCommon
             return result;
         }
 
+        public static double ParseFloat(string value, double defaultValue)
+        {
+            double result;
+            // Try parsing in the current culture
+            if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out result) &&
+                // Then in neutral language
+                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+            {
+                result = defaultValue;
+            }
+            return result;
+        }
+
         public static string AdjustNum(int val, int up)
         {
             StringBuilder res = new StringBuilder(up);

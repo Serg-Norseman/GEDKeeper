@@ -20,10 +20,24 @@
 
 namespace GKCore.Types
 {
+    /// <summary>
+    /// Types of store multimedia files.
+    /// </summary>
     public enum MediaStoreType
     {
+        /// <summary>
+        /// Direct absolute file reference.
+        /// </summary>
         mstReference,
+
+        /// <summary>
+        /// Storage's folder next to the database file.
+        /// </summary>
         mstStorage,
+
+        /// <summary>
+        /// The archive file (zip) next to the database file.
+        /// </summary>
         mstArchive
     }
 }

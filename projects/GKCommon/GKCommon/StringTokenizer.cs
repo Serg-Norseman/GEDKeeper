@@ -15,7 +15,10 @@ namespace GKCommon
     {
         Unknown,
         Word,
+        Ident,
         Number,
+        HexNumber,
+        BinNumber,
         QuotedString,
         WhiteSpace,
         Symbol,
@@ -55,6 +58,9 @@ namespace GKCommon
         private Token fCurrentToken;
         private bool fIgnoreWhiteSpace;
         private bool fRecognizeDecimals;
+        private bool fRecognizeHex;
+        private bool fRecognizeBin;
+        private bool fRecognizeIdents;
         private int fSaveCol;
         private int fSaveLine;
         private int fSavePos;
@@ -81,6 +87,24 @@ namespace GKCommon
         {
             get { return fRecognizeDecimals; }
             set { fRecognizeDecimals = value; }
+        }
+
+        public bool RecognizeHex
+        {
+            get { return fRecognizeHex; }
+            set { fRecognizeHex = value; }
+        }
+
+        public bool RecognizeBin
+        {
+            get { return fRecognizeBin; }
+            set { fRecognizeBin = value; }
+        }
+
+        public bool RecognizeIdents
+        {
+            get { return fRecognizeIdents; }
+            set { fRecognizeIdents = value; }
         }
 
         /// <summary>
@@ -180,25 +204,38 @@ namespace GKCommon
         {
             StartRead();
 
+            TokenKind kind = TokenKind.Number;
             bool hadDot = false;
+            bool hadHex = false;
+            bool hadBin = false;
 
             Consume(); // read first digit
-
             while (true)
             {
                 char ch = LookAhead(0);
-                if (char.IsDigit(ch))
+
+                if (char.IsDigit(ch)) {
                     Consume();
-                else if (ch == '.' && fRecognizeDecimals && !hadDot)
-                {
+                } else if (((ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f')) && fRecognizeHex && hadHex) {
+                    Consume();
+                } else if (ch == '.' && fRecognizeDecimals && !hadDot) {
                     hadDot = true;
                     Consume();
+                } else if ((ch == 'e' || ch == 'E' || ch == '+' || ch == '-') && fRecognizeDecimals && hadDot) {
+                    Consume();
+                } else if (ch == 'x' && fRecognizeHex && !hadHex) {
+                    hadHex = true;
+                    kind = TokenKind.HexNumber;
+                    Consume();
+                } else if (ch == 'b' && fRecognizeBin && !hadBin) {
+                    hadBin = true;
+                    kind = TokenKind.BinNumber;
+                    Consume();
                 }
-                else
-                    break;
+                else break;
             }
 
-            return CreateToken(TokenKind.Number);
+            return CreateToken(kind);
         }
 
         /// <summary>
@@ -208,18 +245,22 @@ namespace GKCommon
         {
             StartRead();
 
-            Consume(); // consume first character of the word
+            TokenKind kind = TokenKind.Word;
 
+            Consume(); // consume first character of the word
             while (true)
             {
                 char ch = LookAhead(0);
-                if (char.IsLetter(ch) || ch == '_')
+                if (char.IsLetter(ch) || ch == '_') {
                     Consume();
-                else
+                } else if (char.IsDigit(ch) && fRecognizeIdents) {
+                    kind = TokenKind.Ident;
+                    Consume();
+                } else
                     break;
             }
 
-            return CreateToken(TokenKind.Word);
+            return CreateToken(kind);
         }
 
         /// <summary>

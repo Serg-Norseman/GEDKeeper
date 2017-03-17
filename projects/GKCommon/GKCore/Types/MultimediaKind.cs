@@ -21,7 +21,8 @@
 namespace GKCore.Types
 {
     /// <summary>
-    /// Description of MultimediaKind.
+    /// The type of the media object when stored in a storage or archive
+    /// (specifies the structure of sub-folders).
     /// </summary>
     public enum MultimediaKind
     {

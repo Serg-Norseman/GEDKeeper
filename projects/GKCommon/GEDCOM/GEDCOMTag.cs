@@ -24,6 +24,12 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// The main class of the entire storage infrastructure in the GEDCOM format.
+    /// The ancestor of all structural classes. Contains the main logic
+    /// for reading and writing the values of tags in the terminology and
+    /// according to the rules of GEDCOM.
+    /// </summary>
     public class GEDCOMTag : GEDCOMObject
     {
         #region Protected fields
@@ -39,12 +45,18 @@ namespace GKCommon.GEDCOM
         #endregion
         
         #region Public properties
-        
+
+        /// <summary>
+        /// The number of nested sub-tags.
+        /// </summary>
         public int Count
         {
             get { return fTags.Count; }
         }
 
+        /// <summary>
+        /// Access to items of nested sub-tags.
+        /// </summary>
         public GEDCOMTag this[int index]
         {
             get { return fTags[index]; }
@@ -144,7 +156,7 @@ namespace GKCommon.GEDCOM
             return (props != null && props.EmptySkip);
         }
 
-        public void SetLevel(int value)
+        internal void SetLevel(int value)
         {
             fLevel = value;
         }
@@ -154,6 +166,13 @@ namespace GKCommon.GEDCOM
             fName = value;
         }
 
+        /// <summary>
+        /// Adding nested sub-tags.
+        /// </summary>
+        /// <param name="tagName">A name of sub-tag.</param>
+        /// <param name="tagValue">A string value of sub-tag.</param>
+        /// <param name="tagConstructor">The default constructor of sub-tag.</param>
+        /// <returns></returns>
         public virtual GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag tag = null;
@@ -177,6 +196,10 @@ namespace GKCommon.GEDCOM
             return tag;
         }
 
+        /// <summary>
+        /// Copying the sub-tags from the source to the current tag.
+        /// </summary>
+        /// <param name="source">A source tag.</param>
         public virtual void Assign(GEDCOMTag source/*, string[] skipList = null*/)
         {
             if (source == null) return;
@@ -200,7 +223,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        protected GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
+        private GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
         {
             GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { Owner, this, "", "" });
             result.Assign(sourceTag);

@@ -24,6 +24,9 @@ using System.Yaml.Serialization;
 
 namespace GKCommon
 {
+    /// <summary>
+    /// This class is a helper for serializing/deserializing data in yaml format.
+    /// </summary>
     public static class YamlHelper
     {
         private static readonly YamlSerializer serializer;
