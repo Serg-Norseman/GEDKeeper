@@ -29,10 +29,10 @@ namespace GKCore.Lists
     /// </summary>
     public enum SourceColumnType
     {
-        sctShortName,
-        sctAuthor,
-        sctTitle,
-        sctChangeDate
+        ctShortName,
+        ctAuthor,
+        ctTitle,
+        ctChangeDate
     }
 
     /// <summary>
@@ -42,15 +42,10 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
-            AddStatic(LSID.LSID_Author, DataType.dtString, 200, true);
-            AddStatic(LSID.LSID_Title, DataType.dtString, 200, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public SourceListColumns()
-        {
-            InitData(typeof(SourceColumnType));
+            AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
+            AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
+            AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -60,6 +55,10 @@ namespace GKCore.Lists
     public sealed class SourceListMan : ListManager
     {
         private GEDCOMSourceRecord fRec;
+
+        public SourceListMan(GEDCOMTree tree) : base(tree, new SourceListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -78,25 +77,25 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((SourceColumnType)colType)
+            {
+                case SourceColumnType.ctShortName:
                     result = fRec.FiledByEntry.Trim();
                     break;
-                case 1:
+
+                case SourceColumnType.ctAuthor:
                     result = fRec.Originator.Text.Trim();
                     break;
-                case 2:
+
+                case SourceColumnType.ctTitle:
                     result = fRec.Title.Text.Trim();
                     break;
-                case 3:
+
+                case SourceColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public SourceListMan(GEDCOMTree tree) : base(tree, new SourceListColumns())
-        {
         }
     }
 }

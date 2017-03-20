@@ -273,8 +273,8 @@ namespace GKCore.Export
                     fWriter.addParagraph(sps, fTextFont);
 
                     evList.Clear();
-                    int num3 = family.Children.Count;
-                    for (int j = 0; j < num3; j++)
+                    int childrenCount = family.Children.Count;
+                    for (int j = 0; j < childrenCount; j++)
                     {
                         irec = (GEDCOMIndividualRecord)family.Children[j].Value;
                         evList.Add(new PedigreeEvent(irec, irec.FindEvent("BIRT")));
@@ -293,8 +293,8 @@ namespace GKCore.Export
 
                 fWriter.beginList();
 
-                int num4 = person.IRec.Notes.Count;
-                for (int i = 0; i < num4; i++)
+                int notesCount = person.IRec.Notes.Count;
+                for (int i = 0; i < notesCount; i++)
                 {
                     GEDCOMNotes note = person.IRec.Notes[i];
                     fWriter.addListItem(" " + GKUtils.MergeStrings(note.Notes), fTextFont);

@@ -29,11 +29,11 @@ namespace GKCore.Lists
     /// </summary>
     public enum TaskColumnType
     {
-        tctGoal,
-        tctPriority,
-        tctStartDate,
-        tctStopDate,
-        tctChangeDate
+        ctGoal,
+        ctPriority,
+        ctStartDate,
+        ctStopDate,
+        ctChangeDate
     }
 
     /// <summary>
@@ -43,16 +43,11 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Goal, DataType.dtString, 300, true);
-            AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
-            AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public TaskListColumns()
-        {
-            InitData(typeof(TaskColumnType));
+            AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true);
+            AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
+            AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -62,6 +57,10 @@ namespace GKCore.Lists
     public sealed class TaskListMan : ListManager
     {
         private GEDCOMTaskRecord fRec;
+
+        public TaskListMan(GEDCOMTree tree) : base(tree, new TaskListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -80,28 +79,29 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((TaskColumnType)colType)
+            {
+                case TaskColumnType.ctGoal:
                     result = GKUtils.GetTaskGoalStr(fRec);
                     break;
-                case 1:
+
+                case TaskColumnType.ctPriority:
                     result = LangMan.LS(GKData.PriorityNames[(int)fRec.Priority]);
                     break;
-                case 2:
+
+                case TaskColumnType.ctStartDate:
                     result = GetDateValue(fRec.StartDate, isVisible);
                     break;
-                case 3:
+
+                case TaskColumnType.ctStopDate:
                     result = GetDateValue(fRec.StopDate, isVisible);
                     break;
-                case 4:
+
+                case TaskColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public TaskListMan(GEDCOMTree tree) : base(tree, new TaskListColumns())
-        {
         }
     }
 }

@@ -29,10 +29,10 @@ namespace GKCore.Lists
     /// </summary>
     public enum MultimediaColumnType
     {
-        mctTitle,
-        mctMediaType,
-        mctFileRef,
-        mctChangeDate
+        ctTitle,
+        ctMediaType,
+        ctFileRef,
+        ctChangeDate
     }
 
     /// <summary>
@@ -42,15 +42,10 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Title, DataType.dtString, 150, true);
-            AddStatic(LSID.LSID_Type, DataType.dtString, 85, true);
-            AddStatic(LSID.LSID_File, DataType.dtString, 300, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public MultimediaListColumns()
-        {
-            InitData(typeof(MultimediaColumnType));
+            AddColumn(LSID.LSID_Title, DataType.dtString, 150, true);
+            AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
+            AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -60,6 +55,10 @@ namespace GKCore.Lists
     public sealed class MultimediaListMan : ListManager
     {
         private GEDCOMMultimediaRecord fRec;
+
+        public MultimediaListMan(GEDCOMTree tree) : base(tree, new MultimediaListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -82,25 +81,24 @@ namespace GKCore.Lists
             GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((MultimediaColumnType)colType) {
+                case MultimediaColumnType.ctTitle:
                     result = fileRef.Title;
                     break;
-                case 1:
+
+                case MultimediaColumnType.ctMediaType:
                     result = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
                     break;
-                case 2:
+
+                case MultimediaColumnType.ctFileRef:
                     result = fileRef.StringValue;
                     break;
-                case 3:
+
+                case MultimediaColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public MultimediaListMan(GEDCOMTree tree) : base(tree, new MultimediaListColumns())
-        {
         }
     }
 }

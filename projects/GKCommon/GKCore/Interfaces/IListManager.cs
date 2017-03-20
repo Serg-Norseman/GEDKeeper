@@ -31,9 +31,9 @@ namespace GKCore.Interfaces
         IListFilter Filter { get; }
         IListColumns ListColumns { get; }
 
-        void AddCondition(Enum column, ConditionKind condition, string value);
+        void AddCondition(byte columnId, ConditionKind condition, string value);
         DataType GetColumnDataType(int index);
-        string GetColumnName(Enum colType);
+        string GetColumnName(byte columnId);
         void InitFilter();
         void WidthChanged(int colIndex, int colWidth);
     }

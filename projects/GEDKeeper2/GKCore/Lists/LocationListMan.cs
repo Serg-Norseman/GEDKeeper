@@ -30,10 +30,10 @@ namespace GKCore.Lists
     /// </summary>
     public enum LocationColumnType
     {
-        lctName,
-        lctLati,
-        lctLong,
-        lctChangeDate
+        ctName,
+        ctLati,
+        ctLong,
+        ctChangeDate
     }
 
     /// <summary>
@@ -46,15 +46,10 @@ namespace GKCore.Lists
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
 
-            AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
-            AddStatic(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            AddStatic(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public LocationListColumns()
-        {
-            InitData(typeof(LocationColumnType));
+            AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
+            AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -64,6 +59,10 @@ namespace GKCore.Lists
     public sealed class LocationListMan : ListManager
     {
         private GEDCOMLocationRecord fRec;
+
+        public LocationListMan(GEDCOMTree tree) : base(tree, new LocationListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -82,25 +81,25 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((LocationColumnType)colType)
+            {
+                case LocationColumnType.ctName:
                     result = fRec.LocationName;
                     break;
-                case 1:
+
+                case LocationColumnType.ctLati:
                     result = fRec.Map.Lati;
                     break;
-                case 2:
+
+                case LocationColumnType.ctLong:
                     result = fRec.Map.Long;
                     break;
-                case 3:
+
+                case LocationColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public LocationListMan(GEDCOMTree tree) : base(tree, new LocationListColumns())
-        {
         }
     }
 }

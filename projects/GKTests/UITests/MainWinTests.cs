@@ -61,8 +61,8 @@ namespace GKTests.UITests
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
             for (int i = 0; i < indiCols.Count; i++) {
-                ColumnProps colProps = indiCols[i];
-                colProps.ColActive = true;
+                var colProps = indiCols[i];
+                colProps.CurActive = true;
             }
         }
 
@@ -244,7 +244,7 @@ namespace GKTests.UITests
                 ClickToolStripButton("tbRecordEdit", fMainWin);
 
                 IListManager listMan = baseWin.GetRecordsListManByType(rt);
-                listMan.AddCondition(PersonColumnType.pctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
+                listMan.AddCondition((byte)PersonColumnType.ctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
 
                 ModalFormHandler = CommonFilterDlg_btnAccept_Handler;
                 ClickToolStripButton("tbFilter", fMainWin);

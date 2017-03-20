@@ -116,7 +116,8 @@ namespace GKCommon.Controls
 
         private void ArrangeText()
         {
-            try {
+            try
+            {
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
@@ -135,7 +136,8 @@ namespace GKCommon.Controls
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++) {
+                    for (int k = 0; k < chunksCount; k++)
+                    {
                         TextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -181,7 +183,8 @@ namespace GKCommon.Controls
 
         private void DoPaint(Graphics gfx)
         {
-            try {
+            try
+            {
                 fAcceptFontChange = false;
                 try
                 {
@@ -195,7 +198,8 @@ namespace GKCommon.Controls
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++) {
+                    for (int k = 0; k < chunksCount; k++)
+                    {
                         TextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -204,7 +208,10 @@ namespace GKCommon.Controls
                             xOffset = fBorderWidth - -AutoScrollPosition.X;
                             yOffset += lineHeight;
 
-                            lineHeight = fHeights[line];
+                            // this condition is dirty hack
+                            if (line >= 0 && line < fHeights.Count) {
+                                lineHeight = fHeights[line];
+                            }
                         }
 
                         int prevX = xOffset;
@@ -325,11 +332,13 @@ namespace GKCommon.Controls
             fCurrentLink = null;
 
             int num = fChunks.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < num; i++)
+            {
                 TextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
-                if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset)) {
+                if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset))
+                {
                     fCurrentLink = chunk;
                     break;
                 }

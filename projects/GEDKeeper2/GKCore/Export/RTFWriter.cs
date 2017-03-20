@@ -185,5 +185,10 @@ namespace GKCore.Export
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
             fmt.LocalHyperlink = link;
         }
+
+        public override void addNote(string text, object font)
+        {
+            
+        }
     }
 }

@@ -66,8 +66,8 @@ namespace GKCore.Interfaces
     public interface IListColumns
     {
         void CopyTo(IListColumns columns);
-        Type GetColumnsEnum();
         bool MoveColumn(int idx, bool up);
         void ResetDefaults();
+        void UpdateOrders();
     }
 }

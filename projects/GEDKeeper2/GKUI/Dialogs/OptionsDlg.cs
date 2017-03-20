@@ -79,11 +79,9 @@ namespace GKUI.Dialogs
 
                 int num = fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
-                    ColumnProps colProps = fTempColumns[i];
+                    ListColumn column = fTempColumns.OrderedColumns[i];
 
-                    string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.ColType].ColName);
-
-                    lstPersonColumns.Items.Add(colName, colProps.ColActive);
+                    lstPersonColumns.Items.Add(LangMan.LS(column.ColName), column.CurActive);
                 }
             }
             finally
@@ -236,7 +234,8 @@ namespace GKUI.Dialogs
             radMaiden.Enabled = isExtend;
             radMarried.Enabled = isExtend;
 
-            switch (wsFmt) {
+            switch (wsFmt)
+            {
                 case WomanSurnameFormat.wsfMaiden_Married:
                     radMaiden_Married.Checked = true;
                     break;
@@ -461,7 +460,7 @@ namespace GKUI.Dialogs
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             bool cs = (e.NewValue == CheckState.Checked);
-            fTempColumns[e.Index].ColActive = cs;
+            fTempColumns.OrderedColumns[e.Index].CurActive = cs;
         }
 
         private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
@@ -471,7 +470,8 @@ namespace GKUI.Dialogs
 
         public void SetPage(OptionsPage page)
         {
-            switch (page) {
+            switch (page)
+            {
                 case OptionsPage.opCommon:
                     PageControl1.SelectedTab = pageCommon;
                     break;

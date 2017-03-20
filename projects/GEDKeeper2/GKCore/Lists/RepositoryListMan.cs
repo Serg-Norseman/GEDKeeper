@@ -29,8 +29,8 @@ namespace GKCore.Lists
     /// </summary>
     public enum RepositoryColumnType
     {
-        rctName,
-        rctChangeDate
+        ctName,
+        ctChangeDate
     }
 
     /// <summary>
@@ -40,13 +40,8 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Repository, DataType.dtString, 400, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public RepositoryListColumns()
-        {
-            InitData(typeof(RepositoryColumnType));
+            AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -56,6 +51,10 @@ namespace GKCore.Lists
     public sealed class RepositoryListMan : ListManager
     {
         private GEDCOMRepositoryRecord fRec;
+
+        public RepositoryListMan(GEDCOMTree tree) : base(tree, new RepositoryListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -74,19 +73,17 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((RepositoryColumnType)colType)
+            {
+                case RepositoryColumnType.ctName:
                     result = fRec.RepositoryName;
                     break;
-                case 1:
+
+                case RepositoryColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public RepositoryListMan(GEDCOMTree tree) : base(tree, new RepositoryListColumns())
-        {
         }
     }
 }

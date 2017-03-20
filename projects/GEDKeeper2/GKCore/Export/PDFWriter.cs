@@ -184,5 +184,10 @@ namespace GKCore.Export
             
             p.Add(chunk);
         }
+
+        public override void addNote(string text, object font)
+        {
+            
+        }
     }
 }

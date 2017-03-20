@@ -38,7 +38,7 @@ namespace GKCore.Lists
         {
             public byte ColType;
             public byte ColSubtype;
-            
+
             public MapColumnRec(byte colType, byte colSubtype)
             {
                 ColType = colType;
@@ -181,7 +181,7 @@ namespace GKCore.Lists
                 MapColumnRec colrec = fColumnsMap[i];
 
                 // aColIndex - from 1
-                ColumnStatic cs = fListColumns.ColumnStatics[colrec.ColType];
+                ListColumn cs = fListColumns[colrec.ColType];
                 object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
                 string res = ConvertColumnValue(val, cs);
 
@@ -196,38 +196,36 @@ namespace GKCore.Lists
             ColumnsMap_Clear();
             AddListColumn(listView, "№", 50, false, 0, 0);
 
-            int num = fListColumns.ColumnStatics.Count;
+            int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
-                ColumnStatic cs = fListColumns.ColumnStatics[i];
+                ListColumn cs = fListColumns.OrderedColumns[i];
 
-                AddListColumn(listView, LangMan.LS(cs.ColName), cs.Width, false, (byte)i, 0);
+                AddListColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, (byte)i, 0);
             }
         }
 
-        public string GetColumnName(Enum colType)
+        public string GetColumnName(byte columnId)
         {
-            int col = (colType as IConvertible).ToByte(null);
-
-            if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
-                return LangMan.LS(fListColumns.ColumnStatics[col].ColName);
+            if (columnId >= 0 && columnId < fListColumns.Count) {
+                return LangMan.LS(fListColumns[columnId].ColName);
             }
 
             return "<?>";
         }
 
-        public DataType GetColumnDataType(int index)
+        public DataType GetColumnDataType(int columnId)
         {
-            int col = index/* - 1*/;
+            int col = columnId/* - 1*/;
 
-            if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
-                return fListColumns.ColumnStatics[col].DataType;
+            if (col >= 0 && col < fListColumns.Count) {
+                return fListColumns[col].DataType;
             }
 
             return DataType.dtString;
         }
 
         // used only in UpdateItem
-        private static string ConvertColumnValue(object val, ColumnStatic cs)
+        private static string ConvertColumnValue(object val, ListColumn cs)
         {
             if (val == null) return string.Empty;
 
@@ -275,12 +273,11 @@ namespace GKCore.Lists
             return val;
         }
 
-        public void AddCondition(Enum column, ConditionKind condition, string value)
+        public void AddCondition(byte columnId, ConditionKind condition, string value)
         {
-            int col = (column as IConvertible).ToByte(null);
-            object condValue = ConvertColumnStr(value, GetColumnDataType(col));
+            object condValue = ConvertColumnStr(value, GetColumnDataType(columnId));
 
-            FilterCondition fltCond = new FilterCondition(col, condition, condValue);
+            FilterCondition fltCond = new FilterCondition(columnId, condition, condValue);
             fFilter.Conditions.Add(fltCond);
         }
 
@@ -362,29 +359,30 @@ namespace GKCore.Lists
             return res;
         }
 
-        private ColumnProps FindColumnProps(int colType)
+        // FIXME
+        private ListColumn FindColumnProps(int colType)
         {
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
-                ColumnProps props = fListColumns[i];
-                
-                if (props.ColType == colType) {
+                ListColumn props = fListColumns[i];
+
+                if (props.Id == colType) {
                     return props;
                 }
             }
-            
+
             return null;
         }
-        
-        public void WidthChanged(int colIndex, int colWidth)
+
+        public void WidthChanged(int colIndex, int newWidth)
         {
             if (colIndex <= 0) return;
 
             MapColumnRec colrec = fColumnsMap[colIndex];
-            ColumnProps props = FindColumnProps(colrec.ColType);
+            ListColumn props = FindColumnProps(colrec.ColType);
 
             if (props != null) {
-                props.ColWidth = colWidth;
+                props.CurWidth = newWidth;
             }
         }
     }

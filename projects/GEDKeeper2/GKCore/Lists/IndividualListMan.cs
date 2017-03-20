@@ -32,31 +32,31 @@ namespace GKCore.Lists
     /// </summary>
     public enum PersonColumnType
     {
-        pctPatriarch,
-        pctName,
-        pctNick,
-        pctSex,
-        pctBirthDate,
-        pctDeathDate,
-        pctBirthPlace,
-        pctDeathPlace,
-        pctResidence,
-        pctAge,
-        pctLifeExpectancy,
-        pctDaysForBirth,
-        pctGroups,
-        pctReligion,
-        pctNationality,
-        pctEducation,
-        pctOccupation,
-        pctCaste,
-        pctMili,
-        pctMiliInd,
-        pctMiliDis,
-        pctMiliRank,
-        pctChangeDate,
-        pctBookmark,
-        pctTitle
+        ctPatriarch,
+        ctName,
+        ctNick,
+        ctSex,
+        ctBirthDate,
+        ctDeathDate,
+        ctBirthPlace,
+        ctDeathPlace,
+        ctResidence,
+        ctAge,
+        ctLifeExpectancy,
+        ctDaysForBirth,
+        ctGroups,
+        ctReligion,
+        ctNationality,
+        ctEducation,
+        ctOccupation,
+        ctCaste,
+        ctMili,
+        ctMiliInd,
+        ctMiliDis,
+        ctMiliRank,
+        ctChangeDate,
+        ctBookmark,
+        ctTitle
     }
 
     /// <summary>
@@ -66,36 +66,31 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Patriarch, DataType.dtString, 25, true);
-            AddStatic(LSID.LSID_FullName, DataType.dtString, 300, true);
-            AddStatic(LSID.LSID_Nickname, DataType.dtString, 75, false);
-            AddStatic(LSID.LSID_Sex, DataType.dtString, 45, true);
-            AddStatic(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
-            AddStatic(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
-            AddStatic(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
-            AddStatic(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
-            AddStatic(LSID.LSID_Residence, DataType.dtString, 100, true);
-            AddStatic(LSID.LSID_Age, DataType.dtInteger, 100, false);
-            AddStatic(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
-            AddStatic(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
-            AddStatic(LSID.LSID_RPGroups, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Religion, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Nationality, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Education, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Occupation, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Caste, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Mili, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_MiliInd, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_MiliDis, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_MiliRank, DataType.dtString, 200, false);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-            AddStatic(LSID.LSID_Bookmark, DataType.dtString, 25, true);
-            AddStatic(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
-        }
-
-        public IndividualListColumns()
-        {
-            InitData(typeof(PersonColumnType));
+            AddColumn(LSID.LSID_Patriarch, DataType.dtString, 25, true);
+            AddColumn(LSID.LSID_FullName, DataType.dtString, 300, true);
+            AddColumn(LSID.LSID_Nickname, DataType.dtString, 75, false);
+            AddColumn(LSID.LSID_Sex, DataType.dtString, 45, true);
+            AddColumn(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
+            AddColumn(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
+            AddColumn(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
+            AddColumn(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
+            AddColumn(LSID.LSID_Residence, DataType.dtString, 100, true);
+            AddColumn(LSID.LSID_Age, DataType.dtInteger, 100, false);
+            AddColumn(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
+            AddColumn(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
+            AddColumn(LSID.LSID_RPGroups, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Religion, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Nationality, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Education, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Occupation, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Caste, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Mili, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_MiliInd, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_MiliDis, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_MiliRank, DataType.dtString, 200, false);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            AddColumn(LSID.LSID_Bookmark, DataType.dtString, 25, true);
+            AddColumn(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
         }
     }
 
@@ -149,6 +144,10 @@ namespace GKCore.Lists
         private GEDCOMGroupRecord filter_grp;
         private UDN filter_abd;
         private GEDCOMSourceRecord filter_source;
+
+        public IndividualListMan(GEDCOMTree tree) : base(tree, new IndividualListColumns())
+        {
+        }
 
         protected override void CreateFilter()
         {
@@ -220,7 +219,8 @@ namespace GKCore.Lists
             {
                 bool isLive = (buf_dd == null);
 
-                switch (iFilter.FilterLifeMode) {
+                switch (iFilter.FilterLifeMode)
+                {
                     case FilterLifeMode.lmOnlyAlive:
                         if (!isLive) return false;
                         break;
@@ -239,7 +239,8 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.FilterGroupMode) {
+                switch (iFilter.FilterGroupMode)
+                {
                     case FilterGroupMode.All:
                         break;
 
@@ -256,7 +257,8 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.SourceMode) {
+                switch (iFilter.SourceMode)
+                {
                     case FilterGroupMode.All:
                         break;
 
@@ -342,108 +344,107 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            PersonColumnType pct = (PersonColumnType)colType;
-
             object result = null;
 
-            switch (pct) {
-                case PersonColumnType.pctPatriarch:
+            switch ((PersonColumnType)colType)
+            {
+                case PersonColumnType.ctPatriarch:
                     result = ((fRec.Patriarch) ? "*" : " ");
                     break;
 
-                case PersonColumnType.pctName:
+                case PersonColumnType.ctName:
                     result = GetNameValueEx(colSubtype);
                     break;
 
-                case PersonColumnType.pctNick:
+                case PersonColumnType.ctNick:
                     result = GKUtils.GetNickString(fRec);
                     break;
 
-                case PersonColumnType.pctSex:
+                case PersonColumnType.ctSex:
                     result = GKUtils.SexChar(fRec.Sex);
                     break;
 
-                case PersonColumnType.pctBirthDate:
+                case PersonColumnType.ctBirthDate:
                     result = GetDateValue(buf_bd, isVisible);
                     break;
 
-                case PersonColumnType.pctBirthPlace:
+                case PersonColumnType.ctBirthPlace:
                     result = GKUtils.GetPlaceStr(buf_bd, false);
                     break;
 
-                case PersonColumnType.pctDeathDate:
+                case PersonColumnType.ctDeathDate:
                     result = GetDateValue(buf_dd, isVisible);
                     break;
 
-                case PersonColumnType.pctDeathPlace:
+                case PersonColumnType.ctDeathPlace:
                     result = GKUtils.GetPlaceStr(buf_dd, false);
                     break;
 
-                case PersonColumnType.pctResidence:
+                case PersonColumnType.ctResidence:
                     result = buf_residence;
                     break;
 
-                case PersonColumnType.pctAge:
+                case PersonColumnType.ctAge:
                     result = (isVisible) ? (object)GKUtils.GetAgeStr(fRec, -1) : GKUtils.GetAge(fRec, -1);
                     break;
 
-                case PersonColumnType.pctLifeExpectancy:
+                case PersonColumnType.ctLifeExpectancy:
                     result = (isVisible) ? (object)GKUtils.GetLifeExpectancyStr(fRec) : GKUtils.GetLifeExpectancy(fRec);
                     break;
 
-                case PersonColumnType.pctDaysForBirth:
+                case PersonColumnType.ctDaysForBirth:
                     result = GKUtils.GetDaysForBirth(fRec);
                     break;
 
-                case PersonColumnType.pctGroups:
+                case PersonColumnType.ctGroups:
                     result = GetGroups();
                     break;
 
-                case PersonColumnType.pctReligion:
+                case PersonColumnType.ctReligion:
                     result = buf_religion;
                     break;
 
-                case PersonColumnType.pctNationality:
+                case PersonColumnType.ctNationality:
                     result = buf_nationality;
                     break;
 
-                case PersonColumnType.pctEducation:
+                case PersonColumnType.ctEducation:
                     result = buf_education;
                     break;
 
-                case PersonColumnType.pctOccupation:
+                case PersonColumnType.ctOccupation:
                     result = buf_occupation;
                     break;
 
-                case PersonColumnType.pctCaste:
+                case PersonColumnType.ctCaste:
                     result = buf_caste;
                     break;
 
-                case PersonColumnType.pctMili:
+                case PersonColumnType.ctMili:
                     result = buf_mili;
                     break;
 
-                case PersonColumnType.pctMiliInd:
+                case PersonColumnType.ctMiliInd:
                     result = buf_mili_ind;
                     break;
 
-                case PersonColumnType.pctMiliDis:
+                case PersonColumnType.ctMiliDis:
                     result = buf_mili_dis;
                     break;
 
-                case PersonColumnType.pctMiliRank:
+                case PersonColumnType.ctMiliRank:
                     result = buf_mili_rank;
                     break;
 
-                case PersonColumnType.pctChangeDate:
+                case PersonColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
 
-                case PersonColumnType.pctBookmark:
+                case PersonColumnType.ctBookmark:
                     result = ((fRec.Bookmark) ? "*" : " ");
                     break;
 
-                case PersonColumnType.pctTitle:
+                case PersonColumnType.ctTitle:
                     result = buf_title;
                     break;
             }
@@ -595,14 +596,15 @@ namespace GKCore.Lists
             int num = columns.Count;
             for (int i = 0; i < num; i++)
             {
-                ColumnProps columnProps = columns[i];
-                if (!columnProps.ColActive) continue;
+                ListColumn columnProps = columns.OrderedColumns[i];
+                if (!columnProps.CurActive) continue;
 
-                byte bColType = columnProps.ColType;
-                if (bColType == (byte)PersonColumnType.pctName) {
+                byte bColType = columnProps.Id;
+                if (bColType == (byte)PersonColumnType.ctName) {
                     const bool asz = false;
 
-                    switch (defNameFormat) {
+                    switch (defNameFormat)
+                    {
                         case NameFormat.nfF_N_P:
                             AddListColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
                             AddListColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
@@ -615,18 +617,13 @@ namespace GKCore.Lists
                             break;
 
                         case NameFormat.nfFNP:
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.ColWidth, asz, bColType, 0);
+                            AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.CurWidth, asz, bColType, 0);
                             break;
                     }
                 } else {
-                    string colName = LangMan.LS(columns.ColumnStatics[bColType].ColName);
-                    AddListColumn(listView, colName, columnProps.ColWidth, false, bColType, 0);
+                    AddListColumn(listView, LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
                 }
             }
-        }
-
-        public IndividualListMan(GEDCOMTree tree) : base(tree, new IndividualListColumns())
-        {
         }
     }
 }

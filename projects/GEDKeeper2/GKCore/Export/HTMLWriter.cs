@@ -156,5 +156,10 @@ namespace GKCore.Export
             fStream.WriteLine("<a href=\"#"+link+"\">"+text+"</a>");
             if (sup) fStream.WriteLine("</sup>");
         }
+
+        public override void addNote(string text, object font)
+        {
+            
+        }
     }
 }

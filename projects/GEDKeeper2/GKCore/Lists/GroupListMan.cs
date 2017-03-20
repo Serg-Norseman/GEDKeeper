@@ -29,8 +29,8 @@ namespace GKCore.Lists
     /// </summary>
     public enum GroupColumnType
     {
-        gctName,
-        gctChangeDate
+        ctName,
+        ctChangeDate
     }
 
     /// <summary>
@@ -40,13 +40,8 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Group, DataType.dtString, 400, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public GroupListColumns()
-        {
-            InitData(typeof(GroupColumnType));
+            AddColumn(LSID.LSID_Group, DataType.dtString, 400, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -56,6 +51,10 @@ namespace GKCore.Lists
     public sealed class GroupListMan : ListManager
     {
         private GEDCOMGroupRecord fRec;
+
+        public GroupListMan(GEDCOMTree tree) : base(tree, new GroupListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -74,19 +73,17 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((GroupColumnType)colType)
+            {
+                case GroupColumnType.ctName:
                     result = fRec.GroupName;
                     break;
-                case 1:
+
+                case GroupColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public GroupListMan(GEDCOMTree tree) : base(tree, new GroupListColumns())
-        {
         }
     }
 }

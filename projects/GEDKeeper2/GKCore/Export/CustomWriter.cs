@@ -77,5 +77,7 @@ namespace GKCore.Export
         public abstract void addParagraphChunkAnchor(string text, object font, string anchor);
         public abstract void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup);
         public abstract void endParagraph();
+
+        public abstract void addNote(string text, object font);
     }
 }

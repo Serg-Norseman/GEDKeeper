@@ -24,6 +24,7 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 
 namespace GKUI.Dialogs
 {
@@ -68,15 +69,14 @@ namespace GKUI.Dialogs
             fBase = baseWin;
             fListMan = listMan;
 
-            Type colEnum = fListMan.ListColumns.GetColumnsEnum();
-            Array enums = Enum.GetValues(colEnum);
-            fFields = new string[enums.Length + 1];
+            ListColumns listColumns = (ListColumns)fListMan.ListColumns;
+            fFields = new string[listColumns.Count + 1]; // +empty item
             fFields[0] = "";
-            int idx = 1;
-            foreach (Enum e in enums)
+
+            for (int idx = 0; idx < listColumns.Count; idx++)
             {
-                fFields[idx] = fListMan.GetColumnName(e);
-                idx++;
+                var cs = listColumns[idx];
+                fFields[idx + 1] = fListMan.GetColumnName(cs.Id);
             }
 
             SetLang();
@@ -111,22 +111,19 @@ namespace GKUI.Dialogs
             return res;
         }
 
-        private Enum GetFieldColumn(string fieldName)
+        private int GetFieldColumnId(string fieldName)
         {
             int idx = -1;
             for (int i = 0; i < fFields.Length; i++)
             {
                 if (fFields[i] == fieldName)
                 {
-                    idx = i;
+                    idx = i - 1; // exclude empty item
                     break;
                 }
             }
 
-            idx = idx - 1; // exclude empty item
-            Type colEnum = fListMan.ListColumns.GetColumnsEnum();
-            Array enums = Enum.GetValues(colEnum);
-            return (Enum)enums.GetValue(idx);
+            return idx;
         }
 
         private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
@@ -177,10 +174,9 @@ namespace GKUI.Dialogs
 
             string fld = (string)row.Cells[0].Value;
             if (!string.IsNullOrEmpty(fld)) {
-                Enum column = GetFieldColumn(fld);
-                int col = ((IConvertible) column).ToByte(null);
-                DataType dataType = fListMan.GetColumnDataType(col);
-                
+                int colId = GetFieldColumnId(fld);
+                DataType dataType = fListMan.GetColumnDataType(colId);
+
                 return (dataType == DataType.dtGEDCOMDate);
             }
 
@@ -231,7 +227,8 @@ namespace GKUI.Dialogs
             dataGridView1.Rows.Clear();
 
             int num = fListMan.Filter.Conditions.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < num; i++)
+            {
                 FilterCondition fcond = fListMan.Filter.Conditions[i];
 
                 int r = dataGridView1.Rows.Add();
@@ -280,14 +277,17 @@ namespace GKUI.Dialogs
             {
                 DataGridViewRow row = dataGridView1.Rows[r];
 
+                // ".Value" can be null, so that we should to use direct cast
                 string fld = (string)row.Cells[0].Value;
                 string cnd = (string)row.Cells[1].Value;
                 string val = (string)row.Cells[2].Value;
 
                 if (!string.IsNullOrEmpty(fld)) {
-                    ConditionKind cond = GetCondByName(cnd);
-                    Enum column = GetFieldColumn(fld);
-                    fListMan.AddCondition(column, cond, val);
+                    int colId = GetFieldColumnId(fld);
+                    if (colId != -1) {
+                        ConditionKind cond = GetCondByName(cnd);
+                        fListMan.AddCondition((byte)colId, cond, val);
+                    }
                 }
             }
 

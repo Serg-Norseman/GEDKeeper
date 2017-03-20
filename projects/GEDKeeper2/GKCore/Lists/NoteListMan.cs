@@ -29,8 +29,8 @@ namespace GKCore.Lists
     /// </summary>
     public enum NoteColumnType
     {
-        nctText,
-        nctChangeDate
+        ctText,
+        ctChangeDate
     }
 
     /// <summary>
@@ -40,13 +40,8 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Note, DataType.dtString, 400, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public NoteListColumns()
-        {
-            InitData(typeof(NoteColumnType));
+            AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -56,6 +51,10 @@ namespace GKCore.Lists
     public sealed class NoteListMan : ListManager
     {
         private GEDCOMNoteRecord fRec;
+
+        public NoteListMan(GEDCOMTree tree) : base(tree, new NoteListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -74,22 +73,19 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((NoteColumnType)colType)
+            {
+                case NoteColumnType.ctText:
                     string noteText = GKUtils.MergeStrings(fRec.Note);
                     //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
                     result = noteText;
                     break;
 
-                case 1:
+                case NoteColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public NoteListMan(GEDCOMTree tree) : base(tree, new NoteListColumns())
-        {
         }
     }
 }

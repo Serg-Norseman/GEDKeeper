@@ -29,9 +29,9 @@ namespace GKCore.Lists
     /// </summary>
     public enum FamilyColumnType
     {
-        fctFamilyStr,
-        fctMarriageDate,
-        fctChangeDate
+        ctFamilyStr,
+        ctMarriageDate,
+        ctChangeDate
     }
 
     /// <summary>
@@ -41,14 +41,9 @@ namespace GKCore.Lists
     {
         protected override void InitColumnStatics()
         {
-            AddStatic(LSID.LSID_Spouses, DataType.dtString, 300, true);
-            AddStatic(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
-            AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-
-        public FamilyListColumns()
-        {
-            InitData(typeof(FamilyColumnType));
+            AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true);
+            AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
         }
     }
 
@@ -58,6 +53,10 @@ namespace GKCore.Lists
     public sealed class FamilyListMan : ListManager
     {
         private GEDCOMFamilyRecord fRec;
+
+        public FamilyListMan(GEDCOMTree tree) : base(tree, new FamilyListColumns())
+        {
+        }
 
         public override bool CheckFilter(ShieldState shieldState)
         {
@@ -77,22 +76,21 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch (colType) {
-                case 0:
+            switch ((FamilyColumnType)colType)
+            {
+                case FamilyColumnType.ctFamilyStr:
                     result = GKUtils.GetFamilyString(fRec);
                     break;
-                case 1:
+
+                case FamilyColumnType.ctMarriageDate:
                     result = GetDateValue(GKUtils.GetMarriageDate(fRec), isVisible);
                     break;
-                case 2:
+
+                case FamilyColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
-        }
-
-        public FamilyListMan(GEDCOMTree tree) : base(tree, new FamilyListColumns())
-        {
         }
     }
 }

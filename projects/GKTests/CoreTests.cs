@@ -837,25 +837,11 @@ namespace GKTests.GKCore
         [Test]
         public void Lists_Tests()
         {
-            ColumnProps colProps = new ColumnProps();
-            Assert.IsNotNull(colProps);
-
-            colProps = new ColumnProps(0, false, 10);
-            Assert.IsNotNull(colProps);
-            Assert.AreEqual(0, colProps.ColType);
-            Assert.AreEqual(false, colProps.ColActive);
-            Assert.AreEqual(10, colProps.ColWidth);
-
-            ColumnProps colProps2 = new ColumnProps();
-            colProps2.Assign(null);
-            colProps2.Assign(colProps);
-            Assert.AreEqual(0, colProps.ColType);
-            Assert.AreEqual(false, colProps.ColActive);
-            Assert.AreEqual(10, colProps.ColWidth);
-
-            //
-            ColumnStatic colStatic = new ColumnStatic();
+            ListColumn colStatic = new ListColumn(0, 0, DataType.dtString, 0, true);
             Assert.IsNotNull(colStatic);
+            Assert.AreEqual(0, colStatic.Order);
+            Assert.AreEqual(false, colStatic.CurActive);
+            Assert.AreEqual(0, colStatic.CurWidth);
 
             //
             ListFilter listFilter = new ListFilter();
@@ -871,7 +857,6 @@ namespace GKTests.GKCore
             //
             listManager = new GroupListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(GroupColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
             listManager.Fetch(grpRec);
@@ -897,7 +882,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
             listManager.QuickFilter = "*";
-            listManager.AddCondition(GroupColumnType.gctName, ConditionKind.ck_Contains, "*roup*");
+            listManager.AddCondition((byte)GroupColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
             Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
         }
 
@@ -912,7 +897,6 @@ namespace GKTests.GKCore
         {
             var listManager = new CommunicationListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(CommunicationColumnType), listManager.ListColumns.GetColumnsEnum());
 
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);
@@ -938,7 +922,6 @@ namespace GKTests.GKCore
         {
             var listManager = new FamilyListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(FamilyColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
             listManager.Fetch(famRec);
@@ -961,7 +944,6 @@ namespace GKTests.GKCore
         {
             var listManager = new IndividualListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(PersonColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
             listManager.Fetch(indRec);
@@ -1001,7 +983,6 @@ namespace GKTests.GKCore
         {
             var listManager = new LocationListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(LocationColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
             listManager.Fetch(locRec);
@@ -1024,7 +1005,6 @@ namespace GKTests.GKCore
         {
             var listManager = new MultimediaListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(MultimediaColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
             listManager.Fetch(mediaRec);
@@ -1047,7 +1027,6 @@ namespace GKTests.GKCore
         {
             var listManager = new NoteListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(NoteColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null, "", "");
             noteRec.AddNoteText("Test text");
@@ -1073,7 +1052,6 @@ namespace GKTests.GKCore
         {
             var listManager = new RepositoryListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(RepositoryColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
             listManager.Fetch(repoRec);
@@ -1096,7 +1074,6 @@ namespace GKTests.GKCore
         {
             var listManager = new ResearchListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(ResearchColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
             listManager.Fetch(resRec);
@@ -1119,7 +1096,6 @@ namespace GKTests.GKCore
         {
             var listManager = new SourceListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(SourceColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
             listManager.Fetch(srcRec);
@@ -1142,7 +1118,6 @@ namespace GKTests.GKCore
         {
             var listManager = new TaskListMan(fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(TaskColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
             listManager.Fetch(tskRec);

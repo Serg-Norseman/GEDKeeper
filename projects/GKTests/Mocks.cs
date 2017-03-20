@@ -218,5 +218,6 @@ namespace GKTests.Mocks
         public override void addParagraphChunk(string text, object font) { }
         public override void addParagraphChunkAnchor(string text, object font, string anchor) { }
         public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup) { }
+        public override void addNote(string text, object font) { }
     }
 }

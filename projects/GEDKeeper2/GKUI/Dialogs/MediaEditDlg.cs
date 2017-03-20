@@ -164,7 +164,10 @@ namespace GKUI.Dialogs
 
         private void btnView_Click(object sender, EventArgs e)
         {
-            AcceptChanges();
+            if (fIsNew) {
+                AcceptChanges();
+            }
+
             fBase.ShowMedia(fMediaRec, true);
         }
 
