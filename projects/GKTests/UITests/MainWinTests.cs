@@ -1602,7 +1602,9 @@ namespace GKTests.UITests
                 ClickToolStripButton("tbDocPreview", fMainWin);
             } catch (Exception ex) {
                 // AppVeyor tests crashed, because "No printers are installed"
-                Assert.Fail("PrintPreview failed: " + ex.Message);
+                #if !CI_MODE
+                Assert.Fail("PrintPreview failed: " + ex.StackTrace);
+                #endif
             }
 
             formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape)); // frm.Close();
