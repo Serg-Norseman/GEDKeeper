@@ -1597,8 +1597,13 @@ namespace GKTests.UITests
             //ModalFormHandler = PrintPreviewDialog_Handler;
             //ClickToolStripButton("tbDocPrint", fMainWin);
 
-            ModalFormHandler = PrintDialog_Handler;
-            ClickToolStripButton("tbDocPreview", fMainWin);
+            try {
+                ModalFormHandler = PrintDialog_Handler;
+                ClickToolStripButton("tbDocPreview", fMainWin);
+            } catch (Exception ex) {
+                // AppVeyor tests crashed, because "No printers are installed"
+                Assert.Fail("PrintPreview failed: " + ex.Message);
+            }
 
             formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape)); // frm.Close();
         }
