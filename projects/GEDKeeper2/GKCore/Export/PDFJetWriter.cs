@@ -208,6 +208,10 @@ namespace GKCore.Export
         public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
         {
         }
+
+        public override void addNote(string text, object font)
+        {
+        }
     }
 }
 
