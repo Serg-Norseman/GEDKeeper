@@ -22,11 +22,24 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKNavigatorPlugin
 {
+    public enum DataCategory
+    {
+        Root,
+        RecentActivity,
+        JumpHistory,
+        PotencialProblems,
+        Filters,
+        Bookmarks,
+        Records
+    }
+
     public partial class NavigatorWidget : Form, ILocalization
     {
         private readonly Plugin fPlugin;
@@ -69,25 +82,25 @@ namespace GKNavigatorPlugin
 
             tnRoot = treeView1.Nodes.Add("root");
 
-            tnRecAct = tnRoot.Nodes.Add("Recent Activity");
-            tnJumpHist = tnRecAct.Nodes.Add("Jump history");
-            tnProblems = tnRecAct.Nodes.Add("Potencial problems");
-            tnFilters = tnRecAct.Nodes.Add("Filters");
+            tnRecAct = CreateNode(tnRoot, "Recent Activity", DataCategory.RecentActivity);
+            tnJumpHist = CreateNode(tnRecAct, "Jump history", DataCategory.JumpHistory);
+            tnProblems = CreateNode(tnRecAct, "Potencial problems", DataCategory.PotencialProblems);
+            tnFilters = CreateNode(tnRecAct, "Filters", DataCategory.Filters);
 
-            tnBookmarks = tnRoot.Nodes.Add("Bookmarks");
+            tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
 
             tnRecords = tnRoot.Nodes.Add("Records");
-            tnRecsIndividual = CreateRecordTypeNode("Individuals", GEDCOMRecordType.rtIndividual);
-            tnRecsFamily = CreateRecordTypeNode("Families", GEDCOMRecordType.rtFamily);
-            tnRecsNote = CreateRecordTypeNode("Notes", GEDCOMRecordType.rtNote);
-            tnRecsMultimedia = CreateRecordTypeNode("Multimedia", GEDCOMRecordType.rtMultimedia);
-            tnRecsSource = CreateRecordTypeNode("Sources", GEDCOMRecordType.rtSource);
-            tnRecsRepository = CreateRecordTypeNode("Repositories", GEDCOMRecordType.rtRepository);
-            tnRecsGroup = CreateRecordTypeNode("Groups", GEDCOMRecordType.rtGroup);
-            tnRecsResearch = CreateRecordTypeNode("Researches", GEDCOMRecordType.rtResearch);
-            tnRecsTask = CreateRecordTypeNode("Tasks", GEDCOMRecordType.rtTask);
-            tnRecsCommunication = CreateRecordTypeNode("Communications", GEDCOMRecordType.rtCommunication);
-            tnRecsLocation = CreateRecordTypeNode("Locations", GEDCOMRecordType.rtLocation);
+            tnRecsIndividual = CreateNode(tnRecords, "Individuals", GEDCOMRecordType.rtIndividual);
+            tnRecsFamily = CreateNode(tnRecords, "Families", GEDCOMRecordType.rtFamily);
+            tnRecsNote = CreateNode(tnRecords, "Notes", GEDCOMRecordType.rtNote);
+            tnRecsMultimedia = CreateNode(tnRecords, "Multimedia", GEDCOMRecordType.rtMultimedia);
+            tnRecsSource = CreateNode(tnRecords, "Sources", GEDCOMRecordType.rtSource);
+            tnRecsRepository = CreateNode(tnRecords, "Repositories", GEDCOMRecordType.rtRepository);
+            tnRecsGroup = CreateNode(tnRecords, "Groups", GEDCOMRecordType.rtGroup);
+            tnRecsResearch = CreateNode(tnRecords, "Researches", GEDCOMRecordType.rtResearch);
+            tnRecsTask = CreateNode(tnRecords, "Tasks", GEDCOMRecordType.rtTask);
+            tnRecsCommunication = CreateNode(tnRecords, "Communications", GEDCOMRecordType.rtCommunication);
+            tnRecsLocation = CreateNode(tnRecords, "Locations", GEDCOMRecordType.rtLocation);
         }
 
         #region ILocalization support
@@ -189,35 +202,101 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public enum NodeType
+        private TreeNode CreateNode(TreeNode parent, string title, object tag)
         {
-            ntRoot,
-            ntRecentActivity, ntJumpHistory, ntPotencialProblems, ntFilters,
-            ntBookmarks,
-            ntRecords
-        }
-
-        private TreeNode CreateTreeNode(string title, NodeType nodeType, GEDCOMRecordType recType)
-        {
-            return null;
-        }
-
-        private TreeNode CreateRecordTypeNode(string title, GEDCOMRecordType recType)
-        {
-            TreeNode result = tnRecords.Nodes.Add(title);
-            result.Tag = recType;
+            TreeNode result = parent.Nodes.Add(title);
+            result.Tag = tag;
             return result;
-        }
-
-        private void CollectData()
-        {
         }
 
         private void TreeView1AfterSelect(object sender, TreeViewEventArgs e)
         {
+            if (e.Node == null) return;
+
             object tag = e.Node.Tag;
-            if (tag != null && tag.GetType() == typeof(GEDCOMRecordType)) {
-                fBase.ShowRecordsTab((GEDCOMRecordType)tag);
+            if (tag == null) return;
+
+            if (tag.GetType() == typeof(GEDCOMRecordType))
+            {
+                ShowData(DataCategory.Records, (GEDCOMRecordType)tag);
+            }
+            else if (tag.GetType() == typeof(DataCategory))
+            {
+                ShowData((DataCategory)tag, GEDCOMRecordType.rtNone);
+            }
+        }
+
+        private void ShowData(DataCategory category, GEDCOMRecordType recordType)
+        {
+            switch (category)
+            {
+                case DataCategory.RecentActivity:
+                    lvData.Clear();
+                    break;
+
+                case DataCategory.JumpHistory:
+                    lvData.Clear();
+                    break;
+
+                case DataCategory.PotencialProblems:
+                    lvData.Clear();
+                    break;
+
+                case DataCategory.Filters:
+                    lvData.Clear();
+                    break;
+
+                case DataCategory.Bookmarks:
+                    lvData.Clear();
+                    break;
+
+                case DataCategory.Records:
+                    fBase.ShowRecordsTab(recordType);
+                    ShowRecordsData(recordType);
+                    break;
+            }
+        }
+
+        private void ShowRecordsData(GEDCOMRecordType recordType)
+        {
+            lvData.BeginUpdates();
+            try
+            {
+                lvData.Clear();
+                lvData.AddListColumn("Action", 20, true);
+                lvData.AddListColumn("XRef", 20, true);
+                lvData.AddListColumn("Name", 20, true);
+                lvData.AddListColumn("Time", 20, true);
+
+                BaseData baseData = fPlugin.Data[fBase.Tree.FileName];
+                if (baseData == null) return;
+
+                foreach (var recordInfo in baseData.ChangedRecords)
+                {
+                    if (recordInfo.Type != recordType) continue;
+
+                    string act = "";
+                    switch (recordInfo.Action) {
+                        case RecordAction.raAdd:
+                            act = "+";
+                            break;
+                        case RecordAction.raEdit:
+                            act = "*";
+                            break;
+                        case RecordAction.raDelete:
+                            act = "-";
+                            break;
+                    }
+
+                    GKListItem item = lvData.AddItem(act, null);
+                    item.SubItems.Add(recordInfo.XRef);
+                    item.SubItems.Add(recordInfo.Name);
+                    item.SubItems.Add(recordInfo.Time.ToString());
+                }
+            }
+            finally
+            {
+                lvData.EndUpdates();
             }
         }
     }

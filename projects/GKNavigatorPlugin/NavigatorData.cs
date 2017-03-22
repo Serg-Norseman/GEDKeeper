@@ -28,15 +28,19 @@ namespace GKNavigatorPlugin
 {
     public sealed class RecordInfo
     {
+        public readonly GEDCOMRecordType Type;
         public readonly RecordAction Action;
+        public readonly string XRef;
         public readonly string Name;
         public readonly GEDCOMRecord Record; // null for deleted records
         public readonly DateTime Time;
 
-        public RecordInfo(RecordAction action, string name, GEDCOMRecord record)
+        public RecordInfo(RecordAction action, string xref, string name, GEDCOMRecordType type, GEDCOMRecord record)
         {
             Action = action;
+            XRef = xref;
             Name = name;
+            Type = type;
             Record = record;
             Time = DateTime.Now;
         }
@@ -46,6 +50,11 @@ namespace GKNavigatorPlugin
     public sealed class BaseData
     {
         private readonly List<RecordInfo> fChangedRecords;
+
+        public List<RecordInfo> ChangedRecords
+        {
+            get { return fChangedRecords; }
+        }
 
         public BaseData()
         {
@@ -67,11 +76,11 @@ namespace GKNavigatorPlugin
             switch (action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    fChangedRecords.Add(new RecordInfo(action, recName, gRecord));
+                    fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, gRecord));
                     break;
 
                 case RecordAction.raDelete:
-                    fChangedRecords.Add(new RecordInfo(action, recName, null));
+                    fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, null));
                     break;
             }
         }
