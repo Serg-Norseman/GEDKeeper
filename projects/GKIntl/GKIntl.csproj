@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
-    <ProjectGuid>{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}</ProjectGuid>
+    <ProjectGuid>{764FB16A-FD59-4C9A-B25B-5BB7893ADA76}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>GKSandbox</RootNamespace>
-    <AssemblyName>GKSandbox</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GKIntl</RootNamespace>
+    <AssemblyName>GKIntl</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\</OutputPath>
@@ -63,90 +62,45 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>libs\mswin\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\GKComboBox.cs">
-      <SubType>Component</SubType>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CulturePicker.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProgressStatusBar.cs">
-      <SubType>Component</SubType>
+    <Compile Include="DropDownControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\SlideList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ExtTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Database\GKDatabase.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MPlayerTest.cs" />
-    <Compile Include="MPlayerTest.Designer.cs">
-      <DependentUpon>MPlayerTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Obsolete\GEDCOMBloodGroup.cs" />
-    <Compile Include="Obsolete\SyncTool.cs" />
-    <Compile Include="Obsolete\WebTree.cs" />
-    <Compile Include="Pluralizer.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
+    <Compile Include="GKIFlags.Designer.cs">
+      <DependentUpon>GKIFlags.resx</DependentUpon>
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Utils.cs" />
-    <Compile Include="Validation\NumericFieldValidator.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Validation\RequiredFieldValidator.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Validation\ValidatableControlConverter.cs" />
-    <Compile Include="Validation\ValidatorBase.cs">
-      <SubType>Component</SubType>
+    <Compile Include="OptionsPicker.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CulturePicker.resx">
+      <DependentUpon>CulturePicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKIFlags.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKIFlags.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKIResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKIntl\GKIntl.csproj">
-      <Project>{764FB16A-FD59-4C9A-B25B-5BB7893ADA76}</Project>
-      <Name>GKIntl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.mswin.csproj">
-      <Project>{3C9C706D-A5B2-48FB-BE5E-DCC372F84622}</Project>
-      <Name>GKMediaPlayer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\SlideList.resx">
-      <DependentUpon>SlideList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MPlayerTest.resx">
-      <DependentUpon>MPlayerTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
