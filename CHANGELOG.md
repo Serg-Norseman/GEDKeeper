@@ -1,5 +1,5 @@
 
-## 28.02.2017 [[v2.11.0](/releases/tag/v2.11.0)]
+## 28.02.2017 [[v2.11.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.11.0)]
 
 - Added French localization (thanks to Diana Shilnikova).
 - Added images cache for portraits. This improves tree chart performance
@@ -34,7 +34,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Made small improvements and optimizations.
 - Considered more national language features aware of name processing.
 
-## 26.12.2016 [v2.10.0]
+## 26.12.2016 [[v2.10.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.10.0)]
 
 - Added a geocoding engine (Yandex) and their choice in the options (Google/Yandex).
 - Restored search for locations in the editor of locations and window of maps (GoogleAPI).
@@ -42,7 +42,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Save files in any encoding except UTF-8 are deprecated and disabled.
 - Added check for updates on the website sourceforge.net.
 
-## 18.12.2016 [v2.9.0]
+## 18.12.2016 [[v2.9.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.9.0)]
 
 - Added localization for Polish (Jacek).
 - Fixed problems with European encodings of GEDCOM files.
@@ -52,13 +52,13 @@ setting up default portraits showing in the tree [@g10101k].
 - Create auto-update application sample.
 - Combine GUI dialogs &quot;Adding person&quot; and &quot;Edit person&quot;.
 - Add new types of facts: blood group, hair color and eyes color.
-- Add demo databases for the Bach and Nehru–Gandhi families.
+- Add demo databases for the Bach and Nehruâ€“Gandhi families.
 - Add demo databases for mitochondrial and Y-chromosome gaplogroups (for ones who are keen on molecular genealogy).
 - To improve modifications safety, GEDKeeper locks a record while user is changing it.
 - Implement modifications canceling after changes have been made in editing GUI dialogs.
-- Fix application behavior after clicking buttons that change parents or parents’ families while user is changing a person in the GUI editor.
+- Fix application behavior after clicking buttons that change parents or parentsâ€™ families while user is changing a person in the GUI editor.
 - Improve supporting of multi-monitor configurations [@ruslangaripov].
-- Made a static analysis of the source code – fix over 60 possible defects and errors.
+- Made a static analysis of the source code â€“ fix over 60 possible defects and errors.
 - Fix many small issues and improve overall application stability.
 - Fix some errors.
 - Add coding style guide.
@@ -69,7 +69,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Improve English localization [@ruslangaripov].
 - Add calculator of relation degree.
 
-## 03.09.2016 [v2.8.1]
+## 03.09.2016 [[v2.8.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.8.1)]
 
 - Correct English localization of the user interface [@ruslangaripov].
 - Add preliminary version of demonstration database for USA users (President).
@@ -82,13 +82,13 @@ internationalization of GEDKeeper.
 - Add demonstration database for Russian users (Pushkin's family).
 - Add prototype of the new plug-in: &quot;Navigator&quot;.
 
-## 14.08.2016 [v2.8.0]
+## 14.08.2016 [[v2.8.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.8.0)]
 
 - Clean and optimize code.
 - Included are a selection of the interface language at first run after installation.
 - Implemented selection of portraits from photos.
 
-## 31.07.2016 [v2.7.0]
+## 31.07.2016 [[v2.7.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.7.0)]
 
 - Added a diagram of the circle of descendants.
 - Improved options of the circle of ancestors.
@@ -99,7 +99,7 @@ internationalization of GEDKeeper.
 - Added backup of files before saving.
 - Fixed display of links in location information.
 
-## 20.06.2016 [v2.6.0]
+## 20.06.2016 [[v2.6.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.6.0)]
 
 - Added English localization of help [@ruslangaripov].
 - Export pedigrees to RTF.
