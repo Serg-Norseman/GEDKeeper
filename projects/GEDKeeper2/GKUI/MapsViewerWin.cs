@@ -44,7 +44,7 @@ namespace GKUI
             public PlaceRef(GEDCOMCustomEvent evt)
             {
                 Event = evt;
-                Date = (evt == null) ? new DateTime(0) : evt.Detail.Date.GetDateTime();
+                Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();
             }
         }
 
@@ -113,8 +113,8 @@ namespace GKUI
                             for (int j = 0; j < num2; j++)
                             {
                                 GEDCOMCustomEvent ev = ind.Events[j];
-                                if (ev.Detail.Place.StringValue != "") {
-                                    AddPlace(ev.Detail.Place, ev);
+                                if (ev.Place.StringValue != "") {
+                                    AddPlace(ev.Place, ev);
                                     pCnt++;
                                 }
                             }

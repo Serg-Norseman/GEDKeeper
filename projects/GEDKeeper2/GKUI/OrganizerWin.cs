@@ -118,7 +118,7 @@ namespace GKUI
 
         private void PrepareEvent(string iName, GEDCOMCustomEvent ev)
         {
-            GEDCOMAddress addr = ev.Detail.Address;
+            GEDCOMAddress addr = ev.Address;
             if (addr == null) return;
             
             string addrStr = addr.Address.Text.Trim();

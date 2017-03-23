@@ -96,13 +96,9 @@ namespace GKCommon.GEDCOM
             {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
             }
-            else if (tagName == "FAMC")
-            {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            }
             else
             {
-                // define "DATE" by default
+                // define "DATE", "FAMC" by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

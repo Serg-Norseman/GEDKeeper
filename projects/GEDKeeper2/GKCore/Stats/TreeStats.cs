@@ -152,7 +152,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smBirthPlaces:
-                    v = evt.Detail.Place.StringValue;
+                    v = evt.Place.StringValue;
                     break;
             }
 
@@ -302,7 +302,7 @@ namespace GKCore.Stats
                 case StatsMode.smBirthByMonth:
                     GEDCOMCustomEvent ev = iRec.FindEvent("BIRT");
                     if (ev != null) {
-                        GEDCOMCustomDate dtx = ev.Detail.Date.Value;
+                        GEDCOMCustomDate dtx = ev.Date.Value;
                         if (dtx != null) {
                             int ay;
                             ushort month, ad;

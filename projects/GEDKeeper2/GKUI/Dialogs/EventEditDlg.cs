@@ -196,14 +196,14 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            fEvent.Detail.Place.StringValue = txtEventPlace.Text;
-            fEvent.Detail.Place.Location.Value = fLocation;
-            fEvent.Detail.Classification = txtEventName.Text;
-            fEvent.Detail.Cause = txtEventCause.Text;
-            fEvent.Detail.Agency = txtEventOrg.Text;
+            fEvent.Place.StringValue = txtEventPlace.Text;
+            fEvent.Place.Location.Value = fLocation;
+            fEvent.Classification = txtEventName.Text;
+            fEvent.Cause = txtEventCause.Text;
+            fEvent.Agency = txtEventOrg.Text;
 
             string dt = AssembleDate();
-            fEvent.Detail.Date.ParseString(dt);
+            fEvent.Date.ParseString(dt);
 
             if (fEvent is GEDCOMFamilyEvent)
             {
@@ -246,16 +246,16 @@ namespace GKUI.Dialogs
                 btnPlaceAdd.Enabled = false;
                 btnPlaceDelete.Enabled = true;
             } else {
-                txtEventPlace.Text = fEvent.Detail.Place.StringValue;
+                txtEventPlace.Text = fEvent.Place.StringValue;
                 txtEventPlace.ReadOnly = false;
                 txtEventPlace.BackColor = SystemColors.Window;
                 btnPlaceAdd.Enabled = true;
                 btnPlaceDelete.Enabled = false;
             }
 
-            fNotesList.DataList = fEvent.Detail.Notes.GetEnumerator();
-            fMediaList.DataList = fEvent.Detail.MultimediaLinks.GetEnumerator();
-            fSourcesList.DataList = fEvent.Detail.SourceCitations.GetEnumerator();
+            fNotesList.DataList = fEvent.Notes.GetEnumerator();
+            fMediaList.DataList = fEvent.MultimediaLinks.GetEnumerator();
+            fSourcesList.DataList = fEvent.SourceCitations.GetEnumerator();
         }
 
         private void SetEvent(GEDCOMCustomEvent value)
@@ -294,7 +294,7 @@ namespace GKUI.Dialogs
 
             EditEventType_SelectedIndexChanged(null, null);
 
-            GEDCOMCustomDate date = fEvent.Detail.Date.Value;
+            GEDCOMCustomDate date = fEvent.Date.Value;
             if (date is GEDCOMDateApproximated)
             {
                 GEDCOMApproximated approximated = (date as GEDCOMDateApproximated).Approximated;
@@ -401,10 +401,10 @@ namespace GKUI.Dialogs
             }
 
             EditEventDateType_SelectedIndexChanged(null, null);
-            txtEventName.Text = fEvent.Detail.Classification;
-            txtEventCause.Text = fEvent.Detail.Cause;
-            txtEventOrg.Text = fEvent.Detail.Agency;
-            fLocation = (fEvent.Detail.Place.Location.Value as GEDCOMLocationRecord);
+            txtEventName.Text = fEvent.Classification;
+            txtEventCause.Text = fEvent.Cause;
+            txtEventOrg.Text = fEvent.Agency;
+            fLocation = (fEvent.Place.Location.Value as GEDCOMLocationRecord);
             ControlsRefresh();
 
             ActiveControl = cmbEventType;
@@ -438,7 +438,7 @@ namespace GKUI.Dialogs
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            fBase.ModifyAddress(fEvent.Detail.Address);
+            fBase.ModifyAddress(fEvent.Address);
         }
 
         private void EditEventPlace_KeyDown(object sender, KeyEventArgs e)

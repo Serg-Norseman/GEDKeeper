@@ -419,7 +419,7 @@ namespace GKCore
             GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
             if (evt == null) return 0;
 
-            GEDCOMDate date = evt.Detail.Date.Value as GEDCOMDate;
+            GEDCOMDate date = evt.Date.Value as GEDCOMDate;
             return (date == null) ? 0 : date.Year;
         }
 
@@ -430,7 +430,7 @@ namespace GKCore
                 GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
                 if (evt != null && date != "")
                 {
-                    evt.Detail.Date.ParseString(date);
+                    evt.Date.ParseString(date);
                 }
             }
             catch
@@ -448,7 +448,7 @@ namespace GKCore
         public string gt_get_event_place(object evPtr)
         {
             GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
-            return (evt == null) ? string.Empty : evt.Detail.Place.StringValue;
+            return (evt == null) ? string.Empty : evt.Place.StringValue;
         }
 
         public void gt_set_event_value(object evPtr, string value)
@@ -464,7 +464,7 @@ namespace GKCore
             GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
             if (evt == null) return;
 
-            evt.Detail.Place.StringValue = place;
+            evt.Place.StringValue = place;
         }
 
         public string gt_get_event_name(object evPtr)

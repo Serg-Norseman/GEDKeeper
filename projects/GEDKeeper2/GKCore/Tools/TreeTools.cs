@@ -280,7 +280,7 @@ namespace GKCore.Tools
 
         private static void CheckRecord_EventPlace(GEDCOMCustomEvent aEvent)
         {
-            GEDCOMPlace place = aEvent.Detail.Place;
+            GEDCOMPlace place = aEvent.Place;
             if (place.Location.XRef != "" && place.Location.Value == null)
             {
                 place.Location.XRef = "";
@@ -314,7 +314,7 @@ namespace GKCore.Tools
 
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
-                    CheckRecord_RepairTag(tree, format, evt.Detail);
+                    CheckRecord_RepairTag(tree, format, evt);
 
                     GKUtils.CollectEventValues(evt, valuesCollection);
                 }
@@ -330,7 +330,7 @@ namespace GKCore.Tools
                 int num3 = iRec.Events.Count;
                 for (int i = 0; i < num3; i++)
                 {
-                    CheckRecord_PrepareTag(tree, format, iRec.Events[i].Detail);
+                    CheckRecord_PrepareTag(tree, format, iRec.Events[i]);
                 }
 
                 int num4 = iRec.ChildToFamilyLinks.Count;
@@ -388,7 +388,7 @@ namespace GKCore.Tools
                 int num2 = fam.Events.Count;
                 for (int i = 0; i < num2; i++)
                 {
-                    CheckRecord_PrepareTag(tree, format, fam.Events[i].Detail);
+                    CheckRecord_PrepareTag(tree, format, fam.Events[i]);
                 }
             }
 
@@ -1083,7 +1083,7 @@ namespace GKCore.Tools
             int num3 = iRec.Events.Count;
             for (int i = 0; i < num3; i++)
             {
-                CheckRelations_CheckTag(splitList, iRec.Events[i].Detail);
+                CheckRelations_CheckTag(splitList, iRec.Events[i]);
             }
 
             int num4 = iRec.IndividualOrdinances.Count;
@@ -1136,7 +1136,7 @@ namespace GKCore.Tools
             int num = fRec.Events.Count;
             for (int i = 0; i < num; i++)
             {
-                CheckRelations_CheckTag(splitList, fRec.Events[i].Detail);
+                CheckRelations_CheckTag(splitList, fRec.Events[i]);
             }
             CheckRelations_AddRel(splitList, fRec.Submitter.Value);
 
@@ -1501,10 +1501,10 @@ namespace GKCore.Tools
 
         private static void PlacesSearch_CheckEventPlace(StringList placesList, GEDCOMCustomEvent evt)
         {
-            string placeStr = evt.Detail.Place.StringValue;
+            string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
-            GEDCOMLocationRecord loc = evt.Detail.Place.Location.Value as GEDCOMLocationRecord;
+            GEDCOMLocationRecord loc = evt.Place.Location.Value as GEDCOMLocationRecord;
             if (loc != null) {
                 placeStr = "[*] " + placeStr;
             }

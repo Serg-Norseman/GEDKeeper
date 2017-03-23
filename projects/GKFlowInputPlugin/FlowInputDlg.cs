@@ -333,7 +333,7 @@ namespace GKFlowInputPlugin
 
                         if (!string.IsNullOrEmpty(place)) {
                             GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, "RESI", "", "");
-                            evt.Detail.Place.StringValue = place;
+                            evt.Place.StringValue = place;
                         }
 
                         if (!string.IsNullOrEmpty(comment)) {
@@ -374,11 +374,11 @@ namespace GKFlowInputPlugin
 
                                     if (evName == "BIRT" || evName == "DEAT") {
                                         GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
-                                        evt.Detail.Place.StringValue = place;
+                                        evt.Place.StringValue = place;
                                     } else if (evName == "MARR") {
                                         family = iRec.GetMarriageFamily(true);
                                         GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
-                                        evt.Detail.Place.StringValue = place;
+                                        evt.Place.StringValue = place;
                                     }
                                 }
                                 break;

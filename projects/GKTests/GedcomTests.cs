@@ -69,7 +69,7 @@ namespace GKTests.GKCommon
 
             GEDCOMCustomEventTest(evt, "28.12.1990");
 
-            Assert.IsNotNull(evt.Detail.Address);
+            Assert.IsNotNull(evt.Address);
         }
 
         [TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
@@ -502,11 +502,11 @@ namespace GKTests.GKCommon
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
             ev1 = new GEDCOMIndividualEvent(tree, ind1, "BIRT", "");
-            dtVal1 = ev1.Detail.Date;
+            dtVal1 = ev1.Date;
             ind1.AddEvent(ev1);
 
             ev2 = new GEDCOMIndividualEvent(tree, ind2, "BIRT", "");
-            dtVal2 = ev2.Detail.Date;
+            dtVal2 = ev2.Date;
             ind2.AddEvent(ev2);
 
             float res;
@@ -2086,7 +2086,7 @@ namespace GKTests.GKCommon
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
                 customEvent.AddTag("EMAIL", "email", null);
-                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
+                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
 
@@ -2101,8 +2101,8 @@ namespace GKTests.GKCommon
 
                 // stream test
                 customEvent.SetName("BIRT");
-                customEvent.Detail.Date.ParseString("20 SEP 1970");
-                customEvent.Detail.Place.StringValue = "test place";
+                customEvent.Date.ParseString("20 SEP 1970");
+                customEvent.Place.StringValue = "test place";
                 string buf = TagStreamTest(customEvent);
                 Assert.AreEqual("0 BIRT\r\n"+
                                 "1 DATE 20 SEP 1970\r\n"+
@@ -2120,7 +2120,7 @@ namespace GKTests.GKCommon
                 }
 
                 customEvent.AddTag("EMAIL", "email", null);
-                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
+                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
 
@@ -2134,7 +2134,7 @@ namespace GKTests.GKCommon
                 Assert.IsNotNull(customEvent);
 
                 customEvent.AddTag("EMAIL", "email", null);
-                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
+                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
 
@@ -2146,9 +2146,9 @@ namespace GKTests.GKCommon
 
         public static void GEDCOMCustomEventTest(GEDCOMCustomEvent evt, string dateTest)
         {
-            GEDCOMEventDetailTest(evt.Detail, dateTest);
+            GEDCOMEventDetailTest(evt, dateTest);
 
-            Assert.AreEqual(evt.Detail.Date.GetDateTime(), ParseDT(dateTest));
+            Assert.AreEqual(evt.Date.GetDateTime(), ParseDT(dateTest));
         }
 
         [Test]
@@ -2163,7 +2163,7 @@ namespace GKTests.GKCommon
             }
         }
 
-        private static void GEDCOMEventDetailTest(GEDCOMEventDetail detail, string dateTest)
+        private static void GEDCOMEventDetailTest(GEDCOMCustomEvent detail, string dateTest)
         {
             Assert.AreEqual(ParseDT(dateTest), detail.Date.Date);
             Assert.AreEqual("Ivanovo", detail.Place.StringValue);

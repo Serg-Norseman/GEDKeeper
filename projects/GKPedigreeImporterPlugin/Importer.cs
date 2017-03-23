@@ -434,7 +434,7 @@ namespace GKPedigreeImporterPlugin
                     tmp = tmp + "/" + ym;
                 }
 
-                evt.Detail.Date.ParseString(tmp);
+                evt.Date.ParseString(tmp);
             }
             catch (Exception)
             {

@@ -1762,7 +1762,7 @@ namespace GKCommon.GEDCOM
         /// <returns></returns>
         public static int GetRelativeYear(GEDCOMCustomEvent evt)
         {
-            return (evt == null) ? 0 : GetRelativeYear(evt.Detail.Date);
+            return (evt == null) ? 0 : GetRelativeYear(evt.Date);
         }
 
         public static int GetRelativeYear(GEDCOMDateValue dateVal)
@@ -1800,7 +1800,7 @@ namespace GKCommon.GEDCOM
 
         public static UDN GetUDN(GEDCOMCustomEvent evt)
         {
-            return (evt == null) ? UDN.CreateEmpty() : evt.Detail.Date.GetUDN();
+            return (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
         }
 
         public static UDN GetUDN(GEDCOMRecordWithEvents evsRec, string evSign)

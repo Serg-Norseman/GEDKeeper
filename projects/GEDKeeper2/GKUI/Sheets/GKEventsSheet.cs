@@ -78,16 +78,16 @@ namespace GKUI.Sheets
                     
                     GKListItem item = AddItem(idx, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
-                    item.AddSubItem(new GEDCOMDateItem(evt.Detail.Date.Value));
+                    item.AddSubItem(new GEDCOMDateItem(evt.Date.Value));
 
                     if (fPersonsMode) {
-                        string st = evt.Detail.Place.StringValue;
+                        string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {
                             st = st + " [" + evt.StringValue + "]";
                         }
                         item.AddSubItem(st);
                     } else {
-                        item.AddSubItem(evt.Detail.Place.StringValue);
+                        item.AddSubItem(evt.Place.StringValue);
                     }
 
                     item.AddSubItem(GKUtils.GetEventCause(evt));

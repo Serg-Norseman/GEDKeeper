@@ -22,67 +22,72 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public abstract class GEDCOMCustomEvent : GEDCOMTag
+    public abstract class GEDCOMCustomEvent : GEDCOMTagWithLists
     {
-        private GEDCOMEventDetail fDetail;
-
-        public GEDCOMEventDetail Detail
+        public string Classification
         {
-            get { return fDetail; }
+            get { return GetTagStringValue("TYPE"); }
+            set { SetTagStringValue("TYPE", value); }
+        }
+
+        public string Agency
+        {
+            get { return GetTagStringValue("AGNC"); }
+            set { SetTagStringValue("AGNC", value); }
+        }
+
+        public string ReligiousAffilation
+        {
+            get { return GetTagStringValue("RELI"); }
+            set { SetTagStringValue("RELI", value); }
+        }
+
+        public string Cause
+        {
+            get { return GetTagStringValue("CAUS"); }
+            set { SetTagStringValue("CAUS", value); }
+        }
+
+        public GEDCOMPlace Place
+        {
+            get { return TagClass("PLAC", GEDCOMPlace.Create) as GEDCOMPlace; }
+        }
+
+        public GEDCOMAddress Address
+        {
+            get { return TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
+        }
+
+        public GEDCOMDateValue Date
+        {
+            get { return TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
+        }
+
+        public GEDCOMRestriction Restriction
+        {
+            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue("RESN")); }
+            set { SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
+        }
+
+        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        {
+            GEDCOMTag result;
+
+            if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
+            {
+                result = Address.AddTag(tagName, tagValue, tagConstructor);
+            }
+            else
+            {
+                // define "PLAC", "ADDR", "DATE" by default
+                result = base.AddTag(tagName, tagValue, tagConstructor);
+            }
+
+            return result;
         }
 
         protected GEDCOMCustomEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
-        }
-
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
-            fDetail = new GEDCOMEventDetail(Owner, this, "", "");
-            fDetail.SetLevel(Level);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                fDetail.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        public override void Assign(GEDCOMTag source)
-        {
-            base.Assign(source);
-
-            GEDCOMCustomEvent evt = source as GEDCOMCustomEvent;
-            if (evt != null) {
-                fDetail.Assign(evt.Detail);
-            }
-        }
-
-        public override void Pack()
-        {
-            base.Pack();
-            fDetail.Pack();
-        }
-
-        public override void ReplaceXRefs(XRefReplacer map)
-        {
-            base.ReplaceXRefs(map);
-            fDetail.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fDetail.ResetOwner(newOwner);
-        }
-
-        public override void SaveToStream(StreamWriter stream)
-        {
-            base.SaveToStream(stream);
-            fDetail.SaveToStream(stream);
         }
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
@@ -92,8 +97,8 @@ namespace GKCommon.GEDCOM
 
             // match date
             float dateMatch = 0.0f;
-            GEDCOMDateValue dtVal = fDetail.Date;
-            GEDCOMDateValue dtVal2 = ev.fDetail.Date;
+            GEDCOMDateValue dtVal = this.Date;
+            GEDCOMDateValue dtVal2 = ev.Date;
 
             if (dtVal != null && dtVal2 != null) {
                 dateMatch = dtVal.IsMatch(dtVal2, matchParams);
@@ -101,13 +106,13 @@ namespace GKCommon.GEDCOM
 
             // match location - late code-on by option implementation
             /*float locMatch = 0.0f;
-			if (this.fDetail.Place == null && ev.fDetail.Place == null)
+			if (this.Place == null && ev.Place == null)
 			{
 				locMatch = 100.0f;
 			}
-			else if (this.fDetail.Place != null && ev.fDetail.Place != null)
+			else if (this.Place != null && ev.Place != null)
 			{
-				if (this.fDetail.Place.StringValue == ev.fDetail.Place.StringValue)
+				if (this.Place.StringValue == ev.Place.StringValue)
 				{
 					locMatch = 100.0f;
 				}

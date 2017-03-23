@@ -391,7 +391,7 @@ namespace GKTests.GKCore
             st2 = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfYYYY_MM_DD, false);
             Assert.AreEqual("1990.12.28", st2);
 
-            evt.Detail.Cause = "test cause";
+            evt.Cause = "test cause";
             st2 = GKUtils.GetEventCause(evt);
             Assert.AreEqual("test cause", st2);
 

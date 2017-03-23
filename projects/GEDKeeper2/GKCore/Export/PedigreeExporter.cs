@@ -404,16 +404,16 @@ namespace GKCore.Export
                     int ev = GKUtils.GetPersonEventIndex(evt.Name);
                     string st;
                     if (ev == 0) {
-                        st = evt.Detail.Classification;
+                        st = evt.Classification;
                     } else {
                         st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
                     }
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
                     li = dt + ": " + st + ".";
-                    if (evt.Detail.Place.StringValue != "")
+                    if (evt.Place.StringValue != "")
                     {
-                        li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Detail.Place.StringValue;
+                        li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                     }
 
                     fWriter.addListItem(" " + li, fTextFont);

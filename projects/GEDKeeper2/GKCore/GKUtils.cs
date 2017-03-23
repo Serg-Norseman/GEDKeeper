@@ -147,7 +147,7 @@ namespace GKCore
                     {
                         GEDCOMCustomEvent evt = evsRec.Events[j];
 
-                        if (evt.Detail.Place.Location.Value == locRec)
+                        if (evt.Place.Location.Value == locRec)
                         {
                             linksList.AddObject(GetRecordName(rec, true) + ", " + GetEventName(evt).ToLower(), rec);
                         }
@@ -430,7 +430,7 @@ namespace GKCore
             {
                 int ev = GetPersonEventIndex(evt.Name);
                 if (ev == 0) {
-                    result = evt.Detail.Classification;
+                    result = evt.Classification;
                 } else {
                     result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
                 }
@@ -439,7 +439,7 @@ namespace GKCore
             {
                 int ev = GetFamilyEventIndex(evt.Name);
                 if (ev == 0) {
-                    result = evt.Detail.Classification;
+                    result = evt.Classification;
                 } else {
                     result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evt.Name;
                 }
@@ -457,14 +457,14 @@ namespace GKCore
             string st;
             if (idx == 0)
             {
-                st = iAttr.Detail.Classification;
+                st = iAttr.Classification;
             }
             else
             {
                 st = (idx > 0) ? LangMan.LS(GKData.PersonEvents[idx].Name) : iAttr.Name;
             }
 
-            string place = iAttr.Detail.Place.StringValue;
+            string place = iAttr.Place.StringValue;
             if (place != "")
             {
                 place = " [" + place + "]";
@@ -478,8 +478,8 @@ namespace GKCore
                 throw new ArgumentNullException("evt");
 
             string dt = GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
-            string place = evt.Detail.Place.StringValue;
-            GEDCOMLocationRecord location = evt.Detail.Place.Location.Value as GEDCOMLocationRecord;
+            string place = evt.Place.StringValue;
+            GEDCOMLocationRecord location = evt.Place.Location.Value as GEDCOMLocationRecord;
 
             if (place != "" && location != null && hyperLink) {
                 place = HyperLink(location.XRef, place, 0);
@@ -509,16 +509,15 @@ namespace GKCore
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
-            GEDCOMEventDetail eventDetail = evt.Detail;
-            string result = eventDetail.Cause;
+            string result = evt.Cause;
 
-            if (eventDetail.Agency != "")
+            if (evt.Agency != "")
             {
                 if (result != "")
                 {
                     result += " ";
                 }
-                result = result + "[" + eventDetail.Agency + "]";
+                result = result + "[" + evt.Agency + "]";
             }
 
             return result;
@@ -648,7 +647,7 @@ namespace GKCore
 
         public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
         {
-            return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Detail.Date.Value, format, sign, false);
+            return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Date.Value, format, sign, false);
         }
 
         public static string CompactDate(string date)
@@ -663,7 +662,7 @@ namespace GKCore
             if (iRec == null) return null;
 
             GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
-            GEDCOMCustomDate result = ((evt == null) ? null : evt.Detail.Date.Value);
+            GEDCOMCustomDate result = ((evt == null) ? null : evt.Date.Value);
             return result;
         }
 
@@ -896,7 +895,7 @@ namespace GKCore
             }
 
             GEDCOMCustomEvent evt = fRec.FindEvent("MARR");
-            return ((evt == null) ? null : evt.Detail.Date.Value);
+            return ((evt == null) ? null : evt.Date.Value);
         }
 
         public static string GetMarriageDateStr(GEDCOMFamilyRecord fRec, DateFormat dateFormat)
@@ -931,7 +930,7 @@ namespace GKCore
                         evt = iRec.FindEvent("BIRT");
                         if (evt != null)
                         {
-                            GEDCOMDate dt = evt.Detail.Date.Value as GEDCOMDate;
+                            GEDCOMDate dt = evt.Date.Value as GEDCOMDate;
                             if (dt != null)
                             {
                                 int bdY;
@@ -1015,12 +1014,12 @@ namespace GKCore
         {
             if (evt == null) return string.Empty;
 
-            string result = evt.Detail.Place.StringValue;
+            string result = evt.Place.StringValue;
 
             if (includeAddress)
             {
                 string resi = evt.StringValue;
-                string addr = evt.Detail.Address.Address.Text.Trim();
+                string addr = evt.Address.Address.Text.Trim();
                 if (resi != "" && addr != "")
                 {
                     resi += ", ";
@@ -1626,7 +1625,7 @@ namespace GKCore
             }
         }
 
-        private static void ShowDetailInfo(GEDCOMEventDetail eventDetail, StringList summary)
+        private static void ShowEventDetailInfo(GEDCOMCustomEvent eventDetail, StringList summary)
         {
             if (eventDetail == null)
                 throw new ArgumentNullException("eventDetail");
@@ -1655,25 +1654,25 @@ namespace GKCore
         private static void ShowEvent(GEDCOMRecord subj, StringList aToList, GEDCOMRecord aRec, GEDCOMCustomEvent evt)
         {
             if (subj is GEDCOMNoteRecord) {
-                int num = evt.Detail.Notes.Count;
+                int num = evt.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    if (evt.Detail.Notes[i].Value == subj) {
+                    if (evt.Notes[i].Value == subj) {
                         ShowLink(subj, aToList, aRec, evt, null);
                     }
                 }
             } else
                 if (subj is GEDCOMMultimediaRecord) {
-                int num2 = evt.Detail.MultimediaLinks.Count;
+                int num2 = evt.MultimediaLinks.Count;
                 for (int i = 0; i < num2; i++) {
-                    if (evt.Detail.MultimediaLinks[i].Value == subj) {
+                    if (evt.MultimediaLinks[i].Value == subj) {
                         ShowLink(subj, aToList, aRec, evt, null);
                     }
                 }
             } else if (subj is GEDCOMSourceRecord) {
-                int num3 = evt.Detail.SourceCitations.Count;
+                int num3 = evt.SourceCitations.Count;
                 for (int i = 0; i < num3; i++) {
-                    if (evt.Detail.SourceCitations[i].Value == subj) {
-                        ShowLink(subj, aToList, aRec, evt, evt.Detail.SourceCitations[i]);
+                    if (evt.SourceCitations[i].Value == subj) {
+                        ShowLink(subj, aToList, aRec, evt, evt.SourceCitations[i]);
                     }
                 }
             }
@@ -1969,8 +1968,8 @@ namespace GKCore
                         summary.Add(st + ": " + sv + GetEventDesc(evt));
 
                         ShowDetailCause(evt, summary);
-                        ShowAddressSummary(evt.Detail.Address, summary);
-                        ShowDetailInfo(evt.Detail, summary);
+                        ShowAddressSummary(evt.Address, summary);
+                        ShowEventDetailInfo(evt, summary);
                     }
                 }
             }
@@ -2000,7 +1999,7 @@ namespace GKCore
                         summary.Add(st + ": " + GetEventDesc(evt));
 
                         ShowDetailCause(evt, summary);
-                        ShowDetailInfo(evt.Detail, summary);
+                        ShowEventDetailInfo(evt, summary);
                     }
                 }
             }

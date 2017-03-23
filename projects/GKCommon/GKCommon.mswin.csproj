@@ -159,7 +159,6 @@
     <Compile Include="GEDCOM\GEDCOMDateStatus.cs" />
     <Compile Include="GEDCOM\GEDCOMDateValue.cs" />
     <Compile Include="GEDCOM\GEDCOMEvent.cs" />
-    <Compile Include="GEDCOM\GEDCOMEventDetail.cs" />
     <Compile Include="GEDCOM\GEDCOMFamilyEvent.cs" />
     <Compile Include="GEDCOM\GEDCOMFamilyRecord.cs" />
     <Compile Include="GEDCOM\GEDCOMFileReference.cs" />

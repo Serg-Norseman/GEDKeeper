@@ -180,6 +180,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("_LOC", GEDCOMPointer.Create);
             f.RegisterTag("_POSITION", GEDCOMCutoutPosition.Create);
             f.RegisterTag("LANG", GEDCOMLanguage.Create);
+            f.RegisterTag("FAMC", GEDCOMPointer.Create);
 
             //f.RegisterTag("xxxx", xxxx.Create);
         }
@@ -189,7 +190,8 @@ namespace GKCommon.GEDCOM
             string result = "";
             if (record == null) return result;
 
-            switch (record.RecordType) {
+            switch (record.RecordType)
+            {
                 case GEDCOMRecordType.rtIndividual:
                     result = "I";
                     break;
@@ -1036,8 +1038,8 @@ namespace GKCommon.GEDCOM
                     {
                         GEDCOMCustomEvent ev = evsRec.Events[j];
 
-                        if (ev.Detail.Place.Location.Value == locRec) {
-                            ev.Detail.Place.DeleteTag("_LOC");
+                        if (ev.Place.Location.Value == locRec) {
+                            ev.Place.DeleteTag("_LOC");
                         }
                     }
                 }

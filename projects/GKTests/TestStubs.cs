@@ -49,8 +49,8 @@ namespace GKTests
 
             evt = iRec.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            evt.Detail.Date.ParseString("28 DEC 1990");
-            evt.Detail.Place.StringValue = "Ivanovo";
+            evt.Date.ParseString("28 DEC 1990");
+            evt.Place.StringValue = "Ivanovo";
 
             GEDCOMCustomEvent evtd = context.CreateEventEx(iRec, "DEAT", "28 DEC 2010", "Ivanovo");
             Assert.IsNotNull(evtd);
@@ -59,8 +59,8 @@ namespace GKTests
             GEDCOMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec2.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            evt.Detail.Date.ParseString("17 MAR 1990");
-            evt.Detail.Place.StringValue = "Ivanovo";
+            evt.Date.ParseString("17 MAR 1990");
+            evt.Place.StringValue = "Ivanovo";
 
             iRec.AddAssociation("spouse", iRec2);
 
@@ -68,8 +68,8 @@ namespace GKTests
             GEDCOMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec3.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            evt.Detail.Date.ParseString("11 FEB 2010");
-            evt.Detail.Place.StringValue = "Ivanovo";
+            evt.Date.ParseString("11 FEB 2010");
+            evt.Place.StringValue = "Ivanovo";
 
             // their family
             GEDCOMFamilyRecord famRec = context.Tree.CreateFamily();
@@ -84,8 +84,8 @@ namespace GKTests
             GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
             evt = iRec4.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            evt.Detail.Date.ParseString("15 JUN 1989");
-            evt.Detail.Place.StringValue = "Far Forest";
+            evt.Date.ParseString("15 JUN 1989");
+            evt.Place.StringValue = "Far Forest";
 
             evt = context.CreateEventEx(iRec4, "RESI", "12 FEB", "Far Forest");
             Assert.IsNotNull(evt);

@@ -292,10 +292,10 @@ namespace GKCore.Export
                     GEDCOMCustomEvent evt = iRec.Events[k];
                     if (evt == null) continue;
 
-                    int srcNum2 = evt.Detail.SourceCitations.Count;
+                    int srcNum2 = evt.SourceCitations.Count;
                     for (int m = 0; m < srcNum2; m++)
                     {
-                        GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
+                        GEDCOMSourceRecord src = evt.SourceCitations[m].Value as GEDCOMSourceRecord;
                         if (src == null) continue;
 
                         st = src.FiledByEntry;
@@ -320,7 +320,7 @@ namespace GKCore.Export
                         st = GKUtils.GetPlaceStr(evt, false);
                         if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
 
-                        st = evt.Detail.Cause;
+                        st = evt.Cause;
                         if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(deathCauses, st, iRec);
                     }
                     else if (evt.Name == "OCCU")

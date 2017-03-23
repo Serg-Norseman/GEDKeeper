@@ -221,11 +221,11 @@ namespace GKCore
             result.SetName(evSign);
 
             if (evDate != "") {
-                result.Detail.Date.ParseString(evDate);
+                result.Date.ParseString(evDate);
             }
 
             if (evPlace != "") {
-                result.Detail.Place.StringValue = evPlace;
+                result.Place.StringValue = evPlace;
             }
 
             return result;

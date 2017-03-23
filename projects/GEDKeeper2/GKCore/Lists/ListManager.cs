@@ -134,7 +134,7 @@ namespace GKCore.Lists
                 return (isVisible) ? null : (object)UDN.CreateEmpty();
             }
 
-            return GetDateValue(evt.Detail.Date.Value, isVisible);
+            return GetDateValue(evt.Date.Value, isVisible);
         }
 
         protected static object GetDateValue(GEDCOMCustomDate date, bool isVisible)

@@ -143,9 +143,9 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num1; i++) {
                 GEDCOMCustomEvent evt = fEvents[i];
 
-                int num2 = evt.Detail.SourceCitations.Count;
+                int num2 = evt.SourceCitations.Count;
                 for (int k = 0; k < num2; k++) {
-                    GEDCOMSourceCitation cit = evt.Detail.SourceCitations[k];
+                    GEDCOMSourceCitation cit = evt.SourceCitations[k];
 
                     int ca = cit.CertaintyAssessment;
                     int weight = (ca + 1);

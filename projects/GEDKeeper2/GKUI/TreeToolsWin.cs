@@ -517,8 +517,8 @@ namespace GKUI
                 for (int i = 0; i < num; i++)
                 {
                     GEDCOMCustomEvent evt = pObj.Facts[i];
-                    evt.Detail.Place.StringValue = loc.LocationName;
-                    evt.Detail.Place.Location.Value = loc;
+                    evt.Place.StringValue = loc.LocationName;
+                    evt.Place.Location.Value = loc;
                 }
 
                 CheckPlaces();
