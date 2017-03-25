@@ -40,8 +40,8 @@ namespace GKUI.Dialogs
         private bool fIsNew;
         private GEDCOMMultimediaRecord fMediaRec;
 
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKSourcesSheet fSourcesList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fSourcesList;
 
         public GEDCOMMultimediaRecord MediaRec
         {
@@ -102,8 +102,8 @@ namespace GKUI.Dialogs
             btnFileSelect.Enabled = fIsNew;
             cmbStoreType.Enabled = fIsNew;
 
-            fNotesList.DataList = fMediaRec.Notes.GetEnumerator();
-            fSourcesList.DataList = fMediaRec.SourceCitations.GetEnumerator();
+            fNotesList.UpdateSheet();
+            fSourcesList.UpdateSheet();
         }
 
         private void SetMediaRec(GEDCOMMultimediaRecord value)
@@ -111,6 +111,9 @@ namespace GKUI.Dialogs
             fMediaRec = value;
             try
             {
+                fNotesList.ListModel.DataOwner = fMediaRec;
+                fSourcesList.ListModel.DataOwner = fMediaRec;
+
                 ControlsRefresh();
                 ActiveControl = txtName;
             }
@@ -211,8 +214,8 @@ namespace GKUI.Dialogs
                 cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_RPMultimedia);

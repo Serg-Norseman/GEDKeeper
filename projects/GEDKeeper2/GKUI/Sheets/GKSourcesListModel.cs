@@ -28,49 +28,49 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 
 namespace GKUI.Sheets
 {
-    public sealed class GKSourcesSheet : GKCustomSheet
+    public sealed class GKSourcesListModel : GKListModel
     {
-        public GKSourcesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
+        public GKSourcesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
-            Columns_BeginUpdate();
-            AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
-            AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
-            AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
-            AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
-            Columns_EndUpdate();
-
-            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                  SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-            OnModify += ListModify;
         }
 
-        public override void UpdateSheet()
+        public override void InitView()
         {
-            if (DataList == null) return;
+            fSheetList.Columns_BeginUpdate();
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
+            fSheetList.Columns_EndUpdate();
+
+            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
+        }
+
+        public override void UpdateContent()
+        {
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fSheetList == null || dataOwner == null) return;
 
             try
             {
-                ClearItems();
+                fSheetList.ClearItems();
 
-                DataList.Reset();
-                while (DataList.MoveNext()) {
-                    GEDCOMSourceCitation cit = DataList.Current as GEDCOMSourceCitation;
-                    if (cit == null) continue;
-
+                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations)
+                {
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    GKListItem item = AddItem(sourceRec.Originator.Text.Trim(), cit);
+                    GKListItem item = fSheetList.AddItem(sourceRec.Originator.Text.Trim(), cit);
                     item.AddSubItem(sourceRec.FiledByEntry);
                     item.AddSubItem(cit.Page);
                     item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
                 }
 
-                ResizeColumn(1);
+                fSheetList.ResizeColumn(1);
             }
             catch (Exception ex)
             {
@@ -78,15 +78,10 @@ namespace GKUI.Sheets
             }
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            if (DataList == null) return;
-
-            IBaseWindow baseWin = Editor.Base;
-            if (baseWin == null) return;
-
-            IGEDCOMStructWithLists _struct = DataList.Owner as IGEDCOMStructWithLists;
-            if (_struct == null) return;
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
 
@@ -96,31 +91,29 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = ((BaseWin) baseWin).ModifySourceCitation(fUndoman, _struct, ref aCit);
+                    result = ((BaseWin) fBaseWin).ModifySourceCitation(fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSourceQuery)) != DialogResult.No)
                     {
-                        //_struct.SourceCitations.Delete(aCit);
-                        //result = true;
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, (GEDCOMObject)_struct, aCit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = _struct.SourceCitations.IndexOf(aCit);
+                        int idx = dataOwner.SourceCitations.IndexOf(aCit);
 
                         switch (eArgs.Action)
                         {
                             case RecordAction.raMoveUp:
-                                _struct.SourceCitations.Exchange(idx - 1, idx);
+                                dataOwner.SourceCitations.Exchange(idx - 1, idx);
                                 break;
 
                             case RecordAction.raMoveDown:
-                                _struct.SourceCitations.Exchange(idx, idx + 1);
+                                dataOwner.SourceCitations.Exchange(idx, idx + 1);
                                 break;
                         }
 
@@ -131,8 +124,8 @@ namespace GKUI.Sheets
 
             if (result)
             {
-                baseWin.Modified = true;
-                UpdateSheet();
+                fBaseWin.Modified = true;
+                UpdateContent();
             }
         }
     }

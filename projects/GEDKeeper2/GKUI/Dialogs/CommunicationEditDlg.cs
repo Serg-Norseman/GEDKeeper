@@ -34,8 +34,8 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class CommunicationEditDlg : EditorDialog
     {
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
 
         private GEDCOMCommunicationRecord fCommunication;
         private GEDCOMIndividualRecord fTempInd;
@@ -78,10 +78,10 @@ namespace GKUI.Dialogs
                         txtDir.SelectedIndex = 0;
                         txtCorresponder.Text = "";
                     }
-
-                    fNotesList.DataList = fCommunication.Notes.GetEnumerator();
-                    fMediaList.DataList = fCommunication.MultimediaLinks.GetEnumerator();
                 }
+
+                fNotesList.ListModel.DataOwner = fCommunication;
+                fMediaList.ListModel.DataOwner = fCommunication;
             }
             catch (Exception ex)
             {
@@ -144,8 +144,8 @@ namespace GKUI.Dialogs
                 cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

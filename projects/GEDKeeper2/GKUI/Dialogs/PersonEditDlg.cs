@@ -31,7 +31,6 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -41,13 +40,13 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class PersonEditDlg : EditorDialog
     {
-        private readonly GKEventsSheet fEventsList;
+        private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
         private readonly GKSheetList fGroupsList;
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
-        private readonly GKSourcesSheet fSourcesList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
+        private readonly GKSheetList fSourcesList;
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
 
@@ -105,6 +104,11 @@ namespace GKUI.Dialogs
 
                     txtMarriedSurname.Text = np.Pieces.MarriedName;
                 }
+
+                fEventsList.ListModel.DataOwner = fPerson;
+                fNotesList.ListModel.DataOwner = fPerson;
+                fMediaList.ListModel.DataOwner = fPerson;
+                fSourcesList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
             }
@@ -260,10 +264,11 @@ namespace GKUI.Dialogs
             }
 
             if (totalUpdate) {
-                fEventsList.DataList = fPerson.Events.GetEnumerator();
-                fNotesList.DataList = fPerson.Notes.GetEnumerator();
-                fMediaList.DataList = fPerson.MultimediaLinks.GetEnumerator();
-                fSourcesList.DataList = fPerson.SourceCitations.GetEnumerator();
+                fEventsList.UpdateSheet();
+                fNotesList.UpdateSheet();
+                fMediaList.UpdateSheet();
+                fSourcesList.UpdateSheet();
+
                 UpdateSpousesSheet();
                 UpdateAssociationsSheet();
                 UpdateGroupsSheet();
@@ -1085,7 +1090,7 @@ namespace GKUI.Dialogs
                 cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
-            fEventsList = new GKEventsSheet(this, pageEvents, true, fLocalUndoman);
+            fEventsList = new GKSheetList(pageEvents, new GKEventsListModel(fBase, fLocalUndoman, true));
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
             fSpousesList = CreateSpousesSheet(pageSpouses);
@@ -1100,13 +1105,13 @@ namespace GKUI.Dialogs
             fGroupsList = CreateGroupsSheet(pageGroups);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
 
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
             fMediaList.SetControlName("fMediaList"); // for purpose of tests
 
-            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
+            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             fUserRefList = CreateURefsSheet(pageUserRefs);

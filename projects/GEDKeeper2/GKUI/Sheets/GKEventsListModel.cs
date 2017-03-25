@@ -29,54 +29,51 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Dialogs;
 
 namespace GKUI.Sheets
 {
-    public sealed class GKEventsSheet : GKCustomSheet
+    public sealed class GKEventsListModel : GKListModel
     {
         private readonly bool fPersonsMode;
 
-        public GKEventsSheet(IBaseEditor baseEditor, Control owner, bool personsMode, ChangeTracker undoman) : base(baseEditor, owner, undoman)
+        public GKEventsListModel(IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(baseWin, undoman)
         {
             fPersonsMode = personsMode;
-
-            Columns_BeginUpdate();
-            AddColumn("№", 25, false);
-            AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
-            AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
-            if (!fPersonsMode) {
-                AddColumn(LangMan.LS(LSID.LSID_Place), 200, false);
-            } else {
-                AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
-            }
-            AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
-            Columns_EndUpdate();
-
-            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                  SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-
-            OnModify += ListModify;
         }
 
-        public override void UpdateSheet()
+        public override void InitView()
         {
-            if (DataList == null) return;
+            fSheetList.Columns_BeginUpdate();
+            fSheetList.AddColumn("№", 25, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
+            if (!fPersonsMode) {
+                fSheetList.AddColumn(LangMan.LS(LSID.LSID_Place), 200, false);
+            } else {
+                fSheetList.AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
+            }
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
+            fSheetList.Columns_EndUpdate();
+
+            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
+        }
+
+        public override void UpdateContent()
+        {
+            var dataOwner = fDataOwner as GEDCOMRecordWithEvents;
+            if (fSheetList == null || dataOwner == null) return;
 
             try
             {
-                ClearItems();
+                fSheetList.ClearItems();
 
-                int idx = 0;
-                DataList.Reset();
-                while (DataList.MoveNext()) {
-                    GEDCOMCustomEvent evt = DataList.Current as GEDCOMCustomEvent;
-                    if (evt == null) continue;
+                for (int i = 0; i < dataOwner.Events.Count; i++)
+                {
+                    GEDCOMCustomEvent evt = dataOwner.Events[i];
 
-                    idx += 1;
-                    
-                    GKListItem item = AddItem(idx, evt);
+                    GKListItem item = fSheetList.AddItem(i + 1, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
                     item.AddSubItem(new GEDCOMDateItem(evt.Date.Value));
 
@@ -93,9 +90,9 @@ namespace GKUI.Sheets
                     item.AddSubItem(GKUtils.GetEventCause(evt));
                 }
 
-                ResizeColumn(1);
-                ResizeColumn(2);
-                ResizeColumn(3);
+                fSheetList.ResizeColumn(1);
+                fSheetList.ResizeColumn(2);
+                fSheetList.ResizeColumn(3);
             }
             catch (Exception ex)
             {
@@ -103,47 +100,34 @@ namespace GKUI.Sheets
             }
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            if (DataList == null) return;
-
-            IBaseWindow baseWin = Editor.Base;
-            if (baseWin == null) return;
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
+            GEDCOMRecordWithEvents record = dataOwner as GEDCOMRecordWithEvents;
 
-            bool result = ModifyRecEvent(baseWin, DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
-
-            if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
-
-            if (result) {
-                baseWin.Modified = true;
-                UpdateSheet();
-            }
-        }
-
-        private bool ModifyRecEvent(IBaseWindow baseWin, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
-        {
             bool result = false;
 
             try
             {
-                switch (action)
+                switch (eArgs.Action)
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (EventEditDlg dlgEventEdit = new EventEditDlg(baseWin))
+                        using (EventEditDlg dlgEventEdit = new EventEditDlg(fBaseWin))
                         {
-                            bool exists = (aEvent != null);
+                            bool exists = (evt != null);
 
                             GEDCOMCustomEvent newEvent;
-                            if (aEvent != null) {
-                                newEvent = aEvent;
+                            if (evt != null) {
+                                newEvent = evt;
                             } else {
                                 if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(baseWin.Tree, record, "", "");
+                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Tree, record, "", "");
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(baseWin.Tree, record, "", "");
+                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Tree, record, "", "");
                                 }
                             }
 
@@ -158,37 +142,32 @@ namespace GKUI.Sheets
                                 newEvent = dlgEventEdit.Event;
 
                                 if (!exists) {
-                                    //record.AddEvent(newEvent);
                                     result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                 } else {
-                                    if (record is GEDCOMIndividualRecord && newEvent != aEvent) {
-                                        //record.Events.Delete(aEvent);
-                                        //record.AddEvent(newEvent);
-                                        fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
+                                    if (record is GEDCOMIndividualRecord && newEvent != evt) {
+                                        fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                     }
                                 }
 
-                                aEvent = newEvent;
-                                baseWin.Context.CollectEventValues(aEvent);
+                                evt = newEvent;
+                                fBaseWin.Context.CollectEventValues(evt);
                             }
                         }
                         break;
 
                     case RecordAction.raDelete:
                         if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
-                            //record.Events.Delete(aEvent);
-                            //result = true;
-                            result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, aEvent);
-                            aEvent = null;
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
+                            evt = null;
                         }
                         break;
 
                     case RecordAction.raMoveUp:
                     case RecordAction.raMoveDown:
                         {
-                            int idx = record.Events.IndexOf(aEvent);
-                            switch (action)
+                            int idx = record.Events.IndexOf(evt);
+                            switch (eArgs.Action)
                             {
                                 case RecordAction.raMoveUp:
                                     record.Events.Exchange(idx - 1, idx);
@@ -206,10 +185,17 @@ namespace GKUI.Sheets
             catch (Exception ex)
             {
                 Logger.LogWrite("GKEventsSheet.ModifyRecEvent(): " + ex.Message);
-                return false;
+                result = false;
             }
 
-            return result;
+            if (result) {
+                if (eArgs.Action == RecordAction.raAdd) {
+                    eArgs.ItemData = evt;
+                }
+
+                fBaseWin.Modified = true;
+                fSheetList.UpdateSheet();
+            }
         }
     }
 }

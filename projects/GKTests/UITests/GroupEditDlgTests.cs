@@ -25,8 +25,8 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.ControlTesters;
 using GKTests.Mocks;
-using GKUI.Controls;
 using GKUI.Dialogs;
+using GKUI.Sheets;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

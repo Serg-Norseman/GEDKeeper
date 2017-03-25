@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class TaskEditDlg : EditorDialog
     {
-        private readonly GKNotesSheet fNotesList;
+        private readonly GKSheetList fNotesList;
         
         private GEDCOMTaskRecord fTask;
         private GEDCOMRecord fTempRec;
@@ -58,8 +58,6 @@ namespace GKUI.Dialogs
                     txtStopDate.Text = "";
                     cmbGoalType.SelectedIndex = 0;
                     txtGoal.Text = "";
-
-                    fNotesList.DataList = null;
                 }
                 else
                 {
@@ -82,9 +80,9 @@ namespace GKUI.Dialogs
                             txtGoal.Text = fTask.Goal;
                             break;
                     }
-
-                    fNotesList.DataList = fTask.Notes.GetEnumerator();
                 }
+
+                fNotesList.ListModel.DataOwner = fTask;
 
                 cmbGoalType_SelectedIndexChanged(null, null);
             }
@@ -210,7 +208,7 @@ namespace GKUI.Dialogs
                 cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_WinTaskEdit);

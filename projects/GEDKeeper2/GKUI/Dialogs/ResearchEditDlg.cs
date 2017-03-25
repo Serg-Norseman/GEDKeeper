@@ -29,7 +29,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -42,7 +41,7 @@ namespace GKUI.Dialogs
         private readonly GKSheetList fTasksList;
         private readonly GKSheetList fCommunicationsList;
         private readonly GKSheetList fGroupsList;
-        private readonly GKNotesSheet fNotesList;
+        private readonly GKSheetList fNotesList;
 
         private GEDCOMResearchRecord fResearch;
 
@@ -75,6 +74,8 @@ namespace GKUI.Dialogs
                     txtStopDate.Text = GKUtils.GetDateFmtString(fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
                     nudPercent.Text = fResearch.Percent.ToString();
                 }
+
+                fNotesList.ListModel.DataOwner = fResearch;
 
                 UpdateLists();
             }
@@ -131,7 +132,7 @@ namespace GKUI.Dialogs
             fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
 
             SetLang();
         }
@@ -272,7 +273,6 @@ namespace GKUI.Dialogs
         private void UpdateLists()
         {
             if (fResearch == null) {
-                fNotesList.DataList = null;
                 fTasksList.ClearItems();
                 fCommunicationsList.ClearItems();
                 fGroupsList.ClearItems();
@@ -280,7 +280,7 @@ namespace GKUI.Dialogs
                 return;
             }
 
-            fNotesList.DataList = fResearch.Notes.GetEnumerator();
+            fNotesList.UpdateSheet();
 
             fTasksList.BeginUpdate();
             fTasksList.ClearItems();

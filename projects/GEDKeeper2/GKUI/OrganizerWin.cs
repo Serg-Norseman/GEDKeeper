@@ -26,7 +26,7 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Controls;
+using GKUI.Sheets;
 
 namespace GKUI
 {

@@ -27,35 +27,34 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 
 namespace GKUI.Sheets
 {
-    public sealed class GKNotesSheet : GKCustomSheet
+    public sealed class GKNotesListModel : GKListModel
     {
-        public GKNotesSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
+        public GKNotesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
-            Columns_BeginUpdate();
-            AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
-            Columns_EndUpdate();
-
-            OnModify += ListModify;
         }
 
-        public override void UpdateSheet()
+        public override void InitView()
         {
-            if (DataList == null) return;
-            
+            fSheetList.Columns_BeginUpdate();
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
+            fSheetList.Columns_EndUpdate();
+        }
+
+        public override void UpdateContent()
+        {
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fSheetList == null || dataOwner == null) return;
+
             try
             {
-                ClearItems();
+                fSheetList.ClearItems();
 
-                DataList.Reset();
-                while (DataList.MoveNext()) {
-                    GEDCOMNotes note = DataList.Current as GEDCOMNotes;
-                    if (note == null) continue;
-
-                    AddItem(note.Notes.Text.Trim(), note);
+                foreach (GEDCOMNotes note in dataOwner.Notes)
+                {
+                    fSheetList.AddItem(note.Notes.Text.Trim(), note);
                 }
             }
             catch (Exception ex)
@@ -64,15 +63,10 @@ namespace GKUI.Sheets
             }
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            if (DataList == null) return;
-            
-            IBaseWindow baseWin = Editor.Base;
-            if (baseWin == null) return;
-
-            IGEDCOMStructWithLists _struct = DataList.Owner as IGEDCOMStructWithLists;
-            if (_struct == null) return;
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GEDCOMNotes notes = eArgs.ItemData as GEDCOMNotes;
 
@@ -82,10 +76,9 @@ namespace GKUI.Sheets
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = baseWin.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = fBaseWin.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null) {
-                        //result = (_struct.AddNote(noteRec) != null);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)_struct, noteRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)dataOwner, noteRec);
                     }
                     break;
 
@@ -93,24 +86,22 @@ namespace GKUI.Sheets
                     if (notes != null)
                     {
                         noteRec = notes.Value as GEDCOMNoteRecord;
-                        result = baseWin.ModifyNote(ref noteRec);
+                        result = fBaseWin.ModifyNote(ref noteRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery)) != DialogResult.No)
                     {
-                        //_struct.Notes.Delete(notes);
-                        //result = true;
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)_struct, notes);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
                     }
                     break;
             }
             
             if (result)
             {
-                baseWin.Modified = true;
-                UpdateSheet();
+                fBaseWin.Modified = true;
+                fSheetList.UpdateSheet();
             }
         }
     }

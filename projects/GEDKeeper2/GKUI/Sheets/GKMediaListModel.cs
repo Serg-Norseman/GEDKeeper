@@ -28,44 +28,44 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 
 namespace GKUI.Sheets
 {
-    public sealed class GKMediaSheet : GKCustomSheet
+    public sealed class GKMediaListModel : GKListModel
     {
-        public GKMediaSheet(IBaseEditor baseEditor, Control owner, ChangeTracker undoman) : base(baseEditor, owner, undoman)
+        public GKMediaListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
-            Columns_BeginUpdate();
-            AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
-            AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
-            Columns_EndUpdate();
-
-            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                  SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-            OnModify += ListModify;
         }
 
-        public override void UpdateSheet()
+        public override void InitView()
         {
-            if (DataList == null) return;
-            
+            fSheetList.Columns_BeginUpdate();
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
+            fSheetList.Columns_EndUpdate();
+
+            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
+        }
+
+        public override void UpdateContent()
+        {
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fSheetList == null || dataOwner == null) return;
+
             try
             {
-                ClearItems();
+                fSheetList.ClearItems();
 
-                DataList.Reset();
-                while (DataList.MoveNext()) {
-                    GEDCOMMultimediaLink mmLink = DataList.Current as GEDCOMMultimediaLink;
-                    if (mmLink == null) continue;
-
+                foreach (GEDCOMMultimediaLink mmLink in dataOwner.MultimediaLinks)
+                {
                     GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
                     if (mmRec == null) continue;
 
                     if (mmRec.FileReferences.Count == 0) continue;
 
                     GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
-                    GKListItem item = AddItem(fileRef.Title, mmLink);
+                    GKListItem item = fSheetList.AddItem(fileRef.Title, mmLink);
                     item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                 }
             }
@@ -75,28 +75,22 @@ namespace GKUI.Sheets
             }
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            if (DataList == null) return;
-
-            IBaseWindow baseWin = Editor.Base;
-            if (baseWin == null) return;
-
-            IGEDCOMStructWithLists _struct = DataList.Owner as IGEDCOMStructWithLists;
-            if (_struct == null) return;
+            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GEDCOMMultimediaLink mmLink = eArgs.ItemData as GEDCOMMultimediaLink;
-            
+
             bool result = false;
 
             GEDCOMMultimediaRecord mmRec;
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = baseWin.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    mmRec = fBaseWin.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
                     if (mmRec != null) {
-                        //result = (_struct.AddMultimedia(mmRec) != null);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)_struct, mmRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)dataOwner, mmRec);
                     }
                     break;
 
@@ -104,32 +98,30 @@ namespace GKUI.Sheets
                     if (mmLink != null)
                     {
                         mmRec = mmLink.Value as GEDCOMMultimediaRecord;
-                        result = baseWin.ModifyMedia(ref mmRec);
+                        result = fBaseWin.ModifyMedia(ref mmRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != DialogResult.No)
                     {
-                        //_struct.MultimediaLinks.Delete(mmLink);
-                        //result = true;
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)_struct, mmLink);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)dataOwner, mmLink);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = _struct.MultimediaLinks.IndexOf(mmLink);
+                        int idx = dataOwner.MultimediaLinks.IndexOf(mmLink);
 
                         switch (eArgs.Action)
                         {
                             case RecordAction.raMoveUp:
-                                _struct.MultimediaLinks.Exchange(idx - 1, idx);
+                                dataOwner.MultimediaLinks.Exchange(idx - 1, idx);
                                 break;
 
                             case RecordAction.raMoveDown:
-                                _struct.MultimediaLinks.Exchange(idx, idx + 1);
+                                dataOwner.MultimediaLinks.Exchange(idx, idx + 1);
                                 break;
                         }
 
@@ -139,8 +131,8 @@ namespace GKUI.Sheets
             }
 
             if (result) {
-                baseWin.Modified = true;
-                UpdateSheet();
+                fBaseWin.Modified = true;
+                fSheetList.UpdateSheet();
             }
         }
     }

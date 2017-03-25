@@ -29,7 +29,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -40,10 +39,10 @@ namespace GKUI.Dialogs
     public partial class FamilyEditDlg : EditorDialog
     {
         private readonly GKSheetList fChildsList;
-        private readonly GKEventsSheet fEventsList;
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
-        private readonly GKSourcesSheet fSourcesList;
+        private readonly GKSheetList fEventsList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
+        private readonly GKSheetList fSourcesList;
 
         private GEDCOMFamilyRecord fFamily;
 
@@ -73,9 +72,14 @@ namespace GKUI.Dialogs
                     cmbMarriageStatus.Enabled = true;
                     cmbMarriageStatus.SelectedIndex = statIdx;
                     cmbRestriction.SelectedIndex = (sbyte)fFamily.Restriction;
-
-                    UpdateControls();
                 }
+
+                fEventsList.ListModel.DataOwner = fFamily;
+                fNotesList.ListModel.DataOwner = fFamily;
+                fMediaList.ListModel.DataOwner = fFamily;
+                fSourcesList.ListModel.DataOwner = fFamily;
+
+                UpdateControls();
             }
             catch (Exception ex)
             {
@@ -99,13 +103,17 @@ namespace GKUI.Dialogs
 
             fChildsList = CreateChildsSheet(pageChilds);
             fChildsList.SetControlName("fChildsList"); // for purpose of tests
-            fEventsList = new GKEventsSheet(this, pageEvents, false, fLocalUndoman);
+
+            fEventsList = new GKSheetList(pageEvents, new GKEventsListModel(fBase, fLocalUndoman, false));
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
             fMediaList.SetControlName("fMediaList"); // for purpose of tests
-            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
+
+            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             GKResourceManager resourceManager = MainWin.ResourceManager;
@@ -160,10 +168,11 @@ namespace GKUI.Dialogs
             btnWifeDelete.Enabled = (wife != null);
             btnWifeSel.Enabled = (wife != null);
 
-            fEventsList.DataList = fFamily.Events.GetEnumerator();
-            fNotesList.DataList = fFamily.Notes.GetEnumerator();
-            fMediaList.DataList = fFamily.MultimediaLinks.GetEnumerator();
-            fSourcesList.DataList = fFamily.SourceCitations.GetEnumerator();
+            fEventsList.UpdateSheet();
+            fNotesList.UpdateSheet();
+            fMediaList.UpdateSheet();
+            fSourcesList.UpdateSheet();
+
             UpdateChildsSheet();
 
             LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);

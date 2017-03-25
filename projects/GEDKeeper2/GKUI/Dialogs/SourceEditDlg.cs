@@ -27,7 +27,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -37,8 +36,8 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class SourceEditDlg : EditorDialog
     {
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
         private GEDCOMSourceRecord fSourceRecord;
@@ -59,8 +58,9 @@ namespace GKUI.Dialogs
             txtPublication.Text = fSourceRecord.Publication.Text.Trim();
             txtText.Text = fSourceRecord.Text.Text.Trim();
 
-            fNotesList.DataList = fSourceRecord.Notes.GetEnumerator();
-            fMediaList.DataList = fSourceRecord.MultimediaLinks.GetEnumerator();
+            fNotesList.ListModel.DataOwner = fSourceRecord;
+            fMediaList.ListModel.DataOwner = fSourceRecord;
+
             UpdateReposSheet();
             
             ActiveControl = txtShortTitle;
@@ -73,8 +73,9 @@ namespace GKUI.Dialogs
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
 
             fRepositoriesList = CreateReposSheet(pageRepositories);
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests

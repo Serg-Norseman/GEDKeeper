@@ -29,8 +29,8 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
 using GKCore.Export;
-using GKCore.Interfaces;
 using GKCore.Geocoding;
+using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -41,6 +41,7 @@ using GKCore.Types;
 using GKTests.Mocks;
 using GKUI.Charts;
 using GKUI.Controls;
+using GKUI.Sheets;
 using NUnit.Framework;
 
 namespace GKTests.GKCore
@@ -562,9 +563,16 @@ namespace GKTests.GKCore
 
         private static void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
         {
-            IGEDCOMListEnumerator enumer = iRec.Events.GetEnumerator();
+            IGEDCOMListEnumerator<GEDCOMCustomEvent> enumer = iRec.Events.GetEnumerator();
             while (enumer.MoveNext()) {
-                GEDCOMCustomEvent evt1 = (GEDCOMCustomEvent)enumer.Current;
+                GEDCOMCustomEvent evt1 = enumer.Current;
+                evt1.GetHashCode();
+            }
+        }
+
+        private static void GEDCOMListTest13(GEDCOMIndividualRecord iRec)
+        {
+            foreach (GEDCOMCustomEvent evt1 in iRec.Events) {
                 evt1.GetHashCode();
             }
         }

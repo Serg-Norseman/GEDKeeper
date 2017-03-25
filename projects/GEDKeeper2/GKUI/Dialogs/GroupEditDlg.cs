@@ -27,7 +27,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Controls;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -38,8 +37,8 @@ namespace GKUI.Dialogs
     public sealed partial class GroupEditDlg : EditorDialog
     {
         private readonly GKSheetList fMembersList;
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
 
         private GEDCOMGroupRecord fGroup;
 
@@ -56,11 +55,8 @@ namespace GKUI.Dialogs
             {
                 edName.Text = (fGroup == null) ? "" : fGroup.GroupName;
 
-                if (fGroup != null)
-                {
-                    fNotesList.DataList = fGroup.Notes.GetEnumerator();
-                    fMediaList.DataList = fGroup.MultimediaLinks.GetEnumerator();
-                }
+                fNotesList.ListModel.DataOwner = fGroup;
+                fMediaList.ListModel.DataOwner = fGroup;
 
                 UpdateMembersSheet();
             }
@@ -79,8 +75,9 @@ namespace GKUI.Dialogs
 
             fMembersList = CreateMembersSheet(pageMembers);
             fMembersList.SetControlName("fMembersList"); // for purpose of tests
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_WinGroupEdit);

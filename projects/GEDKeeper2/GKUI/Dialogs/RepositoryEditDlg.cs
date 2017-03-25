@@ -33,7 +33,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class RepositoryEditDlg : EditorDialog
     {
-        private readonly GKNotesSheet fNotesList;
+        private readonly GKSheetList fNotesList;
 
         private GEDCOMRepositoryRecord fRepository;
         
@@ -48,7 +48,7 @@ namespace GKUI.Dialogs
             fRepository = value;
             txtName.Text = fRepository.RepositoryName;
 
-            fNotesList.DataList = fRepository.Notes.GetEnumerator();
+            fNotesList.ListModel.DataOwner = fRepository;
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
@@ -91,7 +91,7 @@ namespace GKUI.Dialogs
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Repository);

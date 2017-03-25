@@ -19,10 +19,11 @@
  */
 
 using System.Collections;
+using System.Collections.Generic;
 
 namespace GKCommon.GEDCOM
 {
-    public interface IGEDCOMListEnumerator : IEnumerator
+    public interface IGEDCOMListEnumerator<T> : IEnumerator, IEnumerator<T>
     {
         GEDCOMObject Owner
         {
@@ -46,7 +47,7 @@ namespace GKCommon.GEDCOM
         GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality);
         GEDCOMMultimediaLink AddMultimedia(GEDCOMMultimediaRecord mediaRec);
     }
-    
+
     public interface IGEDCOMRecordWithEvents
     {
         GEDCOMList<GEDCOMCustomEvent> Events { get; }

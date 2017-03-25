@@ -22,15 +22,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+
 using Externals;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMList<T> : IDisposable, IEnumerable where T : GEDCOMObject
+    public sealed class GEDCOMList<T> : IDisposable, IEnumerable, IEnumerable<T> where T : GEDCOMObject
     {
         #region ListEnumerator
 
-        private struct GEDCOMListEnumerator : IGEDCOMListEnumerator
+        private struct GEDCOMListEnumerator : IGEDCOMListEnumerator<T>
         {
             private readonly GEDCOMList<T> fOwnList;
             private int fIndex;
@@ -44,6 +45,10 @@ namespace GKCommon.GEDCOM
 
                 List<T> dataList = list.fDataList;
                 fSize = ((dataList == null) ? 0 : dataList.Count);
+            }
+
+            void IDisposable.Dispose()
+            {
             }
 
             void IEnumerator.Reset()
@@ -65,7 +70,12 @@ namespace GKCommon.GEDCOM
                 get { return fOwnList.fDataList[fIndex]; }
             }
 
-            GEDCOMObject IGEDCOMListEnumerator.Owner
+            T IEnumerator<T>.Current
+            {
+                get { return fOwnList.fDataList[fIndex]; }
+            }
+
+            GEDCOMObject IGEDCOMListEnumerator<T>.Owner
             {
                 get { return fOwnList.fOwner; }
             }
@@ -115,12 +125,17 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public IGEDCOMListEnumerator GetEnumerator()
+        public IGEDCOMListEnumerator<T> GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new GEDCOMListEnumerator(this);
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);
         }

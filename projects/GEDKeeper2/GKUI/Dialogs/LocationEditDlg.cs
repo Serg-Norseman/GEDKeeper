@@ -39,8 +39,8 @@ namespace GKUI.Dialogs
     public sealed partial class LocationEditDlg : EditorDialog
     {
         private readonly GKMapBrowser fMapBrowser;
-        private readonly GKMediaSheet fMediaList;
-        private readonly GKNotesSheet fNotesList;
+        private readonly GKSheetList fMediaList;
+        private readonly GKSheetList fNotesList;
 
         private GEDCOMLocationRecord fLocationRecord;
 
@@ -63,8 +63,8 @@ namespace GKUI.Dialogs
             fMapBrowser.ShowLines = false;
             panMap.Controls.Add(fMapBrowser);
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Location);
@@ -104,8 +104,8 @@ namespace GKUI.Dialogs
             txtLatitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Lati);
             txtLongitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Long);
 
-            fNotesList.DataList = fLocationRecord.Notes.GetEnumerator();
-            fMediaList.DataList = fLocationRecord.MultimediaLinks.GetEnumerator();
+            fNotesList.ListModel.DataOwner = fLocationRecord;
+            fMediaList.ListModel.DataOwner = fLocationRecord;
 
             ActiveControl = txtName;
         }

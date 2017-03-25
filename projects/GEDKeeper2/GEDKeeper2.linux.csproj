@@ -220,10 +220,6 @@
     <Compile Include="GKUI\Controls\GKRecordsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKSheetList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -427,19 +423,19 @@
     <Compile Include="GKUI\PatriarchsViewerWin.Designer.cs">
       <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKEventsSheet.cs">
+    <Compile Include="GKUI\Sheets\GKEventsListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKMediaSheet.cs">
+    <Compile Include="GKUI\Sheets\GKMediaListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKCustomSheet.cs">
+    <Compile Include="GKUI\Sheets\GKNotesListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKNotesSheet.cs">
+    <Compile Include="GKUI\Sheets\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKSourcesSheet.cs">
+    <Compile Include="GKUI\Sheets\GKSourcesListModel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\CircleChartWin.cs">

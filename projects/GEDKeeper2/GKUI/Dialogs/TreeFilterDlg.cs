@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
+using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {

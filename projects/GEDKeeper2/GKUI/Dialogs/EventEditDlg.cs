@@ -37,9 +37,9 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class EventEditDlg : EditorDialog
     {
-        private readonly GKNotesSheet fNotesList;
-        private readonly GKMediaSheet fMediaList;
-        private readonly GKSourcesSheet fSourcesList;
+        private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fMediaList;
+        private readonly GKSheetList fSourcesList;
 
         private GEDCOMCustomEvent fEvent;
         private GEDCOMLocationRecord fLocation;
@@ -79,9 +79,9 @@ namespace GKUI.Dialogs
 
             fLocation = null;
 
-            fNotesList = new GKNotesSheet(this, pageNotes, fLocalUndoman);
-            fMediaList = new GKMediaSheet(this, pageMultimedia, fLocalUndoman);
-            fSourcesList = new GKSourcesSheet(this, pageSources, fLocalUndoman);
+            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Event);
@@ -253,9 +253,9 @@ namespace GKUI.Dialogs
                 btnPlaceDelete.Enabled = false;
             }
 
-            fNotesList.DataList = fEvent.Notes.GetEnumerator();
-            fMediaList.DataList = fEvent.MultimediaLinks.GetEnumerator();
-            fSourcesList.DataList = fEvent.SourceCitations.GetEnumerator();
+            fNotesList.UpdateSheet();
+            fMediaList.UpdateSheet();
+            fSourcesList.UpdateSheet();
         }
 
         private void SetEvent(GEDCOMCustomEvent value)
@@ -405,6 +405,11 @@ namespace GKUI.Dialogs
             txtEventCause.Text = fEvent.Cause;
             txtEventOrg.Text = fEvent.Agency;
             fLocation = (fEvent.Place.Location.Value as GEDCOMLocationRecord);
+
+            fNotesList.ListModel.DataOwner = fEvent;
+            fMediaList.ListModel.DataOwner = fEvent;
+            fSourcesList.ListModel.DataOwner = fEvent;
+
             ControlsRefresh();
 
             ActiveControl = cmbEventType;

@@ -304,6 +304,9 @@ namespace GKTests.UITests
             Assert.AreEqual(GEDCOMSex.svMale, sex);
         }
 
+        //[STAThread]
+        //[Test]
+        //public void MainWin_Test()
         private void MainWin_Test()
         {
             ModalFormHandler = DayTipsDlgTests.CloseModalHandler;

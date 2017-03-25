@@ -24,13 +24,31 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
+using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Types;
 
-namespace GKUI.Controls
+namespace GKUI.Sheets
 {
     public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
     public delegate void ItemValidatingEventHandler(object sender, ItemValidatingEventArgs e);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ModifyEventArgs : EventArgs
+    {
+        public RecordAction Action { get; private set; }
+        public object ItemData { get; set; }
+
+        public ModifyEventArgs(RecordAction action, object itemData)
+        {
+            Action = action;
+            ItemData = itemData;
+        }
+    }
 
     public class ItemValidatingEventArgs : EventArgs
     {
@@ -69,6 +87,42 @@ namespace GKUI.Controls
         lbMoveDown
     }
 
+    public abstract class GKListModel
+    {
+        protected GKSheetList fSheetList;
+        protected readonly IBaseWindow fBaseWin;
+        protected readonly ChangeTracker fUndoman;
+        protected GEDCOMObject fDataOwner;
+
+        public GEDCOMObject DataOwner
+        {
+            get { return fDataOwner; }
+            set {
+                fDataOwner = value;
+                UpdateContent();
+            }
+        }
+
+        public GKSheetList SheetList
+        {
+            get { return fSheetList; }
+            set {
+                fSheetList = value;
+                InitView();
+            }
+        }
+
+        protected GKListModel(IBaseWindow baseWin, ChangeTracker undoman)
+        {
+            fBaseWin = baseWin;
+            fUndoman = undoman;
+        }
+
+        public abstract void InitView();
+        public abstract void UpdateContent();
+        public abstract void Modify(object sender, ModifyEventArgs eArgs);
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -89,6 +143,9 @@ namespace GKUI.Controls
         private EnumSet<SheetButton> fButtons;
         private bool fReadOnly;
 
+        private GKListModel fListModel;
+
+
         public event ModifyEventHandler OnModify
         {
             add { Events.AddHandler(EventModify, value); }
@@ -105,6 +162,25 @@ namespace GKUI.Controls
         {
             get { return fButtons; }
             set { SetButtons(value); }
+        }
+
+        public GKListModel ListModel
+        {
+            get { return fListModel; }
+            set {
+                if (fListModel != value) {
+                    if (fListModel != null) {
+                        fListModel.SheetList = null;
+                    }
+
+                    fListModel = value;
+
+                    if (fListModel != null) {
+                        fListModel.SheetList = this;
+                        UpdateSheet();
+                    }
+                }
+            }
         }
 
         public bool ReadOnly
@@ -200,6 +276,11 @@ namespace GKUI.Controls
             SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
         }
 
+        public GKSheetList(Control owner, GKListModel listModel) : this(owner)
+        {
+            ListModel = listModel;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -293,6 +374,10 @@ namespace GKUI.Controls
 
         private void DoModify(ModifyEventArgs eArgs)
         {
+            if (fListModel != null) {
+                fListModel.Modify(this, eArgs);
+            }
+
             var eventHandler = (ModifyEventHandler)Events[EventModify];
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
@@ -427,6 +512,13 @@ namespace GKUI.Controls
         public void SelectItem(int index)
         {
             fList.SelectItem(index);
+        }
+
+        public virtual void UpdateSheet()
+        {
+            if (fListModel != null) {
+                fListModel.UpdateContent();
+            }
         }
     }
 }
