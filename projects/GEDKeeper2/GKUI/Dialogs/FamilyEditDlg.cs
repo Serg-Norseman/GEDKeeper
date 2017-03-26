@@ -202,12 +202,10 @@ namespace GKUI.Dialogs
         private GKSheetList CreateChildsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
-            sheet.Columns_BeginUpdate();
+
             sheet.AddColumn("№", 25, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_BirthDate), 100, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             sheet.OnModify += ModifyChildsSheet;
@@ -219,12 +217,12 @@ namespace GKUI.Dialogs
         {
             try
             {
-                fChildsList.SwitchSorter();
                 fChildsList.BeginUpdate();
                 fChildsList.ClearItems();
 
                 int idx = 0;
-                foreach (GEDCOMPointer ptr in fFamily.Children) {
+                foreach (GEDCOMPointer ptr in fFamily.Children)
+                {
                     idx += 1;
 
                     GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
@@ -235,7 +233,6 @@ namespace GKUI.Dialogs
                 }
 
                 fChildsList.EndUpdate();
-                fChildsList.SwitchSorter();
             }
             catch (Exception ex)
             {

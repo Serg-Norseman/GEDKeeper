@@ -18,29 +18,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using GKCommon;
-using GKCommon.GEDCOM;
+using System;
+using Externals.Linguistics;
+using NUnit.Framework;
 
-namespace GKCore.Options
+namespace GKTests.GKCommon
 {
-    public sealed class LangRecord
+    [TestFixture]
+    public class RusDeclensionTests
     {
-        public readonly ushort Code;
-        public readonly string Sign;
-        public readonly string Name;
-        public readonly string FileName;
-        public readonly GEDCOMLanguageID LangID;
-
-        public LangRecord(ushort code, string sign, string name, string fileName)
+        [Test]
+        public void Test_Common()
         {
-            Code = code;
-            Sign = sign;
-            Name = name;
-            FileName = fileName;
+            Assert.AreEqual("Иванова Ивана Ивановича", RusDeclension.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
 
-            string engLangName = SysUtils.NormalizeName(Path.GetFileNameWithoutExtension(fileName));
-            LangID = GEDCOMLanguage.GetLangID(engLangName);
+            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", RusDeclension.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
+
+            //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
+            //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));
         }
     }
 }

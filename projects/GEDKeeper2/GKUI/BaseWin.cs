@@ -1988,7 +1988,7 @@ namespace GKUI
                 {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GEDCOMSourceCitation(Tree, _struct as GEDCOMObject, "", "");
+                        cit = new GEDCOMSourceCitation(fTree, _struct as GEDCOMObject, "", "");
                     }
 
                     fmSrcCitEdit.SourceCitation = cit;

@@ -38,9 +38,7 @@ namespace GKUI.Sheets
 
         public override void InitView()
         {
-            fSheetList.Columns_BeginUpdate();
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
-            fSheetList.Columns_EndUpdate();
         }
 
         public override void UpdateContent()

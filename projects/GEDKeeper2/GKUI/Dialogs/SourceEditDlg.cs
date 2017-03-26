@@ -98,10 +98,8 @@ namespace GKUI.Dialogs
         private GKSheetList CreateReposSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
-            sheet.Columns_BeginUpdate();
+
             sheet.AddColumn(LangMan.LS(LSID.LSID_Repository), 300, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
             sheet.OnModify += ModifyReposSheet;

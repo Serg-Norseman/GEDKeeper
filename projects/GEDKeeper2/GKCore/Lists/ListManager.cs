@@ -89,12 +89,12 @@ namespace GKCore.Lists
             base.Dispose(disposing);
         }
 
-        protected void AddListColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
             if (list == null)
                 throw new ArgumentNullException("list");
 
-            list.AddListColumn(caption, width, autoSize);
+            list.AddColumn(caption, width, autoSize);
             fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
         }
 
@@ -194,13 +194,13 @@ namespace GKCore.Lists
             if (listView == null) return;
 
             ColumnsMap_Clear();
-            AddListColumn(listView, "№", 50, false, 0, 0);
+            AddColumn(listView, "№", 50, false, 0, 0);
 
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
 
-                AddListColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, (byte)i, 0);
+                AddColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, (byte)i, 0);
             }
         }
 

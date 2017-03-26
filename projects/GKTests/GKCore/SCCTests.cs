@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using GKCommon;
 using GKCore;
 using NUnit.Framework;
 
@@ -30,7 +32,24 @@ namespace GKTests.GKCore
     public class SCCTests
     {
         [Test]
-        public void SCCrypt_Tests()
+        public void Test_Complex()
+        {
+            const string pw = "test password";
+            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)SysUtils.CrcStr("test")));
+            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)SysUtils.CrcStr("test")));
+
+            Assert.AreEqual(pw, pw1, "SCCrypt_Test");
+
+            byte[] salt = SCCrypt.CreateRandomSalt(24);
+            Assert.IsNotNull(salt);
+            Assert.AreEqual(24, salt.Length);
+
+            SCCrypt.ClearBytes(salt);
+            Assert.Throws(typeof(ArgumentNullException), () => { SCCrypt.ClearBytes(null); });
+        }
+
+        [Test]
+        public void Test_Common()
         {
             uint source = 0xabbccdd;
             byte[] array = MoveL2S_old(source, 4);

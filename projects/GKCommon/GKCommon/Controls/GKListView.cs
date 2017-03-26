@@ -227,11 +227,11 @@ namespace GKCommon.Controls
         }
 
         private readonly LVColumnSorter fColumnSorter;
-        private SortOrder fOldSortOrder;
 
         protected int fSortColumn;
         protected SortOrder fSortOrder;
         protected int fUpdateCount;
+
 
         public int SortColumn
         {
@@ -244,6 +244,7 @@ namespace GKCommon.Controls
             get { return fSortOrder; }
             set { fSortOrder = value; }
         }
+
 
         public GKListView()
         {
@@ -262,34 +263,19 @@ namespace GKCommon.Controls
 
             fSortColumn = 0;
             fSortOrder = SortOrder.None;
-            fOldSortOrder = SortOrder.None;
             fColumnSorter = new LVColumnSorter(this);
 
             ListViewItemSorter = fColumnSorter;
-        }
-
-        public void SwitchSorter()
-        {
-            if (fOldSortOrder == SortOrder.None) {
-                fOldSortOrder = fSortOrder;
-                fSortOrder = SortOrder.None;
-            } else {
-                fSortOrder = fOldSortOrder;
-                fOldSortOrder = SortOrder.None;
-                Sort();
-            }
         }
 
         public virtual void BeginUpdates()
         {
             fUpdateCount++;
             BeginUpdate();
-            //this.SwitchSorter();
         }
 
         public virtual void EndUpdates()
         {
-            //this.SwitchSorter();
             EndUpdate();
             fUpdateCount--;
         }
@@ -407,7 +393,7 @@ namespace GKCommon.Controls
 
         #region Public methods
 
-        public void AddListColumn(string caption, int width, bool autoSize)
+        public void AddColumn(string caption, int width, bool autoSize)
         {
             if (autoSize) width = -1;
             Columns.Add(caption, width, HorizontalAlignment.Left);

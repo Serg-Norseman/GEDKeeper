@@ -28,10 +28,10 @@ using NUnit.Framework;
 namespace GKTests.GKCommon
 {
     [TestFixture]
-    public class SerializeTests
+    public class YamlHelperTests
     {
         [Test]
-        public void TestSerializes()
+        public void Test_Common()
         {
             var dtx = new DateTime(2009, 01, 08);
             var person = new Person() { Name = "test test test", BirthDay = dtx };

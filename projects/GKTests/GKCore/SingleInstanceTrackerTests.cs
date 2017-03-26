@@ -25,7 +25,7 @@ using NUnit.Framework;
 namespace GKTests.GKCore
 {
     [TestFixture]
-    public class GKExtTests
+    public class SingleInstanceTrackerTests
     {
         #if !__MonoCS__
         private class SingleInstanceEnforcerMock: ISingleInstanceEnforcer
@@ -35,7 +35,7 @@ namespace GKTests.GKCore
         }
 
         [Test]
-        public void SingleInstanceTracker_Tests()
+        public void Test_Common()
         {
             //Assert.Throws(typeof(ArgumentNullException), () => { new SingleInstanceProxy(null); });
 

@@ -588,7 +588,7 @@ namespace GKCore.Lists
         public override void UpdateColumns(IListView listView, bool isMain)
         {
             ColumnsMap_Clear();
-            AddListColumn(listView, "№", 50, false, 0, 0);
+            AddColumn(listView, "№", 50, false, 0, 0);
 
             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
             IndividualListColumns columns = GlobalOptions.Instance.IndividualListColumns;
@@ -606,22 +606,22 @@ namespace GKCore.Lists
                     switch (defNameFormat)
                     {
                         case NameFormat.nfF_N_P:
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
                             break;
 
                         case NameFormat.nfF_NP:
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
                             break;
 
                         case NameFormat.nfFNP:
-                            AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.CurWidth, asz, bColType, 0);
+                            AddColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.CurWidth, asz, bColType, 0);
                             break;
                     }
                 } else {
-                    AddListColumn(listView, LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
+                    AddColumn(listView, LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
                 }
             }
         }

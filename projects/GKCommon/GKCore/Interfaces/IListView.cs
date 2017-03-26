@@ -25,6 +25,6 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IListView
     {
-        void AddListColumn(string caption, int width, bool autoSize);
+        void AddColumn(string caption, int width, bool autoSize);
     }
 }

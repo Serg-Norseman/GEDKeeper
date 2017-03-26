@@ -33,7 +33,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void Calendar_Tests()
+        public void Test_Common()
         {
             DateTime gdt = new DateTime(1990, 10, 10);
             string s;
@@ -81,7 +81,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void CalendarCP_Tests()
+        public void Test_CP()
         {
             DateTime gdt = new DateTime(2016, 11, 28);
 
@@ -106,7 +106,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void CalendarGK_Tests()
+        public void Test_GK()
         {
             double jd;
             int year, month, day;

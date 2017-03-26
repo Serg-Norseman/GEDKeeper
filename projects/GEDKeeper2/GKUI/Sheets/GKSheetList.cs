@@ -314,6 +314,8 @@ namespace GKUI.Sheets
             fBtnMoveDown.Name = fToolBar.Name + "_btnMoveDown";
         }
 
+        #region Private methods
+
         private void SetButtons(EnumSet<SheetButton> value)
         {
             fButtons = value;
@@ -359,12 +361,6 @@ namespace GKUI.Sheets
                         break;
                 }
             }
-        }
-
-        public object GetSelectedData()
-        {
-            GKListItem item = fList.GetSelectedItem();
-            return (item != null) ? item.Data : null;
         }
 
         private void RestoreSelected(object itemData)
@@ -461,6 +457,8 @@ namespace GKUI.Sheets
             RestoreSelected(eArgs.ItemData);
         }
 
+        #endregion
+
         public void ClearColumns()
         {
             fList.Columns.Clear();
@@ -473,25 +471,17 @@ namespace GKUI.Sheets
 
         public void AddColumn(string caption, int width, bool autoSize)
         {
-            fList.AddListColumn(caption, width, autoSize);
-        }
-
-        public void Columns_BeginUpdate()
-        {
-        }
-
-        public void Columns_EndUpdate()
-        {
+            fList.AddColumn(caption, width, autoSize);
         }
 
         public void BeginUpdate()
         {
-            fList.BeginUpdate();
+            fList.BeginUpdates();
         }
 
         public void EndUpdate()
         {
-            fList.EndUpdate();
+            fList.EndUpdates();
         }
 
         public GKListItem AddItem(object itemValue, object data)
@@ -504,11 +494,6 @@ namespace GKUI.Sheets
             fList.Items.Clear();
         }
 
-        public void SwitchSorter()
-        {
-            fList.SwitchSorter();
-        }
-
         public void SelectItem(int index)
         {
             fList.SelectItem(index);
@@ -519,6 +504,12 @@ namespace GKUI.Sheets
             if (fListModel != null) {
                 fListModel.UpdateContent();
             }
+        }
+
+        public object GetSelectedData()
+        {
+            GKListItem item = fList.GetSelectedItem();
+            return (item != null) ? item.Data : null;
         }
     }
 }

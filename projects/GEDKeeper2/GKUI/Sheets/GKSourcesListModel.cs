@@ -39,12 +39,10 @@ namespace GKUI.Sheets
 
         public override void InitView()
         {
-            fSheetList.Columns_BeginUpdate();
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
-            fSheetList.Columns_EndUpdate();
 
             fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                              SheetButton.lbMoveUp, SheetButton.lbMoveDown);

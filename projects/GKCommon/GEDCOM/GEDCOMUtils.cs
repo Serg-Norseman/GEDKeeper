@@ -20,12 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
+    public class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
     {
         private readonly string[] fStrValues;
         private readonly Dictionary<string, int> fValues;
@@ -69,7 +70,7 @@ namespace GKCommon.GEDCOM
         public T GetEnumValue(string key)
         {
             if (!fCaseSensitive) {
-                key = key.Trim().ToLowerInvariant();
+                key = key.Trim().ToLower(CultureInfo.InvariantCulture);
             }
 
             int result;
@@ -787,57 +788,57 @@ namespace GKCommon.GEDCOM
             GEDCOMMediaType result = GEDCOMMediaType.mtUnknown;
             if (string.IsNullOrEmpty(str)) return result;
 
-            str = str.Trim().ToLowerInvariant();
+            str = str.Trim().ToLower(CultureInfo.InvariantCulture);
 
-            if (str == "audio")
+            if (string.Equals(str, "audio"))
             {
                 result = GEDCOMMediaType.mtAudio;
             }
-            else if (str == "book")
+            else if (string.Equals(str, "book"))
             {
                 result = GEDCOMMediaType.mtBook;
             }
-            else if (str == "card")
+            else if (string.Equals(str, "card"))
             {
                 result = GEDCOMMediaType.mtCard;
             }
-            else if (str == "electronic")
+            else if (string.Equals(str, "electronic"))
             {
                 result = GEDCOMMediaType.mtElectronic;
             }
-            else if (str == "fiche")
+            else if (string.Equals(str, "fiche"))
             {
                 result = GEDCOMMediaType.mtFiche;
             }
-            else if (str == "film")
+            else if (string.Equals(str, "film"))
             {
                 result = GEDCOMMediaType.mtFilm;
             }
-            else if (str == "magazine")
+            else if (string.Equals(str, "magazine"))
             {
                 result = GEDCOMMediaType.mtMagazine;
             }
-            else if (str == "manuscript")
+            else if (string.Equals(str, "manuscript"))
             {
                 result = GEDCOMMediaType.mtManuscript;
             }
-            else if (str == "map")
+            else if (string.Equals(str, "map"))
             {
                 result = GEDCOMMediaType.mtMap;
             }
-            else if (str == "newspaper")
+            else if (string.Equals(str, "newspaper"))
             {
                 result = GEDCOMMediaType.mtNewspaper;
             }
-            else if (str == "photo")
+            else if (string.Equals(str, "photo"))
             {
                 result = GEDCOMMediaType.mtPhoto;
             }
-            else if (str == "tombstone")
+            else if (string.Equals(str, "tombstone"))
             {
                 result = GEDCOMMediaType.mtTombstone;
             }
-            else if (str == "video")
+            else if (string.Equals(str, "video"))
             {
                 result = GEDCOMMediaType.mtVideo;
             }

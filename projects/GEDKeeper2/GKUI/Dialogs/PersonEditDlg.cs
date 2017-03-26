@@ -411,10 +411,8 @@ namespace GKUI.Dialogs
         {
             GKSheetList sheet = new GKSheetList(owner);
 
-            sheet.Columns_BeginUpdate();
             sheet.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             sheet.OnModify += ModifyAssociationsSheet;
@@ -498,10 +496,8 @@ namespace GKUI.Dialogs
         {
             GKSheetList sheet = new GKSheetList(owner);
 
-            sheet.Columns_BeginUpdate();
             sheet.AddColumn(LangMan.LS(LSID.LSID_Reference), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
-            sheet.Columns_EndUpdate();
 
             sheet.OnModify += ModifyURefsSheet;
 
@@ -580,11 +576,9 @@ namespace GKUI.Dialogs
         {
             GKSheetList sheet = new GKSheetList(owner);
 
-            sheet.Columns_BeginUpdate();
             sheet.AddColumn("№", 25, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Spouse), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                         SheetButton.lbJump, SheetButton.lbMoveUp, SheetButton.lbMoveDown);
@@ -713,10 +707,8 @@ namespace GKUI.Dialogs
         private GKSheetList CreateGroupsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
-            sheet.Columns_BeginUpdate();
+
             sheet.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
             sheet.OnModify += ModifyGroupsSheet;
@@ -784,11 +776,9 @@ namespace GKUI.Dialogs
         private GKSheetList CreateNamesSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
-            sheet.Columns_BeginUpdate();
+
             sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 350, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 100, false);
-            sheet.Columns_EndUpdate();
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                         SheetButton.lbMoveDown, SheetButton.lbMoveUp);

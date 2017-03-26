@@ -401,9 +401,9 @@ namespace GKUI
             ListChecks = GKUtils.CreateListView(Panel1);
             ListChecks.CheckBoxes = true;
             ListChecks.DoubleClick += ListChecks_DblClick;
-            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
+            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
+            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
         }
 
         private void CheckBase()
@@ -463,8 +463,8 @@ namespace GKUI
         {
             ListPlaces = GKUtils.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
-            ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_Place), 400, false);
-            ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
+            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
 
         private void CheckPlaces()
@@ -637,10 +637,10 @@ namespace GKUI
         {
             ListPatriarchs = GKUtils.CreateListView(Panel3);
             ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
-            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
-            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
-            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
-            ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
+            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
+            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
+            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
+            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)

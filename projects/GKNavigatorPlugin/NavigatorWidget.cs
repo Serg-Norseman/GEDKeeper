@@ -263,10 +263,10 @@ namespace GKNavigatorPlugin
             try
             {
                 lvData.Clear();
-                lvData.AddListColumn("Action", 20, true);
-                lvData.AddListColumn("XRef", 20, true);
-                lvData.AddListColumn("Name", 20, true);
-                lvData.AddListColumn("Time", 20, true);
+                lvData.AddColumn("Action", 20, true);
+                lvData.AddColumn("XRef", 20, true);
+                lvData.AddColumn("Name", 20, true);
+                lvData.AddColumn("Time", 20, true);
 
                 BaseData baseData = fPlugin.Data[fBase.Tree.FileName];
                 if (baseData == null) return;

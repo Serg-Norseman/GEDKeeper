@@ -24,10 +24,10 @@ using NUnit.Framework;
 namespace GKTests.GKCommon
 {
     [TestFixture]
-    public class PIPTests
+    public class ImportUtilsTests
     {
         [Test]
-        public void ImpUtils_Valid_Tests()
+        public void Test_ValidCases()
         {
             bool res;
             string pid;
@@ -134,7 +134,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void ImpUtils_Invalid_Tests()
+        public void Test_InvalidCases()
         {
             bool res;
             string pid;
@@ -202,7 +202,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void Other_Tests()
+        public void Test_Other()
         {
             Assert.IsTrue(ImportUtils.IsRomeLine("XIV"));
             Assert.IsFalse(ImportUtils.IsRomeLine("XVA"));

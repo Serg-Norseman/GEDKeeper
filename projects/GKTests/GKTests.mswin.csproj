@@ -73,14 +73,26 @@
     <Compile Include="CoreTests.cs" />
     <Compile Include="GedcomTests.cs" />
     <Compile Include="GKCommon\CalendarTests.cs" />
-    <Compile Include="GKCommon\ExtTests.cs" />
-    <Compile Include="GKCommon\PIPTests.cs" />
-    <Compile Include="GKCommon\SerializeTests.cs" />
+    <Compile Include="GKCommon\CSVReaderTests.cs" />
+    <Compile Include="GKCommon\EnumSetTests.cs" />
+    <Compile Include="GKCommon\ExpCalculatorTests.cs" />
+    <Compile Include="GKCommon\ExtListTests.cs" />
+    <Compile Include="GKCommon\ExtRectTests.cs" />
+    <Compile Include="GKCommon\IndistinctMatchingTests.cs" />
+    <Compile Include="GKCommon\RangesTests.cs" />
+    <Compile Include="GKCommon\RusDeclensionTests.cs" />
+    <Compile Include="GKCommon\IniFileTests.cs" />
+    <Compile Include="GKCommon\ImportUtilsTests.cs" />
+    <Compile Include="GKCommon\YamlHelperTests.cs" />
     <Compile Include="GKCommon\SmartGraphTests.cs" />
+    <Compile Include="GKCommon\StringListTests.cs" />
+    <Compile Include="GKCommon\StringTokenizerTests.cs" />
     <Compile Include="GKCommon\SysUtilsTests.cs" />
     <Compile Include="GKCommon\UDNTests.cs" />
+    <Compile Include="GKCommon\ValuesCollectionTests.cs" />
+    <Compile Include="GKCommon\ZipStorerTests.cs" />
     <Compile Include="GKCore\SCCTests.cs" />
-    <Compile Include="GKExtTests.cs" />
+    <Compile Include="GKCore\SingleInstanceTrackerTests.cs" />
     <Compile Include="GXResources.Designer.cs">
       <DependentUpon>GXResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>

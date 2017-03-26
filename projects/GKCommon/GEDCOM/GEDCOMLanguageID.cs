@@ -112,4 +112,11 @@ namespace GKCommon.GEDCOM
         Vietnamese,
         Yiddish
     }
+
+    public sealed class GEDCOMLanguageEnumHelper : GEDCOMEnumHelper<GEDCOMLanguageID>
+    {
+        public GEDCOMLanguageEnumHelper() : base(GEDCOMConsts.LngEnumStr, GEDCOMLanguageID.Unknown, true)
+        {
+        }
+    }
 }

@@ -24,7 +24,7 @@ using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKTests.GKCommon;
+using GKTests.GEDCOM;
 using GKTests.Mocks;
 using GKUI;
 using NUnit.Framework;

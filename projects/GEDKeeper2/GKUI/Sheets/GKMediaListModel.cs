@@ -39,10 +39,8 @@ namespace GKUI.Sheets
 
         public override void InitView()
         {
-            fSheetList.Columns_BeginUpdate();
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
-            fSheetList.Columns_EndUpdate();
 
             fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                              SheetButton.lbMoveUp, SheetButton.lbMoveDown);

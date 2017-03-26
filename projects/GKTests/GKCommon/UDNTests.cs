@@ -62,7 +62,7 @@ namespace GKTests.GKCommon
         }
 
         [Test]
-        public void UDNSort_Tests()
+        public void Test_Sort()
         {
             fDates.Add(new UDNRecord(UDNCalendarType.ctGregorian, 2016, 05, 05, "2016/05/05 [g]"));
             fDates.Add(new UDNRecord(UDNCalendarType.ctGregorian, 2016, 05, 04, "2016/05/04 [g]"));
@@ -192,14 +192,14 @@ namespace GKTests.GKCommon
 
         [Test(Description = "UDN Exceptions Test")]
         [ExpectedException(typeof(Exception))]
-        public void UDNExceptions_Tests()
+        public void Test_Exceptions()
         {
             UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
                               new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 07));
         }
 
         [Test]
-        public void UDNCommon_Tests()
+        public void Test_Common()
         {
             UDN testUDNAft = UDN.CreateAfter(UDNCalendarType.ctGregorian, 1900, 11, 0);
             Assert.AreEqual(">1900/11/??", testUDNAft.ToString());

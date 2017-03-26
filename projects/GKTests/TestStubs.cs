@@ -28,6 +28,14 @@ namespace GKTests
 {
     public static class TestStubs
     {
+        public static string CSVData =
+            "test,test2,test3,test4\r\n"+
+            "12,\"alpha\",12.5,15.4\r\n"+
+            "15,\"beta\",15.4,3.7\r\n"+
+            "2100,\"gamma delta\",21.5,1.02\r\n"+
+            "91000,\"omega\",21.5,1.02\r\n";
+
+
         public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
         {
             GEDCOMTree tree = new GEDCOMTree();

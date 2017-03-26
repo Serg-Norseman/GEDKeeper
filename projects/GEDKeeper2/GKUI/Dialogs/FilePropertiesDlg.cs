@@ -124,7 +124,7 @@ namespace GKUI.Dialogs
 
                 if (dlg.ShowDialog() == DialogResult.OK) {
                     // Assignment in control, instead of the header's property to work Cancel.
-                    txtLanguage.Text = GEDCOMLanguage.GetNameByLID(dlg.LanguageID);
+                    txtLanguage.Text = GEDCOMLanguage.GetLangName(dlg.LanguageID);
                 }
             }
         }

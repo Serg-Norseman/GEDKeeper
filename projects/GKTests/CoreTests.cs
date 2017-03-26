@@ -257,23 +257,6 @@ namespace GKTests.GKCore
         }
 
         [Test]
-        public void SCCrypt_Tests()
-        {
-            const string pw = "test password";
-            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)SysUtils.CrcStr("test")));
-            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)SysUtils.CrcStr("test")));
-
-            Assert.AreEqual(pw, pw1, "SCCrypt_Test");
-
-            byte[] salt = SCCrypt.CreateRandomSalt(24);
-            Assert.IsNotNull(salt);
-            Assert.AreEqual(24, salt.Length);
-
-            SCCrypt.ClearBytes(salt);
-            Assert.Throws(typeof(ArgumentNullException), () => { SCCrypt.ClearBytes(null); });
-        }
-
-        [Test]
         public void Utils_Tests()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
@@ -536,6 +519,7 @@ namespace GKTests.GKCore
             for (int k = 0; k < REP_COUNT; k++) {
                 GEDCOMListTest11(iRec);
                 GEDCOMListTest12(iRec);
+                GEDCOMListTest13(iRec);
                 GEDCOMListTest21(iRec);
                 GEDCOMListTest22(iRec);
                 GEDCOMListTest23(iRec);
@@ -834,7 +818,7 @@ namespace GKTests.GKCore
 
         private class ListViewMock : IListView
         {
-            public void AddListColumn(string caption, int width, bool autoSize) {}
+            public void AddColumn(string caption, int width, bool autoSize) {}
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

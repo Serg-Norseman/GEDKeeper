@@ -67,30 +67,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKCommon\CalendarTests.cs" />
     <Compile Include="CommonTests.cs" />
     <Compile Include="CoreTests.cs" />
-    <Compile Include="GKCommon\ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
+    <Compile Include="GKCommon\CalendarTests.cs" />
+    <Compile Include="GKCommon\CSVReaderTests.cs" />
+    <Compile Include="GKCommon\EnumSetTests.cs" />
+    <Compile Include="GKCommon\ExpCalculatorTests.cs" />
+    <Compile Include="GKCommon\ExtListTests.cs" />
+    <Compile Include="GKCommon\ExtRectTests.cs" />
+    <Compile Include="GKCommon\IndistinctMatchingTests.cs" />
+    <Compile Include="GKCommon\RangesTests.cs" />
+    <Compile Include="GKCommon\RusDeclensionTests.cs" />
+    <Compile Include="GKCommon\IniFileTests.cs" />
+    <Compile Include="GKCommon\ImportUtilsTests.cs" />
+    <Compile Include="GKCommon\YamlHelperTests.cs" />
     <Compile Include="GKCommon\SmartGraphTests.cs" />
-	<Compile Include="GKCommon\SysUtilsTests.cs" />
-    <Compile Include="GKExtTests.cs" />
+    <Compile Include="GKCommon\StringListTests.cs" />
+    <Compile Include="GKCommon\StringTokenizerTests.cs" />
+    <Compile Include="GKCommon\SysUtilsTests.cs" />
+    <Compile Include="GKCommon\UDNTests.cs" />
+    <Compile Include="GKCommon\ValuesCollectionTests.cs" />
+    <Compile Include="GKCommon\ZipStorerTests.cs" />
+    <Compile Include="GKCore\SCCTests.cs" />
+    <Compile Include="GKCore\SingleInstanceTrackerTests.cs" />
     <Compile Include="GXResources.Designer.cs">
       <DependentUpon>GXResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Mocks.cs" />
-    <Compile Include="GKCommon\PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GKCore\SCCTests.cs" />
-    <Compile Include="GKCommon\SerializeTests.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
     <Compile Include="ControlTesters\GKSheetListTester.cs" />
     <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
     <Compile Include="ControlTesters\NumericUpDownTester.cs" />
     <Compile Include="TestStubs.cs" />
-    <Compile Include="GKCommon\UDNTests.cs" />
     <Compile Include="UITests\AboutDlgTests.cs" />
     <Compile Include="UITests\AddressEditDlgTests.cs" />
     <Compile Include="UITests\AssociationEditDlgTests.cs" />

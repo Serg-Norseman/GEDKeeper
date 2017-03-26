@@ -44,7 +44,6 @@ namespace GKUI.Sheets
 
         public override void InitView()
         {
-            fSheetList.Columns_BeginUpdate();
             fSheetList.AddColumn("№", 25, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
@@ -54,7 +53,6 @@ namespace GKUI.Sheets
                 fSheetList.AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
             }
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
-            fSheetList.Columns_EndUpdate();
 
             fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                              SheetButton.lbMoveUp, SheetButton.lbMoveDown);

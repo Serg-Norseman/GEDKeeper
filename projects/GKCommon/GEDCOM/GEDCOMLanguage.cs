@@ -25,7 +25,7 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public sealed class GEDCOMLanguage : GEDCOMTag
     {
-        private static readonly GEDCOMEnumHelper<GEDCOMLanguageID> LangEnumHelper;
+        private static readonly GEDCOMLanguageEnumHelper LangEnumHelper = new GEDCOMLanguageEnumHelper();
 
         private GEDCOMLanguageID fValue;
 
@@ -33,11 +33,6 @@ namespace GKCommon.GEDCOM
         {
             get { return fValue; }
             set { fValue = value; }
-        }
-
-        static GEDCOMLanguage()
-        {
-            LangEnumHelper = new GEDCOMEnumHelper<GEDCOMLanguageID>(GEDCOMConsts.LngEnumStr, GEDCOMLanguageID.Unknown, true);
         }
 
         public override void Clear()
@@ -54,12 +49,11 @@ namespace GKCommon.GEDCOM
         public override void Assign(GEDCOMTag source)
         {
             GEDCOMLanguage srcLang = (source as GEDCOMLanguage);
-
             if (srcLang != null) {
                 fValue = srcLang.fValue;
-            } else {
-                base.Assign(source);
             }
+
+            base.Assign(source);
         }
 
         public override string ParseString(string strValue)
@@ -94,12 +88,12 @@ namespace GKCommon.GEDCOM
 
         #region Aux functions
 
-        public static GEDCOMLanguageID GetLIDByName(string name)
+        public static GEDCOMLanguageID GetLangID(string name)
         {
             return LangEnumHelper.GetEnumValue(name);
         }
 
-        public static string GetNameByLID(GEDCOMLanguageID lid)
+        public static string GetLangName(GEDCOMLanguageID lid)
         {
             return LangEnumHelper.GetStrValue(lid);
         }

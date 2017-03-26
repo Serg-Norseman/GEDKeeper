@@ -28,7 +28,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using NUnit.Framework;
 
-namespace GKTests.GKCommon
+namespace GKTests.GEDCOM
 {
     /// <summary>
     /// 
@@ -3042,10 +3042,21 @@ namespace GKTests.GKCommon
         private static string[] MediaTypeArr = new string[] { "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
 
+        private sealed class GEDCOMMediaTypeEnumHelper : GEDCOMEnumHelper<GEDCOMMediaType>
+        {
+            private static string[] XMediaTypeArr = new string[] {
+                "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
+                "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
+
+            public GEDCOMMediaTypeEnumHelper() : base(XMediaTypeArr, GEDCOMMediaType.mtUnknown, false)
+            {
+            }
+        }
+
         [Test]
         public void GEDCOMEnumParse_Tests()
         {
-            GEDCOMEnumHelper<GEDCOMMediaType> mediaEnumHelper = new GEDCOMEnumHelper<GEDCOMMediaType>(MediaTypeArr, GEDCOMMediaType.mtUnknown);
+            var mediaEnumHelper = new GEDCOMMediaTypeEnumHelper();
 
             string strVal3 = mediaEnumHelper.GetStrValue((GEDCOMMediaType) 15);
             Assert.AreEqual("", strVal3);
@@ -3063,36 +3074,42 @@ namespace GKTests.GKCommon
             Assert.Throws(typeof(ArgumentException), () => { new GEDCOMEnumHelper<GEDCOMMediaType>(new string[] { "" }, GEDCOMMediaType.mtUnknown); });
 
             // performance test
-            /*for (int k = 0; k < 10000; k++) {
+            /*Random rnd = new Random();
+            for (int k = 0; k < 100000; k++) {
                 string strVal1, strVal2, strVal3;
 
-                for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
-                    strVal1 = GEDCOMUtils.GetMediaTypeStr(mt);
-                    strVal2 = Enum2Str(mt, MediaTypeArr); // slower for 1.2 ms
-                    strVal3 = mediaEnumHelper.GetStrValue(mt); // slower for 1.4 ms
-                    Assert.AreEqual(strVal1, strVal2);
-                    Assert.AreEqual(strVal2, strVal3);
+                int i = rnd.Next(1, 13);
 
-                    GEDCOMMediaType mt1 = GEDCOMUtils.GetMediaTypeVal(strVal1);
-                    GEDCOMMediaType mt2 = (GEDCOMMediaType)Str2Enum(strVal2, MediaTypeArr); // slower for 23 ms
-                    GEDCOMMediaType mt3 = (GEDCOMMediaType)mediaEnumHelper.GetEnumValue(strVal2); // faster for 114 ms
-                    Assert.AreEqual(mt1, mt2);
-                    Assert.AreEqual(mt2, mt3);
-                }
+                GEDCOMMediaType mt = (GEDCOMMediaType)i;
+                strVal1 = GEDCOMUtils.GetMediaTypeStr(mt);
+                strVal2 = Enum2Str(mt, MediaTypeArr); // slower for 1.2 ms
+                strVal3 = mediaEnumHelper.GetStrValue(mt); // slower for 1.4 ms
+                Assert.AreEqual(strVal1, strVal2);
+                Assert.AreEqual(strVal2, strVal3);
+
+                strVal1 = MediaTypeArr[i];
+                GEDCOMMediaType mt1 = GEDCOMUtils.GetMediaTypeVal(strVal1);
+                GEDCOMMediaType mt2 = (GEDCOMMediaType)Str2Enum(strVal1, MediaTypeArr, (int)GEDCOMMediaType.mtUnknown); // slower for 23 ms
+                GEDCOMMediaType mt3 = (GEDCOMMediaType)mediaEnumHelper.GetEnumValue(strVal1); // faster for 114 ms
+                Assert.AreEqual(mt1, mt2);
+                Assert.AreEqual(mt2, mt3);
             }*/
         }
 
         #region Methods only for the test
 
-        public static int Str2Enum(string val, string[] values)
+        public static int Str2Enum(string val, string[] values, int defVal)
         {
-            val = val.Trim().ToLowerInvariant();
+            if (string.IsNullOrEmpty(val)) return defVal;
+
+            val = val.Trim().ToLower(CultureInfo.InvariantCulture);
             for (int i = 0; i < values.Length; i++) {
-                if (values[i] == val) {
+                if (string.Equals(values[i], val)) {
                     return i;
                 }
             }
-            return 0;
+
+            return defVal;
         }
 
         public static string Enum2Str(IConvertible elem, string[] values)

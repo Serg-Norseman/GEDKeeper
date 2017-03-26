@@ -73,8 +73,8 @@ namespace GKUI
             Panel1.Controls.Add(spl);
 
             fListStats = GKUtils.CreateListView(Panel1);
-            fListStats.AddListColumn("-", 250, false);
-            fListStats.AddListColumn("-", 150, false);
+            fListStats.AddColumn("-", 250, false);
+            fListStats.AddColumn("-", 150, false);
 
             Panel1.Controls.SetChildIndex(fListStats, 0);
             Panel1.Controls.SetChildIndex(spl, 2);

@@ -84,19 +84,6 @@ namespace GKTests.GKCommon
         }
 
 
-        /*[Test]
-		public void Calendar_PerfTest()
-		{
-			int y = 1990, m = 10, d = 10;
-			double jd;
-
-			for (int i = 0; i < 1000000; i++) {
-				jd = CalendarConverter.gregorian_to_jd(y, m, d);
-				jd = CalendarConverter.gregorian_to_jd2(y, m, d);
-				jd = CalendarConverter.gregorian_to_jd3(y, m, d);
-			}
-		}*/
-
         /*public void MyTestFunc1(
             [Values(1, 2, 5)]int x,
             [Values("hello", "buy")]string s)
