@@ -103,17 +103,26 @@ namespace GKCore
                     }
                     #endif
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogWrite("UpdateMan.WorkerMethod(): " + ex.Message);
             }
         }
 
         public static void CheckUpdate()
         {
-            Thread worker = new Thread(WorkerMethod);
-            worker.SetApartmentState(ApartmentState.STA);
-            worker.IsBackground = true;
-            worker.Start();
+            try
+            {
+                Thread worker = new Thread(WorkerMethod);
+                worker.SetApartmentState(ApartmentState.STA);
+                worker.IsBackground = true;
+                worker.Start();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("UpdateMan.CheckUpdate(): " + ex.Message);
+            }
         }
     }
 }

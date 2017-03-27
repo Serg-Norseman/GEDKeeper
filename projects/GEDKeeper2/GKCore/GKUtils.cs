@@ -1454,6 +1454,12 @@ namespace GKCore
             return path;
         }
 
+        public static string GetLogFilename()
+        {
+            string path = GetAppDataPath() + "GEDKeeper2.log";
+            return path;
+        }
+
         #endregion
 
         #region UI functions

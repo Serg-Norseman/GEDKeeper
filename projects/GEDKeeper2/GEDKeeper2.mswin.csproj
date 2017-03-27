@@ -95,9 +95,6 @@
     <Reference Include="itextsharp">
       <HintPath>libs\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LuaInterface">
-      <HintPath>libs\mswin\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Remoting" />
@@ -106,6 +103,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
       <HintPath>libs\ZedGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="LuaInterface">
+      <HintPath>libs\mswin\LuaInterface.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,12 +116,10 @@
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
     <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
-    <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
-    <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
-    <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceException.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
+    <Compile Include="GKCore\SingleInstance\IpcFake.cs" />
+    <Compile Include="GKCore\SingleInstance\ISingleInstanceEnforcer.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceProxy.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />

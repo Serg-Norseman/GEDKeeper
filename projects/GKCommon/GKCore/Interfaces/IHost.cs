@@ -54,6 +54,7 @@ namespace GKCore.Interfaces
         void UpdateControls(bool forceDeactivate);
         void ShowHelpTopic(string topic);
         void EnableWindow(Form form, bool value);
+        void Restore();
 
         bool IsUnix();
         void ShowWarning(string msg);

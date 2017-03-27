@@ -2,30 +2,34 @@
  * Original SingleInstancingWithIpc code by Shy Agam
  * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
  */
+
+#if !__MonoCS__
+#define IPC_SUPPORTS
+#endif
+
 using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Threading;
 
-namespace Externals.SingleInstancing
+using GKCommon;
+
+namespace GKCore.SingleInstance
 {
     /// <summary>
     /// Represents an object used to check for a previous instance of an application, and sending messages to it.
     /// </summary>
     public class SingleInstanceTracker : IDisposable
     {
-        #region Member Variables
-
         private bool fDisposed;
-        private IChannel fIpcChannel;
         private readonly bool fIsFirstInstance;
-        private readonly SingleInstanceProxy fProxy;
+        private SingleInstanceProxy fProxy;
+
+        #if IPC_SUPPORTS
+        private IChannel fIpcChannel;
         private Mutex fSingleInstanceMutex;
-
-        #endregion
-
-        #region Properties
+        #endif
 
         /// <summary>
         /// Gets a value indicating whether this instance of the application is the first instance.
@@ -55,21 +59,6 @@ namespace Externals.SingleInstancing
             }
         }
 
-        #endregion
-
-        #region Construction / Destruction
-
-        /// <summary>
-        /// Instantiates a new SingleInstanceTracker object.
-        /// When using this constructor it is assumed that there is no need for sending messages to the first application instance.
-        /// To enable the tracker's ability to send messages to the first instance, use the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload instead.
-        /// </summary>
-        /// <param name="name">The unique name used to identify the application.</param>
-        /// <exception cref="System.ArgumentNullException">name is null or empty.</exception>
-        /// <exception cref="SingleInstancing.SingleInstancingException">A general error occured while trying to instantiate the SingleInstanceInteractor. See InnerException for more details.</exception>
-        public SingleInstanceTracker(string name)
-            : this(name, null) { }
-
         /// <summary>
         /// Instantiates a new SingleInstanceTracker object.
         /// When using this constructor overload and enforcerRetriever is null, the SingleInstanceTracker object can only be used to determine whether the application is already running.
@@ -85,11 +74,13 @@ namespace Externals.SingleInstancing
 
             try
             {
-                fSingleInstanceMutex = new Mutex(true, name, out fIsFirstInstance);
-
                 // Do not attempt to construct the IPC channel if there is no need for messages
                 if (enforcerRetriever != null)
                 {
+                    #if IPC_SUPPORTS
+
+                    fSingleInstanceMutex = new Mutex(true, name, out fIsFirstInstance);
+
                     const string proxyObjectName = "SingleInstanceProxy";
                     string proxyUri = "ipc://" + name + "/" + proxyObjectName;
 
@@ -127,6 +118,26 @@ namespace Externals.SingleInstancing
                         // Notify the first instance of the application that a new instance was created
                         fProxy.Enforcer.OnNewInstanceCreated(new EventArgs());
                     }
+                    
+                    #else
+
+                    fIsFirstInstance = IpcFake.CreateMutex(name, true);
+
+                    if (fIsFirstInstance) {
+                        // Attempt to retrieve the enforcer from the delegated method
+                        ISingleInstanceEnforcer enforcer = enforcerRetriever();
+                        // Validate that an enforcer object was returned
+                        if (enforcer == null)
+                            throw new InvalidOperationException("The method delegated by the enforcerRetriever argument returned null. The method must return an ISingleInstanceEnforcer object.");
+
+                        // Create the first proxy object
+                        fProxy = new SingleInstanceProxy(enforcer);
+
+                        IpcFake.StartServer(enforcer);
+                    } else {
+                    }
+
+                    #endif
                 }
             }
             catch (Exception ex)
@@ -153,6 +164,8 @@ namespace Externals.SingleInstancing
             {
                 if (disposing)
                 {
+                    #if IPC_SUPPORTS
+
                     if (fSingleInstanceMutex != null)
                     {
                         fSingleInstanceMutex.Close();
@@ -164,6 +177,13 @@ namespace Externals.SingleInstancing
                         ChannelServices.UnregisterChannel(fIpcChannel);
                         fIpcChannel = null;
                     }
+
+                    #else
+
+                    IpcFake.StopServer();
+                    IpcFake.ReleaseAllMutexes();
+
+                    #endif
                 }
 
                 fDisposed = true;
@@ -179,9 +199,6 @@ namespace Externals.SingleInstancing
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        #region Member Functions
 
         /// <summary>
         /// Sends a message to the first instance of the application.
@@ -194,6 +211,8 @@ namespace Externals.SingleInstancing
             if (fDisposed)
                 throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
 
+            #if IPC_SUPPORTS
+
             if (fIpcChannel == null)
                 throw new InvalidOperationException("The object was constructed with the SingleInstanceTracker(string name) constructor overload, or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload, with enforcerRetriever set to null, thus you cannot send messages to the first instance.");
 
@@ -205,8 +224,28 @@ namespace Externals.SingleInstancing
             {
                 throw new SingleInstancingException("Failed to send message to the first instance of the application. The first instance might have terminated.", ex);
             }
-        }
 
-        #endregion
+            #else
+
+            try
+            {
+                string[] args = message as string[];
+                if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
+                {
+                    IpcFake.Send(AppMessage.RestoreWindow, 0, false);
+                }
+                else
+                {
+                    IpcParamEx ipcMsg = new IpcParamEx(IpcFake.CmdSendArgs, IpcFake.SafeSerialize(args));
+                    IpcFake.SendGlobalMessage(ipcMsg);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("SingleInstanceTracker.SendMessageToFirstInstance.2(): " + ex.Message);
+            }
+
+            #endif
+        }
     }
 }

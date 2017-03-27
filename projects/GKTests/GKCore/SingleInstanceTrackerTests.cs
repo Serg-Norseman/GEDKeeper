@@ -19,7 +19,7 @@
  */
 
 using System;
-using Externals.SingleInstancing;
+using GKCore.SingleInstance;
 using NUnit.Framework;
 
 namespace GKTests.GKCore

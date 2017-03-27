@@ -182,6 +182,7 @@ namespace GKTests.Mocks
         public void UpdateControls(bool forceDeactivate) {}
         public void ShowHelpTopic(string topic) {}
         public void EnableWindow(Form form, bool value) {}
+        public void Restore() {}
 
         public bool IsUnix() { return false; }
         public void ShowWarning(string msg) {}

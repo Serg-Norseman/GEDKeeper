@@ -26,9 +26,9 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
 
-using Externals.SingleInstancing;
 using GKCommon;
 using GKCore;
+using GKCore.SingleInstance;
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -49,91 +49,34 @@ using GKCore;
 namespace GKUI
 {
     /// <summary>
-    /// 
+    /// The main startup class of application.
     /// </summary>
     public static class GKProgram
     {
-        #if __MonoCS__
-        private static MainWin fMainWin;
-        #endif
-
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         private static void Main(string[] args)
         {
+            Logger.LogInit(GKUtils.GetLogFilename());
+
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            #if __MonoCS__
-            
-            try {
-                bool firstInstance = GlobalMutexPool.CreateMutex(GKData.APP_TITLE, true);
-                if (!firstInstance) {
-                    ActivatePreviousInstance(args);
-                } else {
-                    IpcBroadcast.StartServer();
-                    fMainWin = new MainWin();
-                    fMainWin.SetArgs(args);
-                    Application.Run(fMainWin);
-                }
-
-                IpcBroadcast.StopServer();
-                GlobalMutexPool.ReleaseAll();
-            } finally {
-            }
-
-            #else
-            SingleInstanceTracker tracker = null;
-            try
+            using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
-                tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer);
-
                 if (tracker.IsFirstInstance) {
-                    MainWin fmMain = (MainWin)tracker.Enforcer;
-                    fmMain.SetArgs(args);
-                    Application.Run(fmMain);
+                    MainWin mainWin = (MainWin)tracker.Enforcer;
+                    mainWin.SetArgs(args);
+                    Application.Run(mainWin);
                 } else {
                     tracker.SendMessageToFirstInstance(args);
                 }
             }
-            finally
-            {
-                if (tracker != null) tracker.Dispose();
-            }
-            #endif
         }
-
-        #if __MonoCS__
-        public static void ProcessMessage(IpcMessage msg)
-        {
-            if (msg.Message == AppMessage.RestoreWindow) {
-                fMainWin.WindowState = FormWindowState.Normal;
-            } else if (msg.Message == AppMessage.IpcByFile) {
-                fMainWin.WindowState = FormWindowState.Normal;
-                IpcBroadcast.ProcessGlobalMessage(msg.LParam, fMainWin);
-            }
-        }
-
-        private static void ActivatePreviousInstance(string[] args)
-        {
-            try
-            {
-                if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
-                {
-                    IpcBroadcast.Send(AppMessage.RestoreWindow, 0, false);
-                }
-                else
-                {
-                    IpcParamEx ipcMsg = new IpcParamEx(IpcBroadcast.CmdOpenDatabase, IpcBroadcast.SafeSerialize(args));
-                    IpcBroadcast.SendGlobalMessage(ipcMsg);
-                }
-            }
-            catch (Exception) { }
-        }
-        #endif
 
         private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
         {

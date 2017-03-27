@@ -903,7 +903,6 @@ namespace GKCore
         {
             #if FILECOPY_EX
 
-            IProgressController pctl = fViewer;
             try {
                 fViewer.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
 

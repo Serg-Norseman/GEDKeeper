@@ -4,7 +4,7 @@
  */
 using System;
 
-namespace Externals.SingleInstancing
+namespace GKCore.SingleInstance
 {
     /// <summary>
     /// Provides a proxy to communicate with the first instance of the application.

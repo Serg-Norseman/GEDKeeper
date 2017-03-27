@@ -26,7 +26,6 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using Externals.SingleInstancing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -34,6 +33,7 @@ using GKCore.Export;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.SingleInstance;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
@@ -61,7 +61,6 @@ namespace GKUI
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
-        private string fLogFilename;
 
         private int fLoadingCount;
         private readonly StringList fTips;
@@ -131,6 +130,8 @@ namespace GKUI
             tbNext.Image = GKResources.iRight1;
             tbDocPreview.Image = GKResources.iPreview;
             tbDocPrint.Image = GKResources.iPrint;
+
+            Logger.LogInit(GKUtils.GetLogFilename());
 
             fActiveWidgets = new List<WidgetInfo>();
 
@@ -225,9 +226,6 @@ namespace GKUI
 
         private void Form_Load(object sender, EventArgs e)
         {
-            fLogFilename = GetAppDataPath() + "GEDKeeper2.log";
-            Logger.LogInit(fLogFilename);
-
             fOptions.LoadFromFile(GetAppDataPath() + "GEDKeeper2.ini");
             fOptions.FindLanguages();
             ApplyOptions();
@@ -1222,12 +1220,12 @@ namespace GKUI
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", fLogFilename);
+            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", GKUtils.GetLogFilename());
         }
 
         private void miLogView_Click(object sender, EventArgs e)
         {
-            SysUtils.LoadExtFile(fLogFilename);
+            SysUtils.LoadExtFile(GKUtils.GetLogFilename());
         }
 
         private void miAbout_Click(object sender, EventArgs e)
@@ -1658,6 +1656,13 @@ namespace GKUI
             }
         }
 
+        public void Restore()
+        {
+            if (WindowState == FormWindowState.Minimized) {
+                WindowState = FormWindowState.Normal;
+            }
+        }
+
         #endregion
 
         #region ISingleInstanceEnforcer implementation
@@ -1665,19 +1670,24 @@ namespace GKUI
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
-                string msg = eventArgs.Message as string;
+                try
+                {
+                    string msg = eventArgs.Message as string;
 
-                if (!string.IsNullOrEmpty(msg)) {
-                    MessageBox.Show(msg, @"Message from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                } else {
-                    //MessageBox.Show("A non-textual message has been received.", "Message From New Instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (!string.IsNullOrEmpty(msg) && msg == "restore") {
+                        Restore();
+                    } else {
+                        string[] args = eventArgs.Message as string[];
+                        if (args != null) {
+                            // A obligatory recovery of window, otherwise it will fail to load
+                            Restore();
 
-                    string[] args = eventArgs.Message as string[];
-
-                    if (args != null) {
-                        SetArgs(args);
-                        LoadArgs();
+                            SetArgs(args);
+                            LoadArgs();
+                        }
                     }
+                } catch (Exception ex) {
+                    LogWrite("MainWin.OnMessageReceived(): " + ex.Message);
                 }
             };
 
@@ -1690,7 +1700,6 @@ namespace GKUI
 
         void ISingleInstanceEnforcer.OnNewInstanceCreated(EventArgs e)
         {
-            //MessageBox.Show("New instance of the program has been created.", "Notification from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion
