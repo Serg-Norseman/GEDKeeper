@@ -133,8 +133,8 @@ namespace GKCore.Lists
                 var tgtCol = targetColumns.fColumns[i];
 
                 tgtCol.Order = srcCol.Order;
-                tgtCol.CurActive = srcCol.DefActive;
-                tgtCol.CurWidth = srcCol.DefWidth;
+                tgtCol.CurActive = srcCol.CurActive;
+                tgtCol.CurWidth = srcCol.CurWidth;
             }
 
             targetColumns.UpdateOrders();

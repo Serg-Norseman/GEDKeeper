@@ -262,22 +262,27 @@ namespace GKUI.Controls
 
         #region Protected methods
 
-        // TODO: rework!
-        private void List_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
         {
             if (fUpdateCount > 0) return;
 
-            try {
-                switch (fRecordType) {
+            try
+            {
+                switch (fRecordType)
+                {
                     case GEDCOMRecordType.rtIndividual:
                         if (fListMan != null) {
                             fListMan.WidthChanged(e.ColumnIndex, Columns[e.ColumnIndex].Width);
                         }
                         break;
                 }
-            } catch (Exception ex) {
-                Logger.LogWrite("GKRecordsView.List_ColumnWidthChanged(): " + ex.Message);
             }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GKRecordsView.OnColumnWidthChanged(): " + ex.Message);
+            }
+
+            base.OnColumnWidthChanged(e);
         }
 
         protected override void InternalColumnClick(ColumnClickEventArgs e)

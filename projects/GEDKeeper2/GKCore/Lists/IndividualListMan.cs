@@ -591,7 +591,7 @@ namespace GKCore.Lists
             AddColumn(listView, "№", 50, false, 0, 0);
 
             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-            IndividualListColumns columns = GlobalOptions.Instance.IndividualListColumns;
+            IndividualListColumns columns = (IndividualListColumns)ListColumns;
 
             int num = columns.Count;
             for (int i = 0; i < num; i++)

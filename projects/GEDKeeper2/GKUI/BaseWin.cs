@@ -199,16 +199,24 @@ namespace GKUI
 
         private void Form_Load(object sender, EventArgs e)
         {
-            //
+            ((IWorkWindow)this).UpdateView();
         }
 
-        private void Form_Closing(object sender, CancelEventArgs e)
+        private void Form_Closing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !CheckModified();
             if (e.Cancel) return;
 
             MainWin.Instance.BaseClosed(this);
             MainWin.Instance.CheckMRUWin(fTree.FileName, this);
+        }
+
+        private void Form_Closed(object sender, FormClosedEventArgs e)
+        {
+            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+            if (listMan != null) {
+                listMan.ListColumns.CopyTo(GlobalOptions.Instance.IndividualListColumns);
+            }
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -793,6 +801,14 @@ namespace GKUI
             return result;
         }
 
+        public void UpdateListsSettings()
+        {
+            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+            if (listMan != null) {
+                GlobalOptions.Instance.IndividualListColumns.CopyTo(listMan.ListColumns);
+            }
+        }
+
         public void RefreshLists(bool titles)
         {
             ListPersons.UpdateContents(fShieldState, titles, 2);
@@ -1267,6 +1283,7 @@ namespace GKUI
 
         void IWorkWindow.UpdateView()
         {
+            UpdateListsSettings();
             RefreshLists(true);
         }
 

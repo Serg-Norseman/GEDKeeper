@@ -34,54 +34,54 @@ namespace GKUI
             this.tabsRecords.Margin = new System.Windows.Forms.Padding(2);
             this.tabsRecords.Name = "tabsRecords";
             this.tabsRecords.SelectedIndex = 0;
-            this.tabsRecords.Size = new System.Drawing.Size(781, 370);
+            this.tabsRecords.Size = new System.Drawing.Size(976, 462);
             this.tabsRecords.TabIndex = 0;
             this.tabsRecords.SelectedIndexChanged += new System.EventHandler(this.PageRecords_SelectedIndexChanged);
             // 
             // contextMenu
             // 
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                                this.miRecordAdd,
-                                                this.miRecordEdit,
-                                                this.miRecordDelete,
-                                                this.miRecordDuplicate});
+                                    this.miRecordAdd,
+                                    this.miRecordEdit,
+                                    this.miRecordDelete,
+                                    this.miRecordDuplicate});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(176, 92);
+            this.contextMenu.Size = new System.Drawing.Size(207, 100);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // miRecordAdd
             // 
             this.miRecordAdd.Name = "miRecordAdd";
-            this.miRecordAdd.Size = new System.Drawing.Size(175, 22);
+            this.miRecordAdd.Size = new System.Drawing.Size(206, 24);
             this.miRecordAdd.Text = "miRecordAdd";
             this.miRecordAdd.Click += new System.EventHandler(this.miRecordAdd_Click);
             // 
             // miRecordEdit
             // 
             this.miRecordEdit.Name = "miRecordEdit";
-            this.miRecordEdit.Size = new System.Drawing.Size(175, 22);
+            this.miRecordEdit.Size = new System.Drawing.Size(206, 24);
             this.miRecordEdit.Text = "miRecordEdit";
             this.miRecordEdit.Click += new System.EventHandler(this.miRecordEdit_Click);
             // 
             // miRecordDelete
             // 
             this.miRecordDelete.Name = "miRecordDelete";
-            this.miRecordDelete.Size = new System.Drawing.Size(175, 22);
+            this.miRecordDelete.Size = new System.Drawing.Size(206, 24);
             this.miRecordDelete.Text = "miRecordDelete";
             this.miRecordDelete.Click += new System.EventHandler(this.miRecordDelete_Click);
             // 
             // miRecordDuplicate
             // 
             this.miRecordDuplicate.Name = "miRecordDuplicate";
-            this.miRecordDuplicate.Size = new System.Drawing.Size(175, 22);
+            this.miRecordDuplicate.Size = new System.Drawing.Size(206, 24);
             this.miRecordDuplicate.Text = "miRecordDuplicate";
             this.miRecordDuplicate.Click += new System.EventHandler(this.miRecordDuplicate_Click);
             // 
             // BaseWin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(781, 370);
+            this.ClientSize = new System.Drawing.Size(976, 462);
             this.Controls.Add(this.tabsRecords);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.KeyPreview = true;
@@ -90,8 +90,9 @@ namespace GKUI
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "BaseWin";
             this.Activated += new System.EventHandler(this.Form_Activated);
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.Form_Closing);
             this.Deactivate += new System.EventHandler(this.Form_Deactivate);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.Load += new System.EventHandler(this.Form_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form_KeyDown);
             this.contextMenu.ResumeLayout(false);
