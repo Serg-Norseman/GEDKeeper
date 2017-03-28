@@ -14,25 +14,56 @@
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
 
+
 ## English
 GEDKeeper program is developed for work with personal genealogical database.
 
-The program is designed for extremely simple and intuitive interface. The program is very easy to install on the computer, fully supports the GEDCOM format, has no restrictions on the number of persons and generations, allows you to generate pedigrees, building several tree species, as well as print and save their images, provides fast navigation, filtering, searching and adding multimedia materials. In addition there is an output of geographic data on Google maps (© Google).
+The program is designed for extremely simple and intuitive interface. 
+The program is very easy to install on the computer, fully supports the GEDCOM 
+format, has no restrictions on the number of persons and generations, allows 
+you to generate pedigrees, building several tree species, as well as print and 
+save their images, provides fast navigation, filtering, searching and adding 
+multimedia materials. In addition there is an output of geographic data on 
+Google maps (© Google).
 
-The aim of the program is as quick and effective means of conducting personal genealogical database as a support tool to the traditional card index.
+The aim of the program is as quick and effective means of conducting personal 
+genealogical database as a support tool to the traditional card index.
+
+The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
+or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
+**Alternatively** why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
+site (this is the most popular).
+
 
 ## Russian
 Программа GEDKeeper предназначена для ведения личной генеалогической базы данных.
 
-Программа разработана так, чтобы интерфейс был максимально простым и интуитивно понятным. Программа очень просто устанавливается на компьютер, полностью поддерживает формат GEDCOM, не имеет ограничений по количеству персон и поколений, позволяет генерировать родословные росписи, строить несколько видов деревьев, а также выводить на печать и сохранять их изображения, обеспечивает быструю навигацию, фильтрацию, поиск и возможности добавления мультимедиа-материалов. Кроме того есть вывод географических данных на карты Google Maps (© Google).
+Программа разработана так, чтобы интерфейс был максимально простым и интуитивно 
+понятным. Программа очень просто устанавливается на компьютер, полностью 
+поддерживает формат GEDCOM, не имеет ограничений по количеству персон и 
+поколений, позволяет генерировать родословные росписи, строить несколько видов 
+деревьев, а также выводить на печать и сохранять их изображения, обеспечивает 
+быструю навигацию, фильтрацию, поиск и возможности добавления 
+мультимедиа-материалов. Кроме того есть вывод географических данных на карты 
+Google Maps (© Google).
 
-Цель программы - максимально быстрое и эффективное средство ведения личной генеалогической базы данных - как вспомогательный инструмент к традиционной картотеке.
+Цель программы - максимально быстрое и эффективное средство ведения личной 
+генеалогической базы данных - как вспомогательный инструмент к традиционной картотеке.
+
+Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
+или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
+**Альтернативно** можно пробовать загрузить на сайте 
+[Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
+
 
 ## Docs & Help
 
 - [Contributing guide](/CONTRIBUTING.md)
 - [Coding style guide](/CODINGSTYLE.md)
+- [Testing](/TESTING.md)
+- [FAQ](/FAQ.md)
 - [Changelog](/CHANGELOG.md)
+
 
 ## Links
 
