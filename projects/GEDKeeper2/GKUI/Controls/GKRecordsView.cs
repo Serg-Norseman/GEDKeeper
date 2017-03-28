@@ -331,7 +331,7 @@ namespace GKUI.Controls
             try {
                 if (fListMan == null) return;
 
-                BeginUpdates();
+                BeginUpdate();
                 try
                 {
                     Columns.Clear();
@@ -339,7 +339,7 @@ namespace GKUI.Controls
                 }
                 finally
                 {
-                    EndUpdates();
+                    EndUpdate();
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("GKRecordsView.UpdateTitles(): " + ex.Message);
@@ -361,7 +361,7 @@ namespace GKUI.Controls
                     UpdateTitles();
                 }
 
-                BeginUpdates();
+                BeginUpdate();
                 try
                 {
                     //SelectedIndices.Clear();
@@ -403,7 +403,7 @@ namespace GKUI.Controls
                 }
                 finally
                 {
-                    EndUpdates();
+                    EndUpdate();
                 }
 
                 if (tempRec != null) SelectItemByRec(tempRec);

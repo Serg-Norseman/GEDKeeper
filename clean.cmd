@@ -73,3 +73,6 @@ rmdir .\projects\GKTreeVizPlugin\obj /s /q
 
 rmdir .\projects\GKLifePlugin\bin /s /q
 rmdir .\projects\GKLifePlugin\obj /s /q
+
+rmdir .\projects\GKChroniclePlugin\bin /s /q
+rmdir .\projects\GKChroniclePlugin\obj /s /q

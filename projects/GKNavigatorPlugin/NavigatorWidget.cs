@@ -259,7 +259,7 @@ namespace GKNavigatorPlugin
 
         private void ShowRecordsData(GEDCOMRecordType recordType)
         {
-            lvData.BeginUpdates();
+            lvData.BeginUpdate();
             try
             {
                 lvData.Clear();
@@ -296,7 +296,7 @@ namespace GKNavigatorPlugin
             }
             finally
             {
-                lvData.EndUpdates();
+                lvData.EndUpdate();
             }
         }
     }

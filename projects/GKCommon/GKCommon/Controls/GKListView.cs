@@ -268,16 +268,26 @@ namespace GKCommon.Controls
             ListViewItemSorter = fColumnSorter;
         }
 
-        public virtual void BeginUpdates()
+        public new void BeginUpdate()
         {
+            if (fUpdateCount == 0)
+            {
+                ListViewItemSorter = null;
+                base.BeginUpdate();
+            }
+
             fUpdateCount++;
-            BeginUpdate();
         }
 
-        public virtual void EndUpdates()
+        public new void EndUpdate()
         {
-            EndUpdate();
             fUpdateCount--;
+
+            if (fUpdateCount == 0)
+            {
+                base.EndUpdate();
+                ListViewItemSorter = fColumnSorter;
+            }
         }
 
         protected SortOrder GetColumnSortOrder(int columnIndex)

@@ -476,12 +476,12 @@ namespace GKUI.Sheets
 
         public void BeginUpdate()
         {
-            fList.BeginUpdates();
+            fList.BeginUpdate();
         }
 
         public void EndUpdate()
         {
-            fList.EndUpdates();
+            fList.EndUpdate();
         }
 
         public GKListItem AddItem(object itemValue, object data)
