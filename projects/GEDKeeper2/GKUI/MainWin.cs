@@ -211,64 +211,52 @@ namespace GKUI
         {
             if (!GlobalOptions.Instance.LoadRecentFiles) return;
 
-            BeginLoading();
+            try {
+                BeginLoading();
 
-            int num = fOptions.GetLastBasesCount();
-            for (int i = 0; i < num; i++) {
-                string lb = fOptions.GetLastBase(i);
-                if (File.Exists(lb)) {
-                    CreateBase(lb);
+                int num = fOptions.GetLastBasesCount();
+                for (int i = 0; i < num; i++) {
+                    string lb = fOptions.GetLastBase(i);
+                    if (File.Exists(lb)) {
+                        CreateBase(lb);
+                    }
                 }
+            } finally {
+                EndLoading();
             }
-
-            EndLoading();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            fOptions.LoadFromFile(GetAppDataPath() + "GEDKeeper2.ini");
-            fOptions.FindLanguages();
-            ApplyOptions();
+            try
+            {
+                fOptions.LoadFromFile(GetAppDataPath() + "GEDKeeper2.ini");
+                fOptions.FindLanguages();
+                ApplyOptions();
 
-            if (!fOptions.MWinRect.IsEmpty()) {
-                Left = fOptions.MWinRect.Left;
-                Top = fOptions.MWinRect.Top;
-                Width = fOptions.MWinRect.Right - fOptions.MWinRect.Left + 1;
-                Height = fOptions.MWinRect.Bottom - fOptions.MWinRect.Top + 1;
-            } else {
-                //--------------------------------------------------------------
-                // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
-                // FIXME: This is an ERROR. You can't use explicit numbers like
-                // 600 or 800 to specify size of a window. You must take into
-                // account system DPI (starting from Windows 8.1: a monitor's
-                // DPI) to convert logical size to physical. At least you have
-                // to do this in native win32 world.
-                //--------------------------------------------------------------
-                Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
-                Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
-                Width = 800;
-                Height = 600;
+                RestoreWindowState();
+
+                fNamesTable = new NamesTable();
+                fNamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
+
+                fPlugins = new List<IPlugin>();
+                LoadPlugins(GKUtils.GetPluginsPath());
+                UpdatePluginsItems();
+
+                fPathReplacer = new PathReplacer();
+                fPathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml");
+
+                LoadLanguage(fOptions.InterfaceLang);
+
+                UpdateMRU();
+                UpdateControls(false);
+
+                LoadArgs();
+
+                UpdateMan.CheckUpdate();
+            } catch (Exception ex) {
+                LogWrite("MainWin.Form_Load(): " + ex.Message);
             }
-            WindowState = fOptions.MWinState;
-
-            fNamesTable = new NamesTable();
-            fNamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
-
-            fPlugins = new List<IPlugin>();
-            LoadPlugins(GKUtils.GetPluginsPath());
-            UpdatePluginsItems();
-
-            fPathReplacer = new PathReplacer();
-            fPathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml");
-
-            LoadLanguage(fOptions.InterfaceLang);
-
-            UpdateMRU();
-            UpdateControls(false);
-
-            LoadArgs();
-
-            UpdateMan.CheckUpdate();
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
@@ -342,17 +330,19 @@ namespace GKUI
         private void Form_DragDrop(object sender, DragEventArgs e)
         {
             try {
-                Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                if (a == null) return;
+                try {
+                    BeginLoading();
 
-                BeginLoading();
+                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
+                    if (a == null) return;
 
-                for (int i = 0; i < a.Length; i++) {
-                    string fn = a.GetValue(i).ToString();
-                    CreateBase(fn);
+                    for (int i = 0; i < a.Length; i++) {
+                        string fn = a.GetValue(i).ToString();
+                        CreateBase(fn);
+                    }
+                } finally {
+                    EndLoading();
                 }
-
-                EndLoading();
             } catch (Exception ex) {
                 LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
             }
@@ -456,6 +446,37 @@ namespace GKUI
 
         #region Misc functions
 
+        private void RestoreWindowState()
+        {
+            try
+            {
+                if (!fOptions.MWinRect.IsEmpty()) {
+                    Left = fOptions.MWinRect.Left;
+                    Top = fOptions.MWinRect.Top;
+                    Width = fOptions.MWinRect.Right - fOptions.MWinRect.Left + 1;
+                    Height = fOptions.MWinRect.Bottom - fOptions.MWinRect.Top + 1;
+                } else {
+                    //--------------------------------------------------------------
+                    // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+                    // FIXME: This is an ERROR. You can't use explicit numbers like
+                    // 600 or 800 to specify size of a window. You must take into
+                    // account system DPI (starting from Windows 8.1: a monitor's
+                    // DPI) to convert logical size to physical. At least you have
+                    // to do this in native win32 world.
+                    //--------------------------------------------------------------
+                    Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
+                    Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
+                    Width = 800;
+                    Height = 600;
+                }
+                WindowState = fOptions.MWinState;
+            }
+            catch (Exception ex)
+            {
+                LogWrite("MainWin.RestoreWindowState(): " + ex.Message);
+            }
+        }
+
         private string GetLanguageSign()
         {
             string lngSign;
@@ -490,11 +511,12 @@ namespace GKUI
 
         public void LoadLanguage(int langCode)
         {
-            if (langCode <= 0) {
-                langCode = RequestLanguage();
-            }
+            try
+            {
+                if (langCode <= 0) {
+                    langCode = RequestLanguage();
+                }
 
-            try {
                 if (langCode != LangMan.LS_DEF_CODE) {
                     bool loaded = false;
 
@@ -525,24 +547,33 @@ namespace GKUI
                 fOptions.InterfaceLang = (ushort)langCode;
 
                 UpdatePluginsLanguage();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 LogWrite("MainWin.LoadLanguage(): " + ex.Message);
             }
         }
 
         private void ProcessHolidays()
         {
-            if (!fOptions.ShowTips) return;
+            try
+            {
+                if (!fOptions.ShowTips) return;
 
-            Holidays holidays = new Holidays();
+                Holidays holidays = new Holidays();
 
-            // TODO: We need a reference to the country, not the language
-            string lngSign = GetLanguageSign();
-            if (!string.IsNullOrEmpty(lngSign)) {
-                holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
+                // TODO: We need a reference to the country, not the language
+                string lngSign = GetLanguageSign();
+                if (!string.IsNullOrEmpty(lngSign)) {
+                    holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
+                }
+
+                holidays.CollectTips(fTips);
             }
-
-            holidays.CollectTips(fTips);
+            catch (Exception ex)
+            {
+                LogWrite("MainWin.ProcessHolidays(): " + ex.Message);
+            }
         }
 
         public DialogResult ShowModalEx(Form form, bool keepModeless)
@@ -787,29 +818,37 @@ namespace GKUI
 
         public IBaseWindow CreateBase(string fileName)
         {
-            BeginLoading();
+            IBaseWindow result = null;
 
-            IBaseWindow result = FindBase(fileName);
-            if (result != null) {
-                result.Activate();
-                return result;
+            try {
+                try {
+                    BeginLoading();
+
+                    result = FindBase(fileName);
+                    if (result != null) {
+                        result.Activate();
+                        return result;
+                    }
+
+                    result = new BaseWin();
+                    ShowMDI((Form) result);
+
+                    if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
+                        result.FileLoad(fileName);
+                        result.CollectTips(fTips);
+                    } else {
+                        result.FileNew();
+                    }
+
+                    RestoreMRU(result, fileName);
+                } finally {
+                    EndLoading();
+                }
+            } catch (Exception ex) {
+                LogWrite("MainWin.CreateBase(): " + ex.Message);
             }
 
-            result = new BaseWin();
-            ShowMDI((Form) result);
-
-            if (fileName != "" && File.Exists(fileName)) {
-                result.FileLoad(fileName);
-                result.CollectTips(fTips);
-            } else {
-                result.FileNew();
-            }
-
-            RestoreMRU(result, fileName);
-
-            EndLoading();
-
-            return result;
+            return null;
         }
 
         public void CriticalSave()
@@ -1220,7 +1259,7 @@ namespace GKUI
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", GKUtils.GetLogFilename());
+            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", GKUtils.GetLogFilename());
         }
 
         private void miLogView_Click(object sender, EventArgs e)

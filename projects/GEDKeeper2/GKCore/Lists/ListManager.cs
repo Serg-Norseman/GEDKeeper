@@ -200,7 +200,7 @@ namespace GKCore.Lists
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
 
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, (byte)i, 0);
+                AddColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, cs.Id, 0);
             }
         }
 

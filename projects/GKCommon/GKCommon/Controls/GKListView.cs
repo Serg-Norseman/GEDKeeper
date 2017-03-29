@@ -272,7 +272,9 @@ namespace GKCommon.Controls
         {
             if (fUpdateCount == 0)
             {
+                #if !__MonoCS__
                 ListViewItemSorter = null;
+                #endif
                 base.BeginUpdate();
             }
 
@@ -286,7 +288,9 @@ namespace GKCommon.Controls
             if (fUpdateCount == 0)
             {
                 base.EndUpdate();
+                #if !__MonoCS__
                 ListViewItemSorter = fColumnSorter;
+                #endif
             }
         }
 

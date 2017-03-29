@@ -38,7 +38,7 @@ using GKCore.SingleInstance;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper")]
-[assembly: AssemblyVersion("2.11.0.0")]
+[assembly: AssemblyVersion("2.12.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
@@ -53,11 +53,25 @@ namespace GKUI
     /// </summary>
     public static class GKProgram
     {
+        private static void LogSysInfo()
+        {
+            try
+            {
+                #if __MonoCS__
+                Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
+                #endif
+                Logger.LogWrite("CLR Version: " + SysUtils.GetCLRVersion());
+                Logger.LogWrite("GK Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            }
+            catch { }
+        }
+
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         private static void Main(string[] args)
         {
             Logger.LogInit(GKUtils.GetLogFilename());
+            LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);

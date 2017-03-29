@@ -91,7 +91,7 @@ namespace GKCore.Lists
             fOrderedColumns = new List<ListColumn>();
 
             InitColumnStatics();
-            UpdateOrders();
+            ResetDefaults();
         }
 
         protected abstract void InitColumnStatics();

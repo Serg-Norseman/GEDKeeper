@@ -191,8 +191,21 @@ namespace GKCommon
 
             #if __MonoCS__
 
-            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + "");
-            Process.Start(mailto);
+            try
+            {
+                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
+                string args = string.Format(mailto, address, subject, body, attach);
+
+                var proc = new System.Diagnostics.Process();
+                proc.EnableRaisingEvents = false;
+                proc.StartInfo.FileName = "xdg-email";
+                proc.StartInfo.Arguments = args;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("SysUtils.SendMail(): " + ex.Message);
+            }
 
             #else
 
@@ -239,13 +252,14 @@ namespace GKCommon
 
         #region Cross-platform helpers
 
-        private static ulong? fMonoVersion = null;
-
-        public static ulong GetMonoVersion()
+        public static string GetCLRVersion()
         {
-            if (fMonoVersion.HasValue) return fMonoVersion.Value;
+            return System.Reflection.Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+        }
 
-            ulong uVersion = 0;
+        public static string GetMonoVersion()
+        {
+            string uVersion = "";
             try
             {
                 Type t = Type.GetType("Mono.Runtime");
@@ -255,22 +269,12 @@ namespace GKCommon
                                                 BindingFlags.NonPublic | BindingFlags.Static);
                     if (mi != null)
                     {
-                        string strName = (mi.Invoke(null, null) as string);
-                        if (!string.IsNullOrEmpty(strName))
-                        {
-                            Match m = Regex.Match(strName, "\\d+(\\.\\d+)+");
-                            if (m.Success)
-                                uVersion = ParseVersion(m.Value);
-                            else { Debug.Assert(false); }
-                        }
-                        else { Debug.Assert(false); }
+                        uVersion = (mi.Invoke(null, null) as string);
                     }
-                    else { Debug.Assert(false); }
                 }
             }
-            catch (Exception) { Debug.Assert(false); }
+            catch { }
 
-            fMonoVersion = uVersion;
             return uVersion;
         }
 
@@ -297,40 +301,6 @@ namespace GKCommon
             fPlatformID = Environment.OSVersion.Platform;
 
             return fPlatformID.Value;
-        }
-
-        private static readonly char[] VersionSep = new char[] { '.', ',' };
-
-        public static ulong ParseVersion(string strVersion)
-        {
-            if (strVersion == null) { return 0; }
-
-            string[] vVer = strVersion.Split(VersionSep);
-            if ((vVer == null) || (vVer.Length == 0)) { return 0; }
-
-            ushort uPart;
-            ushort.TryParse(vVer[0].Trim(), out uPart);
-            ulong uVer = ((ulong)uPart << 48);
-
-            if (vVer.Length >= 2)
-            {
-                ushort.TryParse(vVer[1].Trim(), out uPart);
-                uVer |= ((ulong)uPart << 32);
-            }
-
-            if (vVer.Length >= 3)
-            {
-                ushort.TryParse(vVer[2].Trim(), out uPart);
-                uVer |= ((ulong)uPart << 16);
-            }
-
-            if (vVer.Length >= 4)
-            {
-                ushort.TryParse(vVer[3].Trim(), out uPart);
-                uVer |= (ulong)uPart;
-            }
-
-            return uVer;
         }
 
         #endregion
