@@ -489,6 +489,11 @@ namespace GKUI.Sheets
             return fList.AddItem(itemValue, data);
         }
 
+        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
+        {
+            return fList.AddItem(itemValue, data, subitemsValues);
+        }
+
         public void ClearItems()
         {
             fList.Items.Clear();

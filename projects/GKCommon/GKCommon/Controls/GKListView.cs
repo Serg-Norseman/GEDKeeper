@@ -437,6 +437,13 @@ namespace GKCommon.Controls
             return result;
         }
 
+        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
+        {
+            var result = AddItem(itemValue, data);
+            result.SubItems.AddRange(subitemsValues);
+            return result;
+        }
+
         public GKListItem GetSelectedItem()
         {
             GKListItem result;

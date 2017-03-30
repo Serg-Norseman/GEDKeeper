@@ -74,7 +74,6 @@ namespace GKUI.Sheets
                     GKListItem item = fSheetList.AddItem(i + 1, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
                     item.AddSubItem(new GEDCOMDateItem(evt.Date.Value));
-
                     if (fPersonsMode) {
                         string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {
@@ -84,8 +83,24 @@ namespace GKUI.Sheets
                     } else {
                         item.AddSubItem(evt.Place.StringValue);
                     }
-
                     item.AddSubItem(GKUtils.GetEventCause(evt));
+
+                    /*GKListSubItem[] itemsData = new GKListSubItem[4];
+
+                    itemsData[0] = new GKListSubItem(GKUtils.GetEventName(evt));
+                    itemsData[1] = new GKListSubItem(new GEDCOMDateItem(evt.Date.Value));
+                    if (fPersonsMode) {
+                        string st = evt.Place.StringValue;
+                        if (evt.StringValue != "") {
+                            st = st + " [" + evt.StringValue + "]";
+                        }
+                        itemsData[2] = new GKListSubItem(st);
+                    } else {
+                        itemsData[2] = new GKListSubItem(evt.Place.StringValue);
+                    }
+                    itemsData[3] = new GKListSubItem(GKUtils.GetEventCause(evt));
+
+                    fSheetList.AddItem((i + 1), evt, itemsData);*/
                 }
 
                 fSheetList.ResizeColumn(1);
