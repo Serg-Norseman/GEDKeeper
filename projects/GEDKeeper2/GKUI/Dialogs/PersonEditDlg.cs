@@ -31,6 +31,7 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -881,30 +882,34 @@ namespace GKUI.Dialogs
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord father = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
+            /*GEDCOMIndividualRecord father = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father == null) return;
 
             GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, father);
             if (family != null && family.Husband.Value == null) {
-                //family.AddSpouse(father);
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                 UpdateControls();
-            } else {
-                fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
+            }*/
+
+            if (UIEngine.AddFather(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) == DialogResult.No) return;
+            /*if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) == DialogResult.No) return;
 
             GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
             GEDCOMIndividualRecord father = family.GetHusband();
-            //family.RemoveSpouse(father);
             fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
-            UpdateControls();
+            UpdateControls();*/
+
+            if (UIEngine.DeleteFather(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
         }
 
         private void btnFatherSel_Click(object sender, EventArgs e)
@@ -925,11 +930,8 @@ namespace GKUI.Dialogs
 
             GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, mother);
             if (family != null && family.Wife.Value == null) {
-                //family.AddSpouse(mother);
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                 UpdateControls();
-            } else {
-                fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
             }
         }
 
@@ -941,7 +943,6 @@ namespace GKUI.Dialogs
             if (family == null) return;
 
             GEDCOMIndividualRecord mother = family.GetWife();
-            //family.RemoveSpouse(mother);
             fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
             UpdateControls();
         }

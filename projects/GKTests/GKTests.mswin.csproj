@@ -79,6 +79,7 @@
     <Compile Include="GKCommon\ExtListTests.cs" />
     <Compile Include="GKCommon\ExtRectTests.cs" />
     <Compile Include="GKCommon\IndistinctMatchingTests.cs" />
+    <Compile Include="GKCommon\IocContainerTests.cs" />
     <Compile Include="GKCommon\RangesTests.cs" />
     <Compile Include="GKCommon\RusDeclensionTests.cs" />
     <Compile Include="GKCommon\IniFileTests.cs" />

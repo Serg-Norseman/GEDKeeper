@@ -458,6 +458,11 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\Engine\UIContracts.cs" />
+    <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
+    <Compile Include="GKUI\Engine\IocControllerFactory.cs" />
+    <Compile Include="GKUI\Engine\UIEngine.cs" />
+    <Compile Include="GKUI\Engine\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
     <Compile Include="GKUI\Forms\PrintableForm.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">
@@ -759,6 +764,7 @@
   <ItemGroup>
     <Folder Include="GKCore\Plugins" />
     <Folder Include="GKUI\Forms" />
+    <Folder Include="GKUI\Engine" />
     <Folder Include="Sandbox\" />
   </ItemGroup>
 </Project>

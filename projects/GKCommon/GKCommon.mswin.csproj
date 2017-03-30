@@ -210,6 +210,8 @@
     <Compile Include="GKCommon\ImportUtils.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
+    <Compile Include="GKCommon\IoC\IContainer.cs" />
+    <Compile Include="GKCommon\IoC\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Range.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
@@ -280,6 +282,8 @@
       <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKCommon\IoC" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

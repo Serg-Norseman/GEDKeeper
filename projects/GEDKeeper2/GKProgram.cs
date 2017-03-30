@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.SingleInstance;
+using GKUI.Engine;
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -59,6 +60,7 @@ namespace GKUI
             {
                 #if __MonoCS__
                 Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
+                Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif
                 Logger.LogWrite("CLR Version: " + SysUtils.GetCLRVersion());
                 Logger.LogWrite("GK Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -72,6 +74,8 @@ namespace GKUI
         {
             Logger.LogInit(GKUtils.GetLogFilename());
             LogSysInfo();
+
+            WinFormsBootstrapper.Configure(UIEngine.Container);
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
