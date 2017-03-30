@@ -35,6 +35,6 @@ namespace GKCore.Interfaces
         DataType GetColumnDataType(int index);
         string GetColumnName(byte columnId);
         void InitFilter();
-        void WidthChanged(int colIndex, int colWidth);
+        void ChangeColumnWidth(int colIndex, int colWidth);
     }
 }

@@ -16,7 +16,7 @@
 
 
 ## English
-GEDKeeper program is developed for work with personal genealogical database.
+**GEDKeeper** program is developed for work with personal genealogical database.
 
 The program is designed for extremely simple and intuitive interface. 
 The program is very easy to install on the computer, fully supports the GEDCOM 
@@ -31,12 +31,12 @@ genealogical database as a support tool to the traditional card index.
 
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
-**Alternatively** why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
+Alternatively why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
 site (this is the most popular).
 
 
 ## Russian
-Программа GEDKeeper предназначена для ведения личной генеалогической базы данных.
+Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
 
 Программа разработана так, чтобы интерфейс был максимально простым и интуитивно 
 понятным. Программа очень просто устанавливается на компьютер, полностью 
@@ -52,7 +52,7 @@ Google Maps (© Google).
 
 Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
-**Альтернативно** можно пробовать загрузить на сайте 
+Альтернативно можно пробовать загрузить на сайте 
 [Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
 
 

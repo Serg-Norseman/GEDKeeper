@@ -200,7 +200,7 @@ namespace GKCore.Lists
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
 
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.DefWidth, false, cs.Id, 0);
+                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
             }
         }
 
@@ -374,7 +374,7 @@ namespace GKCore.Lists
             return null;
         }
 
-        public void WidthChanged(int colIndex, int newWidth)
+        public void ChangeColumnWidth(int colIndex, int newWidth)
         {
             if (colIndex <= 0) return;
 

@@ -207,16 +207,18 @@ namespace GKUI
             e.Cancel = !CheckModified();
             if (e.Cancel) return;
 
+            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+            if (listMan != null) {
+                listMan.ListColumns.CopyTo(GlobalOptions.Instance.IndividualListColumns);
+            }
+
             MainWin.Instance.BaseClosed(this);
             MainWin.Instance.CheckMRUWin(fTree.FileName, this);
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
-            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-            if (listMan != null) {
-                listMan.ListColumns.CopyTo(GlobalOptions.Instance.IndividualListColumns);
-            }
+            // Attention: Does not receive control when executing in Mono
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -811,7 +813,7 @@ namespace GKUI
 
         public void RefreshLists(bool titles)
         {
-            ListPersons.UpdateContents(fShieldState, titles, 2);
+            ListPersons.UpdateContents(fShieldState, titles, -1/*2*/);
             ListFamilies.UpdateContents(fShieldState, titles, 1);
             ListNotes.UpdateContents(fShieldState, titles, -1);
             ListMultimedia.UpdateContents(fShieldState, titles, 1);

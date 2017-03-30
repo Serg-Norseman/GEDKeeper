@@ -264,16 +264,14 @@ namespace GKUI.Controls
 
         protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
         {
-            if (fUpdateCount > 0) return;
+            if (fListMan == null || fUpdateCount > 0) return;
 
             try
             {
                 switch (fRecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        if (fListMan != null) {
-                            fListMan.WidthChanged(e.ColumnIndex, Columns[e.ColumnIndex].Width);
-                        }
+                        fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
                         break;
                 }
             }

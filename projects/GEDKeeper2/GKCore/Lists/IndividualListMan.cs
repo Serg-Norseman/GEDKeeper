@@ -599,10 +599,9 @@ namespace GKCore.Lists
                 ListColumn columnProps = columns.OrderedColumns[i];
                 if (!columnProps.CurActive) continue;
 
+                const bool asz = false;
                 byte bColType = columnProps.Id;
-                if (bColType == (byte)PersonColumnType.ctName) {
-                    const bool asz = false;
-
+                if (bColType == (byte)PersonColumnType.ctName && defNameFormat != NameFormat.nfFNP) {
                     switch (defNameFormat)
                     {
                         case NameFormat.nfF_N_P:
@@ -614,10 +613,6 @@ namespace GKCore.Lists
                         case NameFormat.nfF_NP:
                             AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
                             AddColumn(listView, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
-                            break;
-
-                        case NameFormat.nfFNP:
-                            AddColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.CurWidth, asz, bColType, 0);
                             break;
                     }
                 } else {
