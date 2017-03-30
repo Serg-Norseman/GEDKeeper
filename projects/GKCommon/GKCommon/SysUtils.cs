@@ -63,6 +63,20 @@ namespace GKCommon
 
     #endregion
 
+    public enum DesktopType
+    {
+        None = 0,
+        Windows,
+        Gnome,
+        Kde,
+        Unity,
+        Lxde,
+        Xfce,
+        Mate,
+        Cinnamon,
+        Pantheon
+    }
+
     public static class SysUtils
     {
         static SysUtils()
@@ -301,6 +315,50 @@ namespace GKCommon
             fPlatformID = Environment.OSVersion.Platform;
 
             return fPlatformID.Value;
+        }
+
+        public static DesktopType GetDesktopType()
+        {
+            DesktopType deskType = DesktopType.None;
+
+            if (!IsUnix()) {
+                deskType = DesktopType.Windows;
+            } else {
+                try
+                {
+                    string strXdg = (Environment.GetEnvironmentVariable(
+                        "XDG_CURRENT_DESKTOP") ?? string.Empty).Trim();
+                    string strGdm = (Environment.GetEnvironmentVariable(
+                        "GDMSESSION") ?? string.Empty).Trim();
+                    StringComparison sc = StringComparison.OrdinalIgnoreCase;
+
+                    if (strXdg.Equals("Unity", sc))
+                        deskType = DesktopType.Unity;
+                    else if (strXdg.Equals("LXDE", sc))
+                        deskType = DesktopType.Lxde;
+                    else if (strXdg.Equals("XFCE", sc))
+                        deskType = DesktopType.Xfce;
+                    else if (strXdg.Equals("MATE", sc))
+                        deskType = DesktopType.Mate;
+                    else if (strXdg.Equals("X-Cinnamon", sc))
+                        deskType = DesktopType.Cinnamon;
+                    else if (strXdg.Equals("Pantheon", sc)) // Elementary OS
+                        deskType = DesktopType.Pantheon;
+                    else if (strXdg.Equals("KDE", sc) || // Mint 16
+                             strGdm.Equals("kde-plasma", sc)) // Ubuntu 12.04
+                        deskType = DesktopType.Kde;
+                    else if (strXdg.Equals("GNOME", sc))
+                    {
+                        if (strGdm.Equals("cinnamon", sc)) // Mint 13
+                            deskType = DesktopType.Cinnamon;
+                        else deskType = DesktopType.Gnome;
+                    }
+                } catch (Exception) {
+                    Debug.Assert(false);
+                }
+            }
+
+            return deskType;
         }
 
         #endregion

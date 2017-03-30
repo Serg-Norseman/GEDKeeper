@@ -226,6 +226,27 @@ namespace GKUI
             }
         }
 
+        private void Form_Show(object sender, EventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    BeginLoading();
+
+                    ReloadRecentBases();
+
+                    ProcessHolidays();
+                } finally {
+                    EndLoading();
+                }
+
+                UpdateMan.CheckUpdate();
+            } catch (Exception ex) {
+                LogWrite("MainWin.Form_Show(): " + ex.Message);
+            }
+        }
+
         private void Form_Load(object sender, EventArgs e)
         {
             try
@@ -252,8 +273,6 @@ namespace GKUI
                 UpdateControls(false);
 
                 LoadArgs();
-
-                UpdateMan.CheckUpdate();
             } catch (Exception ex) {
                 LogWrite("MainWin.Form_Load(): " + ex.Message);
             }
@@ -290,19 +309,6 @@ namespace GKUI
                     fb.Generate(true);
                 }
                 #endif
-            }
-        }
-
-        private void Form_Show(object sender, EventArgs e)
-        {
-            try {
-                BeginLoading();
-
-                ReloadRecentBases();
-
-                ProcessHolidays();
-            } finally {
-                EndLoading();
             }
         }
 
