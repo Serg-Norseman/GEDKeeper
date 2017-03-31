@@ -21,7 +21,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+
+using GKCommon;
 using GKCore;
+using GKUI.Controls;
 
 namespace GKUI.Engine
 {
@@ -147,6 +150,19 @@ namespace GKUI.Engine
         public void ShowWarning(string msg)
         {
             MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+
+        public bool GetInput(string prompt, ref string value)
+        {
+            bool res = GKInputBox.QueryText(GKData.APP_TITLE, prompt, ref value);
+            return res && !string.IsNullOrEmpty(value);
+        }
+
+        public bool GetPassword(string prompt, ref string value)
+        {
+            bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
+            return res && !string.IsNullOrEmpty(value);
         }
     }
 }

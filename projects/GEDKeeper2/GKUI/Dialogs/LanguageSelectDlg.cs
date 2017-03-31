@@ -25,6 +25,7 @@ using GKCommon;
 using GKCore;
 using GKCore.Options;
 using GKUI.Controls;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -68,7 +69,7 @@ namespace GKUI.Dialogs
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            GKUtils.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
+            UIEngine.UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
         }
     }
 }

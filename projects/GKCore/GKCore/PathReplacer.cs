@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using GKCommon;
+using GKUI.Engine;
 
 namespace GKCore
 {
@@ -43,7 +44,7 @@ namespace GKCore
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PathReplacer
+    public sealed class PathReplacer : IPathReplacer
     {
         private PathsMappingsList fPathsMappings;
 

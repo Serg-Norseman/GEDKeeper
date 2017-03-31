@@ -21,16 +21,84 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon;
+using GKCommon.Controls;
+using GKCommon.GEDCOM;
+using GKUI.Controls;
 
 namespace GKUI.Engine
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class UIHelper
+    public class UIHelper : IUIHelper
     {
-        public static ExtRect GetFormRect(Form form)
+        public void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
+        {
+            for (int i = 0; i < comboBox.Items.Count; i++) {
+                GKComboItem item = comboBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    comboBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
+        {
+            for (int i = 0; i < listBox.Items.Count; i++) {
+                GKComboItem item = listBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    listBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                listBox.SelectedIndex = 0;
+            }
+        }
+
+        public void NormalizeFormRect(ref ExtRect winRect)
+        {
+            // Travis CI does not have access to UI and tests aren't performed.
+            #if !CI_MODE
+
+            //------------------------------------------------------------------
+            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
+            // Restrict position and size of the main window.
+            // FIXME: DPI-aware code still required here.
+            //------------------------------------------------------------------
+
+            Screen screen = Screen.FromRectangle(winRect.ToRectangle());
+            if (screen != null) {
+                Rectangle workArea = screen.WorkingArea;
+
+                int width = winRect.GetWidth();
+                int height = winRect.GetHeight();
+
+                // Besides disallowing to the main window to have its right
+                // and bottom borders overhanged entire virtual workspace,
+                // combined from all available monitors, this code also
+                // does not allow to have this window "between" two
+                // monitors. This may be UNWANTED BEHAVIOR.
+                winRect.Left = Math.Max(workArea.Left, Math.Min(workArea.Right - width, winRect.Left));
+                winRect.Top = Math.Max(workArea.Top, Math.Min(workArea.Bottom - height, winRect.Top));
+                winRect.Right = winRect.Left + width - 1;
+                winRect.Bottom = winRect.Top + height - 1;
+            }
+
+            #endif
+        }
+
+        public ExtRect GetFormRect(Form form)
         {
             if (form == null) return ExtRect.CreateEmpty();
 
@@ -55,7 +123,7 @@ namespace GKUI.Engine
             return ExtRect.Create(form.Left, form.Top, form.Right, form.Bottom);
         }
 
-        public static void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
+        public void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
         {
             // check for new and empty struct
             if (form == null || rt.IsEmpty()) return;
@@ -72,41 +140,7 @@ namespace GKUI.Engine
             }
         }
 
-        public static void NormalizeFormRect(ref ExtRect winRect)
-        {
-            // Travis CI does not have access to UI and tests aren't performed.
-            #if !CI_MODE
-
-            //------------------------------------------------------------------
-            // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
-            // Restrict position and size of the main window.
-            // FIXME: DPI-aware code still required here.
-            //------------------------------------------------------------------
-
-            Screen screen = Screen.FromRectangle(winRect.ToRectangle());
-            if (screen != null) {
-                Rectangle workArea = screen.WorkingArea;
-
-                int width = winRect.GetWidth();
-                int height = winRect.GetHeight();
-
-                // Besides disallowing to the main window to have its right
-                // and bottom borders overhanged entire virtual workspace,
-                // combined from all available monitors, this code also
-                // does not allow to have this window "between" two
-                // monitors. This may be UNWANTED BEHAVIOR.
-                winRect.Left = Math.Max(workArea.Left, Math.Min(
-                    workArea.Right - width, winRect.Left));
-                winRect.Top = Math.Max(workArea.Top, Math.Min(
-                    workArea.Bottom - height, winRect.Top));
-                winRect.Right = winRect.Left + width - 1;
-                winRect.Bottom = winRect.Top + height - 1;
-            }
-
-            #endif
-        }
-
-        public static void CenterFormByParent(Form form, IntPtr parent)
+        public void CenterFormByParent(Form form, IntPtr parent)
         {
             if (form == null) return;
 
@@ -121,6 +155,29 @@ namespace GKUI.Engine
                 form.Left = workArea.Left + ((workArea.Width - form.Width) >> 1);
                 form.Top = workArea.Top + ((workArea.Height - form.Height) >> 1);
             }
+        }
+
+        public GKListView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            if (tree == null)
+                throw new ArgumentNullException("tree");
+
+            GKRecordsView recView = new GKRecordsView();
+            recView.HideSelection = false;
+            recView.LabelEdit = false;
+            recView.FullRowSelect = true;
+            recView.View = View.Details;
+            recView.Tree = tree;
+            recView.RecordType = recType;
+            recView.Dock = DockStyle.Fill;
+
+            parent.Controls.Add(recView);
+            parent.Controls.SetChildIndex(recView, 0);
+
+            return recView;
         }
     }
 }

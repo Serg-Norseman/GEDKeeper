@@ -29,7 +29,6 @@ using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Types;
-using GKUI;
 using GKUI.Engine;
 
 namespace GKCore.Tools
@@ -366,11 +365,9 @@ namespace GKCore.Tools
             }
 
             // in test mode, these objects don't exist
-            if (MainWin.Instance != null) {
-                INamesTable namesTable = MainWin.Instance.NamesTable;
-                if (namesTable != null) {
-                    namesTable.ImportNames(iRec);
-                }
+            INamesTable namesTable = UIEngine.NamesTable;
+            if (namesTable != null) {
+                namesTable.ImportNames(iRec);
             }
         }
 

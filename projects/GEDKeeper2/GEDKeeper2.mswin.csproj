@@ -86,14 +86,8 @@
     <Reference Include="ArborGVT">
       <HintPath>libs\ArborGVT.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetRtfWriter">
-      <HintPath>libs\DotNetRtfWriter.dll</HintPath>
-    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>libs\ExcelLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>libs\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -104,79 +98,8 @@
     <Reference Include="ZedGraph">
       <HintPath>libs\ZedGraph.dll</HintPath>
     </Reference>
-    <Reference Include="LuaInterface">
-      <HintPath>libs\mswin\LuaInterface.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKCore\Export\PDFExporter.cs" />
-    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
-    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
-    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
-    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
-    <Compile Include="GKCore\SingleInstance\IpcFake.cs" />
-    <Compile Include="GKCore\SingleInstance\ISingleInstanceEnforcer.cs" />
-    <Compile Include="GKCore\SingleInstance\SingleInstanceProxy.cs" />
-    <Compile Include="GKCore\SingleInstance\SingleInstanceTracker.cs" />
-    <Compile Include="GKCore\BaseContext.cs" />
-    <Compile Include="GKCore\BaseSearchStrategy.cs" />
-    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
-    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
-    <Compile Include="GKCore\Cultures\AncientCulture.cs" />
-    <Compile Include="GKCore\Cultures\BritishCulture.cs" />
-    <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
-    <Compile Include="GKCore\Cultures\EuropeanCulture.cs" />
-    <Compile Include="GKCore\Cultures\GermanCulture.cs" />
-    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
-    <Compile Include="GKCore\Cultures\PolishCulture.cs" />
-    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
-    <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
-    <Compile Include="GKCore\Cultures\FrenchCulture.cs" />
-    <Compile Include="GKCore\Cultures\ItalianCulture.cs" />
-    <Compile Include="GKCore\Export\CustomWriter.cs" />
-    <Compile Include="GKCore\Export\ExcelExporter.cs" />
-    <Compile Include="GKCore\Export\Exporter.cs" />
-    <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
-    <Compile Include="GKCore\Export\HTMLWriter.cs" />
-    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
-    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
-    <Compile Include="GKCore\Export\PDFWriter.cs" />
-    <Compile Include="GKCore\Export\PedigreeExporter.cs" />
-    <Compile Include="GKCore\Export\RTFWriter.cs" />
-    <Compile Include="GKCore\GKData.cs" />
-    <Compile Include="GKCore\Holidays.cs" />
-    <Compile Include="GKCore\Kinships\KinshipRec.cs" />
-    <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
-    <Compile Include="GKCore\LangMan.cs" />
-    <Compile Include="GKCore\NavigationStack.cs" />
-    <Compile Include="GKCore\Operations\ChangeTracker.cs" />
-    <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
-    <Compile Include="GKCore\Operations\CustomOperation.cs" />
-    <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
-    <Compile Include="GKCore\Operations\UndoManager.cs" />
-    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
-    <Compile Include="GKCore\Options\GlobalOptions.cs" />
-    <Compile Include="GKCore\Options\LangRecord.cs" />
-    <Compile Include="GKCore\Options\MRUFile.cs" />
-    <Compile Include="GKCore\Options\PedigreeOptions.cs" />
-    <Compile Include="GKCore\Options\ProxyOptions.cs" />
-    <Compile Include="GKCore\Options\TreeChartOptions.cs" />
-    <Compile Include="GKCore\GKUtils.cs" />
-    <Compile Include="GKCore\PathReplacer.cs" />
-    <Compile Include="GKCore\Plugins\PluginInfo.cs" />
-    <Compile Include="GKCore\PortraitsCache.cs" />
-    <Compile Include="GKCore\SCCrypt.cs" />
-    <Compile Include="GKCore\ScriptEngine.cs" />
-    <Compile Include="GKCore\Stats\CommonStats.cs" />
-    <Compile Include="GKCore\Stats\CompositeItem.cs" />
-    <Compile Include="GKCore\Stats\StatMode.cs" />
-    <Compile Include="GKCore\Stats\StatsItem.cs" />
-    <Compile Include="GKCore\Stats\TreeStats.cs" />
-    <Compile Include="GKCore\Tools\PlaceObj.cs" />
-    <Compile Include="GKCore\Tools\TreeTools.cs" />
-    <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
@@ -191,7 +114,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
-    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -208,7 +130,6 @@
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
-    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -442,14 +363,9 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
-    <Compile Include="GKCore\Lists\ListFilter.cs" />
-    <Compile Include="GKCore\Lists\ListColumns.cs" />
-    <Compile Include="GKUI\Engine\BaseController.cs" />
     <Compile Include="GKUI\Engine\UIHelper.cs" />
     <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
     <Compile Include="GKUI\Engine\IocControllerFactory.cs" />
-    <Compile Include="GKUI\Engine\UIEngine.cs" />
     <Compile Include="GKUI\Engine\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
     <Compile Include="GKUI\Forms\PrintableForm.cs" />
@@ -511,19 +427,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\PersonList.cs" />
-    <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
-    <Compile Include="GKCore\Lists\FamilyListMan.cs" />
-    <Compile Include="GKCore\Lists\GroupListMan.cs" />
-    <Compile Include="GKCore\Lists\IndividualListMan.cs" />
-    <Compile Include="GKCore\Lists\ListManager.cs" />
-    <Compile Include="GKCore\Lists\LocationListMan.cs" />
-    <Compile Include="GKCore\Lists\MultimediaListMan.cs" />
-    <Compile Include="GKCore\Lists\NoteListMan.cs" />
-    <Compile Include="GKCore\Lists\RepositoryListMan.cs" />
-    <Compile Include="GKCore\Lists\ResearchListMan.cs" />
-    <Compile Include="GKCore\Lists\SourceListMan.cs" />
-    <Compile Include="GKCore\Lists\TaskListMan.cs" />
     <Compile Include="GKUI\BaseWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -714,10 +617,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="libs\mswin\lua51.dll">
-      <Link>lua51.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -756,10 +655,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCore\Plugins" />
     <Folder Include="GKUI\Forms" />
     <Folder Include="GKUI\Engine" />
-    <Folder Include="Sandbox\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

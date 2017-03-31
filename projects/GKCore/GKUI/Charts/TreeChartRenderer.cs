@@ -22,6 +22,28 @@ using System.Drawing;
 
 namespace GKUI.Charts
 {
+    public enum TreeChartKind
+    {
+        ckAncestors,
+        ckDescendants,
+        ckBoth
+    }
+
+    public enum DrawMode
+    {
+        dmInteractive,
+        dmStatic,
+        dmStaticCentered
+    }
+
+    public enum BackgroundMode
+    {
+        bmNone,
+        bmImage,
+        bmFill,
+        bmAny
+    }
+
     /// <summary>
     /// 
     /// </summary>

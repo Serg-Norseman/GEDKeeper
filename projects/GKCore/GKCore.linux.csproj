@@ -7,7 +7,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GKCore</RootNamespace>
     <AssemblyName>GKCore</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -40,9 +39,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -57,22 +58,148 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetRtfWriter">
+      <HintPath>libs\DotNetRtfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>libs\ExcelLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>libs\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="KopiLua">
+      <HintPath>libs\linux\KopiLua.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>libs\linux\NLua.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFClown">
+      <HintPath>libs\linux\PDFClown.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFjet">
+      <HintPath>libs\linux\PDFjet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\BaseContext.cs" />
+    <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Cultures\AncientCulture.cs" />
+    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
+    <Compile Include="GKCore\Cultures\BritishCulture.cs" />
+    <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
+    <Compile Include="GKCore\Cultures\EuropeanCulture.cs" />
+    <Compile Include="GKCore\Cultures\FrenchCulture.cs" />
+    <Compile Include="GKCore\Cultures\GermanCulture.cs" />
+    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
+    <Compile Include="GKCore\Cultures\ItalianCulture.cs" />
+    <Compile Include="GKCore\Cultures\PolishCulture.cs" />
+    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
+    <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
+    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
+    <Compile Include="GKCore\Export\CustomWriter.cs" />
+    <Compile Include="GKCore\Export\ExcelExporter.cs" />
+    <Compile Include="GKCore\Export\Exporter.cs" />
+    <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
+    <Compile Include="GKCore\Export\HTMLWriter.cs" />
+    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
+    <Compile Include="GKCore\Export\PDFExporter.cs" />
+    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
+    <Compile Include="GKCore\Export\PDFWriter.cs" />
+    <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\RTFWriter.cs" />
+    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
+    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
+    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
+    <Compile Include="GKCore\GKData.cs" />
+    <Compile Include="GKCore\GKUtils.cs" />
+    <Compile Include="GKCore\Holidays.cs" />
+    <Compile Include="GKCore\Kinships\KinshipRec.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
+    <Compile Include="GKCore\Lists\FamilyListMan.cs" />
+    <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
+    <Compile Include="GKCore\Lists\GroupListMan.cs" />
+    <Compile Include="GKCore\Lists\IndividualListMan.cs" />
+    <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKCore\Lists\ListFilter.cs" />
+    <Compile Include="GKCore\Lists\ListManager.cs" />
+    <Compile Include="GKCore\Lists\LocationListMan.cs" />
+    <Compile Include="GKCore\Lists\MultimediaListMan.cs" />
+    <Compile Include="GKCore\Lists\NoteListMan.cs" />
+    <Compile Include="GKCore\Lists\RepositoryListMan.cs" />
+    <Compile Include="GKCore\Lists\ResearchListMan.cs" />
+    <Compile Include="GKCore\Lists\SourceListMan.cs" />
+    <Compile Include="GKCore\Lists\TaskListMan.cs" />
+    <Compile Include="GKCore\NamesTable.cs" />
+    <Compile Include="GKCore\NavigationStack.cs" />
+    <Compile Include="GKCore\Operations\ChangeTracker.cs" />
+    <Compile Include="GKCore\Operations\CustomOperation.cs" />
+    <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
+    <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
+    <Compile Include="GKCore\Operations\UndoManager.cs" />
+    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\Options\GlobalOptions.cs" />
+    <Compile Include="GKCore\Options\LangRecord.cs" />
+    <Compile Include="GKCore\Options\MRUFile.cs" />
+    <Compile Include="GKCore\Options\PedigreeOptions.cs" />
+    <Compile Include="GKCore\Options\ProxyOptions.cs" />
+    <Compile Include="GKCore\Options\TreeChartOptions.cs" />
+    <Compile Include="GKCore\PathReplacer.cs" />
+    <Compile Include="GKCore\Plugins\PluginInfo.cs" />
+    <Compile Include="GKCore\PortraitsCache.cs" />
+    <Compile Include="GKCore\SCCrypt.cs" />
+    <Compile Include="GKCore\ScriptEngine.cs" />
+    <Compile Include="GKCore\SingleInstance\IpcFake.cs" />
+    <Compile Include="GKCore\SingleInstance\ISingleInstanceEnforcer.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceProxy.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceTracker.cs" />
+    <Compile Include="GKCore\Stats\CommonStats.cs" />
+    <Compile Include="GKCore\Stats\CompositeItem.cs" />
+    <Compile Include="GKCore\Stats\StatMode.cs" />
+    <Compile Include="GKCore\Stats\StatsItem.cs" />
+    <Compile Include="GKCore\Stats\TreeStats.cs" />
+    <Compile Include="GKCore\Tools\PlaceObj.cs" />
+    <Compile Include="GKCore\Tools\TreeTools.cs" />
+    <Compile Include="GKCore\UpdateMan.cs" />
+    <Compile Include="GKUI\Charts\ITreeChartBox.cs" />
+    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
+    <Compile Include="GKUI\Engine\BaseController.cs" />
+    <Compile Include="GKUI\Engine\UIEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCore" />
+    <Folder Include="GKCore\Cultures" />
+    <Folder Include="GKCore\Export" />
+    <Folder Include="GKCore\Geocoding" />
+    <Folder Include="GKCore\Kinships" />
+    <Folder Include="GKCore\Lists" />
+    <Folder Include="GKCore\Operations" />
+    <Folder Include="GKCore\Options" />
+    <Folder Include="GKCore\Plugins" />
+    <Folder Include="GKCore\SingleInstance" />
+    <Folder Include="GKCore\Stats" />
+    <Folder Include="GKCore\Tools" />
     <Folder Include="GKUI" />
+    <Folder Include="GKUI\Charts" />
+    <Folder Include="GKUI\Engine" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">

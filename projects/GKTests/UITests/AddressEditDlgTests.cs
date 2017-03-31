@@ -22,11 +22,13 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.ControlTesters;
 using GKTests.Mocks;
 using GKUI.Dialogs;
+using GKUI.Engine;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -45,6 +47,8 @@ namespace GKTests.UITests
         public override void Setup()
         {
             base.Setup();
+
+            WinFormsBootstrapper.Configure(UIEngine.Container);
 
             fBase = new BaseWindowMock();
             fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");

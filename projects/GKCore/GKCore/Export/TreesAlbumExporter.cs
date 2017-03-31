@@ -22,9 +22,10 @@ using System;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
-using GKUI;
 using GKUI.Charts;
+using GKUI.Engine;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -88,12 +89,13 @@ namespace GKCore.Export
                     renderer.SetTarget(fPdfWriter.DirectContent);
 
                     // TODO: replace by local options in TreeChartBox
-                    bool prevKinship = MainWin.Instance.Options.ChartOptions.Kinship;
-                    MainWin.Instance.Options.ChartOptions.Kinship = false;
+                    bool prevKinship = GlobalOptions.Instance.ChartOptions.Kinship;
+                    GlobalOptions.Instance.ChartOptions.Kinship = false;
 
-                    var treeBox = new TreeChartBox(renderer);
+                    var treeBox = UIEngine.Container.Resolve<ITreeChartBox>();
+                    treeBox.SetRenderer(renderer);
                     treeBox.Base = fBase;
-                    treeBox.Options = MainWin.Instance.Options.ChartOptions;
+                    treeBox.Options = GlobalOptions.Instance.ChartOptions;
                     treeBox.DepthLimit = 3;
                     treeBox.ShieldState = fShieldState;
                     treeBox.Height = (int)pageHeight;
@@ -105,7 +107,7 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
 
                         treeBox.SetScale(1.0f);
-                        treeBox.GenChart(iRec, TreeChartBox.ChartKind.ckDescendants, false);
+                        treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
 
                         float scaleFactor = SysUtils.ZoomToFit(treeBox.ImageSize.Width,
                                                                treeBox.ImageSize.Height,
@@ -113,12 +115,12 @@ namespace GKCore.Export
                         scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
 
                         treeBox.SetScale(scaleFactor);
-                        treeBox.RenderStatic(TreeChartBox.BackgroundMode.bmNone, true);
+                        treeBox.RenderStatic(BackgroundMode.bmNone, true);
 
                         fDocument.NewPage();
                     }
 
-                    MainWin.Instance.Options.ChartOptions.Kinship = prevKinship;
+                    GlobalOptions.Instance.ChartOptions.Kinship = prevKinship;
                 }
             }
             catch (Exception)

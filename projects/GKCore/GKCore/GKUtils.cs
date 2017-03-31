@@ -33,7 +33,6 @@ using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Controls;
 
 namespace GKCore
 {
@@ -1474,73 +1473,6 @@ namespace GKCore
             parent.Controls.Add(listView);
 
             return listView;
-        }
-
-        public static GKRecordsView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
-        {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
-            if (tree == null)
-                throw new ArgumentNullException("tree");
-
-            GKRecordsView recView = new GKRecordsView();
-            recView.HideSelection = false;
-            recView.LabelEdit = false;
-            recView.FullRowSelect = true;
-            recView.View = View.Details;
-            recView.Tree = tree;
-            recView.RecordType = recType;
-            recView.Dock = DockStyle.Fill;
-
-            parent.Controls.Add(recView);
-            parent.Controls.SetChildIndex(recView, 0);
-
-            return recView;
-        }
-
-        public static bool GetInput(string prompt, ref string value)
-        {
-            bool res = GKInputBox.QueryText(GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);
-        }
-
-        public static bool GetPassword(string prompt, ref string value)
-        {
-            bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);
-        }
-
-        public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < comboBox.Items.Count; i++) {
-                GKComboItem item = comboBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    comboBox.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                comboBox.SelectedIndex = 0;
-            }
-        }
-
-        public static void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < listBox.Items.Count; i++) {
-                GKComboItem item = listBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    listBox.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                listBox.SelectedIndex = 0;
-            }
         }
 
         #endregion

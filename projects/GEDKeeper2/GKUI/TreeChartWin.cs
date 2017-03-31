@@ -43,7 +43,7 @@ namespace GKUI
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
 
-        private TreeChartBox.ChartKind fChartKind;
+        private TreeChartKind fChartKind;
         private int fGensLimit;
         private GEDCOMIndividualRecord fPerson;
 
@@ -53,7 +53,7 @@ namespace GKUI
             get { return fBase; }
         }
 
-        public TreeChartBox.ChartKind ChartKind
+        public TreeChartKind ChartKind
         {
             get { return fChartKind; }
             set {
@@ -71,9 +71,9 @@ namespace GKUI
             tbImageSave.Image = GKResources.iSaveImage;
             tbModes.Image = GKResources.iTools;
 
-            miModeBoth.Tag = TreeChartBox.ChartKind.ckBoth;
-            miModeAncestors.Tag = TreeChartBox.ChartKind.ckAncestors;
-            miModeDescendants.Tag = TreeChartBox.ChartKind.ckDescendants;
+            miModeBoth.Tag = TreeChartKind.ckBoth;
+            miModeAncestors.Tag = TreeChartKind.ckAncestors;
+            miModeDescendants.Tag = TreeChartKind.ckDescendants;
 
             fBase = baseWin;
             fPerson = startPerson;
@@ -120,11 +120,11 @@ namespace GKUI
             return fTreeBox;
         }
 
-        public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartBox.ChartKind chartKind)
+        public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
         {
             bool result = true;
 
-            if (chartKind == TreeChartBox.ChartKind.ckAncestors || chartKind == TreeChartBox.ChartKind.ckBoth)
+            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth)
             {
                 GKUtils.InitExtCounts(tree, -1);
                 int ancCount = GKUtils.GetAncestorsCount(iRec);
@@ -135,7 +135,7 @@ namespace GKUI
                 }
             }
 
-            if (chartKind >= TreeChartBox.ChartKind.ckDescendants && chartKind < (TreeChartBox.ChartKind)3)
+            if (chartKind >= TreeChartKind.ckDescendants && chartKind < (TreeChartKind)3)
             {
                 GKUtils.InitExtCounts(tree, -1);
                 int descCount = GKUtils.GetDescendantsCount(iRec);
@@ -153,13 +153,13 @@ namespace GKUI
         {
             switch (fChartKind)
             {
-                case TreeChartBox.ChartKind.ckAncestors:
+                case TreeChartKind.ckAncestors:
                     Text = LangMan.LS(LSID.LSID_MITreeAncestors);
                     break;
-                case TreeChartBox.ChartKind.ckDescendants:
+                case TreeChartKind.ckDescendants:
                     Text = LangMan.LS(LSID.LSID_MITreeDescendants);
                     break;
-                case TreeChartBox.ChartKind.ckBoth:
+                case TreeChartKind.ckBoth:
                     Text = LangMan.LS(LSID.LSID_MITreeBoth);
                     break;
             }
@@ -186,15 +186,15 @@ namespace GKUI
 
             switch (fChartKind)
             {
-                case TreeChartBox.ChartKind.ckAncestors:
+                case TreeChartKind.ckAncestors:
                     miModeAncestors.Checked = true;
                     break;
 
-                case TreeChartBox.ChartKind.ckDescendants:
+                case TreeChartKind.ckDescendants:
                     miModeDescendants.Checked = true;
                     break;
 
-                case TreeChartBox.ChartKind.ckBoth:
+                case TreeChartKind.ckBoth:
                     miModeBoth.Checked = true;
                     break;
             }
@@ -501,7 +501,7 @@ namespace GKUI
 
         private void miModeItem_Click(object sender, EventArgs e)
         {
-            TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)((ToolStripMenuItem)sender).Tag;
+            TreeChartKind newMode = (TreeChartKind)((ToolStripMenuItem)sender).Tag;
             if (fChartKind == newMode) return;
 
             ChartKind = newMode;

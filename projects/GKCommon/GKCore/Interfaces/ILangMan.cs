@@ -28,5 +28,6 @@ namespace GKCore.Interfaces
     public interface ILangMan
     {
         string LS(Enum lsid);
+        bool LoadFromFile(string fileName, int offset = 0);
     }
 }

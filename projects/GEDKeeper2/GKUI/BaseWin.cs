@@ -537,7 +537,7 @@ namespace GKUI
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            recView = GKUtils.CreateRecordsView(sheet, fTree, recType);
+            recView = (GKRecordsView)UIEngine.UIHelper.CreateRecordsView(sheet, fTree, recType);
             recView.IsMainList = true;
             recView.DoubleClick += RecordEdit;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
@@ -585,7 +585,7 @@ namespace GKUI
             string pw = null;
             string ext = SysUtils.GetFileExtension(fileName);
             if (ext == ".geds") {
-                if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                if (!UIEngine.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                     UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                     return;
                 }
@@ -625,7 +625,7 @@ namespace GKUI
                 string pw = null;
                 string ext = SysUtils.GetFileExtension(fileName);
                 if (ext == ".geds") {
-                    if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                    if (!UIEngine.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                         UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                         return;
                     }

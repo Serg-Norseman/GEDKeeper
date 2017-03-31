@@ -20,10 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -61,14 +63,14 @@ namespace GKUI.Dialogs
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
                             fAddress.AddPhoneNumber(val);
                         }
                         break;
 
                     case RecordAction.raEdit:
                         val = itemTag.StringValue;
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
                             itemTag.StringValue = val;
                         }
                         break;
@@ -83,14 +85,14 @@ namespace GKUI.Dialogs
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
                             fAddress.AddEmailAddress(val);
                         }
                         break;
 
                     case RecordAction.raEdit:
                         val = itemTag.StringValue;
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
                             itemTag.StringValue = val;
                         }
                         break;
@@ -105,14 +107,14 @@ namespace GKUI.Dialogs
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         val = "";
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
                             fAddress.AddWebPage(val);
                         }
                         break;
 
                     case RecordAction.raEdit:
                         val = itemTag.StringValue;
-                        if (GKUtils.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                        if (UIEngine.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
                             itemTag.StringValue = val;
                         }
                         break;

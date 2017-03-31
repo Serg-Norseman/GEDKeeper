@@ -44,7 +44,7 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public class TreeChartBox : CustomChart
+    public class TreeChartBox : CustomChart, ITreeChartBox
     {
         private const float HIGHLIGHTED_VAL = 0.1f;
 
@@ -57,26 +57,12 @@ namespace GKUI.Charts
         public const int DEF_PERSON_NODE_PADDING = 10;
 
         #region Subtypes
-        
+
         private enum ChartControlMode
         {
             ccmDefault,
             ccmDragImage,
             ccmControlsVisible
-        }
-
-        public enum ChartKind
-        {
-            ckAncestors,
-            ckDescendants,
-            ckBoth
-        }
-
-        public enum DrawMode
-        {
-            dmInteractive,
-            dmStatic,
-            dmStaticCentered
         }
 
         private enum MouseAction
@@ -94,14 +80,6 @@ namespace GKUI.Charts
             meDown,
             meMove,
             meUp
-        }
-
-        public enum BackgroundMode
-        {
-            bmNone,
-            bmImage,
-            bmFill,
-            bmAny
         }
 
         public sealed class TreeControlsList<T> : List<T>, IDisposable where T : ITreeControl
@@ -181,23 +159,23 @@ namespace GKUI.Charts
         private readonly PersonList fPersons;
         private readonly List<string> fPreparedFamilies;
         internal readonly List<string> fPreparedIndividuals;
-        private readonly TreeChartRenderer fRenderer;
         private readonly ToolTip fToolTip;
         private readonly TreeControlsList<ITreeControl> fTreeControls;
-        
+
         private IBaseWindow fBase;
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private int fDepthLimit;
         private Font fDrawFont;
         private KinshipsGraph fGraph;
-        private ChartKind fKind;
+        private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
         private int fMargins;
         private int fNodePadding;
         private TreeChartOptions fOptions;
         private bool fPathDebug;
+        private TreeChartRenderer fRenderer;
         private TreeChartPerson fRoot;
         private float fScale;
         private TreeChartPerson fSelected;
@@ -208,7 +186,7 @@ namespace GKUI.Charts
         private bool fTraceKinships;
         private bool fTraceSelected;
         private GEDCOMTree fTree;
-        
+
         private int fBorderWidth;
         private ExtRect fTreeBounds;
 
@@ -226,7 +204,7 @@ namespace GKUI.Charts
         private int fMouseX;
         private int fMouseY;
         private ChartControlMode fMode = ChartControlMode.ccmDefault;
-        
+
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;
         //private PersonControl fPersonControl;
@@ -234,17 +212,17 @@ namespace GKUI.Charts
 
         private IContainer fComponents;
         private Timer fTimer;
-        
+
         private Bitmap fExpPic;
 
         private static readonly object EventPersonModify;
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
-        
+
         #endregion
 
         #region Public properties
-        
+
         public event PersonModifyEventHandler PersonModify
         {
             add { Events.AddHandler(EventPersonModify, value); }
@@ -325,7 +303,7 @@ namespace GKUI.Charts
             get { return fPreparedIndividuals.Count; }
         }
 
-        public ChartKind Kind
+        public TreeChartKind Kind
         {
             get { return fKind; }
             set { fKind = value; }
@@ -399,7 +377,7 @@ namespace GKUI.Charts
             EventPersonProperties = new object();
         }
 
-        public TreeChartBox(TreeChartRenderer renderer) : base()
+        public TreeChartBox()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
@@ -411,7 +389,7 @@ namespace GKUI.Charts
 
             InitSigns();
 
-            fRenderer = renderer;
+            fRenderer = null;
             fPersons = new PersonList(true);
             fFilter = new ChartFilter();
             fBranchDistance = DEF_BRANCH_DISTANCE;
@@ -438,6 +416,11 @@ namespace GKUI.Charts
             InitGraphics();
         }
 
+        public TreeChartBox(TreeChartRenderer renderer) : this()
+        {
+            SetRenderer(renderer);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -456,6 +439,11 @@ namespace GKUI.Charts
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetRenderer(TreeChartRenderer renderer)
+        {
+            fRenderer = renderer;
         }
 
         private static Bitmap PrepareImage(Bitmap source, bool makeTransp)
@@ -550,10 +538,10 @@ namespace GKUI.Charts
             }
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool rootCenter)
+        public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
         {
             if (iRec == null) return;
-            
+
             try
             {
                 fKind = kind;
@@ -565,17 +553,17 @@ namespace GKUI.Charts
                 fPreparedIndividuals.Clear();
 
                 switch (fKind) {
-                    case ChartKind.ckAncestors:
+                    case TreeChartKind.ckAncestors:
                         fPreparedFamilies.Clear();
                         fRoot = DoAncestorsStep(null, iRec, 1, false);
                         break;
-                        
-                    case ChartKind.ckDescendants:
+
+                    case TreeChartKind.ckDescendants:
                         fPreparedFamilies.Clear();
                         fRoot = DoDescendantsStep(null, iRec, 1);
                         break;
 
-                    case ChartKind.ckBoth:
+                    case TreeChartKind.ckBoth:
                         fPreparedFamilies.Clear();
                         fRoot = DoAncestorsStep(null, iRec, 1, false);
                         fPreparedFamilies.Clear();
@@ -604,7 +592,7 @@ namespace GKUI.Charts
                 if (fRoot == null) return;
 
                 GEDCOMIndividualRecord rootRec = fRoot.Rec;
-                
+
                 SaveSelection();
                 GenChart(rootRec, fKind, false);
                 RestoreSelection();
@@ -619,7 +607,7 @@ namespace GKUI.Charts
         {
             fSaveSelection = (fSelected == null) ? null : fSelected.Rec;
         }
-        
+
         public void RestoreSelection()
         {
             SelectByRec(fSaveSelection);
@@ -763,7 +751,7 @@ namespace GKUI.Charts
                             result.SetFlag(PersonFlag.pfHasInvAnc);
                         }
                     }
-                    
+
                     if (aPerson.GetTotalChildsCount() > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
                         result.SetFlag(PersonFlag.pfHasInvDesc);
                     }
@@ -900,7 +888,7 @@ namespace GKUI.Charts
                             res.AddSpouse(resParent);
                             resParent.BaseSpouse = res;
                             resParent.BaseFamily = family;
-                            
+
                             if (resParent.Rec != null) {
                                 if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
                                     resParent.SetFlag(PersonFlag.pfHasInvAnc);
@@ -910,9 +898,7 @@ namespace GKUI.Charts
                                     resParent.SetFlag(PersonFlag.pfHasInvDesc);
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             resParent = res;
                         }
 
@@ -1032,7 +1018,7 @@ namespace GKUI.Charts
 
             CheckSwap(ref x1, ref x2);
             CheckSwap(ref y1, ref y2);
-            
+
             return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
         }
 
@@ -1149,8 +1135,8 @@ namespace GKUI.Charts
 
         private void DrawAncestors(TreeChartPerson person, DrawMode drawMode)
         {
-            Draw(person.Father, ChartKind.ckAncestors, drawMode);
-            Draw(person.Mother, ChartKind.ckAncestors, drawMode);
+            Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
+            Draw(person.Mother, TreeChartKind.ckAncestors, drawMode);
             int crY = person.PtY - fLevelDistance / 2;
 
             if (person.Father != null) {
@@ -1174,7 +1160,7 @@ namespace GKUI.Charts
             int childrenCount = person.GetChildsCount();
 
             for (int i = 0; i < childrenCount; i++) {
-                Draw(person.GetChild(i), ChartKind.ckDescendants, drawMode);
+                Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
             }
 
             int spbOfs = (person.Height - 10) / (spousesCount + 1);
@@ -1197,7 +1183,7 @@ namespace GKUI.Charts
             }
 
             for (int i = 0; i < spousesCount; i++) {
-                Draw(person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
+                Draw(person.GetSpouse(i), TreeChartKind.ckDescendants, drawMode);
             }
 
             int crY = person.PtY + person.Height + fLevelDistance / 2;
@@ -1209,7 +1195,8 @@ namespace GKUI.Charts
             }
             else
             {
-                switch (person.Sex) {
+                switch (person.Sex)
+                {
                     case GEDCOMSex.svMale:
                         cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                         break;
@@ -1319,22 +1306,23 @@ namespace GKUI.Charts
             Draw(fRoot, fKind, drawMode);
         }
 
-        protected void Draw(TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
+        protected void Draw(TreeChartPerson person, TreeChartKind dirKind, DrawMode drawMode)
         {
             if (person == null) return;
 
-            switch (fKind) {
-                case ChartKind.ckAncestors:
+            switch (fKind)
+            {
+                case TreeChartKind.ckAncestors:
                     DrawAncestors(person, drawMode);
                     break;
 
-                case ChartKind.ckDescendants:
+                case TreeChartKind.ckDescendants:
                     DrawDescendants(person, drawMode);
                     break;
 
-                case ChartKind.ckBoth:
-                    if (person == fRoot || dirKind == ChartKind.ckAncestors) DrawAncestors(person, drawMode);
-                    if (person == fRoot || dirKind == ChartKind.ckDescendants) DrawDescendants(person, drawMode);
+                case TreeChartKind.ckBoth:
+                    if (person == fRoot || dirKind == TreeChartKind.ckAncestors) DrawAncestors(person, drawMode);
+                    if (person == fRoot || dirKind == TreeChartKind.ckDescendants) DrawDescendants(person, drawMode);
                     break;
             }
 
@@ -1429,15 +1417,15 @@ namespace GKUI.Charts
             }
 
             switch (fKind) {
-                case ChartKind.ckAncestors:
+                case TreeChartKind.ckAncestors:
                     RecalcAncestorsChart();
                     break;
 
-                case ChartKind.ckDescendants:
+                case TreeChartKind.ckDescendants:
                     RecalcDescendantsChart(true);
                     break;
 
-                case ChartKind.ckBoth:
+                case TreeChartKind.ckBoth:
                     RecalcAncestorsChart();
                     RecalcDescendantsChart(false);
                     break;
@@ -1473,14 +1461,13 @@ namespace GKUI.Charts
         {
             if (person == null) return;
             ExtRect prt = person.Rect;
-            
+
             if (fTreeBounds.Left > prt.Left) fTreeBounds.Left = prt.Left;
             if (fTreeBounds.Top > prt.Top) fTreeBounds.Top = prt.Top;
-            
             if (fTreeBounds.Right < prt.Right) fTreeBounds.Right = prt.Right;
             if (fTreeBounds.Bottom < prt.Bottom) fTreeBounds.Bottom = prt.Bottom;
         }
-        
+
         private static void ShiftAnc(ref int[] edges, TreeChartPerson person, int offset)
         {
             TreeChartPerson pp = person;
@@ -1539,7 +1526,7 @@ namespace GKUI.Charts
                 } else if (person.Mother != null) {
                     anc = person.Mother;
                 }
-                
+
                 if (anc != null) {
                     RecalcAnc(prev, ref edges, anc, person.PtX, person.PtY - fLevelDistance - person.Height);
                 }
@@ -1575,7 +1562,9 @@ namespace GKUI.Charts
             if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GEDCOMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1))
             {
                 ShiftDesc(person.BaseSpouse, offset, isSingle);
-            } else {
+            }
+            else
+            {
                 if (!isSingle) {
                     ShiftDesc(person.Father, offset, false);
                     ShiftDesc(person.Mother, offset, false);
@@ -1599,7 +1588,8 @@ namespace GKUI.Charts
 
             if (fixPair) {
                 GEDCOMSex sex = person.Sex;
-                switch (sex) {
+                switch (sex)
+                {
                     case GEDCOMSex.svMale:
                         centX = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                         break;
@@ -1654,7 +1644,7 @@ namespace GKUI.Charts
         private void RecalcDesc(ref int[] edges, TreeChartPerson person, Point aPt, bool predef)
         {
             if (person == null) return;
-            
+
             int gen = person.Generation;
             if (predef) {
                 person.PtX = aPt.X;
@@ -1780,7 +1770,7 @@ namespace GKUI.Charts
         #endregion
 
         #region Event processing
-        
+
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
             var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
@@ -1788,7 +1778,7 @@ namespace GKUI.Charts
 
             eventHandler(this, eArgs);
         }
-        
+
         private void DoRootChanged(TreeChartPerson person)
         {
             var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
@@ -1796,7 +1786,7 @@ namespace GKUI.Charts
 
             eventHandler(this, person);
         }
-        
+
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
             var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
@@ -1811,7 +1801,8 @@ namespace GKUI.Charts
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            switch (e.KeyCode) {
+            switch (e.KeyCode)
+            {
                 case Keys.Add:
                 case Keys.Oemplus:
                     SetScale(fScale + 0.05f);
@@ -1833,7 +1824,7 @@ namespace GKUI.Charts
         protected override void OnResize(EventArgs e)
         {
             SaveSelection();
-            
+
             AdjustViewPort(fImageSize);
             fTreeControls.UpdateView();
 
@@ -1885,15 +1876,18 @@ namespace GKUI.Charts
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meDown) {
+                    if (e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meDown)
+                    {
                         result = MouseAction.maSelect;
                         break;
                     }
-                    else if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meUp) {
+                    else if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meUp)
+                    {
                         result = MouseAction.maProperties;
                         break;
                     }
-                    else if (mouseEvent == MouseEvent.meMove) {
+                    else if (mouseEvent == MouseEvent.meMove)
+                    {
                         result = MouseAction.maHighlight;
                         break;
                     }
@@ -2019,7 +2013,7 @@ namespace GKUI.Charts
 
                         case MouseAction.maExpand:
                             DoRootChanged(mPers);
-                            GenChart(mPers.Rec, ChartKind.ckBoth, true);
+                            GenChart(mPers.Rec, TreeChartKind.ckBoth, true);
                             break;
                     }
                     break;
@@ -2042,9 +2036,9 @@ namespace GKUI.Charts
         protected override void SetNavObject(object obj)
         {
             var iRec = obj as GEDCOMIndividualRecord;
-            GenChart(iRec, ChartKind.ckBoth, true);
+            GenChart(iRec, TreeChartKind.ckBoth, true);
         }
-        
+
         private void SetSelected(TreeChartPerson value)
         {
             if (fSelected != null) fSelected.Selected = false;
@@ -2195,25 +2189,25 @@ namespace GKUI.Charts
         public IList<ISearchResult> FindAll(string searchPattern)
         {
             var result = new List<ISearchResult>();
-            
+
             Regex regex = GKUtils.InitMaskRegex(searchPattern);
-            
+
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson person = fPersons[i];
                 GEDCOMIndividualRecord iRec = person.Rec;
                 if (iRec == null) continue;
-                
+
                 string fullname = GKUtils.GetNameString(iRec, true, false);
                 if (GKUtils.MatchesRegex(fullname, regex)) {
                     //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(iRec));
                 }
             }
-            
+
             return result;
         }
-        
+
         #endregion
 
         #region Print support

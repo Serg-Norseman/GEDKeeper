@@ -20,6 +20,8 @@
 
 using System;
 using GKCommon.IoC;
+using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Engine
 {
@@ -32,6 +34,9 @@ namespace GKUI.Engine
         private static readonly IocContainer fIocContainer;
         private static IStdDialogs fStdDialogs;
         private static BaseController fBaseController;
+        private static IPathReplacer fPathReplacer;
+        private static INamesTable fNamesTable;
+        private static IUIHelper fUIHelper;
 
 
         public static IocContainer Container
@@ -49,6 +54,16 @@ namespace GKUI.Engine
             }
         }
 
+        public static IUIHelper UIHelper
+        {
+            get {
+                if (fUIHelper == null) {
+                    fUIHelper = fIocContainer.Resolve<IUIHelper>();
+                }
+                return fUIHelper;
+            }
+        }
+
         public static BaseController BaseController
         {
             get {
@@ -56,6 +71,26 @@ namespace GKUI.Engine
                     fBaseController = new BaseController(StdDialogs);
                 }
                 return fBaseController;
+            }
+        }
+
+        public static IPathReplacer PathReplacer
+        {
+            get {
+                if (fPathReplacer == null) {
+                    fPathReplacer = new PathReplacer();
+                }
+                return fPathReplacer;
+            }
+        }
+
+        public static INamesTable NamesTable
+        {
+            get {
+                if (fNamesTable == null) {
+                    fNamesTable = new NamesTable();
+                }
+                return fNamesTable;
             }
         }
 

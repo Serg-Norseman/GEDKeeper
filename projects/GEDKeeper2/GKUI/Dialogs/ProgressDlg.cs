@@ -220,7 +220,7 @@ namespace GKUI.Dialogs
             fProgressForm.Load += ProgressForm_Load;
 
             //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
-            UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
+            UIEngine.UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
 
             fProgressForm.ShowDialog();
             fProgressForm.Close();

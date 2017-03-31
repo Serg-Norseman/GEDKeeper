@@ -59,6 +59,10 @@ namespace GKCommon.IoC
 
         public void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle)
         {
+            // TODO: exception?
+            if (registeredObjects.ContainsKey(typeof(TTypeToResolve)))
+                return;
+
             registeredObjects.Add(typeof(TTypeToResolve),
                                   new RegisteredObject(typeof(TTypeToResolve),
                                                        typeof(TConcrete), lifeCycle));

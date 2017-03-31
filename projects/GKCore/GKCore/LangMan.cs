@@ -1635,7 +1635,7 @@ namespace GKCore
             return (fList.TryGetValue(idx, out res)) ? res : "?";
         }
 
-        internal bool LoadFromFile(string fileName, int offset = 0)
+        public bool LoadFromFile(string fileName, int offset = 0)
         {
             bool result = false;
 

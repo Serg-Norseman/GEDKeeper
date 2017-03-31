@@ -20,6 +20,11 @@
 
 using System;
 using System.Drawing;
+using System.Windows.Forms;
+
+using GKCommon;
+using GKCommon.Controls;
+using GKCommon.GEDCOM;
 
 namespace GKUI.Engine
 {
@@ -39,6 +44,21 @@ namespace GKUI.Engine
         void ShowError(string msg);
         bool ShowQuestionYN(string msg);
         void ShowWarning(string msg);
+
+        bool GetInput(string prompt, ref string value);
+        bool GetPassword(string prompt, ref string value);
+    }
+
+    public interface IUIHelper
+    {
+        void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault);
+        void SelectComboItem(ListBox listBox, object tag, bool allowDefault);
+
+        void NormalizeFormRect(ref ExtRect winRect);
+        ExtRect GetFormRect(Form form);
+        void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState);
+        void CenterFormByParent(Form form, IntPtr parent);
+        GKListView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType);
     }
 
     /// <summary>
@@ -46,5 +66,14 @@ namespace GKUI.Engine
     /// </summary>
     public interface IBaseController
     {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IPathReplacer
+    {
+        void Load(string fileName);
+        bool TryReplacePath(string path, out string newPath);
     }
 }

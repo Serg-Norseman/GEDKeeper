@@ -20,8 +20,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;

@@ -27,6 +27,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Controls;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -111,7 +112,7 @@ namespace GKUI.Dialogs
                 fListRecords = null;
             }
 
-            fListRecords = GKUtils.CreateRecordsView(panList, fBase.Tree, fMode);
+            fListRecords = (GKRecordsView)UIEngine.UIHelper.CreateRecordsView(panList, fBase.Tree, fMode);
             fListRecords.Name = "fListRecords";
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;

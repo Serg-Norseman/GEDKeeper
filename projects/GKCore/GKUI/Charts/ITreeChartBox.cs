@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
@@ -19,24 +19,27 @@
  */
 
 using System;
-using GKCommon.IoC;
-using GKUI.Charts;
+using System.Drawing;
 
-namespace GKUI.Engine
+using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKCore.Options;
+using GKCore.Types;
+
+namespace GKUI.Charts
 {
-    /// <summary>
-    /// This class implements initialization of IoC-container for WinForms Presentation.
-    /// </summary>
-    public static class WinFormsBootstrapper
+    public interface ITreeChartBox
     {
-        public static void Configure(IContainer container)
-        {
-            if (container == null)
-                throw new ArgumentNullException("container");
-
-            container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
-            container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
-            container.Register<IUIHelper, UIHelper>(LifeCycle.Singleton);
-        }
+        void SetScale(float value);
+        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        void RenderStatic(BackgroundMode background, bool centered);
+        void SetRenderer(TreeChartRenderer renderer);
+        IBaseWindow Base { get; set; }
+        int DepthLimit { get; set; }
+        int Height { get; set; }
+        Size ImageSize { get; }
+        TreeChartOptions Options { get; set; }
+        ShieldState ShieldState { get; set; }
+        int Width { get; set; }
     }
 }

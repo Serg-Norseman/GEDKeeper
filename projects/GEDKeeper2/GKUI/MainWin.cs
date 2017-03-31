@@ -284,7 +284,7 @@ namespace GKUI
             try {
                 UnloadPlugins();
 
-                fOptions.MWinRect = UIHelper.GetFormRect(this);
+                fOptions.MWinRect = UIEngine.UIHelper.GetFormRect(this);
                 fOptions.MWinState = WindowState;
 
                 fNamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
@@ -457,11 +457,12 @@ namespace GKUI
         {
             try
             {
-                if (!fOptions.MWinRect.IsEmpty()) {
-                    Left = fOptions.MWinRect.Left;
-                    Top = fOptions.MWinRect.Top;
-                    Width = fOptions.MWinRect.Right - fOptions.MWinRect.Left + 1;
-                    Height = fOptions.MWinRect.Bottom - fOptions.MWinRect.Top + 1;
+                ExtRect mwinRect = fOptions.MWinRect;
+                if (!mwinRect.IsEmpty()) {
+                    Left = mwinRect.Left;
+                    Top = mwinRect.Top;
+                    Width = mwinRect.Right - mwinRect.Left + 1;
+                    Height = mwinRect.Bottom - mwinRect.Top + 1;
                 } else {
                     //--------------------------------------------------------------
                     // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
@@ -673,7 +674,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            mf.WinRect = UIHelper.GetFormRect(frm);
+            mf.WinRect = UIEngine.UIHelper.GetFormRect(frm);
             mf.WinState = frm.WindowState;
         }
 
@@ -683,7 +684,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
+            UIEngine.UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
         }
 
         #endregion
@@ -1211,9 +1212,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors)) {
+            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckAncestors)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
-                fmChart.ChartKind = TreeChartBox.ChartKind.ckAncestors;
+                fmChart.ChartKind = TreeChartKind.ckAncestors;
                 fmChart.GenChart(true);
             }
         }
@@ -1223,9 +1224,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants)) {
+            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckDescendants)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
-                fmChart.ChartKind = TreeChartBox.ChartKind.ckDescendants;
+                fmChart.ChartKind = TreeChartKind.ckDescendants;
                 fmChart.GenChart(true);
             }
         }
@@ -1235,9 +1236,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckBoth)) {
+            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckBoth)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
-                fmChart.ChartKind = TreeChartBox.ChartKind.ckBoth;
+                fmChart.ChartKind = TreeChartKind.ckBoth;
                 fmChart.GenChart(true);
             }
         }

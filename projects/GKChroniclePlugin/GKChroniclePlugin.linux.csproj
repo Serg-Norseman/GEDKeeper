@@ -107,13 +107,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.linux.csproj">
-      <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
-      <Name>GEDKeeper2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -155,19 +155,19 @@ namespace GKTests.UITests
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 27.0");
             ClickToolStripButton("tbTreeAncestors", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckAncestors, "Stage 27", "I3");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartKind.ckAncestors, "Stage 27", "I3");
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", ((BaseWin) fCurBase).GetSelectedPerson().XRef, "Stage 28.0");
             ClickToolStripButton("tbTreeDescendants", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckDescendants, "Stage 28", "I1");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartKind.ckDescendants, "Stage 28", "I1");
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
             ClickToolStripButton("tbTreeBoth", fMainWin);
-            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartBox.ChartKind.ckBoth, "Stage 29", "I1");
+            TreeChartWin_Tests(fMainWin.ActiveMdiChild, TreeChartKind.ckBoth, "Stage 29", "I1");
 
 
             // Stage 30: call to StatsWin (required the base)
@@ -1521,7 +1521,7 @@ namespace GKTests.UITests
             frm.Close();
         }
 
-        private void TreeChartWin_Tests(Form frm, TreeChartBox.ChartKind kind, string stage, string checkXRef)
+        private void TreeChartWin_Tests(Form frm, TreeChartKind kind, string stage, string checkXRef)
         {
             Assert.IsInstanceOf(typeof(TreeChartWin), frm, stage);
 

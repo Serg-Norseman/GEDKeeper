@@ -41,6 +41,7 @@ using GKCore.Types;
 using GKTests.Mocks;
 using GKUI.Charts;
 using GKUI.Controls;
+using GKUI.Engine;
 using GKUI.Sheets;
 using NUnit.Framework;
 
@@ -54,6 +55,8 @@ namespace GKTests.GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            WinFormsBootstrapper.Configure(UIEngine.Container);
+
             LangMan.DefInit();
 
             fContext = TestStubs.CreateContext();
@@ -289,7 +292,7 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateListView(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
+            Assert.Throws(typeof(ArgumentNullException), () => { UIEngine.UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
             //Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
 
             //

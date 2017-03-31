@@ -19,7 +19,7 @@
  */
 
 #if __MonoCS__
-	#define USE_PDFJET
+#define USE_PDFJET
 #endif
 
 #if USE_PDFJET

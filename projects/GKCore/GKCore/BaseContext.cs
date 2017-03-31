@@ -38,7 +38,6 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKUI;
 using GKUI.Engine;
 
 namespace GKCore
@@ -813,7 +812,7 @@ namespace GKCore
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
                                 string newPath;
-                                if (MainWin.Instance.PathReplacer.TryReplacePath(fileName, out newPath)) {
+                                if (UIEngine.PathReplacer.TryReplacePath(fileName, out newPath)) {
                                     fileName = newPath;
                                 }
                             }
