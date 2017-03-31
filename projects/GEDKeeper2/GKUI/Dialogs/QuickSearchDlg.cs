@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -102,7 +103,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 
@@ -117,7 +118,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 

@@ -1464,26 +1464,6 @@ namespace GKCore
 
         #region UI functions
 
-        public static void ShowMessage(string msg)
-        {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-
-        public static void ShowError(string msg)
-        {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Hand);
-        }
-
-        public static DialogResult ShowQuestion(string msg)
-        {
-            return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        }
-
-        public static DialogResult ShowWarning(string msg)
-        {
-            return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-
         public static GKListView CreateListView(Control parent)
         {
             if (parent == null)

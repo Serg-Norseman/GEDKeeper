@@ -26,6 +26,7 @@ using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKUI.Charts
 {
@@ -331,7 +332,7 @@ namespace GKUI.Charts
                         catch (MediaFileNotFoundException)
                         {
                             if (!hasMediaFail) {
-                                GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                                 hasMediaFail = true;
                             }
                         }

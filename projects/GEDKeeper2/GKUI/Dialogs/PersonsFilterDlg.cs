@@ -29,6 +29,7 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -235,7 +236,7 @@ namespace GKUI.Dialogs
                     }
                     catch
                     {
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
                         DialogResult = DialogResult.None;
                     }
                 }

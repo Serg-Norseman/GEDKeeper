@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCommon.IoC;
 using GKCore;
@@ -36,22 +35,34 @@ namespace GKUI.Engine
     public static class UIEngine
     {
         private static readonly IocContainer fIocContainer;
+        private static IStdDialogs fStdDialogs;
+
 
         public static IocContainer Container
         {
             get { return fIocContainer; }
         }
 
+        public static IStdDialogs StdDialogs
+        {
+            get {
+                if (fStdDialogs == null) {
+                    fStdDialogs = fIocContainer.Resolve<IStdDialogs>();
+                }
+                return fStdDialogs;
+            }
+        }
+
+
         static UIEngine()
         {
             fIocContainer = new IocContainer();
         }
 
+
         public static bool AddFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
         {
             bool result = false;
-
-            //var stdDialog = fIocContainer.Resolve<IStdDialogs>();
 
             GEDCOMIndividualRecord father = baseWin.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father != null)
@@ -76,7 +87,7 @@ namespace GKUI.Engine
         {
             bool result = false;
 
-            if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) == DialogResult.Yes)
+            if (fStdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery)) == true)
             {
                 GEDCOMFamilyRecord family = baseWin.GetChildFamily(person, false, null);
                 if (family != null)

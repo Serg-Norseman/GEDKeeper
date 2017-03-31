@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -144,7 +145,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (cit != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != DialogResult.No) {
+                    if (cit != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
                         //this.fSourceRecord.RepositoryCitations.Delete(cit);
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, fSourceRecord, cit.Value as GEDCOMRepositoryRecord);
                         result = true;

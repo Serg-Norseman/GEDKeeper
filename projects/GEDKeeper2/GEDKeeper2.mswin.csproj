@@ -445,7 +445,7 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
-    <Compile Include="GKUI\Engine\UIContracts.cs" />
+    <Compile Include="GKUI\Engine\UIHelper.cs" />
     <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
     <Compile Include="GKUI\Engine\IocControllerFactory.cs" />
     <Compile Include="GKUI\Engine\UIEngine.cs" />

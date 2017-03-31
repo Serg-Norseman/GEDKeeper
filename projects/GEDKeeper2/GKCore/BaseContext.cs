@@ -39,6 +39,7 @@ using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI;
+using GKUI.Engine;
 
 namespace GKCore
 {
@@ -718,7 +719,7 @@ namespace GKCore
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
             {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
             }
             return result;
         }
@@ -745,7 +746,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         stream = new FileStream(targetFn, FileMode.Open);
@@ -760,7 +761,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         ArcFileLoad(targetFn, stream);
@@ -795,7 +796,7 @@ namespace GKCore
                         try
                         {
                             if (!File.Exists(GetArcFileName())) {
-                                GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -885,7 +886,7 @@ namespace GKCore
                     }
                     catch (IOException)
                     {
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
                         result = false;
                     }
                     break;

@@ -20,9 +20,10 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon;
+
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKPedigreeImporterPlugin
 {
@@ -102,7 +103,7 @@ namespace GKPedigreeImporterPlugin
             filter = fLangMan.LS(ILS.LSID_AllFiltersL);
             #endif
 
-            string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
+            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", filter, 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             edImportFile.Text = fileName;

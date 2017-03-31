@@ -28,6 +28,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKImageViewerPlugin
 {
@@ -67,7 +68,7 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == tbFileLoad) {
-                string fileName = UIHelper.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+                string fileName = UIEngine.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     SetFileRef(fileName);

@@ -27,6 +27,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKCore.Export
 {
@@ -536,7 +537,7 @@ namespace GKCore.Export
         {
             if (fRoot == null)
             {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 return;
             }
 
@@ -545,7 +546,7 @@ namespace GKCore.Export
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
             #endif
 
-            fPath = UIHelper.GetSaveFile(availableFormats);
+            fPath = UIEngine.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
 
             string ext = SysUtils.GetFileExtension(fPath);

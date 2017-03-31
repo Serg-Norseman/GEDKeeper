@@ -28,6 +28,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKUI.Charts
 {
@@ -218,7 +219,7 @@ namespace GKUI.Charts
             Size imageSize = GetImageSize();
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
             {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
             }
             else
             {

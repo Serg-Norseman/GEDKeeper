@@ -19,10 +19,10 @@
  */
 
 using System;
-using System.Windows.Forms;
 using Externals.Linguistics;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKCore.Cultures
 {
@@ -135,8 +135,8 @@ namespace GKCore.Cultures
 
             if (result == GEDCOMSex.svNone && canQuery) {
                 string fn = iName + " " + iPat;
-                DialogResult res = GKUtils.ShowQuestion(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
-                result = (res == DialogResult.Yes) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
+                bool res = UIEngine.StdDialogs.ShowQuestionYN(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
+                result = (res == true) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
             }
 
             return result;

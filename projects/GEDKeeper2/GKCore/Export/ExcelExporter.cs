@@ -20,10 +20,10 @@
 
 using System.Collections.Generic;
 using ExcelLibrary.SpreadSheet;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKCore.Export
 {
@@ -41,7 +41,7 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
-            fPath = UIHelper.GetSaveFile("Excel files (*.xls)|*.xls");
+            fPath = UIEngine.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Workbook workbook = new Workbook();

@@ -28,6 +28,7 @@ using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKUI.Controls;
+using GKUI.Engine;
 
 namespace GKUI
 {
@@ -191,7 +192,7 @@ namespace GKUI
         {
             string filter1 = "Image files|*.jpg";
 
-            string fileName = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 fMapBrowser.SaveSnapshot(fileName);

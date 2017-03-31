@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -27,6 +26,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKUI.Sheets
 {
@@ -89,7 +89,7 @@ namespace GKUI.Sheets
                     break;
 
                 case RecordAction.raDelete:
-                    if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery)) != DialogResult.No)
+                    if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
                     }

@@ -16,6 +16,9 @@ code_heat.sh
 /projects/GEDKeeper2/bin/
 /projects/GEDKeeper2/obj/
 
+/projects/GKCore/bin/
+/projects/GKCore/obj/
+
 /projects/GKCommon/bin/
 /projects/GKCommon/obj/
 

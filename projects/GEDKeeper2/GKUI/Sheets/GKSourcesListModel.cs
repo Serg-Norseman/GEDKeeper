@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
@@ -28,6 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKUI.Sheets
 {
@@ -93,7 +93,7 @@ namespace GKUI.Sheets
                     break;
 
                 case RecordAction.raDelete:
-                    if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSourceQuery)) != DialogResult.No)
+                    if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }

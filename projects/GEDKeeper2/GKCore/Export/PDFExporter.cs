@@ -22,8 +22,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore.Interfaces;
+using GKUI.Engine;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -48,7 +48,7 @@ namespace GKCore.Export
         public override void Generate(bool show)
         {
             bool success = false;
-            fPath = UIHelper.GetSaveFile("PDF files (*.pdf)|*.pdf");
+            fPath = UIEngine.StdDialogs.GetSaveFile("PDF files (*.pdf)|*.pdf");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();

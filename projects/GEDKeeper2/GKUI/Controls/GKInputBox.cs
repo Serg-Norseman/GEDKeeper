@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 using GKCore;
+using GKUI.Engine;
 
 namespace GKUI.Controls
 {
@@ -89,7 +90,7 @@ namespace GKUI.Controls
             }
             catch
             {
-                GKUtils.ShowError("Number format is invalid");
+                UIEngine.StdDialogs.ShowError("Number format is invalid");
                 DialogResult = DialogResult.None;
             }
         }

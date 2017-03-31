@@ -22,10 +22,10 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
 
 using GKCommon;
+using GKUI.Engine;
 
 namespace GKCore
 {
@@ -97,7 +97,7 @@ namespace GKCore
                     string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
 
                     #if !CI_MODE
-                    if (DialogResult.Yes == GKUtils.ShowQuestion(string.Format(question, curVersion, newVersion)))
+                    if (true == UIEngine.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
                     {
                         Process.Start(url);
                     }

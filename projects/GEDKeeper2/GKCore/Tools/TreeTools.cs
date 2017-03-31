@@ -30,6 +30,7 @@ using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Types;
 using GKUI;
+using GKUI.Engine;
 
 namespace GKCore.Tools
 {
@@ -609,7 +610,7 @@ namespace GKCore.Tools
                         pc.ProgressStep();
                     }
 
-                    if (!idCheck && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == DialogResult.Yes)
+                    if (!idCheck && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
                     {
                         CorrectIds(tree, pc);
                     }
@@ -624,7 +625,7 @@ namespace GKCore.Tools
             catch (Exception ex)
             {
                 Logger.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 
             return result;

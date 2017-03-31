@@ -16,6 +16,9 @@ rem <<< Main assemblies cleaning >>>
 rmdir .\projects\GEDKeeper2\bin /s /q
 rmdir .\projects\GEDKeeper2\obj /s /q
 
+rmdir .\projects\GKCore\bin /s /q
+rmdir .\projects\GKCore\obj /s /q
+
 rmdir .\projects\GKCommon\bin /s /q
 rmdir .\projects\GKCommon\obj /s /q
 

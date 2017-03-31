@@ -37,6 +37,7 @@ using GKTests.ControlTesters;
 using GKUI;
 using GKUI.Charts;
 using GKUI.Dialogs;
+using GKUI.Engine;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -70,6 +71,8 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
+            WinFormsBootstrapper.Configure(UIEngine.Container);
+
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
@@ -217,10 +220,10 @@ namespace GKTests.UITests
 
             // Other
             ModalFormHandler = MessageBox_OkHandler;
-            GKUtils.ShowMessage("test msg");
+            UIEngine.StdDialogs.ShowMessage("test msg");
 
             ModalFormHandler = MessageBox_OkHandler;
-            GKUtils.ShowError("test error msg");
+            UIEngine.StdDialogs.ShowError("test error msg");
         }
 
         private void BaseWin_Tests(BaseWin baseWin, string stage)

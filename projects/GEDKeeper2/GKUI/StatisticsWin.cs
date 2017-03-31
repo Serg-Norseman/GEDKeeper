@@ -32,6 +32,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
+using GKUI.Engine;
 using ZedGraph;
 
 namespace GKUI
@@ -373,7 +374,7 @@ namespace GKUI
         // TODO: localize?
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             try
@@ -423,7 +424,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 fBase.Host.LogWrite("StatisticsWin.ExcelExport(): " + ex.Message);
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }
     }

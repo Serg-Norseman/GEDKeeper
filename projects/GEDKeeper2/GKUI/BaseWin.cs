@@ -38,6 +38,7 @@ using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
+using GKUI.Engine;
 using GKUI.Forms;
 
 namespace GKUI
@@ -585,7 +586,7 @@ namespace GKUI
             string ext = SysUtils.GetFileExtension(fileName);
             if (ext == ".geds") {
                 if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                     return;
                 }
             }
@@ -610,7 +611,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 Host.LogWrite("BaseWin.FileLoad(): " + ex.Message);
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
             ChangeFileName();
@@ -625,7 +626,7 @@ namespace GKUI
                 string ext = SysUtils.GetFileExtension(fileName);
                 if (ext == ".geds") {
                     if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                         return;
                     }
                 }
@@ -637,11 +638,11 @@ namespace GKUI
             }
             catch (UnauthorizedAccessException)
             {
-                GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
+                UIEngine.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
             }
             catch (Exception ex)
             {
-                GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
+                UIEngine.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
                 Host.LogWrite("BaseWin.FileSave(): " + ex.Message);
             }
         }
@@ -675,7 +676,7 @@ namespace GKUI
                     if (husb == newParent || wife == newParent)
                     {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
-                        if (GKUtils.ShowQuestion(msg) == DialogResult.Yes)
+                        if (UIEngine.StdDialogs.ShowQuestionYN(msg) == true)
                         {
                             result = fam;
                             break;
@@ -723,7 +724,7 @@ namespace GKUI
             GEDCOMSex sex = spouse.Sex;
             if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
             {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }
 
@@ -740,7 +741,7 @@ namespace GKUI
             {
                 if (parent.SpouseToFamilyLinks.Count > 1)
                 {
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
+                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
                 }
                 else
                 {
@@ -780,15 +781,18 @@ namespace GKUI
                 throw new ArgumentNullException("iRec");
 
             GEDCOMSex needSex;
-            switch (iRec.Sex) {
+            switch (iRec.Sex)
+            {
                 case GEDCOMSex.svMale:
                     needSex = GEDCOMSex.svFemale;
                     break;
+
                 case GEDCOMSex.svFemale:
                     needSex = GEDCOMSex.svMale;
                     break;
+
                 default:
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                     return null;
             }
 
@@ -1398,7 +1402,7 @@ namespace GKUI
             if (source == null) return;
             if (source.RecordType != GEDCOMRecordType.rtIndividual) return;
 
-            GKUtils.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
+            UIEngine.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
 
             GEDCOMIndividualRecord target;
             try {
@@ -1573,7 +1577,7 @@ namespace GKUI
                         break;
                 }
 
-                if (confirm && GKUtils.ShowQuestion(msg) != DialogResult.Yes)
+                if (confirm && UIEngine.StdDialogs.ShowQuestionYN(msg) != true)
                     return false;
 
                 RecordNotify(record, RecordAction.raDelete);
@@ -1861,7 +1865,7 @@ namespace GKUI
 
             if (!result) {
                 // message, for exclude of duplication
-                GKUtils.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
+                UIEngine.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
             }
 
             return result;
@@ -2296,7 +2300,7 @@ namespace GKUI
             if (iFilter.SourceMode == FilterGroupMode.Selected)
             {
                 GEDCOMSourceRecord src = fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                if (src != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == DialogResult.Yes)
+                if (src != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == true)
                 {
                     indivRec.AddSource(src, "", 0);
                 }
@@ -2305,7 +2309,7 @@ namespace GKUI
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
             {
                 GEDCOMGroupRecord grp = fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                if (grp != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == DialogResult.Yes)
+                if (grp != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == true)
                 {
                     grp.AddMember(indivRec);
                 }
@@ -2377,7 +2381,7 @@ namespace GKUI
                 if (targetType == FamilyTarget.Spouse && target != null) {
                     GEDCOMSex sex = target.Sex;
                     if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                         return false;
                     }
                 }

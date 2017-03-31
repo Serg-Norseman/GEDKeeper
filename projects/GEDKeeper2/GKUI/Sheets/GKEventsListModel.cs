@@ -30,6 +30,7 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Dialogs;
+using GKUI.Engine;
 
 namespace GKUI.Sheets
 {
@@ -170,7 +171,7 @@ namespace GKUI.Sheets
                         break;
 
                     case RecordAction.raDelete:
-                        if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
+                        if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery)) != false) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }

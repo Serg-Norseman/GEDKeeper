@@ -24,13 +24,13 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Dialogs;
+using GKUI.Engine;
 using GKUI.Forms;
 
 namespace GKUI
@@ -130,7 +130,7 @@ namespace GKUI
                 int ancCount = GKUtils.GetAncestorsCount(iRec);
                 if (ancCount > 2048)
                 {
-                    GKUtils.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
+                    UIEngine.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;
                 }
             }
@@ -141,7 +141,7 @@ namespace GKUI
                 int descCount = GKUtils.GetDescendantsCount(iRec);
                 if (descCount > 2048)
                 {
-                    GKUtils.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
+                    UIEngine.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;
                 }
             }
@@ -236,7 +236,7 @@ namespace GKUI
 
         private void tbImageSave_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
+            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 fTreeBox.SaveSnapshot(fileName);
@@ -490,7 +490,7 @@ namespace GKUI
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            string fileName = UIEngine.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
@@ -540,7 +540,7 @@ namespace GKUI
             {
                 if (fPerson == null)
                 {
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 }
                 else
                 {

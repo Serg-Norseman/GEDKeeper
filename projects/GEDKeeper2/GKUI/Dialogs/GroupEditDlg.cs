@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -139,7 +140,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No);
+                    result = (member != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
                     if (result) {
                         //fGroup.RemoveMember(member);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, fGroup, member);

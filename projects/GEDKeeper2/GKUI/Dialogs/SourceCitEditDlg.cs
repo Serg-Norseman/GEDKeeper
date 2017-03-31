@@ -26,6 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -58,7 +59,7 @@ namespace GKUI.Dialogs
                 GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
                 if (src == null) {
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
+                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
                     DialogResult = DialogResult.None;
                 } else {
                     fSourceCitation.Value = src;

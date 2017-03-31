@@ -38,6 +38,7 @@ using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
+using GKUI.Engine;
 
 namespace GKUI
 {
@@ -1019,7 +1020,7 @@ namespace GKUI
         {
             string homePath = GetUserFilesPath("");
 
-            string fileName = UIHelper.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = UIEngine.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 CreateBase(fileName);
             }
@@ -1032,7 +1033,7 @@ namespace GKUI
 
             string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
 
-            string fileName = UIHelper.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
+            string fileName = UIEngine.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
             if (!string.IsNullOrEmpty(fileName)) {
                 curBase.FileSave(fileName);
             }
@@ -1292,7 +1293,7 @@ namespace GKUI
             }
 
             if (!File.Exists(topic)) {
-                GKUtils.ShowError(@"For that language help is unavailable");
+                UIEngine.StdDialogs.ShowError(@"For that language help is unavailable");
                 return;
             }
 
@@ -1555,7 +1556,7 @@ namespace GKUI
 
         public void ShowWarning(string msg)
         {
-            GKUtils.ShowWarning(msg);
+            UIEngine.StdDialogs.ShowWarning(msg);
         }
 
         public ILangMan CreateLangMan(object sender)

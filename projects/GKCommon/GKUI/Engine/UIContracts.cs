@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 
 namespace GKUI.Engine
 {
@@ -27,6 +28,16 @@ namespace GKUI.Engine
     /// </summary>
     public interface IStdDialogs
     {
-        
+        Font SelectFont(Font font);
+        string GetOpenFile(string title, string context, string filter,
+                           int filterIndex, string defaultExt);
+        string GetSaveFile(string filter);
+        string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
+                           string suggestedFileName, bool overwritePrompt = true);
+
+        void ShowMessage(string msg);
+        void ShowError(string msg);
+        bool ShowQuestionYN(string msg);
+        void ShowWarning(string msg);
     }
 }

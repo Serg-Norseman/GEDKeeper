@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -150,11 +151,11 @@ namespace GKUI.Dialogs
 
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
+            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
-                if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == DialogResult.No) {
+                if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
                     return;
                 }
             }

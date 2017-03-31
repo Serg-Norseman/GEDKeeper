@@ -23,9 +23,9 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {

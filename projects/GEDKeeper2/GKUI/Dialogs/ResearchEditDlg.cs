@@ -29,6 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -173,7 +174,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachTaskQuery)) != DialogResult.No)
+                    if (task != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
                     {
                         //fResearch.RemoveTask(task);
                         //res = true;
@@ -213,7 +214,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != DialogResult.No)
+                    if (comm != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != false)
                     {
                         //fResearch.RemoveCommunication(comm);
                         //res = true;
@@ -249,7 +250,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No)
+                    if (group != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false)
                     {
                         //fResearch.RemoveGroup(group);
                         //res = true;
