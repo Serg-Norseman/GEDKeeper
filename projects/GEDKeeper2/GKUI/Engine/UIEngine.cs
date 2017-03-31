@@ -19,12 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
 using GKCommon.IoC;
-using GKCore;
-using GKCore.Interfaces;
-using GKCore.Operations;
-using GKCore.Types;
 
 namespace GKUI.Engine
 {
@@ -36,6 +31,7 @@ namespace GKUI.Engine
     {
         private static readonly IocContainer fIocContainer;
         private static IStdDialogs fStdDialogs;
+        private static BaseController fBaseController;
 
 
         public static IocContainer Container
@@ -53,51 +49,20 @@ namespace GKUI.Engine
             }
         }
 
+        public static BaseController BaseController
+        {
+            get {
+                if (fBaseController == null) {
+                    fBaseController = new BaseController(StdDialogs);
+                }
+                return fBaseController;
+            }
+        }
+
 
         static UIEngine()
         {
             fIocContainer = new IocContainer();
-        }
-
-
-        public static bool AddFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
-        {
-            bool result = false;
-
-            GEDCOMIndividualRecord father = baseWin.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svMale);
-            if (father != null)
-            {
-                GEDCOMFamilyRecord family = baseWin.GetChildFamily(person, true, father);
-                if (family != null)
-                {
-                    if (family.Husband.Value == null) {
-                        // new family
-                        result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
-                    } else {
-                        // selected family with husband
-                        result = true;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public static bool DeleteFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
-        {
-            bool result = false;
-
-            if (fStdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery)) == true)
-            {
-                GEDCOMFamilyRecord family = baseWin.GetChildFamily(person, false, null);
-                if (family != null)
-                {
-                    GEDCOMIndividualRecord father = family.GetHusband();
-                    result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
-                }
-            }
-
-            return result;
         }
     }
 }

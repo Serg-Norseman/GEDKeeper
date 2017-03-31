@@ -891,7 +891,7 @@ namespace GKUI.Dialogs
                 UpdateControls();
             }*/
 
-            if (UIEngine.AddFather(fBase, fLocalUndoman, fPerson)) {
+            if (UIEngine.BaseController.AddFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
@@ -907,7 +907,7 @@ namespace GKUI.Dialogs
             fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
             UpdateControls();*/
 
-            if (UIEngine.DeleteFather(fBase, fLocalUndoman, fPerson)) {
+            if (UIEngine.BaseController.DeleteFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }

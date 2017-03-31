@@ -40,4 +40,11 @@ namespace GKUI.Engine
         bool ShowQuestionYN(string msg);
         void ShowWarning(string msg);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IBaseController
+    {
+    }
 }

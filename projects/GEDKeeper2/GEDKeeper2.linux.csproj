@@ -458,6 +458,7 @@
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\Engine\BaseController.cs" />
     <Compile Include="GKUI\Engine\UIHelper.cs" />
     <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
     <Compile Include="GKUI\Engine\IocControllerFactory.cs" />
@@ -755,6 +756,10 @@
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.linux.csproj">
       <Project>{3C9C706D-A5B2-48FB-BE5E-DCC372F84622}</Project>
