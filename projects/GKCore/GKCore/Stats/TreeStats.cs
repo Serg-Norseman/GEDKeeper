@@ -20,9 +20,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+
+using ExcelLibrary.SpreadSheet;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKCore.Stats
 {
@@ -424,6 +429,57 @@ namespace GKCore.Stats
 
                     values.Add(new StatsItem(kvp.Key, avg));
                 }
+            }
+        }
+
+        // TODO: localize filter?
+        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals, IProgressController progress)
+        {
+            if (vals == null) return;
+
+            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            try
+            {
+                int rowsCount = vals.Count;
+                progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
+
+                try
+                {
+                    Workbook workbook = new Workbook();
+                    Worksheet worksheet = new Worksheet(title);
+
+                    worksheet.Cells[0,  1] = new Cell(cap1);
+                    worksheet.Cells[0,  2] = new Cell(cap2);
+
+                    int row = 1;
+                    for (int i = 0; i < rowsCount; i++)
+                    {
+                        StatsItem item = vals[i];
+                        worksheet.Cells[row, 1] = new Cell(item.Caption);
+                        worksheet.Cells[row, 2] = new Cell(item.GetDisplayString());
+
+                        row++;
+                        progress.ProgressStep();
+                    }
+
+                    workbook.Worksheets.Add(worksheet);
+                    workbook.Save(fileName);
+
+                    if (File.Exists(fileName)) {
+                        Process.Start(fileName);
+                    }
+                }
+                finally
+                {
+                    progress.ProgressDone();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
+                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }
     }

@@ -20,11 +20,11 @@
 
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCore;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
         public static void ShowAbout()
         {
             string copyright, version;
-            SysUtils.GetAssemblyVersion(Assembly.GetExecutingAssembly(), out copyright, out version);
+            SysUtils.GetAssemblyVersion(UIEngine.Hub.GetExecutingAssembly(), out copyright, out version);
 
             using (AboutDlg dlg = new AboutDlg())
             {

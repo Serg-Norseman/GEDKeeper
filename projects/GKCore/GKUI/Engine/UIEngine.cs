@@ -37,12 +37,14 @@ namespace GKUI.Engine
         private static IPathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IUIHelper fUIHelper;
+        private static IApplicationHub fApplicationHub;
 
 
         public static IocContainer Container
         {
             get { return fIocContainer; }
         }
+
 
         public static IStdDialogs StdDialogs
         {
@@ -91,6 +93,16 @@ namespace GKUI.Engine
                     fNamesTable = new NamesTable();
                 }
                 return fNamesTable;
+            }
+        }
+
+        public static IApplicationHub Hub
+        {
+            get {
+                if (fApplicationHub == null) {
+                    fApplicationHub = fIocContainer.Resolve<IApplicationHub>();
+                }
+                return fApplicationHub;
             }
         }
 

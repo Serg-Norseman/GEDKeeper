@@ -24,9 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace GKCommon.Controls
+namespace GKCommon
 {
-    public sealed class TextChunk
+    public sealed class BBTextChunk
     {
         public int Line;
         public string Text;
@@ -38,7 +38,7 @@ namespace GKCommon.Controls
         public string URL;
         public ExtRect LinkRect;
 
-        public TextChunk(int tokenLine, float fontSize, FontStyle fontStyle)
+        public BBTextChunk(int tokenLine, float fontSize, FontStyle fontStyle)
         {
             Line = tokenLine - 1;
             Text = string.Empty;
@@ -79,20 +79,20 @@ namespace GKCommon.Controls
             }
         }
 
-        private List<TextChunk> fChunks;
+        private List<BBTextChunk> fChunks;
         private float fDefaultFontSize;
         private Color fLinkColor;
         private Color fTextColor;
 
         public BBTextParser(float defaultFontSize, Color linkColor, Color textColor)
         {
-            fChunks = new List<TextChunk>();
+            fChunks = new List<BBTextChunk>();
             fDefaultFontSize = defaultFontSize;
             fLinkColor = linkColor;
             fTextColor = textColor;
         }
 
-        private void GetPrevFontParams(TextChunk chunk, out float fntSize, out FontStyle fntStyle)
+        private void GetPrevFontParams(BBTextChunk chunk, out float fntSize, out FontStyle fntStyle)
         {
             if (chunk != null) {
                 fntSize = chunk.Size;
@@ -103,35 +103,35 @@ namespace GKCommon.Controls
             }
         }
 
-        private void SetChunkColor(int tokenLine, ref TextChunk chunk, Color color)
+        private void SetChunkColor(int tokenLine, ref BBTextChunk chunk, Color color)
         {
             float fntSize;
             FontStyle fntStyle;
             GetPrevFontParams(chunk, out fntSize, out fntStyle);
 
             if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new TextChunk(tokenLine, fntSize, fntStyle);
+                chunk = new BBTextChunk(tokenLine, fntSize, fntStyle);
                 fChunks.Add(chunk);
             }
 
             chunk.Color = color;
         }
 
-        private void SetChunkFontSize(int tokenLine, ref TextChunk chunk, float newSize)
+        private void SetChunkFontSize(int tokenLine, ref BBTextChunk chunk, float newSize)
         {
             float fntSize;
             FontStyle fntStyle;
             GetPrevFontParams(chunk, out fntSize, out fntStyle);
 
             if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new TextChunk(tokenLine, newSize, fntStyle);
+                chunk = new BBTextChunk(tokenLine, newSize, fntStyle);
                 fChunks.Add(chunk);
             }
 
             chunk.Size = newSize;
         }
 
-        private void SetChunkFontStyle(int tokenLine, ref TextChunk chunk, FontStyle style, bool active)
+        private void SetChunkFontStyle(int tokenLine, ref BBTextChunk chunk, FontStyle style, bool active)
         {
             float fntSize;
             FontStyle fntStyle;
@@ -145,34 +145,34 @@ namespace GKCommon.Controls
             }
 
             if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new TextChunk(tokenLine, fntSize, newStyle);
+                chunk = new BBTextChunk(tokenLine, fntSize, newStyle);
                 fChunks.Add(chunk);
             }
 
             chunk.Style = newStyle;
         }
 
-        private void SetChunkText(int tokenLine, ref TextChunk chunk, string text)
+        private void SetChunkText(int tokenLine, ref BBTextChunk chunk, string text)
         {
             float fntSize;
             FontStyle fntStyle;
             GetPrevFontParams(chunk, out fntSize, out fntStyle);
 
             if (chunk == null) {
-                chunk = new TextChunk(tokenLine, fntSize, fntStyle);
+                chunk = new BBTextChunk(tokenLine, fntSize, fntStyle);
                 fChunks.Add(chunk);
             }
 
             chunk.Text += text;
         }
 
-        public void ParseText(List<TextChunk> chunksList, string text)
+        public void ParseText(List<BBTextChunk> chunksList, string text)
         {
             fChunks = chunksList;
             fChunks.Clear();
 
             float lastFontSize = fDefaultFontSize;
-            TextChunk lastChunk = null;
+            BBTextChunk lastChunk = null;
             Stack<SizeChange> stackSizes = new Stack<SizeChange>();
 
             //SetChunkFontSize(0, ref lastChunk, fDefaultFontSize);

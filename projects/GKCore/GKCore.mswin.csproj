@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
+    <Compile Include="GKCore\BaseController.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
@@ -176,8 +177,9 @@
     <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKUI\Charts\ITreeChartBox.cs" />
     <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
-    <Compile Include="GKUI\Engine\BaseController.cs" />
+    <Compile Include="GKUI\Engine\UIContracts.cs" />
     <Compile Include="GKUI\Engine\UIEngine.cs" />
+    <Compile Include="GKUI\IControls.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCore" />

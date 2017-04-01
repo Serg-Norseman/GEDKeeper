@@ -25,7 +25,7 @@ using System.Windows.Forms;
 namespace GKCommon.Controls
 {
     /// <summary>
-    /// Description of WizardPages.
+    /// 
     /// </summary>
     public class WizardPages : TabControl
     {

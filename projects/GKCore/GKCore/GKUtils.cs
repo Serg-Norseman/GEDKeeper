@@ -33,6 +33,7 @@ using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Engine;
 
 namespace GKCore
 {
@@ -1396,15 +1397,13 @@ namespace GKCore
 
         public static string GetTempDir()
         {
-            string tempPath;
-            tempPath = Environment.GetEnvironmentVariable("TEMP");
-            //tempPath = Path.GetTempPath();
+            string tempPath = Environment.GetEnvironmentVariable("TEMP");
             return tempPath + Path.DirectorySeparatorChar;
         }
 
         public static string GetAppPath()
         {
-            Module[] mods = Assembly.GetExecutingAssembly().GetModules();
+            Module[] mods = UIEngine.Hub.GetExecutingAssembly().GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
         }

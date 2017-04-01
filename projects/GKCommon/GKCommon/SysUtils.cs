@@ -30,7 +30,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -265,11 +264,6 @@ namespace GKCommon
         #endregion
 
         #region Cross-platform helpers
-
-        public static string GetCLRVersion()
-        {
-            return System.Reflection.Assembly.GetExecutingAssembly().ImageRuntimeVersion;
-        }
 
         public static string GetMonoVersion()
         {

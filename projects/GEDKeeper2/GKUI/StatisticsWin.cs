@@ -20,19 +20,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
-using ExcelLibrary.SpreadSheet;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
-using GKUI.Engine;
 using ZedGraph;
 
 namespace GKUI
@@ -53,6 +49,7 @@ namespace GKUI
         private string fChartTitle;
         private string fChartXTitle;
         private string fChartYTitle;
+        private List<StatsItem> fCurrentValues;
 
         public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
@@ -180,6 +177,8 @@ namespace GKUI
             try
             {
                 fTreeStats.GetSpecStats(mode, vals);
+                fCurrentValues = vals;
+
                 ListViewItem[] items = new ListViewItem[vals.Count];
 
                 int i = 0;
@@ -187,7 +186,7 @@ namespace GKUI
                 {
                     ListViewItem item = new ListViewItem(lv.Caption);
 
-                    string stVal = (!lv.IsCombo) ? lv.Value.ToString() : lv.ValF.ToString() + " | " + lv.ValM.ToString();
+                    string stVal = lv.GetDisplayString();
                     item.SubItems.Add(stVal);
 
                     items[i] = item;
@@ -371,61 +370,10 @@ namespace GKUI
             cbType.SelectedIndex = oldIndex;
         }
 
-        // TODO: localize?
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            try
-            {
-                int rowsCount = fListStats.Items.Count;
-                fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
-
-                try
-                {
-                    Workbook workbook = new Workbook();
-                    Worksheet worksheet = new Worksheet(cbType.Text);
-
-                    worksheet.Cells[1,  1] = new Cell(fListStats.Columns[0].Text);
-                    worksheet.Cells[1,  2] = new Cell(fListStats.Columns[1].Text);
-
-                    int row = 1;
-                    for (int i = 0; i < rowsCount; i++)
-                    {
-                        ListViewItem item = fListStats.Items[i];
-
-                        worksheet.Cells[row, 1] = new Cell(item.Text);
-
-                        string sval = item.SubItems[1].Text;
-                        double dval;
-                        if (double.TryParse(sval, out dval)) {
-                            worksheet.Cells[row, 2] = new Cell(dval);
-                        } else {
-                            worksheet.Cells[row, 2] = new Cell(sval);
-                        }
-
-                        row++;
-                        fBase.ProgressStep();
-                    }
-
-                    workbook.Worksheets.Add(worksheet);
-                    workbook.Save(fileName);
-
-                    if (File.Exists(fileName)) {
-                        Process.Start(fileName);
-                    }
-                }
-                finally
-                {
-                    fBase.ProgressDone();
-                }
-            }
-            catch (Exception ex)
-            {
-                fBase.Host.LogWrite("StatisticsWin.ExcelExport(): " + ex.Message);
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
-            }
+            fTreeStats.WriteStatsReport(cbType.Text, fListStats.Columns[0].Text, fListStats.Columns[1].Text, 
+                                        fCurrentValues, fBase);
         }
     }
 }

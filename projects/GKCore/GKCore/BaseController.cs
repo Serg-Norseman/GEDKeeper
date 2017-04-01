@@ -20,12 +20,12 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Engine;
 
-namespace GKUI.Engine
+namespace GKCore
 {
     /// <summary>
     /// 

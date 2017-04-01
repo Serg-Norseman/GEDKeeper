@@ -89,15 +89,9 @@
     <Reference Include="ArborGVT">
       <HintPath>libs\ArborGVT.dll</HintPath>
     </Reference>
-    <Reference Include="ExcelLibrary">
-      <HintPath>libs\ExcelLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
       <HintPath>libs\ZedGraph.dll</HintPath>
     </Reference>
@@ -160,6 +154,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Controls\GKRecordsView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
@@ -366,6 +363,7 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Engine\ApplicationHub.cs" />
     <Compile Include="GKUI\Engine\UIHelper.cs" />
     <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
     <Compile Include="GKUI\Engine\IocControllerFactory.cs" />

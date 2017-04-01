@@ -37,9 +37,9 @@ namespace GKCommon.Controls
         private List<int> fHeights;
         private Size fTextSize;
         private readonly StringList fLines;
-        private TextChunk fCurrentLink;
+        private BBTextChunk fCurrentLink;
         private Color fLinkColor;
-        private List<TextChunk> fChunks;
+        private List<BBTextChunk> fChunks;
 
         private static readonly object EventLink;
 
@@ -88,7 +88,7 @@ namespace GKCommon.Controls
             TabStop = true;
 
             fAcceptFontChange = true;
-            fChunks = new List<TextChunk>();
+            fChunks = new List<BBTextChunk>();
             fCurrentLink = null;
             fHeights = new List<int>();
             fLines = new StringList();
@@ -138,7 +138,7 @@ namespace GKCommon.Controls
                     int chunksCount = fChunks.Count;
                     for (int k = 0; k < chunksCount; k++)
                     {
-                        TextChunk chunk = fChunks[k];
+                        BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
                             line = chunk.Line;
@@ -200,7 +200,7 @@ namespace GKCommon.Controls
                     int chunksCount = fChunks.Count;
                     for (int k = 0; k < chunksCount; k++)
                     {
-                        TextChunk chunk = fChunks[k];
+                        BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
                             line = chunk.Line;
@@ -334,7 +334,7 @@ namespace GKCommon.Controls
             int num = fChunks.Count;
             for (int i = 0; i < num; i++)
             {
-                TextChunk chunk = fChunks[i];
+                BBTextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
                 if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset))

@@ -28,6 +28,7 @@ cp $DEV_PATH/deploy/gedkeeper.desktop ~/$PACK_PATH/usr/share/applications
 cp $DEV_PATH/deploy/application-x-gedkeeper.xml ~/$PACK_PATH/usr/share/mime/packages
 
 cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
+cp $DEV_PATH/GKCore.dll ~/$LIB_PATH
 cp $DEV_PATH/GKCommon.dll ~/$LIB_PATH
 cp $DEV_PATH/GKMediaPlayer.dll ~/$LIB_PATH
 
@@ -51,6 +52,7 @@ cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
 cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 
+chmod -x $LIB_PATH/GKCore.dll
 chmod -x $LIB_PATH/GKCommon.dll
 chmod -x $LIB_PATH/GKMediaPlayer.dll
 

@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -49,8 +50,13 @@ namespace GKUI.Engine
         bool GetPassword(string prompt, ref string value);
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IUIHelper
     {
+        // TODO: necessary to exclude these references to WinForms controls!
         void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault);
         void SelectComboItem(ListBox listBox, object tag, bool allowDefault);
 
@@ -61,12 +67,14 @@ namespace GKUI.Engine
         GKListView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType);
     }
 
+
     /// <summary>
     /// 
     /// </summary>
     public interface IBaseController
     {
     }
+
 
     /// <summary>
     /// 
@@ -75,5 +83,15 @@ namespace GKUI.Engine
     {
         void Load(string fileName);
         bool TryReplacePath(string path, out string newPath);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IApplicationHub
+    {
+        Assembly GetExecutingAssembly();
+        Version GetAppVersion();
     }
 }

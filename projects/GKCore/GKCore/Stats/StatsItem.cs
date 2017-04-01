@@ -50,5 +50,11 @@ namespace GKCore.Stats
         {
             return Caption;
         }
+
+        public string GetDisplayString()
+        {
+            string stVal = (!IsCombo) ? Value.ToString() : ValF.ToString() + " | " + ValM.ToString();
+            return stVal;
+        }
     }
 }

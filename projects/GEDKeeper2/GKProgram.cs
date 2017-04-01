@@ -62,8 +62,11 @@ namespace GKUI
                 Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
                 Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif
-                Logger.LogWrite("CLR Version: " + SysUtils.GetCLRVersion());
-                Logger.LogWrite("GK Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+                // There should be no links to the application infrastructure
+                Assembly execAssembly = Assembly.GetExecutingAssembly();
+                Logger.LogWrite("CLR Version: " + execAssembly.ImageRuntimeVersion);
+                Logger.LogWrite("GK Version: " + execAssembly.GetName().Version.ToString());
             }
             catch { }
         }
@@ -109,7 +112,7 @@ namespace GKUI
 
         private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
         {
-            // saving restore copies
+            // Saving the copy for restoration
             MainWin.Instance.CriticalSave();
 
             Exception e = (Exception) args.ExceptionObject;

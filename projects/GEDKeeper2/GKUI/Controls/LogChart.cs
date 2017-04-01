@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GKCommon.Controls
+namespace GKUI.Controls
 {
     public class HintRequestEventArgs : EventArgs
     {

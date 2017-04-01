@@ -96,9 +96,9 @@
     <Compile Include="Externals\IniFiles\IniFileEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
+    <Compile Include="GKCommon\BBTextParser.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />
-    <Compile Include="GKCommon\Controls\BBTextParser.cs" />
     <Compile Include="GKCommon\Controls\GKListView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -109,12 +109,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKCommon\Controls\ImageBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\LogChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\WizardPages.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKCommon\Controls\ExtResources.Designer.cs">
@@ -202,6 +196,9 @@
     <Compile Include="GEDCOM\Extensions\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
+    <Compile Include="GKCommon\Controls\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKCommon\EnumSet.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
     <Compile Include="GKCommon\ExtList.cs" />
@@ -274,7 +271,6 @@
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
-    <Compile Include="GKUI\Engine\UIContracts.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">
@@ -284,8 +280,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCommon\IoC" />
-    <Folder Include="GKUI" />
-    <Folder Include="GKUI\Engine" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

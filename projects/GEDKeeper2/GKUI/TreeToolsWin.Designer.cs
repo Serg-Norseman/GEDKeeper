@@ -62,7 +62,7 @@ namespace GKUI
 		private System.Windows.Forms.RadioButton radSources;
 		private System.Windows.Forms.CheckBox chkBookmarkMerged;
 		private System.Windows.Forms.GroupBox grpMergeOther;
-		private GKCommon.Controls.LogChart gkLogChart1;
+		private GKUI.Controls.LogChart gkLogChart1;
 		private GKUI.Controls.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;
@@ -125,7 +125,7 @@ namespace GKUI
 		    this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 		    this.chkBirthYear = new System.Windows.Forms.CheckBox();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
-		    this.gkLogChart1 = new GKCommon.Controls.LogChart();
+		    this.gkLogChart1 = new GKUI.Controls.LogChart();
 		    this.tvGroups = new System.Windows.Forms.TreeView();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
 		    this.btnBaseRepair = new System.Windows.Forms.Button();

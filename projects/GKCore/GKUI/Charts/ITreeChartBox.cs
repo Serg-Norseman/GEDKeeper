@@ -30,10 +30,6 @@ namespace GKUI.Charts
 {
     public interface ITreeChartBox
     {
-        void SetScale(float value);
-        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
-        void RenderStatic(BackgroundMode background, bool centered);
-        void SetRenderer(TreeChartRenderer renderer);
         IBaseWindow Base { get; set; }
         int DepthLimit { get; set; }
         int Height { get; set; }
@@ -41,5 +37,10 @@ namespace GKUI.Charts
         TreeChartOptions Options { get; set; }
         ShieldState ShieldState { get; set; }
         int Width { get; set; }
+
+        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        void RenderStatic(BackgroundMode background, bool centered);
+        void SetRenderer(TreeChartRenderer renderer);
+        void SetScale(float value);
     }
 }
