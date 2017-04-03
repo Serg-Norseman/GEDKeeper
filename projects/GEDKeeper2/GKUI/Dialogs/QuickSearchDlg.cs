@@ -103,7 +103,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 

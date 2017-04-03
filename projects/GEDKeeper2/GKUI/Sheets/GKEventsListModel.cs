@@ -171,7 +171,7 @@ namespace GKUI.Sheets
                         break;
 
                     case RecordAction.raDelete:
-                        if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery)) != false) {
+                        if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery)) != false) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }

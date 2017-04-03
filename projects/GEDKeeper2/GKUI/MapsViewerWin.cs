@@ -192,7 +192,7 @@ namespace GKUI
         {
             string filter1 = "Image files|*.jpg";
 
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+            string fileName = AppHub.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 fMapBrowser.SaveSnapshot(fileName);

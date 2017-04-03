@@ -78,7 +78,7 @@ namespace GKUI
             Logger.LogInit(GKUtils.GetLogFilename());
             LogSysInfo();
 
-            WinFormsBootstrapper.Configure(UIEngine.Container);
+            WinFormsBootstrapper.Configure(AppHub.Container);
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);

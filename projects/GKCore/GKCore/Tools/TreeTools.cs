@@ -365,7 +365,7 @@ namespace GKCore.Tools
             }
 
             // in test mode, these objects don't exist
-            INamesTable namesTable = UIEngine.NamesTable;
+            INamesTable namesTable = AppHub.NamesTable;
             if (namesTable != null) {
                 namesTable.ImportNames(iRec);
             }
@@ -607,7 +607,7 @@ namespace GKCore.Tools
                         pc.ProgressStep();
                     }
 
-                    if (!idCheck && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
+                    if (!idCheck && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
                     {
                         CorrectIds(tree, pc);
                     }
@@ -622,7 +622,7 @@ namespace GKCore.Tools
             catch (Exception ex)
             {
                 Logger.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 
             return result;

@@ -103,7 +103,7 @@ namespace GKUI.Dialogs
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            UIEngine.UIHelper.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
+            AppHub.UIHelper.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
         }
 
         private void UpdateForm()
@@ -301,7 +301,7 @@ namespace GKUI.Dialogs
             TreeChartOptions chartOptions = fOptions.ChartOptions;
 
             var font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
-            font = UIEngine.StdDialogs.SelectFont(font);
+            font = AppHub.StdDialogs.SelectFont(font);
             if (font != null)
             {
                 chartOptions.DefFontName = font.Name;

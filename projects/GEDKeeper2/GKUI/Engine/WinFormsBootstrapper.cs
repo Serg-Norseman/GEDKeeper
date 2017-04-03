@@ -25,7 +25,7 @@ using GKUI.Charts;
 namespace GKUI.Engine
 {
     /// <summary>
-    /// This class implements initialization of IoC-container for WinForms Presentation.
+    /// This class implements initialization of IoC-container for WinForms presentation.
     /// </summary>
     public static class WinFormsBootstrapper
     {
@@ -36,7 +36,7 @@ namespace GKUI.Engine
 
             container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
             container.Register<IUIHelper, UIHelper>(LifeCycle.Singleton);
-            container.Register<IApplicationHub, ApplicationHub>(LifeCycle.Singleton);
+            container.Register<IUtilities, Utilities>(LifeCycle.Singleton);
 
             // controls and other
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);

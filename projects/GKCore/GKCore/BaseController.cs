@@ -54,6 +54,7 @@ namespace GKCore
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                     } else {
                         // selected family with husband
+                        baseWin.Host.LogWrite("BaseController.AddFather(): fail, because family already has father");
                         result = true;
                     }
                 }

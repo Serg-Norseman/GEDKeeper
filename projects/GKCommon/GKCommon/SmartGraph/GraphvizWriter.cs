@@ -50,6 +50,7 @@ namespace GKCommon.SmartGraph
         public void SaveFile(string path)
         {
             fBuffer.AppendLine("}");
+            // FIXME: fix and test encoding!
             using (StreamWriter sw = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
             {
                 sw.Write(fBuffer.ToString());

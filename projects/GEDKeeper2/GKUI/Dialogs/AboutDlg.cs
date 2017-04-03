@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
         public static void ShowAbout()
         {
             string copyright, version;
-            SysUtils.GetAssemblyVersion(UIEngine.Hub.GetExecutingAssembly(), out copyright, out version);
+            SysUtils.GetAssemblyVersion(AppHub.Utilities.GetExecutingAssembly(), out copyright, out version);
 
             using (AboutDlg dlg = new AboutDlg())
             {

@@ -90,7 +90,7 @@ namespace GKUI.Controls
             }
             catch
             {
-                UIEngine.StdDialogs.ShowError("Number format is invalid");
+                AppHub.StdDialogs.ShowError("Number format is invalid");
                 DialogResult = DialogResult.None;
             }
         }

@@ -367,7 +367,7 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Engine\ApplicationHub.cs" />
+    <Compile Include="GKUI\Engine\Utilities.cs" />
     <Compile Include="GKUI\Engine\UIHelper.cs" />
     <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
     <Compile Include="GKUI\Engine\IocControllerFactory.cs" />

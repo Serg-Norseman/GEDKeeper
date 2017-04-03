@@ -151,11 +151,11 @@ namespace GKUI.Dialogs
 
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
+            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
-                if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
+                if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
                     return;
                 }
             }
@@ -200,7 +200,7 @@ namespace GKUI.Dialogs
                                     MediaStoreType.mstArchive));
             }
 
-            UIEngine.UIHelper.SelectComboItem(cmbStoreType, selectType, true);
+            AppHub.UIHelper.SelectComboItem(cmbStoreType, selectType, true);
         }
 
         public MediaEditDlg(IBaseWindow baseWin) : base(baseWin)

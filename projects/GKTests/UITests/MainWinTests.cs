@@ -71,7 +71,7 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
-            WinFormsBootstrapper.Configure(UIEngine.Container);
+            WinFormsBootstrapper.Configure(AppHub.Container);
 
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
@@ -220,10 +220,10 @@ namespace GKTests.UITests
 
             // Other
             ModalFormHandler = MessageBox_OkHandler;
-            UIEngine.StdDialogs.ShowMessage("test msg");
+            AppHub.StdDialogs.ShowMessage("test msg");
 
             ModalFormHandler = MessageBox_OkHandler;
-            UIEngine.StdDialogs.ShowError("test error msg");
+            AppHub.StdDialogs.ShowError("test error msg");
         }
 
         private void BaseWin_Tests(BaseWin baseWin, string stage)

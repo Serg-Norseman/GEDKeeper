@@ -89,7 +89,7 @@ namespace GKUI.Sheets
                     break;
 
                 case RecordAction.raDelete:
-                    if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)) != false)
+                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
                     }

@@ -332,7 +332,7 @@ namespace GKUI.Charts
                         catch (MediaFileNotFoundException)
                         {
                             if (!hasMediaFail) {
-                                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                                 hasMediaFail = true;
                             }
                         }

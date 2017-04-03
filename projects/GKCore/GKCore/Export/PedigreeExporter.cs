@@ -537,7 +537,7 @@ namespace GKCore.Export
         {
             if (fRoot == null)
             {
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 return;
             }
 
@@ -546,7 +546,7 @@ namespace GKCore.Export
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
             #endif
 
-            fPath = UIEngine.StdDialogs.GetSaveFile(availableFormats);
+            fPath = AppHub.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
 
             string ext = SysUtils.GetFileExtension(fPath);

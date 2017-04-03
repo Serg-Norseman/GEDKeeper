@@ -89,7 +89,7 @@ namespace GKUI.Engine
     /// <summary>
     /// 
     /// </summary>
-    public interface IApplicationHub
+    public interface IUtilities
     {
         Assembly GetExecutingAssembly();
         Version GetAppVersion();

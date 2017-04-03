@@ -87,7 +87,7 @@ namespace GKCore
         private static void WorkerMethod()
         {
             try {
-                Version curVersion = UIEngine.Hub.GetAppVersion();
+                Version curVersion = AppHub.Utilities.GetAppVersion();
 
                 string url;
                 Version newVersion = GetLastVersion(out url);
@@ -97,7 +97,7 @@ namespace GKCore
                     string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
 
                     #if !CI_MODE
-                    if (true == UIEngine.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
+                    if (true == AppHub.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
                     {
                         Process.Start(url);
                     }

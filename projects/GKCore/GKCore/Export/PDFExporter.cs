@@ -48,7 +48,7 @@ namespace GKCore.Export
         public override void Generate(bool show)
         {
             bool success = false;
-            fPath = UIEngine.StdDialogs.GetSaveFile("PDF files (*.pdf)|*.pdf");
+            fPath = AppHub.StdDialogs.GetSaveFile("PDF files (*.pdf)|*.pdf");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();

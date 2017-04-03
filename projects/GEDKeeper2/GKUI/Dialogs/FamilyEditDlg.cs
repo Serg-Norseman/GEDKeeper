@@ -263,7 +263,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)) != false);
+                    result = (child != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)) != false);
                     if (result) {
                         //result = this.fFamily.RemoveChild(child);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, fFamily);
@@ -359,7 +359,7 @@ namespace GKUI.Dialogs
             GEDCOMIndividualRecord husband = fFamily.GetHusband();
             if (!fBase.IsAvailableRecord(husband)) return;
 
-            if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != false)
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != false)
             {
                 //this.fFamily.RemoveSpouse(husband);
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, fFamily, husband);
@@ -393,7 +393,7 @@ namespace GKUI.Dialogs
             GEDCOMIndividualRecord wife = fFamily.GetWife();
             if (!fBase.IsAvailableRecord(wife)) return;
 
-            if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)) != false)
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)) != false)
             {
                 //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, fFamily, wife);

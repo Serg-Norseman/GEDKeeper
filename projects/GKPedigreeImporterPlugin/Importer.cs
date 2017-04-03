@@ -962,7 +962,8 @@ namespace GKPedigreeImporterPlugin
 
             try
             {
-                using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251))) {
+                using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251)))
+                {
                     try
                     {
                         fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);

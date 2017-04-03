@@ -189,7 +189,7 @@ namespace GKUI
 
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
@@ -507,7 +507,7 @@ namespace GKUI
             
             if (pObj.Name.IndexOf("[*]") == 0)
             {
-                UIEngine.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
+                AppHub.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             }
             else
             {
@@ -607,7 +607,7 @@ namespace GKUI
                 }
             }
 
-            UIEngine.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
+            AppHub.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
             fSplitList.Clear();
             UpdateSplitLists();
 
@@ -616,7 +616,7 @@ namespace GKUI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
+            string fileName = AppHub.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             TreeTools.CheckRelations(fSplitList);
@@ -726,7 +726,7 @@ namespace GKUI
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             external_match_db = fileName;

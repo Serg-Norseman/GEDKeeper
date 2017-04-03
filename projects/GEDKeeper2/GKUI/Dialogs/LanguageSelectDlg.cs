@@ -69,7 +69,7 @@ namespace GKUI.Dialogs
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            UIEngine.UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
+            AppHub.UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
         }
     }
 }

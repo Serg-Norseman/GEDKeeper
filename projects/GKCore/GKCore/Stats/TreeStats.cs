@@ -437,7 +437,7 @@ namespace GKCore.Stats
         {
             if (vals == null) return;
 
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            string fileName = AppHub.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             try
@@ -479,7 +479,7 @@ namespace GKCore.Stats
             catch (Exception ex)
             {
                 Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }
     }

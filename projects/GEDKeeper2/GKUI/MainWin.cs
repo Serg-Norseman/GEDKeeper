@@ -284,7 +284,7 @@ namespace GKUI
             try {
                 UnloadPlugins();
 
-                fOptions.MWinRect = UIEngine.UIHelper.GetFormRect(this);
+                fOptions.MWinRect = AppHub.UIHelper.GetFormRect(this);
                 fOptions.MWinState = WindowState;
 
                 fNamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
@@ -674,7 +674,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            mf.WinRect = UIEngine.UIHelper.GetFormRect(frm);
+            mf.WinRect = AppHub.UIHelper.GetFormRect(frm);
             mf.WinState = frm.WindowState;
         }
 
@@ -684,7 +684,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            UIEngine.UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
+            AppHub.UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
         }
 
         #endregion
@@ -1021,7 +1021,7 @@ namespace GKUI
         {
             string homePath = GetUserFilesPath("");
 
-            string fileName = UIEngine.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHub.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 CreateBase(fileName);
             }
@@ -1034,7 +1034,7 @@ namespace GKUI
 
             string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
 
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
+            string fileName = AppHub.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
             if (!string.IsNullOrEmpty(fileName)) {
                 curBase.FileSave(fileName);
             }
@@ -1294,7 +1294,7 @@ namespace GKUI
             }
 
             if (!File.Exists(topic)) {
-                UIEngine.StdDialogs.ShowError(@"For that language help is unavailable");
+                AppHub.StdDialogs.ShowError(@"For that language help is unavailable");
                 return;
             }
 
@@ -1557,7 +1557,7 @@ namespace GKUI
 
         public void ShowWarning(string msg)
         {
-            UIEngine.StdDialogs.ShowWarning(msg);
+            AppHub.StdDialogs.ShowWarning(msg);
         }
 
         public ILangMan CreateLangMan(object sender)

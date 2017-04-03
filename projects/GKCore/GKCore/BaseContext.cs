@@ -718,7 +718,7 @@ namespace GKCore
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
             {
-                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
             }
             return result;
         }
@@ -745,7 +745,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         stream = new FileStream(targetFn, FileMode.Open);
@@ -760,7 +760,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         ArcFileLoad(targetFn, stream);
@@ -795,7 +795,7 @@ namespace GKCore
                         try
                         {
                             if (!File.Exists(GetArcFileName())) {
-                                UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -812,7 +812,7 @@ namespace GKCore
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
                                 string newPath;
-                                if (UIEngine.PathReplacer.TryReplacePath(fileName, out newPath)) {
+                                if (AppHub.PathReplacer.TryReplacePath(fileName, out newPath)) {
                                     fileName = newPath;
                                 }
                             }
@@ -885,7 +885,7 @@ namespace GKCore
                     }
                     catch (IOException)
                     {
-                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
                         result = false;
                     }
                     break;

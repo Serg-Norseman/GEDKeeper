@@ -82,23 +82,28 @@ namespace GKCore
         public void LoadFromFile(string fileName)
         {
             if (!File.Exists(fileName)) return;
-            
+
             try {
-                using (StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251))) {
+                using (StreamReader strd = new StreamReader(fileName, Encoding.UTF8)) {
                     while (strd.Peek() != -1) {
                         string line = strd.ReadLine();
-                        if (string.IsNullOrEmpty(line))
-                            continue;
+                        if (string.IsNullOrEmpty(line)) continue;
 
                         string[] data = line.Trim().Split(';');
-                        NameEntry nm = new NameEntry();
-                        nm.Name = data[0];
-                        nm.F_Patronymic = data[1];
-                        nm.M_Patronymic = data[2];
-                        if (data[3] != "") {
-                            nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                        string nameKey = data[0];
+
+                        if (fNames.ContainsKey(nameKey)) {
+                            Logger.LogWrite(string.Format("NamesTable.LoadFromFile.1(): Duplicate name in the table \"{0}\"", nameKey));
+                        } else {
+                            NameEntry nm = new NameEntry();
+                            nm.Name = nameKey;
+                            nm.F_Patronymic = data[1];
+                            nm.M_Patronymic = data[2];
+                            if (data[3] != "") {
+                                nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                            }
+                            fNames.Add(nameKey, nm);
                         }
-                        fNames.Add(nm.Name, nm);
                     }
                 }
             } catch (Exception ex) {
@@ -108,7 +113,7 @@ namespace GKCore
 
         public void SaveToFile(string fileName)
         {
-            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
+            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
             {
                 foreach (DictionaryEntry de in fNames)
                 {
@@ -197,6 +202,7 @@ namespace GKCore
                     if (string.IsNullOrEmpty(nm.M_Patronymic))
                         nm.M_Patronymic = patronymic;
                     break;
+
                 case GEDCOMSex.svFemale:
                     if (string.IsNullOrEmpty(nm.F_Patronymic))
                         nm.F_Patronymic = patronymic;
@@ -207,7 +213,7 @@ namespace GKCore
         public void SetNameSex(string name, GEDCOMSex sex)
         {
             if (string.IsNullOrEmpty(name)) return;
-            
+
             NameEntry nm = FindName(name);
             if (nm == null)
                 nm = AddName(name);

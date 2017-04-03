@@ -68,7 +68,7 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == tbFileLoad) {
-                string fileName = UIEngine.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+                string fileName = AppHub.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     SetFileRef(fileName);

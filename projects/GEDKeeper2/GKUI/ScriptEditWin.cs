@@ -105,7 +105,7 @@ namespace GKUI
         {
             if (!CheckModified()) return;
 
-            string fileName = UIEngine.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
+            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
@@ -119,7 +119,7 @@ namespace GKUI
 
         private void tbSaveScript_Click(object sender, EventArgs e)
         {
-            string fileName = UIEngine.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
+            string fileName = AppHub.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
             if (string.IsNullOrEmpty(fileName)) return;
 
             using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))

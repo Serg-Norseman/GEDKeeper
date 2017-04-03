@@ -41,7 +41,7 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
-            fPath = UIEngine.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
+            fPath = AppHub.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Workbook workbook = new Workbook();

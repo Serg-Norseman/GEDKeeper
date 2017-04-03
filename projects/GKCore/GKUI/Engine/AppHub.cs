@@ -29,7 +29,7 @@ namespace GKUI.Engine
     /// A prototype of the future global controller of UI for the isolation
     /// of presentation from logic and data model (based on IoC).
     /// </summary>
-    public static class UIEngine
+    public static class AppHub
     {
         private static readonly IocContainer fIocContainer;
         private static IStdDialogs fStdDialogs;
@@ -37,7 +37,7 @@ namespace GKUI.Engine
         private static IPathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IUIHelper fUIHelper;
-        private static IApplicationHub fApplicationHub;
+        private static IUtilities fUtilities;
 
 
         public static IocContainer Container
@@ -96,18 +96,18 @@ namespace GKUI.Engine
             }
         }
 
-        public static IApplicationHub Hub
+        public static IUtilities Utilities
         {
             get {
-                if (fApplicationHub == null) {
-                    fApplicationHub = fIocContainer.Resolve<IApplicationHub>();
+                if (fUtilities == null) {
+                    fUtilities = fIocContainer.Resolve<IUtilities>();
                 }
-                return fApplicationHub;
+                return fUtilities;
             }
         }
 
 
-        static UIEngine()
+        static AppHub()
         {
             fIocContainer = new IocContainer();
         }

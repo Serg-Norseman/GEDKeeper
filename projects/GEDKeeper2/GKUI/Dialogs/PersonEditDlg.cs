@@ -472,7 +472,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != false)
+                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != false)
                     {
                         //this.fPerson.Associations.Delete(ast);
                         //result = true;
@@ -559,7 +559,7 @@ namespace GKUI.Dialogs
                             userRef.StringValue : userRef.ReferenceType;
                         confirmation = string.Format(
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (UIEngine.StdDialogs.ShowQuestionYN(confirmation) != false)
+                        if (AppHub.StdDialogs.ShowQuestionYN(confirmation) != false)
                         {
                             //this.fPerson.UserReferences.Delete(userRef);
                             //result = true;
@@ -649,7 +649,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
+                    if (family != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
                     {
                         //family.RemoveSpouse(this.fPerson);
                         //result = true;
@@ -755,7 +755,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
+                    result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
                     if (result) {
                         //result = groupRec.RemoveMember(this.fPerson);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, fPerson);
@@ -839,13 +839,13 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raDelete:
                     if (fPerson.PersonalNames.Count > 1) {
-                        result = (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
+                        result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
                         if (result) {
                             //this.fPerson.PersonalNames.Delete(persName);
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, fPerson, persName);
                         }
                     } else {
-                        UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
                     }
                     break;
 
@@ -882,32 +882,14 @@ namespace GKUI.Dialogs
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            /*GEDCOMIndividualRecord father = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
-            if (father == null) return;
-
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, father);
-            if (family != null && family.Husband.Value == null) {
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
-                UpdateControls();
-            }*/
-
-            if (UIEngine.BaseController.AddFather(fBase, fLocalUndoman, fPerson)) {
+            if (AppHub.BaseController.AddFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            /*if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) == DialogResult.No) return;
-
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
-            if (family == null) return;
-
-            GEDCOMIndividualRecord father = family.GetHusband();
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
-            UpdateControls();*/
-
-            if (UIEngine.BaseController.DeleteFather(fBase, fLocalUndoman, fPerson)) {
+            if (AppHub.BaseController.DeleteFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
@@ -937,7 +919,7 @@ namespace GKUI.Dialogs
 
         private void btnMotherDelete_Click(object sender, EventArgs e)
         {
-            if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)) == false) return;
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)) == false) return;
 
             GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
             if (family == null) return;
@@ -986,7 +968,7 @@ namespace GKUI.Dialogs
 
         private void btnParentsDelete_Click(object sender, EventArgs e)
         {
-            if (UIEngine.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
 
             GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
             if (family == null) return;

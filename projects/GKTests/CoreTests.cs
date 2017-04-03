@@ -55,7 +55,7 @@ namespace GKTests.GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WinFormsBootstrapper.Configure(UIEngine.Container);
+            WinFormsBootstrapper.Configure(AppHub.Container);
 
             LangMan.DefInit();
 
@@ -292,7 +292,7 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateListView(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { UIEngine.UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
             //Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
 
             //

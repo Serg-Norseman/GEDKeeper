@@ -59,7 +59,7 @@ namespace GKUI.Dialogs
                 GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
                 if (src == null) {
-                    UIEngine.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
+                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
                     DialogResult = DialogResult.None;
                 } else {
                     fSourceCitation.Value = src;

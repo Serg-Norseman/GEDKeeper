@@ -26,9 +26,9 @@ namespace GKUI.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class ApplicationHub : IApplicationHub
+    public class Utilities : IUtilities
     {
-        public ApplicationHub()
+        public Utilities()
         {
         }
 
