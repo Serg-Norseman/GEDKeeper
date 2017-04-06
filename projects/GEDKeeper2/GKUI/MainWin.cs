@@ -292,7 +292,7 @@ namespace GKUI
         {
             if (e.KeyCode == Keys.F12) {
                 #if __MonoCS__
-                ShowWarning(@"This function is not supported in Linux");
+                AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 #else
                 IBaseWindow curBase = GetCurrentFile();
                 if (curBase == null) return;
@@ -898,7 +898,7 @@ namespace GKUI
         private void miExportToFamilyBook_Click(object sender, EventArgs e)
         {
             #if __MonoCS__
-            ShowWarning(@"This function is not supported in Linux");
+            AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             #else
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
@@ -1133,7 +1133,7 @@ namespace GKUI
         private void miMap_Click(object sender, EventArgs e)
         {
             #if __MonoCS__
-            ShowWarning(@"This function is not supported in Linux");
+            AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             #else
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
