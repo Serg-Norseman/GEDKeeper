@@ -117,6 +117,10 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon.linux</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore.linux</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TextSearchWin.resx">
