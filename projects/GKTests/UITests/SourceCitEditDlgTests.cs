@@ -48,7 +48,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null, "", "");
 
-            fDialog = new SourceCitEditDlg(fBase);
+            fDialog = new SourceCitEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.SourceCitation = fSourceCitation;
             fDialog.Show();
         }

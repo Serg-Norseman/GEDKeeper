@@ -22,6 +22,8 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using GKCore;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKTreeVizPlugin")]
@@ -61,7 +63,7 @@ namespace GKTreeVizPlugin
         public void Execute()
         {
             if (fHost.IsUnix()) {
-                fHost.ShowWarning(@"This function is not supported in Linux");
+                AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 

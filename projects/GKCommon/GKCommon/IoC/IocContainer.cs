@@ -73,6 +73,11 @@ namespace GKCommon.IoC
             return (TTypeToResolve) Resolve(typeof(TTypeToResolve));
         }
 
+        /*public TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters)
+        {
+            return (TTypeToResolve) Resolve(typeof(TTypeToResolve), parameters);
+        }*/
+
         public object Resolve(Type typeToResolve)
         {
             RegisteredObject registeredObject;
@@ -83,6 +88,17 @@ namespace GKCommon.IoC
             }
             return GetInstance(registeredObject);
         }
+
+        /*public object Resolve(Type typeToResolve, params object[] parameters)
+        {
+            RegisteredObject registeredObject;
+            if (!registeredObjects.TryGetValue(typeToResolve, out registeredObject))
+            {
+                throw new TypeNotRegisteredException(string.Format(
+                    "The type {0} has not been registered", typeToResolve.Name));
+            }
+            return GetInstance(registeredObject, parameters);
+        }*/
 
         private object GetInstance(RegisteredObject registeredObject)
         {
@@ -108,5 +124,15 @@ namespace GKCommon.IoC
 
             return registeredObject.Instance;
         }
+
+        /*private object GetInstance(RegisteredObject registeredObject, params object[] parameters)
+        {
+            if (registeredObject.Instance == null || registeredObject.LifeCycle == LifeCycle.Transient)
+            {
+                registeredObject.CreateInstance(parameters);
+            }
+
+            return registeredObject.Instance;
+        }*/
     }
 }

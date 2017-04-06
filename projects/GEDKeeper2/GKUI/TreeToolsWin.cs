@@ -511,7 +511,7 @@ namespace GKUI
             }
             else
             {
-                GEDCOMLocationRecord loc = Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                GEDCOMLocationRecord loc = AppHub.BaseController.SelectRecord(Base, GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
                 if (loc == null) return;
 
                 int num = pObj.Facts.Count;

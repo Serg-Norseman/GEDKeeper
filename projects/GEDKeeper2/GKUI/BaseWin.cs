@@ -31,14 +31,11 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Lists;
-using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
-using GKUI.Engine;
 using GKUI.Forms;
 
 namespace GKUI
@@ -659,154 +656,6 @@ namespace GKUI
             }
         }
 
-        private GEDCOMFamilyRecord GetFamilyBySpouse(GEDCOMIndividualRecord newParent)
-        {
-            GEDCOMFamilyRecord result = null;
-
-            int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMRecord rec = fTree[i];
-
-                if (rec.RecordType == GEDCOMRecordType.rtFamily)
-                {
-                    GEDCOMFamilyRecord fam = (GEDCOMFamilyRecord) rec;
-                    GEDCOMIndividualRecord husb = fam.GetHusband();
-                    GEDCOMIndividualRecord wife = fam.GetWife();
-                    if (husb == newParent || wife == newParent)
-                    {
-                        string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
-                        if (AppHub.StdDialogs.ShowQuestionYN(msg) == true)
-                        {
-                            result = fam;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent)
-        {
-            GEDCOMFamilyRecord result = null;
-
-            if (iChild != null)
-            {
-                if (iChild.ChildToFamilyLinks.Count != 0)
-                {
-                    result = iChild.ChildToFamilyLinks[0].Family;
-                }
-                else
-                {
-                    if (canCreate)
-                    {
-                        GEDCOMFamilyRecord fam = GetFamilyBySpouse(newParent);
-                        if (fam == null)
-                        {
-                            fam = fTree.CreateFamily();
-                        }
-                        fam.AddChild(iChild);
-                        result = fam;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse)
-        {
-            if (spouse == null)
-                throw new ArgumentNullException("spouse");
-
-            GEDCOMSex sex = spouse.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
-            {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-                return null;
-            }
-
-            GEDCOMFamilyRecord family = fTree.CreateFamily();
-            family.AddSpouse(spouse);
-            return family;
-        }
-
-        public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex)
-        {
-            GEDCOMIndividualRecord resultChild = null;
-
-            if (parent != null)
-            {
-                if (parent.SpouseToFamilyLinks.Count > 1)
-                {
-                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
-                }
-                else
-                {
-                    GEDCOMFamilyRecord family;
-
-                    if (parent.SpouseToFamilyLinks.Count == 0)
-                    {
-                        //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
-
-                        family = AddFamilyForSpouse(parent);
-                        if (family == null) {
-                            return null;
-                        }
-                    } else {
-                        family = parent.SpouseToFamilyLinks[0].Family;
-                    }
-
-                    GEDCOMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
-
-                    if (child != null && family.AddChild(child))
-                    {
-                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
-                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        ImportNames(child);
-
-                        resultChild = child;
-                    }
-                }
-            }
-
-            return resultChild;
-        }
-
-        public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            GEDCOMSex needSex;
-            switch (iRec.Sex)
-            {
-                case GEDCOMSex.svMale:
-                    needSex = GEDCOMSex.svFemale;
-                    break;
-
-                case GEDCOMSex.svFemale:
-                    needSex = GEDCOMSex.svMale;
-                    break;
-
-                default:
-                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-                    return null;
-            }
-
-            GEDCOMIndividualRecord target = null;
-            TargetMode targetMode = TargetMode.tmNone;
-            if (needSex == GEDCOMSex.svFemale) {
-                target = iRec;
-                targetMode = TargetMode.tmWife;
-            }
-
-            GEDCOMIndividualRecord result = SelectPerson(target, targetMode, needSex);
-            return result;
-        }
-
         public void UpdateListsSettings()
         {
             IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
@@ -859,92 +708,6 @@ namespace GKUI
             }
 
             MainWin.Instance.NotifyRecord(this, record, action);
-        }
-
-        public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
-        {
-            GEDCOMFamilyRecord result;
-
-            try
-            {
-                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
-                {
-                    dlg.Target = target;
-                    dlg.NeedSex = GEDCOMSex.svNone;
-                    dlg.TargetMode = TargetMode.tmChildToFamily;
-                    dlg.Mode = GEDCOMRecordType.rtFamily;
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
-                        result = (dlg.ResultRecord as GEDCOMFamilyRecord);
-                    } else {
-                        result = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Host.LogWrite("BaseWin.SelectFamily(): " + ex.Message);
-                result = null;
-            }
-
-            return result;
-        }
-
-        public GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
-        {
-            GEDCOMIndividualRecord result;
-
-            try
-            {
-                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
-                {
-                    dlg.Target = target;
-                    dlg.NeedSex = needSex;
-                    dlg.TargetMode = targetMode;
-                    dlg.Mode = GEDCOMRecordType.rtIndividual;
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
-                        result = (dlg.ResultRecord as GEDCOMIndividualRecord);
-                    } else {
-                        result = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Host.LogWrite("BaseWin.SelectPerson(): " + ex.Message);
-                result = null;
-            }
-
-            return result;
-        }
-
-        public GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args)
-        {
-            GEDCOMRecord result;
-
-            try
-            {
-                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
-                {
-                    dlg.Mode = mode;
-
-                    if (args != null && args.Length > 0) {
-                        dlg.txtFastFilter.Text = (args[0] as string);
-                    }
-
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
-                        result = dlg.ResultRecord;
-                    } else {
-                        result = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Host.LogWrite("BaseWin.SelectRecord(): " + ex.Message);
-                result = null;
-            }
-
-            return result;
         }
 
         public bool AllowFilter()
@@ -1102,122 +865,8 @@ namespace GKUI
 
         #endregion
 
-        #region Name and sex functions
-
-        // may be move to host (MainWin)?
-        public void ImportNames(GEDCOMIndividualRecord iRec)
-        {
-            if (MainWin.Instance == null) return;
-
-            INamesTable namesTable = MainWin.Instance.NamesTable;
-            if (namesTable == null) return;
-
-            namesTable.ImportNames(iRec);
-        }
-
-        public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
-        {
-            ICulture culture = fContext.Culture;
-            if (!culture.HasPatronymic()) return string.Empty;
-
-            string result = "";
-
-            INamesTable namesTable = MainWin.Instance.NamesTable;
-
-            NameEntry n = namesTable.FindName(name);
-            if (n == null) {
-                if (!confirm) {
-                    return result;
-                }
-
-                n = namesTable.AddName(name);
-            }
-
-            switch (sex) {
-                case GEDCOMSex.svMale:
-                    result = n.M_Patronymic;
-                    break;
-
-                case GEDCOMSex.svFemale:
-                    result = n.F_Patronymic;
-                    break;
-            }
-            
-            if (result == "") {
-                if (!confirm) {
-                    return result;
-                }
-
-                ModifyName(ref n);
-            }
-
-            switch (sex) {
-                    case GEDCOMSex.svMale: {
-                        result = n.M_Patronymic;
-                        break;
-                    }
-                    case GEDCOMSex.svFemale: {
-                        result = n.F_Patronymic;
-                        break;
-                    }
-            }
-            
-            return result;
-        }
-
-        public GEDCOMSex DefineSex(string iName, string iPatr)
-        {
-            //ICulture culture = fContext.Culture;
-            INamesTable namesTable = MainWin.Instance.NamesTable;
-
-            GEDCOMSex result = namesTable.GetSexByName(iName);
-
-            if (result == GEDCOMSex.svNone)
-            {
-                using (SexCheckDlg dlg = new SexCheckDlg())
-                {
-                    dlg.IndividualName = iName + " " + iPatr;
-                    result = fContext.Culture.GetSex(iName, iPatr, false);
-
-                    dlg.Sex = result;
-                    if (dlg.ShowDialog() == DialogResult.OK)
-                    {
-                        result = dlg.Sex;
-
-                        if (result != GEDCOMSex.svNone)
-                        {
-                            namesTable.SetNameSex(iName, result);
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public void CheckPersonSex(GEDCOMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            try {
-                fContext.BeginUpdate();
-
-                if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
-                {
-                    string fFam, fName, fPatr;
-                    GKUtils.GetNameParts(iRec, out fFam, out fName, out fPatr);
-                    iRec.Sex = DefineSex(fName, fPatr);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-        }
-
-        #endregion
-
         #region ILocalization implementation
-        
+
         void ILocalization.SetLang()
         {
             tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
@@ -1237,7 +886,7 @@ namespace GKUI
             miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
             miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
         }
-        
+
         #endregion
 
         #region IProgressController implementation
@@ -1432,7 +1081,7 @@ namespace GKUI
                 case GEDCOMRecordType.rtIndividual:
                     {
                         GEDCOMIndividualRecord indivRec = null;
-                        result = ModifyPerson(ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
+                        result = AppHub.BaseController.ModifyIndividual(this, ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
                         rec = indivRec;
                         break;
                     }
@@ -1440,70 +1089,70 @@ namespace GKUI
                 case GEDCOMRecordType.rtFamily:
                     {
                         GEDCOMFamilyRecord fam = null;
-                        result = ModifyFamily(ref fam, FamilyTarget.None, null);
+                        result = AppHub.BaseController.ModifyFamily(this, ref fam, FamilyTarget.None, null);
                         rec = fam;
                         break;
                     }
                 case GEDCOMRecordType.rtNote:
                     {
                         GEDCOMNoteRecord note = null;
-                        result = ModifyNote(ref note);
+                        result = AppHub.BaseController.ModifyNote(this, ref note);
                         rec = note;
                         break;
                     }
                 case GEDCOMRecordType.rtMultimedia:
                     {
                         GEDCOMMultimediaRecord mmRec = null;
-                        result = ModifyMedia(ref mmRec);
+                        result = AppHub.BaseController.ModifyMedia(this, ref mmRec);
                         rec = mmRec;
                         break;
                     }
                 case GEDCOMRecordType.rtSource:
                     {
                         GEDCOMSourceRecord src = null;
-                        result = ModifySource(ref src);
+                        result = AppHub.BaseController.ModifySource(this, ref src);
                         rec = src;
                         break;
                     }
                 case GEDCOMRecordType.rtRepository:
                     {
                         GEDCOMRepositoryRecord rep = null;
-                        result = ModifyRepository(ref rep);
+                        result = AppHub.BaseController.ModifyRepository(this, ref rep);
                         rec = rep;
                         break;
                     }
                 case GEDCOMRecordType.rtGroup:
                     {
                         GEDCOMGroupRecord grp = null;
-                        result = ModifyGroup(ref grp);
+                        result = AppHub.BaseController.ModifyGroup(this, ref grp);
                         rec = grp;
                         break;
                     }
                 case GEDCOMRecordType.rtResearch:
                     {
                         GEDCOMResearchRecord rsr = null;
-                        result = ModifyResearch(ref rsr);
+                        result = AppHub.BaseController.ModifyResearch(this, ref rsr);
                         rec = rsr;
                         break;
                     }
                 case GEDCOMRecordType.rtTask:
                     {
                         GEDCOMTaskRecord tsk = null;
-                        result = ModifyTask(ref tsk);
+                        result = AppHub.BaseController.ModifyTask(this, ref tsk);
                         rec = tsk;
                         break;
                     }
                 case GEDCOMRecordType.rtCommunication:
                     {
                         GEDCOMCommunicationRecord comm = null;
-                        result = ModifyCommunication(ref comm);
+                        result = AppHub.BaseController.ModifyCommunication(this, ref comm);
                         rec = comm;
                         break;
                     }
                 case GEDCOMRecordType.rtLocation:
                     {
                         GEDCOMLocationRecord loc = null;
-                        result = ModifyLocation(ref loc);
+                        result = AppHub.BaseController.ModifyLocation(this, ref loc);
                         rec = loc;
                         break;
                     }
@@ -1615,57 +1264,57 @@ namespace GKUI
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
                     GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                    result = ModifyPerson(ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    result = AppHub.BaseController.ModifyIndividual(this, ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
                     GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-                    result = ModifyFamily(ref fam, FamilyTarget.None, null);
+                    result = AppHub.BaseController.ModifyFamily(this, ref fam, FamilyTarget.None, null);
                     break;
 
                 case GEDCOMRecordType.rtNote:
                     GEDCOMNoteRecord note = rec as GEDCOMNoteRecord;
-                    result = ModifyNote(ref note);
+                    result = AppHub.BaseController.ModifyNote(this, ref note);
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
                     GEDCOMMultimediaRecord mmRec = rec as GEDCOMMultimediaRecord;
-                    result = ModifyMedia(ref mmRec);
+                    result = AppHub.BaseController.ModifyMedia(this, ref mmRec);
                     break;
 
                 case GEDCOMRecordType.rtSource:
                     GEDCOMSourceRecord src = rec as GEDCOMSourceRecord;
-                    result = ModifySource(ref src);
+                    result = AppHub.BaseController.ModifySource(this, ref src);
                     break;
 
                 case GEDCOMRecordType.rtRepository:
                     GEDCOMRepositoryRecord rep = rec as GEDCOMRepositoryRecord;
-                    result = ModifyRepository(ref rep);
+                    result = AppHub.BaseController.ModifyRepository(this, ref rep);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
                     GEDCOMGroupRecord grp = rec as GEDCOMGroupRecord;
-                    result = ModifyGroup(ref grp);
+                    result = AppHub.BaseController.ModifyGroup(this, ref grp);
                     break;
 
                 case GEDCOMRecordType.rtResearch:
                     GEDCOMResearchRecord rsr = rec as GEDCOMResearchRecord;
-                    result = ModifyResearch(ref rsr);
+                    result = AppHub.BaseController.ModifyResearch(this, ref rsr);
                     break;
 
                 case GEDCOMRecordType.rtTask:
                     GEDCOMTaskRecord tsk = rec as GEDCOMTaskRecord;
-                    result = ModifyTask(ref tsk);
+                    result = AppHub.BaseController.ModifyTask(this, ref tsk);
                     break;
 
                 case GEDCOMRecordType.rtCommunication:
                     GEDCOMCommunicationRecord comm = rec as GEDCOMCommunicationRecord;
-                    result = ModifyCommunication(ref comm);
+                    result = AppHub.BaseController.ModifyCommunication(this, ref comm);
                     break;
 
                 case GEDCOMRecordType.rtLocation:
                     GEDCOMLocationRecord loc = rec as GEDCOMLocationRecord;
-                    result = ModifyLocation(ref loc);
+                    result = AppHub.BaseController.ModifyLocation(this, ref loc);
                     break;
             }
 
@@ -1866,577 +1515,6 @@ namespace GKUI
             if (!result) {
                 // message, for exclude of duplication
                 AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
-            }
-
-            return result;
-        }
-
-        public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (MediaEditDlg dlg = new MediaEditDlg(this))
-                {
-                    bool exists = mediaRec != null;
-                    if (!exists) {
-                        mediaRec = new GEDCOMMultimediaRecord(fTree, fTree, "", "");
-                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(fTree, mediaRec, "", ""));
-                        mediaRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(mediaRec);
-
-                        dlg.MediaRec = mediaRec;
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(mediaRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(mediaRec);
-                        } else {
-                            mediaRec.Dispose();
-                            mediaRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyNote(ref GEDCOMNoteRecord noteRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                bool exists = noteRec != null;
-                if (!exists) {
-                    noteRec = new GEDCOMNoteRecord(fTree, fTree, "", "");
-                    noteRec.InitNew();
-                }
-
-                try {
-                    LockRecord(noteRec);
-
-                    if (GlobalOptions.Instance.UseExtendedNotes) {
-                        using (var dlg = new NoteEditDlgEx(this))
-                        {
-                            dlg.NoteRecord = noteRec;
-                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                        }
-                    } else {
-                        using (var dlg = new NoteEditDlg(this))
-                        {
-                            dlg.NoteRecord = noteRec;
-                            result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                        }
-                    }
-                } finally {
-                    UnlockRecord(noteRec);
-                }
-
-                if (!exists) {
-                    if (result) {
-                        fTree.AddRecord(noteRec);
-                    } else {
-                        noteRec.Dispose();
-                        noteRec = null;
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifySource(ref GEDCOMSourceRecord sourceRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (SourceEditDlg fmSrcEdit = new SourceEditDlg(this))
-                {
-                    bool exists = sourceRec != null;
-                    if (!exists) {
-                        sourceRec = new GEDCOMSourceRecord(fTree, fTree, "", "");
-                        sourceRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(sourceRec);
-
-                        fmSrcEdit.SourceRecord = sourceRec;
-                        result = (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(sourceRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(sourceRec);
-                        } else {
-                            sourceRec.Dispose();
-                            sourceRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifySourceCitation(ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (SourceCitEditDlg fmSrcCitEdit = new SourceCitEditDlg(this))
-                {
-                    bool exists = cit != null;
-                    if (!exists) {
-                        cit = new GEDCOMSourceCitation(fTree, _struct as GEDCOMObject, "", "");
-                    }
-
-                    fmSrcCitEdit.SourceCitation = cit;
-                    result = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false) == DialogResult.OK;
-
-                    if (!exists) {
-                        if (result) {
-                            //_struct.SourceCitations.Add(cit);
-                            result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GEDCOMObject)_struct, cit);
-                        } else {
-                            cit.Dispose();
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyRepository(ref GEDCOMRepositoryRecord repRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (RepositoryEditDlg fmRepEdit = new RepositoryEditDlg(this))
-                {
-                    bool exists = repRec != null;
-                    if (!exists) {
-                        repRec = new GEDCOMRepositoryRecord(fTree, fTree, "", "");
-                        repRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(repRec);
-
-                        fmRepEdit.Repository = repRec;
-                        result = MainWin.Instance.ShowModalEx(fmRepEdit, false) == DialogResult.OK;
-                    } finally {
-                        UnlockRecord(repRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(repRec);
-                        } else {
-                            repRec.Dispose();
-                            repRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyGroup(ref GEDCOMGroupRecord groupRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (GroupEditDlg fmGrpEdit = new GroupEditDlg(this))
-                {
-                    bool exists = groupRec != null;
-                    if (!exists) {
-                        groupRec = new GEDCOMGroupRecord(fTree, fTree, "", "");
-                        groupRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(groupRec);
-
-                        fmGrpEdit.Group = groupRec;
-                        result = (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(groupRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(groupRec);
-                        } else {
-                            groupRec.Dispose();
-                            groupRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyResearch(ref GEDCOMResearchRecord researchRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (ResearchEditDlg fmResEdit = new ResearchEditDlg(this))
-                {
-                    bool exists = researchRec != null;
-                    if (!exists) {
-                        researchRec = new GEDCOMResearchRecord(fTree, fTree, "", "");
-                        researchRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(researchRec);
-
-                        fmResEdit.Research = researchRec;
-                        result = MainWin.Instance.ShowModalEx(fmResEdit, false) == DialogResult.OK;
-                    } finally {
-                        UnlockRecord(researchRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(researchRec);
-                        } else {
-                            researchRec.Dispose();
-                            researchRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyTask(ref GEDCOMTaskRecord taskRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (TaskEditDlg fmTaskEdit = new TaskEditDlg(this))
-                {
-                    bool exists = taskRec != null;
-                    if (!exists) {
-                        taskRec = new GEDCOMTaskRecord(fTree, fTree, "", "");
-                        taskRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(taskRec);
-
-                        fmTaskEdit.Task = taskRec;
-                        result = MainWin.Instance.ShowModalEx(fmTaskEdit, false) == DialogResult.OK;
-                    } finally {
-                        UnlockRecord(taskRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(taskRec);
-                        } else {
-                            taskRec.Dispose();
-                            taskRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyCommunication(ref GEDCOMCommunicationRecord commRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (CommunicationEditDlg fmCorrEdit = new CommunicationEditDlg(this))
-                {
-                    bool exists = commRec != null;
-                    if (!exists) {
-                        commRec = new GEDCOMCommunicationRecord(fTree, fTree, "", "");
-                        commRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(commRec);
-
-                        fmCorrEdit.Communication = commRec;
-                        result = MainWin.Instance.ShowModalEx(fmCorrEdit, false) == DialogResult.OK;
-                    } finally {
-                        UnlockRecord(commRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(commRec);
-                        } else {
-                            commRec.Dispose();
-                            commRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyLocation(ref GEDCOMLocationRecord locRec)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (LocationEditDlg fmLocEdit = new LocationEditDlg(this))
-                {
-                    bool exists = locRec != null;
-                    if (!exists) {
-                        locRec = new GEDCOMLocationRecord(fTree, fTree, "", "");
-                        locRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(locRec);
-
-                        fmLocEdit.LocationRecord = locRec;
-                        result = MainWin.Instance.ShowModalEx(fmLocEdit, false) == DialogResult.OK;
-                    } finally {
-                        UnlockRecord(locRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(locRec);
-                        } else {
-                            locRec.Dispose();
-                            locRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyName(ref NameEntry nameEntry)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (NameEditDlg dlg = new NameEditDlg(this)) {
-                    dlg.IName = nameEntry;
-                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        private void PostProcessPerson(GEDCOMIndividualRecord indivRec)
-        {
-            ImportNames(indivRec);
-
-            IndividualListFilter iFilter = (IndividualListFilter)ListPersons.ListMan.Filter;
-
-            if (iFilter.SourceMode == FilterGroupMode.Selected)
-            {
-                GEDCOMSourceRecord src = fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                if (src != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == true)
-                {
-                    indivRec.AddSource(src, "", 0);
-                }
-            }
-
-            if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
-            {
-                GEDCOMGroupRecord grp = fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                if (grp != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == true)
-                {
-                    grp.AddMember(indivRec);
-                }
-            }
-        }
-
-        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec,
-                                 GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (PersonEditDlg dlg = new PersonEditDlg(this)) {
-                    bool exists = (indivRec != null);
-                    if (!exists) {
-                        indivRec = new GEDCOMIndividualRecord(fTree, fTree, "", "");
-                        indivRec.InitNew();
-
-                        indivRec.AddPersonalName(new GEDCOMPersonalName(fTree, indivRec, "", ""));
-                        fContext.CreateEventEx(indivRec, "BIRT", "", "");
-                    }
-
-                    try {
-                        LockRecord(indivRec);
-
-                        dlg.Person = indivRec;
-
-                        if (targetMode != TargetMode.tmNone) {
-                            if (needSex == GEDCOMSex.svMale || needSex == GEDCOMSex.svFemale) {
-                                dlg.cmbSex.SelectedIndex = (int)needSex;
-                            }
-                            dlg.TargetMode = targetMode;
-                            dlg.Target = target;
-                        }
-
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(indivRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            PostProcessPerson(indivRec);
-
-                            fTree.AddRecord(indivRec);
-                        } else {
-                            GEDCOMUtils.CleanIndividual(indivRec);
-                            indivRec.Dispose();
-                            indivRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget targetType, GEDCOMIndividualRecord target)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                if (targetType == FamilyTarget.Spouse && target != null) {
-                    GEDCOMSex sex = target.Sex;
-                    if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-                        return false;
-                    }
-                }
-
-                using (FamilyEditDlg dlg = new FamilyEditDlg(this)) {
-                    bool exists = (familyRec != null);
-                    if (!exists) {
-                        familyRec = new GEDCOMFamilyRecord(fTree, fTree, "", "");
-                        familyRec.InitNew();
-                    }
-
-                    try {
-                        LockRecord(familyRec);
-
-                        dlg.Family = familyRec;
-
-                        if (targetType != FamilyTarget.None && target != null) {
-                            dlg.SetTarget(targetType, target);
-                        }
-
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                    } finally {
-                        UnlockRecord(familyRec);
-                    }
-
-                    if (!exists) {
-                        if (result) {
-                            fTree.AddRecord(familyRec);
-                        } else {
-                            GEDCOMUtils.CleanFamily(familyRec);
-                            familyRec.Dispose();
-                            familyRec = null;
-                        }
-                    }
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public bool ModifyAddress(GEDCOMAddress address)
-        {
-            bool result;
-
-            try {
-                fContext.BeginUpdate();
-
-                using (AddressEditDlg dlg = new AddressEditDlg(this)) {
-                    dlg.Address = address;
-                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
-                }
-            } finally {
-                fContext.EndUpdate();
             }
 
             return result;

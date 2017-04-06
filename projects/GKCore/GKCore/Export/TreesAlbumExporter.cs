@@ -25,7 +25,6 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Engine;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 

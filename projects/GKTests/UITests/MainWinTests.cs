@@ -57,7 +57,13 @@ namespace GKTests.UITests
         public override void Setup()
         {
             base.Setup();
+
+            WinFormsBootstrapper.Configure(AppHub.Container);
+
             fMainWin = new MainWin();
+
+            AppHub.MainWindow = fMainWin;
+
             fMainWin.Show();
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
@@ -71,8 +77,6 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
-            WinFormsBootstrapper.Configure(AppHub.Container);
-
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
@@ -279,31 +283,31 @@ namespace GKTests.UITests
             Assert.AreEqual(ShieldState.None, baseWin.ShieldState, stage + ".7.2");
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.SelectSpouseFor(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.SelectSpouseFor(baseWin, null); });
             baseWin.RecordNotify(null, RecordAction.raAdd);
 
             IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, baseWin.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, baseWin.AddChildForParent(null, GEDCOMSex.svNone));
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.AddFamilyForSpouse(null); });
+            Assert.AreEqual(null, AppHub.BaseController.GetChildFamily(baseWin.Tree, null, false, null));
+            Assert.AreEqual(null, AppHub.BaseController.AddChildForParent(baseWin, null, GEDCOMSex.svNone));
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.AddFamilyForSpouse(baseWin.Tree, null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.CollectTips(null); });
             baseWin.CollectTips(new StringList());
 
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.CheckPersonSex(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.CheckPersonSex(baseWin.Context, null); });
 
             baseWin.ChangeRecord(null);
 
             baseWin.ApplyFilter();
 
             // default lang for tests is English
-            string patr = baseWin.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
+            string patr = AppHub.BaseController.DefinePatronymic(baseWin.Context, "Ivan", GEDCOMSex.svMale, false);
             Assert.AreEqual("", patr);
 
             ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_Accept_Handler;
-            GEDCOMSex sex = baseWin.DefineSex("Ivan", "Ivanovich");
+            GEDCOMSex sex = AppHub.BaseController.DefineSex(baseWin.Context, "Ivan", "Ivanovich");
             Assert.AreEqual(GEDCOMSex.svMale, sex);
         }
 
@@ -338,7 +342,7 @@ namespace GKTests.UITests
             Assert.IsNotNull(baseWin);
 
             ModalFormHandler = MessageBox_OkHandler;
-            host.ShowWarning("test warn");
+            AppHub.StdDialogs.ShowWarning("test warn");
 
             #if !__MonoCS__
             Assert.IsFalse(host.IsUnix());

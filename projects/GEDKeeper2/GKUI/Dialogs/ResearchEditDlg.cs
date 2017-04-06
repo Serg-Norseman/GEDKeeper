@@ -29,7 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class ResearchEditDlg : EditorDialog
+    public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         private readonly GKSheetList fTasksList;
         private readonly GKSheetList fCommunicationsList;
@@ -86,7 +86,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public ResearchEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public ResearchEditDlg()
         {
             InitializeComponent();
 
@@ -133,7 +133,7 @@ namespace GKUI.Dialogs
             fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
 
             SetLang();
         }
@@ -164,13 +164,13 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    task = fBase.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
+                    task = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
                     //res = fResearch.AddTask(task);
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, fResearch, task);
                     break;
 
                 case RecordAction.raEdit:
-                    res = (task != null && fBase.ModifyTask(ref task));
+                    res = (task != null && AppHub.BaseController.ModifyTask(fBase, ref task));
                     break;
 
                 case RecordAction.raDelete:
@@ -204,13 +204,13 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    comm = fBase.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
+                    comm = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
                     //res = fResearch.AddCommunication(comm);
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, fResearch, comm);
                     break;
 
                 case RecordAction.raEdit:
-                    res = (comm != null && fBase.ModifyCommunication(ref comm));
+                    res = (comm != null && AppHub.BaseController.ModifyCommunication(fBase, ref comm));
                     break;
 
                 case RecordAction.raDelete:
@@ -244,7 +244,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    group = fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    group = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     //res = fResearch.AddGroup(group);
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, fResearch, group);
                     break;
@@ -361,6 +361,18 @@ namespace GKUI.Dialogs
             {
                 fBase.Host.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

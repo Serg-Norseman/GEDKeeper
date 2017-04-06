@@ -38,7 +38,6 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKCore
 {
@@ -881,7 +880,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
-                        CopyFile(fileName, targetFn, false);
+                        CopyFile(fileName, targetFn, false, fViewer);
                     }
                     catch (IOException)
                     {
@@ -899,18 +898,18 @@ namespace GKCore
             return result;
         }
 
-        private void CopyFile(string sourceFileName, string destFileName, bool overwrite)
+        private void CopyFile(string sourceFileName, string destFileName, bool overwrite, IProgressController progress)
         {
             #if FILECOPY_EX
 
             try {
-                fViewer.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
+                progress.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
 
                 var source = new FileInfo(sourceFileName);
                 var target = new FileInfo(destFileName);
-                GKUtils.CopyFile(source, target, fViewer);
+                GKUtils.CopyFile(source, target, progress);
             } finally {
-                fViewer.ProgressDone();
+                progress.ProgressDone();
             }
 
             #else

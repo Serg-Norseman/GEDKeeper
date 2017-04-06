@@ -33,7 +33,6 @@ using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKCore
 {

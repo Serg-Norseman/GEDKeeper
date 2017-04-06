@@ -33,5 +33,7 @@ namespace GKCore.Interfaces
         void SetName(string name, string patronymic, GEDCOMSex sex);
         void SetNameSex(string name, GEDCOMSex sex);
         void ImportNames(GEDCOMIndividualRecord iRec);
+        void LoadFromFile(string fileName);
+        void SaveToFile(string fileName);
     }
 }

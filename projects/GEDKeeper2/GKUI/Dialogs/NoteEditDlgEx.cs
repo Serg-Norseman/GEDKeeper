@@ -25,28 +25,22 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class NoteEditDlgEx : Form, IBaseEditor
+    public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
-        private readonly IBaseWindow fBase;
         private GEDCOMNoteRecord fNoteRecord;
 
         public GEDCOMNoteRecord NoteRecord
         {
             get { return fNoteRecord; }
             set { SetNoteRecord(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void SetNoteRecord(GEDCOMNoteRecord value)
@@ -82,15 +76,13 @@ namespace GKUI.Dialogs
             }
         }
 
-        public NoteEditDlgEx(IBaseWindow baseWin)
+        public NoteEditDlgEx()
         {
             InitializeComponent();
             FillSizes();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -179,6 +171,16 @@ namespace GKUI.Dialogs
 
             string value = item.Tag.ToString();
             txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

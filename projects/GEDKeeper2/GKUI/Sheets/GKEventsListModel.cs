@@ -130,8 +130,10 @@ namespace GKUI.Sheets
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (EventEditDlg dlgEventEdit = new EventEditDlg(fBaseWin))
+                        using (EventEditDlg dlgEventEdit = new EventEditDlg())
                         {
+                            dlgEventEdit.InitDialog(fBaseWin);
+
                             bool exists = (evt != null);
 
                             GEDCOMCustomEvent newEvent;

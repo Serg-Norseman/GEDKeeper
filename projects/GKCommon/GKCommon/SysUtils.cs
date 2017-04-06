@@ -250,17 +250,6 @@ namespace GKCommon
             return SingleOrDefault(OfTypeIterator((T[])attributes));
         }
 
-        public static void GetAssemblyVersion(Assembly assembly, out string copyright, out string version)
-        {
-            copyright = "";
-            version = "";
-
-            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            if (attributes.Length != 0) copyright = ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-
-            version = assembly.GetName().Version.ToString();
-        }
-
         #endregion
 
         #region Cross-platform helpers

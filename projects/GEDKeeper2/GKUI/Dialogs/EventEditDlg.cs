@@ -27,6 +27,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Contracts;
 using GKUI.Controls;
 using GKUI.Sheets;
 
@@ -35,7 +36,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class EventEditDlg : EditorDialog
+    public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -50,7 +51,7 @@ namespace GKUI.Dialogs
             set { SetEvent(value); }
         }
 
-        public EventEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public EventEditDlg()
         {
             InitializeComponent();
 
@@ -79,9 +80,9 @@ namespace GKUI.Dialogs
 
             fLocation = null;
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
-            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fMediaList = new GKSheetList(pageMultimedia);
+            fSourcesList = new GKSheetList(pageSources);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Event);
@@ -443,7 +444,7 @@ namespace GKUI.Dialogs
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            fBase.ModifyAddress(fEvent.Address);
+            AppHub.BaseController.ModifyAddress(fBase, fEvent.Address);
         }
 
         private void EditEventPlace_KeyDown(object sender, KeyEventArgs e)
@@ -456,7 +457,7 @@ namespace GKUI.Dialogs
 
         private void btnPlaceAdd_Click(object sender, EventArgs e)
         {
-            fLocation = (fBase.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
+            fLocation = (AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
             ControlsRefresh();
         }
 
@@ -571,6 +572,20 @@ namespace GKUI.Dialogs
 
             btnBC1.Enabled = txtEventDate1.Enabled;
             btnBC2.Enabled = txtEventDate2.Enabled;
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

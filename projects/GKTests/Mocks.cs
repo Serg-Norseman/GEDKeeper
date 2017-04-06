@@ -149,6 +149,7 @@ namespace GKTests.Mocks
         public void SelectRecordByXRef(string xref) { }
         public void Show() { }
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
+        public void ImportNames(GEDCOMIndividualRecord iRec) { }
     }
 
     public class HostMock : IHost
@@ -186,6 +187,7 @@ namespace GKTests.Mocks
 
         public bool IsUnix() { return false; }
         public void ShowWarning(string msg) {}
+        public bool ShowModalX(ICommonDialog form, bool keepModeless) { return false; }
 
         public void SetLang() {}
     }

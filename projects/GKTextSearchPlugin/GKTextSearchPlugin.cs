@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -78,7 +79,7 @@ namespace GKTextSearchPlugin
         public void Execute()
         {
             if (fHost.IsUnix()) {
-                fHost.ShowWarning(@"This function is not supported in Linux");
+                AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 

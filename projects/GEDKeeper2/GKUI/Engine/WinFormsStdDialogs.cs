@@ -22,8 +22,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
+using GKUI.Contracts;
 using GKUI.Controls;
 
 namespace GKUI.Engine

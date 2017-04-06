@@ -20,13 +20,13 @@
 
 using System;
 
-namespace GKUI
+namespace GKCore.Interfaces
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IX
+    public interface ICommonDialog : IDisposable
     {
-        
+        bool ShowModalX();
     }
 }

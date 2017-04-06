@@ -20,12 +20,10 @@
 
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Threading;
 using System.Xml;
 
 using GKCommon;
-using GKUI.Engine;
 
 namespace GKCore
 {

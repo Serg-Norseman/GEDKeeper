@@ -27,10 +27,10 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public class EditorDialog : Form, IBaseEditor
+    public class EditorDialog : Form, ICommonDialog, IBaseEditor
     {
-        protected readonly IBaseWindow fBase;
-        protected readonly ChangeTracker fLocalUndoman;
+        protected IBaseWindow fBase;
+        protected ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
         {
@@ -45,12 +45,6 @@ namespace GKUI.Dialogs
         {
         }
 
-        public EditorDialog(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
-            fLocalUndoman = new ChangeTracker(fBase.Tree);
-        }
-
         protected void CommitChanges()
         {
             fLocalUndoman.Commit();
@@ -59,6 +53,19 @@ namespace GKUI.Dialogs
         protected void RollbackChanges()
         {
             fLocalUndoman.Rollback();
+        }
+
+        public virtual void InitDialog(IBaseWindow baseWin)
+        {
+            fBase = baseWin;
+            if (fBase != null) {
+                fLocalUndoman = new ChangeTracker(fBase.Tree);
+            }
+        }
+
+        public virtual bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

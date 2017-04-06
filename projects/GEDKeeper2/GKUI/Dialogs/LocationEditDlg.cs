@@ -28,6 +28,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 using GKUI.Controls;
 using GKUI.Sheets;
 
@@ -36,7 +37,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class LocationEditDlg : EditorDialog
+    public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
@@ -50,7 +51,7 @@ namespace GKUI.Dialogs
             set { SetLocationRecord(value); }
         }
 
-        public LocationEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public LocationEditDlg()
         {
             InitializeComponent();
 
@@ -63,8 +64,8 @@ namespace GKUI.Dialogs
             fMapBrowser.ShowLines = false;
             panMap.Controls.Add(fMapBrowser);
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fMediaList = new GKSheetList(pageMultimedia);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Location);
@@ -233,6 +234,19 @@ namespace GKUI.Dialogs
             {
                 fMapBrowser.SetCenter(SysUtils.ParseFloat(txtLatitude.Text, 0), SysUtils.ParseFloat(txtLongitude.Text, 0), -1);
             }
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

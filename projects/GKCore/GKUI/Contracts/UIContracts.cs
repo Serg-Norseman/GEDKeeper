@@ -27,7 +27,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 
-namespace GKUI.Engine
+namespace GKUI.Contracts
 {
     /// <summary>
     /// The interface of the class for working with WinForms dialogs.
@@ -93,5 +93,6 @@ namespace GKUI.Engine
     {
         Assembly GetExecutingAssembly();
         Version GetAppVersion();
+        string GetAppCopyright();
     }
 }

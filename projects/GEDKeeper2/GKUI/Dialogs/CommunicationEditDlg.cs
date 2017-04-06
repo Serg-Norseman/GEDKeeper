@@ -25,6 +25,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -32,7 +33,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class CommunicationEditDlg : EditorDialog
+    public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -125,11 +126,11 @@ namespace GKUI.Dialogs
 
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
-            fTempInd = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempInd = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
             txtCorresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
 
-        public CommunicationEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public CommunicationEditDlg()
         {
             InitializeComponent();
 
@@ -144,8 +145,8 @@ namespace GKUI.Dialogs
                 cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fMediaList = new GKSheetList(pageMultimedia);
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -162,6 +163,19 @@ namespace GKUI.Dialogs
 
             txtDir.Items.Clear();
             txtDir.Items.AddRange(new object[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) });
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

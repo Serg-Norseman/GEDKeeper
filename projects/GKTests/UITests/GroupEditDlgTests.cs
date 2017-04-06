@@ -49,7 +49,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new GroupEditDlg(fBase);
+            fDialog = new GroupEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Group = fGroupRecord;
             fDialog.Show();
         }

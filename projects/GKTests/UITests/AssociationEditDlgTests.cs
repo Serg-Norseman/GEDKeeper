@@ -48,7 +48,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
 
-            fDialog = new AssociationEditDlg(fBase);
+            fDialog = new AssociationEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Association = fAssociation;
             fDialog.Show();
         }

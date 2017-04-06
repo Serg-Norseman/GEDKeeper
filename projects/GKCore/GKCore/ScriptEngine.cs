@@ -330,7 +330,7 @@ namespace GKCore
 
         public object gt_select_record(int recType)
         {
-            GEDCOMRecord rec = fBase.SelectRecord((GEDCOMRecordType)recType, null);
+            GEDCOMRecord rec = AppHub.BaseController.SelectRecord(fBase, (GEDCOMRecordType)recType, null);
             return rec;
         }
 
@@ -577,7 +577,7 @@ namespace GKCore
 
         public string gt_define_sex(string name, string patr)
         {
-            GEDCOMSex sx = fBase.DefineSex(name, patr);
+            GEDCOMSex sx = AppHub.BaseController.DefineSex(fBase.Context, name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
@@ -600,7 +600,7 @@ namespace GKCore
         {
             GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[1]) : GEDCOMSex.svNone;
 
-            string childPatronymic = fBase.DefinePatronymic(fatherName, sex, confirm);
+            string childPatronymic = AppHub.BaseController.DefinePatronymic(fBase.Context, fatherName, sex, confirm);
             return childPatronymic;
         }
 

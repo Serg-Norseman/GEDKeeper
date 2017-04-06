@@ -29,7 +29,6 @@ using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKCore.Tools
 {
@@ -364,11 +363,7 @@ namespace GKCore.Tools
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
 
-            // in test mode, these objects don't exist
-            INamesTable namesTable = AppHub.NamesTable;
-            if (namesTable != null) {
-                namesTable.ImportNames(iRec);
-            }
+            AppHub.NamesTable.ImportNames(iRec);
         }
 
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam, ValuesCollection valuesCollection)
@@ -998,7 +993,7 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdPersonSexless:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
-                    baseWin.CheckPersonSex(iRec);
+                    AppHub.BaseController.CheckPersonSex(baseWin.Context, iRec);
                     //this.Base.ChangeRecord(iRec);
                     break;
 

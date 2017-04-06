@@ -31,7 +31,7 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -39,7 +39,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class PersonEditDlg : EditorDialog
+    public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
@@ -128,7 +128,7 @@ namespace GKUI.Dialogs
                 if (fTarget != null)
                 {
                     ICulture culture = fBase.Context.Culture;
-                    INamesTable namesTable = MainWin.Instance.NamesTable;
+                    INamesTable namesTable = AppHub.NamesTable;
 
                     string surname, name, patronymic;
                     GKUtils.GetNameParts(fTarget, out surname, out name, out patronymic);
@@ -450,8 +450,10 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg(fBase))
+                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg())
                     {
+                        fmAstEdit.InitDialog(fBase);
+
                         bool exists = (ast != null);
                         if (!exists) {
                             ast = new GEDCOMAssociation(fBase.Tree, fPerson, "", "");
@@ -531,8 +533,10 @@ namespace GKUI.Dialogs
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (UserRefEditDlg dlg = new UserRefEditDlg(fBase))
+                    using (UserRefEditDlg dlg = new UserRefEditDlg())
                     {
+                        dlg.InitDialog(fBase);
+
                         bool exists = (userRef != null);
                         if (!exists) {
                             userRef = new GEDCOMUserReference(fBase.Tree, fPerson, "", "");
@@ -637,7 +641,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     AcceptTempData();
-                    result = (fBase.ModifyFamily(ref family, FamilyTarget.Spouse, fPerson));
+                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.Spouse, fPerson));
                     if (result) {
                         eArgs.ItemData = family;
                     }
@@ -645,7 +649,7 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raEdit:
                     AcceptTempData();
-                    result = (fBase.ModifyFamily(ref family, FamilyTarget.None, null));
+                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.None, null));
                     break;
 
                 case RecordAction.raDelete:
@@ -746,7 +750,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    groupRec = fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    groupRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
                         //result = groupRec.AddMember(this.fPerson);
@@ -816,8 +820,10 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg(fBase))
+                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg())
                     {
+                        dlg.InitDialog(fBase);
+
                         bool exists = (persName != null);
                         if (!exists) {
                             persName = new GEDCOMPersonalName(fBase.Tree, fPerson, "", "");
@@ -882,21 +888,21 @@ namespace GKUI.Dialogs
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddFather(fBase, fLocalUndoman, fPerson)) {
+            if (AppHub.BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteFather(fBase, fLocalUndoman, fPerson)) {
+            if (AppHub.BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -907,31 +913,21 @@ namespace GKUI.Dialogs
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord mother = fBase.SelectPerson(fPerson, TargetMode.tmChild, GEDCOMSex.svFemale);
-            if (mother == null) return;
-
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, true, mother);
-            if (family != null && family.Wife.Value == null) {
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
+            if (AppHub.BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnMotherDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)) == false) return;
-
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
-            if (family == null) return;
-
-            GEDCOMIndividualRecord mother = family.GetWife();
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
-            UpdateControls();
+            if (AppHub.BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
         }
 
         private void btnMotherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -944,7 +940,7 @@ namespace GKUI.Dialogs
         {
             AcceptTempData();
 
-            GEDCOMFamilyRecord family = fBase.SelectFamily(fPerson);
+            GEDCOMFamilyRecord family = AppHub.BaseController.SelectFamily(fBase, fPerson);
             if (family == null) return;
 
             if (family.IndexOfChild(fPerson) < 0)
@@ -959,8 +955,8 @@ namespace GKUI.Dialogs
         {
             AcceptTempData();
 
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
-            if (family != null && fBase.ModifyFamily(ref family, FamilyTarget.None, null))
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
+            if (family != null && AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.None, null))
             {
                 UpdateControls();
             }
@@ -970,7 +966,7 @@ namespace GKUI.Dialogs
         {
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
 
-            GEDCOMFamilyRecord family = fBase.GetChildFamily(fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
             if (family == null) return;
 
             //family.RemoveChild(this.fPerson);
@@ -985,7 +981,7 @@ namespace GKUI.Dialogs
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMMultimediaRecord mmRec = fBase.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
+            GEDCOMMultimediaRecord mmRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
             if (mmRec == null) return;
 
             // remove previous portrait link
@@ -998,7 +994,9 @@ namespace GKUI.Dialogs
             mmLink = fPerson.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg(fBase)) {
+            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg())
+            {
+                selectDlg.InitDialog(fBase);
                 selectDlg.MultimediaLink = mmLink;
                 selectDlg.ShowDialog();
             }
@@ -1032,7 +1030,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PersonEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public void SetNeedSex(GEDCOMSex needSex)
+        {
+            cmbSex.SelectedIndex = (int)needSex;
+        }
+
+        public PersonEditDlg()
         {
             InitializeComponent();
 
@@ -1063,7 +1066,7 @@ namespace GKUI.Dialogs
                 cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
-            fEventsList = new GKSheetList(pageEvents, new GKEventsListModel(fBase, fLocalUndoman, true));
+            fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
             fSpousesList = CreateSpousesSheet(pageSpouses);
@@ -1078,13 +1081,13 @@ namespace GKUI.Dialogs
             fGroupsList = CreateGroupsSheet(pageGroups);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
 
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia);
             fMediaList.SetControlName("fMediaList"); // for purpose of tests
 
-            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
+            fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             fUserRefList = CreateURefsSheet(pageUserRefs);
@@ -1147,6 +1150,21 @@ namespace GKUI.Dialogs
             toolTip1.SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
             toolTip1.SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
             toolTip1.SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fEventsList.ListModel = new GKEventsListModel(fBase, fLocalUndoman, true);
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

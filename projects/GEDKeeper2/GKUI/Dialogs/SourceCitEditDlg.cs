@@ -25,17 +25,16 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class SourceCitEditDlg : Form, IBaseEditor
+    public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
     {
-        private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
 
         private GEDCOMSourceCitation fSourceCitation;
@@ -44,11 +43,6 @@ namespace GKUI.Dialogs
         {
             get { return fSourceCitation; }
             set { SetSourceCitation(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -78,7 +72,7 @@ namespace GKUI.Dialogs
         private void btnSourceAdd_Click(object sender, EventArgs e)
         {
             object[] anArgs = new object[0];
-            GEDCOMSourceRecord src = fBase.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
+            GEDCOMSourceRecord src = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
             if (src == null) return;
             
             fBase.Context.GetSourcesList(fSourcesList);
@@ -144,7 +138,7 @@ namespace GKUI.Dialogs
             base.Dispose(disposing);
         }
 
-        public SourceCitEditDlg(IBaseWindow baseWin)
+        public SourceCitEditDlg()
         {
             InitializeComponent();
 
@@ -152,16 +146,12 @@ namespace GKUI.Dialogs
             btnCancel.Image = GKResources.iBtnCancel;
             btnSourceAdd.Image = GKResources.iRecNew;
 
-            fBase = baseWin;
-
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
             {
                 txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
 
             fSourcesList = new StringList();
-            fBase.Context.GetSourcesList(fSourcesList);
-            RefreshSourcesList("");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -172,6 +162,19 @@ namespace GKUI.Dialogs
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
 
             toolTip1.SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fBase.Context.GetSourcesList(fSourcesList);
+            RefreshSourcesList("");
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

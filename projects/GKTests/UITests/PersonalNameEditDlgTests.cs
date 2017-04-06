@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new PersonalNameEditDlg(fBase);
+            fDialog = new PersonalNameEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.PersonalName = fPersonalName;
             fDialog.Show();
         }

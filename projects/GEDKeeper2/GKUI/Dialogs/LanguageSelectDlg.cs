@@ -24,17 +24,17 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Options;
+using GKUI.Contracts;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class LanguageSelectDlg : Form
+    public partial class LanguageSelectDlg : Form, ILanguageSelectDlg
     {
-        public int SelectedLanguage;
+        public int SelectedLanguage { get; set; }
 
         public LanguageSelectDlg()
         {
@@ -70,6 +70,11 @@ namespace GKUI.Dialogs
                 lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
             AppHub.UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
+        }
+
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

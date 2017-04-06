@@ -74,7 +74,7 @@ namespace GKUI.Sheets
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = AppHub.BaseController.SelectRecord(fBaseWin, GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)dataOwner, noteRec);
                     }
@@ -84,7 +84,7 @@ namespace GKUI.Sheets
                     if (notes != null)
                     {
                         noteRec = notes.Value as GEDCOMNoteRecord;
-                        result = fBaseWin.ModifyNote(ref noteRec);
+                        result = AppHub.BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;
 

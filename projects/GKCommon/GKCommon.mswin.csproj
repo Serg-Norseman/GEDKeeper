@@ -231,6 +231,7 @@
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
     <Compile Include="GKCore\Interfaces\IBaseWindow.cs" />
     <Compile Include="GKCore\Interfaces\IChartWindow.cs" />
+    <Compile Include="GKCore\Interfaces\ICommonDialog.cs" />
     <Compile Include="GKCore\Interfaces\ICulture.cs" />
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
     <Compile Include="GKCore\Interfaces\IListView.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
+    <Compile Include="GKCore\Interfaces\ILogger.cs" />
     <Compile Include="GKCore\Interfaces\INamesTable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />

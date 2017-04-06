@@ -23,7 +23,6 @@ using ExcelLibrary.SpreadSheet;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKCore.Export
 {

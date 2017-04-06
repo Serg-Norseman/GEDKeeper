@@ -47,7 +47,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new ResearchEditDlg(fBase);
+            fDialog = new ResearchEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Research = fResearchRecord;
             fDialog.Show();
         }

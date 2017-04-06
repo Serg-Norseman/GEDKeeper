@@ -20,10 +20,10 @@
 
 using System;
 using GKCommon.IoC;
-using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 
-namespace GKUI.Engine
+namespace GKCore
 {
     /// <summary>
     /// A prototype of the future global controller of UI for the isolation
@@ -32,12 +32,14 @@ namespace GKUI.Engine
     public static class AppHub
     {
         private static readonly IocContainer fIocContainer;
+
         private static IStdDialogs fStdDialogs;
         private static BaseController fBaseController;
         private static IPathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IUIHelper fUIHelper;
         private static IUtilities fUtilities;
+        private static IHost fMainWindow;
 
 
         public static IocContainer Container
@@ -45,32 +47,19 @@ namespace GKUI.Engine
             get { return fIocContainer; }
         }
 
+        #region Direct instances
 
-        public static IStdDialogs StdDialogs
+        public static IHost MainWindow
         {
-            get {
-                if (fStdDialogs == null) {
-                    fStdDialogs = fIocContainer.Resolve<IStdDialogs>();
-                }
-                return fStdDialogs;
-            }
-        }
-
-        public static IUIHelper UIHelper
-        {
-            get {
-                if (fUIHelper == null) {
-                    fUIHelper = fIocContainer.Resolve<IUIHelper>();
-                }
-                return fUIHelper;
-            }
+            get { return fMainWindow; }
+            set { fMainWindow = value; }
         }
 
         public static BaseController BaseController
         {
             get {
                 if (fBaseController == null) {
-                    fBaseController = new BaseController(StdDialogs);
+                    fBaseController = new BaseController();
                 }
                 return fBaseController;
             }
@@ -96,6 +85,30 @@ namespace GKUI.Engine
             }
         }
 
+        #endregion
+
+        #region UI-dependent instances
+
+        public static IStdDialogs StdDialogs
+        {
+            get {
+                if (fStdDialogs == null) {
+                    fStdDialogs = fIocContainer.Resolve<IStdDialogs>();
+                }
+                return fStdDialogs;
+            }
+        }
+
+        public static IUIHelper UIHelper
+        {
+            get {
+                if (fUIHelper == null) {
+                    fUIHelper = fIocContainer.Resolve<IUIHelper>();
+                }
+                return fUIHelper;
+            }
+        }
+
         public static IUtilities Utilities
         {
             get {
@@ -106,6 +119,7 @@ namespace GKUI.Engine
             }
         }
 
+        #endregion
 
         static AppHub()
         {

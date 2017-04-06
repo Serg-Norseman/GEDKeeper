@@ -20,9 +20,11 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKUI.Contracts;
 using GKUI.Controls;
 
 namespace GKUI.Dialogs
@@ -30,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class LanguageEditDlg : Form
+    public sealed partial class LanguageEditDlg : Form, ILanguageEditDlg
     {
         private GEDCOMLanguageID fLanguageID;
 
@@ -78,6 +80,11 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("LanguageEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
+        }
+
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

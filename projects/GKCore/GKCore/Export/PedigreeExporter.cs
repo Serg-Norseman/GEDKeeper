@@ -27,7 +27,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKCore.Export
 {

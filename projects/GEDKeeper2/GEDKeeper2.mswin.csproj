@@ -365,8 +365,6 @@
     </Compile>
     <Compile Include="GKUI\Engine\Utilities.cs" />
     <Compile Include="GKUI\Engine\UIHelper.cs" />
-    <Compile Include="GKUI\Engine\WinFormsBootstrapper.cs" />
-    <Compile Include="GKUI\Engine\IocControllerFactory.cs" />
     <Compile Include="GKUI\Engine\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
     <Compile Include="GKUI\Forms\PrintableForm.cs" />
@@ -461,6 +459,7 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinFormsBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

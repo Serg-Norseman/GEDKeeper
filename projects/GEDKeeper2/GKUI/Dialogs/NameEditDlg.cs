@@ -25,15 +25,16 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class NameEditDlg : Form
+    public sealed partial class NameEditDlg : Form, INameEditDlg
     {
-        private readonly IBaseWindow fBase;
+        private IBaseWindow fBase;
         private NameEntry fNameEntry;
 
         public IBaseWindow Base
@@ -91,6 +92,10 @@ namespace GKUI.Dialogs
             }
         }
 
+        public NameEditDlg() : this(null)
+        {
+        }
+
         public NameEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -114,6 +119,16 @@ namespace GKUI.Dialogs
             grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
             lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
+        }
+
+        public void InitDialog(IBaseWindow baseWin)
+        {
+            fBase = baseWin;
+        }
+
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

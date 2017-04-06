@@ -30,7 +30,6 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Dialogs;
-using GKUI.Engine;
 using GKUI.Forms;
 
 namespace GKUI
@@ -282,7 +281,8 @@ namespace GKUI
             if (person.Rec != null) {
                 GEDCOMIndividualRecord iRec = person.Rec;
 
-                if (fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+                if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
+                {
                     UpdateChart();
                 }
             } else {
@@ -292,7 +292,7 @@ namespace GKUI
                 GEDCOMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = fBase.SelectSpouseFor(person.BaseSpouse.Rec);
+                    GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         baseFamily.AddSpouse(iSpouse);
@@ -336,7 +336,8 @@ namespace GKUI
             if (p == null || p.Rec == null) return;
 
             GEDCOMIndividualRecord iRec = p.Rec;
-            if (fBase.ModifyPerson(ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+            if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
+            {
                 UpdateChart();
             }
         }
@@ -375,7 +376,7 @@ namespace GKUI
             if (!familyExist || needParent) {
                 GEDCOMIndividualRecord child = p.Rec;
                 GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Tree.CreateFamily();
-                GEDCOMIndividualRecord parent = fBase.SelectPerson(null, TargetMode.tmParent, needSex);
+                GEDCOMIndividualRecord parent = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmParent, needSex);
                 if (parent != null) {
                     fam.AddSpouse(parent);
                     if (!familyExist)
@@ -402,7 +403,7 @@ namespace GKUI
             if (p == null || p.Rec == null) return;
 
             GEDCOMIndividualRecord iRec = p.Rec;
-            GEDCOMIndividualRecord iSpouse = fBase.SelectSpouseFor(iRec);
+            GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, iRec);
             if (iSpouse == null) return;
 
             GEDCOMFamilyRecord fam = fBase.Tree.CreateFamily();
@@ -416,7 +417,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMIndividualRecord child = fBase.AddChildForParent(p.Rec, needSex);
+            GEDCOMIndividualRecord child = AppHub.BaseController.AddChildForParent(fBase, p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -437,7 +438,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMFamilyRecord fam = fBase.AddFamilyForSpouse(p.Rec);
+            GEDCOMFamilyRecord fam = AppHub.BaseController.AddFamilyForSpouse(fBase.Tree, p.Rec);
             if (fam == null) return;
 
             UpdateChart();

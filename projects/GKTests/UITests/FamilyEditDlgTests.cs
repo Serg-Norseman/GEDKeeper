@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new FamilyEditDlg(fBase);
+            fDialog = new FamilyEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Family = fFamilyRecord;
             fDialog.Show();
         }

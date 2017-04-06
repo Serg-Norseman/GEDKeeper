@@ -49,7 +49,8 @@ namespace GKTests.UITests
             fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
 
             //ExpectModal("CommunicationEditDlg", "DlgHandler");
-            fDialog = new CommunicationEditDlg(fBase);
+            fDialog = new CommunicationEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Communication = fCommunicationRecord;
             //fDialog.ShowDialog();
             fDialog.Show();

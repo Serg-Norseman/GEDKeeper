@@ -24,26 +24,21 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class NoteEditDlg : Form, IBaseEditor
+    public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
-        private readonly IBaseWindow fBase;
         private GEDCOMNoteRecord fNoteRecord;
 
         public GEDCOMNoteRecord NoteRecord
         {
             get { return fNoteRecord; }
             set { SetNoteRecord(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void SetNoteRecord(GEDCOMNoteRecord value)
@@ -79,19 +74,27 @@ namespace GKUI.Dialogs
             }
         }
 
-        public NoteEditDlg(IBaseWindow baseWin)
+        public NoteEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fBase = baseWin;
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_Note);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

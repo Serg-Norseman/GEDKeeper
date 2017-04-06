@@ -26,24 +26,18 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
-    public partial class PersonalNameEditDlg: Form, IBaseEditor
+    public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
-        private readonly IBaseWindow fBase;
-
         private GEDCOMPersonalName fPersonalName;
 
         public GEDCOMPersonalName PersonalName
         {
             get { return fPersonalName; }
             set { SetPersonalName(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
 
@@ -126,14 +120,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PersonalNameEditDlg(IBaseWindow baseWin)
+        public PersonalNameEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)
             {
@@ -157,6 +149,16 @@ namespace GKUI.Dialogs
             lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

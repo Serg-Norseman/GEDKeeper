@@ -92,6 +92,9 @@ namespace GKUI
                 if (tracker.IsFirstInstance) {
                     MainWin mainWin = (MainWin)tracker.Enforcer;
                     mainWin.SetArgs(args);
+
+                    AppHub.MainWindow = mainWin;
+
                     Application.Run(mainWin);
                 } else {
                     tracker.SendMessageToFirstInstance(args);

@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null, "", "");
 
-            fDialog = new EventEditDlg(fBase);
+            fDialog = new EventEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Event = fEvent;
         }
 

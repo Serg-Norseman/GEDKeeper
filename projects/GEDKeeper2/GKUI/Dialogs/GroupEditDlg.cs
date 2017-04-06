@@ -27,7 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class GroupEditDlg : EditorDialog
+    public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
         private readonly GKSheetList fMembersList;
         private readonly GKSheetList fNotesList;
@@ -67,7 +67,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public GroupEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public GroupEditDlg()
         {
             InitializeComponent();
             
@@ -77,8 +77,8 @@ namespace GKUI.Dialogs
             fMembersList = CreateMembersSheet(pageMembers);
             fMembersList.SetControlName("fMembersList"); // for purpose of tests
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fMediaList = new GKSheetList(pageMultimedia);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_WinGroupEdit);
@@ -131,7 +131,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    member = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    member = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     result = (member != null);
                     if (result) {
                         //fGroup.AddMember(member);
@@ -192,6 +192,19 @@ namespace GKUI.Dialogs
             {
                 fBase.Host.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

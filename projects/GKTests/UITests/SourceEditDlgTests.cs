@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new SourceEditDlg(fBase);
+            fDialog = new SourceEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.SourceRecord = fSourceRecord;
             fDialog.Show();
         }

@@ -25,27 +25,21 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class UserRefEditDlg : Form, IBaseEditor
+    public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
-        private readonly IBaseWindow fBase;
-
         private GEDCOMUserReference fUserRef;
 
         public GEDCOMUserReference UserRef
         {
             get { return fUserRef; }
             set { SetUserRef(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void SetUserRef(GEDCOMUserReference value)
@@ -70,14 +64,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public UserRefEditDlg(IBaseWindow baseWin)
+        public UserRefEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
             {
@@ -90,6 +82,16 @@ namespace GKUI.Dialogs
             Text = LangMan.LS(LSID.LSID_WinUserRefEdit);
             lblReference.Text = LangMan.LS(LSID.LSID_Reference);
             lblRefType.Text = LangMan.LS(LSID.LSID_Type);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

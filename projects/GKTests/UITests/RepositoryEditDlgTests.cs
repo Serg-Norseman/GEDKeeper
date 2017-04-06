@@ -45,7 +45,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new RepositoryEditDlg(fBase);
+            fDialog = new RepositoryEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Repository = fRepositoryRecord;
             fDialog.Show();
         }

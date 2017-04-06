@@ -44,7 +44,8 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
 
-            fDialog = new RecordSelectDlg(fBase);
+            fDialog = new RecordSelectDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Show();
         }
 

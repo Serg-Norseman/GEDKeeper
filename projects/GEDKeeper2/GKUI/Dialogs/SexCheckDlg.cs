@@ -22,13 +22,14 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class SexCheckDlg : Form
+    public sealed partial class SexCheckDlg : Form, ISexCheckDlg
     {
         public SexCheckDlg()
         {
@@ -82,6 +83,11 @@ namespace GKUI.Dialogs
                         break;
                 }
             }
+        }
+
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

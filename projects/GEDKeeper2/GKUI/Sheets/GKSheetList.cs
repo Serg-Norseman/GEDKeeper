@@ -276,11 +276,6 @@ namespace GKUI.Sheets
             SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
         }
 
-        public GKSheetList(Control owner, GKListModel listModel) : this(owner)
-        {
-            ListModel = listModel;
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

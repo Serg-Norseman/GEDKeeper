@@ -20,35 +20,26 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class FilePropertiesDlg : Form, IBaseEditor
+    public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
     {
-        private readonly IBaseWindow fBase;
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
-        }
-
-        public FilePropertiesDlg(IBaseWindow baseWin)
+        public FilePropertiesDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
             btnLangEdit.Image = GKResources.iRecEdit;
-
-            fBase = baseWin;
-
-            UpdateControls();
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_MIFileProperties);
@@ -127,6 +118,18 @@ namespace GKUI.Dialogs
                     txtLanguage.Text = GEDCOMLanguage.GetLangName(dlg.LanguageID);
                 }
             }
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            UpdateControls();
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

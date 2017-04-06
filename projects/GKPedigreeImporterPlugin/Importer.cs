@@ -33,6 +33,7 @@ using System.Text;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -450,7 +451,7 @@ namespace GKPedigreeImporterPlugin
             GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
 
             if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
-                fBase.CheckPersonSex(result);
+                AppHub.BaseController.CheckPersonSex(fBase.Context, result);
             }
 
             if (bd != "") SetEvent(result, "BIRT", bd);

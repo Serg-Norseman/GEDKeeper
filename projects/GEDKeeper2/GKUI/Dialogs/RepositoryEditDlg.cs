@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -31,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RepositoryEditDlg : EditorDialog
+    public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
         private readonly GKSheetList fNotesList;
 
@@ -53,7 +54,7 @@ namespace GKUI.Dialogs
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            fBase.ModifyAddress(fRepository.Address);
+            AppHub.BaseController.ModifyAddress(fBase, fRepository.Address);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -84,14 +85,14 @@ namespace GKUI.Dialogs
             }
         }
 
-        public RepositoryEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public RepositoryEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Repository);
@@ -100,6 +101,18 @@ namespace GKUI.Dialogs
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

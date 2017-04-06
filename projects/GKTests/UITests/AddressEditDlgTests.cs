@@ -24,11 +24,12 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKTests.ControlTesters;
 using GKTests.Mocks;
+using GKUI;
 using GKUI.Dialogs;
-using GKUI.Engine;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -58,7 +59,8 @@ namespace GKTests.UITests
             fAddress.AddEmailAddress("test");
             fAddress.AddFaxNumber("test");
 
-            fDialog = new AddressEditDlg(fBase);
+            fDialog = new AddressEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Address = fAddress;
             fDialog.Show();
         }

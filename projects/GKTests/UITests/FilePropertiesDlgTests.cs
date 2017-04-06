@@ -44,7 +44,8 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
 
-            fDialog = new FilePropertiesDlg(fBase);
+            fDialog = new FilePropertiesDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Show();
         }
 

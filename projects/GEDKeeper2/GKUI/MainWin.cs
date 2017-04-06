@@ -55,7 +55,6 @@ namespace GKUI
             public ToolStripMenuItem MenuItem;
         }
 
-        private NamesTable fNamesTable;
         private readonly GlobalOptions fOptions;
         private List<IPlugin> fPlugins;
         private readonly Timer fAutosaveTimer;
@@ -83,11 +82,6 @@ namespace GKUI
         public IGeocoder Geocoder
         {
             get { return GKUtils.CreateGeocoder(fOptions); }
-        }
-
-        public INamesTable NamesTable
-        {
-            get { return fNamesTable; }
         }
 
         public GlobalOptions Options
@@ -150,7 +144,6 @@ namespace GKUI
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNamesTable.Dispose();
                 fOptions.Dispose();
 
                 if (components != null) components.Dispose();
@@ -258,8 +251,7 @@ namespace GKUI
 
                 RestoreWindowState();
 
-                fNamesTable = new NamesTable();
-                fNamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
+                AppHub.NamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
 
                 fPlugins = new List<IPlugin>();
                 LoadPlugins(GKUtils.GetPluginsPath());
@@ -287,8 +279,7 @@ namespace GKUI
                 fOptions.MWinRect = AppHub.UIHelper.GetFormRect(this);
                 fOptions.MWinState = WindowState;
 
-                fNamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
-                fNamesTable.Dispose();
+                AppHub.NamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
 
                 fOptions.SaveToFile(GetAppDataPath() + "GEDKeeper2.ini");
                 fOptions.Dispose();
@@ -595,6 +586,19 @@ namespace GKUI
             }
 
             return form.ShowDialog();
+        }
+
+        public bool ShowModalX(ICommonDialog form, bool keepModeless)
+        {
+            if (form == null) return false;
+
+            if (keepModeless) {
+                #if !__MonoCS__
+                NativeMethods.PostMessage(Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                #endif
+            }
+
+            return form.ShowModalX();
         }
 
         public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
@@ -924,7 +928,9 @@ namespace GKUI
             try {
                 curBase.Context.BeginUpdate();
 
-                using (FilePropertiesDlg dlgFileProps = new FilePropertiesDlg(curBase)) {
+                using (FilePropertiesDlg dlgFileProps = new FilePropertiesDlg())
+                {
+                    dlgFileProps.InitDialog(curBase);
                     ShowModalEx(dlgFileProps, false);
                 }
             } finally {
@@ -1553,11 +1559,6 @@ namespace GKUI
         public bool IsUnix()
         {
             return SysUtils.IsUnix();
-        }
-
-        public void ShowWarning(string msg)
-        {
-            AppHub.StdDialogs.ShowWarning(msg);
         }
 
         public ILangMan CreateLangMan(object sender)

@@ -49,7 +49,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fUserRef = new GEDCOMUserReference(fBase.Context.Tree, null, "", "");
 
-            fDialog = new UserRefEditDlg(fBase);
+            fDialog = new UserRefEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.UserRef = fUserRef;
             fDialog.Show();
         }

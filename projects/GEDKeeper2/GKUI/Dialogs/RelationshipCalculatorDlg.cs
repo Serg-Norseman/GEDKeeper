@@ -28,6 +28,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Tools;
+using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -116,13 +117,13 @@ namespace GKUI.Dialogs
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
             if (iRec != null) SetRec1(iRec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
             if (iRec != null) SetRec2(iRec);
         }
     }

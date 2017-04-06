@@ -84,25 +84,27 @@ namespace GKCore
             if (!File.Exists(fileName)) return;
 
             try {
-                using (StreamReader strd = new StreamReader(fileName, Encoding.UTF8)) {
-                    while (strd.Peek() != -1) {
-                        string line = strd.ReadLine();
-                        if (string.IsNullOrEmpty(line)) continue;
+                using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+                    using (StreamReader reader = GEDCOMUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
+                        while (reader.Peek() != -1) {
+                            string line = reader.ReadLine();
+                            if (string.IsNullOrEmpty(line)) continue;
 
-                        string[] data = line.Trim().Split(';');
-                        string nameKey = data[0];
+                            string[] data = line.Trim().Split(';');
+                            string nameKey = data[0];
 
-                        if (fNames.ContainsKey(nameKey)) {
-                            Logger.LogWrite(string.Format("NamesTable.LoadFromFile.1(): Duplicate name in the table \"{0}\"", nameKey));
-                        } else {
-                            NameEntry nm = new NameEntry();
-                            nm.Name = nameKey;
-                            nm.F_Patronymic = data[1];
-                            nm.M_Patronymic = data[2];
-                            if (data[3] != "") {
-                                nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                            if (fNames.ContainsKey(nameKey)) {
+                                Logger.LogWrite(string.Format("NamesTable.LoadFromFile.1(): Duplicate name in the table \"{0}\"", nameKey));
+                            } else {
+                                NameEntry nm = new NameEntry();
+                                nm.Name = nameKey;
+                                nm.F_Patronymic = data[1];
+                                nm.M_Patronymic = data[2];
+                                if (data[3] != "") {
+                                    nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                                }
+                                fNames.Add(nameKey, nm);
                             }
-                            fNames.Add(nameKey, nm);
                         }
                     }
                 }

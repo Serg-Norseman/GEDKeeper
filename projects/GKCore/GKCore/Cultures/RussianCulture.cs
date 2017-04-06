@@ -22,7 +22,6 @@ using System;
 using Externals.Linguistics;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKCore.Cultures
 {

@@ -27,7 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class SourceEditDlg : EditorDialog
+    public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -67,16 +67,15 @@ namespace GKUI.Dialogs
             ActiveControl = txtShortTitle;
         }
 
-        public SourceEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public SourceEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fMediaList = new GKSheetList(pageMultimedia);
 
             fRepositoriesList = CreateReposSheet(pageRepositories);
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
@@ -136,7 +135,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    GEDCOMRepositoryRecord rep = fBase.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
+                    GEDCOMRepositoryRecord rep = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
                         //this.fSourceRecord.AddRepository(rep);
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, fSourceRecord, rep);
@@ -210,6 +209,19 @@ namespace GKUI.Dialogs
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
             Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), txtShortTitle.Text);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

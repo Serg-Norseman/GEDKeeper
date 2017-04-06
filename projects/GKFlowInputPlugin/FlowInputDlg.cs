@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKFlowInputPlugin
@@ -323,7 +324,7 @@ namespace GKFlowInputPlugin
                     if (!string.IsNullOrEmpty(lnk)) {
                         PersonLink link = GetLinkByName(lnk);
 
-                        GEDCOMSex sx = fBase.DefineSex(nm, pt);
+                        GEDCOMSex sx = AppHub.BaseController.DefineSex(fBase.Context, nm, pt);
                         GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                         if (!string.IsNullOrEmpty(age) && GEDCOMUtils.IsDigits(age)) {

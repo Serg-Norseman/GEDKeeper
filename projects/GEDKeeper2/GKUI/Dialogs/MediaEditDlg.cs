@@ -27,8 +27,8 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Contracts;
 using GKUI.Controls;
-using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -36,7 +36,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MediaEditDlg : EditorDialog
+    public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         private bool fIsNew;
         private GEDCOMMultimediaRecord fMediaRec;
@@ -203,7 +203,7 @@ namespace GKUI.Dialogs
             AppHub.UIHelper.SelectComboItem(cmbStoreType, selectType, true);
         }
 
-        public MediaEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public MediaEditDlg()
         {
             InitializeComponent();
 
@@ -215,8 +215,8 @@ namespace GKUI.Dialogs
                 cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
-            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
+            fSourcesList = new GKSheetList(pageSources);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_RPMultimedia);
@@ -230,6 +230,19 @@ namespace GKUI.Dialogs
             lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
             lblFile.Text = LangMan.LS(LSID.LSID_File);
             btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

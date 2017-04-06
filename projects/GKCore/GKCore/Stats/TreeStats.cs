@@ -27,7 +27,6 @@ using ExcelLibrary.SpreadSheet;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKCore.Stats
 {

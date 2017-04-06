@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new NoteEditDlg(fBase);
+            fDialog = new NoteEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.NoteRecord = fNoteRecord;
             fDialog.Show();
         }

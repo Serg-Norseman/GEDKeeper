@@ -22,7 +22,6 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKUI.Engine;
 
@@ -53,14 +52,11 @@ namespace GKUI.Dialogs
 
         public static void ShowAbout()
         {
-            string copyright, version;
-            SysUtils.GetAssemblyVersion(AppHub.Utilities.GetExecutingAssembly(), out copyright, out version);
-
             using (AboutDlg dlg = new AboutDlg())
             {
                 dlg.lblProduct.Text = GKData.APP_TITLE;
-                dlg.lblVersion.Text = @"Version " + version;
-                dlg.lblCopyright.Text = copyright;
+                dlg.lblVersion.Text = @"Version " + AppHub.Utilities.GetAppVersion();
+                dlg.lblCopyright.Text = AppHub.Utilities.GetAppCopyright();
                 dlg.ShowDialog();
             }
         }

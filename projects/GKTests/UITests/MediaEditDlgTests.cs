@@ -46,7 +46,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new MediaEditDlg(fBase);
+            fDialog = new MediaEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.MediaRec = fMultimediaRecord;
             fDialog.Show();
         }

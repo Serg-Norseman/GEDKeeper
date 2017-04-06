@@ -39,6 +39,7 @@ using GKCore.Stats;
 using GKCore.Tools;
 using GKCore.Types;
 using GKTests.Mocks;
+using GKUI;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Engine;

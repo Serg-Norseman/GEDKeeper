@@ -21,6 +21,9 @@
 using System;
 using System.Reflection;
 
+using GKCommon;
+using GKUI.Contracts;
+
 namespace GKUI.Engine
 {
     /// <summary>
@@ -42,6 +45,12 @@ namespace GKUI.Engine
         public Version GetAppVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version;
+        }
+
+        public string GetAppCopyright()
+        {
+            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
+            return (attr == null) ? string.Empty : attr.Copyright;
         }
 
         #endregion

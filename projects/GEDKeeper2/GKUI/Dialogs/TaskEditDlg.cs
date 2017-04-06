@@ -26,6 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -33,7 +34,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TaskEditDlg : EditorDialog
+    public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         private readonly GKSheetList fNotesList;
         
@@ -139,17 +140,17 @@ namespace GKUI.Dialogs
             GKGoalType gt = (GKGoalType)cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GKGoalType.gtIndividual:
-                    fTempRec = Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    fTempRec = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
                 case GKGoalType.gtFamily:
-                    fTempRec = Base.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
+                    fTempRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtFamily, new object[0]);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
                 case GKGoalType.gtSource:
-                    fTempRec = Base.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
+                    fTempRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtSource, new object[0]);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
@@ -188,7 +189,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public TaskEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public TaskEditDlg()
         {
             InitializeComponent();
 
@@ -208,7 +209,7 @@ namespace GKUI.Dialogs
                 cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_WinTaskEdit);
@@ -221,6 +222,18 @@ namespace GKUI.Dialogs
             lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
 
             toolTip1.SetToolTip(btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

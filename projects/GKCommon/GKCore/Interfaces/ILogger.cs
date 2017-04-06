@@ -19,27 +19,14 @@
  */
 
 using System;
-using GKCommon.IoC;
 
-namespace GKUI.Engine
+namespace GKCore.Interfaces
 {
-    public interface IController
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ILogger
     {
-        
-    }
-
-    public class IocControllerFactory
-    {
-        private readonly IContainer container;
-
-        public IocControllerFactory(IContainer container)
-        {
-            this.container = container;
-        }
-
-        protected IController GetControllerInstance(Type controllerType)
-        {
-            return container.Resolve(controllerType) as IController;
-        }
+        void LogWrite(string msg);
     }
 }

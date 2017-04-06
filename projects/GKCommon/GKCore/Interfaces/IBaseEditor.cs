@@ -23,5 +23,7 @@ namespace GKCore.Interfaces
     public interface IBaseEditor
     {
         IBaseWindow Base { get; }
+
+        void InitDialog(IBaseWindow baseWin);
     }
 }

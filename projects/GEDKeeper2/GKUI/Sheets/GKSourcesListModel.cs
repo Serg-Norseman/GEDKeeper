@@ -89,7 +89,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = ((BaseWin) fBaseWin).ModifySourceCitation(fUndoman, dataOwner, ref aCit);
+                    result = AppHub.BaseController.ModifySourceCitation(((BaseWin) fBaseWin), fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:

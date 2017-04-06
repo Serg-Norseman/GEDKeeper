@@ -25,7 +25,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -33,18 +33,12 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AddressEditDlg : Form, IBaseEditor
+    public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
-        private readonly IBaseWindow fBase;
         private GEDCOMAddress fAddress;
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
-        }
 
         public GEDCOMAddress Address
         {
@@ -182,14 +176,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public AddressEditDlg(IBaseWindow baseWin)
+        public AddressEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
@@ -219,6 +211,16 @@ namespace GKUI.Dialogs
             pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
             pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
             pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

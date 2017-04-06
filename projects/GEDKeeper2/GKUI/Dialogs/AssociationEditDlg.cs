@@ -26,15 +26,15 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AssociationEditDlg : Form, IBaseEditor
+    public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
-        private readonly IBaseWindow fBase;
         private GEDCOMAssociation fAssociation;
         private GEDCOMIndividualRecord fTempInd;
 
@@ -42,11 +42,6 @@ namespace GKUI.Dialogs
         {
             get { return fAssociation; }
             set { SetAssociation(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void SetAssociation(GEDCOMAssociation value)
@@ -80,19 +75,17 @@ namespace GKUI.Dialogs
 
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
-            fTempInd = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempInd = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
             txtPerson.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
 
-        public AssociationEditDlg(IBaseWindow baseWin)
+        public AssociationEditDlg()
         {
             InitializeComponent();
 
             btnPersonAdd.Image = GKResources.iRecNew;
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             int num = GlobalOptions.Instance.Relations.Count;
             for (int i = 0; i < num; i++)
@@ -108,6 +101,16 @@ namespace GKUI.Dialogs
             lblPerson.Text = LangMan.LS(LSID.LSID_Person);
 
             toolTip1.SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

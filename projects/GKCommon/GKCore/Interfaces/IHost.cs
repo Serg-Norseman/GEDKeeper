@@ -25,8 +25,6 @@ namespace GKCore.Interfaces
 {
     public interface IHost : ILocalization
     {
-        INamesTable NamesTable { get; }
-
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
 
@@ -57,6 +55,6 @@ namespace GKCore.Interfaces
         void Restore();
 
         bool IsUnix();
-        void ShowWarning(string msg);
+        bool ShowModalX(ICommonDialog form, bool keepModeless);
     }
 }

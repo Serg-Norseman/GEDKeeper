@@ -27,26 +27,21 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class PortraitSelectDlg : Form, IBaseEditor
+    public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
     {
-        private readonly IBaseWindow fBase;
         private GEDCOMMultimediaLink fMultimediaLink;
 
         public GEDCOMMultimediaLink MultimediaLink
         {
             get { return fMultimediaLink; }
             set { SetMultimediaLink(value); }
-        }
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
         }
 
         private void SetMultimediaLink(GEDCOMMultimediaLink value)
@@ -92,20 +87,29 @@ namespace GKUI.Dialogs
             }
         }
 
-        public PortraitSelectDlg(IBaseWindow baseWin)
+        public PortraitSelectDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fBase = baseWin;
             imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_PortraitSelect);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }

@@ -86,7 +86,7 @@ namespace GKUI.Sheets
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = fBaseWin.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    mmRec = AppHub.BaseController.SelectRecord(fBaseWin, GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)dataOwner, mmRec);
                     }
@@ -96,7 +96,7 @@ namespace GKUI.Sheets
                     if (mmLink != null)
                     {
                         mmRec = mmLink.Value as GEDCOMMultimediaRecord;
-                        result = fBaseWin.ModifyMedia(ref mmRec);
+                        result = AppHub.BaseController.ModifyMedia(fBaseWin, ref mmRec);
                     }
                     break;
 

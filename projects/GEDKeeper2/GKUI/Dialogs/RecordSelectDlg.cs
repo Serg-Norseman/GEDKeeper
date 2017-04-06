@@ -26,18 +26,16 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Contracts;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RecordSelectDlg : Form
+    public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
-        private readonly IBaseWindow fBase;
-
         private GEDCOMRecordType fMode;
         private string fFilter;
         private TargetMode fTargetMode;
@@ -47,6 +45,12 @@ namespace GKUI.Dialogs
         public GEDCOMSex NeedSex { get; set; }
         public GEDCOMRecord ResultRecord { get; set; }
 
+
+        public string FastFilter
+        {
+            get { return txtFastFilter.Text; }
+            set { txtFastFilter.Text = value; }
+        }
 
         public string Filter
         {
@@ -79,15 +83,12 @@ namespace GKUI.Dialogs
         }
 
 
-        public RecordSelectDlg(IBaseWindow baseWin)
+        public RecordSelectDlg()
         {
             InitializeComponent();
 
             btnSelect.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
-            fFilter = "*";
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_WinRecordSelect);
@@ -102,6 +103,17 @@ namespace GKUI.Dialogs
             {
             }
             base.Dispose(disposing);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fFilter = "*";
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
 
         private void DataRefresh()
@@ -160,7 +172,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtIndividual:
                         {
                             GEDCOMIndividualRecord iRec = null;
-                            if (fBase.ModifyPerson(ref iRec, Target, fTargetMode, NeedSex)) {
+                            if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, Target, fTargetMode, NeedSex)) {
                                 ResultRecord = iRec;
                                 DialogResult = DialogResult.OK;
                             }
@@ -173,7 +185,7 @@ namespace GKUI.Dialogs
 
                             FamilyTarget famTarget = (fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
 
-                            if (fBase.ModifyFamily(ref famRec, famTarget, Target))
+                            if (AppHub.BaseController.ModifyFamily(fBase, ref famRec, famTarget, Target))
                             {
                                 ResultRecord = famRec;
                                 DialogResult = DialogResult.OK;
@@ -184,7 +196,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtNote:
                         {
                             GEDCOMNoteRecord noteRec = null;
-                            if (fBase.ModifyNote(ref noteRec))
+                            if (AppHub.BaseController.ModifyNote(fBase, ref noteRec))
                             {
                                 ResultRecord = noteRec;
                                 DialogResult = DialogResult.OK;
@@ -195,7 +207,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtMultimedia:
                         {
                             GEDCOMMultimediaRecord mmRec = null;
-                            if (fBase.ModifyMedia(ref mmRec))
+                            if (AppHub.BaseController.ModifyMedia(fBase, ref mmRec))
                             {
                                 ResultRecord = mmRec;
                                 DialogResult = DialogResult.OK;
@@ -206,7 +218,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtSource:
                         {
                             GEDCOMSourceRecord sourceRec = null;
-                            if (fBase.ModifySource(ref sourceRec))
+                            if (AppHub.BaseController.ModifySource(fBase, ref sourceRec))
                             {
                                 ResultRecord = sourceRec;
                                 DialogResult = DialogResult.OK;
@@ -217,7 +229,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtRepository:
                         {
                             GEDCOMRepositoryRecord repRec = null;
-                            if (fBase.ModifyRepository(ref repRec))
+                            if (AppHub.BaseController.ModifyRepository(fBase, ref repRec))
                             {
                                 ResultRecord = repRec;
                                 DialogResult = DialogResult.OK;
@@ -228,7 +240,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtGroup:
                         {
                             GEDCOMGroupRecord groupRec = null;
-                            if (fBase.ModifyGroup(ref groupRec))
+                            if (AppHub.BaseController.ModifyGroup(fBase, ref groupRec))
                             {
                                 ResultRecord = groupRec;
                                 DialogResult = DialogResult.OK;
@@ -239,7 +251,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtTask:
                         {
                             GEDCOMTaskRecord taskRec = null;
-                            if (fBase.ModifyTask(ref taskRec))
+                            if (AppHub.BaseController.ModifyTask(fBase, ref taskRec))
                             {
                                 ResultRecord = taskRec;
                                 DialogResult = DialogResult.OK;
@@ -250,7 +262,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtCommunication:
                         {
                             GEDCOMCommunicationRecord corrRec = null;
-                            if (fBase.ModifyCommunication(ref corrRec))
+                            if (AppHub.BaseController.ModifyCommunication(fBase, ref corrRec))
                             {
                                 ResultRecord = corrRec;
                                 DialogResult = DialogResult.OK;
@@ -261,7 +273,7 @@ namespace GKUI.Dialogs
                     case GEDCOMRecordType.rtLocation:
                         {
                             GEDCOMLocationRecord locRec = null;
-                            if (fBase.ModifyLocation(ref locRec))
+                            if (AppHub.BaseController.ModifyLocation(fBase, ref locRec))
                             {
                                 ResultRecord = locRec;
                                 DialogResult = DialogResult.OK;

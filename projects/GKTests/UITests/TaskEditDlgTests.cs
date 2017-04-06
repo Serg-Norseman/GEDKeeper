@@ -47,7 +47,8 @@ namespace GKTests.UITests
             fBase = new BaseWindowMock();
             fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new TaskEditDlg(fBase);
+            fDialog = new TaskEditDlg();
+            fDialog.InitDialog(fBase);
             fDialog.Task = fTaskRecord;
             fDialog.Show();
         }

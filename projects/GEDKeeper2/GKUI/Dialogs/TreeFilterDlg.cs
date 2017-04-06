@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
+using GKUI.Engine;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -62,7 +63,7 @@ namespace GKUI.Dialogs
                 switch (eArgs.Action)
                 {
                     case RecordAction.raAdd:
-                        iRec = Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                        iRec = AppHub.BaseController.SelectPerson(Base, null, TargetMode.tmNone, GEDCOMSex.svNone);
                         if (iRec != null) {
                             fTemp = fTemp + iRec.XRef + ";";
                         }

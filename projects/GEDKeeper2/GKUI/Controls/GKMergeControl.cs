@@ -26,6 +26,7 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Engine;
 
 namespace GKUI.Controls
 {
@@ -186,13 +187,13 @@ namespace GKUI.Controls
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = fBase.SelectRecord(fMergeMode, null);
+            GEDCOMRecord irec = AppHub.BaseController.SelectRecord(fBase, fMergeMode, null);
             if (irec != null) SetRec1(irec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = fBase.SelectRecord(fMergeMode, null);
+            GEDCOMRecord irec = AppHub.BaseController.SelectRecord(fBase, fMergeMode, null);
             if (irec != null) SetRec2(irec);
         }
 

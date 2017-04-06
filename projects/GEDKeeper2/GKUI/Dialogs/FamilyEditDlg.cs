@@ -29,7 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Engine;
+using GKUI.Contracts;
 using GKUI.Sheets;
 
 namespace GKUI.Dialogs
@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class FamilyEditDlg : EditorDialog
+    public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
         private readonly GKSheetList fChildsList;
         private readonly GKSheetList fEventsList;
@@ -88,7 +88,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public FamilyEditDlg(IBaseWindow baseWin) : base(baseWin)
+        public FamilyEditDlg()
         {
             InitializeComponent();
 
@@ -105,16 +105,16 @@ namespace GKUI.Dialogs
             fChildsList = CreateChildsSheet(pageChilds);
             fChildsList.SetControlName("fChildsList"); // for purpose of tests
 
-            fEventsList = new GKSheetList(pageEvents, new GKEventsListModel(fBase, fLocalUndoman, false));
+            fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
-            fNotesList = new GKSheetList(pageNotes, new GKNotesListModel(fBase, fLocalUndoman));
+            fNotesList = new GKSheetList(pageNotes);
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
 
-            fMediaList = new GKSheetList(pageMultimedia, new GKMediaListModel(fBase, fLocalUndoman));
+            fMediaList = new GKSheetList(pageMultimedia);
             fMediaList.SetControlName("fMediaList"); // for purpose of tests
 
-            fSourcesList = new GKSheetList(pageSources, new GKSourcesListModel(fBase, fLocalUndoman));
+            fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
             GKResourceManager resourceManager = MainWin.ResourceManager;
@@ -250,7 +250,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    child = fBase.SelectPerson(fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
+                    child = AppHub.BaseController.SelectPerson(fBase, fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
                     result = (child != null && fBase.IsAvailableRecord(child));
                     if (result) {
                         //result = this.fFamily.AddChild(child);
@@ -259,7 +259,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raEdit:
-                    result = (fBase.ModifyPerson(ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
+                    result = (AppHub.BaseController.ModifyIndividual(fBase, ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
                     break;
 
                 case RecordAction.raDelete:
@@ -327,7 +327,7 @@ namespace GKUI.Dialogs
             Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
         }
 
-        internal void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target)
+        public void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target)
         {
             if (targetType == FamilyTarget.None || target == null) return;
 
@@ -345,7 +345,7 @@ namespace GKUI.Dialogs
 
         private void btnHusbandAddClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord husband = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
+            GEDCOMIndividualRecord husband = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svMale);
             if (husband != null && fFamily.Husband.StringValue == "")
             {
                 //this.fFamily.AddSpouse(husband);
@@ -379,7 +379,7 @@ namespace GKUI.Dialogs
 
         private void btnWifeAddClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord wife = fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
+            GEDCOMIndividualRecord wife = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svFemale);
             if (wife != null && fFamily.Wife.StringValue == "")
             {
                 //this.fFamily.AddSpouse(wife);
@@ -428,6 +428,21 @@ namespace GKUI.Dialogs
             } else {
                 e.IsAvailable = true;
             }
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+
+            fEventsList.ListModel = new GKEventsListModel(fBase, fLocalUndoman, false);
+            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+        }
+
+        public override bool ShowModalX()
+        {
+            return base.ShowModalX();
         }
     }
 }
