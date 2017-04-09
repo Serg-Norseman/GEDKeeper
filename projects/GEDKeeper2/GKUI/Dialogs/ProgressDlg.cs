@@ -25,7 +25,6 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
@@ -148,12 +147,12 @@ namespace GKUI.Dialogs
         public delegate void PStep(int value);
     }
 
-    public static class ProgressController
+    public sealed class ProgressController : IProgressController
     {
-        private static ProgressProxy fProxy;
-        private static int fVal;
+        private ProgressProxy fProxy;
+        private int fVal;
 
-        public static void ProgressInit(string title, int max)
+        public void ProgressInit(string title, int max)
         {
             if (fProxy != null) {
                 fProxy.ProgressReset(title, max);
@@ -164,21 +163,21 @@ namespace GKUI.Dialogs
             fVal = 0;
         }
 
-        public static void ProgressDone()
+        public void ProgressDone()
         {
-            if (fProxy == null) return;
-
-            fProxy.Close();
-            fProxy = null;
+            if (fProxy != null) {
+                fProxy.Close();
+                fProxy = null;
+            }
         }
 
-        public static void ProgressStep()
+        public void ProgressStep()
         {
             fProxy.UpdateProgress(fVal++);
             //System.Threading.Thread.Sleep(0); // debug
         }
 
-        public static void ProgressStep(int value)
+        public void ProgressStep(int value)
         {
             fProxy.UpdateProgress(value);
             //System.Threading.Thread.Sleep(0); // debug
@@ -200,7 +199,9 @@ namespace GKUI.Dialogs
             fFormLoaded = false;
             fTitle = title;
             fMax = max;
-            fParentHandle = MainWin.Instance.Handle;
+
+            Form mainForm = MainWin.Instance;
+            fParentHandle = (mainForm != null) ? mainForm.Handle : IntPtr.Zero;
 
             fThread = new Thread(ShowProgressForm);
             fThread.SetApartmentState(ApartmentState.STA);
@@ -219,8 +220,10 @@ namespace GKUI.Dialogs
             fProgressForm.DoInit(fTitle, fMax);
             fProgressForm.Load += ProgressForm_Load;
 
-            //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
-            AppHub.UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
+            if (fParentHandle != IntPtr.Zero) {
+                //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
+                AppHub.UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
+            }
 
             fProgressForm.ShowDialog();
             fProgressForm.Close();

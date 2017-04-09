@@ -432,13 +432,14 @@ namespace GKCore.Stats
         }
 
         // TODO: localize filter?
-        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals, IProgressController progress)
+        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals)
         {
             if (vals == null) return;
 
             string fileName = AppHub.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(fileName)) return;
 
+            IProgressController progress = AppHub.Progress;
             try
             {
                 int rowsCount = vals.Count;

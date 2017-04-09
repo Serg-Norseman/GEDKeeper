@@ -249,17 +249,17 @@ namespace GKCore
 
         public void gk_progress_init(int length, string title)
         {
-            fBase.ProgressInit(title, length);
+            AppHub.Progress.ProgressInit(title, length);
         }
 
         public void gk_progress_done()
         {
-            fBase.ProgressDone();
+            AppHub.Progress.ProgressDone();
         }
 
         public void gk_progress_step()
         {
-            fBase.ProgressStep();
+            AppHub.Progress.ProgressStep();
         }
 
         public void gk_update_view()
@@ -584,7 +584,7 @@ namespace GKCore
 
         public object gt_find_source(string name)
         {
-            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(name);
+            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Tree, name);
             return srcRec;
         }
 

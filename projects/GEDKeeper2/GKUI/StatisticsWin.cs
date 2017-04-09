@@ -372,8 +372,8 @@ namespace GKUI
 
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            fTreeStats.WriteStatsReport(cbType.Text, fListStats.Columns[0].Text, fListStats.Columns[1].Text, 
-                                        fCurrentValues, fBase);
+            fTreeStats.WriteStatsReport(cbType.Text, fListStats.Columns[0].Text, fListStats.Columns[1].Text,
+                                        fCurrentValues);
         }
     }
 }

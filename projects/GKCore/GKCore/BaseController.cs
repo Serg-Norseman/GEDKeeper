@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -394,6 +395,46 @@ namespace GKCore
                 }
             } finally {
                 context.EndUpdate();
+            }
+        }
+
+        #endregion
+
+        #region Data search
+
+        public GEDCOMSourceRecord FindSource(GEDCOMTree tree, string sourceName)
+        {
+            GEDCOMSourceRecord result = null;
+
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = tree[i];
+
+                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).FiledByEntry == sourceName)
+                {
+                    result = (rec as GEDCOMSourceRecord);
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public void GetSourcesList(GEDCOMTree tree, StringList sources)
+        {
+            if (sources == null) return;
+
+            sources.Clear();
+
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = tree[i];
+                if (rec is GEDCOMSourceRecord)
+                {
+                    sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+                }
             }
         }
 

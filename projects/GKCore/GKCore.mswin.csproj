@@ -160,6 +160,7 @@
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\PathReplacer.cs" />
+    <Compile Include="GKCore\PatriarchsMan.cs" />
     <Compile Include="GKCore\Plugins\PluginInfo.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />
     <Compile Include="GKCore\SCCrypt.cs" />

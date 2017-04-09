@@ -28,7 +28,6 @@ using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI
 {
@@ -89,11 +88,13 @@ namespace GKUI
         {
             try
             {
+                IProgressController progress = AppHub.Progress;
+
                 fMapBrowser.InitMap();
 
                 cmbPersons.BeginUpdate();
                 tvPlaces.BeginUpdate();
-                fBase.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), fTree.RecordsCount);
+                progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), fTree.RecordsCount);
                 try
                 {
                     fPlaces.Clear();
@@ -125,7 +126,7 @@ namespace GKUI
                             }
                         }
 
-                        fBase.ProgressStep();
+                        progress.ProgressStep();
                     }
 
                     fBaseRoot.ExpandAll();
@@ -135,7 +136,7 @@ namespace GKUI
                 }
                 finally
                 {
-                    fBase.ProgressDone();
+                    progress.ProgressDone();
                     tvPlaces.EndUpdate();
                     cmbPersons.EndUpdate();
                 }

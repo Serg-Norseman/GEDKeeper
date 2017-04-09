@@ -38,10 +38,6 @@ namespace GKCore.Interfaces
         void FileLoad(string fileName, string password = null);
         void FileSave(string fileName, string password = null);
 
-        // Data search
-        GEDCOMSourceRecord FindSource(string sourceName);
-        void GetSourcesList(StringList sources);
-
         // Data manipulation
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
@@ -53,11 +49,6 @@ namespace GKCore.Interfaces
         int FindBirthYear(GEDCOMIndividualRecord iRec);
         int FindDeathYear(GEDCOMIndividualRecord iRec);
         int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign);
-
-        // Patriarchs search
-        ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck);
-        ExtList<PatriarchObj> GetPatriarchsLinks(int gensMin, bool datesCheck, bool loneSuppress);
-        Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
 
         // Multimedia support
         bool CheckBasePath();

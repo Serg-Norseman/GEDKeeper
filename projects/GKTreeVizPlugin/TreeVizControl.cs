@@ -29,6 +29,7 @@ using ArborGVT;
 using CsGL.OpenGL;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -425,7 +426,8 @@ namespace GKTreeVizPlugin
                 fSys.setScreenSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
-                using (ExtList<PatriarchObj> patList = baseWin.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
+                using (ExtList<PatriarchObj> patList = PatriarchsMan.GetPatriarchsLinks(
+                    baseWin.Context, minGens, false, loneSuppress))
                 {
                     int num = patList.Count;
                     for (int i = 0; i < num; i++) {

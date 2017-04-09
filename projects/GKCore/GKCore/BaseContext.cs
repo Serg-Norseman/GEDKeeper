@@ -31,12 +31,10 @@ using System.Text;
 using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore
@@ -148,46 +146,6 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        #endregion
-
-        #region Data search
-
-        public GEDCOMSourceRecord FindSource(string sourceName)
-        {
-            GEDCOMSourceRecord result = null;
-
-            int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMRecord rec = fTree[i];
-
-                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).FiledByEntry == sourceName)
-                {
-                    result = (rec as GEDCOMSourceRecord);
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        public void GetSourcesList(StringList sources)
-        {
-            if (sources == null) return;
-
-            sources.Clear();
-
-            int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMRecord rec = fTree[i];
-                if (rec is GEDCOMSourceRecord)
-                {
-                    sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
-                }
-            }
-        }
-        
         #endregion
 
         #region Data Manipulation
@@ -381,246 +339,6 @@ namespace GKCore
             return 0;
         }
 
-        #endregion
-
-        #region Patriarchs Search
-
-        public ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck)
-        {
-            ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
-
-            IProgressController pctl = fViewer;
-
-            pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), fTree.RecordsCount);
-
-            GKUtils.InitExtCounts(fTree, -1);
-            try
-            {
-                int num = fTree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
-                    GEDCOMRecord rec = fTree[i];
-
-                    if (rec is GEDCOMIndividualRecord)
-                    {
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-
-                        string nf, nn, np;
-                        GKUtils.GetNameParts(iRec, out nf, out nn, out np);
-
-                        int birthDate = FindBirthYear(iRec);
-                        int descGens = GKUtils.GetDescGenerations(iRec);
-
-                        bool res = (iRec.ChildToFamilyLinks.Count == 0);
-                        res = (res && iRec.Sex == GEDCOMSex.svMale);
-                        res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
-                        res = (res && descGens >= gensMin);
-
-                        if (datesCheck)
-                        {
-                            res = (res && birthDate != 0);
-                        }
-
-                        if (res)
-                        {
-                            PatriarchObj pObj = new PatriarchObj();
-                            pObj.IRec = iRec;
-                            pObj.BirthYear = birthDate;
-                            pObj.DescendantsCount = GKUtils.GetDescendantsCount(iRec) - 1;
-                            pObj.DescGenerations = descGens;
-                            patList.Add(pObj);
-                        }
-                    }
-
-                    pctl.ProgressStep();
-                }
-            }
-            finally
-            {
-                pctl.ProgressDone();
-            }
-            
-            return patList;
-        }
-
-        public ExtList<PatriarchObj> GetPatriarchsLinks(int gensMin, bool datesCheck, bool loneSuppress)
-        {
-            ExtList<PatriarchObj> patList = GetPatriarchsList(gensMin, datesCheck);
-
-            IProgressController pctl = fViewer;
-
-            pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
-            try
-            {
-                int num2 = patList.Count;
-                for (int i = 0; i < num2; i++)
-                {
-                    PatriarchObj patr = patList[i];
-
-                    for (int j = i + 1; j < num2; j++)
-                    {
-                        PatriarchObj patr2 = patList[j];
-
-                        GEDCOMIndividualRecord cross;
-                        bool res = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec, out cross);
-
-                        if (res)
-                        {
-                            patr.HasLinks = true;
-                            patr2.HasLinks = true;
-
-                            if (cross.Sex == GEDCOMSex.svFemale) {
-                                patr.Links.Add(patr2);
-                            } else {
-                                patr2.Links.Add(patr);
-                            }
-                        }
-                    }
-
-                    pctl.ProgressStep();
-                }
-            }
-            finally
-            {
-                pctl.ProgressDone();
-            }
-
-            if (loneSuppress)
-            {
-                for (int i = patList.Count - 1; i >= 0; i--)
-                {
-                    PatriarchObj patr = patList[i];
-                    if (!patr.HasLinks) patList.Delete(i);
-                }
-                patList.Pack();
-            }
-            
-            return patList;
-        }
-
-        private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
-        {
-            for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++)
-            {
-                GEDCOMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
-                PGNode node = family.ExtData as PGNode;
-
-                if (node != null && node.Type != PGNodeType.Default)
-                {
-                    IVertex vtx = graph.FindVertex(node.FamilyXRef);
-                    if (vtx == null)
-                    {
-                        vtx = graph.AddVertex(node.FamilyXRef, node);
-                    }
-
-                    if (prevNode != null)
-                    {
-                        graph.AddDirectedEdge(prevNode.FamilyXRef, node.FamilyXRef, 1, null);
-                    }
-
-                    prevNode = node;
-                }
-
-                for (int k = 0, count2 = family.Children.Count; k < count2; k++)
-                {
-                    GEDCOMIndividualRecord child = family.Children[k].Value as GEDCOMIndividualRecord;
-                    PL_WalkDescLinks(graph, prevNode, child);
-                }
-            }
-        }
-
-        public Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true)
-        {
-            Graph graph = new Graph();
-
-            try
-            {
-                using (ExtList<PatriarchObj> patList = GetPatriarchsList(gensMin, datesCheck))
-                {
-                    IProgressController pctl = fViewer;
-
-                    // init
-                    GKUtils.InitExtData(fTree);
-
-                    // prepare
-                    int count = patList.Count;
-                    for (int i = 0; i < count; i++)
-                    {
-                        PatriarchObj patNode = patList[i];
-                        GEDCOMIndividualRecord iRec = patNode.IRec;
-
-                        int count2 = iRec.SpouseToFamilyLinks.Count;
-                        for (int k = 0; k < count2; k++)
-                        {
-                            GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-                            family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
-                        }
-                    }
-
-                    try
-                    {
-                        int patCount = patList.Count;
-                        pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
-
-                        for (int i = 0; i < patCount; i++)
-                        {
-                            PatriarchObj patr = patList[i];
-
-                            for (int j = i + 1; j < patCount; j++)
-                            {
-                                PatriarchObj patr2 = patList[j];
-
-                                GEDCOMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
-
-                                if (cross != null)
-                                {
-                                    PGNode node = (PGNode)cross.ExtData;
-
-                                    if (node != null && node.Type == PGNodeType.Patriarch) {
-                                        // dummy
-                                    } else {
-                                        int size = GKUtils.GetDescGenerations(cross.GetHusband());
-                                        if (size == 0) size = 1;
-                                        cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
-                                    }
-                                }
-                            }
-
-                            pctl.ProgressStep();
-                        }
-                    }
-                    finally
-                    {
-                        pctl.ProgressDone();
-                    }
-
-                    // create graph
-                    int count3 = patList.Count;
-                    for (int i = 0; i < count3; i++)
-                    {
-                        PatriarchObj patNode = patList[i];
-                        PL_WalkDescLinks(graph, null, patNode.IRec);
-                    }
-
-                    // clear
-                    GKUtils.InitExtData(fTree);
-
-                    /*if (gpl_params.aLoneSuppress) {
-				for (int i = aList.Count - 1; i >= 0; i--) {
-					PatriarchObj patr = aList[i] as PatriarchObj;
-					if (patr.ILinks.Count == 0) aList.Delete(i);
-				}
-				aList.Pack();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                fHost.LogWrite("BaseContext.GetPatriarchsGraph(): " + ex.Message);
-            }
-
-            return graph;
-        }
-        
         #endregion
 
         #region Private media support
@@ -880,7 +598,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
-                        CopyFile(fileName, targetFn, false, fViewer);
+                        CopyFile(fileName, targetFn, false);
                     }
                     catch (IOException)
                     {
@@ -898,10 +616,11 @@ namespace GKCore
             return result;
         }
 
-        private void CopyFile(string sourceFileName, string destFileName, bool overwrite, IProgressController progress)
+        private void CopyFile(string sourceFileName, string destFileName, bool overwrite)
         {
             #if FILECOPY_EX
 
+            IProgressController progress = AppHub.Progress;
             try {
                 progress.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
 

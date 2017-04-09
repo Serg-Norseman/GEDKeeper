@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
+using GKCommon.IoC;
 using GKCore;
 using GKCore.Cultures;
 using GKCore.Export;
@@ -42,7 +43,6 @@ using GKTests.Mocks;
 using GKUI;
 using GKUI.Charts;
 using GKUI.Controls;
-using GKUI.Engine;
 using GKUI.Sheets;
 using NUnit.Framework;
 
@@ -74,11 +74,11 @@ namespace GKTests.GKCore
         {
             Assert.IsNotNull(fContext.Culture);
 
-            GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
+            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fContext.Tree, "test source");
             Assert.IsNull(srcRec);
 
             StringList sources = new StringList();
-            fContext.GetSourcesList(sources);
+            AppHub.BaseController.GetSourcesList(fContext.Tree, sources);
             Assert.AreEqual(1, sources.Count);
 
             Assert.IsNotNull(fContext.ValuesCollection);
@@ -1392,6 +1392,7 @@ namespace GKTests.GKCore
         public void Tools_Tests()
         {
             IBaseWindow baseWin = new BaseWindowMock();
+            AppHub.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton);
 
             //
 
@@ -1485,7 +1486,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, placesList, null); });
 
-            TreeTools.PlacesSearch(fContext.Tree, placesList, baseWin);
+            TreeTools.PlacesSearch(fContext.Tree, placesList, AppHub.Progress);
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs

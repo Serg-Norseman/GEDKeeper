@@ -680,12 +680,14 @@ namespace GKPedigreeImporterPlugin
 
             try
             {
+                IProgressController progress = AppHub.Progress;
+
                 try
                 {
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
-                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
+                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
 
                     for (int i = 0; i < num; i++) {
                         string txt = fRawContents[i].Trim();
@@ -717,7 +719,7 @@ namespace GKPedigreeImporterPlugin
                             rawLine.Type = RawLineType.rltEOF;
                         }
 
-                        fBase.ProgressStep(i + 1);
+                        progress.ProgressStep(i + 1);
                     }
 
                     if (numberStats[1] > numberStats[2]) {
@@ -730,7 +732,7 @@ namespace GKPedigreeImporterPlugin
                 }
                 finally
                 {
-                    fBase.ProgressDone();
+                    progress.ProgressDone();
                 }
             }
             catch (Exception ex)
@@ -850,13 +852,14 @@ namespace GKPedigreeImporterPlugin
                 MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
                 //sheet.Activate();
 
+                IProgressController progress = AppHub.Progress;
                 StringList buffer = new StringList();
                 try
                 {
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
-                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
+                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
@@ -930,7 +933,7 @@ namespace GKPedigreeImporterPlugin
                                 break;
                         }
 
-                        fBase.ProgressStep(row);
+                        progress.ProgressStep(row);
                     }
 
                     // hack: processing last items before end
@@ -940,7 +943,7 @@ namespace GKPedigreeImporterPlugin
                 }
                 finally
                 {
-                    fBase.ProgressDone();
+                    progress.ProgressDone();
 
                     buffer.Dispose();
 
@@ -965,9 +968,10 @@ namespace GKPedigreeImporterPlugin
             {
                 using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251)))
                 {
+                    IProgressController progress = AppHub.Progress;
                     try
                     {
-                        fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
+                        progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
                         while (strd.Peek() != -1) {
@@ -977,14 +981,14 @@ namespace GKPedigreeImporterPlugin
                                 fRawContents.AddObject(txt, new RawLine(lineNum));
                             }
 
-                            fBase.ProgressStep((int)strd.BaseStream.Position);
+                            progress.ProgressStep((int)strd.BaseStream.Position);
                             lineNum++;
                         }
                         fRawContents.AddObject("", new RawLine(lineNum));
                     }
                     finally
                     {
-                        fBase.ProgressDone();
+                        progress.ProgressDone();
                     }
                 }
 
@@ -1015,6 +1019,7 @@ namespace GKPedigreeImporterPlugin
                     return false;
                 }
 
+                IProgressController progress = AppHub.Progress;
                 try
                 {
                     wordApp.Visible = DEBUG_WORD;
@@ -1022,7 +1027,7 @@ namespace GKPedigreeImporterPlugin
 
                     MSOWord.Document doc = wordApp.Documents.Open(fFileName);
 
-                    fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
+                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
                     for (int i = 0; i < doc.Paragraphs.Count; i++)
@@ -1034,7 +1039,7 @@ namespace GKPedigreeImporterPlugin
                             fRawContents.AddObject(txt, new RawLine(lineNum));
                         }
 
-                        fBase.ProgressStep(i + 1);
+                        progress.ProgressStep(i + 1);
                         lineNum++;
                     }
                     fRawContents.AddObject("", new RawLine(lineNum));
@@ -1043,7 +1048,7 @@ namespace GKPedigreeImporterPlugin
                 }
                 finally
                 {
-                    fBase.ProgressDone();
+                    progress.ProgressDone();
 
                     object saveOptionsObject = MSOWord.WdSaveOptions.wdDoNotSaveChanges;
                     wordApp.Quit(ref saveOptionsObject);

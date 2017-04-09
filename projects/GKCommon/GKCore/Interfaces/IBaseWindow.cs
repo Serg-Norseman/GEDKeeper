@@ -27,7 +27,7 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public interface IBaseWindow : IWorkWindow, IProgressController, ILocalization
+    public interface IBaseWindow : IWorkWindow, ILocalization
     {
         IHost Host { get; }
         IBaseContext Context { get; }

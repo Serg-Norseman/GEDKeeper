@@ -20,6 +20,7 @@
 
 using System;
 using GKCommon.IoC;
+using GKCore.Interfaces;
 using GKUI.Charts;
 using GKUI.Contracts;
 using GKUI.Dialogs;
@@ -41,6 +42,7 @@ namespace GKUI
             container.Register<IUIHelper, UIHelper>(LifeCycle.Singleton);
             container.Register<IUtilities, Utilities>(LifeCycle.Singleton);
             //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
+            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 
             // controls and other
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);

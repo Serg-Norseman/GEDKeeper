@@ -222,7 +222,7 @@ namespace GKFlowInputPlugin
 
         private void InitSourceControls()
         {
-            fBase.Context.GetSourcesList(fSourcesList);
+            AppHub.BaseController.GetSourcesList(fBase.Tree, fSourcesList);
 
             cbSource.Items.Clear();
 
@@ -344,7 +344,7 @@ namespace GKFlowInputPlugin
                         }
 
                         if (!string.IsNullOrEmpty(srcName)) {
-                            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(srcName);
+                            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Tree, srcName);
                             if (srcRec == null) {
                                 srcRec = fBase.Tree.CreateSource();
                                 srcRec.FiledByEntry = srcName;

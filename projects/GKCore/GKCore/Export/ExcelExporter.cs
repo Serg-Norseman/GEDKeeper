@@ -46,7 +46,8 @@ namespace GKCore.Export
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");
 
-            fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
+            IProgressController progress = AppHub.Progress;
+            progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
             //TCellAttributeSet cas = (TCellAttributeSet.acBottomBorder | TCellAttributeSet.acTopBorder | TCellAttributeSet.acRightBorder | TCellAttributeSet.acLeftBorder);
 
@@ -94,7 +95,7 @@ namespace GKCore.Export
                         }
                     }
 
-                    fBase.ProgressStep();
+                    progress.ProgressStep();
                 }
 
                 workbook.Worksheets.Add(worksheet);
@@ -106,7 +107,7 @@ namespace GKCore.Export
             }
             finally
             {
-                fBase.ProgressDone();
+                progress.ProgressDone();
             }
         }
     }

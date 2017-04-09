@@ -40,6 +40,7 @@ namespace GKCore
         private static IUIHelper fUIHelper;
         private static IUtilities fUtilities;
         private static IHost fMainWindow;
+        private static IProgressController fProgressController;
 
 
         public static IocContainer Container
@@ -88,6 +89,16 @@ namespace GKCore
         #endregion
 
         #region UI-dependent instances
+
+        public static IProgressController Progress
+        {
+            get {
+                if (fProgressController == null) {
+                    fProgressController = fIocContainer.Resolve<IProgressController>();
+                }
+                return fProgressController;
+            }
+        }
 
         public static IStdDialogs StdDialogs
         {

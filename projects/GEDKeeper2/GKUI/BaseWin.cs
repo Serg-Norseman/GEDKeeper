@@ -588,9 +588,11 @@ namespace GKUI
                 }
             }
 
+            IProgressController progress = AppHub.Progress;
+
             try
             {
-                ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+                progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
                 fTree.OnProgress += LoadProgress;
                 try
                 {
@@ -599,10 +601,10 @@ namespace GKUI
                 finally
                 {
                     fTree.OnProgress -= LoadProgress;
-                    ProgressDone();
+                    progress.ProgressDone();
                 }
 
-                TreeTools.CheckGEDCOMFormat(fTree, fContext.ValuesCollection, this);
+                TreeTools.CheckGEDCOMFormat(fTree, fContext.ValuesCollection, progress);
                 Modified = false;
             }
             catch (Exception ex)
@@ -863,6 +865,11 @@ namespace GKUI
             }
         }
 
+        private void LoadProgress(object sender, int progress)
+        {
+            AppHub.Progress.ProgressStep(progress);
+        }
+
         #endregion
 
         #region ILocalization implementation
@@ -885,35 +892,6 @@ namespace GKUI
             miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
             miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
-        }
-
-        #endregion
-
-        #region IProgressController implementation
-        
-        public void ProgressInit(string title, int max)
-        {
-            ProgressController.ProgressInit(title, max);
-        }
-
-        public void ProgressDone()
-        {
-            ProgressController.ProgressDone();
-        }
-
-        public void ProgressStep()
-        {
-            ProgressController.ProgressStep();
-        }
-
-        public void ProgressStep(int value)
-        {
-            ProgressController.ProgressStep(value);
-        }
-
-        private void LoadProgress(object sender, int progress)
-        {
-            ProgressController.ProgressStep(progress);
         }
 
         #endregion

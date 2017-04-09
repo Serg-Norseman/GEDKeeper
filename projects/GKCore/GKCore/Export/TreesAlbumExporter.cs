@@ -135,7 +135,7 @@ namespace GKCore.Export
 
         private void PreparePatriarchs()
         {
-            using (ExtList<PatriarchObj> lst = fBase.Context.GetPatriarchsList(2, false))
+            using (ExtList<PatriarchObj> lst = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false))
             {
                 lst.QuickSort(PatriarchsCompare);
 

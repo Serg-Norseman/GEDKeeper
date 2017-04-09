@@ -140,7 +140,7 @@ namespace GKCore.Tools
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
 
-            using (ExtList<PatriarchObj> patList = baseWin.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
+            using (ExtList<PatriarchObj> patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress))
             {
                 int num = patList.Count;
                 for (int i = 0; i < num; i++) {
@@ -942,16 +942,18 @@ namespace GKCore.Tools
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
 
+            IProgressController progress = AppHub.Progress;
+
             try
             {
                 GEDCOMTree tree = baseWin.Tree;
 
-                baseWin.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
+                progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
 
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    baseWin.ProgressStep();
+                    progress.ProgressStep();
 
                     GEDCOMRecord rec = tree[i];
 
@@ -968,7 +970,7 @@ namespace GKCore.Tools
             }
             finally
             {
-                baseWin.ProgressDone();
+                progress.ProgressDone();
             }
         }
 
@@ -1221,7 +1223,8 @@ namespace GKCore.Tools
 
             Hashtable families = new Hashtable();
 
-            baseWin.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
+            IProgressController progress = AppHub.Progress;
+            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
@@ -1250,10 +1253,10 @@ namespace GKCore.Tools
                     }
                 }
 
-                baseWin.ProgressStep();
+                progress.ProgressStep();
             }
 
-            baseWin.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
+            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
 
             // find all persons of one surname, not related by ties of kinship
             foreach (DictionaryEntry entry in families)
@@ -1289,12 +1292,12 @@ namespace GKCore.Tools
                     result.Add(indiv);
                 }
 
-                baseWin.ProgressStep();
+                progress.ProgressStep();
             }
 
             result.Sort(new IndividualRecordComparer());
             
-            baseWin.ProgressDone();
+            progress.ProgressDone();
 
             return result;
         }

@@ -38,7 +38,6 @@ using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
-using GKUI.Engine;
 
 namespace GKUI
 {

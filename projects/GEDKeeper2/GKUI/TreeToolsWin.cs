@@ -32,7 +32,6 @@ using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI
 {
@@ -315,8 +314,10 @@ namespace GKUI
 
         private void CheckGroups()
         {
+            IProgressController progress = AppHub.Progress;
+
             gkLogChart1.Clear();
-            fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
+            progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
@@ -362,7 +363,7 @@ namespace GKUI
                         }
                     }
 
-                    fBase.ProgressStep();
+                    progress.ProgressStep();
                     Application.DoEvents();
                 }
             }
@@ -370,7 +371,7 @@ namespace GKUI
             {
                 groupRecords.Clear();
                 //prepared.Dispose();
-                fBase.ProgressDone();
+                progress.ProgressDone();
             }
         }
 
@@ -473,7 +474,7 @@ namespace GKUI
             ListPlaces.BeginUpdate();
             try
             {
-                TreeTools.PlacesSearch(fTree, fPlaces, fBase);
+                TreeTools.PlacesSearch(fTree, fPlaces, AppHub.Progress);
 
                 ListPlaces.Items.Clear();
 
@@ -668,7 +669,8 @@ namespace GKUI
             try
             {
                 ListPatriarchs.Items.Clear();
-                lst = fBase.Context.GetPatriarchsList(decimal.ToInt32(edMinGens.Value), !chkWithoutDates.Checked);
+                lst = PatriarchsMan.GetPatriarchsList(fBase.Context,
+                                                      decimal.ToInt32(edMinGens.Value), !chkWithoutDates.Checked);
                 lst.QuickSort(PatriarchsCompare);
 
                 int num = lst.Count;
@@ -758,7 +760,7 @@ namespace GKUI
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, fBase);
+                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHub.Progress);
                     break;
 
                 case TreeMatchType.tmtExternal:
