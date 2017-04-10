@@ -23,7 +23,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCore;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {

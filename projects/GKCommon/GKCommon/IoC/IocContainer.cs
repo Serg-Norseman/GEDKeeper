@@ -57,14 +57,21 @@ namespace GKCommon.IoC
             Register<TTypeToResolve, TConcrete>(LifeCycle.Singleton);
         }
 
-        public void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle)
+        public void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false)
         {
-            // TODO: exception?
-            if (registeredObjects.ContainsKey(typeof(TTypeToResolve)))
-                return;
+            Type typeToResolve = typeof(TTypeToResolve);
 
-            registeredObjects.Add(typeof(TTypeToResolve),
-                                  new RegisteredObject(typeof(TTypeToResolve),
+            // TODO: exception?
+            if (registeredObjects.ContainsKey(typeToResolve)) {
+                if (!canReplace) {
+                    return;
+                } else {
+                    registeredObjects.Remove(typeToResolve);
+                }
+            }
+
+            registeredObjects.Add(typeToResolve,
+                                  new RegisteredObject(typeToResolve,
                                                        typeof(TConcrete), lifeCycle));
         }
 

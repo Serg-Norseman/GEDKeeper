@@ -21,12 +21,14 @@
 #define FILECOPY_EX
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Externals;
 using GKCommon;
@@ -51,6 +53,7 @@ namespace GKCore
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
         private readonly ChangeTracker fUndoman;
+        private readonly List<GEDCOMRecord> fLockedRecords;
 
         #endregion
 
@@ -136,6 +139,7 @@ namespace GKCore
             fHost = (viewer == null) ? null : viewer.Host;
             fUndoman = new ChangeTracker(fTree);
             fValuesCollection = new ValuesCollection();
+            fLockedRecords = new List<GEDCOMRecord>();
         }
 
         protected override void Dispose(bool disposing)
@@ -262,6 +266,27 @@ namespace GKCore
             return result;
         }
 
+        public IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern)
+        {
+            List<ISearchResult> result = new List<ISearchResult>();
+
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                GEDCOMRecord rec = fTree[i];
+                if (rec.RecordType != recordType) continue;
+
+                string recName = GKUtils.GetRecordName(rec, false);
+                if (GKUtils.MatchesRegex(recName, regex)) {
+                    //yield return new SearchResult(iRec);
+                    result.Add(new SearchResult(rec));
+                }
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Individual utils
@@ -337,6 +362,73 @@ namespace GKCore
             }
 
             return 0;
+        }
+
+        public void CollectTips(StringList tipsList)
+        {
+            if (tipsList == null)
+                throw new ArgumentNullException("tipsList");
+
+            if (!GlobalOptions.Instance.ShowTips) return;
+
+            try
+            {
+                try
+                {
+                    bool firstTip = true;
+                    int num = fTree.RecordsCount;
+                    for (int i = 0; i < num; i++)
+                    {
+                        GEDCOMRecord rec = fTree[i];
+                        if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+
+                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
+
+                        int days;
+                        if (GKUtils.GetDaysForBirth(iRec, out days))
+                        {
+                            string nm = GKUtils.GetNameString(iRec, true, false);
+                            nm = Culture.GetPossessiveName(nm);
+
+                            if (days >= 0 && 3 > days) {
+                                string tip;
+
+                                if (firstTip) {
+                                    tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                                    firstTip = false;
+                                }
+
+                                if (0 == days)
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_BirthdayToday), nm);
+                                }
+                                else if (1 == days)
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
+                                }
+                                else
+                                {
+                                    tip = string.Format(
+                                        LangMan.LS(LSID.LSID_DaysRemained),
+                                        nm, days);
+                                }
+
+                                tipsList.Add(tip);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    // temp stub, remove try/finally here?
+                }
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("BaseContext.CollectTips(): " + ex.Message);
+            }
         }
 
         #endregion
@@ -986,6 +1078,43 @@ namespace GKCore
             fUndoman.Rollback();
             //fViewer.RefreshLists(false);
             //fHost.UpdateControls(false);
+        }
+
+        #endregion
+
+        #region Modify routines
+
+        /// <summary>
+        /// This method performs a basic locking of the records for their
+        /// editors.
+        /// 
+        /// The original idea was to call the methods Lock/Unlock records,
+        /// in the edit dialogs of the records. However, it would be unsafe,
+        /// because in the case of a failure of dialogue, the record would
+        /// remain locked. Therefore, the locking and unlocking of records
+        /// must take on a methods that controls the dialog.
+        /// </summary>
+        /// <param name="record"></param>
+        public void LockRecord(GEDCOMRecord record)
+        {
+            fLockedRecords.Add(record);
+        }
+
+        public void UnlockRecord(GEDCOMRecord record)
+        {
+            fLockedRecords.Remove(record);
+        }
+
+        public bool IsAvailableRecord(GEDCOMRecord record)
+        {
+            bool result = fLockedRecords.IndexOf(record) < 0;
+
+            if (!result) {
+                // message, for exclude of duplication
+                AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
+            }
+
+            return result;
         }
 
         #endregion

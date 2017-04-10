@@ -29,7 +29,6 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.SingleInstance;
-using GKUI.Engine;
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]

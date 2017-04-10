@@ -26,7 +26,6 @@ using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Types;
-using GKUI.Engine;
 
 namespace GKUI.Charts
 {

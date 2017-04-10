@@ -28,7 +28,6 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKUI.Charts
 {

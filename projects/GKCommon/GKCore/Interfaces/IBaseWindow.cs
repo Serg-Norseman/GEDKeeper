@@ -37,8 +37,7 @@ namespace GKCore.Interfaces
         GEDCOMTree Tree { get; }
 
         void Activate();
-        void ApplyFilter();
-        void ApplyFilter(GEDCOMRecordType recType);
+        void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         void ChangeRecord(GEDCOMRecord record);
         void Close();
 
@@ -47,7 +46,6 @@ namespace GKCore.Interfaces
         void FileLoad(string fileName);
         void FileSave(string fileName);
         void CriticalSave();
-        void CollectTips(StringList tipsList);
 
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);
@@ -59,15 +57,11 @@ namespace GKCore.Interfaces
         //void RefreshRecordsView(GEDCOMRecordType recType);
         void ShowRecordsTab(GEDCOMRecordType recType);
 
-        void LockRecord(GEDCOMRecord record);
-        void UnlockRecord(GEDCOMRecord record);
-        bool IsAvailableRecord(GEDCOMRecord record);
-
-        void RecordAdd();
-        void RecordDelete();
-        bool RecordDelete(GEDCOMRecord record, bool confirm);
-        void RecordEdit(object sender, EventArgs e);
+        void AddRecord();
+        void DeleteRecord();
+        void EditRecord();
         bool RecordIsFiltered(GEDCOMRecord record);
+        void NotifyRecord(GEDCOMRecord record, RecordAction action);
 
         void SelectRecordByXRef(string xref);
         void Show();

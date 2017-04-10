@@ -18,12 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -42,13 +42,15 @@ namespace GKCore.Interfaces
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
         bool DeleteRecord(GEDCOMRecord record);
-        void CollectEventValues(GEDCOMCustomEvent evt);
 
         // Individual utils
         bool IsChildless(GEDCOMIndividualRecord iRec);
         int FindBirthYear(GEDCOMIndividualRecord iRec);
         int FindDeathYear(GEDCOMIndividualRecord iRec);
         int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign);
+        void CollectEventValues(GEDCOMCustomEvent evt);
+        void CollectTips(StringList tipsList);
+        IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);
 
         // Multimedia support
         bool CheckBasePath();
@@ -72,5 +74,9 @@ namespace GKCore.Interfaces
         void DoRedo();
         void DoCommit();
         void DoRollback();
+
+        void LockRecord(GEDCOMRecord record);
+        void UnlockRecord(GEDCOMRecord record);
+        bool IsAvailableRecord(GEDCOMRecord record);
     }
 }

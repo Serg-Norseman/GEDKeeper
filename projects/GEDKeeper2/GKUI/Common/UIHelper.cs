@@ -28,7 +28,7 @@ using GKCommon.GEDCOM;
 using GKUI.Contracts;
 using GKUI.Controls;
 
-namespace GKUI.Engine
+namespace GKUI.Common
 {
     /// <summary>
     /// 

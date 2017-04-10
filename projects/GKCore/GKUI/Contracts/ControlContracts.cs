@@ -19,9 +19,32 @@
  */
 
 using System;
+using GKCommon;
+using GKCore.Geocoding;
 
 namespace GKUI.Contracts
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IMapBrowser
+    {
+        bool ShowPoints { get; set; }
+        bool ShowLines { get; set; }
+        ExtList<GeoPoint> MapPoints { get; }
+
+        int AddPoint(double latitude, double longitude, string hint);
+        void ClearPoints();
+        void DeletePoint(int index);
+        void BeginUpdate();
+        void EndUpdate();
+        void InitMap();
+        void RefreshPoints();
+        void SaveSnapshot(string fileName);
+        void SetCenter(double latitude, double longitude, int scale);
+        void ZoomToBounds();
+    }
+
     /// <summary>
     /// 
     /// </summary>

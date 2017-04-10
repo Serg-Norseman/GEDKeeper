@@ -26,7 +26,6 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKUI.Controls
 {
@@ -132,7 +131,7 @@ namespace GKUI.Controls
                 }
 
                 sourceRec.MoveTo(targetRec, false);
-                fBase.RecordDelete(sourceRec, false);
+                AppHub.BaseController.DeleteRecord(fBase, sourceRec, false);
 
                 if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && fBookmark) {
                     ((GEDCOMIndividualRecord)targetRec).Bookmark = true;

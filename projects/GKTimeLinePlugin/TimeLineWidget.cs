@@ -182,11 +182,11 @@ namespace GKTimeLinePlugin
                 int ddy = GEDCOMUtils.GetRelativeYear(iRec, "DEAT");
 
                 if (bdy != 0 && ddy == 0) {
-                    ddy = bdy + GKConsts.PROVED_LIFE_LENGTH;
+                    ddy = bdy + GKData.PROVED_LIFE_LENGTH;
                 }
 
                 if (bdy == 0 && ddy != 0) {
-                    bdy = ddy - GKConsts.PROVED_LIFE_LENGTH;
+                    bdy = ddy - GKData.PROVED_LIFE_LENGTH;
                 }
 
                 if (fYearCurrent > 0) {

@@ -86,7 +86,7 @@ namespace GKCommon.GEDCOM
         private readonly GEDCOMHeader fHeader;
         private readonly GEDCOMList<GEDCOMRecord> fRecords;
         private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
-        
+
         private string fFileName;
         private EventHandler fOnChange;
         private EventHandler fOnChanging;

@@ -29,8 +29,8 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
+using GKUI.Common;
 using GKUI.Dialogs;
-using GKUI.Forms;
 
 namespace GKUI
 {
@@ -117,35 +117,6 @@ namespace GKUI
         protected override IPrintable GetPrintable()
         {
             return fTreeBox;
-        }
-
-        public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
-        {
-            bool result = true;
-
-            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth)
-            {
-                GKUtils.InitExtCounts(tree, -1);
-                int ancCount = GKUtils.GetAncestorsCount(iRec);
-                if (ancCount > 2048)
-                {
-                    AppHub.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
-                    return false;
-                }
-            }
-
-            if (chartKind >= TreeChartKind.ckDescendants && chartKind < (TreeChartKind)3)
-            {
-                GKUtils.InitExtCounts(tree, -1);
-                int descCount = GKUtils.GetDescendantsCount(iRec);
-                if (descCount > 2048)
-                {
-                    AppHub.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
-                    result = false;
-                }
-            }
-
-            return result;
         }
 
         private void UpdateTitle()
@@ -449,7 +420,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null || p == fTreeBox.Root) return;
 
-            fBase.RecordDelete(p.Rec, true);
+            AppHub.BaseController.DeleteRecord(fBase, p.Rec, true);
             GenChart(true);
         }
 

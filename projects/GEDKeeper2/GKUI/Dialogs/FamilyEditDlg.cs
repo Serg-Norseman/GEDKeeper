@@ -251,7 +251,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     child = AppHub.BaseController.SelectPerson(fBase, fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
-                    result = (child != null && fBase.IsAvailableRecord(child));
+                    result = (child != null && fBase.Context.IsAvailableRecord(child));
                     if (result) {
                         //result = this.fFamily.AddChild(child);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, fFamily);
@@ -357,7 +357,7 @@ namespace GKUI.Dialogs
         private void btnHusbandDeleteClick(object sender, EventArgs e)
         {
             GEDCOMIndividualRecord husband = fFamily.GetHusband();
-            if (!fBase.IsAvailableRecord(husband)) return;
+            if (!fBase.Context.IsAvailableRecord(husband)) return;
 
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != false)
             {
@@ -391,7 +391,7 @@ namespace GKUI.Dialogs
         private void btnWifeDeleteClick(object sender, EventArgs e)
         {
             GEDCOMIndividualRecord wife = fFamily.GetWife();
-            if (!fBase.IsAvailableRecord(wife)) return;
+            if (!fBase.Context.IsAvailableRecord(wife)) return;
 
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)) != false)
             {
@@ -423,7 +423,7 @@ namespace GKUI.Dialogs
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
-            if (e.Item is GEDCOMRecord && !fBase.IsAvailableRecord((GEDCOMRecord) e.Item)) {
+            if (e.Item is GEDCOMRecord && !fBase.Context.IsAvailableRecord((GEDCOMRecord) e.Item)) {
                 e.IsAvailable = false;
             } else {
                 e.IsAvailable = true;

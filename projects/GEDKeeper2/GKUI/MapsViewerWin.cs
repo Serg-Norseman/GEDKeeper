@@ -27,6 +27,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKUI.Controls;
 
 namespace GKUI
@@ -36,40 +37,6 @@ namespace GKUI
     /// </summary>
     public sealed partial class MapsViewerWin : Form, ILocalization
     {
-        private class PlaceRef
-        {
-            public readonly DateTime Date;
-            public readonly GEDCOMCustomEvent Event;
-
-            public PlaceRef(GEDCOMCustomEvent evt)
-            {
-                Event = evt;
-                Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();
-            }
-        }
-
-        private class MapPlace : BaseObject
-        {
-            public string Name;
-            public readonly IList<GeoPoint> Points;
-            public readonly ExtList<PlaceRef> PlaceRefs;
-
-            public MapPlace()
-            {
-                Points = new List<GeoPoint>();
-                PlaceRefs = new ExtList<PlaceRef>(false);
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing)
-                {
-                    PlaceRefs.Dispose();
-                }
-                base.Dispose(disposing);
-            }
-        }
-
         private readonly TreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
@@ -147,33 +114,6 @@ namespace GKUI
             }
         }
 
-        private void PreparePointsList(ExtList<GeoPoint> gmapPoints, bool byPerson)
-        {
-            fMapBrowser.BeginUpdate();
-            try
-            {
-                fMapBrowser.ClearPoints();
-
-                int num = gmapPoints.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    GeoPoint pt = gmapPoints[i];
-                    string stHint = pt.Hint;
-                    if (byPerson)
-                    {
-                        stHint = stHint + " [" + pt.Date.ToString() + "]";
-                    }
-
-                    fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, stHint);
-                }
-                fMapBrowser.ZoomToBounds();
-            }
-            finally
-            {
-                fMapBrowser.EndUpdate();
-            }
-        }
-
         private void radTotal_Click(object sender, EventArgs e)
         {
             chkBirth.Enabled = radTotal.Checked;
@@ -236,7 +176,7 @@ namespace GKUI
 
                     if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI"))
                     {
-                        CopyPoint(place.Points[0], place.PlaceRefs[j]);
+                        PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
                     }
                 }
             }
@@ -247,7 +187,7 @@ namespace GKUI
                 fMapPoints.QuickSort(MapPointsCompare);
             }
 
-            PreparePointsList(fMapPoints, ind != null);
+            PlacesLoader.CopyPoints(fMapBrowser, fMapPoints, ind != null);
         }
 
         private static int MapPointsCompare(GeoPoint item1, GeoPoint item2)
@@ -364,22 +304,6 @@ namespace GKUI
             } catch (Exception ex) {
                 Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
             }
-        }
-
-        private void CopyPoint(GeoPoint gmPt, PlaceRef placeRef)
-        {
-            GeoPoint pt;
-            int num = fMapPoints.Count;
-            for (int i = 0; i < num; i++) {
-                pt = fMapPoints[i];
-                if (pt.Hint == gmPt.Hint) {
-                    return;
-                }
-            }
-
-            pt = new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint);
-            pt.Date = placeRef.Date;
-            fMapPoints.Add(pt);
         }
     }
 }

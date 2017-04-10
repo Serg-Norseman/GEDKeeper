@@ -2592,6 +2592,66 @@ namespace GKCore
             }
         }
 
+        public static void GetRecordContent(GEDCOMRecord record, ShieldState shieldState, StringList ctx)
+        {
+            if (record != null && ctx != null)
+            {
+                try
+                {
+                    switch (record.RecordType)
+                    {
+                        case GEDCOMRecordType.rtIndividual:
+                            GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, ctx, shieldState);
+                            break;
+
+                        case GEDCOMRecordType.rtFamily:
+                            GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, ctx, shieldState);
+                            break;
+
+                        case GEDCOMRecordType.rtNote:
+                            GKUtils.ShowNoteInfo(record as GEDCOMNoteRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtMultimedia:
+                            GKUtils.ShowMultimediaInfo(record as GEDCOMMultimediaRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtSource:
+                            GKUtils.ShowSourceInfo(record as GEDCOMSourceRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtRepository:
+                            GKUtils.ShowRepositoryInfo(record as GEDCOMRepositoryRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtGroup:
+                            GKUtils.ShowGroupInfo(record as GEDCOMGroupRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtResearch:
+                            GKUtils.ShowResearchInfo(record as GEDCOMResearchRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtTask:
+                            GKUtils.ShowTaskInfo(record as GEDCOMTaskRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtCommunication:
+                            GKUtils.ShowCommunicationInfo(record as GEDCOMCommunicationRecord, ctx);
+                            break;
+
+                        case GEDCOMRecordType.rtLocation:
+                            GKUtils.ShowLocationInfo(record as GEDCOMLocationRecord, ctx);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWrite("GKUtils.GetRecordContext(): " + ex.Message);
+                }
+            }
+        }
+
         #endregion
 
         #region Multimedia support

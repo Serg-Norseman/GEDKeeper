@@ -18,21 +18,41 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore
-{
-    public static class GKConsts
-    {
-        /// <summary>
-        /// Bounds checks data for correctness.
-        /// </summary>
-        public const int PROVED_LIFE_LENGTH = 122; // max. duration of a person's life (proved)
+using System;
+using System.Reflection;
 
-        // TODO: implement checks and options!
-        public const int MIN_PARENT_AGE = 10; // min. age of parent at child's birth
-        public const int MAX_MOTHER_AGE = 55; // max. age of mother at child's birth
-        public const int MAX_FATHER_AGE = 85; // max. age of father at child's birth
-        public const int MIN_MARRIAGE_AGE = 15; // min. age for marriage
-        public const int MAX_SPOUSES_DIFF = 90; // max. age difference between spouses
-        public const int MAX_BRT_SST_DIFF = 40; // max. age difference between brothers/sisters
+using GKCommon;
+using GKUI.Contracts;
+
+namespace GKUI.Common
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Utilities : IUtilities
+    {
+        public Utilities()
+        {
+        }
+
+        #region Executing environment
+
+        public Assembly GetExecutingAssembly()
+        {
+            return Assembly.GetExecutingAssembly();
+        }
+
+        public Version GetAppVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version;
+        }
+
+        public string GetAppCopyright()
+        {
+            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
+            return (attr == null) ? string.Empty : attr.Copyright;
+        }
+
+        #endregion
     }
 }

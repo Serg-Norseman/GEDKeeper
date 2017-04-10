@@ -604,7 +604,7 @@ namespace GKUI
 
                 if (obj is GEDCOMIndividualRecord)
                 {
-                    Base.RecordDelete(obj as GEDCOMIndividualRecord, false);
+                    AppHub.BaseController.DeleteRecord(Base, obj as GEDCOMIndividualRecord, false);
                 }
             }
 

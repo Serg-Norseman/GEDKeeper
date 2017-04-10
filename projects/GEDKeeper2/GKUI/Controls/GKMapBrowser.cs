@@ -24,13 +24,14 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCore.Geocoding;
+using GKUI.Contracts;
 
 namespace GKUI.Controls
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKMapBrowser : WebBrowser
+    public class GKMapBrowser : WebBrowser, IMapBrowser
     {
         private struct CoordsRect
         {

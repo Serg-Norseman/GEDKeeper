@@ -27,7 +27,6 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKUI
 {

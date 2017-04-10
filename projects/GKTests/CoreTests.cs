@@ -1392,7 +1392,10 @@ namespace GKTests.GKCore
         public void Tools_Tests()
         {
             IBaseWindow baseWin = new BaseWindowMock();
-            AppHub.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton);
+            AppHub.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton, true);
+
+            ValuesCollection valuesCollection = new ValuesCollection();
+            ProgressMock progress = new ProgressMock();
 
             //
 
@@ -1435,8 +1438,6 @@ namespace GKTests.GKCore
 
             //
 
-            ValuesCollection valuesCollection = new ValuesCollection();
-            ProgressMock progress = new ProgressMock();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, null); });

@@ -26,6 +26,7 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Charts;
 using GKUI.Contracts;
 
 namespace GKCore
@@ -438,6 +439,35 @@ namespace GKCore
             }
         }
 
+        public bool CheckTreeChartSize(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
+        {
+            bool result = true;
+
+            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth)
+            {
+                GKUtils.InitExtCounts(tree, -1);
+                int ancCount = GKUtils.GetAncestorsCount(iRec);
+                if (ancCount > 2048)
+                {
+                    AppHub.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
+                    return false;
+                }
+            }
+
+            if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth)
+            {
+                GKUtils.InitExtCounts(tree, -1);
+                int descCount = GKUtils.GetDescendantsCount(iRec);
+                if (descCount > 2048)
+                {
+                    AppHub.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Modify routines
@@ -462,12 +492,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(mediaRec);
+                        baseWin.Context.LockRecord(mediaRec);
 
                         dlg.MediaRec = mediaRec;
                         result = (AppHub.MainWindow.ShowModalX(dlg, false));
                     } finally {
-                        baseWin.UnlockRecord(mediaRec);
+                        baseWin.Context.UnlockRecord(mediaRec);
                     }
 
                     if (!exists) {
@@ -501,7 +531,7 @@ namespace GKCore
                 }
 
                 try {
-                    baseWin.LockRecord(noteRec);
+                    baseWin.Context.LockRecord(noteRec);
 
                     if (GlobalOptions.Instance.UseExtendedNotes) {
                         using (var dlg = AppHub.Container.Resolve<INoteEditDlgEx>())
@@ -521,7 +551,7 @@ namespace GKCore
                         }
                     }
                 } finally {
-                    baseWin.UnlockRecord(noteRec);
+                    baseWin.Context.UnlockRecord(noteRec);
                 }
 
                 if (!exists) {
@@ -558,12 +588,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(sourceRec);
+                        baseWin.Context.LockRecord(sourceRec);
 
                         dlg.SourceRecord = sourceRec;
                         result = (AppHub.MainWindow.ShowModalX(dlg, false));
                     } finally {
-                        baseWin.UnlockRecord(sourceRec);
+                        baseWin.Context.UnlockRecord(sourceRec);
                     }
 
                     if (!exists) {
@@ -637,12 +667,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(repRec);
+                        baseWin.Context.LockRecord(repRec);
 
                         dlg.Repository = repRec;
                         result = AppHub.MainWindow.ShowModalX(dlg, false);
                     } finally {
-                        baseWin.UnlockRecord(repRec);
+                        baseWin.Context.UnlockRecord(repRec);
                     }
 
                     if (!exists) {
@@ -680,12 +710,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(groupRec);
+                        baseWin.Context.LockRecord(groupRec);
 
                         dlg.Group = groupRec;
                         result = (AppHub.MainWindow.ShowModalX(dlg, false));
                     } finally {
-                        baseWin.UnlockRecord(groupRec);
+                        baseWin.Context.UnlockRecord(groupRec);
                     }
 
                     if (!exists) {
@@ -723,12 +753,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(researchRec);
+                        baseWin.Context.LockRecord(researchRec);
 
                         dlg.Research = researchRec;
                         result = AppHub.MainWindow.ShowModalX(dlg, false);
                     } finally {
-                        baseWin.UnlockRecord(researchRec);
+                        baseWin.Context.UnlockRecord(researchRec);
                     }
 
                     if (!exists) {
@@ -766,12 +796,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(taskRec);
+                        baseWin.Context.LockRecord(taskRec);
 
                         dlg.Task = taskRec;
                         result = AppHub.MainWindow.ShowModalX(dlg, false);
                     } finally {
-                        baseWin.UnlockRecord(taskRec);
+                        baseWin.Context.UnlockRecord(taskRec);
                     }
 
                     if (!exists) {
@@ -809,12 +839,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(commRec);
+                        baseWin.Context.LockRecord(commRec);
 
                         dlg.Communication = commRec;
                         result = AppHub.MainWindow.ShowModalX(dlg, false);
                     } finally {
-                        baseWin.UnlockRecord(commRec);
+                        baseWin.Context.UnlockRecord(commRec);
                     }
 
                     if (!exists) {
@@ -852,12 +882,12 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(locRec);
+                        baseWin.Context.LockRecord(locRec);
 
                         dlg.LocationRecord = locRec;
                         result = AppHub.MainWindow.ShowModalX(dlg, false);
                     } finally {
-                        baseWin.UnlockRecord(locRec);
+                        baseWin.Context.UnlockRecord(locRec);
                     }
 
                     if (!exists) {
@@ -925,7 +955,7 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(indivRec);
+                        baseWin.Context.LockRecord(indivRec);
 
                         dlg.Person = indivRec;
 
@@ -939,7 +969,7 @@ namespace GKCore
 
                         result = (AppHub.MainWindow.ShowModalX(dlg, false));
                     } finally {
-                        baseWin.UnlockRecord(indivRec);
+                        baseWin.Context.UnlockRecord(indivRec);
                     }
 
                     if (!exists) {
@@ -988,7 +1018,7 @@ namespace GKCore
                     }
 
                     try {
-                        baseWin.LockRecord(familyRec);
+                        baseWin.Context.LockRecord(familyRec);
 
                         dlg.Family = familyRec;
 
@@ -998,7 +1028,7 @@ namespace GKCore
 
                         result = (AppHub.MainWindow.ShowModalX(dlg, false));
                     } finally {
-                        baseWin.UnlockRecord(familyRec);
+                        baseWin.Context.UnlockRecord(familyRec);
                     }
 
                     if (!exists) {
@@ -1061,6 +1091,238 @@ namespace GKCore
         #endregion
 
         #region Data modification functions for UI
+
+        public bool AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, out GEDCOMRecord rec)
+        {
+            bool result = false;
+            rec = null;
+
+            switch (rt)
+            {
+                case GEDCOMRecordType.rtIndividual:
+                    {
+                        GEDCOMIndividualRecord indivRec = null;
+                        result = ModifyIndividual(baseWin, ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
+                        rec = indivRec;
+                        break;
+                    }
+
+                case GEDCOMRecordType.rtFamily:
+                    {
+                        GEDCOMFamilyRecord fam = null;
+                        result = ModifyFamily(baseWin, ref fam, FamilyTarget.None, null);
+                        rec = fam;
+                        break;
+                    }
+                case GEDCOMRecordType.rtNote:
+                    {
+                        GEDCOMNoteRecord note = null;
+                        result = ModifyNote(baseWin, ref note);
+                        rec = note;
+                        break;
+                    }
+                case GEDCOMRecordType.rtMultimedia:
+                    {
+                        GEDCOMMultimediaRecord mmRec = null;
+                        result = ModifyMedia(baseWin, ref mmRec);
+                        rec = mmRec;
+                        break;
+                    }
+                case GEDCOMRecordType.rtSource:
+                    {
+                        GEDCOMSourceRecord src = null;
+                        result = ModifySource(baseWin, ref src);
+                        rec = src;
+                        break;
+                    }
+                case GEDCOMRecordType.rtRepository:
+                    {
+                        GEDCOMRepositoryRecord rep = null;
+                        result = ModifyRepository(baseWin, ref rep);
+                        rec = rep;
+                        break;
+                    }
+                case GEDCOMRecordType.rtGroup:
+                    {
+                        GEDCOMGroupRecord grp = null;
+                        result = ModifyGroup(baseWin, ref grp);
+                        rec = grp;
+                        break;
+                    }
+                case GEDCOMRecordType.rtResearch:
+                    {
+                        GEDCOMResearchRecord rsr = null;
+                        result = ModifyResearch(baseWin, ref rsr);
+                        rec = rsr;
+                        break;
+                    }
+                case GEDCOMRecordType.rtTask:
+                    {
+                        GEDCOMTaskRecord tsk = null;
+                        result = ModifyTask(baseWin, ref tsk);
+                        rec = tsk;
+                        break;
+                    }
+                case GEDCOMRecordType.rtCommunication:
+                    {
+                        GEDCOMCommunicationRecord comm = null;
+                        result = ModifyCommunication(baseWin, ref comm);
+                        rec = comm;
+                        break;
+                    }
+                case GEDCOMRecordType.rtLocation:
+                    {
+                        GEDCOMLocationRecord loc = null;
+                        result = ModifyLocation(baseWin, ref loc);
+                        rec = loc;
+                        break;
+                    }
+            }
+
+            return result;
+        }
+
+        public bool EditRecord(IBaseWindow baseWin, GEDCOMRecord rec)
+        {
+            bool result = false;
+
+            switch (rec.RecordType) {
+                case GEDCOMRecordType.rtIndividual:
+                    GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    break;
+
+                case GEDCOMRecordType.rtFamily:
+                    GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
+                    result = ModifyFamily(baseWin, ref fam, FamilyTarget.None, null);
+                    break;
+
+                case GEDCOMRecordType.rtNote:
+                    GEDCOMNoteRecord note = rec as GEDCOMNoteRecord;
+                    result = ModifyNote(baseWin, ref note);
+                    break;
+
+                case GEDCOMRecordType.rtMultimedia:
+                    GEDCOMMultimediaRecord mmRec = rec as GEDCOMMultimediaRecord;
+                    result = ModifyMedia(baseWin, ref mmRec);
+                    break;
+
+                case GEDCOMRecordType.rtSource:
+                    GEDCOMSourceRecord src = rec as GEDCOMSourceRecord;
+                    result = ModifySource(baseWin, ref src);
+                    break;
+
+                case GEDCOMRecordType.rtRepository:
+                    GEDCOMRepositoryRecord rep = rec as GEDCOMRepositoryRecord;
+                    result = ModifyRepository(baseWin, ref rep);
+                    break;
+
+                case GEDCOMRecordType.rtGroup:
+                    GEDCOMGroupRecord grp = rec as GEDCOMGroupRecord;
+                    result = ModifyGroup(baseWin, ref grp);
+                    break;
+
+                case GEDCOMRecordType.rtResearch:
+                    GEDCOMResearchRecord rsr = rec as GEDCOMResearchRecord;
+                    result = ModifyResearch(baseWin, ref rsr);
+                    break;
+
+                case GEDCOMRecordType.rtTask:
+                    GEDCOMTaskRecord tsk = rec as GEDCOMTaskRecord;
+                    result = ModifyTask(baseWin, ref tsk);
+                    break;
+
+                case GEDCOMRecordType.rtCommunication:
+                    GEDCOMCommunicationRecord comm = rec as GEDCOMCommunicationRecord;
+                    result = ModifyCommunication(baseWin, ref comm);
+                    break;
+
+                case GEDCOMRecordType.rtLocation:
+                    GEDCOMLocationRecord loc = rec as GEDCOMLocationRecord;
+                    result = ModifyLocation(baseWin, ref loc);
+                    break;
+            }
+
+            return result;
+        }
+
+        public bool DeleteRecord(IBaseWindow baseWin, GEDCOMRecord record, bool confirm)
+        {
+            bool result = false;
+
+            if (record != null)
+            {
+                //string xref = record.XRef;
+                string msg = "";
+                switch (record.RecordType)
+                {
+                    case GEDCOMRecordType.rtIndividual:
+                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GEDCOMIndividualRecord)record), true, false));
+                        break;
+
+                    case GEDCOMRecordType.rtFamily:
+                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
+                        break;
+
+                    case GEDCOMRecordType.rtNote:
+                        {
+                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
+                            if (string.IsNullOrEmpty(value))
+                            {
+                                value = string.Format("#{0}", record.GetId().ToString());
+                            }
+                            msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
+                            break;
+                        }
+
+                    case GEDCOMRecordType.rtMultimedia:
+                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
+                        break;
+
+                    case GEDCOMRecordType.rtSource:
+                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
+                        break;
+
+                    case GEDCOMRecordType.rtRepository:
+                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
+                        break;
+
+                    case GEDCOMRecordType.rtGroup:
+                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
+                        break;
+
+                    case GEDCOMRecordType.rtResearch:
+                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
+                        break;
+
+                    case GEDCOMRecordType.rtTask:
+                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
+                        break;
+
+                    case GEDCOMRecordType.rtCommunication:
+                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
+                        break;
+
+                    case GEDCOMRecordType.rtLocation:
+                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
+                        break;
+                }
+
+                if (confirm && AppHub.StdDialogs.ShowQuestionYN(msg) != true)
+                    return false;
+
+                baseWin.NotifyRecord(record, RecordAction.raDelete);
+
+                result = baseWin.Context.DeleteRecord(record);
+
+                if (result) {
+                    baseWin.Modified = true;
+                    baseWin.Tree.Header.TransmissionDateTime = DateTime.Now;
+                }
+            }
+
+            return result;
+        }
 
         public bool AddIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
         {

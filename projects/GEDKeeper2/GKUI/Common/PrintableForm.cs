@@ -28,7 +28,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore.Interfaces;
 
-namespace GKUI.Forms
+namespace GKUI.Common
 {
     /// <summary>
     /// Form's class, common for the implementation of the print.

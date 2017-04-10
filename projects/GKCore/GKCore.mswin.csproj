@@ -145,6 +145,7 @@
     <Compile Include="GKCore\Lists\ResearchListMan.cs" />
     <Compile Include="GKCore\Lists\SourceListMan.cs" />
     <Compile Include="GKCore\Lists\TaskListMan.cs" />
+    <Compile Include="GKCore\Maps\PlacesLoader.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
@@ -190,6 +191,7 @@
     <Folder Include="GKCore\Geocoding" />
     <Folder Include="GKCore\Kinships" />
     <Folder Include="GKCore\Lists" />
+    <Folder Include="GKCore\Maps" />
     <Folder Include="GKCore\Operations" />
     <Folder Include="GKCore\Options" />
     <Folder Include="GKCore\Plugins" />

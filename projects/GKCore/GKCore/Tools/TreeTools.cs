@@ -875,7 +875,7 @@ namespace GKCore.Tools
             {
                 int age = GKUtils.GetAge(iRec, -1);
 
-                if (age != -1 && age >= GKConsts.PROVED_LIFE_LENGTH)
+                if (age != -1 && age >= GKData.PROVED_LIFE_LENGTH)
                 {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonLonglived, CheckSolve.csSetIsDead);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);

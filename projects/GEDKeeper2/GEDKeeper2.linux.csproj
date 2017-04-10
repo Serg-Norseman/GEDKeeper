@@ -131,6 +131,8 @@
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Common\MdiChildFormEx.cs" />
+    <Compile Include="GKUI\Common\PrintableForm.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -367,11 +369,9 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Engine\Utilities.cs" />
-    <Compile Include="GKUI\Engine\UIHelper.cs" />
-    <Compile Include="GKUI\Engine\WinFormsStdDialogs.cs" />
-    <Compile Include="GKUI\Forms\MdiChildFormEx.cs" />
-    <Compile Include="GKUI\Forms\PrintableForm.cs" />
+    <Compile Include="GKUI\Common\Utilities.cs" />
+    <Compile Include="GKUI\Common\UIHelper.cs" />
+    <Compile Include="GKUI\Common\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>

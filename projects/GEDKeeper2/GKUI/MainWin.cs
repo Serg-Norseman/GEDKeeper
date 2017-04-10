@@ -846,7 +846,7 @@ namespace GKUI
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         result.FileLoad(fileName);
-                        result.CollectTips(fTips);
+                        result.Context.CollectTips(fTips);
                     } else {
                         result.FileNew();
                     }
@@ -1062,7 +1062,7 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            curBase.RecordAdd();
+            curBase.AddRecord();
         }
 
         private void miRecordEdit_Click(object sender, EventArgs e)
@@ -1070,7 +1070,7 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            curBase.RecordEdit(sender, e);
+            curBase.EditRecord();
         }
 
         private void miRecordDelete_Click(object sender, EventArgs e)
@@ -1078,7 +1078,7 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            curBase.RecordDelete();
+            curBase.DeleteRecord();
         }
 
         private void miSearch_Click(object sender, EventArgs e)
@@ -1217,8 +1217,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckAncestors)) {
-                TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
+            GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckAncestors)) {
+                TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckAncestors;
                 fmChart.GenChart(true);
             }
@@ -1229,8 +1230,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckDescendants)) {
-                TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
+            GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckDescendants)) {
+                TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckDescendants;
                 fmChart.GenChart(true);
             }
@@ -1241,8 +1243,9 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile();
             if (curBase == null) return;
 
-            if (TreeChartWin.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartKind.ckBoth)) {
-                TreeChartWin fmChart = new TreeChartWin(curBase, curBase.GetSelectedPerson());
+            GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckBoth)) {
+                TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckBoth;
                 fmChart.GenChart(true);
             }

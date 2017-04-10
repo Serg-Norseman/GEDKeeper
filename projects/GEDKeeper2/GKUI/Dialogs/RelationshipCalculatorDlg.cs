@@ -28,7 +28,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Tools;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {

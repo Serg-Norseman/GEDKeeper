@@ -20,10 +20,10 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {

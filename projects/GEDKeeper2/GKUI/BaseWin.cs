@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -34,9 +33,9 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using GKUI.Common;
 using GKUI.Controls;
 using GKUI.Dialogs;
-using GKUI.Forms;
 
 namespace GKUI
 {
@@ -47,10 +46,8 @@ namespace GKUI
     {
         #region Private fields
 
-        private readonly List<GEDCOMRecord> fLockedRecords;
-
-        private readonly NavigationStack fNavman;
         private readonly IBaseContext fContext;
+        private readonly NavigationStack fNavman;
 
         private bool fModified;
         private ShieldState fShieldState;
@@ -136,11 +133,8 @@ namespace GKUI
         {
             InitializeComponent();
 
-            fLockedRecords = new List<GEDCOMRecord>();
-
             fTree = new GEDCOMTree();
             fContext = new BaseContext(fTree, this);
-
             fNavman = new NavigationStack();
 
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out ListPersons, out mPersonSummary);
@@ -170,8 +164,6 @@ namespace GKUI
                     fTree.Dispose();
                     fTree = null;
                 }
-
-                /*fLockedRecords.Dispose();*/
 
                 if (components != null) components.Dispose();
                 #endif
@@ -231,7 +223,7 @@ namespace GKUI
 
                 case Keys.Return:
                     if (e.Control) {
-                        RecordEdit(null, null);
+                        EditRecord();
                     }
                     break;
 
@@ -255,22 +247,22 @@ namespace GKUI
 
         private void miRecordAdd_Click(object sender, EventArgs e)
         {
-            RecordAdd();
+            AddRecord();
         }
-        
+
         private void miRecordEdit_Click(object sender, EventArgs e)
         {
-            RecordEdit(null, null);
+            EditRecord();
         }
 
         private void miRecordDelete_Click(object sender, EventArgs e)
         {
-            RecordDelete();
+            DeleteRecord();
         }
 
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
-            RecordDuplicate();
+            DuplicateRecord();
         }
 
         #endregion
@@ -335,14 +327,13 @@ namespace GKUI
             return list;
         }
 
-        ///-----------------------------------------------------------------------------
+
         /// <summary>
         /// Gets a hyper-view control for the specified record type.
         /// </summary>
         /// <param name="recType">Record type for which a hyper view control is
         /// required.</param>
         /// <returns>Hyper view control.</returns>
-        ///-----------------------------------------------------------------------------
         public HyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
             HyperView view = null;
@@ -405,8 +396,8 @@ namespace GKUI
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
-            GEDCOMRecordType rt = GetSelectedRecordType();
-            GKRecordsView rView = GetRecordsViewByType(rt);
+            GEDCOMRecordType recType = GetSelectedRecordType();
+            GKRecordsView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.GetSelectedRecord();
         }
 
@@ -464,19 +455,15 @@ namespace GKUI
             MainWin.Instance.UpdateControls(false);
         }
 
-        public void ApplyFilter()
+        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
         {
             if (fTree.RecordsCount > 0)
             {
-                RefreshLists(false);
-            }
-        }
-
-        public void ApplyFilter(GEDCOMRecordType recType)
-        {
-            if (fTree.RecordsCount > 0)
-            {
-                RefreshRecordsView(recType);
+                if (recType == GEDCOMRecordType.rtNone) {
+                    RefreshLists(false);
+                } else {
+                    RefreshRecordsView(recType);
+                }
             }
         }
 
@@ -484,10 +471,10 @@ namespace GKUI
         {
             if (record == null) return;
 
-            record.ChangeDate.ChangeDateTime = DateTime.Now;
-
+            DateTime dtNow = DateTime.Now;
+            record.ChangeDate.ChangeDateTime = dtNow;
+            fTree.Header.TransmissionDateTime = dtNow;
             Modified = true;
-            fTree.Header.TransmissionDateTime = DateTime.Now;
 
             MainWin.Instance.NotifyRecord(this, record, RecordAction.raEdit);
         }
@@ -536,7 +523,7 @@ namespace GKUI
 
             recView = (GKRecordsView)AppHub.UIHelper.CreateRecordsView(sheet, fTree, recType);
             recView.IsMainList = true;
-            recView.DoubleClick += RecordEdit;
+            recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateTitles();
             recView.ContextMenuStrip = contextMenu;
@@ -573,6 +560,11 @@ namespace GKUI
             fTree.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fTree.Header.Language.Value = MainWin.Instance.Options.GetCurrentItfLang();
             Modified = false;
+        }
+
+        private void LoadProgress(object sender, int progress)
+        {
+            AppHub.Progress.ProgressStep(progress);
         }
 
         public void FileLoad(string fileName)
@@ -693,7 +685,7 @@ namespace GKUI
             PageRecords_SelectedIndexChanged(null, null);
         }
 
-        public void RecordNotify(GEDCOMRecord record, RecordAction action)
+        public void NotifyRecord(GEDCOMRecord record, RecordAction action)
         {
             if (record == null) return;
 
@@ -798,78 +790,6 @@ namespace GKUI
             }
         }
 
-        public void CollectTips(StringList tipsList)
-        {
-            if (tipsList == null)
-                throw new ArgumentNullException("tipsList");
-
-            if (!MainWin.Instance.Options.ShowTips) return;
-
-            try
-            {
-                try
-                {
-                    bool firstTip = true;
-                    int num = fTree.RecordsCount;
-                    for (int i = 0; i < num; i++)
-                    {
-                        GEDCOMRecord rec = fTree[i];
-                        if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
-
-                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
-
-                        int days;
-                        if (GKUtils.GetDaysForBirth(iRec, out days))
-                        {
-                            string nm = GKUtils.GetNameString(iRec, true, false);
-                            nm = fContext.Culture.GetPossessiveName(nm);
-
-                            if (days >= 0 && 3 > days) {
-                                string tip;
-
-                                if (firstTip) {
-                                    tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
-                                    firstTip = false;
-                                }
-
-                                if (0 == days)
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_BirthdayToday), nm);
-                                }
-                                else if (1 == days)
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
-                                }
-                                else
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_DaysRemained),
-                                        nm, days);
-                                }
-
-                                tipsList.Add(tip);
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    // temp stub, remove try/finally here?
-                }
-            }
-            catch (Exception ex)
-            {
-                Host.LogWrite("BaseWin.ShowTips(): " + ex.Message);
-            }
-        }
-
-        private void LoadProgress(object sender, int progress)
-        {
-            AppHub.Progress.ProgressStep(progress);
-        }
-
         #endregion
 
         #region ILocalization implementation
@@ -902,8 +822,8 @@ namespace GKUI
         {
             string res = "";
 
-            GEDCOMRecordType rt = GetSelectedRecordType();
-            GKRecordsView rView = GetRecordsViewByType(rt);
+            GEDCOMRecordType recType = GetSelectedRecordType();
+            GKRecordsView rView = GetRecordsViewByType(recType);
 
             if (rView != null)
             {
@@ -973,25 +893,8 @@ namespace GKUI
 
         IList<ISearchResult> IWorkWindow.FindAll(string searchPattern)
         {
-            List<ISearchResult> result = new List<ISearchResult>();
-
-            Regex regex = GKUtils.InitMaskRegex(searchPattern);
-
-            int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = fTree[i];
-
-                if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
-
-                    string fullname = GKUtils.GetNameString(iRec, true, false);
-                    if (GKUtils.MatchesRegex(fullname, regex)) {
-                        //yield return new SearchResult(iRec);
-                        result.Add(new SearchResult(iRec));
-                    }
-                }
-            }
-
+            GEDCOMRecordType rt = GetSelectedRecordType();
+            IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
             return result;
         }
 
@@ -1023,11 +926,11 @@ namespace GKUI
 
         #region Record Management
 
-        public void RecordDuplicate()
+        public void DuplicateRecord()
         {
-            GEDCOMRecord source = GetSelectedRecordEx();
-            if (source == null) return;
-            if (source.RecordType != GEDCOMRecordType.rtIndividual) return;
+            GEDCOMRecord original = GetSelectedRecordEx();
+            if (original == null) return;
+            if (original.RecordType != GEDCOMRecordType.rtIndividual) return;
 
             AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
 
@@ -1036,7 +939,7 @@ namespace GKUI
                 fContext.BeginUpdate();
 
                 target = fContext.Tree.CreateIndividual();
-                target.Assign(source);
+                target.Assign(original);
 
                 ChangeRecord(target);
             } finally {
@@ -1047,259 +950,35 @@ namespace GKUI
             SelectRecordByXRef(target.XRef);
         }
 
-        public void RecordAdd()
+        public void AddRecord()
         {
-            bool result = false;
-
-            GEDCOMRecord rec = null;
             GEDCOMRecordType rt = GetSelectedRecordType();
 
-            switch (rt)
-            {
-                case GEDCOMRecordType.rtIndividual:
-                    {
-                        GEDCOMIndividualRecord indivRec = null;
-                        result = AppHub.BaseController.ModifyIndividual(this, ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
-                        rec = indivRec;
-                        break;
-                    }
-
-                case GEDCOMRecordType.rtFamily:
-                    {
-                        GEDCOMFamilyRecord fam = null;
-                        result = AppHub.BaseController.ModifyFamily(this, ref fam, FamilyTarget.None, null);
-                        rec = fam;
-                        break;
-                    }
-                case GEDCOMRecordType.rtNote:
-                    {
-                        GEDCOMNoteRecord note = null;
-                        result = AppHub.BaseController.ModifyNote(this, ref note);
-                        rec = note;
-                        break;
-                    }
-                case GEDCOMRecordType.rtMultimedia:
-                    {
-                        GEDCOMMultimediaRecord mmRec = null;
-                        result = AppHub.BaseController.ModifyMedia(this, ref mmRec);
-                        rec = mmRec;
-                        break;
-                    }
-                case GEDCOMRecordType.rtSource:
-                    {
-                        GEDCOMSourceRecord src = null;
-                        result = AppHub.BaseController.ModifySource(this, ref src);
-                        rec = src;
-                        break;
-                    }
-                case GEDCOMRecordType.rtRepository:
-                    {
-                        GEDCOMRepositoryRecord rep = null;
-                        result = AppHub.BaseController.ModifyRepository(this, ref rep);
-                        rec = rep;
-                        break;
-                    }
-                case GEDCOMRecordType.rtGroup:
-                    {
-                        GEDCOMGroupRecord grp = null;
-                        result = AppHub.BaseController.ModifyGroup(this, ref grp);
-                        rec = grp;
-                        break;
-                    }
-                case GEDCOMRecordType.rtResearch:
-                    {
-                        GEDCOMResearchRecord rsr = null;
-                        result = AppHub.BaseController.ModifyResearch(this, ref rsr);
-                        rec = rsr;
-                        break;
-                    }
-                case GEDCOMRecordType.rtTask:
-                    {
-                        GEDCOMTaskRecord tsk = null;
-                        result = AppHub.BaseController.ModifyTask(this, ref tsk);
-                        rec = tsk;
-                        break;
-                    }
-                case GEDCOMRecordType.rtCommunication:
-                    {
-                        GEDCOMCommunicationRecord comm = null;
-                        result = AppHub.BaseController.ModifyCommunication(this, ref comm);
-                        rec = comm;
-                        break;
-                    }
-                case GEDCOMRecordType.rtLocation:
-                    {
-                        GEDCOMLocationRecord loc = null;
-                        result = AppHub.BaseController.ModifyLocation(this, ref loc);
-                        rec = loc;
-                        break;
-                    }
-            }
-
-            if (result) {
+            GEDCOMRecord rec;
+            if (AppHub.BaseController.AddRecord(this, rt, out rec)) {
                 RefreshLists(false);
                 SelectRecordByXRef(rec.XRef);
             }
         }
 
-        public bool RecordDelete(GEDCOMRecord record, bool confirm)
-        {
-            bool result = false;
-
-            if (record != null)
-            {
-                //string xref = record.XRef;
-                string msg = "";
-                switch (record.RecordType)
-                {
-                    case GEDCOMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GEDCOMIndividualRecord)record), true, false));
-                        break;
-
-                    case GEDCOMRecordType.rtFamily:
-                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
-                        break;
-
-                    case GEDCOMRecordType.rtNote:
-                        {
-                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
-                            if (string.IsNullOrEmpty(value))
-                            {
-                                value = string.Format("#{0}", record.GetId().ToString());
-                            }
-                            msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtMultimedia:
-                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
-                        break;
-
-                    case GEDCOMRecordType.rtSource:
-                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
-                        break;
-
-                    case GEDCOMRecordType.rtRepository:
-                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
-                        break;
-
-                    case GEDCOMRecordType.rtGroup:
-                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
-                        break;
-
-                    case GEDCOMRecordType.rtResearch:
-                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
-                        break;
-
-                    case GEDCOMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
-                        break;
-
-                    case GEDCOMRecordType.rtCommunication:
-                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
-                        break;
-
-                    case GEDCOMRecordType.rtLocation:
-                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
-                        break;
-                }
-
-                if (confirm && AppHub.StdDialogs.ShowQuestionYN(msg) != true)
-                    return false;
-
-                RecordNotify(record, RecordAction.raDelete);
-
-                result = fContext.DeleteRecord(record);
-
-                if (result) {
-                    Modified = true;
-                    fTree.Header.TransmissionDateTime = DateTime.Now;
-                }
-            }
-
-            return result;
-        }
-
-        public void RecordDelete()
+        public void EditRecord()
         {
             GEDCOMRecord record = GetSelectedRecordEx();
             if (record == null) return;
 
-            bool result = RecordDelete(record, true);
-
-            if (result) {
+            if (AppHub.BaseController.EditRecord(this, record)) {
                 RefreshLists(false);
+                ShowRecordInfo(record);
             }
         }
 
-        public void RecordEdit(object sender, EventArgs e)
+        public void DeleteRecord()
         {
-            GEDCOMRecord rec = GetSelectedRecordEx();
-            if (rec == null) return;
+            GEDCOMRecord record = GetSelectedRecordEx();
+            if (record == null) return;
 
-            bool result = false;
-
-            switch (rec.RecordType) {
-                case GEDCOMRecordType.rtIndividual:
-                    GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                    result = AppHub.BaseController.ModifyIndividual(this, ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
-                    break;
-
-                case GEDCOMRecordType.rtFamily:
-                    GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-                    result = AppHub.BaseController.ModifyFamily(this, ref fam, FamilyTarget.None, null);
-                    break;
-
-                case GEDCOMRecordType.rtNote:
-                    GEDCOMNoteRecord note = rec as GEDCOMNoteRecord;
-                    result = AppHub.BaseController.ModifyNote(this, ref note);
-                    break;
-
-                case GEDCOMRecordType.rtMultimedia:
-                    GEDCOMMultimediaRecord mmRec = rec as GEDCOMMultimediaRecord;
-                    result = AppHub.BaseController.ModifyMedia(this, ref mmRec);
-                    break;
-
-                case GEDCOMRecordType.rtSource:
-                    GEDCOMSourceRecord src = rec as GEDCOMSourceRecord;
-                    result = AppHub.BaseController.ModifySource(this, ref src);
-                    break;
-
-                case GEDCOMRecordType.rtRepository:
-                    GEDCOMRepositoryRecord rep = rec as GEDCOMRepositoryRecord;
-                    result = AppHub.BaseController.ModifyRepository(this, ref rep);
-                    break;
-
-                case GEDCOMRecordType.rtGroup:
-                    GEDCOMGroupRecord grp = rec as GEDCOMGroupRecord;
-                    result = AppHub.BaseController.ModifyGroup(this, ref grp);
-                    break;
-
-                case GEDCOMRecordType.rtResearch:
-                    GEDCOMResearchRecord rsr = rec as GEDCOMResearchRecord;
-                    result = AppHub.BaseController.ModifyResearch(this, ref rsr);
-                    break;
-
-                case GEDCOMRecordType.rtTask:
-                    GEDCOMTaskRecord tsk = rec as GEDCOMTaskRecord;
-                    result = AppHub.BaseController.ModifyTask(this, ref tsk);
-                    break;
-
-                case GEDCOMRecordType.rtCommunication:
-                    GEDCOMCommunicationRecord comm = rec as GEDCOMCommunicationRecord;
-                    result = AppHub.BaseController.ModifyCommunication(this, ref comm);
-                    break;
-
-                case GEDCOMRecordType.rtLocation:
-                    GEDCOMLocationRecord loc = rec as GEDCOMLocationRecord;
-                    result = AppHub.BaseController.ModifyLocation(this, ref loc);
-                    break;
-            }
-
-            if (result)
-            {
+            if (AppHub.BaseController.DeleteRecord(this, record, true)) {
                 RefreshLists(false);
-                ShowRecordInfo(rec);
             }
         }
 
@@ -1319,7 +998,6 @@ namespace GKUI
 
             ShowRecordsTab(record.RecordType);
             ActiveControl = rView;
-            //aList.Focus();
             rView.SelectItemByRec(record);
         }
 
@@ -1329,52 +1007,8 @@ namespace GKUI
 
             try
             {
-                switch (record.RecordType)
-                {
-                    case GEDCOMRecordType.rtIndividual:
-                        GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, mPersonSummary.Lines, fShieldState);
-                        break;
-
-                    case GEDCOMRecordType.rtFamily:
-                        GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, mFamilySummary.Lines, fShieldState);
-                        break;
-
-                    case GEDCOMRecordType.rtNote:
-                        GKUtils.ShowNoteInfo(record as GEDCOMNoteRecord, mNoteSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtMultimedia:
-                        GKUtils.ShowMultimediaInfo(record as GEDCOMMultimediaRecord, mMediaSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtSource:
-                        GKUtils.ShowSourceInfo(record as GEDCOMSourceRecord, mSourceSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtRepository:
-                        GKUtils.ShowRepositoryInfo(record as GEDCOMRepositoryRecord, mRepositorySummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtGroup:
-                        GKUtils.ShowGroupInfo(record as GEDCOMGroupRecord, mGroupSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtResearch:
-                        GKUtils.ShowResearchInfo(record as GEDCOMResearchRecord, mResearchSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtTask:
-                        GKUtils.ShowTaskInfo(record as GEDCOMTaskRecord, mTaskSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtCommunication:
-                        GKUtils.ShowCommunicationInfo(record as GEDCOMCommunicationRecord, mCommunicationSummary.Lines);
-                        break;
-
-                    case GEDCOMRecordType.rtLocation:
-                        GKUtils.ShowLocationInfo(record as GEDCOMLocationRecord, mLocationSummary.Lines);
-                        break;
-                }
+                HyperView hyperView = GetHyperViewByType(record.RecordType);
+                GKUtils.GetRecordContent(record, fShieldState, hyperView.Lines);
             }
             catch (Exception ex)
             {
@@ -1385,64 +1019,7 @@ namespace GKUI
         public StringList GetRecordContent(GEDCOMRecord record)
         {
             StringList ctx = new StringList();
-
-            if (record != null)
-            {
-                try
-                {
-                    switch (record.RecordType)
-                    {
-                        case GEDCOMRecordType.rtIndividual:
-                            GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, ctx, fShieldState);
-                            break;
-
-                        case GEDCOMRecordType.rtFamily:
-                            GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, ctx, fShieldState);
-                            break;
-
-                        case GEDCOMRecordType.rtNote:
-                            GKUtils.ShowNoteInfo(record as GEDCOMNoteRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtMultimedia:
-                            GKUtils.ShowMultimediaInfo(record as GEDCOMMultimediaRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtSource:
-                            GKUtils.ShowSourceInfo(record as GEDCOMSourceRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtRepository:
-                            GKUtils.ShowRepositoryInfo(record as GEDCOMRepositoryRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtGroup:
-                            GKUtils.ShowGroupInfo(record as GEDCOMGroupRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtResearch:
-                            GKUtils.ShowResearchInfo(record as GEDCOMResearchRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtTask:
-                            GKUtils.ShowTaskInfo(record as GEDCOMTaskRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtCommunication:
-                            GKUtils.ShowCommunicationInfo(record as GEDCOMCommunicationRecord, ctx);
-                            break;
-
-                        case GEDCOMRecordType.rtLocation:
-                            GKUtils.ShowLocationInfo(record as GEDCOMLocationRecord, ctx);
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Host.LogWrite("BaseWin.GetRecordContext(): " + ex.Message);
-                }
-            }
-
+            GKUtils.GetRecordContent(record, fShieldState, ctx);
             return ctx;
         }
 
@@ -1458,43 +1035,6 @@ namespace GKUI
 
             GKRecordsView rView = GetRecordsViewByType(record.RecordType);
             result = (rView != null && rView.IndexOfRecord(record) >= 0);
-            return result;
-        }
-
-        #endregion
-
-        #region Modify routines
-
-        /// <summary>
-        /// This method performs a basic locking of the records for their
-        /// editors.
-        /// 
-        /// The original idea was to call the methods Lock/Unlock records,
-        /// in the edit dialogs of the records. However, it would be unsafe,
-        /// because in the case of a failure of dialogue, the record would
-        /// remain locked. Therefore, the locking and unlocking of records
-        /// must take on a methods that controls the dialog.
-        /// </summary>
-        /// <param name="record"></param>
-        public void LockRecord(GEDCOMRecord record)
-        {
-            fLockedRecords.Add(record);
-        }
-
-        public void UnlockRecord(GEDCOMRecord record)
-        {
-            fLockedRecords.Remove(record);
-        }
-
-        public bool IsAvailableRecord(GEDCOMRecord record)
-        {
-            bool result = fLockedRecords.IndexOf(record) < 0;
-
-            if (!result) {
-                // message, for exclude of duplication
-                AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
-            }
-
             return result;
         }
 

@@ -21,7 +21,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GKUI.Forms
+namespace GKUI.Common
 {
     /// <summary>
     /// 

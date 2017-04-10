@@ -299,7 +299,7 @@ namespace GKCore
         public bool gt_delete_record(object recPtr)
         {
             GEDCOMRecord rec = recPtr as GEDCOMRecord;
-            bool res = fBase.RecordDelete(rec, false);
+            bool res = AppHub.BaseController.DeleteRecord(fBase, rec, false);
             return res;
         }
 

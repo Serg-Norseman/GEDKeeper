@@ -40,7 +40,7 @@ namespace GKCommon.IoC
     public interface IContainer
     {
         void Register<TTypeToResolve, TConcrete>();
-        void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle);
+        void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
         TTypeToResolve Resolve<TTypeToResolve>();
         object Resolve(Type typeToResolve);
     }

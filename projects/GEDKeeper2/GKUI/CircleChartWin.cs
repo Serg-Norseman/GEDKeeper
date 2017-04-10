@@ -26,7 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Charts;
-using GKUI.Forms;
+using GKUI.Common;
 
 namespace GKUI
 {

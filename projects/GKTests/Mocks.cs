@@ -69,13 +69,7 @@ namespace GKTests.Mocks
             fTree = fContext.Tree;
         }
 
-        public void ProgressInit(string title, int max) { }
-        public void ProgressDone() { }
-        public void ProgressStep() { }
-        public void ProgressStep(int value) { }
-
         public void SetLang() {}
-
 
         public IHost Host { get { return fHost; } }
         public IBaseContext Context { get { return fContext; } }
@@ -91,21 +85,12 @@ namespace GKTests.Mocks
         public void ChangeRecord(GEDCOMRecord record) { }
         public void Close() { }
 
-        public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm) { return null; }
-        public GEDCOMSex DefineSex(string iName, string iPatr) { return GEDCOMSex.svNone; }
-        public void CheckPersonSex(GEDCOMIndividualRecord iRec) { }
-        public void CollectEventValues(GEDCOMCustomEvent evt) { }
-
         public bool IsUnknown() { return false; }
         public void FileNew() { }
         public void FileLoad(string fileName) { }
         public void FileSave(string fileName) { }
         public void CriticalSave() { }
-        public void CollectTips(StringList tipsList) { }
 
-        public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex) { return null; }
-        public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse) { return null; }
-        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent) { return null; }
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
         public StringList GetRecordContent(GEDCOMRecord record) { return null; }
         public string GetRecordName(GEDCOMRecord record, bool signed) { return string.Empty; }
@@ -117,39 +102,15 @@ namespace GKTests.Mocks
 
         public GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { return null; }
 
-        public void LockRecord(GEDCOMRecord record) { }
-        public void UnlockRecord(GEDCOMRecord record) { }
-        public bool IsAvailableRecord(GEDCOMRecord record) { return true; }
-
-        public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec) { mediaRec = null; return false; }
-        public bool ModifyNote(ref GEDCOMNoteRecord noteRec) { noteRec = null; return false; }
-        public bool ModifySource(ref GEDCOMSourceRecord sourceRec) { sourceRec = null; return false; }
-        public bool ModifyRepository(ref GEDCOMRepositoryRecord repRec) { repRec = null; return false; }
-        public bool ModifyGroup(ref GEDCOMGroupRecord groupRec) { groupRec = null; return false; }
-        public bool ModifyResearch(ref GEDCOMResearchRecord researchRec) { researchRec = null; return false; }
-        public bool ModifyTask(ref GEDCOMTaskRecord taskRec) { taskRec = null; return false; }
-        public bool ModifyCommunication(ref GEDCOMCommunicationRecord commRec) { commRec = null; return false; }
-        public bool ModifyLocation(ref GEDCOMLocationRecord locRec) { locRec = null; return false; }
-        public bool ModifyPerson(ref GEDCOMIndividualRecord indivRec,
-                                 GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { indivRec = null; return false; }
-        public bool ModifyFamily(ref GEDCOMFamilyRecord familyRec, FamilyTarget target, GEDCOMIndividualRecord person) { familyRec = null; return false; }
-        public bool ModifyAddress(GEDCOMAddress address) { return false; }
-        public bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit) { cit = null; return false; }
-
-        public void RecordAdd() { }
-        public void RecordDelete() { }
-        public bool RecordDelete(GEDCOMRecord record, bool confirm) { return false; }
-        public void RecordEdit(object sender, EventArgs e) { }
+        public void AddRecord() { }
+        public void DeleteRecord() { }
+        public void EditRecord() { }
         public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
+        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
 
-        public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec) { return null; }
-        public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target) { return null; }
-        public GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { return null; }
-        public GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args) { return null; }
         public void SelectRecordByXRef(string xref) { }
         public void Show() { }
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
-        public void ImportNames(GEDCOMIndividualRecord iRec) { }
     }
 
     public class HostMock : IHost

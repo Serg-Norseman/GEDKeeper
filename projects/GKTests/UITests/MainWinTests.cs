@@ -37,7 +37,6 @@ using GKTests.ControlTesters;
 using GKUI;
 using GKUI.Charts;
 using GKUI.Dialogs;
-using GKUI.Engine;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -127,6 +126,7 @@ namespace GKTests.UITests
 
 
             // Stage 7: call to QuickFind
+            (fCurBase as BaseWin).ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             QuickSearch_Test();
 
 
@@ -207,7 +207,7 @@ namespace GKTests.UITests
 
             // Stage 36
             ModalFormHandler = MessageBox_OkHandler;
-            ((BaseWin)fCurBase).RecordDuplicate();
+            ((BaseWin)fCurBase).DuplicateRecord();
 
             // Stage 50: close Base
             ClickToolStripMenuItem("miFileClose", fMainWin);
@@ -275,7 +275,7 @@ namespace GKTests.UITests
             string recordName = baseWin.GetRecordName(record, true);
             Assert.IsNotNull(recordName, stage + ".4.2");
 
-            Assert.IsTrue(baseWin.IsAvailableRecord(record), stage + ".5");
+            Assert.IsTrue(baseWin.Context.IsAvailableRecord(record), stage + ".5");
             Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
 
             Assert.AreEqual(ShieldState.Maximum, baseWin.ShieldState, stage + ".7.1");
@@ -284,7 +284,7 @@ namespace GKTests.UITests
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.SelectSpouseFor(baseWin, null); });
-            baseWin.RecordNotify(null, RecordAction.raAdd);
+            baseWin.NotifyRecord(null, RecordAction.raAdd);
 
             IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
             Assert.AreEqual(1, search.Count);
@@ -293,8 +293,8 @@ namespace GKTests.UITests
             Assert.AreEqual(null, AppHub.BaseController.AddChildForParent(baseWin, null, GEDCOMSex.svNone));
             Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.AddFamilyForSpouse(baseWin.Tree, null); });
 
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.CollectTips(null); });
-            baseWin.CollectTips(new StringList());
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
+            baseWin.Context.CollectTips(new StringList());
 
             Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.CheckPersonSex(baseWin.Context, null); });
 

@@ -28,7 +28,6 @@ using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Engine;
 
 namespace GKUI.Dialogs
 {
