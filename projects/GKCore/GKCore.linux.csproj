@@ -135,6 +135,7 @@
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
     <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
     <Compile Include="GKCore\Lists\FamilyListMan.cs" />
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
