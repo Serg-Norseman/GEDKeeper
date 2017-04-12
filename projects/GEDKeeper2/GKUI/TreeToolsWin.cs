@@ -31,7 +31,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
-using GKUI.Controls;
+using GKUI.Components;
 
 namespace GKUI
 {

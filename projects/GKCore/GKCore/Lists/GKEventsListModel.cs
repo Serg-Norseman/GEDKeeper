@@ -20,18 +20,14 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
-using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Dialogs;
+using GKUI.Contracts;
 
-namespace GKUI.Sheets
+namespace GKCore.Lists
 {
     public sealed class GKEventsListModel : GKListModel
     {
@@ -71,7 +67,7 @@ namespace GKUI.Sheets
                 {
                     GEDCOMCustomEvent evt = dataOwner.Events[i];
 
-                    GKListItem item = fSheetList.AddItem(i + 1, evt);
+                    IListItem item = fSheetList.AddItem(i + 1, evt);
                     item.AddSubItem(GKUtils.GetEventName(evt));
                     item.AddSubItem(new GEDCOMDateItem(evt.Date.Value));
                     if (fPersonsMode) {
@@ -129,7 +125,7 @@ namespace GKUI.Sheets
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (EventEditDlg dlgEventEdit = new EventEditDlg())
+                        using (var dlgEventEdit = AppHub.Container.Resolve<IEventEditDlg>())
                         {
                             dlgEventEdit.InitDialog(fBaseWin);
 
@@ -147,7 +143,7 @@ namespace GKUI.Sheets
                             }
 
                             dlgEventEdit.Event = newEvent;
-                            result = (MainWin.Instance.ShowModalEx(dlgEventEdit, true) == DialogResult.OK);
+                            result = AppHub.MainWindow.ShowModalX(dlgEventEdit, true);
 
                             if (!result) {
                                 if (!exists) {

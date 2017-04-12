@@ -28,7 +28,7 @@ using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKUI.Controls;
+using GKUI.Components;
 
 namespace GKUI
 {

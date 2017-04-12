@@ -18,16 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKToolStripMenuItem : ToolStripMenuItem
+    [Serializable]
+    public class GKTreeNode : TreeNode
     {
-        public GKToolStripMenuItem(string text, object tag) : base(text)
+        public GKTreeNode(string text, object tag) : base(text)
         {
             Tag = tag;
         }

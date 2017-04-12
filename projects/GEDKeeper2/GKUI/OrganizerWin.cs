@@ -22,11 +22,11 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Sheets;
+using GKCore.Lists;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -112,7 +112,7 @@ namespace GKUI
 
         private static void AddItem(GKSheetList list, string name, string value)
         {
-            GKListItem item = list.AddItem(name, null);
+            IListItem item = list.AddItem(name, null);
             item.AddSubItem(value);
         }
 

@@ -21,13 +21,14 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
-using GKUI.Controls;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -51,7 +52,7 @@ namespace GKUI.Dialogs
             set { fOptions = value; }
         }
 
-        public OptionsDlg(IHost aHost)
+        public OptionsDlg(IHost host)
         {
             InitializeComponent();
 
@@ -60,7 +61,7 @@ namespace GKUI.Dialogs
             btnColumnUp.Image = GKResources.iUp;
             btnColumnDown.Image = GKResources.iDown;
 
-            fHost = aHost;
+            fHost = host;
             fOptions = GlobalOptions.Instance;
             fTempColumns = new IndividualListColumns();
 
@@ -272,10 +273,12 @@ namespace GKUI.Dialogs
 
             lvPlugins.Items.Clear();
 
-            foreach (IPlugin plugin in MainWin.Instance.Plugins)
+            int num = MainWin.Instance.Plugins.Count;
+            for (int i = 0; i < num; i++)
             {
+                IPlugin plugin = MainWin.Instance.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
-                
+
                 ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
                 item.SubItems.Add(pInfo.Version);
                 item.SubItems.Add(pInfo.Copyright);
@@ -319,7 +322,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }

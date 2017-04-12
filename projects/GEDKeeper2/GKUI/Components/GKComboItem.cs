@@ -18,36 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
-
-using System.Windows.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
-
-namespace GKTests.ControlTesters
+namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKSheetListTester : ControlTester<GKSheetList, GKSheetListTester>
+    public class GKComboItem
     {
-        public GKSheetListTester()
+        public readonly string Caption;
+        public readonly object Tag;
+
+        public GKComboItem(string caption, object tag)
         {
+            Caption = caption;
+            Tag = tag;
         }
 
-        public GKSheetListTester(string name, Form form) : base(name, form)
+        public override string ToString()
         {
-        }
-
-        public GKSheetListTester(string name) : base(name)
-        {
-        }
-
-        public new GKSheetList Properties
-        {
-            get { return (GKSheetList) TheObject; }
+            return Caption;
         }
     }
 }
-
-#endif

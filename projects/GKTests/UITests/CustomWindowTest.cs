@@ -46,7 +46,13 @@ namespace GKTests.UITests
         public static void ClickToolStripButton(string name, Form form)
         {
             var tsBtn = new ToolStripButtonTester(name, form);
-            tsBtn.FireEvent("Click");
+            if (tsBtn.Count > 1) {
+                // FIXME: Find out why sometimes the search returns 
+                // two components where there is only one (MediaViewerWinTests)
+                tsBtn[0].FireEvent("Click");
+            } else {
+                tsBtn.FireEvent("Click");
+            }
         }
 
         public static void ClickToolStripMenuItem(string name, Form form)

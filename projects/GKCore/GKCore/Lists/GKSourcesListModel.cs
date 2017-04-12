@@ -19,16 +19,13 @@
  */
 
 using System;
-
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
 
-namespace GKUI.Sheets
+namespace GKCore.Lists
 {
     public sealed class GKSourcesListModel : GKListModel
     {
@@ -61,7 +58,7 @@ namespace GKUI.Sheets
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    GKListItem item = fSheetList.AddItem(sourceRec.Originator.Text.Trim(), cit);
+                    IListItem item = fSheetList.AddItem(sourceRec.Originator.Text.Trim(), cit);
                     item.AddSubItem(sourceRec.FiledByEntry);
                     item.AddSubItem(cit.Page);
                     item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
@@ -88,7 +85,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = AppHub.BaseController.ModifySourceCitation(((BaseWin) fBaseWin), fUndoman, dataOwner, ref aCit);
+                    result = AppHub.BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:

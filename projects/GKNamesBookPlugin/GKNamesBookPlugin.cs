@@ -94,7 +94,7 @@ namespace GKNamesBookPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
         
@@ -107,7 +107,7 @@ namespace GKNamesBookPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNamesBookPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKNamesBookPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -121,7 +121,7 @@ namespace GKNamesBookPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNamesBookPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKNamesBookPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

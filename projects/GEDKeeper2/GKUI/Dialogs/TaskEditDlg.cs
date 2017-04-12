@@ -22,12 +22,14 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -89,7 +91,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TaskEditDlg.SetTask(): " + ex.Message);
+                Logger.LogWrite("TaskEditDlg.SetTask(): " + ex.Message);
             }
         }
 
@@ -118,7 +120,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TaskEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("TaskEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -131,7 +133,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -229,11 +231,6 @@ namespace GKUI.Dialogs
             base.InitDialog(baseWin);
 
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

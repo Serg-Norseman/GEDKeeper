@@ -43,7 +43,7 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.TextBox txtNameSuffix;
         private System.Windows.Forms.Label lblNickname;
         private System.Windows.Forms.TextBox txtNickname;
-        private GKUI.Controls.GKPortrait imgPortrait;
+        private GKUI.Components.GKPortrait imgPortrait;
         private System.Windows.Forms.Button btnNameCopy;
         private System.Windows.Forms.Button btnPortraitAdd;
         private System.Windows.Forms.Button btnPortraitDelete;
@@ -67,7 +67,7 @@ namespace GKUI.Dialogs
             this.lblRestriction = new System.Windows.Forms.Label();
             this.cmbRestriction = new System.Windows.Forms.ComboBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.imgPortrait = new GKUI.Controls.GKPortrait();
+            this.imgPortrait = new GKUI.Components.GKPortrait();
             this.lblMarriedSurname = new System.Windows.Forms.Label();
             this.lblSurname = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();

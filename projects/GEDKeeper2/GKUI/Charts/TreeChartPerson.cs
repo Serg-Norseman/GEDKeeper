@@ -354,7 +354,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fChart.Base.Host.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
+                Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
                 throw;
             }
         }
@@ -424,7 +424,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fChart.Base.Host.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
+                Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
 
@@ -484,7 +484,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
+                Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }
 

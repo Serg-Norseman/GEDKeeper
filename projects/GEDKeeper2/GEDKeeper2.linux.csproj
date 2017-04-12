@@ -114,7 +114,6 @@
     <Compile Include="GKUI\Charts\AncestorsCircle.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -131,40 +130,46 @@
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
-    <Compile Include="GKUI\Common\MdiChildFormEx.cs" />
-    <Compile Include="GKUI\Common\PrintableForm.cs" />
-    <Compile Include="GKUI\Controls\GKMergeControl.cs">
+    <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKMergeControl.Designer.cs">
+    <Compile Include="GKUI\Components\GKMergeControl.Designer.cs">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\GKInputBox.cs">
+    <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKInputBox.Designer.cs">
+    <Compile Include="GKUI\Components\GKInputBox.Designer.cs">
       <DependentUpon>GKInputBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\GKComboItem.cs" />
-    <Compile Include="GKUI\Controls\GKMenuItem.cs">
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKPortrait.cs">
+    <Compile Include="GKUI\Components\GKPortrait.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKPortrait.Designer.cs">
+    <Compile Include="GKUI\Components\GKPortrait.Designer.cs">
       <DependentUpon>GKPortrait.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\GKTreeNode.cs" />
-    <Compile Include="GKUI\Controls\GKMapBrowser.cs">
+    <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\GKRecordsView.cs">
+    <Compile Include="GKUI\Components\GKTreeNode.cs" />
+    <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\LogChart.cs">
+    <Compile Include="GKUI\Components\GKRecordsView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\LogChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\MdiChildFormEx.cs" />
+    <Compile Include="GKUI\Components\PrintableForm.cs" />
+    <Compile Include="GKUI\Components\UIHelper.cs" />
+    <Compile Include="GKUI\Components\Utilities.cs" />
+    <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -369,9 +374,6 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Common\Utilities.cs" />
-    <Compile Include="GKUI\Common\UIHelper.cs" />
-    <Compile Include="GKUI\Common\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -383,21 +385,6 @@
     </Compile>
     <Compile Include="GKUI\PatriarchsViewerWin.Designer.cs">
       <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKEventsListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKMediaListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKNotesListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKSheetList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKSourcesListModel.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\CircleChartWin.cs">
       <SubType>Form</SubType>
@@ -473,13 +460,13 @@
     <EmbeddedResource Include="GKUI\Charts\ACOptionsControl.resx">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
+    <EmbeddedResource Include="GKUI\Components\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
+    <EmbeddedResource Include="GKUI\Components\GKInputBox.resx">
       <DependentUpon>GKInputBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Controls\GKPortrait.resx">
+    <EmbeddedResource Include="GKUI\Components\GKPortrait.resx">
       <DependentUpon>GKPortrait.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\AboutDlg.resx">
@@ -659,9 +646,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCore\Plugins" />
-    <Folder Include="GKUI\Forms" />
-    <Folder Include="GKUI\Engine" />
+    <Folder Include="GKUI\Charts" />
+    <Folder Include="GKUI\Components" />
+    <Folder Include="GKUI\Dialogs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

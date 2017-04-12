@@ -33,10 +33,11 @@ using GKCore.Export;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Controls;
+using GKUI.Components;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -55,7 +56,7 @@ namespace GKUI
         }
 
         private readonly GlobalOptions fOptions;
-        private List<IPlugin> fPlugins;
+        private PluginsMan fPlugins;
         private readonly Timer fAutosaveTimer;
 
         private readonly List<WidgetInfo> fActiveWidgets;
@@ -78,17 +79,12 @@ namespace GKUI
             get { return fResourceManager; }
         }
 
-        public IGeocoder Geocoder
-        {
-            get { return GKUtils.CreateGeocoder(fOptions); }
-        }
-
         public GlobalOptions Options
         {
             get { return fOptions; }
         }
 
-        public List<IPlugin> Plugins
+        public PluginsMan Plugins
         {
             get { return fPlugins; }
         }
@@ -169,7 +165,7 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
+                Logger.LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
             }
         }
 
@@ -236,7 +232,7 @@ namespace GKUI
 
                 UpdateMan.CheckUpdate();
             } catch (Exception ex) {
-                LogWrite("MainWin.Form_Show(): " + ex.Message);
+                Logger.LogWrite("MainWin.Form_Show(): " + ex.Message);
             }
         }
 
@@ -252,8 +248,8 @@ namespace GKUI
 
                 AppHub.NamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
 
-                fPlugins = new List<IPlugin>();
-                LoadPlugins(GKUtils.GetPluginsPath());
+                fPlugins = new PluginsMan();
+                fPlugins.Load(this, GKUtils.GetPluginsPath());
                 UpdatePluginsItems();
 
                 fPathReplacer = new PathReplacer();
@@ -266,14 +262,14 @@ namespace GKUI
 
                 LoadArgs();
             } catch (Exception ex) {
-                LogWrite("MainWin.Form_Load(): " + ex.Message);
+                Logger.LogWrite("MainWin.Form_Load(): " + ex.Message);
             }
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             try {
-                UnloadPlugins();
+                fPlugins.Unload();
 
                 fOptions.MWinRect = AppHub.UIHelper.GetFormRect(this);
                 fOptions.MWinState = WindowState;
@@ -283,7 +279,7 @@ namespace GKUI
                 fOptions.SaveToFile(GetAppDataPath() + "GEDKeeper2.ini");
                 fOptions.Dispose();
             } catch (Exception ex) {
-                LogWrite("MainWin.Form_Closed(): " + ex.Message);
+                Logger.LogWrite("MainWin.Form_Closed(): " + ex.Message);
             }
         }
 
@@ -341,7 +337,7 @@ namespace GKUI
                     EndLoading();
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
+                Logger.LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
             }
         }
 
@@ -471,7 +467,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                LogWrite("MainWin.RestoreWindowState(): " + ex.Message);
+                Logger.LogWrite("MainWin.RestoreWindowState(): " + ex.Message);
             }
         }
 
@@ -548,7 +544,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                LogWrite("MainWin.LoadLanguage(): " + ex.Message);
+                Logger.LogWrite("MainWin.LoadLanguage(): " + ex.Message);
             }
         }
 
@@ -570,7 +566,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                LogWrite("MainWin.ProcessHolidays(): " + ex.Message);
+                Logger.LogWrite("MainWin.ProcessHolidays(): " + ex.Message);
             }
         }
 
@@ -610,13 +606,15 @@ namespace GKUI
 
             try
             {
-                IEnumerable<GeoPoint> geoPoints = Geocoder.Geocode(searchValue, 1);
+                IGeocoder geocoder = GKUtils.CreateGeocoder(fOptions);
+
+                IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
                 foreach (GeoPoint pt in geoPoints)
                 {
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.RequestGeoCoords(): " + ex.Message);
+                Logger.LogWrite("MainWin.RequestGeoCoords(): " + ex.Message);
             }
         }
 
@@ -650,7 +648,7 @@ namespace GKUI
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.UpdateMRU(): " + ex.Message);
+                Logger.LogWrite("MainWin.UpdateMRU(): " + ex.Message);
             }
         }
 
@@ -703,7 +701,7 @@ namespace GKUI
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                LogWrite("MainWin.UpdateNavControls(): " + ex.Message);
+                Logger.LogWrite("MainWin.UpdateNavControls(): " + ex.Message);
             }
         }
 
@@ -770,7 +768,7 @@ namespace GKUI
 
                 StatusBar.Invalidate();
             } catch (Exception ex) {
-                LogWrite("MainWin.UpdateControls(): " + ex.Message);
+                Logger.LogWrite("MainWin.UpdateControls(): " + ex.Message);
             }
         }
 
@@ -856,7 +854,7 @@ namespace GKUI
                     EndLoading();
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.CreateBase(): " + ex.Message);
+                Logger.LogWrite("MainWin.CreateBase(): " + ex.Message);
             }
 
             return null;
@@ -874,7 +872,7 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.CriticalSave(): " + ex.Message);
+                Logger.LogWrite("MainWin.CriticalSave(): " + ex.Message);
             }
         }
 
@@ -1446,9 +1444,7 @@ namespace GKUI
         {
             if (fPlugins == null) return;
 
-            foreach (IPlugin plugin in fPlugins) {
-                plugin.OnLanguageChange();
-            }
+            fPlugins.OnLanguageChange();
 
             int num = miPlugins.DropDownItems.Count;
             for (int i = 0; i < num; i++) {
@@ -1477,7 +1473,9 @@ namespace GKUI
 
                 fActiveWidgets.Clear();
 
-                foreach (IPlugin plugin in fPlugins) {
+                int num = fPlugins.Count;
+                for (int i = 0; i < num; i++) {
+                    IPlugin plugin = fPlugins[i];
                     string dispName = plugin.DisplayName;
 
                     ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
@@ -1495,73 +1493,13 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                LogWrite("MainWin.UpdatePluginsItems(): " + ex.Message);
-            }
-        }
-
-        private void UnloadPlugins()
-        {
-            try {
-                if (fPlugins == null) return;
-
-                foreach (IPlugin plugin in fPlugins) {
-                    plugin.Shutdown();
-                }
-            } catch (Exception ex) {
-                LogWrite("MainWin.UnloadPlugins(): " + ex.Message);
-            }
-        }
-
-        private void LoadPlugins(string path)
-        {
-            if (!Directory.Exists(path)) return;
-
-            try {
-                AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
-
-                Type pluginType = typeof(IPlugin);
-                string[] pluginFiles = Directory.GetFiles(path, "*.dll");
-
-                foreach (string pfn in pluginFiles) {
-                    try {
-                        Assembly asm;
-
-                        try {
-                            AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
-                            asm = Assembly.Load(assemblyName);
-                        } catch {
-                            asm = null;
-                            // block exceptions for bad or non-dotnet assemblies
-                        }
-
-                        if (asm == null) continue;
-
-                        Type[] types = asm.GetTypes();
-                        foreach (Type type in types) {
-                            if (type.IsInterface || type.IsAbstract) continue;
-                            if (type.GetInterface(pluginType.FullName) == null) continue;
-
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                            plugin.Startup(this);
-                            fPlugins.Add(plugin);
-                        }
-                    } catch (Exception ex) {
-                        LogWrite("MainWin.LoadPlugin(" + pfn + "): " + ex.Message);
-                    }
-                }
-            } catch (Exception ex) {
-                LogWrite("MainWin.LoadPlugins(" + path + "): " + ex.Message);
+                Logger.LogWrite("MainWin.UpdatePluginsItems(): " + ex.Message);
             }
         }
 
         #endregion
 
         #region IHost implementation
-
-        public bool IsUnix()
-        {
-            return SysUtils.IsUnix();
-        }
 
         public ILangMan CreateLangMan(object sender)
         {
@@ -1606,26 +1544,9 @@ namespace GKUI
             return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
         }
 
-        public void LogWrite(string msg)
-        {
-            Logger.LogWrite(msg);
-        }
-
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-            if (fPlugins == null) return;
-            if (baseWin == null || record == null) return;
-
-            foreach (IPlugin plugin in fPlugins) {
-                ISubscriber subscriber = (plugin as ISubscriber);
-                if (subscriber == null) continue;
-
-                try {
-                    subscriber.NotifyRecord(baseWin, record, action);
-                } catch (Exception ex) {
-                    Logger.LogWrite("MainWin.NotifyRecord(): " + ex.Message);
-                }
-            }
+            fPlugins.NotifyRecord(baseWin, record, action);
         }
 
         public string GetAppDataPath()
@@ -1737,7 +1658,7 @@ namespace GKUI
                         }
                     }
                 } catch (Exception ex) {
-                    LogWrite("MainWin.OnMessageReceived(): " + ex.Message);
+                    Logger.LogWrite("MainWin.OnMessageReceived(): " + ex.Message);
                 }
             };
 

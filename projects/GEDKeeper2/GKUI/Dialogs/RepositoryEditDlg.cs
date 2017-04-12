@@ -21,11 +21,13 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -68,7 +70,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("RepositoryEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("RepositoryEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -81,7 +83,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -108,11 +110,6 @@ namespace GKUI.Dialogs
             base.InitDialog(baseWin);
 
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

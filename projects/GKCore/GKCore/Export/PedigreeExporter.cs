@@ -525,8 +525,8 @@ namespace GKCore.Export
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PedigreeExporter.Generate(): " + ex.Message);
-                fBase.Host.LogWrite("PedigreeExporter.Generate(): " + ex.StackTrace);
+                Logger.LogWrite("PedigreeExporter.Generate(): " + ex.Message);
+                Logger.LogWrite("PedigreeExporter.Generate(): " + ex.StackTrace);
             }
 
             return result;

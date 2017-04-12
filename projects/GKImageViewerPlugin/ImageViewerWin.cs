@@ -104,7 +104,7 @@ namespace GKImageViewerPlugin
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
-                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.0(): " + ex.Message);
+                                Logger.LogWrite("ImageViewerWin.SetFileRef.0(): " + ex.Message);
                             }
 
                             ctl = fImageCtl;
@@ -132,7 +132,7 @@ namespace GKImageViewerPlugin
                                     }
                                 }
                             } catch (Exception ex) {
-                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.1(): " + ex.Message);
+                                Logger.LogWrite("ImageViewerWin.SetFileRef.1(): " + ex.Message);
                             }
 
                             ctl = txtBox;
@@ -153,7 +153,7 @@ namespace GKImageViewerPlugin
                                     }
                                 }
                             } catch (Exception ex) {
-                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
                             }
 
                             ctl = rtfBox;
@@ -169,7 +169,7 @@ namespace GKImageViewerPlugin
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {
-                                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
                             }
                             ctl = browser;
                         }
@@ -193,7 +193,7 @@ namespace GKImageViewerPlugin
             {
                 if (ctl != null) ctl.Dispose();
 
-                fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
+                Logger.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
             }
         }
 

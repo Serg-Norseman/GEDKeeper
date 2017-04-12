@@ -42,8 +42,7 @@ using GKCore.Types;
 using GKTests.Mocks;
 using GKUI;
 using GKUI.Charts;
-using GKUI.Controls;
-using GKUI.Sheets;
+using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKTests.GKCore
@@ -519,7 +518,7 @@ namespace GKTests.GKCore
         private static void GEDCOMListTests(GEDCOMIndividualRecord iRec)
         {
             //GEDCOMListTest_Hot(iRec);
-            
+
             for (int k = 0; k < REP_COUNT; k++) {
                 GEDCOMListTest11(iRec);
                 GEDCOMListTest12(iRec);

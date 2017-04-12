@@ -35,7 +35,7 @@ namespace GKCommon.Controls
     /// 
     /// </summary>
     [Serializable]
-    public class GKListItem : ListViewItem, IComparable
+    public class GKListItem : ListViewItem, IListItem
     {
         protected object fValue;
 

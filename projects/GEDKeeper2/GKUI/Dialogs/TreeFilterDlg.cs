@@ -25,10 +25,10 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Controls;
-using GKUI.Sheets;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -198,7 +198,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeFilterDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("TreeFilterDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }

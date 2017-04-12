@@ -87,20 +87,18 @@ namespace GKCore
             return result;
         }
 
-        //----------------------------------------------------------------------
-        // <summary>
-        // Converts the specified 32-bits integer value to array of bytes. Only
-        // the specified number of bytes is copied to the result array.
-        // Despite the fact that I stuck with the original name of the method
-        // (`MoveL2S`), I really don't know what it means.
-        // </summary>
-        // <param name="source">Source 32-bits value to be converted to array of
-        // bytes.</param>
-        // <param name="count">Number of bytes to convert (starting from the
-        // least signficant byte).</param>
-        // <returns>Array of byte that represents the <parameref name="source">.
-        // Size of the array equals to <paramref name="count" />.</returns>
-        //----------------------------------------------------------------------
+        /// <summary>
+        /// Converts the specified 32-bits integer value to array of bytes. Only
+        /// the specified number of bytes is copied to the result array.
+        /// Despite the fact that I stuck with the original name of the method
+        /// (`MoveL2S`), I really don't know what it means.
+        /// </summary>
+        /// <param name="source">Source 32-bits value to be converted to array of
+        /// bytes.</param>
+        /// <param name="count">Number of bytes to convert (starting from the
+        /// least signficant byte).</param>
+        /// <returns>Array of byte that represents the <parameref name="source">.
+        /// Size of the array equals to <paramref name="count" />.</returns>
         public static byte[] MoveL2S(uint source, int count)
         {
             byte[] result = new byte[count];
@@ -140,7 +138,6 @@ namespace GKCore
             return result;
         }
 
-        //----------------------------------------------------------------------
         // <summary>
         // Converts the specified array of bytes to 32-bits signed integer
         // value.
@@ -150,7 +147,6 @@ namespace GKCore
         // <param name="source">Source array of bytes to be converted.</param>
         // <returns>32-bits integer signed avlue that represents the
         // <parameref name="source">.</returns>
-        //----------------------------------------------------------------------
         public static uint MoveS2L(byte[] source, int count)
         {
             uint result = 0;

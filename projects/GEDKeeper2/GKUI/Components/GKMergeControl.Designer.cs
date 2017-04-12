@@ -1,4 +1,4 @@
-﻿namespace GKUI.Controls
+﻿namespace GKUI.Components
 {
 	partial class GKMergeControl
 	{

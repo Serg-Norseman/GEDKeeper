@@ -90,6 +90,10 @@
     <Compile Include="GKCommon\UDNTests.cs" />
     <Compile Include="GKCommon\ValuesCollectionTests.cs" />
     <Compile Include="GKCommon\ZipStorerTests.cs" />
+    <Compile Include="GKCore\HolidaysTests.cs" />
+    <Compile Include="GKCore\PathReplacerTests.cs" />
+    <Compile Include="GKCore\PluginTests.cs" />
+    <Compile Include="GKCore\PortraitsCacheTests.cs" />
     <Compile Include="GKCore\SCCTests.cs" />
     <Compile Include="GKCore\SingleInstanceTrackerTests.cs" />
     <Compile Include="GXResources.Designer.cs">
@@ -160,6 +164,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GXResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ControlTesters" />
+    <Folder Include="GKCommon" />
+    <Folder Include="GKCore" />
+    <Folder Include="UITests" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

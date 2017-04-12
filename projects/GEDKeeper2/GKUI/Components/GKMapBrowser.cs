@@ -26,7 +26,7 @@ using GKCommon;
 using GKCore.Geocoding;
 using GKUI.Contracts;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// 

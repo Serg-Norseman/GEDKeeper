@@ -38,8 +38,6 @@ namespace GKCore.Interfaces
 
         string GetAppDataPath();
 
-        void LogWrite(string msg);
-
         bool IsWidgetActive(IWidget widget);
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
@@ -54,7 +52,6 @@ namespace GKCore.Interfaces
         void EnableWindow(Form form, bool value);
         void Restore();
 
-        bool IsUnix();
         bool ShowModalX(ICommonDialog form, bool keepModeless);
     }
 }

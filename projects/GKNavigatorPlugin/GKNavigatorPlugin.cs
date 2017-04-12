@@ -109,7 +109,7 @@ namespace GKNavigatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNavigatorPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKNavigatorPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -123,7 +123,7 @@ namespace GKNavigatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNavigatorPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKNavigatorPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -138,7 +138,7 @@ namespace GKNavigatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKNavigatorPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKNavigatorPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKSamplePlugin1")]
@@ -69,7 +70,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -83,7 +84,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
+                Logger.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -98,7 +99,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

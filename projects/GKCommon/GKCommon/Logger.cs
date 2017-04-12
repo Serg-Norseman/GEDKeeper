@@ -26,6 +26,7 @@ namespace GKCommon
 {
     public static class Logger
     {
+        private static readonly object fLock = new object();
         private static string fLogFilename;
 
         public static void LogInit(string fileName)
@@ -36,11 +37,13 @@ namespace GKCommon
         public static void LogWrite(string msg)
         {
             try {
-                using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8))
-                {
-                    log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
-                    log.Flush();
-                    log.Close();
+                lock (fLock) {
+                    using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8))
+                    {
+                        log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
+                        log.Flush();
+                        log.Close();
+                    }
                 }
             } catch (Exception ex) {
             }

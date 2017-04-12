@@ -21,9 +21,9 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Contracts;
 
@@ -34,13 +34,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class NameEditDlg : Form, INameEditDlg
     {
-        private IBaseWindow fBase;
         private NameEntry fNameEntry;
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
-        }
 
         public NameEntry IName
         {
@@ -79,7 +73,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -92,18 +86,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        public NameEditDlg() : this(null)
-        {
-        }
-
-        public NameEditDlg(IBaseWindow baseWin)
+        public NameEditDlg()
         {
             InitializeComponent();
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
-
-            fBase = baseWin;
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
             {
@@ -119,11 +107,6 @@ namespace GKUI.Dialogs
             grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
             lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
-        }
-
-        public void InitDialog(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
         }
 
         public bool ShowModalX()

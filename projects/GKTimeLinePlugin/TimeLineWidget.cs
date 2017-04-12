@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -195,7 +196,7 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                fPlugin.Host.LogWrite("TimeLineWidget.FilterHandler(): " + ex.Message);
+                Logger.LogWrite("TimeLineWidget.FilterHandler(): " + ex.Message);
             }
 
             return result;

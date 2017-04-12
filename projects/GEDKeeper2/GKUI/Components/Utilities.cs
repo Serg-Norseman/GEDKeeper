@@ -19,19 +19,40 @@
  */
 
 using System;
-using System.Windows.Forms;
+using System.Reflection;
 
-namespace GKUI.Controls
+using GKCommon;
+using GKUI.Contracts;
+
+namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    [Serializable]
-    public class GKTreeNode : TreeNode
+    public class Utilities : IUtilities
     {
-        public GKTreeNode(string text, object tag) : base(text)
+        public Utilities()
         {
-            Tag = tag;
         }
+
+        #region Executing environment
+
+        public Assembly GetExecutingAssembly()
+        {
+            return Assembly.GetExecutingAssembly();
+        }
+
+        public Version GetAppVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version;
+        }
+
+        public string GetAppCopyright()
+        {
+            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
+            return (attr == null) ? string.Empty : attr.Copyright;
+        }
+
+        #endregion
     }
 }

@@ -25,8 +25,8 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
 
 namespace GKUI.Dialogs
 {
@@ -64,7 +64,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -170,11 +170,6 @@ namespace GKUI.Dialogs
 
             AppHub.BaseController.GetSourcesList(fBase.Tree, fSourcesList);
             RefreshSourcesList("");
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

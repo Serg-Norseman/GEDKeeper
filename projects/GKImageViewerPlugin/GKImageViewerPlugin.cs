@@ -79,7 +79,7 @@ namespace GKImageViewerPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
+                Logger.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
             }
         }
 
@@ -98,7 +98,7 @@ namespace GKImageViewerPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -111,7 +111,7 @@ namespace GKImageViewerPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKImageViewerPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKImageViewerPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -125,7 +125,7 @@ namespace GKImageViewerPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKImageViewerPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKImageViewerPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

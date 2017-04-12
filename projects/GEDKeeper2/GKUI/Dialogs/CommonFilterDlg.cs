@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -256,7 +257,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("CommonFilterDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("CommonFilterDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }

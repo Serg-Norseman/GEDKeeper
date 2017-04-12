@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKFlowInputPlugin")]
@@ -125,7 +126,7 @@ namespace GKFlowInputPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKFlowInputPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKFlowInputPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -138,7 +139,7 @@ namespace GKFlowInputPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKFlowInputPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKFlowInputPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -152,7 +153,7 @@ namespace GKFlowInputPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKFlowInputPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKFlowInputPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

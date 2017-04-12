@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -103,7 +104,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -125,11 +126,6 @@ namespace GKUI.Dialogs
             base.InitDialog(baseWin);
 
             UpdateControls();
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

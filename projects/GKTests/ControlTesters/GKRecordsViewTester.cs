@@ -21,7 +21,7 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-using GKUI.Controls;
+using GKUI.Components;
 using NUnit.Extensions.Forms;
 
 namespace GKTests.ControlTesters

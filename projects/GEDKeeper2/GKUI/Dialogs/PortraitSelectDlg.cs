@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -105,11 +105,6 @@ namespace GKUI.Dialogs
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

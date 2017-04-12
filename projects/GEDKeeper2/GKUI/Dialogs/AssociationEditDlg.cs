@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -41,15 +42,12 @@ namespace GKUI.Dialogs
         public GEDCOMAssociation Association
         {
             get { return fAssociation; }
-            set { SetAssociation(value); }
-        }
-
-        private void SetAssociation(GEDCOMAssociation value)
-        {
-            fAssociation = value;
-            cmbRelation.Text = fAssociation.Relation;
-            string st = ((fAssociation.Individual == null) ? "" : GKUtils.GetNameString(fAssociation.Individual, true, false));
-            txtPerson.Text = st;
+            set {
+                if (fAssociation != value) {
+                    fAssociation = value;
+                    UpdateView();
+                }
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -64,11 +62,12 @@ namespace GKUI.Dialogs
 
                 fAssociation.Relation = cmbRelation.Text;
                 fAssociation.Individual = fTempInd;
+
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("AssociationEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("AssociationEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -103,14 +102,16 @@ namespace GKUI.Dialogs
             toolTip1.SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
         }
 
+        public override void UpdateView()
+        {
+            cmbRelation.Text = fAssociation.Relation;
+            string st = ((fAssociation.Individual == null) ? "" : GKUtils.GetNameString(fAssociation.Individual, true, false));
+            txtPerson.Text = st;
+        }
+
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

@@ -55,6 +55,10 @@ namespace GKUI.Dialogs
             fLocalUndoman.Rollback();
         }
 
+        public virtual void UpdateView()
+        {
+        }
+
         public virtual void InitDialog(IBaseWindow baseWin)
         {
             fBase = baseWin;

@@ -130,9 +130,24 @@
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
     <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
     <Compile Include="GKCore\Lists\FamilyListMan.cs" />
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
+    <Compile Include="GKCore\Lists\GKChildrenListModel.cs" />
+    <Compile Include="GKCore\Lists\GKEventsListModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKCore\Lists\GKListModel.cs" />
+    <Compile Include="GKCore\Lists\GKMediaListModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKCore\Lists\GKNotesListModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKCore\Lists\GKSourcesListModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKCore\Lists\GroupListMan.cs" />
     <Compile Include="GKCore\Lists\IndividualListMan.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
@@ -163,6 +178,7 @@
     <Compile Include="GKCore\PathReplacer.cs" />
     <Compile Include="GKCore\PatriarchsMan.cs" />
     <Compile Include="GKCore\Plugins\PluginInfo.cs" />
+    <Compile Include="GKCore\Plugins\PluginsMan.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />
     <Compile Include="GKCore\SCCrypt.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
@@ -178,6 +194,7 @@
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKCore\UpdateMan.cs" />
+    <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKUI\Charts\ITreeChartBox.cs" />
     <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
     <Compile Include="GKUI\Contracts\ControlContracts.cs" />

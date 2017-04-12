@@ -25,6 +25,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -141,8 +142,8 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.Message);
-                fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
+                Logger.LogWrite("ScriptEditWin.Run(): " + ex.Message);
+                Logger.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
             }
         }
 

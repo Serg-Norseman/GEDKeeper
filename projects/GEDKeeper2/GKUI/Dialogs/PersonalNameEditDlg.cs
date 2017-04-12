@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -50,7 +51,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
+                Logger.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
             }
         }
 
@@ -115,7 +116,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -154,11 +155,6 @@ namespace GKUI.Dialogs
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

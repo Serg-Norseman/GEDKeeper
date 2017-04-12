@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,40 +19,24 @@
  */
 
 using System;
-using System.Reflection;
+using GKCore;
+using NUnit.Framework;
 
-using GKCommon;
-using GKUI.Contracts;
-
-namespace GKUI.Common
+namespace GKTests.GKCore
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class Utilities : IUtilities
+    [TestFixture]
+    public class PortraitsCacheTests
     {
-        public Utilities()
+        [TestFixtureSetUp]
+        public void SetUp()
         {
         }
 
-        #region Executing environment
-
-        public Assembly GetExecutingAssembly()
+        [Test]
+        public void Test_Instance()
         {
-            return Assembly.GetExecutingAssembly();
+            var inst = PortraitsCache.Instance;
+            Assert.IsNotNull(inst);
         }
-
-        public Version GetAppVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version;
-        }
-
-        public string GetAppCopyright()
-        {
-            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
-            return (attr == null) ? string.Empty : attr.Copyright;
-        }
-
-        #endregion
     }
 }

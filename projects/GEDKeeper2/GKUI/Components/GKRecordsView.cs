@@ -29,7 +29,7 @@ using GKCommon.GEDCOM;
 using GKCore.Lists;
 using GKCore.Types;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// 

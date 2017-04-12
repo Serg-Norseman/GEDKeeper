@@ -19,15 +19,13 @@
  */
 
 using System;
-
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
 
-namespace GKUI.Sheets
+namespace GKCore.Lists
 {
     public sealed class GKNotesListModel : GKListModel
     {

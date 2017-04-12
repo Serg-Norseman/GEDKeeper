@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
@@ -114,7 +115,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKPedigreeImporterPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKPedigreeImporterPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -127,7 +128,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKPedigreeImporterPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKPedigreeImporterPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -141,7 +142,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKPedigreeImporterPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKPedigreeImporterPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

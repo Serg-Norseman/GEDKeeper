@@ -126,7 +126,7 @@ namespace GKCalendarPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -139,7 +139,7 @@ namespace GKCalendarPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -153,7 +153,7 @@ namespace GKCalendarPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalendarPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKCalendarPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

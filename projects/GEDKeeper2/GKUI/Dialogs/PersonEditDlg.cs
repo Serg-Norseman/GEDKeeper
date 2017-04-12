@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -31,8 +30,8 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -110,12 +109,13 @@ namespace GKUI.Dialogs
                 fNotesList.ListModel.DataOwner = fPerson;
                 fMediaList.ListModel.DataOwner = fPerson;
                 fSourcesList.ListModel.DataOwner = fPerson;
+                fAssociationsList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
             }
         }
 
@@ -169,7 +169,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonEditDlg.SetTarget("+fTargetMode.ToString()+"): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.SetTarget("+fTargetMode.ToString()+"): " + ex.Message);
             }
         }
 
@@ -269,9 +269,9 @@ namespace GKUI.Dialogs
                 fNotesList.UpdateSheet();
                 fMediaList.UpdateSheet();
                 fSourcesList.UpdateSheet();
+                fAssociationsList.UpdateSheet();
 
                 UpdateSpousesSheet();
-                UpdateAssociationsSheet();
                 UpdateGroupsSheet();
                 UpdateURefsSheet();
                 UpdateNamesSheet();
@@ -381,7 +381,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -394,7 +394,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -408,91 +408,15 @@ namespace GKUI.Dialogs
             fLocalUndoman.DoIndividualNameChange(fPerson, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
         }
 
-        private GKSheetList CreateAssociationsSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += ModifyAssociationsSheet;
-
-            return sheet;
-        }
-
-        private void UpdateAssociationsSheet()
-        {
-            try
-            {
-                fAssociationsList.ClearItems();
-
-                foreach (GEDCOMAssociation ast in fPerson.Associations) {
-                    string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
-
-                    GKListItem item = fAssociationsList.AddItem(ast.Relation, ast);
-                    item.AddSubItem(nm);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.UpdateAssociationsSheet(): " + ex.Message);
-            }
-        }
-
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
-            bool result = false;
-
             GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
 
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg())
-                    {
-                        fmAstEdit.InitDialog(fBase);
-
-                        bool exists = (ast != null);
-                        if (!exists) {
-                            ast = new GEDCOMAssociation(fBase.Tree, fPerson, "", "");
-                        }
-
-                        fmAstEdit.Association = ast;
-                        result = (MainWin.Instance.ShowModalEx(fmAstEdit, false) == DialogResult.OK);
-
-                        if (!exists) {
-                            if (result) {
-                                //this.fPerson.Associations.Add(ast);
-                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, fPerson, ast);
-                            } else {
-                                ast.Dispose();
-                            }
-                        }
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != false)
-                    {
-                        //this.fPerson.Associations.Delete(ast);
-                        //result = true;
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, fPerson, ast);
-                        fBase.Modified = true;
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (ast != null) {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(ast.Individual.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && ast != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(ast.Individual.XRef);
+                Close();
             }
-
-            if (result) UpdateAssociationsSheet();
         }
 
         private GKSheetList CreateURefsSheet(Control owner)
@@ -514,7 +438,7 @@ namespace GKUI.Dialogs
                 fUserRefList.ClearItems();
 
                 foreach (GEDCOMUserReference uref in fPerson.UserReferences) {
-                    GKListItem item = fUserRefList.AddItem(uref.StringValue, uref);
+                    IListItem item = fUserRefList.AddItem(uref.StringValue, uref);
                     item.AddSubItem(uref.ReferenceType);
                 }
             }
@@ -533,7 +457,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (UserRefEditDlg dlg = new UserRefEditDlg())
+                    using (var dlg = AppHub.Container.Resolve<IUserRefEditDlg>())
                     {
                         dlg.InitDialog(fBase);
 
@@ -543,11 +467,10 @@ namespace GKUI.Dialogs
                         }
 
                         dlg.UserRef = userRef;
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        result = AppHub.MainWindow.ShowModalX(dlg, false);
 
                         if (!exists) {
                             if (result) {
-                                //this.fPerson.UserReferences.Add(userRef);
                                 result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, fPerson, userRef);
                             } else {
                                 userRef.Dispose();
@@ -565,8 +488,6 @@ namespace GKUI.Dialogs
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
                         if (AppHub.StdDialogs.ShowQuestionYN(confirmation) != false)
                         {
-                            //this.fPerson.UserReferences.Delete(userRef);
-                            //result = true;
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, fPerson, userRef);
                             fBase.Modified = true;
                         }
@@ -620,7 +541,7 @@ namespace GKUI.Dialogs
                         relName = GKUtils.GetNameString(relPerson, true, false);
                     }
 
-                    GKListItem item = fSpousesList.AddItem(idx, family);
+                    IListItem item = fSpousesList.AddItem(idx, family);
                     item.AddSubItem(relName);
                     item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
                 }
@@ -800,7 +721,7 @@ namespace GKUI.Dialogs
 
                 foreach (GEDCOMPersonalName pn in fPerson.PersonalNames)
                 {
-                    GKListItem item = fNamesList.AddItem(pn.FullName, pn);
+                    IListItem item = fNamesList.AddItem(pn.FullName, pn);
                     item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
                 }
             }
@@ -820,7 +741,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg())
+                    using (var dlg = AppHub.Container.Resolve<IPersonalNameEditDlg>())
                     {
                         dlg.InitDialog(fBase);
 
@@ -830,11 +751,10 @@ namespace GKUI.Dialogs
                         }
 
                         dlg.PersonalName = persName;
-                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                        result = AppHub.MainWindow.ShowModalX(dlg, false);
 
                         if (!exists) {
                             if (result) {
-                                //this.fPerson.PersonalNames.Add(persName);
                                 result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, fPerson, persName);
                             } else {
                                 persName.Dispose();
@@ -847,7 +767,6 @@ namespace GKUI.Dialogs
                     if (fPerson.PersonalNames.Count > 1) {
                         result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
                         if (result) {
-                            //this.fPerson.PersonalNames.Delete(persName);
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, fPerson, persName);
                         }
                     } else {
@@ -945,7 +864,6 @@ namespace GKUI.Dialogs
 
             if (family.IndexOfChild(fPerson) < 0)
             {
-                //family.AddChild(this.fPerson);
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
             }
             UpdateControls();
@@ -969,7 +887,6 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
             if (family == null) return;
 
-            //family.RemoveChild(this.fPerson);
             fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
             UpdateControls();
         }
@@ -1075,7 +992,8 @@ namespace GKUI.Dialogs
             fNamesList = CreateNamesSheet(pageNames);
             fNamesList.SetControlName("fNamesList"); // for purpose of tests
 
-            fAssociationsList = CreateAssociationsSheet(pageAssociations);
+            fAssociationsList = new GKSheetList(pageAssociations);
+            fAssociationsList.OnModify += ModifyAssociationsSheet;
             fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
 
             fGroupsList = CreateGroupsSheet(pageGroups);
@@ -1160,11 +1078,7 @@ namespace GKUI.Dialogs
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
+            fAssociationsList.ListModel = new AssociationsListModel(fBase, fLocalUndoman);
         }
     }
 }

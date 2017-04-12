@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -59,7 +60,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -87,11 +88,6 @@ namespace GKUI.Dialogs
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

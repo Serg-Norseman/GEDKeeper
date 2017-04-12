@@ -24,12 +24,13 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
-using GKUI.Common;
+using GKUI.Components;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -492,7 +493,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
+                Logger.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
 
@@ -528,7 +529,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
+                Logger.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
             }
         }
 

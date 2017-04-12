@@ -22,15 +22,14 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -39,7 +38,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
-        private readonly GKSheetList fChildsList;
+        private readonly GKSheetList fChildrenList;
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -58,6 +57,12 @@ namespace GKUI.Dialogs
             fFamily = value;
             try
             {
+                fChildrenList.ListModel.DataOwner = fFamily;
+                fEventsList.ListModel.DataOwner = fFamily;
+                fNotesList.ListModel.DataOwner = fFamily;
+                fMediaList.ListModel.DataOwner = fFamily;
+                fSourcesList.ListModel.DataOwner = fFamily;
+
                 if (fFamily == null)
                 {
                     btnHusbandSel.Enabled = false;
@@ -75,16 +80,11 @@ namespace GKUI.Dialogs
                     cmbRestriction.SelectedIndex = (sbyte)fFamily.Restriction;
                 }
 
-                fEventsList.ListModel.DataOwner = fFamily;
-                fNotesList.ListModel.DataOwner = fFamily;
-                fMediaList.ListModel.DataOwner = fFamily;
-                fSourcesList.ListModel.DataOwner = fFamily;
-
                 UpdateControls();
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("FamilyEditDlg.SetFamily(): " + ex.Message);
+                Logger.LogWrite("FamilyEditDlg.SetFamily(): " + ex.Message);
             }
         }
 
@@ -102,8 +102,12 @@ namespace GKUI.Dialogs
                 cmbMarriageStatus.Items.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }
 
-            fChildsList = CreateChildsSheet(pageChilds);
-            fChildsList.SetControlName("fChildsList"); // for purpose of tests
+            fChildrenList = new GKSheetList(pageChilds);
+            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
+            fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
+            fChildrenList.Buttons = EnumSet<SheetButton>.Create(
+                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete/*, SheetButton.lbJump*/);
+            //fChildsList.OnModify += ModifyChildsSheet;
 
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
@@ -128,8 +132,6 @@ namespace GKUI.Dialogs
                 btnWifeDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
                 btnWifeSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
             }
-
-            fChildsList.OnItemValidating += FamilyEditDlg_ItemValidating;
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -169,12 +171,11 @@ namespace GKUI.Dialogs
             btnWifeDelete.Enabled = (wife != null);
             btnWifeSel.Enabled = (wife != null);
 
+            fChildrenList.UpdateSheet();
             fEventsList.UpdateSheet();
             fNotesList.UpdateSheet();
             fMediaList.UpdateSheet();
             fSourcesList.UpdateSheet();
-
-            UpdateChildsSheet();
 
             LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);
         }
@@ -188,7 +189,7 @@ namespace GKUI.Dialogs
 
             cmbMarriageStatus.Enabled = (cmbMarriageStatus.Enabled && !locked);
 
-            fChildsList.ReadOnly = locked;
+            fChildrenList.ReadOnly = locked;
             fEventsList.ReadOnly = locked;
             fNotesList.ReadOnly = locked;
             fMediaList.ReadOnly = locked;
@@ -200,87 +201,15 @@ namespace GKUI.Dialogs
             LockEditor(cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
         }
 
-        private GKSheetList CreateChildsSheet(Control owner)
+        /*private void ModifyChildsSheet(object sender, ModifyEventArgs eArgs)
         {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn("№", 25, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 300, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_BirthDate), 100, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += ModifyChildsSheet;
-
-            return sheet;
-        }
-
-        private void UpdateChildsSheet()
-        {
-            try
-            {
-                fChildsList.BeginUpdate();
-                fChildsList.ClearItems();
-
-                int idx = 0;
-                foreach (GEDCOMPointer ptr in fFamily.Children)
-                {
-                    idx += 1;
-
-                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
-
-                    GKListItem item = fChildsList.AddItem(idx, child);
-                    item.AddSubItem(GKUtils.GetNameString(child, true, false));
-                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetBirthDate(child)));
-                }
-
-                fChildsList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("FamilyEditDlg.UpdateChildsSheet(): " + ex.Message);
-            }
-        }
-
-        private void ModifyChildsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            bool result = false;
-
             GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    child = AppHub.BaseController.SelectPerson(fBase, fFamily.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
-                    result = (child != null && fBase.Context.IsAvailableRecord(child));
-                    if (result) {
-                        //result = this.fFamily.AddChild(child);
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, fFamily);
-                    }
-                    break;
-
-                case RecordAction.raEdit:
-                    result = (AppHub.BaseController.ModifyIndividual(fBase, ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
-                    break;
-
-                case RecordAction.raDelete:
-                    result = (child != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)) != false);
-                    if (result) {
-                        //result = this.fFamily.RemoveChild(child);
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, fFamily);
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (child != null) {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(child.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && child != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(child.XRef);
+                Close();
             }
-
-            if (result) UpdateChildsSheet();
-        }
+        }*/
 
         private void AcceptChanges()
         {
@@ -305,7 +234,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("FamilyEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("FamilyEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -318,7 +247,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -327,6 +256,7 @@ namespace GKUI.Dialogs
             Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
         }
 
+        // TODO: rework
         public void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target)
         {
             if (targetType == FamilyTarget.None || target == null) return;
@@ -345,24 +275,14 @@ namespace GKUI.Dialogs
 
         private void btnHusbandAddClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord husband = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svMale);
-            if (husband != null && fFamily.Husband.StringValue == "")
-            {
-                //this.fFamily.AddSpouse(husband);
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, husband);
+            if (AppHub.BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnHusbandDeleteClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord husband = fFamily.GetHusband();
-            if (!fBase.Context.IsAvailableRecord(husband)) return;
-
-            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != false)
-            {
-                //this.fFamily.RemoveSpouse(husband);
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, fFamily, husband);
+            if (AppHub.BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
@@ -379,24 +299,14 @@ namespace GKUI.Dialogs
 
         private void btnWifeAddClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord wife = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svFemale);
-            if (wife != null && fFamily.Wife.StringValue == "")
-            {
-                //this.fFamily.AddSpouse(wife);
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, wife);
+            if (AppHub.BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnWifeDeleteClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord wife = fFamily.GetWife();
-            if (!fBase.Context.IsAvailableRecord(wife)) return;
-
-            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)) != false)
-            {
-                //this.fFamily.RemoveSpouse(this.fFamily.GetWife());
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, fFamily, wife);
+            if (AppHub.BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
@@ -434,15 +344,11 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
+            fChildrenList.ListModel = new GKChildrenListModel(fBase, fLocalUndoman);
             fEventsList.ListModel = new GKEventsListModel(fBase, fLocalUndoman, false);
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

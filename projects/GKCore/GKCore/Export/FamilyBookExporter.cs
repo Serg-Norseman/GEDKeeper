@@ -256,7 +256,7 @@ namespace GKCore.Export
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
+                Logger.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
                 throw;
             }
         }

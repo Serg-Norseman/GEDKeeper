@@ -24,109 +24,17 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.Controls;
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Operations;
+using GKCore.Lists;
 using GKCore.Types;
 
-namespace GKUI.Sheets
+namespace GKUI.Components
 {
-    public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
-    public delegate void ItemValidatingEventHandler(object sender, ItemValidatingEventArgs e);
-
     /// <summary>
     /// 
     /// </summary>
-    public class ModifyEventArgs : EventArgs
-    {
-        public RecordAction Action { get; private set; }
-        public object ItemData { get; set; }
-
-        public ModifyEventArgs(RecordAction action, object itemData)
-        {
-            Action = action;
-            ItemData = itemData;
-        }
-    }
-
-    public class ItemValidatingEventArgs : EventArgs
-    {
-        private bool fIsAvailable;
-        private object fItem;
-
-        public bool IsAvailable
-        {
-            get { return fIsAvailable; }
-            set { fIsAvailable = value; }
-        }
-
-        public object Item
-        {
-            get { return fItem; }
-            set { fItem = value; }
-        }
-
-        public ItemValidatingEventArgs() : this(null)
-        {
-        }
-
-        public ItemValidatingEventArgs(object item)
-        {
-            fItem = item;
-        }
-    }
-
-    public enum SheetButton
-    {
-        lbAdd,
-        lbEdit,
-        lbDelete,
-        lbJump,
-        lbMoveUp,
-        lbMoveDown
-    }
-
-    public abstract class GKListModel
-    {
-        protected GKSheetList fSheetList;
-        protected readonly IBaseWindow fBaseWin;
-        protected readonly ChangeTracker fUndoman;
-        protected GEDCOMObject fDataOwner;
-
-        public GEDCOMObject DataOwner
-        {
-            get { return fDataOwner; }
-            set {
-                fDataOwner = value;
-                UpdateContent();
-            }
-        }
-
-        public GKSheetList SheetList
-        {
-            get { return fSheetList; }
-            set {
-                fSheetList = value;
-                InitView();
-            }
-        }
-
-        protected GKListModel(IBaseWindow baseWin, ChangeTracker undoman)
-        {
-            fBaseWin = baseWin;
-            fUndoman = undoman;
-        }
-
-        public abstract void InitView();
-        public abstract void UpdateContent();
-        public abstract void Modify(object sender, ModifyEventArgs eArgs);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GKSheetList : ContainerControl
+    public class GKSheetList : ContainerControl, ISheetList
     {
         private static readonly object EventModify;
         private static readonly object EventItemValidating;
@@ -479,7 +387,7 @@ namespace GKUI.Sheets
             fList.EndUpdate();
         }
 
-        public GKListItem AddItem(object itemValue, object data)
+        public IListItem AddItem(object itemValue, object data)
         {
             return fList.AddItem(itemValue, data);
         }

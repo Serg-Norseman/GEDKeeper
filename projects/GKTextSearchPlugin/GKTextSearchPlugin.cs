@@ -78,7 +78,7 @@ namespace GKTextSearchPlugin
 
         public void Execute()
         {
-            if (fHost.IsUnix()) {
+            if (SysUtils.IsUnix()) {
                 AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
@@ -105,7 +105,7 @@ namespace GKTextSearchPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
         
@@ -119,7 +119,7 @@ namespace GKTextSearchPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -135,7 +135,7 @@ namespace GKTextSearchPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

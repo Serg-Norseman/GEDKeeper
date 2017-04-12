@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
 	partial class GKInputBox
 	{

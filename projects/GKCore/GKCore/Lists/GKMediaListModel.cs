@@ -19,16 +19,13 @@
  */
 
 using System;
-
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
 
-namespace GKUI.Sheets
+namespace GKCore.Lists
 {
     public sealed class GKMediaListModel : GKListModel
     {
@@ -62,7 +59,7 @@ namespace GKUI.Sheets
                     if (mmRec.FileReferences.Count == 0) continue;
 
                     GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
-                    GKListItem item = fSheetList.AddItem(fileRef.Title, mmLink);
+                    IListItem item = fSheetList.AddItem(fileRef.Title, mmLink);
                     item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                 }
             }

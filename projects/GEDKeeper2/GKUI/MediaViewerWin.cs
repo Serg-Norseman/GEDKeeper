@@ -24,6 +24,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -96,7 +97,7 @@ namespace GKUI
                                                 txtBox.Text = strd.ReadToEnd();
                                             }
                                         } catch (Exception ex) {
-                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.1(): " + ex.Message);
+                                            Logger.LogWrite("MediaViewerWin.SetFileRef.1(): " + ex.Message);
                                         }
 
                                         ctl = txtBox;
@@ -114,7 +115,7 @@ namespace GKUI
                                                 rtfBox.Text = strd.ReadToEnd();
                                             }
                                         } catch (Exception ex) {
-                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.2(): " + ex.Message);
+                                            Logger.LogWrite("MediaViewerWin.SetFileRef.2(): " + ex.Message);
                                         }
 
                                         ctl = rtfBox;
@@ -133,7 +134,7 @@ namespace GKUI
                                                 // didn't work, because didn't defines codepage from page's header (?!)
                                             }*/
                                         } catch (Exception ex) {
-                                            fBase.Host.LogWrite("MediaViewerWin.SetFileRef.3(): " + ex.Message);
+                                            Logger.LogWrite("MediaViewerWin.SetFileRef.3(): " + ex.Message);
                                         }
 
                                         ctl = browser;
@@ -151,7 +152,7 @@ namespace GKUI
             {
                 if (ctl != null) ctl.Dispose();
 
-                fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
+                Logger.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
             }
         }
 

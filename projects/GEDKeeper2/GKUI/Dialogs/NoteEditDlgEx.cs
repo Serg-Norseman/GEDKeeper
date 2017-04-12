@@ -22,11 +22,12 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
 
 namespace GKUI.Dialogs
 {
@@ -71,7 +72,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -176,11 +177,6 @@ namespace GKUI.Dialogs
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

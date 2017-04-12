@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -62,7 +63,7 @@ namespace GKTreeVizPlugin
 
         public void Execute()
         {
-            if (fHost.IsUnix()) {
+            if (SysUtils.IsUnix()) {
                 AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
@@ -93,7 +94,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTreeVizPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKTreeVizPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -107,7 +108,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTreeVizPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKTreeVizPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -122,7 +123,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTreeVizPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKTreeVizPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

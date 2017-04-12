@@ -19,11 +19,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// Image with the pop-up panel.

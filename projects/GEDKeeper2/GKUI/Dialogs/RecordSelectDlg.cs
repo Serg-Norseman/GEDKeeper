@@ -21,13 +21,14 @@
 using System;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
 
 namespace GKUI.Dialogs
 {
@@ -158,7 +159,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
+                Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
@@ -284,7 +285,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
+                Logger.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }

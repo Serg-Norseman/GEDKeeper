@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,36 +18,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+using System;
+using GKCore;
+using NUnit.Framework;
 
-using System.Windows.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
-
-namespace GKTests.ControlTesters
+namespace GKTests.GKCore
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GKSheetListTester : ControlTester<GKSheetList, GKSheetListTester>
+    [TestFixture]
+    public class PathReplacerTests
     {
-        public GKSheetListTester()
+        private PathReplacer fPathReplacer;
+
+        [TestFixtureSetUp]
+        public void SetUp()
         {
+            fPathReplacer = new PathReplacer();
         }
 
-        public GKSheetListTester(string name, Form form) : base(name, form)
+        [Test]
+        public void Test_TryReplacePath()
         {
-        }
+            string newPath;
+            Assert.Throws(typeof(ArgumentNullException), () => { fPathReplacer.TryReplacePath(null, out newPath); });
 
-        public GKSheetListTester(string name) : base(name)
-        {
-        }
-
-        public new GKSheetList Properties
-        {
-            get { return (GKSheetList) TheObject; }
+            bool res;
+            res = fPathReplacer.TryReplacePath(@"C:\TEST\x.yyy", out newPath);
+            Assert.IsFalse(res);
         }
     }
 }
-
-#endif

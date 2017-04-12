@@ -62,8 +62,8 @@ namespace GKUI
 		private System.Windows.Forms.RadioButton radSources;
 		private System.Windows.Forms.CheckBox chkBookmarkMerged;
 		private System.Windows.Forms.GroupBox grpMergeOther;
-		private GKUI.Controls.LogChart gkLogChart1;
-		private GKUI.Controls.GKMergeControl MergeCtl;
+		private GKUI.Components.LogChart gkLogChart1;
+		private GKUI.Components.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;
 		private System.Windows.Forms.RadioButton radAnalysis;
@@ -105,7 +105,7 @@ namespace GKUI
 		    this.pageRecMerge = new System.Windows.Forms.TabPage();
 		    this.PageControl1 = new System.Windows.Forms.TabControl();
 		    this.pageMerge = new System.Windows.Forms.TabPage();
-		    this.MergeCtl = new GKUI.Controls.GKMergeControl();
+		    this.MergeCtl = new GKUI.Components.GKMergeControl();
 		    this.btnAutoSearch = new System.Windows.Forms.Button();
 		    this.btnSkip = new System.Windows.Forms.Button();
 		    this.ProgressBar1 = new System.Windows.Forms.ProgressBar();
@@ -125,7 +125,7 @@ namespace GKUI
 		    this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 		    this.chkBirthYear = new System.Windows.Forms.CheckBox();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
-		    this.gkLogChart1 = new GKUI.Controls.LogChart();
+		    this.gkLogChart1 = new GKUI.Components.LogChart();
 		    this.tvGroups = new System.Windows.Forms.TreeView();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
 		    this.btnBaseRepair = new System.Windows.Forms.Button();

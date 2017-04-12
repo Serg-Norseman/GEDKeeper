@@ -582,7 +582,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
             }
         }
 
@@ -599,7 +599,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
             }
         }
 
@@ -624,7 +624,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
             }
         }
 
@@ -666,7 +666,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.AddDescPerson(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.AddDescPerson(): " + ex.Message);
                 throw;
             }
         }
@@ -761,7 +761,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.DoAncestorsStep(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.DoAncestorsStep(): " + ex.Message);
                 throw;
             }
         }
@@ -831,7 +831,7 @@ namespace GKUI.Charts
 
                         // protection against invalid third-party files
                         if (family == null) {
-                            fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to family");
+                            Logger.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to family");
                             continue;
                         }
 
@@ -874,7 +874,7 @@ namespace GKUI.Charts
                             case GEDCOMSex.svNone:
                             case GEDCOMSex.svUndetermined:
                                 invalidSpouse = true;
-                                fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): sex of spouse is undetermined");
+                                Logger.LogWrite("TreeChartBox.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
                         }
 
@@ -918,7 +918,7 @@ namespace GKUI.Charts
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
-                                    fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to child");
+                                    Logger.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to child");
                                     continue;
                                 }
 
@@ -950,7 +950,7 @@ namespace GKUI.Charts
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.DoDescendantsStep(): " + ex.Message);
                 throw;
             }
         }
@@ -1129,7 +1129,7 @@ namespace GKUI.Charts
                     }
                 }
             } catch (Exception ex) {
-                fBase.Host.LogWrite("TreeChartBox.DrawPerson(): " + ex.Message);
+                Logger.LogWrite("TreeChartBox.DrawPerson(): " + ex.Message);
             }
         }
 

@@ -31,7 +31,6 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
-using GKCore.Plugins;
 using GKCore.Types;
 using GKTests.ControlTesters;
 using GKUI;
@@ -320,8 +319,6 @@ namespace GKTests.UITests
             fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
             DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { PluginInfo.GetPluginInfo(null); });
-
             fMainWin.AddMRU("test.ged");
 
             Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
@@ -344,11 +341,6 @@ namespace GKTests.UITests
             ModalFormHandler = MessageBox_OkHandler;
             AppHub.StdDialogs.ShowWarning("test warn");
 
-            #if !__MonoCS__
-            Assert.IsFalse(host.IsUnix());
-            #else
-            Assert.IsTrue(host.IsUnix());
-            #endif
 
             ILangMan langMan = host.CreateLangMan(null);
             Assert.IsNull(langMan);

@@ -96,7 +96,7 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
         
@@ -109,7 +109,7 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -123,7 +123,7 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

@@ -18,25 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKUI.Controls
+using System;
+
+namespace GKCore.Interfaces
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem
+    public interface IListItem : IComparable
     {
-        public readonly string Caption;
-        public readonly object Tag;
-
-        public GKComboItem(string caption, object tag)
-        {
-            Caption = caption;
-            Tag = tag;
-        }
-
-        public override string ToString()
-        {
-            return Caption;
-        }
+        void AddSubItem(object itemValue);
     }
 }

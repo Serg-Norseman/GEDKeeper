@@ -33,8 +33,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKUI.Common;
-using GKUI.Controls;
+using GKUI.Components;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -601,7 +600,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                Host.LogWrite("BaseWin.FileLoad(): " + ex.Message);
+                Logger.LogWrite("BaseWin.FileLoad(): " + ex.Message);
                 AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
@@ -634,7 +633,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
-                Host.LogWrite("BaseWin.FileSave(): " + ex.Message);
+                Logger.LogWrite("BaseWin.FileSave(): " + ex.Message);
             }
         }
 
@@ -646,7 +645,7 @@ namespace GKUI
                 // TODO: PrepareHeader or not?
                 fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
             } catch (Exception ex) {
-                Host.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
+                Logger.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
             }
         }
 
@@ -785,7 +784,7 @@ namespace GKUI
                 catch (Exception ex)
                 {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Host.LogWrite("BaseWin.ShowMedia(): " + ex.Message);
+                    Logger.LogWrite("BaseWin.ShowMedia(): " + ex.Message);
                 }
             }
         }
@@ -1012,7 +1011,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                Host.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
+                Logger.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
             }
         }
 

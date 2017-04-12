@@ -92,7 +92,7 @@ namespace GKCalculatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
         
@@ -105,7 +105,7 @@ namespace GKCalculatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -119,7 +119,7 @@ namespace GKCalculatorPlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKCalculatorPlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKCalculatorPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

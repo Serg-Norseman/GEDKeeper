@@ -96,7 +96,7 @@ namespace GKChroniclePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKChroniclePlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKChroniclePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
         
@@ -109,7 +109,7 @@ namespace GKChroniclePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKChroniclePlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKChroniclePlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -123,7 +123,7 @@ namespace GKChroniclePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKChroniclePlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKChroniclePlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

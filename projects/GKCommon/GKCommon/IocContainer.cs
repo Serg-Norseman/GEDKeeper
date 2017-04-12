@@ -24,6 +24,30 @@ using System.Reflection;
 
 namespace GKCommon.IoC
 {
+    public class TypeNotRegisteredException : Exception
+    {
+        public TypeNotRegisteredException(string message) : base(message)
+        {
+        }
+    }
+
+
+    public enum LifeCycle
+    {
+        Singleton,
+        Transient
+    }
+
+
+    public interface IContainer
+    {
+        void Register<TTypeToResolve, TConcrete>();
+        void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
+        TTypeToResolve Resolve<TTypeToResolve>();
+        object Resolve(Type typeToResolve);
+    }
+
+
     internal class RegisteredObject
     {
         public RegisteredObject(Type typeToResolve, Type concreteType, LifeCycle lifeCycle)

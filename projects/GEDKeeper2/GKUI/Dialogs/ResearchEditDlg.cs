@@ -22,15 +22,14 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -82,7 +81,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
+                Logger.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
             }
         }
 
@@ -290,7 +289,7 @@ namespace GKUI.Dialogs
                 GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
                 if (task == null) continue;
 
-                GKListItem item = fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
+                IListItem item = fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
                 item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
                 item.AddSubItem(new GEDCOMDateItem(task.StartDate));
                 item.AddSubItem(new GEDCOMDateItem(task.StopDate));
@@ -304,7 +303,7 @@ namespace GKUI.Dialogs
                 GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
                 if (corr == null) continue;
 
-                GKListItem item = fCommunicationsList.AddItem(corr.CommName, corr);
+                IListItem item = fCommunicationsList.AddItem(corr.CommName, corr);
                 item.AddSubItem(GKUtils.GetCorresponderStr(fBase.Tree, corr, false));
                 item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
                 item.AddSubItem(new GEDCOMDateItem(corr.Date));
@@ -346,7 +345,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -359,7 +358,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -368,11 +367,6 @@ namespace GKUI.Dialogs
             base.InitDialog(baseWin);
 
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

@@ -1,6 +1,6 @@
-/*
+﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,29 +19,30 @@
  */
 
 using System;
+using GKCommon;
+using GKCore;
+using NUnit.Framework;
 
-namespace GKCommon.IoC
+namespace GKTests.GKCore
 {
-    public class TypeNotRegisteredException : Exception
+    [TestFixture]
+    public class HolidaysTests
     {
-        public TypeNotRegisteredException(string message) : base(message)
+        private Holidays fHolidays;
+
+        [TestFixtureSetUp]
+        public void SetUp()
         {
+            fHolidays = new Holidays();
         }
-    }
 
+        [Test]
+        public void Test_CollectTips()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fHolidays.CollectTips(null); });
 
-    public enum LifeCycle
-    {
-        Singleton,
-        Transient
-    }
-
-
-    public interface IContainer
-    {
-        void Register<TTypeToResolve, TConcrete>();
-        void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
-        TTypeToResolve Resolve<TTypeToResolve>();
-        object Resolve(Type typeToResolve);
+            StringList tipsList = new StringList();
+            fHolidays.CollectTips(tipsList);
+        }
     }
 }

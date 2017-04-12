@@ -28,7 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Controls;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {

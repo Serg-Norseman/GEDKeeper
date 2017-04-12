@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -198,7 +199,7 @@ namespace GKNavigatorPlugin
             }
             catch (Exception ex)
             {
-                fPlugin.Host.LogWrite("GKNavigatorPlugin.UpdateControls(): " + ex.Message);
+                Logger.LogWrite("GKNavigatorPlugin.UpdateControls(): " + ex.Message);
             }
         }
 

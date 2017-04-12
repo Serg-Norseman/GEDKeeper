@@ -21,8 +21,8 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
 using ConwayLife;
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKLifePlugin")]
@@ -91,7 +91,7 @@ namespace GKLifePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKLifePlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKLifePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -104,7 +104,7 @@ namespace GKLifePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKLifePlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKLifePlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -118,7 +118,7 @@ namespace GKLifePlugin
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKLifePlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKLifePlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

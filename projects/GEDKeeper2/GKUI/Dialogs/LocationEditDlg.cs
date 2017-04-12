@@ -28,9 +28,9 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -132,7 +132,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -145,7 +145,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -242,11 +242,6 @@ namespace GKUI.Dialogs
 
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

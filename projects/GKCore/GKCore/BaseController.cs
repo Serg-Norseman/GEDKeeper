@@ -65,7 +65,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                baseWin.Host.LogWrite("BaseController.SelectFamily(): " + ex.Message);
+                Logger.LogWrite("BaseController.SelectFamily(): " + ex.Message);
                 result = null;
             }
 
@@ -97,7 +97,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                baseWin.Host.LogWrite("BaseController.SelectPerson(): " + ex.Message);
+                Logger.LogWrite("BaseController.SelectPerson(): " + ex.Message);
                 result = null;
             }
 
@@ -130,7 +130,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                baseWin.Host.LogWrite("BaseController.SelectRecord(): " + ex.Message);
+                Logger.LogWrite("BaseController.SelectRecord(): " + ex.Message);
                 result = null;
             }
 
@@ -1339,7 +1339,7 @@ namespace GKCore
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                     } else {
                         // selected family with husband
-                        baseWin.Host.LogWrite("BaseController.AddFather(): fail, because family already has father");
+                        Logger.LogWrite("BaseController.AddFather(): fail, because family already has father");
                         result = true;
                     }
                 }
@@ -1378,7 +1378,7 @@ namespace GKCore
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                     } else {
                         // selected family with wife
-                        baseWin.Host.LogWrite("BaseController.AddMother(): fail, because family already has mother");
+                        Logger.LogWrite("BaseController.AddMother(): fail, because family already has mother");
                         result = true;
                     }
                 }
@@ -1399,6 +1399,70 @@ namespace GKCore
                     GEDCOMIndividualRecord mother = family.GetWife();
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }
+            }
+
+            return result;
+        }
+
+
+        public bool AddFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        {
+            bool result = false;
+
+            GEDCOMIndividualRecord husband = AppHub.BaseController.SelectPerson(baseWin, null, TargetMode.tmNone, GEDCOMSex.svMale);
+            if (husband != null && family.Husband.StringValue == "")
+            {
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
+            }
+
+            return result;
+        }
+
+        public bool DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        {
+            bool result = false;
+
+            GEDCOMIndividualRecord husband = family.GetHusband();
+            if (!baseWin.Context.IsAvailableRecord(husband)) return false;
+
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != false)
+            {
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
+            }
+
+            return result;
+        }
+
+        public bool AddFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        {
+            bool result = false;
+
+            GEDCOMIndividualRecord wife = AppHub.BaseController.SelectPerson(baseWin, null, TargetMode.tmNone, GEDCOMSex.svFemale);
+            if (wife != null && family.Wife.StringValue == "")
+            {
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
+            }
+
+            return result;
+        }
+
+        public void DeleteFamilyWife(IBaseEditor editor, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        {
+            if (DeleteFamilyWife(editor.Base, localUndoman, family)) {
+                editor.UpdateView();
+            }
+        }
+
+        public bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        {
+            bool result = false;
+
+            GEDCOMIndividualRecord wife = family.GetWife();
+            if (!baseWin.Context.IsAvailableRecord(wife)) return false;
+
+            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)) != false)
+            {
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 
             return result;

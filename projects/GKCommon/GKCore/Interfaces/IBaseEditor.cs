@@ -25,5 +25,6 @@ namespace GKCore.Interfaces
         IBaseWindow Base { get; }
 
         void InitDialog(IBaseWindow baseWin);
+        void UpdateView();
     }
 }

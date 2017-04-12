@@ -22,7 +22,7 @@ using System;
 using GKCommon.IoC;
 using GKCore.Interfaces;
 using GKUI.Charts;
-using GKUI.Common;
+using GKUI.Components;
 using GKUI.Contracts;
 using GKUI.Dialogs;
 

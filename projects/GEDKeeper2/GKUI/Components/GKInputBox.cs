@@ -22,7 +22,7 @@ using System;
 using System.Windows.Forms;
 using GKCore;
 
-namespace GKUI.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// 

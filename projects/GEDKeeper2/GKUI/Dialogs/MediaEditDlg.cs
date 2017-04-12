@@ -25,11 +25,11 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
-using GKUI.Sheets;
 
 namespace GKUI.Dialogs
 {
@@ -120,7 +120,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
+                Logger.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
             }
         }
 
@@ -132,7 +132,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }
@@ -145,7 +145,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -238,11 +238,6 @@ namespace GKUI.Dialogs
 
             fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
-        }
-
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
         }
     }
 }

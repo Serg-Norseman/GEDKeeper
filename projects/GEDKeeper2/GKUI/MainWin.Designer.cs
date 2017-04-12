@@ -1,5 +1,5 @@
 ﻿using System;
-using GKUI.Controls;
+using GKUI.Components;
 
 namespace GKUI
 {

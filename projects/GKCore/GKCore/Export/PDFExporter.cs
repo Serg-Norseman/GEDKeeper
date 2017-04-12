@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -68,8 +69,8 @@ namespace GKCore.Export
             }
             catch (Exception ex)
             {
-                fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.Message);
-                fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.StackTrace);
+                Logger.LogWrite("PDFExporter.Generate(): " + ex.Message);
+                Logger.LogWrite("PDFExporter.Generate(): " + ex.StackTrace);
             }
 
             #if !CI_MODE

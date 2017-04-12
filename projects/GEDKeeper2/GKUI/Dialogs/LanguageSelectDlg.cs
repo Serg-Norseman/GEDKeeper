@@ -24,8 +24,8 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Options;
+using GKUI.Components;
 using GKUI.Contracts;
-using GKUI.Controls;
 
 namespace GKUI.Dialogs
 {

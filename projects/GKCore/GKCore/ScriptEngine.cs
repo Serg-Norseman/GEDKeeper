@@ -100,7 +100,7 @@ namespace GKCore
             }
             else
             {
-                fBase.Host.LogWrite("ScriptEngine.lua_register(" + funcName + "): fail");
+                Logger.LogWrite("ScriptEngine.lua_register(" + funcName + "): fail");
             }
         }
 

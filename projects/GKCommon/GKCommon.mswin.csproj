@@ -207,8 +207,7 @@
     <Compile Include="GKCommon\ImportUtils.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
-    <Compile Include="GKCommon\IoC\IContainer.cs" />
-    <Compile Include="GKCommon\IoC\IocContainer.cs" />
+    <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Range.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
@@ -236,6 +235,7 @@
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
+    <Compile Include="GKCore\Interfaces\IListItem.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
     <Compile Include="GKCore\Interfaces\IListView.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
@@ -280,7 +280,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCommon\IoC" />
+    <Folder Include="GKCommon\" />
+    <Folder Include="GEDCOM\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

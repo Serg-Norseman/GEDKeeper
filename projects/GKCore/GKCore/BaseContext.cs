@@ -427,7 +427,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.CollectTips(): " + ex.Message);
+                Logger.LogWrite("BaseContext.CollectTips(): " + ex.Message);
             }
         }
 
@@ -631,7 +631,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
+                Logger.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
                 fileName = "";
             }
         }
@@ -759,7 +759,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
+                Logger.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -818,7 +818,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
+                Logger.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -851,7 +851,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.GetPrimaryBitmap(): " + ex.Message);
+                Logger.LogWrite("BaseContext.GetPrimaryBitmap(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -869,7 +869,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("BaseContext.GetPrimaryBitmapUID(): " + ex.Message);
+                Logger.LogWrite("BaseContext.GetPrimaryBitmapUID(): " + ex.Message);
                 result = null;
             }
             return result;

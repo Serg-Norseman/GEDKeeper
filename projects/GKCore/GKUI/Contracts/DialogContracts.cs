@@ -76,7 +76,7 @@ namespace GKUI.Contracts
         GEDCOMMultimediaRecord MediaRec { get; set; }
     }
 
-    public interface INameEditDlg : ICommonDialog, IBaseEditor
+    public interface INameEditDlg : ICommonDialog
     {
         NameEntry IName { get; set; }
     }
