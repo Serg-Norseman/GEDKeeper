@@ -46,7 +46,9 @@ namespace GKTextSearchPlugin
 
             fPlugin = plugin;
             fBase = baseWin;
-            Text = string.Format(fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]", Path.GetFileName(fBase.Tree.FileName));
+            Text = string.Format(
+                fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]",
+                Path.GetFileName(fBase.Context.FileName));
 
             SuspendLayout();
             fResultsText = new HyperView();
@@ -94,7 +96,7 @@ namespace GKTextSearchPlugin
                     Write(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][/size]",
                                         entry.Rank, entry.Percent, entry.XRef));
 
-                    GEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);
+                    GEDCOMRecord rec = fBase.Context.Tree.XRefIndex_Find(entry.XRef);
                     StringList ctx = fBase.GetRecordContent(rec);
                     fResultsText.Lines.AddStrings(ctx);
                     Write("");

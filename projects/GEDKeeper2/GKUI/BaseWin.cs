@@ -31,7 +31,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Dialogs;
@@ -50,7 +49,6 @@ namespace GKUI
 
         private bool fModified;
         private ShieldState fShieldState;
-        private GEDCOMTree fTree;
 
         private readonly GKRecordsView ListPersons;
         private readonly GKRecordsView ListFamilies;
@@ -119,11 +117,6 @@ namespace GKUI
             }
         }
 
-        public GEDCOMTree Tree
-        {
-            get { return fTree; }
-        }
-
         #endregion
 
         #region Instance control
@@ -132,8 +125,7 @@ namespace GKUI
         {
             InitializeComponent();
 
-            fTree = new GEDCOMTree();
-            fContext = new BaseContext(fTree, this);
+            fContext = new BaseContext(this);
             fNavman = new NavigationStack();
 
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out ListPersons, out mPersonSummary);
@@ -158,11 +150,7 @@ namespace GKUI
             {
                 #if !__MonoCS__
                 fNavman.Dispose();
-
-                if (fTree != null) {
-                    fTree.Dispose();
-                    fTree = null;
-                }
+                fContext.Dispose();
 
                 if (components != null) components.Dispose();
                 #endif
@@ -202,7 +190,7 @@ namespace GKUI
             }
 
             MainWin.Instance.BaseClosed(this);
-            MainWin.Instance.CheckMRUWin(fTree.FileName, this);
+            MainWin.Instance.CheckMRUWin(fContext.FileName, this);
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
@@ -425,7 +413,7 @@ namespace GKUI
 
         private void SetMainTitle()
         {
-            Text = Path.GetFileName(fTree.FileName);
+            Text = Path.GetFileName(fContext.FileName);
             if (fModified)
             {
                 Text = @"* " + Text;
@@ -437,7 +425,7 @@ namespace GKUI
             if (linkName.StartsWith("view_"))
             {
                 string xref = linkName.Remove(0, 5);
-                GEDCOMMultimediaRecord mmRec = fTree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
+                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
                 if (mmRec != null)
                 {
                     ShowMedia(mmRec, false);
@@ -456,7 +444,7 @@ namespace GKUI
 
         public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
         {
-            if (fTree.RecordsCount > 0)
+            if (fContext.Tree.RecordsCount > 0)
             {
                 if (recType == GEDCOMRecordType.rtNone) {
                     RefreshLists(false);
@@ -472,7 +460,7 @@ namespace GKUI
 
             DateTime dtNow = DateTime.Now;
             record.ChangeDate.ChangeDateTime = dtNow;
-            fTree.Header.TransmissionDateTime = dtNow;
+            fContext.Tree.Header.TransmissionDateTime = dtNow;
             Modified = true;
 
             MainWin.Instance.NotifyRecord(this, record, RecordAction.raEdit);
@@ -520,7 +508,7 @@ namespace GKUI
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            recView = (GKRecordsView)AppHub.UIHelper.CreateRecordsView(sheet, fTree, recType);
+            recView = UIHelper.CreateRecordsView(sheet, fContext.Tree, recType);
             recView.IsMainList = true;
             recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
@@ -534,8 +522,8 @@ namespace GKUI
         private void ChangeFileName()
         {
             SetMainTitle();
-            MainWin.Instance.Options.LastDir = Path.GetDirectoryName(fTree.FileName);
-            MainWin.Instance.AddMRU(fTree.FileName);
+            GlobalOptions.Instance.LastDir = Path.GetDirectoryName(fContext.FileName);
+            MainWin.Instance.AddMRU(fContext.FileName);
         }
 
         public void Clear()
@@ -546,106 +534,37 @@ namespace GKUI
 
         public bool IsUnknown()
         {
-            string fileName = fTree.FileName;
+            string fileName = fContext.FileName;
 
             return string.IsNullOrEmpty(fileName) || !File.Exists(fileName);
         }
 
-        public void FileNew()
+        public void CreateNewFile()
         {
             Clear();
             RefreshLists(false);
             GKUtils.ShowPersonInfo(null, mPersonSummary.Lines, fShieldState);
-            fTree.SetFileName(LangMan.LS(LSID.LSID_Unknown));
-            fTree.Header.Language.Value = MainWin.Instance.Options.GetCurrentItfLang();
+            fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
+            fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
             Modified = false;
         }
 
-        private void LoadProgress(object sender, int progress)
-        {
-            AppHub.Progress.ProgressStep(progress);
-        }
-
-        public void FileLoad(string fileName)
+        public void LoadFile(string fileName)
         {
             Clear();
 
-            string pw = null;
-            string ext = SysUtils.GetFileExtension(fileName);
-            if (ext == ".geds") {
-                if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
-                    return;
-                }
-            }
-
-            IProgressController progress = AppHub.Progress;
-
-            try
-            {
-                progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
-                fTree.OnProgress += LoadProgress;
-                try
-                {
-                    fContext.FileLoad(fileName, pw);
-                }
-                finally
-                {
-                    fTree.OnProgress -= LoadProgress;
-                    progress.ProgressDone();
-                }
-
-                TreeTools.CheckGEDCOMFormat(fTree, fContext.ValuesCollection, progress);
+            if (fContext.FileLoad(fileName)) {
                 Modified = false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("BaseWin.FileLoad(): " + ex.Message);
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
-            }
-
-            ChangeFileName();
-            RefreshLists(false);
-        }
-
-        public void FileSave(string fileName)
-        {
-            try
-            {
-                string pw = null;
-                string ext = SysUtils.GetFileExtension(fileName);
-                if (ext == ".geds") {
-                    if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
-                        return;
-                    }
-                }
-
-                fContext.FileSave(fileName, pw);
-                Modified = false;
-
                 ChangeFileName();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
-            }
-            catch (Exception ex)
-            {
-                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
-                Logger.LogWrite("BaseWin.FileSave(): " + ex.Message);
+                RefreshLists(false);
             }
         }
 
-        public void CriticalSave()
+        public void SaveFile(string fileName)
         {
-            try
-            {
-                string rfn = Path.ChangeExtension(fTree.FileName, ".restore");
-                // TODO: PrepareHeader or not?
-                fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
-            } catch (Exception ex) {
-                Logger.LogWrite("BaseWin.CriticalSave(): " + ex.Message);
+            if (fContext.FileSave(fileName)) {
+                Modified = false;
+                ChangeFileName();
             }
         }
 
@@ -989,7 +908,7 @@ namespace GKUI
 
         public void SelectRecordByXRef(string xref)
         {
-            GEDCOMRecord record = fTree.XRefIndex_Find(xref);
+            GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
             if (record == null) return;
 
             GKRecordsView rView = GetRecordsViewByType(record.RecordType);

@@ -28,7 +28,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
 using org.pdfclown;
 using org.pdfclown.documents;
 using org.pdfclown.documents.interaction.forms;
@@ -47,16 +46,13 @@ namespace GKCore.Export
 
     public class PDFClownWriter : CustomWriter
     {
-        private Padding fMargins;
+        private Margins fMargins;
         protected Document fDocument;
         protected bool fAlbumPage;
 
         public PDFClownWriter()
         {
-            this.fMargins.Left = 20;
-            this.fMargins.Top = 20;
-            this.fMargins.Right = 20;
-            this.fMargins.Bottom = 20;
+            this.fMargins = new Margins(20);
             this.fAlbumPage = false;
         }
 

@@ -86,10 +86,10 @@ namespace GKUI
             fMailsList.ClearItems();
             fWebsList.ClearItems();
 
-            int num = fBase.Tree.RecordsCount;
+            int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fBase.Tree[i];
+                GEDCOMRecord rec = fBase.Context.Tree[i];
                 if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;

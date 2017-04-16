@@ -153,7 +153,7 @@ namespace GKUI.Dialogs
             cmbEventVal.Text = iFilter.EventVal;
             chkOnlyPatriarchs.Checked = iFilter.PatriarchOnly;
 
-            GEDCOMTree tree = Base.Tree;
+            GEDCOMTree tree = Base.Context.Tree;
 
             cmbGroup.Items.Clear();
             cmbGroup.Sorted = true;
@@ -207,13 +207,13 @@ namespace GKUI.Dialogs
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
             string fs = txtName.Text.Trim();
-            SaveFilter(fs, MainWin.Instance.Options.NameFilters);
+            SaveFilter(fs, GlobalOptions.Instance.NameFilters);
 
             fs = cmbResidence.Text.Trim();
-            SaveFilter(fs, MainWin.Instance.Options.ResidenceFilters);
+            SaveFilter(fs, GlobalOptions.Instance.ResidenceFilters);
 
             fs = cmbEventVal.Text.Trim();
-            SaveFilter(fs, MainWin.Instance.Options.EventFilters);
+            SaveFilter(fs, GlobalOptions.Instance.EventFilters);
 
             iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked;
 

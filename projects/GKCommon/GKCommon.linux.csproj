@@ -86,6 +86,8 @@
     <Compile Include="Externals\IniFiles\IniFileElement.cs" />
     <Compile Include="Externals\IniFiles\IniFileEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
+    <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
+    <Compile Include="GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\BBTextParser.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
@@ -184,7 +186,6 @@
     <Compile Include="GEDCOM\GEDCOMUserReference.cs" />
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
-    <Compile Include="GEDCOM\Extensions\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKCommon\Controls\WizardPages.cs">
@@ -200,6 +201,7 @@
     <Compile Include="GKCommon\IniFile.cs" />
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
+    <Compile Include="GKCommon\Margins.cs" />
     <Compile Include="GKCommon\Range.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
     <Compile Include="GKCommon\SmartGraph\Graph.cs" />

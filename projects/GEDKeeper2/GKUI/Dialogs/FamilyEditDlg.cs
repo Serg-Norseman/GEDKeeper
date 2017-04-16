@@ -121,17 +121,14 @@ namespace GKUI.Dialogs
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
-            GKResourceManager resourceManager = MainWin.ResourceManager;
-            if (resourceManager != null) {
-                btnAccept.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnAccept")));
-                btnCancel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnCancel")));
-                btnHusbandAdd.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecNew")));
-                btnHusbandDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
-                btnHusbandSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
-                btnWifeAdd.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecNew")));
-                btnWifeDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
-                btnWifeSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
-            }
+            btnAccept.Image = GKResources.iBtnAccept;
+            btnCancel.Image = GKResources.iBtnCancel;
+            btnHusbandAdd.Image = GKResources.iRecNew;
+            btnHusbandDelete.Image = GKResources.iRecDelete;
+            btnHusbandSel.Image = GKResources.iToMan;
+            btnWifeAdd.Image = GKResources.iRecNew;
+            btnWifeDelete.Image = GKResources.iRecDelete;
+            btnWifeSel.Image = GKResources.iToMan;
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

@@ -48,7 +48,7 @@ namespace GKTextSearchPlugin
         
         private static string GetSign(IBaseWindow baseWin)
         {
-            return Path.GetFileNameWithoutExtension(baseWin.Tree.FileName);
+            return Path.GetFileNameWithoutExtension(baseWin.Context.FileName);
         }
 
         private static bool IsIndexedRecord(GEDCOMRecord rec)
@@ -58,7 +58,7 @@ namespace GKTextSearchPlugin
 
         private static void SetDBLastChange(IBaseWindow baseWin, WritableDatabase database)
         {
-            string dbLastchange = baseWin.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
+            string dbLastchange = baseWin.Context.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
             database.SetMetadata(GetSign(baseWin), dbLastchange);
         }
 
@@ -153,11 +153,11 @@ namespace GKTextSearchPlugin
                         indexer.SetStemmer(stemmer);
 
                         IProgressController progress = AppHub.Progress;
-                        progress.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Tree.RecordsCount);
-                        int num = baseWin.Tree.RecordsCount;
+                        progress.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
+                        int num = baseWin.Context.Tree.RecordsCount;
                         for (int i = 0; i < num; i++)
                         {
-                            GEDCOMRecord record = baseWin.Tree[i];
+                            GEDCOMRecord record = baseWin.Context.Tree[i];
                             if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);
 
                             progress.ProgressStep();

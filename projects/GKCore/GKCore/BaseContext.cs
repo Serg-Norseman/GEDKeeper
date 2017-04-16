@@ -37,6 +37,7 @@ using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
+using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore
@@ -48,6 +49,7 @@ namespace GKCore
     {
         #region Private fields
 
+        private string fFileName;
         private readonly IHost fHost;
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
@@ -113,6 +115,11 @@ namespace GKCore
             }
         }
 
+        public string FileName
+        {
+            get { return fFileName; }
+        }
+
         public GEDCOMTree Tree
         {
             get { return fTree; }
@@ -132,9 +139,10 @@ namespace GKCore
 
         #region Instance control
 
-        public BaseContext(GEDCOMTree tree, IBaseWindow viewer)
+        public BaseContext(IBaseWindow viewer)
         {
-            fTree = tree;
+            fFileName = "";
+            fTree = new GEDCOMTree();
             fViewer = viewer;
             fHost = (viewer == null) ? null : viewer.Host;
             fUndoman = new ChangeTracker(fTree);
@@ -146,6 +154,9 @@ namespace GKCore
         {
             if (disposing) {
                 fUndoman.Dispose();
+
+                fTree.Dispose();
+                //fTree = null;
             }
             base.Dispose(disposing);
         }
@@ -442,14 +453,14 @@ namespace GKCore
 
         private string GetArcFileName()
         {
-            string treeName = fTree.FileName;
+            string treeName = fFileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
             return result;
         }
 
         private string GetStgFolder(bool create)
         {
-            string treeName = fTree.FileName;
+            string treeName = fFileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + Path.DirectorySeparatorChar;
             if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
             return result;
@@ -522,7 +533,7 @@ namespace GKCore
         /// <returns>The status of the existence of the file path.</returns>
         public bool CheckBasePath()
         {
-            string path = Path.GetDirectoryName(fTree.FileName);
+            string path = Path.GetDirectoryName(fFileName);
 
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
@@ -879,24 +890,106 @@ namespace GKCore
 
         #region Files
 
+        public void SetFileName(string fileName)
+        {
+            fFileName = fileName;
+        }
+
+        private void LoadProgress(object sender, int progress)
+        {
+            AppHub.Progress.ProgressStep(progress);
+        }
+
         public void Clear()
         {
             fTree.Clear();
             fUndoman.Clear();
         }
 
-        public void FileLoad(string fileName, string password = null)
+        public bool FileLoad(string fileName)
+        {
+            bool result = false;
+
+            try
+            {
+                string pw = null;
+                string ext = SysUtils.GetFileExtension(fileName);
+                if (ext == ".geds") {
+                    if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                        return false;
+                    }
+                }
+
+                IProgressController progress = AppHub.Progress;
+                progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+                fTree.OnProgress += LoadProgress;
+                try
+                {
+                    FileLoad(fileName, pw);
+                    TreeTools.CheckGEDCOMFormat(fTree, fValuesCollection, progress);
+                    result = true;
+                }
+                finally
+                {
+                    fTree.OnProgress -= LoadProgress;
+                    progress.ProgressDone();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("BaseContext.FileLoad(): " + ex.Message);
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
+            }
+
+            return result;
+        }
+
+        private void FileLoad(string fileName, string password)
         {
             if (string.IsNullOrEmpty(password)) {
                 fTree.LoadFromFile(fileName);
             } else {
                 LoadFromSecFile(fileName, password);
             }
+
+            fFileName = fileName;
         }
 
-        public void FileSave(string fileName, string password = null)
+        public bool FileSave(string fileName)
         {
-            string oldFileName = fTree.FileName;
+            bool result = false;
+
+            try
+            {
+                string pw = null;
+                string ext = SysUtils.GetFileExtension(fileName);
+                if (ext == ".geds") {
+                    if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                        return false;
+                    }
+                }
+
+                FileSave(fileName, pw);
+                result = true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
+            }
+            catch (Exception ex)
+            {
+                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
+                Logger.LogWrite("BaseContext.FileSave(): " + ex.Message);
+            }
+
+            return result;
+        }
+
+        private void FileSave(string fileName, string password)
+        {
+            string oldFileName = fFileName;
 
             switch (GlobalOptions.Instance.FileBackup)
             {
@@ -936,6 +1029,20 @@ namespace GKCore
                 fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
+            }
+
+            fFileName = fileName;
+        }
+
+        public void CriticalSave()
+        {
+            try
+            {
+                string rfn = Path.ChangeExtension(fFileName, ".restore");
+                // TODO: PrepareHeader or not?
+                fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseContext.CriticalSave(): " + ex.Message);
             }
         }
 

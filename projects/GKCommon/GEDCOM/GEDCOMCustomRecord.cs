@@ -53,7 +53,7 @@ namespace GKCommon.GEDCOM
                 str = str + " " + StringValue;
             }
 
-            stream.Write(str + GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
         protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

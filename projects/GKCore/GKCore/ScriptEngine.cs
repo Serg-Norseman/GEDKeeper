@@ -282,12 +282,12 @@ namespace GKCore
 
         public int gt_get_records_count()
         {
-            return fBase.Tree.RecordsCount;
+            return fBase.Context.Tree.RecordsCount;
         }
 
         public object gt_get_record(int idx)
         {
-            return fBase.Tree[idx];
+            return fBase.Context.Tree[idx];
         }
 
         public int gt_get_record_type(object recPtr)
@@ -498,26 +498,26 @@ namespace GKCore
 
         public object gt_create_family()
         {
-            GEDCOMFamilyRecord fRec = fBase.Tree.CreateFamily();
+            GEDCOMFamilyRecord fRec = fBase.Context.Tree.CreateFamily();
             return fRec;
         }
 
         public object gt_create_note()
         {
-            GEDCOMNoteRecord nRec = fBase.Tree.CreateNote();
+            GEDCOMNoteRecord nRec = fBase.Context.Tree.CreateNote();
             return nRec;
         }
 
         public object gt_create_source(string name)
         {
-            GEDCOMSourceRecord srcRec = fBase.Tree.CreateSource();
+            GEDCOMSourceRecord srcRec = fBase.Context.Tree.CreateSource();
             srcRec.FiledByEntry = name;
             return srcRec;
         }
 
         public object gt_create_group(string name)
         {
-            GEDCOMGroupRecord grpRec = fBase.Tree.CreateGroup();
+            GEDCOMGroupRecord grpRec = fBase.Context.Tree.CreateGroup();
             grpRec.GroupName = name;
             return grpRec;
         }
@@ -584,7 +584,7 @@ namespace GKCore
 
         public object gt_find_source(string name)
         {
-            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Tree, name);
+            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Context.Tree, name);
             return srcRec;
         }
 
@@ -664,7 +664,7 @@ namespace GKCore
             StringList linkList = new StringList();
             try
             {
-                GKUtils.GetLocationLinks(fBase.Tree, loc, ref linkList);
+                GKUtils.GetLocationLinks(fBase.Context.Tree, loc, ref linkList);
                 usages = linkList.Count;
             }
             finally

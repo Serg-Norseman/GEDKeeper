@@ -463,7 +463,7 @@ namespace GKUI.Dialogs
 
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GEDCOMUserReference(fBase.Tree, fPerson, "", "");
+                            userRef = new GEDCOMUserReference(fBase.Context.Tree, fPerson, "", "");
                         }
 
                         dlg.UserRef = userRef;
@@ -576,8 +576,6 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     if (family != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
                     {
-                        //family.RemoveSpouse(this.fPerson);
-                        //result = true;
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, fPerson);
                     }
                     break;
@@ -674,7 +672,6 @@ namespace GKUI.Dialogs
                     groupRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
-                        //result = groupRec.AddMember(this.fPerson);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, fPerson);
                     }
                     break;
@@ -682,7 +679,6 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
                     if (result) {
-                        //result = groupRec.RemoveMember(this.fPerson);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, fPerson);
                     }
                     break;
@@ -747,7 +743,7 @@ namespace GKUI.Dialogs
 
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GEDCOMPersonalName(fBase.Tree, fPerson, "", "");
+                            persName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson, "", "");
                         }
 
                         dlg.PersonalName = persName;
@@ -821,7 +817,7 @@ namespace GKUI.Dialogs
 
         private void btnFatherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -846,7 +842,7 @@ namespace GKUI.Dialogs
 
         private void btnMotherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -873,7 +869,7 @@ namespace GKUI.Dialogs
         {
             AcceptTempData();
 
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
             if (family != null && AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.None, null))
             {
                 UpdateControls();
@@ -884,7 +880,7 @@ namespace GKUI.Dialogs
         {
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
 
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
             if (family == null) return;
 
             fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);

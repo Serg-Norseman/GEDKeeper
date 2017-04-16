@@ -141,7 +141,7 @@ namespace GKNavigatorPlugin
             fBase = baseWin;
 
             if (fBase != null) {
-                fDatabaseName = Path.GetFileName(fBase.Tree.FileName);
+                fDatabaseName = Path.GetFileName(fBase.Context.FileName);
             } else {
                 fDatabaseName = "";
             }
@@ -151,7 +151,7 @@ namespace GKNavigatorPlugin
 
         public void BaseClosed(IBaseWindow baseWin)
         {
-            fPlugin.Data.CloseBase(baseWin.Context.Tree.FileName);
+            fPlugin.Data.CloseBase(baseWin.Context.FileName);
             fDatabaseName = "";
             fBase = null;
             UpdateControls(true);
@@ -173,7 +173,7 @@ namespace GKNavigatorPlugin
                     stats = new int[((int)GEDCOMRecordType.rtLast)];
                 } else {
                     dbName = fDatabaseName;
-                    stats = fBase.Tree.GetRecordStats();
+                    stats = fBase.Context.Tree.GetRecordStats();
                 }
 
                 try {
@@ -269,7 +269,7 @@ namespace GKNavigatorPlugin
                 lvData.AddColumn("Name", 20, true);
                 lvData.AddColumn("Time", 20, true);
 
-                BaseData baseData = fPlugin.Data[fBase.Tree.FileName];
+                BaseData baseData = fPlugin.Data[fBase.Context.FileName];
                 if (baseData == null) return;
 
                 foreach (var recordInfo in baseData.ChangedRecords)

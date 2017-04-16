@@ -239,7 +239,7 @@ namespace GKCore
                     {
                         //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
 
-                        family = AddFamilyForSpouse(baseWin.Tree, parent);
+                        family = AddFamilyForSpouse(baseWin.Context.Tree, parent);
                         if (family == null) {
                             return null;
                         }
@@ -915,7 +915,7 @@ namespace GKCore
 
             if (iFilter.SourceMode == FilterGroupMode.Selected)
             {
-                GEDCOMSourceRecord src = baseWin.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                GEDCOMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
                 if (src != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == true)
                 {
                     indivRec.AddSource(src, "", 0);
@@ -924,7 +924,7 @@ namespace GKCore
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
             {
-                GEDCOMGroupRecord grp = baseWin.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                GEDCOMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
                 if (grp != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == true)
                 {
                     grp.AddMember(indivRec);
@@ -1317,7 +1317,7 @@ namespace GKCore
 
                 if (result) {
                     baseWin.Modified = true;
-                    baseWin.Tree.Header.TransmissionDateTime = DateTime.Now;
+                    baseWin.Context.Tree.Header.TransmissionDateTime = DateTime.Now;
                 }
             }
 
@@ -1331,7 +1331,7 @@ namespace GKCore
             GEDCOMIndividualRecord father = SelectPerson(baseWin, person, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father != null)
             {
-                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Tree, person, true, father);
+                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Context.Tree, person, true, father);
                 if (family != null)
                 {
                     if (family.Husband.Value == null) {
@@ -1354,7 +1354,7 @@ namespace GKCore
 
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery)) == true)
             {
-                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Tree, person, false, null);
+                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Context.Tree, person, false, null);
                 if (family != null)
                 {
                     GEDCOMIndividualRecord father = family.GetHusband();
@@ -1371,7 +1371,7 @@ namespace GKCore
 
             GEDCOMIndividualRecord mother = SelectPerson(baseWin, person, TargetMode.tmChild, GEDCOMSex.svFemale);
             if (mother != null) {
-                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Tree, person, true, mother);
+                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Context.Tree, person, true, mother);
                 if (family != null) {
                     if (family.Wife.Value == null) {
                         // new family
@@ -1393,7 +1393,7 @@ namespace GKCore
 
             if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)) == true)
             {
-                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Tree, person, false, null);
+                GEDCOMFamilyRecord family = GetChildFamily(baseWin.Context.Tree, person, false, null);
                 if (family != null)
                 {
                     GEDCOMIndividualRecord mother = family.GetWife();

@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -567,7 +566,7 @@ namespace GKCore.Export
 
             #if !CI_MODE
             if (!success) {
-                MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

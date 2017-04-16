@@ -304,7 +304,7 @@ namespace GKUI.Dialogs
                 if (corr == null) continue;
 
                 IListItem item = fCommunicationsList.AddItem(corr.CommName, corr);
-                item.AddSubItem(GKUtils.GetCorresponderStr(fBase.Tree, corr, false));
+                item.AddSubItem(GKUtils.GetCorresponderStr(fBase.Context.Tree, corr, false));
                 item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
                 item.AddSubItem(new GEDCOMDateItem(corr.Date));
             }

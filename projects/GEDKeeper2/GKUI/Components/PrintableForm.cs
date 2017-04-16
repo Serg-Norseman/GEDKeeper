@@ -58,7 +58,7 @@ namespace GKUI.Components
         {
             fPrintDoc.DocumentName = Text;
             fPrintDoc.DefaultPageSettings.Landscape = GetPrintable().IsLandscape();
-            fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
+            fPrintDoc.DefaultPageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
         }
 
         private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
@@ -68,7 +68,7 @@ namespace GKUI.Components
         private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
         {
             e.PageSettings.Landscape = GetPrintable().IsLandscape();
-            e.PageSettings.Margins = new Margins(25, 25, 25, 25);
+            e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
         }
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)

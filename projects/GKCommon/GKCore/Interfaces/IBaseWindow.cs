@@ -34,7 +34,6 @@ namespace GKCore.Interfaces
 
         bool Modified { get; set; }
         ShieldState ShieldState { get; set; }
-        GEDCOMTree Tree { get; }
 
         void Activate();
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
@@ -42,10 +41,9 @@ namespace GKCore.Interfaces
         void Close();
 
         bool IsUnknown();
-        void FileNew();
-        void FileLoad(string fileName);
-        void FileSave(string fileName);
-        void CriticalSave();
+        void CreateNewFile();
+        void LoadFile(string fileName);
+        void SaveFile(string fileName);
 
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);

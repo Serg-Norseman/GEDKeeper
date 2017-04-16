@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -102,7 +101,7 @@ namespace GKCore.Export
 
         public FamilyBookExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fMargins = new Padding(20);
+            fMargins = new Margins(20);
             fAlbumPage = true;
         }
 

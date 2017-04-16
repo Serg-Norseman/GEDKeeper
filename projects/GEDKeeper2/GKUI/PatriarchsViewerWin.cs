@@ -68,7 +68,7 @@ namespace GKUI
                     //GEDCOMIndividualRecord iRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
                     //string txt = iRec.GetNameString(true, false) + " [" + xref + "]";
 
-                    GEDCOMFamilyRecord famRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
+                    GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     fTip.Show(txt, arborViewer1, e.X + 24, e.Y);

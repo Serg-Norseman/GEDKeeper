@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -136,9 +135,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Tree, record, "", "");
+                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Context.Tree, record, "", "");
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Tree, record, "", "");
+                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Context.Tree, record, "", "");
                                 }
                             }
 

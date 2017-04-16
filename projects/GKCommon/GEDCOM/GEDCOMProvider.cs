@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,17 +18,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GKCommon.GEDCOM
 {
     /// <summary>
-    /// Base class for all GEDCOM objects like tags, and tree and xref replacer.
+    /// 
     /// </summary>
-    public class GEDCOMObject : BaseObject
+    public class GEDCOMProvider
     {
-        public object ExtData
+        public const char GEDCOM_DELIMITER = ' ';
+        public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
+        public const string GEDCOM_YEAR_BC = "B.C.";
+        public const char GEDCOM_POINTER_DELIMITER = '@';
+        public const string GEDCOM_NEWLINE = "\r\n";
+
+
+        // deprecated
+        //public const byte GEDCOMMaxPhoneNumbers = 3;
+        //public const byte GEDCOMMaxEmailAddresses = 3;
+        //public const byte GEDCOMMaxFaxNumbers = 3;
+        //public const byte GEDCOMMaxWebPages = 3;
+        //public const byte GEDCOMMaxLanguages = 3;
+
+
+        private readonly GEDCOMTree fTree;
+
+
+        public GEDCOMProvider(GEDCOMTree tree)
         {
-            get;
-            set;
+            fTree = tree;
         }
     }
 }

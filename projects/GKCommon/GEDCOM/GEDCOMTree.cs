@@ -87,7 +87,6 @@ namespace GKCommon.GEDCOM
         private readonly GEDCOMList<GEDCOMRecord> fRecords;
         private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
 
-        private string fFileName;
         private EventHandler fOnChange;
         private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
@@ -95,11 +94,6 @@ namespace GKCommon.GEDCOM
         private int fUpdateCount;
         private GEDCOMFormat fFormat;
 
-
-        public string FileName
-        {
-            get { return fFileName; }
-        }
 
         public event ProgressEventHandler OnProgress
         {
@@ -152,7 +146,6 @@ namespace GKCommon.GEDCOM
             fRecords = new GEDCOMList<GEDCOMRecord>(this);
             fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
             fHeader = new GEDCOMHeader(this, this, "", "");
-            fFileName = "";
         }
 
         protected override void Dispose(bool disposing)
@@ -360,11 +353,6 @@ namespace GKCommon.GEDCOM
 
         #region Load/Save
 
-        public void SetFileName(string fileName)
-        {
-            fFileName = fileName;
-        }
-
         public void LoadFromFile(string fileName)
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
@@ -384,8 +372,6 @@ namespace GKCommon.GEDCOM
 
         public void LoadFromStreamExt(Stream fileStream, Stream inputStream, string fileName)
         {
-            fFileName = fileName;
-
             using (StreamReader reader = GEDCOMUtils.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
                 Clear();
                 LoadFromStream(fileStream, reader);
@@ -397,10 +383,7 @@ namespace GKCommon.GEDCOM
         {
             // Attention: processing of Header moved to BaseContext!
 
-            fFileName = fileName;
-
             Pack();
-
             using (StreamWriter writer = new StreamWriter(outputStream, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
                 SaveToStream(writer);
                 writer.Flush();
@@ -666,7 +649,7 @@ namespace GKCommon.GEDCOM
         private static void SaveFooterToStream(StreamWriter stream)
         {
             const string str = "0 TRLR";
-            stream.Write(str + GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
         #endregion

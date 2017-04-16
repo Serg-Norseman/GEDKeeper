@@ -73,6 +73,9 @@ namespace GKTests.GKCore
         {
             Assert.IsNotNull(fContext.Culture);
 
+            fContext.SetFileName("testfile.ged");
+            Assert.AreEqual("testfile.ged", fContext.FileName);
+
             GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fContext.Tree, "test source");
             Assert.IsNull(srcRec);
 
@@ -288,12 +291,6 @@ namespace GKTests.GKCore
             //
 
             GKUtils.CollectEventValues(null, null);
-
-            //
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateListView(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
-            //Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
 
             //
 

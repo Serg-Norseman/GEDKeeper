@@ -246,7 +246,7 @@ namespace GKUI.Charts
             get { return fBase; }
             set {
                 fBase = value;
-                fTree = fBase.Tree;
+                fTree = fBase.Context.Tree;
                 fGraph = new KinshipsGraph(fBase.Context);
             }
         }
@@ -348,12 +348,6 @@ namespace GKUI.Charts
             set { SetSelected(value); }
         }
 
-        public ShieldState ShieldState
-        {
-            get { return fShieldState; }
-            set { fShieldState = value; }
-        }
-
         public bool TraceSelected
         {
             get { return fTraceSelected; }
@@ -408,8 +402,8 @@ namespace GKUI.Charts
             fToolTip = new ToolTip();
 
             fTreeControls = new TreeControlsList<ITreeControl>();
-            fTreeControls.Add(new ScaleControl(this));
-            fTreeControls.Add(new GenerationsControl(this));
+            fTreeControls.Add(new TCScaleControl(this));
+            fTreeControls.Add(new TCGenerationsControl(this));
             //fPersonControl = new PersonControl(this);
 
             InitTimer();
@@ -551,6 +545,7 @@ namespace GKUI.Charts
                 DoFilter(iRec);
                 fRoot = null;
                 fPreparedIndividuals.Clear();
+                fShieldState = fBase.ShieldState;
 
                 switch (fKind) {
                     case TreeChartKind.ckAncestors:

@@ -107,7 +107,7 @@ namespace GKUI.Dialogs
                 for (int i = 0; i < num; i++)
                 {
                     string xref = tmpRefs[i];
-                    GEDCOMIndividualRecord p = fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
                     if (p != null) fPersonsList.AddItem(GKUtils.GetNameString(p, true, false), p);
                 }
             }
@@ -115,7 +115,7 @@ namespace GKUI.Dialogs
             if (fFilter.SourceMode != FilterGroupMode.Selected) {
                 cmbSource.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
-                GEDCOMSourceRecord srcRec = fBase.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
+                GEDCOMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
                 if (srcRec != null) cmbSource.Text = srcRec.FiledByEntry;
             }
         }
@@ -210,7 +210,7 @@ namespace GKUI.Dialogs
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
-            GEDCOMTree tree = fBase.Tree;
+            GEDCOMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
             cmbSource.Sorted = true;

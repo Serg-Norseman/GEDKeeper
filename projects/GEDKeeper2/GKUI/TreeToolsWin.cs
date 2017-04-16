@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -29,6 +28,7 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
@@ -81,10 +81,10 @@ namespace GKUI
         {
             InitializeComponent();
 
-            btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+            btnClose.Image = GKResources.iBtnCancel;
 
             fBase = baseWin;
-            fTree = Base.Tree;
+            fTree = Base.Context.Tree;
 
             tabsTools.SelectedIndex = 0;
 
@@ -192,7 +192,7 @@ namespace GKUI
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.TreeMerge(Base.Tree, edUpdateBase.Text, mSyncRes);
+            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
             Base.RefreshLists(false);
         }
 
@@ -400,7 +400,7 @@ namespace GKUI
 
         private void PrepareChecksList()
         {
-            ListChecks = GKUtils.CreateListView(Panel1);
+            ListChecks = UIHelper.CreateListView(Panel1);
             ListChecks.CheckBoxes = true;
             ListChecks.DoubleClick += ListChecks_DblClick;
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
@@ -463,7 +463,7 @@ namespace GKUI
 
         private void PreparePlacesList()
         {
-            ListPlaces = GKUtils.CreateListView(Panel4);
+            ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
@@ -622,7 +622,7 @@ namespace GKUI
 
             TreeTools.CheckRelations(fSplitList);
 
-            GKUtils.PrepareHeader(fTree, fileName, MainWin.Instance.Options.DefCharacterSet, true);
+            GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, true);
 
             using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet)))
             {
@@ -637,7 +637,7 @@ namespace GKUI
 
         private void PreparePatriarchsList()
         {
-            ListPatriarchs = GKUtils.CreateListView(Panel3);
+            ListPatriarchs = UIHelper.CreateListView(Panel3);
             ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);

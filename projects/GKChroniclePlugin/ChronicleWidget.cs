@@ -106,10 +106,10 @@ namespace GKChroniclePlugin
 
         private void CollectData()
         {
-            int num = fBase.Tree.RecordsCount;
+            int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecordWithEvents rec = fBase.Tree[i] as GEDCOMRecordWithEvents;
+                GEDCOMRecordWithEvents rec = fBase.Context.Tree[i] as GEDCOMRecordWithEvents;
                 if (rec == null) continue;
 
                 int eventsCount = rec.Events.Count;

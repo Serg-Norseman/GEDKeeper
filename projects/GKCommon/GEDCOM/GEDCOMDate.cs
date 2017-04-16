@@ -330,7 +330,7 @@ namespace GKCommon.GEDCOM
                 }
                 if (fYearBC)
                 {
-                    result += GEDCOM_YEAR_BC;
+                    result += GEDCOMProvider.GEDCOM_YEAR_BC;
                 }
                 if (!noDelimiter)
                 {
@@ -354,7 +354,7 @@ namespace GKCommon.GEDCOM
                 result = fYear.ToString();
                 if (fYearBC)
                 {
-                    result += GEDCOM_YEAR_BC;
+                    result += GEDCOMProvider.GEDCOM_YEAR_BC;
                 }
                 if (!noDelimiter)
                 {
@@ -535,7 +535,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                if (result != "" && result.Substring(0, 4).ToUpper() == GEDCOM_YEAR_BC)
+                if (result != "" && result.Substring(0, 4).ToUpper() == GEDCOMProvider.GEDCOM_YEAR_BC)
                 {
                     fYearBC = true;
                     result = result.Remove(0, 4);

@@ -24,10 +24,8 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
@@ -1455,22 +1453,6 @@ namespace GKCore
         {
             string path = GetAppDataPath() + "GEDKeeper2.log";
             return path;
-        }
-
-        #endregion
-
-        #region UI functions
-
-        public static GKListView CreateListView(Control parent)
-        {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
-            GKListView listView = new GKListView();
-            listView.Dock = DockStyle.Fill;
-            parent.Controls.Add(listView);
-
-            return listView;
         }
 
         #endregion

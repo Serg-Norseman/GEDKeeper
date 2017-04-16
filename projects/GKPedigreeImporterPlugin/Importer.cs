@@ -144,7 +144,7 @@ namespace GKPedigreeImporterPlugin
         public Importer(IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
             fBase = baseWin;
-            fTree = baseWin.Tree;
+            fTree = baseWin.Context.Tree;
             fLog = aLog;
             fLangMan = langMan;
 

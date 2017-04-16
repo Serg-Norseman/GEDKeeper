@@ -28,6 +28,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Components;
@@ -87,7 +88,7 @@ namespace GKUI
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
-            fTreeBox.Options = MainWin.Instance.Options.ChartOptions;
+            fTreeBox.Options = GlobalOptions.Instance.ChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
 
             Controls.Add(fTreeBox);
@@ -135,7 +136,7 @@ namespace GKUI
                     break;
             }
 
-            Text = string.Format("{0} \"{1}\"", Text, Path.GetFileName(fBase.Tree.FileName));
+            Text = string.Format("{0} \"{1}\"", Text, Path.GetFileName(fBase.Context.FileName));
         }
 
         #region Interface handlers
@@ -250,13 +251,11 @@ namespace GKUI
             TreeChartPerson person = eArgs.Person;
             if (person == null) return;
 
+            bool modified = false;
+
             if (person.Rec != null) {
                 GEDCOMIndividualRecord iRec = person.Rec;
-
-                if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
-                {
-                    UpdateChart();
-                }
+                modified = AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
@@ -267,10 +266,13 @@ namespace GKUI
                     GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
-                        baseFamily.AddSpouse(iSpouse);
-                        UpdateChart();
+                        modified = baseFamily.AddSpouse(iSpouse);
                     }
                 }
+            }
+
+            if (modified) {
+                UpdateChart();
             }
         }
 
@@ -347,7 +349,7 @@ namespace GKUI
 
             if (!familyExist || needParent) {
                 GEDCOMIndividualRecord child = p.Rec;
-                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Tree.CreateFamily();
+                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
                 GEDCOMIndividualRecord parent = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmParent, needSex);
                 if (parent != null) {
                     fam.AddSpouse(parent);
@@ -378,7 +380,7 @@ namespace GKUI
             GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, iRec);
             if (iSpouse == null) return;
 
-            GEDCOMFamilyRecord fam = fBase.Tree.CreateFamily();
+            GEDCOMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
             fam.AddSpouse(iRec);
             fam.AddSpouse(iSpouse);
             UpdateChart();
@@ -410,7 +412,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMFamilyRecord fam = AppHub.BaseController.AddFamilyForSpouse(fBase.Tree, p.Rec);
+            GEDCOMFamilyRecord fam = AppHub.BaseController.AddFamilyForSpouse(fBase.Context.Tree, p.Rec);
             if (fam == null) return;
 
             UpdateChart();
@@ -521,7 +523,6 @@ namespace GKUI
                     if (show) base.Show();
 
                     fTreeBox.DepthLimit = fGensLimit;
-                    fTreeBox.ShieldState = fBase.ShieldState;
                     fTreeBox.GenChart(fPerson, fChartKind, true);
 
                     MainWin.Instance.UpdateControls(false);

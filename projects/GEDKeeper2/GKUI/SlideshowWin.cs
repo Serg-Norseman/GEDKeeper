@@ -94,7 +94,7 @@ namespace GKUI
         private void LoadList()
         {
             GEDCOMRecord record;
-            var enumerator = fBase.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
+            var enumerator = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
             while (enumerator.MoveNext(out record)) {
                 GEDCOMMultimediaRecord mediaRec = (GEDCOMMultimediaRecord)record;
                 GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];

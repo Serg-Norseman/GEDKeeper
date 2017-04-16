@@ -473,7 +473,7 @@ namespace GKTreeVizPlugin
                 {
                     PatriarchObj patObj = (PatriarchObj)node.Data;
 
-                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Tree.XRefIndex_Find(node.Sign);
+                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Context.Tree.XRefIndex_Find(node.Sign);
                     int descGens = patObj.DescGenerations;
 
                     TVPerson patr = PreparePerson(null, iRec, TVPersonType.Patriarch);

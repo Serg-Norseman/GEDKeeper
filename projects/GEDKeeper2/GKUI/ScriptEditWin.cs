@@ -161,10 +161,10 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbNewScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iCreateNew");
-            tbLoadScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLoad");
-            tbSaveScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iSave");
-            tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
+            tbNewScript.Image = GKResources.iCreateNew;
+            tbLoadScript.Image = GKResources.iLoad;
+            tbSaveScript.Image = GKResources.iSave;
+            tbRun.Image = GKResources.iStart;
 
             fBase = baseWin;
 

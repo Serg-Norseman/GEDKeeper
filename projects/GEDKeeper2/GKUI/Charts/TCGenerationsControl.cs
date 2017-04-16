@@ -29,7 +29,7 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GenerationsControl : ITreeControl
+    public sealed class TCGenerationsControl : ITreeControl
     {
         /* Padding for this control within the owner client area. */
         private const int PADDING_X = 10;
@@ -62,7 +62,7 @@ namespace GKUI.Charts
             get { return fDestRect.Width; }
         }
 
-        public GenerationsControl(TreeChartBox chart) : base(chart)
+        public TCGenerationsControl(TreeChartBox chart) : base(chart)
         {
         }
 

@@ -63,7 +63,7 @@ namespace GKUI.Dialogs
         {
             fBase = baseWin;
             if (fBase != null) {
-                fLocalUndoman = new ChangeTracker(fBase.Tree);
+                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
             }
         }
 

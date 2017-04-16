@@ -652,7 +652,7 @@ namespace GKCommon.GEDCOM
                 str = str + " " + val;
             }
 
-            stream.Write(str + GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
         public virtual void SaveToStream(StreamWriter stream)

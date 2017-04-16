@@ -64,7 +64,6 @@ namespace GKUI.Contracts
         ExtRect GetFormRect(Form form);
         void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState);
         void CenterFormByParent(Form form, IntPtr parent);
-        GKListView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType);
     }
 
 

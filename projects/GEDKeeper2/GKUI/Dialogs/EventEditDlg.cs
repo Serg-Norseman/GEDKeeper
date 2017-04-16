@@ -143,11 +143,11 @@ namespace GKUI.Dialogs
             }
 
             if (btnBC1.Checked) {
-                gcd1 = gcd1 + GEDCOMObject.GEDCOM_YEAR_BC;
+                gcd1 = gcd1 + GEDCOMProvider.GEDCOM_YEAR_BC;
             }
 
             if (btnBC2.Checked) {
-                gcd2 = gcd2 + GEDCOMObject.GEDCOM_YEAR_BC;
+                gcd2 = gcd2 + GEDCOMProvider.GEDCOM_YEAR_BC;
             }
 
             switch (cmbEventDateType.SelectedIndex) {

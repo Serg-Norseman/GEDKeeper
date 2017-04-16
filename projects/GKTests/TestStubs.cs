@@ -38,10 +38,9 @@ namespace GKTests
 
         public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
         {
-            GEDCOMTree tree = new GEDCOMTree();
-            Assert.IsNotNull(tree);
-
-            BaseContext context = new BaseContext(tree, /*baseWin*/null);
+            BaseContext context = new BaseContext(/*baseWin*/null);
+            Assert.IsNotNull(context);
+            Assert.IsNotNull(context.Tree);
             return context;
         }
 

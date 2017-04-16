@@ -19,7 +19,6 @@
  */
 
 using System.Drawing;
-using System.Windows.Forms;
 using GKCommon;
 
 namespace GKCore.Export
@@ -34,12 +33,12 @@ namespace GKCore.Export
         protected bool fAlbumPage;
         protected string fDocumentTitle;
         protected string fFileName;
-        protected Padding fMargins;
+        protected Margins fMargins;
 
         protected CustomWriter()
         {
             fAlbumPage = false;
-            fMargins = new Padding(20);
+            fMargins = new Margins(20);
         }
 
         public virtual void SetAlbumPage(bool value)

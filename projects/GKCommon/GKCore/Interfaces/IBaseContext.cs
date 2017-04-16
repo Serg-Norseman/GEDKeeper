@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -28,15 +29,18 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public interface IBaseContext
+    public interface IBaseContext : IDisposable
     {
         ICulture Culture { get; }
+        string FileName { get; }
         GEDCOMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
 
         void Clear();
-        void FileLoad(string fileName, string password = null);
-        void FileSave(string fileName, string password = null);
+        bool FileLoad(string fileName);
+        bool FileSave(string fileName);
+        void SetFileName(string fileName);
+        void CriticalSave();
 
         // Data manipulation
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);

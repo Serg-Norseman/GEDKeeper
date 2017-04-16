@@ -80,15 +80,14 @@ namespace GKTests.Mocks
         public ValuesCollection ValuesCollection { get { return null; } }
 
         public void Activate() { }
-        public void ApplyFilter() { }
-        public void ApplyFilter(GEDCOMRecordType recType) { }
+        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
         public void ChangeRecord(GEDCOMRecord record) { }
         public void Close() { }
 
         public bool IsUnknown() { return false; }
-        public void FileNew() { }
-        public void FileLoad(string fileName) { }
-        public void FileSave(string fileName) { }
+        public void CreateNewFile() { }
+        public void LoadFile(string fileName) { }
+        public void SaveFile(string fileName) { }
         public void CriticalSave() { }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
@@ -99,8 +98,6 @@ namespace GKTests.Mocks
         public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
         public void RefreshLists(bool titles) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
-
-        public GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { return null; }
 
         public void AddRecord() { }
         public void DeleteRecord() { }
@@ -130,8 +127,6 @@ namespace GKTests.Mocks
 
         public string GetAppDataPath() { return string.Empty; }
 
-        public void LogWrite(string msg) {}
-
         public bool IsWidgetActive(IWidget widget) { return false; }
         public void WidgetShow(IWidget widget) {}
         public void WidgetClose(IWidget widget) {}
@@ -146,8 +141,6 @@ namespace GKTests.Mocks
         public void EnableWindow(Form form, bool value) {}
         public void Restore() {}
 
-        public bool IsUnix() { return false; }
-        public void ShowWarning(string msg) {}
         public bool ShowModalX(ICommonDialog form, bool keepModeless) { return false; }
 
         public void SetLang() {}

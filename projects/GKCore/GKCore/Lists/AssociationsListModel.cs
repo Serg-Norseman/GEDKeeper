@@ -42,7 +42,9 @@ namespace GKCore.Lists
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
 
-            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
+            fSheetList.Buttons = EnumSet<SheetButton>.Create(
+                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
+                SheetButton.lbJump);
         }
 
         public override void UpdateContent()
@@ -86,7 +88,7 @@ namespace GKCore.Lists
 
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GEDCOMAssociation(fBaseWin.Tree, person, "", "");
+                            ast = new GEDCOMAssociation(fBaseWin.Context.Tree, person, "", "");
                         }
 
                         dlg.Association = ast;

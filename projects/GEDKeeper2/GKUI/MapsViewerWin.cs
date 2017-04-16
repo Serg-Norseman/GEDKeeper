@@ -221,7 +221,7 @@ namespace GKUI
             Panel1.Controls.Add(fMapBrowser);
 
             fBase = baseWin;
-            fTree = baseWin.Tree;
+            fTree = baseWin.Context.Tree;
             fSelectedPersons = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
 
             fMapPoints = new ExtList<GeoPoint>(true);

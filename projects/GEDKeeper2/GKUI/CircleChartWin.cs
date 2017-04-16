@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKUI.Charts;
 using GKUI.Components;
 
@@ -133,7 +134,7 @@ namespace GKUI
 
         public void UpdateView()
         {
-            fCircleChart.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
+            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
             fCircleChart.Changed();
         }
 

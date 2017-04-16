@@ -52,7 +52,7 @@ namespace GKCore.Export
                 throw new ArgumentNullException("baseWin");
 
             fBase = baseWin;
-            fTree = baseWin.Tree;
+            fTree = baseWin.Context.Tree;
         }
 
         public abstract void Generate(bool show);

@@ -288,9 +288,9 @@ namespace GKTests.UITests
             IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, AppHub.BaseController.GetChildFamily(baseWin.Tree, null, false, null));
+            Assert.AreEqual(null, AppHub.BaseController.GetChildFamily(baseWin.Context.Tree, null, false, null));
             Assert.AreEqual(null, AppHub.BaseController.AddChildForParent(baseWin, null, GEDCOMSex.svNone));
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.AddFamilyForSpouse(baseWin.Tree, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.AddFamilyForSpouse(baseWin.Context.Tree, null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
             baseWin.Context.CollectTips(new StringList());
@@ -330,7 +330,7 @@ namespace GKTests.UITests
             // IHost tests
             IHost host = fMainWin;
 
-            fMainWin.Options.LastDir = "";
+            GlobalOptions.Instance.LastDir = "";
             string ufPath = host.GetUserFilesPath("");
             Assert.AreEqual(GKUtils.GetHomePath(), ufPath);
             Assert.IsFalse(string.IsNullOrEmpty(ufPath));

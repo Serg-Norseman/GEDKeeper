@@ -946,7 +946,7 @@ namespace GKCore.Tools
 
             try
             {
-                GEDCOMTree tree = baseWin.Tree;
+                GEDCOMTree tree = baseWin.Context.Tree;
 
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
@@ -982,7 +982,7 @@ namespace GKCore.Tools
             if (checkObj == null)
                 throw new ArgumentNullException("checkObj");
 
-            GEDCOMTree tree = baseWin.Tree;
+            GEDCOMTree tree = baseWin.Context.Tree;
             GEDCOMIndividualRecord iRec;
 
             switch (checkObj.Diag)

@@ -96,7 +96,6 @@ namespace GKCore.Export
                     treeBox.Base = fBase;
                     treeBox.Options = GlobalOptions.Instance.ChartOptions;
                     treeBox.DepthLimit = 3;
-                    treeBox.ShieldState = fShieldState;
                     treeBox.Height = (int)pageHeight;
                     treeBox.Width = (int)pageWidth;
 

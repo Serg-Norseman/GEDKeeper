@@ -27,7 +27,7 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PersonControl : ITreeControl
+    public sealed class TCPersonControl : ITreeControl
     {
         private readonly Pen fCtlPen;
         private readonly Brush fCtlBrush;
@@ -53,7 +53,7 @@ namespace GKUI.Charts
 
         #endregion
 
-        public PersonControl(TreeChartBox chart) : base(chart)
+        public TCPersonControl(TreeChartBox chart) : base(chart)
         {
             fCtlPen = new Pen(Color.Black, 2.0f);
             fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));

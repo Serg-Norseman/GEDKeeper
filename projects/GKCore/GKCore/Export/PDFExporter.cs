@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCore.Interfaces;
@@ -35,13 +34,13 @@ namespace GKCore.Export
     public abstract class PDFExporter : Exporter
     {
         protected bool fAlbumPage;
-        protected Padding fMargins;
+        protected Margins fMargins;
         protected Document fDocument;
         protected PdfWriter fPdfWriter;
 
         protected PDFExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fMargins = new Padding(20);
+            fMargins = new Margins(20);
             fAlbumPage = true;
         }
 
@@ -75,7 +74,7 @@ namespace GKCore.Export
 
             #if !CI_MODE
             if (!success) {
-                MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
+                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

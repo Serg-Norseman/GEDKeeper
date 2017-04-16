@@ -125,7 +125,7 @@ namespace GKUI.Dialogs
                 fListRecords = null;
             }
 
-            fListRecords = (GKRecordsView)AppHub.UIHelper.CreateRecordsView(panList, fBase.Tree, fMode);
+            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context.Tree, fMode);
             fListRecords.Name = "fListRecords";
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;

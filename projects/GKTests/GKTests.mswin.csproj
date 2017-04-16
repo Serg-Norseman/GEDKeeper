@@ -71,7 +71,8 @@
   <ItemGroup>
     <Compile Include="CommonTests.cs" />
     <Compile Include="CoreTests.cs" />
-    <Compile Include="GedcomTests.cs" />
+    <Compile Include="GEDCOM\GedcomTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="GKCommon\CalendarTests.cs" />
     <Compile Include="GKCommon\CSVReaderTests.cs" />
     <Compile Include="GKCommon\EnumSetTests.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="UITests\AddressEditDlgTests.cs" />
     <Compile Include="UITests\AssociationEditDlgTests.cs" />
     <Compile Include="UITests\CommonFilterDlgTests.cs" />
+    <Compile Include="UITests\CommonTests.cs" />
     <Compile Include="UITests\CommunicationEditDlgTests.cs" />
     <Compile Include="UITests\CustomWindowTest.cs" />
     <Compile Include="UITests\DayTipsDlgTests.cs" />
@@ -171,6 +173,7 @@
     <Folder Include="ControlTesters" />
     <Folder Include="GKCommon" />
     <Folder Include="GKCore" />
+    <Folder Include="GEDCOM" />
     <Folder Include="UITests" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

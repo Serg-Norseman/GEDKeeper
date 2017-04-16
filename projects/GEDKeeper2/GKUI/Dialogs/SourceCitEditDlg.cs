@@ -75,7 +75,7 @@ namespace GKUI.Dialogs
             GEDCOMSourceRecord src = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
             if (src == null) return;
             
-            AppHub.BaseController.GetSourcesList(fBase.Tree, fSourcesList);
+            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
             RefreshSourcesList("");
             cmbSource.Text = src.FiledByEntry;
         }
@@ -168,7 +168,7 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            AppHub.BaseController.GetSourcesList(fBase.Tree, fSourcesList);
+            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
             RefreshSourcesList("");
         }
     }

@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using GKCore;
 
 namespace GKUI.Charts
@@ -29,7 +30,7 @@ namespace GKUI.Charts
     /// Non-windowed scaling control.
     /// Uses a resource bitmap to draw itself on the parent's context.
     /// </summary>
-    public sealed class ScaleControl : ITreeControl
+    public sealed class TCScaleControl : ITreeControl
     {
         #region Private fields
         
@@ -88,7 +89,7 @@ namespace GKUI.Charts
 
         #endregion
 
-        public ScaleControl(TreeChartBox chart) : base(chart)
+        public TCScaleControl(TreeChartBox chart) : base(chart)
         {
             fControlsImage = GKResources.iChartControls;
         }

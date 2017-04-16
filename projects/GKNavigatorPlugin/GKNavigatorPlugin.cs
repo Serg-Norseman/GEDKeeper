@@ -179,7 +179,7 @@ namespace GKNavigatorPlugin
         {
             if (baseWin == null || record == null) return;
 
-            string baseName = baseWin.Context.Tree.FileName;
+            string baseName = baseWin.Context.FileName;
             fData[baseName].NotifyRecord(baseWin, record, action);
         }
 

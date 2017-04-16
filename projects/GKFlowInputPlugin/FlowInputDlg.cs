@@ -222,7 +222,7 @@ namespace GKFlowInputPlugin
 
         private void InitSourceControls()
         {
-            AppHub.BaseController.GetSourcesList(fBase.Tree, fSourcesList);
+            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
 
             cbSource.Items.Clear();
 
@@ -283,7 +283,7 @@ namespace GKFlowInputPlugin
             }
 
             if (!string.IsNullOrEmpty(MemoNote.Text)) {
-                GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
                 noteRec.SetNoteText(MemoNote.Text);
                 iRec.AddNote(noteRec);
             }
@@ -338,15 +338,15 @@ namespace GKFlowInputPlugin
                         }
 
                         if (!string.IsNullOrEmpty(comment)) {
-                            GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                            GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
                             noteRec.SetNoteText(comment);
                             iRec.AddNote(noteRec);
                         }
 
                         if (!string.IsNullOrEmpty(srcName)) {
-                            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Tree, srcName);
+                            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Context.Tree, srcName);
                             if (srcRec == null) {
-                                srcRec = fBase.Tree.CreateSource();
+                                srcRec = fBase.Context.Tree.CreateSource();
                                 srcRec.FiledByEntry = srcName;
                             }
                             iRec.AddSource(srcRec, srcPage, 0);

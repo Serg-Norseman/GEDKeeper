@@ -19,27 +19,35 @@
  */
 
 using System;
-using System.Drawing;
 
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKCore.Options;
-using GKCore.Types;
-
-namespace GKUI.Charts
+namespace GKCommon
 {
-    public interface ITreeChartBox
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct Margins
     {
-        IBaseWindow Base { get; set; }
-        int DepthLimit { get; set; }
-        int Height { get; set; }
-        Size ImageSize { get; }
-        TreeChartOptions Options { get; set; }
-        int Width { get; set; }
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
 
-        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
-        void RenderStatic(BackgroundMode background, bool centered);
-        void SetRenderer(TreeChartRenderer renderer);
-        void SetScale(float value);
+        public static readonly Margins Empty = new Margins(0);
+
+        public Margins(int all)
+        {
+            Bottom = all;
+            Right = all;
+            Left = all;
+            Top = all;
+        }
+
+        public Margins(int left, int top, int right, int bottom)
+        {
+            Top = top;
+            Left = left;
+            Right = right;
+            Bottom = bottom;
+        }
     }
 }

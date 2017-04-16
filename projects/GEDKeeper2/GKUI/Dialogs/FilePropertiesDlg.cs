@@ -57,9 +57,9 @@ namespace GKUI.Dialogs
 
         private void UpdateControls()
         {
-            txtLanguage.Text = fBase.Tree.Header.Language.StringValue;
+            txtLanguage.Text = fBase.Context.Tree.Header.Language.StringValue;
 
-            GEDCOMSubmitterRecord submitter = fBase.Tree.GetSubmitter();
+            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             txtName.Text = submitter.Name.FullName;
             txtAddress.Text = submitter.Address.Address.Text;
 
@@ -72,7 +72,7 @@ namespace GKUI.Dialogs
 
         private void UpdateStats()
         {
-            int[] stats = fBase.Tree.GetRecordStats();
+            int[] stats = fBase.Context.Tree.GetRecordStats();
 
             lvRecordStats.Items.Clear();
             for (int i = 1; i < stats.Length; i++)
@@ -86,9 +86,9 @@ namespace GKUI.Dialogs
         {
             try
             {
-                fBase.Tree.Header.Language.ParseString(txtLanguage.Text);
+                fBase.Context.Tree.Header.Language.ParseString(txtLanguage.Text);
 
-                GEDCOMSubmitterRecord submitter = fBase.Tree.GetSubmitter();
+                GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name.StringValue = txtName.Text;
                 submitter.Address.SetAddressArray(txtAddress.Lines);
 
@@ -112,7 +112,7 @@ namespace GKUI.Dialogs
         private void btnLangEdit_Click(object sender, EventArgs e)
         {
             using (var dlg = new LanguageEditDlg()) {
-                dlg.LanguageID = fBase.Tree.Header.Language.Value;
+                dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
 
                 if (dlg.ShowDialog() == DialogResult.OK) {
                     // Assignment in control, instead of the header's property to work Cancel.

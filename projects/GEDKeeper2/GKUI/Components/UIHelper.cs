@@ -157,7 +157,9 @@ namespace GKUI.Components
             }
         }
 
-        public GKListView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
+        #region Static functions
+
+        public static GKRecordsView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -179,5 +181,19 @@ namespace GKUI.Components
 
             return recView;
         }
+
+        public static GKListView CreateListView(Control parent)
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            GKListView listView = new GKListView();
+            listView.Dock = DockStyle.Fill;
+            parent.Controls.Add(listView);
+
+            return listView;
+        }
+
+        #endregion
     }
 }

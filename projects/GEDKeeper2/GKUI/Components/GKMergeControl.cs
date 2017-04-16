@@ -124,7 +124,7 @@ namespace GKUI.Components
             {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
-                GEDCOMTree tree = fBase.Tree;
+                GEDCOMTree tree = fBase.Context.Tree;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     tree[i].ReplaceXRefs(repMap);

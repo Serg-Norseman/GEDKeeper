@@ -55,33 +55,20 @@ namespace GKUI
             public ToolStripMenuItem MenuItem;
         }
 
-        private readonly GlobalOptions fOptions;
-        private PluginsMan fPlugins;
-        private readonly Timer fAutosaveTimer;
-
         private readonly List<WidgetInfo> fActiveWidgets;
+        private readonly Timer fAutosaveTimer;
         private string[] fCommandArgs;
-
         private int fLoadingCount;
-        private readonly StringList fTips;
+        private readonly GlobalOptions fOptions;
         private PathReplacer fPathReplacer;
+        private PluginsMan fPlugins;
+        private readonly StringList fTips;
 
         private static MainWin fInstance = null;
-        private static GKResourceManager fResourceManager;
 
         public static MainWin Instance
         {
             get { return fInstance; }
-        }
-
-        public static GKResourceManager ResourceManager
-        {
-            get { return fResourceManager; }
-        }
-
-        public GlobalOptions Options
-        {
-            get { return fOptions; }
         }
 
         public PluginsMan Plugins
@@ -101,7 +88,6 @@ namespace GKUI
             InitializeComponent();
 
             fInstance = this;
-            fResourceManager = new GKResourceManager("GKResources", typeof(MainWin).Assembly);
             fOptions = GlobalOptions.Instance;
 
             tbFileNew.Image = GKResources.iCreateNew;
@@ -160,7 +146,7 @@ namespace GKUI
                         // file is modified, isn't updated now, and isn't now created (exists)
                         if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.IsUnknown()) {
                             // TODO: if file is new and not exists - don't save it, but hint to user
-                            baseWin.FileSave(baseWin.Tree.FileName);
+                            baseWin.SaveFile(baseWin.Context.FileName);
                         }
                     }
                 }
@@ -310,7 +296,7 @@ namespace GKUI
             for (int i = MdiChildren.Length - 1; i >= 0; i--) {
                 Form mdiChild = MdiChildren[i];
                 if (mdiChild is IBaseWindow) {
-                    fOptions.AddLastBase((mdiChild as IBaseWindow).Tree.FileName);
+                    fOptions.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
                 }
             }
         }
@@ -775,7 +761,7 @@ namespace GKUI
         public string GetCurrentFileName()
         {
             IBaseWindow cb = GetCurrentFile();
-            string result = ((cb == null) ? "" : cb.Tree.FileName);
+            string result = ((cb == null) ? "" : cb.Context.FileName);
             return result;
         }
 
@@ -790,7 +776,7 @@ namespace GKUI
                 IBaseWindow baseWin = child as IBaseWindow;
                 if (baseWin == null) continue;
 
-                if (string.Equals(baseWin.Tree.FileName, fileName)) {
+                if (string.Equals(baseWin.Context.FileName, fileName)) {
                     result = baseWin;
                     break;
                 }
@@ -843,10 +829,10 @@ namespace GKUI
                     ShowMDI((Form) result);
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
-                        result.FileLoad(fileName);
+                        result.LoadFile(fileName);
                         result.Context.CollectTips(fTips);
                     } else {
-                        result.FileNew();
+                        result.CreateNewFile();
                     }
 
                     RestoreMRU(result, fileName);
@@ -868,7 +854,7 @@ namespace GKUI
                 for (int i = 0; i < num; i++) {
                     IBaseWindow baseWin = MdiChildren[i] as IBaseWindow;
                     if (baseWin != null) {
-                        baseWin.CriticalSave();
+                        baseWin.Context.CriticalSave();
                     }
                 }
             } catch (Exception ex) {
@@ -1035,11 +1021,11 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile(true);
             if (curBase == null) return;
 
-            string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Tree.FileName));
+            string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Context.FileName));
 
-            string fileName = AppHub.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
+            string fileName = AppHub.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Context.FileName, false);
             if (!string.IsNullOrEmpty(fileName)) {
-                curBase.FileSave(fileName);
+                curBase.SaveFile(fileName);
             }
         }
 
@@ -1049,7 +1035,7 @@ namespace GKUI
             if (curBase == null) return;
 
             if (!curBase.IsUnknown()) {
-                curBase.FileSave(curBase.Tree.FileName);
+                curBase.SaveFile(curBase.Context.FileName);
             } else {
                 miFileSaveAs_Click(sender, e);
             }
@@ -1216,7 +1202,7 @@ namespace GKUI
             if (curBase == null) return;
 
             GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckAncestors)) {
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckAncestors)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckAncestors;
                 fmChart.GenChart(true);
@@ -1229,7 +1215,7 @@ namespace GKUI
             if (curBase == null) return;
 
             GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckDescendants)) {
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckDescendants)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckDescendants;
                 fmChart.GenChart(true);
@@ -1242,7 +1228,7 @@ namespace GKUI
             if (curBase == null) return;
 
             GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Tree, selPerson, TreeChartKind.ckBoth)) {
+            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckBoth)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = TreeChartKind.ckBoth;
                 fmChart.GenChart(true);

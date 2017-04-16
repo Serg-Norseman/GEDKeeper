@@ -29,6 +29,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
+using GKUI.Components;
 using ZedGraph;
 
 namespace GKUI
@@ -70,7 +71,7 @@ namespace GKUI
             Panel1.Controls.Add(fGraph);
             Panel1.Controls.Add(spl);
 
-            fListStats = GKUtils.CreateListView(Panel1);
+            fListStats = UIHelper.CreateListView(Panel1);
             fListStats.AddColumn("-", 250, false);
             fListStats.AddColumn("-", 150, false);
 
