@@ -47,7 +47,7 @@ namespace GKCore.Export
 
         public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fShieldState = fBase.ShieldState;
+            fShieldState = fBase.Context.ShieldState;
             fPatList = new StringList();
         }
 

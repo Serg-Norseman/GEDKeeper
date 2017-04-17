@@ -369,7 +369,7 @@ namespace GKUI.Dialogs
 
             fLocalUndoman.Commit();
 
-            fBase.ChangeRecord(fPerson);
+            fBase.NotifyRecord(fPerson, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

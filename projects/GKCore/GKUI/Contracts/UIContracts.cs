@@ -54,22 +54,6 @@ namespace GKUI.Contracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IUIHelper
-    {
-        // TODO: necessary to exclude these references to WinForms controls!
-        void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault);
-        void SelectComboItem(ListBox listBox, object tag, bool allowDefault);
-
-        void NormalizeFormRect(ref ExtRect winRect);
-        ExtRect GetFormRect(Form form);
-        void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState);
-        void CenterFormByParent(Form form, IntPtr parent);
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IBaseController
     {
     }

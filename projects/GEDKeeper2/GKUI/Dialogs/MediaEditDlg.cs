@@ -77,7 +77,7 @@ namespace GKUI.Dialogs
             ControlsRefresh();
 
             CommitChanges();
-            fBase.ChangeRecord(fMediaRec);
+            fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
 
             return true;
         }
@@ -200,7 +200,7 @@ namespace GKUI.Dialogs
                                     MediaStoreType.mstArchive));
             }
 
-            AppHub.UIHelper.SelectComboItem(cmbStoreType, selectType, true);
+            UIHelper.SelectComboItem(cmbStoreType, selectType, true);
         }
 
         public MediaEditDlg()

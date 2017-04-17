@@ -26,6 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Types;
 using GKUI.Components;
 using GKUI.Contracts;
 
@@ -65,7 +66,9 @@ namespace GKUI.Dialogs
             {
                 fRepository.RepositoryName = txtName.Text;
                 CommitChanges();
-                fBase.ChangeRecord(fRepository);
+
+                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
+
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)

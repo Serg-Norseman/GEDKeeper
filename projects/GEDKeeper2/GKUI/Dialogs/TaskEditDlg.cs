@@ -115,7 +115,9 @@ namespace GKUI.Dialogs
                 }
 
                 CommitChanges();
-                Base.ChangeRecord(fTask);
+
+                Base.NotifyRecord(fTask, RecordAction.raEdit);
+
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)

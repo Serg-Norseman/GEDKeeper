@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-
 using GKCommon;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Plugins
@@ -129,6 +129,29 @@ namespace GKCore.Plugins
                     Logger.LogWrite("PluginsMan.NotifyRecord(): " + ex.Message);
                 }
             }
+        }
+
+        public ILangMan CreateLangMan(object sender)
+        {
+            if (sender == null)
+                return null;
+
+            //CultureInfo cultInfo = new CultureInfo(fOptions.InterfaceLang);
+            //string ext = cultInfo.ThreeLetterISOLanguageName;
+            string lngSign = GlobalOptions.Instance.GetLanguageSign();
+
+            Assembly asm = sender.GetType().Assembly;
+            Module[] mods = asm.GetModules();
+            string asmFile = mods[0].FullyQualifiedName;
+
+            string langFile = Path.ChangeExtension(asmFile, "." + lngSign);
+            if (!File.Exists(langFile)) {
+                langFile = Path.ChangeExtension(asmFile, "." + LangMan.LS_DEF_SIGN);
+            }
+
+            LangManager langMan = new LangManager();
+            bool res = langMan.LoadFromFile(langFile);
+            return (res) ? langMan : null;
         }
     }
 }

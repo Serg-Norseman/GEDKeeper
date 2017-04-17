@@ -38,15 +38,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2\GE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.mswin.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMediaPlayer", "GKMediaPlayer\GKMediaPlayer.mswin.csproj", "{0B9F856F-4E88-47ED-9364-B9770FC7E6E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCore", "GKCore\GKCore.mswin.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKUpdater", "GKUpdater\GKUpdater.csproj", "{EC117EAC-E63D-4B5C-90E4-B9AD87984067}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSandbox", "GKSandbox\GKSandbox.csproj", "{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMediaPlayer", "GKMediaPlayer\GKMediaPlayer.mswin.csproj", "{0B9F856F-4E88-47ED-9364-B9770FC7E6E3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKIntl", "GKIntl\GKIntl.csproj", "{764FB16A-FD59-4C9A-B25B-5BB7893ADA76}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCore", "GKCore\GKCore.mswin.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

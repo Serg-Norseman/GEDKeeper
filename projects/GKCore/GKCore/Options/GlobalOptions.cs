@@ -308,6 +308,13 @@ namespace GKCore.Options
             return null;
         }
 
+        public string GetLanguageSign()
+        {
+            LangRecord lngrec = GetLangByCode(InterfaceLang);
+            string lngSign = (lngrec == null) ? LangMan.LS_DEF_SIGN : lngrec.Sign;
+            return lngSign;
+        }
+
         // TODO: rework it
         public GEDCOMLanguageID GetCurrentItfLang()
         {
@@ -523,8 +530,6 @@ namespace GKCore.Options
             fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
             fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
             fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
-
-            AppHub.UIHelper.NormalizeFormRect(ref fMWinRect);
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)

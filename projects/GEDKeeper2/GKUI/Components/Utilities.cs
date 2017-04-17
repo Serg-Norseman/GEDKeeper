@@ -44,7 +44,7 @@ namespace GKUI.Components
 
         public Version GetAppVersion()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version;
+            return GetExecutingAssembly().GetName().Version;
         }
 
         public string GetAppCopyright()

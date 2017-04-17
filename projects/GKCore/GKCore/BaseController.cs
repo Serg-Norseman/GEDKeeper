@@ -19,8 +19,11 @@
  */
 
 using System;
+using System.Collections.Generic;
+
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -468,6 +471,28 @@ namespace GKCore
             return result;
         }
 
+        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+                throw new ArgumentNullException("searchValue");
+
+            if (pointsList == null)
+                throw new ArgumentNullException("pointsList");
+
+            try
+            {
+                IGeocoder geocoder = GKUtils.CreateGeocoder(GlobalOptions.Instance);
+
+                IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
+                foreach (GeoPoint pt in geoPoints)
+                {
+                    pointsList.Add(pt);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseController.RequestGeoCoords(): " + ex.Message);
+            }
+        }
+
         #endregion
 
         #region Modify routines
@@ -911,6 +936,8 @@ namespace GKCore
             AppHub.NamesTable.ImportNames(indivRec);
 
             IListManager listMan = baseWin.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+            if (listMan == null) return;
+
             IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;
 
             if (iFilter.SourceMode == FilterGroupMode.Selected)

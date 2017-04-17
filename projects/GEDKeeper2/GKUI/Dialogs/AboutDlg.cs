@@ -39,6 +39,10 @@ namespace GKUI.Dialogs
 
             Text = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+
+            lblProduct.Text = GKData.APP_TITLE;
+            lblVersion.Text = @"Version " + AppHub.Utilities.GetAppVersion();
+            lblCopyright.Text = AppHub.Utilities.GetAppCopyright();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)
@@ -47,17 +51,6 @@ namespace GKUI.Dialogs
             if (lbl == null) return;
 
             Process.Start(lbl.Text);
-        }
-
-        public static void ShowAbout()
-        {
-            using (AboutDlg dlg = new AboutDlg())
-            {
-                dlg.lblProduct.Text = GKData.APP_TITLE;
-                dlg.lblVersion.Text = @"Version " + AppHub.Utilities.GetAppVersion();
-                dlg.lblCopyright.Text = AppHub.Utilities.GetAppCopyright();
-                dlg.ShowDialog();
-            }
         }
     }
 }

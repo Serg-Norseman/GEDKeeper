@@ -25,6 +25,7 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -222,7 +223,7 @@ namespace GKUI.Dialogs
 
             if (fParentHandle != IntPtr.Zero) {
                 //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
-                AppHub.UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
+                UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
             }
 
             fProgressForm.ShowDialog();

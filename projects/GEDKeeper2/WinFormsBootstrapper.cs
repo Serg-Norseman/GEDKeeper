@@ -39,7 +39,6 @@ namespace GKUI
                 throw new ArgumentNullException("container");
 
             container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
-            container.Register<IUIHelper, UIHelper>(LifeCycle.Singleton);
             container.Register<IUtilities, Utilities>(LifeCycle.Singleton);
             //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);

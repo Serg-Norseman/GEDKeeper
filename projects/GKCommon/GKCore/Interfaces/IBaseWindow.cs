@@ -31,20 +31,17 @@ namespace GKCore.Interfaces
     {
         IHost Host { get; }
         IBaseContext Context { get; }
-
         bool Modified { get; set; }
-        ShieldState ShieldState { get; set; }
 
         void Activate();
-        void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
-        void ChangeRecord(GEDCOMRecord record);
         void Close();
+        void Show();
 
-        bool IsUnknown();
         void CreateNewFile();
         void LoadFile(string fileName);
         void SaveFile(string fileName);
 
+        void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);
         string GetRecordName(GEDCOMRecord record, bool signed);
@@ -54,15 +51,13 @@ namespace GKCore.Interfaces
         void RefreshLists(bool titles);
         //void RefreshRecordsView(GEDCOMRecordType recType);
         void ShowRecordsTab(GEDCOMRecordType recType);
+        void SelectRecordByXRef(string xref);
+        void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
 
         void AddRecord();
         void DeleteRecord();
         void EditRecord();
         bool RecordIsFiltered(GEDCOMRecord record);
         void NotifyRecord(GEDCOMRecord record, RecordAction action);
-
-        void SelectRecordByXRef(string xref);
-        void Show();
-        void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
     }
 }

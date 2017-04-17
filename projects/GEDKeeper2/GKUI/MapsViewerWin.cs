@@ -281,7 +281,7 @@ namespace GKUI
                     fBaseRoot.Nodes.Add(node);
 
                     if (locRec == null) {
-                        MainWin.Instance.RequestGeoCoords(placeName, mapPlace.Points);
+                        AppHub.BaseController.RequestGeoCoords(placeName, mapPlace.Points);
 
                         int num = mapPlace.Points.Count;
                         for (int i = 0; i < num; i++) {

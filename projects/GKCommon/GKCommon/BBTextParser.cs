@@ -302,7 +302,8 @@ namespace GKCommon
                         }
 
                         if (tok.Kind != TokenKind.Symbol || tok.Value != "]") {
-                            tok = strTok.Next();
+                            // Possible syntax error?
+                            strTok.Next();
                         }
                     }
                 } else if (tok.Kind == TokenKind.EOL) {

@@ -139,7 +139,7 @@ namespace GKUI.Dialogs
                 }
             }
 
-            fListRecords.UpdateContents(fBase.ShieldState, true, 1);
+            fListRecords.UpdateContents(fBase.Context.ShieldState, true, 1);
         }
 
         private static bool ChildSelectorHandler(GEDCOMRecord record)

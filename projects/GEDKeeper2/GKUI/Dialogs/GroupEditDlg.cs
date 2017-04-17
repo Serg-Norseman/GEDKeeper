@@ -166,7 +166,7 @@ namespace GKUI.Dialogs
             CommitChanges();
 
             fGroup.GroupName = edName.Text;
-            fBase.ChangeRecord(fGroup);
+            fBase.NotifyRecord(fGroup, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

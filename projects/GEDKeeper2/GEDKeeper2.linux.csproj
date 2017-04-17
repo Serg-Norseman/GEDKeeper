@@ -642,7 +642,7 @@
       <Name>GKCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.linux.csproj">
-      <Project>{3C9C706D-A5B2-48FB-BE5E-DCC372F84622}</Project>
+      <Project>{0B9F856F-4E88-47ED-9364-B9770FC7E6E3}</Project>
       <Name>GKMediaPlayer</Name>
     </ProjectReference>
   </ItemGroup>

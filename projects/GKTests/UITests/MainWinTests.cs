@@ -258,7 +258,7 @@ namespace GKTests.UITests
                 ClickToolStripButton("tbFilter", fMainWin);
             }
 
-            Assert.IsTrue(baseWin.IsUnknown(), stage + ".2");
+            Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
 
             Assert.IsNotNull(baseWin.Navman, stage + ".3");
 
@@ -277,10 +277,6 @@ namespace GKTests.UITests
             Assert.IsTrue(baseWin.Context.IsAvailableRecord(record), stage + ".5");
             Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
 
-            Assert.AreEqual(ShieldState.Maximum, baseWin.ShieldState, stage + ".7.1");
-            baseWin.ShieldState = ShieldState.None;
-            Assert.AreEqual(ShieldState.None, baseWin.ShieldState, stage + ".7.2");
-
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.SelectSpouseFor(baseWin, null); });
             baseWin.NotifyRecord(null, RecordAction.raAdd);
@@ -297,7 +293,7 @@ namespace GKTests.UITests
 
             Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.CheckPersonSex(baseWin.Context, null); });
 
-            baseWin.ChangeRecord(null);
+            baseWin.NotifyRecord(null, RecordAction.raEdit);
 
             baseWin.ApplyFilter();
 
@@ -324,8 +320,8 @@ namespace GKTests.UITests
             Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
 
             //
-            Assert.Throws(typeof(ArgumentNullException), () => { fMainWin.RequestGeoCoords(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { fMainWin.RequestGeoCoords("Moscow", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.RequestGeoCoords(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.RequestGeoCoords("Moscow", null); });
 
             // IHost tests
             IHost host = fMainWin;

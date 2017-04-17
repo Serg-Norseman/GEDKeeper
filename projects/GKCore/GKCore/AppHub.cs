@@ -37,7 +37,6 @@ namespace GKCore
         private static BaseController fBaseController;
         private static IPathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
-        private static IUIHelper fUIHelper;
         private static IUtilities fUtilities;
         private static IHost fMainWindow;
         private static IProgressController fProgressController;
@@ -110,16 +109,6 @@ namespace GKCore
             }
         }
 
-        public static IUIHelper UIHelper
-        {
-            get {
-                if (fUIHelper == null) {
-                    fUIHelper = fIocContainer.Resolve<IUIHelper>();
-                }
-                return fUIHelper;
-            }
-        }
-
         public static IUtilities Utilities
         {
             get {
@@ -135,6 +124,16 @@ namespace GKCore
         static AppHub()
         {
             fIocContainer = new IocContainer();
+        }
+
+        public static void InitHost()
+        {
+            
+        }
+
+        public static void DoneHost()
+        {
+            
         }
     }
 }

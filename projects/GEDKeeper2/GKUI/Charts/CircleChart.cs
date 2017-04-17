@@ -211,7 +211,7 @@ namespace GKUI.Charts
             fOptions = new AncestorsCircleOptions();
             fSegments = new List<CircleSegment>();
             fSelected = null;
-            fShieldState = baseWin.ShieldState;
+            fShieldState = baseWin.Context.ShieldState;
             fBounds = new float[4];
             fMouseCaptured = MouseCaptured.mcNone;
 

@@ -48,7 +48,6 @@ namespace GKUI
         private readonly NavigationStack fNavman;
 
         private bool fModified;
-        private ShieldState fShieldState;
 
         private readonly GKRecordsView ListPersons;
         private readonly GKRecordsView ListFamilies;
@@ -102,18 +101,6 @@ namespace GKUI
             set {
                 fModified = value;
                 SetMainTitle();
-            }
-        }
-
-        public ShieldState ShieldState
-        {
-            get {
-                return fShieldState;
-            }
-            set {
-                if (fShieldState == value) return;
-                fShieldState = value;
-                RefreshLists(false);
             }
         }
 
@@ -454,18 +441,6 @@ namespace GKUI
             }
         }
 
-        public void ChangeRecord(GEDCOMRecord record)
-        {
-            if (record == null) return;
-
-            DateTime dtNow = DateTime.Now;
-            record.ChangeDate.ChangeDateTime = dtNow;
-            fContext.Tree.Header.TransmissionDateTime = dtNow;
-            Modified = true;
-
-            MainWin.Instance.NotifyRecord(this, record, RecordAction.raEdit);
-        }
-
         public bool CheckModified()
         {
             bool result = true;
@@ -532,18 +507,11 @@ namespace GKUI
             fContext.Clear();
         }
 
-        public bool IsUnknown()
-        {
-            string fileName = fContext.FileName;
-
-            return string.IsNullOrEmpty(fileName) || !File.Exists(fileName);
-        }
-
         public void CreateNewFile()
         {
             Clear();
             RefreshLists(false);
-            GKUtils.ShowPersonInfo(null, mPersonSummary.Lines, fShieldState);
+            GKUtils.ShowPersonInfo(null, mPersonSummary.Lines, fContext.ShieldState);
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
             Modified = false;
@@ -578,17 +546,19 @@ namespace GKUI
 
         public void RefreshLists(bool titles)
         {
-            ListPersons.UpdateContents(fShieldState, titles, -1/*2*/);
-            ListFamilies.UpdateContents(fShieldState, titles, 1);
-            ListNotes.UpdateContents(fShieldState, titles, -1);
-            ListMultimedia.UpdateContents(fShieldState, titles, 1);
-            ListSources.UpdateContents(fShieldState, titles, 1);
-            ListRepositories.UpdateContents(fShieldState, titles, 1);
-            ListGroups.UpdateContents(fShieldState, titles, 1);
-            ListResearches.UpdateContents(fShieldState, titles, 1);
-            ListTasks.UpdateContents(fShieldState, titles, 1);
-            ListCommunications.UpdateContents(fShieldState, titles, 1);
-            ListLocations.UpdateContents(fShieldState, titles, 1);
+            ShieldState shieldState = Context.ShieldState;
+
+            ListPersons.UpdateContents(shieldState, titles, -1/*2*/);
+            ListFamilies.UpdateContents(shieldState, titles, 1);
+            ListNotes.UpdateContents(shieldState, titles, -1);
+            ListMultimedia.UpdateContents(shieldState, titles, 1);
+            ListSources.UpdateContents(shieldState, titles, 1);
+            ListRepositories.UpdateContents(shieldState, titles, 1);
+            ListGroups.UpdateContents(shieldState, titles, 1);
+            ListResearches.UpdateContents(shieldState, titles, 1);
+            ListTasks.UpdateContents(shieldState, titles, 1);
+            ListCommunications.UpdateContents(shieldState, titles, 1);
+            ListLocations.UpdateContents(shieldState, titles, 1);
 
             PageRecords_SelectedIndexChanged(null, null);
         }
@@ -596,30 +566,52 @@ namespace GKUI
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
             GKRecordsView rView = GetRecordsViewByType(recType);
-            if (rView == null) return;
-
-            rView.UpdateContents(fShieldState, false, -1);
-
-            PageRecords_SelectedIndexChanged(null, null);
+            if (rView != null) {
+                rView.UpdateContents(fContext.ShieldState, false, -1);
+                PageRecords_SelectedIndexChanged(null, null);
+            }
         }
 
         public void NotifyRecord(GEDCOMRecord record, RecordAction action)
         {
             if (record == null) return;
 
-            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+            DateTime dtNow = DateTime.Now;
 
-            if (rView != null && action == RecordAction.raDelete)
-            {
-                rView.DeleteRecord(record);
-                HyperView hView = GetHyperViewByType(record.RecordType);
-                if ((null != hView) && (0 == rView.FilteredCount))
-                {
-                    hView.Lines.Clear();
-                }
+            switch (action) {
+                case RecordAction.raAdd:
+                case RecordAction.raEdit:
+                    record.ChangeDate.ChangeDateTime = dtNow;
+                    break;
+
+                case RecordAction.raDelete:
+                    {
+                        GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+                        if (rView != null) {
+                            rView.DeleteRecord(record);
+
+                            HyperView hView = GetHyperViewByType(record.RecordType);
+                            if ((hView != null) && (rView.FilteredCount == 0)) {
+                                hView.Lines.Clear();
+                            }
+                        }
+                    }
+                    break;
+
+                case RecordAction.raJump:
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    break;
             }
 
-            MainWin.Instance.NotifyRecord(this, record, action);
+            if (action != RecordAction.raJump) {
+                fContext.Tree.Header.TransmissionDateTime = dtNow;
+                Modified = true;
+
+                MainWin.Instance.NotifyRecord(this, record, action);
+            }
         }
 
         public bool AllowFilter()
@@ -859,7 +851,7 @@ namespace GKUI
                 target = fContext.Tree.CreateIndividual();
                 target.Assign(original);
 
-                ChangeRecord(target);
+                NotifyRecord(target, RecordAction.raAdd);
             } finally {
                 fContext.EndUpdate();
             }
@@ -926,7 +918,9 @@ namespace GKUI
             try
             {
                 HyperView hyperView = GetHyperViewByType(record.RecordType);
-                GKUtils.GetRecordContent(record, fShieldState, hyperView.Lines);
+                if (hyperView != null) {
+                    GKUtils.GetRecordContent(record, fContext.ShieldState, hyperView.Lines);
+                }
             }
             catch (Exception ex)
             {
@@ -937,7 +931,7 @@ namespace GKUI
         public StringList GetRecordContent(GEDCOMRecord record)
         {
             StringList ctx = new StringList();
-            GKUtils.GetRecordContent(record, fShieldState, ctx);
+            GKUtils.GetRecordContent(record, fContext.ShieldState, ctx);
             return ctx;
         }
 
@@ -949,10 +943,10 @@ namespace GKUI
         public bool RecordIsFiltered(GEDCOMRecord record)
         {
             bool result = false;
-            if (record == null) return result;
-
-            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
-            result = (rView != null && rView.IndexOfRecord(record) >= 0);
+            if (record != null) {
+                GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+                result = (rView != null && rView.IndexOfRecord(record) >= 0);
+            }
             return result;
         }
 

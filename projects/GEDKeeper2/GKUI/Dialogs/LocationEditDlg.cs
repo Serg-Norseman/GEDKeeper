@@ -29,6 +29,7 @@ using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Types;
 using GKUI.Components;
 using GKUI.Contracts;
 
@@ -126,8 +127,11 @@ namespace GKUI.Dialogs
                 fLocationRecord.LocationName = txtName.Text;
                 fLocationRecord.Map.Lati = SysUtils.ParseFloat(txtLatitude.Text, 0.0);
                 fLocationRecord.Map.Long = SysUtils.ParseFloat(txtLongitude.Text, 0.0);
+
                 CommitChanges();
-                fBase.ChangeRecord(fLocationRecord);
+
+                fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
+
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
@@ -157,7 +161,7 @@ namespace GKUI.Dialogs
             {
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
-                MainWin.Instance.RequestGeoCoords(txtName.Text, searchPoints);
+                AppHub.BaseController.RequestGeoCoords(txtName.Text, searchPoints);
                 ListGeoCoords.Items.Clear();
                 fMapBrowser.ClearPoints();
 

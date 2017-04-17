@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKFlowInputPlugin
 {
@@ -288,7 +289,7 @@ namespace GKFlowInputPlugin
                 iRec.AddNote(noteRec);
             }
 
-            fBase.ChangeRecord(iRec);
+            fBase.NotifyRecord(iRec, RecordAction.raAdd);
 
             InitSimpleControls();
         }
@@ -352,7 +353,7 @@ namespace GKFlowInputPlugin
                             iRec.AddSource(srcRec, srcPage, 0);
                         }
 
-                        fBase.ChangeRecord(iRec);
+                        fBase.NotifyRecord(iRec, RecordAction.raAdd);
 
                         GEDCOMFamilyRecord family = null;
 

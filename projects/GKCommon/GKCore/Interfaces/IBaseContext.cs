@@ -35,7 +35,9 @@ namespace GKCore.Interfaces
         string FileName { get; }
         GEDCOMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
+        ShieldState ShieldState { get; set; }
 
+        bool IsUnknown();
         void Clear();
         bool FileLoad(string fileName);
         bool FileSave(string fileName);
@@ -73,6 +75,7 @@ namespace GKCore.Interfaces
         bool IsUpdated();
         void BeginUpdate();
         void EndUpdate();
+        void SwitchShieldState();
 
         void DoUndo();
         void DoRedo();

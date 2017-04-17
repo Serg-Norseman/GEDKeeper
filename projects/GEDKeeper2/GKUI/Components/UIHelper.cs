@@ -25,48 +25,15 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKUI.Contracts;
 
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    /// Static functions only for UI implementation.
     /// </summary>
-    public class UIHelper : IUIHelper
+    public static class UIHelper
     {
-        public void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < comboBox.Items.Count; i++) {
-                GKComboItem item = comboBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    comboBox.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                comboBox.SelectedIndex = 0;
-            }
-        }
-
-        public void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < listBox.Items.Count; i++) {
-                GKComboItem item = listBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    listBox.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                listBox.SelectedIndex = 0;
-            }
-        }
-
-        public void NormalizeFormRect(ref ExtRect winRect)
+        public static void NormalizeFormRect(ref ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
             #if !CI_MODE
@@ -98,7 +65,7 @@ namespace GKUI.Components
             #endif
         }
 
-        public ExtRect GetFormRect(Form form)
+        public static ExtRect GetFormRect(Form form)
         {
             if (form == null) return ExtRect.CreateEmpty();
 
@@ -123,7 +90,7 @@ namespace GKUI.Components
             return ExtRect.Create(form.Left, form.Top, form.Right, form.Bottom);
         }
 
-        public void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
+        public static void RestoreFormRect(Form form, ExtRect rt, FormWindowState winState)
         {
             // check for new and empty struct
             if (form == null || rt.IsEmpty()) return;
@@ -140,7 +107,7 @@ namespace GKUI.Components
             }
         }
 
-        public void CenterFormByParent(Form form, IntPtr parent)
+        public static void CenterFormByParent(Form form, IntPtr parent)
         {
             if (form == null) return;
 
@@ -157,7 +124,37 @@ namespace GKUI.Components
             }
         }
 
-        #region Static functions
+        public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
+        {
+            for (int i = 0; i < comboBox.Items.Count; i++) {
+                GKComboItem item = comboBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    comboBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
+        {
+            for (int i = 0; i < listBox.Items.Count; i++) {
+                GKComboItem item = listBox.Items[i] as GKComboItem;
+
+                if (item != null && object.Equals(item.Tag, tag)) {
+                    listBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                listBox.SelectedIndex = 0;
+            }
+        }
 
         public static GKRecordsView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
         {
@@ -193,7 +190,5 @@ namespace GKUI.Components
 
             return listView;
         }
-
-        #endregion
     }
 }

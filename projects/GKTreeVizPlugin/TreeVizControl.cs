@@ -277,6 +277,8 @@ namespace GKTreeVizPlugin
             if (e.Button == MouseButtons.Left) {
                 fMouseDrag = false;
             }
+
+            base.OnMouseUp(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

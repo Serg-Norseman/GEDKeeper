@@ -65,8 +65,6 @@ namespace GKUI.Dialogs
 
                 if (fFamily == null)
                 {
-                    btnHusbandSel.Enabled = false;
-                    btnWifeSel.Enabled = false;
                     cmbMarriageStatus.Enabled = false;
                     cmbMarriageStatus.SelectedIndex = 0;
                     cmbRestriction.SelectedIndex = 0;
@@ -154,16 +152,26 @@ namespace GKUI.Dialogs
 
         private void UpdateControls()
         {
-            GEDCOMIndividualRecord husband = fFamily.GetHusband();
-            txtHusband.Text = (husband != null) ? GKUtils.GetNameString(husband, true, false) : LangMan.LS(LSID.LSID_UnkMale);
+            GEDCOMIndividualRecord husband, wife;
 
+            if (fFamily == null) {
+                husband = null;
+                wife = null;
+
+                LockEditor(true);
+            } else {
+                husband = fFamily.GetHusband();
+                wife = fFamily.GetWife();
+
+                LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);
+            }
+
+            txtHusband.Text = (husband != null) ? GKUtils.GetNameString(husband, true, false) : LangMan.LS(LSID.LSID_UnkMale);
             btnHusbandAdd.Enabled = (husband == null);
             btnHusbandDelete.Enabled = (husband != null);
             btnHusbandSel.Enabled = (husband != null);
 
-            GEDCOMIndividualRecord wife = fFamily.GetWife();
             txtWife.Text = (wife != null) ? GKUtils.GetNameString(wife, true, false) : LangMan.LS(LSID.LSID_UnkFemale);
-
             btnWifeAdd.Enabled = (wife == null);
             btnWifeDelete.Enabled = (wife != null);
             btnWifeSel.Enabled = (wife != null);
@@ -173,8 +181,6 @@ namespace GKUI.Dialogs
             fNotesList.UpdateSheet();
             fMediaList.UpdateSheet();
             fSourcesList.UpdateSheet();
-
-            LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);
         }
 
         private void LockEditor(bool locked)
@@ -219,7 +225,7 @@ namespace GKUI.Dialogs
 
             fLocalUndoman.Commit();
 
-            fBase.ChangeRecord(fFamily);
+            fBase.NotifyRecord(fFamily, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

@@ -26,6 +26,7 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKUI.Components
 {
@@ -137,7 +138,7 @@ namespace GKUI.Components
                     ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
                 }
 
-                fBase.ChangeRecord(targetRec);
+                fBase.NotifyRecord(targetRec, RecordAction.raEdit);
                 fBase.RefreshLists(false);
             }
             finally

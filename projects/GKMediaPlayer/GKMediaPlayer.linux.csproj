@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
-    <ProjectGuid>{3C9C706D-A5B2-48FB-BE5E-DCC372F84622}</ProjectGuid>
+    <ProjectGuid>{0B9F856F-4E88-47ED-9364-B9770FC7E6E3}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <OutputType>Library</OutputType>
@@ -63,15 +63,15 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="NLog">
       <HintPath>libs\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nVLC">
       <HintPath>libs\linux\nVLC.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

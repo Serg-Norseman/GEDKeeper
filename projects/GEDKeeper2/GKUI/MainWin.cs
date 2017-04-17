@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -30,7 +29,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Export;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Plugins;
@@ -144,7 +142,7 @@ namespace GKUI
                         IBaseWindow baseWin = (IBaseWindow) child;
 
                         // file is modified, isn't updated now, and isn't now created (exists)
-                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.IsUnknown()) {
+                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.Context.IsUnknown()) {
                             // TODO: if file is new and not exists - don't save it, but hint to user
                             baseWin.SaveFile(baseWin.Context.FileName);
                         }
@@ -257,7 +255,7 @@ namespace GKUI
             try {
                 fPlugins.Unload();
 
-                fOptions.MWinRect = AppHub.UIHelper.GetFormRect(this);
+                fOptions.MWinRect = UIHelper.GetFormRect(this);
                 fOptions.MWinState = WindowState;
 
                 AppHub.NamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
@@ -345,7 +343,7 @@ namespace GKUI
             if (curBase == null) return;
 
             Bitmap pic = null;
-            switch (curBase.ShieldState)
+            switch (curBase.Context.ShieldState)
             {
                 case ShieldState.None:
                     pic = (Bitmap)GKResources.iRGShieldNone.Clone();
@@ -367,17 +365,10 @@ namespace GKUI
         {
             if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
                 IBaseWindow curBase = GetCurrentFile();
-                if (curBase == null) return;
-
-                ShieldState ss = curBase.ShieldState;
-                if (ss == ShieldState.None) {
-                    ss = ShieldState.Maximum;
-                } else {
-                    ss = (ShieldState)((int)ss + 1);
+                if (curBase != null) {
+                    curBase.Context.SwitchShieldState();
+                    StatusBar.Invalidate();
                 }
-
-                curBase.ShieldState = ss;
-                StatusBar.Invalidate();
             }
         }
 
@@ -430,6 +421,9 @@ namespace GKUI
             try
             {
                 ExtRect mwinRect = fOptions.MWinRect;
+
+                UIHelper.NormalizeFormRect(ref mwinRect);
+
                 if (!mwinRect.IsEmpty()) {
                     Left = mwinRect.Left;
                     Top = mwinRect.Top;
@@ -455,25 +449,6 @@ namespace GKUI
             {
                 Logger.LogWrite("MainWin.RestoreWindowState(): " + ex.Message);
             }
-        }
-
-        private string GetLanguageSign()
-        {
-            string lngSign;
-
-            LangRecord lngrec = fOptions.GetLangByCode(fOptions.InterfaceLang);
-            if (lngrec == null) {
-                /*if (fOptions.InterfaceLang == LangMan.LS_DEF_CODE) {
-                    lngSign = LangMan.LS_DEF_SIGN;
-                } else {
-                    lngSign = string.Empty;
-                }*/
-                lngSign = LangMan.LS_DEF_SIGN;
-            } else {
-                lngSign = lngrec.Sign;
-            }
-
-            return lngSign;
         }
 
         private static ushort RequestLanguage()
@@ -543,7 +518,7 @@ namespace GKUI
                 Holidays holidays = new Holidays();
 
                 // TODO: We need a reference to the country, not the language
-                string lngSign = GetLanguageSign();
+                string lngSign = fOptions.GetLanguageSign();
                 if (!string.IsNullOrEmpty(lngSign)) {
                     holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
                 }
@@ -580,28 +555,6 @@ namespace GKUI
             }
 
             return form.ShowModalX();
-        }
-
-        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
-        {
-            if (string.IsNullOrEmpty(searchValue))
-                throw new ArgumentNullException("searchValue");
-
-            if (pointsList == null)
-                throw new ArgumentNullException("pointsList");
-
-            try
-            {
-                IGeocoder geocoder = GKUtils.CreateGeocoder(fOptions);
-
-                IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
-                foreach (GeoPoint pt in geoPoints)
-                {
-                    pointsList.Add(pt);
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("MainWin.RequestGeoCoords(): " + ex.Message);
-            }
         }
 
         #endregion
@@ -661,7 +614,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            mf.WinRect = AppHub.UIHelper.GetFormRect(frm);
+            mf.WinRect = UIHelper.GetFormRect(frm);
             mf.WinState = frm.WindowState;
         }
 
@@ -671,7 +624,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            AppHub.UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
+            UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
         }
 
         #endregion
@@ -771,12 +724,9 @@ namespace GKUI
 
             int num = MdiChildren.Length;
             for (int i = 0; i < num; i++) {
-                Form child = MdiChildren[i];
+                IBaseWindow baseWin = MdiChildren[i] as IBaseWindow;
 
-                IBaseWindow baseWin = child as IBaseWindow;
-                if (baseWin == null) continue;
-
-                if (string.Equals(baseWin.Context.FileName, fileName)) {
+                if (baseWin != null && string.Equals(baseWin.Context.FileName, fileName)) {
                     result = baseWin;
                     break;
                 }
@@ -911,10 +861,9 @@ namespace GKUI
             try {
                 curBase.Context.BeginUpdate();
 
-                using (FilePropertiesDlg dlgFileProps = new FilePropertiesDlg())
-                {
-                    dlgFileProps.InitDialog(curBase);
-                    ShowModalEx(dlgFileProps, false);
+                using (var dlg = new FilePropertiesDlg()) {
+                    dlg.InitDialog(curBase);
+                    ShowModalX(dlg, false);
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -1034,7 +983,7 @@ namespace GKUI
             IBaseWindow curBase = GetCurrentFile(true);
             if (curBase == null) return;
 
-            if (!curBase.IsUnknown()) {
+            if (!curBase.Context.IsUnknown()) {
                 curBase.SaveFile(curBase.Context.FileName);
             } else {
                 miFileSaveAs_Click(sender, e);
@@ -1175,7 +1124,7 @@ namespace GKUI
             using (PedigreeExporter p = new PedigreeExporter(curBase)) {
                 p.Root = curBase.GetSelectedPerson();
                 p.Options = fOptions;
-                p.ShieldState = curBase.ShieldState;
+                p.ShieldState = curBase.Context.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
             }
@@ -1269,12 +1218,14 @@ namespace GKUI
 
         private void miAbout_Click(object sender, EventArgs e)
         {
-            AboutDlg.ShowAbout();
+            using (AboutDlg dlg = new AboutDlg()) {
+                dlg.ShowDialog();
+            }
         }
 
         public void ShowHelpTopic(string topic)
         {
-            string lngSign = GetLanguageSign();
+            string lngSign = fOptions.GetLanguageSign();
             if (string.IsNullOrEmpty(lngSign)) return;
 
             string helpPath = GKUtils.GetHelpPath(lngSign);
@@ -1489,25 +1440,7 @@ namespace GKUI
 
         public ILangMan CreateLangMan(object sender)
         {
-            if (sender == null)
-                return null;
-
-            //CultureInfo cultInfo = new CultureInfo(fOptions.InterfaceLang);
-            //string ext = cultInfo.ThreeLetterISOLanguageName;
-            string lngSign = GetLanguageSign();
-
-            Assembly asm = sender.GetType().Assembly;
-            Module[] mods = asm.GetModules();
-            string asmFile = mods[0].FullyQualifiedName;
-
-            string langFile = Path.ChangeExtension(asmFile, "." + lngSign);
-            if (!File.Exists(langFile)) {
-                langFile = Path.ChangeExtension(asmFile, "." + LangMan.LS_DEF_SIGN);
-            }
-
-            LangManager langMan = new LangManager();
-            bool res = langMan.LoadFromFile(langFile);
-            return (res) ? langMan : null;
+            return fPlugins.CreateLangMan(sender);
         }
 
         public IBaseWindow GetCurrentFile(bool extMode = false)

@@ -103,7 +103,7 @@ namespace GKUI.Dialogs
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            AppHub.UIHelper.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
+            UIHelper.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
         }
 
         private void UpdateForm()

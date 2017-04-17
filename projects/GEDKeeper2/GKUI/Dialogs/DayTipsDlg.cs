@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCore;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -106,7 +107,7 @@ namespace GKUI.Dialogs
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
 
-                AppHub.UIHelper.CenterFormByParent(dlg, parent);
+                UIHelper.CenterFormByParent(dlg, parent);
 
                 dlg.ShowDialog();
 

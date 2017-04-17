@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Contracts;
 
 namespace GKUI.Dialogs
@@ -60,7 +61,9 @@ namespace GKUI.Dialogs
                 if (0 != length)
                 {
                     fNoteRecord.SetNotesArray(txtNote.Lines);
-                    fBase.ChangeRecord(fNoteRecord);
+
+                    fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
+
                     DialogResult = DialogResult.OK;
                 }
                 else

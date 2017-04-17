@@ -103,7 +103,7 @@ namespace GKUI.Dialogs
 
                 CommitChanges();
 
-                fBase.ChangeRecord(fCommunication);
+                fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
 
                 DialogResult = DialogResult.OK;
             }

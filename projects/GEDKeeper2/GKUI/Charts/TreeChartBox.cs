@@ -545,7 +545,7 @@ namespace GKUI.Charts
                 DoFilter(iRec);
                 fRoot = null;
                 fPreparedIndividuals.Clear();
-                fShieldState = fBase.ShieldState;
+                fShieldState = fBase.Context.ShieldState;
 
                 switch (fKind) {
                     case TreeChartKind.ckAncestors:
@@ -1837,13 +1837,16 @@ namespace GKUI.Charts
             // interactive controls
             fTreeControls.Draw(gfx);
             //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
+
+            base.OnPaint(e);
         }
 
         protected override void OnDoubleClick(EventArgs e)
         {
             TreeChartPerson p = fSelected;
-
             DoPersonModify(new PersonModifyEventArgs(p));
+
+            base.OnDoubleClick(e);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -1983,6 +1986,8 @@ namespace GKUI.Charts
                     }
                     break;
             }
+
+            base.OnMouseMove(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)

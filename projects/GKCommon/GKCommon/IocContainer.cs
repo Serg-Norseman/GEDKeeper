@@ -67,14 +67,14 @@ namespace GKCommon.IoC
 
         public void CreateInstance(params object[] args)
         {
-            this.Instance = Activator.CreateInstance(this.ConcreteType, args);
+            Instance = Activator.CreateInstance(ConcreteType, args);
         }
     }
 
 
     public class IocContainer : IContainer
     {
-        private readonly IDictionary<Type, RegisteredObject> registeredObjects = new Dictionary<Type, RegisteredObject>();
+        private readonly IDictionary<Type, RegisteredObject> fRegisteredObjects = new Dictionary<Type, RegisteredObject>();
 
         public void Register<TTypeToResolve, TConcrete>()
         {
@@ -86,15 +86,15 @@ namespace GKCommon.IoC
             Type typeToResolve = typeof(TTypeToResolve);
 
             // TODO: exception?
-            if (registeredObjects.ContainsKey(typeToResolve)) {
+            if (fRegisteredObjects.ContainsKey(typeToResolve)) {
                 if (!canReplace) {
                     return;
                 } else {
-                    registeredObjects.Remove(typeToResolve);
+                    fRegisteredObjects.Remove(typeToResolve);
                 }
             }
 
-            registeredObjects.Add(typeToResolve,
+            fRegisteredObjects.Add(typeToResolve,
                                   new RegisteredObject(typeToResolve,
                                                        typeof(TConcrete), lifeCycle));
         }
@@ -112,7 +112,7 @@ namespace GKCommon.IoC
         public object Resolve(Type typeToResolve)
         {
             RegisteredObject registeredObject;
-            if (!registeredObjects.TryGetValue(typeToResolve, out registeredObject))
+            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject))
             {
                 throw new TypeNotRegisteredException(string.Format(
                     "The type {0} has not been registered", typeToResolve.Name));
@@ -123,7 +123,7 @@ namespace GKCommon.IoC
         /*public object Resolve(Type typeToResolve, params object[] parameters)
         {
             RegisteredObject registeredObject;
-            if (!registeredObjects.TryGetValue(typeToResolve, out registeredObject))
+            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject))
             {
                 throw new TypeNotRegisteredException(string.Format(
                     "The type {0} has not been registered", typeToResolve.Name));

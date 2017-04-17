@@ -56,6 +56,7 @@ namespace GKCore
         private readonly IBaseWindow fViewer;
         private readonly ChangeTracker fUndoman;
         private readonly List<GEDCOMRecord> fLockedRecords;
+        private ShieldState fShieldState;
 
         #endregion
 
@@ -133,6 +134,22 @@ namespace GKCore
         public ValuesCollection ValuesCollection
         {
             get { return fValuesCollection; }
+        }
+
+        public ShieldState ShieldState
+        {
+            get {
+                return fShieldState;
+            }
+            set {
+                if (fShieldState != value) {
+                    fShieldState = value;
+
+                    if (fViewer != null) {
+                        fViewer.RefreshLists(false);
+                    }
+                }
+            }
         }
 
         #endregion
@@ -890,6 +907,11 @@ namespace GKCore
 
         #region Files
 
+        public bool IsUnknown()
+        {
+            return string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
+        }
+
         public void SetFileName(string fileName)
         {
             fFileName = fileName;
@@ -1151,6 +1173,18 @@ namespace GKCore
         public void EndUpdate()
         {
             fTree.EndUpdate();
+        }
+
+        public void SwitchShieldState()
+        {
+            ShieldState ss = fShieldState;
+            if (ss == ShieldState.None) {
+                ss = ShieldState.Maximum;
+            } else {
+                ss = (ShieldState)((int)ss + 1);
+            }
+
+            ShieldState = ss;
         }
 
         #endregion

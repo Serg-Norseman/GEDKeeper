@@ -110,7 +110,9 @@ namespace GKCore.Lists
 
         public GEDCOMObject DataOwner
         {
-            get { return fDataOwner; }
+            get {
+                return fDataOwner;
+            }
             set {
                 fDataOwner = value;
                 UpdateContent();
@@ -119,10 +121,14 @@ namespace GKCore.Lists
 
         public ISheetList SheetList
         {
-            get { return fSheetList; }
+            get {
+                return fSheetList;
+            }
             set {
-                fSheetList = value;
-                InitView();
+                if (fSheetList != value) {
+                    fSheetList = value;
+                    InitView();
+                }
             }
         }
 

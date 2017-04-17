@@ -76,6 +76,12 @@ namespace GKTests.GKCore
             fContext.SetFileName("testfile.ged");
             Assert.AreEqual("testfile.ged", fContext.FileName);
 
+
+            Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.1");
+            fContext.ShieldState = ShieldState.None;
+            Assert.AreEqual(ShieldState.None, fContext.ShieldState, "BaseContext.ShieldState.2");
+
+
             GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fContext.Tree, "test source");
             Assert.IsNull(srcRec);
 

@@ -333,7 +333,7 @@ namespace GKUI.Dialogs
 
             CommitChanges();
 
-            fBase.ChangeRecord(fResearch);
+            fBase.NotifyRecord(fResearch, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
