@@ -787,7 +787,9 @@ namespace GKCore.Tools
             XRefReplacer repMap = new XRefReplacer();
             try
             {
-                extTree.LoadFromFile(fileName);
+                var gedcomProvider = new GEDCOMProvider(extTree);
+                gedcomProvider.LoadFromFile(fileName);
+
                 extTree.Header.Clear();
                 while (extTree.RecordsCount > 0)
                 {
@@ -891,8 +893,8 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            int yBirth = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
-            int yDeath = GEDCOMUtils.GetRelativeYear(iRec, "DEAT");
+            int yBirth = iRec.GetChronologicalYear("BIRT");
+            int yDeath = iRec.GetChronologicalYear("DEAT");
             if (yBirth != 0 && yDeath != 0)
             {
                 int delta = (yDeath - yBirth);
@@ -1365,7 +1367,9 @@ namespace GKCore.Tools
 
             GEDCOMTree mainTree = context.Tree;
             GEDCOMTree tempTree = new GEDCOMTree();
-            tempTree.LoadFromFile(fileName);
+
+            var gedcomProvider = new GEDCOMProvider(tempTree);
+            gedcomProvider.LoadFromFile(fileName);
 
             StringList fams = new StringList();
             StringList names = new StringList();

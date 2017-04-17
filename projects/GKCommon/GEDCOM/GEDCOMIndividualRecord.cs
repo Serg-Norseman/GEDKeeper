@@ -343,16 +343,34 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
+            for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--)
+            {
+                GEDCOMFamilyRecord family = fChildToFamilyLinks[i].Family;
+                family.DeleteChild(this);
+            }
+            fChildToFamilyLinks.Clear();
+
+            for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--)
+            {
+                GEDCOMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
+                family.RemoveSpouse(this);
+            }
+            fSpouseToFamilyLinks.Clear();
+
+            for (int i = fGroups.Count - 1; i >= 0; i--)
+            {
+                GEDCOMGroupRecord group = (GEDCOMGroupRecord)fGroups[i].Value;
+                group.RemoveMember(this);
+            }
+            fGroups.Clear();
+
             fPersonalNames.Clear();
             fIndividualOrdinances.Clear();
-            fChildToFamilyLinks.Clear();
-            fSpouseToFamilyLinks.Clear();
             fSubmittors.Clear();
             fAssociations.Clear();
             fAliasses.Clear();
             fAncestorsInterest.Clear();
             fDescendantsInterest.Clear();
-            fGroups.Clear();
         }
 
         public override bool IsEmpty()

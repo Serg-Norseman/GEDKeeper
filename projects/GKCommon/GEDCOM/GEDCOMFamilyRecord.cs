@@ -161,8 +161,23 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
+            int num = fChildren.Count;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)fChildren[i].Value;
+                child.DeleteChildToFamilyLink(this);
+            }
             fChildren.Clear();
+
             fSpouseSealings.Clear();
+
+            // This is not required, because Husband and Wife are sub-tags
+            // and will be cleared in the call base.Clear()
+            /*GEDCOMIndividualRecord spouse;
+            spouse = GetHusband();
+            RemoveSpouse(spouse);
+            spouse = GetWife();
+            RemoveSpouse(spouse);*/
         }
 
         public override bool IsEmpty()

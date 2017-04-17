@@ -514,7 +514,7 @@ namespace GKCore.Export
         {
             if (evt == null) return;
 
-            int dtY = GEDCOMUtils.GetRelativeYear(evt);
+            int dtY = evt.GetChronologicalYear();
             if (dtY != 0) {
                 PrepareSpecIndex(index, dtY.ToString(), iRec);
             }

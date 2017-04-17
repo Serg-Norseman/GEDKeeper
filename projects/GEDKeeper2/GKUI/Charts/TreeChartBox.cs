@@ -2159,7 +2159,7 @@ namespace GKUI.Charts
             ChartFilter.BranchCutType branchCut = fFilter.BranchCut;
             switch (branchCut) {
                 case ChartFilter.BranchCutType.Years:
-                    int birthYear = GEDCOMUtils.GetRelativeYear(person, "BIRT");
+                    int birthYear = person.GetChronologicalYear("BIRT");
                     result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
                     break;
 

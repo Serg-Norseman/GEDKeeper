@@ -143,7 +143,7 @@ namespace GKCore.Stats
             GEDCOMCustomEvent evt = iRec.FindEvent(evtName);
             if (evt == null) return;
 
-            int dtY = GEDCOMUtils.GetRelativeYear(evt);
+            int dtY = evt.GetChronologicalYear();
             if (dtY == 0 && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) return;
 
             switch (mode) {
@@ -360,14 +360,14 @@ namespace GKCore.Stats
                     {
                         GEDCOMIndividualRecord iChild;
                         int fba = GKUtils.GetFirstbornAge(iRec, out iChild);
-                        if (fba > 0) {
+                        if (fba > 0 && iChild != null) {
                             string key;
                             List<int> valsList;
 
                             switch (mode)
                             {
                                 case StatsMode.smAAF_1:
-                                    int dty1 = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
+                                    int dty1 = iRec.GetChronologicalYear("BIRT");
                                     if (dty1 != 0) {
                                         key = SysUtils.Trunc(dty1 / 10 * 10).ToString();
 
@@ -382,7 +382,7 @@ namespace GKCore.Stats
                                     break;
 
                                 case StatsMode.smAAF_2:
-                                    int dty2 = GEDCOMUtils.GetRelativeYear(iChild, "BIRT");
+                                    int dty2 = iChild.GetChronologicalYear("BIRT");
                                     if (dty2 != 0) {
                                         key = SysUtils.Trunc(dty2 / 10 * 10).ToString();
 

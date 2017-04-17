@@ -125,6 +125,11 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        internal IList<T> GetList()
+        {
+            return fDataList;
+        }
+
         public IGEDCOMListEnumerator<T> GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);

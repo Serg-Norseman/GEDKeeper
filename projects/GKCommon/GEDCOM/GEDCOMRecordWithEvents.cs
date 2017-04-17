@@ -175,6 +175,19 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        /// <summary>
+        /// In the historical chronology of the year 0 does not exist.
+        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
+        /// ChronologicalYear - introduced for the purposes of uniform chronology years in the Gregorian calendar.
+        /// Is estimated from -4714 BC to 3268 AD.
+        /// </summary>
+        /// <returns>chronological year</returns>
+        public int GetChronologicalYear(string eventSign)
+        {
+            GEDCOMCustomEvent evt = FindEvent(eventSign);
+            return (evt == null) ? 0 : evt.GetChronologicalYear();
+        }
+
         #endregion
     }
 }

@@ -1005,7 +1005,7 @@ namespace GKCore
 
                             tree.AddRecord(indivRec);
                         } else {
-                            GEDCOMUtils.CleanIndividual(indivRec);
+                            indivRec.Clear();
                             indivRec.Dispose();
                             indivRec = null;
                         }
@@ -1062,7 +1062,7 @@ namespace GKCore
                         if (result) {
                             tree.AddRecord(familyRec);
                         } else {
-                            GEDCOMUtils.CleanFamily(familyRec);
+                            familyRec.Clear();
                             familyRec.Dispose();
                             familyRec = null;
                         }

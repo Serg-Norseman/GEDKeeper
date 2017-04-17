@@ -2641,10 +2641,12 @@ namespace GKTests.GEDCOM
             {
                 using (GEDCOMTree tree = new GEDCOMTree())
                 {
-                    tree.LoadFromStreamExt(inStream, inStream, "TGC55CLF.GED");
+                    var gedcomProvider = new GEDCOMProvider(tree);
+                    gedcomProvider.LoadFromStreamExt(inStream, inStream, "TGC55CLF.GED");
 
                     using (MemoryStream outStream = new MemoryStream()) {
-                        tree.SaveToStreamExt(outStream, "", GEDCOMCharacterSet.csASCII);
+                        gedcomProvider = new GEDCOMProvider(tree);
+                        gedcomProvider.SaveToStreamExt(outStream, "", GEDCOMCharacterSet.csASCII);
                     }
                 }
             }

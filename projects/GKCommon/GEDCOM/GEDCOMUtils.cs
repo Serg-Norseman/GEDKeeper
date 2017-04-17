@@ -21,11 +21,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
     {
         private readonly string[] fStrValues;
@@ -88,7 +90,7 @@ namespace GKCommon.GEDCOM
     public static class GEDCOMUtils
     {
         #region Tag properties
-        
+
         public sealed class TagProperties
         {
             public readonly string Name;
@@ -342,7 +344,7 @@ namespace GKCommon.GEDCOM
         #endregion
 
         #region GEDCOM Enums processing
-        
+
         public static Encoding GetEncodingByCharacterSet(GEDCOMCharacterSet cs)
         {
             Encoding res = Encoding.Default;
@@ -1533,85 +1535,6 @@ namespace GKCommon.GEDCOM
 
         #region Other
 
-        public static StreamReader OpenStreamReader(Stream src, Encoding defaultEncoding)
-        {
-            Encoding encodingSource = defaultEncoding;
-            bool detectEncoding = false;
-
-            if (src.CanSeek)
-            {
-                byte[] bPreamble = new byte[4];
-                int iReaded = src.Read(bPreamble, 0, 4);
-
-                if (iReaded >= 3 && bPreamble[0] == 0xEF && bPreamble[1] == 0xBB && bPreamble[2] == 0xBF) // utf-8
-                    encodingSource = Encoding.UTF8;
-                else if (iReaded == 4 && bPreamble[0] == 0x00 && bPreamble[1] == 0x00 && bPreamble[2] == 0xFE && bPreamble[3] == 0xFF) // utf-32 EB
-                {
-                    encodingSource = Encoding.GetEncoding("utf-32"); // is a EL codepage, but the StreamReader should switch to EB
-                    detectEncoding = true;
-                }
-                else if (iReaded == 4 && bPreamble[0] == 0xFF && bPreamble[1] == 0xFE && bPreamble[2] == 0x00 && bPreamble[3] == 0x00) // utf-32 EL
-                    encodingSource = Encoding.GetEncoding("utf-32");
-                else if (iReaded >= 2 && bPreamble[0] == 0xFE && bPreamble[1] == 0xFF) // utf-16 EB
-                    encodingSource = Encoding.BigEndianUnicode;
-                else if (iReaded >= 2 && bPreamble[0] == 0xFF && bPreamble[1] == 0xFE) // utf-16 EL
-                    encodingSource = Encoding.Unicode;
-
-                src.Seek(-iReaded, SeekOrigin.Current);
-            }
-            else
-                detectEncoding = true;
-
-            return new StreamReader(src, encodingSource, detectEncoding);
-        }
-
-        public static bool IsUnicodeEncoding(Encoding encoding)
-        {
-            return (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
-        }
-
-        /// <summary>
-        /// Fix of errors that are in the dates of FamilyTreeBuilder.
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string FixFTB(string str)
-        {
-            string result = str;
-            string su = result.Substring(0, 3).ToUpperInvariant();
-
-            if (su == GEDCOMCustomDate.GEDCOMDateRangeArray[0] ||
-                su == GEDCOMCustomDate.GEDCOMDateRangeArray[1] ||
-                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[1] ||
-                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[2] ||
-                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[3])
-            {
-                result = result.Remove(0, 4);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Fix of line errors that are in the files of FamilyTreeBuilder.
-        /// </summary>
-        public static void FixFTBLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
-        {
-            try
-            {
-                if (curTag is GEDCOMNotes) {
-                    curTag.AddTag("CONT", str, null);
-                } else {
-                    if (curRecord != null) {
-                        curRecord.AddTag("NOTE", str, null);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.FixFTBLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
-            }
-        }
-
         // FIXME: there is the bug - use GEDCOMMonthArray without depend to Calendar (hebrew and islamic month's names)
         public static string StrToGEDCOMDate(string strDate, bool aException)
         {
@@ -1737,66 +1660,6 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        #region RelativeYear utils
-
-        public static int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign)
-        {
-            int result;
-
-            if (evsRec == null) {
-                result = 0;
-            } else {
-                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
-                result = GetRelativeYear(evt);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// In the historical chronology of the year 0 does not exist.
-        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
-        /// RelativeYear - introduced for the purposes of uniform chronology years in the Gregorian calendar.
-        /// Is estimated from -4714 BC to 3268 AD.
-        /// </summary>
-        /// <param name="evt"></param>
-        /// <returns></returns>
-        public static int GetRelativeYear(GEDCOMCustomEvent evt)
-        {
-            return (evt == null) ? 0 : GetRelativeYear(evt.Date);
-        }
-
-        public static int GetRelativeYear(GEDCOMDateValue dateVal)
-        {
-            return (dateVal.Value == null) ? 0 : GetRelativeYear(dateVal.Value);
-        }
-
-        // TODO: all of years lead to the Gregorian calendar!
-        public static int GetRelativeYear(GEDCOMCustomDate customDate)
-        {
-            if (customDate == null) {
-                return 0;
-            } else {
-                GEDCOMDate date = customDate as GEDCOMDate;
-
-                if (date == null) {
-                    return 0;
-                } else {
-                    int year = date.Year;
-                    if (year <= 0) {
-                        return 0;
-                    } else {
-                        if (date.YearBC) year = -year;
-                        // TODO: calendars and other!
-                    }
-
-                    return year;
-                }
-            }
-        }
-
-        #endregion
-
         #region UDN utils
 
         public static UDN GetUDN(GEDCOMCustomEvent evt)
@@ -1831,53 +1694,6 @@ namespace GKCommon.GEDCOM
             catch
             {
                 return UDN.CreateEmpty();
-            }
-        }
-
-        #endregion
-
-        #region Clean utils
-
-        public static void CleanFamily(GEDCOMFamilyRecord famRec)
-        {
-            if (famRec == null) return;
-
-            int num = famRec.Children.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)famRec.Children[i].Value;
-                child.DeleteChildToFamilyLink(famRec);
-            }
-
-            GEDCOMIndividualRecord spouse;
-
-            spouse = famRec.GetHusband();
-            famRec.RemoveSpouse(spouse);
-
-            spouse = famRec.GetWife();
-            famRec.RemoveSpouse(spouse);
-        }
-
-        public static void CleanIndividual(GEDCOMIndividualRecord indRec)
-        {
-            if (indRec == null) return;
-            
-            for (int i = indRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
-            {
-                GEDCOMFamilyRecord family = indRec.ChildToFamilyLinks[i].Family;
-                family.DeleteChild(indRec);
-            }
-
-            for (int i = indRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
-            {
-                GEDCOMFamilyRecord family = indRec.SpouseToFamilyLinks[i].Family;
-                family.RemoveSpouse(indRec);
-            }
-
-            for (int i = indRec.Groups.Count - 1; i >= 0; i--)
-            {
-                GEDCOMGroupRecord group = (GEDCOMGroupRecord)indRec.Groups[i].Value;
-                group.RemoveMember(indRec);
             }
         }
 

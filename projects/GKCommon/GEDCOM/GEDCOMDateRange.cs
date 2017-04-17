@@ -152,7 +152,7 @@ namespace GKCommon.GEDCOM
                         {
                             result = result.Remove(0, 3);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                            result = GEDCOMUtils.FixFTB(result);
+                            result = GEDCOMProvider.FixFTB(result);
                             result = fDateAfter.ParseString(result);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
@@ -162,7 +162,7 @@ namespace GKCommon.GEDCOM
                             {
                                 result = result.Remove(0, 3);
                                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                                result = GEDCOMUtils.FixFTB(result);
+                                result = GEDCOMProvider.FixFTB(result);
                                 result = fDateBefore.ParseString(result);
                             }
                         }

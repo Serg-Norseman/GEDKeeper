@@ -98,10 +98,33 @@ namespace GKCommon.GEDCOM
         public abstract void SetDateTime(DateTime value);
         public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
 
-        /**
-         * Obtaining UDN (Unified Date Number) for purposes of processing and sorting.
-         */
+        /// <summary>
+        /// Obtaining UDN (Unified Date Number) for purposes of processing and sorting.
+        /// </summary>
+        /// <returns></returns>
         public abstract UDN GetUDN();
+
+        /// <summary>
+        /// In the historical chronology of the year 0 does not exist.
+        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
+        /// ChronologicalYear - introduced for the purposes of uniform chronology years in the Gregorian calendar.
+        /// Is estimated from -4714 BC to 3268 AD.
+        /// </summary>
+        /// <returns>chronological year</returns>
+        public virtual int GetChronologicalYear()
+        {
+            int resultYear;
+
+            UDN udn = GetUDN();
+            if (udn.HasKnownYear()) {
+                int m, d;
+                CalendarConverter.jd_to_gregorian2(udn.GetUnmaskedValue(), out resultYear, out m, out d);
+            } else {
+                resultYear = 0;
+            }
+
+            return resultYear;
+        }
 
         public int CompareTo(object obj)
         {

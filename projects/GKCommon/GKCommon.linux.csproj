@@ -119,7 +119,6 @@
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMConsts.cs" />
-    <Compile Include="GEDCOM\GEDCOMDelegates.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />
     <Compile Include="GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="GEDCOM\GEDCOMList.cs" />

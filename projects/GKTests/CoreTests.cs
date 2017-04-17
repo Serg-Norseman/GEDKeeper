@@ -96,7 +96,8 @@ namespace GKTests.GKCore
 
             Assert.AreEqual(false, fContext.IsChildless(iRec));
 
-            Assert.AreEqual(1990, fContext.GetRelativeYear(iRec, "BIRT"));
+            // FIXME: move to other tests
+            Assert.AreEqual(1990, iRec.GetChronologicalYear("BIRT"));
 
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
             Assert.AreEqual(2010, fContext.FindDeathYear(iRec));

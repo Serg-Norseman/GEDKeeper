@@ -797,14 +797,19 @@ namespace GKCore
             return result;
         }
 
+        public static int GetChronologicalYear(GEDCOMCustomEvent evt)
+        {
+            return (evt == null) ? 0 : evt.Date.GetChronologicalYear();
+        }
+
         public static int GetEventsYearsDiff(GEDCOMCustomEvent ev1, GEDCOMCustomEvent ev2, bool currentEnd)
         {
             int result = -1;
 
             try
             {
-                int dt1 = GEDCOMUtils.GetRelativeYear(ev1);
-                int dt2 = GEDCOMUtils.GetRelativeYear(ev2);
+                int dt1 = GetChronologicalYear(ev1);
+                int dt2 = GetChronologicalYear(ev2);
 
                 if (currentEnd && dt2 == 0)
                 {
@@ -871,7 +876,7 @@ namespace GKCore
                 if (toYear == -1) {
                     result = GetEventsYearsDiff(bd, dd, dd == null);
                 } else {
-                    int birthYear = GEDCOMUtils.GetRelativeYear(bd);
+                    int birthYear = GetChronologicalYear(bd);
                     if (birthYear != 0) {
                         result = toYear - birthYear;
                     }
@@ -1179,7 +1184,7 @@ namespace GKCore
                 GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
                 if (evt != null)
                 {
-                    int parentYear = GEDCOMUtils.GetRelativeYear(evt);
+                    int parentYear = evt.GetChronologicalYear();
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++)
@@ -1195,7 +1200,7 @@ namespace GKCore
                             evt = child.FindEvent("BIRT");
                             if (evt == null) continue;
 
-                            int childYear = GEDCOMUtils.GetRelativeYear(evt);
+                            int childYear = evt.GetChronologicalYear();
 
                             if (firstYear == 0) {
                                 firstYear = childYear;
@@ -1235,17 +1240,17 @@ namespace GKCore
                 GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
                 if (evt != null)
                 {
-                    int mainYear = GEDCOMUtils.GetRelativeYear(evt);
+                    int mainYear = evt.GetChronologicalYear();
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++)
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                        GEDCOMCustomEvent fEvent = family.FindEvent("MARR");
-                        if (fEvent == null) continue;
+                        GEDCOMCustomEvent marrEvt = family.FindEvent("MARR");
+                        if (marrEvt == null) continue;
 
-                        int spouseYear = GEDCOMUtils.GetRelativeYear(fEvent);
+                        int spouseYear = marrEvt.GetChronologicalYear();
 
                         if (firstYear == 0) {
                             firstYear = spouseYear;

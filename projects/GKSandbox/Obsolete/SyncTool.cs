@@ -31,7 +31,9 @@ namespace GKCore
             ExtList<SyncRecord> syncList = new ExtList<SyncRecord>(true);
             try
             {
-                extTree.LoadFromFile(fileName);
+                var gedcomProvider = new GEDCOMProvider(extTree);
+                gedcomProvider.LoadFromFile(fileName);
+
                 extTree.Header.Clear();
 
                 int num = extTree.RecordsCount;

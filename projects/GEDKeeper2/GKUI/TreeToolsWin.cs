@@ -626,7 +626,9 @@ namespace GKUI
 
             using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet)))
             {
-                fTree.SaveToStream(fs, fSplitList);
+                var gedcomProvider = new GEDCOMProvider(fTree);
+                gedcomProvider.SaveToStream(fs, fSplitList);
+
                 fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }

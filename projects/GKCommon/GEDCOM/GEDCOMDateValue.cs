@@ -142,8 +142,9 @@ namespace GKCommon.GEDCOM
 
             if (IsEmpty() || date.IsEmpty()) return 0.0f;
 
-            int absVal1 = GEDCOMUtils.GetRelativeYear(this);
-            int absVal2 = GEDCOMUtils.GetRelativeYear(date);
+            // TODO: I'm here some kind of nonsense wrote
+            int absVal1 = this.GetChronologicalYear();
+            int absVal2 = date.GetChronologicalYear();
 
             float match = 0.0f;
             float matches = 0.0f;
@@ -172,6 +173,18 @@ namespace GKCommon.GEDCOM
         public override UDN GetUDN()
         {
             return (fValue == null) ? UDN.CreateEmpty() : fValue.GetUDN();
+        }
+
+        /// <summary>
+        /// In the historical chronology of the year 0 does not exist.
+        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
+        /// ChronologicalYear - introduced for the purposes of uniform chronology years in the Gregorian calendar.
+        /// Is estimated from -4714 BC to 3268 AD.
+        /// </summary>
+        /// <returns>chronological year</returns>
+        public override int GetChronologicalYear()
+        {
+            return (fValue == null) ? 0 : fValue.GetChronologicalYear();
         }
 
         #endregion

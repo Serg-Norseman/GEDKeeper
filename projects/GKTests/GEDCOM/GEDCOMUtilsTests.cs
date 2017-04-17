@@ -256,11 +256,6 @@ namespace GKTests.GEDCOM
             Assert.AreEqual(Encoding.UTF8, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csUTF8));
             //Assert.IsInstanceOf(typeof(AnselEncoding), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
             Assert.AreEqual(Encoding.GetEncoding(1251), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
-
-            //
-
-            Assert.IsTrue(GEDCOMUtils.IsUnicodeEncoding(Encoding.UTF8));
-            Assert.IsFalse(GEDCOMUtils.IsUnicodeEncoding(Encoding.ASCII));
         }
 
         [Test]

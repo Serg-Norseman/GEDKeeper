@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Text;
 
 using Externals;
 using GKCommon;
@@ -183,6 +184,11 @@ namespace GKTests.GKCommon
             Assert.IsFalse(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
             #endif
+
+            //
+
+            Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
+            Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
 
             //
 

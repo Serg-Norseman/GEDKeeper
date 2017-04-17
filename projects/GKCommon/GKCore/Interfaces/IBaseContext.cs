@@ -53,7 +53,6 @@ namespace GKCore.Interfaces
         bool IsChildless(GEDCOMIndividualRecord iRec);
         int FindBirthYear(GEDCOMIndividualRecord iRec);
         int FindDeathYear(GEDCOMIndividualRecord iRec);
-        int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign);
         void CollectEventValues(GEDCOMCustomEvent evt);
         void CollectTips(StringList tipsList);
         IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);

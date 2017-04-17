@@ -85,7 +85,7 @@ namespace GKCore
 
             try {
                 using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                    using (StreamReader reader = GEDCOMUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
+                    using (StreamReader reader = SysUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
                         while (reader.Peek() != -1) {
                             string line = reader.ReadLine();
                             if (string.IsNullOrEmpty(line)) continue;

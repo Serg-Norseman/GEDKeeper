@@ -325,15 +325,10 @@ namespace GKCore
             return (exp != -1 && exp < 15);
         }
 
-        public int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign)
-        {
-            return GEDCOMUtils.GetRelativeYear(evsRec, evSign);
-        }
-
         public int FindBirthYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int birthDate = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
+                int birthDate = iRec.GetChronologicalYear("BIRT");
                 if (birthDate != 0) {
                     return birthDate;
                 }
@@ -361,7 +356,7 @@ namespace GKCore
         public int FindDeathYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int deathDate = GEDCOMUtils.GetRelativeYear(iRec, "DEAT");
+                int deathDate = iRec.GetChronologicalYear("DEAT");
                 if (deathDate != 0) {
                     return deathDate;
                 }
@@ -970,7 +965,8 @@ namespace GKCore
         private void FileLoad(string fileName, string password)
         {
             if (string.IsNullOrEmpty(password)) {
-                fTree.LoadFromFile(fileName);
+                var gedcomProvider = new GEDCOMProvider(fTree);
+                gedcomProvider.LoadFromFile(fileName);
             } else {
                 LoadFromSecFile(fileName, password);
             }
@@ -1048,7 +1044,9 @@ namespace GKCore
 
             if (string.IsNullOrEmpty(password)) {
                 GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
-                fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
+
+                var gedcomProvider = new GEDCOMProvider(fTree);
+                gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
             }
@@ -1062,7 +1060,9 @@ namespace GKCore
             {
                 string rfn = Path.ChangeExtension(fFileName, ".restore");
                 // TODO: PrepareHeader or not?
-                fTree.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
+
+                var gedcomProvider = new GEDCOMProvider(fTree);
+                gedcomProvider.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.CriticalSave(): " + ex.Message);
             }
@@ -1104,7 +1104,8 @@ namespace GKCore
 
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
                         {
-                            fTree.LoadFromStreamExt(fileStream, crStream, fileName);
+                            var gedcomProvider = new GEDCOMProvider(fTree);
+                            gedcomProvider.LoadFromStreamExt(fileStream, crStream, fileName);
                         }
 
                         SCCrypt.ClearBytes(pwd);
@@ -1140,7 +1141,10 @@ namespace GKCore
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
                         {
                             GKUtils.PrepareHeader(fTree, fileName, charSet, false);
-                            fTree.SaveToStreamExt(crStream, fileName, charSet);
+
+                            var gedcomProvider = new GEDCOMProvider(fTree);
+                            gedcomProvider.SaveToStreamExt(crStream, fileName, charSet);
+
                             crStream.Flush();
                         }
 
