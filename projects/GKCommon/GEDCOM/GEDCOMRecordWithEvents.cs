@@ -175,6 +175,12 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        public UDN GetUDN(string eventSign)
+        {
+            GEDCOMCustomEvent evt = FindEvent(eventSign);
+            return (evt == null) ? UDN.CreateEmpty() : evt.GetUDN();
+        }
+
         /// <summary>
         /// In the historical chronology of the year 0 does not exist.
         /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.

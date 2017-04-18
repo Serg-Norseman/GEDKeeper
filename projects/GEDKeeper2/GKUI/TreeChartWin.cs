@@ -421,7 +421,7 @@ namespace GKUI
         private void miDelete_Click(object sender, EventArgs e)
         {
             TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null || p == fTreeBox.Root) return;
+            if (p == null || p.Rec == null || p == fTreeBox.Model.Root) return;
 
             AppHub.BaseController.DeleteRecord(fBase, p.Rec, true);
             GenChart(true);
@@ -608,7 +608,7 @@ namespace GKUI
 
         public IList<ISearchResult> FindAll(string searchPattern)
         {
-            return fTreeBox.FindAll(searchPattern);
+            return fTreeBox.Model.FindAll(searchPattern);
         }
 
         public void SelectByRec(GEDCOMIndividualRecord iRec)
@@ -638,7 +638,7 @@ namespace GKUI
         public void SetFilter()
         {
             using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
-                dlgFilter.Filter = fTreeBox.Filter;
+                dlgFilter.Filter = fTreeBox.Model.Filter;
 
                 if (dlgFilter.ShowDialog() == DialogResult.OK)
                 {

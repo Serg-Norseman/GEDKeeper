@@ -25,10 +25,24 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKUI.Charts
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PersonModifyEventArgs : EventArgs
+    {
+        public TreeChartPerson Person { get; set; }
+
+        public PersonModifyEventArgs(TreeChartPerson person)
+        {
+            Person = person;
+        }
+    }
+
     public enum PersonFlag
     {
         pfDivorced, pfIsDead, pfSelected, pfIsDup,
@@ -42,7 +56,7 @@ namespace GKUI.Charts
     /// </summary>
     public class TreeChartPerson : BaseObject
     {
-        protected TreeChartBox fChart;
+        private readonly TreeChartModel fModel;
 
         // strictly private
         private string fBirthDate;
@@ -199,10 +213,9 @@ namespace GKUI.Charts
             get { return fWidth; }
         }
 
-        public TreeChartPerson(TreeChartBox chart)
+        public TreeChartPerson(TreeChartModel model)
         {
-            fChart = chart;
-
+            fModel = model;
             fFlags = EnumSet<PersonFlag>.Create();
             fPortrait = null;
             fSpouses = null;
@@ -280,8 +293,8 @@ namespace GKUI.Charts
                 fRec = iRec;
 
                 if (iRec != null) {
-                    if (fChart.fPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
-                        fChart.fPreparedIndividuals.Add(iRec.XRef);
+                    if (fModel.PreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+                        fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
                     string fam, nam, pat;
@@ -292,15 +305,17 @@ namespace GKUI.Charts
                     fNick = GKUtils.GetNickString(iRec);
                     fSex = iRec.Sex;
 
+                    TreeChartOptions options = fModel.Options;
+
                     GEDCOMCustomEvent birthEvent, deathEvent;
                     iRec.GetLifeDates(out birthEvent, out deathEvent);
-                    DateFormat dateFormat = (fChart.Options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                    DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
 
                     IsDead = (deathEvent != null);
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, false);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, false);
 
-                    if (fChart.Options.SignsVisible) {
+                    if (options.SignsVisible) {
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
 
                         int num = fRec.UserReferences.Count;
@@ -318,14 +333,13 @@ namespace GKUI.Charts
                         fSigns = EnumSet<SpecialUserRef>.Create();
                     }
 
-                    if (fChart.Options.PortraitsVisible) {
+                    if (options.PortraitsVisible) {
                         try
                         {
-                            //fPortrait = fChart.Base.Context.GetPrimaryBitmap(iRec, -1, -1, true);
-                            fPortrait = PortraitsCache.Instance.GetImage(fChart.Base.Context, iRec);
+                            fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
-                            if (fPortrait == null && fChart.Options.DefaultPortraits) {
-                                fPortrait = (fSex == GEDCOMSex.svFemale) ? GKResources.piFemale140 : GKResources.piMale140;
+                            if (fPortrait == null && options.DefaultPortraits) {
+                                fPortrait = (fSex == GEDCOMSex.svFemale) ? GKCoreResources.piFemale140 : GKCoreResources.piMale140;
                             }
                         }
                         catch (MediaFileNotFoundException)
@@ -365,21 +379,23 @@ namespace GKUI.Charts
 
             try
             {
+                TreeChartOptions options = fModel.Options;
+
                 // prepare
                 string nameLine = fName;
-                if (fChart.Options.NickVisible && !string.IsNullOrEmpty(fNick)) {
+                if (options.NickVisible && !string.IsNullOrEmpty(fNick)) {
                     nameLine += " \"" + fNick + "\"";
                 }
 
                 // create lines
                 int idx = 0;
 
-                if (fChart.Options.FamilyVisible) {
+                if (options.FamilyVisible) {
                     Lines[idx] = fSurname;
                     idx++;
                 }
 
-                if (!fChart.Options.DiffLines) {
+                if (!options.DiffLines) {
                     Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
                     idx++;
                 } else {
@@ -390,13 +406,13 @@ namespace GKUI.Charts
                     idx++;
                 }
 
-                if (!fChart.Options.OnlyYears) {
-                    if (fChart.Options.BirthDateVisible) {
+                if (!options.OnlyYears) {
+                    if (options.BirthDateVisible) {
                         Lines[idx] = fBirthDate;
                         idx++;
                     }
 
-                    if (fChart.Options.DeathDateVisible) {
+                    if (options.DeathDateVisible) {
                         Lines[idx] = fDeathDate;
                         idx++;
                     }
@@ -412,12 +428,12 @@ namespace GKUI.Charts
                     idx++;
                 }
 
-                if (fChart.Options.Kinship) {
+                if (options.Kinship) {
                     Lines[idx] = Kinship;
                     idx++;
                 }
 
-                if (fChart.PathDebug) {
+                if (fModel.PathDebug) {
                     Lines[idx] = PathDebug;
                     //idx++;
                 }
@@ -446,7 +462,7 @@ namespace GKUI.Charts
             }
         }
 
-        public void CalcBounds(int lines, TreeChartRenderer renderer)
+        public void CalcBounds(int lines, ChartRenderer renderer)
         {
             try
             {
@@ -455,14 +471,14 @@ namespace GKUI.Charts
 
                 int maxwid = 0;
                 for (int k = 0; k < lines; k++) {
-                    int wt = renderer.GetTextWidth(Lines[k], fChart.DrawFont);
+                    int wt = renderer.GetTextWidth(Lines[k], fModel.DrawFont);
                     if (maxwid < wt) maxwid = wt;
                 }
 
-                int pad2side = (fChart.NodePadding * 2);
+                int pad2side = (fModel.NodePadding * 2);
 
                 fWidth = pad2side + maxwid;
-                fHeight = pad2side + renderer.GetTextHeight(fChart.DrawFont) * lines;
+                fHeight = pad2side + renderer.GetTextHeight(fModel.DrawFont) * lines;
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);
@@ -519,17 +535,19 @@ namespace GKUI.Charts
                 if (IsDup) {
                     result = Color.FromArgb(192, 192, 192);
                 } else {
+                    TreeChartOptions options = fModel.Options;
+
                     switch (fSex) {
                         case GEDCOMSex.svMale:
-                            result = Divorced ? fChart.Options.UnHusbandColor : fChart.Options.MaleColor;
+                            result = Divorced ? options.UnHusbandColor : options.MaleColor;
                             break;
 
                         case GEDCOMSex.svFemale:
-                            result = Divorced ? fChart.Options.UnWifeColor : fChart.Options.FemaleColor;
+                            result = Divorced ? options.UnWifeColor : options.FemaleColor;
                             break;
 
                         default:
-                            result = fChart.Options.UnkSexColor;
+                            result = options.UnkSexColor;
                             break;
                     }
                 }

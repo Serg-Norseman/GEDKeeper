@@ -126,11 +126,8 @@
     <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\TCPersonControl.cs" />
-    <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\TCScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
-    <Compile Include="GKUI\Charts\TreeChartModel.cs" />
-    <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -417,7 +414,6 @@
     <Compile Include="GKUI\Charts\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\PersonList.cs" />
     <Compile Include="GKUI\BaseWin.cs">
       <SubType>Form</SubType>
     </Compile>

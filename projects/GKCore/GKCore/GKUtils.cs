@@ -845,7 +845,7 @@ namespace GKCore
                 GEDCOMCustomEvent bd;
                 GEDCOMCustomEvent dd;
                 iRec.GetLifeDates(out bd, out dd);
-                
+
                 result = GetEventsYearsDiff(bd, dd, false);
             }
             catch (Exception ex)

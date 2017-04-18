@@ -94,6 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCoreResources.Designer.cs">
+      <DependentUpon>GKCoreResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="GKCore\AppHub.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
@@ -201,7 +205,9 @@
     <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKUI\Charts\ITreeChartBox.cs" />
-    <Compile Include="GKUI\Charts\TreeChartRenderer.cs" />
+    <Compile Include="GKUI\Charts\TreeChartModel.cs" />
+    <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Charts\ChartRenderer.cs" />
     <Compile Include="GKUI\Contracts\ControlContracts.cs" />
     <Compile Include="GKUI\Contracts\DialogContracts.cs" />
     <Compile Include="GKUI\Contracts\UIContracts.cs" />
@@ -229,6 +235,12 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GKCoreResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKCoreResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

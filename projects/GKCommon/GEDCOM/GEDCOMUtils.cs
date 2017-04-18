@@ -170,6 +170,35 @@ namespace GKCommon.GEDCOM
 
         #region Parse functions
 
+        public static string TrimLeft(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return "";
+
+            int len = str.Length;
+            int i = 1;
+            while (i <= len && str[i - 1] <= ' ') i++;
+
+            string result;
+            if (i > len) {
+                result = "";
+            } else {
+                result = ((i != 1) ? str.Substring(i - 1) : str);
+            }
+            return result;
+        }
+
+        public static string TrimRight(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return "";
+
+            int len = str.Length;
+            int i = len;
+            while (i > 0 && str[i - 1] <= ' ') i--;
+
+            string result = ((i != len) ? str.Substring(0, i) : str);
+            return result;
+        }
+
         public static string ExtractDelimiter(string str, int max)
         {
             string result = str;
@@ -1566,35 +1595,6 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public static string TrimLeft(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return "";
-
-            int len = str.Length;
-            int i = 1;
-            while (i <= len && str[i - 1] <= ' ') i++;
-
-            string result;
-            if (i > len) {
-                result = "";
-            } else {
-                result = ((i != 1) ? str.Substring(i - 1) : str);
-            }
-            return result;
-        }
-
-        public static string TrimRight(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return "";
-
-            int len = str.Length;
-            int i = len;
-            while (i > 0 && str[i - 1] <= ' ') i--;
-
-            string result = ((i != len) ? str.Substring(0, i) : str);
-            return result;
-        }
-
         public static string EncodeUID(byte[] binaryKey)
         {
             StringBuilder result = new StringBuilder(36);
@@ -1658,27 +1658,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        #endregion
-
-        #region UDN utils
-
         public static UDN GetUDN(GEDCOMCustomEvent evt)
         {
             return (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
-        }
-
-        public static UDN GetUDN(GEDCOMRecordWithEvents evsRec, string evSign)
-        {
-            UDN result;
-
-            if (evsRec == null) {
-                result = UDN.CreateEmpty();
-            } else {
-                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
-                result = GetUDN(evt);
-            }
-
-            return result;
         }
 
         public static UDN GetUDN(string dateStr)

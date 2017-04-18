@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Drawing;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -80,7 +82,7 @@ namespace GKCore.Export
 
                     PreparePatriarchs();
 
-                    Rectangle itPS = fDocument.PageSize;
+                    var itPS = fDocument.PageSize;
                     float pageHeight = itPS.Height;
                     float pageWidth = itPS.Width;
 
@@ -107,8 +109,9 @@ namespace GKCore.Export
                         treeBox.SetScale(1.0f);
                         treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
 
-                        float scaleFactor = SysUtils.ZoomToFit(treeBox.ImageSize.Width,
-                                                               treeBox.ImageSize.Height,
+                        Size imageSize = treeBox.GetImageSize();
+                        float scaleFactor = SysUtils.ZoomToFit(imageSize.Width,
+                                                               imageSize.Height,
                                                                pageWidth, pageHeight);
                         scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
 

@@ -36,7 +36,7 @@ namespace GKCore.Export
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TreeChartPDFRenderer : TreeChartRenderer
+    public sealed class TreeChartPDFRenderer : ChartRenderer
     {
         private PdfContentByte fCanvas;
         private readonly float fPageHeight;

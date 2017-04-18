@@ -91,10 +91,10 @@ namespace GKUI.Components
         public void AddButton(Button b)
         {
             fBtnsList.Add(b);
-            ReDrawButtons();
+            RedrawButtons();
         }
 
-        private void ReDrawButtons()
+        private void RedrawButtons()
         {
             int lenwagon = 0;
 
@@ -107,17 +107,16 @@ namespace GKUI.Components
 
             int center = lenwagon / 2;
             int startPosition = btnPanel.Width / 2 - center;
-            
+
             for (int i = 0, c = fBtnsList.Count; i < c; i++)
             {
                 int heightCenter = btnPanel.Height / 2;
                 int btnCenter = fBtnsList[i].Height / 2;
-                
+
                 fBtnsList[i].Location = new Point(startPosition, heightCenter - btnCenter);
                 btnPanel.Controls.Add(fBtnsList[i]);
                 startPosition += fBtnsList[i].Width + 8;
             }
-
         }
 
         private void MoveSlidePanel(object sender, EventArgs e)
@@ -127,7 +126,7 @@ namespace GKUI.Components
             else
                 btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
         }
-        
+
         private void PictureBox1MouseHover(object sender, EventArgs e)
         {
             CheckCursorPosition(sender, e);

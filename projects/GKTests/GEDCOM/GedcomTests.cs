@@ -274,20 +274,20 @@ namespace GKTests.GEDCOM
             using (GEDCOMSpouseSealing spouseSealing = GEDCOMSpouseSealing.Create(null, null, "", "") as GEDCOMSpouseSealing)
             {
                 Assert.IsNotNull(spouseSealing);
-                
+
                 Assert.IsNotNull(spouseSealing.Date);
-                
+
                 spouseSealing.TempleCode = "temple code";
                 Assert.AreEqual("temple code", spouseSealing.TempleCode);
-                
-                spouseSealing.Place = "test place";
-                Assert.AreEqual("test place", spouseSealing.Place);
-                
+
+                spouseSealing.Place.StringValue = "test place";
+                Assert.AreEqual("test place", spouseSealing.Place.StringValue);
+
                 spouseSealing.SpouseSealingDateStatus = GEDCOMSpouseSealingDateStatus.sdsCanceled;
                 Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsCanceled, spouseSealing.SpouseSealingDateStatus);
-                
+
                 Assert.IsNotNull(spouseSealing.SpouseSealingChangeDate);
-                
+
                 Assert.IsNotNull(spouseSealing.DateStatus);
             }
         }
@@ -325,10 +325,9 @@ namespace GKTests.GEDCOM
             GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
             //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN(null));
-            Assert.AreEqual(emptyUDN, GEDCOMUtils.GetUDN(null, ""));
             //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN("0102"));
 
-            UDN testUDN = GEDCOMUtils.GetUDN(iRec, "BIRT");
+            UDN testUDN = iRec.GetUDN("BIRT");
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
             testUDN = GEDCOMUtils.GetUDN("28/12/1990");

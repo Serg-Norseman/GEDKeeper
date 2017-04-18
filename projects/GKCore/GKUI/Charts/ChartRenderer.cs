@@ -47,13 +47,13 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public abstract class TreeChartRenderer
+    public abstract class ChartRenderer
     {
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
         protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
-        protected TreeChartRenderer()
+        protected ChartRenderer()
         {
         }
 

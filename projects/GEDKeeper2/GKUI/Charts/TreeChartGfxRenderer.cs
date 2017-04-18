@@ -29,7 +29,7 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TreeChartGfxRenderer : TreeChartRenderer
+    public sealed class TreeChartGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
 

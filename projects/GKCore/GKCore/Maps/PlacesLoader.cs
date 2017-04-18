@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;
@@ -37,6 +39,14 @@ namespace GKCore.Maps
             Event = evt;
             Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();
         }
+    }
+
+    public struct CoordsRect
+    {
+        public double MinLon;
+        public double MinLat;
+        public double MaxLon;
+        public double MaxLat;
     }
 
     public class MapPlace : BaseObject
@@ -112,6 +122,49 @@ namespace GKCore.Maps
             {
                 browser.EndUpdate();
             }
+        }
+
+        public static CoordsRect GetPointsFrame(ExtList<GeoPoint> mapPoints)
+        {
+            CoordsRect result = new CoordsRect();
+            if (mapPoints == null || mapPoints.Count <= 0) return result;
+
+            GeoPoint pt = mapPoints[0];
+            result.MinLon = pt.Longitude;
+            result.MaxLon = pt.Longitude;
+            result.MinLat = pt.Latitude;
+            result.MaxLat = pt.Latitude;
+
+            if (mapPoints.Count == 1)
+            {
+                result.MinLon = (result.MinLon - 20.0);
+                result.MaxLon = (result.MaxLon + 20.0);
+                result.MinLat = (result.MinLat - 20.0);
+                result.MaxLat = (result.MaxLat + 20.0);
+            }
+            else
+            {
+                int num = mapPoints.Count;
+                for (int i = 0; i < num; i++)
+                {
+                    pt = mapPoints[i];
+
+                    if (result.MinLon > pt.Longitude) result.MinLon = pt.Longitude;
+                    else if (result.MaxLon < pt.Longitude) result.MaxLon = pt.Longitude;
+
+                    if (result.MinLat > pt.Latitude) result.MinLat = pt.Latitude;
+                    else if (result.MaxLat < pt.Latitude) result.MaxLat = pt.Latitude;
+                }
+            }
+
+            return result;
+        }
+
+        public static string CoordToStr(double val)
+        {
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            return val.ToString("0.000000", nfi);
         }
     }
 }

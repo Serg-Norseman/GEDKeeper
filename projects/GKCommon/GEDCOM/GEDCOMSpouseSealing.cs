@@ -33,10 +33,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("TEMP", value); }
         }
 
-        public string Place
+        public GEDCOMPlace Place
         {
-            get { return GetTagStringValue("PLAC"); }
-            set { SetTagStringValue("PLAC", value); }
+            get { return TagClass("PLAC", GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus

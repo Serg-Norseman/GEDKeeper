@@ -50,6 +50,8 @@ namespace GKUI.Components
             }
         }
 
+        private GKListItem[] fCache;
+        private int fCacheFirstItem;
         private List<ValItem> fContentList;
         private int fFilteredCount;
         private bool fIsMainList;
@@ -58,9 +60,6 @@ namespace GKUI.Components
         private int fTotalCount;
         private GEDCOMTree fTree;
         private int fXSortFactor;
-
-        private GKListItem[] fCache;
-        private int fCacheFirstItem;
 
         #endregion
 
@@ -109,7 +108,6 @@ namespace GKUI.Components
             fSortColumn = 0;
             fSortOrder = SortOrder.Ascending;
             VirtualMode = true;
-            //ColumnWidthChanged += this.List_ColumnWidthChanged;
         }
 
         protected override void Dispose(bool disposing)

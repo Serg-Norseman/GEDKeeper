@@ -145,7 +145,7 @@ namespace GKUI.Charts
 
                         int depthLimit = (fThumbPos < 9) ? fThumbPos + 1 : -1;
                         fChart.DepthLimit = depthLimit;
-                        fChart.GenChart(fChart.Root.Rec, fChart.Kind, true);
+                        fChart.GenChart(fChart.Model.Root.Rec, fChart.Kind, true);
                     }
                     break;
                 }

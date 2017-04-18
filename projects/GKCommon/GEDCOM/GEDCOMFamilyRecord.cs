@@ -319,8 +319,8 @@ namespace GKCommon.GEDCOM
 
         private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
         {
-            UDN udn1 = GEDCOMUtils.GetUDN(cp1.Value as GEDCOMIndividualRecord, "BIRT");
-            UDN udn2 = GEDCOMUtils.GetUDN(cp2.Value as GEDCOMIndividualRecord, "BIRT");
+            UDN udn1 = ((GEDCOMIndividualRecord)cp1.Value).GetUDN("BIRT");
+            UDN udn2 = ((GEDCOMIndividualRecord)cp2.Value).GetUDN("BIRT");
             return udn1.CompareTo(udn2);
         }
 

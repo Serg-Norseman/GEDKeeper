@@ -19,11 +19,11 @@
  */
 
 using System;
-using System.Globalization;
 using System.Windows.Forms;
 
 using GKCommon;
 using GKCore.Geocoding;
+using GKCore.Maps;
 using GKUI.Contracts;
 
 namespace GKUI.Components
@@ -33,14 +33,6 @@ namespace GKUI.Components
     /// </summary>
     public class GKMapBrowser : WebBrowser, IMapBrowser
     {
-        private struct CoordsRect
-        {
-            public double MinLon;
-            public double MinLat;
-            public double MaxLon;
-            public double MaxLat;
-        }
-
         private readonly ExtList<GeoPoint> fMapPoints;
         private bool fShowPoints;
         private bool fShowLines;
@@ -90,43 +82,6 @@ namespace GKUI.Components
                 fMapPoints.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-
-        private CoordsRect GetPointsFrame()
-        {
-            CoordsRect result = new CoordsRect();
-            if (fMapPoints.Count <= 0) return result;
-
-            GeoPoint pt = fMapPoints[0];
-            result.MinLon = pt.Longitude;
-            result.MaxLon = pt.Longitude;
-            result.MinLat = pt.Latitude;
-            result.MaxLat = pt.Latitude;
-
-            if (fMapPoints.Count == 1)
-            {
-                result.MinLon = (result.MinLon - 20.0);
-                result.MaxLon = (result.MaxLon + 20.0);
-                result.MinLat = (result.MinLat - 20.0);
-                result.MaxLat = (result.MaxLat + 20.0);
-            }
-            else
-            {
-                int num = fMapPoints.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    pt = fMapPoints[i];
-
-                    if (result.MinLon > pt.Longitude) result.MinLon = pt.Longitude;
-                    else if (result.MaxLon < pt.Longitude) result.MaxLon = pt.Longitude;
-
-                    if (result.MinLat > pt.Latitude) result.MinLat = pt.Latitude;
-                    else if (result.MaxLat < pt.Latitude) result.MaxLat = pt.Latitude;
-                }
-            }
-
-            return result;
         }
 
         public int AddPoint(double latitude, double longitude, string hint)
@@ -234,13 +189,6 @@ namespace GKUI.Components
             }
         }
 
-        public static string CoordToStr(double val)
-        {
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-            return val.ToString("0.000000", nfi);
-        }
-
         public void RefreshPoints()
         {
             gm_ClearPoints();
@@ -254,7 +202,7 @@ namespace GKUI.Components
             {
                 GeoPoint pt = fMapPoints[i];
                 pointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
-                                              { CoordToStr(pt.Latitude), CoordToStr(pt.Longitude), pt.Hint });
+                                              { PlacesLoader.CoordToStr(pt.Latitude), PlacesLoader.CoordToStr(pt.Longitude), pt.Hint });
 
                 /*polylineScript = string.Concat(new string[]
                                                    {
@@ -265,7 +213,7 @@ namespace GKUI.Components
                 polylineScript = string.Concat(new string[]
                                                {
                                                    polylineScript,
-                                                   "{lat:", CoordToStr(pt.Latitude), ",lng:", CoordToStr(pt.Longitude), "},"
+                                                   "{lat:", PlacesLoader.CoordToStr(pt.Latitude), ",lng:", PlacesLoader.CoordToStr(pt.Longitude), "},"
                                                });
             }
 
@@ -295,13 +243,15 @@ namespace GKUI.Components
             string script;
             if (scale >= 0) {
                 script = string.Concat(new string[] {
-                                           "var point = new google.maps.LatLng(", CoordToStr(latitude), ",", CoordToStr(longitude), "); ",
+                                           "var point = new google.maps.LatLng(",
+                                           PlacesLoader.CoordToStr(latitude), ",", PlacesLoader.CoordToStr(longitude), "); ",
                                            "map.setCenter(point)",
                                            "map.setZoom(", scale.ToString(), ")"
                                        });
             } else {
                 script = string.Concat(new string[] {
-                                           "var point = new google.maps.LatLng(", CoordToStr(latitude), ",", CoordToStr(longitude), "); ",
+                                           "var point = new google.maps.LatLng(",
+                                           PlacesLoader.CoordToStr(latitude), ",", PlacesLoader.CoordToStr(longitude), "); ",
                                            "map.setCenter(point)"
                                        });
             }
@@ -311,7 +261,7 @@ namespace GKUI.Components
 
         public void ZoomToBounds()
         {
-            CoordsRect rt = GetPointsFrame();
+            CoordsRect rt = PlacesLoader.GetPointsFrame(fMapPoints);
             if (rt.MinLon == rt.MaxLon || rt.MinLat == rt.MaxLat) return;
 
             double centerLongtude = ((rt.MaxLon + rt.MinLon) / 2.0);
@@ -324,7 +274,9 @@ namespace GKUI.Components
                 "map.fitBounds(bounds);" +
                 "map.setCenter(new google.maps.LatLng({4}, {5}));";
             script = string.Format(script, new object[]
-                                   { CoordToStr(rt.MinLat), CoordToStr(rt.MinLon), CoordToStr(rt.MaxLat), CoordToStr(rt.MaxLon), CoordToStr(centerLatitude), CoordToStr(centerLongtude) });
+                                   { PlacesLoader.CoordToStr(rt.MinLat), PlacesLoader.CoordToStr(rt.MinLon),
+                                       PlacesLoader.CoordToStr(rt.MaxLat), PlacesLoader.CoordToStr(rt.MaxLon),
+                                       PlacesLoader.CoordToStr(centerLatitude), PlacesLoader.CoordToStr(centerLongtude) });
 
             gm_ExecScript(script);
         }
@@ -373,7 +325,7 @@ namespace GKUI.Components
             }
             #endif
         }
-        
+
         #endregion
     }
 }

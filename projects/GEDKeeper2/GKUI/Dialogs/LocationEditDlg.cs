@@ -29,6 +29,7 @@ using GKCore;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Maps;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Contracts;
@@ -103,8 +104,8 @@ namespace GKUI.Dialogs
         {
             fLocationRecord = value;
             txtName.Text = fLocationRecord.LocationName;
-            txtLatitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Lati);
-            txtLongitude.Text = GKMapBrowser.CoordToStr(fLocationRecord.Map.Long);
+            txtLatitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Lati);
+            txtLongitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Long);
 
             fNotesList.ListModel.DataOwner = fLocationRecord;
             fMediaList.ListModel.DataOwner = fLocationRecord;
@@ -171,8 +172,8 @@ namespace GKUI.Dialogs
                     GeoPoint pt = searchPoints[i];
 
                     GKListItem item = new GKListItem(pt.Hint, pt);
-                    item.AddSubItem(GKMapBrowser.CoordToStr(pt.Latitude));
-                    item.AddSubItem(GKMapBrowser.CoordToStr(pt.Longitude));
+                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Latitude));
+                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Longitude));
                     ListGeoCoords.Items.Add(item);
 
                     fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);

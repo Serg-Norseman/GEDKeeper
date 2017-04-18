@@ -33,13 +33,13 @@ namespace GKUI.Charts
         IBaseWindow Base { get; set; }
         int DepthLimit { get; set; }
         int Height { get; set; }
-        Size ImageSize { get; }
         TreeChartOptions Options { get; set; }
         int Width { get; set; }
 
         void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        Size GetImageSize();
         void RenderStatic(BackgroundMode background, bool centered);
-        void SetRenderer(TreeChartRenderer renderer);
+        void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);
     }
 }

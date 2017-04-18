@@ -81,7 +81,9 @@ namespace GKCommon.GEDCOM
 
         public override UDN GetUDN()
         {
-            return UDN.CreateApproximate(base.GetUDN());
+            UDN udn = base.GetUDN();
+
+            return (fDateApproximated == GEDCOMApproximated.daExact) ? udn : UDN.CreateApproximate(udn);
         }
     }
 }

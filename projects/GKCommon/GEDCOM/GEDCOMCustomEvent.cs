@@ -122,6 +122,11 @@ namespace GKCommon.GEDCOM
             return match;
         }
 
+        public UDN GetUDN()
+        {
+            return Date.GetUDN();
+        }
+
         /// <summary>
         /// In the historical chronology of the year 0 does not exist.
         /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
