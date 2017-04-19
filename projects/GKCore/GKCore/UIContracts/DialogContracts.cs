@@ -19,12 +19,35 @@
  */
 
 using System;
+using System.Drawing;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-namespace GKUI.Contracts
+namespace GKCore.UIContracts
 {
+    /// <summary>
+    /// The interface of the class for working with WinForms dialogs.
+    /// </summary>
+    public interface IStdDialogs
+    {
+        Font SelectFont(Font font);
+        string GetOpenFile(string title, string context, string filter,
+                           int filterIndex, string defaultExt);
+        string GetSaveFile(string filter);
+        string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
+                           string suggestedFileName, bool overwritePrompt = true);
+
+        void ShowMessage(string msg);
+        void ShowError(string msg);
+        bool ShowQuestionYN(string msg);
+        void ShowWarning(string msg);
+
+        bool GetInput(string prompt, ref string value);
+        bool GetPassword(string prompt, ref string value);
+    }
+
+
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMAddress Address { get; set; }

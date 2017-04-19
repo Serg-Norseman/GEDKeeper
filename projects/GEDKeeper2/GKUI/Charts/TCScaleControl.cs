@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 
 using GKCore;
+using GKCore.Charts;
 
 namespace GKUI.Charts
 {

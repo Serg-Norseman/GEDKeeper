@@ -67,6 +67,12 @@ namespace GKTests.UITests
             messageBox.SendCommand(MessageBoxTester.Command.Yes);
         }
 
+        public static void MessageBox_NoHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.No);
+        }
+
         public static void MessageBox_OkHandler(string name, IntPtr ptr, Form form)
         {
             MessageBoxTester messageBox = new MessageBoxTester(ptr);

@@ -22,7 +22,7 @@ using System;
 using System.Reflection;
 
 using GKCommon;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {

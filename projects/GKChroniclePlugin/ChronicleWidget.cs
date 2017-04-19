@@ -23,11 +23,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKUI.Components;
 
 namespace GKChroniclePlugin
 {

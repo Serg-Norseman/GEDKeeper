@@ -32,7 +32,7 @@
             this.lblFile = new System.Windows.Forms.Label();
             this.edImportFile = new System.Windows.Forms.TextBox();
             this.btnImportFileChoose = new System.Windows.Forms.Button();
-            this.tabControl1 = new GKCommon.Controls.WizardPages();
+            this.tabControl1 = new GKUI.Components.WizardPages();
             this.pageSelect = new System.Windows.Forms.TabPage();
             this.grpConversionParams = new System.Windows.Forms.GroupBox();
             this.chkSurnamesNormalize = new System.Windows.Forms.CheckBox();
@@ -422,7 +422,7 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TabPage pageSelect;
-        private GKCommon.Controls.WizardPages tabControl1;
+        private GKUI.Components.WizardPages tabControl1;
         private System.Windows.Forms.Button btnImportFileChoose;
         private System.Windows.Forms.TextBox edImportFile;
         private System.Windows.Forms.Label lblFile;

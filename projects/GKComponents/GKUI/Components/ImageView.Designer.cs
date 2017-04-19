@@ -1,4 +1,4 @@
-﻿namespace GKCommon.Controls
+﻿namespace GKUI.Components
 {
     partial class ImageView
     {
@@ -35,7 +35,7 @@
         	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.zoomLevelsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
         	this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-        	this.imageBox = new GKCommon.Controls.ImageBox();
+        	this.imageBox = new GKUI.Components.ImageBox();
         	this.toolStrip.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -56,7 +56,7 @@
         	// btnSizeToFit
         	// 
         	this.btnSizeToFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnSizeToFit.Image = global::GKCommon.Controls.ExtResources.iSizeToFit;
+        	this.btnSizeToFit.Image = global::GKUI.Components.ExtResources.iSizeToFit;
         	this.btnSizeToFit.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnSizeToFit.Name = "btnSizeToFit";
         	this.btnSizeToFit.Size = new System.Drawing.Size(23, 25);
@@ -66,7 +66,7 @@
         	// btnZoomIn
         	// 
         	this.btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomIn.Image = global::GKCommon.Controls.ExtResources.iZoomIn;
+        	this.btnZoomIn.Image = global::GKUI.Components.ExtResources.iZoomIn;
         	this.btnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomIn.Name = "btnZoomIn";
         	this.btnZoomIn.Size = new System.Drawing.Size(23, 25);
@@ -76,7 +76,7 @@
         	// btnZoomOut
         	// 
         	this.btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomOut.Image = global::GKCommon.Controls.ExtResources.iZoomOut;
+        	this.btnZoomOut.Image = global::GKUI.Components.ExtResources.iZoomOut;
         	this.btnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomOut.Name = "btnZoomOut";
         	this.btnZoomOut.Size = new System.Drawing.Size(23, 25);
@@ -128,7 +128,7 @@
 
         #endregion
 
-        private GKCommon.Controls.ImageBox imageBox;
+        private GKUI.Components.ImageBox imageBox;
         private System.Windows.Forms.ToolStrip toolStrip;
         public System.Windows.Forms.ToolStripButton btnSizeToFit;
         public System.Windows.Forms.ToolStripButton btnZoomIn;

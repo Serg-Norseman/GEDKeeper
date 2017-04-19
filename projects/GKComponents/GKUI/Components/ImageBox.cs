@@ -25,7 +25,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace GKCommon.Controls
+using GKCommon;
+
+namespace GKUI.Components
 {
     /// <summary>
     ///   Specifies the selection mode.

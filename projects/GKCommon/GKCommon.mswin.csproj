@@ -101,29 +101,6 @@
     <Compile Include="GKCommon\BBTextParser.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />
-    <Compile Include="GKCommon\Controls\GKListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\GKScrollableControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\HyperView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\ImageBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\ExtResources.Designer.cs">
-      <DependentUpon>ExtResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="GKCommon\Controls\ImageView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKCommon\Controls\ImageView.Designer.cs">
-      <DependentUpon>ImageView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Externals\ListTimSort.cs" />
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
@@ -196,9 +173,6 @@
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
-    <Compile Include="GKCommon\Controls\WizardPages.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKCommon\EnumSet.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
     <Compile Include="GKCommon\ExtList.cs" />
@@ -273,12 +247,6 @@
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCommon\" />

@@ -21,6 +21,7 @@
 using System;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using GKCore.Types;
 using NUnit.Framework;
 
 namespace GKTests.GKCore
@@ -61,6 +62,22 @@ namespace GKTests.GKCore
             public void OnLanguageChange() {}
             public bool Startup(IHost host) { return true; }
             public bool Shutdown() { return true; }
+        }
+
+        [Test]
+        public void Test_PluginsMan()
+        {
+            var pluginsMan = new PluginsMan();
+            Assert.IsNotNull(pluginsMan);
+
+            Assert.AreEqual(0, pluginsMan.Count);
+
+            pluginsMan.Load(null, null);
+            pluginsMan.Unload();
+            pluginsMan.OnLanguageChange();
+            pluginsMan.NotifyRecord(null, null, RecordAction.raAdd);
+
+            Assert.AreEqual(null, pluginsMan.CreateLangMan(null));
         }
     }
 }

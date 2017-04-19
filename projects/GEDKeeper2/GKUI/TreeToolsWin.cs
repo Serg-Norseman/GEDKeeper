@@ -24,13 +24,13 @@ using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI
@@ -192,7 +192,7 @@ namespace GKUI
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
+            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, (ITextControl)mSyncRes);
             Base.RefreshLists(false);
         }
 
@@ -766,7 +766,7 @@ namespace GKUI
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(fBase.Context, external_match_db, ListCompare);
+                    TreeTools.TreeCompare(fBase.Context, external_match_db, (ITextControl)ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

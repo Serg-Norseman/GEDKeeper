@@ -44,7 +44,7 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fIndividualRecord = new GEDCOMIndividualRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GEDCOMSex.svMale, true);
 
             fDialog = new PersonEditDlg();
             fDialog.InitDialog(fBase);

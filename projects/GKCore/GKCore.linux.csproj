@@ -77,7 +77,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="KopiLua">
       <HintPath>libs\linux\KopiLua.dll</HintPath>
@@ -102,6 +101,7 @@
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Charts\ITreeControl.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
@@ -203,14 +203,13 @@
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKCore\UpdateMan.cs" />
-    <Compile Include="GKUI\Charts\ChartFilter.cs" />
-    <Compile Include="GKUI\Charts\ITreeChartBox.cs" />
-    <Compile Include="GKUI\Charts\TreeChartModel.cs" />
-    <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
-    <Compile Include="GKUI\Charts\ChartRenderer.cs" />
-    <Compile Include="GKUI\Contracts\ControlContracts.cs" />
-    <Compile Include="GKUI\Contracts\DialogContracts.cs" />
-    <Compile Include="GKUI\Contracts\UIContracts.cs" />
+    <Compile Include="GKCore\Charts\ChartFilter.cs" />
+    <Compile Include="GKCore\Charts\ITreeChartBox.cs" />
+    <Compile Include="GKCore\Charts\TreeChartModel.cs" />
+    <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKCore\Charts\ChartRenderer.cs" />
+    <Compile Include="GKCore\UIContracts\ControlContracts.cs" />
+    <Compile Include="GKCore\UIContracts\DialogContracts.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCore" />
@@ -226,14 +225,17 @@
     <Folder Include="GKCore\SingleInstance" />
     <Folder Include="GKCore\Stats" />
     <Folder Include="GKCore\Tools" />
-    <Folder Include="GKUI" />
-    <Folder Include="GKUI\Charts" />
-    <Folder Include="GKUI\Contracts" />
+    <Folder Include="GKCore\Charts" />
+    <Folder Include="GKCore\UIContracts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

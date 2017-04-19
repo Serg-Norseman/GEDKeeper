@@ -30,7 +30,7 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.lvData = new GKCommon.Controls.GKListView();
+            this.lvData = new GKUI.Components.GKListView();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -101,7 +101,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
-        private GKCommon.Controls.GKListView lvData;
+        private GKUI.Components.GKListView lvData;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView treeView1;
 

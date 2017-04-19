@@ -23,14 +23,14 @@ using System.Collections.Generic;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Charts;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKCore
 {

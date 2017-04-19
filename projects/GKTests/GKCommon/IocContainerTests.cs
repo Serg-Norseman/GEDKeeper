@@ -38,6 +38,19 @@ namespace GKTests.GKCommon
         }
 
         [Test]
+        public void Test_RegisterAndReplace()
+        {
+            var container = new IocContainer();
+            container.Register<ITypeToResolve, ConcreteType>();
+
+            container.Register<ITypeToResolve, ConcreteType>(LifeCycle.Singleton, false);
+            container.Register<ITypeToResolve, ConcreteType>(LifeCycle.Singleton, true);
+
+            var instance = container.Resolve<ITypeToResolve>();
+            Assert.IsInstanceOf(typeof(ConcreteType), instance);
+        }
+
+        [Test]
         public void Test_ExceptionIfNotRegistered()
         {
             var container = new IocContainer();

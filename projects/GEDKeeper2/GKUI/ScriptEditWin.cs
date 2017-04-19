@@ -20,7 +20,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -28,6 +27,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKUI
 {
@@ -137,7 +137,7 @@ namespace GKUI
             {
                 txtDebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(txtScriptText.Text, fBase, txtDebugOutput);
+                    scrEngine.lua_run(txtScriptText.Text, fBase, (ITextControl)txtDebugOutput);
                 }
             }
             catch (Exception ex)

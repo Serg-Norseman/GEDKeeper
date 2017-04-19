@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-using GKUI.Charts;
+using GKCore.Charts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 

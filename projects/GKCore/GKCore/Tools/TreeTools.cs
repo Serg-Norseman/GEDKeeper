@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -29,6 +28,7 @@ using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Types;
+using GKCore.UIContracts;
 
 namespace GKCore.Tools
 {
@@ -771,7 +771,7 @@ namespace GKCore.Tools
 
         #region Tree Merge
 
-        public static void TreeMerge(GEDCOMTree mainTree, string fileName, TextBox logBox)
+        public static void TreeMerge(GEDCOMTree mainTree, string fileName, ITextControl logBox)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -1348,7 +1348,7 @@ namespace GKCore.Tools
                     }
 
                     pc.ProgressStep();
-                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(1);
                 }
             }
             finally
@@ -1357,7 +1357,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void TreeCompare(IBaseContext context, string fileName, TextBox logBox)
+        public static void TreeCompare(IBaseContext context, string fileName, ITextControl logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");

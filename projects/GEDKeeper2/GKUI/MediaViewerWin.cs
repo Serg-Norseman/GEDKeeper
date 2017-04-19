@@ -25,12 +25,12 @@ using System.Text;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKMediaPlayer;
+using GKUI.Components;
 
 namespace GKUI
 {

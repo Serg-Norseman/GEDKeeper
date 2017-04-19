@@ -18,10 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
-namespace GKCommon.Controls
+using GKCommon;
+
+namespace GKUI.Components
 {
     public class GKScrollableControl : Panel
     {
@@ -35,13 +40,13 @@ namespace GKCommon.Controls
             #if __MonoCS__
             ScrollBar obj = SysUtils.GetFieldValue(this, "hscrollbar") as ScrollBar;
             if (obj != null) {
-                SysUtils.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                RemoveControlStdEventHandlers(obj, "ScrollEvent");
                 obj.Scroll += new ScrollEventHandler(HandleHScrollEvent);
             }
 
             obj = SysUtils.GetFieldValue(this, "vscrollbar") as ScrollBar;
             if (obj != null) {
-                SysUtils.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                RemoveControlStdEventHandlers(obj, "ScrollEvent");
                 obj.Scroll += new ScrollEventHandler(HandleVScrollEvent);
             }
             #else
@@ -49,7 +54,25 @@ namespace GKCommon.Controls
             #endif
         }
 
+        private static void RemoveControlStdEventHandlers(Control ctl, string privateEventObj)
+        {
+            if (ctl == null)
+                throw new ArgumentNullException("ctl");
+
+            FieldInfo f1 = SysUtils.FindFieldInfo(ctl.GetType(), privateEventObj);
+            if (f1 == null) return;
+
+            object obj = f1.GetValue(ctl);
+
+            PropertyInfo pi = ctl.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (pi == null) return;
+
+            EventHandlerList list = (EventHandlerList)pi.GetValue(ctl, null);
+            list.RemoveHandler(obj, list[obj]);
+        }
+
         #if __MonoCS__
+
         private void HandleHScrollEvent(object sender, ScrollEventArgs args)
         {
             //fValidEvent = true;
@@ -65,6 +88,7 @@ namespace GKCommon.Controls
             OnScroll(newArgs);
             //fValidEvent = false;
         }
+
         #endif
 
         protected override void OnMouseDown(MouseEventArgs e)

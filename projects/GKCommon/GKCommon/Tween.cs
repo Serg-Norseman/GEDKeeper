@@ -19,8 +19,7 @@
  */
 
 using System;
-using System.ComponentModel;
-using System.Windows.Forms;
+using System.Timers;
 
 namespace GKCommon
 {
@@ -50,7 +49,6 @@ namespace GKCommon
         private int fCurX, fCurY;
 
         private TweenAnimation fAnimation;
-        private IContainer fComponents;
         private readonly float[] fStartPos;
         private Timer fTimer;
         private TweenDelegate fTweenDelegate;
@@ -67,7 +65,6 @@ namespace GKCommon
             if (disposing)
             {
                 if (fTimer != null) fTimer.Dispose();
-                if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -92,10 +89,9 @@ namespace GKCommon
             fDestX = destX;
             fDestY = destY;
 
-            fComponents = new Container();
-            fTimer = new Timer(fComponents);
+            fTimer = new Timer();
             fTimer.Interval = 1;
-            fTimer.Tick += timer_Tick;
+            fTimer.Elapsed += timer_Tick;
             fTimer.Stop();
             fTimer.Start();
         }

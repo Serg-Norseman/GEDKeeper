@@ -20,9 +20,9 @@
 
 #if !__MonoCS__
 
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKTests.Mocks;
-using GKUI.Charts;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;

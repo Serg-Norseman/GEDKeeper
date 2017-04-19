@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;

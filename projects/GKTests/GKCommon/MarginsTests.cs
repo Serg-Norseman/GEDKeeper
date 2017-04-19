@@ -19,27 +19,22 @@
  */
 
 using System;
-using System.Drawing;
+using GKCommon;
+using NUnit.Framework;
 
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKCore.Options;
-using GKCore.Types;
-
-namespace GKUI.Charts
+namespace GKTests.GKCommon
 {
-    public interface ITreeChartBox
+    [TestFixture]
+    public class MarginsTests
     {
-        IBaseWindow Base { get; set; }
-        int DepthLimit { get; set; }
-        int Height { get; set; }
-        TreeChartOptions Options { get; set; }
-        int Width { get; set; }
+        [Test]
+        public void TestMethod()
+        {
+            var margins = Margins.Empty;
 
-        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
-        Size GetImageSize();
-        void RenderStatic(BackgroundMode background, bool centered);
-        void SetRenderer(ChartRenderer renderer);
-        void SetScale(float value);
+            margins = new Margins(12);
+
+            margins = new Margins(1, 2, 3, 4);
+        }
     }
 }

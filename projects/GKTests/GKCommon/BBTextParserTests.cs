@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,25 +19,26 @@
  */
 
 using System;
-using System.Security.Permissions;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using GKCommon;
+using NUnit.Framework;
 
-namespace GKCommon.Controls
+namespace GKTests.GKCommon
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class WizardPages : TabControl
+    [TestFixture]
+    public class BBTextParserTests
     {
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
+        [Test]
+        public void TestMethod()
         {
-            // Hide tabs by trapping the TCM_ADJUSTRECT message
-            if (m.Msg == 0x1328 && !DesignMode) {
-                m.Result = (IntPtr)1;
-            } else {
-                base.WndProc(ref m);
-            }
+            string sample = "[b]bold text[/b] qq \r\n [url=http://test.com/~user/index.html]url text[/url]";
+
+            var parser = new BBTextParser(12.0f, Color.Blue, Color.Black);
+
+            List<BBTextChunk> chunksList = new List<BBTextChunk>();
+
+            parser.ParseText(chunksList, sample);
         }
     }
 }

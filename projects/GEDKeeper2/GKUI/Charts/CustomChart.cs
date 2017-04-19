@@ -25,9 +25,9 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {

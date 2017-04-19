@@ -25,7 +25,7 @@ using System.Globalization;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKCore.Maps
 {

@@ -24,7 +24,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKCore.Lists
 {

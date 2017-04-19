@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCore;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {

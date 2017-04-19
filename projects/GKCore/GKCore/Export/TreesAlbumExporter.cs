@@ -23,10 +23,10 @@ using System.Drawing;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Charts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 

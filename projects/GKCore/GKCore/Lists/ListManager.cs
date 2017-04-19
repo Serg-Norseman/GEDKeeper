@@ -22,11 +22,11 @@ using System;
 using System.Collections.Generic;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -172,7 +172,7 @@ namespace GKCore.Lists
         {
         }
 
-        public virtual void UpdateItem(GKListItem item, bool isMain)
+        public virtual void UpdateItem(IListItem item, bool isMain)
         {
             if (item == null) return;
 
@@ -186,7 +186,7 @@ namespace GKCore.Lists
                 object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
                 string res = ConvertColumnValue(val, cs);
 
-                item.SubItems.Add(res);
+                item.AddSubItem(res);
             }
         }
 

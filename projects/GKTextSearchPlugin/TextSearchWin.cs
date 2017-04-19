@@ -25,9 +25,9 @@ using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKTextSearchPlugin
 {

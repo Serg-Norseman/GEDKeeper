@@ -25,17 +25,17 @@ using System.Text;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKImageViewerPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class ImageViewerWin : Form, ILocalization
+    public partial class ImageViewerWin : Form, ILocalization, IMDIChild
     {
         private ImageView fImageCtl;
         private readonly Plugin fPlugin;

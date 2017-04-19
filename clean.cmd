@@ -22,6 +22,9 @@ rmdir .\projects\GKCore\obj /s /q
 rmdir .\projects\GKCommon\bin /s /q
 rmdir .\projects\GKCommon\obj /s /q
 
+rmdir .\projects\GKComponents\bin /s /q
+rmdir .\projects\GKComponents\obj /s /q
+
 rmdir .\projects\GKMediaPlayer\bin /s /q
 rmdir .\projects\GKMediaPlayer\obj /s /q
 

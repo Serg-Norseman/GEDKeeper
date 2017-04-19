@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -511,7 +510,7 @@ namespace GKCommon
 
         private const BindingFlags AllBindings = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
-        private static FieldInfo FindFieldInfo(Type t, string fieldName)
+        public static FieldInfo FindFieldInfo(Type t, string fieldName)
         {
             foreach (FieldInfo fi in t.GetFields(AllBindings))
             {
@@ -522,23 +521,6 @@ namespace GKCommon
             }
 
             return t.BaseType != null ? FindFieldInfo(t.BaseType, fieldName) : null;
-        }
-
-        public static void RemoveControlStdEventHandlers(Control ctl, string privateEventObj)
-        {
-            if (ctl == null)
-                throw new ArgumentNullException("ctl");
-
-            FieldInfo f1 = FindFieldInfo(ctl.GetType(), privateEventObj);
-            if (f1 == null) return;
-
-            object obj = f1.GetValue(ctl);
-
-            PropertyInfo pi = ctl.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (pi == null) return;
-
-            EventHandlerList list = (EventHandlerList)pi.GetValue(ctl, null);
-            list.RemoveHandler(obj, list[obj]);
         }
 
         #endregion

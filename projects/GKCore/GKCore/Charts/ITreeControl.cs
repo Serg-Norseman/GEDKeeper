@@ -21,14 +21,14 @@
 using System.Drawing;
 using GKCommon;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 
     /// </summary>
     public abstract class ITreeControl : BaseObject
     {
-        protected readonly TreeChartBox fChart;
+        protected readonly ITreeChartBox fChart;
 
         protected Rectangle fDestRect;
         protected bool fMouseCaptured;
@@ -41,12 +41,14 @@ namespace GKUI.Charts
 
         public bool Visible
         {
-            get { return fVisible; }
+            get {
+                return fVisible;
+            }
             set {
-                if (fVisible == value) return;
-
-                fVisible = value;
-                fChart.Invalidate();
+                if (fVisible != value) {
+                    fVisible = value;
+                    fChart.Invalidate();
+                }
             }
         }
 
@@ -61,7 +63,7 @@ namespace GKUI.Charts
         public abstract void MouseMove(int x, int y);
         public abstract void MouseUp(int x, int y);
 
-        protected ITreeControl(TreeChartBox chart)
+        protected ITreeControl(ITreeChartBox chart)
         {
             fChart = chart;
         }

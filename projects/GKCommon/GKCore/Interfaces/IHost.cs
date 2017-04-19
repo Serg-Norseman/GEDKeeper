@@ -18,11 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
+    public interface IMDIChild
+    {
+    }
+
     public interface IHost : ILocalization
     {
         IBaseWindow GetCurrentFile(bool extMode = false);
@@ -42,14 +45,14 @@ namespace GKCore.Interfaces
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
 
-        void ShowMDI(Form form);
+        void ShowMDI(IMDIChild form);
 
         ILangMan CreateLangMan(object sender);
         void LoadLanguage(int langCode);
         void UpdateNavControls();
         void UpdateControls(bool forceDeactivate);
         void ShowHelpTopic(string topic);
-        void EnableWindow(Form form, bool value);
+        void EnableWindow(IWidgetForm form, bool value);
         void Restore();
 
         bool ShowModalX(ICommonDialog form, bool keepModeless);

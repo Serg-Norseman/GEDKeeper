@@ -25,13 +25,12 @@ using System.Text.RegularExpressions;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Types;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     public delegate void PersonModifyEventHandler(object sender, PersonModifyEventArgs eArgs);
 
@@ -45,6 +44,13 @@ namespace GKUI.Charts
         public PersonList(bool ownsObjects) : base(ownsObjects)
         {
         }
+    }
+
+    public enum TreeChartKind
+    {
+        ckAncestors,
+        ckDescendants,
+        ckBoth
     }
 
     /// <summary>
@@ -214,7 +220,15 @@ namespace GKUI.Charts
 
         public float Scale
         {
-            get { return fScale; }
+            get {
+                return fScale;
+            }
+            set {
+                if (value < 0.5f) value = 0.5f;
+                if (value > 1.5f) value = 1.5f;
+
+                fScale = value;
+            }
         }
 
         public Rectangle VisibleArea
@@ -254,12 +268,6 @@ namespace GKUI.Charts
         public void SetRenderer(ChartRenderer renderer)
         {
             fRenderer = renderer;
-        }
-
-        public void SetScale(float value)
-        {
-            if (value < 0.5 || value > 1.5) return;
-            fScale = value;
         }
 
         private static Bitmap PrepareImage(Bitmap source, bool makeTransp)
@@ -1226,11 +1234,11 @@ namespace GKUI.Charts
             }
         }
 
-        private void DrawPerson(TreeChartPerson person, DrawMode drawMode)
+        private void DrawPerson(TreeChartPerson person, ChartDrawMode drawMode)
         {
             try {
                 ExtRect prt = person.Rect;
-                if (drawMode == DrawMode.dmInteractive && !IsPersonVisible(prt))
+                if (drawMode == ChartDrawMode.dmInteractive && !IsPersonVisible(prt))
                     return;
 
                 prt.Offset(fSPX, fSPY);
@@ -1242,7 +1250,7 @@ namespace GKUI.Charts
 
                 Pen xpen = null;
                 try {
-                    if (drawMode == DrawMode.dmInteractive && person.Selected) {
+                    if (drawMode == ChartDrawMode.dmInteractive && person.Selected) {
                         Color penColor = person.GetSelectedColor();
                         xpen = new Pen(penColor, 2.0f);
                     } else {
@@ -1287,7 +1295,7 @@ namespace GKUI.Charts
                 }
 
                 // only interactive mode
-                if (drawMode == DrawMode.dmInteractive) {
+                if (drawMode == ChartDrawMode.dmInteractive) {
                     if (person.CanExpand) {
                         ExtRect expRt = GetExpanderRect(brt);
                         fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top);
@@ -1304,7 +1312,7 @@ namespace GKUI.Charts
             }
         }
 
-        private void DrawAncestors(TreeChartPerson person, DrawMode drawMode)
+        private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
         {
             Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
             Draw(person.Mother, TreeChartKind.ckAncestors, drawMode);
@@ -1325,7 +1333,7 @@ namespace GKUI.Charts
             }
         }
 
-        private void DrawDescendants(TreeChartPerson person, DrawMode drawMode)
+        private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode)
         {
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
@@ -1402,7 +1410,7 @@ namespace GKUI.Charts
             }
         }
 
-        public void Draw(TreeChartPerson person, TreeChartKind dirKind, DrawMode drawMode)
+        public void Draw(TreeChartPerson person, TreeChartKind dirKind, ChartDrawMode drawMode)
         {
             if (person == null) return;
 
@@ -1425,7 +1433,7 @@ namespace GKUI.Charts
             DrawPerson(person, drawMode);
         }
 
-        private void InternalDraw(DrawMode drawMode, BackgroundMode background, int fSPX, int fSPY)
+        private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background, int fSPX, int fSPY)
         {
             
         }

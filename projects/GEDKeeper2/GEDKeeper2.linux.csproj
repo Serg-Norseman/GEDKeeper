@@ -124,7 +124,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
-    <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\TCPersonControl.cs" />
     <Compile Include="GKUI\Charts\TCScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
@@ -140,10 +139,6 @@
     <Compile Include="GKUI\Components\GKInputBox.Designer.cs">
       <DependentUpon>GKInputBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Components\GKComboItem.cs" />
-    <Compile Include="GKUI\Components\GKMenuItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\GKPortrait.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,14 +148,10 @@
     <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKTreeNode.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKRecordsView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\MdiChildFormEx.cs" />
@@ -632,6 +623,10 @@
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>

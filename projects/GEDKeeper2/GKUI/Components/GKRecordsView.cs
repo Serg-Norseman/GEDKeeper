@@ -24,7 +24,6 @@ using System.Windows.Forms;
 
 using Externals;
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Lists;
 using GKCore.Types;

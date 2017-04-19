@@ -7,7 +7,7 @@ namespace GKChroniclePlugin
 
 		private void InitializeComponent()
 		{
-		    this.lvEvents = new GKCommon.Controls.GKListView();
+		    this.lvEvents = new GKUI.Components.GKListView();
 		    this.SuspendLayout();
 		    // 
 		    // lvEvents
@@ -43,6 +43,6 @@ namespace GKChroniclePlugin
 		    this.Load += new System.EventHandler(this.CalcWidget_Load);
 		    this.ResumeLayout(false);
 		}
-		private GKCommon.Controls.GKListView lvEvents;
+		private GKUI.Components.GKListView lvEvents;
 	}
 }

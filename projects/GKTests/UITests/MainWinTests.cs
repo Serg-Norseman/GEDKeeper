@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -34,7 +35,6 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests.ControlTesters;
 using GKUI;
-using GKUI.Charts;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -675,6 +675,7 @@ namespace GKTests.UITests
             txtScriptText.Enter("R = gt_select_record(rtIndividual);");
             ClickToolStripButton("tbRun", form);
 
+            ModalFormHandler = MessageBox_NoHandler;
             var formTester = new FormTester(form.Name);
             formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
             //form.Close();

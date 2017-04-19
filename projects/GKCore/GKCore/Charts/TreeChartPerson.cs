@@ -24,11 +24,10 @@ using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
-using GKCore;
 using GKCore.Options;
 using GKCore.Types;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 

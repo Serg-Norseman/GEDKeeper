@@ -20,7 +20,9 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using GKCommon;
+using GKCore.Charts;
 
 namespace GKUI.Charts
 {
@@ -69,13 +71,14 @@ namespace GKUI.Charts
         {
             if (person == null) return;
             fPerson = person;
-            
-            ExtRect rt = fPerson.Rect.GetOffset(fChart.fSPX, fChart.fSPY);
+
+            Point offsets = fChart.GetOffsets();
+            ExtRect rt = fPerson.Rect.GetOffset(offsets.X, offsets.Y);
             Rectangle rect = rt.ToRectangle();
-            
+
             rect.X = rect.Right;
             rect.Width = 40;
-            
+
             fDestRect = rect;
         }
 

@@ -22,13 +22,13 @@ using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 
 using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKCore.UIContracts;
 
 namespace GKCore
 {
@@ -55,7 +55,7 @@ namespace GKCore
     /// </summary>
     public class ScriptEngine : BaseObject
     {
-        private TextBox fDebugOutput;
+        private ITextControl fDebugOutput;
         private IBaseWindow fBase;
 
         protected override void Dispose(bool disposing)
@@ -67,7 +67,7 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        public void lua_run(string script, IBaseWindow baseWin, TextBox debugOutput)
+        public void lua_run(string script, IBaseWindow baseWin, ITextControl debugOutput)
         {
             fDebugOutput = debugOutput;
             fBase = baseWin;
@@ -89,7 +89,7 @@ namespace GKCore
         {
             if (fDebugOutput == null) return;
 
-            fDebugOutput.Text += (text + @"\r\n");
+            fDebugOutput.AppendText(text + @"\r\n");
         }
 
         private void lua_register(Lua lvm, string funcName)
@@ -269,11 +269,8 @@ namespace GKCore
 
         public string gk_select_file()
         {
-            string fn;
-            using (OpenFileDialog dlg = new OpenFileDialog()) {
-                fn = (dlg.ShowDialog() == DialogResult.OK) ? dlg.FileName : "";
-            }
-            return fn;
+            string filename = AppHub.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
+            return filename;
         }
 
         #endregion

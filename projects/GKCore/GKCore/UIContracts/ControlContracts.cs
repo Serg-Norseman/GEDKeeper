@@ -19,35 +19,41 @@
  */
 
 using System;
-using System.Drawing;
 using System.Reflection;
-using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
-using GKCommon.GEDCOM;
+using GKCore.Geocoding;
 
-namespace GKUI.Contracts
+namespace GKCore.UIContracts
 {
     /// <summary>
-    /// The interface of the class for working with WinForms dialogs.
+    /// 
     /// </summary>
-    public interface IStdDialogs
+    public interface IMapBrowser
     {
-        Font SelectFont(Font font);
-        string GetOpenFile(string title, string context, string filter,
-                           int filterIndex, string defaultExt);
-        string GetSaveFile(string filter);
-        string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                           string suggestedFileName, bool overwritePrompt = true);
+        bool ShowPoints { get; set; }
+        bool ShowLines { get; set; }
+        ExtList<GeoPoint> MapPoints { get; }
 
-        void ShowMessage(string msg);
-        void ShowError(string msg);
-        bool ShowQuestionYN(string msg);
-        void ShowWarning(string msg);
+        int AddPoint(double latitude, double longitude, string hint);
+        void ClearPoints();
+        void DeletePoint(int index);
+        void BeginUpdate();
+        void EndUpdate();
+        void InitMap();
+        void RefreshPoints();
+        void SaveSnapshot(string fileName);
+        void SetCenter(double latitude, double longitude, int scale);
+        void ZoomToBounds();
+    }
 
-        bool GetInput(string prompt, ref string value);
-        bool GetPassword(string prompt, ref string value);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IX
+    {
+        
     }
 
 
@@ -77,5 +83,15 @@ namespace GKUI.Contracts
         Assembly GetExecutingAssembly();
         Version GetAppVersion();
         string GetAppCopyright();
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ITextControl
+    {
+        void AppendText(string text);
+        void Clear();
     }
 }

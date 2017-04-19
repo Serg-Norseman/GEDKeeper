@@ -19,16 +19,25 @@
  */
 
 using System;
-using System.Windows.Forms;
 using GKCommon;
 
 namespace GKCore.Options
 {
-    public sealed class MRUFile
+    /// <summary>
+    /// Introduced for isolation from System.WinForms.
+    /// </summary>
+	public enum WindowState
+	{
+		Normal,
+		Minimized,
+		Maximized
+	}
+
+	public sealed class MRUFile
     {
         public string FileName;
         public ExtRect WinRect;
-        public FormWindowState WinState;
+        public WindowState WinState;
 
         public MRUFile()
         {
@@ -49,7 +58,7 @@ namespace GKCore.Options
             WinRect.Top = iniFile.ReadInteger(section, "WinT", 10);
             WinRect.Right = iniFile.ReadInteger(section, "WinR", 778);
             WinRect.Bottom = iniFile.ReadInteger(section, "WinB", 312);
-            WinState = (FormWindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
+            WinState = (WindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
         }
 
         public void SaveToFile(IniFile iniFile, string section)

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKUI.Dialogs
 {

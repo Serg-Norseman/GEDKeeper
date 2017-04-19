@@ -23,7 +23,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GKCommon.Controls
+using GKCommon;
+
+namespace GKUI.Components
 {
     public delegate void LinkEventHandler(object sender, string linkName);
 

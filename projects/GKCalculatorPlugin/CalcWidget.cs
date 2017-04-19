@@ -30,7 +30,7 @@ namespace GKCalculatorPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalcWidget : Form, ILocalization
+    public partial class CalcWidget : Form, ILocalization, IWidgetForm
     {
         private readonly Plugin fPlugin;
         private readonly ExpCalculator fCalc;

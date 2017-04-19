@@ -20,16 +20,9 @@
 
 using System.Drawing;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
-    public enum TreeChartKind
-    {
-        ckAncestors,
-        ckDescendants,
-        ckBoth
-    }
-
-    public enum DrawMode
+    public enum ChartDrawMode
     {
         dmInteractive,
         dmStatic,

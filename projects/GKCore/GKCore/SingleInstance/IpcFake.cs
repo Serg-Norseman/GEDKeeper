@@ -25,7 +25,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 using GKCommon;
@@ -282,8 +281,7 @@ namespace GKCore.SingleInstance
         {
             try
             {
-                Form form = fEnforcer as Form;
-                if (form == null) return;
+                if (fEnforcer == null) return;
 
                 if (msg.Message == AppMessage.RestoreWindow)
                 {

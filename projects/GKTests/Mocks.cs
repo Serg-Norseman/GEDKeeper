@@ -131,14 +131,14 @@ namespace GKTests.Mocks
         public void WidgetShow(IWidget widget) {}
         public void WidgetClose(IWidget widget) {}
 
-        public void ShowMDI(Form form) {}
+        public void ShowMDI(IMDIChild form) {}
 
         public ILangMan CreateLangMan(object sender) { return null; }
         public void LoadLanguage(int langCode) {}
         public void UpdateNavControls() {}
         public void UpdateControls(bool forceDeactivate) {}
         public void ShowHelpTopic(string topic) {}
-        public void EnableWindow(Form form, bool value) {}
+        public void EnableWindow(IWidgetForm form, bool value) {}
         public void Restore() {}
 
         public bool ShowModalX(ICommonDialog form, bool keepModeless) { return false; }

@@ -28,6 +28,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -256,7 +257,7 @@ namespace GKUI
                 fPlugins.Unload();
 
                 fOptions.MWinRect = UIHelper.GetFormRect(this);
-                fOptions.MWinState = WindowState;
+                fOptions.MWinState = (WindowState)this.WindowState;
 
                 AppHub.NamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
 
@@ -443,7 +444,7 @@ namespace GKUI
                     Width = 800;
                     Height = 600;
                 }
-                WindowState = fOptions.MWinState;
+                WindowState = (FormWindowState)fOptions.MWinState;
             }
             catch (Exception ex)
             {
@@ -615,7 +616,7 @@ namespace GKUI
 
             MRUFile mf = fOptions.MRUFiles[idx];
             mf.WinRect = UIHelper.GetFormRect(frm);
-            mf.WinState = frm.WindowState;
+            mf.WinState = (WindowState)frm.WindowState;
         }
 
         public void RestoreMRU(IBaseWindow baseWin, string fileName)
@@ -624,7 +625,7 @@ namespace GKUI
             if (idx < 0) return;
 
             MRUFile mf = fOptions.MRUFiles[idx];
-            UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, mf.WinState);
+            UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, (FormWindowState)mf.WinState);
         }
 
         #endregion
@@ -776,7 +777,7 @@ namespace GKUI
                     }
 
                     result = new BaseWin();
-                    ShowMDI((Form) result);
+                    ShowMDI(result);
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         result.LoadFile(fileName);
@@ -1529,19 +1530,23 @@ namespace GKUI
             // TODO: implementation of Base.SaveAs
         }
 
-        public void ShowMDI(Form form)
+        public void ShowMDI(IMDIChild form)
         {
-            if (form == null) return;
+            Form frm = form as Form;
 
-            form.MdiParent = this;
-            form.Show();
+            if (frm != null) {
+                frm.MdiParent = this;
+                frm.Show();
+            }
         }
 
-        public void EnableWindow(Form form, bool value)
+        public void EnableWindow(IWidgetForm form, bool value)
         {
-            if (form != null) {
+            Form frm = form as Form;
+
+            if (frm != null) {
                 #if !__MonoCS__
-                NativeMethods.EnableWindow(form.Handle, value);
+                NativeMethods.EnableWindow(frm.Handle, value);
                 #endif
             }
         }

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Geocoding;
@@ -31,8 +30,8 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
-using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {

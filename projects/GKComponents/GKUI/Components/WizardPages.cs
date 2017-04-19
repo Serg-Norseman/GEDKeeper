@@ -19,37 +19,25 @@
  */
 
 using System;
-using GKCommon;
-using GKCore.Geocoding;
+using System.Security.Permissions;
+using System.Windows.Forms;
 
-namespace GKUI.Contracts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IMapBrowser
+    public class WizardPages : TabControl
     {
-        bool ShowPoints { get; set; }
-        bool ShowLines { get; set; }
-        ExtList<GeoPoint> MapPoints { get; }
-
-        int AddPoint(double latitude, double longitude, string hint);
-        void ClearPoints();
-        void DeletePoint(int index);
-        void BeginUpdate();
-        void EndUpdate();
-        void InitMap();
-        void RefreshPoints();
-        void SaveSnapshot(string fileName);
-        void SetCenter(double latitude, double longitude, int scale);
-        void ZoomToBounds();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IX
-    {
-        
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override void WndProc(ref Message m)
+        {
+            // Hide tabs by trapping the TCM_ADJUSTRECT message
+            if (m.Msg == 0x1328 && !DesignMode) {
+                m.Result = (IntPtr)1;
+            } else {
+                base.WndProc(ref m);
+            }
+        }
     }
 }

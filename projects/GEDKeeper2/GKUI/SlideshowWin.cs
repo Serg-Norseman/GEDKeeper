@@ -22,11 +22,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKUI
 {

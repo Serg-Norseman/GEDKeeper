@@ -107,6 +107,10 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GKCore\GKCore.mswin.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>

@@ -26,7 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKUI.Dialogs
 {

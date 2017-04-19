@@ -8,7 +8,7 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private GKCommon.Controls.ImageView imageView1;
+		private GKUI.Components.ImageView imageView1;
 		private System.Windows.Forms.Panel panel1;
 
 		private void InitializeComponent()
@@ -17,7 +17,7 @@ namespace GKUI.Dialogs
 		    this.panel1 = new System.Windows.Forms.Panel();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.imageView1 = new GKCommon.Controls.ImageView();
+		    this.imageView1 = new GKUI.Components.ImageView();
 		    this.panel1.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
@@ -64,7 +64,7 @@ namespace GKUI.Dialogs
 		    this.imageView1.Location = new System.Drawing.Point(0, 0);
 		    this.imageView1.Margin = new System.Windows.Forms.Padding(4);
 		    this.imageView1.Name = "imageView1";
-		    this.imageView1.SelectionMode = GKCommon.Controls.ImageBoxSelectionMode.Zoom;
+		    this.imageView1.SelectionMode = GKUI.Components.ImageBoxSelectionMode.Zoom;
 		    this.imageView1.SelectionRegion = ((System.Drawing.RectangleF)(resources.GetObject("imageView1.SelectionRegion")));
 		    this.imageView1.ShowToolbar = true;
 		    this.imageView1.Size = new System.Drawing.Size(871, 623);

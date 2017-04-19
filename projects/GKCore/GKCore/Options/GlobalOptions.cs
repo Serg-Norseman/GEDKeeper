@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -59,7 +58,7 @@ namespace GKCore.Options
         private bool fListHighlightUnmarriedPersons;
         private bool fListHighlightUnparentedPersons;
         private ExtRect fMWinRect;
-        private FormWindowState fMWinState;
+        private WindowState fMWinState;
         private readonly StringList fLastBases;
         private bool fShowDatesCalendar;
         private FileBackup fFileBackup;
@@ -152,7 +151,7 @@ namespace GKCore.Options
             set { fMWinRect = value; }
         }
 
-        public FormWindowState MWinState
+        public WindowState MWinState
         {
             get { return fMWinState; }
             set { fMWinState = value; }
@@ -529,7 +528,7 @@ namespace GKCore.Options
             fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
             fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
             fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
-            fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
+            fMWinState = (WindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
             for (int i = 0; i < cnt; i++)

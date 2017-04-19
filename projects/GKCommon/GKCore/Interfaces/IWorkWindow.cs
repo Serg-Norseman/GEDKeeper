@@ -23,7 +23,7 @@ using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
-    public interface IWorkWindow
+    public interface IWorkWindow : IMDIChild
     {
         string GetStatusString();
 

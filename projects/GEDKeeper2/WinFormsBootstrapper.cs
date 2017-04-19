@@ -20,10 +20,11 @@
 
 using System;
 using GKCommon.IoC;
+using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 using GKUI.Charts;
 using GKUI.Components;
-using GKUI.Contracts;
 using GKUI.Dialogs;
 
 namespace GKUI

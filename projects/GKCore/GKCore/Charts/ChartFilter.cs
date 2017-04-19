@@ -22,7 +22,7 @@ using GKCommon;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 

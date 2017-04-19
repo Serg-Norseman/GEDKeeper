@@ -30,8 +30,8 @@ using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
-using GKUI.Contracts;
 
 namespace GKUI.Dialogs
 {

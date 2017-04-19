@@ -20,6 +20,10 @@
 
 namespace GKCore.Interfaces
 {
+    public interface IWidgetForm
+    {
+    }
+
     public interface IWidget
     {
         /// <summary>

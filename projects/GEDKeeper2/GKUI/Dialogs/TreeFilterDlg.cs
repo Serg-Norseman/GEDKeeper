@@ -24,10 +24,10 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
-using GKUI.Charts;
 using GKUI.Components;
 
 namespace GKUI.Dialogs

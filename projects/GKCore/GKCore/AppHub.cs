@@ -21,7 +21,7 @@
 using System;
 using GKCommon.IoC;
 using GKCore.Interfaces;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKCore
 {

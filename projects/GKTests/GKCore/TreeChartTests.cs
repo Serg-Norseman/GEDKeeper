@@ -19,10 +19,14 @@
  */
 
 using System;
+using System.Drawing;
+
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
+using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Charts;
+using GKTests.Mocks;
 using NUnit.Framework;
 
 namespace GKTests.GKCore
@@ -30,6 +34,14 @@ namespace GKTests.GKCore
     [TestFixture]
     public class TreeChartTests
     {
+        private IBaseWindow fBase;
+
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            fBase = new BaseWindowMock();
+        }
+
         [Test]
         public void Test_ChartFilter()
         {
@@ -144,6 +156,62 @@ namespace GKTests.GKCore
             using (var model = new TreeChartModel())
             {
                 Assert.IsNotNull(model);
+
+                model.Base = fBase;
+                Assert.AreEqual(fBase, model.Base);
+
+                model.BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
+                Assert.AreEqual(TreeChartModel.DEF_BRANCH_DISTANCE, model.BranchDistance);
+
+                model.CertaintyIndex = true;
+                Assert.AreEqual(true, model.CertaintyIndex);
+
+                model.DepthLimit = 8;
+                Assert.AreEqual(8, model.DepthLimit);
+
+                model.DepthLimit = 8;
+                Assert.AreEqual(8, model.DepthLimit);
+
+                Assert.IsNotNull(model.Filter);
+
+                model.HighlightedPerson = null;
+                Assert.AreEqual(null, model.HighlightedPerson);
+
+                Assert.AreEqual(0, model.ImageHeight);
+                Assert.AreEqual(0, model.ImageWidth);
+
+                Size sz = model.ImageSize;
+                Assert.AreEqual(0, sz.Height);
+                Assert.AreEqual(0, sz.Width);
+
+                model.KinRoot = null;
+                Assert.AreEqual(null, model.KinRoot);
+
+                model.Kind = TreeChartKind.ckAncestors;
+                Assert.AreEqual(TreeChartKind.ckAncestors, model.Kind);
+
+                model.Margins = 15;
+                Assert.AreEqual(15, model.Margins);
+
+                Assert.IsNull(model.Options);
+
+                model.PathDebug = true;
+                Assert.AreEqual(true, model.PathDebug);
+
+                Assert.IsNotNull(model.Persons);
+
+                Assert.IsNotNull(model.PreparedIndividuals);
+
+                Assert.IsNull(model.Root);
+
+                model.Scale = 1.3f;
+                Assert.AreEqual(1.3f, model.Scale);
+
+                model.Scale = 0.1f;
+                Assert.AreEqual(0.5f, model.Scale);
+
+                model.Scale = 1.7f;
+                Assert.AreEqual(1.5f, model.Scale);
             }
         }
     }

@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore.Geocoding;
 using GKCore.Maps;
-using GKUI.Contracts;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {

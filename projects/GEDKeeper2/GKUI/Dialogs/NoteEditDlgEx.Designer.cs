@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
 		    this.miExport = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miClear = new System.Windows.Forms.ToolStripMenuItem();
 		    this.pagePreview = new System.Windows.Forms.TabPage();
-		    this.hyperView1 = new GKCommon.Controls.HyperView();
+		    this.hyperView1 = new GKUI.Components.HyperView();
 		    this.tabControl1.SuspendLayout();
 		    this.pageEditor.SuspendLayout();
 		    this.toolStrip1.SuspendLayout();
@@ -266,7 +266,7 @@ namespace GKUI.Dialogs
 		    this.pagePreview.ResumeLayout(false);
 		    this.ResumeLayout(false);
 		}
-		private GKCommon.Controls.HyperView hyperView1;
+		private GKUI.Components.HyperView hyperView1;
 		private System.Windows.Forms.ToolStripComboBox cmbSizes;
 		private System.Windows.Forms.ToolStripMenuItem miClear;
 		private System.Windows.Forms.ToolStripMenuItem miExport;

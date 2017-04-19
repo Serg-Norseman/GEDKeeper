@@ -28,6 +28,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 
@@ -363,7 +364,7 @@ namespace GKUI.Charts
 
         public void SetScale(float value)
         {
-            fModel.SetScale(value);
+            fModel.Scale = value;
 
             RecalcChart();
 
@@ -444,6 +445,11 @@ namespace GKUI.Charts
 
         #region Drawing routines
 
+        public Point GetOffsets()
+        {
+            return new Point(fSPX, fSPY);
+        }
+
         private void DrawBackground(BackgroundMode background)
         {
             if (background == BackgroundMode.bmNone) return;
@@ -468,12 +474,12 @@ namespace GKUI.Charts
             }
         }
 
-        private void InternalDraw(DrawMode drawMode, BackgroundMode background)
+        private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background)
         {
             fSPX = 0;
             fSPY = 0;
 
-            if (drawMode == DrawMode.dmInteractive) {
+            if (drawMode == ChartDrawMode.dmInteractive) {
                 /*Rectangle viewPort = GetImageViewPort();
                 fSPX = -viewPort.Left;
                 fSPY = -viewPort.Top;*/
@@ -493,7 +499,7 @@ namespace GKUI.Charts
 
                 fModel.VisibleArea = GetSourceImageRegion();
             } else {
-                if (drawMode == DrawMode.dmStaticCentered) {
+                if (drawMode == ChartDrawMode.dmStaticCentered) {
                     Size sz = ClientSize;
 
                     if (fModel.ImageWidth < sz.Width) {
@@ -666,7 +672,7 @@ namespace GKUI.Charts
         {
             Graphics gfx = e.Graphics;
             fRenderer.SetTarget(gfx);
-            InternalDraw(DrawMode.dmInteractive, BackgroundMode.bmAny);
+            InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
             fTreeControls.Draw(gfx);
@@ -953,9 +959,22 @@ namespace GKUI.Charts
 
         private void SetScroll(int x, int y)
         {
-            AutoScrollPosition = new Point(x, y);
-            Invalidate();
-            OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            TweenDelegate invoker = delegate(int newX, int newY) {
+                try
+                {
+                    AutoScrollPosition = new Point(newX, newY);
+                    Invalidate();
+                    OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                } catch (Exception ex) {
+                    Logger.LogWrite("TreeChartBox.SetScroll(): " + ex.Message);
+                }
+            };
+
+            if (InvokeRequired) {
+                Invoke(invoker, x, y);
+            } else {
+                invoker(x, y);
+            }
         }
 
         #endregion
@@ -978,7 +997,7 @@ namespace GKUI.Charts
 
         public void RenderStatic(BackgroundMode background, bool centered = false)
         {
-            DrawMode drawMode = (!centered) ? DrawMode.dmStatic : DrawMode.dmStaticCentered;
+            ChartDrawMode drawMode = (!centered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
             InternalDraw(drawMode, background);
         }
 

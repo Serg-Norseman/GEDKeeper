@@ -19,11 +19,11 @@
  */
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -569,7 +569,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateItem(GKListItem item, bool isMain)
+        public override void UpdateItem(IListItem item, bool isMain)
         {
             base.UpdateItem(item, isMain);
 

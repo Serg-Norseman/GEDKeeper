@@ -19,12 +19,11 @@
  */
 
 using System;
-
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

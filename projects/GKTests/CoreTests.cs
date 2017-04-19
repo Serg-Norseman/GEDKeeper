@@ -21,10 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 
 using GKCommon;
-using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.IoC;
 using GKCore;
@@ -41,7 +39,6 @@ using GKCore.Tools;
 using GKCore.Types;
 using GKTests.Mocks;
 using GKUI;
-using GKUI.Charts;
 using GKUI.Components;
 using NUnit.Framework;
 
@@ -1192,8 +1189,8 @@ namespace GKTests.GKCore
                 globalOptions.MWinRect = ExtRect.CreateEmpty();
                 Assert.IsTrue(globalOptions.MWinRect.IsEmpty());
 
-                globalOptions.MWinState = FormWindowState.Maximized;
-                Assert.AreEqual(FormWindowState.Maximized, globalOptions.MWinState);
+                globalOptions.MWinState = WindowState.Maximized;
+                Assert.AreEqual(WindowState.Maximized, globalOptions.MWinState);
 
                 Assert.IsNotNull(globalOptions.NameFilters);
 

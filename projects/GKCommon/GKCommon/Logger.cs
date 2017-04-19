@@ -45,8 +45,7 @@ namespace GKCommon
                         log.Close();
                     }
                 }
-            } catch (Exception ex) {
-            }
+            } catch { }
         }
     }
 }
