@@ -741,6 +741,13 @@ namespace GKTests.UITests
                             pvWin.Close();
                         }
                         break;
+
+                    case TreeToolsWin.ToolType.ttTreeMerge:
+                        {
+                            ModalFormHandler = OpenFile_Cancel_Handler;
+                            ClickButton("btnTreeMerge", form);
+                        }
+                        break;
                 }
             }
 
@@ -1672,10 +1679,24 @@ namespace GKTests.UITests
             frm.Close();
         }
 
+        private void SaveFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            var saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.ClickCancel();
+        }
+
         private void MapsViewerWin_Tests(Form frm, string stage)
         {
             Assert.IsInstanceOf(typeof(MapsViewerWin), frm, stage);
-            frm.Close();
+
+            ClickRadioButton("radTotal", frm);
+
+            ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickButton("btnSaveImage", frm);
+
+            var formTester = new FormTester(frm.Name);
+            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
+            //frm.Close();
         }
     }
 }

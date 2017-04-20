@@ -19,6 +19,7 @@
  */
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GKCore.Charts
 {
@@ -71,5 +72,13 @@ namespace GKCore.Charts
                                            float width, float height);
         public abstract void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
                                                   float width, float height, float radius);
+
+
+        public abstract void CreateCircleSegment(GraphicsPath path,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2);
+        public abstract void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2);
     }
 }

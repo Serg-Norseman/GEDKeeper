@@ -23,7 +23,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     public partial class ACOptionsControl : UserControl, IOptionsControl
     {

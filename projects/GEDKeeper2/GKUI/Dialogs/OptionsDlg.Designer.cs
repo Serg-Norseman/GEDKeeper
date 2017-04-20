@@ -97,7 +97,7 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.Label lblMinutes;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkGenerations;
-        private GKUI.Charts.ACOptionsControl ancOptionsControl1;
+        private GKUI.Components.ACOptionsControl ancOptionsControl1;
         private System.Windows.Forms.TabPage pageAncCircle;
         private System.Windows.Forms.CheckBox chkExtendWomanSurnames;
         private System.Windows.Forms.RadioButton radMaiden_Married;
@@ -171,7 +171,7 @@ namespace GKUI.Dialogs
             this.panDefFont = new System.Windows.Forms.Panel();
             this.lblChartFont = new System.Windows.Forms.Label();
             this.pageAncCircle = new System.Windows.Forms.TabPage();
-            this.ancOptionsControl1 = new GKUI.Charts.ACOptionsControl();
+            this.ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
             this.pageUIView = new System.Windows.Forms.TabPage();
             this.PageControl2 = new System.Windows.Forms.TabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();

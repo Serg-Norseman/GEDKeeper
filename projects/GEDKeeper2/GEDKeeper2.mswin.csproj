@@ -101,28 +101,22 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\ACOptionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Charts\ACOptionsControl.Designer.cs">
-      <DependentUpon>ACOptionsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Charts\AncestorsCircle.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\DescendantsCircle.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
     <Compile Include="GKUI\Charts\TCPersonControl.cs" />
     <Compile Include="GKUI\Charts\TCScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
+    <Compile Include="GKUI\Components\ACOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
+      <DependentUpon>ACOptionsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -441,7 +435,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Charts\ACOptionsControl.resx">
+    <EmbeddedResource Include="GKUI\Components\ACOptionsControl.resx">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Components\GKMergeControl.resx">

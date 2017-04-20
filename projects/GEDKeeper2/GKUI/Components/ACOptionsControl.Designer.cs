@@ -1,4 +1,4 @@
-﻿namespace GKUI.Charts
+﻿namespace GKUI.Components
 {
 	partial class ACOptionsControl
 	{

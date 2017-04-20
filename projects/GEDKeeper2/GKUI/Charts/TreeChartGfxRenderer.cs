@@ -24,6 +24,7 @@ using System.Drawing.Drawing2D;
 
 using GKCommon;
 using GKCore.Charts;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {
@@ -99,6 +100,20 @@ namespace GKUI.Charts
                     fCanvas.DrawPath(pen, path);
                 }
             }
+        }
+
+        public override void CreateCircleSegment(GraphicsPath path,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+        }
+
+        public override void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
         }
     }
 }

@@ -20,8 +20,8 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-
 using GKCore.Charts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -209,6 +209,20 @@ namespace GKCore.Export
                 SetFillColor(fillColor);
                 fCanvas.Fill();
             }
+        }
+
+        public override void CreateCircleSegment(GraphicsPath path,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            
+        }
+
+        public override void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            
         }
     }
 }

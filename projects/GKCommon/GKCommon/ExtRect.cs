@@ -110,4 +110,93 @@ namespace GKCommon
             return new Rectangle(Left, Top, GetWidth(), GetHeight());
         }
     }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ExtRectF
+    {
+        public static readonly ExtRect Empty = default(ExtRect);
+
+        public float Left;
+        public float Top;
+        public float Right;
+        public float Bottom;
+
+        public static ExtRectF Create(float left, float top, float right, float bottom)
+        {
+            ExtRectF result;
+            result.Left = left;
+            result.Top = top;
+            result.Right = right;
+            result.Bottom = bottom;
+            return result;
+        }
+
+        public static ExtRectF CreateBounds(float left, float top, float width, float height)
+        {
+            return Create(left, top, left + width - 1, top + height - 1);
+        }
+
+        public static ExtRectF CreateEmpty()
+        {
+            return Create(0, 0, 0, 0);
+        }
+
+        public float GetWidth()
+        {
+            return (Right == Left) ? 0 : Right - Left + 1;
+        }
+
+        public float GetHeight()
+        {
+            return (Bottom == Top) ? 0 : Bottom - Top + 1;
+        }
+
+        public bool IsEmpty()
+        {
+            return Right <= Left || Bottom <= Top;
+        }
+
+        public bool Contains(int x, int y)
+        {
+            return x >= Left && y >= Top && x <= Right && y <= Bottom;
+        }
+
+        public ExtRectF GetOffset(float dX, float dY)
+        {
+            return Create(Left + dX, Top + dY, Right + dX, Bottom + dY);
+        }
+
+        public void Offset(int dX, int dY)
+        {
+            Left += dX;
+            Right += dX;
+            Top += dY;
+            Bottom += dY;
+        }
+
+        public void Inflate(int dX, int dY)
+        {
+            Left += dX;
+            Right -= dX;
+            Top += dY;
+            Bottom -= dY;
+        }
+
+        public bool IntersectsWith(ExtRect rect)
+        {
+            return rect.Left < Right && Left < rect.Right && rect.Top < Bottom && Top < rect.Bottom;
+        }
+
+        public override string ToString()
+        {
+            return string.Concat("{X=", Left.ToString(), ",Y=", Top.ToString(),
+                                 ",Width=", GetWidth().ToString(), ",Height=", GetHeight().ToString(), "}");
+        }
+
+        public RectangleF ToRectangle()
+        {
+            return new RectangleF(Left, Top, GetWidth(), GetHeight());
+        }
+    }
 }

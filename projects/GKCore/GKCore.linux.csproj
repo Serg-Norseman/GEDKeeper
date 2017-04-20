@@ -101,6 +101,8 @@
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Charts\ChartModel.cs" />
+    <Compile Include="GKCore\Charts\CircleChartModel.cs" />
     <Compile Include="GKCore\Charts\ITreeControl.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />

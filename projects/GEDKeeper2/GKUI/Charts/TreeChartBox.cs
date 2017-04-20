@@ -613,25 +613,22 @@ namespace GKUI.Charts
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
             var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
-            if (eventHandler == null) return;
-
-            eventHandler(this, eArgs);
+            if (eventHandler != null)
+                eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
             var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
-            if (eventHandler == null) return;
-
-            eventHandler(this, person);
+            if (eventHandler != null)
+                eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
             var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
-            if (eventHandler == null) return;
-
-            eventHandler(this, eArgs);
+            if (eventHandler != null)
+                eventHandler(this, eArgs);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -649,11 +646,9 @@ namespace GKUI.Charts
                     SetScale(fModel.Scale - 0.05f);
                     e.Handled = true;
                     break;
-
-                default:
-                    base.OnKeyDown(e);
-                    break;
             }
+
+            base.OnKeyDown(e);
         }
 
         protected override void OnResize(EventArgs e)
@@ -750,7 +745,6 @@ namespace GKUI.Charts
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
             fMouseX = e.X;
             fMouseY = e.Y;
 
@@ -778,6 +772,8 @@ namespace GKUI.Charts
                     fTreeControls.MouseDown(e.X, e.Y);
                     break;
             }
+
+            base.OnMouseDown(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -832,8 +828,6 @@ namespace GKUI.Charts
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseUp(e);
-
             switch (fMode) {
                 case ChartControlMode.ccmDefault:
                     TreeChartPerson mPers;
@@ -867,6 +861,8 @@ namespace GKUI.Charts
                     fTreeControls.MouseUp(e.X, e.Y);
                     break;
             }
+
+            base.OnMouseUp(e);
         }
 
         #endregion

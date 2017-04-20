@@ -56,7 +56,7 @@ namespace GKCore.Charts
     /// <summary>
     /// 
     /// </summary>
-    public class TreeChartModel : BaseObject
+    public class TreeChartModel : ChartModel
     {
         public const int DEF_MARGINS = 24;
         public const int DEF_SPOUSE_DISTANCE = 10;
@@ -80,9 +80,6 @@ namespace GKCore.Charts
         private Bitmap fExpPic;
         private KinshipsGraph fGraph;
         private TreeChartPerson fHighlightedPerson;
-        private int fImageHeight;
-        private int fImageWidth;
-        private Size fImageSize;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
@@ -93,7 +90,6 @@ namespace GKCore.Charts
         private bool fPathDebug;
         private readonly IList<string> fPreparedFamilies;
         private readonly IList<string> fPreparedIndividuals;
-        private ChartRenderer fRenderer;
         private TreeChartPerson fRoot;
         private float fScale;
         private ShieldState fShieldState;
@@ -151,21 +147,6 @@ namespace GKCore.Charts
         {
             get { return fHighlightedPerson; }
             set { fHighlightedPerson = value; }
-        }
-
-        public int ImageHeight
-        {
-            get { return fImageHeight; }
-        }
-
-        public int ImageWidth
-        {
-            get { return fImageWidth; }
-        }
-
-        public Size ImageSize
-        {
-            get { return fImageSize; }
         }
 
         public TreeChartKind Kind
@@ -263,11 +244,6 @@ namespace GKCore.Charts
                 fPersons.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public void SetRenderer(ChartRenderer renderer)
-        {
-            fRenderer = renderer;
         }
 
         private static Bitmap PrepareImage(Bitmap source, bool makeTransp)

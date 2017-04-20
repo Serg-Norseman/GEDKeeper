@@ -35,8 +35,6 @@ namespace GKUI
     {
         private readonly CircleChart fCircleChart;
         private readonly IBaseWindow fBaseWin;
-        private readonly CircleChartType fType;
-
 
         public IBaseWindow Base
         {
@@ -50,20 +48,14 @@ namespace GKUI
             ShowInTaskbar = true;
 
             fBaseWin = baseWin;
-            fType = type;
 
-            if (type == CircleChartType.Ancestors) {
-                fCircleChart = new AncestorsCircle(fBaseWin);
-            } else {
-                fCircleChart = new DescendantsCircle(fBaseWin);
-            }
-
+            fCircleChart = new CircleChart(fBaseWin);
+            fCircleChart.ChartType = type;
             fCircleChart.Name = "fCircleChart";
             fCircleChart.Dock = DockStyle.Fill;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
-
             Controls.Add(fCircleChart);
 
             SetLang();
@@ -101,21 +93,20 @@ namespace GKUI
         }
 
         #region ILocalization implementation
-        
+
         public void SetLang()
         {
-            if (fType == CircleChartType.Ancestors) {
+            if (fCircleChart.ChartType == CircleChartType.Ancestors) {
                 Text = LangMan.LS(LSID.LSID_AncestorsCircle);
             } else {
                 Text = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
-            
         }
 
         #endregion
 
         #region IChartWindow implementation
-        
+
         public void GenChart(bool show)
         {
             if (show) base.Show();
@@ -129,7 +120,7 @@ namespace GKUI
 
         public string GetStatusString()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.IndividualsCount.ToString());
+            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount.ToString());
         }
 
         public void UpdateView()

@@ -24,6 +24,7 @@ using System.Drawing.Drawing2D;
 
 using GKCore;
 using GKCore.Charts;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {
@@ -113,7 +114,7 @@ namespace GKUI.Charts
 
                 using (var brush = new SolidBrush(color)) {
                     using (var path = new GraphicsPath()) {
-                        CustomChart.CreateCircleSegment(path, ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2);
+                        UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2);
                         gfx.FillPath(brush, path);
                     }
                 }

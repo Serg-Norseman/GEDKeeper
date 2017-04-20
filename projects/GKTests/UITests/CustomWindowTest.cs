@@ -47,7 +47,7 @@ namespace GKTests.UITests
         {
             var tsBtn = new ToolStripButtonTester(name, form);
             if (tsBtn.Count > 1) {
-                // FIXME: Find out why sometimes the search returns 
+                // FIXME: Find out why sometimes the search returns
                 // two components where there is only one (MediaViewerWinTests)
                 tsBtn[0].FireEvent("Click");
             } else {
@@ -59,6 +59,12 @@ namespace GKTests.UITests
         {
             var tsMenuItem = new ToolStripMenuItemTester(name, form);
             tsMenuItem.Click();
+        }
+
+        public static void ClickRadioButton(string name, Form form)
+        {
+            var radBtn = new RadioButtonTester(name, form);
+            radBtn.Click();
         }
 
         public static void MessageBox_YesHandler(string name, IntPtr ptr, Form form)

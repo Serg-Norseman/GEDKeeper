@@ -93,10 +93,10 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-
             if (!Focused)
                 Focus();
+
+            base.OnMouseDown(e);
         }
 
         /// <summary>
