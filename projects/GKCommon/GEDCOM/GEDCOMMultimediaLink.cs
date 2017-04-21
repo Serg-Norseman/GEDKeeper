@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 
 namespace GKCommon.GEDCOM
@@ -148,5 +149,35 @@ namespace GKCommon.GEDCOM
         {
             return new GEDCOMMultimediaLink(owner, parent, tagName, tagValue);
         }
+
+        #region Utilities
+
+        public string GetUID()
+        {
+            string result = null;
+            try
+            {
+                if (Value != null)
+                {
+                    ExtRect cutoutArea;
+                    if (IsPrimaryCutout) {
+                        cutoutArea = CutoutPosition.Value;
+                    } else {
+                        cutoutArea = ExtRect.CreateEmpty();
+                    }
+
+                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)Value;
+                    result = mmRec.UID + "-" + GEDCOMUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GEDCOMMultimediaLink.GetUID(): " + ex.Message);
+                result = null;
+            }
+            return result;
+        }
+
+        #endregion
     }
 }

@@ -68,6 +68,27 @@ namespace GKTests.UITests
             var txtPriority = new ComboBoxTester("txtPriority", fDialog);
             txtPriority.Select(1);
 
+            var cmbGoalType = new ComboBoxTester("cmbGoalType", fDialog);
+            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+                cmbGoalType.Select((int)gt);
+            }
+
+            ClickButton("btnAccept", fDialog);
+
+            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual("", fTaskRecord.StartDate.StringValue);
+            Assert.AreEqual("", fTaskRecord.StopDate.StringValue);
+        }
+
+        [Test]
+        public void Test_EnterDataDatesAndApply()
+        {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fTaskRecord, fDialog.Task);
+
+            var txtPriority = new ComboBoxTester("txtPriority", fDialog);
+            txtPriority.Select(1);
+
             var txtStartDate = new MaskedTextBoxTester("txtStartDate", fDialog);
             txtStartDate.Enter("01.01.2000");
 

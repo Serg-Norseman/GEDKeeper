@@ -327,8 +327,8 @@ namespace GKUI.Dialogs
             fResearch.ResearchName = txtName.Text;
             fResearch.Priority = (GKResearchPriority)cmbPriority.SelectedIndex;
             fResearch.Status = (GKResearchStatus)cmbStatus.SelectedIndex;
-            fResearch.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtStartDate.Text, true));
-            fResearch.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtStopDate.Text, true));
+            fResearch.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStartDate.Text, true));
+            fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
             fResearch.Percent = int.Parse(nudPercent.Text);
 
             CommitChanges();

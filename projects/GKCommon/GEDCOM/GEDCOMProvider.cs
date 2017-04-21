@@ -25,6 +25,32 @@ using System.Text;
 
 namespace GKCommon.GEDCOM
 {
+    public sealed class TagProperties
+    {
+        public readonly string Name;
+        public readonly bool SkipEmpty;
+        public readonly bool GKExtend;
+
+        public TagProperties(string name, bool skipEmpty, bool extend)
+        {
+            Name = name;
+            SkipEmpty = skipEmpty;
+            GKExtend = extend;
+        }
+    }
+
+    public struct GEDCOMAppFormat
+    {
+        public string Sign;
+        public string Name;
+
+        public GEDCOMAppFormat(string sign, string name)
+        {
+            Sign = sign;
+            Name = name;
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -36,13 +62,14 @@ namespace GKCommon.GEDCOM
         public const char GEDCOM_POINTER_DELIMITER = '@';
         public const string GEDCOM_NEWLINE = "\r\n";
 
-
         // deprecated
         //public const byte GEDCOMMaxPhoneNumbers = 3;
         //public const byte GEDCOMMaxEmailAddresses = 3;
         //public const byte GEDCOMMaxFaxNumbers = 3;
         //public const byte GEDCOMMaxWebPages = 3;
         //public const byte GEDCOMMaxLanguages = 3;
+
+        public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
 
         private readonly GEDCOMTree fTree;
@@ -51,6 +78,21 @@ namespace GKCommon.GEDCOM
         public GEDCOMProvider(GEDCOMTree tree)
         {
             fTree = tree;
+        }
+
+        static GEDCOMProvider()
+        {
+            fTagsBase = CreatePropertiesDict();
+
+            GEDCOMFormats = new GEDCOMAppFormat[] {
+                new GEDCOMAppFormat("", ""),
+                new GEDCOMAppFormat("GEDKeeper", ""),
+                new GEDCOMAppFormat("GENBOX", "Genbox Family History"),
+                new GEDCOMAppFormat("ALTREE", "Agelong Tree"),
+                new GEDCOMAppFormat("AGES", "Ages!"),
+                new GEDCOMAppFormat("PAF", "Personal Ancestral File"),
+                new GEDCOMAppFormat("AHN", "Ahnenblatt")
+            };
         }
 
         #region Encoding hack
@@ -147,7 +189,7 @@ namespace GKCommon.GEDCOM
                     str = GEDCOMUtils.TrimLeft(str);
                     if (str.Length == 0) continue;
 
-                    if (!GEDCOMUtils.IsDigit(str[0]))
+                    if (!SysUtils.IsDigit(str[0]))
                     {
                         FixFTBLine(curRecord, curTag, lineNum, str);
                     }
@@ -398,6 +440,88 @@ namespace GKCommon.GEDCOM
             {
                 Logger.LogWrite("GEDCOMProvider.FixFTBLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
             }
+        }
+
+        public static GEDCOMFormat GetGEDCOMFormat(GEDCOMTree tree)
+        {
+            if (tree != null) {
+                string sour = tree.Header.Source;
+
+                for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++) {
+                    if (GEDCOMProvider.GEDCOMFormats[(int)gf].Sign == sour) {
+                        return gf;
+                    }
+                }
+            }
+
+            return GEDCOMFormat.gf_Unknown;
+        }
+
+        #endregion
+
+        #region Tag properties
+
+        private static readonly Dictionary<string, TagProperties> fTagsBase;
+
+        private static Dictionary<string, TagProperties> CreatePropertiesDict()
+        {
+            var result = new Dictionary<string, TagProperties>();
+
+            result.Add("ADDR", new TagProperties("ADDR", true, false));
+            result.Add("AGNC", new TagProperties("AGNC", true, false));
+            result.Add("AUTH", new TagProperties("AUTH", true, false));
+            result.Add("CAUS", new TagProperties("CAUS", true, false));
+            result.Add("CHAN", new TagProperties("CHAN", true, false));
+            result.Add("CITY", new TagProperties("CITY", true, false));
+            result.Add("CTRY", new TagProperties("CTRY", true, false));
+            result.Add("DATE", new TagProperties("DATE", true, false));
+            result.Add("PAGE", new TagProperties("PAGE", true, false));
+            result.Add("PLAC", new TagProperties("PLAC", true, false));
+            result.Add("POST", new TagProperties("POST", true, false));
+            result.Add("PUBL", new TagProperties("PUBL", true, false));
+            result.Add("RESN", new TagProperties("RESN", true, false));
+            result.Add("STAE", new TagProperties("STAE", true, false));
+            result.Add("TEXT", new TagProperties("TEXT", true, false));
+            result.Add("TIME", new TagProperties("TIME", true, false));
+            result.Add("TYPE", new TagProperties("TYPE", true, false));
+            result.Add("SUBM", new TagProperties("SUBM", true, false));
+            result.Add("VERS", new TagProperties("VERS", true, false));
+            result.Add("LANG", new TagProperties("LANG", true, false));
+
+            result.Add("NPFX", new TagProperties("NPFX", true, false));
+            result.Add("GIVN", new TagProperties("GIVN", true, false));
+            result.Add("NICK", new TagProperties("NICK", true, false));
+            result.Add("SPFX", new TagProperties("SPFX", true, false));
+            result.Add("SURN", new TagProperties("SURN", true, false));
+            result.Add("NSFX", new TagProperties("NSFX", true, false));
+
+            result.Add("_PATN", new TagProperties("_PATN", true, true));
+            result.Add("_MARN", new TagProperties("_MARN", true, true));
+            result.Add("_RELN", new TagProperties("_RELN", true, true));
+            result.Add("_CENN", new TagProperties("_CENN", true, true));
+
+            result.Add("_LOC", new TagProperties("_LOC", true,  true));
+            result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
+            result.Add("ALIA", new TagProperties("ALIA", true, false));
+
+            // need for compatibility with Agelong Tree (ALTREE)
+            //TAGS_BASE.Add("HUSB", new TagProperties("HUSB", true, false));
+            //TAGS_BASE.Add("WIFE", new TagProperties("WIFE", true, false));
+
+            result.Add("_BGRO", new TagProperties("_BGRO", true,  true));
+            result.Add("_HAIR", new TagProperties("_HAIR", true,  true));
+            result.Add("_EYES", new TagProperties("_EYES", true,  true));
+            result.Add("_MDNA", new TagProperties("_MDNA", true,  true));
+            result.Add("_YDNA", new TagProperties("_YDNA", true,  true));
+
+            return result;
+        }
+
+        public static TagProperties GetTagProps(string tagName)
+        {
+            TagProperties result;
+            fTagsBase.TryGetValue(tagName, out result);
+            return result;
         }
 
         #endregion

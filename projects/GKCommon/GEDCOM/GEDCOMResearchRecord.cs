@@ -46,14 +46,14 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("_STATUS", GEDCOMUtils.GetStatusStr(value)); }
         }
 
-        public GEDCOMDateExact StartDate
+        public GEDCOMDate StartDate
         {
-            get { return TagClass("_STARTDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STARTDATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
-        public GEDCOMDateExact StopDate
+        public GEDCOMDate StopDate
         {
-            get { return TagClass("_STOPDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STOPDATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public int Percent
@@ -109,7 +109,7 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "_STARTDATE" || tagName == "_STOPDATE")
             {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateExact.Create);
+                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
             else if (tagName == "_TASK")
             {

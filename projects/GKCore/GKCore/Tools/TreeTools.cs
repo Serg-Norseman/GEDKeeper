@@ -567,7 +567,7 @@ namespace GKCore.Tools
                 pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), tree.RecordsCount);
                 try
                 {
-                    GEDCOMFormat format = tree.GetGEDCOMFormat();
+                    GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
                     bool idCheck = true;
                     int fileVer;
 

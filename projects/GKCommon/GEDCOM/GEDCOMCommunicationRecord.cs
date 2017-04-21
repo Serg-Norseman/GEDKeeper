@@ -24,9 +24,9 @@ namespace GKCommon.GEDCOM
     {
         public static readonly string[] CommunicationTags = new string[] { "FROM", "TO" };
 
-        public GEDCOMDateExact Date
+        public GEDCOMDate Date
         {
-            get { return TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public string CommName
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
             }
             else if (tagName == "DATE")
             {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateExact.Create);
+                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
             else
             {

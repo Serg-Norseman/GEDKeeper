@@ -65,34 +65,6 @@ namespace GKTests.GEDCOM
 
             //
 
-            string str;
-            
-            //
-
-            string gcStr;
-
-            Assert.AreEqual("", GEDCOMUtils.StrToGEDCOMDate(null, false));
-            Assert.AreEqual("20 DEC 1980", GEDCOMUtils.StrToGEDCOMDate("20/12/1980", false));
-
-            gcStr = GEDCOMUtils.StrToGEDCOMDate("__/12/1980", false);
-            Assert.AreEqual("DEC 1980", gcStr);
-            
-            Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMUtils.StrToGEDCOMDate("1980", true); });
-            
-            gcStr = GEDCOMUtils.StrToGEDCOMDate("1980", false);
-            Assert.AreEqual("", gcStr);
-
-            //
-
-            GEDCOMUtils.TagProperties props = GEDCOMUtils.GetTagProps("ADDR");
-            Assert.IsNotNull(props);
-            Assert.IsTrue(props.EmptySkip);
-
-            props = GEDCOMUtils.GetTagProps("test");
-            Assert.IsNull(props);
-
-            //
-
             Assert.AreEqual("I12", GEDCOMUtils.CleanXRef("@I12@"), "CleanXRef(@I12@)");
             Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
 
@@ -163,16 +135,7 @@ namespace GKTests.GEDCOM
 
             //
 
-            Assert.IsFalse(GEDCOMUtils.IsDigit('F'), "IsDigit(F)");
-            Assert.IsTrue(GEDCOMUtils.IsDigit('9'), "IsDigit(9)");
-
-            Assert.IsFalse(GEDCOMUtils.IsDigits("f09"), "IsDigits(f09)");
-            Assert.IsTrue(GEDCOMUtils.IsDigits("99"), "IsDigits(99)");
-
-            //
-
             Assert.AreEqual("0F000F00D700D700CCDC", GEDCOMUtils.GetRectUID(15, 15, 215, 215));
-            Assert.IsNull(GEDCOMUtils.GetMultimediaLinkUID(null));
         }
 
         [TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]

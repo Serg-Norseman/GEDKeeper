@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("STAT", GEDCOMUtils.GetBaptismDateStatusStr(value)); }
         }
 
-        public GEDCOMDateExact BaptismChangeDate
+        public GEDCOMDate BaptismChangeDate
         {
             get { return GetChangeDate(); }
         }
@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("STAT", GEDCOMUtils.GetEndowmentDateStatusStr(value)); }
         }
 
-        public GEDCOMDateExact EndowmentChangeDate
+        public GEDCOMDate EndowmentChangeDate
         {
             get { return GetChangeDate(); }
         }
@@ -72,15 +72,15 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("STAT", GEDCOMUtils.GetChildSealingDateStatusStr(value)); }
         }
 
-        public GEDCOMDateExact ChildSealingChangeDate
+        public GEDCOMDate ChildSealingChangeDate
         {
             get { return GetChangeDate(); }
         }
 
 
-        private GEDCOMDateExact GetChangeDate()
+        private GEDCOMDate GetChangeDate()
         {
-            return DateStatus.TagClass("CHAN", GEDCOMDateExact.Create) as GEDCOMDateExact;
+            return DateStatus.TagClass("CHAN", GEDCOMDate.Create) as GEDCOMDate;
         }
 
         public GEDCOMDateStatus DateStatus

@@ -34,14 +34,14 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
         }
 
-        public GEDCOMDateExact StartDate
+        public GEDCOMDate StartDate
         {
-            get { return TagClass("_STARTDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STARTDATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
-        public GEDCOMDateExact StopDate
+        public GEDCOMDate StopDate
         {
-            get { return TagClass("_STOPDATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("_STOPDATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -57,7 +57,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "_STARTDATE" || tagName == "_STOPDATE")
             {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateExact.Create);
+                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
             else
             {

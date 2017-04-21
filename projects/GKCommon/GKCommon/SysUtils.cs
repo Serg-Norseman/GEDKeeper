@@ -88,6 +88,32 @@ namespace GKCommon
             return (val & (1 << pos)) != 0;
         }
 
+        public static bool IsDigit(char chr)
+        {
+            return chr >= '0' && chr <= '9';
+        }
+
+        public static bool IsDigits(string str)
+        {
+            bool res = false;
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                int I;
+                for (I = 1; I <= str.Length; I++)
+                {
+                    char c = str[I - 1];
+                    if (c < '0' || c >= ':')
+                    {
+                        break;
+                    }
+                }
+                res = (I > str.Length);
+            }
+
+            return res;
+        }
+
         #region Math helpers
 
         public static long Trunc(double value)
@@ -672,6 +698,31 @@ namespace GKCommon
                 crc = CrcBytes(data);
             }
             return crc;
+        }
+
+        #endregion
+
+        #region Encoding
+
+        public static string EncodeUID(byte[] binaryKey)
+        {
+            StringBuilder result = new StringBuilder(36);
+            byte checkA = 0;
+            byte checkB = 0;
+
+            int num = binaryKey.Length;
+            for (int i = 0; i < num; i++)
+            {
+                byte val = binaryKey[i];
+                checkA = unchecked((byte)(checkA + (uint)val));
+                checkB = unchecked((byte)(checkB + (uint)checkA));
+                result.Append(val.ToString("X2"));
+            }
+
+            result.Append(checkA.ToString("X2"));
+            result.Append(checkB.ToString("X2"));
+
+            return result.ToString();
         }
 
         #endregion

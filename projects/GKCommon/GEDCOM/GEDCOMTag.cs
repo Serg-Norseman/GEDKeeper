@@ -152,8 +152,8 @@ namespace GKCommon.GEDCOM
 
         public bool IsEmptySkip()
         {
-            GEDCOMUtils.TagProperties props = GEDCOMUtils.GetTagProps(fName);
-            return (props != null && props.EmptySkip);
+            TagProperties props = GEDCOMProvider.GetTagProps(fName);
+            return (props != null && props.SkipEmpty);
         }
 
         internal void SetLevel(int value)
@@ -205,7 +205,7 @@ namespace GKCommon.GEDCOM
             if (source == null) return;
             
             SetName(source.Name);
-            StringValue = source.StringValue;
+            SetStringValue(source.StringValue);
 
             foreach (GEDCOMTag sourceTag in source.fTags)
             {

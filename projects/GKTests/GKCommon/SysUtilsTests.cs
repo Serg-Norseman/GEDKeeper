@@ -268,5 +268,14 @@ namespace GKTests.GKCommon
             Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));
         }
 
+        [Test]
+        public void Test_IsDigit()
+        {
+            Assert.IsFalse(SysUtils.IsDigit('F'), "IsDigit(F)");
+            Assert.IsTrue(SysUtils.IsDigit('9'), "IsDigit(9)");
+
+            Assert.IsFalse(SysUtils.IsDigits("f09"), "IsDigits(f09)");
+            Assert.IsTrue(SysUtils.IsDigits("99"), "IsDigits(99)");
+        }
     }
 }

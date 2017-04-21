@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
         private readonly T fDefaultValue;
         private readonly bool fCaseSensitive;
 
-        public GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
+        protected GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
         {
             Type enumType = typeof(T);
             if (!enumType.IsEnum)
@@ -89,85 +89,6 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public static class GEDCOMUtils
     {
-        #region Tag properties
-
-        public sealed class TagProperties
-        {
-            public readonly string Name;
-            public readonly bool EmptySkip;
-            public readonly bool GKExtend;
-
-            public TagProperties(string name, bool emptySkip, bool extend)
-            {
-                Name = name;
-                EmptySkip = emptySkip;
-                GKExtend = extend;
-            }
-        }
-
-        private static readonly Dictionary<string, TagProperties> TAGS_BASE;
-
-
-        static GEDCOMUtils()
-        {
-            TAGS_BASE = new Dictionary<string, TagProperties>();
-            TAGS_BASE.Add("ADDR", new TagProperties("ADDR", true, false));
-            TAGS_BASE.Add("AGNC", new TagProperties("AGNC", true, false));
-            TAGS_BASE.Add("AUTH", new TagProperties("AUTH", true, false));
-            TAGS_BASE.Add("CAUS", new TagProperties("CAUS", true, false));
-            TAGS_BASE.Add("CHAN", new TagProperties("CHAN", true, false));
-            TAGS_BASE.Add("CITY", new TagProperties("CITY", true, false));
-            TAGS_BASE.Add("CTRY", new TagProperties("CTRY", true, false));
-            TAGS_BASE.Add("DATE", new TagProperties("DATE", true, false));
-            TAGS_BASE.Add("PAGE", new TagProperties("PAGE", true, false));
-            TAGS_BASE.Add("PLAC", new TagProperties("PLAC", true, false));
-            TAGS_BASE.Add("POST", new TagProperties("POST", true, false));
-            TAGS_BASE.Add("PUBL", new TagProperties("PUBL", true, false));
-            TAGS_BASE.Add("RESN", new TagProperties("RESN", true, false));
-            TAGS_BASE.Add("STAE", new TagProperties("STAE", true, false));
-            TAGS_BASE.Add("TEXT", new TagProperties("TEXT", true, false));
-            TAGS_BASE.Add("TIME", new TagProperties("TIME", true, false));
-            TAGS_BASE.Add("TYPE", new TagProperties("TYPE", true, false));
-            TAGS_BASE.Add("SUBM", new TagProperties("SUBM", true, false));
-            TAGS_BASE.Add("VERS", new TagProperties("VERS", true, false));
-            TAGS_BASE.Add("LANG", new TagProperties("LANG", true, false));
-
-            TAGS_BASE.Add("NPFX", new TagProperties("NPFX", true, false));
-            TAGS_BASE.Add("GIVN", new TagProperties("GIVN", true, false));
-            TAGS_BASE.Add("NICK", new TagProperties("NICK", true, false));
-            TAGS_BASE.Add("SPFX", new TagProperties("SPFX", true, false));
-            TAGS_BASE.Add("SURN", new TagProperties("SURN", true, false));
-            TAGS_BASE.Add("NSFX", new TagProperties("NSFX", true, false));
-
-            TAGS_BASE.Add("_PATN", new TagProperties("_PATN", true, true));
-            TAGS_BASE.Add("_MARN", new TagProperties("_MARN", true, true));
-            TAGS_BASE.Add("_RELN", new TagProperties("_RELN", true, true));
-            TAGS_BASE.Add("_CENN", new TagProperties("_CENN", true, true));
-
-            TAGS_BASE.Add("_LOC", new TagProperties("_LOC", true,  true));
-            TAGS_BASE.Add("_POSITION", new TagProperties("_POSITION", true,  true));
-            TAGS_BASE.Add("ALIA", new TagProperties("ALIA", true, false));
-
-            // need for compatibility with Agelong Tree (ALTREE)
-            //TAGS_BASE.Add("HUSB", new TagProperties("HUSB", true, false));
-            //TAGS_BASE.Add("WIFE", new TagProperties("WIFE", true, false));
-
-            TAGS_BASE.Add("_BGRO", new TagProperties("_BGRO", true,  true));
-            TAGS_BASE.Add("_HAIR", new TagProperties("_HAIR", true,  true));
-            TAGS_BASE.Add("_EYES", new TagProperties("_EYES", true,  true));
-            TAGS_BASE.Add("_MDNA", new TagProperties("_MDNA", true,  true));
-            TAGS_BASE.Add("_YDNA", new TagProperties("_YDNA", true,  true));
-        }
-
-        public static TagProperties GetTagProps(string tagName)
-        {
-            TagProperties result;
-            TAGS_BASE.TryGetValue(tagName, out result);
-            return result;
-        }
-
-        #endregion
-
         #region Parse functions
 
         public static string TrimLeft(string str)
@@ -324,7 +245,7 @@ namespace GKCommon.GEDCOM
 
             if (!string.IsNullOrEmpty(result)) {
                 int I = 0;
-                while (I < result.Length && IsDigit(result[I])) {
+                while (I < result.Length && SysUtils.IsDigit(result[I])) {
                     I++;
                 }
 
@@ -342,32 +263,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public static bool IsDigit(char chr)
-        {
-            return chr >= '0' && chr <= '9';
-        }
-
-        public static bool IsDigits(string str)
-        {
-            bool res = false;
-
-            if (!string.IsNullOrEmpty(str))
-            {
-                int I;
-                for (I = 1; I <= str.Length; I++)
-                {
-                    char c = str[I - 1];
-                    if (c < '0' || c >= ':')
-                    {
-                        break;
-                    }
-                }
-                res = (I > str.Length);
-            }
-
-            return res;
         }
 
         #endregion
@@ -1564,58 +1459,6 @@ namespace GKCommon.GEDCOM
 
         #region Other
 
-        // FIXME: there is the bug - use GEDCOMMonthArray without depend to Calendar (hebrew and islamic month's names)
-        public static string StrToGEDCOMDate(string strDate, bool aException)
-        {
-            if (string.IsNullOrEmpty(strDate)) return "";
-
-            if (strDate.IndexOf("/") >= 0) strDate = strDate.Replace("/", ".");
-            if (strDate.IndexOf("_") >= 0) strDate = strDate.Replace("_", " ");
-
-            string[] dtParts = strDate.Split('.');
-            if (dtParts.Length < 3)
-            {
-                if (aException) {
-                    throw new GEDCOMDateException(string.Format("GKUtils.StrToGEDCOMDate(): date format is invalid {0}", strDate));
-                }
-
-                return "";
-            }
-
-            string result = "";
-
-            string pd = dtParts[0].Trim();
-            string pm = dtParts[1].Trim();
-            string py = dtParts[2].Trim();
-
-            if (pd != "") result = result + pd + " ";
-            if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[SysUtils.ParseInt(pm, 1) - 1] + " ";
-            if (py != "") result += py;
-
-            return result;
-        }
-
-        public static string EncodeUID(byte[] binaryKey)
-        {
-            StringBuilder result = new StringBuilder(36);
-            byte checkA = 0;
-            byte checkB = 0;
-
-            int num = binaryKey.Length;
-            for (int i = 0; i < num; i++)
-            {
-                byte val = binaryKey[i];
-                checkA = unchecked((byte)(checkA + (uint)val));
-                checkB = unchecked((byte)(checkB + (uint)checkA));
-                result.Append(val.ToString("X2"));
-            }
-
-            result.Append(checkA.ToString("X2"));
-            result.Append(checkB.ToString("X2"));
-
-            return result.ToString();
-        }
-
         public static string GetRectUID(int x1, int y1, int x2, int y2)
         {
             byte[] bx1 = BitConverter.GetBytes((ushort)x1);
@@ -1629,54 +1472,12 @@ namespace GKCommon.GEDCOM
             Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
             Buffer.BlockCopy(by2, 0, buffer, 6, 2);
 
-            return EncodeUID(buffer);
-        }
-
-        public static string GetMultimediaLinkUID(GEDCOMMultimediaLink mmLink)
-        {
-            string result = null;
-            try
-            {
-                if (mmLink != null && mmLink.Value != null)
-                {
-                    ExtRect cutoutArea;
-                    if (mmLink.IsPrimaryCutout) {
-                        cutoutArea = mmLink.CutoutPosition.Value;
-                    } else {
-                        cutoutArea = ExtRect.CreateEmpty();
-                    }
-
-                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
-                    result = mmRec.UID + "-" + GEDCOMUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMUtils.GetMultimediaLinkUID(): " + ex.Message);
-                result = null;
-            }
-            return result;
+            return SysUtils.EncodeUID(buffer);
         }
 
         public static UDN GetUDN(GEDCOMCustomEvent evt)
         {
             return (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
-        }
-
-        public static UDN GetUDN(string dateStr)
-        {
-            try
-            {
-                dateStr = StrToGEDCOMDate(dateStr, false);
-
-                GEDCOMDateExact dtx = (GEDCOMDateExact)GEDCOMDateExact.Create(null, null, "", "");
-                dtx.ParseString(dateStr);
-                return dtx.GetUDN();
-            }
-            catch
-            {
-                return UDN.CreateEmpty();
-            }
         }
 
         #endregion

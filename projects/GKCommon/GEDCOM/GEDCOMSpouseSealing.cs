@@ -44,9 +44,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("STAT", GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
         }
 
-        public GEDCOMDateExact SpouseSealingChangeDate
+        public GEDCOMDate SpouseSealingChangeDate
         {
-            get { return DateStatus.TagClass("CHAN", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return DateStatus.TagClass("CHAN", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDateStatus DateStatus

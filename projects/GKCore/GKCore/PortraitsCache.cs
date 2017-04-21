@@ -117,7 +117,7 @@ namespace GKCore
             if (mmLink == null) return;
 
             try {
-                string imageUID = GEDCOMUtils.GetMultimediaLinkUID(mmLink);
+                string imageUID = mmLink.GetUID();
                 string cachedFile = GetCachedFilename(imageUID);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {

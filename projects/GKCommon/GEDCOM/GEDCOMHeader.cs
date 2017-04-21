@@ -129,9 +129,9 @@ namespace GKCommon.GEDCOM
             get { return TagClass("SUBM", GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
-        public GEDCOMDateExact TransmissionDate
+        public GEDCOMDate TransmissionDate
         {
-            get { return TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact; }
+            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMTime TransmissionTime
@@ -169,7 +169,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "DATE")
             {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateExact.Create);
+                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
             else if (tagName == "SUBM")
             {

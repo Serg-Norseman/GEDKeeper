@@ -22,6 +22,7 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests.ControlTesters;
 using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
@@ -48,11 +49,9 @@ namespace GKTests.UITests
             fContext = fBase.Context;
             fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
 
-            //ExpectModal("CommunicationEditDlg", "DlgHandler");
             fDialog = new CommunicationEditDlg();
             fDialog.InitDialog(fBase);
             fDialog.Communication = fCommunicationRecord;
-            //fDialog.ShowDialog();
             fDialog.Show();
         }
 
@@ -70,11 +69,33 @@ namespace GKTests.UITests
 
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);
+
+            var cmbCorrType = new ComboBoxTester("cmbCorrType", fDialog);
+            cmbCorrType.Select(1);
 
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
+            Assert.AreEqual(GKCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
+            Assert.AreEqual("", fCommunicationRecord.Date.StringValue);
+        }
+
+        [Test]
+        public void Test_EnterDataDatesAndApply()
+        {
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
+
+            var txtName = new TextBoxTester("txtName");
+            txtName.Enter("sample text");
+
+            var txtDate = new MaskedTextBoxTester("txtDate", fDialog);
+            txtDate.Enter("20.02.2000");
+
+            ClickButton("btnAccept", fDialog);
+
+            Assert.AreEqual("sample text", fCommunicationRecord.CommName);
+            Assert.AreEqual("20 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
     }
 }

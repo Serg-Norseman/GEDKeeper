@@ -268,7 +268,7 @@ namespace GKCore.Lists
                     return DateTime.Parse(val);
 
                 case DataType.dtGEDCOMDate:
-                    return GEDCOMUtils.GetUDN(val);
+                    return GEDCOMDate.GetUDNByFormattedStr(val, GEDCOMCalendar.dcGregorian);
             }
 
             return val;

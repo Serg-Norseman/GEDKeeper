@@ -95,7 +95,6 @@
     <Compile Include="Externals\ListTimSort.cs" />
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
-    <Compile Include="GEDCOM\GEDCOMConsts.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />
     <Compile Include="GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="GEDCOM\GEDCOMList.cs" />
@@ -114,8 +113,6 @@
     <Compile Include="GEDCOM\GEDCOMCustomRecord.cs" />
     <Compile Include="GEDCOM\GEDCOMData.cs" />
     <Compile Include="GEDCOM\GEDCOMDate.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateApproximated.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateExact.cs" />
     <Compile Include="GEDCOM\GEDCOMDateInterpreted.cs" />
     <Compile Include="GEDCOM\GEDCOMDatePeriod.cs" />
     <Compile Include="GEDCOM\GEDCOMDateRange.cs" />

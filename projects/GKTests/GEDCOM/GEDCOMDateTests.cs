@@ -18,17 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+
+using System;
+using GKCommon.GEDCOM;
+using NUnit.Framework;
+
+namespace GKTests.GEDCOM
 {
-    public sealed class GEDCOMDateExact : GEDCOMDate
+    [TestFixture]
+    public class GEDCOMDateTests
     {
-        public GEDCOMDateExact(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        [Test]
+        public void TestMethod()
         {
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        [Test]
+        public void Test_CreateByFormattedStr()
         {
-            return new GEDCOMDateExact(owner, parent, tagName, tagValue);
+            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr(null, false));
+            Assert.AreEqual("20 DEC 1980", GEDCOMDate.CreateByFormattedStr("20/12/1980", false).StringValue);
+            Assert.AreEqual("DEC 1980", GEDCOMDate.CreateByFormattedStr("__/12/1980", false).StringValue);
+            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr("1980", false));
+            
+            Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMDate.CreateByFormattedStr("1980", true); });
         }
     }
 }

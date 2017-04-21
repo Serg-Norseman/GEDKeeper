@@ -92,7 +92,6 @@ namespace GKCommon.GEDCOM
         private ProgressEventHandler fOnProgressEvent;
         private GEDCOMState fState;
         private int fUpdateCount;
-        private GEDCOMFormat fFormat;
 
 
         public ProgressEventHandler OnProgress
@@ -369,25 +368,6 @@ namespace GKCommon.GEDCOM
             }
 
             return stats;
-        }
-
-        public GEDCOMFormat GetGEDCOMFormat()
-        {
-            if (fFormat != GEDCOMFormat.gf_Unknown) return fFormat;
-
-            string sour = fHeader.Source;
-
-            for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++)
-            {
-                if (GEDCOMConsts.GEDCOMFormats[(int)gf].Sign == sour)
-                {
-                    fFormat = gf;
-                    return gf;
-                }
-            }
-
-            fFormat = GEDCOMFormat.gf_Unknown;
-            return GEDCOMFormat.gf_Unknown;
         }
 
         public GEDCOMSubmitterRecord GetSubmitter()
@@ -718,6 +698,10 @@ namespace GKCommon.GEDCOM
             DeleteRecord(locRec);
             return true;
         }
+
+        #endregion
+
+        #region Utilities
 
         #endregion
 

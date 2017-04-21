@@ -22,6 +22,7 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests.ControlTesters;
 using GKTests.Mocks;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
@@ -62,11 +63,21 @@ namespace GKTests.UITests
         [Test]
         public void Test_EnterDataAndApply()
         {
+            // Empty dates
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fResearchRecord, fDialog.Research);
 
             var txtName = new TextBoxTester("txtName", fDialog);
             txtName.Enter("sample text");
+
+            var cmbPriority = new ComboBoxTester("cmbPriority", fDialog);
+            cmbPriority.Select(1);
+
+            var cmbStatus = new ComboBoxTester("cmbStatus", fDialog);
+            cmbStatus.Select(1);
+
+            var nudPercent = new NumericUpDownTester("nudPercent", fDialog);
+            nudPercent.EnterValue(11);
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
@@ -74,6 +85,37 @@ namespace GKTests.UITests
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fResearchRecord.ResearchName);
+            Assert.AreEqual(GKResearchPriority.rpLow, fResearchRecord.Priority);
+            Assert.AreEqual(GKResearchStatus.rsInProgress, fResearchRecord.Status);
+            Assert.AreEqual(11, fResearchRecord.Percent);
+            Assert.AreEqual("", fResearchRecord.StartDate.StringValue);
+            Assert.AreEqual("", fResearchRecord.StopDate.StringValue);
+        }
+
+        [Test]
+        public void Test_EnterDataDatesAndApply()
+        {
+            // Dates isn't empty
+            Assert.AreEqual(fBase, fDialog.Base);
+            Assert.AreEqual(fResearchRecord, fDialog.Research);
+
+            var txtName = new TextBoxTester("txtName", fDialog);
+            txtName.Enter("sample text");
+
+            var txtStartDate = new MaskedTextBoxTester("txtStartDate", fDialog);
+            txtStartDate.Enter("01.01.2000");
+
+            var txtStopDate = new MaskedTextBoxTester("txtStopDate", fDialog);
+            txtStopDate.Enter("20.02.2000");
+
+            // The links to other records can be added or edited only in MainWinTests
+            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
+
+            ClickButton("btnAccept", fDialog);
+
+            Assert.AreEqual("sample text", fResearchRecord.ResearchName);
+            Assert.AreEqual("01 JAN 2000", fResearchRecord.StartDate.StringValue);
+            Assert.AreEqual("20 FEB 2000", fResearchRecord.StopDate.StringValue);
         }
     }
 }

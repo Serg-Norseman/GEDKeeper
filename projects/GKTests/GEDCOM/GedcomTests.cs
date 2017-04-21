@@ -330,7 +330,7 @@ namespace GKTests.GEDCOM
             UDN testUDN = iRec.GetUDN("BIRT");
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
-            testUDN = GEDCOMUtils.GetUDN("28/12/1990");
+            testUDN = GEDCOMDate.GetUDNByFormattedStr("28/12/1990", GEDCOMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
             using (GEDCOMDateValue dateVal = new GEDCOMDateValue(null, null, "", "")) {
@@ -450,9 +450,9 @@ namespace GKTests.GEDCOM
         }
 
         [Test]
-        public void GEDCOMDateExact_Tests()
+        public void GEDCOMDate_Tests()
         {
-            using (GEDCOMDateExact dtx1 = new GEDCOMDateExact(null, null, "DATE", "20 JAN 2013"))
+            using (GEDCOMDate dtx1 = new GEDCOMDate(null, null, "DATE", "20 JAN 2013"))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
@@ -506,7 +506,7 @@ namespace GKTests.GEDCOM
                 dtx1.ParseString("@#DJULIAN@ 01 MAR 1980");
                 Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
 
-                using (GEDCOMDateExact dtx2 = new GEDCOMDateExact(null, null, "DATE", ""))
+                using (GEDCOMDate dtx2 = new GEDCOMDate(null, null, "DATE", ""))
                 {
                     Assert.IsNotNull(dtx2, "dtx2 != null");
 
@@ -750,24 +750,24 @@ namespace GKTests.GEDCOM
                 dtx1.ParseString(st);
                 Assert.IsTrue(dtx1.Date.Equals(dt));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daAbout, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
+                Assert.AreEqual(GEDCOMApproximated.daAbout, ((GEDCOMDate)dtx1.Value).Approximated);
                 
                 st = "CAL 20 JAN 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, dt);
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daCalculated, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
+                Assert.AreEqual(GEDCOMApproximated.daCalculated, ((GEDCOMDate)dtx1.Value).Approximated);
                 
                 st = "EST 20 DEC 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, ParseDT("20.12.2013"));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daEstimated, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
+                Assert.AreEqual(GEDCOMApproximated.daEstimated, ((GEDCOMDate)dtx1.Value).Approximated);
 
-                ((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daCalculated;
+                ((GEDCOMDate)dtx1.Value).Approximated = GEDCOMApproximated.daCalculated;
                 Assert.AreEqual("CAL 20 DEC 2013", dtx1.StringValue);
 
-                ((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
+                ((GEDCOMDate)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
                 Assert.AreEqual("20 DEC 2013", dtx1.StringValue);
 
                 using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "DATE", "19 JAN 2013"))
@@ -999,11 +999,6 @@ namespace GKTests.GEDCOM
             tree.OnProgress -= OnTreeProgress;
             //Assert.AreEqual(null, tree.OnProgress);
 
-
-            // Tests of determine GEDCOM-format
-            Assert.AreEqual(GEDCOMFormat.gf_Unknown, tree.GetGEDCOMFormat());
-            tree.Header.Source = "GENBOX";
-            Assert.AreEqual(GEDCOMFormat.gf_GENBOX, tree.GetGEDCOMFormat());
 
             //
 
@@ -2322,6 +2317,8 @@ namespace GKTests.GEDCOM
                 Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
 
+                Assert.IsNull(mmLink.GetUID());
+
                 mmLink.CutoutPosition.Clear();
                 Assert.IsTrue(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("", mmLink.CutoutPosition.StringValue);
@@ -2656,36 +2653,35 @@ namespace GKTests.GEDCOM
         private static string[] MediaTypeArr = new string[] { "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
 
-        private sealed class GEDCOMMediaTypeEnumHelper : GEDCOMEnumHelper<GEDCOMMediaType>
+        private sealed class GEDCOMMediaTypeEnum : GEDCOMEnumHelper<GEDCOMMediaType>
         {
             private static string[] XMediaTypeArr = new string[] {
                 "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
                 "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
 
-            public GEDCOMMediaTypeEnumHelper() : base(XMediaTypeArr, GEDCOMMediaType.mtUnknown, false)
+            protected GEDCOMMediaTypeEnum() : base(XMediaTypeArr, GEDCOMMediaType.mtUnknown, false)
             {
             }
+
+            public static readonly GEDCOMMediaTypeEnum Instance = new GEDCOMMediaTypeEnum();
         }
 
         [Test]
         public void GEDCOMEnumParse_Tests()
         {
-            var mediaEnumHelper = new GEDCOMMediaTypeEnumHelper();
+            Assert.IsNotNull(GEDCOMMediaTypeEnum.Instance);
 
-            string strVal3 = mediaEnumHelper.GetStrValue((GEDCOMMediaType) 15);
+            string strVal3 = GEDCOMMediaTypeEnum.Instance.GetStrValue((GEDCOMMediaType) 15);
             Assert.AreEqual("", strVal3);
 
-            strVal3 = mediaEnumHelper.GetStrValue(GEDCOMMediaType.mtMagazine);
+            strVal3 = GEDCOMMediaTypeEnum.Instance.GetStrValue(GEDCOMMediaType.mtMagazine);
             Assert.AreEqual("magazine", strVal3);
 
-            GEDCOMMediaType mt3 = mediaEnumHelper.GetEnumValue(strVal3);
+            GEDCOMMediaType mt3 = GEDCOMMediaTypeEnum.Instance.GetEnumValue(strVal3);
             Assert.AreEqual(GEDCOMMediaType.mtMagazine, mt3);
 
-            mt3 = mediaEnumHelper.GetEnumValue("test");
+            mt3 = GEDCOMMediaTypeEnum.Instance.GetEnumValue("test");
             Assert.AreEqual(GEDCOMMediaType.mtUnknown, mt3);
-
-            Assert.Throws(typeof(ArgumentException), () => { new GEDCOMEnumHelper<int>(MediaTypeArr, (int)GEDCOMMediaType.mtUnknown); });
-            Assert.Throws(typeof(ArgumentException), () => { new GEDCOMEnumHelper<GEDCOMMediaType>(new string[] { "" }, GEDCOMMediaType.mtUnknown); });
 
             // performance test
             /*Random rnd = new Random();

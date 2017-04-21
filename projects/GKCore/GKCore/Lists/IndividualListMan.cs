@@ -456,7 +456,7 @@ namespace GKCore.Lists
         {
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            filter_abd = GEDCOMUtils.GetUDN(iFilter.AliveBeforeDate);
+            filter_abd = GEDCOMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GEDCOMCalendar.dcGregorian);
 
             if (iFilter.GroupRef == "") {
                 filter_grp = null;

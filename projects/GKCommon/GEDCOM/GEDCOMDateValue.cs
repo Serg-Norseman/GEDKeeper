@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
             }
             else
             {
-                fValue = new GEDCOMDateExact(Owner, this, "", "");
+                fValue = new GEDCOMDate(Owner, this, "", "");
                 fValue.Date = value;
             }
         }
@@ -90,7 +90,7 @@ namespace GKCommon.GEDCOM
 
                 if (su == GEDCOMDateApproximatedArray[1] || su == GEDCOMDateApproximatedArray[2] || su == GEDCOMDateApproximatedArray[3])
                 {
-                    fValue = new GEDCOMDateApproximated(Owner, this, "", "");
+                    fValue = new GEDCOMDate(Owner, this, "", "");
                 }
                 else if (su == "INT")
                 {

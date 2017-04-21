@@ -100,8 +100,10 @@ namespace GKUI.Dialogs
             try
             {
                 fTask.Priority = (GKResearchPriority)txtPriority.SelectedIndex;
-                fTask.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtStartDate.Text, true));
-                fTask.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtStopDate.Text, true));
+
+                fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStartDate.Text, true));
+                fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
+
                 GKGoalType gt = (GKGoalType)cmbGoalType.SelectedIndex;
                 switch (gt) {
                     case GKGoalType.gtIndividual:

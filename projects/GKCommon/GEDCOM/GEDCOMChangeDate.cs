@@ -24,10 +24,10 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMChangeDate : GEDCOMTag
     {
-        public GEDCOMDateExact ChangeDate
+        public GEDCOMDate ChangeDate
         {
             get {
-                return TagClass("DATE", GEDCOMDateExact.Create) as GEDCOMDateExact;
+                return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate;
             }
         }
 
@@ -67,7 +67,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "DATE")
             {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateExact.Create);
+                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
             else if (tagName == "NOTE")
             {

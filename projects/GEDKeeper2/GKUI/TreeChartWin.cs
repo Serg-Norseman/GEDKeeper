@@ -210,8 +210,7 @@ namespace GKUI
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             string fileName = AppHub.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName))
-            {
+            if (!string.IsNullOrEmpty(fileName)) {
                 fTreeBox.SaveSnapshot(fileName);
             }
         }

@@ -124,6 +124,8 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
+            // Format: AFT DATE, BEF DATE, BET AFT_DATE AND BEF_DATE
+
             fDateAfter.Clear();
             fDateBefore.Clear();
 
@@ -181,6 +183,11 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateRange(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
+        }
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        {
+            return new GEDCOMDateRange(owner, parent, tagName, tagValue);
         }
 
         public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)

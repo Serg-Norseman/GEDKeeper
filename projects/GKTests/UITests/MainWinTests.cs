@@ -484,7 +484,12 @@ namespace GKTests.UITests
             Assert.AreEqual(GlobalOptions.Instance, optDlg.Options);
 
             optDlg.SetPage(OptionsPage.opCommon);
+
             optDlg.SetPage(OptionsPage.opTreeChart);
+            var chkPortraitsVisible = new CheckBoxTester("chkPortraitsVisible", form);
+            chkPortraitsVisible.Properties.Checked = false;
+            chkPortraitsVisible.Properties.Checked = true;
+
             optDlg.SetPage(OptionsPage.opAncestorsCircle);
 
             optDlg.SetPage(OptionsPage.opInterface);

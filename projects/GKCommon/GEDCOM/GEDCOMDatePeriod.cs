@@ -131,6 +131,8 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
+            // Format: FROM DATE1 TO DATE2
+
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
             {

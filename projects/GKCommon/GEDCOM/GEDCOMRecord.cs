@@ -80,7 +80,7 @@ namespace GKCommon.GEDCOM
         private static string CreateUID()
         {
             byte[] binary = Guid.NewGuid().ToByteArray();
-            string result = GEDCOMUtils.EncodeUID(binary);
+            string result = SysUtils.EncodeUID(binary);
             return result;
         }
 

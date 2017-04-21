@@ -592,11 +592,8 @@ namespace GKCore
                     GEDCOMDate dtx = (GEDCOMDate) date;
                     result = GetDateFmtString(dtx, format, true, showCalendar);
 
-                    if (dtx is GEDCOMDateApproximated)
-                    {
-                        if (sign && (dtx as GEDCOMDateApproximated).Approximated != GEDCOMApproximated.daExact) {
-                            result = "~ " + result;
-                        }
+                    if (sign && dtx.Approximated != GEDCOMApproximated.daExact) {
+                        result = "~ " + result;
                     }
                 }
                 else if (date is GEDCOMDateRange)

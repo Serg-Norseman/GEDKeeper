@@ -69,6 +69,8 @@
   <ItemGroup>
     <Compile Include="CommonTests.cs" />
     <Compile Include="CoreTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GEDCOM\GedcomTests.cs" />
     <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="GKCommon\BBTextParserTests.cs" />

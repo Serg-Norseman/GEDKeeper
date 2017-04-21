@@ -187,6 +187,11 @@ namespace GKCore
             GKUtils.CollectEventValues(evt, fValuesCollection);
         }
 
+        public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, GEDCOMCustomDate evDate, string evPlace)
+        {
+            return CreateEventEx(aRec, evSign, evDate.StringValue, evPlace);
+        }
+
         public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
         {
             if (aRec == null) return null;
@@ -888,7 +893,7 @@ namespace GKCore
             try
             {
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                result = GEDCOMUtils.GetMultimediaLinkUID(mmLink);
+                result = (mmLink == null) ? null : mmLink.GetUID();
             }
             catch (Exception ex)
             {

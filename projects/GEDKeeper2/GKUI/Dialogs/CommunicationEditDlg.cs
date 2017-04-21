@@ -98,7 +98,7 @@ namespace GKUI.Dialogs
             {
                 fCommunication.CommName = txtName.Text;
                 fCommunication.CommunicationType = (GKCommunicationType)cmbCorrType.SelectedIndex;
-                fCommunication.Date.ParseString(GEDCOMUtils.StrToGEDCOMDate(txtDate.Text, true));
+                fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(txtDate.Text, true));
                 fCommunication.SetCorresponder((GKCommunicationDir)txtDir.SelectedIndex, fTempInd);
 
                 CommitChanges();

@@ -124,71 +124,57 @@ namespace GKUI.Dialogs
             comboBox.SelectedIndex = 0;
         }
 
-        private string AssembleDate()
+        private GEDCOMCustomDate AssembleDate()
         {
-            string result = "";
+            GEDCOMCustomDate result = null;
 
             GEDCOMCalendar cal1 = GetComboCalendar(cmbDate1Calendar);
+            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(txtEventDate1.Text, cal1, true);
+            gcd1.YearBC = btnBC1.Checked;
+
             GEDCOMCalendar cal2 = GetComboCalendar(cmbDate2Calendar);
-
-            string gcd1 = GEDCOMUtils.StrToGEDCOMDate(txtEventDate1.Text, true);
-            string gcd2 = GEDCOMUtils.StrToGEDCOMDate(txtEventDate2.Text, true);
-
-            if (cal1 != GEDCOMCalendar.dcGregorian) {
-                gcd1 = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal1] + " " + gcd1;
-            }
-
-            if (cal2 != GEDCOMCalendar.dcGregorian) {
-                gcd2 = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal2] + " " + gcd2;
-            }
-
-            if (btnBC1.Checked) {
-                gcd1 = gcd1 + GEDCOMProvider.GEDCOM_YEAR_BC;
-            }
-
-            if (btnBC2.Checked) {
-                gcd2 = gcd2 + GEDCOMProvider.GEDCOM_YEAR_BC;
-            }
+            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(txtEventDate2.Text, cal2, true);
+            gcd2.YearBC = btnBC2.Checked;
 
             switch (cmbEventDateType.SelectedIndex) {
                 case 0:
                     result = gcd1;
                     break;
 
-                case 1:
-                    result = "BEF " + gcd2;
+                case 1: // BEF gcd2
+                    result = GEDCOMCustomDate.CreateRange(null, null, null, gcd2);
                     break;
 
-                case 2:
-                    result = "AFT " + gcd1;
+                case 2: // AFT gcd1
+                    result = GEDCOMCustomDate.CreateRange(null, null, gcd1, null);
                     break;
 
-                case 3:
-                    result = "BET " + gcd1 + " AND " + gcd2;
+                case 3: // "BET " + gcd1 + " AND " + gcd2
+                    result = GEDCOMCustomDate.CreateRange(null, null, gcd1, gcd2);
                     break;
 
-                case 4:
-                    result = "FROM " + gcd1;
+                case 4: // FROM gcd1
+                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd1, null);
                     break;
 
-                case 5:
-                    result = "TO " + gcd2;
+                case 5: // TO gcd2
+                    result = GEDCOMCustomDate.CreatePeriod(null, null, null, gcd2);
                     break;
 
-                case 6:
-                    result = "FROM " + gcd1 + " TO " + gcd2;
+                case 6: // FROM gcd1 TO gcd2
+                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd1, gcd2);
                     break;
 
-                case 7:
-                    result = "ABT " + gcd1;
+                case 7: // ABT gcd1
+                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daAbout);
                     break;
 
-                case 8:
-                    result = "CAL " + gcd1;
+                case 8: // CAL gcd1
+                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daCalculated);
                     break;
 
-                case 9:
-                    result = "EST " + gcd1;
+                case 9: // EST gcd1
+                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daEstimated);
                     break;
             }
 
@@ -203,8 +189,8 @@ namespace GKUI.Dialogs
             fEvent.Cause = txtEventCause.Text;
             fEvent.Agency = txtEventOrg.Text;
 
-            string dt = AssembleDate();
-            fEvent.Date.ParseString(dt);
+            GEDCOMCustomDate dt = AssembleDate();
+            fEvent.Date.ParseString(dt.StringValue);
 
             if (fEvent is GEDCOMFamilyEvent)
             {
@@ -296,9 +282,58 @@ namespace GKUI.Dialogs
             EditEventType_SelectedIndexChanged(null, null);
 
             GEDCOMCustomDate date = fEvent.Date.Value;
-            if (date is GEDCOMDateApproximated)
+
+            if (date is GEDCOMDateRange)
             {
-                GEDCOMApproximated approximated = (date as GEDCOMDateApproximated).Approximated;
+                GEDCOMDateRange dtRange = date as GEDCOMDateRange;
+
+                if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "")
+                {
+                    cmbEventDateType.SelectedIndex = 1;
+                }
+                else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "")
+                {
+                    cmbEventDateType.SelectedIndex = 2;
+                }
+                else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue != "")
+                {
+                    cmbEventDateType.SelectedIndex = 3;
+                }
+
+                txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
+                txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
+                SetComboCalendar(cmbDate1Calendar, dtRange.After.DateCalendar);
+                SetComboCalendar(cmbDate2Calendar, dtRange.Before.DateCalendar);
+                btnBC1.Checked = dtRange.After.YearBC;
+                btnBC2.Checked = dtRange.Before.YearBC;
+            }
+            else if (date is GEDCOMDatePeriod)
+            {
+                GEDCOMDatePeriod dtPeriod = date as GEDCOMDatePeriod;
+
+                if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "")
+                {
+                    cmbEventDateType.SelectedIndex = 4;
+                }
+                else if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "")
+                {
+                    cmbEventDateType.SelectedIndex = 5;
+                }
+                else if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue != "")
+                {
+                    cmbEventDateType.SelectedIndex = 6;
+                }
+
+                txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
+                txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
+                SetComboCalendar(cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
+                SetComboCalendar(cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
+                btnBC1.Checked = dtPeriod.DateFrom.YearBC;
+                btnBC2.Checked = dtPeriod.DateTo.YearBC;
+            }
+            else if (date is GEDCOMDate)
+            {
+                GEDCOMApproximated approximated = (date as GEDCOMDate).Approximated;
 
                 switch (approximated) {
                     case GEDCOMApproximated.daExact:
@@ -321,84 +356,10 @@ namespace GKUI.Dialogs
             }
             else
             {
-                if (date is GEDCOMDateRange)
-                {
-                    GEDCOMDateRange dtRange = date as GEDCOMDateRange;
-                    if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "")
-                    {
-                        cmbEventDateType.SelectedIndex = 1;
-                    }
-                    else
-                    {
-                        if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "")
-                        {
-                            cmbEventDateType.SelectedIndex = 2;
-                        }
-                        else
-                        {
-                            if (dtRange.After.StringValue != "" && dtRange.Before.StringValue != "")
-                            {
-                                cmbEventDateType.SelectedIndex = 3;
-                            }
-                        }
-                    }
-
-                    txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
-                    txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
-                    SetComboCalendar(cmbDate1Calendar, dtRange.After.DateCalendar);
-                    SetComboCalendar(cmbDate2Calendar, dtRange.Before.DateCalendar);
-                    btnBC1.Checked = dtRange.After.YearBC;
-                    btnBC2.Checked = dtRange.Before.YearBC;
-                }
-                else
-                {
-                    if (date is GEDCOMDatePeriod)
-                    {
-                        GEDCOMDatePeriod dtPeriod = date as GEDCOMDatePeriod;
-                        if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "")
-                        {
-                            cmbEventDateType.SelectedIndex = 4;
-                        }
-                        else
-                        {
-                            if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "")
-                            {
-                                cmbEventDateType.SelectedIndex = 5;
-                            }
-                            else
-                            {
-                                if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue != "")
-                                {
-                                    cmbEventDateType.SelectedIndex = 6;
-                                }
-                            }
-                        }
-
-                        txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
-                        txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
-                        SetComboCalendar(cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
-                        SetComboCalendar(cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
-                        btnBC1.Checked = dtPeriod.DateFrom.YearBC;
-                        btnBC2.Checked = dtPeriod.DateTo.YearBC;
-                    }
-                    else
-                    {
-                        if (date is GEDCOMDate)
-                        {
-                            cmbEventDateType.SelectedIndex = 0;
-                            txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
-                            SetComboCalendar(cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
-                            btnBC1.Checked = (date as GEDCOMDate).YearBC;
-                        }
-                        else
-                        {
-                            cmbEventDateType.SelectedIndex = 0;
-                            txtEventDate1.Text = "";
-                            cmbDate1Calendar.SelectedIndex = 0;
-                            btnBC1.Checked = false;
-                        }
-                    }
-                }
+                cmbEventDateType.SelectedIndex = 0;
+                txtEventDate1.Text = "";
+                cmbDate1Calendar.SelectedIndex = 0;
+                btnBC1.Checked = false;
             }
 
             EditEventDateType_SelectedIndexChanged(null, null);
