@@ -32,7 +32,8 @@ namespace GKTests.GKCommon
         [Test]
         public void TestMethod()
         {
-            string sample = "[b]bold text[/b] qq \r\n [url=http://test.com/~user/index.html]url text[/url]";
+            string sample = "[size=+1][color=red][b]bold text[/b] [i][u]italic[/i] and underline[/u] qq[/color] "+
+                "[s]strikeout[/s] \r\n [url=http://test.com/~user/index.html]url text[/url][/size]";
 
             var parser = new BBTextParser(12.0f, Color.Blue, Color.Black);
 

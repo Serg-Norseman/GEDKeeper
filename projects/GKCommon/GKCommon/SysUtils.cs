@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -815,7 +814,7 @@ namespace GKCommon
 
         #endregion
 
-        #region Color transformations
+        #region Graphics functions
 
         public static Color Darker(Color color, float fraction)
         {
@@ -873,10 +872,6 @@ namespace GKCommon
             return Color.FromArgb(red, green, blue);
         }
 
-        #endregion
-
-        #region Graphics functions
-
         public static float ZoomToFit(float imgWidth, float imgHeight,
                                       float requireWidth, float requireHeight)
         {
@@ -899,116 +894,6 @@ namespace GKCommon
             }
 
             return aspectRatio;
-        }
-
-        public static GraphicsPath CreateRectangle(float x, float y, float width, float height)
-        {
-            float xw = x + width;
-            float yh = y + height;
-
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
-
-            p.AddLine(x, y, xw, y); // Top Edge
-            p.AddLine(xw, y, xw, yh); // Right Edge
-            p.AddLine(xw, yh, x, yh); // Bottom Edge
-            p.AddLine(x, yh, x, y); // Left Edge
-
-            p.CloseFigure();
-            return p;
-        }
-
-        public static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
-        {
-            float xw = x + width;
-            float yh = y + height;
-            float xwr = xw - radius;
-            float yhr = yh - radius;
-            float xr = x + radius;
-            float yr = y + radius;
-            float r2 = radius * 2;
-            float xwr2 = xw - r2;
-            float yhr2 = yh - r2;
-
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
-
-            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
-            p.AddLine(xr, y, xwr, y); // Top Edge
-            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
-            p.AddLine(xw, yr, xw, yhr); // Right Edge
-            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
-            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
-            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
-            p.AddLine(x, yhr, x, yr); // Left Edge
-
-            p.CloseFigure();
-            return p;
-        }
-
-        public static void DrawPathWithFuzzyLine(Graphics gfx, GraphicsPath path, Color baseColor, int maxOpacity, int width, int opaqueWidth)
-        {
-            if (gfx == null || path == null) return;
-
-            int numSteps = width - opaqueWidth + 1; // Number of pens we will use
-            float delta = (float)maxOpacity / numSteps / numSteps; // Change in alpha between pens
-            float alpha = delta; // Initial alpha
-
-            for (int thickness = width; thickness >= opaqueWidth; thickness--)
-            {
-                Color color = Color.FromArgb((int)alpha, baseColor.R, baseColor.G, baseColor.B);
-
-                using (Pen pen = new Pen(color, thickness))
-                {
-                    pen.EndCap = LineCap.Round;
-                    pen.StartCap = LineCap.Round;
-                    gfx.DrawPath(pen, path);
-                }
-
-                alpha += delta;
-            }
-        }
-
-        public enum Direction {
-            Up,
-            Right,
-            Down,
-            Left
-        }
-
-        public static void DrawTriangle(Graphics gfx, Rectangle rect, Direction direction)
-        {
-            int halfWidth = rect.Width / 2;
-            int halfHeight = rect.Height / 2;
-            Point p0 = Point.Empty;
-            Point p1 = Point.Empty;
-            Point p2 = Point.Empty;
-
-            switch (direction)
-            {
-                case Direction.Up:
-                    p0 = new Point(rect.Left + halfWidth, rect.Top);
-                    p1 = new Point(rect.Left, rect.Bottom);
-                    p2 = new Point(rect.Right, rect.Bottom);
-                    break;
-                case Direction.Down:
-                    p0 = new Point(rect.Left + halfWidth, rect.Bottom);
-                    p1 = new Point(rect.Left, rect.Top);
-                    p2 = new Point(rect.Right, rect.Top);
-                    break;
-                case Direction.Left:
-                    p0 = new Point(rect.Left, rect.Top + halfHeight);
-                    p1 = new Point(rect.Right, rect.Top);
-                    p2 = new Point(rect.Right, rect.Bottom);
-                    break;
-                case Direction.Right:
-                    p0 = new Point(rect.Right, rect.Top + halfHeight);
-                    p1 = new Point(rect.Left, rect.Bottom);
-                    p2 = new Point(rect.Left, rect.Top);
-                    break;
-            }
-
-            gfx.FillPolygon(Brushes.Black, new Point[] { p0, p1, p2 });
         }
 
         #endregion

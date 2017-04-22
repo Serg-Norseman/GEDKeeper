@@ -339,19 +339,16 @@ namespace GKCommon.GEDCOM
 
         public bool AddSpouse(GEDCOMIndividualRecord spouse)
         {
-            if (spouse == null)
-            {
+            if (spouse == null) {
                 return false;
             }
 
             GEDCOMSex sex = spouse.Sex;
-            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
-            {
+            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined) {
                 return false;
             }
 
-            switch (sex)
-            {
+            switch (sex) {
                 case GEDCOMSex.svMale:
                     Husband.Value = spouse;
                     break;

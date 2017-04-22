@@ -180,9 +180,13 @@ namespace GKTests.GKCommon
             #if __MonoCS__
             Assert.IsTrue(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
+            Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+            Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
             #else
             Assert.IsFalse(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
+            Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+            Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
             #endif
 
             //

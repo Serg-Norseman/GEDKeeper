@@ -29,7 +29,7 @@ namespace GKTests.GKCommon
     public class ExtRectTests
     {
         [Test]
-        public void Test_Common()
+        public void Test_ExtRect()
         {
             ExtRect rt = ExtRect.Create(0, 0, 9, 9);
 
@@ -52,24 +52,72 @@ namespace GKTests.GKCommon
             Assert.AreEqual("{X=0,Y=0,Width=10,Height=10}", rt.ToString());
 
             Assert.IsTrue(rt.Contains(5, 5));
-            
+
             rt.Inflate(3, -2);
             Assert.AreEqual("{X=3,Y=-2,Width=4,Height=14}", rt.ToString());
-            
+
             rt.Offset(2, 5);
             Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt.ToString());
 
             rt = rt.GetOffset(10, 10);
             Assert.AreEqual("{X=15,Y=13,Width=4,Height=14}", rt.ToString());
-            
+
             Assert.IsTrue(rt.IntersectsWith(ExtRect.Create(16, 14, 20, 20)));
-            
+
             rt = ExtRect.CreateEmpty();
             Assert.IsTrue(rt.IsEmpty());
 
             Assert.IsFalse(rt.Contains(5, 5));
-            
+
             Rectangle rect = rt.ToRectangle();
+            Assert.AreEqual(0, rect.Left);
+            Assert.AreEqual(0, rect.Top);
+            Assert.AreEqual(0, rect.Right);
+            Assert.AreEqual(0, rect.Bottom);
+        }
+
+        [Test]
+        public void Test_ExtRectF()
+        {
+            ExtRectF rt = ExtRectF.Create(0, 0, 9, 9);
+
+            Assert.AreEqual(0, rt.Left);
+            Assert.AreEqual(0, rt.Top);
+            Assert.AreEqual(9, rt.Right);
+            Assert.AreEqual(9, rt.Bottom);
+            Assert.AreEqual(10, rt.GetHeight());
+            Assert.AreEqual(10, rt.GetWidth());
+
+            rt = ExtRectF.CreateBounds(0, 0, 10, 10);
+
+            Assert.AreEqual(0, rt.Left);
+            Assert.AreEqual(0, rt.Top);
+            Assert.AreEqual(9, rt.Right);
+            Assert.AreEqual(9, rt.Bottom);
+            Assert.AreEqual(10, rt.GetHeight());
+            Assert.AreEqual(10, rt.GetWidth());
+
+            Assert.AreEqual("{X=0,Y=0,Width=10,Height=10}", rt.ToString());
+
+            Assert.IsTrue(rt.Contains(5, 5));
+
+            rt.Inflate(3, -2);
+            Assert.AreEqual("{X=3,Y=-2,Width=4,Height=14}", rt.ToString());
+
+            rt.Offset(2, 5);
+            Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt.ToString());
+
+            rt = rt.GetOffset(10, 10);
+            Assert.AreEqual("{X=15,Y=13,Width=4,Height=14}", rt.ToString());
+
+            Assert.IsTrue(rt.IntersectsWith(ExtRect.Create(16, 14, 20, 20)));
+
+            rt = ExtRectF.CreateEmpty();
+            Assert.IsTrue(rt.IsEmpty());
+
+            Assert.IsFalse(rt.Contains(5, 5));
+
+            RectangleF rect = rt.ToRectangle();
             Assert.AreEqual(0, rect.Left);
             Assert.AreEqual(0, rect.Top);
             Assert.AreEqual(0, rect.Right);

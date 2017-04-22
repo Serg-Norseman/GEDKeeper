@@ -117,8 +117,7 @@ namespace GKCommon.GEDCOM
 
         public void Dispose()
         {
-            if (!fDisposed)
-            {
+            if (!fDisposed) {
                 Clear();
                 //this.fList.Free(); isnot IDisposable
                 fDisposed = true;
@@ -147,10 +146,8 @@ namespace GKCommon.GEDCOM
         
         public T Add(T item)
         {
-            if (item != null)
-            {
-                if (fDataList == null)
-                {
+            if (item != null) {
+                if (fDataList == null) {
                     fDataList = new List<T>();
                 }
 
@@ -164,8 +161,7 @@ namespace GKCommon.GEDCOM
         {
             if (fDataList == null) return;
 
-            for (int i = fDataList.Count - 1; i >= 0; i--)
-            {
+            for (int i = fDataList.Count - 1; i >= 0; i--) {
                 fDataList[i].Dispose();
             }
             fDataList.Clear();
@@ -199,8 +195,7 @@ namespace GKCommon.GEDCOM
         {
             if (fDataList == null) return;
 
-            if (index1 >= 0 && index1 < fDataList.Count && index2 >= 0 && index2 < fDataList.Count)
-            {
+            if (index1 >= 0 && index1 < fDataList.Count && index2 >= 0 && index2 < fDataList.Count) {
                 T tmp = fDataList[index1];
                 fDataList[index1] = fDataList[index2];
                 fDataList[index2] = tmp;
@@ -260,11 +255,9 @@ namespace GKCommon.GEDCOM
             if (fDataList == null) return;
 
             int num = fDataList.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GEDCOMTag item = fDataList[i] as GEDCOMTag;
-                if (item != null)
-                {
+                if (item != null) {
                     item.ResetOwner(newOwner);
                 }
             }

@@ -19,6 +19,8 @@
  */
 
 using System;
+using GKCommon;
+using GKCore.Geocoding;
 using GKCore.Maps;
 using NUnit.Framework;
 
@@ -58,6 +60,23 @@ namespace GKTests.GKCore
             Assert.AreEqual(0.0d, coordsRect.MinLat);
             Assert.AreEqual(0.0d, coordsRect.MaxLon);
             Assert.AreEqual(0.0d, coordsRect.MaxLat);
+
+            ExtList<GeoPoint> mapPoints = new ExtList<GeoPoint>();
+            mapPoints.Add(new GeoPoint(11, 13, "pt1"));
+            mapPoints.Add(new GeoPoint(22, 25, "pt1"));
+            coordsRect = PlacesLoader.GetPointsFrame(mapPoints);
+            Assert.AreEqual(13.0d, coordsRect.MinLon);
+            Assert.AreEqual(11.0d, coordsRect.MinLat);
+            Assert.AreEqual(25.0d, coordsRect.MaxLon);
+            Assert.AreEqual(22.0d, coordsRect.MaxLat);
+
+            mapPoints.Clear();
+            mapPoints.Add(new GeoPoint(21, 21, "pt1"));
+            coordsRect = PlacesLoader.GetPointsFrame(mapPoints);
+            Assert.AreEqual(1.0d, coordsRect.MinLon);
+            Assert.AreEqual(1.0d, coordsRect.MinLat);
+            Assert.AreEqual(41.0d, coordsRect.MaxLon);
+            Assert.AreEqual(41.0d, coordsRect.MaxLat);
         }
 
         [Test]

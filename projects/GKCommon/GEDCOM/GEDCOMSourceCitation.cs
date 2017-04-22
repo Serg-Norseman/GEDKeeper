@@ -24,13 +24,33 @@ namespace GKCommon.GEDCOM
     {
         public bool IsPointer
         {
-            get { return (!string.IsNullOrEmpty(XRef)); }
+            get {
+                return (!string.IsNullOrEmpty(XRef));
+            }
         }
 
         public StringList Description
         {
-            get { return GetDescription(); }
-            set { SetDescription(value); }
+            get {
+                StringList description;
+
+                if (!IsPointer) {
+                    description = GetTagStrings(this);
+                } else {
+                    GEDCOMRecord sourceRecord = Value;
+                    if (sourceRecord is GEDCOMSourceRecord) {
+                        description = ((sourceRecord as GEDCOMSourceRecord).Title);
+                    } else {
+                        description = new StringList();
+                    }
+                }
+
+                return description;
+            }
+            set {
+                Clear();
+                SetTagStrings(this, value);
+            }
         }
 
         public string Page
@@ -43,33 +63,6 @@ namespace GKCommon.GEDCOM
         {
             get { return GetTagIntegerValue("QUAY", 0); }
             set { SetTagIntegerValue("QUAY", value); }
-        }
-
-        private StringList GetDescription()
-        {
-            StringList description;
-
-            if (!IsPointer)
-            {
-                description = GetTagStrings(this);
-            }
-            else
-            {
-                GEDCOMRecord sourceRecord = Value;
-                if (sourceRecord is GEDCOMSourceRecord) {
-                    description = ((sourceRecord as GEDCOMSourceRecord).Title);
-                } else {
-                    description = new StringList();
-                }
-            }
-
-            return description;
-        }
-
-        private void SetDescription(StringList value)
-        {
-            Clear();
-            SetTagStrings(this, value);
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)

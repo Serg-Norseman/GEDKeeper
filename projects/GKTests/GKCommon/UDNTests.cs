@@ -217,6 +217,7 @@ namespace GKTests.GKCommon
             UDN testUDN2 = (UDN)testUDNApp.Clone();
             Assert.AreEqual("~????/05/14", testUDN2.ToString());
             Assert.IsFalse(testUDN2.IsEmpty());
+            Assert.IsTrue(testUDNApp.Equals(testUDN2));
 
             Assert.IsTrue(testUDN2.GetHashCode() != 0);
 

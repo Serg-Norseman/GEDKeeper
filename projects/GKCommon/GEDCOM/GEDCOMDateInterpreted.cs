@@ -26,27 +26,24 @@ namespace GKCommon.GEDCOM
 
         public string DatePhrase
         {
-            get	{ return fDatePhrase; }
-            set	{ SetDatePhrase(value); }
-        }
-
-        private void SetDatePhrase(string value)
-        {
-            string phrase = value;
-            if (!string.IsNullOrEmpty(phrase))
-            {
-                if (phrase[0] == '(')
-                {
-                    phrase = phrase.Remove(0, 1);
-                }
-
-                if (phrase.Length > 0 && phrase[phrase.Length - 1] == ')')
-                {
-                    phrase = phrase.Remove(phrase.Length - 1, 1);
-                }
+            get {
+                return fDatePhrase;
             }
-            
-            fDatePhrase = phrase;
+            set {
+                string phrase = value;
+
+                if (!string.IsNullOrEmpty(phrase)) {
+                    if (phrase[0] == '(') {
+                        phrase = phrase.Remove(0, 1);
+                    }
+
+                    if (phrase.Length > 0 && phrase[phrase.Length - 1] == ')') {
+                        phrase = phrase.Remove(phrase.Length - 1, 1);
+                    }
+                }
+
+                fDatePhrase = phrase;
+            }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -103,11 +100,9 @@ namespace GKCommon.GEDCOM
         public override string ParseString(string strValue)
         {
             string result = strValue;
-            if (!string.IsNullOrEmpty(result))
-            {
+            if (!string.IsNullOrEmpty(result)) {
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                if (result.Substring(0, 3).ToUpperInvariant() == "INT")
-                {
+                if (result.Substring(0, 3).ToUpperInvariant() == "INT") {
                     result = result.Remove(0, 3);
                 }
                 result = GEDCOMUtils.ExtractDelimiter(result, 0);

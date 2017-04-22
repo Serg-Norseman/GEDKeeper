@@ -227,8 +227,17 @@ namespace GKTests.GEDCOM
             using (GEDCOMDateStatus dateStatus = GEDCOMDateStatus.Create(null, null, "", "") as GEDCOMDateStatus)
             {
                 Assert.IsNotNull(dateStatus);
-
                 Assert.IsNotNull(dateStatus.ChangeDate);
+            }
+        }
+
+        [Test]
+        public void GEDCOMIndividualEvent_Tests()
+        {
+            using (GEDCOMIndividualEvent iEvent = GEDCOMIndividualEvent.Create(null, null, "", "") as GEDCOMIndividualEvent)
+            {
+                Assert.IsNotNull(iEvent);
+                Assert.IsNotNull(iEvent.Family);
             }
         }
 
@@ -561,7 +570,7 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMDateRange_Tests()
         {
-            using (GEDCOMDateRange dtx1 = new GEDCOMDateRange(null, null, "DATE", ""))
+            using (var dtx1 = (GEDCOMDateRange)GEDCOMDateRange.Create(null, null, "DATE", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
@@ -631,6 +640,10 @@ namespace GKTests.GEDCOM
                 Assert.IsTrue(udn.IsEmpty());
 
                 dtx1.ParseString("FROM 04 JAN 2013 TO 23 JAN 2013");
+
+                dtx1.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, dtx1.Owner);
+
                 Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.Date);
                 dtx1.GetDateParts(out year, out month, out day, out yearBC);
@@ -1385,6 +1398,9 @@ namespace GKTests.GEDCOM
                     st = GKUtils.GetNameString(indi3, true, true);
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);
                 }
+
+                indi.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, indi.Owner);
             }
         }
 
@@ -1603,6 +1619,9 @@ namespace GKTests.GEDCOM
             using (GEDCOMGroupRecord grpRec = GEDCOMGroupRecord.Create(null, null, "", "") as GEDCOMGroupRecord)
             {
                 Assert.IsNotNull(grpRec);
+
+                grpRec.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, grpRec.Owner);
             }
         }
 
@@ -1671,6 +1690,10 @@ namespace GKTests.GEDCOM
                 list.Exchange(0, 1);
                 Assert.AreEqual(0, list.IndexOf(obj1));
                 Assert.AreEqual(1, list.IndexOf(obj2));
+
+                Assert.AreEqual(null, list.Extract(null));
+                list.Add(obj1);
+                Assert.AreEqual(obj1, list.Extract(obj1));
 
                 foreach (GEDCOMObject obj in list) {
                 }
@@ -1876,6 +1899,9 @@ namespace GKTests.GEDCOM
                     Assert.AreEqual(1, famRec2.SpouseSealings.Count);
                     Assert.AreEqual(sps, famRec2.SpouseSealings[0]);
                 }
+
+                famRec.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, famRec.Owner);
             }
         }
 
@@ -2005,6 +2031,9 @@ namespace GKTests.GEDCOM
                     src2.FiledByEntry = "test source";
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
                 }
+
+                src1.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, src1.Owner);
             }
 
             // check move
@@ -2150,6 +2179,9 @@ namespace GKTests.GEDCOM
         public void GEDCOMResearchRecord_Tests()
         {
             using (GEDCOMResearchRecord resRec = GEDCOMResearchRecord.Create(null, null, "", "") as GEDCOMResearchRecord) {
+
+                resRec.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, resRec.Owner);
             }
         }
 
@@ -2240,6 +2272,9 @@ namespace GKTests.GEDCOM
             using (GEDCOMMultimediaRecord mmRec = GEDCOMMultimediaRecord.Create(null, null, "", "") as GEDCOMMultimediaRecord)
             {
                 Assert.IsNotNull(mmRec);
+
+                mmRec.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, mmRec.Owner);
             }
         }
 
@@ -2282,10 +2317,9 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMMultimediaLink_Tests()
         {
-            using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(null, null, "", "") as GEDCOMMultimediaLink) {
+            using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(_context.Tree, null, "", "") as GEDCOMMultimediaLink) {
                 Assert.IsNotNull(mmLink);
                 Assert.IsTrue(mmLink.IsEmpty());
-
 
                 // extensions
                 Assert.IsFalse(mmLink.IsPrimaryCutout);
@@ -2317,11 +2351,20 @@ namespace GKTests.GEDCOM
                 Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
 
-                Assert.IsNull(mmLink.GetUID());
+                using (var mmRec = (GEDCOMMultimediaRecord)GEDCOMMultimediaRecord.Create(_context.Tree, _context.Tree, "", "")) {
+                    Assert.IsNull(mmLink.GetUID());
+
+                    mmLink.Value = mmRec;
+
+                    Assert.IsNotNull(mmLink.GetUID());
+                }
 
                 mmLink.CutoutPosition.Clear();
                 Assert.IsTrue(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("", mmLink.CutoutPosition.StringValue);
+
+                mmLink.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, mmLink.Owner);
             }
         }
 
@@ -2399,6 +2442,10 @@ namespace GKTests.GEDCOM
                 Assert.IsFalse(subrRec.IsEmpty());
                 subrRec.Clear();
                 Assert.IsTrue(subrRec.IsEmpty());
+
+
+                subrRec.ResetOwner(_context.Tree);
+                Assert.AreEqual(_context.Tree, subrRec.Owner);
             }
         }
 

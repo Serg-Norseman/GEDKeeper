@@ -172,51 +172,6 @@ namespace GKCommon.GEDCOM
             fGroups.SaveToStream(stream);
         }
 
-        public int IndexOfTask(GEDCOMTaskRecord taskRec)
-        {
-            if (taskRec != null) {
-                int num = fTasks.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    if (fTasks[i].XRef == taskRec.XRef) {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        public int IndexOfCommunication(GEDCOMCommunicationRecord commRec)
-        {
-            if (commRec != null) {
-                int num = fCommunications.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    if (fCommunications[i].XRef == commRec.XRef) {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        public int IndexOfGroup(GEDCOMGroupRecord groupRec)
-        {
-            if (groupRec != null) {
-                int num = fGroups.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    if (fGroups[i].XRef == groupRec.XRef) {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
         public GEDCOMResearchRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }
@@ -232,8 +187,7 @@ namespace GKCommon.GEDCOM
         {
             bool result = false;
 
-            if (taskRecord != null)
-            {
+            if (taskRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
                 ptr.SetNamedValue("_TASK", taskRecord);
                 fTasks.Add(ptr);
@@ -250,12 +204,28 @@ namespace GKCommon.GEDCOM
             fTasks.DeleteAt(IndexOfTask(taskRecord));
         }
 
+        public int IndexOfTask(GEDCOMTaskRecord taskRec)
+        {
+            int result = -1;
+
+            if (taskRec != null) {
+                int num = fTasks.Count;
+                for (int i = 0; i < num; i++) {
+                    if (fTasks[i].XRef == taskRec.XRef) {
+                        result = i;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public bool AddGroup(GEDCOMGroupRecord groupRecord)
         {
             bool result = false;
 
-            if (groupRecord != null)
-            {
+            if (groupRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
                 ptr.SetNamedValue("_GROUP", groupRecord);
                 fGroups.Add(ptr);
@@ -272,12 +242,28 @@ namespace GKCommon.GEDCOM
             fGroups.DeleteAt(IndexOfGroup(groupRecord));
         }
 
+        public int IndexOfGroup(GEDCOMGroupRecord groupRec)
+        {
+            int result = -1;
+
+            if (groupRec != null) {
+                int num = fGroups.Count;
+                for (int i = 0; i < num; i++) {
+                    if (fGroups[i].XRef == groupRec.XRef) {
+                        result = i;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public bool AddCommunication(GEDCOMCommunicationRecord commRecord)
         {
             bool result = false;
 
-            if (commRecord != null)
-            {
+            if (commRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
                 ptr.SetNamedValue("_COMM", commRecord);
                 fCommunications.Add(ptr);
@@ -292,6 +278,23 @@ namespace GKCommon.GEDCOM
             if (commRecord == null) return;
 
             fCommunications.DeleteAt(IndexOfCommunication(commRecord));
+        }
+
+        public int IndexOfCommunication(GEDCOMCommunicationRecord commRec)
+        {
+            int result = -1;
+
+            if (commRec != null) {
+                int num = fCommunications.Count;
+                for (int i = 0; i < num; i++) {
+                    if (fCommunications[i].XRef == commRec.XRef) {
+                        result = i;
+                        break;
+                    }
+                }
+            }
+
+            return result;
         }
 
         #endregion

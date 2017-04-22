@@ -142,11 +142,12 @@ namespace GKTests.GKCore
                 ExtRect psnRt = tcPerson.Rect;
                 Assert.IsTrue(psnRt.IsEmpty());
 
-                //Assert.AreEqual(null, tcPerson.Portrait);
-                //Assert.AreEqual(null, tcPerson.Portrait);
-                //Assert.AreEqual(null, tcPerson.Portrait);
-                //Assert.AreEqual(null, tcPerson.Portrait);
-                //Assert.AreEqual(null, tcPerson.Portrait);
+                tcPerson.Sex = GEDCOMSex.svMale;
+                Assert.AreEqual(Color.Blue, tcPerson.GetSelectedColor());
+                tcPerson.Sex = GEDCOMSex.svFemale;
+                Assert.AreEqual(Color.Red, tcPerson.GetSelectedColor());
+                tcPerson.Sex = GEDCOMSex.svUndetermined;
+                Assert.AreEqual(Color.Black, tcPerson.GetSelectedColor());
             }
         }
 
@@ -212,6 +213,12 @@ namespace GKTests.GKCore
 
                 model.Scale = 1.7f;
                 Assert.AreEqual(1.5f, model.Scale);
+
+                Assert.Throws(typeof(ArgumentNullException), () => { model.DoFilter(null); });
+
+                Assert.IsNull(model.FindPersonByCoords(0, 0));
+
+                Assert.AreEqual(ExtRect.Create(0, -18, 15, -2), TreeChartModel.GetExpanderRect(ExtRect.Create(0, 0, 0, 0)));
             }
         }
     }

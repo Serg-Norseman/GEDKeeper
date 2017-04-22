@@ -75,8 +75,12 @@ namespace GKTests.GKCore
 
 
             Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.1");
-            fContext.ShieldState = ShieldState.None;
-            Assert.AreEqual(ShieldState.None, fContext.ShieldState, "BaseContext.ShieldState.2");
+            fContext.SwitchShieldState();
+            Assert.AreEqual(ShieldState.Middle, fContext.ShieldState, "BaseContext.ShieldState.2");
+            fContext.SwitchShieldState();
+            Assert.AreEqual(ShieldState.None, fContext.ShieldState, "BaseContext.ShieldState.3");
+            fContext.SwitchShieldState();
+            Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.4");
 
 
             GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fContext.Tree, "test source");

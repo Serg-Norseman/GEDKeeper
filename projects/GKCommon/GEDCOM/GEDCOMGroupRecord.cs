@@ -48,8 +48,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fMembers.Dispose();
             }
             base.Dispose(disposing);
@@ -117,17 +116,19 @@ namespace GKCommon.GEDCOM
 
         public int IndexOfMember(GEDCOMIndividualRecord member)
         {
+            int result = -1;
+
             if (member != null) {
                 int num = fMembers.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     if (fMembers[i].XRef == member.XRef) {
-                        return i;
+                        result = i;
+                        break;
                     }
                 }
             }
 
-            return -1;
+            return result;
         }
 
         public bool AddMember(GEDCOMIndividualRecord member)
