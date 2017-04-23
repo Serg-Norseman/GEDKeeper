@@ -167,12 +167,10 @@ namespace GKUI.Charts
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None == ModifierKeys) {
-                VerticalScroll.Value =
-                    Math.Max(VerticalScroll.Value - e.Delta, 0);
+                VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
                 PerformLayout();
             } else if (Keys.Shift == ModifierKeys) {
-                HorizontalScroll.Value =
-                    Math.Max(HorizontalScroll.Value - e.Delta, 0);
+                HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
                 PerformLayout();
             }
             else {

@@ -63,9 +63,9 @@ namespace GKSandbox {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_female {
+        internal static System.Drawing.Bitmap iSymFemale {
             get {
-                object obj = ResourceManager.GetObject("symbol_female", resourceCulture);
+                object obj = ResourceManager.GetObject("iSymFemale", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace GKSandbox {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_male {
+        internal static System.Drawing.Bitmap iSymMale {
             get {
-                object obj = ResourceManager.GetObject("symbol_male", resourceCulture);
+                object obj = ResourceManager.GetObject("iSymMale", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

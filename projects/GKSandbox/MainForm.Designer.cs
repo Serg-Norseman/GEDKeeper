@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gkComboBox1 = new GKCommon.Controls.GKComboBox();
+            this.gkComboBox1 = new GKUI.Components.GKComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.culturePicker1 = new GKIntl.CulturePicker();
             this.optionsPicker1 = new GKCommon.Controls.OptionsPicker();
@@ -94,6 +94,6 @@
         private GKCommon.Controls.OptionsPicker optionsPicker1;
         private GKIntl.CulturePicker culturePicker1;
         private System.Windows.Forms.Button button1;
-        private GKCommon.Controls.GKComboBox gkComboBox1;
+        private GKUI.Components.GKComboBox gkComboBox1;
     }
 }

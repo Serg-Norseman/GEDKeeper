@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Drawing;
+
 namespace GKUI.Components
 {
     /// <summary>
@@ -27,11 +29,24 @@ namespace GKUI.Components
     {
         public readonly string Caption;
         public readonly object Tag;
+        public readonly Image Image;
+
+        public GKComboItem(string caption)
+        {
+            Caption = caption;
+        }
 
         public GKComboItem(string caption, object tag)
         {
             Caption = caption;
             Tag = tag;
+        }
+
+        public GKComboItem(string caption, object tag, Image image)
+        {
+            Caption = caption;
+            Tag = tag;
+            Image = image;
         }
 
         public override string ToString()

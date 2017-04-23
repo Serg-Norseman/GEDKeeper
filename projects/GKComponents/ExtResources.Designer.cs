@@ -133,6 +133,16 @@ internal class ExtResources {
     /// <summary>
     ///   Looks up a localized resource of type System.Drawing.Bitmap.
     /// </summary>
+    internal static System.Drawing.Bitmap iBtnClose {
+        get {
+            object obj = ResourceManager.GetObject("iBtnClose", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
     internal static System.Drawing.Bitmap iSizeToFit {
         get {
             object obj = ResourceManager.GetObject("iSizeToFit", resourceCulture);

@@ -81,9 +81,16 @@
       <DependentUpon>ExtResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="GKUI\Components\GKComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKTabControl.cs" />
+    <Compile Include="GKUI\Components\GKTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\ScrollablePanel.cs" />

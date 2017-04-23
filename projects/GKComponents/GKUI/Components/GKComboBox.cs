@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GKCommon.Controls
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -39,10 +39,10 @@ namespace GKCommon.Controls
             e.DrawBackground();
             e.DrawFocusRectangle();
 
-            if (e.Index < 0 || e.Index >= Items.Count) return; 
+            if (e.Index < 0 || e.Index >= Items.Count) return;
 
             object item = Items[e.Index];
-            DropDownItem ddItem = item as DropDownItem;
+            GKComboItem ddItem = item as GKComboItem;
             if (ddItem != null) {
                 int offset = e.Bounds.Left;
 
@@ -51,51 +51,13 @@ namespace GKCommon.Controls
                     offset += ddItem.Image.Width;
                 }
 
-                e.Graphics.DrawString(ddItem.Value, e.Font, new SolidBrush(e.ForeColor),
+                e.Graphics.DrawString(ddItem.Caption, e.Font, new SolidBrush(e.ForeColor),
                                       offset, e.Bounds.Top + 2);
             } else {
                 e.Graphics.DrawString(item.ToString(), e.Font, new SolidBrush(e.ForeColor),
                                       e.Bounds.Left, e.Bounds.Top + 2);
             }
             base.OnDrawItem(e);
-        }
-    }
-
-    public class DropDownItem
-    {
-        private string fText;
-        private Image fImage;
-
-        public string Value
-        {
-            get { return fText; }
-            set { fText = value; }
-        }
-
-        public Image Image
-        {
-            get { return fImage; }
-            set { fImage = value; }
-        }
-
-        public DropDownItem()
-        {
-        }
-
-        public DropDownItem(string text)
-        {
-            fText = text;
-        }
-
-        public DropDownItem(string text, Image image)
-        {
-            fText = text;
-            fImage = image;
-        }
-
-        public override string ToString()
-        {
-            return fText;
         }
     }
 }
