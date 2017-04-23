@@ -32,7 +32,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : GKScrollableControl
+    public class HyperView : ScrollablePanel
     {
         private bool fAcceptFontChange;
         private int fBorderWidth;

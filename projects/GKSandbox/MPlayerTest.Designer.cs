@@ -38,7 +38,7 @@ namespace GKSandbox
         {
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.btnOpen = new System.Windows.Forms.Button();
-            this.mediaPlayer1 = new GKMediaPlayer.MediaPlayer();
+            this.mediaPlayer1 = new GKUI.Components.MediaPlayer();
             this.SuspendLayout();
             // 
             // txtFileName
@@ -80,7 +80,7 @@ namespace GKSandbox
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-        private GKMediaPlayer.MediaPlayer mediaPlayer1;
+        private GKUI.Components.MediaPlayer mediaPlayer1;
         private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.TextBox txtFileName;
     }

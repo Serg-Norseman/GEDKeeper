@@ -61,6 +61,15 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LinqBridge">
+      <HintPath>libs\LinqBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>libs\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nVLC">
+      <HintPath>libs\mswin\nVLC.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -68,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GKUI\Components\ExtResources.Designer.cs">
+    <Compile Include="ExtResources.Designer.cs">
       <DependentUpon>ExtResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -77,7 +86,7 @@
     <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKScrollableControl.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
     <Compile Include="GKUI\Components\GKTreeNode.cs" />
     <Compile Include="GKUI\Components\HyperView.cs" />
     <Compile Include="GKUI\Components\ImageBox.cs" />
@@ -88,6 +97,12 @@
     <Compile Include="GKUI\Components\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\MediaPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
+      <DependentUpon>MediaPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Components\WizardPages.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +110,7 @@
     <Folder Include="GKUI\Components" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKUI\Components\ExtResources.resx">
+    <EmbeddedResource Include="ExtResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

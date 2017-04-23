@@ -2697,10 +2697,7 @@ namespace GKTests.GEDCOM
 
         #region GEDCOM Enums test
 
-        private static string[] MediaTypeArr = new string[] { "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
-            "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
-
-        private sealed class GEDCOMMediaTypeEnum : GEDCOMEnumHelper<GEDCOMMediaType>
+        private class GEDCOMMediaTypeEnum : GEDCOMEnumHelper<GEDCOMMediaType>
         {
             private static string[] XMediaTypeArr = new string[] {
                 "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",

@@ -113,7 +113,7 @@ namespace GKCommon.GEDCOM
         Yiddish
     }
 
-    public sealed class GEDCOMLanguageEnum : GEDCOMEnumHelper<GEDCOMLanguageID>
+    public class GEDCOMLanguageEnum : GEDCOMEnumHelper<GEDCOMLanguageID>
     {
         private static readonly string[] LngEnumStr = new string[] {
             "", "Afrikaans", "Albanian", "Anglo-Saxon", "Catalan", "Catalan_Spn", "Czech", "Danish", "Dutch", "English",

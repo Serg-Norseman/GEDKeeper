@@ -626,10 +626,6 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKMediaPlayer\GKMediaPlayer.linux.csproj">
-      <Project>{0B9F856F-4E88-47ED-9364-B9770FC7E6E3}</Project>
-      <Name>GKMediaPlayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKUI\Charts" />

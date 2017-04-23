@@ -80,7 +80,7 @@ namespace GKUI.Components
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
     [DefaultProperty("Image"), ToolboxItem(true)]
-    public sealed class ImageBox : GKScrollableControl
+    public sealed class ImageBox : ScrollablePanel
     {
         #region Constants
 

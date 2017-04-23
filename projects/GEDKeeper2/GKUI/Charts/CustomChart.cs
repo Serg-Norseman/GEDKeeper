@@ -30,7 +30,7 @@ using GKUI.Components;
 
 namespace GKUI.Charts
 {
-    public abstract class CustomChart : GKScrollableControl, IPrintable
+    public abstract class CustomChart : ScrollablePanel, IPrintable
     {
         private static readonly object EventNavRefresh;
 

@@ -27,7 +27,7 @@ using nVLC.Events;
 using nVLC.Media;
 using nVLC.Players;
 
-namespace GKMediaPlayer
+namespace GKUI.Components
 {
     public partial class MediaPlayer : UserControl
     {
@@ -158,16 +158,16 @@ namespace GKMediaPlayer
             fPlayer.Volume = trkVolume.Value;
 
             if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
-                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMax;
+                btnMute.BackgroundImage = ExtResources.btnVolumeMax;
             }
             if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
-                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMiddle;
+                btnMute.BackgroundImage = ExtResources.btnVolumeMiddle;
             }
             if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
-                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMin;
+                btnMute.BackgroundImage = ExtResources.btnVolumeMin;
             }
             if (fPlayer.Volume == 0) {
-                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
+                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
             }
         }
 
@@ -191,7 +191,7 @@ namespace GKMediaPlayer
             fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {
-                btnMute.BackgroundImage = GKMediaPlayerResources.btnVolumeMute;
+                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
             } else {
                 trkVolume_Scroll(sender, e);
             }

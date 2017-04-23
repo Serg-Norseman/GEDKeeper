@@ -28,11 +28,11 @@ using GKCommon;
 
 namespace GKUI.Components
 {
-    public class GKScrollableControl : Panel
+    public class ScrollablePanel : Panel
     {
         //private bool fValidEvent;
 
-        public GKScrollableControl()
+        public ScrollablePanel()
         {
             AutoScroll = true;
             ResizeRedraw = true;

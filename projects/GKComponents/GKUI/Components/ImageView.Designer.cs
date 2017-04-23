@@ -56,7 +56,7 @@
         	// btnSizeToFit
         	// 
         	this.btnSizeToFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnSizeToFit.Image = global::GKUI.Components.ExtResources.iSizeToFit;
+        	this.btnSizeToFit.Image = global::ExtResources.iSizeToFit;
         	this.btnSizeToFit.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnSizeToFit.Name = "btnSizeToFit";
         	this.btnSizeToFit.Size = new System.Drawing.Size(23, 25);
@@ -66,7 +66,7 @@
         	// btnZoomIn
         	// 
         	this.btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomIn.Image = global::GKUI.Components.ExtResources.iZoomIn;
+        	this.btnZoomIn.Image = global::ExtResources.iZoomIn;
         	this.btnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomIn.Name = "btnZoomIn";
         	this.btnZoomIn.Size = new System.Drawing.Size(23, 25);
@@ -76,7 +76,7 @@
         	// btnZoomOut
         	// 
         	this.btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomOut.Image = global::GKUI.Components.ExtResources.iZoomOut;
+        	this.btnZoomOut.Image = global::ExtResources.iZoomOut;
         	this.btnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomOut.Name = "btnZoomOut";
         	this.btnZoomOut.Size = new System.Drawing.Size(23, 25);
