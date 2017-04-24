@@ -207,7 +207,6 @@ namespace GKUI.Dialogs
 		    this.txtHusband.ReadOnly = true;
 		    this.txtHusband.Size = new System.Drawing.Size(460, 24);
 		    this.txtHusband.TabIndex = 1;
-		    this.txtHusband.TextChanged += new System.EventHandler(this.EditHusband_TextChanged);
 		    // 
 		    // txtWife
 		    // 
@@ -218,7 +217,6 @@ namespace GKUI.Dialogs
 		    this.txtWife.ReadOnly = true;
 		    this.txtWife.Size = new System.Drawing.Size(460, 24);
 		    this.txtWife.TabIndex = 6;
-		    this.txtWife.TextChanged += new System.EventHandler(this.EditWife_TextChanged);
 		    // 
 		    // cmbMarriageStatus
 		    // 

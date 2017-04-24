@@ -236,8 +236,8 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
         }
     }
 }

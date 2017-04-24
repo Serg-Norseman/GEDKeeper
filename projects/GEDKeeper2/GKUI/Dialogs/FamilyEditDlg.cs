@@ -90,6 +90,9 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
+            txtHusband.TextChanged += EditSpouse_TextChanged;
+            txtWife.TextChanged += EditSpouse_TextChanged;
+
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
             {
                 cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
@@ -254,22 +257,15 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void SetTitle()
-        {
-            Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
-        }
-
         // TODO: rework
-        public void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target)
+        public void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target)
         {
-            if (targetType == FamilyTarget.None || target == null) return;
+            if (targetType == TargetMode.tmNone || target == null) return;
 
             bool result = false;
-            if (targetType == FamilyTarget.Spouse) {
-                //this.fFamily.AddSpouse(target);
+            if (targetType == TargetMode.tmFamilySpouse) {
                 result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
-            } else if (targetType == FamilyTarget.Child) {
-                //this.fFamily.AddChild(target);
+            } else if (targetType == TargetMode.tmFamilyChild) {
                 result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
             }
 
@@ -324,14 +320,9 @@ namespace GKUI.Dialogs
             Close();
         }
 
-        private void EditHusband_TextChanged(object sender, EventArgs e)
+        private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
-            SetTitle();
-        }
-
-        private void EditWife_TextChanged(object sender, EventArgs e)
-        {
-            SetTitle();
+            Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
         }
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
@@ -347,11 +338,11 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fChildrenList.ListModel = new GKChildrenListModel(fBase, fLocalUndoman);
-            fEventsList.ListModel = new GKEventsListModel(fBase, fLocalUndoman, false);
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+            fChildrenList.ListModel = new ChildrenListModel(fBase, fLocalUndoman);
+            fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, false);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
         }
     }
 }

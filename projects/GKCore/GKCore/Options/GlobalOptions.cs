@@ -473,8 +473,8 @@ namespace GKCore.Options
 
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
 
-            int kl = ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
-            SysUtils.SetKeyLayout(kl);
+            int kl = ini.ReadInteger("Common", "KeyLayout", AppHub.Utilities.GetKeyLayout());
+            AppHub.Utilities.SetKeyLayout(kl);
 
             fChartOptions.LoadFromFile(ini);
             fPedigreeOptions.LoadFromFile(ini);
@@ -577,7 +577,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
 
-            ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
+            ini.WriteInteger("Common", "KeyLayout", AppHub.Utilities.GetKeyLayout());
 
             ini.WriteBool("Common", "Autosave", fAutosave);
             ini.WriteInteger("Common", "AutosaveInterval", fAutosaveInterval);

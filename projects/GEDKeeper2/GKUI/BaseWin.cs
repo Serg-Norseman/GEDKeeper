@@ -91,7 +91,6 @@ namespace GKUI
             get { return fNavman; }
         }
 
-
         public bool Modified
         {
             get {
@@ -864,7 +863,7 @@ namespace GKUI
             GEDCOMRecordType rt = GetSelectedRecordType();
 
             GEDCOMRecord rec;
-            if (AppHub.BaseController.AddRecord(this, rt, out rec)) {
+            if (AppHub.BaseController.AddRecord(this, rt, null, out rec)) {
                 RefreshLists(false);
                 SelectRecordByXRef(rec.XRef);
             }

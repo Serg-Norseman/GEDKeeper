@@ -18,12 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+using System;
+using GKCore.Interfaces;
+using GKCore.Operations;
+
+namespace GKCore.Lists
 {
-    public enum FamilyTarget
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class RecordsListModel : ListModel
     {
-        None,
-        Spouse,
-        Child
+        protected RecordsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+        }
     }
 }

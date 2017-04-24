@@ -28,11 +28,11 @@ using GKCore.UIContracts;
 
 namespace GKCore.Lists
 {
-    public sealed class GKEventsListModel : GKListModel
+    public sealed class EventsListModel : ListModel
     {
         private readonly bool fPersonsMode;
 
-        public GKEventsListModel(IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(baseWin, undoman)
+        public EventsListModel(IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(baseWin, undoman)
         {
             fPersonsMode = personsMode;
         }

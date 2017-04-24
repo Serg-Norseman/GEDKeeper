@@ -83,6 +83,9 @@ namespace GKCore.UIContracts
         Assembly GetExecutingAssembly();
         Version GetAppVersion();
         string GetAppCopyright();
+
+        int GetKeyLayout();
+        void SetKeyLayout(int layout);
     }
 
 

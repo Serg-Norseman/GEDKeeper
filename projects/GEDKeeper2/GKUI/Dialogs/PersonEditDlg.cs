@@ -562,7 +562,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     AcceptTempData();
-                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.Spouse, fPerson));
+                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmFamilySpouse, fPerson));
                     if (result) {
                         eArgs.ItemData = family;
                     }
@@ -570,7 +570,7 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raEdit:
                     AcceptTempData();
-                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.None, null));
+                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null));
                     break;
 
                 case RecordAction.raDelete:
@@ -790,15 +790,10 @@ namespace GKUI.Dialogs
             if (result) UpdateNamesSheet();
         }
 
-        private void SetTitle()
+        private void Names_TextChanged(object sender, EventArgs e)
         {
             Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
                                  cmbPatronymic.Text, fPerson.GetXRefNum());
-        }
-
-        private void edSurname_TextChanged(object sender, EventArgs e)
-        {
-            SetTitle();
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
@@ -870,7 +865,7 @@ namespace GKUI.Dialogs
             AcceptTempData();
 
             GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
-            if (family != null && AppHub.BaseController.ModifyFamily(fBase, ref family, FamilyTarget.None, null))
+            if (family != null && AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null))
             {
                 UpdateControls();
             }
@@ -894,37 +889,17 @@ namespace GKUI.Dialogs
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
         {
-            GEDCOMMultimediaRecord mmRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
-            if (mmRec == null) return;
-
-            // remove previous portrait link
-            GEDCOMMultimediaLink mmLink = fPerson.GetPrimaryMultimediaLink();
-            if (mmLink != null) {
-                mmLink.IsPrimary = false;
+            if (AppHub.BaseController.AddIndividualPortrait(fBase, fPerson)) {
+                fMediaList.UpdateSheet();
+                UpdatePortrait(true);
             }
-
-            // set new portrait link
-            mmLink = fPerson.SetPrimaryMultimediaLink(mmRec);
-
-            // select portrait area
-            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg())
-            {
-                selectDlg.InitDialog(fBase);
-                selectDlg.MultimediaLink = mmLink;
-                selectDlg.ShowDialog();
-            }
-
-            fMediaList.UpdateSheet();
-            UpdatePortrait(true);
         }
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
         {
-            GEDCOMMultimediaLink mmLink = fPerson.GetPrimaryMultimediaLink();
-            if (mmLink == null) return;
-
-            mmLink.IsPrimary = false;
-            UpdatePortrait(true);
+            if (AppHub.BaseController.DeleteIndividualPortrait(fBase, fPerson)) {
+                UpdatePortrait(true);
+            }
         }
 
         private void edSurname_KeyDown(object sender, KeyEventArgs e)
@@ -951,6 +926,11 @@ namespace GKUI.Dialogs
         public PersonEditDlg()
         {
             InitializeComponent();
+
+            txtMarriedSurname.TextChanged += Names_TextChanged;
+            txtSurname.TextChanged += Names_TextChanged;
+            txtName.TextChanged += Names_TextChanged;
+            cmbPatronymic.TextChanged += Names_TextChanged;
 
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
@@ -1070,10 +1050,10 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fEventsList.ListModel = new GKEventsListModel(fBase, fLocalUndoman, true);
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new GKSourcesListModel(fBase, fLocalUndoman);
+            fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, true);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
             fAssociationsList.ListModel = new AssociationsListModel(fBase, fLocalUndoman);
         }
     }

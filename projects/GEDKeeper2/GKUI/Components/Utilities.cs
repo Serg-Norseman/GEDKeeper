@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.Globalization;
 using System.Reflection;
+using System.Windows.Forms;
 
 using GKCommon;
 using GKCore.UIContracts;
@@ -51,6 +53,32 @@ namespace GKUI.Components
         {
             var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
             return (attr == null) ? string.Empty : attr.Copyright;
+        }
+
+        #endregion
+
+        #region KeyLayout functions
+
+        public int GetKeyLayout()
+        {
+            #if __MonoCS__
+            // There is a bug in Mono: does not work this CurrentInputLanguage
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+            #else
+            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+            return currentLang.Culture.KeyboardLayoutId;
+            #endif
+        }
+
+        public void SetKeyLayout(int layout)
+        {
+            try {
+                CultureInfo cultureInfo = new CultureInfo(layout);
+                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
+                InputLanguage.CurrentInputLanguage = currentLang;
+            } catch (Exception ex) {
+                Logger.LogWrite("Utilities.SetKeyLayout(): " + ex.Message);
+            }
         }
 
         #endregion

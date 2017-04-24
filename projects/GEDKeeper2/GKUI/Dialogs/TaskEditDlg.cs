@@ -100,7 +100,6 @@ namespace GKUI.Dialogs
             try
             {
                 fTask.Priority = (GKResearchPriority)txtPriority.SelectedIndex;
-
                 fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStartDate.Text, true));
                 fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
 
@@ -234,7 +233,7 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
         }
     }
 }

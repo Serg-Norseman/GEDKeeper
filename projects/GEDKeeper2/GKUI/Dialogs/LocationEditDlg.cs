@@ -48,8 +48,12 @@ namespace GKUI.Dialogs
 
         public GEDCOMLocationRecord LocationRecord
         {
-            get { return fLocationRecord; }
-            set { SetLocationRecord(value); }
+            get {
+                return fLocationRecord;
+            }
+            set {
+                SetLocationRecord(value);
+            }
         }
 
         public LocationEditDlg()
@@ -244,8 +248,8 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
         }
     }
 }

@@ -78,12 +78,7 @@ namespace GKUI
 
         private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Escape:
-                    Close();
-                    break;
-            }
+            if (e.KeyCode == Keys.Escape) Close();
         }
 
         protected override void OnLoad(EventArgs e)

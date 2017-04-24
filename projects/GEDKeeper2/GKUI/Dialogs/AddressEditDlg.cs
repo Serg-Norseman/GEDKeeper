@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -213,11 +212,6 @@ namespace GKUI.Dialogs
             pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
             pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
             pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
         }
     }
 }

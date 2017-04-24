@@ -145,18 +145,19 @@
     <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
     <Compile Include="GKCore\Lists\FamilyListMan.cs" />
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
-    <Compile Include="GKCore\Lists\GKChildrenListModel.cs" />
-    <Compile Include="GKCore\Lists\GKEventsListModel.cs">
+    <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
+    <Compile Include="GKCore\Lists\EventsListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCore\Lists\GKListModel.cs" />
-    <Compile Include="GKCore\Lists\GKMediaListModel.cs">
+    <Compile Include="GKCore\Lists\ListModel.cs" />
+    <Compile Include="GKCore\Lists\MediaLinksListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCore\Lists\GKNotesListModel.cs">
+    <Compile Include="GKCore\Lists\NoteLinksListModel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKCore\Lists\GKSourcesListModel.cs">
+    <Compile Include="GKCore\Lists\RecordsListModel.cs" />
+    <Compile Include="GKCore\Lists\SourceCitationsListModel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKCore\Lists\GroupListMan.cs" />

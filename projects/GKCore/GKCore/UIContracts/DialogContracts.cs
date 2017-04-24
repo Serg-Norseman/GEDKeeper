@@ -71,7 +71,7 @@ namespace GKCore.UIContracts
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMFamilyRecord Family { get; set; }
-        void SetTarget(FamilyTarget targetType, GEDCOMIndividualRecord target);
+        void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target);
     }
 
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor
@@ -179,7 +179,7 @@ namespace GKCore.UIContracts
     {
         string FastFilter { get; set; }
         string Filter { get; set; }
-        GEDCOMRecordType Mode { get; set; }
+        GEDCOMRecordType RecType { get; set; }
         TargetMode TargetMode { get; set; }
         GEDCOMIndividualRecord Target { get; set; }
         GEDCOMSex NeedSex { get; set; }

@@ -185,12 +185,7 @@ namespace GKUI
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Escape:
-                    Close();
-                    break;
-            }
+            if (e.KeyCode == Keys.Escape) Close();
         }
     }
 }

@@ -329,7 +329,6 @@ namespace GKUI.Dialogs
             this.txtMarriedSurname.Name = "txtMarriedSurname";
             this.txtMarriedSurname.Size = new System.Drawing.Size(182, 21);
             this.txtMarriedSurname.TabIndex = 3;
-            this.txtMarriedSurname.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.txtMarriedSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.txtMarriedSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
             // 
@@ -340,7 +339,6 @@ namespace GKUI.Dialogs
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.Size = new System.Drawing.Size(182, 21);
             this.txtSurname.TabIndex = 1;
-            this.txtSurname.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.txtSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.txtSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
             // 
@@ -351,7 +349,6 @@ namespace GKUI.Dialogs
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(182, 21);
             this.txtName.TabIndex = 5;
-            this.txtName.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.txtName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
             // 
@@ -362,7 +359,6 @@ namespace GKUI.Dialogs
             this.cmbPatronymic.Name = "cmbPatronymic";
             this.cmbPatronymic.Size = new System.Drawing.Size(182, 21);
             this.cmbPatronymic.TabIndex = 7;
-            this.cmbPatronymic.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
             this.cmbPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
             this.cmbPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
             // 

@@ -84,10 +84,5 @@ namespace GKUI.Dialogs
             lblReference.Text = LangMan.LS(LSID.LSID_Reference);
             lblRefType.Text = LangMan.LS(LSID.LSID_Type);
         }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-        }
     }
 }

@@ -25,7 +25,9 @@ namespace GKCore.Types
         tmNone,
         tmParent,
         tmChild,
-        tmChildToFamily,
-        tmWife
+        tmWife,
+
+        tmFamilySpouse,
+        tmFamilyChild
     }
 }

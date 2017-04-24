@@ -30,9 +30,9 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GKChildrenListModel : GKListModel
+    public sealed class ChildrenListModel : ListModel
     {
-        public GKChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
         }
 

@@ -210,9 +210,7 @@ namespace GKUI
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) {
-                Close();
-            }
+            if (e.KeyCode == Keys.Escape) Close();
         }
 
         private void MediaViewerWin_FormClosing(object sender, FormClosingEventArgs e)

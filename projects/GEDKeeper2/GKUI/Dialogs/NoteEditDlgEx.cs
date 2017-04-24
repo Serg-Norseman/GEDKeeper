@@ -176,10 +176,5 @@ namespace GKUI.Dialogs
             string value = item.Tag.ToString();
             txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);
         }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-        }
     }
 }

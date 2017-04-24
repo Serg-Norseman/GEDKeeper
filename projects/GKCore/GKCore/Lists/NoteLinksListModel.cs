@@ -27,9 +27,9 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class GKNotesListModel : GKListModel
+    public sealed class NoteLinksListModel : ListModel
     {
-        public GKNotesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
         }
 

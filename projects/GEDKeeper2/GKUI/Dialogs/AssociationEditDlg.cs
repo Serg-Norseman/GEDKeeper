@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -107,11 +106,6 @@ namespace GKUI.Dialogs
             cmbRelation.Text = fAssociation.Relation;
             string st = ((fAssociation.Individual == null) ? "" : GKUtils.GetNameString(fAssociation.Individual, true, false));
             txtPerson.Text = st;
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
         }
     }
 }

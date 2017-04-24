@@ -101,10 +101,5 @@ namespace GKUI.Dialogs
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_PortraitSelect);
         }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-        }
     }
 }

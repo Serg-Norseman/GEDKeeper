@@ -38,8 +38,13 @@ namespace GKUI.Dialogs
 
         public GEDCOMLanguageID LanguageID
         {
-            get { return fLanguageID; }
-            set { SetLanguageID(value); }
+            get {
+                return fLanguageID;
+            }
+            set {
+                fLanguageID = value;
+                cmbLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(fLanguageID);
+            }
         }
 
         public LanguageEditDlg()
@@ -59,12 +64,6 @@ namespace GKUI.Dialogs
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_Language);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
-        }
-
-        private void SetLanguageID(GEDCOMLanguageID value)
-        {
-            fLanguageID = value;
-            cmbLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(fLanguageID);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

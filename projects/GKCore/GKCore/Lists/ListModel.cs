@@ -101,7 +101,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public abstract class GKListModel
+    public abstract class ListModel
     {
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
@@ -132,7 +132,7 @@ namespace GKCore.Lists
             }
         }
 
-        protected GKListModel(IBaseWindow baseWin, ChangeTracker undoman)
+        protected ListModel(IBaseWindow baseWin, ChangeTracker undoman)
         {
             fBaseWin = baseWin;
             fUndoman = undoman;

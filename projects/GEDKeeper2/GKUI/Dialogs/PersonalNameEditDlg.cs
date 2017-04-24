@@ -151,10 +151,5 @@ namespace GKUI.Dialogs
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
         }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-        }
     }
 }

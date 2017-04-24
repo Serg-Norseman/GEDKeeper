@@ -34,6 +34,20 @@ using GKCore.UIContracts;
 
 namespace GKCore
 {
+    public sealed class Target
+    {
+        public GEDCOMIndividualRecord TargetIndividual;
+        public TargetMode TargetMode;
+        public GEDCOMSex NeedSex;
+
+        /*public void Reset()
+        {
+            TargetIndividual = null;
+            TargetMode = TargetMode.tmNone;
+            NeedSex = GEDCOMSex.svNone;
+        }*/
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -57,8 +71,8 @@ namespace GKCore
 
                     dlg.Target = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
-                    dlg.TargetMode = TargetMode.tmChildToFamily;
-                    dlg.Mode = GEDCOMRecordType.rtFamily;
+                    dlg.TargetMode = TargetMode.tmFamilyChild;
+                    dlg.RecType = GEDCOMRecordType.rtFamily;
                     if (AppHub.MainWindow.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GEDCOMFamilyRecord);
                     } else {
@@ -90,7 +104,7 @@ namespace GKCore
                     dlg.Target = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
-                    dlg.Mode = GEDCOMRecordType.rtIndividual;
+                    dlg.RecType = GEDCOMRecordType.rtIndividual;
                     if (AppHub.MainWindow.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GEDCOMIndividualRecord);
                     } else {
@@ -118,7 +132,7 @@ namespace GKCore
                 {
                     dlg.InitDialog(baseWin);
 
-                    dlg.Mode = mode;
+                    dlg.RecType = mode;
 
                     if (args != null && args.Length > 0) {
                         dlg.FastFilter = (args[0] as string);
@@ -1018,7 +1032,7 @@ namespace GKCore
             return result;
         }
 
-        public bool ModifyFamily(IBaseWindow baseWin, ref GEDCOMFamilyRecord familyRec, FamilyTarget targetType, GEDCOMIndividualRecord target)
+        public bool ModifyFamily(IBaseWindow baseWin, ref GEDCOMFamilyRecord familyRec, TargetMode targetType, GEDCOMIndividualRecord target)
         {
             bool result;
 
@@ -1026,7 +1040,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                if (targetType == FamilyTarget.Spouse && target != null) {
+                if (targetType == TargetMode.tmFamilySpouse && target != null) {
                     GEDCOMSex sex = target.Sex;
                     if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
                         AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
@@ -1049,7 +1063,7 @@ namespace GKCore
 
                         dlg.Family = familyRec;
 
-                        if (targetType != FamilyTarget.None && target != null) {
+                        if (targetType != TargetMode.tmNone && target != null) {
                             dlg.SetTarget(targetType, target);
                         }
 
@@ -1119,7 +1133,7 @@ namespace GKCore
 
         #region Data modification functions for UI
 
-        public bool AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, out GEDCOMRecord rec)
+        public bool AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target, out GEDCOMRecord rec)
         {
             bool result = false;
             rec = null;
@@ -1128,16 +1142,28 @@ namespace GKCore
             {
                 case GEDCOMRecordType.rtIndividual:
                     {
+                        // FIXME: legacy code, checkit
+                        if (target == null) {
+                            target = new Target();
+                            target.TargetMode = TargetMode.tmParent;
+                        }
+
                         GEDCOMIndividualRecord indivRec = null;
-                        result = ModifyIndividual(baseWin, ref indivRec, null, TargetMode.tmParent, GEDCOMSex.svNone);
+                        result = ModifyIndividual(baseWin, ref indivRec, target.TargetIndividual, target.TargetMode, target.NeedSex);
                         rec = indivRec;
                         break;
                     }
 
                 case GEDCOMRecordType.rtFamily:
                     {
+                        if (target == null) {
+                            target = new Target();
+                        }
+
+                        TargetMode famTarget = (target.TargetMode != TargetMode.tmFamilyChild) ? TargetMode.tmNone : target.TargetMode;
+
                         GEDCOMFamilyRecord fam = null;
-                        result = ModifyFamily(baseWin, ref fam, FamilyTarget.None, null);
+                        result = ModifyFamily(baseWin, ref fam, famTarget, target.TargetIndividual);
                         rec = fam;
                         break;
                     }
@@ -1221,7 +1247,7 @@ namespace GKCore
 
                 case GEDCOMRecordType.rtFamily:
                     GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-                    result = ModifyFamily(baseWin, ref fam, FamilyTarget.None, null);
+                    result = ModifyFamily(baseWin, ref fam, TargetMode.tmNone, null);
                     break;
 
                 case GEDCOMRecordType.rtNote:
@@ -1473,13 +1499,6 @@ namespace GKCore
             return result;
         }
 
-        public void DeleteFamilyWife(IBaseEditor editor, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
-        {
-            if (DeleteFamilyWife(editor.Base, localUndoman, family)) {
-                editor.UpdateView();
-            }
-        }
-
         public bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
         {
             bool result = false;
@@ -1493,6 +1512,42 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public bool AddIndividualPortrait(IBaseWindow baseWin, GEDCOMIndividualRecord iRec)
+        {
+            bool result = false;
+
+            GEDCOMMultimediaRecord mmRec = AppHub.BaseController.SelectRecord(baseWin, GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
+            if (mmRec == null) return false;
+
+            // remove previous portrait link
+            GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+            if (mmLink != null) {
+                mmLink.IsPrimary = false;
+            }
+
+            // set new portrait link
+            mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
+
+            // select portrait area
+            using (var selectDlg = AppHub.Container.Resolve<IPortraitSelectDlg>())
+            {
+                selectDlg.InitDialog(baseWin);
+                selectDlg.MultimediaLink = mmLink;
+                result = selectDlg.ShowModalX();
+            }
+
+            return result;
+        }
+
+        public bool DeleteIndividualPortrait(IBaseWindow baseWin, GEDCOMIndividualRecord iRec)
+        {
+            GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+            if (mmLink == null) return false;
+
+            mmLink.IsPrimary = false;
+            return true;
         }
 
         #endregion

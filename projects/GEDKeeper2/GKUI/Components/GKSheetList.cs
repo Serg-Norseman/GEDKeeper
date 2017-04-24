@@ -50,7 +50,7 @@ namespace GKUI.Components
         private EnumSet<SheetButton> fButtons;
         private bool fReadOnly;
 
-        private GKListModel fListModel;
+        private ListModel fListModel;
 
 
         public event ModifyEventHandler OnModify
@@ -71,7 +71,7 @@ namespace GKUI.Components
             set { SetButtons(value); }
         }
 
-        public GKListModel ListModel
+        public ListModel ListModel
         {
             get { return fListModel; }
             set {

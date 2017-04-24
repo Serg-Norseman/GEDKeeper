@@ -135,7 +135,6 @@ namespace GKUI.Dialogs
                     member = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     result = (member != null);
                     if (result) {
-                        //fGroup.AddMember(member);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, fGroup, member);
                     }
                     break;
@@ -143,7 +142,6 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     result = (member != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
                     if (result) {
-                        //fGroup.RemoveMember(member);
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, fGroup, member);
                     }
                     break;
@@ -199,8 +197,8 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
         }
     }
 }

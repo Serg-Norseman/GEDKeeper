@@ -29,7 +29,6 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace GKCommon
 {
@@ -227,32 +226,6 @@ namespace GKCommon
         public static bool IsUnicodeEncoding(Encoding encoding)
         {
             return (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
-        }
-
-        #endregion
-
-        #region KeyLayout functions
-
-        public static int GetKeyLayout()
-        {
-            #if __MonoCS__
-            // There is a bug in Mono: does not work this CurrentInputLanguage
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-            #else
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #endif
-        }
-
-        public static void SetKeyLayout(int layout)
-        {
-            try {
-                CultureInfo cultureInfo = new CultureInfo(layout);
-                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;
-            } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.SetKeyLayout(): " + ex.Message);
-            }
         }
 
         #endregion

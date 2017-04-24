@@ -46,7 +46,6 @@ namespace GKUI
         private readonly TreeChartBox fTreeBox;
 
         private TreeChartKind fChartKind;
-        private int fGensLimit;
         private GEDCOMIndividualRecord fPerson;
 
 
@@ -79,7 +78,6 @@ namespace GKUI
 
             fBase = baseWin;
             fPerson = startPerson;
-            fGensLimit = -1;
 
             fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
             fTreeBox.Name = "fTreeBox";
@@ -290,16 +288,18 @@ namespace GKUI
             miGens9.Checked = false;
             ((ToolStripMenuItem)sender).Checked = true;
 
-            if (sender == miGensInf) fGensLimit = -1;
-            if (sender == miGens1) fGensLimit = 1;
-            if (sender == miGens2) fGensLimit = 2;
-            if (sender == miGens3) fGensLimit = 3;
-            if (sender == miGens4) fGensLimit = 4;
-            if (sender == miGens5) fGensLimit = 5;
-            if (sender == miGens6) fGensLimit = 6;
-            if (sender == miGens7) fGensLimit = 7;
-            if (sender == miGens8) fGensLimit = 8;
-            if (sender == miGens9) fGensLimit = 9;
+            int depth = -1;
+            if (sender == miGensInf) depth = -1;
+            if (sender == miGens1) depth = 1;
+            if (sender == miGens2) depth = 2;
+            if (sender == miGens3) depth = 3;
+            if (sender == miGens4) depth = 4;
+            if (sender == miGens5) depth = 5;
+            if (sender == miGens6) depth = 6;
+            if (sender == miGens7) depth = 7;
+            if (sender == miGens8) depth = 8;
+            if (sender == miGens9) depth = 9;
+            fTreeBox.DepthLimit = depth;
 
             GenChart(true);
         }
@@ -522,7 +522,6 @@ namespace GKUI
                     UpdateTitle();
                     if (show) base.Show();
 
-                    fTreeBox.DepthLimit = fGensLimit;
                     fTreeBox.GenChart(fPerson, fChartKind, true);
 
                     MainWin.Instance.UpdateControls(false);

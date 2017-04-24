@@ -108,7 +108,6 @@ namespace GKUI.Dialogs
                 dlg.GetNextTip();
 
                 UIHelper.CenterFormByParent(dlg, parent);
-
                 dlg.ShowDialog();
 
                 result = dlg.chkShow.Checked;

@@ -53,7 +53,7 @@ namespace GKTests.UITests
         public void Test_Common()
         {
             Assert.AreEqual("*", fDialog.Filter);
-            Assert.AreEqual(GEDCOMRecordType.rtNone, fDialog.Mode);
+            Assert.AreEqual(GEDCOMRecordType.rtNone, fDialog.RecType);
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
             Assert.AreEqual(null, fDialog.ResultRecord);
 

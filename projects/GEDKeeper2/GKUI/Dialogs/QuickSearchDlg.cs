@@ -45,7 +45,7 @@ namespace GKUI.Dialogs
             fWorkWindow = workWindow;
             SetLang();
         }
-        
+
         private void InitializeComponent()
         {
             txtSearchPattern = new TextBox();
@@ -59,7 +59,7 @@ namespace GKUI.Dialogs
             txtSearchPattern.Margin = new Padding(3, 3, 3, 0);
             txtSearchPattern.TextChanged += SearchPattern_TextChanged;
             txtSearchPattern.Name = "txtSearchPattern";
-            
+
             btnPrev.Location = new System.Drawing.Point(156, 3);
             btnPrev.Margin = new Padding(3);
             btnPrev.Height = 24;
@@ -67,7 +67,7 @@ namespace GKUI.Dialogs
             btnPrev.Click += FindPrev_Click;
             btnPrev.Image = GKResources.iLeft1;
             btnPrev.Name = "btnPrev";
-            
+
             btnNext.Location = new System.Drawing.Point(156+27, 3);
             btnNext.Margin = new Padding(3);
             btnNext.Height = 24;
@@ -75,7 +75,7 @@ namespace GKUI.Dialogs
             btnNext.Click += FindNext_Click;
             btnNext.Image = GKResources.iRight1;
             btnNext.Name = "btnNext";
-            
+
             AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             ClientSize = new System.Drawing.Size(210, 30);
             Controls.Add(txtSearchPattern);
@@ -127,14 +127,14 @@ namespace GKUI.Dialogs
                 SelectResult(result as SearchResult);
             }
         }
-        
+
         private void SelectResult(SearchResult result)
         {
             if (result == null || result.Result == null) return;
-            
+
             fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
         }
-        
+
         private void SearchPanel_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode) {

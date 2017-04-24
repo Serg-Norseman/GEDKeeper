@@ -27,18 +27,16 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class GKSourcesListModel : GKListModel
+    public sealed class MediaLinksListModel : ListModel
     {
-        public GKSourcesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public MediaLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
         }
 
         public override void InitView()
         {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
 
             fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
                                                              SheetButton.lbMoveUp, SheetButton.lbMoveDown);
@@ -53,22 +51,21 @@ namespace GKCore.Lists
             {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations)
+                foreach (GEDCOMMultimediaLink mmLink in dataOwner.MultimediaLinks)
                 {
-                    GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
-                    if (sourceRec == null) continue;
+                    GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                    if (mmRec == null) continue;
 
-                    IListItem item = fSheetList.AddItem(sourceRec.Originator.Text.Trim(), cit);
-                    item.AddSubItem(sourceRec.FiledByEntry);
-                    item.AddSubItem(cit.Page);
-                    item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
+                    if (mmRec.FileReferences.Count == 0) continue;
+
+                    GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
+                    IListItem item = fSheetList.AddItem(fileRef.Title, mmLink);
+                    item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                 }
-
-                fSheetList.ResizeColumn(1);
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKSourcesSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("GKMediaSheet.UpdateSheet(): " + ex.Message);
             }
         }
 
@@ -77,37 +74,48 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
+            GEDCOMMultimediaLink mmLink = eArgs.ItemData as GEDCOMMultimediaLink;
 
             bool result = false;
 
+            GEDCOMMultimediaRecord mmRec;
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
+                    mmRec = AppHub.BaseController.SelectRecord(fBaseWin, GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    if (mmRec != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)dataOwner, mmRec);
+                    }
+                    break;
+
                 case RecordAction.raEdit:
-                    result = AppHub.BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
+                    if (mmLink != null)
+                    {
+                        mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                        result = AppHub.BaseController.ModifyMedia(fBaseWin, ref mmRec);
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)) != false)
+                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != false)
                     {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)dataOwner, mmLink);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = dataOwner.SourceCitations.IndexOf(aCit);
+                        int idx = dataOwner.MultimediaLinks.IndexOf(mmLink);
 
                         switch (eArgs.Action)
                         {
                             case RecordAction.raMoveUp:
-                                dataOwner.SourceCitations.Exchange(idx - 1, idx);
+                                dataOwner.MultimediaLinks.Exchange(idx - 1, idx);
                                 break;
 
                             case RecordAction.raMoveDown:
-                                dataOwner.SourceCitations.Exchange(idx, idx + 1);
+                                dataOwner.MultimediaLinks.Exchange(idx, idx + 1);
                                 break;
                         }
 
@@ -116,10 +124,9 @@ namespace GKCore.Lists
                     break;
             }
 
-            if (result)
-            {
+            if (result) {
                 fBaseWin.Modified = true;
-                UpdateContent();
+                fSheetList.UpdateSheet();
             }
         }
     }

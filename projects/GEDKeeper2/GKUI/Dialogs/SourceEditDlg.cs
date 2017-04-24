@@ -138,7 +138,6 @@ namespace GKUI.Dialogs
                 case RecordAction.raAdd:
                     GEDCOMRepositoryRecord rep = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
-                        //this.fSourceRecord.AddRepository(rep);
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, fSourceRecord, rep);
                         result = true;
                     }
@@ -146,7 +145,6 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raDelete:
                     if (cit != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
-                        //this.fSourceRecord.RepositoryCitations.Delete(cit);
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, fSourceRecord, cit.Value as GEDCOMRepositoryRecord);
                         result = true;
                     }
@@ -216,8 +214,8 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            fNotesList.ListModel = new GKNotesListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new GKMediaListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
         }
     }
 }

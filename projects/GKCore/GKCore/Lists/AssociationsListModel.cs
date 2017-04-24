@@ -31,7 +31,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class AssociationsListModel : GKListModel
+    public class AssociationsListModel : ListModel
     {
         public AssociationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {

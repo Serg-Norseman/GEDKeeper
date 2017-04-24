@@ -37,14 +37,10 @@ namespace GKUI.Dialogs
     /// </summary>
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
-        private GEDCOMRecordType fMode;
         private string fFilter;
-        private TargetMode fTargetMode;
         private GKRecordsView fListRecords;
-
-        public GEDCOMIndividualRecord Target { get; set; }
-        public GEDCOMSex NeedSex { get; set; }
-        public GEDCOMRecord ResultRecord { get; set; }
+        private GEDCOMRecordType fRecType;
+        private Target fTarget;
 
 
         public string FastFilter
@@ -68,19 +64,33 @@ namespace GKUI.Dialogs
             }
         }
 
-        public GEDCOMRecordType Mode
+        public GEDCOMRecordType RecType
         {
-            get { return fMode; }
+            get { return fRecType; }
             set {
-                fMode = value;
+                fRecType = value;
                 DataRefresh();
             }
         }
 
+        public GEDCOMSex NeedSex
+        {
+            get { return fTarget.NeedSex; }
+            set { fTarget.NeedSex = value; }
+        }
+
+        public GEDCOMRecord ResultRecord { get; set; }
+
+        public GEDCOMIndividualRecord Target
+        {
+            get { return fTarget.TargetIndividual; }
+            set { fTarget.TargetIndividual = value; }
+        }
+
         public TargetMode TargetMode
         {
-            get { return fTargetMode; }
-            set { fTargetMode = value; }
+            get { return fTarget.TargetMode; }
+            set { fTarget.TargetMode = value; }
         }
 
 
@@ -96,6 +106,8 @@ namespace GKUI.Dialogs
             btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
             btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+
+            fTarget = new Target();
         }
 
         protected override void Dispose(bool disposing)
@@ -112,11 +124,6 @@ namespace GKUI.Dialogs
             fFilter = "*";
         }
 
-        public override bool ShowModalX()
-        {
-            return base.ShowModalX();
-        }
-
         private void DataRefresh()
         {
             if (fListRecords != null)
@@ -125,16 +132,16 @@ namespace GKUI.Dialogs
                 fListRecords = null;
             }
 
-            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context.Tree, fMode);
+            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context.Tree, fRecType);
             fListRecords.Name = "fListRecords";
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;
 
-            if (fMode == GEDCOMRecordType.rtIndividual) {
+            if (fRecType == GEDCOMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;
                 iFilter.Sex = NeedSex;
                 
-                if (fTargetMode == TargetMode.tmParent) {
+                if (fTarget.TargetMode == TargetMode.tmParent) {
                     fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
                 }
             }
@@ -145,9 +152,7 @@ namespace GKUI.Dialogs
         private static bool ChildSelectorHandler(GEDCOMRecord record)
         {
             GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-            if (iRec == null) return false;
-
-            return (iRec.ChildToFamilyLinks.Count == 0);
+            return (iRec == null) ? false : (iRec.ChildToFamilyLinks.Count == 0);
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -169,118 +174,10 @@ namespace GKUI.Dialogs
         {
             try
             {
-                switch (fMode) {
-                    case GEDCOMRecordType.rtIndividual:
-                        {
-                            GEDCOMIndividualRecord iRec = null;
-                            if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, Target, fTargetMode, NeedSex)) {
-                                ResultRecord = iRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtFamily:
-                        {
-                            GEDCOMFamilyRecord famRec = null;
-
-                            FamilyTarget famTarget = (fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
-
-                            if (AppHub.BaseController.ModifyFamily(fBase, ref famRec, famTarget, Target))
-                            {
-                                ResultRecord = famRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtNote:
-                        {
-                            GEDCOMNoteRecord noteRec = null;
-                            if (AppHub.BaseController.ModifyNote(fBase, ref noteRec))
-                            {
-                                ResultRecord = noteRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtMultimedia:
-                        {
-                            GEDCOMMultimediaRecord mmRec = null;
-                            if (AppHub.BaseController.ModifyMedia(fBase, ref mmRec))
-                            {
-                                ResultRecord = mmRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtSource:
-                        {
-                            GEDCOMSourceRecord sourceRec = null;
-                            if (AppHub.BaseController.ModifySource(fBase, ref sourceRec))
-                            {
-                                ResultRecord = sourceRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtRepository:
-                        {
-                            GEDCOMRepositoryRecord repRec = null;
-                            if (AppHub.BaseController.ModifyRepository(fBase, ref repRec))
-                            {
-                                ResultRecord = repRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtGroup:
-                        {
-                            GEDCOMGroupRecord groupRec = null;
-                            if (AppHub.BaseController.ModifyGroup(fBase, ref groupRec))
-                            {
-                                ResultRecord = groupRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtTask:
-                        {
-                            GEDCOMTaskRecord taskRec = null;
-                            if (AppHub.BaseController.ModifyTask(fBase, ref taskRec))
-                            {
-                                ResultRecord = taskRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtCommunication:
-                        {
-                            GEDCOMCommunicationRecord corrRec = null;
-                            if (AppHub.BaseController.ModifyCommunication(fBase, ref corrRec))
-                            {
-                                ResultRecord = corrRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
-
-                    case GEDCOMRecordType.rtLocation:
-                        {
-                            GEDCOMLocationRecord locRec = null;
-                            if (AppHub.BaseController.ModifyLocation(fBase, ref locRec))
-                            {
-                                ResultRecord = locRec;
-                                DialogResult = DialogResult.OK;
-                            }
-                            break;
-                        }
+                GEDCOMRecord rec;
+                if (AppHub.BaseController.AddRecord(fBase, fRecType, fTarget, out rec)) {
+                    ResultRecord = rec;
+                    DialogResult = DialogResult.OK;
                 }
             }
             catch (Exception ex)
