@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,29 +19,15 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using GKCommon;
-using NUnit.Framework;
+using System.Windows.Forms;
+using GKCore.UIContracts;
 
-namespace GKTests.GKCommon
+namespace GKUI.Components
 {
-    [TestFixture]
-    public class BBTextParserTests
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TextBoxEx : TextBox, ITextControl
     {
-        [Test]
-        public void TestMethod()
-        {
-            string sample = "[size=+1][color=red][b]bold text[/b] [i][u]italic[/i] and underline[/u] qq[/color] "+
-                "[size=-1][s]strikeout[/s][/size] \r\n [url=http://test.com/~user/index.html]url text[/url][/size]";
-
-            var parser = new BBTextParser(12.0f, Color.Blue, Color.Black);
-
-            List<BBTextChunk> chunksList = new List<BBTextChunk>();
-
-            parser.ParseText(chunksList, sample);
-
-            Assert.IsFalse(chunksList[0].HasCoord(5, 5, 0, 0));
-        }
     }
 }

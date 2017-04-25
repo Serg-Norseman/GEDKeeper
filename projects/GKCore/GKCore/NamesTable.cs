@@ -84,6 +84,8 @@ namespace GKCore
             if (!File.Exists(fileName)) return;
 
             try {
+                fNames.Clear();
+
                 using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                     using (StreamReader reader = SysUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
                         while (reader.Peek() != -1) {

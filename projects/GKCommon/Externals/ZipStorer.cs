@@ -318,7 +318,7 @@ namespace Externals
                 ushort extraSize = BitConverter.ToUInt16(fCentralDirImage, pointer + 30);
                 ushort commentSize = BitConverter.ToUInt16(fCentralDirImage, pointer + 32);
                 uint headerOffset = BitConverter.ToUInt32(fCentralDirImage, pointer + 42);
-                uint headerSize = (uint)( 46 + filenameSize + extraSize + commentSize);
+                uint headerSize = (uint)(46 + filenameSize + extraSize + commentSize);
 
                 Encoding encoder = encodeUTF8 ? Encoding.UTF8 : fDefaultEncoding;
 

@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ProgressDlg : Form, IProgressController
+    public sealed partial class ProgressDlg : Form
     {
         private DateTime fStartTime;
 
@@ -50,62 +50,87 @@ namespace GKUI.Dialogs
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
-        #region Temp methods for future
+        #region Protected methods
 
-        private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
-        private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
+        //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
+        //private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
         private bool requiresClose;
         private int fVal;
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            initEvent.Set();
+            //initEvent.Set();
             requiresClose = true;
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             requiresClose = false;
-            abortEvent.Set();
+            //abortEvent.Set();
             base.OnClosing(e);
         }
 
-        void IProgressController.ProgressInit(string title, int max)
+        internal void ProgressInit(string title, int max)
         {
-            initEvent.WaitOne();
-            Invoke( new PInit( DoInit ), new object[] { title, max } );
+            //initEvent.WaitOne();
+
+            try {
+                if (InvokeRequired) {
+                    Invoke(new PInit(DoInit), new object[] { title, max });
+                } else {
+                    DoInit(title, max);
+                }
+            } catch { }
         }
 
-        void IProgressController.ProgressDone()
+        internal void ProgressDone()
         {
-            if (requiresClose) {
-                Invoke( new MethodInvoker( DoDone ) );
-            }
+            try {
+                if (requiresClose) {
+                    if (InvokeRequired) {
+                        Invoke(new PDone(DoDone));
+                    } else {
+                        DoDone();
+                    }
+                }
+            } catch { }
         }
 
-        void IProgressController.ProgressStep()
+        internal void ProgressStep()
         {
-            Invoke( new PStep( DoStep ), new object[] { fVal + 1 } );
+            try {
+                if (InvokeRequired) {
+                    Invoke(new PStep(DoStep), new object[] { fVal + 1 });
+                } else {
+                    DoStep(fVal + 1);
+                }
+            } catch { }
         }
 
-        void IProgressController.ProgressStep(int value)
+        internal void ProgressStep(int value)
         {
-            Invoke( new PStep( DoStep ), new object[] { value } );
+            try {
+                if (InvokeRequired) {
+                    Invoke(new PStep(DoStep), new object[] { value });
+                } else {
+                    DoStep(value);
+                }
+            } catch { }
         }
 
-        public bool IsAborting
+        /*public bool IsAborting
         {
             get {
-                return abortEvent.WaitOne( 0, false );
+                return abortEvent.WaitOne(0, false);
             }
-        }
+        }*/
 
         #endregion
 
-        #region Protected methods
+        #region Private methods
 
-        internal void DoInit(string title, int max)
+        private void DoInit(string title, int max)
         {
             lblTitle.Text = title;
             ProgressBar1.Maximum = max;
@@ -115,12 +140,12 @@ namespace GKUI.Dialogs
             fVal = 0;
         }
 
-        internal void DoDone()
+        private void DoDone()
         {
             Close();
         }
 
-        internal void DoStep(int value)
+        private void DoStep(int value)
         {
             if (fVal == value) return;
 
@@ -144,8 +169,9 @@ namespace GKUI.Dialogs
 
         #endregion
 
-        public delegate void PInit(string title, int max);
-        public delegate void PStep(int value);
+        private delegate void PInit(string title, int max);
+        private delegate void PStep(int value);
+        private delegate void PDone();
     }
 
     public sealed class ProgressController : IProgressController
@@ -218,11 +244,10 @@ namespace GKUI.Dialogs
         private void ShowProgressForm()
         {
             fProgressForm = new ProgressDlg();
-            fProgressForm.DoInit(fTitle, fMax);
+            fProgressForm.ProgressInit(fTitle, fMax);
             fProgressForm.Load += ProgressForm_Load;
 
             if (fParentHandle != IntPtr.Zero) {
-                //fProgressForm.StartPosition = FormStartPosition.CenterScreen;
                 UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
             }
 
@@ -238,54 +263,17 @@ namespace GKUI.Dialogs
 
         public void ProgressReset(string title, int max)
         {
-            try
-            {
-                if (fProgressForm.InvokeRequired)
-                {
-                    fProgressForm.Invoke(new DelReset(ProgressReset), new object[] { title, max });
-                }
-                else
-                {
-                    fProgressForm.DoInit(title, max);
-                }
-            }
-            catch
-            {
-            }
+            fProgressForm.ProgressInit(title, max);
         }
 
         public void UpdateProgress(int percent)
         {
-            try
-            {
-                if (fProgressForm.InvokeRequired)
-                {
-                    fProgressForm.Invoke(new DelUpdateProgress(UpdateProgress), new object[] { percent });
-                }
-                else
-                {
-                    fProgressForm.DoStep(percent);
-                }
-            }
-            catch
-            {
-            }
+            fProgressForm.ProgressStep(percent);
         }
 
         public void Close()
         {
-            if (fProgressForm.InvokeRequired)
-            {
-                fProgressForm.Invoke(new MethodInvoker(Close));
-            }
-            else
-            {
-                fProgressForm.DialogResult = DialogResult.OK;
-            }
+            fProgressForm.ProgressDone();
         }
-
-        private delegate void DelReset(string title, int max);
-        private delegate void DelUpdateProgress(int percent);
-        private delegate void DelClose();
     }
 }

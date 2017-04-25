@@ -27,7 +27,6 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
 
 namespace GKUI
 {
@@ -137,7 +136,7 @@ namespace GKUI
             {
                 txtDebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(txtScriptText.Text, fBase, (ITextControl)txtDebugOutput);
+                    scrEngine.lua_run(txtScriptText.Text, fBase, txtDebugOutput);
                 }
             }
             catch (Exception ex)
@@ -169,7 +168,7 @@ namespace GKUI
             fBase = baseWin;
 
             txtScriptText.TextChanged += mmScriptText_TextChanged;
-            
+
             tbNewScript_Click(this, null);
 
             SetLang();

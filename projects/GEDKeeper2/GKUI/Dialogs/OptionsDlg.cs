@@ -273,10 +273,10 @@ namespace GKUI.Dialogs
 
             lvPlugins.Items.Clear();
 
-            int num = MainWin.Instance.Plugins.Count;
+            int num = AppHub.Plugins.Count;
             for (int i = 0; i < num; i++)
             {
-                IPlugin plugin = MainWin.Instance.Plugins[i];
+                IPlugin plugin = AppHub.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
 
                 ListViewItem item = lvPlugins.Items.Add(pInfo.Title);

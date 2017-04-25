@@ -32,10 +32,8 @@ using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
-using GKUI.Charts;
 using GKUI.Components;
 using GKUI.Dialogs;
 
@@ -58,9 +56,6 @@ namespace GKUI
         private readonly Timer fAutosaveTimer;
         private string[] fCommandArgs;
         private int fLoadingCount;
-        private readonly GlobalOptions fOptions;
-        private PathReplacer fPathReplacer;
-        private PluginsMan fPlugins;
         private readonly StringList fTips;
 
         private static MainWin fInstance = null;
@@ -70,16 +65,6 @@ namespace GKUI
             get { return fInstance; }
         }
 
-        public PluginsMan Plugins
-        {
-            get { return fPlugins; }
-        }
-
-        public PathReplacer PathReplacer
-        {
-            get { return fPathReplacer; }
-        }
-
         #region Instance control
 
         public MainWin()
@@ -87,7 +72,6 @@ namespace GKUI
             InitializeComponent();
 
             fInstance = this;
-            fOptions = GlobalOptions.Instance;
 
             tbFileNew.Image = GKResources.iCreateNew;
             tbFileLoad.Image = GKResources.iLoad;
@@ -124,7 +108,7 @@ namespace GKUI
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fOptions.Dispose();
+                AppHub.Options.Dispose();
 
                 if (components != null) components.Dispose();
             }
@@ -156,8 +140,8 @@ namespace GKUI
 
         private void ApplyOptions()
         {
-            fAutosaveTimer.Interval = fOptions.AutosaveInterval /* min */ * 60 * 1000;
-            fAutosaveTimer.Enabled = fOptions.Autosave;
+            fAutosaveTimer.Interval = AppHub.Options.AutosaveInterval /* min */ * 60 * 1000;
+            fAutosaveTimer.Enabled = AppHub.Options.Autosave;
         }
 
         #endregion
@@ -188,9 +172,9 @@ namespace GKUI
             try {
                 BeginLoading();
 
-                int num = fOptions.GetLastBasesCount();
+                int num = AppHub.Options.GetLastBasesCount();
                 for (int i = 0; i < num; i++) {
-                    string lb = fOptions.GetLastBase(i);
+                    string lb = AppHub.Options.GetLastBase(i);
                     if (File.Exists(lb)) {
                         CreateBase(lb);
                     }
@@ -225,26 +209,16 @@ namespace GKUI
         {
             try
             {
-                fOptions.LoadFromFile(GetAppDataPath() + "GEDKeeper2.ini");
-                fOptions.FindLanguages();
+                AppHub.InitHost();
+
+                AppHub.Plugins.Load(this, GKUtils.GetPluginsPath());
+
                 ApplyOptions();
-
                 RestoreWindowState();
-
-                AppHub.NamesTable.LoadFromFile(GetAppDataPath() + "GEDKeeper2.nms");
-
-                fPlugins = new PluginsMan();
-                fPlugins.Load(this, GKUtils.GetPluginsPath());
                 UpdatePluginsItems();
-
-                fPathReplacer = new PathReplacer();
-                fPathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml");
-
-                LoadLanguage(fOptions.InterfaceLang);
-
+                LoadLanguage(AppHub.Options.InterfaceLang);
                 UpdateMRU();
                 UpdateControls(false);
-
                 LoadArgs();
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_Load(): " + ex.Message);
@@ -254,15 +228,11 @@ namespace GKUI
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             try {
-                fPlugins.Unload();
+                SaveWindowState();
 
-                fOptions.MWinRect = UIHelper.GetFormRect(this);
-                fOptions.MWinState = (WindowState)this.WindowState;
+                AppHub.Plugins.Unload();
 
-                AppHub.NamesTable.SaveToFile(GetAppDataPath() + "GEDKeeper2.nms");
-
-                fOptions.SaveToFile(GetAppDataPath() + "GEDKeeper2.ini");
-                fOptions.Dispose();
+                AppHub.DoneHost();
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_Closed(): " + ex.Message);
             }
@@ -291,11 +261,11 @@ namespace GKUI
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            fOptions.ClearLastBases();
+            AppHub.Options.ClearLastBases();
             for (int i = MdiChildren.Length - 1; i >= 0; i--) {
                 Form mdiChild = MdiChildren[i];
                 if (mdiChild is IBaseWindow) {
-                    fOptions.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
+                    AppHub.Options.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
                 }
             }
         }
@@ -417,11 +387,17 @@ namespace GKUI
 
         #region Misc functions
 
+        private void SaveWindowState()
+        {
+            AppHub.Options.MWinRect = UIHelper.GetFormRect(this);
+            AppHub.Options.MWinState = (WindowState)this.WindowState;
+        }
+
         private void RestoreWindowState()
         {
             try
             {
-                ExtRect mwinRect = fOptions.MWinRect;
+                ExtRect mwinRect = AppHub.Options.MWinRect;
 
                 UIHelper.NormalizeFormRect(ref mwinRect);
 
@@ -444,7 +420,7 @@ namespace GKUI
                     Width = 800;
                     Height = 600;
                 }
-                WindowState = (FormWindowState)fOptions.MWinState;
+                WindowState = (FormWindowState)AppHub.Options.MWinState;
             }
             catch (Exception ex)
             {
@@ -476,7 +452,7 @@ namespace GKUI
                 if (langCode != LangMan.LS_DEF_CODE) {
                     bool loaded = false;
 
-                    foreach (LangRecord langRec in fOptions.Languages) {
+                    foreach (LangRecord langRec in AppHub.Options.Languages) {
                         if (langRec.Code == langCode) {
                             loaded = LangMan.LoadFromFile(langRec.FileName);
                             break;
@@ -500,7 +476,7 @@ namespace GKUI
 
                 SetLang();
 
-                fOptions.InterfaceLang = (ushort)langCode;
+                AppHub.Options.InterfaceLang = (ushort)langCode;
 
                 UpdatePluginsLanguage();
             }
@@ -514,12 +490,12 @@ namespace GKUI
         {
             try
             {
-                if (!fOptions.ShowTips) return;
+                if (!AppHub.Options.ShowTips) return;
 
                 Holidays holidays = new Holidays();
 
                 // TODO: We need a reference to the country, not the language
-                string lngSign = fOptions.GetLanguageSign();
+                string lngSign = AppHub.Options.GetLanguageSign();
                 if (!string.IsNullOrEmpty(lngSign)) {
                     holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
                 }
@@ -565,19 +541,19 @@ namespace GKUI
         private void MRUFileClick(object sender, EventArgs e)
         {
             int idx = (int)((GKToolStripMenuItem)sender).Tag;
-            CreateBase(fOptions.MRUFiles[idx].FileName);
+            CreateBase(AppHub.Options.MRUFiles[idx].FileName);
         }
 
         private void UpdateMRU()
         {
             try {
-                miMRUFiles.Enabled = (fOptions.MRUFiles.Count > 0);
+                miMRUFiles.Enabled = (AppHub.Options.MRUFiles.Count > 0);
                 miMRUFiles.DropDownItems.Clear();
                 MenuMRU.Items.Clear();
 
-                int num = fOptions.MRUFiles.Count;
+                int num = AppHub.Options.MRUFiles.Count;
                 for (int i = 0; i < num; i++) {
-                    string fn = fOptions.MRUFiles[i].FileName;
+                    string fn = AppHub.Options.MRUFiles[i].FileName;
 
                     GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
                     mi.Click += MRUFileClick;
@@ -594,37 +570,37 @@ namespace GKUI
 
         public void AddMRU(string fileName)
         {
-            int idx = fOptions.MRUFiles_IndexOf(fileName);
+            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
 
             MRUFile mf;
             if (idx >= 0) {
-                mf = fOptions.MRUFiles[idx];
-                fOptions.MRUFiles.RemoveAt(idx);
+                mf = AppHub.Options.MRUFiles[idx];
+                AppHub.Options.MRUFiles.RemoveAt(idx);
             } else {
                 mf = new MRUFile(fileName);
             }
 
-            fOptions.MRUFiles.Insert(0, mf);
+            AppHub.Options.MRUFiles.Insert(0, mf);
 
             UpdateMRU();
         }
 
         public void CheckMRUWin(string fileName, Form frm)
         {
-            int idx = fOptions.MRUFiles_IndexOf(fileName);
+            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
             if (idx < 0) return;
 
-            MRUFile mf = fOptions.MRUFiles[idx];
+            MRUFile mf = AppHub.Options.MRUFiles[idx];
             mf.WinRect = UIHelper.GetFormRect(frm);
             mf.WinState = (WindowState)frm.WindowState;
         }
 
         public void RestoreMRU(IBaseWindow baseWin, string fileName)
         {
-            int idx = fOptions.MRUFiles_IndexOf(fileName);
+            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
             if (idx < 0) return;
 
-            MRUFile mf = fOptions.MRUFiles[idx];
+            MRUFile mf = AppHub.Options.MRUFiles[idx];
             UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, (FormWindowState)mf.WinState);
         }
 
@@ -740,9 +716,9 @@ namespace GKUI
         {
             if (fTips.Count <= 0) return;
 
-            fOptions.ShowTips =
+            AppHub.Options.ShowTips =
                 DayTipsDlg.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays),
-                                      fOptions.ShowTips, fTips, Handle);
+                                      AppHub.Options.ShowTips, fTips, Handle);
 
             fTips.Clear();
         }
@@ -849,7 +825,7 @@ namespace GKUI
             if (curBase == null) return;
 
             using (ExcelExporter exExp = new ExcelExporter(curBase)) {
-                exExp.Options = fOptions;
+                exExp.Options = AppHub.Options;
                 exExp.Generate(true);
             }
         }
@@ -949,7 +925,7 @@ namespace GKUI
             string ufPath = filePath;
             if (Directory.Exists(ufPath)) return ufPath;
 
-            ufPath = fOptions.LastDir;
+            ufPath = AppHub.Options.LastDir;
             if (Directory.Exists(ufPath)) return ufPath;
 
             ufPath = GKUtils.GetHomePath();
@@ -1124,7 +1100,7 @@ namespace GKUI
 
             using (PedigreeExporter p = new PedigreeExporter(curBase)) {
                 p.Root = curBase.GetSelectedPerson();
-                p.Options = fOptions;
+                p.Options = AppHub.Options;
                 p.ShieldState = curBase.Context.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
@@ -1226,7 +1202,7 @@ namespace GKUI
 
         public void ShowHelpTopic(string topic)
         {
-            string lngSign = fOptions.GetLanguageSign();
+            string lngSign = AppHub.Options.GetLanguageSign();
             if (string.IsNullOrEmpty(lngSign)) return;
 
             string helpPath = GKUtils.GetHelpPath(lngSign);
@@ -1380,9 +1356,7 @@ namespace GKUI
 
         private void UpdatePluginsLanguage()
         {
-            if (fPlugins == null) return;
-
-            fPlugins.OnLanguageChange();
+            AppHub.Plugins.OnLanguageChange();
 
             int num = miPlugins.DropDownItems.Count;
             for (int i = 0; i < num; i++) {
@@ -1406,14 +1380,14 @@ namespace GKUI
         private void UpdatePluginsItems()
         {
             try {
-                miPlugins.Visible = (fPlugins.Count > 0);
+                miPlugins.Visible = (AppHub.Plugins.Count > 0);
                 miPlugins.DropDownItems.Clear();
 
                 fActiveWidgets.Clear();
 
-                int num = fPlugins.Count;
+                int num = AppHub.Plugins.Count;
                 for (int i = 0; i < num; i++) {
-                    IPlugin plugin = fPlugins[i];
+                    IPlugin plugin = AppHub.Plugins[i];
                     string dispName = plugin.DisplayName;
 
                     ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
@@ -1441,7 +1415,7 @@ namespace GKUI
 
         public ILangMan CreateLangMan(object sender)
         {
-            return fPlugins.CreateLangMan(sender);
+            return AppHub.Plugins.CreateLangMan(sender);
         }
 
         public IBaseWindow GetCurrentFile(bool extMode = false)
@@ -1466,7 +1440,7 @@ namespace GKUI
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-            fPlugins.NotifyRecord(baseWin, record, action);
+            AppHub.Plugins.NotifyRecord(baseWin, record, action);
         }
 
         public string GetAppDataPath()

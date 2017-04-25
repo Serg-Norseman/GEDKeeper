@@ -1553,6 +1553,9 @@ namespace GKTests.GEDCOM
                 }
             }
 
+            persName.ResetOwner(_context.Tree);
+            Assert.AreEqual(_context.Tree, persName.Owner);
+
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());
         }

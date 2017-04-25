@@ -11,7 +11,7 @@ namespace GKUI
 		private System.Windows.Forms.ToolStripButton tbLoadScript;
 		private System.Windows.Forms.ToolStripSeparator ToolButton2;
 		private System.Windows.Forms.ToolStripButton tbRun;
-		private System.Windows.Forms.TextBox txtDebugOutput;
+		private GKUI.Components.TextBoxEx txtDebugOutput;
 		private System.Windows.Forms.TextBox txtScriptText;
 		private System.Windows.Forms.ToolStripButton tbSaveScript;
 		private System.Windows.Forms.ToolStripButton tbNewScript;
@@ -27,7 +27,7 @@ namespace GKUI
 		    this.tbRun = new System.Windows.Forms.ToolStripButton();
 		    this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 		    this.txtScriptText = new System.Windows.Forms.TextBox();
-		    this.txtDebugOutput = new System.Windows.Forms.TextBox();
+		    this.txtDebugOutput = new GKUI.Components.TextBoxEx();
 		    this.ToolBar1.SuspendLayout();
 		    this.splitContainer1.Panel1.SuspendLayout();
 		    this.splitContainer1.Panel2.SuspendLayout();

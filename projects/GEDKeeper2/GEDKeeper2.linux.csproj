@@ -36,7 +36,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <StartupObject>GKUI.GKProgram</StartupObject>
+    <StartupObject>GKUI.ProgramMDI</StartupObject>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
@@ -101,10 +101,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKProgram.cs" />
-    <Compile Include="GKResources.Designer.cs">
-      <DependentUpon>GKResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -150,6 +146,7 @@
     </Compile>
     <Compile Include="GKUI\Components\MdiChildFormEx.cs" />
     <Compile Include="GKUI\Components\PrintableForm.cs" />
+    <Compile Include="GKUI\Components\TextBoxEx.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\Utilities.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
@@ -357,6 +354,9 @@
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\GKResources.Designer.cs">
+      <DependentUpon>GKResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -375,14 +375,8 @@
     <Compile Include="GKUI\CircleChartWin.Designer.cs">
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\BaseWin.Designer.cs">
-      <DependentUpon>BaseWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\TreeChartWin.Designer.cs">
       <DependentUpon>TreeChartWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\MainWin.Designer.cs">
-      <DependentUpon>MainWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\MapsViewerWin.Designer.cs">
       <DependentUpon>MapsViewerWin.cs</DependentUpon>
@@ -399,13 +393,7 @@
     <Compile Include="GKUI\Charts\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\BaseWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\TreeChartWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\MainWin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\MapsViewerWin.cs">
@@ -432,13 +420,22 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinFormsBootstrapper.cs" />
+    <Compile Include="GKUI\WinFormsBootstrapper.cs" />
+    <Compile Include="MDI\BaseWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MDI\BaseWin.Designer.cs">
+      <DependentUpon>BaseWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MDI\ProgramMDI.cs" />
+    <Compile Include="MDI\MainWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MDI\MainWin.Designer.cs">
+      <DependentUpon>MainWin.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Components\ACOptionsControl.resx">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -550,6 +547,10 @@
     <EmbeddedResource Include="GKUI\Dialogs\UserRefEditDlg.resx">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\GKResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\MapsViewerWin.resx">
       <DependentUpon>MapsViewerWin.cs</DependentUpon>
     </EmbeddedResource>
@@ -562,14 +563,8 @@
     <EmbeddedResource Include="GKUI\CircleChartWin.resx">
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\BaseWin.resx">
-      <DependentUpon>BaseWin.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TreeChartWin.resx">
       <DependentUpon>TreeChartWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\MainWin.resx">
-      <DependentUpon>MainWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\MediaViewerWin.resx">
       <DependentUpon>MediaViewerWin.cs</DependentUpon>
@@ -585,6 +580,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TreeToolsWin.resx">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MDI\BaseWin.resx">
+      <DependentUpon>BaseWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MDI\MainWin.resx">
+      <DependentUpon>MainWin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

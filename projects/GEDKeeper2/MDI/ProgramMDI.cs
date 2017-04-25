@@ -51,7 +51,7 @@ namespace GKUI
     /// <summary>
     /// The main startup class of application.
     /// </summary>
-    public static class GKProgram
+    public static class ProgramMDI
     {
         private static void LogSysInfo()
         {

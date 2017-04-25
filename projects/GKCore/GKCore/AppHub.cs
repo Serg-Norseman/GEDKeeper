@@ -21,6 +21,8 @@
 using System;
 using GKCommon.IoC;
 using GKCore.Interfaces;
+using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.UIContracts;
 
 namespace GKCore
@@ -40,6 +42,8 @@ namespace GKCore
         private static IUtilities fUtilities;
         private static IHost fMainWindow;
         private static IProgressController fProgressController;
+        private static PluginsMan fPlugins;
+        private static GlobalOptions fOptions;
 
 
         public static IocContainer Container
@@ -82,6 +86,26 @@ namespace GKCore
                     fNamesTable = new NamesTable();
                 }
                 return fNamesTable;
+            }
+        }
+
+        public static PluginsMan Plugins
+        {
+            get {
+                if (fPlugins == null) {
+                    fPlugins = new PluginsMan();
+                }
+                return fPlugins;
+            }
+        }
+
+        public static GlobalOptions Options
+        {
+            get {
+                if (fOptions == null) {
+                    fOptions = GlobalOptions.Instance;
+                }
+                return fOptions;
             }
         }
 
@@ -128,12 +152,22 @@ namespace GKCore
 
         public static void InitHost()
         {
-            
+            var options = GlobalOptions.Instance;
+            options.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
+            options.FindLanguages();
+
+            NamesTable.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
+
+            PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
         }
 
         public static void DoneHost()
         {
-            
+            NamesTable.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
+
+            var options = GlobalOptions.Instance;
+            options.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
+            options.Dispose();
         }
     }
 }

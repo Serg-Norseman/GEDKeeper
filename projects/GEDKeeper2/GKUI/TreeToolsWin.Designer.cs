@@ -7,7 +7,7 @@ namespace GKUI
 	{
 		private System.Windows.Forms.TabControl tabsTools;
 		private System.Windows.Forms.TabPage pageTreeCompare;
-		private System.Windows.Forms.TextBox ListCompare;
+		private GKUI.Components.TextBoxEx ListCompare;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.Label lblFile;
 		private System.Windows.Forms.TextBox txtCompareFile;
@@ -46,7 +46,7 @@ namespace GKUI
 		private System.Windows.Forms.Label lblOtherBase;
 		private System.Windows.Forms.TextBox edUpdateBase;
 		private System.Windows.Forms.Button btnTreeMerge;
-		private System.Windows.Forms.TextBox mSyncRes;
+		private GKUI.Components.TextBoxEx mSyncRes;
 		private System.Windows.Forms.TabPage pagePatSearch;
 		private System.Windows.Forms.Button btnPatSearch;
 		private System.Windows.Forms.Panel Panel3;
@@ -85,14 +85,14 @@ namespace GKUI
 		    this.btnFileChoose = new System.Windows.Forms.Button();
 		    this.radMatchInternal = new System.Windows.Forms.RadioButton();
 		    this.radMathExternal = new System.Windows.Forms.RadioButton();
-		    this.ListCompare = new System.Windows.Forms.TextBox();
+		    this.ListCompare = new GKUI.Components.TextBoxEx();
 		    this.pageTreeMerge = new System.Windows.Forms.TabPage();
 		    this.lblMasterBase = new System.Windows.Forms.Label();
 		    this.lblOtherBase = new System.Windows.Forms.Label();
 		    this.edMasterBase = new System.Windows.Forms.TextBox();
 		    this.edUpdateBase = new System.Windows.Forms.TextBox();
 		    this.btnTreeMerge = new System.Windows.Forms.Button();
-		    this.mSyncRes = new System.Windows.Forms.TextBox();
+		    this.mSyncRes = new GKUI.Components.TextBoxEx();
 		    this.pageTreeSplit = new System.Windows.Forms.TabPage();
 		    this.btnSelectAll = new System.Windows.Forms.Button();
 		    this.ListSelected = new System.Windows.Forms.ListBox();

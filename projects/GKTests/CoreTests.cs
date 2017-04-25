@@ -691,9 +691,13 @@ namespace GKTests.GKCore
 
             fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Armenian;
             Assert.IsInstanceOf(typeof(ArmenianCulture), fContext.Culture);
+            Assert.IsTrue(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
 
             fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Turkish;
             Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
+            Assert.IsFalse(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
 
             fContext.Tree.Header.Language.Value = GEDCOMLanguageID.French;
             Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);

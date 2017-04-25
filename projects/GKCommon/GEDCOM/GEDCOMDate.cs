@@ -971,7 +971,7 @@ namespace GKCommon.GEDCOM
             try
             {
                 GEDCOMDate dtx = GEDCOMDate.CreateByFormattedStr(dateStr, calendar, false);
-                return dtx.GetUDN();
+                return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
             }
             catch (Exception ex)
             {

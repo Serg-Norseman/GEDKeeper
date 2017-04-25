@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 using GKTests.Mocks;
 using NUnit.Framework;
@@ -148,6 +149,28 @@ namespace GKTests.GKCore
                 Assert.AreEqual(Color.Red, tcPerson.GetSelectedColor());
                 tcPerson.Sex = GEDCOMSex.svUndetermined;
                 Assert.AreEqual(Color.Black, tcPerson.GetSelectedColor());
+            }
+        }
+
+        [Test]
+        public void Test_CircleChartModel()
+        {
+            using (var model = new CircleChartModel())
+            {
+                Assert.IsNotNull(model);
+
+                Assert.IsNotNull(model.Segments);
+
+                model.Options = GlobalOptions.Instance.AncestorsCircleOptions;
+                Assert.AreEqual(GlobalOptions.Instance.AncestorsCircleOptions, model.Options);
+
+                model.Base = fBase;
+                Assert.AreEqual(fBase, model.Base);
+
+                model.Selected = null;
+                Assert.AreEqual(null, model.Selected);
+
+                Assert.AreEqual(null, model.FindSegmentByRec(null));
             }
         }
 

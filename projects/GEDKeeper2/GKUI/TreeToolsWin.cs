@@ -192,7 +192,7 @@ namespace GKUI
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, (ITextControl)mSyncRes);
+            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
             Base.RefreshLists(false);
         }
 
@@ -766,7 +766,7 @@ namespace GKUI
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(fBase.Context, external_match_db, (ITextControl)ListCompare);
+                    TreeTools.TreeCompare(fBase.Context, external_match_db, ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

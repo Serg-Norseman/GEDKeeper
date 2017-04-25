@@ -62,6 +62,7 @@ namespace GKCore
 
         #region Public properties
 
+        // TODO: rework
         public ICulture Culture
         {
             get {

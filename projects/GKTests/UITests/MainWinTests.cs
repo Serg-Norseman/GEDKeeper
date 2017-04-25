@@ -680,6 +680,12 @@ namespace GKTests.UITests
             txtScriptText.Enter("R = gt_select_record(rtIndividual);");
             ClickToolStripButton("tbRun", form);
 
+            ModalFormHandler = OpenFile_Cancel_Handler;
+            ClickToolStripButton("tbLoadScript", form);
+
+            ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickToolStripButton("tbSaveScript", form);
+
             ModalFormHandler = MessageBox_NoHandler;
             var formTester = new FormTester(form.Name);
             formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
@@ -731,6 +737,8 @@ namespace GKTests.UITests
                             btnRec2Sel.Click();
 
                             ClickButton("btnAutoSearch", form);
+
+                            ClickButton("btnSkip", form);
                         }
                         break;
 
@@ -740,6 +748,8 @@ namespace GKTests.UITests
                             edMinGens.EnterValue(1);
 
                             ClickButton("btnPatSearch", form);
+
+                            ClickButton("btnSetPatriarch", form);
 
                             ClickButton("btnPatriarchsDiagram", form);
                             var pvWin = new FormTester("PatriarchsViewerWin");
@@ -751,6 +761,21 @@ namespace GKTests.UITests
                         {
                             ModalFormHandler = OpenFile_Cancel_Handler;
                             ClickButton("btnTreeMerge", form);
+                        }
+                        break;
+
+                    case TreeToolsWin.ToolType.ttTreeSplit:
+                        {
+                            ClickButton("btnSelectFamily", form);
+
+                            ClickButton("btnSelectAncestors", form);
+
+                            ClickButton("btnSelectDescendants", form);
+
+                            ClickButton("btnSelectAll", form);
+
+                            ModalFormHandler = SaveFile_Cancel_Handler;
+                            ClickButton("btnSave", form);
                         }
                         break;
                 }
@@ -1648,6 +1673,9 @@ namespace GKTests.UITests
         private void StatsWin_Tests(Form frm, string stage)
         {
             Assert.IsInstanceOf(typeof(StatisticsWin), frm, stage);
+
+            ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickToolStripButton("tbExcelExport", frm);
 
             frm.Close();
         }

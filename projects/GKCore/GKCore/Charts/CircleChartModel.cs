@@ -31,7 +31,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
 

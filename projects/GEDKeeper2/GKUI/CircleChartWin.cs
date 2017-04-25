@@ -24,6 +24,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Charts;

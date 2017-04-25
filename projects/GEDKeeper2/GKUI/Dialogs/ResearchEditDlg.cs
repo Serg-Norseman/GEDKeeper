@@ -105,8 +105,7 @@ namespace GKUI.Dialogs
             fTasksList = new GKSheetList(pageTasks);
             fTasksList.OnModify += ListTasksModify;
             fTasksList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
-               );
+                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             fTasksList.AddColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
             fTasksList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
             fTasksList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
@@ -116,8 +115,7 @@ namespace GKUI.Dialogs
             fCommunicationsList = new GKSheetList(pageCommunications);
             fCommunicationsList.OnModify += ListCommunicationsModify;
             fCommunicationsList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
-               );
+                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
             fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
             fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
@@ -127,8 +125,7 @@ namespace GKUI.Dialogs
             fGroupsList = new GKSheetList(pageGroups);
             fGroupsList.OnModify += ListGroupsModify;
             fGroupsList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
-               );
+                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
