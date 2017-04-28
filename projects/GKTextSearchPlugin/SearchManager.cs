@@ -152,7 +152,7 @@ namespace GKTextSearchPlugin
                     {
                         indexer.SetStemmer(stemmer);
 
-                        IProgressController progress = AppHub.Progress;
+                        IProgressController progress = AppHost.Progress;
                         progress.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
                         int num = baseWin.Context.Tree.RecordsCount;
                         for (int i = 0; i < num; i++)

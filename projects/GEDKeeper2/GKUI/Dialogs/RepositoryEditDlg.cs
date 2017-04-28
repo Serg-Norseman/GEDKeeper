@@ -57,7 +57,7 @@ namespace GKUI.Dialogs
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            AppHub.BaseController.ModifyAddress(fBase, fRepository.Address);
+            BaseController.ModifyAddress(fBase, fRepository.Address);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

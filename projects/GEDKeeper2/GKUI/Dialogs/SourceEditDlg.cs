@@ -136,7 +136,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    GEDCOMRepositoryRecord rep = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
+                    GEDCOMRepositoryRecord rep = fBase.Context.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, fSourceRecord, rep);
                         result = true;
@@ -144,7 +144,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    if (cit != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
+                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
                         fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, fSourceRecord, cit.Value as GEDCOMRepositoryRecord);
                         result = true;
                     }

@@ -45,6 +45,7 @@ namespace GKTests.Mocks
         public void SelectByRec(GEDCOMIndividualRecord iRec) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
+        public void SetLang() {}
     }
 
     internal class ProgressMock : IProgressController
@@ -89,6 +90,8 @@ namespace GKTests.Mocks
         public void LoadFile(string fileName) { }
         public void SaveFile(string fileName) { }
         public void CriticalSave() { }
+        public void RestoreMRU() { }
+        public void SaveFileEx(bool saveAs) { }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
         public StringList GetRecordContent(GEDCOMRecord record) { return null; }
@@ -131,7 +134,7 @@ namespace GKTests.Mocks
         public void WidgetShow(IWidget widget) {}
         public void WidgetClose(IWidget widget) {}
 
-        public void ShowMDI(IMDIChild form) {}
+        public void ShowWindow(IWindow window, bool taskbar) {}
 
         public ILangMan CreateLangMan(object sender) { return null; }
         public void LoadLanguage(int langCode) {}

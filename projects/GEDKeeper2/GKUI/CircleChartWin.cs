@@ -45,8 +45,6 @@ namespace GKUI
         public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
         {
             InitializeComponent();
-            MdiParent = MainWin.Instance;
-            ShowInTaskbar = true;
 
             fBaseWin = baseWin;
 
@@ -69,12 +67,12 @@ namespace GKUI
 
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
         {
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
         {
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
@@ -86,6 +84,7 @@ namespace GKUI
         {
             base.OnLoad(e);
             fCircleChart.Select();
+            AppHost.Instance.UpdateControls(false);
         }
 
         #region ILocalization implementation
@@ -103,11 +102,9 @@ namespace GKUI
 
         #region IChartWindow implementation
 
-        public void GenChart(bool show)
+        public void GenChart()
         {
-            if (show) base.Show();
-
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         #endregion

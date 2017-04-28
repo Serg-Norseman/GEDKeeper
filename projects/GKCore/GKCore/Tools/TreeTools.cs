@@ -363,7 +363,7 @@ namespace GKCore.Tools
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
 
-            AppHub.NamesTable.ImportNames(iRec);
+            AppHost.NamesTable.ImportNames(iRec);
         }
 
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam, ValuesCollection valuesCollection)
@@ -602,7 +602,7 @@ namespace GKCore.Tools
                         pc.ProgressStep();
                     }
 
-                    if (!idCheck && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
+                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
                     {
                         CorrectIds(tree, pc);
                     }
@@ -617,7 +617,7 @@ namespace GKCore.Tools
             catch (Exception ex)
             {
                 Logger.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 
             return result;
@@ -944,7 +944,7 @@ namespace GKCore.Tools
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
 
             try
             {
@@ -997,7 +997,7 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdPersonSexless:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
-                    AppHub.BaseController.CheckPersonSex(baseWin.Context, iRec);
+                    baseWin.Context.CheckPersonSex(iRec);
                     //this.Base.ChangeRecord(iRec);
                     break;
 
@@ -1225,7 +1225,7 @@ namespace GKCore.Tools
 
             Hashtable families = new Hashtable();
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
 
             // make a table of surnames and persons, related to these surnames

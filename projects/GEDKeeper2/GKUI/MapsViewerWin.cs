@@ -35,7 +35,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : Form, ILocalization
+    public sealed partial class MapsViewerWin : Form, ILocalization, IWindow
     {
         private readonly TreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
@@ -55,7 +55,7 @@ namespace GKUI
         {
             try
             {
-                IProgressController progress = AppHub.Progress;
+                IProgressController progress = AppHost.Progress;
 
                 fMapBrowser.InitMap();
 
@@ -133,7 +133,7 @@ namespace GKUI
         {
             string filter1 = "Image files|*.jpg";
 
-            string fileName = AppHub.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 fMapBrowser.SaveSnapshot(fileName);
@@ -281,7 +281,7 @@ namespace GKUI
                     fBaseRoot.Nodes.Add(node);
 
                     if (locRec == null) {
-                        AppHub.BaseController.RequestGeoCoords(placeName, mapPlace.Points);
+                        AppHost.Instance.RequestGeoCoords(placeName, mapPlace.Points);
 
                         int num = mapPlace.Points.Count;
                         for (int i = 0; i < num; i++) {

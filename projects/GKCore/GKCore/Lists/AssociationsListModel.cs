@@ -82,7 +82,7 @@ namespace GKCore.Lists
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHub.Container.Resolve<IAssociationEditDlg>())
+                    using (var dlg = AppHost.Container.Resolve<IAssociationEditDlg>())
                     {
                         dlg.InitDialog(fBaseWin);
 
@@ -92,7 +92,7 @@ namespace GKCore.Lists
                         }
 
                         dlg.Association = ast;
-                        result = AppHub.MainWindow.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, false);
 
                         if (!exists) {
                             if (result) {
@@ -105,7 +105,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != false)
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, person, ast);
                     }

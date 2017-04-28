@@ -178,7 +178,7 @@ namespace GKUI
             tbPrev.Enabled = (fCurrentIndex > 0);
             tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
 
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         private void Timer1Tick(object sender, System.EventArgs e)

@@ -82,7 +82,7 @@ namespace GKCore.Lists
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = AppHub.BaseController.SelectRecord(fBaseWin, GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    mmRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)dataOwner, mmRec);
                     }
@@ -92,12 +92,12 @@ namespace GKCore.Lists
                     if (mmLink != null)
                     {
                         mmRec = mmLink.Value as GEDCOMMultimediaRecord;
-                        result = AppHub.BaseController.ModifyMedia(fBaseWin, ref mmRec);
+                        result = BaseController.ModifyMedia(fBaseWin, ref mmRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != false)
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)dataOwner, mmLink);
                     }

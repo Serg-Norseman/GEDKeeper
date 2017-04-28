@@ -124,7 +124,7 @@ namespace GKCore.Lists
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (var dlgEventEdit = AppHub.Container.Resolve<IEventEditDlg>())
+                        using (var dlgEventEdit = AppHost.Container.Resolve<IEventEditDlg>())
                         {
                             dlgEventEdit.InitDialog(fBaseWin);
 
@@ -142,7 +142,7 @@ namespace GKCore.Lists
                             }
 
                             dlgEventEdit.Event = newEvent;
-                            result = AppHub.MainWindow.ShowModalX(dlgEventEdit, true);
+                            result = AppHost.Instance.ShowModalX(dlgEventEdit, true);
 
                             if (!result) {
                                 if (!exists) {
@@ -167,7 +167,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raDelete:
-                        if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery)) != false) {
+                        if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery)) != false) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }

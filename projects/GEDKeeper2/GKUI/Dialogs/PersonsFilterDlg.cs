@@ -235,7 +235,7 @@ namespace GKUI.Dialogs
                     }
                     catch
                     {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
                         DialogResult = DialogResult.None;
                     }
                 }

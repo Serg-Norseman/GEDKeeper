@@ -79,7 +79,7 @@ namespace GKTextSearchPlugin
         public void Execute()
         {
             if (SysUtils.IsUnix()) {
-                AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+                AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 

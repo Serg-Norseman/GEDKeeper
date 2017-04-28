@@ -249,17 +249,17 @@ namespace GKCore
 
         public void gk_progress_init(int length, string title)
         {
-            AppHub.Progress.ProgressInit(title, length);
+            AppHost.Progress.ProgressInit(title, length);
         }
 
         public void gk_progress_done()
         {
-            AppHub.Progress.ProgressDone();
+            AppHost.Progress.ProgressDone();
         }
 
         public void gk_progress_step()
         {
-            AppHub.Progress.ProgressStep();
+            AppHost.Progress.ProgressStep();
         }
 
         public void gk_update_view()
@@ -269,7 +269,7 @@ namespace GKCore
 
         public string gk_select_file()
         {
-            string filename = AppHub.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
+            string filename = AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
             return filename;
         }
 
@@ -296,7 +296,7 @@ namespace GKCore
         public bool gt_delete_record(object recPtr)
         {
             GEDCOMRecord rec = recPtr as GEDCOMRecord;
-            bool res = AppHub.BaseController.DeleteRecord(fBase, rec, false);
+            bool res = BaseController.DeleteRecord(fBase, rec, false);
             return res;
         }
 
@@ -327,7 +327,7 @@ namespace GKCore
 
         public object gt_select_record(int recType)
         {
-            GEDCOMRecord rec = AppHub.BaseController.SelectRecord(fBase, (GEDCOMRecordType)recType, null);
+            GEDCOMRecord rec = fBase.Context.SelectRecord((GEDCOMRecordType)recType, null);
             return rec;
         }
 
@@ -574,14 +574,14 @@ namespace GKCore
 
         public string gt_define_sex(string name, string patr)
         {
-            GEDCOMSex sx = AppHub.BaseController.DefineSex(fBase.Context, name, patr);
+            GEDCOMSex sx = fBase.Context.DefineSex(name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
 
         public object gt_find_source(string name)
         {
-            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Context.Tree, name);
+            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(name);
             return srcRec;
         }
 
@@ -597,7 +597,7 @@ namespace GKCore
         {
             GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[1]) : GEDCOMSex.svNone;
 
-            string childPatronymic = AppHub.BaseController.DefinePatronymic(fBase.Context, fatherName, sex, confirm);
+            string childPatronymic = fBase.Context.DefinePatronymic(fatherName, sex, confirm);
             return childPatronymic;
         }
 

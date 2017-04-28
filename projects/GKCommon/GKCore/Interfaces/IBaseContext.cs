@@ -85,5 +85,23 @@ namespace GKCore.Interfaces
         void LockRecord(GEDCOMRecord record);
         void UnlockRecord(GEDCOMRecord record);
         bool IsAvailableRecord(GEDCOMRecord record);
+
+        GEDCOMSourceRecord FindSource(string sourceName);
+        void GetSourcesList(StringList sources);
+
+        string DefinePatronymic(string name, GEDCOMSex sex, bool confirm);
+        GEDCOMSex DefineSex(string iName, string iPatr);
+        void CheckPersonSex(GEDCOMIndividualRecord iRec);
+
+        GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target);
+        GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target,
+                                            TargetMode targetMode, GEDCOMSex needSex);
+        GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);
+        GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild,
+                                                 bool canCreate,
+                                                 GEDCOMIndividualRecord newParent);
+        GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
+        GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex);
+        GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec);
     }
 }

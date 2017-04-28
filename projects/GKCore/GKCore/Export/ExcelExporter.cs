@@ -40,13 +40,13 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
-            fPath = AppHub.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
+            fPath = AppHost.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
             //TCellAttributeSet cas = (TCellAttributeSet.acBottomBorder | TCellAttributeSet.acTopBorder | TCellAttributeSet.acRightBorder | TCellAttributeSet.acLeftBorder);

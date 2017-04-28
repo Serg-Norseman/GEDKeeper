@@ -51,27 +51,9 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IX
+    public interface IMenuItem
     {
-        
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IBaseController
-    {
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IPathReplacer
-    {
-        void Load(string fileName);
-        bool TryReplacePath(string path, out string newPath);
+        bool Checked { get; set; }
     }
 
 

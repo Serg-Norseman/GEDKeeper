@@ -53,7 +53,7 @@ namespace GKUI.Dialogs
                 GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
                 if (src == null) {
-                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
                     DialogResult = DialogResult.None;
                 } else {
                     fSourceCitation.Value = src;
@@ -72,10 +72,10 @@ namespace GKUI.Dialogs
         private void btnSourceAdd_Click(object sender, EventArgs e)
         {
             object[] anArgs = new object[0];
-            GEDCOMSourceRecord src = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
+            GEDCOMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
             if (src == null) return;
             
-            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
+            fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
             cmbSource.Text = src.FiledByEntry;
         }
@@ -168,7 +168,7 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
-            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
+            fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
         }
     }

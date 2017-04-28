@@ -93,7 +93,7 @@ namespace GKCore.Export
                     bool prevKinship = GlobalOptions.Instance.ChartOptions.Kinship;
                     GlobalOptions.Instance.ChartOptions.Kinship = false;
 
-                    var treeBox = AppHub.Container.Resolve<ITreeChartBox>();
+                    var treeBox = AppHost.Container.Resolve<ITreeChartBox>();
                     treeBox.SetRenderer(renderer);
                     treeBox.Base = fBase;
                     treeBox.Options = GlobalOptions.Instance.ChartOptions;

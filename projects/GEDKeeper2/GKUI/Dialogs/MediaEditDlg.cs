@@ -151,11 +151,11 @@ namespace GKUI.Dialogs
 
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
-                if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
+                if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
                     return;
                 }
             }

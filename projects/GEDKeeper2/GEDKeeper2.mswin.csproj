@@ -140,9 +140,12 @@
     <Compile Include="GKUI\Components\GKRecordsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\MdiChildFormEx.cs" />
-    <Compile Include="GKUI\Components\PrintableForm.cs" />
-    <Compile Include="GKUI\Components\TextBoxEx.cs" />
+    <Compile Include="GKUI\Components\PrintableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\TextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\Utilities.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
@@ -416,7 +419,9 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\WinFormsBootstrapper.cs" />
+    <Compile Include="GKUI\WinFormsBootstrapper.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MDI\BaseWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -628,7 +633,6 @@
     <Folder Include="GKUI\Charts" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
-    <Folder Include="MDI" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

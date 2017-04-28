@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : Form
+    public partial class CommonFilterDlg : Form, ICommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly string[] fFields;
@@ -310,6 +310,11 @@ namespace GKUI.Dialogs
         {
             fListMan.Filter.Clear();
             UpdateGrid();
+        }
+
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

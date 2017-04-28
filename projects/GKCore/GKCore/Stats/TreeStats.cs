@@ -436,10 +436,10 @@ namespace GKCore.Stats
         {
             if (vals == null) return;
 
-            string fileName = AppHub.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(fileName)) return;
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             try
             {
                 int rowsCount = vals.Count;
@@ -479,7 +479,7 @@ namespace GKCore.Stats
             catch (Exception ex)
             {
                 Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }
     }

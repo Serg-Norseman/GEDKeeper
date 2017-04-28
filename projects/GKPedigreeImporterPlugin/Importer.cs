@@ -451,7 +451,7 @@ namespace GKPedigreeImporterPlugin
             GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
 
             if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
-                AppHub.BaseController.CheckPersonSex(fBase.Context, result);
+                fBase.Context.CheckPersonSex(result);
             }
 
             if (bd != "") SetEvent(result, "BIRT", bd);
@@ -680,7 +680,7 @@ namespace GKPedigreeImporterPlugin
 
             try
             {
-                IProgressController progress = AppHub.Progress;
+                IProgressController progress = AppHost.Progress;
 
                 try
                 {
@@ -852,7 +852,7 @@ namespace GKPedigreeImporterPlugin
                 MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
                 //sheet.Activate();
 
-                IProgressController progress = AppHub.Progress;
+                IProgressController progress = AppHost.Progress;
                 StringList buffer = new StringList();
                 try
                 {
@@ -968,7 +968,7 @@ namespace GKPedigreeImporterPlugin
             {
                 using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251)))
                 {
-                    IProgressController progress = AppHub.Progress;
+                    IProgressController progress = AppHost.Progress;
                     try
                     {
                         progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
@@ -1019,7 +1019,7 @@ namespace GKPedigreeImporterPlugin
                     return false;
                 }
 
-                IProgressController progress = AppHub.Progress;
+                IProgressController progress = AppHost.Progress;
                 try
                 {
                     wordApp.Visible = DEBUG_WORD;

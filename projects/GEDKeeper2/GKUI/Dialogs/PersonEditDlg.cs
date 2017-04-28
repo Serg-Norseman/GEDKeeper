@@ -128,7 +128,7 @@ namespace GKUI.Dialogs
                 if (fTarget != null)
                 {
                     ICulture culture = fBase.Context.Culture;
-                    INamesTable namesTable = AppHub.NamesTable;
+                    INamesTable namesTable = AppHost.NamesTable;
 
                     string surname, name, patronymic;
                     GKUtils.GetNameParts(fTarget, out surname, out name, out patronymic);
@@ -457,7 +457,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHub.Container.Resolve<IUserRefEditDlg>())
+                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>())
                     {
                         dlg.InitDialog(fBase);
 
@@ -467,7 +467,7 @@ namespace GKUI.Dialogs
                         }
 
                         dlg.UserRef = userRef;
-                        result = AppHub.MainWindow.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, false);
 
                         if (!exists) {
                             if (result) {
@@ -486,7 +486,7 @@ namespace GKUI.Dialogs
                             userRef.StringValue : userRef.ReferenceType;
                         confirmation = string.Format(
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (AppHub.StdDialogs.ShowQuestionYN(confirmation) != false)
+                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation) != false)
                         {
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, fPerson, userRef);
                             fBase.Modified = true;
@@ -562,7 +562,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     AcceptTempData();
-                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmFamilySpouse, fPerson));
+                    result = (BaseController.ModifyFamily(fBase, ref family, TargetMode.tmFamilySpouse, fPerson));
                     if (result) {
                         eArgs.ItemData = family;
                     }
@@ -570,11 +570,11 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raEdit:
                     AcceptTempData();
-                    result = (AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null));
+                    result = (BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null));
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
+                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
                     {
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, fPerson);
                     }
@@ -669,7 +669,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    groupRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    groupRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, fPerson);
@@ -677,7 +677,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
+                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
                     if (result) {
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, fPerson);
                     }
@@ -737,7 +737,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHub.Container.Resolve<IPersonalNameEditDlg>())
+                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>())
                     {
                         dlg.InitDialog(fBase);
 
@@ -747,7 +747,7 @@ namespace GKUI.Dialogs
                         }
 
                         dlg.PersonalName = persName;
-                        result = AppHub.MainWindow.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, false);
 
                         if (!exists) {
                             if (result) {
@@ -761,12 +761,12 @@ namespace GKUI.Dialogs
 
                 case RecordAction.raDelete:
                     if (fPerson.PersonalNames.Count > 1) {
-                        result = (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
+                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
                         if (result) {
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, fPerson, persName);
                         }
                     } else {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
                     }
                     break;
 
@@ -798,21 +798,21 @@ namespace GKUI.Dialogs
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -823,21 +823,21 @@ namespace GKUI.Dialogs
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnMotherDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnMotherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
             AcceptChanges();
@@ -850,7 +850,7 @@ namespace GKUI.Dialogs
         {
             AcceptTempData();
 
-            GEDCOMFamilyRecord family = AppHub.BaseController.SelectFamily(fBase, fPerson);
+            GEDCOMFamilyRecord family = fBase.Context.SelectFamily(fPerson);
             if (family == null) return;
 
             if (family.IndexOfChild(fPerson) < 0)
@@ -864,8 +864,8 @@ namespace GKUI.Dialogs
         {
             AcceptTempData();
 
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
-            if (family != null && AppHub.BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null))
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null))
             {
                 UpdateControls();
             }
@@ -873,9 +873,9 @@ namespace GKUI.Dialogs
 
         private void btnParentsDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
 
-            GEDCOMFamilyRecord family = AppHub.BaseController.GetChildFamily(fBase.Context.Tree, fPerson, false, null);
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
             fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
@@ -889,7 +889,7 @@ namespace GKUI.Dialogs
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddIndividualPortrait(fBase, fPerson)) {
+            if (BaseController.AddIndividualPortrait(fBase, fPerson)) {
                 fMediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -897,7 +897,7 @@ namespace GKUI.Dialogs
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteIndividualPortrait(fBase, fPerson)) {
+            if (BaseController.DeleteIndividualPortrait(fBase, fPerson)) {
                 UpdatePortrait(true);
             }
         }

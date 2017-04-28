@@ -85,11 +85,11 @@ namespace GKCore.Lists
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = AppHub.BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
+                    result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)) != false)
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }

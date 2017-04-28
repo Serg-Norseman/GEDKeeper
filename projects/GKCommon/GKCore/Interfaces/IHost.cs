@@ -22,11 +22,13 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public interface IMDIChild
+    public interface IMainWindow : IWindow
     {
+        void Restore();
+        void UpdateControls(bool forceDeactivate);
     }
 
-    public interface IHost : ILocalization
+    public interface IHost
     {
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
@@ -45,15 +47,12 @@ namespace GKCore.Interfaces
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
 
-        void ShowMDI(IMDIChild form);
+        void ShowWindow(IWindow window, bool taskbar);
 
         ILangMan CreateLangMan(object sender);
-        void LoadLanguage(int langCode);
-        void UpdateNavControls();
         void UpdateControls(bool forceDeactivate);
         void ShowHelpTopic(string topic);
         void EnableWindow(IWidgetForm form, bool value);
-        void Restore();
 
         bool ShowModalX(ICommonDialog form, bool keepModeless);
     }

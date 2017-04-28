@@ -132,7 +132,7 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    member = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    member = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                     result = (member != null);
                     if (result) {
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, fGroup, member);
@@ -140,7 +140,7 @@ namespace GKUI.Dialogs
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
+                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
                     if (result) {
                         result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, fGroup, member);
                     }

@@ -19,7 +19,11 @@
  */
 
 using System;
+using System.Windows.Forms;
+
+using GKCommon;
 using GKCommon.IoC;
+using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.UIContracts;
@@ -29,6 +33,140 @@ using GKUI.Dialogs;
 
 namespace GKUI
 {
+    public class ToolStripMenuItemEx : ToolStripMenuItem, IMenuItem
+    {
+        public ToolStripMenuItemEx(string text) : base(text)
+        {
+        }
+    }
+
+    public sealed class WinFormsAppHost : AppHost
+    {
+        private readonly ApplicationContext fAppContext;
+
+        public ApplicationContext AppContext
+        {
+            get { return fAppContext; }
+        }
+
+        public WinFormsAppHost() : base()
+        {
+            fAppContext = new ApplicationContext();
+            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+        }
+
+        public override void Init(string[] args, bool isMDI)
+        {
+            base.Init(args, isMDI);
+
+            if (fIsMDI) {
+                fAppContext.MainForm = (Form)fMainWindow;
+            }
+        }
+
+        public override IntPtr GetTopWindowHandle()
+        {
+            IntPtr mainHandle = IntPtr.Zero;
+            if (fIsMDI && fMainWindow != null) {
+                mainHandle = ((Form)fMainWindow).Handle;
+            }
+            return mainHandle;
+        }
+
+        public override void CloseWindow(IWindow window)
+        {
+            base.CloseWindow(window);
+
+            if (!fIsMDI && fRunningForms.Count == 0) {
+                fAppContext.ExitThread();
+            }
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+        }
+
+        public override IWindow GetActiveMdiChild()
+        {
+            if (fIsMDI) {
+                return (IWindow)((Form)fMainWindow).ActiveMdiChild;
+            } else {
+                return null;
+            }
+        }
+
+        public override void ShowWindow(IWindow window, bool taskbar)
+        {
+            Form frm = window as Form;
+
+            if (frm != null) {
+                frm.ShowInTaskbar = taskbar;
+                if (fIsMDI) {
+                    frm.MdiParent = (Form)fMainWindow;
+                }
+                frm.Show();
+            }
+        }
+
+        public override bool ShowModalX(ICommonDialog form, bool keepModeless)
+        {
+            IntPtr mainHandle = ((Form)fMainWindow).Handle;
+
+            if (keepModeless) {
+                #if !__MonoCS__
+                NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                #endif
+            }
+
+            UIHelper.CenterFormByParent((Form)form, mainHandle);
+
+            return base.ShowModalX(form, keepModeless);
+        }
+
+        public override void EnableWindow(IWidgetForm form, bool value)
+        {
+            Form frm = form as Form;
+
+            if (frm != null) {
+                #if !__MonoCS__
+                NativeMethods.EnableWindow(frm.Handle, value);
+                #endif
+            }
+        }
+
+        protected override void UpdateLang()
+        {
+            if (fIsMDI && fMainWindow != null) {
+                var mdiForm = fMainWindow as Form;
+                foreach (Form child in mdiForm.MdiChildren) {
+                    ILocalization localChild = (child as ILocalization);
+
+                    if (localChild != null) {
+                        localChild.SetLang();
+                    }
+                }
+
+                fMainWindow.SetLang();
+            }
+        }
+
+        public override void BaseClosed(IBaseWindow baseWin)
+        {
+            base.BaseClosed(baseWin);
+
+            if (fIsMDI && fMainWindow != null) {
+                ((MainWin)fMainWindow).CheckMRUWin(baseWin.Context.FileName, (Form)baseWin);
+            }
+        }
+
+        protected override void UpdateMRU()
+        {
+            if (fIsMDI && fMainWindow != null) {
+                ((MainWin)fMainWindow).UpdateMRU();
+            }
+        }
+    }
+
     /// <summary>
     /// This class implements initialization of IoC-container for WinForms presentation.
     /// </summary>
@@ -74,6 +212,10 @@ namespace GKUI
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
+
+            container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
+            container.Register<IMainWindow, MainWin>(LifeCycle.Transient);
+            container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
         }
     }
 }

@@ -1421,5 +1421,34 @@ namespace GKCore.Charts
         }
 
         #endregion
+
+        public static bool CheckTreeChartSize(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
+        {
+            bool result = true;
+
+            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth)
+            {
+                GKUtils.InitExtCounts(tree, -1);
+                int ancCount = GKUtils.GetAncestorsCount(iRec);
+                if (ancCount > 2048)
+                {
+                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
+                    return false;
+                }
+            }
+
+            if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth)
+            {
+                GKUtils.InitExtCounts(tree, -1);
+                int descCount = GKUtils.GetDescendantsCount(iRec);
+                if (descCount > 2048)
+                {
+                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
+                    result = false;
+                }
+            }
+
+            return result;
+        }
     }
 }

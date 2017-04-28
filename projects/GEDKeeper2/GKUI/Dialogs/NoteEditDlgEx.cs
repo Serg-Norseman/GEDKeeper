@@ -138,7 +138,7 @@ namespace GKUI.Dialogs
 
         private void miImport_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
             if (string.IsNullOrEmpty(fileName)) return;
 
             using (var sr = new StreamReader(fileName)) {
@@ -148,7 +148,7 @@ namespace GKUI.Dialogs
 
         private void miExport_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
             if (string.IsNullOrEmpty(fileName)) return;
 
             using (var sw = new StreamWriter(fileName)) {

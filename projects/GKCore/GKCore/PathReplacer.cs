@@ -44,7 +44,7 @@ namespace GKCore
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PathReplacer : IPathReplacer
+    public sealed class PathReplacer
     {
         private PathsMappingsList fPathsMappings;
 

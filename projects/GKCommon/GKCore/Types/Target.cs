@@ -18,19 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Interfaces
-{
-    /// <summary>
-    /// Interface for windows of different charts with support
-    /// for working functions and localization, and printing.
-    /// </summary>
-    public interface IChartWindow : IWorkWindow, ILocalization
-    {
-        IBaseWindow Base { get; }
+using System;
+using GKCommon.GEDCOM;
 
-        bool AllowPrint();
-        void DoPrint();
-        void DoPrintPreview();
-        void GenChart();
+namespace GKCore.Types
+{
+    public sealed class Target
+    {
+        public GEDCOMIndividualRecord TargetIndividual;
+        public TargetMode TargetMode;
+        public GEDCOMSex NeedSex;
     }
 }

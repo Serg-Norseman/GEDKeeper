@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -32,7 +31,6 @@ using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.SingleInstance;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Dialogs;
@@ -42,36 +40,13 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MainWin : Form, IHost, ISingleInstanceEnforcer
+    public sealed partial class MainWin : Form, IMainWindow
     {
-        private delegate void OnMessageReceivedInvoker(MessageEventArgs e);
-
-        private class WidgetInfo
-        {
-            public IWidget Widget;
-            public ToolStripMenuItem MenuItem;
-        }
-
-        private readonly List<WidgetInfo> fActiveWidgets;
         private readonly Timer fAutosaveTimer;
-        private string[] fCommandArgs;
-        private int fLoadingCount;
-        private readonly StringList fTips;
-
-        private static MainWin fInstance = null;
-
-        public static MainWin Instance
-        {
-            get { return fInstance; }
-        }
-
-        #region Instance control
 
         public MainWin()
         {
             InitializeComponent();
-
-            fInstance = this;
 
             tbFileNew.Image = GKResources.iCreateNew;
             tbFileLoad.Image = GKResources.iLoad;
@@ -90,17 +65,11 @@ namespace GKUI
             tbDocPreview.Image = GKResources.iPreview;
             tbDocPrint.Image = GKResources.iPrint;
 
-            Logger.LogInit(GKUtils.GetLogFilename());
-
-            fActiveWidgets = new List<WidgetInfo>();
-
             fAutosaveTimer = new Timer(components);
             fAutosaveTimer.Stop();
             fAutosaveTimer.Enabled = false;
             fAutosaveTimer.Interval = 10 * 60 * 1000;
             fAutosaveTimer.Tick += AutosaveTimer_Tick;
-
-            fTips = new StringList();
 
             //LangMan.SaveDefaultLanguage();
         }
@@ -108,7 +77,7 @@ namespace GKUI
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                AppHub.Options.Dispose();
+                AppHost.Options.Dispose();
 
                 if (components != null) components.Dispose();
             }
@@ -140,48 +109,8 @@ namespace GKUI
 
         private void ApplyOptions()
         {
-            fAutosaveTimer.Interval = AppHub.Options.AutosaveInterval /* min */ * 60 * 1000;
-            fAutosaveTimer.Enabled = AppHub.Options.Autosave;
-        }
-
-        #endregion
-
-        #region Event handlers
-
-        public void SetArgs(string[] args)
-        {
-            if (args == null) return;
-
-            fCommandArgs = (string[])args.Clone();
-        }
-
-        private void LoadArgs()
-        {
-            if (fCommandArgs != null && fCommandArgs.Length > 0) {
-                CreateBase(fCommandArgs[0]);
-            }
-        }
-
-        /// <summary>
-        /// Reload at startup recent opened files.
-        /// </summary>
-        private void ReloadRecentBases()
-        {
-            if (!GlobalOptions.Instance.LoadRecentFiles) return;
-
-            try {
-                BeginLoading();
-
-                int num = AppHub.Options.GetLastBasesCount();
-                for (int i = 0; i < num; i++) {
-                    string lb = AppHub.Options.GetLastBase(i);
-                    if (File.Exists(lb)) {
-                        CreateBase(lb);
-                    }
-                }
-            } finally {
-                EndLoading();
-            }
+            fAutosaveTimer.Interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
+            fAutosaveTimer.Enabled = AppHost.Options.Autosave;
         }
 
         private void Form_Show(object sender, EventArgs e)
@@ -190,13 +119,13 @@ namespace GKUI
             {
                 try
                 {
-                    BeginLoading();
+                    AppHost.Instance.BeginLoading();
 
-                    ReloadRecentBases();
+                    AppHost.Instance.ReloadRecentBases();
 
-                    ProcessHolidays();
+                    AppHost.Instance.ProcessHolidays();
                 } finally {
-                    EndLoading();
+                    AppHost.Instance.EndLoading();
                 }
 
                 UpdateMan.CheckUpdate();
@@ -209,17 +138,13 @@ namespace GKUI
         {
             try
             {
-                AppHub.InitHost();
-
-                AppHub.Plugins.Load(this, GKUtils.GetPluginsPath());
-
                 ApplyOptions();
                 RestoreWindowState();
                 UpdatePluginsItems();
-                LoadLanguage(AppHub.Options.InterfaceLang);
+                AppHost.Instance.LoadLanguage(AppHost.Options.InterfaceLang);
                 UpdateMRU();
                 UpdateControls(false);
-                LoadArgs();
+                AppHost.Instance.LoadArgs();
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_Load(): " + ex.Message);
             }
@@ -229,10 +154,6 @@ namespace GKUI
         {
             try {
                 SaveWindowState();
-
-                AppHub.Plugins.Unload();
-
-                AppHub.DoneHost();
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_Closed(): " + ex.Message);
             }
@@ -242,9 +163,9 @@ namespace GKUI
         {
             if (e.KeyCode == Keys.F12) {
                 #if __MonoCS__
-                AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+                AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 #else
-                IBaseWindow curBase = GetCurrentFile();
+                IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
                 if (curBase == null) return;
 
                 using (TreesAlbumExporter fb = new TreesAlbumExporter(curBase)) {
@@ -261,11 +182,11 @@ namespace GKUI
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            AppHub.Options.ClearLastBases();
+            AppHost.Options.ClearLastBases();
             for (int i = MdiChildren.Length - 1; i >= 0; i--) {
                 Form mdiChild = MdiChildren[i];
                 if (mdiChild is IBaseWindow) {
-                    AppHub.Options.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
+                    AppHost.Options.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
                 }
             }
         }
@@ -279,17 +200,17 @@ namespace GKUI
         {
             try {
                 try {
-                    BeginLoading();
+                    AppHost.Instance.BeginLoading();
 
                     Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
                     if (a == null) return;
 
                     for (int i = 0; i < a.Length; i++) {
                         string fn = a.GetValue(i).ToString();
-                        CreateBase(fn);
+                        AppHost.Instance.CreateBase(fn);
                     }
                 } finally {
-                    EndLoading();
+                    AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
@@ -302,7 +223,7 @@ namespace GKUI
             base.WndProc(ref m);
 
             if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
-                foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                foreach (WidgetInfo widgetInfo in AppHost.Instance.ActiveWidgets) {
                     widgetInfo.Widget.WidgetEnable();
                 }
             }
@@ -310,7 +231,7 @@ namespace GKUI
 
         private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             Bitmap pic = null;
@@ -327,15 +248,16 @@ namespace GKUI
                     break;
             }
 
-            if (pic == null) return;
-            pic.MakeTransparent(pic.GetPixel(0, 0));
-            sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+            if (pic != null) {
+                pic.MakeTransparent(pic.GetPixel(0, 0));
+                sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+            }
         }
 
         private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
         {
             if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
-                IBaseWindow curBase = GetCurrentFile();
+                IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
                 if (curBase != null) {
                     curBase.Context.SwitchShieldState();
                     StatusBar.Invalidate();
@@ -378,26 +300,17 @@ namespace GKUI
             }
         }
 
-        private void miExit_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        #endregion
-
-        #region Misc functions
-
         private void SaveWindowState()
         {
-            AppHub.Options.MWinRect = UIHelper.GetFormRect(this);
-            AppHub.Options.MWinState = (WindowState)this.WindowState;
+            AppHost.Options.MWinRect = UIHelper.GetFormRect(this);
+            AppHost.Options.MWinState = (WindowState)this.WindowState;
         }
 
         private void RestoreWindowState()
         {
             try
             {
-                ExtRect mwinRect = AppHub.Options.MWinRect;
+                ExtRect mwinRect = AppHost.Options.MWinRect;
 
                 UIHelper.NormalizeFormRect(ref mwinRect);
 
@@ -420,7 +333,7 @@ namespace GKUI
                     Width = 800;
                     Height = 600;
                 }
-                WindowState = (FormWindowState)AppHub.Options.MWinState;
+                WindowState = (FormWindowState)AppHost.Options.MWinState;
             }
             catch (Exception ex)
             {
@@ -428,132 +341,29 @@ namespace GKUI
             }
         }
 
-        private static ushort RequestLanguage()
+        public void Restore()
         {
-            using (LanguageSelectDlg dlg = new LanguageSelectDlg())
-            {
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    return (ushort)dlg.SelectedLanguage;
-                }
-            }
-
-            return LangMan.LS_DEF_CODE;
-        }
-
-        public void LoadLanguage(int langCode)
-        {
-            try
-            {
-                if (langCode <= 0) {
-                    langCode = RequestLanguage();
-                }
-
-                if (langCode != LangMan.LS_DEF_CODE) {
-                    bool loaded = false;
-
-                    foreach (LangRecord langRec in AppHub.Options.Languages) {
-                        if (langRec.Code == langCode) {
-                            loaded = LangMan.LoadFromFile(langRec.FileName);
-                            break;
-                        }
-                    }
-
-                    if (!loaded) langCode = LangMan.LS_DEF_CODE;
-                }
-
-                if (langCode == LangMan.LS_DEF_CODE) {
-                    LangMan.DefInit();
-                }
-
-                foreach (Form child in MdiChildren) {
-                    ILocalization localChild = (child as ILocalization);
-
-                    if (localChild != null) {
-                        localChild.SetLang();
-                    }
-                }
-
-                SetLang();
-
-                AppHub.Options.InterfaceLang = (ushort)langCode;
-
-                UpdatePluginsLanguage();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("MainWin.LoadLanguage(): " + ex.Message);
+            if (WindowState == FormWindowState.Minimized) {
+                WindowState = FormWindowState.Normal;
             }
         }
-
-        private void ProcessHolidays()
-        {
-            try
-            {
-                if (!AppHub.Options.ShowTips) return;
-
-                Holidays holidays = new Holidays();
-
-                // TODO: We need a reference to the country, not the language
-                string lngSign = AppHub.Options.GetLanguageSign();
-                if (!string.IsNullOrEmpty(lngSign)) {
-                    holidays.Load(GKUtils.GetLangsPath() + "holidays_" + lngSign + ".yaml");
-                }
-
-                holidays.CollectTips(fTips);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("MainWin.ProcessHolidays(): " + ex.Message);
-            }
-        }
-
-        public DialogResult ShowModalEx(Form form, bool keepModeless)
-        {
-            if (form == null) return DialogResult.None;
-
-            if (keepModeless) {
-                #if !__MonoCS__
-                NativeMethods.PostMessage(Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
-            }
-
-            return form.ShowDialog();
-        }
-
-        public bool ShowModalX(ICommonDialog form, bool keepModeless)
-        {
-            if (form == null) return false;
-
-            if (keepModeless) {
-                #if !__MonoCS__
-                NativeMethods.PostMessage(Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
-            }
-
-            return form.ShowModalX();
-        }
-
-        #endregion
-
-        #region MRU functions
 
         private void MRUFileClick(object sender, EventArgs e)
         {
             int idx = (int)((GKToolStripMenuItem)sender).Tag;
-            CreateBase(AppHub.Options.MRUFiles[idx].FileName);
+            AppHost.Instance.CreateBase(AppHost.Options.MRUFiles[idx].FileName);
         }
 
-        private void UpdateMRU()
+        public void UpdateMRU()
         {
             try {
-                miMRUFiles.Enabled = (AppHub.Options.MRUFiles.Count > 0);
+                miMRUFiles.Enabled = (AppHost.Options.MRUFiles.Count > 0);
                 miMRUFiles.DropDownItems.Clear();
                 MenuMRU.Items.Clear();
 
-                int num = AppHub.Options.MRUFiles.Count;
+                int num = AppHost.Options.MRUFiles.Count;
                 for (int i = 0; i < num; i++) {
-                    string fn = AppHub.Options.MRUFiles[i].FileName;
+                    string fn = AppHost.Options.MRUFiles[i].FileName;
 
                     GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
                     mi.Click += MRUFileClick;
@@ -568,51 +378,21 @@ namespace GKUI
             }
         }
 
-        public void AddMRU(string fileName)
-        {
-            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
-
-            MRUFile mf;
-            if (idx >= 0) {
-                mf = AppHub.Options.MRUFiles[idx];
-                AppHub.Options.MRUFiles.RemoveAt(idx);
-            } else {
-                mf = new MRUFile(fileName);
-            }
-
-            AppHub.Options.MRUFiles.Insert(0, mf);
-
-            UpdateMRU();
-        }
-
         public void CheckMRUWin(string fileName, Form frm)
         {
-            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
+            int idx = AppHost.Options.MRUFiles_IndexOf(fileName);
             if (idx < 0) return;
 
-            MRUFile mf = AppHub.Options.MRUFiles[idx];
+            MRUFile mf = AppHost.Options.MRUFiles[idx];
             mf.WinRect = UIHelper.GetFormRect(frm);
             mf.WinState = (WindowState)frm.WindowState;
         }
-
-        public void RestoreMRU(IBaseWindow baseWin, string fileName)
-        {
-            int idx = AppHub.Options.MRUFiles_IndexOf(fileName);
-            if (idx < 0) return;
-
-            MRUFile mf = AppHub.Options.MRUFiles[idx];
-            UIHelper.RestoreFormRect(baseWin as Form, mf.WinRect, (FormWindowState)mf.WinState);
-        }
-
-        #endregion
-
-        #region Base Management
 
         public void UpdateNavControls()
         {
             try
             {
-                IWorkWindow workWin = GetWorkWindow();
+                IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
@@ -625,10 +405,10 @@ namespace GKUI
         {
             try
             {
-                IBaseWindow curBase = ((forceDeactivate) ? null : GetCurrentFile());
+                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
                 IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
 
-                IWorkWindow workWin = GetWorkWindow();
+                IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
 
                 GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
                 bool baseEn = (rt != GEDCOMRecordType.rtNone);
@@ -688,110 +468,14 @@ namespace GKUI
             }
         }
 
-        public string GetCurrentFileName()
+        private void miExit_Click(object sender, EventArgs e)
         {
-            IBaseWindow cb = GetCurrentFile();
-            string result = ((cb == null) ? "" : cb.Context.FileName);
-            return result;
-        }
-
-        public IBaseWindow FindBase(string fileName)
-        {
-            IBaseWindow result = null;
-
-            int num = MdiChildren.Length;
-            for (int i = 0; i < num; i++) {
-                IBaseWindow baseWin = MdiChildren[i] as IBaseWindow;
-
-                if (baseWin != null && string.Equals(baseWin.Context.FileName, fileName)) {
-                    result = baseWin;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        public void ShowTips()
-        {
-            if (fTips.Count <= 0) return;
-
-            AppHub.Options.ShowTips =
-                DayTipsDlg.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays),
-                                      AppHub.Options.ShowTips, fTips, Handle);
-
-            fTips.Clear();
-        }
-
-        private void BeginLoading()
-        {
-            fLoadingCount++;
-        }
-
-        private void EndLoading()
-        {
-            fLoadingCount--;
-
-            if (fLoadingCount == 0)
-            {
-                ShowTips();
-            }
-        }
-
-        public IBaseWindow CreateBase(string fileName)
-        {
-            IBaseWindow result = null;
-
-            try {
-                try {
-                    BeginLoading();
-
-                    result = FindBase(fileName);
-                    if (result != null) {
-                        result.Activate();
-                        return result;
-                    }
-
-                    result = new BaseWin();
-                    ShowMDI(result);
-
-                    if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
-                        result.LoadFile(fileName);
-                        result.Context.CollectTips(fTips);
-                    } else {
-                        result.CreateNewFile();
-                    }
-
-                    RestoreMRU(result, fileName);
-                } finally {
-                    EndLoading();
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("MainWin.CreateBase(): " + ex.Message);
-            }
-
-            return null;
-        }
-
-        public void CriticalSave()
-        {
-            try
-            {
-                int num = MdiChildren.Length;
-                for (int i = 0; i < num; i++) {
-                    IBaseWindow baseWin = MdiChildren[i] as IBaseWindow;
-                    if (baseWin != null) {
-                        baseWin.Context.CriticalSave();
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("MainWin.CriticalSave(): " + ex.Message);
-            }
+            Close();
         }
 
         private void miUndo_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Context.DoUndo();
@@ -799,7 +483,7 @@ namespace GKUI
 
         private void miRedo_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Context.DoRedo();
@@ -808,9 +492,9 @@ namespace GKUI
         private void miExportToFamilyBook_Click(object sender, EventArgs e)
         {
             #if __MonoCS__
-            AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             #else
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             using (FamilyBookExporter fb = new FamilyBookExporter(curBase)) {
@@ -821,18 +505,18 @@ namespace GKUI
 
         private void miExportToExcelFile_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             using (ExcelExporter exExp = new ExcelExporter(curBase)) {
-                exExp.Options = AppHub.Options;
+                exExp.Options = AppHost.Options;
                 exExp.Generate(true);
             }
         }
 
         private void miFileProperties_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             try {
@@ -840,7 +524,7 @@ namespace GKUI
 
                 using (var dlg = new FilePropertiesDlg()) {
                     dlg.InitDialog(curBase);
-                    ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -849,14 +533,14 @@ namespace GKUI
 
         private void miScripts_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             try {
                 curBase.Context.BeginUpdate();
 
-                using (ScriptEditWin dmn = new ScriptEditWin(curBase)) {
-                    ShowModalEx(dmn, false);
+                using (ScriptEditWin scriptWin = new ScriptEditWin(curBase)) {
+                    scriptWin.ShowDialog();
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -865,14 +549,14 @@ namespace GKUI
 
         private void miTreeTools_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             try {
                 curBase.Context.BeginUpdate();
 
                 using (TreeToolsWin fmTreeTools = new TreeToolsWin(curBase)) {
-                    ShowModalEx(fmTreeTools, false);
+                    fmTreeTools.ShowDialog();
                 }
             } finally {
                 curBase.Context.EndUpdate();
@@ -881,7 +565,7 @@ namespace GKUI
 
         private void miOptions_Click(object sender, EventArgs e)
         {
-            using (OptionsDlg dlgOptions = new OptionsDlg(this))
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
             {
                 Form activeForm = ActiveMdiChild;
                 if (activeForm is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
@@ -909,7 +593,7 @@ namespace GKUI
 
         private void miFileClose_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.Close();
@@ -917,59 +601,38 @@ namespace GKUI
 
         private void miFileNew_Click(object sender, EventArgs e)
         {
-            CreateBase("");
-        }
-
-        public string GetUserFilesPath(string filePath)
-        {
-            string ufPath = filePath;
-            if (Directory.Exists(ufPath)) return ufPath;
-
-            ufPath = AppHub.Options.LastDir;
-            if (Directory.Exists(ufPath)) return ufPath;
-
-            ufPath = GKUtils.GetHomePath();
-            return ufPath;
+            AppHost.Instance.CreateBase("");
         }
 
         private void miFileLoad_Click(object sender, EventArgs e)
         {
-            string homePath = GetUserFilesPath("");
+            string homePath = AppHost.Instance.GetUserFilesPath("");
 
-            string fileName = AppHub.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
-                CreateBase(fileName);
+                AppHost.Instance.CreateBase(fileName);
             }
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile(true);
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile(true);
             if (curBase == null) return;
 
-            string homePath = GetUserFilesPath(Path.GetDirectoryName(curBase.Context.FileName));
-
-            string fileName = AppHub.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Context.FileName, false);
-            if (!string.IsNullOrEmpty(fileName)) {
-                curBase.SaveFile(fileName);
-            }
+            curBase.SaveFileEx(true);
         }
 
-        public void miFileSave_Click(object sender, EventArgs e)
+        private void miFileSave_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile(true);
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile(true);
             if (curBase == null) return;
 
-            if (!curBase.Context.IsUnknown()) {
-                curBase.SaveFile(curBase.Context.FileName);
-            } else {
-                miFileSaveAs_Click(sender, e);
-            }
+            curBase.SaveFileEx(false);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.AddRecord();
@@ -977,7 +640,7 @@ namespace GKUI
 
         private void miRecordEdit_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.EditRecord();
@@ -985,7 +648,7 @@ namespace GKUI
 
         private void miRecordDelete_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             curBase.DeleteRecord();
@@ -993,7 +656,7 @@ namespace GKUI
 
         private void miSearch_Click(object sender, EventArgs e)
         {
-            IWorkWindow win = GetWorkWindow();
+            IWorkWindow win = AppHost.Instance.GetWorkWindow();
             if (win == null) return;
 
             win.QuickSearch();
@@ -1001,7 +664,7 @@ namespace GKUI
 
         private void miFilter_Click(object sender, EventArgs e)
         {
-            IWorkWindow win = GetWorkWindow();
+            IWorkWindow win = AppHost.Instance.GetWorkWindow();
             if (win == null) return;
 
             win.SetFilter();
@@ -1009,7 +672,7 @@ namespace GKUI
 
         private void tbPrev_Click(object sender, EventArgs e)
         {
-            IWorkWindow win = GetWorkWindow();
+            IWorkWindow win = AppHost.Instance.GetWorkWindow();
             if (win == null) return;
 
             win.NavPrev();
@@ -1017,7 +680,7 @@ namespace GKUI
 
         private void tbNext_Click(object sender, EventArgs e)
         {
-            IWorkWindow win = GetWorkWindow();
+            IWorkWindow win = AppHost.Instance.GetWorkWindow();
             if (win == null) return;
 
             win.NavNext();
@@ -1025,7 +688,7 @@ namespace GKUI
 
         private void tbDocPrint_Click(object sender, EventArgs e)
         {
-            IChartWindow chartWin = GetWorkWindow() as IChartWindow;
+            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
             if (chartWin != null && chartWin.AllowPrint()) {
                 chartWin.DoPrint();
             }
@@ -1033,7 +696,7 @@ namespace GKUI
 
         private void tbDocPreview_Click(object sender, EventArgs e)
         {
-            IChartWindow chartWin = GetWorkWindow() as IChartWindow;
+            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
             if (chartWin != null && chartWin.AllowPrint()) {
                 chartWin.DoPrintPreview();
             }
@@ -1042,9 +705,9 @@ namespace GKUI
         private void miMap_Click(object sender, EventArgs e)
         {
             #if __MonoCS__
-            AppHub.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             #else
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
             
             MapsViewerWin mapsWin = new MapsViewerWin(curBase);
@@ -1055,17 +718,17 @@ namespace GKUI
 
         private void miOrganizer_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             using (OrganizerWin dlg = new OrganizerWin(curBase)) {
-                ShowModalEx(dlg, false);
+                dlg.ShowDialog();
             }
         }
 
         private void miRelationshipCalculator_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(curBase)) {
@@ -1075,32 +738,32 @@ namespace GKUI
 
         private void miSlideshow_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             SlideshowWin win = new SlideshowWin(curBase);
-            ShowMDI(win);
+            AppHost.Instance.ShowWindow(win, false);
         }
 
         private void miStats_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 
             StatisticsWin win = new StatisticsWin(curBase, selectedRecords);
-            ShowMDI(win);
+            AppHost.Instance.ShowWindow(win, false);
         }
 
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             using (PedigreeExporter p = new PedigreeExporter(curBase)) {
                 p.Root = curBase.GetSelectedPerson();
-                p.Options = AppHub.Options;
+                p.Options = AppHost.Options;
                 p.ShieldState = curBase.Context.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
@@ -1124,64 +787,50 @@ namespace GKUI
 
         private void miTreeAncestors_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
-            if (curBase == null) return;
-
-            GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckAncestors)) {
-                TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
-                fmChart.ChartKind = TreeChartKind.ckAncestors;
-                fmChart.GenChart(true);
-            }
+            ShowTreeChart(TreeChartKind.ckAncestors);
         }
 
         private void miTreeDescendants_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
-            if (curBase == null) return;
-
-            GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckDescendants)) {
-                TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
-                fmChart.ChartKind = TreeChartKind.ckDescendants;
-                fmChart.GenChart(true);
-            }
+            ShowTreeChart(TreeChartKind.ckDescendants);
         }
 
         private void miTreeBoth_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            ShowTreeChart(TreeChartKind.ckBoth);
+        }
+
+        private void ShowTreeChart(TreeChartKind chartKind)
+        {
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             GEDCOMIndividualRecord selPerson = curBase.GetSelectedPerson();
-            if (AppHub.BaseController.CheckTreeChartSize(curBase.Context.Tree, selPerson, TreeChartKind.ckBoth)) {
+            if (TreeChartModel.CheckTreeChartSize(curBase.Context.Tree, selPerson, chartKind)) {
                 TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
-                fmChart.ChartKind = TreeChartKind.ckBoth;
-                fmChart.GenChart(true);
+                fmChart.ChartKind = chartKind;
+                fmChart.GenChart();
+                AppHost.Instance.ShowWindow(fmChart, false);
             }
         }
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Ancestors);
-            fmChart.GenChart(true);
+            AppHost.Instance.ShowWindow(fmChart, false);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            IBaseWindow curBase = GetCurrentFile();
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Descendants);
-            fmChart.GenChart(true);
+            AppHost.Instance.ShowWindow(fmChart, false);
         }
-
-        #endregion
-
-        #region Help and Windows
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
@@ -1200,30 +849,9 @@ namespace GKUI
             }
         }
 
-        public void ShowHelpTopic(string topic)
-        {
-            string lngSign = AppHub.Options.GetLanguageSign();
-            if (string.IsNullOrEmpty(lngSign)) return;
-
-            string helpPath = GKUtils.GetHelpPath(lngSign);
-
-            if (string.IsNullOrEmpty(topic)) {
-                topic = helpPath + "GEDKeeper2.html";
-            } else {
-                topic = helpPath + topic;
-            }
-
-            if (!File.Exists(topic)) {
-                AppHub.StdDialogs.ShowError(@"For that language help is unavailable");
-                return;
-            }
-
-            SysUtils.LoadExtFile(topic);
-        }
-
         private void miContext_Click(object sender, EventArgs e)
         {
-            ShowHelpTopic("");
+            AppHost.Instance.ShowHelpTopic("");
         }
 
         private void miWinCascade_Click(object sender, EventArgs e)
@@ -1266,9 +894,6 @@ namespace GKUI
             ActivateMdiChild(activeChild);
         }
 
-        #endregion
-
-        #region ILocalization implementation
 
         public void SetLang()
         {
@@ -1348,15 +973,6 @@ namespace GKUI
 
             tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
             tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
-        }
-
-        #endregion
-
-        #region Plugins support
-
-        private void UpdatePluginsLanguage()
-        {
-            AppHub.Plugins.OnLanguageChange();
 
             int num = miPlugins.DropDownItems.Count;
             for (int i = 0; i < num; i++) {
@@ -1380,17 +996,17 @@ namespace GKUI
         private void UpdatePluginsItems()
         {
             try {
-                miPlugins.Visible = (AppHub.Plugins.Count > 0);
+                miPlugins.Visible = (AppHost.Plugins.Count > 0);
                 miPlugins.DropDownItems.Clear();
 
-                fActiveWidgets.Clear();
+                AppHost.Instance.ActiveWidgets.Clear();
 
-                int num = AppHub.Plugins.Count;
+                int num = AppHost.Plugins.Count;
                 for (int i = 0; i < num; i++) {
-                    IPlugin plugin = AppHub.Plugins[i];
+                    IPlugin plugin = AppHost.Plugins[i];
                     string dispName = plugin.DisplayName;
 
-                    ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
+                    ToolStripMenuItemEx mi = new ToolStripMenuItemEx(dispName/*, i*/);
                     mi.Click += Plugin_Click;
                     mi.Tag = plugin;
                     miPlugins.DropDownItems.Add(mi);
@@ -1399,178 +1015,14 @@ namespace GKUI
                         WidgetInfo widInfo = new WidgetInfo();
                         widInfo.Widget = (plugin as IWidget);
                         widInfo.MenuItem = mi;
-                        fActiveWidgets.Add(widInfo);
+                        AppHost.Instance.ActiveWidgets.Add(widInfo);
 
-                        (plugin as IWidget).WidgetInit(this);
+                        (plugin as IWidget).WidgetInit(AppHost.Instance);
                     }
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.UpdatePluginsItems(): " + ex.Message);
             }
         }
-
-        #endregion
-
-        #region IHost implementation
-
-        public ILangMan CreateLangMan(object sender)
-        {
-            return AppHub.Plugins.CreateLangMan(sender);
-        }
-
-        public IBaseWindow GetCurrentFile(bool extMode = false)
-        {
-            IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
-            IBaseWindow result;
-
-            if (extMode && curChart != null) {
-                result = curChart.Base;
-            } else {
-                result = ((ActiveMdiChild is IBaseWindow) ? ((IBaseWindow) ActiveMdiChild) : null);
-            }
-
-            return result;
-        }
-
-        public IWorkWindow GetWorkWindow()
-        {
-            Form activeForm = ActiveMdiChild;
-            return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
-        }
-
-        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
-        {
-            AppHub.Plugins.NotifyRecord(baseWin, record, action);
-        }
-
-        public string GetAppDataPath()
-        {
-            return GKUtils.GetAppDataPath();
-        }
-
-        private WidgetInfo FindWidgetInfo(IWidget widget)
-        {
-            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
-                if (widgetInfo.Widget == widget) {
-                    return widgetInfo;
-                }
-            }
-
-            return null;
-        }
-
-        public void WidgetShow(IWidget widget)
-        {
-            WidgetInfo widInfo = FindWidgetInfo(widget);
-            if (widInfo == null) return;
-
-            if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = true;
-        }
-
-        public void WidgetClose(IWidget widget)
-        {
-            WidgetInfo widInfo = FindWidgetInfo(widget);
-            if (widInfo == null) return;
-
-            if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
-        }
-
-        public bool IsWidgetActive(IWidget widget)
-        {
-            WidgetInfo widInfo = FindWidgetInfo(widget);
-            if (widInfo == null || widInfo.MenuItem == null) {
-                return false;
-            } else {
-                return widInfo.MenuItem.Checked;
-            }
-        }
-
-        public void BaseChanged(IBaseWindow baseWin)
-        {
-            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
-                widgetInfo.Widget.BaseChanged(baseWin);
-            }
-        }
-
-        public void BaseClosed(IBaseWindow baseWin)
-        {
-            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
-                widgetInfo.Widget.BaseClosed(baseWin);
-            }
-        }
-
-        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
-        {
-            // TODO: implementation of Base.SaveAs
-        }
-
-        public void ShowMDI(IMDIChild form)
-        {
-            Form frm = form as Form;
-
-            if (frm != null) {
-                frm.MdiParent = this;
-                frm.Show();
-            }
-        }
-
-        public void EnableWindow(IWidgetForm form, bool value)
-        {
-            Form frm = form as Form;
-
-            if (frm != null) {
-                #if !__MonoCS__
-                NativeMethods.EnableWindow(frm.Handle, value);
-                #endif
-            }
-        }
-
-        public void Restore()
-        {
-            if (WindowState == FormWindowState.Minimized) {
-                WindowState = FormWindowState.Normal;
-            }
-        }
-
-        #endregion
-
-        #region ISingleInstanceEnforcer implementation
-
-        void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
-        {
-            OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
-                try
-                {
-                    string msg = eventArgs.Message as string;
-
-                    if (!string.IsNullOrEmpty(msg) && msg == "restore") {
-                        Restore();
-                    } else {
-                        string[] args = eventArgs.Message as string[];
-                        if (args != null) {
-                            // A obligatory recovery of window, otherwise it will fail to load
-                            Restore();
-
-                            SetArgs(args);
-                            LoadArgs();
-                        }
-                    }
-                } catch (Exception ex) {
-                    Logger.LogWrite("MainWin.OnMessageReceived(): " + ex.Message);
-                }
-            };
-
-            if (InvokeRequired) {
-                Invoke(invoker, e);
-            } else {
-                invoker(e);
-            }
-        }
-
-        void ISingleInstanceEnforcer.OnNewInstanceCreated(EventArgs e)
-        {
-        }
-
-        #endregion
     }
 }

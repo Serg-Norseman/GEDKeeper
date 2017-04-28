@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using GKCore;
+using GKUI;
 using GKUI.Dialogs;
 using NUnit.Framework;
 
@@ -36,6 +38,9 @@ namespace GKTests.UITests
         public override void Setup()
         {
             base.Setup();
+
+            WinFormsBootstrapper.Configure(AppHost.Container);
+
             fDialog = new AboutDlg();
             fDialog.Show();
         }

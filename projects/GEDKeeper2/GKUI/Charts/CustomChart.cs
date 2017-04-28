@@ -215,7 +215,7 @@ namespace GKUI.Charts
             Size imageSize = GetImageSize();
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
             {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
             }
             else
             {

@@ -36,7 +36,7 @@ namespace GKCore
         }
     }
 
-    public class BaseSearchStrategy : ISearchStrategy
+    public class SearchStrategy : ISearchStrategy
     {
         private readonly string fSearchPattern;
         private readonly IWorkWindow fWorkWindow;
@@ -44,7 +44,7 @@ namespace GKCore
         private IList<ISearchResult> fCurrentResults;
         private ISearchResult fCurResult;
 
-        public BaseSearchStrategy(IWorkWindow workWindow, string searchPattern)
+        public SearchStrategy(IWorkWindow workWindow, string searchPattern)
         {
             if (searchPattern == null)
                 throw new ArgumentNullException("searchPattern");

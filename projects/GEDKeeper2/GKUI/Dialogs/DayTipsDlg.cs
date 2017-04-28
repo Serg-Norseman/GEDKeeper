@@ -23,14 +23,14 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCore;
-using GKUI.Components;
+using GKCore.UIContracts;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class DayTipsDlg : Form
+    public partial class DayTipsDlg : Form, IDayTipsDlg
     {
         private readonly StringList fTips;
 
@@ -85,34 +85,24 @@ namespace GKUI.Dialogs
             GetNextTip();
         }
 
-        /// <summary>
-        /// Shows MOTD window.
-        /// </summary>
-        /// <param name="caption">Window title.</param>
-        /// <param name="showTipsChecked">Initial state of the "Show on the
-        /// application startup" option.</param>
-        /// <param name="tips">List of messahes to show.</param>
-        /// <param name="parent">handle to the parent window.</param>
-        /// <returns>true if user wants to view MOTD window on the next
-        /// application startup and false otherwise.</returns>
-        public static bool ShowTipsEx(string caption, bool showTipsChecked,
-                                      StringList tips, IntPtr parent)
+        public bool ShowTipsChecked
         {
-            bool result;
-            using (DayTipsDlg dlg = new DayTipsDlg())
-            {
-                dlg.chkShow.Checked = showTipsChecked;
-                dlg.Text = caption;
-                dlg.lblTitle.Text = caption;
-                dlg.fTips.Assign(tips);
-                dlg.GetNextTip();
+            get { return chkShow.Checked; }
+            set { chkShow.Checked = value; }
+        }
 
-                UIHelper.CenterFormByParent(dlg, parent);
-                dlg.ShowDialog();
+        public void Init(string caption, bool showTipsChecked, StringList tips)
+        {
+            chkShow.Checked = showTipsChecked;
+            Text = caption;
+            lblTitle.Text = caption;
+            fTips.Assign(tips);
+            GetNextTip();
+        }
 
-                result = dlg.chkShow.Checked;
-            }
-            return result;
+        public bool ShowModalX()
+        {
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

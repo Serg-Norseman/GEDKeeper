@@ -35,7 +35,7 @@ namespace GKImageViewerPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class ImageViewerWin : Form, ILocalization, IMDIChild
+    public partial class ImageViewerWin : Form, ILocalization, IWindow
     {
         private ImageView fImageCtl;
         private readonly Plugin fPlugin;
@@ -68,7 +68,7 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == tbFileLoad) {
-                string fileName = AppHub.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+                string fileName = AppHost.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     SetFileRef(fileName);

@@ -39,6 +39,7 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using GKCore.UIContracts;
 
 namespace GKCore
 {
@@ -50,7 +51,6 @@ namespace GKCore
         #region Private fields
 
         private string fFileName;
-        private readonly IHost fHost;
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
@@ -162,7 +162,6 @@ namespace GKCore
             fFileName = "";
             fTree = new GEDCOMTree();
             fViewer = viewer;
-            fHost = (viewer == null) ? null : viewer.Host;
             fUndoman = new ChangeTracker(fTree);
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GEDCOMRecord>();
@@ -323,6 +322,46 @@ namespace GKCore
 
         #endregion
 
+        #region Data search
+
+        public GEDCOMSourceRecord FindSource(string sourceName)
+        {
+            GEDCOMSourceRecord result = null;
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = fTree[i];
+
+                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).FiledByEntry == sourceName)
+                {
+                    result = (rec as GEDCOMSourceRecord);
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public void GetSourcesList(StringList sources)
+        {
+            if (sources == null) return;
+
+            sources.Clear();
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = fTree[i];
+                if (rec is GEDCOMSourceRecord)
+                {
+                    sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+                }
+            }
+        }
+
+        #endregion
+
         #region Individual utils
 
         public bool IsChildless(GEDCOMIndividualRecord iRec)
@@ -462,6 +501,110 @@ namespace GKCore
 
         #endregion
 
+        #region Name and sex functions
+
+        public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
+        {
+            ICulture culture = this.Culture;
+            if (!culture.HasPatronymic()) return string.Empty;
+
+            string result = "";
+
+            INamesTable namesTable = AppHost.NamesTable;
+
+            NameEntry n = namesTable.FindName(name);
+            if (n == null) {
+                if (!confirm) {
+                    return result;
+                }
+
+                n = namesTable.AddName(name);
+            }
+
+            switch (sex)
+            {
+                case GEDCOMSex.svMale:
+                    result = n.M_Patronymic;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    result = n.F_Patronymic;
+                    break;
+            }
+
+            if (result == "") {
+                if (!confirm) {
+                    return result;
+                }
+
+                BaseController.ModifyName(this, ref n);
+            }
+
+            switch (sex)
+            {
+                case GEDCOMSex.svMale:
+                    result = n.M_Patronymic;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    result = n.F_Patronymic;
+                    break;
+            }
+
+            return result;
+        }
+
+        public GEDCOMSex DefineSex(string iName, string iPatr)
+        {
+            //ICulture culture = fContext.Culture;
+            INamesTable namesTable = AppHost.NamesTable;
+
+            GEDCOMSex result = namesTable.GetSexByName(iName);
+
+            if (result == GEDCOMSex.svNone)
+            {
+                using (var dlg = AppHost.Container.Resolve<ISexCheckDlg>())
+                {
+                    dlg.IndividualName = iName + " " + iPatr;
+                    result = this.Culture.GetSex(iName, iPatr, false);
+
+                    dlg.Sex = result;
+                    if (AppHost.Instance.ShowModalX(dlg, false))
+                    {
+                        result = dlg.Sex;
+
+                        if (result != GEDCOMSex.svNone)
+                        {
+                            namesTable.SetNameSex(iName, result);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public void CheckPersonSex(GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            try {
+                BeginUpdate();
+
+                if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
+                {
+                    string fFam, fName, fPatr;
+                    GKUtils.GetNameParts(iRec, out fFam, out fName, out fPatr);
+                    iRec.Sex = DefineSex(fName, fPatr);
+                }
+            } finally {
+                EndUpdate();
+            }
+        }
+
+        #endregion
+
         #region Private media support
 
         private static string GetTreePath(string treeName)
@@ -556,7 +699,7 @@ namespace GKCore
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
             {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
             }
             return result;
         }
@@ -583,7 +726,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         stream = new FileStream(targetFn, FileMode.Open);
@@ -598,7 +741,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException();
                         }
 
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                     }
                     else {
                         ArcFileLoad(targetFn, stream);
@@ -633,7 +776,7 @@ namespace GKCore
                         try
                         {
                             if (!File.Exists(GetArcFileName())) {
-                                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -650,7 +793,7 @@ namespace GKCore
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
                                 string newPath;
-                                if (AppHub.PathReplacer.TryReplacePath(fileName, out newPath)) {
+                                if (AppHost.PathReplacer.TryReplacePath(fileName, out newPath)) {
                                     fileName = newPath;
                                 }
                             }
@@ -723,7 +866,7 @@ namespace GKCore
                     }
                     catch (IOException)
                     {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
                         result = false;
                     }
                     break;
@@ -741,7 +884,7 @@ namespace GKCore
         {
             #if FILECOPY_EX
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             try {
                 progress.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
 
@@ -920,7 +1063,7 @@ namespace GKCore
 
         private void LoadProgress(object sender, int progress)
         {
-            AppHub.Progress.ProgressStep(progress);
+            AppHost.Progress.ProgressStep(progress);
         }
 
         public void Clear()
@@ -938,13 +1081,13 @@ namespace GKCore
                 string pw = null;
                 string ext = SysUtils.GetFileExtension(fileName);
                 if (ext == ".geds") {
-                    if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                    if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                         return false;
                     }
                 }
 
-                IProgressController progress = AppHub.Progress;
+                IProgressController progress = AppHost.Progress;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
                 fTree.OnProgress += LoadProgress;
                 try
@@ -962,7 +1105,7 @@ namespace GKCore
             catch (Exception ex)
             {
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.Message);
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
             return result;
@@ -989,8 +1132,8 @@ namespace GKCore
                 string pw = null;
                 string ext = SysUtils.GetFileExtension(fileName);
                 if (ext == ".geds") {
-                    if (!AppHub.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                    if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                         return false;
                     }
                 }
@@ -1000,11 +1143,11 @@ namespace GKCore
             }
             catch (UnauthorizedAccessException)
             {
-                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
             }
             catch (Exception ex)
             {
-                AppHub.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
                 Logger.LogWrite("BaseContext.FileSave(): " + ex.Message);
             }
 
@@ -1206,7 +1349,7 @@ namespace GKCore
             fUndoman.Undo();
 
             if (fViewer != null) fViewer.RefreshLists(false);
-            if (fHost != null) fHost.UpdateControls(false);
+            if (AppHost.Instance != null) AppHost.Instance.UpdateControls(false);
         }
 
         public void DoRedo()
@@ -1214,7 +1357,7 @@ namespace GKCore
             fUndoman.Redo();
 
             if (fViewer != null) fViewer.RefreshLists(false);
-            if (fHost != null) fHost.UpdateControls(false);
+            if (AppHost.Instance != null) AppHost.Instance.UpdateControls(false);
         }
 
         public void DoCommit()
@@ -1262,9 +1405,260 @@ namespace GKCore
 
             if (!result) {
                 // message, for exclude of duplication
-                AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
             }
 
+            return result;
+        }
+
+        #endregion
+
+        #region UI control functions
+
+        public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
+        {
+            GEDCOMFamilyRecord result;
+
+            try
+            {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
+                {
+                    dlg.InitDialog(fViewer);
+
+                    dlg.Target = target;
+                    dlg.NeedSex = GEDCOMSex.svNone;
+                    dlg.TargetMode = TargetMode.tmFamilyChild;
+                    dlg.RecType = GEDCOMRecordType.rtFamily;
+                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                        result = (dlg.ResultRecord as GEDCOMFamilyRecord);
+                    } else {
+                        result = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("BaseContext.SelectFamily(): " + ex.Message);
+                result = null;
+            }
+
+            return result;
+        }
+
+        public GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target,
+                                                   TargetMode targetMode, GEDCOMSex needSex)
+        {
+            GEDCOMIndividualRecord result;
+
+            try
+            {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
+                {
+                    dlg.InitDialog(fViewer);
+
+                    dlg.Target = target;
+                    dlg.NeedSex = needSex;
+                    dlg.TargetMode = targetMode;
+                    dlg.RecType = GEDCOMRecordType.rtIndividual;
+                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                        result = (dlg.ResultRecord as GEDCOMIndividualRecord);
+                    } else {
+                        result = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("BaseContext.SelectPerson(): " + ex.Message);
+                result = null;
+            }
+
+            return result;
+        }
+
+        public GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args)
+        {
+            GEDCOMRecord result;
+
+            try
+            {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
+                {
+                    dlg.InitDialog(fViewer);
+
+                    dlg.RecType = mode;
+
+                    if (args != null && args.Length > 0) {
+                        dlg.FastFilter = (args[0] as string);
+                    }
+
+                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                        result = dlg.ResultRecord;
+                    } else {
+                        result = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("BaseContext.SelectRecord(): " + ex.Message);
+                result = null;
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region Data modification functions
+
+        private GEDCOMFamilyRecord GetFamilyBySpouse(GEDCOMIndividualRecord newParent)
+        {
+            GEDCOMFamilyRecord result = null;
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = fTree[i];
+
+                if (rec.RecordType == GEDCOMRecordType.rtFamily)
+                {
+                    GEDCOMFamilyRecord fam = (GEDCOMFamilyRecord) rec;
+                    GEDCOMIndividualRecord husb = fam.GetHusband();
+                    GEDCOMIndividualRecord wife = fam.GetWife();
+                    if (husb == newParent || wife == newParent)
+                    {
+                        string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
+                        if (AppHost.StdDialogs.ShowQuestionYN(msg))
+                        {
+                            result = fam;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild,
+                                                 bool canCreate,
+                                                 GEDCOMIndividualRecord newParent)
+        {
+            GEDCOMFamilyRecord result = null;
+
+            if (iChild != null)
+            {
+                if (iChild.ChildToFamilyLinks.Count != 0)
+                {
+                    result = iChild.ChildToFamilyLinks[0].Family;
+                }
+                else
+                {
+                    if (canCreate)
+                    {
+                        GEDCOMFamilyRecord fam = GetFamilyBySpouse(newParent);
+                        if (fam == null)
+                        {
+                            fam = fTree.CreateFamily();
+                        }
+                        fam.AddChild(iChild);
+                        result = fam;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse)
+        {
+            if (spouse == null)
+                throw new ArgumentNullException(@"spouse");
+
+            GEDCOMSex sex = spouse.Sex;
+            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
+            {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                return null;
+            }
+
+            GEDCOMFamilyRecord family = fTree.CreateFamily();
+            family.AddSpouse(spouse);
+            return family;
+        }
+
+        public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex)
+        {
+            GEDCOMIndividualRecord resultChild = null;
+
+            if (parent != null)
+            {
+                if (parent.SpouseToFamilyLinks.Count > 1)
+                {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
+                }
+                else
+                {
+                    GEDCOMFamilyRecord family;
+
+                    if (parent.SpouseToFamilyLinks.Count == 0)
+                    {
+                        //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
+
+                        family = AddFamilyForSpouse(parent);
+                        if (family == null) {
+                            return null;
+                        }
+                    } else {
+                        family = parent.SpouseToFamilyLinks[0].Family;
+                    }
+
+                    GEDCOMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+
+                    if (child != null && family.AddChild(child))
+                    {
+                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
+                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
+                        AppHost.NamesTable.ImportNames(child);
+
+                        resultChild = child;
+                    }
+                }
+            }
+
+            return resultChild;
+        }
+
+        public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException(@"iRec");
+
+            GEDCOMSex needSex;
+            switch (iRec.Sex)
+            {
+                case GEDCOMSex.svMale:
+                    needSex = GEDCOMSex.svFemale;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    needSex = GEDCOMSex.svMale;
+                    break;
+
+                default:
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                    return null;
+            }
+
+            GEDCOMIndividualRecord target = null;
+            TargetMode targetMode = TargetMode.tmNone;
+            if (needSex == GEDCOMSex.svFemale) {
+                target = iRec;
+                targetMode = TargetMode.tmWife;
+            }
+
+            GEDCOMIndividualRecord result = SelectPerson(target, targetMode, needSex);
             return result;
         }
 

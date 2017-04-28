@@ -67,7 +67,6 @@ namespace GKUI
         public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
             InitializeComponent();
-            MdiParent = MainWin.Instance;
 
             tbImageSave.Image = GKResources.iSaveImage;
             tbModes.Image = GKResources.iTools;
@@ -176,7 +175,7 @@ namespace GKUI
             switch (e.KeyCode)
             {
                 case Keys.F5:
-                    GenChart(true);
+                    GenChart();
                     break;
 
                 case Keys.F6:
@@ -207,7 +206,7 @@ namespace GKUI
 
         private void tbImageSave_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 fTreeBox.SaveSnapshot(fileName);
             }
@@ -236,12 +235,12 @@ namespace GKUI
 
             fPerson = person.Rec;
 
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         private void ImageTree_NavRefresh(object sender, EventArgs e)
         {
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)
@@ -253,7 +252,7 @@ namespace GKUI
 
             if (person.Rec != null) {
                 GEDCOMIndividualRecord iRec = person.Rec;
-                modified = AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
@@ -261,7 +260,7 @@ namespace GKUI
                 GEDCOMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, person.BaseSpouse.Rec);
+                    GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);
@@ -301,7 +300,7 @@ namespace GKUI
             if (sender == miGens9) depth = 9;
             fTreeBox.DepthLimit = depth;
 
-            GenChart(true);
+            GenChart();
         }
 
         private void miEdit_Click(object sender, EventArgs e)
@@ -310,7 +309,7 @@ namespace GKUI
             if (p == null || p.Rec == null) return;
 
             GEDCOMIndividualRecord iRec = p.Rec;
-            if (AppHub.BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
+            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
             {
                 UpdateChart();
             }
@@ -350,7 +349,7 @@ namespace GKUI
             if (!familyExist || needParent) {
                 GEDCOMIndividualRecord child = p.Rec;
                 GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
-                GEDCOMIndividualRecord parent = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmParent, needSex);
+                GEDCOMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
                 if (parent != null) {
                     fam.AddSpouse(parent);
                     if (!familyExist)
@@ -377,7 +376,7 @@ namespace GKUI
             if (p == null || p.Rec == null) return;
 
             GEDCOMIndividualRecord iRec = p.Rec;
-            GEDCOMIndividualRecord iSpouse = AppHub.BaseController.SelectSpouseFor(fBase, iRec);
+            GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
             if (iSpouse == null) return;
 
             GEDCOMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
@@ -391,7 +390,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMIndividualRecord child = AppHub.BaseController.AddChildForParent(fBase, p.Rec, needSex);
+            GEDCOMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -412,7 +411,7 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMFamilyRecord fam = AppHub.BaseController.AddFamilyForSpouse(fBase.Context.Tree, p.Rec);
+            GEDCOMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
             if (fam == null) return;
 
             UpdateChart();
@@ -423,8 +422,8 @@ namespace GKUI
             TreeChartPerson p = fTreeBox.Selected;
             if (p == null || p.Rec == null || p == fTreeBox.Model.Root) return;
 
-            AppHub.BaseController.DeleteRecord(fBase, p.Rec, true);
-            GenChart(true);
+            BaseController.DeleteRecord(fBase, p.Rec, true);
+            GenChart();
         }
 
         private void miRebuildKinships_Click(object sender, EventArgs e)
@@ -465,7 +464,7 @@ namespace GKUI
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
@@ -480,7 +479,7 @@ namespace GKUI
             if (fChartKind == newMode) return;
 
             ChartKind = newMode;
-            GenChart(true);
+            GenChart();
         }
 
         private void miRebuildTree_Click(object sender, EventArgs e)
@@ -491,7 +490,7 @@ namespace GKUI
                 if (p == null || p.Rec == null) return;
 
                 fPerson = p.Rec;
-                GenChart(true);
+                GenChart();
             }
             catch (Exception ex)
             {
@@ -509,22 +508,18 @@ namespace GKUI
 
         #region IChartWindow implementation
 
-        public void GenChart(bool show)
+        public void GenChart()
         {
             try
             {
-                if (fPerson == null)
-                {
-                    AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-                }
-                else
-                {
+                if (fPerson == null) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                } else {
                     UpdateTitle();
-                    if (show) base.Show();
 
                     fTreeBox.GenChart(fPerson, fChartKind, true);
 
-                    MainWin.Instance.UpdateControls(false);
+                    AppHost.Instance.UpdateControls(false);
                 }
             }
             catch (Exception ex)
@@ -577,7 +572,7 @@ namespace GKUI
 
         public void UpdateView()
         {
-            GenChart(false);
+            GenChart();
         }
 
         public void NavNext()
@@ -641,7 +636,7 @@ namespace GKUI
 
                 if (dlgFilter.ShowDialog() == DialogResult.OK)
                 {
-                    GenChart(true);
+                    GenChart();
                 }
             }
         }

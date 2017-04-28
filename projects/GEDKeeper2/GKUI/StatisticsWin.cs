@@ -36,7 +36,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class StatisticsWin : Form, ILocalization, IMDIChild
+    public sealed partial class StatisticsWin : Form, ILocalization, IWindow
     {
         private enum ChartStyle { Bar, Point, ClusterBar }
 

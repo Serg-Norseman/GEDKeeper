@@ -344,7 +344,7 @@ namespace GKCore.Charts
                         catch (MediaFileNotFoundException)
                         {
                             if (!hasMediaFail) {
-                                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                                 hasMediaFail = true;
                             }
                         }

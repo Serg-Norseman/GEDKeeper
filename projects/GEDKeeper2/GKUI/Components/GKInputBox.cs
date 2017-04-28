@@ -89,7 +89,7 @@ namespace GKUI.Components
             }
             catch
             {
-                AppHub.StdDialogs.ShowError("Number format is invalid");
+                AppHost.StdDialogs.ShowError("Number format is invalid");
                 DialogResult = DialogResult.None;
             }
         }

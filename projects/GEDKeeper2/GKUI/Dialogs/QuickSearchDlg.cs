@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
         {
-            fStrategy = new BaseSearchStrategy(fWorkWindow, txtSearchPattern.Text);
+            fStrategy = new SearchStrategy(fWorkWindow, txtSearchPattern.Text);
         }
 
         private void FindNext_Click(object sender, EventArgs e)
@@ -103,7 +103,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace GKUI.Dialogs
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
                 return;
             }
 

@@ -29,7 +29,6 @@ namespace GKCore.Interfaces
 {
     public interface IBaseWindow : IWorkWindow, ILocalization
     {
-        IHost Host { get; }
         IBaseContext Context { get; }
         bool Modified { get; set; }
 
@@ -40,6 +39,8 @@ namespace GKCore.Interfaces
         void CreateNewFile();
         void LoadFile(string fileName);
         void SaveFile(string fileName);
+        void SaveFileEx(bool saveAs);
+        void RestoreMRU();
 
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);

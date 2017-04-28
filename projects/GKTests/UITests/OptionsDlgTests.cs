@@ -20,6 +20,7 @@
 
 #if !__MonoCS__
 
+using GKCore;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI.Dialogs;
@@ -42,7 +43,7 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
 
-            fDialog = new OptionsDlg(fBase.Host);
+            fDialog = new OptionsDlg(AppHost.Instance);
             fDialog.Show();
         }
 

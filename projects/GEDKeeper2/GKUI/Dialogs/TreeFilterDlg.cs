@@ -62,7 +62,7 @@ namespace GKUI.Dialogs
                 switch (eArgs.Action)
                 {
                     case RecordAction.raAdd:
-                        iRec = AppHub.BaseController.SelectPerson(Base, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                        iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                         if (iRec != null) {
                             fTemp = fTemp + iRec.XRef + ";";
                         }

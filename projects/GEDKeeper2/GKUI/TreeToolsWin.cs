@@ -188,7 +188,7 @@ namespace GKUI
 
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
@@ -314,7 +314,7 @@ namespace GKUI
 
         private void CheckGroups()
         {
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
 
             gkLogChart1.Clear();
             progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
@@ -474,7 +474,7 @@ namespace GKUI
             ListPlaces.BeginUpdate();
             try
             {
-                TreeTools.PlacesSearch(fTree, fPlaces, AppHub.Progress);
+                TreeTools.PlacesSearch(fTree, fPlaces, AppHost.Progress);
 
                 ListPlaces.Items.Clear();
 
@@ -508,11 +508,11 @@ namespace GKUI
             
             if (pObj.Name.IndexOf("[*]") == 0)
             {
-                AppHub.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
+                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             }
             else
             {
-                GEDCOMLocationRecord loc = AppHub.BaseController.SelectRecord(Base, GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                GEDCOMLocationRecord loc = fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
                 if (loc == null) return;
 
                 int num = pObj.Facts.Count;
@@ -604,11 +604,11 @@ namespace GKUI
 
                 if (obj is GEDCOMIndividualRecord)
                 {
-                    AppHub.BaseController.DeleteRecord(Base, obj as GEDCOMIndividualRecord, false);
+                    BaseController.DeleteRecord(Base, obj as GEDCOMIndividualRecord, false);
                 }
             }
 
-            AppHub.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
+            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
             fSplitList.Clear();
             UpdateSplitLists();
 
@@ -617,7 +617,7 @@ namespace GKUI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             TreeTools.CheckRelations(fSplitList);
@@ -730,7 +730,7 @@ namespace GKUI
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            string fileName = AppHub.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             external_match_db = fileName;
@@ -762,7 +762,7 @@ namespace GKUI
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHub.Progress);
+                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHost.Progress);
                     break;
 
                 case TreeMatchType.tmtExternal:

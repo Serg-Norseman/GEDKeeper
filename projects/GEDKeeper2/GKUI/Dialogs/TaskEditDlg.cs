@@ -145,17 +145,17 @@ namespace GKUI.Dialogs
             GKGoalType gt = (GKGoalType)cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GKGoalType.gtIndividual:
-                    fTempRec = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
                 case GKGoalType.gtFamily:
-                    fTempRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtFamily, new object[0]);
+                    fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
                 case GKGoalType.gtSource:
-                    fTempRec = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtSource, new object[0]);
+                    fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
                     txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 

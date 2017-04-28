@@ -131,7 +131,7 @@ namespace GKUI.Components
                 }
 
                 sourceRec.MoveTo(targetRec, false);
-                AppHub.BaseController.DeleteRecord(fBase, sourceRec, false);
+                BaseController.DeleteRecord(fBase, sourceRec, false);
 
                 if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && fBookmark) {
                     ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
@@ -186,13 +186,13 @@ namespace GKUI.Components
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = AppHub.BaseController.SelectRecord(fBase, fMergeMode, null);
+            GEDCOMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
             if (irec != null) SetRec1(irec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = AppHub.BaseController.SelectRecord(fBase, fMergeMode, null);
+            GEDCOMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
             if (irec != null) SetRec2(irec);
         }
 

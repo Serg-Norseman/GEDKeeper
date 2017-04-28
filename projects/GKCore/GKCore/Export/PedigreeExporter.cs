@@ -535,7 +535,7 @@ namespace GKCore.Export
         {
             if (fRoot == null)
             {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 return;
             }
 
@@ -544,7 +544,7 @@ namespace GKCore.Export
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
             #endif
 
-            fPath = AppHub.StdDialogs.GetSaveFile(availableFormats);
+            fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
 
             string ext = SysUtils.GetFileExtension(fPath);
@@ -566,7 +566,7 @@ namespace GKCore.Export
 
             #if !CI_MODE
             if (!success) {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

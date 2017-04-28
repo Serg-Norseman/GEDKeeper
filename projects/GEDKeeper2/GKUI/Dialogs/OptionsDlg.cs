@@ -269,14 +269,12 @@ namespace GKUI.Dialogs
 
         private void UpdatePlugins()
         {
-            if (MainWin.Instance == null) return;
-
             lvPlugins.Items.Clear();
 
-            int num = AppHub.Plugins.Count;
+            int num = AppHost.Plugins.Count;
             for (int i = 0; i < num; i++)
             {
-                IPlugin plugin = AppHub.Plugins[i];
+                IPlugin plugin = AppHost.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
 
                 ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
@@ -303,7 +301,7 @@ namespace GKUI.Dialogs
             TreeChartOptions chartOptions = fOptions.ChartOptions;
 
             var font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
-            font = AppHub.StdDialogs.SelectFont(font);
+            font = AppHost.StdDialogs.SelectFont(font);
             if (font != null)
             {
                 chartOptions.DefFontName = font.Name;
@@ -411,7 +409,7 @@ namespace GKUI.Dialogs
 
             GKComboItem item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem;
             if (item != null) {
-                MainWin.Instance.LoadLanguage((int)item.Tag);
+                AppHost.Instance.LoadLanguage((int)item.Tag);
             }
 
             ancOptionsControl1.AcceptChanges();

@@ -73,7 +73,7 @@ namespace GKUI.Dialogs
 
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
-            fTempInd = AppHub.BaseController.SelectPerson(fBase, null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
             txtPerson.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
 

@@ -56,12 +56,12 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHub.Container);
+            WinFormsBootstrapper.Configure(AppHost.Container);
 
-            fMainWin = new MainWin();
+            var appHost = new WinFormsAppHost();
+            appHost.Init(null, true);
 
-            AppHub.MainWindow = fMainWin;
-
+            fMainWin = (MainWin)AppHost.Instance.MainWindow;
             fMainWin.Show();
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
@@ -85,13 +85,13 @@ namespace GKTests.UITests
 
 
             // Stage 2.1: GetCurrentFile()
-            Assert.IsNull(fMainWin.GetCurrentFile(), "Stage 2.1");
+            Assert.IsNull(AppHost.Instance.GetCurrentFile(), "Stage 2.1");
 
             // Stage 2.2: create an empty base
             ClickToolStripButton("tbFileNew", fMainWin);
 
             // Stage 2.3: GetCurrentFile()
-            fCurBase = fMainWin.GetCurrentFile();
+            fCurBase = AppHost.Instance.GetCurrentFile();
             Assert.IsNotNull(fCurBase, "Stage 2.3");
 
             // Stage 2.4: fill context for sample data
@@ -214,7 +214,7 @@ namespace GKTests.UITests
 
             // Stage 51: call to LanguageSelectDlg
             ModalFormHandler = LanguageSelectDlg_Accept_Handler;
-            fMainWin.LoadLanguage(0);
+            AppHost.Instance.LoadLanguage(0);
 
 
             // Stage 52: exit
@@ -223,10 +223,10 @@ namespace GKTests.UITests
 
             // Other
             ModalFormHandler = MessageBox_OkHandler;
-            AppHub.StdDialogs.ShowMessage("test msg");
+            AppHost.StdDialogs.ShowMessage("test msg");
 
             ModalFormHandler = MessageBox_OkHandler;
-            AppHub.StdDialogs.ShowError("test error msg");
+            AppHost.StdDialogs.ShowError("test error msg");
         }
 
         private void BaseWin_Tests(BaseWin baseWin, string stage)
@@ -278,31 +278,31 @@ namespace GKTests.UITests
             Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.SelectSpouseFor(baseWin, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.SelectSpouseFor(null); });
             baseWin.NotifyRecord(null, RecordAction.raAdd);
 
             IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, AppHub.BaseController.GetChildFamily(baseWin.Context.Tree, null, false, null));
-            Assert.AreEqual(null, AppHub.BaseController.AddChildForParent(baseWin, null, GEDCOMSex.svNone));
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.AddFamilyForSpouse(baseWin.Context.Tree, null); });
+            Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
+            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GEDCOMSex.svNone));
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.AddFamilyForSpouse(null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
             baseWin.Context.CollectTips(new StringList());
 
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.CheckPersonSex(baseWin.Context, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CheckPersonSex(null); });
 
             baseWin.NotifyRecord(null, RecordAction.raEdit);
 
             baseWin.ApplyFilter();
 
             // default lang for tests is English
-            string patr = AppHub.BaseController.DefinePatronymic(baseWin.Context, "Ivan", GEDCOMSex.svMale, false);
+            string patr = baseWin.Context.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
             Assert.AreEqual("", patr);
 
             ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_Accept_Handler;
-            GEDCOMSex sex = AppHub.BaseController.DefineSex(baseWin.Context, "Ivan", "Ivanovich");
+            GEDCOMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
             Assert.AreEqual(GEDCOMSex.svMale, sex);
         }
 
@@ -312,19 +312,20 @@ namespace GKTests.UITests
         private void MainWin_Test()
         {
             ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
-            fMainWin.ShowTips(); // don't show dialog because BirthDays is empty
-            DayTipsDlg.ShowTipsEx("", true, null, fMainWin.Handle);
+            AppHost.Instance.ShowTips(); // don't show dialog because BirthDays is empty
 
-            fMainWin.AddMRU("test.ged");
+            AppHost.Instance.AddMRU("test.ged");
 
-            Assert.AreEqual("Unknown", fMainWin.GetCurrentFileName(), "check MainWin.GetCurrentFileName()");
+            Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName(), "check AppHost.Instance.GetCurrentFileName()");
 
             //
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.RequestGeoCoords(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHub.BaseController.RequestGeoCoords("Moscow", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords("Moscow", null); });
 
             // IHost tests
-            IHost host = fMainWin;
+            //IHost host = fMainWin;
+            // FIXME: !!!
+            IHost host = AppHost.Instance;
 
             GlobalOptions.Instance.LastDir = "";
             string ufPath = host.GetUserFilesPath("");
@@ -335,7 +336,7 @@ namespace GKTests.UITests
             Assert.IsNotNull(baseWin);
 
             ModalFormHandler = MessageBox_OkHandler;
-            AppHub.StdDialogs.ShowWarning("test warn");
+            AppHost.StdDialogs.ShowWarning("test warn");
 
 
             ILangMan langMan = host.CreateLangMan(null);

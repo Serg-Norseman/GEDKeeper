@@ -20,6 +20,8 @@
 
 using System;
 using System.Drawing;
+
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -184,5 +186,12 @@ namespace GKCore.UIContracts
         GEDCOMIndividualRecord Target { get; set; }
         GEDCOMSex NeedSex { get; set; }
         GEDCOMRecord ResultRecord { get; set; }
+    }
+
+    public interface IDayTipsDlg : ICommonDialog
+    {
+        bool ShowTipsChecked { get; set; }
+
+        void Init(string caption, bool showTipsChecked, StringList tips);
     }
 }

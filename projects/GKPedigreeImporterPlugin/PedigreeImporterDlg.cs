@@ -103,7 +103,7 @@ namespace GKPedigreeImporterPlugin
             filter = fLangMan.LS(ILS.LSID_AllFiltersL);
             #endif
 
-            string fileName = AppHub.StdDialogs.GetOpenFile("", "", filter, 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             edImportFile.Text = fileName;

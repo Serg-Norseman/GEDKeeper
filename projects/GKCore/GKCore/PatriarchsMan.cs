@@ -38,7 +38,7 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
 
             GKUtils.InitExtCounts(context.Tree, -1);
@@ -97,7 +97,7 @@ namespace GKCore
         {
             ExtList<PatriarchObj> patList = GetPatriarchsList(context, gensMin, datesCheck);
 
-            IProgressController progress = AppHub.Progress;
+            IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
             try
             {
@@ -205,7 +205,7 @@ namespace GKCore
                         }
                     }
 
-                    IProgressController progress = AppHub.Progress;
+                    IProgressController progress = AppHost.Progress;
                     try
                     {
                         int patCount = patList.Count;

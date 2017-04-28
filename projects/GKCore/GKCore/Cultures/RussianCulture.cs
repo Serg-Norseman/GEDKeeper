@@ -134,7 +134,7 @@ namespace GKCore.Cultures
 
             if (result == GEDCOMSex.svNone && canQuery) {
                 string fn = iName + " " + iPat;
-                bool res = AppHub.StdDialogs.ShowQuestionYN(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
+                bool res = AppHost.StdDialogs.ShowQuestionYN(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
                 result = (res == true) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
             }
 

@@ -97,10 +97,10 @@
       <DependentUpon>GKCoreResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="GKCore\AppHub.cs" />
+    <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
-    <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\SearchStrategy.cs" />
     <Compile Include="GKCore\Charts\ChartModel.cs" />
     <Compile Include="GKCore\Charts\CircleChartModel.cs" />
     <Compile Include="GKCore\Charts\ITreeControl.cs" />
@@ -146,20 +146,12 @@
     <Compile Include="GKCore\Lists\FamilyListMan.cs" />
     <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
     <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
-    <Compile Include="GKCore\Lists\EventsListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKCore\Lists\EventsListModel.cs" />
     <Compile Include="GKCore\Lists\ListModel.cs" />
-    <Compile Include="GKCore\Lists\MediaLinksListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKCore\Lists\NoteLinksListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKCore\Lists\MediaLinksListModel.cs" />
+    <Compile Include="GKCore\Lists\NoteLinksListModel.cs" />
     <Compile Include="GKCore\Lists\RecordsListModel.cs" />
-    <Compile Include="GKCore\Lists\SourceCitationsListModel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKCore\Lists\SourceCitationsListModel.cs" />
     <Compile Include="GKCore\Lists\GroupListMan.cs" />
     <Compile Include="GKCore\Lists\IndividualListMan.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
@@ -214,6 +206,7 @@
     <Compile Include="GKCore\UIContracts\ControlContracts.cs" />
     <Compile Include="GKCore\UIContracts\DialogContracts.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Folder Include="GKCore" />
     <Folder Include="GKCore\Cultures" />

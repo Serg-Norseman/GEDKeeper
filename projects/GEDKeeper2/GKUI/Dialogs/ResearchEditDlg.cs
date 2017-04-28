@@ -160,16 +160,16 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    task = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
+                    task = fBase.Context.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, fResearch, task);
                     break;
 
                 case RecordAction.raEdit:
-                    res = (task != null && AppHub.BaseController.ModifyTask(fBase, ref task));
+                    res = (task != null && BaseController.ModifyTask(fBase, ref task));
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
+                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
                     {
                         res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, fResearch, task);
                     }
@@ -197,16 +197,16 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    comm = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
+                    comm = fBase.Context.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, fResearch, comm);
                     break;
 
                 case RecordAction.raEdit:
-                    res = (comm != null && AppHub.BaseController.ModifyCommunication(fBase, ref comm));
+                    res = (comm != null && BaseController.ModifyCommunication(fBase, ref comm));
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != false)
+                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != false)
                     {
                         res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, fResearch, comm);
                     }
@@ -234,12 +234,12 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    group = AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    group = fBase.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, fResearch, group);
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false)
+                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false)
                     {
                         res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, fResearch, group);
                     }

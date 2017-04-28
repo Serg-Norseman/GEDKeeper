@@ -52,7 +52,7 @@ namespace GKTests.GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WinFormsBootstrapper.Configure(AppHub.Container);
+            WinFormsBootstrapper.Configure(AppHost.Container);
 
             LangMan.DefInit();
 
@@ -83,11 +83,11 @@ namespace GKTests.GKCore
             Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.4");
 
 
-            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fContext.Tree, "test source");
+            GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
             Assert.IsNull(srcRec);
 
             StringList sources = new StringList();
-            AppHub.BaseController.GetSourcesList(fContext.Tree, sources);
+            fContext.GetSourcesList(sources);
             Assert.AreEqual(1, sources.Count);
 
             Assert.IsNotNull(fContext.ValuesCollection);
@@ -505,9 +505,9 @@ namespace GKTests.GKCore
             SearchResult searchResult = new SearchResult(null);
             Assert.IsNotNull(searchResult);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { new BaseSearchStrategy(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new SearchStrategy(null, null); });
 
-            BaseSearchStrategy strat = new BaseSearchStrategy(new WorkWindowMock(), "");
+            SearchStrategy strat = new SearchStrategy(new WorkWindowMock(), "");
             Assert.IsNotNull(strat);
 
             IList<ISearchResult> res = strat.FindAll();
@@ -1400,7 +1400,7 @@ namespace GKTests.GKCore
         public void Tools_Tests()
         {
             IBaseWindow baseWin = new BaseWindowMock();
-            AppHub.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton, true);
+            AppHost.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton, true);
 
             ValuesCollection valuesCollection = new ValuesCollection();
             ProgressMock progress = new ProgressMock();
@@ -1495,7 +1495,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, placesList, null); });
 
-            TreeTools.PlacesSearch(fContext.Tree, placesList, AppHub.Progress);
+            TreeTools.PlacesSearch(fContext.Tree, placesList, AppHost.Progress);
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs

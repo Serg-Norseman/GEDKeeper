@@ -23,7 +23,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -223,7 +222,7 @@ namespace GKFlowInputPlugin
 
         private void InitSourceControls()
         {
-            AppHub.BaseController.GetSourcesList(fBase.Context.Tree, fSourcesList);
+            fBase.Context.GetSourcesList(fSourcesList);
 
             cbSource.Items.Clear();
 
@@ -325,7 +324,7 @@ namespace GKFlowInputPlugin
                     if (!string.IsNullOrEmpty(lnk)) {
                         PersonLink link = GetLinkByName(lnk);
 
-                        GEDCOMSex sx = AppHub.BaseController.DefineSex(fBase.Context, nm, pt);
+                        GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
                         GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                         if (!string.IsNullOrEmpty(age) && SysUtils.IsDigits(age)) {
@@ -345,7 +344,7 @@ namespace GKFlowInputPlugin
                         }
 
                         if (!string.IsNullOrEmpty(srcName)) {
-                            GEDCOMSourceRecord srcRec = AppHub.BaseController.FindSource(fBase.Context.Tree, srcName);
+                            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(srcName);
                             if (srcRec == null) {
                                 srcRec = fBase.Context.Tree.CreateSource();
                                 srcRec.FiledByEntry = srcName;

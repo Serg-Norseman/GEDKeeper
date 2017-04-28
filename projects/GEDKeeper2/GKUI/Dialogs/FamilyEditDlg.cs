@@ -274,14 +274,14 @@ namespace GKUI.Dialogs
 
         private void btnHusbandAddClick(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnHusbandDeleteClick(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
@@ -298,14 +298,14 @@ namespace GKUI.Dialogs
 
         private void btnWifeAddClick(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnWifeDeleteClick(object sender, EventArgs e)
         {
-            if (AppHub.BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }

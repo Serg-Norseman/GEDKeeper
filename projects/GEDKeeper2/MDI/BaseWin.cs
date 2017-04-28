@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -39,7 +40,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWin : MdiChildFormEx, IBaseWindow
+    public sealed partial class BaseWin : Form, IBaseWindow
     {
         #region Private fields
 
@@ -76,11 +77,6 @@ namespace GKUI
 
         #region Public properties
 
-        public IHost Host
-        {
-            get { return MainWin.Instance; }
-        }
-
         public IBaseContext Context
         {
             get { return fContext; }
@@ -109,6 +105,8 @@ namespace GKUI
         public BaseWin()
         {
             InitializeComponent();
+
+            AppHost.Instance.LoadWindow(this);
 
             fContext = new BaseContext(this);
             fNavman = new NavigationStack();
@@ -143,20 +141,57 @@ namespace GKUI
             base.Dispose(disposing);
         }
 
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override void WndProc(ref Message m)
+        {
+            FormWindowState prevState = WindowState;
+
+            base.WndProc(ref m);
+
+            if (WindowState != prevState)
+                OnFormWindowStateChanged(prevState, WindowState);
+        }
+
+        /// <summary>
+        /// It's a Windows-specific hack for bypass problems with the restoration
+        /// of the MdiChild window from maximized state to normal (creates
+        /// the dimensions that are included in visible borders of MdiParent
+        /// to avoid appear of scrollbars).
+        /// </summary>
+        private void OnFormWindowStateChanged(FormWindowState oldState, FormWindowState newState)
+        {
+            if (oldState == FormWindowState.Maximized && newState == FormWindowState.Normal) {
+                // Is it MdiChild form?
+                Form mdiParent = MdiParent;
+                if (mdiParent == null) return;
+
+                MdiClient client = null;
+                foreach (Control ctl in mdiParent.Controls) {
+                    if (ctl is MdiClient) {
+                        client = ctl as MdiClient;
+                        break;
+                    }
+                }
+                if (client == null) return;
+
+                Rectangle formRect = Bounds;
+                formRect.Intersect(client.ClientRectangle);
+                SetBounds(formRect.Left, formRect.Top, formRect.Width, formRect.Height, BoundsSpecified.All);
+            }
+        }
+
         #endregion
 
         #region Form handlers
 
         private void Form_Activated(object sender, EventArgs e)
         {
-            MainWin.Instance.UpdateControls(false);
-            MainWin.Instance.BaseChanged(this);
+            AppHost.Instance.BaseChanged(this);
         }
 
         private void Form_Deactivate(object sender, EventArgs e)
         {
-            MainWin.Instance.BaseChanged(null);
-            MainWin.Instance.UpdateControls(true);
+            AppHost.Instance.BaseChanged(null);
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -174,12 +209,12 @@ namespace GKUI
                 listMan.ListColumns.CopyTo(GlobalOptions.Instance.IndividualListColumns);
             }
 
-            MainWin.Instance.BaseClosed(this);
-            MainWin.Instance.CheckMRUWin(fContext.FileName, this);
+            AppHost.Instance.BaseClosed(this);
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
+            AppHost.Instance.CloseWindow(this);
             // Attention: Does not receive control when executing in Mono
         }
 
@@ -235,6 +270,15 @@ namespace GKUI
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
             DuplicateRecord();
+        }
+
+        public void RestoreMRU()
+        {
+            int idx = AppHost.Options.MRUFiles_IndexOf(fContext.FileName);
+            if (idx >= 0) {
+                MRUFile mf = AppHost.Options.MRUFiles[idx];
+                UIHelper.RestoreFormRect(this, mf.WinRect, (FormWindowState)mf.WinState);
+            }
         }
 
         #endregion
@@ -298,7 +342,6 @@ namespace GKUI
 
             return list;
         }
-
 
         /// <summary>
         /// Gets a hyper-view control for the specified record type.
@@ -424,7 +467,7 @@ namespace GKUI
 
         private void PageRecords_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
@@ -439,6 +482,19 @@ namespace GKUI
             }
         }
 
+        public void SaveFileEx(bool saveAs)
+        {
+            if (!fContext.IsUnknown() && !saveAs) {
+                SaveFile(fContext.FileName);
+            } else {
+                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(fContext.FileName));
+                string fileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, fContext.FileName, false);
+                if (!string.IsNullOrEmpty(fileName)) {
+                    SaveFile(fileName);
+                }
+            }
+        }
+
         public bool CheckModified()
         {
             bool result = true;
@@ -447,7 +503,7 @@ namespace GKUI
             DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (dialogResult) {
                 case DialogResult.Yes:
-                    MainWin.Instance.miFileSave_Click(null, null);
+                    SaveFileEx(false);
                     break;
                 case DialogResult.No:
                     break;
@@ -496,7 +552,7 @@ namespace GKUI
         {
             SetMainTitle();
             GlobalOptions.Instance.LastDir = Path.GetDirectoryName(fContext.FileName);
-            MainWin.Instance.AddMRU(fContext.FileName);
+            AppHost.Instance.AddMRU(fContext.FileName);
         }
 
         public void Clear()
@@ -608,7 +664,7 @@ namespace GKUI
                 fContext.Tree.Header.TransmissionDateTime = dtNow;
                 Modified = true;
 
-                MainWin.Instance.NotifyRecord(this, record, action);
+                AppHost.Instance.NotifyRecord(this, record, action);
             }
         }
 
@@ -626,8 +682,9 @@ namespace GKUI
             switch (rt) {
                 case GEDCOMRecordType.rtIndividual:
                     using (PersonsFilterDlg fmFilter = new PersonsFilterDlg(this, listMan)) {
-                        DialogResult res = MainWin.Instance.ShowModalEx(fmFilter, false);
-                        if (res == DialogResult.OK) ApplyFilter(rt);
+                        if (AppHost.Instance.ShowModalX(fmFilter, false)) {
+                            ApplyFilter(rt);
+                        }
                     }
                     break;
 
@@ -642,8 +699,9 @@ namespace GKUI
                 case GEDCOMRecordType.rtCommunication:
                 case GEDCOMRecordType.rtLocation:
                     using (CommonFilterDlg fmComFilter = new CommonFilterDlg(this, listMan)) {
-                        DialogResult res = MainWin.Instance.ShowModalEx(fmComFilter, false);
-                        if (res == DialogResult.OK) ApplyFilter(rt);
+                        if (AppHost.Instance.ShowModalX(fmComFilter, false)) {
+                            ApplyFilter(rt);
+                        }
                     }
                     break;
             }
@@ -654,7 +712,7 @@ namespace GKUI
             if (aRec == null || fNavman.Busy) return;
 
             fNavman.Current = aRec;
-            MainWin.Instance.UpdateControls(false);
+            AppHost.Instance.UpdateControls(false);
         }
 
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
@@ -757,7 +815,7 @@ namespace GKUI
                 if (rec != null)
                 {
                     SelectRecordByXRef(rec.XRef);
-                    MainWin.Instance.UpdateControls(false);
+                    AppHost.Instance.UpdateControls(false);
                 }
             }
             finally
@@ -775,7 +833,7 @@ namespace GKUI
                 if (rec != null)
                 {
                     SelectRecordByXRef(rec.XRef);
-                    MainWin.Instance.UpdateControls(false);
+                    AppHost.Instance.UpdateControls(false);
                 }
             }
             finally
@@ -840,7 +898,7 @@ namespace GKUI
             if (original == null) return;
             if (original.RecordType != GEDCOMRecordType.rtIndividual) return;
 
-            AppHub.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
+            AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
 
             GEDCOMIndividualRecord target;
             try {
@@ -863,7 +921,7 @@ namespace GKUI
             GEDCOMRecordType rt = GetSelectedRecordType();
 
             GEDCOMRecord rec;
-            if (AppHub.BaseController.AddRecord(this, rt, null, out rec)) {
+            if (BaseController.AddRecord(this, rt, null, out rec)) {
                 RefreshLists(false);
                 SelectRecordByXRef(rec.XRef);
             }
@@ -874,7 +932,7 @@ namespace GKUI
             GEDCOMRecord record = GetSelectedRecordEx();
             if (record == null) return;
 
-            if (AppHub.BaseController.EditRecord(this, record)) {
+            if (BaseController.EditRecord(this, record)) {
                 RefreshLists(false);
                 ShowRecordInfo(record);
             }
@@ -885,7 +943,7 @@ namespace GKUI
             GEDCOMRecord record = GetSelectedRecordEx();
             if (record == null) return;
 
-            if (AppHub.BaseController.DeleteRecord(this, record, true)) {
+            if (BaseController.DeleteRecord(this, record, true)) {
                 RefreshLists(false);
             }
         }

@@ -226,9 +226,7 @@ namespace GKUI.Dialogs
             fFormLoaded = false;
             fTitle = title;
             fMax = max;
-
-            Form mainForm = MainWin.Instance;
-            fParentHandle = (mainForm != null) ? mainForm.Handle : IntPtr.Zero;
+            fParentHandle = AppHost.Instance.GetTopWindowHandle();
 
             fThread = new Thread(ShowProgressForm);
             fThread.SetApartmentState(ApartmentState.STA);

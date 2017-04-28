@@ -71,7 +71,7 @@ namespace GKCore.Lists
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = AppHub.BaseController.SelectRecord(fBaseWin, GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)dataOwner, noteRec);
                     }
@@ -81,12 +81,12 @@ namespace GKCore.Lists
                     if (notes != null)
                     {
                         noteRec = notes.Value as GEDCOMNoteRecord;
-                        result = AppHub.BaseController.ModifyNote(fBaseWin, ref noteRec);
+                        result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHub.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)) != false)
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)) != false)
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
                     }

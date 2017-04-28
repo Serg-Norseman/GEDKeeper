@@ -240,6 +240,7 @@
     <Compile Include="GKCore\Types\RelationKind.cs" />
     <Compile Include="GKCore\Types\ShieldState.cs" />
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
+    <Compile Include="GKCore\Types\Target.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
   </ItemGroup>

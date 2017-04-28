@@ -47,7 +47,7 @@ namespace GKCore.Export
         public override void Generate(bool show)
         {
             bool success = false;
-            fPath = AppHub.StdDialogs.GetSaveFile("PDF files (*.pdf)|*.pdf");
+            fPath = AppHost.StdDialogs.GetSaveFile("PDF files (*.pdf)|*.pdf");
             if (string.IsNullOrEmpty(fPath)) return;
 
             Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
@@ -74,7 +74,7 @@ namespace GKCore.Export
 
             #if !CI_MODE
             if (!success) {
-                AppHub.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

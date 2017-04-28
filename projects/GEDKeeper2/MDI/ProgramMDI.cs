@@ -77,7 +77,7 @@ namespace GKUI
             Logger.LogInit(GKUtils.GetLogFilename());
             LogSysInfo();
 
-            WinFormsBootstrapper.Configure(AppHub.Container);
+            WinFormsBootstrapper.Configure(AppHost.Container);
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
@@ -86,15 +86,19 @@ namespace GKUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            var appHost = new WinFormsAppHost();
+
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
                 if (tracker.IsFirstInstance) {
-                    MainWin mainWin = (MainWin)tracker.Enforcer;
-                    mainWin.SetArgs(args);
+                    try
+                    {
+                        appHost.Init(args, true);
 
-                    AppHub.MainWindow = mainWin;
-
-                    Application.Run(mainWin);
+                        Application.Run(appHost.AppContext);
+                    } finally {
+                        AppHost.DoneHost();
+                    }
                 } else {
                     tracker.SendMessageToFirstInstance(args);
                 }
@@ -103,7 +107,7 @@ namespace GKUI
 
         private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
         {
-            return new MainWin();
+            return AppHost.Instance;
         }
 
         private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
@@ -115,7 +119,7 @@ namespace GKUI
         private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
         {
             // Saving the copy for restoration
-            MainWin.Instance.CriticalSave();
+            AppHost.Instance.CriticalSave();
 
             Exception e = (Exception) args.ExceptionObject;
             Logger.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);

@@ -405,7 +405,7 @@ namespace GKUI.Dialogs
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            AppHub.BaseController.ModifyAddress(fBase, fEvent.Address);
+            BaseController.ModifyAddress(fBase, fEvent.Address);
         }
 
         private void EditEventPlace_KeyDown(object sender, KeyEventArgs e)
@@ -418,7 +418,7 @@ namespace GKUI.Dialogs
 
         private void btnPlaceAdd_Click(object sender, EventArgs e)
         {
-            fLocation = (AppHub.BaseController.SelectRecord(fBase, GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
+            fLocation = (fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
             ControlsRefresh();
         }
 
