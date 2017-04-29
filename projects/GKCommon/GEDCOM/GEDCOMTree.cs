@@ -119,6 +119,11 @@ namespace GKCommon.GEDCOM
             get { return fHeader; }
         }
 
+        public bool IsEmpty
+        {
+            get { return (fRecords.Count == 0); }
+        }
+
         public GEDCOMState State
         {
             get { return fState; }

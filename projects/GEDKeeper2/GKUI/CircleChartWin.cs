@@ -46,6 +46,12 @@ namespace GKUI
         {
             InitializeComponent();
 
+            tbImageSave.Image = GKResources.iSaveImage;
+            tbDocPreview.Image = GKResources.iPreview;
+            tbDocPrint.Image = GKResources.iPrint;
+
+            ToolBar1.Visible = !AppHost.Instance.IsMDI;
+
             fBaseWin = baseWin;
 
             fCircleChart = new CircleChart(fBaseWin);
@@ -87,6 +93,24 @@ namespace GKUI
             AppHost.Instance.UpdateControls(false);
         }
 
+        private void tbImageSave_Click(object sender, EventArgs e)
+        {
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fileName)) {
+                fCircleChart.SaveSnapshot(fileName);
+            }
+        }
+
+        private void tbDocPreview_Click(object sender, EventArgs e)
+        {
+            DoPrintPreview();
+        }
+
+        private void tbDocPrint_Click(object sender, EventArgs e)
+        {
+            DoPrint();
+        }
+
         #region ILocalization implementation
 
         public void SetLang()
@@ -96,6 +120,10 @@ namespace GKUI
             } else {
                 Text = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
+
+            tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
+            tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
+            tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
         }
 
         #endregion

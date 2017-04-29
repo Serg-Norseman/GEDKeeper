@@ -40,7 +40,6 @@ namespace GKCore.Interfaces
         void LoadFile(string fileName);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
-        void RestoreMRU();
 
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
@@ -58,6 +57,7 @@ namespace GKCore.Interfaces
         void AddRecord();
         void DeleteRecord();
         void EditRecord();
+        void DuplicateRecord();
         bool RecordIsFiltered(GEDCOMRecord record);
         void NotifyRecord(GEDCOMRecord record, RecordAction action);
     }

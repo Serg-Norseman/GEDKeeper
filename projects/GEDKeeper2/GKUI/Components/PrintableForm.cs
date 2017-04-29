@@ -33,7 +33,7 @@ namespace GKUI.Components
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public abstract class PrintableForm : Form
+    public class PrintableForm : Form
     {
         private PrintDocument fPrintDoc;
 
@@ -42,7 +42,10 @@ namespace GKUI.Components
             InitPrintDoc();
         }
 
-        protected abstract IPrintable GetPrintable();
+        protected virtual IPrintable GetPrintable()
+        {
+            return null; // dummy
+        }
 
         #region Print support
 

@@ -75,7 +75,7 @@ namespace GKImageViewerPlugin
             try
             {
                 fForm = new ImageViewerWin(this);
-                fHost.ShowWindow(fForm, true);
+                fHost.ShowWindow(fForm);
             }
             catch (Exception ex)
             {

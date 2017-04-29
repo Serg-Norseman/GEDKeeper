@@ -44,6 +44,7 @@ namespace GKCommon.IoC
         void Register<TTypeToResolve, TConcrete>();
         void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
         TTypeToResolve Resolve<TTypeToResolve>();
+        void Reset();
         object Resolve(Type typeToResolve);
     }
 
@@ -75,6 +76,11 @@ namespace GKCommon.IoC
     public class IocContainer : IContainer
     {
         private readonly IDictionary<Type, RegisteredObject> fRegisteredObjects = new Dictionary<Type, RegisteredObject>();
+
+        public void Reset()
+        {
+            fRegisteredObjects.Clear();
+        }
 
         public void Register<TTypeToResolve, TConcrete>()
         {

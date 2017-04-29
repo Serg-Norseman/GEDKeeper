@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Timers;
 
 using GKCommon;
 using GKCommon.IoC;
@@ -57,6 +58,7 @@ namespace GKCore
         private int fLoadingCount;
         protected IMainWindow fMainWindow;
         private readonly StringList fTips;
+        private readonly Timer fAutosaveTimer;
 
         public static AppHost Instance
         {
@@ -71,9 +73,9 @@ namespace GKCore
             get { return fActiveWidgets; }
         }
 
-        public IWindow ActiveMdiChild
+        public bool IsMDI
         {
-            get { return GetActiveMdiChild(); }
+            get { return fIsMDI; }
         }
 
         public IMainWindow MainWindow
@@ -82,26 +84,62 @@ namespace GKCore
             //set { fMainWindow = value; }
         }
 
+        public IList<IWindow> RunningForms
+        {
+            get { return fRunningForms; }
+        }
+
         protected AppHost()
         {
+            fInstance = this;
+
             InitHost();
 
-            fInstance = this;
+            fAutosaveTimer = new Timer();
+            fAutosaveTimer.Stop();
+            fAutosaveTimer.Enabled = false;
+            fAutosaveTimer.Interval = 10 * 60 * 1000;
+            fAutosaveTimer.Elapsed += AutosaveTimer_Tick;
 
             fActiveWidgets = new List<WidgetInfo>();
             fRunningForms = new List<IWindow>();
             fTips = new StringList();
         }
 
+        private void AutosaveTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (IWindow win in fRunningForms) {
+                    if (win is IBaseWindow) {
+                        IBaseWindow baseWin = (IBaseWindow) win;
+
+                        // file is modified, isn't updated now, and isn't now created (exists)
+                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.Context.IsUnknown()) {
+                            // TODO: if file is new and not exists - don't save it, but hint to user
+                            baseWin.SaveFile(baseWin.Context.FileName);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("AppHost.AutosaveTimer_Tick(): " + ex.Message);
+            }
+        }
+
         public virtual void Init(string[] args, bool isMDI)
         {
+            LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
 
             fIsMDI = isMDI;
 
             if (fIsMDI) {
                 fMainWindow = fIocContainer.Resolve<IMainWindow>();
+            } else {
+                CreateBase("");
             }
+
+            //LangMan.SaveDefaultLanguage();
         }
 
         public void SetArgs(string[] args)
@@ -111,7 +149,7 @@ namespace GKCore
             }
         }
 
-        public void LoadWindow(IWindow window)
+        public virtual void LoadWindow(IWindow window)
         {
             fRunningForms.Add(window);
         }
@@ -157,33 +195,50 @@ namespace GKCore
             fTips.Clear();
         }
 
+        public abstract IWindow GetActiveWindow();
+
+        public abstract IntPtr GetTopWindowHandle();
+
+        public abstract void ShowWindow(IWindow window);
+
+        public abstract void EnableWindow(IWidgetForm form, bool value);
+
+        public abstract void SaveWinMRU(IBaseWindow baseWin);
+
+        public abstract void RestoreWinMRU(IBaseWindow baseWin);
+
+        protected abstract void UpdateLang();
+
+        protected abstract void UpdateMRU();
+
+        public abstract void SaveLastBases();
+
         #region IHost implementation
 
-        public abstract IWindow GetActiveMdiChild();
-
-        public ILangMan CreateLangMan(object sender)
+        public IWorkWindow GetWorkWindow()
         {
-            return AppHost.Plugins.CreateLangMan(sender);
+            IWindow activeForm = GetActiveWindow();
+            return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
         }
 
         public IBaseWindow GetCurrentFile(bool extMode = false)
         {
-            IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
+            IWindow activeWin = GetActiveWindow();
+            IChartWindow curChart = ((activeWin is IChartWindow) ? ((IChartWindow) activeWin) : null);
             IBaseWindow result;
 
             if (extMode && curChart != null) {
                 result = curChart.Base;
             } else {
-                result = ((ActiveMdiChild is IBaseWindow) ? ((IBaseWindow) ActiveMdiChild) : null);
+                result = ((activeWin is IBaseWindow) ? ((IBaseWindow) activeWin) : null);
             }
 
             return result;
         }
 
-        public IWorkWindow GetWorkWindow()
+        public ILangMan CreateLangMan(object sender)
         {
-            IWindow activeForm = ActiveMdiChild;
-            return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
+            return AppHost.Plugins.CreateLangMan(sender);
         }
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
@@ -233,6 +288,13 @@ namespace GKCore
             }
         }
 
+        public void WidgetsEnable()
+        {
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.WidgetEnable();
+            }
+        }
+
         public void BaseChanged(IBaseWindow baseWin)
         {
             bool forceDeactivate = (baseWin == null);
@@ -254,13 +316,6 @@ namespace GKCore
         {
             // TODO: implementation of Base.SaveAs
         }
-
-        public abstract IntPtr GetTopWindowHandle();
-
-        public abstract void ShowWindow(IWindow window, bool taskbar);
-
-        public abstract void EnableWindow(IWidgetForm form, bool value);
-
 
         public virtual bool ShowModalX(ICommonDialog form, bool keepModeless)
         {
@@ -315,7 +370,7 @@ namespace GKCore
                     }
 
                     result = AppHost.Container.Resolve<IBaseWindow>();
-                    ShowWindow(result, !fIsMDI);
+                    ShowWindow(result);
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         result.LoadFile(fileName);
@@ -324,7 +379,7 @@ namespace GKCore
                         result.CreateNewFile();
                     }
 
-                    result.RestoreMRU();
+                    RestoreWinMRU(result);
                 } finally {
                     EndLoading();
                 }
@@ -333,6 +388,39 @@ namespace GKCore
             }
 
             return null;
+        }
+
+        public void LoadBase(IBaseWindow baseWin, string fileName)
+        {
+            if (baseWin == null)
+                throw new ArgumentNullException(@"baseWin");
+
+            try {
+                if (!baseWin.Context.IsUnknown() || !baseWin.Context.Tree.IsEmpty) {
+                    CreateBase(fileName);
+                    return;
+                }
+
+                try {
+                    BeginLoading();
+
+                    IBaseWindow result = FindBase(fileName);
+                    if (result != null) {
+                        result.Activate();
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
+                        baseWin.LoadFile(fileName);
+                        baseWin.Context.CollectTips(fTips);
+                        RestoreWinMRU(baseWin);
+                    }
+                } finally {
+                    EndLoading();
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("AppHost.LoadBase(): " + ex.Message);
+            }
         }
 
         public IBaseWindow FindBase(string fileName)
@@ -433,8 +521,6 @@ namespace GKCore
             }
         }
 
-        protected abstract void UpdateLang();
-
         private static ushort RequestLanguage()
         {
             using (var dlg = AppHost.Container.Resolve<ILanguageSelectDlg>()) {
@@ -482,8 +568,6 @@ namespace GKCore
             }
         }
 
-        protected abstract void UpdateMRU();
-
         public void AddMRU(string fileName)
         {
             int idx = AppHost.Options.MRUFiles_IndexOf(fileName);
@@ -521,6 +605,12 @@ namespace GKCore
             } catch (Exception ex) {
                 Logger.LogWrite("AppHost.RequestGeoCoords(): " + ex.Message);
             }
+        }
+
+        public virtual void ApplyOptions()
+        {
+            fAutosaveTimer.Interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
+            fAutosaveTimer.Enabled = AppHost.Options.Autosave;
         }
 
         #endregion

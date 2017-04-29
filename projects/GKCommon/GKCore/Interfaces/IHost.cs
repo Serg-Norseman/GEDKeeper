@@ -35,19 +35,21 @@ namespace GKCore.Interfaces
 
         string GetUserFilesPath(string filePath);
         IBaseWindow CreateBase(string fileName);
+        void LoadBase(IBaseWindow baseWin, string fileName);
         IBaseWindow FindBase(string fileName);
         void BaseChanged(IBaseWindow baseWin);
         void BaseClosed(IBaseWindow baseWin);
         void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
 
+        void ApplyOptions();
         string GetAppDataPath();
 
         bool IsWidgetActive(IWidget widget);
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
 
-        void ShowWindow(IWindow window, bool taskbar);
+        void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);
         void UpdateControls(bool forceDeactivate);

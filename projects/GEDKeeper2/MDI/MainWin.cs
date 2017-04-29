@@ -182,13 +182,8 @@ namespace GKUI
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            AppHost.Options.ClearLastBases();
-            for (int i = MdiChildren.Length - 1; i >= 0; i--) {
-                Form mdiChild = MdiChildren[i];
-                if (mdiChild is IBaseWindow) {
-                    AppHost.Options.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
-                }
-            }
+            // FIXME: implement to SDI!
+            AppHost.Instance.SaveLastBases();
         }
 
         private void Form_DragEnter(object sender, DragEventArgs e)
@@ -378,16 +373,6 @@ namespace GKUI
             }
         }
 
-        public void CheckMRUWin(string fileName, Form frm)
-        {
-            int idx = AppHost.Options.MRUFiles_IndexOf(fileName);
-            if (idx < 0) return;
-
-            MRUFile mf = AppHost.Options.MRUFiles[idx];
-            mf.WinRect = UIHelper.GetFormRect(frm);
-            mf.WinState = (WindowState)frm.WindowState;
-        }
-
         public void UpdateNavControls()
         {
             try
@@ -405,10 +390,9 @@ namespace GKUI
         {
             try
             {
-                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
-                IChartWindow curChart = ((ActiveMdiChild is IChartWindow) ? ((IChartWindow) ActiveMdiChild) : null);
-
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
+                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
+                IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
 
                 GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
                 bool baseEn = (rt != GEDCOMRecordType.rtNone);
@@ -567,26 +551,18 @@ namespace GKUI
         {
             using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
             {
-                Form activeForm = ActiveMdiChild;
-                if (activeForm is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
-                if (activeForm is IChartWindow) {
-                    if (activeForm is CircleChartWin) {
+                IWindow activeWin = AppHost.Instance.GetActiveWindow();
+                if (activeWin is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
+                if (activeWin is IChartWindow) {
+                    if (activeWin is CircleChartWin) {
                         dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
                     } else {
                         dlgOptions.SetPage(OptionsPage.opTreeChart);
                     }
                 }
 
-                if (dlgOptions.ShowDialog() == DialogResult.OK)
-                {
-                    ApplyOptions();
-
-                    foreach (Form child in MdiChildren)
-                    {
-                        if (child is IWorkWindow) {
-                            (child as IWorkWindow).UpdateView();
-                        }
-                    }
+                if (dlgOptions.ShowDialog() == DialogResult.OK) {
+                    AppHost.Instance.ApplyOptions();
                 }
             }
         }
@@ -742,7 +718,7 @@ namespace GKUI
             if (curBase == null) return;
 
             SlideshowWin win = new SlideshowWin(curBase);
-            AppHost.Instance.ShowWindow(win, false);
+            AppHost.Instance.ShowWindow(win);
         }
 
         private void miStats_Click(object sender, EventArgs e)
@@ -753,7 +729,7 @@ namespace GKUI
             List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 
             StatisticsWin win = new StatisticsWin(curBase, selectedRecords);
-            AppHost.Instance.ShowWindow(win, false);
+            AppHost.Instance.ShowWindow(win);
         }
 
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
@@ -810,7 +786,7 @@ namespace GKUI
                 TreeChartWin fmChart = new TreeChartWin(curBase, selPerson);
                 fmChart.ChartKind = chartKind;
                 fmChart.GenChart();
-                AppHost.Instance.ShowWindow(fmChart, false);
+                AppHost.Instance.ShowWindow(fmChart);
             }
         }
 
@@ -820,7 +796,7 @@ namespace GKUI
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Ancestors);
-            AppHost.Instance.ShowWindow(fmChart, false);
+            AppHost.Instance.ShowWindow(fmChart);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
@@ -829,7 +805,7 @@ namespace GKUI
             if (curBase == null) return;
 
             CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Descendants);
-            AppHost.Instance.ShowWindow(fmChart, false);
+            AppHost.Instance.ShowWindow(fmChart);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)
@@ -883,7 +859,7 @@ namespace GKUI
 
         private void miWindow_DropDownOpening(object sender, EventArgs e)
         {
-            Form activeChild = ActiveMdiChild;
+            var activeChild = AppHost.Instance.GetActiveWindow();
             if (activeChild == null) return;
 
             // platform: in Mono here is bug, but code works without this line
@@ -891,7 +867,7 @@ namespace GKUI
             ActivateMdiChild(null);
             #endif
 
-            ActivateMdiChild(activeChild);
+            ActivateMdiChild((Form)activeChild);
         }
 
 

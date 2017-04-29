@@ -439,6 +439,10 @@
     <Compile Include="MDI\MainWin.Designer.cs">
       <DependentUpon>MainWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="SDI\BaseWinSDI.cs" />
+    <Compile Include="SDI\BaseWinSDI.Designer.cs">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKUI\Components\ACOptionsControl.resx">
@@ -592,6 +596,9 @@
     <EmbeddedResource Include="MDI\MainWin.resx">
       <DependentUpon>MainWin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SDI\BaseWinSDI.resx">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -637,6 +644,7 @@
     <Folder Include="GKUI\Charts" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
+    <Folder Include="SDI" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

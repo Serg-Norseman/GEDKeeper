@@ -90,7 +90,6 @@ namespace GKTests.Mocks
         public void LoadFile(string fileName) { }
         public void SaveFile(string fileName) { }
         public void CriticalSave() { }
-        public void RestoreMRU() { }
         public void SaveFileEx(bool saveAs) { }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
@@ -105,6 +104,7 @@ namespace GKTests.Mocks
         public void AddRecord() { }
         public void DeleteRecord() { }
         public void EditRecord() { }
+        public void DuplicateRecord() { }
         public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
         public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
 
@@ -122,19 +122,21 @@ namespace GKTests.Mocks
 
         public string GetUserFilesPath(string filePath) { return string.Empty; }
         public IBaseWindow CreateBase(string fileName) { return null; }
+        public void LoadBase(IBaseWindow baseWin, string fileName) { }
         public IBaseWindow FindBase(string fileName) { return null; }
         public void BaseChanged(IBaseWindow baseWin) {}
         public void BaseClosed(IBaseWindow baseWin) {}
         public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
 
+        public void ApplyOptions() { }
         public string GetAppDataPath() { return string.Empty; }
 
         public bool IsWidgetActive(IWidget widget) { return false; }
         public void WidgetShow(IWidget widget) {}
         public void WidgetClose(IWidget widget) {}
 
-        public void ShowWindow(IWindow window, bool taskbar) {}
+        public void ShowWindow(IWindow window) {}
 
         public ILangMan CreateLangMan(object sender) { return null; }
         public void LoadLanguage(int langCode) {}

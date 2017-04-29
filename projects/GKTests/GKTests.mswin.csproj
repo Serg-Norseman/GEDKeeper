@@ -130,6 +130,7 @@
     <Compile Include="UITests\FilePropertiesDlgTests.cs" />
     <Compile Include="UITests\GroupEditDlgTests.cs" />
     <Compile Include="UITests\InputBoxTests.cs" />
+    <Compile Include="UITests\MainSDITests.cs" />
     <Compile Include="UITests\MainWinTests.cs" />
     <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />

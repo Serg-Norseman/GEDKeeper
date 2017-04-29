@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define SDI_TEST
+
 using System;
 using System.Reflection;
 using System.Resources;
@@ -77,14 +79,18 @@ namespace GKUI
             Logger.LogInit(GKUtils.GetLogFilename());
             LogSysInfo();
 
-            WinFormsBootstrapper.Configure(AppHost.Container);
-
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            #if SDI_TEST
+            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            #else
+            WinFormsBootstrapper.Configure(AppHost.Container, true);
+            #endif
 
             var appHost = new WinFormsAppHost();
 
@@ -93,7 +99,11 @@ namespace GKUI
                 if (tracker.IsFirstInstance) {
                     try
                     {
+                        #if SDI_TEST
+                        appHost.Init(args, false);
+                        #else
                         appHost.Init(args, true);
+                        #endif
 
                         Application.Run(appHost.AppContext);
                     } finally {

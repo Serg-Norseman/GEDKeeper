@@ -93,6 +93,12 @@ namespace GKTests.UITests
             saveDlg.SaveFile(fileName);
             saveDlg.SaveFile();
         }
+
+        public static Form GetActiveForm(string formName)
+        {
+            var tester = new FormTester(formName);
+            return (tester == null) ? null : (Form)tester.TheObject;
+        }
     }
 }
 

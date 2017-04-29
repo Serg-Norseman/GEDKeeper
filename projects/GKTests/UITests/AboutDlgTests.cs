@@ -39,7 +39,7 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container);
+            WinFormsBootstrapper.Configure(AppHost.Container, false);
 
             fDialog = new AboutDlg();
             fDialog.Show();

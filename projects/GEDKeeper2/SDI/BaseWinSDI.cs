@@ -29,6 +29,8 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -40,7 +42,7 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWin : Form, IBaseWindow
+    public sealed partial class BaseWinSDI : Form, IBaseWindow
     {
         #region Private fields
 
@@ -102,9 +104,29 @@ namespace GKUI
 
         #region Instance control
 
-        public BaseWin()
+        public BaseWinSDI()
         {
             InitializeComponent();
+
+            tbFileNew.Image = GKResources.iCreateNew;
+            tbFileLoad.Image = GKResources.iLoad;
+            tbFileSave.Image = GKResources.iSave;
+            tbRecordAdd.Image = GKResources.iRecNew;
+            tbRecordEdit.Image = GKResources.iRecEdit;
+            tbRecordDelete.Image = GKResources.iRecDelete;
+            tbFilter.Image = GKResources.iFilter;
+            tbTreeAncestors.Image = GKResources.iTreeAncestry;
+            tbTreeDescendants.Image = GKResources.iTreeDescendants;
+            tbTreeBoth.Image = GKResources.iTreeBoth;
+            tbPedigree.Image = GKResources.iScroll;
+            tbStats.Image = GKResources.iTable;
+            tbPrev.Image = GKResources.iLeft1;
+            tbNext.Image = GKResources.iRight1;
+            tbDocPreview.Image = GKResources.iPreview;
+            tbDocPrint.Image = GKResources.iPrint;
+
+            tbDocPrint.Visible = false;
+            tbDocPreview.Visible = false;
 
             AppHost.Instance.LoadWindow(this);
 
@@ -124,7 +146,7 @@ namespace GKUI
             CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out ListLocations, out mLocationSummary);
             tabsRecords.SelectedIndex = 0;
 
-            (this as ILocalization).SetLang();
+            SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -144,40 +166,7 @@ namespace GKUI
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
-            FormWindowState prevState = WindowState;
-
             base.WndProc(ref m);
-
-            if (WindowState != prevState)
-                OnFormWindowStateChanged(prevState, WindowState);
-        }
-
-        /// <summary>
-        /// It's a Windows-specific hack for bypass problems with the restoration
-        /// of the MdiChild window from maximized state to normal (creates
-        /// the dimensions that are included in visible borders of MdiParent
-        /// to avoid appear of scrollbars).
-        /// </summary>
-        private void OnFormWindowStateChanged(FormWindowState oldState, FormWindowState newState)
-        {
-            if (oldState == FormWindowState.Maximized && newState == FormWindowState.Normal) {
-                // Is it MdiChild form?
-                Form mdiParent = MdiParent;
-                if (mdiParent == null) return;
-
-                MdiClient client = null;
-                foreach (Control ctl in mdiParent.Controls) {
-                    if (ctl is MdiClient) {
-                        client = ctl as MdiClient;
-                        break;
-                    }
-                }
-                if (client == null) return;
-
-                Rectangle formRect = Bounds;
-                formRect.Intersect(client.ClientRectangle);
-                SetBounds(formRect.Left, formRect.Top, formRect.Width, formRect.Height, BoundsSpecified.All);
-            }
         }
 
         #endregion
@@ -196,7 +185,15 @@ namespace GKUI
 
         private void Form_Load(object sender, EventArgs e)
         {
-            ((IWorkWindow)this).UpdateView();
+            try
+            {
+                ((IWorkWindow)this).UpdateView();
+
+                UpdatePluginsItems();
+                UpdateMRU();
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+            }
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -236,6 +233,18 @@ namespace GKUI
 
                     /*case Keys.F12:
                     throw new NotSupportedException(); // debug!*/
+
+                case Keys.F12:
+                    {
+                        #if __MonoCS__
+                        AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+                        #else
+                        using (TreesAlbumExporter fb = new TreesAlbumExporter(this)) {
+                            fb.Generate(true);
+                        }
+                        #endif
+                    }
+                    break;
 
                     /*case Keys.F:
         			if (e.Control) {
@@ -666,6 +675,8 @@ namespace GKUI
 
         public void SetFilter()
         {
+            if (!AllowFilter()) return;
+
             GEDCOMRecordType rt = GetSelectedRecordType();
             IListManager listMan = GetRecordsListManByType(rt);
             if (listMan == null) return;
@@ -742,7 +753,7 @@ namespace GKUI
                 catch (Exception ex)
                 {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.LogWrite("BaseWin.ShowMedia(): " + ex.Message);
+                    Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
                 }
             }
         }
@@ -751,8 +762,92 @@ namespace GKUI
 
         #region ILocalization implementation
 
-        void ILocalization.SetLang()
+        public void SetLang()
         {
+            miFile.Text = LangMan.LS(LSID.LSID_MIFile);
+            miEdit.Text = LangMan.LS(LSID.LSID_MIEdit);
+            miPedigree.Text = LangMan.LS(LSID.LSID_MIPedigree);
+            miService.Text = LangMan.LS(LSID.LSID_MIService);
+            //miWindow.Text = LangMan.LS(LSID.LSID_MIWindow);
+            miHelp.Text = LangMan.LS(LSID.LSID_MIHelp);
+
+            miFileNew.Text = LangMan.LS(LSID.LSID_MIFileNew);
+            miFileLoad.Text = LangMan.LS(LSID.LSID_MIFileLoad);
+            miMRUFiles.Text = LangMan.LS(LSID.LSID_MIMRUFiles);
+            miFileSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
+            miFileSaveAs.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+            miFileClose.Text = LangMan.LS(LSID.LSID_MIFileClose);
+            miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
+            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
+            miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
+            miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            miExit.Text = LangMan.LS(LSID.LSID_MIExit);
+
+            miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
+            miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+            miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+
+            miTreeAncestors.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
+            miTreeDescendants.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
+            miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
+            miPedigreeAscend.Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
+            miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
+            miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
+
+            miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
+            miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
+            miSearch.Text = LangMan.LS(LSID.LSID_Search);
+            miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+            miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
+
+            miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
+            miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
+            miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
+            miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
+            miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
+            miOptions.Text = LangMan.LS(LSID.LSID_MIOptions) + @"...";
+
+            //miWinCascade.Text = LangMan.LS(LSID.LSID_MIWinCascade);
+            //miWinHTile.Text = LangMan.LS(LSID.LSID_MIWinHTile);
+            //miWinVTile.Text = LangMan.LS(LSID.LSID_MIWinVTile);
+            //miWinMinimize.Text = LangMan.LS(LSID.LSID_MIWinMinimize);
+            //miWinArrange.Text = LangMan.LS(LSID.LSID_MIWinArrange);
+
+            miContext.Text = LangMan.LS(LSID.LSID_MIContext);
+            miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
+            miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
+            miLogView.Text = LangMan.LS(LSID.LSID_LogView);
+            miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+
+            tbFileNew.ToolTipText = LangMan.LS(LSID.LSID_FileNewTip);
+            tbFileLoad.ToolTipText = LangMan.LS(LSID.LSID_FileLoadTip);
+            tbFileSave.ToolTipText = LangMan.LS(LSID.LSID_FileSaveTip);
+            tbRecordAdd.ToolTipText = LangMan.LS(LSID.LSID_RecordAddTip);
+            tbRecordEdit.ToolTipText = LangMan.LS(LSID.LSID_RecordEditTip);
+            tbRecordDelete.ToolTipText = LangMan.LS(LSID.LSID_RecordDeleteTip);
+            tbFilter.ToolTipText = LangMan.LS(LSID.LSID_FilterTip);
+            tbTreeAncestors.ToolTipText = LangMan.LS(LSID.LSID_TreeAncestorsTip);
+            tbTreeDescendants.ToolTipText = LangMan.LS(LSID.LSID_TreeDescendantsTip);
+            tbTreeBoth.ToolTipText = LangMan.LS(LSID.LSID_TreeBothTip);
+            tbPedigree.ToolTipText = LangMan.LS(LSID.LSID_PedigreeTip);
+            miPedigree_dAboville2.Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
+            miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+            tbStats.ToolTipText = LangMan.LS(LSID.LSID_StatsTip);
+
+            tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
+            tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
+
+            tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
+
+            int num = miPlugins.DropDownItems.Count;
+            for (int i = 0; i < num; i++) {
+                ToolStripItem mi = miPlugins.DropDownItems[i];
+                IPlugin plugin = (IPlugin)mi.Tag;
+                mi.Text = plugin.DisplayName;
+            }
+
             tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
             tabsRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
             tabsRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
@@ -870,6 +965,8 @@ namespace GKUI
 
         void IWorkWindow.QuickSearch()
         {
+            if (!AllowQuickSearch()) return;
+
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
             Rectangle client = ClientRectangle;
@@ -971,7 +1068,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
+                Logger.LogWrite("BaseWinSDI.ShowRecordInfo(): " + ex.Message);
             }
         }
 
@@ -995,6 +1092,598 @@ namespace GKUI
                 result = (rView != null && rView.IndexOfRecord(record) >= 0);
             }
             return result;
+        }
+
+        #endregion
+
+        #region From MainWin
+
+        private void Form_Show(object sender, EventArgs e)
+        {
+            try
+            {
+                /*try
+                {
+                    AppHost.Instance.BeginLoading();
+
+                    AppHost.Instance.ReloadRecentBases();
+
+                    AppHost.Instance.ProcessHolidays();
+                } finally {
+                    AppHost.Instance.EndLoading();
+                }
+
+                UpdateMan.CheckUpdate();*/
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.Form_Show(): " + ex.Message);
+            }
+        }
+
+        /*private void Form_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                ApplyOptions();
+                UpdatePluginsItems();
+                UpdateMRU();
+                UpdateControls(false);
+                AppHost.Instance.LoadArgs();
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+            }
+        }
+         */
+
+        /*[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+                AppHost.Instance.WidgetsEnable();
+            }
+        }*/
+
+        // FIXME
+        private void tbDocPrint_Click(object sender, EventArgs e)
+        {
+            /*IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
+            if (chartWin != null && chartWin.AllowPrint()) {
+                chartWin.DoPrint();
+            }*/
+        }
+
+        // FIXME
+        private void tbDocPreview_Click(object sender, EventArgs e)
+        {
+            /*IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
+            if (chartWin != null && chartWin.AllowPrint()) {
+                chartWin.DoPrintPreview();
+            }*/
+        }
+
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            StatusBar.Panels[0].Width = Width - 50;
+        }
+
+        public void Restore()
+        {
+            if (WindowState == FormWindowState.Minimized) {
+                WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void Form_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        private void Form_DragDrop(object sender, DragEventArgs e)
+        {
+            try {
+                try {
+                    AppHost.Instance.BeginLoading();
+
+                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
+                    if (a == null) return;
+
+                    for (int i = 0; i < a.Length; i++) {
+                        string fn = a.GetValue(i).ToString();
+                        AppHost.Instance.CreateBase(fn);
+                    }
+                } finally {
+                    AppHost.Instance.EndLoading();
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+            }
+        }
+
+        private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
+        {
+            Bitmap pic = null;
+            switch (fContext.ShieldState)
+            {
+                case ShieldState.None:
+                    pic = (Bitmap)GKResources.iRGShieldNone.Clone();
+                    break;
+                case ShieldState.Middle:
+                    pic = (Bitmap)GKResources.iRGShieldMid.Clone();
+                    break;
+                case ShieldState.Maximum:
+                    pic = (Bitmap)GKResources.iRGShieldMax.Clone();
+                    break;
+            }
+
+            if (pic != null) {
+                pic.MakeTransparent(pic.GetPixel(0, 0));
+                sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+            }
+        }
+
+        private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
+        {
+            if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
+                fContext.SwitchShieldState();
+                StatusBar.Invalidate();
+            }
+        }
+
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
+        {
+            if (sender == tbFileNew) {
+                miFileNew_Click(null, null);
+            } else if (sender == tbFileLoad) {
+                miFileLoad_Click(null, null);
+            } else if (sender == tbFileSave) {
+                miFileSave_Click(null, null);
+            } else if (sender == tbRecordAdd) {
+                miRecordAdd_Click(null, null);
+            } else if (sender == tbRecordEdit) {
+                miRecordEdit_Click(null, null);
+            } else if (sender == tbRecordDelete) {
+                miRecordDelete_Click(null, null);
+            } else if (sender == tbFilter) {
+                miFilter_Click(null, null);
+            } else if (sender == tbTreeAncestors) {
+                miTreeAncestors_Click(null, null);
+            } else if (sender == tbTreeDescendants) {
+                miTreeDescendants_Click(null, null);
+            } else if (sender == tbTreeBoth) {
+                miTreeBoth_Click(null, null);
+            } else if (sender == tbStats) {
+                miStats_Click(null, null);
+            } else if (sender == tbPrev) {
+                tbPrev_Click(null, null);
+            } else if (sender == tbNext) {
+                tbNext_Click(null, null);
+            } else if (sender == tbDocPrint) {
+                tbDocPrint_Click(null, null);
+            } else if (sender == tbDocPreview) {
+                tbDocPreview_Click(null, null);
+            }
+        }
+
+        private void MRUFileClick(object sender, EventArgs e)
+        {
+            int idx = (int)((GKToolStripMenuItem)sender).Tag;
+            AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
+        }
+
+        public void UpdateMRU()
+        {
+            try {
+                miMRUFiles.Enabled = (AppHost.Options.MRUFiles.Count > 0);
+                miMRUFiles.DropDownItems.Clear();
+                MenuMRU.Items.Clear();
+
+                int num = AppHost.Options.MRUFiles.Count;
+                for (int i = 0; i < num; i++) {
+                    string fn = AppHost.Options.MRUFiles[i].FileName;
+
+                    GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
+                    mi.Click += MRUFileClick;
+                    miMRUFiles.DropDownItems.Add(mi);
+
+                    GKToolStripMenuItem tsmi = new GKToolStripMenuItem(fn, i);
+                    tsmi.Click += MRUFileClick;
+                    MenuMRU.Items.Add(tsmi);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.UpdateMRU(): " + ex.Message);
+            }
+        }
+
+        public void UpdateNavControls()
+        {
+            try
+            {
+                IWorkWindow workWin = this as IWorkWindow;
+
+                tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
+                tbNext.Enabled = (workWin != null && workWin.NavCanForward());
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.UpdateNavControls(): " + ex.Message);
+            }
+        }
+
+        // FIXME
+        public void UpdateControls(bool forceDeactivate)
+        {
+            try
+            {
+                IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
+                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
+                IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
+
+                GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
+                bool baseEn = (rt != GEDCOMRecordType.rtNone);
+
+                miFileSave.Enabled = baseEn || (curChart != null);
+                miFileSaveAs.Enabled = miFileSave.Enabled;
+                tbFileSave.Enabled = miFileSave.Enabled;
+
+                miRecordAdd.Enabled = baseEn;
+                tbRecordAdd.Enabled = miRecordAdd.Enabled;
+                miRecordEdit.Enabled = baseEn;
+                tbRecordEdit.Enabled = miRecordEdit.Enabled;
+                miRecordDelete.Enabled = baseEn;
+                tbRecordDelete.Enabled = miRecordDelete.Enabled;
+                miStats.Enabled = baseEn;
+                tbStats.Enabled = miStats.Enabled;
+
+                miFilter.Enabled = (workWin != null && workWin.AllowFilter());
+                tbFilter.Enabled = miFilter.Enabled;
+
+                miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
+
+                tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
+                tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
+
+                miTreeTools.Enabled = baseEn;
+                miExportToFamilyBook.Enabled = baseEn;
+                miExportToExcelFile.Enabled = baseEn;
+                miFileClose.Enabled = baseEn;
+                miFileProperties.Enabled = baseEn;
+                miOrganizer.Enabled = baseEn;
+                miSlideshow.Enabled = baseEn;
+                miScripts.Enabled = baseEn;
+
+                bool indivEn = baseEn && rt == GEDCOMRecordType.rtIndividual;
+
+                miTreeAncestors.Enabled = indivEn;
+                tbTreeAncestors.Enabled = miTreeAncestors.Enabled;
+                miTreeDescendants.Enabled = indivEn;
+                tbTreeDescendants.Enabled = miTreeDescendants.Enabled;
+                miTreeBoth.Enabled = indivEn;
+                tbTreeBoth.Enabled = miTreeBoth.Enabled;
+                miPedigree.Enabled = indivEn;
+                tbPedigree.Enabled = miPedigree.Enabled;
+                miPedigree_dAboville.Enabled = indivEn;
+                miPedigree_Konovalov.Enabled = indivEn;
+
+                if (workWin != null) {
+                    StatusBar.Panels[0].Text = workWin.GetStatusString();
+                }
+
+                UpdateNavControls();
+
+                StatusBar.Invalidate();
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
+            }
+        }
+
+        private void miExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void miUndo_Click(object sender, EventArgs e)
+        {
+            fContext.DoUndo();
+        }
+
+        private void miRedo_Click(object sender, EventArgs e)
+        {
+            fContext.DoRedo();
+        }
+
+        private void miExportToFamilyBook_Click(object sender, EventArgs e)
+        {
+            #if __MonoCS__
+            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            #else
+            using (FamilyBookExporter fb = new FamilyBookExporter(this)) {
+                fb.Generate(true);
+            }
+            #endif
+        }
+
+        private void miExportToExcelFile_Click(object sender, EventArgs e)
+        {
+            using (ExcelExporter exExp = new ExcelExporter(this)) {
+                exExp.Options = AppHost.Options;
+                exExp.Generate(true);
+            }
+        }
+
+        private void miFileProperties_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+
+                using (var dlg = new FilePropertiesDlg()) {
+                    dlg.InitDialog(this);
+                    AppHost.Instance.ShowModalX(dlg, false);
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miScripts_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+
+                using (ScriptEditWin scriptWin = new ScriptEditWin(this)) {
+                    scriptWin.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTreeTools_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+
+                using (TreeToolsWin fmTreeTools = new TreeToolsWin(this)) {
+                    fmTreeTools.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miOptions_Click(object sender, EventArgs e)
+        {
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
+            {
+                IWindow activeWin = AppHost.Instance.GetActiveWindow();
+                if (activeWin is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
+                if (activeWin is IChartWindow) {
+                    if (activeWin is CircleChartWin) {
+                        dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
+                    } else {
+                        dlgOptions.SetPage(OptionsPage.opTreeChart);
+                    }
+                }
+
+                if (dlgOptions.ShowDialog() == DialogResult.OK) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
+        }
+
+        private void miFileClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void miFileNew_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.CreateBase("");
+        }
+
+        private void miFileLoad_Click(object sender, EventArgs e)
+        {
+            string homePath = AppHost.Instance.GetUserFilesPath("");
+
+            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            if (!string.IsNullOrEmpty(fileName)) {
+                AppHost.Instance.LoadBase(this, fileName);
+            }
+        }
+
+        private void miFileSaveAs_Click(object sender, EventArgs e)
+        {
+            SaveFileEx(true);
+        }
+
+        private void miFileSave_Click(object sender, EventArgs e)
+        {
+            SaveFileEx(false);
+        }
+
+        private void miSearch_Click(object sender, EventArgs e)
+        {
+            (this as IWorkWindow).QuickSearch();
+        }
+
+        private void miFilter_Click(object sender, EventArgs e)
+        {
+            (this as IWorkWindow).SetFilter();
+        }
+
+        private void tbPrev_Click(object sender, EventArgs e)
+        {
+            (this as IWorkWindow).NavPrev();
+        }
+
+        private void tbNext_Click(object sender, EventArgs e)
+        {
+            (this as IWorkWindow).NavNext();
+        }
+
+        private void miMap_Click(object sender, EventArgs e)
+        {
+            #if __MonoCS__
+            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            #else
+            MapsViewerWin mapsWin = new MapsViewerWin(this);
+            mapsWin.ProcessMap();
+            #endif
+        }
+
+        private void miOrganizer_Click(object sender, EventArgs e)
+        {
+            using (OrganizerWin dlg = new OrganizerWin(this)) {
+                dlg.ShowDialog();
+            }
+        }
+
+        private void miRelationshipCalculator_Click(object sender, EventArgs e)
+        {
+            using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(this)) {
+                relCalc.ShowDialog();
+            }
+        }
+
+        private void miSlideshow_Click(object sender, EventArgs e)
+        {
+            SlideshowWin win = new SlideshowWin(this);
+            AppHost.Instance.ShowWindow(win);
+        }
+
+        private void miStats_Click(object sender, EventArgs e)
+        {
+            List<GEDCOMRecord> selectedRecords = GetContentList(GEDCOMRecordType.rtIndividual);
+
+            StatisticsWin win = new StatisticsWin(this, selectedRecords);
+            AppHost.Instance.ShowWindow(win);
+        }
+
+        private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
+        {
+            using (PedigreeExporter p = new PedigreeExporter(this)) {
+                p.Root = this.GetSelectedPerson();
+                p.Options = AppHost.Options;
+                p.ShieldState = this.Context.ShieldState;
+                p.Kind = kind;
+                p.Generate(true);
+            }
+        }
+
+        private void miPedigreeAscend_Click(object sender, EventArgs e)
+        {
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+        }
+
+        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        {
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+        }
+
+        private void miPedigree_KonovalovClick(object sender, EventArgs e)
+        {
+            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+        }
+
+        private void miTreeAncestors_Click(object sender, EventArgs e)
+        {
+            ShowTreeChart(TreeChartKind.ckAncestors);
+        }
+
+        private void miTreeDescendants_Click(object sender, EventArgs e)
+        {
+            ShowTreeChart(TreeChartKind.ckDescendants);
+        }
+
+        private void miTreeBoth_Click(object sender, EventArgs e)
+        {
+            ShowTreeChart(TreeChartKind.ckBoth);
+        }
+
+        private void ShowTreeChart(TreeChartKind chartKind)
+        {
+            GEDCOMIndividualRecord selPerson = this.GetSelectedPerson();
+            if (TreeChartModel.CheckTreeChartSize(this.Context.Tree, selPerson, chartKind)) {
+                TreeChartWin fmChart = new TreeChartWin(this, selPerson);
+                fmChart.ChartKind = chartKind;
+                fmChart.GenChart();
+                AppHost.Instance.ShowWindow(fmChart);
+            }
+        }
+
+        private void miAncestorsCircle_Click(object sender, EventArgs e)
+        {
+            CircleChartWin fmChart = new CircleChartWin(this, this.GetSelectedPerson(), CircleChartType.Ancestors);
+            AppHost.Instance.ShowWindow(fmChart);
+        }
+
+        private void miDescendantsCircle_Click(object sender, EventArgs e)
+        {
+            CircleChartWin fmChart = new CircleChartWin(this, this.GetSelectedPerson(), CircleChartType.Descendants);
+            AppHost.Instance.ShowWindow(fmChart);
+        }
+
+        private void miLogSend_Click(object sender, EventArgs e)
+        {
+            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", GKUtils.GetLogFilename());
+        }
+
+        private void miLogView_Click(object sender, EventArgs e)
+        {
+            SysUtils.LoadExtFile(GKUtils.GetLogFilename());
+        }
+
+        private void miAbout_Click(object sender, EventArgs e)
+        {
+            using (AboutDlg dlg = new AboutDlg()) {
+                dlg.ShowDialog();
+            }
+        }
+
+        private void miContext_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.ShowHelpTopic("");
+        }
+
+        private static void Plugin_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item == null) return;
+
+            IPlugin plugin = item.Tag as IPlugin;
+            if (plugin == null) return;
+
+            plugin.Execute();
+        }
+
+        private void UpdatePluginsItems()
+        {
+            try {
+                miPlugins.Visible = (AppHost.Plugins.Count > 0);
+                miPlugins.DropDownItems.Clear();
+
+                AppHost.Instance.ActiveWidgets.Clear();
+
+                int num = AppHost.Plugins.Count;
+                for (int i = 0; i < num; i++) {
+                    IPlugin plugin = AppHost.Plugins[i];
+                    string dispName = plugin.DisplayName;
+
+                    ToolStripMenuItemEx mi = new ToolStripMenuItemEx(dispName/*, i*/);
+                    mi.Click += Plugin_Click;
+                    mi.Tag = plugin;
+                    miPlugins.DropDownItems.Add(mi);
+
+                    if (plugin is IWidget) {
+                        WidgetInfo widInfo = new WidgetInfo();
+                        widInfo.Widget = (plugin as IWidget);
+                        widInfo.MenuItem = mi;
+                        AppHost.Instance.ActiveWidgets.Add(widInfo);
+
+                        (plugin as IWidget).WidgetInit(AppHost.Instance);
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
+            }
         }
 
         #endregion

@@ -69,6 +69,12 @@ namespace GKUI
             InitializeComponent();
 
             tbImageSave.Image = GKResources.iSaveImage;
+            tbDocPreview.Image = GKResources.iPreview;
+            tbDocPrint.Image = GKResources.iPrint;
+
+            tbDocPrint.Visible = !AppHost.Instance.IsMDI;
+            tbDocPreview.Visible = !AppHost.Instance.IsMDI;
+
             tbModes.Image = GKResources.iTools;
 
             miModeBoth.Tag = TreeChartKind.ckBoth;
@@ -504,6 +510,16 @@ namespace GKUI
             miMotherAdd.Enabled = ParentIsRequired(GEDCOMSex.svFemale);
         }
 
+        private void tbDocPreview_Click(object sender, EventArgs e)
+        {
+            DoPrintPreview();
+        }
+
+        private void tbDocPrint_Click(object sender, EventArgs e)
+        {
+            DoPrint();
+        }
+
         #endregion
 
         #region IChartWindow implementation
@@ -557,8 +573,11 @@ namespace GKUI
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 
-            tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
             tbModes.ToolTipText = LangMan.LS(LSID.LSID_ModesTip);
+
+            tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
+            tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
+            tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
         }
 
         #endregion

@@ -46,9 +46,9 @@ namespace GKTests.UITests
     /// and dialogs that are heavily dependent on the main window.
     /// </summary>
     [TestFixture]
-    public class MainWinTests : CustomWindowTest
+    public class MainSDITests : CustomWindowTest
     {
-        private MainWin fMainWin;
+        private Form fMainWin;
         private IBaseWindow fCurBase;
         private int fIndex;
 
@@ -56,13 +56,10 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container, true);
+            WinFormsBootstrapper.Configure(AppHost.Container, false);
 
             var appHost = new WinFormsAppHost();
-            appHost.Init(null, true);
-
-            fMainWin = (MainWin)AppHost.Instance.MainWindow;
-            fMainWin.Show();
+            appHost.Init(null, false);
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
             for (int i = 0; i < indiCols.Count; i++) {
@@ -72,11 +69,22 @@ namespace GKTests.UITests
         }
 
         [STAThread, Test]
+        public void Test_About()
+        {
+            
+        }
+
+        [STAThread, Test]
         public void Test_Common()
         {
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
+
+            // at complex tests, first form hasn't focus
+            ((Form)AppHost.Instance.RunningForms[0]).Show(); // FIXME
+
+            fMainWin = (Form)AppHost.Instance.GetActiveWindow();
 
             // Stage 1: call to AboutDlg, closing in AboutDlg_Handler
             ExpectModal("AboutDlg", "AboutDlg_Handler");
@@ -84,10 +92,12 @@ namespace GKTests.UITests
 
 
             // Stage 2.1: GetCurrentFile()
-            Assert.IsNull(AppHost.Instance.GetCurrentFile(), "Stage 2.1");
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
+            Assert.IsNotNull(curBase, "Stage 2.1");
+            Assert.AreEqual(fMainWin, curBase);
 
             // Stage 2.2: create an empty base
-            ClickToolStripButton("tbFileNew", fMainWin);
+            //ClickToolStripButton("tbFileNew", fBaseSDI);
 
             // Stage 2.3: GetCurrentFile()
             fCurBase = AppHost.Instance.GetCurrentFile();
@@ -116,7 +126,7 @@ namespace GKTests.UITests
 
 
             // Stage 5: internals of BaseWin
-            BaseWin_Tests(fCurBase as BaseWin, "Stage 5");
+            BaseWin_Tests(fCurBase, "Stage 5");
 
 
             // Stage 6
@@ -124,7 +134,7 @@ namespace GKTests.UITests
 
 
             // Stage 7: call to QuickFind
-            (fCurBase as BaseWin).ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            ((BaseWinSDI)fCurBase).ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             QuickSearch_Test();
 
 
@@ -144,42 +154,42 @@ namespace GKTests.UITests
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef, "Stage 25.0");
             ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
-            CircleChartWin_Tests((Form)AppHost.Instance.GetActiveWindow(), "Stage 25");
+            CircleChartWin_Tests(GetActiveForm("CircleChartWin"), "Stage 25");
 
             // Stage 26: call to CircleChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef, "Stage 26.0");
             ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
-            CircleChartWin_Tests((Form)AppHost.Instance.GetActiveWindow(), "Stage 26");
+            CircleChartWin_Tests(GetActiveForm("CircleChartWin"), "Stage 26");
 
 
             // Stage 27: call to TreeChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef, "Stage 27.0");
             ClickToolStripButton("tbTreeAncestors", fMainWin);
-            TreeChartWin_Tests((Form)AppHost.Instance.GetActiveWindow(), TreeChartKind.ckAncestors, "Stage 27", "I3");
+            TreeChartWin_Tests(GetActiveForm("TreeChartWin"), TreeChartKind.ckAncestors, "Stage 27", "I3");
 
 
             // Stage 28: call to TreeChartWin (required the base, selected person)
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef, "Stage 28.0");
             ClickToolStripButton("tbTreeDescendants", fMainWin);
-            TreeChartWin_Tests((Form)AppHost.Instance.GetActiveWindow(), TreeChartKind.ckDescendants, "Stage 28", "I1");
+            TreeChartWin_Tests(GetActiveForm("TreeChartWin"), TreeChartKind.ckDescendants, "Stage 28", "I1");
 
 
             // Stage 29: call to TreeChartWin (required the base, selected person)
             ClickToolStripButton("tbTreeBoth", fMainWin);
-            TreeChartWin_Tests((Form)AppHost.Instance.GetActiveWindow(), TreeChartKind.ckBoth, "Stage 29", "I1");
+            TreeChartWin_Tests(GetActiveForm("TreeChartWin"), TreeChartKind.ckBoth, "Stage 29", "I1");
 
 
             // Stage 30: call to StatsWin (required the base)
             ClickToolStripButton("tbStats", fMainWin);
-            StatsWin_Tests((Form)AppHost.Instance.GetActiveWindow(), "Stage 30");
+            StatsWin_Tests(GetActiveForm("StatisticsWin"), "Stage 30");
 
 
             // Stage 31: call to SlideshowWin (required the base)
             ClickToolStripMenuItem("miSlideshow", fMainWin);
-            SlideshowWin_Tests((Form)AppHost.Instance.GetActiveWindow(), "Stage 31");
+            SlideshowWin_Tests(GetActiveForm("SlideshowWin"), "Stage 31");
 
 
             // Stage 32: call to ScriptEditWin (required the base)
@@ -200,15 +210,15 @@ namespace GKTests.UITests
 
             // Stage 35: call to MapsViewerWin (required the base)
             ClickToolStripMenuItem("miMap", fMainWin);
-            MapsViewerWin_Tests((Form)AppHost.Instance.GetActiveWindow(), "Stage 35");
+            MapsViewerWin_Tests(GetActiveForm("MapsViewerWin"), "Stage 35");
 
 
             // Stage 36
             ModalFormHandler = MessageBox_OkHandler;
-            ((BaseWin)fCurBase).DuplicateRecord();
+            fCurBase.DuplicateRecord();
 
             // Stage 50: close Base
-            ClickToolStripMenuItem("miFileClose", fMainWin);
+            //ClickToolStripMenuItem("miFileClose", fBaseSDI); // FIXME
 
 
             // Stage 51: call to LanguageSelectDlg
@@ -217,7 +227,7 @@ namespace GKTests.UITests
 
 
             // Stage 52: exit
-            ClickToolStripMenuItem("miExit", fMainWin);
+            //ClickToolStripMenuItem("miExit", fBaseSDI);
 
 
             // Other
@@ -228,11 +238,11 @@ namespace GKTests.UITests
             AppHost.StdDialogs.ShowError("test error msg");
         }
 
-        private void BaseWin_Tests(BaseWin baseWin, string stage)
+        private void BaseWin_Tests(IBaseWindow baseWin, string stage)
         {
             // Stage 5: calls to the different Editors
             for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                Assert.IsNotNull(baseWin.GetHyperViewByType(rt), stage + ".1");
+                Assert.IsNotNull(((BaseWinSDI)baseWin).GetHyperViewByType(rt), stage + ".1");
 
                 baseWin.ShowRecordsTab(rt);
 
@@ -259,12 +269,12 @@ namespace GKTests.UITests
 
             Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
 
-            Assert.IsNotNull(baseWin.Navman, stage + ".3");
+            Assert.IsNotNull(((BaseWinSDI)baseWin).Navman, stage + ".3");
 
             baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
 
-            GEDCOMRecord record = baseWin.GetSelectedRecordEx();
+            GEDCOMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
             Assert.IsNotNull(record, stage + ".4");
 
             StringList recordContent = baseWin.GetRecordContent(record);
@@ -312,6 +322,7 @@ namespace GKTests.UITests
 
             AppHost.Instance.AddMRU("test.ged");
 
+            fMainWin.Activate();
             Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName(), "check AppHost.Instance.GetCurrentFileName()");
 
             //
@@ -347,13 +358,6 @@ namespace GKTests.UITests
 
             ClickToolStripButton("tbNext", fMainWin);
             ClickToolStripButton("tbPrev", fMainWin);
-
-            ClickToolStripMenuItem("miWinArrange", fMainWin);
-            ClickToolStripMenuItem("miWinCascade", fMainWin);
-            ClickToolStripMenuItem("miWinHTile", fMainWin);
-            ClickToolStripMenuItem("miWinMinimize", fMainWin);
-            ClickToolStripMenuItem("miWinVTile", fMainWin);
-            ClickToolStripMenuItem("miWinArrange", fMainWin);
         }
 
         private void QuickSearch_Test()
@@ -1546,6 +1550,7 @@ namespace GKTests.UITests
             ccWin.SetFilter();
 
             frm.Close();
+            frm.Dispose();
         }
 
         private void TreeChartWin_Tests(Form frm, TreeChartKind kind, string stage, string checkXRef)
@@ -1639,6 +1644,7 @@ namespace GKTests.UITests
             }
 
             formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape)); // frm.Close();
+            frm.Dispose();
         }
 
         private void SaveSnapshot_Handler(string name, IntPtr hWnd, Form form)

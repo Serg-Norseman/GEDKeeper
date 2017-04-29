@@ -595,7 +595,7 @@ Marcatori del DNA
 L’età media dei genitori al momento in cui è nato il primo figlio, riferita all’età dei genitori
 L’età media dei genitori al momento in cui è nato il primo figlio, in riferita all’età del figlio
 Scheda di famiglia vuota
-Salvataggio di ogni revisione di file
+salvataggio di ogni revisione di file
 Caricamento
 Errore di salvataggio del file "{0}"{1}.
 Sfondo…
@@ -727,7 +727,7 @@ Domani è il compleanno di {0}
 Gruppo sanguigno
 Colore dei capelli
 Colore degli occhi
-MtDNA haplogroup
+mtDNA haplogroup
 Y-ADN haplogroup
 La scheda è bloccata dall’editor
 Cognome da nubile
@@ -736,8 +736,8 @@ Altri nomi
 I nomi per esteso delle donne
 Formato "nubile (sposata)"
 Formato "sposata (nubile)"
-Formato: "nubile"
-Formato: "sposata"
+Formato "nubile"
+Formato "sposata"
 H
 W
 Geocoder

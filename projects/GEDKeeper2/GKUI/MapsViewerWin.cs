@@ -208,8 +208,9 @@ namespace GKUI
 
         public void ProcessMap()
         {
-            Show();
+            AppHost.Instance.ShowWindow(this);
             PlacesLoad();
+            Activate();
         }
 
         public MapsViewerWin(IBaseWindow baseWin)
