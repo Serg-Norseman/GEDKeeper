@@ -39,10 +39,15 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             fDialog = new AboutDlg();
             fDialog.Show();
+        }
+
+        public override void TearDown()
+        {
+            fDialog.Dispose();
         }
 
         [Test]

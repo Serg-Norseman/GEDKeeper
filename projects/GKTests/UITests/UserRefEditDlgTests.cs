@@ -32,7 +32,7 @@ using NUnit.Framework;
 namespace GKTests.UITests
 {
     /// <summary>
-    /// Isolated test of dialogue (UserRefEditDlg), without the ability 
+    /// Isolated test of dialogue (UserRefEditDlg), without the ability
     /// to add or change references to other records.
     /// </summary>
     [TestFixture]
@@ -53,6 +53,11 @@ namespace GKTests.UITests
             fDialog.InitDialog(fBase);
             fDialog.UserRef = fUserRef;
             fDialog.Show();
+        }
+
+        public override void TearDown()
+        {
+            fDialog.Dispose();
         }
 
         [Test]

@@ -25,9 +25,17 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
+    public class ToolStripMenuItemEx : ToolStripMenuItem, IMenuItem
+    {
+        public ToolStripMenuItemEx(string text) : base(text)
+        {
+        }
+    }
+
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>

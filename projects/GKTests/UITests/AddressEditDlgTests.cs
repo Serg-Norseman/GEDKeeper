@@ -49,7 +49,7 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");

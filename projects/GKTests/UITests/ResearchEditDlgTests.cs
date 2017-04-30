@@ -31,7 +31,7 @@ using NUnit.Framework;
 namespace GKTests.UITests
 {
     /// <summary>
-    /// Isolated test of dialogue (ResearchEditDlg), without the ability 
+    /// Isolated test of dialogue (ResearchEditDlg), without the ability
     /// to add or change references to other records.
     /// </summary>
     [TestFixture]
@@ -52,6 +52,11 @@ namespace GKTests.UITests
             fDialog.InitDialog(fBase);
             fDialog.Research = fResearchRecord;
             fDialog.Show();
+        }
+
+        public override void TearDown()
+        {
+            fDialog.Dispose();
         }
 
         [Test]

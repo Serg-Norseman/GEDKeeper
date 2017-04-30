@@ -52,6 +52,11 @@ namespace GKTests.UITests
             fDialog.Show();
         }
 
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
         [Test]
         public void Test_Common()
         {
@@ -65,6 +70,8 @@ namespace GKTests.UITests
                     //ClickToolStripButton("tbExcelExport", fDialog);
                 }
             }
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
         }
 
         private void GenerateExcel_Handler(string name, IntPtr hWnd, Form form)

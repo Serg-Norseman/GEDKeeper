@@ -85,7 +85,7 @@ namespace GKCore
         private static void WorkerMethod()
         {
             try {
-                Version curVersion = AppHost.Utilities.GetAppVersion();
+                Version curVersion = AppHost.Instance.GetAppVersion();
 
                 string url;
                 Version newVersion = GetLastVersion(out url);

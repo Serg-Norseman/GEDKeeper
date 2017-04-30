@@ -48,6 +48,7 @@ namespace GKUI
         {
             InitializeComponent();
 
+            Icon = GKResources.GK2_Icon;
             tbFileNew.Image = GKResources.iCreateNew;
             tbFileLoad.Image = GKResources.iLoad;
             tbFileSave.Image = GKResources.iSave;

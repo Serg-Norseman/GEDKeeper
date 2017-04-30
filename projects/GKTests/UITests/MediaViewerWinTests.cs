@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System.Drawing;
+using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -58,6 +59,11 @@ namespace GKTests.UITests
             fDialog.Show();
         }
 
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
         [Test]
         public void Test_Common()
         {
@@ -74,6 +80,8 @@ namespace GKTests.UITests
             ClickToolStripButton("btnZoomIn", fDialog);
             ClickToolStripButton("btnZoomOut", fDialog);
             ClickToolStripButton("btnSizeToFit", fDialog);
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
         }
     }
 }

@@ -108,6 +108,7 @@ namespace GKUI
         {
             InitializeComponent();
 
+            Icon = GKResources.GK2_Icon;
             tbFileNew.Image = GKResources.iCreateNew;
             tbFileLoad.Image = GKResources.iLoad;
             tbFileSave.Image = GKResources.iSave;
@@ -1045,14 +1046,13 @@ namespace GKUI
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            if (record == null) return;
+            GKRecordsView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
-            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
-            if (rView == null) return;
-
-            ShowRecordsTab(record.RecordType);
-            ActiveControl = rView;
-            rView.SelectItemByRec(record);
+            if (rView != null) {
+                ShowRecordsTab(record.RecordType);
+                ActiveControl = rView;
+                rView.SelectItemByRec(record);
+            }
         }
 
         public void ShowRecordInfo(GEDCOMRecord record)

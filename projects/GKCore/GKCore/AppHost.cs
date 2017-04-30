@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Timers;
 
 using GKCommon;
@@ -92,8 +93,6 @@ namespace GKCore
         protected AppHost()
         {
             fInstance = this;
-
-            InitHost();
 
             fAutosaveTimer = new Timer();
             fAutosaveTimer.Stop();
@@ -212,6 +211,27 @@ namespace GKCore
         protected abstract void UpdateMRU();
 
         public abstract void SaveLastBases();
+
+        public abstract int GetKeyLayout();
+
+        public abstract void SetKeyLayout(int layout);
+
+        #region Executing environment
+
+        public abstract Assembly GetExecutingAssembly();
+
+        public Version GetAppVersion()
+        {
+            return GetExecutingAssembly().GetName().Version;
+        }
+
+        public string GetAppCopyright()
+        {
+            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetExecutingAssembly());
+            return (attr == null) ? string.Empty : attr.Copyright;
+        }
+
+        #endregion
 
         #region IHost implementation
 
@@ -661,7 +681,6 @@ namespace GKCore
         private static IStdDialogs fStdDialogs;
         private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
-        private static IUtilities fUtilities;
         private static IProgressController fProgressController;
         private static PluginsMan fPlugins;
         private static GlobalOptions fOptions;
@@ -732,23 +751,13 @@ namespace GKCore
             }
         }
 
-        public static IUtilities Utilities
-        {
-            get {
-                if (fUtilities == null) {
-                    fUtilities = fIocContainer.Resolve<IUtilities>();
-                }
-                return fUtilities;
-            }
-        }
-
 
         static AppHost()
         {
             fIocContainer = new IocContainer();
         }
 
-        public static void InitHost()
+        public static void InitSettings()
         {
             Logger.LogInit(GKUtils.GetLogFilename());
 
@@ -763,7 +772,7 @@ namespace GKCore
             Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
         }
 
-        public static void DoneHost()
+        public static void DoneSettings()
         {
             Plugins.Unload();
 

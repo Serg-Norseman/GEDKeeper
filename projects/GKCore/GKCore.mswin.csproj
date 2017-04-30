@@ -198,8 +198,7 @@
     <Compile Include="GKCore\Charts\TreeChartModel.cs" />
     <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
     <Compile Include="GKCore\Charts\ChartRenderer.cs" />
-    <Compile Include="GKCore\UIContracts\ControlContracts.cs" />
-    <Compile Include="GKCore\UIContracts\DialogContracts.cs" />
+    <Compile Include="GKCore\UIContracts\UIContracts.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

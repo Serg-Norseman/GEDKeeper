@@ -56,7 +56,7 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container, true);
+            WinFormsAppHost.ConfigureBootstrap(true);
 
             var appHost = new WinFormsAppHost();
             appHost.Init(null, true);

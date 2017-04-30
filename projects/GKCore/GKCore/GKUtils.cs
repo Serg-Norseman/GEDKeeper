@@ -1402,7 +1402,7 @@ namespace GKCore
 
         public static string GetAppPath()
         {
-            Module[] mods = AppHost.Utilities.GetExecutingAssembly().GetModules();
+            Module[] mods = AppHost.Instance.GetExecutingAssembly().GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
         }

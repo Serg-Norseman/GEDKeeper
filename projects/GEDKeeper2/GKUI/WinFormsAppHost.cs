@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Globalization;
+using System.Reflection;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -34,13 +36,6 @@ using GKUI.Dialogs;
 
 namespace GKUI
 {
-    public class ToolStripMenuItemEx : ToolStripMenuItem, IMenuItem
-    {
-        public ToolStripMenuItemEx(string text) : base(text)
-        {
-        }
-    }
-
     public sealed class WinFormsAppHost : AppHost
     {
         private readonly ApplicationContext fAppContext;
@@ -153,6 +148,8 @@ namespace GKUI
         protected override void UpdateLang()
         {
             if (fIsMDI && fMainWindow != null) {
+                fMainWindow.SetLang();
+
                 var mdiForm = fMainWindow as Form;
                 foreach (Form child in mdiForm.MdiChildren) {
                     ILocalization localChild = (child as ILocalization);
@@ -161,8 +158,6 @@ namespace GKUI
                         localChild.SetLang();
                     }
                 }
-
-                fMainWindow.SetLang();
             } else {
                 foreach (IWindow win in fRunningForms) {
                     win.SetLang();
@@ -232,9 +227,9 @@ namespace GKUI
             if (fIsMDI && fMainWindow != null) {
                 var mdiForm = fMainWindow as Form;
                 for (int i = mdiForm.MdiChildren.Length - 1; i >= 0; i--) {
-                    Form mdiChild = mdiForm.MdiChildren[i];
-                    if (mdiChild is IBaseWindow) {
-                        AppHost.Options.AddLastBase((mdiChild as IBaseWindow).Context.FileName);
+                    var baseWin = mdiForm.MdiChildren[i] as IBaseWindow;
+                    if (baseWin != null) {
+                        AppHost.Options.AddLastBase(baseWin.Context.FileName);
                     }
                 }
             } else {
@@ -245,22 +240,58 @@ namespace GKUI
                 }
             }
         }
-    }
 
-    /// <summary>
-    /// This class implements initialization of IoC-container for WinForms presentation.
-    /// </summary>
-    public static class WinFormsBootstrapper
-    {
-        public static void Configure(IContainer container, bool mdi)
+        #region KeyLayout functions
+
+        public override int GetKeyLayout()
         {
+            #if __MonoCS__
+            // There is a bug in Mono: does not work this CurrentInputLanguage
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+            #else
+            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+            return currentLang.Culture.KeyboardLayoutId;
+            #endif
+        }
+
+        public override void SetKeyLayout(int layout)
+        {
+            try {
+                CultureInfo cultureInfo = new CultureInfo(layout);
+                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
+                InputLanguage.CurrentInputLanguage = currentLang;
+            } catch (Exception ex) {
+                Logger.LogWrite("Utilities.SetKeyLayout(): " + ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Executing environment
+
+        public override Assembly GetExecutingAssembly()
+        {
+            return Assembly.GetExecutingAssembly();
+        }
+
+        #endregion
+
+        #region Bootstrapper
+
+        /// <summary>
+        /// This function implements initialization of IoC-container for WinForms presentation.
+        /// </summary>
+        public static void ConfigureBootstrap(bool mdi)
+        {
+            var appHost = new WinFormsAppHost();
+            IContainer container = AppHost.Container;
+
             if (container == null)
                 throw new ArgumentNullException("container");
 
-            AppHost.Container.Reset();
+            container.Reset();
 
             container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
-            container.Register<IUtilities, Utilities>(LifeCycle.Singleton);
             //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 
@@ -303,5 +334,7 @@ namespace GKUI
                 container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
             }
         }
+
+        #endregion
     }
 }

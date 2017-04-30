@@ -41,8 +41,8 @@ namespace GKUI.Dialogs
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
 
             lblProduct.Text = GKData.APP_TITLE;
-            lblVersion.Text = @"Version " + AppHost.Utilities.GetAppVersion();
-            lblCopyright.Text = AppHost.Utilities.GetAppCopyright();
+            lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
+            lblCopyright.Text = AppHost.Instance.GetAppCopyright();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

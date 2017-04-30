@@ -56,7 +56,7 @@ namespace GKTests.UITests
         {
             base.Setup();
 
-            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             var appHost = new WinFormsAppHost();
             appHost.Init(null, false);
@@ -66,12 +66,6 @@ namespace GKTests.UITests
                 var colProps = indiCols[i];
                 colProps.CurActive = true;
             }
-        }
-
-        [STAThread, Test]
-        public void Test_About()
-        {
-            
         }
 
         [STAThread, Test]
@@ -217,8 +211,26 @@ namespace GKTests.UITests
             ModalFormHandler = MessageBox_OkHandler;
             fCurBase.DuplicateRecord();
 
+
+            // Stage 47: close Base
+            ModalFormHandler = MessageBox_CancelHandler;
+            ClickToolStripMenuItem("miFileLoad", fMainWin);
+
+
+            // Stage 48: close Base
+            ModalFormHandler = MessageBox_CancelHandler;
+            ClickToolStripMenuItem("miFileSaveAs", fMainWin);
+
+
+            // Stage 49: close Base
+            ModalFormHandler = MessageBox_CancelHandler;
+            ClickToolStripMenuItem("miFileSave", fMainWin);
+
+
             // Stage 50: close Base
-            //ClickToolStripMenuItem("miFileClose", fBaseSDI); // FIXME
+            Assert.IsTrue(fCurBase.Modified);
+            ModalFormHandler = MessageBox_CancelHandler;
+            ClickToolStripMenuItem("miFileClose", fMainWin);
 
 
             // Stage 51: call to LanguageSelectDlg
@@ -688,9 +700,8 @@ namespace GKTests.UITests
             ClickToolStripButton("tbSaveScript", form);
 
             ModalFormHandler = MessageBox_NoHandler;
-            var formTester = new FormTester(form.Name);
-            formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
-            //form.Close();
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
         }
 
         private void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
@@ -791,8 +802,8 @@ namespace GKTests.UITests
 
         private void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
         {
-            var formTester = new FormTester(form.Name);
-            formTester.FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
         }
 
         #endregion
@@ -1549,7 +1560,7 @@ namespace GKTests.UITests
             ccWin.SelectByRec(null);
             ccWin.SetFilter();
 
-            frm.Close();
+            KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();
         }
 
@@ -1643,7 +1654,7 @@ namespace GKTests.UITests
                 // No Fail, or Ignore, or etc - not yet divide this test into smaller correct parts
             }
 
-            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape)); // frm.Close();
+            KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();
         }
 
@@ -1680,7 +1691,8 @@ namespace GKTests.UITests
             ModalFormHandler = SaveFile_Cancel_Handler;
             ClickToolStripButton("tbExcelExport", frm);
 
-            frm.Close();
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
         }
 
         private void SlideshowWin_Tests(Form frm, string stage)
@@ -1712,7 +1724,8 @@ namespace GKTests.UITests
             ClickToolStripButton("tbNext", frm);
             ClickToolStripButton("tbPrev", frm);
 
-            frm.Close();
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
         }
 
         private void SaveFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
@@ -1730,9 +1743,8 @@ namespace GKTests.UITests
             ModalFormHandler = SaveFile_Cancel_Handler;
             ClickButton("btnSaveImage", frm);
 
-            var formTester = new FormTester(frm.Name);
-            formTester[0].FireEvent("KeyDown", new KeyEventArgs(Keys.Escape));
-            //frm.Close();
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
         }
     }
 }

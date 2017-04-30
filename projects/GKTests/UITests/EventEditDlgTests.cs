@@ -51,6 +51,11 @@ namespace GKTests.UITests
             fDialog.Event = fEvent;
         }
 
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
         [STAThread]
         [Test]
         public void Test_Date1()

@@ -36,7 +36,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <StartupObject>GKUI.ProgramMDI</StartupObject>
+    <StartupObject>GKUI.GKProgram</StartupObject>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
@@ -101,6 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKProgram.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -151,7 +152,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\Utilities.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
@@ -423,7 +423,7 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\WinFormsBootstrapper.cs">
+    <Compile Include="GKUI\WinFormsAppHost.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MDI\BaseWin.cs">
@@ -432,7 +432,6 @@
     <Compile Include="MDI\BaseWin.Designer.cs">
       <DependentUpon>BaseWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="MDI\ProgramMDI.cs" />
     <Compile Include="MDI\MainWin.cs">
       <SubType>Form</SubType>
     </Compile>

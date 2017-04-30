@@ -53,7 +53,7 @@ namespace GKUI
     /// <summary>
     /// The main startup class of application.
     /// </summary>
-    public static class ProgramMDI
+    public static class GKProgram
     {
         private static void LogSysInfo()
         {
@@ -87,18 +87,19 @@ namespace GKUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             #if SDI_TEST
-            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            WinFormsAppHost.ConfigureBootstrap(false);
             #else
-            WinFormsBootstrapper.Configure(AppHost.Container, true);
+            WinFormsAppHost.ConfigureBootstrap(true);
             #endif
-
-            var appHost = new WinFormsAppHost();
 
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
                 if (tracker.IsFirstInstance) {
+                    AppHost.InitSettings();
                     try
                     {
+                        var appHost = (WinFormsAppHost)AppHost.Instance;
+
                         #if SDI_TEST
                         appHost.Init(args, false);
                         #else
@@ -107,7 +108,7 @@ namespace GKUI
 
                         Application.Run(appHost.AppContext);
                     } finally {
-                        AppHost.DoneHost();
+                        AppHost.DoneSettings();
                     }
                 } else {
                     tracker.SendMessageToFirstInstance(args);

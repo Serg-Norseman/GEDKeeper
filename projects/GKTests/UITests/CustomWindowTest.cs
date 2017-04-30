@@ -67,6 +67,13 @@ namespace GKTests.UITests
             radBtn.Click();
         }
 
+
+        public static void KeyDownForm(string formName, Keys keyData)
+        {
+            var formTester = new FormTester(formName);
+            formTester.FireEvent("KeyDown", new KeyEventArgs(keyData));
+        }
+
         public static void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
         {
             MessageBoxTester messageBox = new MessageBoxTester(ptr);
@@ -83,6 +90,12 @@ namespace GKTests.UITests
         {
             MessageBoxTester messageBox = new MessageBoxTester(ptr);
             messageBox.SendCommand(MessageBoxTester.Command.OK);
+        }
+
+        public static void MessageBox_CancelHandler(string name, IntPtr ptr, Form form)
+        {
+            MessageBoxTester messageBox = new MessageBoxTester(ptr);
+            messageBox.SendCommand(MessageBoxTester.Command.Cancel);
         }
 
         public static void PrepareFileSave(string fileName, IntPtr hWnd)

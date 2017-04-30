@@ -52,7 +52,7 @@ namespace GKTests.GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WinFormsBootstrapper.Configure(AppHost.Container, false);
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             LangMan.DefInit();
 

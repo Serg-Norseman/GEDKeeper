@@ -41,6 +41,11 @@ namespace GKTests.UITests
             fDialog.Show();
         }
 
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
         [Test]
         public void Test_Common()
         {

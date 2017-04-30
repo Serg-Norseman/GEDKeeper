@@ -23,11 +23,53 @@ using System.Drawing;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKCore.UIContracts
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IMapBrowser
+    {
+        bool ShowPoints { get; set; }
+        bool ShowLines { get; set; }
+        ExtList<GeoPoint> MapPoints { get; }
+
+        int AddPoint(double latitude, double longitude, string hint);
+        void ClearPoints();
+        void DeletePoint(int index);
+        void BeginUpdate();
+        void EndUpdate();
+        void InitMap();
+        void RefreshPoints();
+        void SaveSnapshot(string fileName);
+        void SetCenter(double latitude, double longitude, int scale);
+        void ZoomToBounds();
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IMenuItem
+    {
+        bool Checked { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ITextControl
+    {
+        void AppendText(string text);
+        void Clear();
+    }
+
+
     /// <summary>
     /// The interface of the class for working with WinForms dialogs.
     /// </summary>
