@@ -24,6 +24,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "Ukrainian"
 !insertmacro MUI_LANGUAGE "Polish"
 !insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "Italian"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -43,30 +44,35 @@ LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
 LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
 LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
 LangString gkreq ${LANG_FRENCH} "GEDKeeper2 (obligatoire)"
+LangString gkreq ${LANG_ITALIAN} "GEDKeeper2 (necessario)"
 
 LangString gkscr ${LANG_ENGLISH} "Script samples"
 LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
 LangString gkscr ${LANG_UKRAINIAN} "Приклади скриптів"
 LangString gkscr ${LANG_POLISH} "Przykłady skryptów"
 LangString gkscr ${LANG_FRENCH} "Échantillons de script"
+LangString gkscr ${LANG_ITALIAN} "Esempi di script"
 
 LangString gkreg ${LANG_ENGLISH} "System registration"
 LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
 LangString gkreg ${LANG_UKRAINIAN} "Реєстрація в системі"
 LangString gkreg ${LANG_POLISH} "Rejestracja w systemie"
 LangString gkreg ${LANG_FRENCH} "Enregistrement du système"
+LangString gkreg ${LANG_ITALIAN} "Registrazione del sistema"
 
 LangString gklang ${LANG_ENGLISH} "Languages"
 LangString gklang ${LANG_RUSSIAN} "Языки"
 LangString gklang ${LANG_UKRAINIAN} "Мови"
 LangString gklang ${LANG_POLISH} "Języki"
 LangString gklang ${LANG_FRENCH} "Langues"
+LangString gklang ${LANG_ITALIAN} "Le lingue"
 
 LangString gkplg ${LANG_ENGLISH} "Plugins"
 LangString gkplg ${LANG_RUSSIAN} "Плагины"
 LangString gkplg ${LANG_UKRAINIAN} "Плагіни"
 LangString gkplg ${LANG_POLISH} "Wtyczki"
 LangString gkplg ${LANG_FRENCH} "Plugins"
+LangString gkplg ${LANG_ITALIAN} "Plugins"
 
 
 LangString gkp_calc ${LANG_ENGLISH} "Expression calculator"
@@ -74,60 +80,77 @@ LangString gkp_calc ${LANG_RUSSIAN} "Калькулятор выражений"
 LangString gkp_calc ${LANG_UKRAINIAN} "Калькулятор"
 LangString gkp_calc ${LANG_POLISH} "Kalkulator"
 LangString gkp_calc ${LANG_FRENCH} "Calculateur d'expression"
+LangString gkp_calc ${LANG_ITALIAN} "Calcolatrice di espressione"
 
 LangString gkp_calendar ${LANG_ENGLISH} "Calendar"
 LangString gkp_calendar ${LANG_RUSSIAN} "Календарь"
 LangString gkp_calendar ${LANG_UKRAINIAN} "Календар"
 LangString gkp_calendar ${LANG_POLISH} "Kalendarz"
 LangString gkp_calendar ${LANG_FRENCH} "Calendrier"
+LangString gkp_calendar ${LANG_ITALIAN} "Calendario"
 
 LangString gkp_nb ${LANG_ENGLISH} "Names book"
 LangString gkp_nb ${LANG_RUSSIAN} "Справочник имен"
 LangString gkp_nb ${LANG_UKRAINIAN} "Довідник імен"
 LangString gkp_nb ${LANG_POLISH} "Kieszonkowy nazw"
 LangString gkp_nb ${LANG_FRENCH} "Livre des noms"
+LangString gkp_nb ${LANG_ITALIAN} "Libro di nomi"
 
 LangString gkp_timeline ${LANG_ENGLISH} "Time line"
 LangString gkp_timeline ${LANG_RUSSIAN} "Линия времени"
 LangString gkp_timeline ${LANG_UKRAINIAN} "Линія часу"
 LangString gkp_timeline ${LANG_POLISH} "Linia czasu"
 LangString gkp_timeline ${LANG_FRENCH} "Chronologie"
+LangString gkp_timeline ${LANG_ITALIAN} "Sequenza temporale"
 
 LangString gkp_flowinput ${LANG_ENGLISH} "Flow input"
 LangString gkp_flowinput ${LANG_RUSSIAN} "Поточный ввод"
 LangString gkp_flowinput ${LANG_UKRAINIAN} "Поточне введення"
 LangString gkp_flowinput ${LANG_POLISH} "Źródło wejścia"
 LangString gkp_flowinput ${LANG_FRENCH} "Flux d'entrée"
+LangString gkp_flowinput ${LANG_ITALIAN} "Ingresso flusso"
 
 LangString gkp_pi ${LANG_ENGLISH} "Pedigrees importer"
 LangString gkp_pi ${LANG_RUSSIAN} "Импорт росписей"
 LangString gkp_pi ${LANG_UKRAINIAN} "Імпорт розписів"
 LangString gkp_pi ${LANG_POLISH} "Importuj rodowód"
 LangString gkp_pi ${LANG_FRENCH} "Pedigrees importateur"
+LangString gkp_pi ${LANG_ITALIAN} "Pedigrees importer"
 
 LangString gkp_ts ${LANG_ENGLISH} "Text search"
 LangString gkp_ts ${LANG_RUSSIAN} "Полнотекстовый поиск"
 LangString gkp_ts ${LANG_UKRAINIAN} "Повнотекстовий пошук"
 LangString gkp_ts ${LANG_POLISH} "Wyszukiwanie pełnotekstowe"
 LangString gkp_ts ${LANG_FRENCH} "Recherche de texte"
+LangString gkp_ts ${LANG_ITALIAN} "Ricerca testo"
 
 LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
 LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
 LangString gkp_tv ${LANG_UKRAINIAN} "3D візуалізатор"
 LangString gkp_tv ${LANG_POLISH} "Wizualizacja 3D"
 LangString gkp_tv ${LANG_FRENCH} "3D TreeViz"
+LangString gkp_tv ${LANG_ITALIAN} "3D TreeViz"
 
 LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
 LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
 LangString gkp_iv ${LANG_UKRAINIAN} "Перегляд зображень"
 LangString gkp_iv ${LANG_POLISH} "Podgląd zdjęcia"
 LangString gkp_iv ${LANG_FRENCH} "Visionneuse d'images"
+LangString gkp_iv ${LANG_ITALIAN} "Visualizzatore di immagini"
 
 LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
 LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
 LangString gkp_cl ${LANG_UKRAINIAN} "Гра 'Життя Конвея'"
 LangString gkp_cl ${LANG_POLISH} "Gra w życie"
 LangString gkp_cl ${LANG_FRENCH} "Jeu de la vie"
+LangString gkp_cl ${LANG_ITALIAN} "Conway Life"
+
+LangString gkp_chron ${LANG_ENGLISH} "Chronicle"
+LangString gkp_chron ${LANG_RUSSIAN} "Хроника"
+LangString gkp_chron ${LANG_UKRAINIAN} "Хроніка"
+LangString gkp_chron ${LANG_POLISH} "Kronika"
+LangString gkp_chron ${LANG_FRENCH} "Chronique"
+LangString gkp_chron ${LANG_ITALIAN} "Cronaca"
 
 
 function .onInit
@@ -144,7 +167,8 @@ Section "$(gkreq)"
 
   File "..\GEDKeeper2.exe"
   File "..\GKCommon.dll"
-  File "..\GKMediaPlayer.dll"
+  File "..\GKComponents.dll"
+  File "..\GKCore.dll"
 
   File "..\LinqBridge.dll"
   File "..\NLog.dll"
@@ -256,6 +280,11 @@ SectionGroup /e "$(gklang)"
 		SetOutPath "$INSTDIR\locales"
 		File "..\locales\french.lng"
 	SectionEnd
+
+	Section "Italiano"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\italian.lng"
+	SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"
@@ -355,6 +384,15 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKLifePlugin.ukr"
 		File "..\plugins\GKLifePlugin.pol"
 	SectionEnd
+
+	Section "$(gkp_chron)"
+  		SetOutPath "$INSTDIR\plugins"
+		File "..\plugins\GKChroniclePlugin.dll"
+  		File "..\plugins\GKChroniclePlugin.rus"
+  		File "..\plugins\GKChroniclePlugin.enu"
+  		File "..\plugins\GKChroniclePlugin.ukr"
+		File "..\plugins\GKChroniclePlugin.pol"
+	SectionEnd
 SectionGroupEnd
 
 Section "Uninstall"
@@ -369,6 +407,8 @@ Section "Uninstall"
   ; Remove files and uninstaller
   Delete $INSTDIR\GEDKeeper2.exe
   Delete $INSTDIR\GKCommon.dll
+  Delete $INSTDIR\GKComponents.dll
+  Delete $INSTDIR\GKCore.dll
 
   Delete $INSTDIR\ArborGVT.dll
   Delete $INSTDIR\DotNetRtfWriter.dll

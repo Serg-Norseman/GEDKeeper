@@ -13,6 +13,8 @@ echo Processing portable installation start
 
 echo "..\GEDKeeper2.exe" > %lstfile%
 echo "..\GKCommon.dll" >> %lstfile%
+echo "..\GKComponents.dll" >> %lstfile%
+echo "..\GKCore.dll" >> %lstfile%
 
 echo "..\ArborGVT.dll" >> %lstfile%
 echo "..\DotNetRtfWriter.dll" >> %lstfile%

@@ -30,7 +30,7 @@ cp $DEV_PATH/deploy/application-x-gedkeeper.xml ~/$PACK_PATH/usr/share/mime/pack
 cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
 cp $DEV_PATH/GKCore.dll ~/$LIB_PATH
 cp $DEV_PATH/GKCommon.dll ~/$LIB_PATH
-cp $DEV_PATH/GKMediaPlayer.dll ~/$LIB_PATH
+cp $DEV_PATH/GKComponents.dll ~/$LIB_PATH
 
 cp $DEV_PATH/LinqBridge.dll ~/$LIB_PATH
 cp $DEV_PATH/NLog.dll ~/$LIB_PATH
@@ -54,7 +54,7 @@ cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 
 chmod -x $LIB_PATH/GKCore.dll
 chmod -x $LIB_PATH/GKCommon.dll
-chmod -x $LIB_PATH/GKMediaPlayer.dll
+chmod -x $LIB_PATH/GKComponents.dll
 
 chmod -x $LIB_PATH/LinqBridge.dll
 chmod -x $LIB_PATH/NLog.dll

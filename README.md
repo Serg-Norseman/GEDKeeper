@@ -34,6 +34,8 @@ or from the homepage site on [GitHub.io](https://gedkeeper.github.io/).
 Alternatively why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
 site (this is the most popular).
 
+Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
+
 
 ## Russian
 Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
@@ -54,6 +56,8 @@ Google Maps (© Google).
 или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
 Альтернативно можно пробовать загрузить на сайте 
 [Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
+
+Основной сайт проекта: [http://ru.gedkeeper.net/](http://ru.gedkeeper.net/)
 
 
 ## Docs & Help
