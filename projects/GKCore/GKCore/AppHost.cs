@@ -135,10 +135,37 @@ namespace GKCore
             if (fIsMDI) {
                 fMainWindow = fIocContainer.Resolve<IMainWindow>();
             } else {
-                CreateBase("");
+                StartupWork();
             }
 
             //LangMan.SaveDefaultLanguage();
+        }
+
+        public void StartupWork()
+        {
+            try
+            {
+                ApplyOptions();
+
+                try
+                {
+                    BeginLoading();
+
+                    int result = LoadArgs();
+                    result += ReloadRecentBases();
+                    if (!fIsMDI && result == 0) {
+                        CreateBase("");
+                    }
+
+                    ProcessHolidays();
+                } finally {
+                    EndLoading();
+                }
+
+                UpdateMan.CheckUpdate();
+            } catch (Exception ex) {
+                Logger.LogWrite("AppHost.StartupWork(): " + ex.Message);
+            }
         }
 
         public void SetArgs(string[] args)
@@ -476,19 +503,23 @@ namespace GKCore
             }
         }
 
-        public void LoadArgs()
+        public int LoadArgs()
         {
+            int result = 0;
             if (fCommandArgs != null && fCommandArgs.Length > 0) {
                 AppHost.Instance.CreateBase(fCommandArgs[0]);
+                result += 1;
             }
+            return result;
         }
 
         /// <summary>
         /// Reload at startup recent opened files.
         /// </summary>
-        public void ReloadRecentBases()
+        public int ReloadRecentBases()
         {
-            if (!GlobalOptions.Instance.LoadRecentFiles) return;
+            int result = 0;
+            if (!GlobalOptions.Instance.LoadRecentFiles) return result;
 
             try {
                 BeginLoading();
@@ -498,11 +529,14 @@ namespace GKCore
                     string lb = AppHost.Options.GetLastBase(i);
                     if (File.Exists(lb)) {
                         AppHost.Instance.CreateBase(lb);
+                        result += 1;
                     }
                 }
             } finally {
                 EndLoading();
             }
+
+            return result;
         }
 
         public void ProcessHolidays()

@@ -42,8 +42,6 @@ namespace GKUI
     /// </summary>
     public sealed partial class MainWin : Form, IMainWindow
     {
-        private readonly Timer fAutosaveTimer;
-
         public MainWin()
         {
             InitializeComponent();
@@ -66,13 +64,7 @@ namespace GKUI
             tbDocPreview.Image = GKResources.iPreview;
             tbDocPrint.Image = GKResources.iPrint;
 
-            fAutosaveTimer = new Timer(components);
-            fAutosaveTimer.Stop();
-            fAutosaveTimer.Enabled = false;
-            fAutosaveTimer.Interval = 10 * 60 * 1000;
-            fAutosaveTimer.Tick += AutosaveTimer_Tick;
-
-            //LangMan.SaveDefaultLanguage();
+            SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -85,67 +77,20 @@ namespace GKUI
             base.Dispose(disposing);
         }
 
-        private void AutosaveTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                int num = MdiChildren.Length;
-                for (int i = 0; i < num; i++) {
-                    Form child = MdiChildren[i];
-
-                    if (child is IBaseWindow) {
-                        IBaseWindow baseWin = (IBaseWindow) child;
-
-                        // file is modified, isn't updated now, and isn't now created (exists)
-                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.Context.IsUnknown()) {
-                            // TODO: if file is new and not exists - don't save it, but hint to user
-                            baseWin.SaveFile(baseWin.Context.FileName);
-                        }
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
-            }
-        }
-
-        private void ApplyOptions()
-        {
-            fAutosaveTimer.Interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
-            fAutosaveTimer.Enabled = AppHost.Options.Autosave;
-        }
-
         private void Form_Show(object sender, EventArgs e)
         {
-            try
-            {
-                try
-                {
-                    AppHost.Instance.BeginLoading();
-
-                    AppHost.Instance.ReloadRecentBases();
-
-                    AppHost.Instance.ProcessHolidays();
-                } finally {
-                    AppHost.Instance.EndLoading();
-                }
-
-                UpdateMan.CheckUpdate();
-            } catch (Exception ex) {
-                Logger.LogWrite("MainWin.Form_Show(): " + ex.Message);
-            }
+            AppHost.Instance.StartupWork();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
             try
             {
-                ApplyOptions();
                 RestoreWindowState();
+
                 UpdatePluginsItems();
-                AppHost.Instance.LoadLanguage(AppHost.Options.InterfaceLang);
                 UpdateMRU();
                 UpdateControls(false);
-                AppHost.Instance.LoadArgs();
             } catch (Exception ex) {
                 Logger.LogWrite("MainWin.Form_Load(): " + ex.Message);
             }
@@ -183,7 +128,6 @@ namespace GKUI
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            // FIXME: implement to SDI!
             AppHost.Instance.SaveLastBases();
         }
 

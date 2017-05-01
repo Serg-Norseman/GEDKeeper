@@ -168,6 +168,11 @@ namespace GKUI
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
+
+            // FIXME
+            /*if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+                AppHost.Instance.WidgetsEnable();
+            }*/
         }
 
         #endregion
@@ -192,9 +197,14 @@ namespace GKUI
 
                 UpdatePluginsItems();
                 UpdateMRU();
+                UpdateControls(false);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
             }
+        }
+
+        private void Form_Show(object sender, EventArgs e)
+        {
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -861,9 +871,9 @@ namespace GKUI
             tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
             tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
 
-            miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+            miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
+            miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+            miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
             miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
         }
 
@@ -1098,52 +1108,6 @@ namespace GKUI
 
         #region From MainWin
 
-        private void Form_Show(object sender, EventArgs e)
-        {
-            try
-            {
-                /*try
-                {
-                    AppHost.Instance.BeginLoading();
-
-                    AppHost.Instance.ReloadRecentBases();
-
-                    AppHost.Instance.ProcessHolidays();
-                } finally {
-                    AppHost.Instance.EndLoading();
-                }
-
-                UpdateMan.CheckUpdate();*/
-            } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Show(): " + ex.Message);
-            }
-        }
-
-        /*private void Form_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                ApplyOptions();
-                UpdatePluginsItems();
-                UpdateMRU();
-                UpdateControls(false);
-                AppHost.Instance.LoadArgs();
-            } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
-            }
-        }
-         */
-
-        /*[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
-                AppHost.Instance.WidgetsEnable();
-            }
-        }*/
-
         // FIXME
         private void tbDocPrint_Click(object sender, EventArgs e)
         {
@@ -1190,7 +1154,7 @@ namespace GKUI
 
                     for (int i = 0; i < a.Length; i++) {
                         string fn = a.GetValue(i).ToString();
-                        AppHost.Instance.CreateBase(fn);
+                        AppHost.Instance.LoadBase(this, fn);
                     }
                 } finally {
                     AppHost.Instance.EndLoading();
@@ -1377,6 +1341,8 @@ namespace GKUI
 
         private void miExit_Click(object sender, EventArgs e)
         {
+            // FIXME: Controversial issue...
+            //AppHost.Instance.SaveLastBases();
             Application.Exit();
         }
 
@@ -1449,6 +1415,7 @@ namespace GKUI
             }
         }
 
+        // FIXME: implement button of options into charts windows
         private void miOptions_Click(object sender, EventArgs e)
         {
             using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
