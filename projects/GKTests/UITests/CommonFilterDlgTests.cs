@@ -45,7 +45,7 @@ namespace GKTests.UITests
 
             fBase = new BaseWindowMock();
             fContext = fBase.Context;
-            fListMan = new IndividualListMan(fContext.Tree);
+            fListMan = new IndividualListMan(fContext);
 
             //ExpectModal("CommonFilterDlg", "DlgHandler");
             fDialog = new CommonFilterDlg(fBase, fListMan);

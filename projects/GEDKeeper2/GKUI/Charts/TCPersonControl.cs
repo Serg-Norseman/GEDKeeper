@@ -23,6 +23,7 @@ using System.Drawing.Drawing2D;
 
 using GKCommon;
 using GKCore.Charts;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {
@@ -74,7 +75,7 @@ namespace GKUI.Charts
 
             Point offsets = fChart.GetOffsets();
             ExtRect rt = fPerson.Rect.GetOffset(offsets.X, offsets.Y);
-            Rectangle rect = rt.ToRectangle();
+            Rectangle rect = UIHelper.Rt2Rt(rt);
 
             rect.X = rect.Right;
             rect.Width = 40;

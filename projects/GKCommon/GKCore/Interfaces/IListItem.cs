@@ -31,5 +31,6 @@ namespace GKCore.Interfaces
         Color BackColor { get; set; }
 
         void AddSubItem(object itemValue);
+        //void SetBackColor(IColor color);
     }
 }

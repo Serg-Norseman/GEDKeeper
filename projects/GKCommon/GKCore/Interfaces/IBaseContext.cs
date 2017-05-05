@@ -49,6 +49,7 @@ namespace GKCore.Interfaces
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, GEDCOMCustomDate evDate, string evPlace);
         GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
         bool DeleteRecord(GEDCOMRecord record);
+        bool IsRecordAccess(GEDCOMRestriction restriction);
 
         // Individual utils
         bool IsChildless(GEDCOMIndividualRecord iRec);

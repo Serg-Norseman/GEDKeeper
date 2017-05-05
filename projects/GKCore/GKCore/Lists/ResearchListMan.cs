@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -62,11 +61,11 @@ namespace GKCore.Lists
     {
         private GEDCOMResearchRecord fRec;
 
-        public ResearchListMan(GEDCOMTree tree) : base(tree, new ResearchListColumns())
+        public ResearchListMan(IBaseContext baseContext) : base(baseContext, new ResearchListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ResearchName, QuickFilter));
 

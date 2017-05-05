@@ -68,12 +68,6 @@ namespace GKTests.GKCommon
             Assert.IsTrue(rt.IsEmpty());
 
             Assert.IsFalse(rt.Contains(5, 5));
-
-            Rectangle rect = rt.ToRectangle();
-            Assert.AreEqual(0, rect.Left);
-            Assert.AreEqual(0, rect.Top);
-            Assert.AreEqual(0, rect.Right);
-            Assert.AreEqual(0, rect.Bottom);
         }
 
         [Test]
@@ -116,12 +110,6 @@ namespace GKTests.GKCommon
             Assert.IsTrue(rt.IsEmpty());
 
             Assert.IsFalse(rt.Contains(5, 5));
-
-            RectangleF rect = rt.ToRectangle();
-            Assert.AreEqual(0, rect.Left);
-            Assert.AreEqual(0, rect.Top);
-            Assert.AreEqual(0, rect.Right);
-            Assert.AreEqual(0, rect.Bottom);
         }
     }
 }

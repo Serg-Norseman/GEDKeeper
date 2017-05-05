@@ -821,8 +821,7 @@ namespace GKTests.UITests
         {
             var listRecords = new GKRecordsViewTester("fListRecords", form);
 
-            Assert.IsFalse(listRecords.Properties.IsMainList);
-            Assert.IsNotNull(listRecords.Properties.Tree);
+            Assert.IsNotNull(listRecords.Properties.BaseContext);
             Assert.AreNotEqual(GEDCOMRecordType.rtNone, listRecords.Properties.RecordType);
 
             listRecords.Properties.SelectItem(fIndex);

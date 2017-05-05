@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -54,13 +53,13 @@ namespace GKCore.Lists
     {
         private GEDCOMFamilyRecord fRec;
 
-        public FamilyListMan(GEDCOMTree tree) : base(tree, new FamilyListColumns())
+        public FamilyListMan(IBaseContext baseContext) : base(baseContext, new FamilyListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
-            bool res = (GKUtils.IsRecordAccess(fRec.Restriction, shieldState)
+            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter)));
 
             res = res && CheckCommonFilter();

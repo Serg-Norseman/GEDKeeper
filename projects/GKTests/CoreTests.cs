@@ -443,28 +443,24 @@ namespace GKTests.GKCore
             
             st = GKUtils.GetAppPath();
             Assert.IsTrue(Directory.Exists(st));
-            
-            // matches tests
-            bool res = GKUtils.MatchesMask("abrakadabra", "*kad*");
-            Assert.IsTrue(res);
-            
-            res = GKUtils.MatchesMask("abrakadabra", "*test*");
-            Assert.IsFalse(res);
 
             GEDCOMListTests(iRec);
-            
+
             // access tests
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.None));
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.None));
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.None));
+            fContext.ShieldState = ShieldState.None;
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
 
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.Middle));
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.Middle));
-            Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.Middle));
+            fContext.ShieldState = ShieldState.Middle;
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
+            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
 
-            Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.Maximum));
-            Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.Maximum));
-            Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.Maximum));
+            fContext.ShieldState = ShieldState.Maximum;
+            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
+            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
+            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
 
             st1 = GKUtils.HyperLink("@X001@", "test", 0);
             Assert.AreEqual("[url=" + "@X001@" + "]" + "test" + "[/url]", st1);
@@ -859,22 +855,22 @@ namespace GKTests.GKCore
             GKListItem listItem;
 
             //
-            listManager = new GroupListMan(fContext.Tree);
+            listManager = new GroupListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
             listManager.Fetch(grpRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*roup*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
 
             //
             IListFilter filter = listManager.Filter;
@@ -887,7 +883,7 @@ namespace GKTests.GKCore
 
             listManager.QuickFilter = "*";
             listManager.AddCondition((byte)GroupColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
         }
 
         [Test]
@@ -899,7 +895,7 @@ namespace GKTests.GKCore
         [Test]
         public void LMCommunication_Tests()
         {
-            var listManager = new CommunicationListMan(fContext.Tree);
+            var listManager = new CommunicationListMan(fContext);
             Assert.IsNotNull(listManager);
 
             listManager.ExternalFilter = null;
@@ -909,127 +905,127 @@ namespace GKTests.GKCore
             listManager.Fetch(commRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*commun*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMFamily_Tests()
         {
-            var listManager = new FamilyListMan(fContext.Tree);
+            var listManager = new FamilyListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
             listManager.Fetch(famRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "* - *";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMIndividual_Tests()
         {
-            var listManager = new IndividualListMan(fContext.Tree);
+            var listManager = new IndividualListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
             listManager.Fetch(indRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*Petr*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             GlobalOptions.Instance.ListHighlightUnparentedPersons = true;
             GlobalOptions.Instance.ListHighlightUnmarriedPersons = true;
-            listManager.InitFilter();
+            listManager.PrepareFilter();
             listManager.ExternalFilter = ExtFilterHandler;
 
             var lvMock = new ListViewMock();
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMLocation_Tests()
         {
-            var listManager = new LocationListMan(fContext.Tree);
+            var listManager = new LocationListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
             listManager.Fetch(locRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*locat*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMMultimedia_Tests()
         {
-            var listManager = new MultimediaListMan(fContext.Tree);
+            var listManager = new MultimediaListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
             listManager.Fetch(mediaRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*media*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMNote_Tests()
         {
-            var listManager = new NoteListMan(fContext.Tree);
+            var listManager = new NoteListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null, "", "");
@@ -1037,106 +1033,106 @@ namespace GKTests.GKCore
             listManager.Fetch(noteRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*text*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
             noteRec.Clear();
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMRepository_Tests()
         {
-            var listManager = new RepositoryListMan(fContext.Tree);
+            var listManager = new RepositoryListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
             listManager.Fetch(repoRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*repos*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMResearch_Tests()
         {
-            var listManager = new ResearchListMan(fContext.Tree);
+            var listManager = new ResearchListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
             listManager.Fetch(resRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*resear*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMSource_Tests()
         {
-            var listManager = new SourceListMan(fContext.Tree);
+            var listManager = new SourceListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
             listManager.Fetch(srcRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*sourc*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
         public void LMTask_Tests()
         {
-            var listManager = new TaskListMan(fContext.Tree);
+            var listManager = new TaskListMan(fContext);
             Assert.IsNotNull(listManager);
 
             GEDCOMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
             listManager.Fetch(tskRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*task*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter = "*xxxx*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+            Assert.IsFalse(listManager.CheckFilter());
 
             var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock, true);
+            listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
+            listManager.UpdateItem(listItem);
         }
 
         [Test]
@@ -1621,9 +1617,9 @@ namespace GKTests.GKCore
             StringList summary = new StringList();
 
             summary.Clear();
-            GKUtils.ShowFamilyInfo(null, null, ShieldState.None);
+            GKUtils.ShowFamilyInfo(fContext, null, null);
             GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
-            GKUtils.ShowFamilyInfo(famRec, summary, ShieldState.None);
+            GKUtils.ShowFamilyInfo(fContext, famRec, summary);
 
             summary.Clear();
             GKUtils.ShowGroupInfo(null, null);
@@ -1641,9 +1637,9 @@ namespace GKTests.GKCore
             GKUtils.ShowNoteInfo(noteRec, summary);
 
             summary.Clear();
-            GKUtils.ShowPersonInfo(null, null, ShieldState.None);
+            GKUtils.ShowPersonInfo(fContext, null, null);
             GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-            GKUtils.ShowPersonInfo(indRec, summary, ShieldState.None);
+            GKUtils.ShowPersonInfo(fContext, indRec, summary);
 
             summary.Clear();
             GKUtils.ShowSourceInfo(null, null);

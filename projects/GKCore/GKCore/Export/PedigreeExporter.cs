@@ -247,7 +247,7 @@ namespace GKCore.Export
                 for (i = 0; i < num2; i++)
                 {
                     GEDCOMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
-                    if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
+                    if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                     GEDCOMPointer sp;
                     string unk;
@@ -323,7 +323,7 @@ namespace GKCore.Export
                 for (int i = 0; i < num2; i++)
                 {
                     GEDCOMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
-                    if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
+                    if (fBase.Context.IsRecordAccess(family.Restriction))
                     {
                         GEDCOMPointer sp;
                         string st;
@@ -613,7 +613,7 @@ namespace GKCore.Export
             if (fKind == PedigreeKind.pkAscend) {
                 if (iRec.ChildToFamilyLinks.Count > 0) {
                     GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
-                    if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
+                    if (fBase.Context.IsRecordAccess(family.Restriction))
                     {
                         GEDCOMIndividualRecord prnt;
 
@@ -629,7 +629,7 @@ namespace GKCore.Export
                 for (int j = 0; j < num2; j++)
                 {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-                    if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
+                    if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                     family.SortChilds();
 

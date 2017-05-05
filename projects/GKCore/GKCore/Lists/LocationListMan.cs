@@ -21,7 +21,6 @@
 using System.Globalization;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -60,11 +59,11 @@ namespace GKCore.Lists
     {
         private GEDCOMLocationRecord fRec;
 
-        public LocationListMan(GEDCOMTree tree) : base(tree, new LocationListColumns())
+        public LocationListMan(IBaseContext baseContext) : base(baseContext, new LocationListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.LocationName, QuickFilter));
 

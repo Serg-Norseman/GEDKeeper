@@ -43,7 +43,7 @@ namespace GKTests.UITests
             base.Setup();
 
             fBase = new BaseWindowMock();
-            fListMan = new IndividualListMan(fBase.Context.Tree);
+            fListMan = new IndividualListMan(fBase.Context);
 
             fDialog = new PersonsFilterDlg(fBase, fListMan);
             fDialog.Show();

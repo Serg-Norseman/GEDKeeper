@@ -194,6 +194,7 @@
     <Compile Include="GKCore\Interfaces\ICommonDialog.cs" />
     <Compile Include="GKCore\Interfaces\ICulture.cs" />
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
+    <Compile Include="GKCore\Interfaces\IGraphics.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="GKCore\Interfaces\INamesTable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
+    <Compile Include="GKCore\Interfaces\IPlatformUtilities.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
     <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />

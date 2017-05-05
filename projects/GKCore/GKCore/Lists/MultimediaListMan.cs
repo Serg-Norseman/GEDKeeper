@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -56,11 +55,11 @@ namespace GKCore.Lists
     {
         private GEDCOMMultimediaRecord fRec;
 
-        public MultimediaListMan(GEDCOMTree tree) : base(tree, new MultimediaListColumns())
+        public MultimediaListMan(IBaseContext baseContext) : base(baseContext, new MultimediaListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
             GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,22 +19,14 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
-    public delegate bool ExternalFilterHandler(GEDCOMRecord record);
-
-    public interface IListManager
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IPlatformUtilities
     {
-        ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
-        IListColumns ListColumns { get; }
-
-        void AddCondition(byte columnId, ConditionKind condition, string value);
-        DataType GetColumnDataType(int index);
-        string GetColumnName(byte columnId);
-        void PrepareFilter();
-        void ChangeColumnWidth(int colIndex, int colWidth);
+        
     }
 }

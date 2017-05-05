@@ -18,23 +18,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GKCommon.GEDCOM;
-
 namespace GKCore.Interfaces
 {
-    public delegate bool ExternalFilterHandler(GEDCOMRecord record);
-
-    public interface IListManager
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IColor
     {
-        ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
-        IListColumns ListColumns { get; }
+    }
 
-        void AddCondition(byte columnId, ConditionKind condition, string value);
-        DataType GetColumnDataType(int index);
-        string GetColumnName(byte columnId);
-        void PrepareFilter();
-        void ChangeColumnWidth(int colIndex, int colWidth);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IImage
+    {
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IFont
+    {
     }
 }

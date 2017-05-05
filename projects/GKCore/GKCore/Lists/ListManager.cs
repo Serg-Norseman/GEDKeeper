@@ -25,8 +25,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
-using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -48,7 +46,7 @@ namespace GKCore.Lists
         }
 
         protected ListFilter fFilter;
-        protected GEDCOMTree fTree;
+        protected IBaseContext fBaseContext;
         protected ExternalFilterHandler fExternalFilter;
 
         private readonly ListColumns fListColumns;
@@ -72,9 +70,9 @@ namespace GKCore.Lists
             get { return fListColumns; }
         }
 
-        protected ListManager(GEDCOMTree tree, ListColumns defaultListColumns)
+        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns)
         {
-            fTree = tree;
+            fBaseContext = baseContext;
             fListColumns = defaultListColumns;
             fColumnsMap = new List<MapColumnRec>();
 
@@ -120,13 +118,13 @@ namespace GKCore.Lists
             int num = masks.Length;
             for (int i = 0; i < num; i++)
             {
-                result = result || GKUtils.MatchesMask(stx, masks[i]);
+                result = result || SysUtils.MatchesMask(stx, masks[i]);
             }
 
             return result;
         }
 
-        public abstract bool CheckFilter(ShieldState shieldState);
+        public abstract bool CheckFilter();
         public abstract void Fetch(GEDCOMRecord aRec);
 
         protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
@@ -168,11 +166,11 @@ namespace GKCore.Lists
             return null;
         }
 
-        public virtual void InitFilter()
+        public virtual void PrepareFilter()
         {
         }
 
-        public virtual void UpdateItem(IListItem item, bool isMain)
+        public virtual void UpdateItem(IListItem item)
         {
             if (item == null) return;
 
@@ -190,7 +188,7 @@ namespace GKCore.Lists
             }
         }
 
-        public virtual void UpdateColumns(IListView listView, bool isMain)
+        public virtual void UpdateColumns(IListView listView)
         {
             if (listView == null) return;
 
@@ -322,11 +320,11 @@ namespace GKCore.Lists
                         break;
 
                     case ConditionKind.ck_Contains:
-                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        res = SysUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
 
                     case ConditionKind.ck_NotContains:
-                        res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        res = !SysUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
             }
@@ -360,7 +358,6 @@ namespace GKCore.Lists
             return res;
         }
 
-        // FIXME
         private ListColumn FindColumnProps(int colType)
         {
             int num = fListColumns.Count;

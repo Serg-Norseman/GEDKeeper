@@ -548,11 +548,10 @@ namespace GKUI
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            recView = UIHelper.CreateRecordsView(sheet, fContext.Tree, recType);
-            recView.IsMainList = true;
+            recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
-            recView.UpdateTitles();
+            recView.UpdateContents(true);
             recView.ContextMenuStrip = contextMenu;
 
             sheet.Controls.SetChildIndex(spl, 1);
@@ -576,7 +575,7 @@ namespace GKUI
         {
             Clear();
             RefreshLists(false);
-            GKUtils.ShowPersonInfo(null, mPersonSummary.Lines, fContext.ShieldState);
+            GKUtils.ShowPersonInfo(fContext, null, mPersonSummary.Lines);
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
             Modified = false;
@@ -611,19 +610,17 @@ namespace GKUI
 
         public void RefreshLists(bool titles)
         {
-            ShieldState shieldState = Context.ShieldState;
-
-            ListPersons.UpdateContents(shieldState, titles, -1/*2*/);
-            ListFamilies.UpdateContents(shieldState, titles, 1);
-            ListNotes.UpdateContents(shieldState, titles, -1);
-            ListMultimedia.UpdateContents(shieldState, titles, 1);
-            ListSources.UpdateContents(shieldState, titles, 1);
-            ListRepositories.UpdateContents(shieldState, titles, 1);
-            ListGroups.UpdateContents(shieldState, titles, 1);
-            ListResearches.UpdateContents(shieldState, titles, 1);
-            ListTasks.UpdateContents(shieldState, titles, 1);
-            ListCommunications.UpdateContents(shieldState, titles, 1);
-            ListLocations.UpdateContents(shieldState, titles, 1);
+            ListPersons.UpdateContents(titles, -1/*2*/);
+            ListFamilies.UpdateContents(titles, 1);
+            ListNotes.UpdateContents(titles, -1);
+            ListMultimedia.UpdateContents(titles, 1);
+            ListSources.UpdateContents(titles, 1);
+            ListRepositories.UpdateContents(titles, 1);
+            ListGroups.UpdateContents(titles, 1);
+            ListResearches.UpdateContents(titles, 1);
+            ListTasks.UpdateContents(titles, 1);
+            ListCommunications.UpdateContents(titles, 1);
+            ListLocations.UpdateContents(titles, 1);
 
             PageRecords_SelectedIndexChanged(null, null);
         }
@@ -632,7 +629,7 @@ namespace GKUI
         {
             GKRecordsView rView = GetRecordsViewByType(recType);
             if (rView != null) {
-                rView.UpdateContents(fContext.ShieldState, false, -1);
+                rView.UpdateContents(false, -1);
                 PageRecords_SelectedIndexChanged(null, null);
             }
         }
@@ -1073,7 +1070,7 @@ namespace GKUI
             {
                 HyperView hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
-                    GKUtils.GetRecordContent(record, fContext.ShieldState, hyperView.Lines);
+                    GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             }
             catch (Exception ex)
@@ -1085,7 +1082,7 @@ namespace GKUI
         public StringList GetRecordContent(GEDCOMRecord record)
         {
             StringList ctx = new StringList();
-            GKUtils.GetRecordContent(record, fContext.ShieldState, ctx);
+            GKUtils.GetRecordContent(fContext, record, ctx);
             return ctx;
         }
 

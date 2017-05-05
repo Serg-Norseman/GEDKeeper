@@ -281,5 +281,15 @@ namespace GKTests.GKCommon
             Assert.IsFalse(SysUtils.IsDigits("f09"), "IsDigits(f09)");
             Assert.IsTrue(SysUtils.IsDigits("99"), "IsDigits(99)");
         }
+
+        [Test]
+        public void Test_Matches()
+        {
+            bool res = SysUtils.MatchesMask("abrakadabra", "*kad*");
+            Assert.IsTrue(res);
+
+            res = SysUtils.MatchesMask("abrakadabra", "*test*");
+            Assert.IsFalse(res);
+        }
     }
 }

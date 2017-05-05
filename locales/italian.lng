@@ -267,9 +267,9 @@ Lingua
 Tutte le liste
 Lista delle persone
 Formato dei nomi
-Patronimico cognome nome
-Patronimico cognome nome
-Patronimico cognome nome
+Cognome_Nome_Patronimico
+Cognome; Nome_Patronimico
+Cognome; Nome; Patronimico
 Formato data nelle liste
 Includere l’indirizzo nella casella del luogo
 Evidenziare le persone senza genitori

@@ -713,6 +713,7 @@ namespace GKCore
         private static readonly IocContainer fIocContainer;
 
         private static IStdDialogs fStdDialogs;
+        private static IPlatformUtilities fUtilities;
         private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IProgressController fProgressController;
@@ -782,6 +783,16 @@ namespace GKCore
                     fStdDialogs = fIocContainer.Resolve<IStdDialogs>();
                 }
                 return fStdDialogs;
+            }
+        }
+
+        public static IPlatformUtilities Utilities
+        {
+            get {
+                if (fUtilities == null) {
+                    fUtilities = fIocContainer.Resolve<IPlatformUtilities>();
+                }
+                return fUtilities;
             }
         }
 

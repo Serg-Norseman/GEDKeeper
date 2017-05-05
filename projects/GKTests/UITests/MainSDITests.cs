@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -35,6 +36,7 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests.ControlTesters;
 using GKUI;
+using GKUI.Components;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -66,6 +68,21 @@ namespace GKTests.UITests
                 var colProps = indiCols[i];
                 colProps.CurActive = true;
             }
+        }
+
+        public void Test_Other()
+        {
+            Rectangle rect1 = UIHelper.Rt2Rt(ExtRect.Empty);
+            Assert.AreEqual(0, rect1.Left);
+            Assert.AreEqual(0, rect1.Top);
+            Assert.AreEqual(0, rect1.Right);
+            Assert.AreEqual(0, rect1.Bottom);
+
+            RectangleF rect2 = UIHelper.Rt2Rt(ExtRectF.Empty);
+            Assert.AreEqual(0, rect2.Left);
+            Assert.AreEqual(0, rect2.Top);
+            Assert.AreEqual(0, rect2.Right);
+            Assert.AreEqual(0, rect2.Bottom);
         }
 
         [STAThread, Test]
@@ -836,8 +853,7 @@ namespace GKTests.UITests
         {
             var listRecords = new GKRecordsViewTester("fListRecords", form);
 
-            Assert.IsFalse(listRecords.Properties.IsMainList);
-            Assert.IsNotNull(listRecords.Properties.Tree);
+            Assert.IsNotNull(listRecords.Properties.BaseContext);
             Assert.AreNotEqual(GEDCOMRecordType.rtNone, listRecords.Properties.RecordType);
 
             listRecords.Properties.SelectItem(fIndex);

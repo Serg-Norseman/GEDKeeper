@@ -511,7 +511,7 @@ namespace GKUI.Charts
                     }
                 }
 
-                fModel.VisibleArea = new Rectangle(0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
 
             fModel.SetOffsets(fSPX, fSPY);
@@ -592,15 +592,15 @@ namespace GKUI.Charts
             return viewPort;
         }
 
-        private Rectangle GetSourceImageRegion()
+        private ExtRect GetSourceImageRegion()
         {
-            Rectangle region;
+            ExtRect region;
 
             if (!fModel.ImageSize.IsEmpty) {
                 Rectangle viewPort = GetImageViewPort();
-                region = new Rectangle(-AutoScrollPosition.X, -AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
+                region = ExtRect.CreateBounds(-AutoScrollPosition.X, -AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
             } else {
-                region = Rectangle.Empty;
+                region = ExtRect.Empty;
             }
 
             return region;

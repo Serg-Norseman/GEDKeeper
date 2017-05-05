@@ -105,7 +105,7 @@ namespace GKUI.Dialogs
                 for (int i = 0; i < num; i++) {
                     string st = fSourcesList[i];
 
-                    if (filter == "" || GKUtils.MatchesMask(st, flt))
+                    if (filter == "" || SysUtils.MatchesMask(st, flt))
                     {
                         cmbSource.Items.Add(new GKComboItem(st, fSourcesList.GetObject(i)));
                     }

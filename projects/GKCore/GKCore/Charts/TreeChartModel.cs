@@ -100,7 +100,7 @@ namespace GKCore.Charts
         private int fSPY;
         private GEDCOMTree fTree;
         private ExtRect fTreeBounds;
-        private Rectangle fVisibleArea;
+        private ExtRect fVisibleArea;
 
 
         public IBaseWindow Base
@@ -212,7 +212,7 @@ namespace GKCore.Charts
             }
         }
 
-        public Rectangle VisibleArea
+        public ExtRect VisibleArea
         {
             get { return fVisibleArea; }
             set { fVisibleArea = value; }
@@ -400,14 +400,14 @@ namespace GKCore.Charts
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
-                        if (GKUtils.IsRecordAccess(family.Restriction, fShieldState))
+                        if (fBase.Context.IsRecordAccess(family.Restriction))
                         {
                             GEDCOMIndividualRecord iFather = family.GetHusband();
                             GEDCOMIndividualRecord iMother = family.GetWife();
 
                             bool divorced = (family.GetTagStringValue("_STAT") == "NOTMARR");
 
-                            if (iFather != null && GKUtils.IsRecordAccess(iFather.Restriction, fShieldState))
+                            if (iFather != null && fBase.Context.IsRecordAccess(iFather.Restriction))
                             {
                                 result.Father = DoAncestorsStep(result, iFather, generation + 1, isDup);
                                 if (result.Father != null)
@@ -423,7 +423,7 @@ namespace GKCore.Charts
                                 result.Father = null;
                             }
 
-                            if (iMother != null && GKUtils.IsRecordAccess(iMother.Restriction, fShieldState))
+                            if (iMother != null && fBase.Context.IsRecordAccess(iMother.Restriction))
                             {
                                 result.Mother = DoAncestorsStep(result, iMother, generation + 1, isDup);
                                 if (result.Mother != null)
@@ -536,7 +536,7 @@ namespace GKCore.Charts
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
-                        if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
+                        if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         TreeChartPerson resParent = null;
                         GEDCOMSex sex = person.Sex;
@@ -620,7 +620,7 @@ namespace GKCore.Charts
                                     continue;
                                 }
 
-                                if (!GKUtils.IsRecordAccess(childRec.Restriction, fShieldState)) continue;
+                                if (!fBase.Context.IsRecordAccess(childRec.Restriction)) continue;
 
                                 TreeChartPerson child = DoDescendantsStep(resParent, childRec, level + 1);
                                 if (child == null) continue;
@@ -1086,7 +1086,7 @@ namespace GKCore.Charts
         {
             var result = new List<ISearchResult>();
 
-            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+            Regex regex = SysUtils.InitMaskRegex(searchPattern);
 
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
@@ -1095,7 +1095,7 @@ namespace GKCore.Charts
                 if (iRec == null) continue;
 
                 string fullname = GKUtils.GetNameString(iRec, true, false);
-                if (GKUtils.MatchesRegex(fullname, regex)) {
+                if (SysUtils.MatchesRegex(fullname, regex)) {
                     //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(iRec));
                 }
@@ -1154,7 +1154,7 @@ namespace GKCore.Charts
 
         private bool IsPersonVisible(ExtRect pnRect)
         {
-            return fVisibleArea.IntersectsWith(pnRect.ToRectangle());
+            return fVisibleArea.IntersectsWith(pnRect);
         }
 
         private static void CheckSwap(ref int val1, ref int val2)

@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace GKCommon
@@ -867,6 +868,64 @@ namespace GKCommon
             }
 
             return aspectRatio;
+        }
+
+        #endregion
+
+        #region Match functions
+
+        public static Regex InitMaskRegex(string mask)
+        {
+            Regex result = null;
+
+            if (!string.IsNullOrEmpty(mask))
+            {
+                string regexStr = "";
+                int curPos = 0;
+                int len = mask.Length;
+
+                while (curPos < len)
+                {
+                    int I = mask.IndexOfAny("*?".ToCharArray(), curPos);
+                    if (I < curPos) break;
+                    if (I > curPos) {
+                        string part = mask.Substring(curPos, I - curPos);
+                        regexStr += Regex.Escape(part);
+                    }
+
+                    char c = mask[I];
+                    switch (c) {
+                        case '*':
+                            regexStr += ".*";
+                            break;
+                        case '?':
+                            regexStr += ".";
+                            break;
+                    }
+
+                    curPos = I + 1;
+                }
+
+                if (curPos < len) {
+                    string part = mask.Substring(curPos, len - curPos);
+                    regexStr += Regex.Escape(part);
+                }
+
+                result = new Regex(regexStr, RegexOptions.IgnoreCase);
+            }
+
+            return result;
+        }
+
+        public static bool MatchesRegex(string str, Regex regex)
+        {
+            return (regex != null) && regex.IsMatch(str);
+        }
+
+        public static bool MatchesMask(string str, string mask)
+        {
+            Regex regex = InitMaskRegex(mask);
+            return MatchesRegex(str, regex);
         }
 
         #endregion

@@ -25,6 +25,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 
 namespace GKUI.Components
@@ -41,6 +42,16 @@ namespace GKUI.Components
     /// </summary>
     public static class UIHelper
     {
+        public static Rectangle Rt2Rt(ExtRect ert)
+        {
+            return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+        }
+
+        public static RectangleF Rt2Rt(ExtRectF ert)
+        {
+            return new RectangleF(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+        }
+
         public static void NormalizeFormRect(ref ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
@@ -52,7 +63,7 @@ namespace GKUI.Components
             // FIXME: DPI-aware code still required here.
             //------------------------------------------------------------------
 
-            Screen screen = Screen.FromRectangle(winRect.ToRectangle());
+            Screen screen = Screen.FromRectangle(Rt2Rt(winRect));
             if (screen != null) {
                 Rectangle workArea = screen.WorkingArea;
 
@@ -164,20 +175,20 @@ namespace GKUI.Components
             }
         }
 
-        public static GKRecordsView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
+        public static GKRecordsView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
 
-            if (tree == null)
-                throw new ArgumentNullException("tree");
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
 
             GKRecordsView recView = new GKRecordsView();
             recView.HideSelection = false;
             recView.LabelEdit = false;
             recView.FullRowSelect = true;
             recView.View = View.Details;
-            recView.Tree = tree;
+            recView.BaseContext = baseContext;
             recView.RecordType = recType;
             recView.Dock = DockStyle.Fill;
 

@@ -292,6 +292,7 @@ namespace GKUI
             container.Reset();
 
             container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
+            container.Register<IPlatformUtilities, WinFormsUtilities>(LifeCycle.Singleton);
             //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 

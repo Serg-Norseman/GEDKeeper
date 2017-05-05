@@ -132,7 +132,7 @@ namespace GKUI.Dialogs
                 fListRecords = null;
             }
 
-            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context.Tree, fRecType);
+            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context, fRecType);
             fListRecords.Name = "fListRecords";
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;
@@ -146,7 +146,7 @@ namespace GKUI.Dialogs
                 }
             }
 
-            fListRecords.UpdateContents(fBase.Context.ShieldState, true, 1);
+            fListRecords.UpdateContents(true, 1);
         }
 
         private static bool ChildSelectorHandler(GEDCOMRecord record)

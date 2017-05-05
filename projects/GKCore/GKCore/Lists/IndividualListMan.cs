@@ -23,7 +23,6 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -145,7 +144,7 @@ namespace GKCore.Lists
         private UDN filter_abd;
         private GEDCOMSourceRecord filter_source;
 
-        public IndividualListMan(GEDCOMTree tree) : base(tree, new IndividualListColumns())
+        public IndividualListMan(IBaseContext baseContext) : base(baseContext, new IndividualListColumns())
         {
         }
 
@@ -281,9 +280,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
-            bool res = (GKUtils.IsRecordAccess(fRec.Restriction, shieldState)
+            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(buf_fullname, QuickFilter)));
 
             res = res && CheckCommonFilter() && CheckSpecificFilter();
@@ -452,7 +451,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void InitFilter()
+        public override void PrepareFilter()
         {
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
@@ -461,13 +460,13 @@ namespace GKCore.Lists
             if (iFilter.GroupRef == "") {
                 filter_grp = null;
             } else {
-                filter_grp = fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                filter_grp = fBaseContext.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
             }
 
             if (iFilter.SourceRef == "") {
                 filter_source = null;
             } else {
-                filter_source = fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                filter_source = fBaseContext.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
             }
         }
 
@@ -569,9 +568,9 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateItem(IListItem item, bool isMain)
+        public override void UpdateItem(IListItem item)
         {
-            base.UpdateItem(item, isMain);
+            base.UpdateItem(item);
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 
@@ -585,7 +584,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateColumns(IListView listView, bool isMain)
+        public override void UpdateColumns(IListView listView)
         {
             ColumnsMap_Clear();
             AddColumn(listView, "№", 50, false, 0, 0);

@@ -71,27 +71,6 @@ namespace GKCore
             return result;
         }
 
-        public static bool IsRecordAccess(GEDCOMRestriction restriction, ShieldState shieldState)
-        {
-            bool result = false;
-
-            switch (shieldState) {
-                case ShieldState.Maximum:
-                    result = (restriction != GEDCOMRestriction.rnConfidential && restriction != GEDCOMRestriction.rnPrivacy);
-                    break;
-
-                case ShieldState.Middle:
-                    result = (restriction != GEDCOMRestriction.rnPrivacy);
-                    break;
-
-                case ShieldState.None:
-                    result = true;
-                    break;
-            }
-
-            return result;
-        }
-
         public static string MergeStrings(StringList strings)
         {
             if (strings == null)
@@ -1334,64 +1313,6 @@ namespace GKCore
 
         #endregion
 
-        #region Match functions
-
-        public static Regex InitMaskRegex(string mask)
-        {
-            Regex result = null;
-
-            if (!string.IsNullOrEmpty(mask))
-            {
-                string regexStr = "";
-                int curPos = 0;
-                int len = mask.Length;
-                
-                while (curPos < len)
-                {
-                    int I = mask.IndexOfAny("*?".ToCharArray(), curPos);
-                    if (I < curPos) break;
-                    if (I > curPos) {
-                        string part = mask.Substring(curPos, I - curPos);
-                        regexStr += Regex.Escape(part);
-                    }
-
-                    char c = mask[I];
-                    switch (c) {
-                        case '*':
-                            regexStr += ".*";
-                            break;
-                        case '?':
-                            regexStr += ".";
-                            break;
-                    }
-
-                    curPos = I + 1;
-                }
-
-                if (curPos < len) {
-                    string part = mask.Substring(curPos, len - curPos);
-                    regexStr += Regex.Escape(part);
-                }
-
-                result = new Regex(regexStr, RegexOptions.IgnoreCase);
-            }
-
-            return result;
-        }
-
-        public static bool MatchesRegex(string str, Regex regex)
-        {
-            return (regex != null) && regex.IsMatch(str);
-        }
-
-        public static bool MatchesMask(string str, string mask)
-        {
-            Regex regex = InitMaskRegex(mask);
-            return MatchesRegex(str, regex);
-        }
-
-        #endregion
-
         #region Folder functions
 
         public static string GetTempDir()
@@ -1455,6 +1376,29 @@ namespace GKCore
         {
             string path = GetAppDataPath() + "GEDKeeper2.log";
             return path;
+        }
+
+        public static void CopyFile(FileInfo source, FileInfo target, IProgressController progressController)
+        {
+            const int bufferSize = 1024 * 1024; // 1MB
+            byte[] buffer = new byte[bufferSize];
+            int progress = 0, reportedProgress = 0, read = 0;
+            long len = source.Length;
+            float flen = len;
+
+            using (var sourceStm = source.OpenRead())
+                using (var targetStm = target.OpenWrite())
+            {
+                targetStm.SetLength(sourceStm.Length);
+                for (long size = 0; size < len; size += read)
+                {
+                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress)
+                        progressController.ProgressStep(reportedProgress = progress);
+
+                    read = sourceStm.Read(buffer, 0, bufferSize);
+                    targetStm.Write(buffer, 0, read);
+                }
+            }
         }
 
         #endregion
@@ -1939,7 +1883,7 @@ namespace GKCore
 
         //
 
-        public static void ShowFamilyInfo(GEDCOMFamilyRecord familyRec, StringList summary, ShieldState shieldState)
+        public static void ShowFamilyInfo(IBaseContext baseContext, GEDCOMFamilyRecord familyRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2122,7 +2066,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowPersonInfo(GEDCOMIndividualRecord iRec, StringList summary, ShieldState shieldState)
+        public static void ShowPersonInfo(IBaseContext baseContext, GEDCOMIndividualRecord iRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2171,7 +2115,7 @@ namespace GKCore
                             {
                                 GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
                                 if (family == null) continue;
-                                if (!IsRecordAccess(family.Restriction, shieldState)) continue;
+                                if (!baseContext.IsRecordAccess(family.Restriction)) continue;
 
                                 string st;
                                 GEDCOMPointer sp;
@@ -2576,7 +2520,7 @@ namespace GKCore
             }
         }
 
-        public static void GetRecordContent(GEDCOMRecord record, ShieldState shieldState, StringList ctx)
+        public static void GetRecordContent(IBaseContext baseContext, GEDCOMRecord record, StringList ctx)
         {
             if (record != null && ctx != null)
             {
@@ -2585,11 +2529,11 @@ namespace GKCore
                     switch (record.RecordType)
                     {
                         case GEDCOMRecordType.rtIndividual:
-                            GKUtils.ShowPersonInfo(record as GEDCOMIndividualRecord, ctx, shieldState);
+                            GKUtils.ShowPersonInfo(baseContext, record as GEDCOMIndividualRecord, ctx);
                             break;
 
                         case GEDCOMRecordType.rtFamily:
-                            GKUtils.ShowFamilyInfo(record as GEDCOMFamilyRecord, ctx, shieldState);
+                            GKUtils.ShowFamilyInfo(baseContext, record as GEDCOMFamilyRecord, ctx);
                             break;
 
                         case GEDCOMRecordType.rtNote:
@@ -2638,7 +2582,7 @@ namespace GKCore
 
         #endregion
 
-        #region Multimedia support
+        #region Multimedia support (static)
 
         public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
         {
@@ -2719,32 +2663,9 @@ namespace GKCore
             return result;
         }
 
-        public static void CopyFile(FileInfo source, FileInfo target, IProgressController progressController)
-        {
-            const int bufferSize = 1024 * 1024; // 1MB
-            byte[] buffer = new byte[bufferSize];
-            int progress = 0, reportedProgress = 0, read = 0;
-            long len = source.Length;
-            float flen = len;
-
-            using (var sourceStm = source.OpenRead())
-                using (var targetStm = target.OpenWrite())
-            {
-                targetStm.SetLength(sourceStm.Length);
-                for (long size = 0; size < len; size += read)
-                {
-                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress)
-                        progressController.ProgressStep(reportedProgress = progress);
-
-                    read = sourceStm.Read(buffer, 0, bufferSize);
-                    targetStm.Write(buffer, 0, read);
-                }
-            }
-        }
-
         #endregion
 
-        #region Archives support
+        #region Archives support (static)
 
         public static string GetContainerName(string fileName, bool arc)
         {

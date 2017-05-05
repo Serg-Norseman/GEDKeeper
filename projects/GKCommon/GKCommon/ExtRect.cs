@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
@@ -104,11 +103,6 @@ namespace GKCommon
             return string.Concat("{X=", Left.ToString(), ",Y=", Top.ToString(),
                                  ",Width=", GetWidth().ToString(), ",Height=", GetHeight().ToString(), "}");
         }
-
-        public Rectangle ToRectangle()
-        {
-            return new Rectangle(Left, Top, GetWidth(), GetHeight());
-        }
     }
 
 
@@ -192,11 +186,6 @@ namespace GKCommon
         {
             return string.Concat("{X=", Left.ToString(), ",Y=", Top.ToString(),
                                  ",Width=", GetWidth().ToString(), ",Height=", GetHeight().ToString(), "}");
-        }
-
-        public RectangleF ToRectangle()
-        {
-            return new RectangleF(Left, Top, GetWidth(), GetHeight());
         }
     }
 }

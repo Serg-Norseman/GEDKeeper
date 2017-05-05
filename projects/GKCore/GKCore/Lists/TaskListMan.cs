@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -58,11 +57,11 @@ namespace GKCore.Lists
     {
         private GEDCOMTaskRecord fRec;
 
-        public TaskListMan(GEDCOMTree tree) : base(tree, new TaskListColumns())
+        public TaskListMan(IBaseContext baseContext) : base(baseContext, new TaskListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(GKUtils.GetTaskGoalStr(fRec), QuickFilter));
 

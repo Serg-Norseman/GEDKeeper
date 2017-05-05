@@ -303,7 +303,7 @@ namespace GKCore
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
-            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+            Regex regex = SysUtils.InitMaskRegex(searchPattern);
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -311,10 +311,31 @@ namespace GKCore
                 if (rec.RecordType != recordType) continue;
 
                 string recName = GKUtils.GetRecordName(rec, false);
-                if (GKUtils.MatchesRegex(recName, regex)) {
+                if (SysUtils.MatchesRegex(recName, regex)) {
                     //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(rec));
                 }
+            }
+
+            return result;
+        }
+
+        public bool IsRecordAccess(GEDCOMRestriction restriction)
+        {
+            bool result = false;
+
+            switch (fShieldState) {
+                case ShieldState.Maximum:
+                    result = (restriction != GEDCOMRestriction.rnConfidential && restriction != GEDCOMRestriction.rnPrivacy);
+                    break;
+
+                case ShieldState.Middle:
+                    result = (restriction != GEDCOMRestriction.rnPrivacy);
+                    break;
+
+                case ShieldState.None:
+                    result = true;
+                    break;
             }
 
             return result;
@@ -973,8 +994,11 @@ namespace GKCore
                                     graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
                                 } else {
                                     Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                                    Rectangle srcRect = cutoutArea.ToRectangle();
-                                    graphic.DrawImage(bmp, destRect, srcRect, GraphicsUnit.Pixel);
+                                    //Rectangle srcRect = cutoutArea.ToRectangle();
+                                    graphic.DrawImage(bmp, destRect,
+                                                      cutoutArea.Left, cutoutArea.Top,
+                                                      cutoutArea.GetWidth(), cutoutArea.GetHeight(),
+                                                      GraphicsUnit.Pixel);
                                 }
                             }
 

@@ -722,7 +722,7 @@ namespace GKCore.Charts
                     for (int j = 0; j < numberOfFamilyLinks; j++)
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-                        if (!GKUtils.IsRecordAccess(family.Restriction, fShieldState)) continue;
+                        if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         family.SortChilds();
 

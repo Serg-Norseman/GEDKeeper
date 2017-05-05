@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -59,11 +58,11 @@ namespace GKCore.Lists
     {
         private GEDCOMCommunicationRecord fRec;
 
-        public CommunicationListMan(GEDCOMTree tree) : base(tree, new CommunicationListColumns())
+        public CommunicationListMan(IBaseContext baseContext) : base(baseContext, new CommunicationListColumns())
         {
         }
 
-        public override bool CheckFilter(ShieldState shieldState)
+        public override bool CheckFilter()
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.CommName, QuickFilter));
 
@@ -87,7 +86,7 @@ namespace GKCore.Lists
                     break;
 
                 case CommunicationColumnType.ctCorresponder:
-                    result = GKUtils.GetCorresponderStr(fTree, fRec, false);
+                    result = GKUtils.GetCorresponderStr(fBaseContext.Tree, fRec, false);
                     break;
 
                 case CommunicationColumnType.ctCommType:

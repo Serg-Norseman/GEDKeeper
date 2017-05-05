@@ -25,8 +25,8 @@ using System.Windows.Forms;
 using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 
 namespace GKUI.Components
 {
@@ -49,15 +49,14 @@ namespace GKUI.Components
             }
         }
 
+        private IBaseContext fBaseContext;
         private GKListItem[] fCache;
         private int fCacheFirstItem;
         private List<ValItem> fContentList;
         private int fFilteredCount;
-        private bool fIsMainList;
         private ListManager fListMan;
         private GEDCOMRecordType fRecordType;
         private int fTotalCount;
-        private GEDCOMTree fTree;
         private int fXSortFactor;
 
         #endregion
@@ -67,12 +66,6 @@ namespace GKUI.Components
         public int FilteredCount
         {
             get { return fFilteredCount; }
-        }
-
-        public bool IsMainList
-        {
-            get { return fIsMainList; }
-            set { fIsMainList = value; }
         }
 
         public ListManager ListMan
@@ -91,10 +84,10 @@ namespace GKUI.Components
             get { return fTotalCount; }
         }
 
-        public GEDCOMTree Tree
+        public IBaseContext BaseContext
         {
-            get { return fTree; }
-            set { fTree = value; }
+            get { return fBaseContext; }
+            set { fBaseContext = value; }
         }
 
         #endregion
@@ -135,47 +128,47 @@ namespace GKUI.Components
 
             switch (fRecordType) {
                 case GEDCOMRecordType.rtIndividual:
-                    fListMan = new IndividualListMan(fTree);
+                    fListMan = new IndividualListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    fListMan = new FamilyListMan(fTree);
+                    fListMan = new FamilyListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtNote:
-                    fListMan = new NoteListMan(fTree);
+                    fListMan = new NoteListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
-                    fListMan = new MultimediaListMan(fTree);
+                    fListMan = new MultimediaListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtSource:
-                    fListMan = new SourceListMan(fTree);
+                    fListMan = new SourceListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtRepository:
-                    fListMan = new RepositoryListMan(fTree);
+                    fListMan = new RepositoryListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
-                    fListMan = new GroupListMan(fTree);
+                    fListMan = new GroupListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtResearch:
-                    fListMan = new ResearchListMan(fTree);
+                    fListMan = new ResearchListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtTask:
-                    fListMan = new TaskListMan(fTree);
+                    fListMan = new TaskListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtCommunication:
-                    fListMan = new CommunicationListMan(fTree);
+                    fListMan = new CommunicationListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtLocation:
-                    fListMan = new LocationListMan(fTree);
+                    fListMan = new LocationListMan(fBaseContext);
                     break;
 
                 case GEDCOMRecordType.rtSubmission:
@@ -251,7 +244,7 @@ namespace GKUI.Components
                 newItem = new GKListItem(rec.GetXRefNum(), rec);
 
                 fListMan.Fetch(rec);
-                fListMan.UpdateItem(newItem, fIsMainList);
+                fListMan.UpdateItem(newItem);
             }
 
             return newItem;
@@ -321,7 +314,7 @@ namespace GKUI.Components
 
         #region Public methods
 
-        public void UpdateTitles()
+        private void UpdateTitles()
         {
             try {
                 if (fListMan == null) return;
@@ -330,7 +323,7 @@ namespace GKUI.Components
                 try
                 {
                     Columns.Clear();
-                    fListMan.UpdateColumns(this, fIsMainList);
+                    fListMan.UpdateColumns(this);
                 }
                 finally
                 {
@@ -341,7 +334,7 @@ namespace GKUI.Components
             }
         }
 
-        public void UpdateContents(ShieldState shieldState, bool titles, int autosizeColumn)
+        public void UpdateContents(bool titles, int autosizeColumn = -1)
         {
             if (fListMan == null) return;
 
@@ -362,21 +355,21 @@ namespace GKUI.Components
                     //SelectedIndices.Clear();
                     //SelectedItems.Clear();
 
-                    fListMan.InitFilter();
+                    fListMan.PrepareFilter();
 
-                    int contentSize = fTree.RecordsCount;
+                    int contentSize = fBaseContext.Tree.RecordsCount;
 
                     fContentList.Clear();
                     fContentList.Capacity = contentSize;
 
                     for (int i = 0; i < contentSize; i++) {
-                        GEDCOMRecord rec = fTree[i];
+                        GEDCOMRecord rec = fBaseContext.Tree[i];
 
                         if (rec.RecordType == fRecordType) {
                             fTotalCount++;
 
                             fListMan.Fetch(rec);
-                            if (fListMan.CheckFilter(shieldState)) {
+                            if (fListMan.CheckFilter()) {
                                 fContentList.Add(new ValItem(rec));
                             }
                         }
