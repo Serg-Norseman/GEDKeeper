@@ -132,10 +132,6 @@ namespace GKTests.GEDCOM
             Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("", out xref, false, "test"); });
 
             Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("@sample", out xref, false, "test"); });
-
-            //
-
-            Assert.AreEqual("0F000F00D700D700CCDC", GEDCOMUtils.GetRectUID(15, 15, 215, 215));
         }
 
         [TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]

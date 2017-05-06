@@ -229,8 +229,8 @@ namespace GKCore.Lists
                         break;
 
                     case FilterLifeMode.lmAliveBefore:
-                        UDN bdt = GEDCOMUtils.GetUDN(buf_bd);
-                        UDN ddt = GEDCOMUtils.GetUDN(buf_dd);
+                        UDN bdt = (buf_bd == null) ? UDN.CreateEmpty() : buf_bd.Date.GetUDN();
+                        UDN ddt = (buf_dd == null) ? UDN.CreateEmpty() : buf_dd.Date.GetUDN();
                         if ((bdt.CompareTo(filter_abd) > 0) || (ddt.CompareTo(filter_abd) < 0)) return false;
                         break;
 

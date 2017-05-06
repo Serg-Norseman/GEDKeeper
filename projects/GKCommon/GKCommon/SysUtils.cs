@@ -698,6 +698,22 @@ namespace GKCommon
             return result.ToString();
         }
 
+        public static string GetRectUID(int x1, int y1, int x2, int y2)
+        {
+            byte[] bx1 = BitConverter.GetBytes((ushort)x1);
+            byte[] by1 = BitConverter.GetBytes((ushort)y1);
+            byte[] bx2 = BitConverter.GetBytes((ushort)x2);
+            byte[] by2 = BitConverter.GetBytes((ushort)y2);
+
+            byte[] buffer = new byte[8];
+            Buffer.BlockCopy(bx1, 0, buffer, 0, 2);
+            Buffer.BlockCopy(by1, 0, buffer, 2, 2);
+            Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
+            Buffer.BlockCopy(by2, 0, buffer, 6, 2);
+
+            return SysUtils.EncodeUID(buffer);
+        }
+
         #endregion
 
         #region Sort helpers

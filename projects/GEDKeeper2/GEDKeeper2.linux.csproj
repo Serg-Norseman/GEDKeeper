@@ -102,6 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKProgram.cs" />
+    <Compile Include="GKUI\BaseWinSDI.cs" />
+    <Compile Include="GKUI\BaseWinSDI.Designer.cs">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -427,24 +431,11 @@
     <Compile Include="GKUI\WinFormsAppHost.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MDI\BaseWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MDI\BaseWin.Designer.cs">
-      <DependentUpon>BaseWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MDI\MainWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MDI\MainWin.Designer.cs">
-      <DependentUpon>MainWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SDI\BaseWinSDI.cs" />
-    <Compile Include="SDI\BaseWinSDI.Designer.cs">
-      <DependentUpon>BaseWinSDI.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKUI\BaseWinSDI.resx">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Components\ACOptionsControl.resx">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -589,15 +580,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TreeToolsWin.resx">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MDI\BaseWin.resx">
-      <DependentUpon>BaseWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MDI\MainWin.resx">
-      <DependentUpon>MainWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SDI\BaseWinSDI.resx">
-      <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

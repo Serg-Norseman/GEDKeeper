@@ -518,8 +518,6 @@ namespace GKTests.GKCore
 
         private static void GEDCOMListTests(GEDCOMIndividualRecord iRec)
         {
-            //GEDCOMListTest_Hot(iRec);
-
             for (int k = 0; k < REP_COUNT; k++) {
                 GEDCOMListTest11(iRec);
                 GEDCOMListTest12(iRec);
@@ -529,18 +527,6 @@ namespace GKTests.GKCore
                 GEDCOMListTest23(iRec);
             }
         }
-
-        /*private void GEDCOMListTest_Hot(GEDCOMIndividualRecord iRec)
-		{
-			for (int k = 0; k < 100000; k++) {
-				GEDCOMListTest11(iRec);
-				GEDCOMListTest12(iRec);
-				GEDCOMListTest21(iRec);
-				GEDCOMListTest22(iRec);
-				GEDCOMListTest23(iRec);
-				GEDCOMListTest3(iRec);
-			}
-		}*/
 
         private static void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
         {

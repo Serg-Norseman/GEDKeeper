@@ -73,7 +73,7 @@ namespace GKCore.Export
             {
                 IRec = iRec;
                 Event = evt;
-                Date = GEDCOMUtils.GetUDN(evt);
+                Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
             }
         }
 

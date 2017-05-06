@@ -167,7 +167,7 @@ namespace GKCommon.GEDCOM
                     }
 
                     GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)Value;
-                    result = mmRec.UID + "-" + GEDCOMUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
+                    result = mmRec.UID + "-" + SysUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             }
             catch (Exception ex)

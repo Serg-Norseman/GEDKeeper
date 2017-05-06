@@ -291,5 +291,11 @@ namespace GKTests.GKCommon
             res = SysUtils.MatchesMask("abrakadabra", "*test*");
             Assert.IsFalse(res);
         }
+
+        [Test]
+        public void Test_GetRectUID()
+        {
+            Assert.AreEqual("0F000F00D700D700CCDC", SysUtils.GetRectUID(15, 15, 215, 215));
+        }
     }
 }

@@ -36,13 +36,13 @@ namespace GKTests.GEDCOM
     [TestFixture]
     public class GedcomTests
     {
-        private BaseContext _context;
+        private BaseContext fContext;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            _context = TestStubs.CreateContext();
-            TestStubs.FillContext(_context);
+            fContext = TestStubs.CreateContext();
+            TestStubs.FillContext(fContext);
         }
 
         [TestFixtureTearDown]
@@ -51,26 +51,6 @@ namespace GKTests.GEDCOM
         }
 
         #region True Tests
-
-        [Test]
-        public void GEDCOMAux_Tests()
-        {
-            GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-
-            //
-
-            GEDCOMCustomEvent evt, evtd;
-
-            evt = iRec.FindEvent("BIRT");
-            Assert.IsNotNull(evt);
-
-            evtd = iRec.FindEvent("DEAT");
-            Assert.IsNotNull(evtd);
-
-            GEDCOMCustomEventTest(evt, "28.12.1990");
-
-            Assert.IsNotNull(evt.Address);
-        }
 
         private GEDCOMTag TagConstructorTest(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
@@ -308,7 +288,7 @@ namespace GKTests.GEDCOM
             {
                 Assert.IsNotNull(replacer);
 
-                GEDCOMIndividualRecord iRec = _context.CreatePersonEx("ivan", "ivanovich", "ivanov", GEDCOMSex.svMale, false);
+                GEDCOMIndividualRecord iRec = fContext.CreatePersonEx("ivan", "ivanovich", "ivanov", GEDCOMSex.svMale, false);
                 replacer.AddXRef(iRec, "I210", iRec.XRef);
 
                 string newXRef = replacer.FindNewXRef("I210");
@@ -331,7 +311,7 @@ namespace GKTests.GEDCOM
             Assert.IsTrue(emptyUDN.IsEmpty());
 
             // BIRT: "28 DEC 1990"
-            GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
             //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN(null));
             //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN("0102"));
@@ -641,8 +621,8 @@ namespace GKTests.GEDCOM
 
                 dtx1.ParseString("FROM 04 JAN 2013 TO 23 JAN 2013");
 
-                dtx1.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, dtx1.Owner);
+                dtx1.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, dtx1.Owner);
 
                 Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.Date);
@@ -1180,7 +1160,7 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMHeader_Tests()
         {
-            GEDCOMHeader headRec = _context.Tree.Header;
+            GEDCOMHeader headRec = fContext.Tree.Header;
 
             headRec.Notes = new StringList("This notes test");
             Assert.AreEqual("This notes test", headRec.Notes[0]);
@@ -1254,16 +1234,32 @@ namespace GKTests.GEDCOM
         }
 
         [Test]
+        public void GEDCOMAux_Tests()
+        {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMCustomEvent evt, evtd;
+
+            evt = iRec.FindEvent("BIRT");
+            Assert.IsNotNull(evt);
+
+            evtd = iRec.FindEvent("DEAT");
+            Assert.IsNotNull(evtd);
+
+            GEDCOMCustomEventTest(evt, "28.12.1990");
+            Assert.IsNotNull(evt.Address);
+        }
+
+        [Test]
         public void GEDCOMIndividualRecord_Tests()
         {
-            GEDCOMIndividualRecord ind3 = _context.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
             Assert.IsNotNull(ind3.GetParentsFamily());
 
-            GEDCOMIndividualRecord ind2 = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord ind2 = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
             Assert.IsNotNull(ind2.GetMarriageFamily());
 
             //
-            GEDCOMIndividualRecord indiRec = _context.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord indiRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
             Assert.IsNull(indiRec.GetMarriageFamily());
             Assert.IsNotNull(indiRec.GetMarriageFamily(true));
 
@@ -1329,7 +1325,7 @@ namespace GKTests.GEDCOM
             Assert.IsNull(indiRec.GetPrimaryMultimediaLink());
             GEDCOMMultimediaLink mmLink = indiRec.SetPrimaryMultimediaLink(null);
             Assert.IsNull(mmLink);
-            GEDCOMMultimediaRecord mmRec = _context.Tree.CreateMultimedia();
+            GEDCOMMultimediaRecord mmRec = fContext.Tree.CreateMultimedia();
             mmLink = indiRec.SetPrimaryMultimediaLink(mmRec);
             Assert.IsNotNull(mmLink);
             mmLink = indiRec.GetPrimaryMultimediaLink();
@@ -1340,11 +1336,11 @@ namespace GKTests.GEDCOM
             Assert.AreEqual(-1, indiRec.IndexOfSpouse(null));
 
 
-            GEDCOMIndividualRecord indi2 = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord indi2 = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
             GEDCOMAssociation asso = indiRec.AddAssociation("test", indi2);
             Assert.IsNotNull(asso);
 
-            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(_context.Tree, _context.Tree, "", "")) {
+            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
                 Assert.IsNotNull(indi);
 
                 string surname, name, patronymic;
@@ -1353,7 +1349,7 @@ namespace GKTests.GEDCOM
                 Assert.AreEqual("", name);
                 Assert.AreEqual("", patronymic);
 
-                indi.AddPersonalName(new GEDCOMPersonalName(_context.Tree, indi, "", "")); // test with empty Name
+                indi.AddPersonalName(new GEDCOMPersonalName(fContext.Tree, indi, "", "")); // test with empty Name
                 GKUtils.GetNameParts(indi, out surname, out name, out patronymic);
                 Assert.AreEqual("", surname);
                 Assert.AreEqual("", name);
@@ -1364,7 +1360,7 @@ namespace GKTests.GEDCOM
                 Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
                 Assert.AreEqual("", GKUtils.GetNickString(indi));
 
-                GEDCOMPersonalName pName = new GEDCOMPersonalName(_context.Tree, indi, "", "");
+                GEDCOMPersonalName pName = new GEDCOMPersonalName(fContext.Tree, indi, "", "");
                 indi.AddPersonalName(pName);
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
@@ -1379,35 +1375,35 @@ namespace GKTests.GEDCOM
                 Assert.IsNotNull(indi.GetParentsFamily(true));
 
                 // MoveTo test
-                GEDCOMIndividualRecord ind = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                GEDCOMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
                 GEDCOMAssociation asso1 = indi.AddAssociation("test", ind);
 
-                GEDCOMAlias als = indi.Aliases.Add(new GEDCOMAlias(_context.Tree, indi, "", ""));
+                GEDCOMAlias als = indi.Aliases.Add(new GEDCOMAlias(fContext.Tree, indi, "", ""));
 
-                GEDCOMIndividualOrdinance indOrd = indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(_context.Tree, indi, "", ""));
+                GEDCOMIndividualOrdinance indOrd = indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(fContext.Tree, indi, "", ""));
 
-                GEDCOMPointer ancInt = indi.AncestorsInterest.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+                GEDCOMPointer ancInt = indi.AncestorsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
-                GEDCOMPointer descInt = indi.DescendantsInterest.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+                GEDCOMPointer descInt = indi.DescendantsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
-                GEDCOMPointer subm = indi.Submittors.Add(new GEDCOMPointer(_context.Tree, indi, "", ""));
+                GEDCOMPointer subm = indi.Submittors.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
-                using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(_context.Tree, _context.Tree, "", "")) {
+                using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
                     indi.MoveTo(indi3, false);
 
                     st = GKUtils.GetNameString(indi3, true, true);
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);
                 }
 
-                indi.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, indi.Owner);
+                indi.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, indi.Owner);
             }
         }
 
         [Test]
         public void GEDCOMPersonalName_Tests()
         {
-            GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
             GEDCOMPersonalName pName = iRec.PersonalNames[0];
             Assert.AreEqual("Ivanov", pName.Surname);
@@ -1553,8 +1549,8 @@ namespace GKTests.GEDCOM
                 }
             }
 
-            persName.ResetOwner(_context.Tree);
-            Assert.AreEqual(_context.Tree, persName.Owner);
+            persName.ResetOwner(fContext.Tree);
+            Assert.AreEqual(fContext.Tree, persName.Owner);
 
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());
@@ -1623,16 +1619,16 @@ namespace GKTests.GEDCOM
             {
                 Assert.IsNotNull(grpRec);
 
-                grpRec.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, grpRec.Owner);
+                grpRec.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, grpRec.Owner);
             }
         }
 
         [Test]
         public void GEDCOMGroupRecord_Tests()
         {
-            using (GEDCOMGroupRecord groupRec = _context.Tree.CreateGroup()) {
-                GEDCOMIndividualRecord member = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            using (GEDCOMGroupRecord groupRec = fContext.Tree.CreateGroup()) {
+                GEDCOMIndividualRecord member = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);
@@ -1848,7 +1844,7 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMFamilyRecord_Tests()
         {
-            using (GEDCOMFamilyRecord famRec = GEDCOMFamilyRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMFamilyRecord)
+            using (GEDCOMFamilyRecord famRec = GEDCOMFamilyRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMFamilyRecord)
             {
                 Assert.IsNotNull(famRec);
 
@@ -1856,10 +1852,10 @@ namespace GKTests.GEDCOM
                 unkInd.Sex = GEDCOMSex.svUndetermined;
                 Assert.IsFalse(famRec.AddSpouse(unkInd));
 
-                GEDCOMIndividualRecord child1 = _context.Tree.CreateIndividual(); // for pointer need a proper object
+                GEDCOMIndividualRecord child1 = fContext.Tree.CreateIndividual(); // for pointer need a proper object
                 Assert.IsTrue(famRec.AddChild(child1));
 
-                GEDCOMIndividualRecord child2 = _context.Tree.CreateIndividual(); // for pointer need a proper object
+                GEDCOMIndividualRecord child2 = fContext.Tree.CreateIndividual(); // for pointer need a proper object
                 Assert.IsTrue(famRec.AddChild(child2));
                 Assert.AreEqual(1, famRec.IndexOfChild(child2));
 
@@ -1878,15 +1874,15 @@ namespace GKTests.GEDCOM
                 // MoveTo test
                 Assert.Throws(typeof(ArgumentException), () => { famRec.MoveTo(null, false); });
 
-                GEDCOMCustomEvent evt = famRec.AddEvent(new GEDCOMFamilyEvent(_context.Tree, famRec, "MARR", "01 SEP 1981"));
+                GEDCOMCustomEvent evt = famRec.AddEvent(new GEDCOMFamilyEvent(fContext.Tree, famRec, "MARR", "01 SEP 1981"));
                 Assert.AreEqual(1, famRec.Events.Count);
                 Assert.AreEqual(evt, famRec.FindEvent("MARR"));
 
-                GEDCOMSpouseSealing sps = famRec.SpouseSealings.Add(new GEDCOMSpouseSealing(_context.Tree, _context.Tree, "", ""));
+                GEDCOMSpouseSealing sps = famRec.SpouseSealings.Add(new GEDCOMSpouseSealing(fContext.Tree, fContext.Tree, "", ""));
                 Assert.AreEqual(1, famRec.SpouseSealings.Count);
                 Assert.AreEqual(sps, famRec.SpouseSealings[0]);
 
-                using (GEDCOMFamilyRecord famRec2 = GEDCOMFamilyRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMFamilyRecord)
+                using (GEDCOMFamilyRecord famRec2 = GEDCOMFamilyRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMFamilyRecord)
                 {
                     Assert.AreEqual(0, famRec2.Events.Count);
                     Assert.AreEqual(null, famRec2.FindEvent("MARR"));
@@ -1903,8 +1899,8 @@ namespace GKTests.GEDCOM
                     Assert.AreEqual(sps, famRec2.SpouseSealings[0]);
                 }
 
-                famRec.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, famRec.Owner);
+                famRec.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, famRec.Owner);
             }
         }
 
@@ -2035,8 +2031,8 @@ namespace GKTests.GEDCOM
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
                 }
 
-                src1.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, src1.Owner);
+                src1.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, src1.Owner);
             }
 
             // check move
@@ -2183,8 +2179,8 @@ namespace GKTests.GEDCOM
         {
             using (GEDCOMResearchRecord resRec = GEDCOMResearchRecord.Create(null, null, "", "") as GEDCOMResearchRecord) {
 
-                resRec.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, resRec.Owner);
+                resRec.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, resRec.Owner);
             }
         }
 
@@ -2246,7 +2242,7 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMRepositoryRecord_Tests()
         {
-            using (GEDCOMRepositoryRecord repoRec = GEDCOMRepositoryRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMRepositoryRecord)
+            using (GEDCOMRepositoryRecord repoRec = GEDCOMRepositoryRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMRepositoryRecord)
             {
                 Assert.IsNotNull(repoRec);
 
@@ -2276,8 +2272,8 @@ namespace GKTests.GEDCOM
             {
                 Assert.IsNotNull(mmRec);
 
-                mmRec.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, mmRec.Owner);
+                mmRec.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, mmRec.Owner);
             }
         }
 
@@ -2320,7 +2316,7 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMMultimediaLink_Tests()
         {
-            using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(_context.Tree, null, "", "") as GEDCOMMultimediaLink) {
+            using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(fContext.Tree, null, "", "") as GEDCOMMultimediaLink) {
                 Assert.IsNotNull(mmLink);
                 Assert.IsTrue(mmLink.IsEmpty());
 
@@ -2354,7 +2350,7 @@ namespace GKTests.GEDCOM
                 Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
 
-                using (var mmRec = (GEDCOMMultimediaRecord)GEDCOMMultimediaRecord.Create(_context.Tree, _context.Tree, "", "")) {
+                using (var mmRec = (GEDCOMMultimediaRecord)GEDCOMMultimediaRecord.Create(fContext.Tree, fContext.Tree, "", "")) {
                     Assert.IsNull(mmLink.GetUID());
 
                     mmLink.Value = mmRec;
@@ -2366,8 +2362,8 @@ namespace GKTests.GEDCOM
                 Assert.IsTrue(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("", mmLink.CutoutPosition.StringValue);
 
-                mmLink.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, mmLink.Owner);
+                mmLink.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, mmLink.Owner);
             }
         }
 
@@ -2447,18 +2443,18 @@ namespace GKTests.GEDCOM
                 Assert.IsTrue(subrRec.IsEmpty());
 
 
-                subrRec.ResetOwner(_context.Tree);
-                Assert.AreEqual(_context.Tree, subrRec.Owner);
+                subrRec.ResetOwner(fContext.Tree);
+                Assert.AreEqual(fContext.Tree, subrRec.Owner);
             }
         }
 
         [Test]
         public void GEDCOMCommunicationRecord_Test()
         {
-            GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            using (GEDCOMCommunicationRecord comRec = GEDCOMCommunicationRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMCommunicationRecord) {
+            using (GEDCOMCommunicationRecord comRec = GEDCOMCommunicationRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMCommunicationRecord) {
                 comRec.CommName = "Test Communication";
                 Assert.AreEqual("Test Communication", comRec.CommName);
 
@@ -2510,16 +2506,16 @@ namespace GKTests.GEDCOM
         [Test]
         public void GEDCOMTaskRecord_Tests()
         {
-            GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            GEDCOMFamilyRecord famRec = _context.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+            GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
             Assert.IsNotNull(famRec);
 
-            GEDCOMSourceRecord srcRec = _context.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
+            GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
             Assert.IsNotNull(srcRec);
 
-            using (GEDCOMTaskRecord taskRec = GEDCOMTaskRecord.Create(_context.Tree, _context.Tree, "", "") as GEDCOMTaskRecord)
+            using (GEDCOMTaskRecord taskRec = GEDCOMTaskRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMTaskRecord)
             {
                 Assert.IsNotNull(taskRec);
 

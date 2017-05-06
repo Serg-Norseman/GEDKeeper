@@ -195,7 +195,13 @@ namespace GKUI
         protected override void UpdateMRU()
         {
             if (fIsMDI && fMainWindow != null) {
-                ((MainWin)fMainWindow).UpdateMRU();
+                //((MainWin)fMainWindow).UpdateMRU();
+            } else {
+                foreach (IWindow win in fRunningForms) {
+                    if (win is IBaseWindow) {
+                        (win as BaseWinSDI).UpdateMRU();
+                    }
+                }
             }
         }
 
@@ -331,8 +337,8 @@ namespace GKUI
             if (!mdi) {
                 container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
             } else {
-                container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
-                container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
+                //container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
+                //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
             }
         }
 
