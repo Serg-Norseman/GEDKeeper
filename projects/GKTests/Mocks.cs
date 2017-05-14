@@ -69,7 +69,7 @@ namespace GKTests.Mocks
             fTree = fContext.Tree;
         }
 
-        public void SetLang() {}
+        public new void SetLang() {}
 
         public IHost Host { get { return fHost; } }
         public IBaseContext Context { get { return fContext; } }
