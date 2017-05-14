@@ -49,19 +49,17 @@ namespace GKUI
         private readonly IBaseContext fContext;
         private readonly NavigationStack fNavman;
 
-        private bool fModified;
-
-        private readonly GKRecordsView ListPersons;
-        private readonly GKRecordsView ListFamilies;
-        private readonly GKRecordsView ListNotes;
-        private readonly GKRecordsView ListMultimedia;
-        private readonly GKRecordsView ListSources;
-        private readonly GKRecordsView ListRepositories;
-        private readonly GKRecordsView ListGroups;
-        private readonly GKRecordsView ListResearches;
-        private readonly GKRecordsView ListTasks;
-        private readonly GKRecordsView ListCommunications;
-        private readonly GKRecordsView ListLocations;
+        private readonly GKListView ListPersons;
+        private readonly GKListView ListFamilies;
+        private readonly GKListView ListNotes;
+        private readonly GKListView ListMultimedia;
+        private readonly GKListView ListSources;
+        private readonly GKListView ListRepositories;
+        private readonly GKListView ListGroups;
+        private readonly GKListView ListResearches;
+        private readonly GKListView ListTasks;
+        private readonly GKListView ListCommunications;
+        private readonly GKListView ListLocations;
 
         private readonly HyperView mPersonSummary;
         private readonly HyperView mFamilySummary;
@@ -87,17 +85,6 @@ namespace GKUI
         public NavigationStack Navman
         {
             get { return fNavman; }
-        }
-
-        public bool Modified
-        {
-            get {
-                return fModified;
-            }
-            set {
-                fModified = value;
-                SetMainTitle();
-            }
         }
 
         #endregion
@@ -132,6 +119,8 @@ namespace GKUI
             AppHost.Instance.LoadWindow(this);
 
             fContext = new BaseContext(this);
+            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
+
             fNavman = new NavigationStack();
 
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out ListPersons, out mPersonSummary);
@@ -162,6 +151,11 @@ namespace GKUI
                 #endif
             }
             base.Dispose(disposing);
+        }
+
+        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
+        {
+            SetMainTitle();
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -267,7 +261,7 @@ namespace GKUI
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            GKRecordsView recView = contextMenu.SourceControl as GKRecordsView;
+            GKListView recView = contextMenu.SourceControl as GKListView;
 
             miRecordDuplicate.Visible = (recView == ListPersons);
         }
@@ -301,9 +295,9 @@ namespace GKUI
             return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
         }
 
-        public GKRecordsView GetRecordsViewByType(GEDCOMRecordType recType)
+        public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
-            GKRecordsView list = null;
+            GKListView list = null;
 
             switch (recType) {
                 case GEDCOMRecordType.rtIndividual:
@@ -416,27 +410,27 @@ namespace GKUI
 
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.ListMan;
+            GKListView rView = GetRecordsViewByType(recType);
+            return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKRecordsView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.GetSelectedRecord();
+            GKListView rView = GetRecordsViewByType(recType);
+            return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
         }
 
         public GEDCOMIndividualRecord GetSelectedPerson()
         {
-            return ListPersons.GetSelectedRecord() as GEDCOMIndividualRecord;
+            return GetSelectedRecordEx() as GEDCOMIndividualRecord;
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (sender == null) return;
 
-            GEDCOMRecord rec = ((GKRecordsView) sender).GetSelectedRecord();
+            GEDCOMRecord rec = ((GKListView) sender).GetSelectedData() as GEDCOMRecord;
             if (rec != null)
             {
                 NavAdd(rec);
@@ -446,15 +440,14 @@ namespace GKUI
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.GetContentList();
+            GKListView rView = GetRecordsViewByType(recType);
+            return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
         private void SetMainTitle()
         {
             Text = Path.GetFileName(fContext.FileName);
-            if (fModified)
-            {
+            if (fContext.Modified) {
                 Text = @"* " + Text;
             }
         }
@@ -506,10 +499,19 @@ namespace GKUI
             }
         }
 
+        public void CheckAutosave()
+        {
+            // file is modified, isn't updated now, and isn't now created (exists)
+            if (fContext.Modified && !fContext.IsUpdated() && !fContext.IsUnknown()) {
+                // TODO: if file is new and not exists - don't save it, but hint to user
+                SaveFile(fContext.FileName);
+            }
+        }
+
         public bool CheckModified()
         {
             bool result = true;
-            if (!Modified) return result;
+            if (!fContext.Modified) return result;
 
             DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (dialogResult) {
@@ -526,7 +528,7 @@ namespace GKUI
             return result;
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKRecordsView recView, out HyperView summary)
+        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListView recView, out HyperView summary)
         {
             tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
@@ -578,7 +580,7 @@ namespace GKUI
             GKUtils.ShowPersonInfo(fContext, null, mPersonSummary.Lines);
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
-            Modified = false;
+            fContext.Modified = false;
         }
 
         public void LoadFile(string fileName)
@@ -586,7 +588,7 @@ namespace GKUI
             Clear();
 
             if (fContext.FileLoad(fileName)) {
-                Modified = false;
+                fContext.Modified = false;
                 ChangeFileName();
                 RefreshLists(false);
             }
@@ -595,7 +597,7 @@ namespace GKUI
         public void SaveFile(string fileName)
         {
             if (fContext.FileSave(fileName)) {
-                Modified = false;
+                fContext.Modified = false;
                 ChangeFileName();
             }
         }
@@ -627,7 +629,7 @@ namespace GKUI
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            GKRecordsView rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents(false, -1);
                 PageRecords_SelectedIndexChanged(null, null);
@@ -648,12 +650,12 @@ namespace GKUI
 
                 case RecordAction.raDelete:
                     {
-                        GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+                        GKListView rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
                             HyperView hView = GetHyperViewByType(record.RecordType);
-                            if ((hView != null) && (rView.FilteredCount == 0)) {
+                            if ((hView != null) && (rView.ListMan.FilteredCount == 0)) {
                                 hView.Lines.Clear();
                             }
                         }
@@ -670,7 +672,7 @@ namespace GKUI
 
             if (action != RecordAction.raJump) {
                 fContext.Tree.Header.TransmissionDateTime = dtNow;
-                Modified = true;
+                fContext.Modified = true;
 
                 AppHost.Instance.NotifyRecord(this, record, action);
             }
@@ -883,12 +885,13 @@ namespace GKUI
             string res = "";
 
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKRecordsView rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
 
             if (rView != null)
             {
-                res = LangMan.LS(LSID.LSID_SBRecords) + ": " + rView.TotalCount.ToString();
-                res = res + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + rView.FilteredCount.ToString();
+                var listMan = rView.ListMan;
+                res = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
+                res = res + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
             return res;
@@ -1053,12 +1056,12 @@ namespace GKUI
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            GKRecordsView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+            GKListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
                 ActiveControl = rView;
-                rView.SelectItemByRec(record);
+                rView.SelectItemByData(record);
             }
         }
 
@@ -1095,8 +1098,8 @@ namespace GKUI
         {
             bool result = false;
             if (record != null) {
-                GKRecordsView rView = GetRecordsViewByType(record.RecordType);
-                result = (rView != null && rView.IndexOfRecord(record) >= 0);
+                GKListView rView = GetRecordsViewByType(record.RecordType);
+                result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
             }
             return result;
         }
@@ -1269,7 +1272,6 @@ namespace GKUI
             }
         }
 
-        // FIXME
         public void UpdateControls(bool forceDeactivate)
         {
             try
@@ -1523,8 +1525,11 @@ namespace GKUI
 
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
+            var selPerson = GetSelectedPerson();
+            if (selPerson == null) return;
+
             using (PedigreeExporter p = new PedigreeExporter(this)) {
-                p.Root = this.GetSelectedPerson();
+                p.Root = selPerson;
                 p.Options = AppHost.Options;
                 p.ShieldState = this.Context.ShieldState;
                 p.Kind = kind;
@@ -1564,8 +1569,10 @@ namespace GKUI
 
         private void ShowTreeChart(TreeChartKind chartKind)
         {
-            GEDCOMIndividualRecord selPerson = this.GetSelectedPerson();
-            if (TreeChartModel.CheckTreeChartSize(this.Context.Tree, selPerson, chartKind)) {
+            var selPerson = GetSelectedPerson();
+            if (selPerson == null) return;
+
+            if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 TreeChartWin fmChart = new TreeChartWin(this, selPerson);
                 fmChart.ChartKind = chartKind;
                 fmChart.GenChart();
@@ -1575,13 +1582,19 @@ namespace GKUI
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            CircleChartWin fmChart = new CircleChartWin(this, this.GetSelectedPerson(), CircleChartType.Ancestors);
+            var selPerson = GetSelectedPerson();
+            if (selPerson == null) return;
+
+            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Ancestors);
             AppHost.Instance.ShowWindow(fmChart);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            CircleChartWin fmChart = new CircleChartWin(this, this.GetSelectedPerson(), CircleChartType.Descendants);
+            var selPerson = GetSelectedPerson();
+            if (selPerson == null) return;
+
+            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Descendants);
             AppHost.Instance.ShowWindow(fmChart);
         }
 

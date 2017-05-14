@@ -157,6 +157,7 @@ namespace GKUI.Charts
         private Timer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
+        private TweenLibrary fTween;
 
         // drawing relative offset of tree on graphics
         internal int fSPX;
@@ -308,6 +309,7 @@ namespace GKUI.Charts
 
             InitTimer();
             fModel.InitGraphics();
+            fTween = new TweenLibrary();
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -319,6 +321,7 @@ namespace GKUI.Charts
         {
             if (disposing)
             {
+                fTween.Dispose();
                 if (fModel.DrawFont != null) fModel.DrawFont.Dispose();
                 fModel.DoneGraphics();
                 fModel.Dispose();
@@ -550,7 +553,8 @@ namespace GKUI.Charts
                 }
             }
 
-            AdjustViewPort(fModel.ImageSize, noRedraw);
+            var imageSize = GetImageSize();
+            AdjustViewPort(imageSize, noRedraw);
         }
 
         private Rectangle GetInsideViewPort(bool includePadding)
@@ -575,14 +579,15 @@ namespace GKUI.Charts
         {
             Rectangle viewPort;
 
-            if (!fModel.ImageSize.IsEmpty) {
+            var imageSize = GetImageSize();
+            if (!imageSize.IsEmpty) {
                 Rectangle innerRectangle = GetInsideViewPort(true);
 
-                int x = !HScroll ? (innerRectangle.Width - (fModel.ImageSize.Width + Padding.Horizontal)) / 2 : 0;
-                int y = !VScroll ? (innerRectangle.Height - (fModel.ImageSize.Height + Padding.Vertical)) / 2 : 0;
+                int x = !HScroll ? (innerRectangle.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
+                int y = !VScroll ? (innerRectangle.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
 
-                int width = Math.Min(fModel.ImageSize.Width - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
-                int height = Math.Min(fModel.ImageSize.Height - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
+                int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
+                int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
 
                 viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
             } else {
@@ -596,7 +601,8 @@ namespace GKUI.Charts
         {
             ExtRect region;
 
-            if (!fModel.ImageSize.IsEmpty) {
+            var imageSize = GetImageSize();
+            if (!imageSize.IsEmpty) {
                 Rectangle viewPort = GetImageViewPort();
                 region = ExtRect.CreateBounds(-AutoScrollPosition.X, -AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
             } else {
@@ -655,7 +661,8 @@ namespace GKUI.Charts
         {
             SaveSelection();
 
-            AdjustViewPort(fModel.ImageSize);
+            var imageSize = GetImageSize();
+            AdjustViewPort(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
@@ -946,24 +953,18 @@ namespace GKUI.Charts
             if ((oldX == dstX) && (oldY == dstY)) return;
 
             if (animation) {
-                var tween = new TweenLibrary();
-                tween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
+                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
             } else {
-                SetScroll(dstX, dstY);
+                //fTween.StopTween();
+                //SetScroll(dstX, dstY);
+                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 1);
             }
         }
 
         private void SetScroll(int x, int y)
         {
             TweenDelegate invoker = delegate(int newX, int newY) {
-                try
-                {
-                    AutoScrollPosition = new Point(newX, newY);
-                    Invalidate();
-                    OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
-                } catch (Exception ex) {
-                    Logger.LogWrite("TreeChartBox.SetScroll(): " + ex.Message);
-                }
+                UpdateScrollPosition(new Point(newX, newY));
             };
 
             if (InvokeRequired) {
@@ -977,10 +978,9 @@ namespace GKUI.Charts
 
         #region Print support
 
-        /* TODO(zsv): Temporary implementation. Refactoring this hierarchy later. */
         public override Size GetImageSize()
         {
-            return fModel.ImageSize;
+            return new Size(fModel.ImageWidth, fModel.ImageHeight);
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)

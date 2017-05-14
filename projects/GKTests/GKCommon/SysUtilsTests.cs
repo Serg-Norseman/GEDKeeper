@@ -142,6 +142,9 @@ namespace GKTests.GKCommon
             ival = SysUtils.ParseInt("asdfa", 11);
             Assert.AreEqual(11, ival);
 
+            Assert.AreEqual(11.05, SysUtils.ParseFloat(null, 11.05, false));
+            Assert.AreEqual(11.05, SysUtils.ParseFloat("495,575", 11.05, false)); // badVal -> defVal
+
             double fval = SysUtils.ParseFloat("495.575", 0);
             Assert.AreEqual(495.575, fval);
 

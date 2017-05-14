@@ -179,7 +179,7 @@ namespace GKUI.Charts
 
             fModel.AdjustBounds();
 
-            Size boundary = GetPathsBoundaryI();
+            Size boundary = GetImageSize();
             AdjustViewPort(boundary, false);
         }
 
@@ -188,18 +188,6 @@ namespace GKUI.Charts
             var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler != null)
                 eventHandler(this, person);
-        }
-
-        /// <summary>
-        /// Gets boundary of the area that includes all paths of this chart.
-        /// This member does not recalculates boundaries -- it uses calculation
-        /// made by member `Changed`.
-        /// Result includes width of a path's borders.
-        /// </summary>
-        /// <returns>The paths boundary.</returns>
-        private Size GetPathsBoundaryI()
-        {
-            return new Size((int)(fModel.ImageWidth * fZoomX), (int)(fModel.ImageHeight * fZoomY));
         }
 
         /// <summary>
@@ -379,7 +367,7 @@ namespace GKUI.Charts
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
                         fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
-                        Size boundary = GetPathsBoundaryI();
+                        Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
                     }
@@ -390,7 +378,7 @@ namespace GKUI.Charts
                     if (Keys.None == ModifierKeys) {
                         fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
                         fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
-                        Size boundary = GetPathsBoundaryI();
+                        Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
                     }
@@ -400,7 +388,7 @@ namespace GKUI.Charts
                     if (e.Control) {
                         fZoomX = 1.0f;
                         fZoomY = 1.0f;
-                        Size boundary = GetPathsBoundaryI();
+                        Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
                     }
@@ -511,7 +499,7 @@ namespace GKUI.Charts
                     fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
                     fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
                 }
-                Size boundary = GetPathsBoundaryI();
+                Size boundary = GetImageSize();
                 AdjustViewPort(boundary, true);
                 Invalidate();
             }
@@ -521,10 +509,16 @@ namespace GKUI.Charts
 
         #endregion
 
-        /* TODO(zsv): Temporary implementation. Refactoring this hierarchy later. */
+        /// <summary>
+        /// Gets boundary of the area that includes all paths of this chart.
+        /// This member does not recalculates boundaries -- it uses calculation
+        /// made by member `Changed`.
+        /// Result includes width of a path's borders.
+        /// </summary>
+        /// <returns>The paths boundary.</returns>
         public override Size GetImageSize()
         {
-            return GetPathsBoundaryI();
+            return new Size((int)(fModel.ImageWidth * fZoomX), (int)(fModel.ImageHeight * fZoomY));
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)

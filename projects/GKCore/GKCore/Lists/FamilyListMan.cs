@@ -53,7 +53,8 @@ namespace GKCore.Lists
     {
         private GEDCOMFamilyRecord fRec;
 
-        public FamilyListMan(IBaseContext baseContext) : base(baseContext, new FamilyListColumns())
+        public FamilyListMan(IBaseContext baseContext) : 
+            base(baseContext, new FamilyListColumns(), GEDCOMRecordType.rtFamily)
         {
         }
 

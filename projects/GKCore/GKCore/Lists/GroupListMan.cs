@@ -51,7 +51,8 @@ namespace GKCore.Lists
     {
         private GEDCOMGroupRecord fRec;
 
-        public GroupListMan(IBaseContext baseContext) : base(baseContext, new GroupListColumns())
+        public GroupListMan(IBaseContext baseContext) : 
+            base(baseContext, new GroupListColumns(), GEDCOMRecordType.rtGroup)
         {
         }
 

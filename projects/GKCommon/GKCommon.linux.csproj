@@ -184,6 +184,7 @@
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\Tween.cs" />
+    <Compile Include="GKCommon\TypeHandler.cs" />
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
     <Compile Include="GKCommon\YamlHelper.cs" />

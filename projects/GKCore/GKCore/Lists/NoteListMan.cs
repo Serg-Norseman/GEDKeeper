@@ -51,7 +51,8 @@ namespace GKCore.Lists
     {
         private GEDCOMNoteRecord fRec;
 
-        public NoteListMan(IBaseContext baseContext) : base(baseContext, new NoteListColumns())
+        public NoteListMan(IBaseContext baseContext) : 
+            base(baseContext, new NoteListColumns(), GEDCOMRecordType.rtNote)
         {
         }
 

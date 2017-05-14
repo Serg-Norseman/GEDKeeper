@@ -90,11 +90,11 @@ namespace GKCore.Export
         private ShieldState fShieldState;
         private StringList fSourceList;
 
-        private object fTitleFont;
-        private object fChapFont;
-        private object fPersonFont;
-        private object fLinkFont;
-        private object fTextFont, fSupText;
+        private IFont fTitleFont;
+        private IFont fChapFont;
+        private IFont fPersonFont;
+        private IFont fLinkFont;
+        private IFont fTextFont, fSupText;
 
         private PedigreeFormat fFormat;
         private string fTitle;

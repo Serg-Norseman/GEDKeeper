@@ -19,22 +19,46 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
     public delegate bool ExternalFilterHandler(GEDCOMRecord record);
 
-    public interface IListManager
+    public delegate IListItem CreateListItemHandler(object itemValue, object data);
+
+
+    public interface IListSource : IDisposable
     {
-        ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
+    }
+
+
+    public interface IListManager : IListSource
+    {
         IListColumns ListColumns { get; }
 
         void AddCondition(byte columnId, ConditionKind condition, string value);
         DataType GetColumnDataType(int index);
         string GetColumnName(byte columnId);
-        void PrepareFilter();
+
+        IBaseContext BaseContext { get; }
+        ExternalFilterHandler ExternalFilter { get; set; }
+        IListFilter Filter { get; }
+        int FilteredCount { get; }
+        string QuickFilter { get; set; }
+        GEDCOMRecordType RecordType { get; }
+        int TotalCount { get; }
+
         void ChangeColumnWidth(int colIndex, int colWidth);
+        IListItem CreateListItem(object rowData, CreateListItemHandler handler);
+        bool DeleteRecord(object data);
+        GEDCOMRecord GetContentItem(int itemIndex);
+        List<GEDCOMRecord> GetRecordsList();
+        int IndexOfRecord(object data);
+        void SortContents(int sortColumn, bool sortAscending);
+        void UpdateColumns(IListView listView);
+        void UpdateContents();
+        void UpdateItem(IListItem item, object rowData);
     }
 }

@@ -89,10 +89,13 @@ namespace GKUI.Components
             SubItems.Add(subItem);
         }
 
-        /*public void SetBackColor(IColor color)
+        public void SetBackColor(IColor color)
         {
-            BackColor = color as Color;
-        }*/
+            var colorHandler = color as ColorHandler;
+            if (colorHandler != null) {
+                BackColor = colorHandler.Handle;
+            }
+        }
     }
 
 
@@ -238,6 +241,11 @@ namespace GKUI.Components
         protected SortOrder fSortOrder;
         protected int fUpdateCount;
 
+        // Virtual fields
+        private GKListItem[] fCache;
+        private int fCacheFirstItem;
+        private IListManager fListMan;
+
 
         public int SortColumn
         {
@@ -249,6 +257,30 @@ namespace GKUI.Components
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
+        }
+
+        public IListManager ListMan
+        {
+            get {
+                return fListMan;
+            }
+            set {
+                if (fListMan != value) {
+                    if (fListMan != null) fListMan.Dispose();
+
+                    fListMan = value;
+
+                    if (fListMan != null) {
+                        VirtualMode = true;
+                        fSortColumn = 0;
+                        fSortOrder = SortOrder.Ascending;
+                    } else {
+                        VirtualMode = false;
+                    }
+
+                    //VirtualMode = (fListMan != null);
+                }
+            }
         }
 
 
@@ -272,6 +304,20 @@ namespace GKUI.Components
             fColumnSorter = new LVColumnSorter(this);
 
             ListViewItemSorter = fColumnSorter;
+
+            fListMan = null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (fListMan != null) {
+                    fListMan.Dispose();
+                    fListMan = null;
+                }
+            }
+            base.Dispose(disposing);
         }
 
         public new void BeginUpdate()
@@ -305,18 +351,13 @@ namespace GKUI.Components
             return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
         }
 
-        protected virtual void InternalColumnClick(ColumnClickEventArgs e)
+        protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             SortOrder prevOrder = GetColumnSortOrder(e.Column);
             fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
             fSortColumn = e.Column;
 
-            Sort();
-        }
-
-        protected override void OnColumnClick(ColumnClickEventArgs e)
-        {
-            InternalColumnClick(e);
+            SortContents(true);
 
             // we use Refresh() because only Invalidate() isn't update header's area
             Refresh();
@@ -410,6 +451,174 @@ namespace GKUI.Components
             e.DrawDefault = true;
             base.OnDrawSubItem(e);
         }
+
+        private void SortContents(bool restoreSelected)
+        {
+            if (fListMan != null) {
+                object rec = (restoreSelected) ? GetSelectedData() : null;
+
+                fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
+                ResetCache();
+
+                if (restoreSelected) SelectItemByData(rec);
+            } else {
+                Sort();
+            }
+        }
+
+        #region Virtual mode with ListSource
+
+        private static IListItem CreateListItem(object itemValue, object data)
+        {
+            return new GKListItem(itemValue, data);
+        }
+
+        private GKListItem GetVirtualItem(int itemIndex)
+        {
+            GKListItem newItem;
+
+            object rowData = fListMan.GetContentItem(itemIndex);
+            if (rowData == null) {
+                newItem = null;
+            } else {
+                newItem = fListMan.CreateListItem(rowData, CreateListItem) as GKListItem;
+                fListMan.UpdateItem(newItem, rowData);
+            }
+
+            return newItem;
+        }
+
+        protected override void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)
+        {
+            // Only recreate the cache if we need to.
+            if (fCache != null && e.StartIndex >= fCacheFirstItem && e.EndIndex <= fCacheFirstItem + fCache.Length) return;
+
+            fCacheFirstItem = e.StartIndex;
+            int length = e.EndIndex - e.StartIndex + 1;
+
+            fCache = new GKListItem[length];
+            for (int i = 0; i < length; i++) {
+                fCache[i] = GetVirtualItem(fCacheFirstItem + i);
+            }
+        }
+
+        protected override void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
+        {
+            // If we have the item cached, return it. Otherwise, recreate it.
+            if (fCache != null && e.ItemIndex >= fCacheFirstItem && e.ItemIndex < fCacheFirstItem + fCache.Length) {
+                e.Item = fCache[e.ItemIndex - fCacheFirstItem];
+            } else {
+                e.Item = GetVirtualItem(e.ItemIndex);
+            }
+        }
+
+        protected void ResetCache()
+        {
+            fCache = null;
+        }
+
+        protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
+        {
+            if (fListMan != null && fUpdateCount == 0) {
+                fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
+            }
+
+            base.OnColumnWidthChanged(e);
+        }
+
+        public void UpdateContents(bool titles, int autosizeColumn = -1)
+        {
+            if (fListMan == null) return;
+
+            try
+            {
+                object tempRec = GetSelectedData();
+
+                BeginUpdate();
+                try
+                {
+                    if (titles) {
+                        Columns.Clear();
+                        fListMan.UpdateColumns(this);
+                    }
+
+                    fListMan.UpdateContents();
+                    SortContents(false);
+                    VirtualListSize = fListMan.FilteredCount;
+
+                    #if __MonoCS__
+                    if (fListMan.FilteredCount != 0) {
+                        TopItem = Items[0];
+                    }
+                    #endif
+
+                    ResizeColumn(autosizeColumn);
+                }
+                finally
+                {
+                    EndUpdate();
+                }
+
+                if (tempRec != null) SelectItemByData(tempRec);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+            }
+        }
+
+        public void DeleteRecord(object data)
+        {
+            // crash protection: when you delete records from the diagrams,
+            // between the actual deleting a record and updating the list
+            // may take a few requests to update the list's items which does not already exist
+            if (fListMan != null && fListMan.DeleteRecord(data)) {
+                VirtualListSize = fListMan.FilteredCount;
+            }
+        }
+
+        public void SelectItemByData(object record)
+        {
+            try {
+                int idx = fListMan.IndexOfRecord(record);
+                if (idx >= 0) {
+                    ListViewItem item = Items[idx];
+
+                    SelectedIndices.Clear();
+                    item.Selected = true;
+
+                    // platform: in Mono it doesn't work
+                    //item.EnsureVisible();
+                    EnsureVisible(idx);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("GKListView.SelectItemByData(): " + ex.Message);
+            }
+        }
+
+        public object GetSelectedData()
+        {
+            try {
+                object result = null;
+
+                if (!VirtualMode) {
+                    GKListItem item = GetSelectedItem();
+                    if (item != null) result = item.Data;
+                } else {
+                    if (SelectedIndices.Count > 0) {
+                        int index = SelectedIndices[0];
+                        result = fListMan.GetContentItem(index);
+                    }
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.LogWrite("GKListView.GetSelectedData(): " + ex.Message);
+                return null;
+            }
+        }
+
+        #endregion
 
         #region Public methods
 

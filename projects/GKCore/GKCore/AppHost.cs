@@ -111,13 +111,7 @@ namespace GKCore
             {
                 foreach (IWindow win in fRunningForms) {
                     if (win is IBaseWindow) {
-                        IBaseWindow baseWin = (IBaseWindow) win;
-
-                        // file is modified, isn't updated now, and isn't now created (exists)
-                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.Context.IsUnknown()) {
-                            // TODO: if file is new and not exists - don't save it, but hint to user
-                            baseWin.SaveFile(baseWin.Context.FileName);
-                        }
+                        ((IBaseWindow) win).CheckAutosave();
                     }
                 }
             } catch (Exception ex) {
@@ -201,8 +195,7 @@ namespace GKCore
         {
             fLoadingCount--;
 
-            if (fLoadingCount == 0)
-            {
+            if (fLoadingCount == 0) {
                 ShowTips();
             }
         }
@@ -565,6 +558,14 @@ namespace GKCore
         {
             if (fIsMDI && fMainWindow != null) {
                 fMainWindow.UpdateControls(forceDeactivate);
+            } else {
+                int num = fRunningForms.Count;
+                for (int i = 0; i < num; i++) {
+                    IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
+                    if (baseWin != null) {
+                        baseWin.UpdateControls(forceDeactivate);
+                    }
+                }
             }
         }
 

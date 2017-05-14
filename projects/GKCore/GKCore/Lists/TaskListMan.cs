@@ -57,7 +57,8 @@ namespace GKCore.Lists
     {
         private GEDCOMTaskRecord fRec;
 
-        public TaskListMan(IBaseContext baseContext) : base(baseContext, new TaskListColumns())
+        public TaskListMan(IBaseContext baseContext) : 
+            base(baseContext, new TaskListColumns(), GEDCOMRecordType.rtTask)
         {
         }
 

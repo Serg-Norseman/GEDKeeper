@@ -19,39 +19,57 @@
  */
 
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
-namespace GKCore.Interfaces
+using GKCommon;
+using GKCore.Interfaces;
+
+namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IColor
+    public sealed class ColorHandler: TypeHandler<Color>, IColor
     {
+        public ColorHandler(Color handle) : base(handle)
+        {
+        }
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    public interface IGfxPath
+    public sealed class GfxPathHandler: TypeHandler<GraphicsPath>, IGfxPath
     {
+        public GfxPathHandler(GraphicsPath handle) : base(handle)
+        {
+        }
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    public interface IImage : IDisposable
+    public sealed class ImageHandler: TypeHandler<Image>, IImage
     {
-        int Height { get; }
-        int Width { get; }
-    }
+        public int Height
+        {
+            get { return Handle.Height; }
+        }
 
+        public int Width
+        {
+            get { return Handle.Width; }
+        }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IFont
-    {
+        public ImageHandler(Image handle) : base(handle)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
     }
 }

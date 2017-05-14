@@ -55,7 +55,8 @@ namespace GKCore.Lists
     {
         private GEDCOMSourceRecord fRec;
 
-        public SourceListMan(IBaseContext baseContext) : base(baseContext, new SourceListColumns())
+        public SourceListMan(IBaseContext baseContext) : 
+            base(baseContext, new SourceListColumns(), GEDCOMRecordType.rtSource)
         {
         }
 

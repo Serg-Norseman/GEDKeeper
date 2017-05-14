@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 
 using GKCommon;
@@ -36,6 +35,7 @@ namespace GKCore.Interfaces
         GEDCOMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
         ShieldState ShieldState { get; set; }
+        bool Modified { get; set; }
 
         bool IsUnknown();
         void Clear();
@@ -67,10 +67,10 @@ namespace GKCore.Interfaces
         bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
 
         // Used only in MediaViewer and Slideshow
-        Bitmap LoadMediaImage(GEDCOMFileReference fileReference, bool throwException);
-        Bitmap LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
+        IImage LoadMediaImage(GEDCOMFileReference fileReference, bool throwException);
+        IImage LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
         // Used in FamilyBookExporter, TreeChart and PersonEdit
-        Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
+        IImage GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
         string GetPrimaryBitmapUID(GEDCOMIndividualRecord iRec);
 
         bool IsUpdated();

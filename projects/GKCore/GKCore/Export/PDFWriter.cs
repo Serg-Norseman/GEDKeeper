@@ -22,6 +22,8 @@ using System;
 using System.Drawing;
 using System.IO;
 
+using GKCommon;
+using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;
@@ -34,6 +36,13 @@ namespace GKCore.Export
 
     public class PDFWriter : CustomWriter
     {
+        private sealed class FontHandler: TypeHandler<it.Font>, IFont
+        {
+            public FontHandler(it.Font handle) : base(handle)
+            {
+            }
+        }
+
         private readonly int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
         
         private Document fDocument;
@@ -80,7 +89,7 @@ namespace GKCore.Export
             fDocument.Close();
         }
 
-        public override object CreateFont(string name, float size, bool bold, bool underline, Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, Color color)
         {
             int style = it.Font.NORMAL;
             if (bold) style |= it.Font.BOLD;
@@ -88,33 +97,33 @@ namespace GKCore.Export
 
             BaseColor clr = new BaseColor(color.ToArgb());
 
-            return new it.Font(fBaseFont, size, style, clr);
+            return new FontHandler(new it.Font(fBaseFont, size, style, clr));
         }
 
-        public override void addParagraph(string text, object font)
+        public override void addParagraph(string text, IFont font)
         {
-            fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = Element.ALIGN_LEFT });
+            fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = Element.ALIGN_LEFT });
         }
 
-        public override void addParagraph(string text, object font, TextAlignment alignment)
+        public override void addParagraph(string text, IFont font, TextAlignment alignment)
         {
             int al = iAlignments[(int)alignment];
             
-            fDocument.Add(new Paragraph(text, (iTextSharp.text.Font)font) { Alignment = al });
+            fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = al });
         }
 
-        public override void addParagraphAnchor(string text, object font, string anchor)
+        public override void addParagraphAnchor(string text, IFont font, string anchor)
         {
-            Chunk chunk = new Chunk(text, (iTextSharp.text.Font)font);
+            Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             chunk.SetLocalDestination(anchor);
             fDocument.Add(new Paragraph(chunk));
         }
 
-        public override void addParagraphLink(string text, object font, string link, object linkFont)
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
             Paragraph pg = new Paragraph();
-            pg.Add(new Chunk(text, (iTextSharp.text.Font)font));
-            pg.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
+            pg.Add(new Chunk(text, ((FontHandler)font).Handle));
+            pg.Add(new Chunk(link, ((FontHandler)linkFont).Handle).SetLocalGoto(link));
             fDocument.Add(pg);
         }
 
@@ -130,18 +139,18 @@ namespace GKCore.Export
             fDocument.Add(fList);
         }
 
-        public override void addListItem(string text, object font)
+        public override void addListItem(string text, IFont font)
         {
-            fList.Add(new ListItem(new Chunk(text, (iTextSharp.text.Font)font)));
+            fList.Add(new ListItem(new Chunk(text, ((FontHandler)font).Handle)));
         }
 
-        public override void addListItemLink(string text, object font, string link, object linkFont)
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
         {
             Paragraph p1 = new Paragraph();
-            p1.Add(new Chunk(text, (iTextSharp.text.Font)font));
+            p1.Add(new Chunk(text, ((FontHandler)font).Handle));
 
             if (!string.IsNullOrEmpty(link)) {
-                p1.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
+                p1.Add(new Chunk(link, ((FontHandler)linkFont).Handle).SetLocalGoto(link));
             }
 
             fList.Add(new ListItem(p1));
@@ -160,19 +169,19 @@ namespace GKCore.Export
             fDocument.Add(p);
         }
 
-        public override void addParagraphChunk(string text, object font)
+        public override void addParagraphChunk(string text, IFont font)
         {
-            p.Add(new Chunk(text, (iTextSharp.text.Font)font));
+            p.Add(new Chunk(text, ((FontHandler)font).Handle));
         }
 
-        public override void addParagraphChunkAnchor(string text, object font, string anchor)
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
         {
-            p.Add(new Chunk(text, (iTextSharp.text.Font)font).SetLocalDestination(anchor));
+            p.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalDestination(anchor));
         }
 
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
-            Chunk chunk = new Chunk(text, (iTextSharp.text.Font)font);
+            Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             if (sup) {
                 chunk.SetTextRise(4);
             }
@@ -185,7 +194,7 @@ namespace GKCore.Export
             p.Add(chunk);
         }
 
-        public override void addNote(string text, object font)
+        public override void addNote(string text, IFont font)
         {
             
         }

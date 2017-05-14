@@ -33,23 +33,20 @@ namespace GKCommon
     public delegate void TweenDelegate(int newX, int newY);
 
     ///<summary>
-    /// This class is implemented so that from any other class it can be called, and by passing the correct parameters
-    /// from any object, it will animate the object passed. Parameters required are:
-    /// (sender[do not modify], timer1[do not modify and must exist], X Destination, Y Destination, Animation Type, Duration) or as noted below.
-    /// From the remote class add this to the object's eventHandler:
-    /// TweenLibrary.startTweenEvent(sender, timer1, 300, randint(), "easeinoutcubic", 20); :-mm
+    /// This class is implemented so that from any other class it can be called,
+    /// and by passing the correct parameters from any object, it will animate
+    /// the object passed.
     ///</summary>
     public sealed class TweenLibrary : BaseObject
     {
+        private TweenAnimation fAnimation;
         private bool fBusy;
         private int fCounter;
+        private int fCurX, fCurY;
+        private int fDestX, fDestY;
+        private float fStartX, fStartY;
         private int fTimeStart;
         private int fTimeDest;
-        private int fDestX, fDestY;
-        private int fCurX, fCurY;
-
-        private TweenAnimation fAnimation;
-        private readonly float[] fStartPos;
         private Timer fTimer;
         private TweenDelegate fTweenDelegate;
 
@@ -57,7 +54,14 @@ namespace GKCommon
         {
             fBusy = false;
             fCounter = 0;
-            fStartPos = new float[] { 0, 0 };
+            fStartX = 0.0f;
+            fStartY = 0.0f;
+
+            fTimer = new Timer();
+            fTimer.Interval = 1;
+            fTimer.Elapsed += timer_Tick;
+
+            StopTween();
         }
 
         protected override void Dispose(bool disposing)
@@ -74,7 +78,9 @@ namespace GKCommon
         ///</summary>
         public void StartTween(TweenDelegate tweenDelegate, int srcX, int srcY, int destX, int destY, TweenAnimation animType, int timeInterval)
         {
-            if (fBusy) return;
+            if (tweenDelegate == null) return;
+
+            if (fBusy) StopTween();
             fBusy = true;
 
             fTweenDelegate = tweenDelegate;
@@ -82,18 +88,22 @@ namespace GKCommon
             fTimeStart = fCounter;
             fTimeDest = timeInterval;
             fAnimation = animType;
-            fStartPos[0] = srcX;
-            fStartPos[1] = srcY;
+            fStartX = srcX;
+            fStartY = srcY;
             fCurX = srcX;
             fCurY = srcY;
             fDestX = destX;
             fDestY = destY;
 
-            fTimer = new Timer();
-            fTimer.Interval = 1;
-            fTimer.Elapsed += timer_Tick;
-            fTimer.Stop();
+            fTimer.Enabled = true;
             fTimer.Start();
+        }
+
+        public void StopTween()
+        {
+            fTimer.Stop();
+            fTimer.Enabled = false;
+            fBusy = false;
         }
 
         ///<summary>
@@ -102,36 +112,17 @@ namespace GKCommon
         private void timer_Tick(object sender, EventArgs e)
         {
             if (fCurX == fDestX && fCurY == fDestY) {
-                fTimer.Stop();
-                fTimer.Enabled = false;
-                
-                fBusy = false;
+                StopTween();
             } else {
-                fCurX = Tween(0);
-                fCurY = Tween(1);
+                float t = fCounter - fTimeStart;
+                float d = fTimeDest - fTimeStart;
 
-                if (fTweenDelegate != null) fTweenDelegate(fCurX, fCurY);
-                
+                fCurX = GetFormula(t, fStartX, d, fDestX - fStartX);
+                fCurY = GetFormula(t, fStartY, d, fDestY - fStartY);
+
+                fTweenDelegate(fCurX, fCurY);
                 fCounter++;
             }
-        }
-
-        ///<summary>
-        /// This method returns a value from the tween formula.
-        ///</summary>
-        private int Tween(int prop)
-        {
-            float c;
-            if (prop == 0) {
-                c = fDestX - fStartPos[prop];
-            } else {
-                c = fDestY - fStartPos[prop];
-            }
-
-            float t = (float)fCounter - fTimeStart;
-            float d = (float)fTimeDest - fTimeStart;
-
-            return GetFormula(t, fStartPos[prop], d, c);
         }
 
         ///<summary>

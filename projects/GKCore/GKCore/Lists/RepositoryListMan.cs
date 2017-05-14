@@ -51,7 +51,8 @@ namespace GKCore.Lists
     {
         private GEDCOMRepositoryRecord fRec;
 
-        public RepositoryListMan(IBaseContext baseContext) : base(baseContext, new RepositoryListColumns())
+        public RepositoryListMan(IBaseContext baseContext) : 
+            base(baseContext, new RepositoryListColumns(), GEDCOMRecordType.rtRepository)
         {
         }
 

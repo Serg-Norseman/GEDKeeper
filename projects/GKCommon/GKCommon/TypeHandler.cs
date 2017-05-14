@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,21 +19,22 @@
  */
 
 using System;
-using System.IO;
-using GKCommon;
 
-namespace GKCore.Interfaces
+namespace GKCommon
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IPlatformUtilities
+    public abstract class TypeHandler<T>
     {
-        IImage LoadImage(string fileName);
-        void SaveImage(IImage image, string fileName);
-        IImage CreateImage(Stream stream);
-        IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+        public readonly T Handle;
 
-        IImage GetResourceImage(string resName);
+        public TypeHandler(T handle)
+        {
+            if (handle == null)
+                throw new ArgumentNullException("handle");
+
+            Handle = handle;
+        }
     }
 }

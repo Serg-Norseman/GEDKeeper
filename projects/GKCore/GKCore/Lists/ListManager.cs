@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 
+using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -33,6 +34,18 @@ namespace GKCore.Lists
     /// </summary>
     public abstract class ListManager : BaseObject, IListManager
     {
+        public sealed class ValItem
+        {
+            public readonly GEDCOMRecord Record;
+            public object ColumnValue;
+
+            public ValItem(GEDCOMRecord record)
+            {
+                Record = record;
+                ColumnValue = null;
+            }
+        }
+
         protected sealed class MapColumnRec
         {
             public byte ColType;
@@ -46,13 +59,27 @@ namespace GKCore.Lists
         }
 
         protected ListFilter fFilter;
-        protected IBaseContext fBaseContext;
+        protected readonly IBaseContext fBaseContext;
         protected ExternalFilterHandler fExternalFilter;
 
         private readonly ListColumns fListColumns;
         private readonly List<MapColumnRec> fColumnsMap;
+        private readonly List<ValItem> fContentList;
+        private readonly GEDCOMRecordType fRecordType;
+        private int fXSortFactor;
+        private int fTotalCount;
+        private string fQuickFilter = "*";
 
-        public string QuickFilter = "*";
+
+        public IBaseContext BaseContext
+        {
+            get { return fBaseContext; }
+        }
+
+        public List<ValItem> ContentList
+        {
+            get { return fContentList; }
+        }
 
         public ExternalFilterHandler ExternalFilter
         {
@@ -65,16 +92,40 @@ namespace GKCore.Lists
             get { return fFilter; }
         }
 
+        public int FilteredCount
+        {
+            get { return fContentList.Count; }
+        }
+
         public IListColumns ListColumns
         {
             get { return fListColumns; }
         }
 
-        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns)
+        public GEDCOMRecordType RecordType
+        {
+            get { return fRecordType; }
+        }
+
+        public int TotalCount
+        {
+            get { return fTotalCount; }
+        }
+
+        public string QuickFilter
+        {
+            get { return fQuickFilter; }
+            set { fQuickFilter = value; }
+        }
+
+
+        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType)
         {
             fBaseContext = baseContext;
             fListColumns = defaultListColumns;
             fColumnsMap = new List<MapColumnRec>();
+            fContentList = new List<ValItem>();
+            fRecordType = recordType;
 
             CreateFilter();
         }
@@ -84,6 +135,7 @@ namespace GKCore.Lists
             if (disposing)
             {
                 // dummy
+                //fContentList = null;
             }
             base.Dispose(disposing);
         }
@@ -170,9 +222,12 @@ namespace GKCore.Lists
         {
         }
 
-        public virtual void UpdateItem(IListItem item)
+        public virtual void UpdateItem(IListItem item, object rowData)
         {
-            if (item == null) return;
+            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            if (item == null || rec == null) return;
+
+            Fetch(rec);
 
             int num = fColumnsMap.Count;
             for (int i = 1; i < num; i++)
@@ -382,6 +437,196 @@ namespace GKCore.Lists
             if (props != null) {
                 props.CurWidth = newWidth;
             }
+        }
+
+        private int CompareItems(ValItem item1, ValItem item2)
+        {
+            int compRes;
+            object cv1 = item1.ColumnValue;
+            object cv2 = item2.ColumnValue;
+
+            if (cv1 != null && cv2 != null)
+            {
+                compRes = ((IComparable)cv1).CompareTo(cv2);
+            }
+            else if (cv1 != null && cv2 == null)
+            {
+                compRes = -1;
+            }
+            else if (cv1 == null && cv2 != null)
+            {
+                compRes = 1;
+            }
+            else {
+                compRes = 0;
+            }
+
+            return compRes * fXSortFactor;
+        }
+
+        public void SortContents(int sortColumn, bool sortAscending)
+        {
+            try {
+                int num = fContentList.Count;
+                for (int i = 0; i < num; i++) {
+                    ValItem valItem = fContentList[i];
+                    GEDCOMRecord rec = valItem.Record;
+
+                    if (sortColumn == 0) {
+                        valItem.ColumnValue = rec.GetId();
+                    } else {
+                        Fetch(rec);
+                        valItem.ColumnValue = GetColumnInternalValue(sortColumn);
+                    }
+                }
+
+                fXSortFactor = (sortAscending ? 1 : -1);
+                ListTimSort<ValItem>.Sort(fContentList, CompareItems);
+            } catch (Exception ex) {
+                Logger.LogWrite("ListManager.SortContents(): " + ex.Message);
+            }
+        }
+
+        public void UpdateContents()
+        {
+            fTotalCount = 0;
+
+            PrepareFilter();
+
+            int contentSize = fBaseContext.Tree.RecordsCount;
+
+            fContentList.Clear();
+            fContentList.Capacity = contentSize;
+
+            for (int i = 0; i < contentSize; i++) {
+                GEDCOMRecord rec = fBaseContext.Tree[i];
+
+                if (rec.RecordType == fRecordType) {
+                    fTotalCount++;
+
+                    Fetch(rec);
+                    if (CheckFilter()) {
+                        fContentList.Add(new ValItem(rec));
+                    }
+                }
+            }
+        }
+
+        public List<GEDCOMRecord> GetRecordsList()
+        {
+            int size = fContentList.Count;
+            var result = new List<GEDCOMRecord>(size);
+
+            for (int i = 0; i < size; i++) {
+                result.Add(fContentList[i].Record);
+            }
+
+            return result;
+        }
+
+        public IListItem CreateListItem(object rowData, CreateListItemHandler handler)
+        {
+            GEDCOMRecord record = rowData as GEDCOMRecord;
+            if (record == null || handler == null) return null;
+
+            return handler(record.GetXRefNum(), record);
+        }
+
+        public GEDCOMRecord GetContentItem(int itemIndex)
+        {
+            GEDCOMRecord result;
+            if (itemIndex < 0 || itemIndex >= fContentList.Count) {
+                result = null;
+            } else {
+                result = fContentList[itemIndex].Record;
+            }
+            return result;
+        }
+
+        public int IndexOfRecord(object data)
+        {
+            int result = -1;
+
+            int num = fContentList.Count;
+            for (int i = 0; i < num; i++) {
+                if (fContentList[i].Record == data) {
+                    result = i;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public bool DeleteRecord(object data)
+        {
+            int idx = IndexOfRecord(data);
+            if (idx >= 0) {
+                fContentList.RemoveAt(idx);
+                return true;
+            }
+            return false;
+        }
+
+        public static ListManager Create(IBaseContext baseContext, GEDCOMRecordType recType)
+        {
+            ListManager result = null;
+
+            switch (recType) {
+                case GEDCOMRecordType.rtIndividual:
+                    result = new IndividualListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtFamily:
+                    result = new FamilyListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtNote:
+                    result = new NoteListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtMultimedia:
+                    result = new MultimediaListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtSource:
+                    result = new SourceListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtRepository:
+                    result = new RepositoryListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtGroup:
+                    result = new GroupListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtResearch:
+                    result = new ResearchListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtTask:
+                    result = new TaskListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtCommunication:
+                    result = new CommunicationListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtLocation:
+                    result = new LocationListMan(baseContext);
+                    break;
+
+                case GEDCOMRecordType.rtSubmission:
+                    result = null;
+                    break;
+
+                case GEDCOMRecordType.rtSubmitter:
+                    result = null;
+                    break;
+            }
+
+            return result;
         }
     }
 }

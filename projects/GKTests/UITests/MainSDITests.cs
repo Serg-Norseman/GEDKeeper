@@ -245,7 +245,7 @@ namespace GKTests.UITests
 
 
             // Stage 50: close Base
-            Assert.IsTrue(fCurBase.Modified);
+            Assert.IsTrue(fCurBase.Context.Modified);
             ModalFormHandler = MessageBox_CancelHandler;
             ClickToolStripMenuItem("miFileClose", fMainWin);
 
@@ -853,8 +853,8 @@ namespace GKTests.UITests
         {
             var listRecords = new GKRecordsViewTester("fListRecords", form);
 
-            Assert.IsNotNull(listRecords.Properties.BaseContext);
-            Assert.AreNotEqual(GEDCOMRecordType.rtNone, listRecords.Properties.RecordType);
+            Assert.IsNotNull(listRecords.Properties.ListMan.BaseContext);
+            Assert.AreNotEqual(GEDCOMRecordType.rtNone, listRecords.Properties.ListMan.RecordType);
 
             listRecords.Properties.SelectItem(fIndex);
             ClickButton("btnSelect", form);

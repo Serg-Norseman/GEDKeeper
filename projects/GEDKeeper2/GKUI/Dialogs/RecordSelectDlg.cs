@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         private string fFilter;
-        private GKRecordsView fListRecords;
+        private GKListView fListRecords;
         private GEDCOMRecordType fRecType;
         private Target fTarget;
 
@@ -159,7 +159,7 @@ namespace GKUI.Dialogs
         {
             try
             {
-                ResultRecord = fListRecords.GetSelectedRecord();
+                ResultRecord = fListRecords.GetSelectedData() as GEDCOMRecord;
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)

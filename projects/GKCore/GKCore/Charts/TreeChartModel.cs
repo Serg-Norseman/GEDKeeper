@@ -778,7 +778,6 @@ namespace GKCore.Charts
 
             fImageHeight = fTreeBounds.GetHeight() + fMargins * 2;
             fImageWidth = fTreeBounds.GetWidth() + fMargins * 2;
-            fImageSize = new Size(fImageWidth, fImageHeight);
         }
 
         private void AdjustTreeBounds(TreeChartPerson person)

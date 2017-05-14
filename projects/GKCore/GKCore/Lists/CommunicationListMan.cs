@@ -58,7 +58,8 @@ namespace GKCore.Lists
     {
         private GEDCOMCommunicationRecord fRec;
 
-        public CommunicationListMan(IBaseContext baseContext) : base(baseContext, new CommunicationListColumns())
+        public CommunicationListMan(IBaseContext baseContext) : 
+            base(baseContext, new CommunicationListColumns(), GEDCOMRecordType.rtCommunication)
         {
         }
 

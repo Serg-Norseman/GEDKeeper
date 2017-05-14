@@ -203,7 +203,7 @@ namespace GKCore.Lists
                     eArgs.ItemData = evt;
                 }
 
-                fBaseWin.Modified = true;
+                fBaseWin.Context.Modified = true;
                 fSheetList.UpdateSheet();
             }
         }

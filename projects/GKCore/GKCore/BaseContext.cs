@@ -22,9 +22,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -51,12 +48,14 @@ namespace GKCore
         #region Private fields
 
         private string fFileName;
+        private bool fModified;
+        private ShieldState fShieldState;
+
+        private readonly List<GEDCOMRecord> fLockedRecords;
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
         private readonly ChangeTracker fUndoman;
-        private readonly List<GEDCOMRecord> fLockedRecords;
-        private ShieldState fShieldState;
 
         #endregion
 
@@ -122,6 +121,19 @@ namespace GKCore
             get { return fFileName; }
         }
 
+        public bool Modified
+        {
+            get {
+                return fModified;
+            }
+            set {
+                fModified = value;
+
+                var eventHandler = ModifiedChanged;
+                if (eventHandler != null) eventHandler(this, null);
+            }
+        }
+
         public GEDCOMTree Tree
         {
             get { return fTree; }
@@ -152,6 +164,8 @@ namespace GKCore
                 }
             }
         }
+
+        public event EventHandler ModifiedChanged;
 
         #endregion
 
@@ -244,6 +258,12 @@ namespace GKCore
             if (record == null) return result;
 
             try {
+                // `Viewer` (BaseWin) is notified about deletion of the record
+                // before the fact of deletion
+                if (fViewer != null) {
+                    fViewer.NotifyRecord(record, RecordAction.raDelete);
+                }
+
                 BeginUpdate();
 
                 switch (record.RecordType)
@@ -294,6 +314,11 @@ namespace GKCore
                 }
             } finally {
                 EndUpdate();
+            }
+
+            if (result) {
+                fTree.Header.TransmissionDateTime = DateTime.Now;
+                Modified = true;
             }
 
             return result;
@@ -923,25 +948,19 @@ namespace GKCore
             #endif
         }
 
-        public Bitmap LoadMediaImage(GEDCOMFileReference fileReference, bool throwException)
+        public IImage LoadMediaImage(GEDCOMFileReference fileReference, bool throwException)
         {
             if (fileReference == null) return null;
 
-            Bitmap result = null;
+            IImage result = null;
             try
             {
                 Stream stm;
                 MediaLoad(fileReference, out stm, throwException);
 
-                if (stm != null)
-                {
+                if (stm != null) {
                     if (stm.Length != 0) {
-                        using (Bitmap bmp = new Bitmap(stm))
-                        {
-                            // cloning is necessary to release the resource
-                            // loaded from the image stream
-                            result = (Bitmap)bmp.Clone();
-                        }
+                        result = AppHost.Utilities.CreateImage(stm);
                     }
                     stm.Dispose();
                 }
@@ -958,52 +977,19 @@ namespace GKCore
             return result;
         }
 
-        public Bitmap LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
+        public IImage LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
         {
             if (fileReference == null) return null;
 
-            Bitmap result = null;
+            IImage result = null;
             try
             {
                 Stream stm;
                 MediaLoad(fileReference, out stm, throwException);
 
-                if (stm != null)
-                {
+                if (stm != null) {
                     if (stm.Length != 0) {
-                        using (Bitmap bmp = new Bitmap(stm))
-                        {
-                            bool cutoutIsEmpty = cutoutArea.IsEmpty();
-                            int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
-                            int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
-
-                            if (thumbWidth > 0 && thumbHeight > 0) {
-                                float ratio = SysUtils.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
-                                imgWidth = (int)(imgWidth * ratio);
-                                imgHeight = (int)(imgHeight * ratio);
-                            }
-
-                            Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                            using (Graphics graphic = Graphics.FromImage(newImage)) {
-                                graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphic.SmoothingMode = SmoothingMode.HighQuality;
-                                graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                                graphic.CompositingQuality = CompositingQuality.HighQuality;
-
-                                if (cutoutIsEmpty) {
-                                    graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                                } else {
-                                    Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                                    //Rectangle srcRect = cutoutArea.ToRectangle();
-                                    graphic.DrawImage(bmp, destRect,
-                                                      cutoutArea.Left, cutoutArea.Top,
-                                                      cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                                      GraphicsUnit.Pixel);
-                                }
-                            }
-
-                            result = newImage;
-                        }
+                        result = AppHost.Utilities.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
                     }
                     stm.Dispose();
                 }
@@ -1020,11 +1006,11 @@ namespace GKCore
             return result;
         }
 
-        public Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
+        public IImage GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
         {
             if (iRec == null) return null;
 
-            Bitmap result = null;
+            IImage result = null;
             try
             {
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();

@@ -856,7 +856,7 @@ namespace GKTests.GKCore
 
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, grpRec);
 
             //
             IListFilter filter = listManager.Filter;
@@ -900,7 +900,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, commRec);
         }
 
         [Test]
@@ -922,7 +922,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, famRec);
         }
 
         [Test]
@@ -951,17 +951,17 @@ namespace GKTests.GKCore
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, indRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, indRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, indRec);
         }
 
         [Test]
@@ -983,7 +983,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, locRec);
         }
 
         [Test]
@@ -1005,7 +1005,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, mediaRec);
         }
 
         [Test]
@@ -1028,9 +1028,9 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, noteRec);
             noteRec.Clear();
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, noteRec);
         }
 
         [Test]
@@ -1052,7 +1052,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, repoRec);
         }
 
         [Test]
@@ -1074,7 +1074,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, resRec);
         }
 
         [Test]
@@ -1096,7 +1096,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, srcRec);
         }
 
         [Test]
@@ -1118,7 +1118,7 @@ namespace GKTests.GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem);
+            listManager.UpdateItem(listItem, tskRec);
         }
 
         [Test]
@@ -1220,6 +1220,9 @@ namespace GKTests.GKCore
 
                 globalOptions.ExtendedNames = true;
                 Assert.AreEqual(true, globalOptions.ExtendedNames);
+
+                globalOptions.UseExtendedNotes = true;
+                Assert.AreEqual(true, globalOptions.UseExtendedNotes);
 
                 globalOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
                 Assert.AreEqual(WomanSurnameFormat.wsfMaiden, globalOptions.WomanSurnameFormat);

@@ -109,6 +109,7 @@
     <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
   </ItemGroup>
   <ItemGroup>

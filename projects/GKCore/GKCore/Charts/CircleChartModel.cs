@@ -25,8 +25,6 @@ using System.Drawing.Drawing2D;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
-using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -275,7 +273,6 @@ namespace GKCore.Charts
             /* Add double width of the pen -- adjust both sides. */
             fImageHeight = (int)(fBounds.GetHeight() + fPen.Width * 2);
             fImageWidth = (int)(fBounds.GetWidth() + fPen.Width * 2);
-            fImageSize = new Size(fImageWidth, fImageHeight);
         }
 
         public CircleSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)

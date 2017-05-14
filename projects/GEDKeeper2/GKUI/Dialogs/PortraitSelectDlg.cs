@@ -51,9 +51,10 @@ namespace GKUI.Dialogs
 
             GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
 
-            Image img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
+            IImage img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
             if (img == null) return;
-            imageView1.OpenImage(img);
+
+            imageView1.OpenImage(((ImageHandler)img).Handle);
 
             if (fMultimediaLink.IsPrimaryCutout) {
                 ExtRect rt = fMultimediaLink.CutoutPosition.Value;

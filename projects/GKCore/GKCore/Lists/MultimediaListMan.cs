@@ -55,7 +55,8 @@ namespace GKCore.Lists
     {
         private GEDCOMMultimediaRecord fRec;
 
-        public MultimediaListMan(IBaseContext baseContext) : base(baseContext, new MultimediaListColumns())
+        public MultimediaListMan(IBaseContext baseContext) : 
+            base(baseContext, new MultimediaListColumns(), GEDCOMRecordType.rtMultimedia)
         {
         }
 

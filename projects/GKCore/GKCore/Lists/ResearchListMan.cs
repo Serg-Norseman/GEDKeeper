@@ -61,7 +61,8 @@ namespace GKCore.Lists
     {
         private GEDCOMResearchRecord fRec;
 
-        public ResearchListMan(IBaseContext baseContext) : base(baseContext, new ResearchListColumns())
+        public ResearchListMan(IBaseContext baseContext) : 
+            base(baseContext, new ResearchListColumns(), GEDCOMRecordType.rtResearch)
         {
         }
 

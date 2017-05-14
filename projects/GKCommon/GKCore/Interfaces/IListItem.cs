@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 
 namespace GKCore.Interfaces
 {
@@ -28,9 +27,7 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IListItem : IComparable
     {
-        Color BackColor { get; set; }
-
         void AddSubItem(object itemValue);
-        //void SetBackColor(IColor color);
+        void SetBackColor(IColor color);
     }
 }

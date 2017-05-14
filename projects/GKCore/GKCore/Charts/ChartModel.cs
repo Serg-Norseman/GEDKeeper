@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using GKCommon;
 
 namespace GKCore.Charts
@@ -31,7 +30,6 @@ namespace GKCore.Charts
     {
         protected int fImageHeight;
         protected int fImageWidth;
-        protected Size fImageSize;
         protected ChartRenderer fRenderer;
 
         public int ImageHeight
@@ -42,11 +40,6 @@ namespace GKCore.Charts
         public int ImageWidth
         {
             get { return fImageWidth; }
-        }
-
-        public Size ImageSize
-        {
-            get { return fImageSize; }
         }
 
 

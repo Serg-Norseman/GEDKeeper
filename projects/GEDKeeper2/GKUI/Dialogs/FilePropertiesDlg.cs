@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKCore.UIContracts;
 
 namespace GKUI.Dialogs
@@ -98,8 +99,7 @@ namespace GKUI.Dialogs
                     submitter.Address.AddPhoneNumber(txtTel.Text);
                 }
 
-                submitter.ChangeDate.ChangeDateTime = DateTime.Now;
-                fBase.Modified = true;
+                fBase.NotifyRecord(submitter, RecordAction.raEdit);
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)

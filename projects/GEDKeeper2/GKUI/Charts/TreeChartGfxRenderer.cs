@@ -22,8 +22,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-using GKCommon;
 using GKCore.Charts;
+using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Charts
@@ -46,6 +46,13 @@ namespace GKUI.Charts
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
+        }
+
+        public override void DrawImage(IImage image, float x, float y,
+                                       float width, float height)
+        {
+            var sdImage = ((ImageHandler)image).Handle;
+            fCanvas.DrawImage(sdImage, x, y, width, height);
         }
 
         public override void DrawImage(Image image, float x, float y,

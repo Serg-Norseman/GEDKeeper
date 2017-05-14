@@ -22,7 +22,10 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+
 using GKCore.Charts;
+using GKCore.Interfaces;
+using GKUI.Components;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -90,6 +93,13 @@ namespace GKCore.Export
         }
 
         #endregion
+
+        public override void DrawImage(IImage image, float x, float y,
+                                       float width, float height)
+        {
+            var sdImage = ((ImageHandler)image).Handle;
+            DrawImage(sdImage, x, y, width, height);
+        }
 
         public override void DrawImage(sdImage image, float x, float y,
                                        float width, float height)

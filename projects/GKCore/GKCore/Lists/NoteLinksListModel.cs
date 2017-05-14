@@ -95,7 +95,7 @@ namespace GKCore.Lists
             
             if (result)
             {
-                fBaseWin.Modified = true;
+                fBaseWin.Context.Modified = true;
                 fSheetList.UpdateSheet();
             }
         }

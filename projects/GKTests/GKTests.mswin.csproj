@@ -89,6 +89,7 @@
     <Compile Include="GKCommon\RusDeclensionTests.cs" />
     <Compile Include="GKCommon\IniFileTests.cs" />
     <Compile Include="GKCommon\ImportUtilsTests.cs" />
+    <Compile Include="GKCommon\TypeHandlerTests.cs" />
     <Compile Include="GKCommon\YamlHelperTests.cs" />
     <Compile Include="GKCommon\SmartGraphTests.cs" />
     <Compile Include="GKCommon\StringListTests.cs" />

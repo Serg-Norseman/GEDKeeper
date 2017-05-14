@@ -53,7 +53,7 @@ namespace GKUI.Dialogs
         private GEDCOMIndividualRecord fPerson;
         private GEDCOMIndividualRecord fTarget;
         private TargetMode fTargetMode;
-        private Image fPortraitImg;
+        private IImage fPortraitImg;
 
         public GEDCOMIndividualRecord Person
         {
@@ -313,7 +313,7 @@ namespace GKUI.Dialogs
                 fPortraitImg = fBase.Context.GetPrimaryBitmap(fPerson, imgPortrait.Width, imgPortrait.Height, false);
             }
 
-            Image img = fPortraitImg;
+            Image img = (fPortraitImg == null) ? null : ((ImageHandler)fPortraitImg).Handle;
             if (img == null) {
                 // using avatar's image
                 GEDCOMSex curSex = (GEDCOMSex)cmbSex.SelectedIndex;
@@ -489,7 +489,7 @@ namespace GKUI.Dialogs
                         if (AppHost.StdDialogs.ShowQuestionYN(confirmation) != false)
                         {
                             result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, fPerson, userRef);
-                            fBase.Modified = true;
+                            fBase.Context.Modified = true;
                         }
                         break;
                     }

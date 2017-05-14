@@ -171,6 +171,13 @@ namespace GKTests.GKCore
                 Assert.AreEqual(null, model.Selected);
 
                 Assert.AreEqual(null, model.FindSegmentByRec(null));
+
+                Assert.AreEqual(0, model.IndividualsCount);
+
+                model.GenWidth = 40; // valid
+                Assert.AreEqual(40, model.GenWidth);
+                model.GenWidth = 10; // invalid
+                Assert.AreEqual(40, model.GenWidth);
             }
         }
 
@@ -203,10 +210,6 @@ namespace GKTests.GKCore
 
                 Assert.AreEqual(0, model.ImageHeight);
                 Assert.AreEqual(0, model.ImageWidth);
-
-                Size sz = model.ImageSize;
-                Assert.AreEqual(0, sz.Height);
-                Assert.AreEqual(0, sz.Width);
 
                 model.KinRoot = null;
                 Assert.AreEqual(null, model.KinRoot);

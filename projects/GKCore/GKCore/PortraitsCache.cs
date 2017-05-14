@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 
 using GKCommon;
@@ -45,17 +43,17 @@ namespace GKCore
             }
         }
 
-        private Dictionary<string, Image> fMemoryCache;
+        private Dictionary<string, IImage> fMemoryCache;
 
         private PortraitsCache()
         {
-            fMemoryCache = new Dictionary<string, Image>();
+            fMemoryCache = new Dictionary<string, IImage>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                foreach (KeyValuePair<string, Image> pair in fMemoryCache)
+                foreach (KeyValuePair<string, IImage> pair in fMemoryCache)
                 {
                     pair.Value.Dispose();
                 }
@@ -68,11 +66,11 @@ namespace GKCore
             return GKUtils.GetCachePath() + imageUID + ".bmp";
         }
 
-        public Image GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
+        public IImage GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return null;
 
-            Image result = null;
+            IImage result = null;
 
             // get multimedia UID
             string imageUID = context.GetPrimaryBitmapUID(iRec);
@@ -90,7 +88,7 @@ namespace GKCore
             // in-memory cache doesn't contain image
             // check cache folder by multimedia UID
             if (File.Exists(cachedFile)) {
-                result = new Bitmap(cachedFile);
+                result = AppHost.Utilities.LoadImage(cachedFile);
             }
 
             // if cache doesn't contain the image, then load and save it to cache
@@ -99,7 +97,7 @@ namespace GKCore
 
                 // save image to cache
                 if (result != null) {
-                    result.Save(cachedFile, ImageFormat.Bmp);
+                    AppHost.Utilities.SaveImage(result, cachedFile);
                 }
             }
 

@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -91,6 +90,7 @@ namespace GKTests.Mocks
         public void SaveFile(string fileName) { }
         public void CriticalSave() { }
         public void SaveFileEx(bool saveAs) { }
+        public void CheckAutosave() { }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
         public StringList GetRecordContent(GEDCOMRecord record) { return null; }
@@ -100,6 +100,7 @@ namespace GKTests.Mocks
         public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
         public void RefreshLists(bool titles) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
+        public void UpdateControls(bool forceDeactivate) { }
 
         public void AddRecord() { }
         public void DeleteRecord() { }
@@ -166,20 +167,20 @@ namespace GKTests.Mocks
         public MockWriter() { }
         public override void beginWrite() { }
         public override void endWrite() { }
-        public override void addParagraph(string text, object font, TextAlignment alignment) { }
-        public override void addParagraph(string text, object font) { }
-        public override void addParagraphAnchor(string text, object font, string anchor) { }
-        public override void addParagraphLink(string text, object font, string link, object linkFont) { }
-        public override object CreateFont(string name, float size, bool bold, bool underline, Color color) { return null; }
+        public override void addParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void addParagraph(string text, IFont font) { }
+        public override void addParagraphAnchor(string text, IFont font, string anchor) { }
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont) { }
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, Color color) { return null; }
         public override void beginList() { }
         public override void endList() { }
-        public override void addListItem(string text, object font) { }
-        public override void addListItemLink(string text, object font, string link, object linkFont) { }
+        public override void addListItem(string text, IFont font) { }
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont) { }
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter) { }
         public override void endParagraph() { }
-        public override void addParagraphChunk(string text, object font) { }
-        public override void addParagraphChunkAnchor(string text, object font, string anchor) { }
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup) { }
-        public override void addNote(string text, object font) { }
+        public override void addParagraphChunk(string text, IFont font) { }
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor) { }
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup) { }
+        public override void addNote(string text, IFont font) { }
     }
 }

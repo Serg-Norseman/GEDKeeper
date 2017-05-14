@@ -19,6 +19,8 @@
  */
 
 using Elistia.DotNetRtfWriter;
+using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKCore.Export
 {
@@ -27,6 +29,13 @@ namespace GKCore.Export
     /// </summary>
     public class RTFWriter : CustomWriter
     {
+        private sealed class FontHandler: TypeHandler<FontStruct>, IFont
+        {
+            public FontHandler(FontStruct handle) : base(handle)
+            {
+            }
+        }
+
         private class FontStruct
         {
             public FontDescriptor FD;
@@ -57,9 +66,9 @@ namespace GKCore.Export
             fDocument.save(fFileName);
         }
 
-        private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, object font)
+        private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, IFont font)
         {
-            FontStruct fntStr = (FontStruct)font;
+            FontStruct fntStr = ((FontHandler)font).Handle;
 
             par.DefaultCharFormat.Font = fntStr.FD;
 
@@ -77,34 +86,34 @@ namespace GKCore.Export
             return fmt;
         }
 
-        public override void addParagraph(string text, object font, TextAlignment alignment)
+        public override void addParagraph(string text, IFont font, TextAlignment alignment)
         {
             RtfParagraph par = fDocument.addParagraph();
             par.Alignment = iAlignments[(int)alignment];
             addParagraphChunk(par, text, font);
         }
 
-        public override void addParagraph(string text, object font)
+        public override void addParagraph(string text, IFont font)
         {
             RtfParagraph par = fDocument.addParagraph();
             addParagraphChunk(par, text, font);
         }
 
-        public override void addParagraphAnchor(string text, object font, string anchor)
+        public override void addParagraphAnchor(string text, IFont font, string anchor)
         {
             RtfParagraph par = fDocument.addParagraph();
             RtfCharFormat fmt = addParagraphChunk(par, text, font);
             fmt.Bookmark = anchor;
         }
 
-        public override void addParagraphLink(string text, object font, string link, object linkFont)
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
             RtfParagraph par = fDocument.addParagraph();
             RtfCharFormat fmt = addParagraphChunk(par, text, font);
             fmt.LocalHyperlink = link;
         }
 
-        public override object CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
         {
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
@@ -116,7 +125,7 @@ namespace GKCore.Export
             fntStr.Bold = bold;
             fntStr.Underline = underline;
 
-            return fntStr;
+            return new FontHandler(fntStr);
         }
 
         public override void beginList()
@@ -127,23 +136,23 @@ namespace GKCore.Export
         {
         }
 
-        public override void addListItem(string text, object font)
+        public override void addListItem(string text, IFont font)
         {
             RtfParagraph par = fDocument.addParagraph();
 
-            FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct fntStr = ((FontHandler)font).Handle;
+            var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
         }
 
-        public override void addListItemLink(string text, object font, string link, object linkFont)
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
         {
             RtfParagraph par = fDocument.addParagraph();
 
-            FontStruct fntStr = (FontStruct)font;
-            FontStruct symFont = (FontStruct)CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            FontStruct fntStr = ((FontHandler)font).Handle;
+            var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
@@ -159,7 +168,7 @@ namespace GKCore.Export
             fParagraph = fDocument.addParagraph();
             fParagraph.Alignment = iAlignments[(int)alignment];
             
-            Margins margins = fParagraph.Margins;
+            var margins = fParagraph.Margins;
             margins[Direction.Top] = spacingBefore;
             margins[Direction.Bottom] = spacingAfter;
         }
@@ -168,25 +177,25 @@ namespace GKCore.Export
         {
         }
 
-        public override void addParagraphChunk(string text, object font)
+        public override void addParagraphChunk(string text, IFont font)
         {
             addParagraphChunk(fParagraph, text, font);
         }
 
-        public override void addParagraphChunkAnchor(string text, object font, string anchor)
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
         {
             RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             fmt.Bookmark = anchor;
         }
 
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
             RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
             fmt.LocalHyperlink = link;
         }
 
-        public override void addNote(string text, object font)
+        public override void addNote(string text, IFont font)
         {
             
         }

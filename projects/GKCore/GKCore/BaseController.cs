@@ -887,16 +887,8 @@ namespace GKCore
                         break;
                 }
 
-                if (confirm && AppHost.StdDialogs.ShowQuestionYN(msg) != true)
-                    return false;
-
-                baseWin.NotifyRecord(record, RecordAction.raDelete);
-
-                result = baseWin.Context.DeleteRecord(record);
-
-                if (result) {
-                    baseWin.Modified = true;
-                    baseWin.Context.Tree.Header.TransmissionDateTime = DateTime.Now;
+                if (confirm && AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                    result = baseWin.Context.DeleteRecord(record);
                 }
             }
 

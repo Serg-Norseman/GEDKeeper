@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.UIContracts;
 
 namespace GKUI.Components
@@ -175,7 +176,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKRecordsView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -183,13 +184,12 @@ namespace GKUI.Components
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");
 
-            GKRecordsView recView = new GKRecordsView();
+            GKListView recView = new GKListView();
             recView.HideSelection = false;
             recView.LabelEdit = false;
             recView.FullRowSelect = true;
             recView.View = View.Details;
-            recView.BaseContext = baseContext;
-            recView.RecordType = recType;
+            recView.ListMan = ListManager.Create(baseContext, recType);
             recView.Dock = DockStyle.Fill;
 
             parent.Controls.Add(recView);

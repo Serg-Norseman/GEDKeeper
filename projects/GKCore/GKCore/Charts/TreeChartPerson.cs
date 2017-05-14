@@ -24,6 +24,7 @@ using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -70,7 +71,7 @@ namespace GKCore.Charts
         private GEDCOMSex fSex;
         private PersonList fChilds;
         private PersonList fSpouses;
-        private Image fPortrait;
+        private IImage fPortrait;
         private int fPortraitWidth;
 
         // for rendering
@@ -96,7 +97,7 @@ namespace GKCore.Charts
         public ExtRect PortraitArea;
 
 
-        public Image Portrait
+        public IImage Portrait
         {
             get { return fPortrait; }
         }
@@ -338,7 +339,8 @@ namespace GKCore.Charts
                             fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
-                                fPortrait = (fSex == GEDCOMSex.svFemale) ? GKCoreResources.piFemale140 : GKCoreResources.piMale140;
+                                string resName = (fSex == GEDCOMSex.svFemale) ? "piFemale140" : "piMale140";
+                                fPortrait = AppHost.Utilities.GetResourceImage(resName);
                             }
                         }
                         catch (MediaFileNotFoundException)

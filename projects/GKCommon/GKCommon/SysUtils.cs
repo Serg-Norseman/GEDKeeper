@@ -568,9 +568,9 @@ namespace GKCommon
             return res;
         }
 
-        public static double ParseFloat(string str, double Default, bool checkSeparator = false)
+        public static double ParseFloat(string str, double defaultValue, bool checkSeparator = false)
         {
-            if (string.IsNullOrEmpty(str)) return Default;
+            if (string.IsNullOrEmpty(str)) return defaultValue;
 
             string decSep;
             if (checkSeparator) {
@@ -588,19 +588,6 @@ namespace GKCommon
             if (double.TryParse(str, NumberStyles.Float, formatInfo, out value)) {
                 result = value;
             } else {
-                result = Default;
-            }
-            return result;
-        }
-
-        public static double ParseFloat(string value, double defaultValue)
-        {
-            double result;
-            // Try parsing in the current culture
-            if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out result) &&
-                // Then in neutral language
-                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result))
-            {
                 result = defaultValue;
             }
             return result;

@@ -30,7 +30,6 @@ namespace GKCore.Interfaces
     public interface IBaseWindow : IWorkWindow, ILocalization
     {
         IBaseContext Context { get; }
-        bool Modified { get; set; }
 
         void Activate();
         void Close();
@@ -40,6 +39,7 @@ namespace GKCore.Interfaces
         void LoadFile(string fileName);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
+        void CheckAutosave();
 
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
@@ -53,6 +53,7 @@ namespace GKCore.Interfaces
         void ShowRecordsTab(GEDCOMRecordType recType);
         void SelectRecordByXRef(string xref);
         void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
+        void UpdateControls(bool forceDeactivate);
 
         void AddRecord();
         void DeleteRecord();

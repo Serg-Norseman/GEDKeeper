@@ -23,6 +23,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -144,7 +145,8 @@ namespace GKCore.Lists
         private UDN filter_abd;
         private GEDCOMSourceRecord filter_source;
 
-        public IndividualListMan(IBaseContext baseContext) : base(baseContext, new IndividualListColumns())
+        public IndividualListMan(IBaseContext baseContext) : 
+            base(baseContext, new IndividualListColumns(), GEDCOMRecordType.rtIndividual)
         {
         }
 
@@ -568,19 +570,19 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateItem(IListItem item)
+        public override void UpdateItem(IListItem item, object rowData)
         {
-            base.UpdateItem(item);
+            base.UpdateItem(item, rowData);
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 
             if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
             {
-                item.BackColor = GKData.HighlightUnparentedColor;
+                item.SetBackColor(new ColorHandler(GKData.HighlightUnparentedColor));
             }
             else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
             {
-                item.BackColor = GKData.HighlightUnmarriedColor;
+                item.SetBackColor(new ColorHandler(GKData.HighlightUnmarriedColor));
             }
         }
 

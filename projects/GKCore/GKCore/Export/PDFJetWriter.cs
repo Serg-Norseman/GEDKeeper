@@ -29,9 +29,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using PDFjet.NET;
+using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKCore.Export
 {
+    using pjnFont = PDFjet.NET.Font;
     /*
      * Total: the file is generated, only one worked a strange font, the Russian language is.
      * How to make arrangement - it is unclear; how to form paragraphs - it is unclear; how to make a multi-page document - is unclear.
@@ -40,12 +43,11 @@ namespace GKCore.Export
 
     public class PDFJetWriter : CustomWriter
     {
-        private class FontStruct
+        private sealed class FontHandler: TypeHandler<pjnFont>, IFont
         {
-            public PDFjet.NET.Font FD;
-            public System.Drawing.Color OriginalColor;
-            public bool Bold;
-            public bool Underline;
+            public FontHandler(pjnFont handle) : base(handle)
+            {
+            }
         }
 
         private int[] iAlignments = new int[] { Align.LEFT, Align.CENTER, Align.RIGHT, Align.JUSTIFY };
@@ -113,60 +115,62 @@ namespace GKCore.Export
             this.fDocument.Close();
         }
 
-        public override object CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
         {
             this.requireDocument();
 
             //CoreFont cf = (!bold) ? CoreFont.TIMES_ROMAN : CoreFont.TIMES_BOLD;
 
-            PDFjet.NET.Font fnt = new PDFjet.NET.Font(this.fDocument/*, cf*/, "AdobeMingStd"/*, CodePage.UNICODE*/);
+            pjnFont fnt = new pjnFont(this.fDocument/*, cf*/, "AdobeMingStd"/*, CodePage.UNICODE*/);
             fnt.SetSize(size);
             fnt.SetKernPairs(false);
             
-            FontStruct fntStr = new FontStruct();
-            fntStr.FD = fnt;
-            fntStr.OriginalColor = color;
-            fntStr.Bold = bold;
-            fntStr.Underline = underline;
-
-            return fntStr;
+            return new FontHandler(fnt);
         }
 
-        public override void addParagraph(string text, object font)
+        public override void addParagraph(string text, IFont font)
         {
+            pjnFont fnt = ((FontHandler)font).Handle;
+
             Paragraph p = new Paragraph();
-            TextLine tl = new TextLine(((FontStruct)font).FD, text);
+            TextLine tl = new TextLine(fnt, text);
             p.Add(tl);
             this.paragraphs.Add(p);
             this.fColumn.AddParagraph(p);
         }
 
-        public override void addParagraph(string text, object font, TextAlignment alignment)
+        public override void addParagraph(string text, IFont font, TextAlignment alignment)
         {
+            pjnFont fnt = ((FontHandler)font).Handle;
+
             int al = iAlignments[(int)alignment];
             
             Paragraph p = new Paragraph();
             p.SetAlignment(al);
-            TextLine tl = new TextLine(((FontStruct)font).FD, text);
+            TextLine tl = new TextLine(fnt, text);
             p.Add(tl);
             this.paragraphs.Add(p);
             this.fColumn.AddParagraph(p);
         }
 
-        public override void addParagraphAnchor(string text, object font, string anchor)
+        public override void addParagraphAnchor(string text, IFont font, string anchor)
         {
+            pjnFont fnt = ((FontHandler)font).Handle;
+
             Paragraph p = new Paragraph();
-            TextLine tl = new TextLine(((FontStruct)font).FD, text);
+            TextLine tl = new TextLine(fnt, text);
             p.Add(tl);
             this.paragraphs.Add(p);
             this.fPage.AddDestination(anchor + "#", tl.GetDestinationY());
             this.fColumn.AddParagraph(p);
         }
 
-        public override void addParagraphLink(string text, object font, string link, object linkFont)
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
+            pjnFont fnt = ((FontHandler)font).Handle;
+
             Paragraph p = new Paragraph();
-            TextLine tl = new TextLine(((FontStruct)font).FD, text);
+            TextLine tl = new TextLine(fnt, text);
             tl.SetGoToAction(link + "#");
             p.Add(tl);
             this.paragraphs.Add(p);
@@ -181,11 +185,11 @@ namespace GKCore.Export
         {
         }
 
-        public override void addListItem(string text, object font)
+        public override void addListItem(string text, IFont font)
         {
         }
 
-        public override void addListItemLink(string text, object font, string link, object linkFont)
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
         {
         }
 
@@ -197,19 +201,19 @@ namespace GKCore.Export
         {
         }
 
-        public override void addParagraphChunk(string text, object font)
+        public override void addParagraphChunk(string text, IFont font)
         {
         }
 
-        public override void addParagraphChunkAnchor(string text, object font, string anchor)
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
         {
         }
 
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
         }
 
-        public override void addNote(string text, object font)
+        public override void addNote(string text, IFont font)
         {
         }
     }

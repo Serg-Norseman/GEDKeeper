@@ -59,7 +59,8 @@ namespace GKCore.Lists
     {
         private GEDCOMLocationRecord fRec;
 
-        public LocationListMan(IBaseContext baseContext) : base(baseContext, new LocationListColumns())
+        public LocationListMan(IBaseContext baseContext) : 
+            base(baseContext, new LocationListColumns(), GEDCOMRecordType.rtLocation)
         {
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,21 +19,29 @@
  */
 
 using System;
-using System.IO;
+using System.Drawing;
 using GKCommon;
+using GKCore.Interfaces;
+using NUnit.Framework;
 
-namespace GKCore.Interfaces
+namespace GKTests.GKCommon
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IPlatformUtilities
+    [TestFixture]
+    public class TypeHandlerTests
     {
-        IImage LoadImage(string fileName);
-        void SaveImage(IImage image, string fileName);
-        IImage CreateImage(Stream stream);
-        IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+        [Test]
+        public void Test_General()
+        {
+            var handler = new ColorHandler(Color.PaleVioletRed);
+            Assert.IsNotNull(handler);
+            Assert.AreEqual(Color.PaleVioletRed, handler.Handle);
+        }
 
-        IImage GetResourceImage(string resName);
+        private sealed class ColorHandler: TypeHandler<Color>, IColor
+        {
+            public ColorHandler(Color handle) : base(handle)
+            {
+            }
+        }
     }
 }

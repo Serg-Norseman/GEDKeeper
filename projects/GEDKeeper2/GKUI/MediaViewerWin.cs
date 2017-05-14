@@ -62,8 +62,10 @@ namespace GKUI
                 {
                     case MultimediaKind.mkImage:
                         {
-                            Image img = fBase.Context.LoadMediaImage(fFileRef, false);
-                            SetViewImage(img);
+                            IImage img = fBase.Context.LoadMediaImage(fFileRef, false);
+                            if (img != null) {
+                                SetViewImage(((ImageHandler)img).Handle);
+                            }
                             break;
                         }
 

@@ -146,9 +146,6 @@
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKRecordsView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\PrintableForm.cs">
       <SubType>Form</SubType>
     </Compile>

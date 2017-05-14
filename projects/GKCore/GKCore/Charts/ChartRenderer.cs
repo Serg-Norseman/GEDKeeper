@@ -20,6 +20,7 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {
@@ -59,6 +60,9 @@ namespace GKCore.Charts
         }
 
         public abstract void DrawImage(Image image, float x, float y,
+                                       float width, float height);
+
+        public abstract void DrawImage(IImage image, float x, float y,
                                        float width, float height);
 
         public abstract int GetTextHeight(Font font);

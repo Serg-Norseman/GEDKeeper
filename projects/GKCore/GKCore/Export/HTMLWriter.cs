@@ -23,6 +23,9 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 
+using GKCommon;
+using GKCore.Interfaces;
+
 namespace GKCore.Export
 {
     /// <summary>
@@ -30,6 +33,13 @@ namespace GKCore.Export
     /// </summary>
     public class HTMLWriter : CustomWriter
     {
+        private sealed class FontHandler: TypeHandler<string>, IFont
+        {
+            public FontHandler(string handle) : base(handle)
+            {
+            }
+        }
+
         private StreamWriter fStream;
         private readonly Dictionary<string, string> fStyles;
 
@@ -68,41 +78,41 @@ namespace GKCore.Export
             fStream.Close();
         }
 
-        public override void addParagraph(string text, object font, TextAlignment alignment)
+        public override void addParagraph(string text, IFont font, TextAlignment alignment)
         {
-            fStream.WriteLine("<p class=\""+font+"\">"+text+"</p>");
+            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\">"+text+"</p>");
         }
 
-        public override void addParagraph(string text, object font)
+        public override void addParagraph(string text, IFont font)
         {
-            fStream.WriteLine("<p class=\""+font+"\">"+text+"</p>");
+            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\">"+text+"</p>");
         }
 
-        public override void addParagraphAnchor(string text, object font, string anchor)
+        public override void addParagraphAnchor(string text, IFont font, string anchor)
         {
-            fStream.WriteLine("<p class=\""+font+"\"><a name=\""+anchor+"\">"+text+"</a></p>");
+            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a name=\""+anchor+"\">"+text+"</a></p>");
         }
 
-        public override void addParagraphLink(string text, object font, string link, object linkFont)
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
-            fStream.WriteLine("<p class=\""+font+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
+            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
         }
 
-        public override object CreateFont(string name, float size, bool bold, bool underline, Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, Color color)
         {
             string style;
-            
+
             style = "font-family: " + name;
             style += "; font-size: " + size + "pt";
             style += "; color: " + color.Name;
             if (bold) style += "; font-weight: bold";
             if (underline) style += "; text-decoration: underline";
-            
+
             int index = fStyles.Count;
             string key = "style_" + index;
             fStyles.Add(key, style);
 
-            return key;
+            return new FontHandler(key);
         }
 
         public override void beginList()
@@ -115,19 +125,19 @@ namespace GKCore.Export
             fStream.WriteLine("</ul>");
         }
 
-        public override void addListItem(string text, object font)
+        public override void addListItem(string text, IFont font)
         {
-            fStream.WriteLine("<li class=\""+font+"\">"+text+"</li>");
+            fStream.WriteLine("<li class=\""+((FontHandler)font).Handle+"\">"+text+"</li>");
         }
 
-        public override void addListItemLink(string text, object font, string link, object linkFont)
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
         {
             string alink = "";
             if (!string.IsNullOrEmpty(link)) {
                 alink = "<a href=\"#" + link + "\">" + link + "</a>";
             }
 
-            fStream.WriteLine("<li class=\""+font+"\">" + text + alink + "</li>");
+            fStream.WriteLine("<li class=\""+((FontHandler)font).Handle+"\">" + text + alink + "</li>");
         }
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
@@ -140,24 +150,24 @@ namespace GKCore.Export
             fStream.WriteLine("</p>");
         }
 
-        public override void addParagraphChunk(string text, object font)
+        public override void addParagraphChunk(string text, IFont font)
         {
             fStream.WriteLine(text);
         }
 
-        public override void addParagraphChunkAnchor(string text, object font, string anchor)
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
         {
             fStream.WriteLine("<a name=\""+anchor+"\">"+text+"</a>");
         }
 
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
             if (sup) fStream.WriteLine("<sup>");
             fStream.WriteLine("<a href=\"#"+link+"\">"+text+"</a>");
             if (sup) fStream.WriteLine("</sup>");
         }
 
-        public override void addNote(string text, object font)
+        public override void addNote(string text, IFont font)
         {
             
         }

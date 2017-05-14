@@ -101,7 +101,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListModel
+    public abstract class ListModel : BaseObject, IListSource
     {
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;

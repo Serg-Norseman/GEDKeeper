@@ -25,6 +25,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -371,9 +372,11 @@ namespace GKCore.Export
             pg.KeepTogether = true;
             mct.AddElement(pg);
 
-            var bmp = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
-            if (bmp != null)
+            // FIXME
+            IImage image = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
+            if (image != null)
             {
+                var bmp = ((ImageHandler)image).Handle;
                 itImage img = itImage.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
 
                 float fitWidth = colWidth * 0.5f;

@@ -26,7 +26,7 @@ using NUnit.Extensions.Forms;
 
 namespace GKTests.ControlTesters
 {
-    public class GKRecordsViewTester : ControlTester<GKRecordsView, GKRecordsViewTester>
+    public class GKRecordsViewTester : ControlTester<GKListView, GKRecordsViewTester>
     {
         public GKRecordsViewTester()
         {
@@ -36,9 +36,9 @@ namespace GKTests.ControlTesters
         {
         }
 
-        public new GKRecordsView Properties
+        public new GKListView Properties
         {
-            get { return (GKRecordsView) TheObject; }
+            get { return (GKListView) TheObject; }
         }
     }
 }
