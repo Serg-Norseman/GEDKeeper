@@ -26,13 +26,57 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Types;
 
 namespace GKCore.Lists
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListManager : BaseObject, IListManager
+    public abstract class ListSource : BaseObject, IListSource
+    {
+        private EnumSet<RecordAction> fAllowedActions;
+        private bool fColumnsHaveBeenChanged;
+
+        protected readonly IBaseContext fBaseContext;
+        protected readonly ListColumns fListColumns;
+
+
+        public EnumSet<RecordAction> AllowedActions
+        {
+            get { return fAllowedActions; }
+            set { fAllowedActions = value; }
+        }
+
+        public IBaseContext BaseContext
+        {
+            get { return fBaseContext; }
+        }
+
+        public bool ColumnsHaveBeenChanged
+        {
+            get { return fColumnsHaveBeenChanged; }
+            set { fColumnsHaveBeenChanged = value; }
+        }
+
+        public IListColumns ListColumns
+        {
+            get { return fListColumns; }
+        }
+
+
+        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
+        {
+            fAllowedActions = new EnumSet<RecordAction>();
+            fBaseContext = baseContext;
+            fListColumns = defaultListColumns;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class ListManager : ListSource, IListManager
     {
         public sealed class ValItem
         {
@@ -59,10 +103,8 @@ namespace GKCore.Lists
         }
 
         protected ListFilter fFilter;
-        protected readonly IBaseContext fBaseContext;
         protected ExternalFilterHandler fExternalFilter;
 
-        private readonly ListColumns fListColumns;
         private readonly List<MapColumnRec> fColumnsMap;
         private readonly List<ValItem> fContentList;
         private readonly GEDCOMRecordType fRecordType;
@@ -70,11 +112,6 @@ namespace GKCore.Lists
         private int fTotalCount;
         private string fQuickFilter = "*";
 
-
-        public IBaseContext BaseContext
-        {
-            get { return fBaseContext; }
-        }
 
         public List<ValItem> ContentList
         {
@@ -97,11 +134,6 @@ namespace GKCore.Lists
             get { return fContentList.Count; }
         }
 
-        public IListColumns ListColumns
-        {
-            get { return fListColumns; }
-        }
-
         public GEDCOMRecordType RecordType
         {
             get { return fRecordType; }
@@ -119,10 +151,9 @@ namespace GKCore.Lists
         }
 
 
-        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType)
+        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType) :
+            base(baseContext, defaultListColumns)
         {
-            fBaseContext = baseContext;
-            fListColumns = defaultListColumns;
             fColumnsMap = new List<MapColumnRec>();
             fContentList = new List<ValItem>();
             fRecordType = recordType;
@@ -176,7 +207,11 @@ namespace GKCore.Lists
             return result;
         }
 
-        public abstract bool CheckFilter();
+        public virtual bool CheckFilter()
+        {
+            return true;
+        }
+
         public abstract void Fetch(GEDCOMRecord aRec);
 
         protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)

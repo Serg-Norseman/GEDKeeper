@@ -26,7 +26,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Operations;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -76,8 +75,9 @@ namespace GKUI.Dialogs
                 }
 
                 fNotesList.ListModel.DataOwner = fResearch;
-
-                UpdateLists();
+                fTasksList.ListModel.DataOwner = fResearch;
+                fCommunicationsList.ListModel.DataOwner = fResearch;
+                fGroupsList.ListModel.DataOwner = fResearch;
             }
             catch (Exception ex)
             {
@@ -104,29 +104,14 @@ namespace GKUI.Dialogs
 
             fTasksList = new GKSheetList(pageTasks);
             fTasksList.OnModify += ListTasksModify;
-            fTasksList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            fTasksList.AddColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
-            fTasksList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
-            fTasksList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
-            fTasksList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
             fTasksList.SetControlName("fTasksList"); // for purpose of tests
 
             fCommunicationsList = new GKSheetList(pageCommunications);
             fCommunicationsList.OnModify += ListCommunicationsModify;
-            fCommunicationsList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
-            fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
-            fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
-            fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
             fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
 
             fGroupsList = new GKSheetList(pageGroups);
             fGroupsList.OnModify += ListGroupsModify;
-            fGroupsList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
-            fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             fNotesList = new GKSheetList(pageNotes);
@@ -153,161 +138,32 @@ namespace GKUI.Dialogs
 
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
-            bool res = false;
-
             GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    task = fBase.Context.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
-                    res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, fResearch, task);
-                    break;
-
-                case RecordAction.raEdit:
-                    res = (task != null && BaseController.ModifyTask(fBase, ref task));
-                    break;
-
-                case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
-                    {
-                        res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, fResearch, task);
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (task != null)
-                    {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(task.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && task != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(task.XRef);
+                Close();
             }
-
-            if (res) UpdateLists();
         }
 
         private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
-            bool res = false;
-
             GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    comm = fBase.Context.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
-                    res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, fResearch, comm);
-                    break;
-
-                case RecordAction.raEdit:
-                    res = (comm != null && BaseController.ModifyCommunication(fBase, ref comm));
-                    break;
-
-                case RecordAction.raDelete:
-                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != false)
-                    {
-                        res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, fResearch, comm);
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (comm != null)
-                    {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(comm.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && comm != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(comm.XRef);
+                Close();
             }
-
-            if (res) UpdateLists();
         }
 
         private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
-            bool res = false;
-
             GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    group = fBase.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
-                    res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, fResearch, group);
-                    break;
-
-                case RecordAction.raDelete:
-                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false)
-                    {
-                        res = fLocalUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, fResearch, group);
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (group != null)
-                    {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(group.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && group != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(group.XRef);
+                Close();
             }
-
-            if (res) UpdateLists();
-        }
-
-        private void UpdateLists()
-        {
-            if (fResearch == null) {
-                fTasksList.ClearItems();
-                fCommunicationsList.ClearItems();
-                fGroupsList.ClearItems();
-
-                return;
-            }
-
-            fNotesList.UpdateSheet();
-
-            fTasksList.BeginUpdate();
-            fTasksList.ClearItems();
-            foreach (GEDCOMPointer taskPtr in fResearch.Tasks)
-            {
-                GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
-                if (task == null) continue;
-
-                IListItem item = fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
-                item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
-                item.AddSubItem(new GEDCOMDateItem(task.StartDate));
-                item.AddSubItem(new GEDCOMDateItem(task.StopDate));
-            }
-            fTasksList.EndUpdate();
-
-            fCommunicationsList.BeginUpdate();
-            fCommunicationsList.ClearItems();
-            foreach (GEDCOMPointer commPtr in fResearch.Communications)
-            {
-                GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
-                if (corr == null) continue;
-
-                IListItem item = fCommunicationsList.AddItem(corr.CommName, corr);
-                item.AddSubItem(GKUtils.GetCorresponderStr(fBase.Context.Tree, corr, false));
-                item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
-                item.AddSubItem(new GEDCOMDateItem(corr.Date));
-            }
-            fCommunicationsList.EndUpdate();
-
-            fGroupsList.BeginUpdate();
-            fGroupsList.ClearItems();
-            foreach (GEDCOMPointer groupPtr in fResearch.Groups)
-            {
-                GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
-                if (grp == null) continue;
-
-                fGroupsList.AddItem(grp.GroupName, grp);
-            }
-            fGroupsList.EndUpdate();
         }
 
         private void AcceptChanges()
@@ -354,6 +210,9 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
+            fTasksList.ListModel = new ResTasksSublistModel(fBase, fLocalUndoman);
+            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fLocalUndoman);
+            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fLocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
         }
     }

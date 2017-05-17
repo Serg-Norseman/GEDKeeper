@@ -31,15 +31,15 @@ namespace GKCore.Lists
     {
         public MediaLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveUp, RecordAction.raMoveDown);
         }
 
         public override void InitView()
         {
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_RPMultimedia), 300, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
-
-            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
         }
 
         public override void UpdateContent()

@@ -86,8 +86,6 @@ namespace GKCore.Lists
 
     public interface ISheetList
     {
-        EnumSet<SheetButton> Buttons { get; set; }
-
         void AddColumn(string caption, int width, bool autoSize);
         void BeginUpdate();
         void EndUpdate();
@@ -101,12 +99,13 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListModel : BaseObject, IListSource
+    public abstract class ListModel : ListSource
     {
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
         protected GEDCOMObject fDataOwner;
+
 
         public GEDCOMObject DataOwner
         {
@@ -132,7 +131,8 @@ namespace GKCore.Lists
             }
         }
 
-        protected ListModel(IBaseWindow baseWin, ChangeTracker undoman)
+        protected ListModel(IBaseWindow baseWin, ChangeTracker undoman) :
+            base(baseWin.Context, new ListColumns())
         {
             fBaseWin = baseWin;
             fUndoman = undoman;

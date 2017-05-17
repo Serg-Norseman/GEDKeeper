@@ -31,6 +31,8 @@ namespace GKCore.Lists
     {
         public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
         }
 
         public override void InitView()

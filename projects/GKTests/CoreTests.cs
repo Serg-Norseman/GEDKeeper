@@ -862,7 +862,7 @@ namespace GKTests.GKCore
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
 
-            GroupListColumns copyColumns = new GroupListColumns();
+            ListColumns copyColumns = GroupListMan.CreateGroupListColumns();
             listColumns.CopyTo(copyColumns);
 
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });

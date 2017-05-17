@@ -31,6 +31,9 @@ namespace GKCore.Lists
     {
         public SourceCitationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveUp, RecordAction.raMoveDown);
         }
 
         public override void InitView()
@@ -39,9 +42,6 @@ namespace GKCore.Lists
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
-
-            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
         }
 
         public override void UpdateContent()

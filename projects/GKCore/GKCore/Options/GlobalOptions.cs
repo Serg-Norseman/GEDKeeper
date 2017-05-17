@@ -54,7 +54,7 @@ namespace GKCore.Options
         private readonly StringList fRelations;
         private readonly StringList fResidenceFilters;
         private bool fShowTips;
-        private readonly IndividualListColumns fIndividualListColumns;
+        private readonly ListColumns fIndividualListColumns;
         private bool fListHighlightUnmarriedPersons;
         private bool fListHighlightUnparentedPersons;
         private ExtRect fMWinRect;
@@ -212,7 +212,7 @@ namespace GKCore.Options
             set { fListHighlightUnparentedPersons = value; }
         }
 
-        public IndividualListColumns IndividualListColumns
+        public ListColumns IndividualListColumns
         {
             get { return fIndividualListColumns; }
         }
@@ -365,7 +365,7 @@ namespace GKCore.Options
             fAllowMediaStoreReferences = false;
             fUseExtendedNotes = true;
 
-            fIndividualListColumns = new IndividualListColumns();
+            fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
 
             fLanguages = new List<LangRecord>();

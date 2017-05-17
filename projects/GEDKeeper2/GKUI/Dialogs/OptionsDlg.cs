@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
     {
         private readonly IHost fHost;
         private GlobalOptions fOptions;
-        private readonly IndividualListColumns fTempColumns;
+        private readonly ListColumns fTempColumns;
 
         public GlobalOptions Options
         {
@@ -63,7 +63,7 @@ namespace GKUI.Dialogs
 
             fHost = host;
             fOptions = GlobalOptions.Instance;
-            fTempColumns = new IndividualListColumns();
+            fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
             SetLang();
             UpdateForm();

@@ -149,6 +149,11 @@ namespace GKCore
             get { return fValuesCollection; }
         }
 
+        public IBaseWindow Viewer
+        {
+            get { return fViewer; }
+        }
+
         public ShieldState ShieldState
         {
             get {

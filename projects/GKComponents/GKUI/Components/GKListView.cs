@@ -532,12 +532,16 @@ namespace GKUI.Components
 
             try
             {
+                if (fListMan.ColumnsHaveBeenChanged != titles && titles) {
+                    fListMan.ColumnsHaveBeenChanged = titles;
+                }
+
                 object tempRec = GetSelectedData();
 
                 BeginUpdate();
                 try
                 {
-                    if (titles) {
+                    if (titles || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
                         fListMan.UpdateColumns(this);
                     }

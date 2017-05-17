@@ -18,18 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum PersonColumnType
     {
         ctPatriarch,
@@ -57,41 +57,6 @@ namespace GKCore.Lists
         ctChangeDate,
         ctBookmark,
         ctTitle
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class IndividualListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Patriarch, DataType.dtString, 25, true);
-            AddColumn(LSID.LSID_FullName, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Nickname, DataType.dtString, 75, false);
-            AddColumn(LSID.LSID_Sex, DataType.dtString, 45, true);
-            AddColumn(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
-            AddColumn(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
-            AddColumn(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
-            AddColumn(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
-            AddColumn(LSID.LSID_Residence, DataType.dtString, 100, true);
-            AddColumn(LSID.LSID_Age, DataType.dtInteger, 100, false);
-            AddColumn(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
-            AddColumn(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
-            AddColumn(LSID.LSID_RPGroups, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Religion, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Nationality, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Education, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Occupation, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Caste, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Mili, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_MiliInd, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_MiliDis, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_MiliRank, DataType.dtString, 200, false);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-            AddColumn(LSID.LSID_Bookmark, DataType.dtString, 25, true);
-            AddColumn(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
-        }
     }
 
     /// <summary>
@@ -145,9 +110,43 @@ namespace GKCore.Lists
         private UDN filter_abd;
         private GEDCOMSourceRecord filter_source;
 
-        public IndividualListMan(IBaseContext baseContext) : 
-            base(baseContext, new IndividualListColumns(), GEDCOMRecordType.rtIndividual)
+        public IndividualListMan(IBaseContext baseContext) :
+            base(baseContext, CreateIndividualListColumns(), GEDCOMRecordType.rtIndividual)
         {
+        }
+
+        public static ListColumns CreateIndividualListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Patriarch, DataType.dtString, 25, true);
+            result.AddColumn(LSID.LSID_FullName, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Nickname, DataType.dtString, 75, false);
+            result.AddColumn(LSID.LSID_Sex, DataType.dtString, 45, true);
+            result.AddColumn(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
+            result.AddColumn(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
+            result.AddColumn(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_Residence, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_Age, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.LSID_RPGroups, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Religion, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Nationality, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Education, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Occupation, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Caste, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Mili, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_MiliInd, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_MiliDis, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_MiliRank, DataType.dtString, 200, false);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.LSID_Bookmark, DataType.dtString, 25, true);
+            result.AddColumn(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override void CreateFilter()
@@ -592,7 +591,7 @@ namespace GKCore.Lists
             AddColumn(listView, "№", 50, false, 0, 0);
 
             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-            IndividualListColumns columns = (IndividualListColumns)ListColumns;
+            ListColumns columns = (ListColumns)this.ListColumns;
 
             int num = columns.Count;
             for (int i = 0; i < num; i++)
@@ -619,6 +618,412 @@ namespace GKCore.Lists
                 } else {
                     AddColumn(listView, LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
                 }
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class GroupsSublistModel : ListModel
+    {
+        public GroupsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPointer ptr in iRec.Groups) {
+                    GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
+                    if (grp != null) {
+                        fSheetList.AddItem(grp.GroupName, grp);
+                    }
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GroupsSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GEDCOMGroupRecord groupRec = eArgs.ItemData as GEDCOMGroupRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    groupRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    result = (groupRec != null);
+                    if (result) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
+                    if (result) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, iRec);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class NamesSublistModel : ListModel
+    {
+        public NamesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveDown, RecordAction.raMoveUp);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Name), 350, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 100, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPersonalName pn in iRec.PersonalNames)
+                {
+                    IListItem item = fSheetList.AddItem(pn.FullName, pn);
+                    item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("NamesSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GEDCOMPersonalName persName = eArgs.ItemData as GEDCOMPersonalName;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                case RecordAction.raEdit:
+                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>())
+                    {
+                        dlg.InitDialog(fBaseWin);
+
+                        bool exists = (persName != null);
+                        if (!exists) {
+                            persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec, "", "");
+                        }
+
+                        dlg.PersonalName = persName;
+                        result = AppHost.Instance.ShowModalX(dlg, false);
+
+                        if (!exists) {
+                            if (result) {
+                                result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, iRec, persName);
+                            } else {
+                                persName.Dispose();
+                            }
+                        }
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    if (iRec.PersonalNames.Count > 1) {
+                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
+                        if (result) {
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, iRec, persName);
+                        }
+                    } else {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    int idx = iRec.PersonalNames.IndexOf(persName);
+                    switch (eArgs.Action)
+                    {
+                        case RecordAction.raMoveUp:
+                            iRec.PersonalNames.Exchange(idx - 1, idx);
+                            break;
+
+                        case RecordAction.raMoveDown:
+                            iRec.PersonalNames.Exchange(idx, idx + 1);
+                            break;
+                    }
+                    result = true;
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class SpousesSublistModel : ListModel
+    {
+        public SpousesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn("№", 25, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Spouse), 300, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                int idx = 0;
+                foreach (GEDCOMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
+                    idx += 1;
+
+                    GEDCOMFamilyRecord family = spLink.Family;
+                    if (family == null) continue;
+
+                    GEDCOMIndividualRecord relPerson;
+                    string relName;
+
+                    if (iRec.Sex == GEDCOMSex.svMale) {
+                        relPerson = family.GetWife();
+                        relName = LangMan.LS(LSID.LSID_UnkFemale);
+                    } else {
+                        relPerson = family.GetHusband();
+                        relName = LangMan.LS(LSID.LSID_UnkMale);
+                    }
+
+                    if (relPerson != null) {
+                        relName = GKUtils.GetNameString(relPerson, true, false);
+                    }
+
+                    IListItem item = fSheetList.AddItem(idx, family);
+                    item.AddSubItem(relName);
+                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("SpousesSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmFamilySpouse, iRec));
+                    if (result) {
+                        eArgs.ItemData = family;
+                    }
+                    break;
+
+                case RecordAction.raEdit:
+                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmNone, null));
+                    break;
+
+                case RecordAction.raDelete:
+                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
+                    {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, iRec);
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    {
+                        int idx = iRec.IndexOfSpouse(family);
+
+                        switch (eArgs.Action)
+                        {
+                            case RecordAction.raMoveUp:
+                                iRec.ExchangeSpouses(idx - 1, idx);
+                                break;
+
+                            case RecordAction.raMoveDown:
+                                iRec.ExchangeSpouses(idx, idx + 1);
+                                break;
+                        }
+
+                        result = true;
+                        break;
+                    }
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class URefsSublistModel : ListModel
+    {
+        public URefsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Reference), 300, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMUserReference uref in iRec.UserReferences) {
+                    IListItem item = fSheetList.AddItem(uref.StringValue, uref);
+                    item.AddSubItem(uref.ReferenceType);
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("URefsSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GEDCOMUserReference userRef = eArgs.ItemData as GEDCOMUserReference;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                case RecordAction.raEdit:
+                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>())
+                    {
+                        dlg.InitDialog(fBaseWin);
+
+                        bool exists = (userRef != null);
+                        if (!exists) {
+                            userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec, "", "");
+                        }
+
+                        dlg.UserRef = userRef;
+                        result = AppHost.Instance.ShowModalX(dlg, false);
+
+                        if (!exists) {
+                            if (result) {
+                                result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, iRec, userRef);
+                            } else {
+                                userRef.Dispose();
+                            }
+                        }
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    {
+                        string confirmation =
+                            !string.IsNullOrEmpty(userRef.StringValue) ?
+                            userRef.StringValue : userRef.ReferenceType;
+                        confirmation = string.Format(
+                            LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
+                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation) != false)
+                        {
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
+                            fBaseWin.Context.Modified = true;
+                        }
+                        break;
+                    }
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
             }
         }
     }

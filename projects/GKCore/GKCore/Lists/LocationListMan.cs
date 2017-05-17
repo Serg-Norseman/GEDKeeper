@@ -24,9 +24,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum LocationColumnType
     {
         ctName,
@@ -35,22 +32,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class LocationListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-
-            AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -59,9 +40,26 @@ namespace GKCore.Lists
     {
         private GEDCOMLocationRecord fRec;
 
-        public LocationListMan(IBaseContext baseContext) : 
-            base(baseContext, new LocationListColumns(), GEDCOMRecordType.rtLocation)
+
+        public LocationListMan(IBaseContext baseContext) :
+            base(baseContext, CreateLocationListColumns(), GEDCOMRecordType.rtLocation)
         {
+        }
+
+        public static ListColumns CreateLocationListColumns()
+        {
+            var result = new ListColumns();
+
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

@@ -18,14 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
+using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum ResearchColumnType
     {
         ctName,
@@ -37,22 +38,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ResearchListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_Status, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_Percent, DataType.dtInteger, 90, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -61,9 +46,26 @@ namespace GKCore.Lists
     {
         private GEDCOMResearchRecord fRec;
 
-        public ResearchListMan(IBaseContext baseContext) : 
-            base(baseContext, new ResearchListColumns(), GEDCOMRecordType.rtResearch)
+
+        public ResearchListMan(IBaseContext baseContext) :
+            base(baseContext, CreateResearchListColumns(), GEDCOMRecordType.rtResearch)
         {
+        }
+
+        public static ListColumns CreateResearchListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Status, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Percent, DataType.dtInteger, 90, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()
@@ -114,6 +116,245 @@ namespace GKCore.Lists
                     break;
             }
             return result;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ResTasksSublistModel : ListModel
+    {
+        public ResTasksSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fSheetList == null || research == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPointer taskPtr in research.Tasks)
+                {
+                    GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
+                    if (task == null) continue;
+
+                    IListItem item = fSheetList.AddItem(GKUtils.GetTaskGoalStr(task), task);
+                    item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
+                    item.AddSubItem(new GEDCOMDateItem(task.StartDate));
+                    item.AddSubItem(new GEDCOMDateItem(task.StopDate));
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("ResTasksSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fBaseWin == null || fSheetList == null || research == null) return;
+
+            GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    task = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
+                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
+                    break;
+
+                case RecordAction.raEdit:
+                    result = (task != null && BaseController.ModifyTask(fBaseWin, ref task));
+                    break;
+
+                case RecordAction.raDelete:
+                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
+                    {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ResCommunicationsSublistModel : ListModel
+    {
+        public ResCommunicationsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fSheetList == null || research == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPointer commPtr in research.Communications)
+                {
+                    GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
+                    if (corr == null) continue;
+
+                    IListItem item = fSheetList.AddItem(corr.CommName, corr);
+                    item.AddSubItem(GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false));
+                    item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
+                    item.AddSubItem(new GEDCOMDateItem(corr.Date));
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fBaseWin == null || fSheetList == null || research == null) return;
+
+            GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    comm = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
+                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
+                    break;
+
+                case RecordAction.raEdit:
+                    result = (comm != null && BaseController.ModifyCommunication(fBaseWin, ref comm));
+                    break;
+
+                case RecordAction.raDelete:
+                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != false)
+                    {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, research, comm);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ResGroupsSublistModel : ListModel
+    {
+        public ResGroupsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fSheetList == null || research == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPointer groupPtr in research.Groups)
+                {
+                    GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
+                    if (grp == null) continue;
+
+                    fSheetList.AddItem(grp.GroupName, grp);
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("ResGroupsSublistModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var research = fDataOwner as GEDCOMResearchRecord;
+            if (fBaseWin == null || fSheetList == null || research == null) return;
+
+            GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    group = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
+                    break;
+
+                case RecordAction.raDelete:
+                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false)
+                    {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, research, group);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
         }
     }
 }

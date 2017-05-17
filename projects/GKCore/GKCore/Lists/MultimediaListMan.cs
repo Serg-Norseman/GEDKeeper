@@ -23,9 +23,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum MultimediaColumnType
     {
         ctTitle,
@@ -34,19 +31,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class MultimediaListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Title, DataType.dtString, 150, true);
-            AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
-            AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -55,9 +39,23 @@ namespace GKCore.Lists
     {
         private GEDCOMMultimediaRecord fRec;
 
-        public MultimediaListMan(IBaseContext baseContext) : 
-            base(baseContext, new MultimediaListColumns(), GEDCOMRecordType.rtMultimedia)
+
+        public MultimediaListMan(IBaseContext baseContext) :
+            base(baseContext, CreateMultimediaListColumns(), GEDCOMRecordType.rtMultimedia)
         {
+        }
+
+        public static ListColumns CreateMultimediaListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true);
+            result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
+            result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

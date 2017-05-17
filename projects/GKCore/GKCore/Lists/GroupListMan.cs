@@ -18,31 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
+using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum GroupColumnType
     {
         ctName,
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class GroupListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Group, DataType.dtString, 400, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -51,9 +41,21 @@ namespace GKCore.Lists
     {
         private GEDCOMGroupRecord fRec;
 
-        public GroupListMan(IBaseContext baseContext) : 
-            base(baseContext, new GroupListColumns(), GEDCOMRecordType.rtGroup)
+
+        public GroupListMan(IBaseContext baseContext) :
+            base(baseContext, CreateGroupListColumns(), GEDCOMRecordType.rtGroup)
         {
+        }
+
+        public static ListColumns CreateGroupListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()
@@ -84,6 +86,81 @@ namespace GKCore.Lists
                     break;
             }
             return result;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class GroupMembersSublistModel : ListModel
+    {
+        public GroupMembersSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Name), 300, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var grp = fDataOwner as GEDCOMGroupRecord;
+            if (fSheetList == null || grp == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMPointer ptrMember in grp.Members) {
+                    GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
+                    if (member == null) continue;
+
+                    fSheetList.AddItem(GKUtils.GetNameString(member, true, false), member);
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("MembersListModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var grp = fDataOwner as GEDCOMGroupRecord;
+            if (fBaseWin == null || fSheetList == null || grp == null) return;
+
+            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    result = (member != null);
+                    if (result) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
+                    if (result) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, grp, member);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
         }
     }
 }

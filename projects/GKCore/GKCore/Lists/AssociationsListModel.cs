@@ -35,16 +35,15 @@ namespace GKCore.Lists
     {
         public AssociationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raJump);
         }
 
         public override void InitView()
         {
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
-
-            fSheetList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                SheetButton.lbJump);
         }
 
         public override void UpdateContent()

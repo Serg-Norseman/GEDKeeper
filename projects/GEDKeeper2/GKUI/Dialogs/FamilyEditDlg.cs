@@ -106,9 +106,7 @@ namespace GKUI.Dialogs
             fChildrenList = new GKSheetList(pageChilds);
             fChildrenList.SetControlName("fChildsList"); // for purpose of tests
             fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
-            fChildrenList.Buttons = EnumSet<SheetButton>.Create(
-                SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete/*, SheetButton.lbJump*/);
-            //fChildsList.OnModify += ModifyChildsSheet;
+            fChildrenList.OnModify += ModifyChildrenSheet;
 
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
@@ -207,7 +205,7 @@ namespace GKUI.Dialogs
             LockEditor(cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
         }
 
-        /*private void ModifyChildsSheet(object sender, ModifyEventArgs eArgs)
+        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
             if (eArgs.Action == RecordAction.raJump && child != null) {
@@ -215,7 +213,7 @@ namespace GKUI.Dialogs
                 fBase.SelectRecordByXRef(child.XRef);
                 Close();
             }
-        }*/
+        }
 
         private void AcceptChanges()
         {

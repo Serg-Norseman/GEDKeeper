@@ -23,9 +23,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum TaskColumnType
     {
         ctGoal,
@@ -35,20 +32,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class TaskListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -57,9 +40,24 @@ namespace GKCore.Lists
     {
         private GEDCOMTaskRecord fRec;
 
-        public TaskListMan(IBaseContext baseContext) : 
-            base(baseContext, new TaskListColumns(), GEDCOMRecordType.rtTask)
+
+        public TaskListMan(IBaseContext baseContext) :
+            base(baseContext, CreateTaskListColumns(), GEDCOMRecordType.rtTask)
         {
+        }
+
+        public static ListColumns CreateTaskListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

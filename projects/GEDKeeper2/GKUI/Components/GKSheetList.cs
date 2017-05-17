@@ -68,7 +68,12 @@ namespace GKUI.Components
         public EnumSet<SheetButton> Buttons
         {
             get { return fButtons; }
-            set { SetButtons(value); }
+            set {
+                if (fButtons != value) {
+                    fButtons = value;
+                    UpdateButtons();
+                }
+            }
         }
 
         public ListModel ListModel
@@ -84,9 +89,10 @@ namespace GKUI.Components
 
                     if (fListModel != null) {
                         fListModel.SheetList = this;
-                        UpdateSheet();
                     }
                 }
+
+                UpdateSheet();
             }
         }
 
@@ -180,7 +186,8 @@ namespace GKUI.Components
             owner.Controls.Add(this);
             owner.ResumeLayout(false);
 
-            SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
+            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
+            fListModel = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -218,16 +225,26 @@ namespace GKUI.Components
 
         #region Private methods
 
-        private void SetButtons(EnumSet<SheetButton> value)
+        private void UpdateButtons()
         {
-            fButtons = value;
-            fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
-            fBtnDelete.Visible = fButtons.Contains(SheetButton.lbDelete);
-            fBtnEdit.Visible = fButtons.Contains(SheetButton.lbEdit);
-            fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
-            fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
-            fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
-            fToolBar.Visible = !fButtons.IsEmpty();
+            if (fListModel == null) {
+                fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
+                fBtnDelete.Visible = fButtons.Contains(SheetButton.lbDelete);
+                fBtnEdit.Visible = fButtons.Contains(SheetButton.lbEdit);
+                fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
+                fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
+                fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
+                fToolBar.Visible = !fButtons.IsEmpty();
+            } else {
+                EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
+                fBtnAdd.Visible = allowedActions.Contains(RecordAction.raAdd);
+                fBtnDelete.Visible = allowedActions.Contains(RecordAction.raDelete);
+                fBtnEdit.Visible = allowedActions.Contains(RecordAction.raEdit);
+                fBtnLinkJump.Visible = allowedActions.Contains(RecordAction.raJump);
+                fBtnMoveUp.Visible = allowedActions.Contains(RecordAction.raMoveUp);
+                fBtnMoveDown.Visible = allowedActions.Contains(RecordAction.raMoveDown);
+                fToolBar.Visible = !allowedActions.IsEmpty();
+            }
         }
 
         private void SetReadOnly(bool value)
@@ -408,6 +425,8 @@ namespace GKUI.Components
 
         public virtual void UpdateSheet()
         {
+            UpdateButtons();
+
             if (fListModel != null) {
                 fListModel.UpdateContent();
             }

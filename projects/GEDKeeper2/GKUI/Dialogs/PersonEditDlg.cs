@@ -111,6 +111,11 @@ namespace GKUI.Dialogs
                 fSourcesList.ListModel.DataOwner = fPerson;
                 fAssociationsList.ListModel.DataOwner = fPerson;
 
+                fGroupsList.ListModel.DataOwner = fPerson;
+                fNamesList.ListModel.DataOwner = fPerson;
+                fSpousesList.ListModel.DataOwner = fPerson;
+                fUserRefList.ListModel.DataOwner = fPerson;
+
                 UpdateControls(true);
             }
             catch (Exception ex)
@@ -271,10 +276,10 @@ namespace GKUI.Dialogs
                 fSourcesList.UpdateSheet();
                 fAssociationsList.UpdateSheet();
 
-                UpdateSpousesSheet();
-                UpdateGroupsSheet();
-                UpdateURefsSheet();
-                UpdateNamesSheet();
+                fGroupsList.UpdateSheet();
+                fNamesList.UpdateSheet();
+                fSpousesList.UpdateSheet();
+                fUserRefList.UpdateSheet();
             }
 
             UpdatePortrait(totalUpdate);
@@ -411,7 +416,6 @@ namespace GKUI.Dialogs
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
-
             if (eArgs.Action == RecordAction.raJump && ast != null) {
                 AcceptChanges();
                 fBase.SelectRecordByXRef(ast.Individual.XRef);
@@ -419,375 +423,41 @@ namespace GKUI.Dialogs
             }
         }
 
-        private GKSheetList CreateURefsSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Reference), 300, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
-
-            sheet.OnModify += ModifyURefsSheet;
-
-            return sheet;
-        }
-
-        private void UpdateURefsSheet()
-        {
-            try
-            {
-                fUserRefList.ClearItems();
-
-                foreach (GEDCOMUserReference uref in fPerson.UserReferences) {
-                    IListItem item = fUserRefList.AddItem(uref.StringValue, uref);
-                    item.AddSubItem(uref.ReferenceType);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.UpdateURefsSheet(): " + ex.Message);
-            }
-        }
-
-        private void ModifyURefsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            bool result = false;
-
-            GEDCOMUserReference userRef = eArgs.ItemData as GEDCOMUserReference;
-
-            switch (eArgs.Action) {
-                case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>())
-                    {
-                        dlg.InitDialog(fBase);
-
-                        bool exists = (userRef != null);
-                        if (!exists) {
-                            userRef = new GEDCOMUserReference(fBase.Context.Tree, fPerson, "", "");
-                        }
-
-                        dlg.UserRef = userRef;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
-
-                        if (!exists) {
-                            if (result) {
-                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, fPerson, userRef);
-                            } else {
-                                userRef.Dispose();
-                            }
-                        }
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    {
-                        string confirmation =
-                            !string.IsNullOrEmpty(userRef.StringValue) ?
-                            userRef.StringValue : userRef.ReferenceType;
-                        confirmation = string.Format(
-                            LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation) != false)
-                        {
-                            result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, fPerson, userRef);
-                            fBase.Context.Modified = true;
-                        }
-                        break;
-                    }
-            }
-
-            if (result) UpdateURefsSheet();
-        }
-
-        private GKSheetList CreateSpousesSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn("№", 25, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Spouse), 300, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                        SheetButton.lbJump, SheetButton.lbMoveUp, SheetButton.lbMoveDown);
-            sheet.OnModify += ModifySpousesSheet;
-
-            return sheet;
-        }
-
-        private void UpdateSpousesSheet()
-        {
-            try
-            {
-                fSpousesList.ClearItems();
-
-                int idx = 0;
-                foreach (GEDCOMSpouseToFamilyLink spLink in fPerson.SpouseToFamilyLinks) {
-                    idx += 1;
-
-                    GEDCOMFamilyRecord family = spLink.Family;
-                    if (family == null) continue;
-
-                    GEDCOMIndividualRecord relPerson;
-                    string relName;
-
-                    if (fPerson.Sex == GEDCOMSex.svMale) {
-                        relPerson = family.GetWife();
-                        relName = LangMan.LS(LSID.LSID_UnkFemale);
-                    } else {
-                        relPerson = family.GetHusband();
-                        relName = LangMan.LS(LSID.LSID_UnkMale);
-                    }
-
-                    if (relPerson != null) {
-                        relName = GKUtils.GetNameString(relPerson, true, false);
-                    }
-
-                    IListItem item = fSpousesList.AddItem(idx, family);
-                    item.AddSubItem(relName);
-                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.UpdateSpousesSheet(): " + ex.Message);
-            }
-        }
-
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
-            bool result = false;
-
             GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+            if (eArgs.Action == RecordAction.raJump) {
+                if (family != null && (fPerson.Sex == GEDCOMSex.svMale || fPerson.Sex == GEDCOMSex.svFemale))
+                {
+                    GEDCOMPointer sp = null;
+                    switch (fPerson.Sex) {
+                        case GEDCOMSex.svMale:
+                            sp = family.Wife;
+                            break;
 
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    AcceptTempData();
-                    result = (BaseController.ModifyFamily(fBase, ref family, TargetMode.tmFamilySpouse, fPerson));
-                    if (result) {
-                        eArgs.ItemData = family;
-                    }
-                    break;
-
-                case RecordAction.raEdit:
-                    AcceptTempData();
-                    result = (BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null));
-                    break;
-
-                case RecordAction.raDelete:
-                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
-                    {
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, fPerson);
-                    }
-                    break;
-
-                case RecordAction.raMoveUp:
-                case RecordAction.raMoveDown:
-                    {
-                        int idx = fPerson.IndexOfSpouse(family);
-
-                        switch (eArgs.Action)
-                        {
-                            case RecordAction.raMoveUp:
-                                fPerson.ExchangeSpouses(idx - 1, idx);
-                                break;
-
-                            case RecordAction.raMoveDown:
-                                fPerson.ExchangeSpouses(idx, idx + 1);
-                                break;
-                        }
-
-                        result = true;
-                        break;
+                        case GEDCOMSex.svFemale:
+                            sp = family.Husband;
+                            break;
                     }
 
-                case RecordAction.raJump:
-                    if (family != null && (fPerson.Sex == GEDCOMSex.svMale || fPerson.Sex == GEDCOMSex.svFemale))
-                    {
-                        GEDCOMPointer sp = null;
-                        switch (fPerson.Sex) {
-                            case GEDCOMSex.svMale:
-                                sp = family.Wife;
-                                break;
-
-                            case GEDCOMSex.svFemale:
-                                sp = family.Husband;
-                                break;
-                        }
-
-                        if (sp != null)
-                        {
-                            GEDCOMIndividualRecord spouse = (GEDCOMIndividualRecord)sp.Value;
-                            AcceptChanges();
-                            fBase.SelectRecordByXRef(spouse.XRef);
-                            Close();
-                        }
-                    }
-                    break;
-            }
-
-            if (result) UpdateSpousesSheet();
-        }
-
-        private GKSheetList CreateGroupsSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += ModifyGroupsSheet;
-            
-            return sheet;
-        }
-
-        private void UpdateGroupsSheet()
-        {
-            try
-            {
-                fGroupsList.ClearItems();
-
-                foreach (GEDCOMPointer ptr in fPerson.Groups) {
-                    GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
-
-                    if (grp != null) {
-                        fGroupsList.AddItem(grp.GroupName, grp);
+                    if (sp != null) {
+                        GEDCOMIndividualRecord spouse = (GEDCOMIndividualRecord)sp.Value;
+                        AcceptChanges();
+                        fBase.SelectRecordByXRef(spouse.XRef);
+                        Close();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.UpdateGroupsSheet(): " + ex.Message);
             }
         }
 
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
-            bool result = false;
-
             GEDCOMGroupRecord groupRec = eArgs.ItemData as GEDCOMGroupRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    groupRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
-                    result = (groupRec != null);
-                    if (result) {
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, fPerson);
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
-                    if (result) {
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, fPerson);
-                    }
-                    break;
-                    
-                case RecordAction.raJump:
-                    if (groupRec != null) {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(groupRec.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && groupRec != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(groupRec.XRef);
+                Close();
             }
-
-            if (result) UpdateGroupsSheet();
-        }
-
-        private GKSheetList CreateNamesSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 350, false);
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 100, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                        SheetButton.lbMoveDown, SheetButton.lbMoveUp);
-            sheet.OnModify += ModifyNamesSheet;
-            
-            return sheet;
-        }
-
-        private void UpdateNamesSheet()
-        {
-            try
-            {
-                fNamesList.ClearItems();
-
-                foreach (GEDCOMPersonalName pn in fPerson.PersonalNames)
-                {
-                    IListItem item = fNamesList.AddItem(pn.FullName, pn);
-                    item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.UpdateNamesSheet(): " + ex.Message);
-            }
-        }
-
-        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            bool result = false;
-
-            GEDCOMPersonalName persName = eArgs.ItemData as GEDCOMPersonalName;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>())
-                    {
-                        dlg.InitDialog(fBase);
-
-                        bool exists = (persName != null);
-                        if (!exists) {
-                            persName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson, "", "");
-                        }
-
-                        dlg.PersonalName = persName;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
-
-                        if (!exists) {
-                            if (result) {
-                                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameAdd, fPerson, persName);
-                            } else {
-                                persName.Dispose();
-                            }
-                        }
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    if (fPerson.PersonalNames.Count > 1) {
-                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
-                        if (result) {
-                            result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, fPerson, persName);
-                        }
-                    } else {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
-                    }
-                    break;
-
-                case RecordAction.raMoveUp:
-                case RecordAction.raMoveDown:
-                    int idx = fPerson.PersonalNames.IndexOf(persName);
-                    switch (eArgs.Action)
-                    {
-                        case RecordAction.raMoveUp:
-                            fPerson.PersonalNames.Exchange(idx - 1, idx);
-                            break;
-
-                        case RecordAction.raMoveDown:
-                            fPerson.PersonalNames.Exchange(idx, idx + 1);
-                            break;
-                    }
-                    result = true;
-                    break;
-            }
-
-            if (result) UpdateNamesSheet();
         }
 
         private void Names_TextChanged(object sender, EventArgs e)
@@ -962,18 +632,20 @@ namespace GKUI.Dialogs
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
-            fSpousesList = CreateSpousesSheet(pageSpouses);
+            fSpousesList = new GKSheetList(pageSpouses);
             fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
+            fSpousesList.OnModify += ModifySpousesSheet;
 
-            fNamesList = CreateNamesSheet(pageNames);
+            fNamesList = new GKSheetList(pageNames);
             fNamesList.SetControlName("fNamesList"); // for purpose of tests
 
             fAssociationsList = new GKSheetList(pageAssociations);
             fAssociationsList.OnModify += ModifyAssociationsSheet;
             fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
 
-            fGroupsList = CreateGroupsSheet(pageGroups);
+            fGroupsList = new GKSheetList(pageGroups);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
+            fGroupsList.OnModify += ModifyGroupsSheet;
 
             fNotesList = new GKSheetList(pageNotes);
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
@@ -984,7 +656,7 @@ namespace GKUI.Dialogs
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
-            fUserRefList = CreateURefsSheet(pageUserRefs);
+            fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             btnPortraitAdd.Image = GKResources.iRecNew;
@@ -1055,6 +727,11 @@ namespace GKUI.Dialogs
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
             fAssociationsList.ListModel = new AssociationsListModel(fBase, fLocalUndoman);
+
+            fGroupsList.ListModel = new GroupsSublistModel(fBase, fLocalUndoman);
+            fNamesList.ListModel = new NamesSublistModel(fBase, fLocalUndoman);
+            fSpousesList.ListModel = new SpousesSublistModel(fBase, fLocalUndoman);
+            fUserRefList.ListModel = new URefsSublistModel(fBase, fLocalUndoman);
         }
     }
 }

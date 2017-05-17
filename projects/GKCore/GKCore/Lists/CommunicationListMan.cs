@@ -23,9 +23,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum CommunicationColumnType
     {
         ctCommName,
@@ -35,21 +32,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class CommunicationListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            // not to change the order of these lines in their changes
-            AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
-            AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -58,9 +40,25 @@ namespace GKCore.Lists
     {
         private GEDCOMCommunicationRecord fRec;
 
-        public CommunicationListMan(IBaseContext baseContext) : 
-            base(baseContext, new CommunicationListColumns(), GEDCOMRecordType.rtCommunication)
+
+        public CommunicationListMan(IBaseContext baseContext) :
+            base(baseContext, CreateCommunicationListColumns(), GEDCOMRecordType.rtCommunication)
         {
+        }
+
+        public static ListColumns CreateCommunicationListColumns()
+        {
+            var result = new ListColumns();
+
+            // not to change the order of these lines in their changes
+            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
+            result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

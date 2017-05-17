@@ -73,8 +73,8 @@ namespace GKTests.UITests
             Assert.AreEqual(fGroupRecord, fDialog.Group);
 
             var sheetTester = new GKSheetListTester("fMembersList", fDialog);
-            EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
-            Assert.IsTrue(buttons.ContainsAll(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump));
+            //EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
+            //Assert.IsTrue(buttons.ContainsAll(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump));
             Assert.IsFalse(sheetTester.Properties.ReadOnly);
 
             var edName = new TextBoxTester("edName");

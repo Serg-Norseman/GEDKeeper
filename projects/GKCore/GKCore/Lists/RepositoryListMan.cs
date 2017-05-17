@@ -23,26 +23,12 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum RepositoryColumnType
     {
         ctName,
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class RepositoryListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -51,9 +37,21 @@ namespace GKCore.Lists
     {
         private GEDCOMRepositoryRecord fRec;
 
-        public RepositoryListMan(IBaseContext baseContext) : 
-            base(baseContext, new RepositoryListColumns(), GEDCOMRecordType.rtRepository)
+
+        public RepositoryListMan(IBaseContext baseContext) :
+            base(baseContext, CreateRepositoryListColumns(), GEDCOMRecordType.rtRepository)
         {
+        }
+
+        public static ListColumns CreateRepositoryListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

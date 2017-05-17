@@ -34,6 +34,8 @@ namespace GKCore.Lists
     {
         public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
         }
 
         public override void InitView()

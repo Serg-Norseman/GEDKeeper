@@ -18,14 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
+using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum SourceColumnType
     {
         ctShortName,
@@ -34,19 +35,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class SourceListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
-            AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
-            AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -55,9 +43,23 @@ namespace GKCore.Lists
     {
         private GEDCOMSourceRecord fRec;
 
-        public SourceListMan(IBaseContext baseContext) : 
-            base(baseContext, new SourceListColumns(), GEDCOMRecordType.rtSource)
+
+        public SourceListMan(IBaseContext baseContext) :
+            base(baseContext, CreateSourceListColumns(), GEDCOMRecordType.rtSource)
         {
+        }
+
+        public static ListColumns CreateSourceListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
+            result.AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()
@@ -96,6 +98,79 @@ namespace GKCore.Lists
                     break;
             }
             return result;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class SourceRepositoriesSublistModel : ListModel
+    {
+        public SourceRepositoriesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+        }
+
+        public override void InitView()
+        {
+            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Repository), 300, false);
+        }
+
+        public override void UpdateContent()
+        {
+            var source = fDataOwner as GEDCOMSourceRecord;
+            if (fSheetList == null || source == null) return;
+
+            try
+            {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMRepositoryCitation repCit in source.RepositoryCitations) {
+                    GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
+                    if (rep == null) continue;
+
+                    fSheetList.AddItem(rep.RepositoryName, repCit);
+                }
+
+                fSheetList.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("RepositoriesListModel.UpdateContent(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var source = fDataOwner as GEDCOMSourceRecord;
+            if (fBaseWin == null || fSheetList == null || source == null) return;
+
+            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    GEDCOMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
+                    if (rep != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, rep);
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GEDCOMRepositoryRecord);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                fSheetList.UpdateSheet();
+            }
         }
     }
 }

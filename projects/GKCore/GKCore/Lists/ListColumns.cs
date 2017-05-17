@@ -61,7 +61,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListColumns : IListColumns
+    public class ListColumns : IListColumns
     {
         private readonly List<ListColumn> fColumns;
         private readonly List<ListColumn> fOrderedColumns;
@@ -84,7 +84,7 @@ namespace GKCore.Lists
         }
 
 
-        protected ListColumns()
+        public ListColumns()
         {
             fLastId = -1;
             fColumns = new List<ListColumn>();
@@ -94,7 +94,10 @@ namespace GKCore.Lists
             ResetDefaults();
         }
 
-        protected abstract void InitColumnStatics();
+        protected virtual void InitColumnStatics()
+        {
+            // dummy
+        }
 
         public void AddColumn(LSID colName, DataType dataType,
                               int defWidth, bool defActive,
@@ -189,8 +192,10 @@ namespace GKCore.Lists
         public void UpdateOrders()
         {
             fOrderedColumns.Clear();
-            foreach (var column in fColumns) fOrderedColumns.Add(column);
-            SysUtils.MergeSort(fOrderedColumns, CompareItems);
+            if (fColumns.Count > 0) {
+                foreach (var column in fColumns) fOrderedColumns.Add(column);
+                SysUtils.MergeSort(fOrderedColumns, CompareItems);
+            }
         }
 
         public bool MoveColumn(int idx, bool up)

@@ -20,7 +20,9 @@
 
 using System;
 using System.Collections.Generic;
+using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
@@ -31,18 +33,19 @@ namespace GKCore.Interfaces
 
     public interface IListSource : IDisposable
     {
+        EnumSet<RecordAction> AllowedActions { get; }
+        IBaseContext BaseContext { get; }
+        bool ColumnsHaveBeenChanged { get; set; }
+        IListColumns ListColumns { get; }
     }
 
 
     public interface IListManager : IListSource
     {
-        IListColumns ListColumns { get; }
-
         void AddCondition(byte columnId, ConditionKind condition, string value);
         DataType GetColumnDataType(int index);
         string GetColumnName(byte columnId);
 
-        IBaseContext BaseContext { get; }
         ExternalFilterHandler ExternalFilter { get; set; }
         IListFilter Filter { get; }
         int FilteredCount { get; }

@@ -35,6 +35,9 @@ namespace GKCore.Lists
         public EventsListModel(IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(baseWin, undoman)
         {
             fPersonsMode = personsMode;
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveUp, RecordAction.raMoveDown);
         }
 
         public override void InitView()
@@ -48,9 +51,6 @@ namespace GKCore.Lists
                 fSheetList.AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
             }
             fSheetList.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
-
-            fSheetList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete,
-                                                             SheetButton.lbMoveUp, SheetButton.lbMoveDown);
         }
 
         public override void UpdateContent()

@@ -23,26 +23,12 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum NoteColumnType
     {
         ctText,
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class NoteListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -51,9 +37,21 @@ namespace GKCore.Lists
     {
         private GEDCOMNoteRecord fRec;
 
-        public NoteListMan(IBaseContext baseContext) : 
-            base(baseContext, new NoteListColumns(), GEDCOMRecordType.rtNote)
+
+        public NoteListMan(IBaseContext baseContext) :
+            base(baseContext, CreateNoteListColumns(), GEDCOMRecordType.rtNote)
         {
+        }
+
+        public static ListColumns CreateNoteListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()

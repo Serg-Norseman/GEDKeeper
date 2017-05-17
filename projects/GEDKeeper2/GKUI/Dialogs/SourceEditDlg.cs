@@ -26,7 +26,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Operations;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -60,10 +59,9 @@ namespace GKUI.Dialogs
             txtPublication.Text = fSourceRecord.Publication.Text.Trim();
             txtText.Text = fSourceRecord.Text.Text.Trim();
 
+            fRepositoriesList.ListModel.DataOwner = fSourceRecord;
             fNotesList.ListModel.DataOwner = fSourceRecord;
             fMediaList.ListModel.DataOwner = fSourceRecord;
-
-            UpdateReposSheet();
             
             ActiveControl = txtShortTitle;
         }
@@ -78,8 +76,9 @@ namespace GKUI.Dialogs
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 
-            fRepositoriesList = CreateReposSheet(pageRepositories);
+            fRepositoriesList = new GKSheetList(pageRepositories);
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
+            fRepositoriesList.OnModify += ModifyReposSheet;
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_Source);
@@ -96,70 +95,14 @@ namespace GKUI.Dialogs
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
 
-        private GKSheetList CreateReposSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Repository), 300, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += ModifyReposSheet;
-
-            return sheet;
-        }
-        
-        private void UpdateReposSheet()
-        {
-            try
-            {
-                fRepositoriesList.ClearItems();
-
-                foreach (GEDCOMRepositoryCitation repCit in fSourceRecord.RepositoryCitations) {
-                    GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
-                    if (rep == null) continue;
-
-                    fRepositoriesList.AddItem(rep.RepositoryName, repCit);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SourceEditDlg.UpdateReposSheet(): " + ex.Message);
-            }
-        }
-        
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
         {
-            bool result = false;
-
             GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    GEDCOMRepositoryRecord rep = fBase.Context.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
-                    if (rep != null) {
-                        fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, fSourceRecord, rep);
-                        result = true;
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
-                        fLocalUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, fSourceRecord, cit.Value as GEDCOMRepositoryRecord);
-                        result = true;
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (cit != null) {
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(cit.Value.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && cit != null) {
+                AcceptChanges();
+                fBase.SelectRecordByXRef(cit.Value.XRef);
+                Close();
             }
-
-            if (result) UpdateReposSheet();
         }
 
         private void AcceptChanges()
@@ -214,6 +157,7 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
+            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(fBase, fLocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
         }

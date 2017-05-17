@@ -36,6 +36,7 @@ namespace GKCore.Interfaces
         ValuesCollection ValuesCollection { get; }
         ShieldState ShieldState { get; set; }
         bool Modified { get; set; }
+        IBaseWindow Viewer { get; }
 
         bool IsUnknown();
         void Clear();

@@ -46,25 +46,19 @@ namespace GKUI.Dialogs
 
         public GEDCOMGroupRecord Group
         {
-            get { return fGroup; }
-            set { SetGroup(value); }
-        }
-
-        private void SetGroup(GEDCOMGroupRecord value)
-        {
-            fGroup = value;
-            try
-            {
-                edName.Text = (fGroup == null) ? "" : fGroup.GroupName;
-
-                fNotesList.ListModel.DataOwner = fGroup;
-                fMediaList.ListModel.DataOwner = fGroup;
-
-                UpdateMembersSheet();
+            get {
+                return fGroup;
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
+            set {
+                if (fGroup != value) {
+                    fGroup = value;
+
+                    edName.Text = (fGroup == null) ? "" : fGroup.GroupName;
+
+                    fMembersList.ListModel.DataOwner = fGroup;
+                    fNotesList.ListModel.DataOwner = fGroup;
+                    fMediaList.ListModel.DataOwner = fGroup;
+                }
             }
         }
 
@@ -75,8 +69,9 @@ namespace GKUI.Dialogs
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            fMembersList = CreateMembersSheet(pageMembers);
+            fMembersList = new GKSheetList(pageMembers);
             fMembersList.SetControlName("fMembersList"); // for purpose of tests
+            fMembersList.OnModify += ModifyMembersSheet;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
@@ -90,73 +85,16 @@ namespace GKUI.Dialogs
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
-
-        private GKSheetList CreateMembersSheet(Control owner)
-        {
-            GKSheetList sheet = new GKSheetList(owner);
-
-            sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 300, false);
-
-            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump);
-            sheet.OnModify += ModifyMembersSheet;
-            
-            return sheet;
-        }
         
-        private void UpdateMembersSheet()
-        {
-            try
-            {
-                fMembersList.ClearItems();
-                if (fGroup == null) return;
-
-                foreach (GEDCOMPointer ptrMember in fGroup.Members) {
-                    GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
-                    if (member == null) continue;
-
-                    fMembersList.AddItem(GKUtils.GetNameString(member, true, false), member);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GroupEditDlg.UpdateMembersSheet(): " + ex.Message);
-            }
-        }
-
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
         {
-            bool result = false;
-
             GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
-
-            switch (eArgs.Action)
-            {
-                case RecordAction.raAdd:
-                    member = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-                    result = (member != null);
-                    if (result) {
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, fGroup, member);
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
-                    if (result) {
-                        result = fLocalUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, fGroup, member);
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    if (member != null) {
-                        AcceptChanges();
-                        DialogResult = DialogResult.OK;
-                        fBase.SelectRecordByXRef(member.XRef);
-                        Close();
-                    }
-                    break;
+            if (eArgs.Action == RecordAction.raJump && member != null) {
+                AcceptChanges();
+                DialogResult = DialogResult.OK;
+                fBase.SelectRecordByXRef(member.XRef);
+                Close();
             }
-
-            if (result) UpdateMembersSheet();
         }
 
         private void AcceptChanges()
@@ -197,6 +135,7 @@ namespace GKUI.Dialogs
         {
             base.InitDialog(baseWin);
 
+            fMembersList.ListModel = new GroupMembersSublistModel(fBase, fLocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
         }

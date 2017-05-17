@@ -23,9 +23,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum FamilyColumnType
     {
         ctFamilyStr,
@@ -33,18 +30,6 @@ namespace GKCore.Lists
         ctChangeDate
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class FamilyListColumns : ListColumns
-    {
-        protected override void InitColumnStatics()
-        {
-            AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true);
-            AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
-            AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-        }
-    }
 
     /// <summary>
     /// 
@@ -53,9 +38,22 @@ namespace GKCore.Lists
     {
         private GEDCOMFamilyRecord fRec;
 
-        public FamilyListMan(IBaseContext baseContext) : 
-            base(baseContext, new FamilyListColumns(), GEDCOMRecordType.rtFamily)
+
+        public FamilyListMan(IBaseContext baseContext) :
+            base(baseContext, CreateFamilyListColumns(), GEDCOMRecordType.rtFamily)
         {
+        }
+
+        public static ListColumns CreateFamilyListColumns()
+        {
+            var result = new ListColumns();
+
+            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override bool CheckFilter()
