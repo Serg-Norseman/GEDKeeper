@@ -37,6 +37,9 @@ namespace GKCore.Interfaces
         IBaseContext BaseContext { get; }
         bool ColumnsHaveBeenChanged { get; set; }
         IListColumns ListColumns { get; }
+
+        void UpdateColumns(IListView listView);
+        void UpdateContents();
     }
 
 
@@ -61,8 +64,6 @@ namespace GKCore.Interfaces
         int IndexOfRecord(object data);
         bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);
-        void UpdateColumns(IListView listView);
-        void UpdateContents();
         void UpdateItem(IListItem item, object rowData);
     }
 }

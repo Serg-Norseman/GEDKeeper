@@ -129,17 +129,15 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Goal, 250, false);
+            fListColumns.AddColumn(LSID.LSID_Priority, 90, false);
+            fListColumns.AddColumn(LSID.LSID_StartDate, 90, false);
+            fListColumns.AddColumn(LSID.LSID_StopDate, 90, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var research = fDataOwner as GEDCOMResearchRecord;
             if (fSheetList == null || research == null) return;
@@ -164,7 +162,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResTasksSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("ResTasksSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -197,7 +195,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
@@ -212,17 +210,15 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Theme, 150, false);
+            fListColumns.AddColumn(LSID.LSID_Corresponder, 150, false);
+            fListColumns.AddColumn(LSID.LSID_Type, 90, false);
+            fListColumns.AddColumn(LSID.LSID_Date, 90, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var research = fDataOwner as GEDCOMResearchRecord;
             if (fSheetList == null || research == null) return;
@@ -247,7 +243,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -280,7 +276,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
@@ -295,14 +291,12 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Group, 350, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var research = fDataOwner as GEDCOMResearchRecord;
             if (fSheetList == null || research == null) return;
@@ -324,7 +318,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResGroupsSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("ResGroupsSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -353,7 +347,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }

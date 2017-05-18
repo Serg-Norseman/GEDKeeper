@@ -38,15 +38,13 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Relation, 300, false);
+            fListColumns.AddColumn(LSID.LSID_Person, 200, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var person = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || person == null) return;
@@ -64,7 +62,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("AssociationsListModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("AssociationsListModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -113,7 +111,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }

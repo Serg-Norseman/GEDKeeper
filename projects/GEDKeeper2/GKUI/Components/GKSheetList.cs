@@ -291,6 +291,10 @@ namespace GKUI.Components
         {
             if (fListModel != null) {
                 fListModel.Modify(this, eArgs);
+
+                if (eArgs.IsChanged) {
+                    UpdateSheet();
+                }
             }
 
             var eventHandler = (ModifyEventHandler)Events[EventModify];
@@ -423,12 +427,17 @@ namespace GKUI.Components
             fList.SelectItem(index);
         }
 
-        public virtual void UpdateSheet()
+        public void UpdateSheet()
         {
             UpdateButtons();
 
             if (fListModel != null) {
-                fListModel.UpdateContent();
+                if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
+                    fList.Columns.Clear();
+                    fListModel.UpdateColumns(fList);
+                }
+
+                fListModel.UpdateContents();
             }
         }
 

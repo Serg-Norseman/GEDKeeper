@@ -35,10 +35,23 @@ namespace GKCore.Lists
     /// </summary>
     public abstract class ListSource : BaseObject, IListSource
     {
+        protected sealed class MapColumnRec
+        {
+            public byte ColType;
+            public byte ColSubtype;
+
+            public MapColumnRec(byte colType, byte colSubtype)
+            {
+                ColType = colType;
+                ColSubtype = colSubtype;
+            }
+        }
+
         private EnumSet<RecordAction> fAllowedActions;
         private bool fColumnsHaveBeenChanged;
 
         protected readonly IBaseContext fBaseContext;
+        protected readonly List<MapColumnRec> fColumnsMap;
         protected readonly ListColumns fListColumns;
 
 
@@ -69,8 +82,27 @@ namespace GKCore.Lists
         {
             fAllowedActions = new EnumSet<RecordAction>();
             fBaseContext = baseContext;
+            fColumnsMap = new List<MapColumnRec>();
             fListColumns = defaultListColumns;
         }
+
+        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            list.AddColumn(caption, width, autoSize);
+            fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
+        }
+
+        protected void ColumnsMap_Clear()
+        {
+            fColumnsMap.Clear();
+        }
+
+        public abstract void UpdateColumns(IListView listView);
+
+        public abstract void UpdateContents();
     }
 
     /// <summary>
@@ -90,22 +122,9 @@ namespace GKCore.Lists
             }
         }
 
-        protected sealed class MapColumnRec
-        {
-            public byte ColType;
-            public byte ColSubtype;
-
-            public MapColumnRec(byte colType, byte colSubtype)
-            {
-                ColType = colType;
-                ColSubtype = colSubtype;
-            }
-        }
-
         protected ListFilter fFilter;
         protected ExternalFilterHandler fExternalFilter;
 
-        private readonly List<MapColumnRec> fColumnsMap;
         private readonly List<ValItem> fContentList;
         private readonly GEDCOMRecordType fRecordType;
         private int fXSortFactor;
@@ -154,7 +173,6 @@ namespace GKCore.Lists
         protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
-            fColumnsMap = new List<MapColumnRec>();
             fContentList = new List<ValItem>();
             fRecordType = recordType;
 
@@ -169,20 +187,6 @@ namespace GKCore.Lists
                 //fContentList = null;
             }
             base.Dispose(disposing);
-        }
-
-        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-
-            list.AddColumn(caption, width, autoSize);
-            fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
-        }
-
-        protected void ColumnsMap_Clear()
-        {
-            fColumnsMap.Clear();
         }
 
         protected virtual void CreateFilter()
@@ -278,7 +282,7 @@ namespace GKCore.Lists
             }
         }
 
-        public virtual void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListView listView)
         {
             if (listView == null) return;
 
@@ -538,7 +542,7 @@ namespace GKCore.Lists
             }
         }
 
-        public void UpdateContents()
+        public override void UpdateContents()
         {
             fTotalCount = 0;
 

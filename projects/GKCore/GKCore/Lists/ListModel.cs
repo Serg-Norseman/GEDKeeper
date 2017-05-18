@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Operations;
@@ -37,11 +36,13 @@ namespace GKCore.Lists
     {
         public RecordAction Action { get; private set; }
         public object ItemData { get; set; }
+        public bool IsChanged { get; set; }
 
         public ModifyEventArgs(RecordAction action, object itemData)
         {
             Action = action;
             ItemData = itemData;
+            IsChanged = false;
         }
     }
 
@@ -93,7 +94,6 @@ namespace GKCore.Lists
         void ClearItems();
         IListItem AddItem(object itemValue, object data);
         void ResizeColumn(int columnIndex);
-        void UpdateSheet();
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ namespace GKCore.Lists
             }
             set {
                 fDataOwner = value;
-                UpdateContent();
+                UpdateContents();
             }
         }
 
@@ -126,7 +126,6 @@ namespace GKCore.Lists
             set {
                 if (fSheetList != value) {
                     fSheetList = value;
-                    InitView();
                 }
             }
         }
@@ -138,8 +137,22 @@ namespace GKCore.Lists
             fUndoman = undoman;
         }
 
-        public abstract void InitView();
-        public abstract void UpdateContent();
+        public override void UpdateColumns(IListView listView)
+        {
+            if (listView == null) return;
+
+            ColumnsMap_Clear();
+
+            int num = fListColumns.Count;
+            for (int i = 0; i < num; i++) {
+                ListColumn cs = fListColumns.OrderedColumns[i];
+
+                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
+            }
+
+            ColumnsHaveBeenChanged = false;
+        }
+
         public abstract void Modify(object sender, ModifyEventArgs eArgs);
     }
 }

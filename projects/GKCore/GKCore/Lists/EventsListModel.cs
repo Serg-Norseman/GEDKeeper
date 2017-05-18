@@ -38,22 +38,20 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
-        }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn("№", 25, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Event), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Date), 80, false);
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.LSID_Event, 90, false);
+            fListColumns.AddColumn(LSID.LSID_Date, 80, false);
             if (!fPersonsMode) {
-                fSheetList.AddColumn(LangMan.LS(LSID.LSID_Place), 200, false);
+                fListColumns.AddColumn(LSID.LSID_Place, 200, false);
             } else {
-                fSheetList.AddColumn(LangMan.LS(LSID.LSID_PlaceAndAttribute), 200, false);
+                fListColumns.AddColumn(LSID.LSID_PlaceAndAttribute, 200, false);
             }
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
+            fListColumns.AddColumn(LSID.LSID_Cause, 130, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var dataOwner = fDataOwner as GEDCOMRecordWithEvents;
             if (fSheetList == null || dataOwner == null) return;
@@ -104,7 +102,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKEventsSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("EventsListModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -194,7 +192,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKEventsSheet.ModifyRecEvent(): " + ex.Message);
+                Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
                 result = false;
             }
 
@@ -204,7 +202,7 @@ namespace GKCore.Lists
                 }
 
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }

@@ -34,17 +34,15 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
+
+            fListColumns.AddColumn(LSID.LSID_Author, 70, false);
+            fListColumns.AddColumn(LSID.LSID_Title, 180, false);
+            fListColumns.AddColumn(LSID.LSID_Page, 90, false);
+            fListColumns.AddColumn(LSID.LSID_Certainty, 220, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Author), 70, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Title), 180, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Page), 90, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
@@ -68,7 +66,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKSourcesSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("SourceCitationsListModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -116,10 +114,9 @@ namespace GKCore.Lists
                     break;
             }
 
-            if (result)
-            {
+            if (result) {
                 fBaseWin.Context.Modified = true;
-                UpdateContent();
+                eArgs.IsChanged = true;
             }
         }
     }

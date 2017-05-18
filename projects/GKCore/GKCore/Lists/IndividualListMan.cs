@@ -632,14 +632,12 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Group, 350, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var iRec = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
@@ -692,7 +690,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
@@ -708,15 +706,13 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
+
+            fListColumns.AddColumn(LSID.LSID_Name, 350, false);
+            fListColumns.AddColumn(LSID.LSID_Type, 100, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Name), 350, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 100, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var iRec = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
@@ -736,7 +732,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("NamesSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("NamesSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -804,7 +800,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
@@ -820,16 +816,14 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown);
+
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.LSID_Spouse, 300, false);
+            fListColumns.AddColumn(LSID.LSID_MarriageDate, 100, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn("№", 25, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Spouse), 300, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var iRec = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
@@ -870,7 +864,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("SpousesSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("SpousesSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -925,7 +919,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
@@ -940,15 +934,13 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+
+            fListColumns.AddColumn(LSID.LSID_Reference, 300, false);
+            fListColumns.AddColumn(LSID.LSID_Type, 200, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Reference), 300, false);
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var iRec = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
@@ -967,7 +959,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("URefsSublistModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("URefsSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -1023,7 +1015,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }

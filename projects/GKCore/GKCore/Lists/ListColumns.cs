@@ -101,6 +101,11 @@ namespace GKCore.Lists
             // dummy
         }
 
+        public void AddColumn(LSID colName, int defWidth, bool autosize = false)
+        {
+            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null);
+        }
+
         public void AddColumn(LSID colName, DataType dataType,
                               int defWidth, bool defActive,
                               bool autosize = false)

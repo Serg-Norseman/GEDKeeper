@@ -812,8 +812,9 @@ namespace GKCore
         /* 755 */ LSID_CopyingFile,
         /* 756 */ LSID_Actions,
         /* 757 */ LSID_SelectAndCopy,
+        /* 758 */ LSID_NumberSym,
 
-        /* 000 */ LSID_Last = LSID_SelectAndCopy
+        /* 000 */ LSID_Last = LSID_NumberSym
     }
 
     // TODO: remove and merge with LangManager
@@ -1582,6 +1583,7 @@ namespace GKCore
             /* 755 */ "Copying file",
             /* 756 */ "Actions",
             /* 757 */ "Select and copy",
+            /* 758 */ "№",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

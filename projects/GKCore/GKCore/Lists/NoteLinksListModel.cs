@@ -33,14 +33,12 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+
+            fListColumns.AddColumn(LSID.LSID_Note, 500, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Note), 500, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
@@ -56,7 +54,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKNotesSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("NoteLinksListModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -94,11 +92,10 @@ namespace GKCore.Lists
                     }
                     break;
             }
-            
-            if (result)
-            {
+
+            if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }

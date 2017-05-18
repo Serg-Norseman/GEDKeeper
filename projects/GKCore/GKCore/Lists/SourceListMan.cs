@@ -111,14 +111,12 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+
+            fListColumns.AddColumn(LSID.LSID_Repository, 300, false);
+            fListColumns.ResetDefaults();
         }
 
-        public override void InitView()
-        {
-            fSheetList.AddColumn(LangMan.LS(LSID.LSID_Repository), 300, false);
-        }
-
-        public override void UpdateContent()
+        public override void UpdateContents()
         {
             var source = fDataOwner as GEDCOMSourceRecord;
             if (fSheetList == null || source == null) return;
@@ -139,7 +137,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("RepositoriesListModel.UpdateContent(): " + ex.Message);
+                Logger.LogWrite("SourceRepositoriesSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -169,7 +167,7 @@ namespace GKCore.Lists
 
             if (result) {
                 fBaseWin.Context.Modified = true;
-                fSheetList.UpdateSheet();
+                eArgs.IsChanged = true;
             }
         }
     }
