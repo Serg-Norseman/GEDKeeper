@@ -48,7 +48,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns();
 
-            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 

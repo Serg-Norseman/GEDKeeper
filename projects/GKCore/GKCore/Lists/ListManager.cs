@@ -291,6 +291,8 @@ namespace GKCore.Lists
 
                 AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
             }
+
+            ColumnsHaveBeenChanged = false;
         }
 
         public string GetColumnName(byte columnId)
@@ -471,6 +473,20 @@ namespace GKCore.Lists
 
             if (props != null) {
                 props.CurWidth = newWidth;
+            }
+        }
+
+        public bool IsColumnAutosize(int colIndex)
+        {
+            if (colIndex <= 0) return false;
+
+            MapColumnRec colrec = fColumnsMap[colIndex];
+            ListColumn props = FindColumnProps(colrec.ColType);
+
+            if (props != null) {
+                return props.Autosize;
+            } else {
+                return false;
             }
         }
 

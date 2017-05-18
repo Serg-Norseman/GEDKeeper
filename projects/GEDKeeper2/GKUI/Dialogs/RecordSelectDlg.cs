@@ -140,13 +140,13 @@ namespace GKUI.Dialogs
             if (fRecType == GEDCOMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;
                 iFilter.Sex = NeedSex;
-                
+
                 if (fTarget.TargetMode == TargetMode.tmParent) {
                     fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
                 }
             }
 
-            fListRecords.UpdateContents(true, 1);
+            fListRecords.UpdateContents();
         }
 
         private static bool ChildSelectorHandler(GEDCOMRecord record)

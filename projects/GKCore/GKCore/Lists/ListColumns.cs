@@ -39,14 +39,15 @@ namespace GKCore.Lists
         public readonly bool DefActive;
         public readonly string Format;
         public readonly NumberFormatInfo NumFmt;
+        public readonly bool Autosize;
 
         public int CurWidth;
         public bool CurActive;
         public int Order;
 
         public ListColumn(byte id, LSID colName, DataType dataType,
-                          int defWidth, bool defActive, string format = null,
-                          NumberFormatInfo numFmt = null)
+                          int defWidth, bool defActive, bool autosize = false,
+                          string format = null, NumberFormatInfo numFmt = null)
         {
             Id = id;
             ColName = colName;
@@ -55,6 +56,7 @@ namespace GKCore.Lists
             DefActive = defActive;
             Format = format;
             NumFmt = numFmt;
+            Autosize = autosize;
         }
     }
 
@@ -101,10 +103,18 @@ namespace GKCore.Lists
 
         public void AddColumn(LSID colName, DataType dataType,
                               int defWidth, bool defActive,
-                              string format = null, NumberFormatInfo nfi = null)
+                              bool autosize = false)
+        {
+            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null);
+        }
+
+        public void AddColumn(LSID colName, DataType dataType,
+                              int defWidth, bool defActive, bool autosize,
+                              string format, NumberFormatInfo nfi)
         {
             fLastId += 1;
-            ListColumn cs = new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, format, nfi);
+            ListColumn cs = new ListColumn((byte)fLastId, colName, dataType,
+                                           defWidth, defActive, autosize, format, nfi);
             fColumns.Add(cs);
         }
 

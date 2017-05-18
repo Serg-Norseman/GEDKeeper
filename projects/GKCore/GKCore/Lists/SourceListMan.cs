@@ -53,7 +53,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns();
 
-            result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
+            result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true, true);
             result.AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);

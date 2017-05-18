@@ -49,7 +49,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns();
 
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true);
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
             result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
             result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);

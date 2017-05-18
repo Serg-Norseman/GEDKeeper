@@ -50,7 +50,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns();
 
-            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);

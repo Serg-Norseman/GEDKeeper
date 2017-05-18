@@ -51,7 +51,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns();
 
-            result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true);
+            result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();

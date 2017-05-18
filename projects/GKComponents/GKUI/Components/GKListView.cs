@@ -526,14 +526,14 @@ namespace GKUI.Components
             base.OnColumnWidthChanged(e);
         }
 
-        public void UpdateContents(bool titles, int autosizeColumn = -1)
+        public void UpdateContents(bool columnsChanged = false)
         {
             if (fListMan == null) return;
 
             try
             {
-                if (fListMan.ColumnsHaveBeenChanged != titles && titles) {
-                    fListMan.ColumnsHaveBeenChanged = titles;
+                if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
+                    fListMan.ColumnsHaveBeenChanged = columnsChanged;
                 }
 
                 object tempRec = GetSelectedData();
@@ -541,7 +541,7 @@ namespace GKUI.Components
                 BeginUpdate();
                 try
                 {
-                    if (titles || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
+                    if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
                         fListMan.UpdateColumns(this);
                     }
@@ -556,7 +556,7 @@ namespace GKUI.Components
                     }
                     #endif
 
-                    ResizeColumn(autosizeColumn);
+                    ResizeColumns();
                 }
                 finally
                 {
@@ -568,6 +568,17 @@ namespace GKUI.Components
             catch (Exception ex)
             {
                 Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+            }
+        }
+
+        public void ResizeColumns()
+        {
+            if (fListMan == null) return;
+
+            for (int i = 0; i < Columns.Count; i++) {
+                if (fListMan.IsColumnAutosize(i)) {
+                    ResizeColumn(i);
+                }
             }
         }
 

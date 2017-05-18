@@ -553,7 +553,7 @@ namespace GKUI
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
-            recView.UpdateContents(true);
+            recView.UpdateContents();
             recView.ContextMenuStrip = contextMenu;
 
             sheet.Controls.SetChildIndex(spl, 1);
@@ -610,19 +610,19 @@ namespace GKUI
             }
         }
 
-        public void RefreshLists(bool titles)
+        public void RefreshLists(bool columnsChanged)
         {
-            ListPersons.UpdateContents(titles, -1/*2*/);
-            ListFamilies.UpdateContents(titles, 1);
-            ListNotes.UpdateContents(titles, -1);
-            ListMultimedia.UpdateContents(titles, 1);
-            ListSources.UpdateContents(titles, 1);
-            ListRepositories.UpdateContents(titles, 1);
-            ListGroups.UpdateContents(titles, 1);
-            ListResearches.UpdateContents(titles, 1);
-            ListTasks.UpdateContents(titles, 1);
-            ListCommunications.UpdateContents(titles, 1);
-            ListLocations.UpdateContents(titles, 1);
+            ListPersons.UpdateContents(columnsChanged);
+            ListFamilies.UpdateContents(columnsChanged);
+            ListNotes.UpdateContents(columnsChanged);
+            ListMultimedia.UpdateContents(columnsChanged);
+            ListSources.UpdateContents(columnsChanged);
+            ListRepositories.UpdateContents(columnsChanged);
+            ListGroups.UpdateContents(columnsChanged);
+            ListResearches.UpdateContents(columnsChanged);
+            ListTasks.UpdateContents(columnsChanged);
+            ListCommunications.UpdateContents(columnsChanged);
+            ListLocations.UpdateContents(columnsChanged);
 
             PageRecords_SelectedIndexChanged(null, null);
         }
@@ -631,7 +631,7 @@ namespace GKUI
         {
             GKListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
-                rView.UpdateContents(false, -1);
+                rView.UpdateContents();
                 PageRecords_SelectedIndexChanged(null, null);
             }
         }

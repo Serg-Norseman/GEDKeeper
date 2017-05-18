@@ -53,9 +53,9 @@ namespace GKCore.Lists
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
 
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true);
-            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
-            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();

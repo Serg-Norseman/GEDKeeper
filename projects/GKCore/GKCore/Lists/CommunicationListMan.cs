@@ -51,7 +51,7 @@ namespace GKCore.Lists
             var result = new ListColumns();
 
             // not to change the order of these lines in their changes
-            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);

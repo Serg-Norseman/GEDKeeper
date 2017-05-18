@@ -59,6 +59,7 @@ namespace GKCore.Interfaces
         GEDCOMRecord GetContentItem(int itemIndex);
         List<GEDCOMRecord> GetRecordsList();
         int IndexOfRecord(object data);
+        bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);
         void UpdateColumns(IListView listView);
         void UpdateContents();
