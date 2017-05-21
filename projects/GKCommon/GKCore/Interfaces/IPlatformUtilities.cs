@@ -34,6 +34,11 @@ namespace GKCore.Interfaces
         IImage CreateImage(Stream stream);
         IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
 
-        IImage GetResourceImage(string resName);
+        IImage GetResourceImage(string resName, bool makeTransp);
+        IGfxPath CreatePath();
+        IFont CreateFont(string fontName, float size, bool bold);
+
+        IColor CreateColor(int argb);
+        IColor CreateColor(int r, int g, int b);
     }
 }

@@ -26,6 +26,7 @@ using System.Text;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKUI;
 using NUnit.Framework;
 
 namespace GKTests.GEDCOM
@@ -41,6 +42,10 @@ namespace GKTests.GEDCOM
         [TestFixtureSetUp]
         public void SetUp()
         {
+            // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
+            // TODO: replace to mocks
+            WinFormsAppHost.ConfigureBootstrap(false);
+
             fContext = TestStubs.CreateContext();
             TestStubs.FillContext(fContext);
         }

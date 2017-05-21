@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using GKCommon;
+using GKCore.Charts;
 using GKCore.Interfaces;
 
 namespace GKCore.Options
@@ -47,11 +48,11 @@ namespace GKCore.Options
         public bool CertaintyIndexVisible;
         public bool TraceSelected;
 
-        public Color MaleColor;
-        public Color FemaleColor;
-        public Color UnkSexColor;
-        public Color UnHusbandColor;
-        public Color UnWifeColor;
+        public IColor MaleColor;
+        public IColor FemaleColor;
+        public IColor UnkSexColor;
+        public IColor UnHusbandColor;
+        public IColor UnWifeColor;
 
         public string DefFontName;
         public int DefFontSize;
@@ -79,11 +80,11 @@ namespace GKCore.Options
             ChildlessExclude = false;
             Decorative = true;
 
-            MaleColor = Color.FromArgb(-3750145);
-            FemaleColor = Color.FromArgb(-14650);
-            UnkSexColor = Color.FromArgb(-14593);
-            UnHusbandColor = Color.FromArgb(-2631681);
-            UnWifeColor = Color.FromArgb(-10281);
+            MaleColor = ChartRenderer.GetColor(-3750145);
+            FemaleColor = ChartRenderer.GetColor(-14650);
+            UnkSexColor = ChartRenderer.GetColor(-14593);
+            UnHusbandColor = ChartRenderer.GetColor(-2631681);
+            UnWifeColor = ChartRenderer.GetColor(-10281);
 
             DefFontName = "Verdana";
             DefFontSize = 8;
@@ -147,11 +148,11 @@ namespace GKCore.Options
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
 
-            MaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "MaleColor", -3750145));
-            FemaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "FemaleColor", -14650));
-            UnkSexColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnkSexColor", -14593));
-            UnHusbandColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnHusbandColor", -2631681));
-            UnWifeColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnWifeColor", -10281));
+            MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", -3750145));
+            FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", -14650));
+            UnkSexColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnkSexColor", -14593));
+            UnHusbandColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnHusbandColor", -2631681));
+            UnWifeColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnWifeColor", -10281));
 
             DefFontName = iniFile.ReadString("Chart", "FontName", "Verdana");
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);

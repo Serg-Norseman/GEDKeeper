@@ -19,8 +19,6 @@
  */
 
 using System;
-using System.Drawing;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
@@ -340,7 +338,7 @@ namespace GKCore.Charts
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resName = (fSex == GEDCOMSex.svFemale) ? "piFemale140" : "piMale140";
-                                fPortrait = AppHost.Utilities.GetResourceImage(resName);
+                                fPortrait = AppHost.Utilities.GetResourceImage(resName, false);
                             }
                         }
                         catch (MediaFileNotFoundException)
@@ -505,36 +503,36 @@ namespace GKCore.Charts
             }
         }
 
-        public Color GetSelectedColor()
+        public IColor GetSelectedColor()
         {
-            Color result;
+            int result;
 
             switch (fSex) {
                 case GEDCOMSex.svMale:
-                    result = Color.Blue;
+                    result = ChartRenderer.Blue;
                     break;
 
                 case GEDCOMSex.svFemale:
-                    result = Color.Red;
+                    result = ChartRenderer.Red;
                     break;
 
                 default:
-                    result = Color.Black;
+                    result = ChartRenderer.Black;
                     break;
             }
 
-            return result;
+            return ChartRenderer.GetColor(result);
         }
 
-        public Color GetFillColor(bool dead)
+        public IColor GetFillColor(bool dead)
         {
-            Color result;
+            IColor result;
 
             if (dead) {
-                result = Color.Black;
+                result = ChartRenderer.GetColor(ChartRenderer.Black);
             } else {
                 if (IsDup) {
-                    result = Color.FromArgb(192, 192, 192);
+                    result = ChartRenderer.GetColor(ChartRenderer.Silver);
                 } else {
                     TreeChartOptions options = fModel.Options;
 

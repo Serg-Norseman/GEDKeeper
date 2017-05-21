@@ -31,6 +31,16 @@ namespace GKCore.Export
     {
         private sealed class FontHandler: TypeHandler<FontStruct>, IFont
         {
+            public string Name
+            {
+                get { return string.Empty; } // dummy
+            }
+
+            public float Size
+            {
+                get { return 0; } // dummy
+            }
+
             public FontHandler(FontStruct handle) : base(handle)
             {
             }

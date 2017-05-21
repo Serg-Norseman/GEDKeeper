@@ -88,17 +88,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GKCoreResources.Designer.cs">
-      <DependentUpon>GKCoreResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
     <Compile Include="GKCore\SearchStrategy.cs" />
     <Compile Include="GKCore\Charts\ChartModel.cs" />
     <Compile Include="GKCore\Charts\CircleChartModel.cs" />
-    <Compile Include="GKCore\Charts\ITreeControl.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
     <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
     <Compile Include="GKCore\Cultures\BritishCulture.cs" />
@@ -227,12 +222,6 @@
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GKCoreResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>GKCoreResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCore;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 
 namespace GKUI.Components
@@ -36,12 +37,14 @@ namespace GKUI.Components
         {
         }
 
-        public Font SelectFont(Font font)
+        public IFont SelectFont(IFont font)
         {
+            Font sdFont = ((FontHandler)font).Handle;
+
             using (FontDialog fontDlg = new FontDialog())
             {
-                fontDlg.Font = font;
-                return (fontDlg.ShowDialog() != DialogResult.OK) ? null : fontDlg.Font;
+                fontDlg.Font = sdFont;
+                return (fontDlg.ShowDialog() != DialogResult.OK) ? null : new FontHandler(fontDlg.Font);
             }
         }
 

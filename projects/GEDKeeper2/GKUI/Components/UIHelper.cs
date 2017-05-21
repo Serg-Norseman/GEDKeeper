@@ -235,5 +235,15 @@ namespace GKUI.Components
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();
         }
+
+        public static IColor ConvertColor(Color color)
+        {
+            return new ColorHandler(color);
+        }
+
+        public static Color ConvertColor(IColor color)
+        {
+            return ((ColorHandler)color).Handle;
+        }
     }
 }

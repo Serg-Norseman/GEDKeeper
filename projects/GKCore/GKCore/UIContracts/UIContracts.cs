@@ -19,8 +19,6 @@
  */
 
 using System;
-using System.Drawing;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;
@@ -75,7 +73,7 @@ namespace GKCore.UIContracts
     /// </summary>
     public interface IStdDialogs
     {
-        Font SelectFont(Font font);
+        IFont SelectFont(IFont font);
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);
         string GetSaveFile(string filter);

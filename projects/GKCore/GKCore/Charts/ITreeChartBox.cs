@@ -20,7 +20,7 @@
 
 using System;
 using System.Drawing;
-
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -30,7 +30,6 @@ namespace GKCore.Charts
     public interface ITreeChartBox
     {
         IBaseWindow Base { get; set; }
-        Rectangle ClientRectangle { get; }
         int DepthLimit { get; set; }
         int Height { get; set; }
         TreeChartKind Kind { get; set; }
@@ -40,6 +39,7 @@ namespace GKCore.Charts
         int Width { get; set; }
 
         void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        ExtRect GetClientRect();
         Size GetImageSize();
         Point GetOffsets();
         void Invalidate();

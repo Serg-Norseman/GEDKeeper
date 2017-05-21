@@ -19,8 +19,8 @@
  */
 
 using System;
-using System.Drawing;
 using GKCommon;
+using GKCore.Charts;
 using GKCore.Interfaces;
 
 namespace GKCore.Options
@@ -32,29 +32,29 @@ namespace GKCore.Options
     {
         public const int MAX_BRUSHES = 12;
 
-        private static Color[] DefBrushColor = new Color[] {
-            /* 00 */ Color.Coral,
-            /* 01 */ Color.CadetBlue,
-            /* 02 */ Color.DarkGray,
-            /* 03 */ Color.Khaki,
-            /* 04 */ Color./*CadetBlue,*/LawnGreen,
-            /* 05 */ Color./*DarkGray,*/Khaki,
-            /* 06 */ Color./*Khaki,*/HotPink,
-            /* 07 */ Color./*CadetBlue,*/Ivory,
-            /* 08 */ Color.Black, // text
-            /* 09 */ Color.Moccasin, // background and central
-            /* 10 */ Color.Black, // lines
-            /* 11 */ Color.PaleGreen // lines?
+        private static int[] DefBrushColor = new int[] {
+            /* 00 */ ChartRenderer.Coral,
+            /* 01 */ ChartRenderer.CadetBlue,
+            /* 02 */ ChartRenderer.DarkGray,
+            /* 03 */ ChartRenderer.Khaki,
+            /* 04 */ ChartRenderer.LawnGreen,
+            /* 05 */ ChartRenderer.Khaki,
+            /* 06 */ ChartRenderer.HotPink,
+            /* 07 */ ChartRenderer.Ivory,
+            /* 08 */ ChartRenderer.Black, // text
+            /* 09 */ ChartRenderer.Moccasin, // background and central
+            /* 10 */ ChartRenderer.Black, // lines
+            /* 11 */ ChartRenderer.PaleGreen // lines?
         };
 
         public bool ArcText; // TODO: to OptionsDlg
-        public Color[] BrushColor = new Color[MAX_BRUSHES];
+        public IColor[] BrushColor = new IColor[MAX_BRUSHES];
         public bool HideEmptySegments;
 
         public AncestorsCircleOptions()
         {
             for (int i = 0; i < MAX_BRUSHES; i++) {
-                BrushColor[i] = DefBrushColor[i];
+                BrushColor[i] = ChartRenderer.GetColor(DefBrushColor[i]);
             }
 
             ArcText = false;
@@ -81,8 +81,10 @@ namespace GKCore.Options
 
             try
             {
+                var utils = AppHost.Utilities;
+
                 for (int i = 0; i < MAX_BRUSHES; i++) {
-                    BrushColor[i] = Color.FromArgb(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i].ToArgb()));
+                    BrushColor[i] = utils.CreateColor(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i]));
                 }
 
                 HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);

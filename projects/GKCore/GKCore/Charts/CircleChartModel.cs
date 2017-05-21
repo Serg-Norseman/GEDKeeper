@@ -39,7 +39,7 @@ namespace GKCore.Charts
     {
         public int Gen;
         public GEDCOMIndividualRecord IRec;
-        public GraphicsPath Path;
+        public IGfxPath Path;
         public float Rad;
         public float StartAngle;
         public float WedgeAngle;
@@ -48,7 +48,7 @@ namespace GKCore.Charts
         {
             Gen = generation;
             IRec = null;
-            Path = new GraphicsPath();
+            Path = AppHost.Utilities.CreatePath();
         }
 
         protected override void Dispose(bool disposing)
@@ -96,8 +96,8 @@ namespace GKCore.Charts
         public const float CENTER_RAD = 90;
         public const float DEFAULT_GEN_WIDTH = 60;
 
-        private readonly SolidBrush[] fCircleBrushes;
-        private readonly SolidBrush[] fDarkBrushes;
+        private readonly IBrush[] fCircleBrushes;
+        private readonly IBrush[] fDarkBrushes;
 
         private IBaseWindow fBase;
         private ExtRectF fBounds;
@@ -115,7 +115,7 @@ namespace GKCore.Charts
          * member `fMaxGenerations`, the member should be a const field. */
         private int fMaxGenerations;
         private AncestorsCircleOptions fOptions;
-        private Pen fPen;
+        private IPen fPen;
         private GEDCOMIndividualRecord fRootPerson;
         private readonly List<CircleSegment> fSegments;
         private CircleSegment fSelected;
@@ -126,7 +126,7 @@ namespace GKCore.Charts
         private bool fGroupsMode;
         #endregion
 
-        public Font Font;
+        public IFont Font;
 
 
         public IBaseWindow Base
@@ -213,8 +213,8 @@ namespace GKCore.Charts
 
         public CircleChartModel()
         {
-            fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-            fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            fCircleBrushes = new IBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            fDarkBrushes = new IBrush[AncestorsCircleOptions.MAX_BRUSHES];
 
             fBounds = new ExtRectF();
             fGenWidth = CircleChartModel.DEFAULT_GEN_WIDTH;
@@ -235,13 +235,13 @@ namespace GKCore.Charts
         {
             for (int i = 0; i < fOptions.BrushColor.Length; i++)
             {
-                Color col = fOptions.BrushColor[i];
+                IColor col = fOptions.BrushColor[i];
 
-                fCircleBrushes[i] = new SolidBrush(col);
-                fDarkBrushes[i] = new SolidBrush(SysUtils.Darker(col, 0.2f));
+                fCircleBrushes[i] = fRenderer.CreateSolidBrush(col);
+                fDarkBrushes[i] = fRenderer.CreateSolidBrush(col.Darker(0.2f));
             }
 
-            fPen = new Pen(fOptions.BrushColor[10]);
+            fPen = fRenderer.CreatePen(fOptions.BrushColor[10], 1.0f);
         }
 
         public void DisposeBrushes()
@@ -263,7 +263,7 @@ namespace GKCore.Charts
             fBounds.Right = 0.0f;
             fBounds.Bottom = 0.0f;
             foreach (var segment in fSegments) {
-                RectangleF bound = segment.Path.GetBounds();
+                ExtRectF bound = segment.Path.GetBounds();
                 fBounds.Left = Math.Min(fBounds.Left, bound.Left);
                 fBounds.Top = Math.Min(fBounds.Top, bound.Top);
                 fBounds.Right = Math.Max(fBounds.Right, bound.Right);
@@ -319,18 +319,19 @@ namespace GKCore.Charts
                 GKUtils.GetNameParts(iRec, out surn, out givn, out dummy);
             }
 
+            ExtSizeF size;
             float rad = segment.Rad - 20;
             float angle = segment.StartAngle + 90.0f + segment.WedgeAngle / 2;
             float wedgeAngle = segment.WedgeAngle;
 
-            bool isNarrow = IsNarrowSegment(gfx, givn, rad, wedgeAngle, Font);
+            bool isNarrow = IsNarrowSegment(givn, rad, wedgeAngle, Font);
             Matrix previousTransformation = gfx.Transform;
             if (gen == 0) {
 
-                SizeF size = gfx.MeasureString(surn, Font);
-                gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
-                size = gfx.MeasureString(givn, Font);
-                gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, 0f);
+                size = fRenderer.GetTextSize(surn, Font);
+                fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
+                size = fRenderer.GetTextSize(givn, Font);
+                fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, 0f);
 
             } else {
 
@@ -345,8 +346,8 @@ namespace GKCore.Charts
                     m.Multiply(previousTransformation, MatrixOrder.Append);
                     gfx.Transform = m;
 
-                    SizeF size = gfx.MeasureString(givn, Font);
-                    gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                    size = fRenderer.GetTextSize(givn, Font);
+                    fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
                 } else {
 
@@ -361,18 +362,18 @@ namespace GKCore.Charts
                         m.Multiply(previousTransformation, MatrixOrder.Append);
                         gfx.Transform = m;
 
-                        SizeF size = gfx.MeasureString(givn, Font);
-                        gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                        size = fRenderer.GetTextSize(givn, Font);
+                        fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
                     } else if (wedgeAngle < 180) {
 
                         if (fOptions.ArcText) {
                             if (gen == 2) {
-                                SizeF size = gfx.MeasureString(surn, Font);
+                                size = fRenderer.GetTextSize(surn, Font);
                                 DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                                size = gfx.MeasureString(givn, Font);
+                                size = fRenderer.GetTextSize(givn, Font);
                                 DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                             segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
@@ -393,26 +394,26 @@ namespace GKCore.Charts
                             Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            SizeF size = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            size = fRenderer.GetTextSize(surn, Font);
+                            fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
-                            size = gfx.MeasureString(givn, Font);
+                            size = fRenderer.GetTextSize(givn, Font);
                             dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
                             dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
                             m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
                         }
 
                     } else if (wedgeAngle < 361) {
 
                         if (fOptions.ArcText) {
-                            SizeF size = gfx.MeasureString(surn, Font);
+                            size = fRenderer.GetTextSize(surn, Font);
                             DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
-                            size = gfx.MeasureString(givn, Font);
+                            size = fRenderer.GetTextSize(givn, Font);
                             DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
                                         segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
@@ -425,10 +426,10 @@ namespace GKCore.Charts
                             m.Multiply(previousTransformation, MatrixOrder.Append);
                             gfx.Transform = m;
 
-                            SizeF size = gfx.MeasureString(surn, Font);
-                            gfx.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
-                            size = gfx.MeasureString(givn, Font);
-                            gfx.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f + size.Height);
+                            size = fRenderer.GetTextSize(surn, Font);
+                            fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            size = fRenderer.GetTextSize(givn, Font);
+                            fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f + size.Height);
                         }
 
                     }
@@ -437,9 +438,9 @@ namespace GKCore.Charts
             gfx.Transform = previousTransformation;
         }
 
-        private static bool IsNarrowSegment(Graphics gfx, string text, float radius, float wedgeAngle, Font font)
+        private bool IsNarrowSegment(string text, float radius, float wedgeAngle, IFont font)
         {
-            SizeF size = gfx.MeasureString(text, font);
+            ExtSizeF size = fRenderer.GetTextSize(text, font);
             radius = radius + size.Height / 2.0f;
 
             float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
@@ -447,11 +448,11 @@ namespace GKCore.Charts
             return (wedgeL / size.Width <= 0.9f);
         }
 
-        private static void DrawArcText(Graphics gfx, string text, float centerX, float centerY, float radius,
-                                        float startAngle, float wedgeAngle,
-                                        bool inside, bool clockwise, Font font, Brush brush)
+        private void DrawArcText(Graphics gfx, string text, float centerX, float centerY, float radius,
+                                 float startAngle, float wedgeAngle,
+                                 bool inside, bool clockwise, IFont font, IBrush brush)
         {
-            SizeF size = gfx.MeasureString(text, font);
+            ExtSizeF size = fRenderer.GetTextSize(text, font);
             radius = radius + size.Height / 2.0f;
 
             float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
@@ -483,7 +484,7 @@ namespace GKCore.Charts
                 gfx.Transform = m;
 
                 string chr = new string(text[i], 1);
-                gfx.DrawString(chr, font, brush, 0, 0);
+                fRenderer.DrawString(chr, font, brush, 0, 0);
             }
             gfx.Transform = previousTransformation;
         }
@@ -497,7 +498,7 @@ namespace GKCore.Charts
             float inRad = CircleChartModel.CENTER_RAD - 50;
 
             AncPersonSegment segment = new AncPersonSegment(0);
-            GraphicsPath path = segment.Path;
+            IGfxPath path = segment.Path;
             path.StartFigure();
             path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
             path.CloseFigure();
@@ -633,11 +634,11 @@ namespace GKCore.Charts
                         brIndex = (segment.Gen == 0) ? CircleChartModel.CENTRAL_INDEX : segment.Gen - 1;
                     }
 
-                    SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
+                    IBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
-                    GraphicsPath path = segment.Path;
-                    gfx.FillPath(brush, path);
-                    gfx.DrawPath(fPen, path);
+                    IGfxPath path = segment.Path;
+                    fRenderer.FillPath(brush, path);
+                    fRenderer.DrawPath(fPen, path);
                 }
 
                 DrawPersonName(gfx, fSegments[i]);
@@ -666,7 +667,7 @@ namespace GKCore.Charts
 
         private void CalcDescendants(DescPersonSegment segment, float inRad, float startAngle, float stepAngle)
         {
-            GraphicsPath path = segment.Path;
+            IGfxPath path = segment.Path;
 
             float extRad;
             if (segment.Gen == 0) {
@@ -753,11 +754,11 @@ namespace GKCore.Charts
                 if (segment.IRec == null) continue;
 
                 int brIndex = (segment.Gen == 0) ? CircleChartModel.CENTRAL_INDEX : segment.Gen - 1;
-                SolidBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
+                IBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
-                GraphicsPath path = segment.Path;
-                gfx.FillPath(brush, path);
-                gfx.DrawPath(fPen, path);
+                IGfxPath path = segment.Path;
+                fRenderer.FillPath(brush, path);
+                fRenderer.DrawPath(fPen, path);
                 DrawPersonName(gfx, fSegments[i]);
             }
         }

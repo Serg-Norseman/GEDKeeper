@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define FUN_ANIM
-
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -31,6 +29,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {
@@ -63,20 +62,13 @@ namespace GKUI.Charts
         private float fOffsetX = 0;
         private float fOffsetY = 0;
         /* Zoom factors */
-        private float fZoomX = 1.0f;
-        private float fZoomY = 1.0f;
+        private float fZoom = 1.0f;
         private float fZoomLowLimit = 0.0125f;
         private float fZoomHighLimit = 1000.0f;
         /* Mouse capturing. */
         private MouseCaptured fMouseCaptured;
         private int fMouseCaptureX;
         private int fMouseCaptureY;
-        /* Animation timer. */
-        #if FUN_ANIM
-        private Timer fAppearingAnimationTimer;
-        private UInt64 fAppearingAnimationTime = 0;
-        private const UInt64 fAppearingAnimationTimeLimit = 17;
-        #endif
 
 
         public CircleChartType ChartType
@@ -107,17 +99,14 @@ namespace GKUI.Charts
                 return fModel.RootPerson;
             }
             set {
-                if (fModel.RootPerson == value) return;
-                fModel.RootPerson = value;
+                if (fModel.RootPerson != value) {
+                    fModel.RootPerson = value;
 
-                NavAdd(value);
-                Changed();
+                    NavAdd(value);
+                    Changed();
 
-                DoRootChanged(value);
-
-                #if FUN_ANIM
-                InitTimer();
-                #endif
+                    DoRootChanged(value);
+                }
             }
         }
 
@@ -136,7 +125,7 @@ namespace GKUI.Charts
             fModel.SetRenderer(fRenderer);
             fModel.Options = new AncestorsCircleOptions();
             fModel.Base = baseWin;
-            fModel.Font = this.Font;
+            fModel.Font = AppHost.Utilities.CreateFont(this.Font.Name, this.Font.Size, false);
 
             fComponents = new Container();
             fToolTip = new ToolTip(fComponents);
@@ -147,11 +136,7 @@ namespace GKUI.Charts
 
             fMouseCaptured = MouseCaptured.mcNone;
 
-            #if FUN_ANIM
-            InitTimer();
-            #endif
-
-            BackColor = fModel.Options.BrushColor[9];
+            BackColor = UIHelper.ConvertColor(fModel.Options.BrushColor[9]);
         }
 
         protected override void Dispose(bool disposing)
@@ -211,28 +196,28 @@ namespace GKUI.Charts
                 // left edge.
                 PointF center = new PointF();
 
-                SizeF boundary = new SizeF(fModel.ImageWidth * fZoomX, fModel.ImageHeight * fZoomY);
+                SizeF boundary = new SizeF(fModel.ImageWidth * fZoom, fModel.ImageHeight * fZoom);
 
                 if (ClientSize.Width > boundary.Width) {
-                    center.X = Math.Min(ClientSize.Width - bounds.Right * fZoomX, ClientSize.Width >> 1);
+                    center.X = Math.Min(ClientSize.Width - bounds.Right * fZoom, ClientSize.Width >> 1);
+                } else {
+                    center.X = AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom;
                 }
-                else {
-                    center.X = AutoScrollPosition.X + fOffsetX - bounds.Left * fZoomX;
-                }
+
                 if (ClientSize.Height > boundary.Height) {
-                    center.Y = Math.Min(ClientSize.Height - bounds.Bottom * fZoomY, ClientSize.Height >> 1);
+                    center.Y = Math.Min(ClientSize.Height - bounds.Bottom * fZoom, ClientSize.Height >> 1);
+                } else {
+                    center.Y = AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom;
                 }
-                else {
-                    center.Y = AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoomY;
-                }
+
                 return center;
 
             } else {
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(AutoScrollPosition.X + fOffsetX - bounds.Left * fZoomX,
-                                  AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoomY);
+                return new PointF(AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom,
+                                  AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom);
 
             }
         }
@@ -249,7 +234,7 @@ namespace GKUI.Charts
                 CircleSegment segment = fModel.Segments[i];
                 /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
                  * const Graphics*)` doesn't work for me. */
-                if (segment.Path.IsVisible(mX / fZoomX, mY / fZoomY)) {
+                if (segment.Path.IsVisible(mX / fZoom, mY / fZoom)) {
                     result = segment;
                     break;
                 }
@@ -266,27 +251,15 @@ namespace GKUI.Charts
         /// <param name="target">Rendering target.</param>
         private void Render(Graphics context, RenderTarget target)
         {
+            fModel.Renderer.SetTarget(context);
+
             PointF center = GetCenter(target);
             if (target == RenderTarget.rtScreen) {
-                if ((1.25f < fZoomX) || (1.25f < fZoomY)) {
+                if (1.25f < fZoom) {
                     context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 }
-                #if !FUN_ANIM
-                context.Transform = new Matrix(fZoomX, 0, 0, fZoomY, center.X, center.Y);
-                #else
-                float angle = (float)(3.5f * Math.Sin(fAppearingAnimationTime) *
-                                      Math.Exp(-1.0 * fAppearingAnimationTime / fAppearingAnimationTimeLimit));
-                float rotation = (float)(angle * Math.PI / 180.0f);
-                float cosine = (float)(Math.Cos(rotation));
-                float sine = (float)(Math.Sin(rotation));
-                Matrix m = new Matrix(cosine, sine, -sine, cosine, center.X, center.Y);
-                float zoomX = fZoomX + ((0 != fAppearingAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
-                float zoomY = fZoomY - ((0 != fAppearingAnimationTime) ?
-                                        (float)(Math.Exp(-1.0 * (fAppearingAnimationTime + 50.0f) / fAppearingAnimationTimeLimit)) : 0);
-                m.Scale(zoomX, zoomY);
-                context.Transform = m;
-                #endif
+
+                context.Transform = new Matrix(fZoom, 0, 0, fZoom, center.X, center.Y);
             } else {
                 context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
             }
@@ -305,29 +278,6 @@ namespace GKUI.Charts
 
             context.ResetTransform();
         }
-
-        #if FUN_ANIM
-        private void InitTimer()
-        {
-            if ((fAppearingAnimationTimer == null) || !fAppearingAnimationTimer.Enabled) {
-                fAppearingAnimationTime = 0;
-                fAppearingAnimationTimer = new Timer();
-                fAppearingAnimationTimer.Interval = 1;
-                fAppearingAnimationTimer.Tick += AnimationTimerTick;
-                fAppearingAnimationTimer.Start();
-            }
-        }
-
-        private void AnimationTimerTick(object sender, EventArgs e)
-        {
-            ++fAppearingAnimationTime;
-            if (fAppearingAnimationTimeLimit < fAppearingAnimationTime) {
-                fAppearingAnimationTimer.Stop();
-                fAppearingAnimationTime = 0;
-            }
-            Invalidate();
-        }
-        #endif
 
         #region Protected inherited methods
 
@@ -365,8 +315,7 @@ namespace GKUI.Charts
                 case Keys.Add:
                 case Keys.Oemplus:
                     if (Keys.None == ModifierKeys) {
-                        fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
-                        fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                        fZoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
                         Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
@@ -376,8 +325,7 @@ namespace GKUI.Charts
                 case Keys.Subtract:
                 case Keys.OemMinus:
                     if (Keys.None == ModifierKeys) {
-                        fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
-                        fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                        fZoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                         Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
@@ -386,8 +334,7 @@ namespace GKUI.Charts
 
                 case Keys.D0:
                     if (e.Control) {
-                        fZoomX = 1.0f;
-                        fZoomY = 1.0f;
+                        fZoom = 1.0f;
                         Size boundary = GetImageSize();
                         AdjustViewPort(boundary, true);
                         Invalidate();
@@ -493,11 +440,9 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
-                    fZoomX = Math.Max(fZoomX - fZoomX * 0.05f, fZoomLowLimit);
-                    fZoomY = Math.Max(fZoomY - fZoomY * 0.05f, fZoomLowLimit);
+                    fZoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                 } else {
-                    fZoomX = Math.Min(fZoomX + fZoomX * 0.05f, fZoomHighLimit);
-                    fZoomY = Math.Min(fZoomY + fZoomY * 0.05f, fZoomHighLimit);
+                    fZoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
                 }
                 Size boundary = GetImageSize();
                 AdjustViewPort(boundary, true);
@@ -518,7 +463,7 @@ namespace GKUI.Charts
         /// <returns>The paths boundary.</returns>
         public override Size GetImageSize()
         {
-            return new Size((int)(fModel.ImageWidth * fZoomX), (int)(fModel.ImageHeight * fZoomY));
+            return new Size((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)

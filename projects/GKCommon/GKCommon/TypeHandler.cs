@@ -25,7 +25,7 @@ namespace GKCommon
     /// <summary>
     /// 
     /// </summary>
-    public abstract class TypeHandler<T>
+    public abstract class TypeHandler<T> : BaseObject
     {
         public readonly T Handle;
 

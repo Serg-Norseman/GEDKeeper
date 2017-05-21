@@ -45,6 +45,16 @@ namespace GKCore.Export
     {
         private sealed class FontHandler: TypeHandler<pjnFont>, IFont
         {
+            public string Name
+            {
+                get { return string.Empty; } // dummy
+            }
+
+            public float Size
+            {
+                get { return 0; } // dummy
+            }
+
             public FontHandler(pjnFont handle) : base(handle)
             {
             }

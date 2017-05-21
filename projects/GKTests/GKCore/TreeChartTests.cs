@@ -20,7 +20,6 @@
 
 using System;
 using System.Drawing;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
@@ -28,6 +27,8 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests.Mocks;
+using GKUI;
+using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKTests.GKCore
@@ -40,6 +41,8 @@ namespace GKTests.GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            WinFormsAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowMock();
         }
 
@@ -144,11 +147,16 @@ namespace GKTests.GKCore
                 Assert.IsTrue(psnRt.IsEmpty());
 
                 tcPerson.Sex = GEDCOMSex.svMale;
-                Assert.AreEqual(Color.Blue, tcPerson.GetSelectedColor());
+                var color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
+                Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
+
                 tcPerson.Sex = GEDCOMSex.svFemale;
-                Assert.AreEqual(Color.Red, tcPerson.GetSelectedColor());
+                color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
+                Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
+
                 tcPerson.Sex = GEDCOMSex.svUndetermined;
-                Assert.AreEqual(Color.Black, tcPerson.GetSelectedColor());
+                color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
+                Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
             }
         }
 

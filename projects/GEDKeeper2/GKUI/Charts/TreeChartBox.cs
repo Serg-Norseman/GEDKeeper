@@ -28,12 +28,66 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Components;
 
 namespace GKUI.Charts
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class ITreeControl : BaseObject
+    {
+        protected readonly ITreeChartBox fChart;
+
+        protected Rectangle fDestRect;
+        protected bool fMouseCaptured;
+        protected bool fVisible;
+
+        public bool MouseCaptured
+        {
+            get { return fMouseCaptured; }
+        }
+
+        public bool Visible
+        {
+            get {
+                return fVisible;
+            }
+            set {
+                if (fVisible != value) {
+                    fVisible = value;
+                    fChart.Invalidate();
+                }
+            }
+        }
+
+        public abstract string Tip { get; }
+        public abstract int Height { get; }
+        public abstract int Width { get; }
+
+        public abstract void UpdateState();
+        public abstract void UpdateView();
+        public abstract void Draw(Graphics gfx);
+        public abstract void MouseDown(int x, int y);
+        public abstract void MouseMove(int x, int y);
+        public abstract void MouseUp(int x, int y);
+
+        protected ITreeControl(ITreeChartBox chart)
+        {
+            fChart = chart;
+        }
+
+        public virtual bool Contains(int x, int y)
+        {
+            return fDestRect.Contains(x, y);
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -308,7 +362,6 @@ namespace GKUI.Charts
             //fPersonControl = new PersonControl(this);
 
             InitTimer();
-            fModel.InitGraphics();
             fTween = new TweenLibrary();
         }
 
@@ -322,8 +375,6 @@ namespace GKUI.Charts
             if (disposing)
             {
                 fTween.Dispose();
-                if (fModel.DrawFont != null) fModel.DrawFont.Dispose();
-                fModel.DoneGraphics();
                 fModel.Dispose();
 
                 if (fTreeControls != null) fTreeControls.Dispose();
@@ -472,7 +523,7 @@ namespace GKUI.Charts
                                background == BackgroundMode.bmImage);
 
                 if (bgFill) {
-                    fRenderer.DrawRectangle(null, BackColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                    fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
                 }
             }
         }
@@ -534,10 +585,16 @@ namespace GKUI.Charts
 
         #region Sizes and adjustment routines
 
+        public ExtRect GetClientRect()
+        {
+            Rectangle rt = this.ClientRectangle;
+            return ExtRect.CreateBounds(rt.Left, rt.Top, rt.Width, rt.Height);
+        }
+
         public void RecalcChart(bool noRedraw = false)
         {
             float fsz = (float)Math.Round(fOptions.DefFontSize * fModel.Scale);
-            fModel.DrawFont = new Font(fOptions.DefFontName, fsz, FontStyle.Regular, GraphicsUnit.Point);
+            fModel.DrawFont = AppHost.Utilities.CreateFont(fOptions.DefFontName, fsz, false);
 
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {

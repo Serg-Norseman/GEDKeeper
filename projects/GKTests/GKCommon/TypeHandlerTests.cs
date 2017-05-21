@@ -42,6 +42,26 @@ namespace GKTests.GKCommon
             public ColorHandler(Color handle) : base(handle)
             {
             }
+
+            public IColor Darker(float fraction)
+            {
+                return new ColorHandler(Color.FromArgb(0));
+            }
+
+            public IColor Lighter(float fraction)
+            {
+                return new ColorHandler(Color.FromArgb(0));
+            }
+
+            public string GetName()
+            {
+                return string.Empty;
+            }
+
+            public int ToArgb()
+            {
+                return this.Handle.ToArgb();
+            }
         }
     }
 }

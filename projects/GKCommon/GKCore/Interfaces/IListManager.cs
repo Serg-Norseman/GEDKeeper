@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Types;
@@ -45,16 +46,16 @@ namespace GKCore.Interfaces
 
     public interface IListManager : IListSource
     {
-        void AddCondition(byte columnId, ConditionKind condition, string value);
-        DataType GetColumnDataType(int index);
-        string GetColumnName(byte columnId);
-
         ExternalFilterHandler ExternalFilter { get; set; }
         IListFilter Filter { get; }
         int FilteredCount { get; }
         string QuickFilter { get; set; }
         GEDCOMRecordType RecordType { get; }
         int TotalCount { get; }
+
+        void AddCondition(byte columnId, ConditionKind condition, string value);
+        DataType GetColumnDataType(int index);
+        string GetColumnName(byte columnId);
 
         void ChangeColumnWidth(int colIndex, int colWidth);
         IListItem CreateListItem(object rowData, CreateListItemHandler handler);

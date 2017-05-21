@@ -166,11 +166,12 @@ namespace GKUI.Dialogs
             chkTreeDecorative.Checked = fOptions.ChartOptions.Decorative;
             chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
             chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
-            lblMaleColor.BackColor = fOptions.ChartOptions.MaleColor;
-            lblFemaleColor.BackColor = fOptions.ChartOptions.FemaleColor;
-            lblUnkSexColor.BackColor = fOptions.ChartOptions.UnkSexColor;
-            lblUnHusbandColor.BackColor = fOptions.ChartOptions.UnHusbandColor;
-            lblUnWifeColor.BackColor = fOptions.ChartOptions.UnWifeColor;
+
+            lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
+            lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
+            lblUnkSexColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnkSexColor);
+            lblUnHusbandColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnHusbandColor);
+            lblUnWifeColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnWifeColor);
 
             chkUseProxy.Checked = fOptions.Proxy.UseProxy;
             txtProxyServer.Text = fOptions.Proxy.Server;
@@ -300,7 +301,8 @@ namespace GKUI.Dialogs
         {
             TreeChartOptions chartOptions = fOptions.ChartOptions;
 
-            var font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
+            var sdFont = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
+            IFont font = new FontHandler(sdFont);
             font = AppHost.StdDialogs.SelectFont(font);
             if (font != null)
             {
@@ -374,11 +376,12 @@ namespace GKUI.Dialogs
             fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked;
             fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
             fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
-            fOptions.ChartOptions.MaleColor = lblMaleColor.BackColor;
-            fOptions.ChartOptions.FemaleColor = lblFemaleColor.BackColor;
-            fOptions.ChartOptions.UnkSexColor = lblUnkSexColor.BackColor;
-            fOptions.ChartOptions.UnHusbandColor = lblUnHusbandColor.BackColor;
-            fOptions.ChartOptions.UnWifeColor = lblUnWifeColor.BackColor;
+
+            fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
+            fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
+            fOptions.ChartOptions.UnkSexColor = UIHelper.ConvertColor(lblUnkSexColor.BackColor);
+            fOptions.ChartOptions.UnHusbandColor = UIHelper.ConvertColor(lblUnHusbandColor.BackColor);
+            fOptions.ChartOptions.UnWifeColor = UIHelper.ConvertColor(lblUnWifeColor.BackColor);
 
             fOptions.Proxy.UseProxy = chkUseProxy.Checked;
             fOptions.Proxy.Server = txtProxyServer.Text;

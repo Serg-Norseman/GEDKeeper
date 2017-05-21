@@ -270,9 +270,6 @@ namespace GKTests.GKCommon
 
             Assert.AreEqual(1.0, SysUtils.ZoomToFit(0, 40, 45, 120));
             Assert.AreEqual(1.0, SysUtils.ZoomToFit(15, 0, 45, 120));
-
-            Assert.AreEqual(Color.FromArgb(50, 50, 50), SysUtils.Darker(Color.FromArgb(100, 100, 100), 0.5f));
-            Assert.AreEqual(Color.FromArgb(75, 75, 75), SysUtils.Lighter(Color.FromArgb(50, 50, 50), 0.5f));
         }
 
         [Test]

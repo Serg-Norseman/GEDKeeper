@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text.RegularExpressions;
 
 using GKCommon;
@@ -74,16 +73,16 @@ namespace GKCore.Charts
         private IBaseWindow fBase;
         private int fBranchDistance;
         private bool fCertaintyIndex;
-        private Pen fDecorativeLinePen;
+        private IPen fDecorativeLinePen;
         private int fDepthLimit;
-        private Font fDrawFont;
-        private Bitmap fExpPic;
+        private IFont fDrawFont;
+        private IImage fExpPic;
         private KinshipsGraph fGraph;
         private TreeChartPerson fHighlightedPerson;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
-        private Pen fLinePen;
+        private IPen fLinePen;
         private int fMargins;
         private int fNodePadding;
         private TreeChartOptions fOptions;
@@ -93,8 +92,8 @@ namespace GKCore.Charts
         private TreeChartPerson fRoot;
         private float fScale;
         private ShieldState fShieldState;
-        private Bitmap[] fSignsPic;
-        private SolidBrush fSolidBlack;
+        private IImage[] fSignsPic;
+        private IBrush fSolidBlack;
         private int fSpouseDistance;
         private int fSPX;
         private int fSPY;
@@ -132,7 +131,7 @@ namespace GKCore.Charts
             set { fDepthLimit = value; }
         }
 
-        public Font DrawFont
+        public IFont DrawFont
         {
             get { return fDrawFont; }
             set { fDrawFont = value; }
@@ -242,26 +241,19 @@ namespace GKCore.Charts
                 if (fGraph != null) fGraph.Dispose();
                 fFilter.Dispose();
                 fPersons.Dispose();
+
+                DoneGraphics();
+                if (fDrawFont != null) fDrawFont.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        private static Bitmap PrepareImage(Bitmap source, bool makeTransp)
+        private static IImage PrepareImage(string name, bool makeTransp)
         {
-            if (source == null) return null;
+            if (name == null) return null;
 
             try {
-                var result = (Bitmap)source.Clone();
-
-                if (makeTransp)
-                {
-                    #if __MonoCS__
-                    result.MakeTransparent(); // FIXME: don't work
-                    #else
-                    result.MakeTransparent(source.GetPixel(0, 0));
-                    #endif
-                }
-
+                var result = AppHost.Utilities.GetResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
@@ -272,20 +264,20 @@ namespace GKCore.Charts
         private void InitSigns()
         {
             try {
-                var signsPic = new Bitmap[9];
+                var signsPic = new IImage[9];
 
-                signsPic[0] = PrepareImage(GKCoreResources.iTGGeorgeCross, true);
-                signsPic[1] = PrepareImage(GKCoreResources.iTGSoldier, true);
-                signsPic[2] = PrepareImage(GKCoreResources.iTGSoldierFall, true);
-                signsPic[3] = PrepareImage(GKCoreResources.iTGVeteranRear, true);
-                signsPic[4] = PrepareImage(GKCoreResources.iTGBarbedWire, true);
-                signsPic[5] = PrepareImage(GKCoreResources.iTGIslamSym, false);
-                signsPic[6] = PrepareImage(GKCoreResources.iTGLatinCross, false);
-                signsPic[7] = PrepareImage(GKCoreResources.iTGOrthodoxCross, false);
-                signsPic[8] = PrepareImage(GKCoreResources.iTGOldRitualCross, false);
+                signsPic[0] = PrepareImage("iTGGeorgeCross", true);
+                signsPic[1] = PrepareImage("iTGSoldier", true);
+                signsPic[2] = PrepareImage("iTGSoldierFall", true);
+                signsPic[3] = PrepareImage("iTGVeteranRear", true);
+                signsPic[4] = PrepareImage("iTGBarbedWire", true);
+                signsPic[5] = PrepareImage("iTGIslamSym", false);
+                signsPic[6] = PrepareImage("iTGLatinCross", false);
+                signsPic[7] = PrepareImage("iTGOrthodoxCross", false);
+                signsPic[8] = PrepareImage("iTGOldRitualCross", false);
 
                 fSignsPic = signsPic;
-                fExpPic = PrepareImage(GKCoreResources.iExpand, true);
+                fExpPic = PrepareImage("iExpand", true);
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
             }
@@ -938,7 +930,7 @@ namespace GKCore.Charts
 
             for (int i = 0; i < childrenCount; i++) {
                 TreeChartPerson child = person.GetChild(i);
-                RecalcDesc(ref edges, child, new Point(curX + child.Width / 2, curY), true);
+                RecalcDesc(ref edges, child, new ExtPoint(curX + child.Width / 2, curY), true);
                 curX = child.Rect.Right + fBranchDistance;
             }
 
@@ -964,7 +956,7 @@ namespace GKCore.Charts
             }
         }
 
-        private void RecalcDesc(ref int[] edges, TreeChartPerson person, Point aPt, bool predef)
+        private void RecalcDesc(ref int[] edges, TreeChartPerson person, ExtPoint aPt, bool predef)
         {
             if (person == null) return;
 
@@ -990,15 +982,15 @@ namespace GKCore.Charts
                 int num = person.GetSpousesCount();
                 for (int i = 0; i < num; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
-                    var spPt = new Point();
+                    var spPt = new ExtPoint();
 
                     switch (person.Sex) {
                         case GEDCOMSex.svMale:
-                            spPt = new Point(prev.Rect.Right + (fBranchDistance + sp.Width / 2), person.PtY);
+                            spPt = new ExtPoint(prev.Rect.Right + (fBranchDistance + sp.Width / 2), person.PtY);
                             break;
 
                         case GEDCOMSex.svFemale:
-                            spPt = new Point(prev.Rect.Left - (fBranchDistance + sp.Width / 2), person.PtY);
+                            spPt = new ExtPoint(prev.Rect.Left - (fBranchDistance + sp.Width / 2), person.PtY);
                             break;
                     }
 
@@ -1027,7 +1019,7 @@ namespace GKCore.Charts
             var edges = new int[256];
             Array.Clear(edges, 0, edges.Length);
 
-            RecalcDesc(ref edges, fRoot, new Point(fMargins, fMargins), predef);
+            RecalcDesc(ref edges, fRoot, new ExtPoint(fMargins, fMargins), predef);
         }
 
         #endregion
@@ -1129,19 +1121,26 @@ namespace GKCore.Charts
 
         #region Drawing routines
 
-        public void InitGraphics()
+        public override void SetRenderer(ChartRenderer renderer)
         {
-            InitSigns();
-            fLinePen = new Pen(Color.Black, 1f);
-            fDecorativeLinePen = new Pen(Color.Silver, 1f);
-            fSolidBlack = new SolidBrush(Color.Black);
+            base.SetRenderer(renderer);
+
+            InitGraphics();
         }
 
-        public void DoneGraphics()
+        private void InitGraphics()
         {
-            fLinePen.Dispose();
-            fDecorativeLinePen.Dispose();
-            fSolidBlack.Dispose();
+            InitSigns();
+            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1f);
+            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Silver), 1f);
+            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(ChartRenderer.Black));
+        }
+
+        private void DoneGraphics()
+        {
+            if (fLinePen != null) fLinePen.Dispose();
+            if (fDecorativeLinePen != null) fDecorativeLinePen.Dispose();
+            if (fSolidBlack != null) fSolidBlack.Dispose();
             DoneSigns();
         }
 
@@ -1195,11 +1194,11 @@ namespace GKCore.Charts
             }
         }
 
-        private void DrawBorder(Pen xpen, ExtRect rt, bool dead, TreeChartPerson person)
+        private void DrawBorder(IPen xpen, ExtRect rt, bool dead, TreeChartPerson person)
         {
-            Color bColor = person.GetFillColor(dead);
+            IColor bColor = person.GetFillColor(dead);
             if (fHighlightedPerson == person) {
-                bColor = SysUtils.Lighter(bColor, HIGHLIGHTED_VAL);
+                bColor = bColor.Lighter(HIGHLIGHTED_VAL);
             }
 
             if (person.Sex == GEDCOMSex.svFemale) {
@@ -1223,13 +1222,13 @@ namespace GKCore.Charts
                     DrawBorder(null, dt, true, person);
                 }
 
-                Pen xpen = null;
+                IPen xpen = null;
                 try {
                     if (drawMode == ChartDrawMode.dmInteractive && person.Selected) {
-                        Color penColor = person.GetSelectedColor();
-                        xpen = new Pen(penColor, 2.0f);
+                        IColor penColor = person.GetSelectedColor();
+                        xpen = fRenderer.CreatePen(penColor, 2.0f);
                     } else {
-                        xpen = new Pen(Color.Black, 1.0f);
+                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1.0f);
                     }
 
                     DrawBorder(xpen, prt, false, person);
@@ -1263,7 +1262,7 @@ namespace GKCore.Charts
                     for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                         if (!person.Signs.Contains(cps)) continue;
 
-                        Bitmap pic = fSignsPic[(int)cps - 1];
+                        IImage pic = fSignsPic[(int)cps - 1];
                         fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height);
                         i++;
                     }

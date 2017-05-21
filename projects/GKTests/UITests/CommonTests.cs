@@ -21,6 +21,7 @@
 using System;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
 
@@ -29,11 +30,29 @@ namespace GKTests.UITests
     [TestFixture]
     public class CommonTests
     {
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            WinFormsAppHost.ConfigureBootstrap(false);
+        }
+
         [Test]
         public void Test_UIHelper()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateListView(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
+        }
+
+        [Test]
+        public void Test_ColorLD()
+        {
+            var color = AppHost.Utilities.CreateColor(100, 100, 100);
+            var chk_res = AppHost.Utilities.CreateColor(50, 50, 50);
+            Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
+
+            color = AppHost.Utilities.CreateColor(50, 50, 50);
+            chk_res = AppHost.Utilities.CreateColor(75, 75, 75);
+            Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Lighter(0.5f)).Handle);
         }
     }
 }

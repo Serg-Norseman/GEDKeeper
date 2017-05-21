@@ -72,17 +72,17 @@ namespace GKUI.Components
         {
             if (fOptions == null) return;
 
-            fOptions.BrushColor[ 0] = acb0.BackColor;
-            fOptions.BrushColor[ 1] = acb1.BackColor;
-            fOptions.BrushColor[ 2] = acb2.BackColor;
-            fOptions.BrushColor[ 3] = acb3.BackColor;
-            fOptions.BrushColor[ 4] = acb4.BackColor;
-            fOptions.BrushColor[ 5] = acb5.BackColor;
-            fOptions.BrushColor[ 6] = acb6.BackColor;
-            fOptions.BrushColor[ 7] = acb7.BackColor;
-            fOptions.BrushColor[ 8] = acbText.BackColor;
-            fOptions.BrushColor[ 9] = acbBack.BackColor;
-            fOptions.BrushColor[10] = acbLine.BackColor;
+            fOptions.BrushColor[ 0] = UIHelper.ConvertColor(acb0.BackColor);
+            fOptions.BrushColor[ 1] = UIHelper.ConvertColor(acb1.BackColor);
+            fOptions.BrushColor[ 2] = UIHelper.ConvertColor(acb2.BackColor);
+            fOptions.BrushColor[ 3] = UIHelper.ConvertColor(acb3.BackColor);
+            fOptions.BrushColor[ 4] = UIHelper.ConvertColor(acb4.BackColor);
+            fOptions.BrushColor[ 5] = UIHelper.ConvertColor(acb5.BackColor);
+            fOptions.BrushColor[ 6] = UIHelper.ConvertColor(acb6.BackColor);
+            fOptions.BrushColor[ 7] = UIHelper.ConvertColor(acb7.BackColor);
+            fOptions.BrushColor[ 8] = UIHelper.ConvertColor(acbText.BackColor);
+            fOptions.BrushColor[ 9] = UIHelper.ConvertColor(acbBack.BackColor);
+            fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.BackColor);
 
             fOptions.HideEmptySegments = chkHideEmptySegments.Checked;
             //fOptions.Apply();
@@ -93,17 +93,17 @@ namespace GKUI.Components
             if (fOptions == null) return;
             //PanDefFont.Text = FOptions.ChartOptions.DefFont_Name + ", " + FOptions.ChartOptions.DefFont_Size.ToString();
 
-            acb0.BackColor = fOptions.BrushColor[0];
-            acb1.BackColor = fOptions.BrushColor[1];
-            acb2.BackColor = fOptions.BrushColor[2];
-            acb3.BackColor = fOptions.BrushColor[3];
-            acb4.BackColor = fOptions.BrushColor[4];
-            acb5.BackColor = fOptions.BrushColor[5];
-            acb6.BackColor = fOptions.BrushColor[6];
-            acb7.BackColor = fOptions.BrushColor[7];
-            acbText.BackColor = fOptions.BrushColor[8];
-            acbBack.BackColor = fOptions.BrushColor[9];
-            acbLine.BackColor = fOptions.BrushColor[10];
+            acb0.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[0]);
+            acb1.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[1]);
+            acb2.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[2]);
+            acb3.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[3]);
+            acb4.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[4]);
+            acb5.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[5]);
+            acb6.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[6]);
+            acb7.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[7]);
+            acbText.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[8]);
+            acbBack.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[9]);
+            acbLine.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[10]);
 
             chkHideEmptySegments.Checked = fOptions.HideEmptySegments;
         }

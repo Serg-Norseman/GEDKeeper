@@ -55,31 +55,132 @@ namespace GKUI.Charts
             fCanvas.DrawImage(sdImage, x, y, width, height);
         }
 
-        public override void DrawImage(Image image, float x, float y,
-                                       float width, float height)
+        private void DrawImage(Image image, float x, float y,
+                               float width, float height)
         {
             fCanvas.DrawImage(image, x, y, width, height);
         }
 
-        public override int GetTextHeight(Font font)
+        public override int GetTextHeight(IFont font)
         {
-            return fCanvas.MeasureString(STR_HEIGHT_SAMPLE, font).ToSize().Height;
+            Font sdFnt = ((FontHandler)font).Handle;
+
+            return fCanvas.MeasureString(STR_HEIGHT_SAMPLE, sdFnt).ToSize().Height;
         }
 
-        public override int GetTextWidth(string text, Font font)
+        public override int GetTextWidth(string text, IFont font)
         {
-            return fCanvas.MeasureString(text, font).ToSize().Width;
+            Font sdFnt = ((FontHandler)font).Handle;
+
+            return fCanvas.MeasureString(text, sdFnt).ToSize().Width;
         }
 
-        public override void DrawString(string text, Font font, Brush brush, float x, float y)
+        public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            fCanvas.DrawString(text, font, brush, x, y);
+            return new ExtSizeF(GetTextWidth(text, font), GetTextHeight(font));
         }
 
-        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            fCanvas.DrawLine(pen, x1, y1, x2, y2);
+            Brush sdBrush = ((BrushHandler)brush).Handle;
+            Font sdFnt = ((FontHandler)font).Handle;
+
+            fCanvas.DrawString(text, sdFnt, sdBrush, x, y);
         }
+
+        public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
+        {
+            Pen sdPen = ((PenHandler)pen).Handle;
+
+            fCanvas.DrawLine(sdPen, x1, y1, x2, y2);
+        }
+
+        public override void DrawRectangle(IPen pen, IColor fillColor,
+                                           float x, float y, float width, float height)
+        {
+            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+
+            using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
+                if (sdFillColor != Color.Transparent) {
+                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
+                }
+
+                if (pen != null) {
+                    Pen sdPen = ((PenHandler)pen).Handle;
+                    fCanvas.DrawPath(sdPen, path);
+                }
+            }
+        }
+
+        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
+                                                  float width, float height, float radius)
+        {
+            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+
+            using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
+                if (sdFillColor != Color.Transparent) {
+                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
+                }
+
+                if (pen != null) {
+                    Pen sdPen = ((PenHandler)pen).Handle;
+                    fCanvas.DrawPath(sdPen, path);
+                }
+            }
+        }
+
+        public override void CreateCircleSegment(IGfxPath path,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+        }
+
+        public override void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
+                                                 float inRad, float extRad, float wedgeAngle,
+                                                 float ang1, float ang2)
+        {
+            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
+
+            UIHelper.CreateCircleSegment(sdPath, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
+        }
+
+        public override void FillPath(IBrush brush, IGfxPath path)
+        {
+            Brush sdBrush = ((BrushHandler)brush).Handle;
+            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
+
+            fCanvas.FillPath(sdBrush, sdPath);
+        }
+
+        public override void DrawPath(IPen pen, IGfxPath path)
+        {
+            Pen sdPen = ((PenHandler)pen).Handle;
+            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
+
+            fCanvas.DrawPath(sdPen, sdPath);
+        }
+
+        public override IPen CreatePen(IColor color, float width)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new PenHandler(new Pen(sdColor, width));
+        }
+
+        public override IBrush CreateSolidBrush(IColor color)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new BrushHandler(new SolidBrush(sdColor));
+        }
+
+        public override IGfxPath CreatePath()
+        {
+            return new GfxPathHandler(new GraphicsPath());
+        }
+
+        #region Private helpers
 
         private static GraphicsPath CreateRectangle(float x, float y, float width, float height)
         {
@@ -96,20 +197,6 @@ namespace GKUI.Charts
 
             p.CloseFigure();
             return p;
-        }
-
-        public override void DrawRectangle(Pen pen, Color fillColor,
-                                           float x, float y, float width, float height)
-        {
-            using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
-                if (fillColor != Color.Transparent) {
-                    fCanvas.FillPath(new SolidBrush(fillColor), path);
-                }
-
-                if (pen != null) {
-                    fCanvas.DrawPath(pen, path);
-                }
-            }
         }
 
         private static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
@@ -140,32 +227,6 @@ namespace GKUI.Charts
             return p;
         }
 
-        public override void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
-                                                  float width, float height, float radius)
-        {
-            using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
-                if (fillColor != Color.Transparent) {
-                    fCanvas.FillPath(new SolidBrush(fillColor), path);
-                }
-
-                if (pen != null) {
-                    fCanvas.DrawPath(pen, path);
-                }
-            }
-        }
-
-        public override void CreateCircleSegment(GraphicsPath path,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
-        }
-
-        public override void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
-        }
+        #endregion
     }
 }

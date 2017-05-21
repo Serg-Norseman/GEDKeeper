@@ -21,7 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-
+using GKCommon;
 using GKCore;
 using GKCore.Charts;
 
@@ -97,14 +97,14 @@ namespace GKUI.Charts
 
         public override void UpdateView()
         {
-            Rectangle cr = fChart.ClientRectangle;
+            ExtRect cr = fChart.GetClientRect();
             if (fGrowOver) {
-                int height = cr.Height - (PADDING_Y << 1);
+                int height = cr.GetHeight() - (PADDING_Y << 1);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), PADDING_Y, Width, height);
             } else {
-                int height = Math.Min(cr.Height - (PADDING_Y << 1), Height);
+                int height = Math.Min(cr.GetHeight() - (PADDING_Y << 1), Height);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
-                                          Math.Max(PADDING_Y, (cr.Height - height) >> 1),
+                                          Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
                                           Width, height);
             }
         }

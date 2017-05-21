@@ -101,8 +101,8 @@ namespace GKCore.Export
             DrawImage(sdImage, x, y, width, height);
         }
 
-        public override void DrawImage(sdImage image, float x, float y,
-                                       float width, float height)
+        private void DrawImage(sdImage image, float x, float y,
+                               float width, float height)
         {
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);
@@ -113,11 +113,13 @@ namespace GKCore.Export
             fCanvas.AddImage(img, width, 0, 0, height, x, y);
         }
 
-        public override int GetTextHeight(sdFont font)
+        public override int GetTextHeight(IFont font)
         {
+            sdFont sdFnt = ((FontHandler)font).Handle;
+
             BaseFont baseFont;
             float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
+            GetFontInfo(sdFnt, out baseFont, out fontSize);
 
             float ascent = baseFont.GetAscentPoint(STR_HEIGHT_SAMPLE, fontSize);
             float descent = baseFont.GetDescentPoint(STR_HEIGHT_SAMPLE, fontSize);
@@ -125,24 +127,34 @@ namespace GKCore.Export
             return (int)(height);
         }
 
-        public override int GetTextWidth(string text, sdFont font)
+        public override int GetTextWidth(string text, IFont font)
         {
+            sdFont sdFnt = ((FontHandler)font).Handle;
+
             BaseFont baseFont;
             float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
+            GetFontInfo(sdFnt, out baseFont, out fontSize);
 
             float width = baseFont.GetWidthPoint(text, fontSize);
             return (int)(width);
         }
 
-        public override void DrawString(string text, sdFont font, Brush brush, float x, float y)
+        public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            Color color = ((SolidBrush)brush).Color;
+            return new ExtSizeF(GetTextWidth(text, font), GetTextHeight(font));
+        }
+
+        public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
+        {
+            Brush sdBrush = ((BrushHandler)brush).Handle;
+            sdFont sdFnt = ((FontHandler)font).Handle;
+
+            Color color = ((SolidBrush)sdBrush).Color;
             SetFillColor(color);
 
             BaseFont baseFont;
             float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
+            GetFontInfo(sdFnt, out baseFont, out fontSize);
 
             int h = GetTextHeight(font);
             x = CheckVal(x, false);
@@ -159,9 +171,11 @@ namespace GKCore.Export
             }
         }
 
-        public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
+        public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
         {
             if (pen == null) return;
+
+            Pen sdPen = ((PenHandler)pen).Handle;
 
             x1 = CheckVal(x1, false);
             y1 = CheckVal(y1, true);
@@ -169,15 +183,17 @@ namespace GKCore.Export
             x2 = CheckVal(x2, false);
             y2 = CheckVal(y2, true);
 
-            SetPen(pen);
+            SetPen(sdPen);
             fCanvas.MoveTo(x1, y1);
             fCanvas.LineTo(x2, y2);
             fCanvas.Stroke();
         }
 
-        public override void DrawRectangle(Pen pen, Color fillColor, float x, float y,
+        public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y,
                                            float width, float height)
         {
+            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);
             width = CheckVal(width);
@@ -185,22 +201,28 @@ namespace GKCore.Export
 
             fCanvas.Rectangle(x, y, width, height);
 
-            if (pen != null && fillColor != Color.Transparent) {
-                SetPen(pen);
-                SetFillColor(fillColor);
+            if (pen != null && sdFillColor != Color.Transparent) {
+                Pen sdPen = ((PenHandler)pen).Handle;
+
+                SetPen(sdPen);
+                SetFillColor(sdFillColor);
                 fCanvas.ClosePathFillStroke();
             } else if (pen != null) {
-                SetPen(pen);
+                Pen sdPen = ((PenHandler)pen).Handle;
+
+                SetPen(sdPen);
                 fCanvas.ClosePathStroke();
-            } else if (fillColor != Color.Transparent) {
-                SetFillColor(fillColor);
+            } else if (sdFillColor != Color.Transparent) {
+                SetFillColor(sdFillColor);
                 fCanvas.Fill();
             }
         }
 
-        public override void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
+        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
+            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);
             width = CheckVal(width);
@@ -208,31 +230,64 @@ namespace GKCore.Export
 
             fCanvas.RoundRectangle(x, y, width, height, radius);
 
-            if (pen != null && fillColor != Color.Transparent) {
-                SetPen(pen);
-                SetFillColor(fillColor);
+            if (pen != null && sdFillColor != Color.Transparent) {
+                Pen sdPen = ((PenHandler)pen).Handle;
+
+                SetPen(sdPen);
+                SetFillColor(sdFillColor);
                 fCanvas.ClosePathFillStroke();
             } else if (pen != null) {
-                SetPen(pen);
+                Pen sdPen = ((PenHandler)pen).Handle;
+
+                SetPen(sdPen);
                 fCanvas.ClosePathStroke();
-            } else if (fillColor != Color.Transparent) {
-                SetFillColor(fillColor);
+            } else if (sdFillColor != Color.Transparent) {
+                SetFillColor(sdFillColor);
                 fCanvas.Fill();
             }
         }
 
-        public override void CreateCircleSegment(GraphicsPath path,
+        public override void CreateCircleSegment(IGfxPath path,
                                                  float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             
         }
 
-        public override void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+        public override void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
                                                  float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2)
         {
             
+        }
+
+        public override void FillPath(IBrush brush, IGfxPath path)
+        {
+            
+        }
+
+        public override void DrawPath(IPen pen, IGfxPath path)
+        {
+            
+        }
+
+        public override IPen CreatePen(IColor color, float width)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new PenHandler(new Pen(sdColor, width));
+        }
+
+        public override IBrush CreateSolidBrush(IColor color)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new BrushHandler(new SolidBrush(sdColor));
+        }
+
+        public override IGfxPath CreatePath()
+        {
+            return new GfxPathHandler(new GraphicsPath());
         }
     }
 }

@@ -42,12 +42,16 @@ namespace GKCore.Charts
             get { return fImageWidth; }
         }
 
+        public ChartRenderer Renderer
+        {
+            get { return fRenderer; }
+        }
 
         protected ChartModel()
         {
         }
 
-        public void SetRenderer(ChartRenderer renderer)
+        public virtual void SetRenderer(ChartRenderer renderer)
         {
             fRenderer = renderer;
         }

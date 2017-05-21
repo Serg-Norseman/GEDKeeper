@@ -119,10 +119,52 @@ namespace GKUI.Components
             }
         }
 
-        public IImage GetResourceImage(string resName)
+        public IImage GetResourceImage(string resName, bool makeTransp)
         {
-            object obj = GKResources.ResourceManager.GetObject(resName, GKResources.Culture);
-            return new ImageHandler((Image)obj);
+            Bitmap img = (Bitmap)GKResources.ResourceManager.GetObject(resName, GKResources.Culture);
+
+            if (makeTransp) {
+                img = (Bitmap)img.Clone();
+
+                #if __MonoCS__
+                img.MakeTransparent(); // FIXME: don't work
+                #else
+                img.MakeTransparent(img.GetPixel(0, 0));
+                #endif
+            }
+
+            return new ImageHandler(img);
+        }
+
+        public IGfxPath CreatePath()
+        {
+            return new GfxPathHandler(new GraphicsPath());
+        }
+
+        public IFont CreateFont(string fontName, float size, bool bold)
+        {
+            FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;
+            var sdFont = new Font(fontName, size, style, GraphicsUnit.Point);
+            return new FontHandler(sdFont);
+        }
+
+        public IColor CreateColor(int argb)
+        {
+            // Dirty hack!
+            //argb = (int)unchecked((long)argb & (long)((ulong)-1));
+            //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
+            int red = (argb >> 16) & 0xFF;
+            int green = (argb >> 8) & 0xFF;
+            int blue = (argb >> 0) & 0xFF;
+
+            Color color = Color.FromArgb(red, green, blue);
+            return new ColorHandler(color);
+        }
+
+        public IColor CreateColor(int r, int g, int b)
+        {
+            Color color = Color.FromArgb(r, g, b);
+            return new ColorHandler(color);
         }
     }
 }

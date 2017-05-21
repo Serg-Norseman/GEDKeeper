@@ -35,6 +35,75 @@ namespace GKUI.Components
         public ColorHandler(Color handle) : base(handle)
         {
         }
+
+        public IColor Darker(float fraction)
+        {
+            Color color = this.Handle;
+            float factor = (1.0f - fraction);
+
+            int rgb = color.ToArgb();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = (rgb >> 0) & 0xFF;
+            //int alpha = (rgb >> 24) & 0xFF;
+
+            red = (int) (red * factor);
+            green = (int) (green * factor);
+            blue = (int) (blue * factor);
+
+            red = (red < 0) ? 0 : red;
+            green = (green < 0) ? 0 : green;
+            blue = (blue < 0) ? 0 : blue;
+
+            return new ColorHandler(Color.FromArgb(red, green, blue));
+        }
+
+        public IColor Lighter(float fraction)
+        {
+            Color color = this.Handle;
+            float factor = (1.0f + fraction);
+
+            int rgb = color.ToArgb();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = (rgb >> 0) & 0xFF;
+            //int alpha = (rgb >> 24) & 0xFF;
+
+            red = (int) (red * factor);
+            green = (int) (green * factor);
+            blue = (int) (blue * factor);
+
+            if (red < 0) {
+                red = 0;
+            } else if (red > 255) {
+                red = 255;
+            }
+            if (green < 0) {
+                green = 0;
+            } else if (green > 255) {
+                green = 255;
+            }
+            if (blue < 0) {
+                blue = 0;
+            } else if (blue > 255) {
+                blue = 255;
+            }
+
+            //int alpha = color.getAlpha();
+
+            return new ColorHandler(Color.FromArgb(red, green, blue));
+        }
+
+        public string GetName()
+        {
+            Color color = this.Handle;
+            return color.Name;
+        }
+
+        public int ToArgb()
+        {
+            return this.Handle.ToArgb();
+        }
     }
 
 
@@ -45,6 +114,112 @@ namespace GKUI.Components
     {
         public GfxPathHandler(GraphicsPath handle) : base(handle)
         {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        public void AddEllipse(float x, float y, float width, float height)
+        {
+            Handle.AddEllipse(x, y, width, height);
+        }
+
+        public void CloseFigure()
+        {
+            Handle.CloseFigure();
+        }
+
+        public void StartFigure()
+        {
+            Handle.StartFigure();
+        }
+
+        public bool IsVisible(float x, float y)
+        {
+            return Handle.IsVisible(x, y);
+        }
+
+        public ExtRectF GetBounds()
+        {
+            RectangleF rect = Handle.GetBounds();
+            return ExtRectF.CreateBounds(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class PenHandler: TypeHandler<Pen>, IPen
+    {
+        public float Width
+        {
+            get { return Handle.Width; }
+        }
+
+        public PenHandler(Pen handle) : base(handle)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class BrushHandler: TypeHandler<Brush>, IBrush
+    {
+        public BrushHandler(Brush handle) : base(handle)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class FontHandler: TypeHandler<Font>, IFont
+    {
+        public string Name
+        {
+            get { return Handle.Name; }
+        }
+
+        public float Size
+        {
+            get { return Handle.Size; }
+        }
+
+        public FontHandler(Font handle) : base(handle)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 
@@ -68,8 +243,12 @@ namespace GKUI.Components
         {
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

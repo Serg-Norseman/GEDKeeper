@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using GKCore.Interfaces;
 
 namespace GKCore.Charts
@@ -44,6 +42,24 @@ namespace GKCore.Charts
     /// </summary>
     public abstract class ChartRenderer
     {
+        public const int Black = 0x000000;
+        public const int Silver = 0xC0C0C0;
+        public const int Blue = 0x0000FF;
+        public const int Red = 0xFF0000;
+
+        public const int Coral = 0xFF7F50;
+        public const int CadetBlue = 0x5F9EA0;
+        public const int DarkGray = 0xA9A9A9;
+        public const int Khaki = 0xF0E68C;
+        public const int LawnGreen = 0x7CFC00;
+        public const int HotPink = 0xFF69B4;
+        public const int Ivory = 0xFFFFF0;
+        public const int Moccasin = 0xFFE4B5;
+        public const int PaleGreen = 0x98FB98;
+
+        //public const int Black = 0x000000;
+
+
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
         protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
@@ -52,37 +68,54 @@ namespace GKCore.Charts
         {
         }
 
+        public static IColor GetColor(int argb)
+        {
+            return AppHost.Utilities.CreateColor(argb);
+        }
+
+        public static IColor GetColor(int r, int g, int b)
+        {
+            return AppHost.Utilities.CreateColor(r, g, b);
+        }
+
         public abstract void SetTarget(object target);
 
-        public void DrawImage(Image image, float x, float y)
+        public void DrawImage(IImage image, float x, float y)
         {
             DrawImage(image, x, y, image.Width, image.Height);
         }
 
-        public abstract void DrawImage(Image image, float x, float y,
-                                       float width, float height);
-
         public abstract void DrawImage(IImage image, float x, float y,
                                        float width, float height);
 
-        public abstract int GetTextHeight(Font font);
-        public abstract int GetTextWidth(string text, Font font);
+        public abstract int GetTextHeight(IFont font);
+        public abstract int GetTextWidth(string text, IFont font);
+        public abstract ExtSizeF GetTextSize(string text, IFont font);
 
-        public abstract void DrawString(string text, Font font, Brush brush, float x, float y);
+        public abstract void DrawString(string text, IFont font, IBrush brush, float x, float y);
 
-        public abstract void DrawLine(Pen pen, float x1, float y1, float x2, float y2);
+        public abstract void DrawLine(IPen pen, float x1, float y1, float x2, float y2);
 
-        public abstract void DrawRectangle(Pen pen, Color fillColor, float x, float y,
+        public abstract void DrawRectangle(IPen pen, IColor fillColor, float x, float y,
                                            float width, float height);
-        public abstract void DrawRoundedRectangle(Pen pen, Color fillColor, float x, float y,
+        public abstract void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius);
 
+        public abstract void FillPath(IBrush brush, IGfxPath path);
 
-        public abstract void CreateCircleSegment(GraphicsPath path,
+        public abstract void DrawPath(IPen pen, IGfxPath path);
+
+        public abstract void CreateCircleSegment(IGfxPath path,
                                                  float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2);
-        public abstract void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+        public abstract void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
                                                  float inRad, float extRad, float wedgeAngle,
                                                  float ang1, float ang2);
+
+        public abstract IPen CreatePen(IColor color, float width);
+
+        public abstract IBrush CreateSolidBrush(IColor color);
+
+        public abstract IGfxPath CreatePath();
     }
 }
