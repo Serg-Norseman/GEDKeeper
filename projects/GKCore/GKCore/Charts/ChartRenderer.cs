@@ -78,7 +78,7 @@ namespace GKCore.Charts
             return AppHost.Utilities.CreateColor(r, g, b);
         }
 
-        public abstract void SetTarget(object target);
+        public abstract void SetTarget(object target, bool antiAlias);
 
         public void DrawImage(IImage image, float x, float y)
         {
@@ -117,5 +117,17 @@ namespace GKCore.Charts
         public abstract IBrush CreateSolidBrush(IColor color);
 
         public abstract IGfxPath CreatePath();
+
+        public abstract void ResetTransform();
+        public abstract void ScaleTransform(float sx, float sy);
+        public abstract void TranslateTransform(float dx, float dy);
+        public abstract void RotateTransform(float angle);
+
+        public abstract object SaveTransform();
+        public abstract void RestoreTransform(object matrix);
+
+        public abstract void DrawArcText(string text, float centerX, float centerY, float radius,
+                                         float startAngle, float wedgeAngle,
+                                         bool inside, bool clockwise, IFont font, IBrush brush);
     }
 }

@@ -21,7 +21,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 
+using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -34,18 +36,25 @@ namespace GKUI.Charts
     public sealed class TreeChartGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
+        private Matrix fMatrix;
+        private Matrix fBackMatrix;
 
         public TreeChartGfxRenderer() : base()
         {
         }
 
-        public override void SetTarget(object target)
+        public override void SetTarget(object target, bool antiAlias)
         {
             Graphics gfx = target as Graphics;
             if (gfx == null)
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
+
+            if (antiAlias) {
+                fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
+                fCanvas.SmoothingMode = SmoothingMode.AntiAlias;
+            }
         }
 
         public override void DrawImage(IImage image, float x, float y,
@@ -53,12 +62,6 @@ namespace GKUI.Charts
         {
             var sdImage = ((ImageHandler)image).Handle;
             fCanvas.DrawImage(sdImage, x, y, width, height);
-        }
-
-        private void DrawImage(Image image, float x, float y,
-                               float width, float height)
-        {
-            fCanvas.DrawImage(image, x, y, width, height);
         }
 
         public override int GetTextHeight(IFont font)
@@ -228,5 +231,95 @@ namespace GKUI.Charts
         }
 
         #endregion
+
+        public override void ResetTransform()
+        {
+            fCanvas.ResetTransform();
+            fMatrix = fCanvas.Transform;
+        }
+
+        public override void ScaleTransform(float sx, float sy)
+        {
+            Matrix m = new Matrix(sx, 0, 0, sy, 0, 0);
+            m.Multiply(fMatrix, MatrixOrder.Append);
+            fCanvas.Transform = m;
+            fMatrix = m;
+        }
+
+        public override void TranslateTransform(float dx, float dy)
+        {
+            Matrix m = new Matrix(1, 0, 0, 1, dx, dy);
+            m.Multiply(fMatrix, MatrixOrder.Append);
+            fCanvas.Transform = m;
+            fMatrix = m;
+        }
+
+        public override void RotateTransform(float angle)
+        {
+            float rotation = (float)((angle) * Math.PI / 180.0f);
+            float cosine = (float)(Math.Cos(rotation));
+            float sine = (float)(Math.Sin(rotation));
+            Matrix m = new Matrix(cosine, sine, -sine, cosine, 0, 0);
+            m.Multiply(fMatrix, MatrixOrder.Append);
+            fCanvas.Transform = m;
+            fMatrix = m;
+        }
+
+        public override object SaveTransform()
+        {
+            fBackMatrix = fCanvas.Transform;
+            return fBackMatrix;
+        }
+
+        public override void RestoreTransform(object matrix)
+        {
+            var mtx = matrix as Matrix;
+
+            fCanvas.Transform = mtx;
+            fMatrix = mtx;
+        }
+
+        public override void DrawArcText(string text, float centerX, float centerY, float radius,
+                                         float startAngle, float wedgeAngle,
+                                         bool inside, bool clockwise, IFont font, IBrush brush)
+        {
+            ExtSizeF size = GetTextSize(text, font);
+            radius = radius + size.Height / 2.0f;
+
+            float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
+            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
+
+            if (clockwise) {
+                startAngle += deltaAngle;
+            } else {
+                startAngle += wedgeAngle - deltaAngle;
+            }
+            startAngle = -startAngle;
+
+            Matrix previousTransformation = fCanvas.Transform;
+
+            for (int i = 0; i < text.Length; ++i)
+            {
+                float offset = (textAngle * ((float)(i) / text.Length));
+                float angle = clockwise ? startAngle - offset : startAngle + offset;
+
+                double radAngle = angle * (Math.PI / 180.0d);
+                float x = (float)(centerX + Math.Cos(radAngle) * radius);
+                float y = (float)(centerY - Math.Sin(radAngle) * radius);
+                float charRotation = 90 - (inside ? angle : angle + 180);
+                charRotation *= (float)(Math.PI / 180.0f);
+                float cosine = (float)(Math.Cos(charRotation));
+                float sine = (float)(Math.Sin(charRotation));
+
+                Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
+                m.Multiply(previousTransformation, MatrixOrder.Append);
+                fCanvas.Transform = m;
+
+                string chr = new string(text[i], 1);
+                DrawString(chr, font, brush, 0, 0);
+            }
+
+            fCanvas.Transform = previousTransformation;
+        }
     }
 }

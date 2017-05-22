@@ -25,7 +25,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Components;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -376,8 +375,7 @@ namespace GKCore.Export
             IImage image = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
             if (image != null)
             {
-                var bmp = ((ImageHandler)image).Handle;
-                itImage img = itImage.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
+                itImage img = TreeChartPDFRenderer.ConvertImage(image);
 
                 float fitWidth = colWidth * 0.5f;
                 img.ScaleToFit(fitWidth, fitWidth);

@@ -31,6 +31,11 @@ namespace GKCore.Export
     {
         private sealed class FontHandler: TypeHandler<FontStruct>, IFont
         {
+            public string FontFamilyName
+            {
+                get { return string.Empty; } // dummy
+            }
+
             public string Name
             {
                 get { return string.Empty; } // dummy
@@ -50,7 +55,7 @@ namespace GKCore.Export
         {
             public FontDescriptor FD;
             public float Size;
-            public System.Drawing.Color OriginalColor;
+            public IColor OriginalColor;
             public ColorDescriptor Color;
             public bool Bold;
             public bool Underline;
@@ -123,14 +128,14 @@ namespace GKCore.Export
             fmt.LocalHyperlink = link;
         }
 
-        public override IFont CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
             FontStruct fntStr = new FontStruct();
             fntStr.FD = fDocument.createFont(name);
             fntStr.OriginalColor = color;
-            fntStr.Color = fDocument.createColor(new RtfColor(color));
+            fntStr.Color = fDocument.createColor(new RtfColor(color.GetCode()));
             fntStr.Size = size;
             fntStr.Bold = bold;
             fntStr.Underline = underline;

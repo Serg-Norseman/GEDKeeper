@@ -26,8 +26,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+
 using PDFjet.NET;
 using GKCommon;
 using GKCore.Interfaces;
@@ -45,6 +45,11 @@ namespace GKCore.Export
     {
         private sealed class FontHandler: TypeHandler<pjnFont>, IFont
         {
+            public string FontFamilyName
+            {
+                get { return string.Empty; } // dummy
+            }
+
             public string Name
             {
                 get { return string.Empty; } // dummy
@@ -125,7 +130,7 @@ namespace GKCore.Export
             this.fDocument.Close();
         }
 
-        public override IFont CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             this.requireDocument();
 

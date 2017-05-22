@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
 using GKCore.Types;
 
 namespace GKCore
@@ -45,13 +44,8 @@ namespace GKCore
 
         public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
 
-        #if __MonoCS__
-        public static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
-        public static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));
-        #else
-        public static readonly Color HighlightUnparentedColor = Color.FromArgb(0xFFCACA);
-        public static readonly Color HighlightUnmarriedColor = Color.FromArgb(0xFFFFA1);
-        #endif
+        public static readonly int HighlightUnparentedColor = 0xFFCACA;
+        public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
 
         public struct SexStruct
         {

@@ -531,6 +531,11 @@ namespace GKCore.Interfaces
         IColor Lighter(float fraction);
         string GetName();
         int ToArgb();
+        string GetCode();
+        byte GetR();
+        byte GetG();
+        byte GetB();
+        bool IsTransparent();
     }
 
 
@@ -553,6 +558,7 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IPen : IDisposable
     {
+        IColor Color { get; }
         float Width { get; }
     }
 
@@ -562,6 +568,7 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IBrush : IDisposable
     {
+        IColor Color { get; }
     }
 
 
@@ -572,6 +579,7 @@ namespace GKCore.Interfaces
     {
         int Height { get; }
         int Width { get; }
+        byte[] GetBytes();
     }
 
 
@@ -580,6 +588,7 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IFont : IDisposable
     {
+        string FontFamilyName { get; }
         string Name { get; }
         float Size { get; }
     }

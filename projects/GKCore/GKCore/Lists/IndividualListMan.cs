@@ -21,12 +21,12 @@
 using System;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
-using GKUI.Components;
 
 namespace GKCore.Lists
 {
@@ -577,11 +577,11 @@ namespace GKCore.Lists
 
             if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
             {
-                item.SetBackColor(new ColorHandler(GKData.HighlightUnparentedColor));
+                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
             }
             else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
             {
-                item.SetBackColor(new ColorHandler(GKData.HighlightUnmarriedColor));
+                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
         }
 

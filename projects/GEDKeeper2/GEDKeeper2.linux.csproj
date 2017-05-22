@@ -155,7 +155,6 @@
     <Compile Include="GKUI\Components\TextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Components\WinFormsUtilities.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
@@ -626,7 +625,6 @@
     <Folder Include="GKUI\Charts" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
-    <Folder Include="SDI" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

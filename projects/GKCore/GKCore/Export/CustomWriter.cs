@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
 using GKCommon;
 using GKCore.Interfaces;
 
@@ -65,7 +64,7 @@ namespace GKCore.Export
         public abstract void addParagraphAnchor(string text, IFont font, string anchor);
         public abstract void addParagraphLink(string text, IFont font, string link, IFont linkFont);
 
-        public abstract IFont CreateFont(string name, float size, bool bold, bool underline, Color color);
+        public abstract IFont CreateFont(string name, float size, bool bold, bool underline, IColor color);
 
         public abstract void beginList();
         public abstract void addListItem(string text, IFont font);

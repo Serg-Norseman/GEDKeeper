@@ -62,6 +62,32 @@ namespace GKTests.GKCommon
             {
                 return this.Handle.ToArgb();
             }
+
+            public string GetCode()
+            {
+                string result = ToArgb().ToString("X6");
+                return result;
+            }
+
+            public byte GetR()
+            {
+                return Handle.R;
+            }
+
+            public byte GetG()
+            {
+                return Handle.G;
+            }
+
+            public byte GetB()
+            {
+                return Handle.B;
+            }
+
+            public bool IsTransparent()
+            {
+                return (Handle == Color.Transparent);
+            }
         }
     }
 }

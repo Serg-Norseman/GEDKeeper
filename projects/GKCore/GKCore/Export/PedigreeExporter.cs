@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -504,12 +503,15 @@ namespace GKCore.Export
                 fWriter.SetDocumentTitle(fTitle);
                 fWriter.SetFileName(fPath);
 
-                fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, Color.Black);
-                fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, Color.Black);
-                fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, Color.Black);
-                fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, Color.Blue);
-                fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, Color.Black);
-                fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, Color.Blue);
+                IColor clrBlack = AppHost.Utilities.CreateColor(0x000000);
+                IColor clrBlue = AppHost.Utilities.CreateColor(0x0000FF);
+
+                fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
+                fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
+                fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
+                fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
+                fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
+                fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, clrBlue);
 
                 fWriter.beginWrite();
                 try

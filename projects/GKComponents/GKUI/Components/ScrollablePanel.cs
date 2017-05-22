@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -165,7 +166,7 @@ namespace GKUI.Components
             OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
         }
 
-        protected void AdjustViewPort(Size imageSize, bool noRedraw = false)
+        protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
         {
             if (AutoScroll && !imageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);

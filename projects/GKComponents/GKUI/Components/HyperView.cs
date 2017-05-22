@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -37,7 +38,7 @@ namespace GKUI.Components
         private bool fAcceptFontChange;
         private int fBorderWidth;
         private List<int> fHeights;
-        private Size fTextSize;
+        private ExtSize fTextSize;
         private readonly StringList fLines;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
@@ -96,7 +97,7 @@ namespace GKUI.Components
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
             fLinkColor = Color.Blue;
-            fTextSize = Size.Empty;
+            fTextSize = ExtSize.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -168,7 +169,7 @@ namespace GKUI.Components
                         }
                     }
 
-                    fTextSize = new Size(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
+                    fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
                 }
                 finally
                 {

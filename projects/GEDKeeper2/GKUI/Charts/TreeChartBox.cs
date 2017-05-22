@@ -499,9 +499,9 @@ namespace GKUI.Charts
 
         #region Drawing routines
 
-        public Point GetOffsets()
+        public ExtPoint GetOffsets()
         {
-            return new Point(fSPX, fSPY);
+            return new ExtPoint(fSPX, fSPY);
         }
 
         private void DrawBackground(BackgroundMode background)
@@ -599,7 +599,7 @@ namespace GKUI.Charts
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {
                 gfx = CreateGraphics();
-                fRenderer.SetTarget(gfx);
+                fRenderer.SetTarget(gfx, false);
             }
 
             try {
@@ -730,7 +730,7 @@ namespace GKUI.Charts
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics gfx = e.Graphics;
-            fRenderer.SetTarget(gfx);
+            fRenderer.SetTarget(gfx, false);
             InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
@@ -1035,16 +1035,16 @@ namespace GKUI.Charts
 
         #region Print support
 
-        public override Size GetImageSize()
+        public override ExtSize GetImageSize()
         {
-            return new Size(fModel.ImageWidth, fModel.ImageHeight);
+            return new ExtSize(fModel.ImageWidth, fModel.ImageHeight);
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)
         {
             BackgroundMode bgMode = (printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
 
-            fRenderer.SetTarget(gfx);
+            fRenderer.SetTarget(gfx, false);
             RenderStatic(bgMode);
         }
 

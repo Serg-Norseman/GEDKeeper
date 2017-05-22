@@ -19,7 +19,6 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text;
 
@@ -35,6 +34,11 @@ namespace GKCore.Export
     {
         private sealed class FontHandler: TypeHandler<string>, IFont
         {
+            public string FontFamilyName
+            {
+                get { return string.Empty; } // dummy
+            }
+
             public string Name
             {
                 get { return string.Empty; } // dummy
@@ -108,13 +112,13 @@ namespace GKCore.Export
             fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
         }
 
-        public override IFont CreateFont(string name, float size, bool bold, bool underline, Color color)
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             string style;
 
             style = "font-family: " + name;
             style += "; font-size: " + size + "pt";
-            style += "; color: " + color.Name;
+            style += "; color: \"#" + color.GetCode() + "\"";
             if (bold) style += "; font-weight: bold";
             if (underline) style += "; text-decoration: underline";
 

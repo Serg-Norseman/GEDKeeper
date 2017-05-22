@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 using GKCommon;
 using GKCore.Interfaces;
@@ -102,7 +103,35 @@ namespace GKUI.Components
 
         public int ToArgb()
         {
-            return this.Handle.ToArgb();
+            int result = this.Handle.ToArgb();
+            return result;
+        }
+
+        public string GetCode()
+        {
+            int argb = ToArgb() & 0xFFFFFF;
+            string result = argb.ToString("X6");
+            return result;
+        }
+
+        public byte GetR()
+        {
+            return Handle.R;
+        }
+
+        public byte GetG()
+        {
+            return Handle.G;
+        }
+
+        public byte GetB()
+        {
+            return Handle.B;
+        }
+
+        public bool IsTransparent()
+        {
+            return (Handle == Color.Transparent);
         }
     }
 
@@ -157,6 +186,11 @@ namespace GKUI.Components
     /// </summary>
     public sealed class PenHandler: TypeHandler<Pen>, IPen
     {
+        public IColor Color
+        {
+            get { return UIHelper.ConvertColor(Handle.Color); }
+        }
+
         public float Width
         {
             get { return Handle.Width; }
@@ -181,6 +215,11 @@ namespace GKUI.Components
     /// </summary>
     public sealed class BrushHandler: TypeHandler<Brush>, IBrush
     {
+        public IColor Color
+        {
+            get { return UIHelper.ConvertColor(((SolidBrush)Handle).Color); }
+        }
+
         public BrushHandler(Brush handle) : base(handle)
         {
         }
@@ -200,6 +239,11 @@ namespace GKUI.Components
     /// </summary>
     public sealed class FontHandler: TypeHandler<Font>, IFont
     {
+        public string FontFamilyName
+        {
+            get { return Handle.FontFamily.Name; }
+        }
+
         public string Name
         {
             get { return Handle.Name; }
@@ -249,6 +293,16 @@ namespace GKUI.Components
                 Handle.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public byte[] GetBytes()
+        {
+            //Handle.get
+            using (var stream = new MemoryStream())
+            {
+                Handle.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                return stream.ToArray();
+            }
         }
     }
 }

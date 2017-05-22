@@ -57,7 +57,7 @@ namespace GKCore.Options
                 BrushColor[i] = ChartRenderer.GetColor(DefBrushColor[i]);
             }
 
-            ArcText = false;
+            ArcText = true;
             HideEmptySegments = false;
         }
 

@@ -26,8 +26,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+
 using org.pdfclown;
 using org.pdfclown.documents;
 using org.pdfclown.documents.interaction.forms;
@@ -97,26 +97,26 @@ namespace GKCore.Export
             composer.Flush();
         }
 
-        public override object CreateFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
+        public override object CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             this.requireDocument();
 
             return new object();
         }
 
-        public override void addParagraph(string text, object font)
+        public override void addParagraph(string text, IFont font)
         {
         }
 
-        public override void addParagraph(string text, object font, TextAlignment alignment)
+        public override void addParagraph(string text, IFont font, TextAlignment alignment)
         {
         }
 
-        public override void addParagraphAnchor(string text, object font, string anchor)
+        public override void addParagraphAnchor(string text, IFont font, string anchor)
         {
         }
 
-        public override void addParagraphLink(string text, object font, string link, object linkFont)
+        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
         }
 
@@ -128,11 +128,11 @@ namespace GKCore.Export
         {
         }
 
-        public override void addListItem(string text, object font)
+        public override void addListItem(string text, IFont font)
         {
         }
 
-        public override void addListItemLink(string text, object font, string link, object linkFont)
+        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
         {
         }
 
@@ -144,19 +144,19 @@ namespace GKCore.Export
         {
         }
 
-        public override void addParagraphChunk(string text, object font)
+        public override void addParagraphChunk(string text, IFont font)
         {
         }
 
-        public override void addParagraphChunkAnchor(string text, object font, string anchor)
+        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
         {
         }
 
-        public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
+        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
         }
 
-        public override void addNote(string text, object font)
+        public override void addNote(string text, IFont font)
         {
         }
     }

@@ -166,5 +166,19 @@ namespace GKUI.Components
             Color color = Color.FromArgb(r, g, b);
             return new ColorHandler(color);
         }
+
+        public IBrush CreateSolidBrush(IColor color)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new BrushHandler(new SolidBrush(sdColor));
+        }
+
+        public IPen CreatePen(IColor color, float width)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            return new PenHandler(new Pen(sdColor, width));
+        }
     }
 }

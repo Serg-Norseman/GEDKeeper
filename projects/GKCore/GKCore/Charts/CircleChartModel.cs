@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -301,7 +299,7 @@ namespace GKCore.Charts
         /// transformation back. Thus, from the point of view of the client code
         /// this member doesn't change the context's transformation.</param>
         /// <param name="segment">Source segment to be drawn on `gfx`.</param>
-        private void DrawPersonName(Graphics gfx, CircleSegment segment)
+        private void DrawPersonName(CircleSegment segment)
         {
             int gen = segment.Gen;
             GEDCOMIndividualRecord iRec = segment.IRec;
@@ -325,7 +323,9 @@ namespace GKCore.Charts
             float wedgeAngle = segment.WedgeAngle;
 
             bool isNarrow = IsNarrowSegment(givn, rad, wedgeAngle, Font);
-            Matrix previousTransformation = gfx.Transform;
+
+            object mtx = fRenderer.SaveTransform();
+
             if (gen == 0) {
 
                 size = fRenderer.GetTextSize(surn, Font);
@@ -339,12 +339,8 @@ namespace GKCore.Charts
 
                     float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                     float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
-                    float rotation = (float)((angle - 90.0f) * Math.PI / 180.0f);
-                    float cosine = (float)(Math.Cos(rotation));
-                    float sine = (float)(Math.Sin(rotation));
-                    Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
-                    m.Multiply(previousTransformation, MatrixOrder.Append);
-                    gfx.Transform = m;
+                    fRenderer.TranslateTransform(dx, -dy);
+                    fRenderer.RotateTransform(angle - 90.0f);
 
                     size = fRenderer.GetTextSize(givn, Font);
                     fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
@@ -355,12 +351,8 @@ namespace GKCore.Charts
 
                         float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                         float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
-                        float rotation = (float)(angle * Math.PI / 180.0f);
-                        float cosine = (float)(Math.Cos(rotation));
-                        float sine = (float)(Math.Sin(rotation));
-                        Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
-                        m.Multiply(previousTransformation, MatrixOrder.Append);
-                        gfx.Transform = m;
+                        fRenderer.TranslateTransform(dx, -dy);
+                        fRenderer.RotateTransform(angle);
 
                         size = fRenderer.GetTextSize(givn, Font);
                         fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
@@ -370,39 +362,32 @@ namespace GKCore.Charts
                         if (fOptions.ArcText) {
                             if (gen == 2) {
                                 size = fRenderer.GetTextSize(surn, Font);
-                                DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                fRenderer.DrawArcText(surn, 0.0f, 0.0f, rad + size.Height / 2f,
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
                                 size = fRenderer.GetTextSize(givn, Font);
-                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad - size.Height / 2f,
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             } else {
-                                DrawArcText(gfx, givn, 0.0f, 0.0f, rad,
-                                            segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad,
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                             }
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                             float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
-                            /* Change `gfx`'s transformation via direct matrix
-                             * processing, not with its member functions because
-                             * we are about to change the transformation several
-                             * times (thus, we are avoiding transformation
-                             * reseting on `gfx`). */
-                            float rotation = (float)(angle * Math.PI / 180.0f);
-                            float cosine = (float)(Math.Cos(rotation));
-                            float sine = (float)(Math.Sin(rotation));
-                            Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
-                            m.Multiply(previousTransformation, MatrixOrder.Append);
-                            gfx.Transform = m;
+                            fRenderer.TranslateTransform(dx, -dy);
+                            fRenderer.RotateTransform(angle);
+
                             size = fRenderer.GetTextSize(surn, Font);
                             fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
 
                             size = fRenderer.GetTextSize(givn, Font);
                             dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
                             dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
-                            m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
-                            m.Multiply(previousTransformation, MatrixOrder.Append);
-                            gfx.Transform = m;
+                            fRenderer.RestoreTransform(mtx);
+                            fRenderer.TranslateTransform(dx, -dy);
+                            fRenderer.RotateTransform(angle);
+
                             fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
                         }
 
@@ -410,21 +395,17 @@ namespace GKCore.Charts
 
                         if (fOptions.ArcText) {
                             size = fRenderer.GetTextSize(surn, Font);
-                            DrawArcText(gfx, surn, 0.0f, 0.0f, rad + size.Height / 2f,
-                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                            fRenderer.DrawArcText(surn, 0.0f, 0.0f, rad + size.Height / 2f,
+                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
 
                             size = fRenderer.GetTextSize(givn, Font);
-                            DrawArcText(gfx, givn, 0.0f, 0.0f, rad - size.Height / 2f,
-                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                            fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad - size.Height / 2f,
+                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                             float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
-                            float rotation = (float)(angle * Math.PI / 180.0f);
-                            float cosine = (float)(Math.Cos(rotation));
-                            float sine = (float)(Math.Sin(rotation));
-                            Matrix m = new Matrix(cosine, sine, -sine, cosine, dx, -dy);
-                            m.Multiply(previousTransformation, MatrixOrder.Append);
-                            gfx.Transform = m;
+                            fRenderer.TranslateTransform(dx, -dy);
+                            fRenderer.RotateTransform(angle);
 
                             size = fRenderer.GetTextSize(surn, Font);
                             fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
@@ -435,7 +416,8 @@ namespace GKCore.Charts
                     }
                 }
             }
-            gfx.Transform = previousTransformation;
+
+            fRenderer.RestoreTransform(mtx);
         }
 
         private bool IsNarrowSegment(string text, float radius, float wedgeAngle, IFont font)
@@ -446,47 +428,6 @@ namespace GKCore.Charts
             float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
 
             return (wedgeL / size.Width <= 0.9f);
-        }
-
-        private void DrawArcText(Graphics gfx, string text, float centerX, float centerY, float radius,
-                                 float startAngle, float wedgeAngle,
-                                 bool inside, bool clockwise, IFont font, IBrush brush)
-        {
-            ExtSizeF size = fRenderer.GetTextSize(text, font);
-            radius = radius + size.Height / 2.0f;
-
-            float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
-            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
-
-            if (clockwise) {
-                startAngle += deltaAngle;
-            } else {
-                startAngle += wedgeAngle - deltaAngle;
-            }
-            startAngle = -startAngle;
-
-            Matrix previousTransformation = gfx.Transform;
-            for (int i = 0; i < text.Length; ++i)
-            {
-                float offset = (textAngle * ((float)(i) / text.Length));
-                float angle = clockwise ? startAngle - offset : startAngle + offset;
-
-                double radAngle = angle * (Math.PI / 180.0d);
-                float x = (float)(centerX + Math.Cos(radAngle) * radius);
-                float y = (float)(centerY - Math.Sin(radAngle) * radius);
-                float charRotation = 90 - (inside ? angle : angle + 180);
-                charRotation *= (float)(Math.PI / 180.0f);
-                float cosine = (float)(Math.Cos(charRotation));
-                float sine = (float)(Math.Sin(charRotation));
-                /* Translate and rotate. */
-                Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
-                m.Multiply(previousTransformation, MatrixOrder.Append);
-                gfx.Transform = m;
-
-                string chr = new string(text[i], 1);
-                fRenderer.DrawString(chr, font, brush, 0, 0);
-            }
-            gfx.Transform = previousTransformation;
         }
 
         #region Ancestors Circle
@@ -618,7 +559,7 @@ namespace GKCore.Charts
             if (segment.MotherSegment != null) TraverseGroups(segment.MotherSegment, groupIndex);
         }
 
-        public void DrawAncestors(Graphics gfx)
+        public void DrawAncestors()
         {
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
@@ -641,7 +582,7 @@ namespace GKCore.Charts
                     fRenderer.DrawPath(fPen, path);
                 }
 
-                DrawPersonName(gfx, fSegments[i]);
+                DrawPersonName(fSegments[i]);
             }
         }
 
@@ -746,7 +687,7 @@ namespace GKCore.Charts
             }
         }
 
-        public void DrawDescendants(Graphics gfx)
+        public void DrawDescendants()
         {
             int numberOfSegments = fSegments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
@@ -759,7 +700,7 @@ namespace GKCore.Charts
                 IGfxPath path = segment.Path;
                 fRenderer.FillPath(brush, path);
                 fRenderer.DrawPath(fPen, path);
-                DrawPersonName(gfx, fSegments[i]);
+                DrawPersonName(fSegments[i]);
             }
         }
 

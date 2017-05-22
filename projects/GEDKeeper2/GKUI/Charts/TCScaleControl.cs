@@ -21,9 +21,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using GKCommon;
 using GKCore;
-using GKCore.Charts;
 
 namespace GKUI.Charts
 {

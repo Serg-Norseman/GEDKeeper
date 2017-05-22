@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -40,8 +39,8 @@ namespace GKCore.Charts
 
         void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
         ExtRect GetClientRect();
-        Size GetImageSize();
-        Point GetOffsets();
+        ExtSize GetImageSize();
+        ExtPoint GetOffsets();
         void Invalidate();
         void RenderStatic(BackgroundMode background, bool centered);
         void SetRenderer(ChartRenderer renderer);

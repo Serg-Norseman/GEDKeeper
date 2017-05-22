@@ -21,7 +21,6 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
@@ -85,6 +84,20 @@ namespace GKUI.Charts
         public AncestorsCircleOptions Options
         {
             get { return fModel.Options; }
+        }
+
+        public float Zoom
+        {
+            get {
+                return fZoom;
+            }
+            set {
+                fZoom = value;
+
+                ExtSize boundary = GetImageSize();
+                AdjustViewPort(boundary, true);
+                Invalidate();
+            }
         }
 
         public event ARootChangedEventHandler RootChanged
@@ -164,7 +177,7 @@ namespace GKUI.Charts
 
             fModel.AdjustBounds();
 
-            Size boundary = GetImageSize();
+            ExtSize boundary = GetImageSize();
             AdjustViewPort(boundary, false);
         }
 
@@ -251,32 +264,27 @@ namespace GKUI.Charts
         /// <param name="target">Rendering target.</param>
         private void Render(Graphics context, RenderTarget target)
         {
-            fModel.Renderer.SetTarget(context);
-
             PointF center = GetCenter(target);
+
+            fModel.Renderer.SetTarget(context, true);
+            fModel.Renderer.ResetTransform();
+            fModel.Renderer.TranslateTransform(center.X, center.Y);
+
             if (target == RenderTarget.rtScreen) {
-                if (1.25f < fZoom) {
-                    context.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                }
-
-                context.Transform = new Matrix(fZoom, 0, 0, fZoom, center.X, center.Y);
+                fModel.Renderer.ScaleTransform(fZoom, fZoom);
             } else {
-                context.Transform = new Matrix(1, 0, 0, 1, center.X, center.Y);
+                fModel.Renderer.ScaleTransform(1, 1);
             }
-
-            context.SmoothingMode = SmoothingMode.AntiAlias;
 
             switch (fChartType) {
                 case CircleChartType.Ancestors:
-                    fModel.DrawAncestors(context);
+                    fModel.DrawAncestors();
                     break;
 
                 case CircleChartType.Descendants:
-                    fModel.DrawDescendants(context);
+                    fModel.DrawDescendants();
                     break;
             }
-
-            context.ResetTransform();
         }
 
         #region Protected inherited methods
@@ -315,29 +323,20 @@ namespace GKUI.Charts
                 case Keys.Add:
                 case Keys.Oemplus:
                     if (Keys.None == ModifierKeys) {
-                        fZoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
-                        Size boundary = GetImageSize();
-                        AdjustViewPort(boundary, true);
-                        Invalidate();
+                        Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
                     }
                     break;
 
                 case Keys.Subtract:
                 case Keys.OemMinus:
                     if (Keys.None == ModifierKeys) {
-                        fZoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
-                        Size boundary = GetImageSize();
-                        AdjustViewPort(boundary, true);
-                        Invalidate();
+                        Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                     }
                     break;
 
                 case Keys.D0:
                     if (e.Control) {
-                        fZoom = 1.0f;
-                        Size boundary = GetImageSize();
-                        AdjustViewPort(boundary, true);
-                        Invalidate();
+                        Zoom = 1.0f;
                     }
                     break;
 
@@ -440,13 +439,10 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
-                    fZoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
+                    Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                 } else {
-                    fZoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
+                    Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
                 }
-                Size boundary = GetImageSize();
-                AdjustViewPort(boundary, true);
-                Invalidate();
             }
 
             base.OnMouseWheel(e);
@@ -461,9 +457,9 @@ namespace GKUI.Charts
         /// Result includes width of a path's borders.
         /// </summary>
         /// <returns>The paths boundary.</returns>
-        public override Size GetImageSize()
+        public override ExtSize GetImageSize()
         {
-            return new Size((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
+            return new ExtSize((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)

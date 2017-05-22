@@ -40,5 +40,8 @@ namespace GKCore.Interfaces
 
         IColor CreateColor(int argb);
         IColor CreateColor(int r, int g, int b);
+
+        IBrush CreateSolidBrush(IColor color);
+        IPen CreatePen(IColor color, float width);
     }
 }

@@ -180,18 +180,18 @@ namespace GKUI.Charts
 
         #region Print and snaphots support
 
-        public abstract Size GetImageSize();
+        public abstract ExtSize GetImageSize();
         public abstract void RenderStaticImage(Graphics gfx, bool printer);
 
         public bool IsLandscape()
         {
-            Size imageSize = GetImageSize();
+            ExtSize imageSize = GetImageSize();
             return (imageSize.Height < imageSize.Width);
         }
 
         public Image GetPrintableImage()
         {
-            Size imageSize = GetImageSize();
+            ExtSize imageSize = GetImageSize();
             var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
 
             Image image;
@@ -212,7 +212,7 @@ namespace GKUI.Charts
         {
             string ext = SysUtils.GetFileExtension(fileName);
 
-            Size imageSize = GetImageSize();
+            ExtSize imageSize = GetImageSize();
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
             {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));

@@ -19,8 +19,6 @@
  */
 
 using System;
-using System.Drawing;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
@@ -87,7 +85,7 @@ namespace GKCore.Export
                     float pageWidth = itPS.Width;
 
                     var renderer = new TreeChartPDFRenderer(pageWidth, pageHeight);
-                    renderer.SetTarget(fPdfWriter.DirectContent);
+                    renderer.SetTarget(fPdfWriter.DirectContent, false);
 
                     // TODO: replace by local options in TreeChartBox
                     bool prevKinship = GlobalOptions.Instance.ChartOptions.Kinship;
@@ -109,7 +107,7 @@ namespace GKCore.Export
                         treeBox.SetScale(1.0f);
                         treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
 
-                        Size imageSize = treeBox.GetImageSize();
+                        ExtSize imageSize = treeBox.GetImageSize();
                         float scaleFactor = SysUtils.ZoomToFit(imageSize.Width,
                                                                imageSize.Height,
                                                                pageWidth, pageHeight);
