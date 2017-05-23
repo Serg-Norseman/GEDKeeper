@@ -84,7 +84,8 @@ namespace GKUI.Components
             gfx.DrawRectangle(Pens.Gray, marginBounds);
             #endif
 
-            Image img = GetPrintable().GetPrintableImage();
+            ImageHandler imgHandler = (ImageHandler)GetPrintable().GetPrintableImage();
+            Image img = imgHandler.Handle;
 
             float imgW = img.Width;
             float imgH = img.Height;

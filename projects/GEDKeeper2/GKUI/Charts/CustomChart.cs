@@ -189,7 +189,7 @@ namespace GKUI.Charts
             return (imageSize.Height < imageSize.Width);
         }
 
-        public Image GetPrintableImage()
+        public IImage GetPrintableImage()
         {
             ExtSize imageSize = GetImageSize();
             var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
@@ -203,7 +203,7 @@ namespace GKUI.Charts
                 RenderStaticImage(gfx, true);
             }
 
-            return image;
+            return new ImageHandler(image);
         }
 
         /* TODO(zsv): Need to find an appropriate icon in the general style

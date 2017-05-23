@@ -46,7 +46,7 @@ namespace GKCore.Charts
         {
             Gen = generation;
             IRec = null;
-            Path = AppHost.Utilities.CreatePath();
+            Path = AppHost.GfxProvider.CreatePath();
         }
 
         protected override void Dispose(bool disposing)

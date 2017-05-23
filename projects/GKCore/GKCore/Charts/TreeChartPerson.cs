@@ -338,7 +338,7 @@ namespace GKCore.Charts
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resName = (fSex == GEDCOMSex.svFemale) ? "piFemale140" : "piMale140";
-                                fPortrait = AppHost.Utilities.GetResourceImage(resName, false);
+                                fPortrait = AppHost.GfxProvider.GetResourceImage(resName, false);
                             }
                         }
                         catch (MediaFileNotFoundException)

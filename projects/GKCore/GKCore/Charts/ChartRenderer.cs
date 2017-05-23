@@ -70,12 +70,12 @@ namespace GKCore.Charts
 
         public static IColor GetColor(int argb)
         {
-            return AppHost.Utilities.CreateColor(argb);
+            return AppHost.GfxProvider.CreateColor(argb);
         }
 
         public static IColor GetColor(int r, int g, int b)
         {
-            return AppHost.Utilities.CreateColor(r, g, b);
+            return AppHost.GfxProvider.CreateColor(r, g, b);
         }
 
         public abstract void SetTarget(object target, bool antiAlias);

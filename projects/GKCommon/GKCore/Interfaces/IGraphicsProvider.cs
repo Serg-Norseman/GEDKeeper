@@ -27,7 +27,7 @@ namespace GKCore.Interfaces
     /// <summary>
     /// 
     /// </summary>
-    public interface IPlatformUtilities
+    public interface IGraphicsProvider
     {
         IImage LoadImage(string fileName);
         void SaveImage(IImage image, string fileName);
@@ -40,6 +40,7 @@ namespace GKCore.Interfaces
 
         IColor CreateColor(int argb);
         IColor CreateColor(int r, int g, int b);
+        IColor CreateColor(string signature);
 
         IBrush CreateSolidBrush(IColor color);
         IPen CreatePen(IColor color, float width);

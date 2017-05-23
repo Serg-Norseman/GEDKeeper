@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
+using System;
 
 namespace GKCore.Interfaces
 {
@@ -28,6 +28,6 @@ namespace GKCore.Interfaces
     public interface IPrintable
     {
         bool IsLandscape();
-        Image GetPrintableImage();
+        IImage GetPrintableImage();
     }
 }

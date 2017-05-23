@@ -253,7 +253,7 @@ namespace GKCore.Charts
             if (name == null) return null;
 
             try {
-                var result = AppHost.Utilities.GetResourceImage(name, makeTransp);
+                var result = AppHost.GfxProvider.GetResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);

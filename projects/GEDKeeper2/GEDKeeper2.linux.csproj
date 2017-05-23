@@ -156,7 +156,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
-    <Compile Include="GKUI\Components\WinFormsUtilities.cs" />
+    <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>

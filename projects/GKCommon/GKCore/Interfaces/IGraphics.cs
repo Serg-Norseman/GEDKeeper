@@ -583,6 +583,17 @@ namespace GKCore.Interfaces
     }
 
 
+    [Flags]
+    public enum ExtFontStyle
+    {
+        Regular = 0,
+        Bold = 1,
+        Italic = 2,
+        Underline = 4,
+        Strikeout = 8
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

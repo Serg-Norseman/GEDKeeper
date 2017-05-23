@@ -88,7 +88,7 @@ namespace GKCore
             // in-memory cache doesn't contain image
             // check cache folder by multimedia UID
             if (File.Exists(cachedFile)) {
-                result = AppHost.Utilities.LoadImage(cachedFile);
+                result = AppHost.GfxProvider.LoadImage(cachedFile);
             }
 
             // if cache doesn't contain the image, then load and save it to cache
@@ -97,7 +97,7 @@ namespace GKCore
 
                 // save image to cache
                 if (result != null) {
-                    AppHost.Utilities.SaveImage(result, cachedFile);
+                    AppHost.GfxProvider.SaveImage(result, cachedFile);
                 }
             }
 

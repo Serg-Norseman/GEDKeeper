@@ -24,10 +24,13 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
+    using sdFontStyle = System.Drawing.FontStyle;
+
     public delegate void LinkEventHandler(object sender, string linkName);
 
     /// <summary>
@@ -134,7 +137,11 @@ namespace GKUI.Components
 
                     string text = fLines.Text;
                     Font defFont = this.Font;
-                    var parser = new BBTextParser(defFont.SizeInPoints, fLinkColor, ForeColor);
+
+                    var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
+                                                  new ColorHandler(fLinkColor),
+                                                  new ColorHandler(ForeColor));
+
                     parser.ParseText(fChunks, text);
 
                     int line = -1;
@@ -156,7 +163,7 @@ namespace GKUI.Components
                         }
 
                         if (!string.IsNullOrEmpty(chunk.Text)) {
-                            using (var font = new Font(defFont.Name, chunk.Size, chunk.Style, defFont.Unit)) {
+                            using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
                                 SizeF strSize = gfx.MeasureString(chunk.Text, font);
                                 chunk.Width = (int)strSize.Width;
 
@@ -222,8 +229,9 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            using (var brush = new SolidBrush(chunk.Color)) {
-                                using (var font = new Font(defFont.Name, chunk.Size, chunk.Style, defFont.Unit)) {
+                            var chunkColor = ((ColorHandler)chunk.Color).Handle;
+                            using (var brush = new SolidBrush(chunkColor)) {
+                                using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
                                     gfx.DrawString(ct, font, brush, xOffset, yOffset);
                                 }
                             }

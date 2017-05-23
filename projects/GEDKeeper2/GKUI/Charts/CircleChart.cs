@@ -138,7 +138,7 @@ namespace GKUI.Charts
             fModel.SetRenderer(fRenderer);
             fModel.Options = new AncestorsCircleOptions();
             fModel.Base = baseWin;
-            fModel.Font = AppHost.Utilities.CreateFont(this.Font.Name, this.Font.Size, false);
+            fModel.Font = AppHost.GfxProvider.CreateFont(this.Font.Name, this.Font.Size, false);
 
             fComponents = new Container();
             fToolTip = new ToolTip(fComponents);

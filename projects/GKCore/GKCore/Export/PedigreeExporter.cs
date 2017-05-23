@@ -503,8 +503,8 @@ namespace GKCore.Export
                 fWriter.SetDocumentTitle(fTitle);
                 fWriter.SetFileName(fPath);
 
-                IColor clrBlack = AppHost.Utilities.CreateColor(0x000000);
-                IColor clrBlue = AppHost.Utilities.CreateColor(0x0000FF);
+                IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
+                IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
                 fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
                 fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);

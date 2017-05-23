@@ -32,9 +32,9 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class WinFormsUtilities : IPlatformUtilities
+    public class WinFormsGfxProvider : IGraphicsProvider
     {
-        public WinFormsUtilities()
+        public WinFormsGfxProvider()
         {
         }
 
@@ -165,6 +165,11 @@ namespace GKUI.Components
         {
             Color color = Color.FromArgb(r, g, b);
             return new ColorHandler(color);
+        }
+
+        public IColor CreateColor(string signature)
+        {
+            return null;
         }
 
         public IBrush CreateSolidBrush(IColor color)

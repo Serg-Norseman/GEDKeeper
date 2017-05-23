@@ -21,7 +21,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+
 using GKCommon;
+using GKCore;
+using GKUI;
+using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon
@@ -29,13 +33,21 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class BBTextParserTests
     {
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            WinFormsAppHost.ConfigureBootstrap(false);
+        }
+
         [Test]
         public void TestMethod()
         {
             string sample = "[size=+1][color=red][b]bold text[/b] [i][u]italic[/i] and underline[/u] qq[/color] "+
                 "[size=-1][s]strikeout[/s][/size] \r\n [url=http://test.com/~user/index.html]url text[/url][/size]";
 
-            var parser = new BBTextParser(12.0f, Color.Blue, Color.Black);
+            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f,
+                                          new ColorHandler(Color.Blue),
+                                          new ColorHandler(Color.Black));
 
             List<BBTextChunk> chunksList = new List<BBTextChunk>();
 

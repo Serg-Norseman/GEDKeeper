@@ -74,5 +74,3 @@ Google Maps (© Google).
 https://gedkeeper.github.io/
 
 https://sourceforge.net/projects/gedkeeper/
-
-https://gedkeeper.wordpress.com/

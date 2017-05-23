@@ -246,17 +246,17 @@ namespace GKCore.Export
 
         public override IPen CreatePen(IColor color, float width)
         {
-            return AppHost.Utilities.CreatePen(color, width);
+            return AppHost.GfxProvider.CreatePen(color, width);
         }
 
         public override IBrush CreateSolidBrush(IColor color)
         {
-            return AppHost.Utilities.CreateSolidBrush(color);
+            return AppHost.GfxProvider.CreateSolidBrush(color);
         }
 
         public override IGfxPath CreatePath()
         {
-            return AppHost.Utilities.CreatePath();
+            return AppHost.GfxProvider.CreatePath();
         }
 
         public override void ResetTransform()

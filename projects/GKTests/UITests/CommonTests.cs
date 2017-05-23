@@ -46,12 +46,12 @@ namespace GKTests.UITests
         [Test]
         public void Test_ColorLD()
         {
-            var color = AppHost.Utilities.CreateColor(100, 100, 100);
-            var chk_res = AppHost.Utilities.CreateColor(50, 50, 50);
+            var color = AppHost.GfxProvider.CreateColor(100, 100, 100);
+            var chk_res = AppHost.GfxProvider.CreateColor(50, 50, 50);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
 
-            color = AppHost.Utilities.CreateColor(50, 50, 50);
-            chk_res = AppHost.Utilities.CreateColor(75, 75, 75);
+            color = AppHost.GfxProvider.CreateColor(50, 50, 50);
+            chk_res = AppHost.GfxProvider.CreateColor(75, 75, 75);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Lighter(0.5f)).Handle);
         }
     }

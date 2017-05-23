@@ -594,7 +594,7 @@ namespace GKUI.Charts
         public void RecalcChart(bool noRedraw = false)
         {
             float fsz = (float)Math.Round(fOptions.DefFontSize * fModel.Scale);
-            fModel.DrawFont = AppHost.Utilities.CreateFont(fOptions.DefFontName, fsz, false);
+            fModel.DrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
 
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {

@@ -965,7 +965,7 @@ namespace GKCore
 
                 if (stm != null) {
                     if (stm.Length != 0) {
-                        result = AppHost.Utilities.CreateImage(stm);
+                        result = AppHost.GfxProvider.CreateImage(stm);
                     }
                     stm.Dispose();
                 }
@@ -994,7 +994,7 @@ namespace GKCore
 
                 if (stm != null) {
                     if (stm.Length != 0) {
-                        result = AppHost.Utilities.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                        result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
                     }
                     stm.Dispose();
                 }

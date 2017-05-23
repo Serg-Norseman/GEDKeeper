@@ -81,7 +81,7 @@ namespace GKCore.Options
 
             try
             {
-                var utils = AppHost.Utilities;
+                var utils = AppHost.GfxProvider;
 
                 for (int i = 0; i < MAX_BRUSHES; i++) {
                     BrushColor[i] = utils.CreateColor(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i]));
