@@ -106,6 +106,11 @@ namespace GKCore
                         culture = new ItalianCulture();
                         break;
 
+                    case GEDCOMLanguageID.Cantonese:
+                    case GEDCOMLanguageID.Mandrin:
+                        culture = new ChineseCulture();
+                        break;
+
                     case GEDCOMLanguageID.English:
                     default:
                         culture = new BritishCulture();

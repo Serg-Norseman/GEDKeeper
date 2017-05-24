@@ -91,6 +91,7 @@
     <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseController.cs" />
+    <Compile Include="GKCore\Cultures\ChineseCulture.cs" />
     <Compile Include="GKCore\SearchStrategy.cs" />
     <Compile Include="GKCore\Charts\ChartModel.cs" />
     <Compile Include="GKCore\Charts\CircleChartModel.cs" />

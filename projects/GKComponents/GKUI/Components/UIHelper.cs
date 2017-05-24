@@ -214,16 +214,23 @@ namespace GKUI.Components
                                                float inRad, float extRad, float wedgeAngle,
                                                float ang1, float ang2)
         {
+            float angCos, angSin;
+
             float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            float px1 = ctX + (float)(inRad * Math.Cos(angval1));
-            float py1 = ctY + (float)(inRad * Math.Sin(angval1));
-            float px2 = ctX + (float)(extRad * Math.Cos(angval1));
-            float py2 = ctY + (float)(extRad * Math.Sin(angval1));
+            angCos = (float)Math.Cos(angval1);
+            angSin = (float)Math.Sin(angval1);
+            float px1 = ctX + (inRad * angCos);
+            float py1 = ctY + (inRad * angSin);
+            float px2 = ctX + (extRad * angCos);
+            float py2 = ctY + (extRad * angSin);
+
             float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            float nx1 = ctX + (float)(inRad * Math.Cos(angval2));
-            float ny1 = ctY + (float)(inRad * Math.Sin(angval2));
-            float nx2 = ctX + (float)(extRad * Math.Cos(angval2));
-            float ny2 = ctY + (float)(extRad * Math.Sin(angval2));
+            angCos = (float)Math.Cos(angval2);
+            angSin = (float)Math.Sin(angval2);
+            float nx1 = ctX + (inRad * angCos);
+            float ny1 = ctY + (inRad * angSin);
+            float nx2 = ctX + (extRad * angCos);
+            float ny2 = ctY + (extRad * angSin);
 
             float ir2 = inRad * 2.0f;
             float er2 = extRad * 2.0f;

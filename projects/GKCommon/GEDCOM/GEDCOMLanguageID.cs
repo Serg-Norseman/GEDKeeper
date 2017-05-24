@@ -64,51 +64,51 @@ namespace GKCommon.GEDCOM
         Armenian,
         Assamese,
         Belorusian,
-        Bengali,
+        Bengali,        // Bangladesh, India
         Braj,
         Bulgarian,
-        Burmese,
-        Cantonese,
+        Burmese,        // Myanmar/Burma
+        Cantonese,      // Chinese
         ChurchSlavic,
         Dogri,
         Georgian,
         Greek,
-        Gujarati,
-        Hebrew,
-        Hindi,
+        Gujarati,       // India
+        Hebrew,         // Israel
+        Hindi,          // India
         Japanese,
         Kannada,
-        Khmer,
-        Konkani,
+        Khmer,          // Cambodia
+        Konkani,        // India
         Korean,
-        Lahnda,
+        Lahnda,         // Pakistan
         Lao,
         Macedonian,
-        Maithili,
-        Malayalam,
-        Mandrin,
-        Manipuri,
-        Marathi,
-        Mewari,
-        Nepali,
-        Oriya,
-        Pahari,
+        Maithili,       // Nepal, India
+        Malayalam,      // India
+        Mandrin,        // Chinese
+        Manipuri,       // India
+        Marathi,        // India
+        Mewari,         // India
+        Nepali,         // Nepal
+        Oriya,          // India
+        Pahari,         // Nepal, India, Pakistan
         Palio,
-        Panjabi,
+        Panjabi,        // India, Pakistan
         Persian,
         Prakrit,
         Pusto,
-        Rajasthani,
+        Rajasthani,     // India
         Russian,
         Sanskrit,
         Serb,
-        Tagalog,
-        Tamil,
-        Telugu,
+        Tagalog,        // Philippines
+        Tamil,          // India
+        Telugu,         // India
         Thai,
         Tibetan,
         Ukrainian,
-        Urdu,
+        Urdu,           // India, Pakistan
         Vietnamese,
         Yiddish
     }
@@ -125,7 +125,8 @@ namespace GKCommon.GEDCOM
             "Kannada", "Khmer", "Konkani", "Korean", "Lahnda", "Lao", "Macedonian", "Maithili", "Malayalam", "Mandrin",
             "Manipuri", "Marathi", "Mewari", "Nepali", "Oriya", "Pahari", "Pali", "Panjabi", "Persian", "Prakrit", "Pusto",
             "Rajasthani", "Russian", "Sanskrit", "Serb", "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Ukrainian", "Urdu",
-            "Vietnamese", "Yiddish" };
+            "Vietnamese", "Yiddish"
+        };
 
         protected GEDCOMLanguageEnum() : base(LngEnumStr, GEDCOMLanguageID.Unknown, true)
         {

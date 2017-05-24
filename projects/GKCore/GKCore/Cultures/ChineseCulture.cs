@@ -18,29 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.IO;
-using GKCommon;
-
-namespace GKCore.Interfaces
+namespace GKCore.Cultures
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IGraphicsProvider
+    public class ChineseCulture : DefaultCulture
     {
-        IColor CreateColor(int argb);
-        IColor CreateColor(int r, int g, int b);
-        IColor CreateColor(string signature);
-        IFont CreateFont(string fontName, float size, bool bold);
-        IImage CreateImage(Stream stream);
-        IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
-        IGfxPath CreatePath();
-        IPen CreatePen(IColor color, float width);
-        IBrush CreateSolidBrush(IColor color);
+        public ChineseCulture()
+        {
+        }
 
-        IImage GetResourceImage(string resName, bool makeTransp);
-        IImage LoadImage(string fileName);
-        void SaveImage(IImage image, string fileName);
+        public override bool HasPatronymic()
+        {
+            return false;
+        }
+
+        public override bool HasSurname()
+        {
+            return true;
+        }
     }
 }

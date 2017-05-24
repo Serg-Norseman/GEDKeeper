@@ -18,22 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
+    [Obsolete]
     public interface IMainWindow : IWindow
     {
         void Restore();
         void UpdateControls(bool forceDeactivate);
     }
 
+
     public interface IHost
     {
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
 
+        string GetAppDataPath();
         string GetUserFilesPath(string filePath);
+
         IBaseWindow CreateBase(string fileName);
         void LoadBase(IBaseWindow baseWin, string fileName);
         IBaseWindow FindBase(string fileName);
@@ -43,19 +48,17 @@ namespace GKCore.Interfaces
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
 
         void ApplyOptions();
-        string GetAppDataPath();
 
         bool IsWidgetActive(IWidget widget);
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
 
+        void EnableWindow(IWidgetForm form, bool value);
+        bool ShowModalX(ICommonDialog form, bool keepModeless);
         void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);
         void UpdateControls(bool forceDeactivate);
         void ShowHelpTopic(string topic);
-        void EnableWindow(IWidgetForm form, bool value);
-
-        bool ShowModalX(ICommonDialog form, bool keepModeless);
     }
 }
