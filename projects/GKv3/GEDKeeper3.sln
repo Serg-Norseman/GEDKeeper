@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
+# Visual Studio 2012
+# SharpDevelop 5.1
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3", "GEDKeeper3\GEDKeeper3.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
@@ -14,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.WinForms", "GEDKeeper3.WinForms\GEDKeeper3.WinForms.csproj", "{0EA809E3-4D1B-43D6-B924-2BFCC1887DCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Mac", "GEDKeeper3.Mac\GEDKeeper3.Mac.csproj", "{C0AE8789-BF77-456D-9411-E6A7C46619EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommon.pcl", "..\GKCommon\GKCommon.pcl.csproj", "{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +48,10 @@ Global
 		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
