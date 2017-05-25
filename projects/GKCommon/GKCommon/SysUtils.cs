@@ -32,33 +32,6 @@ using System.Threading;
 
 namespace GKCommon
 {
-    #if !__MonoCS__
-    using Externals.MapiMail;
-    #endif
-
-    #region Native WinAPI
-
-    [SecurityCritical, SuppressUnmanagedCodeSecurity]
-    public static class NativeMethods
-    {
-        public const uint WM_USER = 0x0400;
-        public const uint WM_KEEPMODELESS = WM_USER + 111;
-
-        #if !__MonoCS__
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
-
-        #endif
-    }
-
-    #endregion
-
     public enum DesktopType
     {
         None = 0,
@@ -167,13 +140,8 @@ namespace GKCommon
 
         public static void LoadExtFile(string fileName)
         {
-            if (File.Exists(fileName))
-            {
-                #if __MonoCS__
+            if (File.Exists(fileName)) {
                 Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
-                #else
-                Process.Start(fileName);
-                #endif
             }
         }
 
@@ -231,38 +199,6 @@ namespace GKCommon
         #endregion
 
         #region Network functions
-
-        public static void SendMail(string address, string subject, string body, string attach)
-        {
-            if (!File.Exists(attach)) return;
-
-            #if __MonoCS__
-
-            try
-            {
-                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
-                string args = string.Format(mailto, address, subject, body, attach);
-
-                var proc = new System.Diagnostics.Process();
-                proc.EnableRaisingEvents = false;
-                proc.StartInfo.FileName = "xdg-email";
-                proc.StartInfo.Arguments = args;
-                proc.Start();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SysUtils.SendMail(): " + ex.Message);
-            }
-
-            #else
-
-            MapiMailMessage message = new MapiMailMessage(subject, body);
-            message.Recipients.Add(address);
-            message.Files.Add(attach);
-            message.ShowDialog();
-
-            #endif
-        }
 
         public static bool IsNetworkAvailable()
         {

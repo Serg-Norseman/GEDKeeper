@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKUI\BaseWinSDI.cs" />
     <Compile Include="GKUI\BaseWinSDI.Designer.cs">
@@ -149,6 +150,7 @@
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\PrintableForm.cs">
       <SubType>Form</SubType>
     </Compile>
