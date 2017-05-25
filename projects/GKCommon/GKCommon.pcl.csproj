@@ -2,14 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC};{786C830F-07A1-408B-BD7F-6EE04809D6DB}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -32,10 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="YamlSerializer">
       <HintPath>libs\YamlSerializer.dll</HintPath>
     </Reference>
@@ -186,7 +181,6 @@
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
-    <Compile Include="GKCore\Types\MediaFileNotFoundException.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />
@@ -208,5 +202,5 @@
     <Folder Include="GKCommon\" />
     <Folder Include="GEDCOM\" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
