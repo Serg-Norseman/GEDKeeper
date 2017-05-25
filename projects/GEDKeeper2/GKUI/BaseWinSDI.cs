@@ -39,6 +39,10 @@ using GKUI.Dialogs;
 
 namespace GKUI
 {
+    #if !__MonoCS__
+    using Externals.MapiMail;
+    #endif
+
     /// <summary>
     /// 
     /// </summary>
@@ -1600,7 +1604,7 @@ namespace GKUI
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", GKUtils.GetLogFilename());
+            SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", GKUtils.GetLogFilename());
         }
 
         private void miLogView_Click(object sender, EventArgs e)
@@ -1660,6 +1664,38 @@ namespace GKUI
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
+            }
+        }
+
+        public static void SendMail(string address, string subject, string body, string attach)
+        {
+            if (!File.Exists(attach)) return;
+
+            try
+            {
+                #if __MonoCS__
+
+                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
+                string args = string.Format(mailto, address, subject, body, attach);
+
+                var proc = new System.Diagnostics.Process();
+                proc.EnableRaisingEvents = false;
+                proc.StartInfo.FileName = "xdg-email";
+                proc.StartInfo.Arguments = args;
+                proc.Start();
+
+                #else
+
+                MapiMailMessage message = new MapiMailMessage(subject, body);
+                message.Recipients.Add(address);
+                message.Files.Add(attach);
+                message.ShowDialog();
+
+                #endif
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("BaseWinSDI.SendMail(): " + ex.Message);
             }
         }
 
