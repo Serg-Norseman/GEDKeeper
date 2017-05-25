@@ -23,7 +23,6 @@ using System.Collections.Generic;
 
 namespace GKCommon
 {
-    [Serializable]
     public class ListException : Exception
     {
         public ListException(string message) : base(message)

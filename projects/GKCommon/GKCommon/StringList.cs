@@ -24,7 +24,6 @@ using System.Text;
 
 namespace GKCommon
 {
-    [Serializable]
     public class StringListException : Exception
     {
         public StringListException(string message) : base(message)

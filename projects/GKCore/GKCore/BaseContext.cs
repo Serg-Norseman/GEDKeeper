@@ -40,6 +40,14 @@ using GKCore.UIContracts;
 
 namespace GKCore
 {
+    public class MediaFileNotFoundException : Exception
+    {
+        public MediaFileNotFoundException(string fileName)
+            : base(string.Format("Media file {0} not found", fileName))
+        {
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -779,7 +787,7 @@ namespace GKCore
                     if (!File.Exists(targetFn))
                     {
                         if (throwException) {
-                            throw new MediaFileNotFoundException();
+                            throw new MediaFileNotFoundException(targetFn);
                         }
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
@@ -791,10 +799,11 @@ namespace GKCore
 
                 case MediaStoreType.mstArchive:
                     stream = new MemoryStream();
-                    if (!File.Exists(GetArcFileName()))
+                    string arcFile = GetArcFileName();
+                    if (!File.Exists(arcFile))
                     {
                         if (throwException) {
-                            throw new MediaFileNotFoundException();
+                            throw new MediaFileNotFoundException(arcFile);
                         }
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));

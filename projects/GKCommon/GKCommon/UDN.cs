@@ -30,7 +30,6 @@ namespace GKCommon
     /// Unification of any dates, given a calendar and unknown components for the needs of comparison and sorting.
     /// Works on the basis of algorithms Julian day.
     /// </summary>
-    [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct UDN : ICloneable, IComparable, IComparable<UDN>, IEquatable<UDN>
     {

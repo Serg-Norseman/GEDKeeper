@@ -24,7 +24,6 @@ using System.Collections.Specialized;
 
 namespace GKCommon
 {
-    [Serializable]
     public sealed class ValuesCollection : NameObjectCollectionBase
     {
         public ValuesCollection()

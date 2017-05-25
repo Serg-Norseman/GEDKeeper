@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("GKCore")]
 [assembly: AssemblyDescription("")]
@@ -14,5 +13,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: CLSCompliant(false)]
-[assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en")]
