@@ -5,7 +5,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>GKCore</RootNamespace>
     <AssemblyName>GKCore</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>

@@ -221,7 +221,6 @@
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
-    <Compile Include="GKCore\Types\MediaFileNotFoundException.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />

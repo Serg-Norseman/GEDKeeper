@@ -24,7 +24,6 @@ using System.Threading;
 
 namespace GKCommon.GEDCOM
 {
-    [Serializable]
     public class GEDCOMDateException : EGEDCOMException
     {
         public GEDCOMDateException(string message) : base(message)

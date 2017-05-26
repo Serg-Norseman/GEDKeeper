@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 namespace GKCommon
 {
-    [Serializable]
     public class CalculateException : Exception
     {
         public CalculateException(string message) : base(message) {}
