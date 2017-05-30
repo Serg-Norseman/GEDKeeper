@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Forms;
 using Eto.Drawing;
+using GKUI.Dialogs;
 
 namespace GEDKeeper3
 {
@@ -30,7 +31,7 @@ namespace GEDKeeper3
             quitCommand.Executed += (sender, e) => Application.Instance.Quit();
 
             var aboutCommand = new Command { MenuText = "About..." };
-            aboutCommand.Executed += (sender, e) => MessageBox.Show(this, "About my app...");
+            aboutCommand.Executed += (sender, e) => { var dlg = new AboutDlg(); dlg.Show(); } /*MessageBox.Show(this, "About my app...")*/;
 
             // create menu
             Menu = new MenuBar

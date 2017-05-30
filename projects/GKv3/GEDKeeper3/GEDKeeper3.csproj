@@ -2,13 +2,12 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <ProjectGuid>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>GEDKeeper3</RootNamespace>
     <AssemblyName>GEDKeeper3</AssemblyName>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
@@ -31,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GKUI\Dialogs\AboutDlg.cs" />
+    <Compile Include="GKUI\Dialogs\AboutDlg.eto.cs">
+      <DependentUpon>AboutDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.eto.cs">
@@ -52,6 +55,16 @@
       <Project>{a14ce3e2-b8ec-41c8-a7d1-75ae5d2509c4}</Project>
       <Name>GKCommon.pcl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore.pcl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GKUI" />
+    <Folder Include="GKUI\Charts" />
+    <Folder Include="GKUI\Components" />
+    <Folder Include="GKUI\Dialogs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
