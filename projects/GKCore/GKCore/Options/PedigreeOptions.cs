@@ -25,7 +25,6 @@ using GKCore.Types;
 
 namespace GKCore.Options
 {
-    [Serializable]
     public class EPedigreeOptionsException : Exception
     {
         public EPedigreeOptionsException()

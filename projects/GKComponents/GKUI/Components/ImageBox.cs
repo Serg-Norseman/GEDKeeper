@@ -1332,7 +1332,7 @@ namespace GKUI.Components
                     int x = -fStartScrollPosition.X + (fStartMousePosition.X - e.Location.X);
                     int y = -fStartScrollPosition.Y + (fStartMousePosition.Y - e.Location.Y);
 
-                    UpdateScrollPosition(new Point(x, y));
+                    UpdateScrollPosition(x, y);
                 }
             }
         }

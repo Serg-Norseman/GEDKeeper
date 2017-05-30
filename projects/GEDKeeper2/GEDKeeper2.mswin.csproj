@@ -442,9 +442,6 @@
     <EmbeddedResource Include="GKUI\Components\GKPortrait.resx">
       <DependentUpon>GKPortrait.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\AboutDlg.resx">
-      <DependentUpon>AboutDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\AddressEditDlg.resx">
       <DependentUpon>AddressEditDlg.cs</DependentUpon>
     </EmbeddedResource>
