@@ -1021,7 +1021,7 @@ namespace GKUI.Charts
         private void SetScroll(int x, int y)
         {
             TweenDelegate invoker = delegate(int newX, int newY) {
-                UpdateScrollPosition(new Point(newX, newY));
+                UpdateScrollPosition(newX, newY);
             };
 
             if (InvokeRequired) {

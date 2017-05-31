@@ -107,33 +107,6 @@ namespace GKTests.GKCommon
         }*/
 
         [Test]
-        public void ReflectionHelper_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetPropertyValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetFieldValue(null, "Text"); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SetPropertyValue(null, "Text", null); });
-
-            using (StringList strList = new StringList()) {
-                strList.Text = "Test line";
-
-                object obj = SysUtils.GetPropertyValue(strList, "Text");
-                Assert.AreEqual("Test line\r\n", obj);
-
-                SysUtils.SetPropertyValue(strList, "Text", "Test2");
-                Assert.AreEqual("Test2\r\n", strList.Text);
-
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetPropertyValue(strList, "test"); });
-                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.SetPropertyValue(strList, "test", ""); });
-            }
-
-            Token tkn = new Token(TokenKind.Unknown, "", 111, 0);
-            object obj1 = SysUtils.GetFieldValue(tkn, "Line");
-            Assert.AreEqual(111, obj1);
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { SysUtils.GetFieldValue(tkn, "Lines"); });
-        }
-
-        [Test]
         public void ConvHelper_Tests()
         {
             int ival = SysUtils.ParseInt("495", 0);

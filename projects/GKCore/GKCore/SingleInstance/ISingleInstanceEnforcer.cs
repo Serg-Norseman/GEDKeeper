@@ -9,7 +9,6 @@ namespace GKCore.SingleInstance
     /// <summary>
     /// Provides data for the SingleInstancing.ISingleInstanceEnforcer.OnMessageReceived method.
     /// </summary>
-    [Serializable]
     public class MessageEventArgs : EventArgs
     {
         /// <summary>
@@ -62,7 +61,6 @@ namespace GKCore.SingleInstance
     /// <summary>
     /// Represents errors occured while trying to enforce single application instancing.
     /// </summary>
-    [Serializable]
     public class SingleInstancingException : Exception
     {
         /// <summary>

@@ -38,7 +38,6 @@ namespace GKCore
     using NLua;
     #endif
 
-    [Serializable]
     public class ScriptException : Exception
     {
         public ScriptException()
