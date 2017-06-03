@@ -49,6 +49,61 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\btn_accept.gif" />
+    <EmbeddedResource Include="Resources\btn_cancel.gif" />
+    <EmbeddedResource Include="Resources\btn_copy.gif" />
+    <EmbeddedResource Include="Resources\btn_create_new.gif" />
+    <EmbeddedResource Include="Resources\btn_down.gif" />
+    <EmbeddedResource Include="Resources\btn_excel.gif" />
+    <EmbeddedResource Include="Resources\btn_expand.gif" />
+    <EmbeddedResource Include="Resources\btn_filter.gif" />
+    <EmbeddedResource Include="Resources\btn_jump.gif" />
+    <EmbeddedResource Include="Resources\btn_left.gif" />
+    <EmbeddedResource Include="Resources\btn_load.gif" />
+    <EmbeddedResource Include="Resources\btn_preview.gif" />
+    <EmbeddedResource Include="Resources\btn_print.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_delete.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_edit.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_new.gif" />
+    <EmbeddedResource Include="Resources\btn_redo.gif" />
+    <EmbeddedResource Include="Resources\btn_right.gif" />
+    <EmbeddedResource Include="Resources\btn_save.gif" />
+    <EmbeddedResource Include="Resources\btn_save_image.gif" />
+    <EmbeddedResource Include="Resources\btn_scroll.gif" />
+    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
+    <EmbeddedResource Include="Resources\btn_start.gif" />
+    <EmbeddedResource Include="Resources\btn_stop.gif" />
+    <EmbeddedResource Include="Resources\btn_table.gif" />
+    <EmbeddedResource Include="Resources\btn_tools.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_ancestry.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_both.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_descendants.gif" />
+    <EmbeddedResource Include="Resources\btn_undo.gif" />
+    <EmbeddedResource Include="Resources\btn_up.gif" />
+    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
+    <EmbeddedResource Include="Resources\chart_controls.png" />
+    <EmbeddedResource Include="Resources\icon_gedkeeper.ico" />
+    <EmbeddedResource Include="Resources\icon_gedkeeper.png" />
+    <EmbeddedResource Include="Resources\image_tips_light.png" />
+    <EmbeddedResource Include="Resources\pi_female_140.png" />
+    <EmbeddedResource Include="Resources\pi_female_200.png" />
+    <EmbeddedResource Include="Resources\pi_female_400.png" />
+    <EmbeddedResource Include="Resources\pi_male_140.png" />
+    <EmbeddedResource Include="Resources\pi_male_200.png" />
+    <EmbeddedResource Include="Resources\pi_male_400.png" />
+    <EmbeddedResource Include="Resources\rg_shield_max.gif" />
+    <EmbeddedResource Include="Resources\rg_shield_mid.gif" />
+    <EmbeddedResource Include="Resources\rg_shield_none.gif" />
+    <EmbeddedResource Include="Resources\tg_barbed_wire.gif" />
+    <EmbeddedResource Include="Resources\tg_george_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_islam_sym.gif" />
+    <EmbeddedResource Include="Resources\tg_latin_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_oldritual_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_orthodox_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_soldier.gif" />
+    <EmbeddedResource Include="Resources\tg_soldier_fall.gif" />
+    <EmbeddedResource Include="Resources\tg_veteran_rear.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCommon\GKCommon.pcl.csproj">
@@ -65,6 +120,7 @@
     <Folder Include="GKUI\Charts" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

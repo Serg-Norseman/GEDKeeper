@@ -31,6 +31,7 @@ namespace GKUI.Dialogs
             btnClose.ImagePosition = ButtonImagePosition.Left;
             btnClose.Size = new Size(91, 24);
             btnClose.Text = "btnClose";
+            btnClose.Click += (sender, e) => Close();
 
             lblCopyright.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
             lblCopyright.Text = "lblCopyright";
@@ -44,24 +45,23 @@ namespace GKUI.Dialogs
             lblProjSite.Click += LabelMail_Click;
 
             ClientSize = new Size(383, 221);
+            Maximizable = false;
+            Minimizable = false;
+            Resizable = false;
+            ShowInTaskbar = false;
             Title = "AboutDlg";
-            Maximizable = true;
-            Minimizable = true;
-            Resizable = true;
-            ShowInTaskbar = false; // if has then max/min buttons will be visible
-            //StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 
-            Content = new StackLayout
-            {
-                Padding = 10,
-                Items =
-                {
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
                     lblProduct,
                     lblVersion,
                     lblCopyright,
+                    null,
                     lblProjSite,
                     lblMail,
-                    btnClose
+                    new TableRow(null, TableLayout.AutoSized(btnClose, centered: false))
                 }
             };
         }

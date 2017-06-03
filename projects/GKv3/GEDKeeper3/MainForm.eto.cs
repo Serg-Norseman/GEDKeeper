@@ -11,48 +11,55 @@ namespace GEDKeeper3
         {
             Title = "My Eto Form";
             ClientSize = new Size(400, 350);
+            Icon = Icon.FromResource("Resources.icon_gedkeeper.ico");
 
-            Content = new StackLayout
-            {
+            Content = new StackLayout {
                 Padding = 10,
-                Items =
-                {
-                    new Label { Text = "Hello World! ***", Font = new Font(SystemFont.Default, 14) },
-                    new Label { Text = "Test", Font = new Font(FontFamilies.Serif, 20) }
-                    // add more controls here
+                Items = {
+                    new Label {
+                        Text = "Hello World! ***",
+                        Font = new Font(SystemFont.Default, 14)
+                    },
+                    new Label {
+                        Text = "Test",
+                        Font = new Font(FontFamilies.Serif, 20)
+                    }
                 }
             };
 
-            // create a few commands that can be used for the menu and toolbar
-            var clickMe = new Command { MenuText = "Click Me!", ToolBarText = "Click Me!" };
+            var clickMe = new Command {
+                MenuText = "Click Me!",
+                ToolBarText = "Click Me!"
+            };
             clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
 
-            var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
+            var quitCommand = new Command {
+                MenuText = "Quit",
+                Shortcut = Application.Instance.CommonModifier | Keys.Q
+            };
             quitCommand.Executed += (sender, e) => Application.Instance.Quit();
 
             var aboutCommand = new Command { MenuText = "About..." };
-            aboutCommand.Executed += (sender, e) => { var dlg = new AboutDlg(); dlg.Show(); } /*MessageBox.Show(this, "About my app...")*/;
+            aboutCommand.Executed += (sender, e) => {
+                using (var dlg = new AboutDlg()) {
+                    dlg.ShowModal();
+                }
+            };
 
-            // create menu
-            Menu = new MenuBar
-            {
-                Items =
-                    {
-					    // File submenu
-					    new ButtonMenuItem { Text = "&File", Items = { clickMe } },
-					    // new ButtonMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
-					    // new ButtonMenuItem { Text = "&View", Items = { /* commands/items */ } },
-				    },
-                ApplicationItems =
-                    {
-					    // application (OS X) or file menu (others)
-					    new ButtonMenuItem { Text = "&Preferences..." },
-                    },
+            Menu = new MenuBar {
+                Items = {
+                    new ButtonMenuItem { Text = "&File", Items = { clickMe } },
+                    // new ButtonMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
+                    // new ButtonMenuItem { Text = "&View", Items = { /* commands/items */ } },
+                },
+                ApplicationItems = {
+                    // application (OS X) or file menu (others)
+                    new ButtonMenuItem { Text = "&Preferences..." },
+                },
                 QuitItem = quitCommand,
                 AboutItem = aboutCommand
             };
 
-            // create toolbar			
             ToolBar = new ToolBar { Items = { clickMe } };
         }
     }

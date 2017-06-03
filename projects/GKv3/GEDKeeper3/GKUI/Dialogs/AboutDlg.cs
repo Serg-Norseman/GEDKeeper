@@ -30,17 +30,16 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : Form
+    public sealed partial class AboutDlg : Dialog
     {
         public AboutDlg()
         {
             InitializeComponent();
 
-            //btnClose.Image = GKResources.iBtnAccept;
+            btnClose.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-
             lblProduct.Text = GKData.APP_TITLE;
             //lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
             //lblCopyright.Text = AppHost.Instance.GetAppCopyright();
@@ -48,10 +47,10 @@ namespace GKUI.Dialogs
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            Label lbl = sender as Label;
-            if (lbl == null) return;
-
-            //Process.Start(lbl.Text);
+            var lbl = sender as LinkButton;
+            if (lbl != null) {
+                SysUtils.LoadExtFile(lbl.Text);
+            }
         }
     }
 }

@@ -80,3 +80,23 @@ code_heat.sh
 
 /projects/GKChroniclePlugin/bin/
 /projects/GKChroniclePlugin/obj/
+
+
+
+/projects/GKv3/GEDKeeper3/bin/
+/projects/GKv3/GEDKeeper3/obj/
+
+/projects/GKv3/GEDKeeper3.Gtk2/bin/
+/projects/GKv3/GEDKeeper3.Gtk2/obj/
+
+/projects/GKv3/GEDKeeper3.Gtk3/bin/
+/projects/GKv3/GEDKeeper3.Gtk3/obj/
+
+/projects/GKv3/GEDKeeper3.Mac/bin/
+/projects/GKv3/GEDKeeper3.Mac/obj/
+
+/projects/GKv3/GEDKeeper3.WinForms/bin/
+/projects/GKv3/GEDKeeper3.WinForms/obj/
+
+/projects/GKv3/GEDKeeper3.Wpf/bin/
+/projects/GKv3/GEDKeeper3.Wpf/obj/
