@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -79,7 +78,6 @@ namespace GKUI.Components
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
-    [DefaultProperty("Image"), ToolboxItem(true)]
     public sealed class ImageBox : ScrollablePanel
     {
         #region Constants
@@ -114,7 +112,7 @@ namespace GKUI.Components
         private int fUpdateCount;
         private int fZoom;
         private Size fViewSize;
-        private double fZoomFactor;
+        private float fZoomFactor;
         private readonly List<int> fZoomLevels;
 
         #endregion
@@ -124,26 +122,22 @@ namespace GKUI.Components
         /// <summary>
         ///   Occurs when the Image property is changed.
         /// </summary>
-        [Category("Property Changed")]
         public event EventHandler ImageChanged;
 
         /// <summary>
         ///   Occurs when the SelectionRegion property is changed.
         /// </summary>
-        [Category("Property Changed")]
         public event EventHandler SelectionRegionChanged;
 
         /// <summary>
         ///   Occurs when the Zoom property is changed.
         /// </summary>
-        [Category("Property Changed")]
         public event EventHandler ZoomChanged;
 
         #endregion
 
         #region Properties
 
-        [Category("Behavior"), DefaultValue(false)]
         public bool AllowDoubleClick
         {
             get { return fAllowDoubleClick; }
@@ -163,7 +157,6 @@ namespace GKUI.Components
         /// <value>
         ///   <c>true</c> if the zoom level can be changed; otherwise, <c>false</c>.
         /// </value>
-        [Category("Behavior"), DefaultValue(true)]
         public bool AllowZoom
         {
             get { return fAllowZoom; }
@@ -176,7 +169,6 @@ namespace GKUI.Components
         /// <value>
         ///   <c>true</c> if the image should be centered where possible; otherwise, <c>false</c>.
         /// </value>
-        [Category("Appearance"), DefaultValue(true)]
         public bool AutoCenter
         {
             get { return fAutoCenter; }
@@ -195,7 +187,6 @@ namespace GKUI.Components
         ///   <c>true</c> if the control can be auto panned; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>If this property is set, the SizeToFit property cannot be used.</remarks>
-        [Category("Behavior"), DefaultValue(true)]
         public bool AutoPan
         {
             get { return fAutoPan; }
@@ -215,7 +206,6 @@ namespace GKUI.Components
         /// <returns>
         ///   <c>true</c> if enabled; otherwise, <c>false</c>
         /// </returns>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), DefaultValue(false)]
         public override bool AutoSize
         {
             get { return base.AutoSize; }
@@ -231,7 +221,6 @@ namespace GKUI.Components
         ///   Gets or sets the size of the drop shadow.
         /// </summary>
         /// <value>The size of the drop shadow.</value>
-        [Category("Appearance"), DefaultValue(3)]
         public int DropShadowSize
         {
             get { return fDropShadowSize; }
@@ -247,7 +236,6 @@ namespace GKUI.Components
         ///   Gets or sets the image.
         /// </summary>
         /// <value>The image.</value>
-        [Category("Appearance"), DefaultValue(null)]
         public Image Image
         {
             get { return fImage; }
@@ -264,7 +252,6 @@ namespace GKUI.Components
         ///   Gets or sets the color of the image border.
         /// </summary>
         /// <value>The color of the image border.</value>
-        [Category("Appearance"), DefaultValue(typeof(Color), "ControlDark")]
         public Color ImageBorderColor
         {
             get { return fImageBorderColor; }
@@ -280,7 +267,6 @@ namespace GKUI.Components
         ///   Gets or sets the image border style.
         /// </summary>
         /// <value>The image border style.</value>
-        [Category("Appearance"), DefaultValue(typeof(ImageBoxBorderStyle), "None")]
         public ImageBoxBorderStyle ImageBorderStyle
         {
             get { return fImageBorderStyle; }
@@ -296,7 +282,6 @@ namespace GKUI.Components
         ///   Gets or sets the interpolation mode.
         /// </summary>
         /// <value>The interpolation mode.</value>
-        [Category("Appearance"), DefaultValue(InterpolationMode.NearestNeighbor)]
         public InterpolationMode InterpolationMode
         {
             get { return fInterpolationMode; }
@@ -317,7 +302,6 @@ namespace GKUI.Components
         /// <value>
         ///   <c>true</c> if this control is panning; otherwise, <c>false</c>.
         /// </value>
-        [Browsable(false), DefaultValue(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsPanning
         {
             get { return fIsPanning; }
@@ -342,7 +326,6 @@ namespace GKUI.Components
         /// <value>
         ///   <c>true</c> if a selection region is currently being drawn; otherwise, <c>false</c>.
         /// </value>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsSelecting
         {
             get { return fIsSelecting; }
@@ -371,7 +354,6 @@ namespace GKUI.Components
         /// <value>
         ///   The color of selection regions.
         /// </value>
-        [Category("Appearance"), DefaultValue(typeof(Color), "Highlight")]
         public Color SelectionColor
         {
             get { return fSelectionColor; }
@@ -384,7 +366,6 @@ namespace GKUI.Components
         /// <value>
         ///   The selection mode.
         /// </value>
-        [Category("Behavior"), DefaultValue(typeof(ImageBoxSelectionMode), "None")]
         public ImageBoxSelectionMode SelectionMode
         {
             get { return fSelectionMode; }
@@ -397,7 +378,6 @@ namespace GKUI.Components
         /// <value>
         ///   The selection region.
         /// </value>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public RectangleF SelectionRegion
         {
             get { return fSelectionRegion; }
@@ -415,7 +395,6 @@ namespace GKUI.Components
         /// <value>
         ///   <c>true</c> if the control should size to fit the image contents; otherwise, <c>false</c>.
         /// </value>
-        [Category("Appearance"), DefaultValue(false)]
         public bool SizeToFit
         {
             get { return fSizeToFit; }
@@ -436,7 +415,6 @@ namespace GKUI.Components
         ///   Gets or sets the zoom.
         /// </summary>
         /// <value>The zoom.</value>
-        [Category("Appearance"), DefaultValue(100)]
         public int Zoom
         {
             get { return fZoom; }
@@ -459,7 +437,6 @@ namespace GKUI.Components
         ///   Gets or sets the zoom levels.
         /// </summary>
         /// <value>The zoom levels.</value>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<int> ZoomLevels
         {
             get { return fZoomLevels; }
@@ -515,7 +492,7 @@ namespace GKUI.Components
         private void UpdateParams()
         {
             fViewSize = (fImage != null) ? fImage.Size : Size.Empty;
-            fZoomFactor = (double)fZoom / 100;
+            fZoomFactor = fZoom / 100.0f;
 
             fScaledImageHeight = (int)(fViewSize.Height * fZoomFactor);
             fScaledImageWidth = (int)(fViewSize.Width * fZoomFactor);
@@ -655,23 +632,14 @@ namespace GKUI.Components
         private RectangleF GetOffsetRectangle(RectangleF source)
         {
             RectangleF viewport = GetImageViewPort();
-            RectangleF scaled = GetScaledRectangle(source);
             float offsetX = viewport.Left + Padding.Left + AutoScrollPosition.X;
             float offsetY = viewport.Top + Padding.Top + AutoScrollPosition.Y;
 
-            return new RectangleF(new PointF(scaled.Left + offsetX, scaled.Top + offsetY), scaled.Size);
-        }
+            RectangleF scaledRect = new RectangleF(
+                (source.Left * fZoomFactor), (source.Top * fZoomFactor),
+                (source.Width * fZoomFactor), (source.Height * fZoomFactor));
 
-        /// <summary>
-        ///   Returns the source <see cref="T:System.Drawing.RectangleF" /> scaled according to the current zoom level
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns>A Rectangle which has been resized to match the current zoom level</returns>
-        private RectangleF GetScaledRectangle(RectangleF source)
-        {
-            return new RectangleF(
-                (float)(source.Left * fZoomFactor), (float)(source.Top * fZoomFactor),
-                (float)(source.Width * fZoomFactor), (float)(source.Height * fZoomFactor));
+            return new RectangleF(scaledRect.Left + offsetX, scaledRect.Top + offsetY, scaledRect.Width, scaledRect.Height);
         }
 
         /// <summary>
@@ -685,10 +653,10 @@ namespace GKUI.Components
             if (!fViewSize.IsEmpty)
             {
                 Rectangle viewPort = GetImageViewPort();
-                float sourceLeft = (float)(-AutoScrollPosition.X / fZoomFactor);
-                float sourceTop = (float)(-AutoScrollPosition.Y / fZoomFactor);
-                float sourceWidth = (float)(viewPort.Width / fZoomFactor);
-                float sourceHeight = (float)(viewPort.Height / fZoomFactor);
+                float sourceLeft = (-AutoScrollPosition.X / fZoomFactor);
+                float sourceTop = (-AutoScrollPosition.Y / fZoomFactor);
+                float sourceWidth = (viewPort.Width / fZoomFactor);
+                float sourceHeight = (viewPort.Height / fZoomFactor);
 
                 region = new RectangleF(sourceLeft, sourceTop, sourceWidth, sourceHeight);
             }
@@ -1383,10 +1351,7 @@ namespace GKUI.Components
 
             if (!fIsSelecting) return;
 
-            float x;
-            float y;
-            float w;
-            float h;
+            float x, y, w, h;
 
             Point imageOffset = GetImageViewPort().Location;
 
@@ -1415,10 +1380,10 @@ namespace GKUI.Components
             x = x - imageOffset.X - AutoScrollPosition.X;
             y = y - imageOffset.Y - AutoScrollPosition.Y;
 
-            x = x / (float)fZoomFactor;
-            y = y / (float)fZoomFactor;
-            w = w / (float)fZoomFactor;
-            h = h / (float)fZoomFactor;
+            x = x / fZoomFactor;
+            y = y / fZoomFactor;
+            w = w / fZoomFactor;
+            h = h / fZoomFactor;
 
             SelectionRegion = FitRectangle(x, y, w, h);
         }

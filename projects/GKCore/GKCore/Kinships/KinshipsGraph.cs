@@ -181,8 +181,8 @@ namespace GKCore.Kinships
             string name1 = GKUtils.GetNameString(ind1, true, false);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
-            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), rel);
-            return name2 + " " + rel + " " + fContext.Culture.GetPossessiveName(name1);
+            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, fContext.Culture.GetPossessiveName(name1));
+            return rel;
         }
 
         private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)

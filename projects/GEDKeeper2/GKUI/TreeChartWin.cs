@@ -76,6 +76,9 @@ namespace GKUI
             tbDocPreview.Visible = !AppHost.Instance.IsMDI;
 
             tbModes.Image = GKResources.iTools;
+            tbFilter.Image = GKResources.iFilter;
+            tbPrev.Image = GKResources.iLeft1;
+            tbNext.Image = GKResources.iRight1;
 
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
@@ -144,6 +147,17 @@ namespace GKUI
         }
 
         #region Interface handlers
+
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
+        {
+            if (sender == tbFilter) {
+                SetFilter();
+            } else if (sender == tbPrev) {
+                NavPrev();
+            } else if (sender == tbNext) {
+                NavNext();
+            }
+        }
 
         private void UpdateChart()
         {
@@ -242,11 +256,24 @@ namespace GKUI
             fPerson = person.Rec;
 
             AppHost.Instance.UpdateControls(false);
+            UpdateNavControls();
+        }
+
+        private void UpdateNavControls()
+        {
+            try
+            {
+                tbPrev.Enabled = NavCanBackward();
+                tbNext.Enabled = NavCanForward();
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartWin.UpdateNavControls(): " + ex.Message);
+            }
         }
 
         private void ImageTree_NavRefresh(object sender, EventArgs e)
         {
             AppHost.Instance.UpdateControls(false);
+            UpdateNavControls();
         }
 
         private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)

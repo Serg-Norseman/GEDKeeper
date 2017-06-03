@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Timers;
 
@@ -640,6 +641,27 @@ namespace GKCore
             UpdateMRU();
         }
 
+        #region Geocoding
+
+        public IGeocoder CreateGeocoder()
+        {
+            ProxyOptions proxyOptions = fOptions.Proxy;
+            IWebProxy proxy = null;
+            if (proxyOptions.UseProxy)
+            {
+                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true)
+                {
+                    Credentials = CredentialCache.DefaultCredentials
+                };
+            }
+
+            IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder);
+            geocoder.SetKey(GKData.GAPI_KEY);
+            geocoder.SetProxy(proxy);
+
+            return geocoder;
+        }
+
         public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
         {
             if (string.IsNullOrEmpty(searchValue))
@@ -650,7 +672,7 @@ namespace GKCore
 
             try
             {
-                IGeocoder geocoder = GKUtils.CreateGeocoder(GlobalOptions.Instance);
+                IGeocoder geocoder = CreateGeocoder();
 
                 IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
                 foreach (GeoPoint pt in geoPoints)
@@ -661,6 +683,8 @@ namespace GKCore
                 Logger.LogWrite("AppHost.RequestGeoCoords(): " + ex.Message);
             }
         }
+
+        #endregion
 
         public virtual void ApplyOptions()
         {

@@ -84,6 +84,9 @@ namespace GKUI
             this.miFillImage = new System.Windows.Forms.ToolStripMenuItem();
             this.N9 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbFilter = new System.Windows.Forms.ToolStripButton();
+            this.tbPrev = new System.Windows.Forms.ToolStripButton();
+            this.tbNext = new System.Windows.Forms.ToolStripButton();
             this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
             this.MenuPerson = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -102,6 +105,7 @@ namespace GKUI
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolBar1.SuspendLayout();
             this.MenuGens.SuspendLayout();
             this.MenuModes.SuspendLayout();
@@ -119,6 +123,10 @@ namespace GKUI
                                     this.tbs2,
                                     this.tbModes,
                                     this.toolStripSeparator1,
+                                    this.tbFilter,
+                                    this.tbPrev,
+                                    this.tbNext,
+                                    this.toolStripSeparator2,
                                     this.tbDocPreview,
                                     this.tbDocPrint});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
@@ -339,6 +347,27 @@ namespace GKUI
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
+            // tbFilter
+            // 
+            this.tbFilter.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbFilter.Name = "tbFilter";
+            this.tbFilter.Size = new System.Drawing.Size(23, 24);
+            this.tbFilter.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
+            // tbPrev
+            // 
+            this.tbPrev.Enabled = false;
+            this.tbPrev.Name = "tbPrev";
+            this.tbPrev.Size = new System.Drawing.Size(23, 24);
+            this.tbPrev.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
+            // tbNext
+            // 
+            this.tbNext.Enabled = false;
+            this.tbNext.Name = "tbNext";
+            this.tbNext.Size = new System.Drawing.Size(23, 24);
+            this.tbNext.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
             // tbDocPreview
             // 
             this.tbDocPreview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -462,6 +491,11 @@ namespace GKUI
             this.miRebuildKinships.Text = "miRebuildKinships";
             this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
             // TreeChartWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -483,8 +517,12 @@ namespace GKUI
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tbDocPrint;
         private System.Windows.Forms.ToolStripButton tbDocPreview;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton tbFilter;
+        private System.Windows.Forms.ToolStripButton tbPrev;
+        private System.Windows.Forms.ToolStripButton tbNext;
     }
 }

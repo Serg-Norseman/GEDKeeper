@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using iTextSharp.text;

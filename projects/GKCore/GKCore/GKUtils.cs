@@ -20,13 +20,11 @@
 
 using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Text;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -294,25 +292,6 @@ namespace GKCore
             }
 
             return string.Empty;
-        }
-
-        public static IGeocoder CreateGeocoder(GlobalOptions options)
-        {
-            ProxyOptions proxyOptions = options.Proxy;
-            IWebProxy proxy = null;
-            if (proxyOptions.UseProxy)
-            {
-                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true)
-                {
-                    Credentials = CredentialCache.DefaultCredentials
-                };
-            }
-
-            IGeocoder geocoder = IGeocoder.Create(options.Geocoder);
-            geocoder.SetKey(GKData.GAPI_KEY);
-            geocoder.SetProxy(proxy);
-
-            return geocoder;
         }
 
         #endregion

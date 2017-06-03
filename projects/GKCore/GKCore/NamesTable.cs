@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -35,11 +35,11 @@ namespace GKCore
     /// </summary>
     public sealed class NamesTable : BaseObject, INamesTable
     {
-        private readonly Hashtable fNames;
+        private readonly Dictionary<string, NameEntry> fNames;
 
         public NamesTable()
         {
-            fNames = new Hashtable();
+            fNames = new Dictionary<string, NameEntry>();
         }
 
         protected override void Dispose(bool disposing)
@@ -119,7 +119,7 @@ namespace GKCore
         {
             using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
             {
-                foreach (DictionaryEntry de in fNames)
+                foreach (KeyValuePair<string, NameEntry> de in fNames)
                 {
                     NameEntry nm = (NameEntry)de.Value;
                     string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + GKData.SexData[(int)nm.Sex].Sign;
@@ -140,7 +140,9 @@ namespace GKCore
 
         public NameEntry FindName(string name)
         {
-            return (fNames[name] as NameEntry);
+            NameEntry result;
+            fNames.TryGetValue(name, out result);
+            return result;
         }
 
         public string GetPatronymicByName(string name, GEDCOMSex sex)

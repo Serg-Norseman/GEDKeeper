@@ -70,6 +70,8 @@ namespace GKTests.GKCore
         {
             Assert.IsNotNull(fContext.Culture);
 
+            Assert.IsNull(fContext.Viewer);
+
             fContext.SetFileName("testfile.ged");
             Assert.AreEqual("testfile.ged", fContext.FileName);
 
@@ -317,6 +319,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
 
             Assert.AreEqual(null, GKUtils.GetDaysForBirth(null));
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
@@ -686,6 +689,14 @@ namespace GKTests.GKCore
 
             fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Italian;
             Assert.IsInstanceOf(typeof(ItalianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Cantonese;
+            Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Mandrin;
+            Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
+            Assert.IsFalse(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
         }
 
         [Test]
@@ -883,6 +894,8 @@ namespace GKTests.GKCore
         {
             var listManager = new CommunicationListMan(fContext);
             Assert.IsNotNull(listManager);
+
+            Assert.IsNotNull(listManager.ContentList);
 
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);

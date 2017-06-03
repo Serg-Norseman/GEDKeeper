@@ -39,6 +39,9 @@ namespace GKTests.GKCommon
 
             StringList strList = new StringList(list);
 
+            strList.OnChange += SLChange;
+            strList.OnChanging += SLChanging;
+
             Assert.AreEqual("The", strList[0]);
             Assert.AreEqual("string", strList[1]);
             Assert.AreEqual("list", strList[2]);
@@ -125,6 +128,17 @@ namespace GKTests.GKCommon
             Assert.AreEqual(3, strList.IndexOf("test"));
             Assert.AreEqual(4, strList.IndexOf("The"));
             Assert.AreEqual(-1, strList.IndexOf("abrakadabra"));
+
+            strList.OnChange -= SLChange;
+            strList.OnChanging -= SLChanging;
+        }
+
+        private void SLChanging(object sender)
+        {
+        }
+
+        private void SLChange(object sender)
+        {
         }
     }
 }

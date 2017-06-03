@@ -80,9 +80,10 @@ namespace GKTests.GKCommon
         {
             Assert.Throws(typeof(ArgumentNullException), () => { new StringTokenizer(null); });
 
-            StringTokenizer strTok = new StringTokenizer("alpha beta 123  456.57, x");
+            StringTokenizer strTok = new StringTokenizer("alpha beta 123  456.57, x 0x123F");
             Assert.IsNotNull(strTok);
 
+            strTok.RecognizeHex = true;
             strTok.IgnoreWhiteSpace = false;
             Assert.IsFalse(strTok.IgnoreWhiteSpace);
 
@@ -132,6 +133,13 @@ namespace GKTests.GKCommon
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.Word, tok.Kind);
             Assert.AreEqual("x", tok.Value);
+
+            Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.HexNumber, tok.Kind);
+            Assert.AreEqual(true, strTok.RequireToken(TokenKind.HexNumber));
+            Assert.AreEqual("0x123F", tok.Value);
 
             //
 

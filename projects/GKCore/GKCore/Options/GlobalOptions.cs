@@ -419,7 +419,6 @@ namespace GKCore.Options
             catch (Exception ex)
             {
                 Logger.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
-                throw;
             }
         }
 

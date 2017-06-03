@@ -1548,7 +1548,7 @@ namespace GKCore
             /* 720 */ "Descendants Circle",
             /* 721 */ "Choice of portrait",
             /* 722 */ "Relationship Calculator",
-            /* 723 */ "is {0} of",
+            /* 723 */ "{0} is {1} of {2}",
             /* 724 */ "Today is birthday of {0}",
             /* 725 */ "Tomorrow is birthday of {0}",
             /* 726 */ "Blood group",

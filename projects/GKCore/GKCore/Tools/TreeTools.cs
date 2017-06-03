@@ -1223,7 +1223,7 @@ namespace GKCore.Tools
 
             List<ULIndividual> result = new List<ULIndividual>();
 
-            Hashtable families = new Hashtable();
+            Dictionary<string, List<GEDCOMIndividualRecord>> families = new Dictionary<string, List<GEDCOMIndividualRecord>>();
 
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
@@ -1245,10 +1245,10 @@ namespace GKCore.Tools
                         string f = fams[k];
                         if (f.Length > 1)
                         {
-                            List<GEDCOMIndividualRecord> ps = (List<GEDCOMIndividualRecord>)families[f];
-                            if (ps == null) {
+                            List<GEDCOMIndividualRecord> ps;
+                            if (!families.TryGetValue(f, out ps)) {
                                 ps = new List<GEDCOMIndividualRecord>();
-                                families[f] = ps;
+                                families.Add(f, ps);
                             }
                             ps.Add(iRec);
                         }
@@ -1261,7 +1261,7 @@ namespace GKCore.Tools
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
 
             // find all persons of one surname, not related by ties of kinship
-            foreach (DictionaryEntry entry in families)
+            foreach (KeyValuePair<string, List<GEDCOMIndividualRecord>> entry in families)
             {
                 string fam = (string)entry.Key;
                 List<GEDCOMIndividualRecord> ps = (List<GEDCOMIndividualRecord>)entry.Value;

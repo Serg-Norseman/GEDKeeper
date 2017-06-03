@@ -504,9 +504,9 @@ namespace GKCommon.GEDCOM
             result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
             result.Add("ALIA", new TagProperties("ALIA", true, false));
 
-            // need for compatibility with Agelong Tree (ALTREE)
-            //TAGS_BASE.Add("HUSB", new TagProperties("HUSB", true, false));
-            //TAGS_BASE.Add("WIFE", new TagProperties("WIFE", true, false));
+            // need for compatibility with Agelong Tree (ALTREE), and other
+            //result.Add("HUSB", new TagProperties("HUSB", true, false));
+            //result.Add("WIFE", new TagProperties("WIFE", true, false));
 
             result.Add("_BGRO", new TagProperties("_BGRO", true,  true));
             result.Add("_HAIR", new TagProperties("_HAIR", true,  true));
