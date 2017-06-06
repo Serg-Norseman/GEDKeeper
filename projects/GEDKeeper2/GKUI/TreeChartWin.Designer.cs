@@ -50,6 +50,13 @@ namespace GKUI
         private System.Windows.Forms.ToolStripSeparator tbs1;
         private System.Windows.Forms.ToolStripMenuItem miFatherAdd;
         private System.Windows.Forms.ToolStripMenuItem miMotherAdd;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton tbDocPrint;
+        private System.Windows.Forms.ToolStripButton tbDocPreview;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton tbFilter;
+        private System.Windows.Forms.ToolStripButton tbPrev;
+        private System.Windows.Forms.ToolStripButton tbNext;
 
         private void InitializeComponent()
         {
@@ -84,6 +91,9 @@ namespace GKUI
             this.miFillImage = new System.Windows.Forms.ToolStripMenuItem();
             this.N9 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbFilter = new System.Windows.Forms.ToolStripButton();
+            this.tbPrev = new System.Windows.Forms.ToolStripButton();
+            this.tbNext = new System.Windows.Forms.ToolStripButton();
             this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
             this.MenuPerson = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -102,6 +112,7 @@ namespace GKUI
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolBar1.SuspendLayout();
             this.MenuGens.SuspendLayout();
             this.MenuModes.SuspendLayout();
@@ -113,14 +124,18 @@ namespace GKUI
             this.ToolBar1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ToolBar1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ToolBar1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.tbImageSave,
-                                    this.tbs1,
-                                    this.tbGens,
-                                    this.tbs2,
-                                    this.tbModes,
-                                    this.toolStripSeparator1,
-                                    this.tbDocPreview,
-                                    this.tbDocPrint});
+                                             this.tbImageSave,
+                                             this.tbs1,
+                                             this.tbGens,
+                                             this.tbs2,
+                                             this.tbModes,
+                                             this.toolStripSeparator1,
+                                             this.tbFilter,
+                                             this.tbPrev,
+                                             this.tbNext,
+                                             this.toolStripSeparator2,
+                                             this.tbDocPreview,
+                                             this.tbDocPrint});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(822, 27);
@@ -147,16 +162,16 @@ namespace GKUI
             // MenuGens
             // 
             this.MenuGens.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miGensInf,
-                                    this.miGens1,
-                                    this.miGens2,
-                                    this.miGens3,
-                                    this.miGens4,
-                                    this.miGens5,
-                                    this.miGens6,
-                                    this.miGens7,
-                                    this.miGens8,
-                                    this.miGens9});
+                                             this.miGensInf,
+                                             this.miGens1,
+                                             this.miGens2,
+                                             this.miGens3,
+                                             this.miGens4,
+                                             this.miGens5,
+                                             this.miGens6,
+                                             this.miGens7,
+                                             this.miGens8,
+                                             this.miGens9});
             this.MenuGens.Name = "MenuGens";
             this.MenuGens.OwnerItem = this.tbGens;
             this.MenuGens.Size = new System.Drawing.Size(96, 244);
@@ -247,17 +262,17 @@ namespace GKUI
             // MenuModes
             // 
             this.MenuModes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miModeBoth,
-                                    this.miModeAncestors,
-                                    this.miModeDescendants,
-                                    this.N7,
-                                    this.miTraceSelected,
-                                    this.miTraceKinships,
-                                    this.miCertaintyIndex,
-                                    this.N8,
-                                    this.miFillColor,
-                                    this.miFillImage,
-                                    this.N9});
+                                              this.miModeBoth,
+                                              this.miModeAncestors,
+                                              this.miModeDescendants,
+                                              this.N7,
+                                              this.miTraceSelected,
+                                              this.miTraceKinships,
+                                              this.miCertaintyIndex,
+                                              this.N8,
+                                              this.miFillColor,
+                                              this.miFillImage,
+                                              this.N9});
             this.MenuModes.Name = "MenuModes";
             this.MenuModes.OwnerItem = this.tbModes;
             this.MenuModes.Size = new System.Drawing.Size(219, 214);
@@ -339,6 +354,27 @@ namespace GKUI
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
+            // tbFilter
+            // 
+            this.tbFilter.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbFilter.Name = "tbFilter";
+            this.tbFilter.Size = new System.Drawing.Size(23, 24);
+            this.tbFilter.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
+            // tbPrev
+            // 
+            this.tbPrev.Enabled = false;
+            this.tbPrev.Name = "tbPrev";
+            this.tbPrev.Size = new System.Drawing.Size(23, 24);
+            this.tbPrev.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
+            // tbNext
+            // 
+            this.tbNext.Enabled = false;
+            this.tbNext.Name = "tbNext";
+            this.tbNext.Size = new System.Drawing.Size(23, 24);
+            this.tbNext.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            // 
             // tbDocPreview
             // 
             this.tbDocPreview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -360,19 +396,19 @@ namespace GKUI
             // MenuPerson
             // 
             this.MenuPerson.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miEdit,
-                                    this.N1,
-                                    this.miFatherAdd,
-                                    this.miMotherAdd,
-                                    this.miFamilyAdd,
-                                    this.miSpouseAdd,
-                                    this.miSonAdd,
-                                    this.miDaughterAdd,
-                                    this.N2,
-                                    this.miDelete,
-                                    this.N3,
-                                    this.miRebuildTree,
-                                    this.miRebuildKinships});
+                                               this.miEdit,
+                                               this.N1,
+                                               this.miFatherAdd,
+                                               this.miMotherAdd,
+                                               this.miFamilyAdd,
+                                               this.miSpouseAdd,
+                                               this.miSonAdd,
+                                               this.miDaughterAdd,
+                                               this.N2,
+                                               this.miDelete,
+                                               this.N3,
+                                               this.miRebuildTree,
+                                               this.miRebuildKinships});
             this.MenuPerson.Name = "MenuPerson";
             this.MenuPerson.Size = new System.Drawing.Size(201, 262);
             this.MenuPerson.Opening += new System.ComponentModel.CancelEventHandler(this.MenuPerson_Opening);
@@ -462,6 +498,11 @@ namespace GKUI
             this.miRebuildKinships.Text = "miRebuildKinships";
             this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
             // TreeChartWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -483,8 +524,5 @@ namespace GKUI
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-        private System.Windows.Forms.ToolStripButton tbDocPrint;
-        private System.Windows.Forms.ToolStripButton tbDocPreview;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

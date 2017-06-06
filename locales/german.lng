@@ -1,0 +1,754 @@
+﻿;1031,deu,Deutsch
+&Datei
+&Bearbeiten
+Genealogie
+E&xtras
+&Fenster
+&?
+Neu
+Öffnen...
+Letzte Dokumente
+Speichern
+Schließen
+Dateieigenschaften
+Exportieren
+Familienbuch...
+Speichern unter...
+Exportieren nach Excel Datei...
+Beenden
+<?>
+<?>
+Datensatz eintragen
+Datensatz aktualisieren
+Datensatz löschen
+<?>
+Stammbaum der Vorfahren
+Stammbaum der Nachfahren
+Ganze Stammbaum
+D'Aboville Listerstellung von Nachfahren
+Konowalow Listerstellung von Nachfahren
+Karten
+Statistik
+Listerstellung von Vorfahren
+<?>
+<?>
+<?>
+Organizer
+Skripten
+<?>
+Extras
+Filter
+Einstellungen
+Überlappend
+Untereinander
+Nebeneinander
+Alles minimieren
+Alles andorden
+<?>
+<?>
+<?>
+Inhalt
+Info
+Datensätze
+gefiltert
+Personen
+Familien
+Anmerkungen
+Multimedia
+Quellen
+Archive
+Gruppen
+Forschungen
+Aufgaben
+Kommunikationen
+Örter
+unbekannte
+unbekannt
+?
+Männliches Geschlecht
+Weibliches Geschlecht
+Unbekannt Geschlecht
+Speichern die Dateiänderungen?
+Der angegebene Vorfahr hat die Familie "{0}". Wird das Kind dahin aufgenommen?
+Löschen den Persondatensatz "{0}"?
+Löschen die Familie "{0}"?
+Löschen die Anmerkung?
+Löschen die Quelle "{0}"?
+Löschen die Multimedia "{0}"?
+Löschen das Archiv "{0}"?
+Löschen die Gruppe "{0}"?
+Löschen die Forschung "{0}"?
+Löschen die Aufgabe "{0}"?
+Löschen die Kommunikation "{0}"?
+Löschen den Ort "{0}"?
+Adress
+Tatsachen
+Vorname
+Name
+Patronymikon
+Geschlecht
+Beiname
+Vorsilbe des Vornamens
+Vorsilbe des Namens
+Suffix des Namens
+Patriarch
+Bezeichnung
+Assoziation
+Beziehung
+Person
+Akzeptieren
+Abbrechen
+Schließen
+Auswählen
+Eintragen
+Neu Persondatensatz
+Persondatensatz redigieren
+Geschlechtsprüfung
+Datensatzauswahl
+Quellzitat
+Benutzerreferenz
+Anmerkung
+Quelle
+Seite
+Datensicherheit
+Referenz
+Typ
+Familie
+Ehemann
+Ehefrau
+Status
+Kinder
+Löschen die Referenz an der Ehemann?
+Löschen die Referenz an die Ehefrau?
+Löschen die Referenz an das Kind?
+Geburtsdatum
+Todesdatum
+Sicherheitsbegrenzung
+Name
+Mitglieder
+Gruppe redigieren
+Löschen die Referenz an das Gruppenmitglied?
+Ansicht
+Etappe
+Rufnummer
+E-Mail
+Web-Seite
+Archiv
+Fortschritt
+Vergangenzeit
+Restzeit
+Allgemeine Zeit
+Datum
+Text
+Kurzname
+Autor
+Publiziert
+Gesamt
+Löschen die Referenz an das Archiv?
+Способ хранения
+Datei
+Ansicht
+Fragment {0}: {1} Personen
+Vater
+Mutter
+Eltern
+Ehegatten
+Assoziationen
+Benutzerreferenzen
+gregorianischer
+julianischer
+jüdischer
+islamischer
+iranischer
+indischer
+baha'i
+französischer
+römischer
+unbekannt
+Zusammenstellung
+Andere
+Einreichung
+Antragsteller
+Standort
+Breite
+Länge
+Abbilden
+Suchen Koordinate
+Suchen
+Auswählen Koordinate
+Auswählen Name
+Vorrang
+Prozent
+Gestartet
+Abgestellt
+Ziel
+Thema
+Korrespondent
+Gruppe
+Löschen die Referenz an die Aufgabe?
+Löschen die Referenz an die Korrespondenz?
+Löschen die Referenz an die Gruppe?
+Forschung redigieren
+Aufgabe redigieren
+Kommunikation redigieren
+Fehler
+Lua Anfangfehler!
+Inkorrekt Datumformat
+Staat/Land
+Gebiet
+Stadt
+Postleitzahl
+Rufnummern
+E-Mail
+Web-Seiten
+Bedeutung
+Ereignis
+Ort
+Ursache
+Urkundenstelle
+Weibliche
+Männliche
+Persondatensatz ist nicht gawählt
+Das Geschlecht von diesem Person ist nicht bezeichnet.
+Diese Person hat keine Familie.
+Erwartungsanzahl der Vorfahren von {0} die zulässigen Limits übersteigen.
+Erwartungsanzahl der Nachfahren von {0} die zulässigen Limits übersteigen.
+Generationen abbilden:
+Grenzenlos
+Ehepartner
+Ehedatum
+Löschen die Vaterreferenz?
+Löschen die Mutterreferenz?
+Löschen die Ehepartnerreferenz?
+Löschen die Elternreferenz?
+Alle
+Nur Vorfahren
+Nur Nachfahren
+Автосмена центра
+Redigieren
+Familie eintragen
+Ehepartner eintragen
+Sohn eintragen
+Tochter eintragen
+Löschen
+Stammbaum umgestalten
+Blutsverwandtschaft umgestalten
+Referenzen
+Ort und Attribut
+Ehe
+Familie
+Namensbrüder/Namensschwestern
+Löschen die Tatsache?
+Löschen die Anmerkungreferenz?
+Löschen die Multimediareferenz?
+Löschen die Quellereferenz?
+Löschen die Assoziation?
+Löschen die Benutzerreferenz "{0}"?
+Dateiladen Fehler
+Formatverifikation Fehler
+Geburtstage
+Es ist {1} Tage vor dem Geburtstag von "{0}"
+Interface
+Stammbäume
+Listerstellungen
+Dateispeichern Zeichensatz
+Adressen
+E-Mail
+Web-Seiten
+Herunterladung aus Internet
+Proxy-Server verwenden
+Server
+Port
+Login
+Passwort
+Das Passwort ist nicht bezeichnet
+Tipps bei jedem Start anzeigen
+Sprache
+Alle Listen
+Personenliste
+Namenformat in den Listen
+Vorname_Name_Patronymikon
+Vorname; Name_Patronymikon
+Vorname; Name; Patronymikon
+Datumformat in die Listen
+Adresse in die Ortzeilen einschließen
+Personen ohne Eltern markieren
+Personen ohne Familien markieren
+Standardwert
+Personen im Stammbaum abbilden
+Einzelzeilen (Name und Patronymikon)
+Nur Jahre
+Verwandtschaftsgrad
+Zusätzliche Symbole
+Dekoration
+Porträte abbilden
+Todesfälle im Kindesalter ausschließen
+Gestaltung
+Mann
+Frau
+Unbekannt Geschlecht
+geschiedener Ehemann
+geschiedene Ehefrau
+Schrift
+Bildung von die Listerstellungen
+Inschließlich Personenattribute
+Inschließlich Anmerkungen
+Inschließlich Quellen
+Format
+Überschüssig
+Konventionell
+Zum Datensatz übergehen
+Datensatz aufrücken
+Datensatz nach unten rücken
+Ganze Name
+Geburtsort
+Todesort
+Lebensort
+(Lebens)Alter
+Lebensdauer
+Tage bis zum GT
+Konfession
+Nationalität
+Bildungsniveau
+Beruf
+Soziale Lage
+Kriegsdienst
+Kriegsdienstrekrutierung
+Kriegsdienstaufkündigung
+Dienstgrad
+Modifiziert
+Standesamtlich getraut Ehe
+Gewissensehe
+Geschieden
+Geburt
+Adoption
+Taufe
+Graduierung
+Rentenabgang
+Einbürgerung
+Emigration
+Immigration
+(Volks)zählung
+Testament
+Bestätigung des Testamentes
+Tod
+Bestattung
+Einäscherung
+Tatsache
+Personalbeschreibung
+Identifizierungsnummer
+Sozialversicherungskode
+Kinderzahl
+Ehenzahl
+Eigentum
+Titel
+Reise
+Hobby
+Auszeichnung
+?
+Vater
+Mutter
+Ehemann
+Ehefrau
+Sohn
+Tochter
+Großvater
+Großmutter
+Enkel
+Enkelin
+Bruder
+Schwester
+Schwiegersohn
+Schwiegertochter
+Vater von Ehemann (Schwiegervater)
+Mutter von Ehemann (Schwiegermutter)
+Vater von Ehefrau (Schwiegervater)
+Mutter von Ehefrau (Schwiegermutter)
+Onkel
+Tante
+Neffe
+Nichte
+Cousin
+Cousine
+Bruder von Ehemann (Schwager)
+Schwester von Ehemann (Schwägerin)
+Bruder von Ehefrau (Schwager)
+Bruder von Ehefrau (Schwägerin)
+ur
+<?>
+<?>
+<?>
+<?>
+Bildbreite ist mehr als 65,000 pixels. Unmöglich zu speichern
+Zurück
+Vorwärts
+<?>
+Weiter
+Wußtest du schon?
+Örter herunterladen und suchen
+( nicht ausgewählt )
+Auswahl
+In allen Personen
+Geburtsörter
+Todesörter
+Lebensörter
+Nur Ausgewählt
+Bild speichern...
+Ununterstützert Format
+Datenladungfehler.
+Drucken
+Vorschau
+Generation
+enthalt
+enthalt nicht
+Genau
+Früher
+Später
+Zwischen
+Periode bis
+Periode nach
+Periode zwischen
+Etwa
+Berechnete
+Bewertete
+Eheverlöbnis
+Eheschließungshandlung
+Die öffentliche Bekanntgabe der Ehe
+Abschluss eines Ehevertrages
+Bewilligung zum Ehekonsens
+Abschluss von Ehevertrages
+Aufhebung der Ehe
+Einreichung des Scheidungsantrages
+Ehescheidung
+Dateireferenz
+Einspeicherung ins Archiv
+Einspeicherung in Repositur
+-
+Tonaufzeichnung
+Buch
+Karte
+Elektronisch
+Mikrofische
+Film
+Magazin
+Manuskript
+Karte
+Zeitung
+Fotografie
+Grabmal
+Video
+- Andere -
+Ist nicht bezeichnet
+Niedrig
+Normal
+Hoch
+Vordringlich
+Bestimmt
+Im Gange
+Unterbrechung
+Erschwerungen
+Fertig
+Abberuft
+Anruf
+E-Mail
+Fax
+Brief
+Kassette
+Besuch
+von
+zu
+Person
+Familie
+Quelle
+andere
+Unzuverlässig Beweise oder Vermutungen
+Fragwürdige Zuverlässigkeit von Bestätigung
+Indizienbeweise
+Eindeutige und primäre Beweise
+Forschung
+Aufgabe
+Korrespondenz
+Bezeichnerkorrektur
+Formatüberprüfung
+Требуется коррекция идентификаторов записей, продолжить?
+Количество объектов в основной базе: {0}
+Synchronisierung abgeschlossen.
+Suche die Patriarchen
+Suche von wechselseitige Beziehungen
+Mediadatei ist nicht beladen, denn sie ist in Mediacontainer (Repositur oder Archiv) fehlen
+Maßstab
+GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselten GEDCOM-Dateien (*.geds)|*.geds
+Alle Dateien (*.*)|*.*
+Bilder (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+Skripte (*.lua)|*.lua
+BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|EMF-Dateien (*.emf)|*.emf|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
+Todesursachen
+Stammbaum Listerstellung
+Parameter
+Im Ganzen
+Männer
+Frauen
+Felderfilter
+Jahr
+PDF-Dateien (*.pdf)|*.pdf
+RTF-Dateien (*.rtf)|*.rtf
+HTML-Dateien (*.html)|*.html
+Резервирование файлов (бэкап)
+только предыдущий файл
+Отсечение ветвей
+нет
+по границе лет
+по заданным лицам
+- alle -
+- keine -
+- jede -
+Master-Datenbank
+Datenbank aktualisieren
+[aktuelle Datenbank]
+Установлен фильтр по источнику. Внести источник в новую персональную запись?
+Установлен фильтр по группе. Внести группу в новую персональную запись?
+Duplikatsuche
+Unrichtiger Wert
+Operation
+Datenbanken vergleichen
+Datenbanken vereinigen
+Datenbanken trennen
+Duplikatsätze vereinigen
+Поиск несвязанных однофамильцев
+Проверка связности семей
+Проверка базы данных
+Suche die Patriarchen
+Örterssteuerung
+Поиск совпадений...
+Проверка связности семей
+alle
+nur leben
+nur Verstorbene
+lebte vorher
+nur Männer
+nur Frauen
+Namemaske
+Lebensortmaske
+Tatsachenmaske
+Nur Familienoberhäupter
+Unrichtig Datum
+Leute
+Jahre
+Jahrzehnte
+Geboren
+Gestorben
+Lebenden
+Verstorbene
+Durchschnittsalter
+Lebenserwartung
+Die durchschnittliche Zahl der Kinder
+Das Durchschnittsalter der Geburt des Erstlings
+Die durchschnittliche Zahl der Ehen
+Das Durchschnittsalter der Verheiratung
+Vorfahrenzahl
+Nachfahrenzahl
+Nachfahrengenerationzahl
+Geburtsjahre
+Geburtsjahre (Jahrzehnte)
+Sterbejahre
+Sterbejahre (Jahrzehnte)
+Verteilung der Anzahl der Kinder
+Alter der Geburt des Erstlings
+Alter der Verheiratung
+Unterschied von das Ehegattenalter
+Alle Verbindungen auswählen
+Familie auswählen
+Vorfahren auswählen
+Nachfahren auswählen
+Vereinigung
+Automatisches Suchen
+Auslassen
+Datensätze
+Personensuche
+Strikter Vergleich
+Unstrikter Namenvergleich
+Nur beim Namen/Patronymikon (nur Frauen)
+Mit einem Geburtsjahr
+Genauigkeit von den Namen, %
+Jahreungenauigkeit
+Reparieren
+Nachfahrengenerationen mindestens
+Merkmal aufstellen
+In die Liste eingetragen
+Ähnliche Familiennamen:
+Ähnliche Namen:
+Ausgewählte Personaldatensätze sind gelöscht
+Datensatz
+Problem
+Lösung
+vielleicht Verstorbene (Alter {0})
+Das Geschlecht ist nicht bezeichnet
+Geburtsjahr größer als Sterbejahr
+War die erste Ehe im Alter von {0} Jahren geschlossen?
+War das erste Kind im Alter von {0} Jahren gebiert?
+Nachfahren
+Generationen
+Anzahl der Referenzen
+Örterbearbeitung
+Dieser Ort ist schon in der Ortliste enthalten
+DNS Marken
+Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Elternteils
+Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Kindes
+Familiedatensatz ist leer
+jede Dateiversion speichern
+Beladung
+Dateispeichern Fehler "{0}"{1}.
+Hintergrundfarbe...
+Hintergrundbild...
+Personen im Stammbaum: {0}
+Fehlerprotokoll anzeigen
+Vorfahrenkreis
+Kreis
+Vordergrundfarbe
+Hintergrundfarbe
+Liniefarbe
+keine
+blockiert
+vertraulich
+geheim
+Fehlerprotokoll senden
+Diagramme
+Bild in Fenster einpassen
+Vergrößern
+Verkleinern
+Tatsache des Todes feststellen
+Geschlecht bezeichnen
+Nachträge
+Autospuren die Beziehungen
+Es hat keine Entsprechungen gefunden
+Suchen zurück
+Suchen vorwärts
+Zuverlässigkeitindex
+Geburtsmonaten
+Monat
+Abrechnen
+Feld
+Bedingung
+Quelle ist nicht bezeichnet
+Diaschau
+Vorherige Datensatz
+Nächste Datensatz
+Erzeugung ist ausgefallen
+Start
+Abbrechen
+Demographie
+Namen
+Pseudonym
+Geburtsname
+In Immigration
+Mädchenname
+Ehename
+Löschen einen Namen?
+Die einzige Name darf man nicht löschen
+Zitat
+Vereinigte Datensätze bezeichnen
+Kalender neben dem Datum anzeigen
+Datensatz duplizieren
+Achtung: bei der Persondatensatzdublierung die verwandtschaftliche Verbindungen und Assoziationen werden nicht kopiert
+Datumtypen anzeigen
+Neu Stammbaumdatei erstellen
+Stammbaumdatei öffnen
+Stammbaumdatei speichern
+Datensatz eintragen (Strg+I)
+Datensatz aktualisieren (Strg+Enter)
+Datensatz löschen (Strg+L)
+Datensatzlistefilterung
+Stammbaum der Vorfahren abbilden
+Stammbaum der Nachfahren abbilden
+Ganze Stammbaum abbilden
+Stammbaum Listerstellung
+D'Aboville Listerstellung
+Konowalow Listerstellung
+Statistische Auswertung
+Bild speichern
+Anzeigebetrieb
+Neu Skript erstellen
+Skript öffnen
+Skript speichern
+Skript ausführen
+Porträt verbinden
+Porträt abstellen
+Elternfamilie verbinden
+Elternfamilie aktualisieren
+Elternfamilie abstellen
+Vater auswählen oder eintragen
+Vater abstellen
+Zum Vaterdatensatz übergehen
+Mutter auswählen oder eintragen
+Mutter abstellen
+Zum Mutterdatensatz übergehen
+Name zum Tauschbuffer kopieren
+Ehemann auswählen oder eintragen
+Ehemann abstellen
+Zum Ehemanndatensatz übergehen
+Ehefrau auswählen oder eintragen
+Ehefrau abstellen
+Zum Ehefraudatensatz übergehen
+Persondatensatz auswählen
+Ort auswählen oder eintragen
+Löschen die Referenz an den Ort
+Zeigen auf der Karte
+Quelledatensatz auswählen oder eintragen
+Zieldatensatz auswählen
+Für die Abspeicherntypen "Archiv" und "Repositur" eine neuen Datenbank soll vorher gespeichert werden
+Es gibt jetzt Datei mit diesem Namen im Repositur
+Das ist nicht GEDSEC-kompatibel Datei
+Diese Person ist Mitglied der einigen Famielien. Man soll die Kinder über ihre Eltern zusetzen.
+Fehler bei der Datenexportierung nach Excel
+Spezifisches Filter
+Linien abbilden
+Vergleichtyp
+Innenvergleich (Duplikatsuche)
+Vergleicherung mit anderen Datenbank
+Analyse (experimental)
+Vergleichen
+Datum ignorieren
+Diagramm
+Familienbuch
+Inhaltsverzeichnis
+Persondatensätze
+Katalogen
+Nach dem Namen von "{1}" das Geschlecht ist nicht klar. Ist es Männliches Geschlecht?
+Autospeichern jeden
+Minuten
+Inklusive der Generationnummer
+Leersegmenten verstecken
+Nachfahrenkreis
+Porträtwahl
+Verwandtschaftliche Beziehungen Rechner
+ist {0} von
+Heute ist Geburtstag von {0}
+Morgen wird Geburtstag von {0}
+Blutgruppe
+Haarfarbe
+Augenfarbe
+Haplogruppe mtDNS
+Haplogruppe Y-DNS
+Datensatzverriegelung wegen des Redigierunges
+Mädchenname
+Ehename
+Zusatznamen
+Erweitertes Weiblichenamen
+"Mädchenname (Ehename)" Format
+"Ehename (Mädchenname)" Format
+"Mädchenname" Format
+"Ehename" Format
+M
+F
+Geokoder
+Vater eintragen
+Mutter eintragen
+Porträts standardmäßig anzeigen
+Die Mediendatei wird aus dem Wechselmedium hinzugefügt. Fortsetzen?
+Wenn Multimedia-Dateien von einem Wechselmedium hinzugefügt haben, warnen
+Zuletzt geöffnete Dokumente beim Start laden
+Heute feiern "{0}"
+Morgen feiern "{0}"
+{1} Tag(e) vor dem "{0}"
+Feste
+Der eingebauten MediaPlayer verwenden

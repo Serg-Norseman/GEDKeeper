@@ -24,8 +24,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -217,9 +215,13 @@ namespace GKCommon
                 throw new ArgumentNullException("assembly");
 
             object[] attributes = assembly.GetCustomAttributes(typeof(T), false);
-            if (attributes == null || attributes.Length == 0)
-                return null;
-            return SingleOrDefault(OfTypeIterator((T[])attributes));
+            T result;
+            if (attributes == null || attributes.Length == 0) {
+                result = null;
+            } else {
+                result = attributes[0] as T;
+            }
+            return result;
         }
 
         #endregion
@@ -319,56 +321,6 @@ namespace GKCommon
         #endregion
 
         #region Linq-pieces
-
-        public static IEnumerable<TResult> OfTypeIterator<TResult>(IEnumerable<TResult> source)
-        {
-            foreach (object current in source)
-            {
-                if (current is TResult)
-                {
-                    yield return (TResult)((object)current);
-                }
-            }
-            yield break;
-        }
-
-        public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-
-            IList<TSource> list = source as IList<TSource>;
-
-            if (list != null)
-            {
-                switch (list.Count)
-                {
-                    case 0:
-                        return default(TSource);
-                    case 1:
-                        return list[0];
-                }
-            }
-            else
-            {
-                using (IEnumerator<TSource> enumerator = source.GetEnumerator())
-                {
-                    if (!enumerator.MoveNext())
-                    {
-                        TSource result = default(TSource);
-                        return result;
-                    }
-                    TSource current = enumerator.Current;
-                    if (!enumerator.MoveNext())
-                    {
-                        TSource result = current;
-                        return result;
-                    }
-                }
-            }
-
-            throw new Exception("MoreThanOneElement");
-        }
 
         public static T FirstOrDefault<T>(IList<T> list)
         {

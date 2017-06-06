@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection;
 using System.Text;
 
@@ -202,13 +201,6 @@ namespace GKTests.GKCommon
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.LastOrDefault<int>(null); });
             N = SysUtils.LastOrDefault(new int[] { 5, 7, 10 });
             Assert.AreEqual(10, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.SingleOrDefault<int>(null); });
-            N = SysUtils.SingleOrDefault(new int[] { 11 });
-            Assert.AreEqual(11, N);
-            N = SysUtils.SingleOrDefault(new int[] { });
-            Assert.AreEqual(0, N);
-            Assert.Throws(typeof(Exception), () => { SysUtils.SingleOrDefault(new int[] { 5, 7, 10 }); });
 
             // other
             string st = "ivan";
