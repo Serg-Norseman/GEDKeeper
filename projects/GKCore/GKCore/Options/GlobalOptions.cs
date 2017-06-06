@@ -407,6 +407,9 @@ namespace GKCore.Options
                     {
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
+                        if (lngParams.Length != 3)
+                            throw new Exception("Header is incorrect");
+
                         string lngCode = lngParams[0];
                         string lngSign = lngParams[1];
                         string lngName = lngParams[2];
@@ -418,7 +421,7 @@ namespace GKCore.Options
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
+                Logger.LogWrite("GlobalOptions.LngPrepareProc("+fileName+"): " + ex.Message);
             }
         }
 

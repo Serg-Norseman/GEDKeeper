@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -49,6 +50,8 @@ namespace GKUI
             tbImageSave.Image = GKResources.iSaveImage;
             tbDocPreview.Image = GKResources.iPreview;
             tbDocPrint.Image = GKResources.iPrint;
+            tbPrev.Image = GKResources.iLeft1;
+            tbNext.Image = GKResources.iRight1;
 
             ToolBar1.Visible = !AppHost.Instance.IsMDI;
 
@@ -71,19 +74,41 @@ namespace GKUI
             return fCircleChart;
         }
 
+        private void UpdateNavControls()
+        {
+            try
+            {
+                tbPrev.Enabled = NavCanBackward();
+                tbNext.Enabled = NavCanForward();
+            } catch (Exception ex) {
+                Logger.LogWrite("CircleChartWin.UpdateNavControls(): " + ex.Message);
+            }
+        }
+
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
         {
             AppHost.Instance.UpdateControls(false);
+            UpdateNavControls();
         }
 
         private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
         {
             AppHost.Instance.UpdateControls(false);
+            UpdateNavControls();
         }
 
         private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) Close();
+        }
+
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
+        {
+            if (sender == tbPrev) {
+                NavPrev();
+            } else if (sender == tbNext) {
+                NavNext();
+            }
         }
 
         protected override void OnLoad(EventArgs e)
