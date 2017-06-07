@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -27,6 +28,15 @@ namespace GKUI.Components
 {
     public partial class ImageView : UserControl
     {
+        private IContainer components = null;
+        private ImageBox imageBox;
+        private ToolStrip toolStrip;
+        private ToolStripComboBox cbZoomLevels;
+        public ToolStripButton btnSizeToFit;
+        public ToolStripButton btnZoomIn;
+        public ToolStripButton btnZoomOut;
+
+
         public bool ShowToolbar
         {
             get { return toolStrip.Visible; }
@@ -59,29 +69,101 @@ namespace GKUI.Components
             imageBox.InterpolationMode = InterpolationMode.HighQualityBicubic;
         }
 
+        #region Component design
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            toolStrip = new ToolStrip();
+            btnSizeToFit = new ToolStripButton();
+            btnZoomIn = new ToolStripButton();
+            btnZoomOut = new ToolStripButton();
+            cbZoomLevels = new ToolStripComboBox();
+            imageBox = new ImageBox();
+            toolStrip.SuspendLayout();
+            SuspendLayout();
+
+            toolStrip.Items.AddRange(new ToolStripItem[] {
+                                         btnSizeToFit,
+                                         btnZoomIn,
+                                         btnZoomOut,
+                                         new ToolStripSeparator(),
+                                         cbZoomLevels,
+                                         new ToolStripSeparator()});
+
+            btnSizeToFit.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSizeToFit.Image = ExtResources.iSizeToFit;
+            btnSizeToFit.ImageTransparentColor = Color.Magenta;
+            btnSizeToFit.Name = "btnSizeToFit";
+            btnSizeToFit.Click += new System.EventHandler(btnSizeToFit_Click);
+
+            btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnZoomIn.Image = ExtResources.iZoomIn;
+            btnZoomIn.ImageTransparentColor = Color.Magenta;
+            btnZoomIn.Name = "btnZoomIn";
+            btnZoomIn.Click += new System.EventHandler(btnZoomIn_Click);
+
+            btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnZoomOut.Image = ExtResources.iZoomOut;
+            btnZoomOut.ImageTransparentColor = Color.Magenta;
+            btnZoomOut.Name = "btnZoomOut";
+            btnZoomOut.Click += new System.EventHandler(btnZoomOut_Click);
+
+            cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
+            cbZoomLevels.Size = new Size(140, 28);
+            cbZoomLevels.SelectedIndexChanged += new System.EventHandler(zoomLevelsToolStripComboBox_SelectedIndexChanged);
+
+            imageBox.BackColor = SystemColors.ControlDark;
+            imageBox.Dock = DockStyle.Fill;
+            imageBox.ZoomChanged += new System.EventHandler(imageBox_ZoomChanged);
+
+            Controls.Add(imageBox);
+            Controls.Add(toolStrip);
+            Size = new Size(944, 389);
+            toolStrip.ResumeLayout(false);
+            toolStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
         public void OpenImage(Image image)
         {
-            if (image == null) return;
+            if (image != null) {
+                imageBox.BeginUpdate();
+                imageBox.Image = image;
+                imageBox.ZoomToFit();
+                imageBox.EndUpdate();
 
-            imageBox.BeginUpdate();
-            imageBox.Image = image;
-            imageBox.ZoomToFit();
-            imageBox.EndUpdate();
-
-            UpdateZoomLevels();
+                UpdateZoomLevels();
+            }
         }
 
         private void FillZoomLevels()
         {
-            zoomLevelsToolStripComboBox.Items.Clear();
+            cbZoomLevels.Items.Clear();
 
             foreach (int zoom in imageBox.ZoomLevels)
-                zoomLevelsToolStripComboBox.Items.Add(string.Format("{0}%", zoom));
+                cbZoomLevels.Items.Add(string.Format("{0}%", zoom));
         }
 
         private void UpdateZoomLevels()
         {
-            zoomLevelsToolStripComboBox.Text = string.Format("{0}%", imageBox.Zoom);
+            cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
         }
 
         private void btnSizeToFit_Click(object sender, EventArgs e)
@@ -107,7 +189,7 @@ namespace GKUI.Components
 
         private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int zoom = Convert.ToInt32(zoomLevelsToolStripComboBox.Text.Substring(0, zoomLevelsToolStripComboBox.Text.Length - 1));
+            int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
             imageBox.Zoom = zoom;
         }
 

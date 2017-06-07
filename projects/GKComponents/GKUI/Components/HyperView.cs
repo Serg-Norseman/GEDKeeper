@@ -25,7 +25,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCore;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -64,10 +63,10 @@ namespace GKUI.Components
         {
             get { return fBorderWidth; }
             set {
-                if (fBorderWidth == value) return;
-
-                fBorderWidth = value;
-                Invalidate();
+                if (fBorderWidth != value) {
+                    fBorderWidth = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -79,7 +78,12 @@ namespace GKUI.Components
         public Color LinkColor
         {
             get { return fLinkColor; }
-            set { fLinkColor = value; }
+            set {
+                if (fLinkColor != value) {
+                    fLinkColor = value;
+                    Invalidate();
+                }
+            }
         }
 
 

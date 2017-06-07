@@ -98,6 +98,11 @@
     <Compile Include="GKCommon\UDNTests.cs" />
     <Compile Include="GKCommon\ValuesCollectionTests.cs" />
     <Compile Include="GKCommon\ZipStorerTests.cs" />
+    <Compile Include="GKComponents\CircleChartTests.cs" />
+    <Compile Include="GKComponents\HyperViewTests.cs" />
+    <Compile Include="GKComponents\ImageBoxTests.cs" />
+    <Compile Include="GKComponents\ImageViewTests.cs" />
+    <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
@@ -185,6 +190,7 @@
     <Folder Include="GKCommon" />
     <Folder Include="GKCore" />
     <Folder Include="GEDCOM" />
+    <Folder Include="GKComponents" />
     <Folder Include="UITests" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
