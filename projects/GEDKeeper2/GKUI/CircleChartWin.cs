@@ -57,7 +57,8 @@ namespace GKUI
 
             fBaseWin = baseWin;
 
-            fCircleChart = new CircleChart(fBaseWin);
+            fCircleChart = new CircleChart();
+            fCircleChart.Base = fBaseWin;
             fCircleChart.ChartType = type;
             fCircleChart.Name = "fCircleChart";
             fCircleChart.Dock = DockStyle.Fill;

@@ -112,10 +112,6 @@
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKIntl\GKIntl.csproj">
-      <Project>{764FB16A-FD59-4C9A-B25B-5BB7893ADA76}</Project>
-      <Name>GKIntl</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components" />

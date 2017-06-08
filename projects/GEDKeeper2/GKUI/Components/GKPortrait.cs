@@ -167,5 +167,73 @@ namespace GKUI.Components
             btnPanel.Width = Width;
             CheckCursorPosition(this, e);
         }
+
+        #region Design
+
+        private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel btnPanel;
+        private System.Windows.Forms.Timer timer;
+
+        /// <summary>
+        /// Disposes resources used by the control.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (components != null) {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// This method is required for Windows Forms designer support.
+        /// Do not change the method contents inside the source code editor. The Forms designer might
+        /// not be able to load this method if it was changed manually.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GKPortrait));
+            pictureBox1 = new System.Windows.Forms.PictureBox();
+            btnPanel = new System.Windows.Forms.Panel();
+            timer = new System.Windows.Forms.Timer(components);
+            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).BeginInit();
+            SuspendLayout();
+
+            pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            pictureBox1.Location = new System.Drawing.Point(0, 0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(178, 188);
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
+            pictureBox1.MouseLeave += new System.EventHandler(PictureBox1MouseLeave);
+            pictureBox1.MouseHover += new System.EventHandler(PictureBox1MouseHover);
+
+            btnPanel.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            btnPanel.Location = new System.Drawing.Point(0, 152);
+            btnPanel.Name = "panel1";
+            btnPanel.Size = new System.Drawing.Size(178, 36);
+            btnPanel.TabIndex = 1;
+            btnPanel.MouseLeave += new System.EventHandler(Panel1MouseLeave);
+            btnPanel.MouseHover += new System.EventHandler(Panel1MouseHover);
+
+            timer.Tick += new System.EventHandler(MoveSlidePanel);
+
+            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(btnPanel);
+            Controls.Add(pictureBox1);
+            Name = "GKPortrait";
+            Size = new System.Drawing.Size(178, 188);
+            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).EndInit();
+            ResumeLayout(false);
+        }
+
+        #endregion
     }
 }

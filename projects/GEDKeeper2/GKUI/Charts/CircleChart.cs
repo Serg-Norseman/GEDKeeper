@@ -71,6 +71,12 @@ namespace GKUI.Charts
         private int fMouseCaptureY;
 
 
+        public IBaseWindow Base
+        {
+            get { return fModel.Base; }
+            set { fModel.Base = value; }
+        }
+
         public CircleChartType ChartType
         {
             get { return fChartType; }
@@ -130,7 +136,7 @@ namespace GKUI.Charts
             EventRootChanged = new object();
         }
 
-        public CircleChart(IBaseWindow baseWin)
+        public CircleChart()
         {
             DoubleBuffered = true;
 
@@ -138,7 +144,6 @@ namespace GKUI.Charts
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
             fModel.Options = new AncestorsCircleOptions();
-            fModel.Base = baseWin;
             fModel.Font = AppHost.GfxProvider.CreateFont(this.Font.Name, this.Font.Size, false);
 
             fComponents = new Container();

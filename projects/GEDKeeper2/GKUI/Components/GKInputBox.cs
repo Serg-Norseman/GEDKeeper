@@ -62,6 +62,11 @@ namespace GKUI.Components
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -158,5 +163,72 @@ namespace GKUI.Components
 
             return result;
         }
+
+        #region Design
+
+        private System.Windows.Forms.TextBox txtValue;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnAccept;
+
+        private void InitializeComponent()
+        {
+            txtValue = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            btnAccept = new System.Windows.Forms.Button();
+            btnCancel = new System.Windows.Forms.Button();
+            SuspendLayout();
+
+            txtValue.Location = new System.Drawing.Point(12, 25);
+            txtValue.Name = "txtValue";
+            txtValue.Size = new System.Drawing.Size(354, 20);
+            txtValue.TabIndex = 0;
+
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(12, 9);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(35, 13);
+            label1.TabIndex = 3;
+            label1.Text = "label1";
+
+            btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnAccept.Location = new System.Drawing.Point(197, 61);
+            btnAccept.Name = "btnAccept";
+            btnAccept.Size = new System.Drawing.Size(81, 25);
+            btnAccept.TabIndex = 4;
+            btnAccept.Text = "btnAccept";
+            btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            btnAccept.Click += new System.EventHandler(btnAccept_Click);
+
+            btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            btnCancel.Location = new System.Drawing.Point(285, 61);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new System.Drawing.Size(81, 25);
+            btnCancel.TabIndex = 5;
+            btnCancel.Text = "btnCancel";
+            btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            btnCancel.Click += new System.EventHandler(btnCancel_Click);
+
+            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(378, 98);
+            Controls.Add(btnAccept);
+            Controls.Add(btnCancel);
+            Controls.Add(label1);
+            Controls.Add(txtValue);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+		    this.MaximizeBox = false;
+		    this.MinimizeBox = false;
+            Name = "InputBox";
+            ShowInTaskbar = false;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "InputBox";
+            TopMost = true;
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
     }
 }

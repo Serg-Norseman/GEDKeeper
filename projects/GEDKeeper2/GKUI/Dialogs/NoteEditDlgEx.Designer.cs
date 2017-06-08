@@ -12,7 +12,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteEditDlgEx));
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -119,7 +118,6 @@ namespace GKUI.Dialogs
 		    // 
 		    this.btnBold.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 		    this.btnBold.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.btnBold.Image = ((System.Drawing.Image)(resources.GetObject("btnBold.Image")));
 		    this.btnBold.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.btnBold.Name = "btnBold";
 		    this.btnBold.Size = new System.Drawing.Size(23, 25);
@@ -130,7 +128,6 @@ namespace GKUI.Dialogs
 		    // 
 		    this.btnItalic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 		    this.btnItalic.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.btnItalic.Image = ((System.Drawing.Image)(resources.GetObject("btnItalic.Image")));
 		    this.btnItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.btnItalic.Name = "btnItalic";
 		    this.btnItalic.Size = new System.Drawing.Size(23, 25);
@@ -141,7 +138,6 @@ namespace GKUI.Dialogs
 		    // 
 		    this.btnUnderline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 		    this.btnUnderline.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.btnUnderline.Image = ((System.Drawing.Image)(resources.GetObject("btnUnderline.Image")));
 		    this.btnUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.btnUnderline.Name = "btnUnderline";
 		    this.btnUnderline.Size = new System.Drawing.Size(23, 25);
@@ -153,7 +149,6 @@ namespace GKUI.Dialogs
 		    this.btnURL.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 		    this.btnURL.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.btnURL.ForeColor = System.Drawing.Color.Blue;
-		    this.btnURL.Image = ((System.Drawing.Image)(resources.GetObject("btnURL.Image")));
 		    this.btnURL.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.btnURL.Name = "btnURL";
 		    this.btnURL.Size = new System.Drawing.Size(38, 25);
@@ -179,7 +174,6 @@ namespace GKUI.Dialogs
 		    		    		    this.miImport,
 		    		    		    this.miExport,
 		    		    		    this.miClear});
-		    this.ddbtnActions.Image = ((System.Drawing.Image)(resources.GetObject("ddbtnActions.Image")));
 		    this.ddbtnActions.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.ddbtnActions.Name = "ddbtnActions";
 		    this.ddbtnActions.Size = new System.Drawing.Size(67, 25);

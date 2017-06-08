@@ -1809,7 +1809,7 @@ namespace GKTests.GKCore
                 geocoder = IGeocoder.Create("Yandex");
                 geoPoints = geocoder.Geocode("New York", 1);
                 //Assert.IsTrue(geoPoints.Count > 0);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 Assert.Fail();
             }
         }

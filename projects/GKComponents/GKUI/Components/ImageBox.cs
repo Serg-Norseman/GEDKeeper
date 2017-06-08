@@ -141,13 +141,13 @@ namespace GKUI.Components
         public bool AllowDoubleClick
         {
             get { return fAllowDoubleClick; }
-            set
-            {
-                if (fAllowDoubleClick == value) return;
-                fAllowDoubleClick = value;
+            set {
+                if (fAllowDoubleClick != value) {
+                    fAllowDoubleClick = value;
 
-                SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                UpdateStyles();
+                    SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
+                    UpdateStyles();
+                }
             }
         }
 
@@ -172,11 +172,11 @@ namespace GKUI.Components
         public bool AutoCenter
         {
             get { return fAutoCenter; }
-            set
-            {
-                if (fAutoCenter == value) return;
-                fAutoCenter = value;
-                Invalidate();
+            set {
+                if (fAutoCenter != value) {
+                    fAutoCenter = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -190,12 +190,12 @@ namespace GKUI.Components
         public bool AutoPan
         {
             get { return fAutoPan; }
-            set
-            {
-                if (fAutoPan == value) return;
-                fAutoPan = value;
-                if (value)
-                    SizeToFit = false;
+            set {
+                if (fAutoPan != value) {
+                    fAutoPan = value;
+                    if (value)
+                        SizeToFit = false;
+                }
             }
         }
 
@@ -209,11 +209,11 @@ namespace GKUI.Components
         public override bool AutoSize
         {
             get { return base.AutoSize; }
-            set
-            {
-                if (base.AutoSize == value) return;
-                base.AutoSize = value;
-                AdjustLayout();
+            set {
+                if (base.AutoSize != value) {
+                    base.AutoSize = value;
+                    AdjustLayout();
+                }
             }
         }
 
@@ -239,12 +239,12 @@ namespace GKUI.Components
         public Image Image
         {
             get { return fImage; }
-            set
-            {
-                if (fImage == value) return;
-                fImage = value;
-                UpdateParams();
-                OnImageChanged(EventArgs.Empty);
+            set {
+                if (fImage != value) {
+                    fImage = value;
+                    UpdateParams();
+                    OnImageChanged(EventArgs.Empty);
+                }
             }
         }
 
@@ -255,11 +255,11 @@ namespace GKUI.Components
         public Color ImageBorderColor
         {
             get { return fImageBorderColor; }
-            set
-            {
-                if (fImageBorderColor == value) return;
-                fImageBorderColor = value;
-                Invalidate();
+            set {
+                if (fImageBorderColor != value) {
+                    fImageBorderColor = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -270,11 +270,11 @@ namespace GKUI.Components
         public ImageBoxBorderStyle ImageBorderStyle
         {
             get { return fImageBorderStyle; }
-            set
-            {
-                if (fImageBorderStyle == value) return;
-                fImageBorderStyle = value;
-                Invalidate();
+            set {
+                if (fImageBorderStyle != value) {
+                    fImageBorderStyle = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -285,14 +285,11 @@ namespace GKUI.Components
         public InterpolationMode InterpolationMode
         {
             get { return fInterpolationMode; }
-            set
-            {
-                if (value == InterpolationMode.Invalid)
-                    value = InterpolationMode.Default;
-
-                if (fInterpolationMode == value) return;
-                fInterpolationMode = value;
-                Invalidate();
+            set {
+                if (value != InterpolationMode.Invalid && fInterpolationMode != value) {
+                    fInterpolationMode = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -305,18 +302,15 @@ namespace GKUI.Components
         public bool IsPanning
         {
             get { return fIsPanning; }
-            set
-            {
-                if (fIsPanning == value) return;
-                fIsPanning = value;
+            set {
+                if (fIsPanning != value) {
+                    fIsPanning = value;
 
-                if (value)
-                {
-                    fStartScrollPosition = AutoScrollPosition;
-                    Cursor = Cursors.SizeAll;
+                    if (value) {
+                        fStartScrollPosition = AutoScrollPosition;
+                        Cursor = Cursors.SizeAll;
+                    } else Cursor = Cursors.Default;
                 }
-                else
-                    Cursor = Cursors.Default;
             }
         }
 
@@ -329,22 +323,18 @@ namespace GKUI.Components
         public bool IsSelecting
         {
             get { return fIsSelecting; }
-            set
-            {
-                if (fIsSelecting == value) return;
-
-                if (!value)
-                {
-                    if (fSelectionMode == ImageBoxSelectionMode.Zoom)
-                    {
-                        if (fSelectionRegion.Width > SELECTION_DEAD_ZONE && fSelectionRegion.Height > SELECTION_DEAD_ZONE)
-                        {
-                            ZoomToRegion(fSelectionRegion);
-                            SelectionRegion = RectangleF.Empty;
+            set {
+                if (fIsSelecting != value) {
+                    if (!value) {
+                        if (fSelectionMode == ImageBoxSelectionMode.Zoom) {
+                            if (fSelectionRegion.Width > SELECTION_DEAD_ZONE && fSelectionRegion.Height > SELECTION_DEAD_ZONE) {
+                                ZoomToRegion(fSelectionRegion);
+                                SelectionRegion = RectangleF.Empty;
+                            }
                         }
                     }
+                    fIsSelecting = value;
                 }
-                fIsSelecting = value;
             }
         }
 
@@ -381,11 +371,11 @@ namespace GKUI.Components
         public RectangleF SelectionRegion
         {
             get { return fSelectionRegion; }
-            set
-            {
-                if (fSelectionRegion == value) return;
-                fSelectionRegion = value;
-                OnSelectionRegionChanged(EventArgs.Empty);
+            set {
+                if (fSelectionRegion != value) {
+                    fSelectionRegion = value;
+                    OnSelectionRegionChanged(EventArgs.Empty);
+                }
             }
         }
 
@@ -398,16 +388,16 @@ namespace GKUI.Components
         public bool SizeToFit
         {
             get { return fSizeToFit; }
-            set
-            {
-                if (fSizeToFit == value) return;
-                fSizeToFit = value;
-                AdjustLayout();
+            set {
+                if (fSizeToFit != value) {
+                    fSizeToFit = value;
+                    AdjustLayout();
 
-                if (value)
-                    AutoPan = false;
-                else
-                    ActualSize();
+                    if (value)
+                        AutoPan = false;
+                    else
+                        ActualSize();
+                }
             }
         }
 
@@ -418,18 +408,18 @@ namespace GKUI.Components
         public int Zoom
         {
             get { return fZoom; }
-            set
-            {
+            set {
                 if (value < MIN_ZOOM)
                     value = MIN_ZOOM;
                 else if (value > MAX_ZOOM)
                     value = MAX_ZOOM;
 
-                if (fZoom == value) return;
-                fZoom = value;
+                if (fZoom != value) {
+                    fZoom = value;
 
-                UpdateParams();
-                OnZoomChanged(EventArgs.Empty);
+                    UpdateParams();
+                    OnZoomChanged(EventArgs.Empty);
+                }
             }
         }
 
@@ -521,9 +511,9 @@ namespace GKUI.Components
         ///   Centers the given point in the image in the center of the control
         /// </summary>
         /// <param name="imageLocation">The point of the image to attempt to center.</param>
-        public void CenterAt(Point imageLocation)
+        public void CenterAt(int x, int y)
         {
-            ScrollTo(imageLocation, new Point(ClientSize.Width / 2, ClientSize.Height / 2));
+            ScrollTo(new Point(x, y), new Point(ClientSize.Width / 2, ClientSize.Height / 2));
         }
 
         /// <summary>
@@ -801,7 +791,7 @@ namespace GKUI.Components
             int cy = (int)(rectangle.Y + (rectangle.Height / 2));
 
             Zoom = (int)(zoomFactor * 100);
-            CenterAt(new Point(cx, cy));
+            CenterAt(cx, cy);
         }
 
         /// <summary>

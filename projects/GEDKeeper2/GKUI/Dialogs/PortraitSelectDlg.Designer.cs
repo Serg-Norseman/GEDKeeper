@@ -65,7 +65,7 @@ namespace GKUI.Dialogs
 		    this.imageView1.Margin = new System.Windows.Forms.Padding(4);
 		    this.imageView1.Name = "imageView1";
 		    this.imageView1.SelectionMode = GKUI.Components.ImageBoxSelectionMode.Zoom;
-		    this.imageView1.SelectionRegion = ((System.Drawing.RectangleF)(resources.GetObject("imageView1.SelectionRegion")));
+		    this.imageView1.SelectionRegion = new System.Drawing.RectangleF();
 		    this.imageView1.ShowToolbar = true;
 		    this.imageView1.Size = new System.Drawing.Size(871, 623);
 		    this.imageView1.TabIndex = 4;

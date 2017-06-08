@@ -1665,7 +1665,7 @@ namespace GKTests.UITests
             try {
                 ModalFormHandler = PrintDialog_Handler;
                 ClickToolStripButton("tbDocPreview", fMainWin);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 // AppVeyor tests crashed, because "No printers are installed"
                 // No Fail, or Ignore, or etc - not yet divide this test into smaller correct parts
             }

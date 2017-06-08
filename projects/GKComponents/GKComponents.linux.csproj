@@ -95,9 +95,6 @@
     <Compile Include="GKUI\Components\HyperView.cs" />
     <Compile Include="GKUI\Components\ImageBox.cs" />
     <Compile Include="GKUI\Components\ImageView.cs" />
-    <Compile Include="GKUI\Components\ImageView.Designer.cs">
-      <DependentUpon>ImageView.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Components\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
