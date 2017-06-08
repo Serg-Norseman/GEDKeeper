@@ -140,6 +140,8 @@ namespace GKCommon
         {
             if (File.Exists(fileName)) {
                 Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
+            } else {
+                Process.Start(fileName);
             }
         }
 

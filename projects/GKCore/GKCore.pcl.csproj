@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <ProjectGuid>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>GKCore</AssemblyName>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <NoWin32Manifest>False</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetRtfWriter">
+      <HintPath>libs\DotNetRtfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>libs\ExcelLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>libs\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LuaInterface">
+      <HintPath>libs\mswin\LuaInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libs\mswin\lua51.dll">
+      <Link>lua51.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\AppHost.cs" />
+    <Compile Include="GKCore\BaseContext.cs" />
+    <Compile Include="GKCore\BaseController.cs" />
+    <Compile Include="GKCore\Cultures\ChineseCulture.cs" />
+    <Compile Include="GKCore\SearchStrategy.cs" />
+    <Compile Include="GKCore\Charts\ChartModel.cs" />
+    <Compile Include="GKCore\Charts\CircleChartModel.cs" />
+    <Compile Include="GKCore\Cultures\AncientCulture.cs" />
+    <Compile Include="GKCore\Cultures\ArmenianCulture.cs" />
+    <Compile Include="GKCore\Cultures\BritishCulture.cs" />
+    <Compile Include="GKCore\Cultures\DefaultCulture.cs" />
+    <Compile Include="GKCore\Cultures\EuropeanCulture.cs" />
+    <Compile Include="GKCore\Cultures\FrenchCulture.cs" />
+    <Compile Include="GKCore\Cultures\GermanCulture.cs" />
+    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
+    <Compile Include="GKCore\Cultures\ItalianCulture.cs" />
+    <Compile Include="GKCore\Cultures\PolishCulture.cs" />
+    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
+    <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
+    <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
+    <Compile Include="GKCore\Export\CustomWriter.cs" />
+    <Compile Include="GKCore\Export\ExcelExporter.cs" />
+    <Compile Include="GKCore\Export\Exporter.cs" />
+    <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
+    <Compile Include="GKCore\Export\HTMLWriter.cs" />
+    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
+    <Compile Include="GKCore\Export\PDFExporter.cs" />
+    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
+    <Compile Include="GKCore\Export\PDFWriter.cs" />
+    <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\RTFWriter.cs" />
+    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
+    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
+    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
+    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
+    <Compile Include="GKCore\GKData.cs" />
+    <Compile Include="GKCore\GKUtils.cs" />
+    <Compile Include="GKCore\Holidays.cs" />
+    <Compile Include="GKCore\Kinships\KinshipRec.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
+    <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
+    <Compile Include="GKCore\Lists\FamilyListMan.cs" />
+    <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
+    <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
+    <Compile Include="GKCore\Lists\EventsListModel.cs" />
+    <Compile Include="GKCore\Lists\ListModel.cs" />
+    <Compile Include="GKCore\Lists\MediaLinksListModel.cs" />
+    <Compile Include="GKCore\Lists\NoteLinksListModel.cs" />
+    <Compile Include="GKCore\Lists\RecordsListModel.cs" />
+    <Compile Include="GKCore\Lists\SourceCitationsListModel.cs" />
+    <Compile Include="GKCore\Lists\GroupListMan.cs" />
+    <Compile Include="GKCore\Lists\IndividualListMan.cs" />
+    <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKCore\Lists\ListFilter.cs" />
+    <Compile Include="GKCore\Lists\ListManager.cs" />
+    <Compile Include="GKCore\Lists\LocationListMan.cs" />
+    <Compile Include="GKCore\Lists\MultimediaListMan.cs" />
+    <Compile Include="GKCore\Lists\NoteListMan.cs" />
+    <Compile Include="GKCore\Lists\RepositoryListMan.cs" />
+    <Compile Include="GKCore\Lists\ResearchListMan.cs" />
+    <Compile Include="GKCore\Lists\SourceListMan.cs" />
+    <Compile Include="GKCore\Lists\TaskListMan.cs" />
+    <Compile Include="GKCore\Maps\PlacesLoader.cs" />
+    <Compile Include="GKCore\NamesTable.cs" />
+    <Compile Include="GKCore\NavigationStack.cs" />
+    <Compile Include="GKCore\Operations\ChangeTracker.cs" />
+    <Compile Include="GKCore\Operations\CustomOperation.cs" />
+    <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
+    <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
+    <Compile Include="GKCore\Operations\UndoManager.cs" />
+    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\Options\GlobalOptions.cs" />
+    <Compile Include="GKCore\Options\LangRecord.cs" />
+    <Compile Include="GKCore\Options\MRUFile.cs" />
+    <Compile Include="GKCore\Options\PedigreeOptions.cs" />
+    <Compile Include="GKCore\Options\ProxyOptions.cs" />
+    <Compile Include="GKCore\Options\TreeChartOptions.cs" />
+    <Compile Include="GKCore\PathReplacer.cs" />
+    <Compile Include="GKCore\PatriarchsMan.cs" />
+    <Compile Include="GKCore\Plugins\PluginInfo.cs" />
+    <Compile Include="GKCore\Plugins\PluginsMan.cs" />
+    <Compile Include="GKCore\PortraitsCache.cs" />
+    <Compile Include="GKCore\SCCrypt.cs" />
+    <Compile Include="GKCore\ScriptEngine.cs" />
+    <Compile Include="GKCore\SingleInstance\IpcFake.cs" />
+    <Compile Include="GKCore\SingleInstance\ISingleInstanceEnforcer.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceProxy.cs" />
+    <Compile Include="GKCore\SingleInstance\SingleInstanceTracker.cs" />
+    <Compile Include="GKCore\Stats\CommonStats.cs" />
+    <Compile Include="GKCore\Stats\CompositeItem.cs" />
+    <Compile Include="GKCore\Stats\StatMode.cs" />
+    <Compile Include="GKCore\Stats\StatsItem.cs" />
+    <Compile Include="GKCore\Stats\TreeStats.cs" />
+    <Compile Include="GKCore\Tools\PlaceObj.cs" />
+    <Compile Include="GKCore\Tools\TreeTools.cs" />
+    <Compile Include="GKCore\UpdateMan.cs" />
+    <Compile Include="GKCore\Charts\ChartFilter.cs" />
+    <Compile Include="GKCore\Charts\ITreeChartBox.cs" />
+    <Compile Include="GKCore\Charts\TreeChartModel.cs" />
+    <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKCore\Charts\ChartRenderer.cs" />
+    <Compile Include="GKCore\UIContracts\UIContracts.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKCore" />
+    <Folder Include="GKCore\Cultures" />
+    <Folder Include="GKCore\Export" />
+    <Folder Include="GKCore\Geocoding" />
+    <Folder Include="GKCore\Kinships" />
+    <Folder Include="GKCore\Lists" />
+    <Folder Include="GKCore\Maps" />
+    <Folder Include="GKCore\Operations" />
+    <Folder Include="GKCore\Options" />
+    <Folder Include="GKCore\Plugins" />
+    <Folder Include="GKCore\SingleInstance" />
+    <Folder Include="GKCore\Stats" />
+    <Folder Include="GKCore\Tools" />
+    <Folder Include="GKCore\Charts" />
+    <Folder Include="GKCore\UIContracts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GKCommon\GKCommon.pcl.csproj">
+      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
+      <Name>GKCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
