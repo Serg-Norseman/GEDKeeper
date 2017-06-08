@@ -129,20 +129,11 @@
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKMergeControl.Designer.cs">
-      <DependentUpon>GKMergeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKInputBox.Designer.cs">
-      <DependentUpon>GKInputBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Components\GKPortrait.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKPortrait.Designer.cs">
-      <DependentUpon>GKPortrait.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
@@ -434,150 +425,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKUI\BaseWinSDI.resx">
-      <DependentUpon>BaseWinSDI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Components\ACOptionsControl.resx">
-      <DependentUpon>ACOptionsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Components\GKMergeControl.resx">
-      <DependentUpon>GKMergeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Components\GKInputBox.resx">
-      <DependentUpon>GKInputBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Components\GKPortrait.resx">
-      <DependentUpon>GKPortrait.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\AddressEditDlg.resx">
-      <DependentUpon>AddressEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\AssociationEditDlg.resx">
-      <DependentUpon>AssociationEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\CommonFilterDlg.resx">
-      <DependentUpon>CommonFilterDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\CommunicationEditDlg.resx">
-      <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\EventEditDlg.resx">
-      <DependentUpon>EventEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\FamilyEditDlg.resx">
-      <DependentUpon>FamilyEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\FilePropertiesDlg.resx">
-      <DependentUpon>FilePropertiesDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\GroupEditDlg.resx">
-      <DependentUpon>GroupEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\LanguageEditDlg.resx">
-      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\LanguageSelectDlg.resx">
-      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\LocationEditDlg.resx">
-      <DependentUpon>LocationEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\MediaEditDlg.resx">
-      <DependentUpon>MediaEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\NameEditDlg.resx">
-      <DependentUpon>NameEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\NoteEditDlg.resx">
-      <DependentUpon>NoteEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\NoteEditDlgEx.resx">
-      <DependentUpon>NoteEditDlgEx.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\OptionsDlg.resx">
-      <DependentUpon>OptionsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\ProgressDlg.resx">
-      <DependentUpon>ProgressDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PersonalNameEditDlg.resx">
-      <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PersonEditDlg.resx">
-      <DependentUpon>PersonEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PersonsFilterDlg.resx">
-      <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\RecordSelectDlg.resx">
-      <DependentUpon>RecordSelectDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\RelationshipCalculatorDlg.resx">
-      <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\RepositoryEditDlg.resx">
-      <DependentUpon>RepositoryEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\ResearchEditDlg.resx">
-      <DependentUpon>ResearchEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\PortraitSelectDlg.resx">
-      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\SexCheckDlg.resx">
-      <DependentUpon>SexCheckDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\SourceCitEditDlg.resx">
-      <DependentUpon>SourceCitEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\SourceEditDlg.resx">
-      <DependentUpon>SourceEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\TaskEditDlg.resx">
-      <DependentUpon>TaskEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\DayTipsDlg.resx">
-      <DependentUpon>DayTipsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\TreeFilterDlg.resx">
-      <DependentUpon>TreeFilterDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\UserRefEditDlg.resx">
-      <DependentUpon>UserRefEditDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\GKResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\MapsViewerWin.resx">
-      <DependentUpon>MapsViewerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\OrganizerWin.resx">
-      <DependentUpon>OrganizerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\PatriarchsViewerWin.resx">
-      <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\CircleChartWin.resx">
-      <DependentUpon>CircleChartWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\TreeChartWin.resx">
-      <DependentUpon>TreeChartWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\MediaViewerWin.resx">
-      <DependentUpon>MediaViewerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\ScriptEditWin.resx">
-      <DependentUpon>ScriptEditWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\SlideshowWin.resx">
-      <DependentUpon>SlideshowWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\StatisticsWin.resx">
-      <DependentUpon>StatisticsWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\TreeToolsWin.resx">
-      <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
