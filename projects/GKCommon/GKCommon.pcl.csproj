@@ -205,8 +205,5 @@
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="project.json" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
