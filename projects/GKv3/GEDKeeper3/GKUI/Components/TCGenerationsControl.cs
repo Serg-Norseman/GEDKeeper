@@ -25,7 +25,7 @@ using GKCommon;
 using GKCore;
 using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 

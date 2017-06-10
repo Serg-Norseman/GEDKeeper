@@ -20,8 +20,6 @@
 
 using System;
 using Eto.Drawing;
-using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -109,11 +107,6 @@ namespace GKUI.Dialogs
             grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
             lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
-        }
-
-        public bool ShowModalX()
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

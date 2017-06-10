@@ -171,15 +171,15 @@ namespace GKUI
 
         private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabsTools.SelectedTab == pageFamilyGroups)
+            if (tabsTools.SelectedPage == pageFamilyGroups)
             {
                 CheckGroups();
             }
-            else if (tabsTools.SelectedTab == pageTreeCheck)
+            else if (tabsTools.SelectedPage == pageTreeCheck)
             {
                 CheckBase();
             }
-            else if (tabsTools.SelectedTab == pagePlaceManage)
+            else if (tabsTools.SelectedPage == pagePlaceManage)
             {
                 CheckPlaces();
             }

@@ -20,7 +20,7 @@ namespace GEDKeeper3.Wpf
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Platforms.Wpf).Run(new MainForm());
+            new Application(Platforms.Wpf).Run(new BaseWinSDI());
         }
     }
 }

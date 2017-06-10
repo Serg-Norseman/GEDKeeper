@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -17,68 +18,71 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            ProgressBar1 = new ProgressBar();
-            lblTitle = new Label();
-            lblTimePassed = new Label();
-            lblTimeRemain = new Label();
-            lblPassedVal = new Label();
-            lblRemainVal = new Label();
-            lblTimeTotal = new Label();
-            lblTotalVal = new Label();
             SuspendLayout();
 
-            ProgressBar1.Location = new Point(16, 37);
-            ProgressBar1.Size = new Size(497, 20);
-            ProgressBar1.Step = 1;
-            ProgressBar1.Style = ProgressBarStyle.Continuous;
+            ProgressBar1 = new ProgressBar();
+            //ProgressBar1.Step = 1;
+            //ProgressBar1.Style = ProgressBarStyle.Continuous;
 
-            lblTitle.Location = new Point(16, 16);
+            lblTitle = new Label();
             lblTitle.Size = new Size(47, 17);
             lblTitle.Text = "lblTitle";
 
-            lblTimePassed.Location = new Point(16, 69);
+            lblTimePassed = new Label();
             lblTimePassed.Size = new Size(117, 17);
             lblTimePassed.Text = "lblTimePassed";
 
-            lblTimeRemain.Location = new Point(16, 94);
+            lblTimeRemain = new Label();
             lblTimeRemain.Size = new Size(127, 17);
             lblTimeRemain.Text = "lblTimeRemain";
 
-            lblPassedVal.Font = new Font("Tahoma", 8.25F, FontStyle.Bold);
-            lblPassedVal.Location = new Point(232, 69);
+            lblPassedVal = new Label();
             lblPassedVal.Size = new Size(281, 20);
             lblPassedVal.Text = "lblPassedVal";
 
-            lblRemainVal.Font = new Font("Tahoma", 8.25F, FontStyle.Bold);
-            lblRemainVal.Location = new Point(232, 94);
+            lblRemainVal = new Label();
             lblRemainVal.Size = new Size(281, 20);
             lblRemainVal.Text = "lblRemainVal";
 
-            lblTimeTotal.Location = new Point(16, 119);
+            lblTimeTotal = new Label();
             lblTimeTotal.Size = new Size(102, 17);
             lblTimeTotal.Text = "lblTimeTotal";
 
-            lblTotalVal.Font = new Font("Tahoma", 8.25F, FontStyle.Bold);
-            lblTotalVal.Location = new Point(232, 119);
+            lblTotalVal = new Label();
             lblTotalVal.Size = new Size(281, 20);
             lblTotalVal.Text = "lblTotalVal";
 
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { lblTitle }
+                    },
+                    new TableRow {
+                        Cells = { ProgressBar1 }
+                    },
+                    new TableRow {
+                        Cells = { lblTimePassed, lblPassedVal }
+                    },
+                    new TableRow {
+                        Cells = { lblTimeRemain, lblRemainVal }
+                    },
+                    new TableRow {
+                        Cells = { lblTimeTotal, lblTotalVal }
+                    },
+                    null
+                }
+            };
+
             ClientSize = new Size(531, 152);
-            Controls.Add(ProgressBar1);
-            Controls.Add(lblTitle);
-            Controls.Add(lblTimePassed);
-            Controls.Add(lblTimeRemain);
-            Controls.Add(lblPassedVal);
-            Controls.Add(lblRemainVal);
-            Controls.Add(lblTimeTotal);
-            Controls.Add(lblTotalVal);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
             Maximizable = false;
             Minimizable = false;
-            Padding = new Padding(8);
             ShowInTaskbar = false;
             Title = "ProgressDlg";
             Topmost = true;
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f, FontStyle.Bold);
             ResumeLayout();
         }
     }

@@ -24,7 +24,7 @@ using Eto.Drawing;
 using GKCommon;
 using GKCore;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// Non-windowed scaling control.

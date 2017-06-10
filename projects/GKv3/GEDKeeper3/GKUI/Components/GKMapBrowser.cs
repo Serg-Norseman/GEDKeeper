@@ -122,9 +122,9 @@ namespace GKUI.Components
         {
             string strContent = (documentText ?? string.Empty);
 
-            AllowNavigation = false;
-            ScriptErrorsSuppressed = true;
-            AllowWebBrowserDrop = false;
+            //AllowNavigation = false;
+            //ScriptErrorsSuppressed = true;
+            //AllowWebBrowserDrop = false;
 
             #if !__MonoCS__
             DocumentText = strContent;

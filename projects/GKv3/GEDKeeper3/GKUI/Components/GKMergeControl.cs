@@ -37,8 +37,8 @@ namespace GKUI.Components
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;
 
-        private readonly HyperViewStub fView1;
-        private readonly HyperViewStub fView2;
+        private readonly HyperView fView1;
+        private readonly HyperView fView2;
 
         private IBaseWindow fBase;
         private GEDCOMRecordType fMergeMode;
@@ -76,10 +76,10 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            fView1 = new HyperViewStub();
+            fView1 = new HyperView();
             Controls.Add(fView1);
 
-            fView2 = new HyperViewStub();
+            fView2 = new HyperView();
             Controls.Add(fView2);
 
             AdjustControls();

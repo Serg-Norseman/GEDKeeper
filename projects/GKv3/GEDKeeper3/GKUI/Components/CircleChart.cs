@@ -31,7 +31,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -311,20 +311,20 @@ namespace GKUI.Charts
         {
             Changed();
 
-            base.OnResize(e);
+            base.OnSizeChanged(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.Key) {
                 case Keys.Plus:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
                     }
                     break;
 
                 case Keys.Minus:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                     }
                     break;
@@ -436,7 +436,7 @@ namespace GKUI.Charts
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (Keys.None != (Keys.Control & ModifierKeys)) {
+            if (Keys.None != (Keys.Control & e.Modifiers)) {
                 if (0 > e.Delta) {
                     Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                 } else {

@@ -145,7 +145,6 @@ namespace GKUI.Components
 
             fToolBar = new ToolBar();
             fToolBar.Dock = DockStyle.Right;
-            //fToolBar.Appearance = ToolBarAppearance.Flat;
             fToolBar.Items.AddRange(new ToolItem[] {
                                         fBtnAdd,
                                         fBtnEdit,
@@ -153,7 +152,6 @@ namespace GKUI.Components
                                         fBtnLinkJump,
                                         fBtnMoveUp,
                                         fBtnMoveDown});
-            fToolBar.ImageScalingSize = new Size(24, 20);
             //fToolBar.AutoSize = true;
             //fToolBar.ShowToolTips = true;
 

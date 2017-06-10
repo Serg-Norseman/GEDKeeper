@@ -20,22 +20,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 
 using GKCommon;
 using GKCore;
 
 namespace GKUI.Components
 {
-    using sdFontStyle = System.Drawing.FontStyle;
+    using sdFontStyle = Eto.Drawing.FontStyle;
 
     public delegate void LinkEventHandler(object sender, string linkName);
 
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : ScrollablePanel
+    public class HyperView : ScrollablePanelStub
     {
         private bool fAcceptFontChange;
         private int fBorderWidth;
@@ -89,13 +89,14 @@ namespace GKUI.Components
 
         public HyperView() : base()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
+            // FIXME: GKv3 DevRestriction
+            /*SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
             BorderStyle = BorderStyle.Fixed3D;
             DoubleBuffered = true;
-            TabStop = true;
+            TabStop = true;*/
 
             fAcceptFontChange = true;
             fChunks = new List<BBTextChunk>();
@@ -103,7 +104,7 @@ namespace GKUI.Components
             fHeights = new List<int>();
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
-            fLinkColor = Color.Blue;
+            fLinkColor = Colors.Blue;
             fTextSize = ExtSize.Empty;
         }
 
@@ -142,9 +143,9 @@ namespace GKUI.Components
                     string text = fLines.Text;
                     Font defFont = this.Font;
 
-                    var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
+                    var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
                                                   new ColorHandler(fLinkColor),
-                                                  new ColorHandler(ForeColor));
+                                                  new ColorHandler(TextColor));
 
                     parser.ParseText(fChunks, text);
 
@@ -167,8 +168,8 @@ namespace GKUI.Components
                         }
 
                         if (!string.IsNullOrEmpty(chunk.Text)) {
-                            using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
-                                SizeF strSize = gfx.MeasureString(chunk.Text, font);
+                            using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style)) {
+                                SizeF strSize = gfx.MeasureString(font, chunk.Text);
                                 chunk.Width = (int)strSize.Width;
 
                                 xPos += chunk.Width;
@@ -203,7 +204,7 @@ namespace GKUI.Components
                 try
                 {
                     Rectangle clientRect = ClientRectangle;
-                    gfx.FillRectangle(new SolidBrush(BackColor), clientRect);
+                    gfx.FillRectangle(new SolidBrush(BackgroundColor), clientRect);
                     Font defFont = this.Font;
 
                     int xOffset = fBorderWidth - -AutoScrollPosition.X;
@@ -235,8 +236,8 @@ namespace GKUI.Components
                         if (!string.IsNullOrEmpty(ct)) {
                             var chunkColor = ((ColorHandler)chunk.Color).Handle;
                             using (var brush = new SolidBrush(chunkColor)) {
-                                using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
-                                    gfx.DrawString(ct, font, brush, xOffset, yOffset);
+                                using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style)) {
+                                    gfx.DrawText(font, brush, xOffset, yOffset, ct);
                                 }
                             }
 
@@ -267,24 +268,25 @@ namespace GKUI.Components
 
         #region Protected methods
 
-        protected override void OnFontChanged(EventArgs e)
+        // FIXME: GKv3 DevRestriction
+        /*protected override void OnFontChanged(EventArgs e)
         {
             if (fAcceptFontChange) {
                 ArrangeText();
             }
 
             base.OnFontChanged(e);
-        }
+        }*/
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            switch (e.Key)
             {
-                case Keys.Prior:
+                case Keys.PageUp:
                     AdjustScroll(0, -VerticalScroll.LargeChange);
                     break;
 
-                case Keys.Next:
+                case Keys.PageDown:
                     AdjustScroll(0, VerticalScroll.LargeChange);
                     break;
 
@@ -316,7 +318,8 @@ namespace GKUI.Components
             base.OnKeyDown(e);
         }
 
-        protected override bool IsInputKey(Keys keyData)
+        // FIXME: GKv3 DevRestriction
+        /*protected override bool IsInputKey(Keys keyData)
         {
             bool result;
 
@@ -329,7 +332,7 @@ namespace GKUI.Components
                 result = base.IsInputKey(keyData);
 
             return result;
-        }
+        }*/
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -342,6 +345,7 @@ namespace GKUI.Components
         {
             base.OnMouseMove(e);
 
+            Point mpt = new Point(e.Location);
             int xOffset = (fBorderWidth - -AutoScrollPosition.X);
             int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
             fCurrentLink = null;
@@ -352,14 +356,14 @@ namespace GKUI.Components
                 BBTextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
-                if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset))
+                if (chunk.HasCoord(mpt.X, mpt.Y, xOffset, yOffset))
                 {
                     fCurrentLink = chunk;
                     break;
                 }
             }
 
-            Cursor = (fCurrentLink == null) ? Cursors.Default : Cursors.Hand;
+            Cursor = (fCurrentLink == null) ? Cursors.Default : Cursors.Pointer;
         }
 
         protected override void OnPaint(PaintEventArgs e)

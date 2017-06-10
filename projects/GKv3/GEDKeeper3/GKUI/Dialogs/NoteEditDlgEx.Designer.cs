@@ -9,7 +9,7 @@ namespace GKUI.Dialogs
         private Button btnAccept;
         private Button btnCancel;
         private TextArea txtNote;
-        private GKUI.Components.HyperViewStub hyperView1;
+        private GKUI.Components.HyperView hyperView1;
         //private ToolStripComboBox cmbSizes; // FIXME: GKv3 DevRestriction
         private ButtonMenuItem miClear;
         private ButtonMenuItem miExport;

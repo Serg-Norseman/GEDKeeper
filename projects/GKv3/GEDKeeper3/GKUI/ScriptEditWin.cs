@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using Eto.Drawing;
 using Eto.Forms;
 
 using GKCommon;
@@ -67,7 +68,7 @@ namespace GKUI
             bool result = true;
             if (!Modified) return result;
 
-            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxType.Question);
             switch (dialogResult) {
                 case DialogResult.Yes:
                     tbSaveScript_Click(this, null);
@@ -163,7 +164,7 @@ namespace GKUI
             tbNewScript.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
             tbLoadScript.Image = Bitmap.FromResource("Resources.btn_load.gif");
             tbSaveScript.Image = Bitmap.FromResource("Resources.btn_save.gif");
-            tbRun.Image = GKResources.iStart;
+            tbRun.Image = Bitmap.FromResource("Resources.btn_start.gif");
 
             fBase = baseWin;
 

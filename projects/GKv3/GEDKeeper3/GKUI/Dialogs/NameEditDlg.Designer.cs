@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -20,87 +21,84 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            lblName = new Label();
-            txtName = new TextBox();
-            lblSex = new Label();
-            cmbSex = new ComboBox();
-            btnAccept = new Button();
-            btnCancel = new Button();
-            grpPatronymics = new GroupBox();
-            lblFemale = new Label();
-            lblMale = new Label();
-            txtFPatr = new TextBox();
-            txtMPatr = new TextBox();
-            grpPatronymics.SuspendLayout();
             SuspendLayout();
 
-            lblName.Location = new Point(12, 13);
-            lblName.Size = new Size(33, 17);
+            lblName = new Label();
             lblName.Text = "lblName";
 
-            txtName.Location = new Point(101, 10);
-            txtName.Size = new Size(270, 24);
-            txtName.KeyPress += edName_KeyPress;
+            txtName = new TextBox();
+            //txtName.KeyPress += edName_KeyPress;
 
-            lblSex.Location = new Point(12, 52);
-            lblSex.Size = new Size(33, 17);
+            lblSex = new Label();
             lblSex.Text = "lblSex";
 
+            cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
-            cmbSex.Location = new Point(101, 49);
-            cmbSex.Size = new Size(169, 25);
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Location = new Point(134, 204);
-            btnAccept.Size = new Size(114, 30);
+            btnAccept.Size = new Size(80, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Location = new Point(258, 204);
-            btnCancel.Size = new Size(113, 30);
+            btnCancel.Size = new Size(80, 26);
             btnCancel.Text = "btnCancel";
 
-            grpPatronymics.Controls.Add(lblFemale);
-            grpPatronymics.Controls.Add(lblMale);
-            grpPatronymics.Controls.Add(txtFPatr);
-            grpPatronymics.Controls.Add(txtMPatr);
-            grpPatronymics.Location = new Point(11, 87);
-            grpPatronymics.Size = new Size(360, 95);
-            grpPatronymics.Text = "grpPatronymics";
-
-            lblFemale.Location = new Point(11, 22);
-            lblFemale.Size = new Size(66, 17);
+            lblFemale = new Label();
             lblFemale.Text = "lblFemale";
 
-            lblMale.Location = new Point(11, 61);
-            lblMale.Size = new Size(65, 17);
+            lblMale = new Label();
             lblMale.Text = "lblMale";
 
-            txtFPatr.Location = new Point(90, 19);
-            txtFPatr.Size = new Size(259, 24);
-            txtFPatr.KeyPress += edName_KeyPress;
+            txtFPatr = new TextBox();
+            //txtFPatr.KeyPress += edName_KeyPress;
 
-            txtMPatr.Location = new Point(90, 58);
-            txtMPatr.Size = new Size(259, 24);
-            txtMPatr.KeyPress += edName_KeyPress;
+            txtMPatr = new TextBox();
+            //txtMPatr.KeyPress += edName_KeyPress;
+
+            grpPatronymics = new GroupBox();
+            grpPatronymics.Text = "grpPatronymics";
+            grpPatronymics.Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { lblFemale, txtFPatr }
+                    },
+                    new TableRow {
+                        Cells = { lblMale, txtMPatr }
+                    }
+                }
+            };
+
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { lblName, txtName }
+                    },
+                    new TableRow {
+                        Cells = { lblSex, cmbSex }
+                    },
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { grpPatronymics }
+                    },
+                    new TableRow {
+                        Cells = { null, btnAccept, btnCancel }
+                    }
+                }
+            };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
             ClientSize = new Size(385, 250);
-            Controls.Add(lblName);
-            Controls.Add(txtName);
-            Controls.Add(lblSex);
-            Controls.Add(cmbSex);
-            Controls.Add(btnAccept);
-            Controls.Add(btnCancel);
-            Controls.Add(grpPatronymics);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
-            Maximizable = false;
-            Minimizable = false;
-            ShowInTaskbar = false;
             Title = "NameEditDlg";
-            grpPatronymics.ResumeLayout();
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

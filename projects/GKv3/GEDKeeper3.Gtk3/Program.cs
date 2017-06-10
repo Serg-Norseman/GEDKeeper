@@ -20,7 +20,7 @@ namespace GEDKeeper3.Gtk3
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Platforms.Gtk3).Run(new MainForm());
+            new Application(Platforms.Gtk3).Run(new BaseWinSDI());
         }
     }
 }

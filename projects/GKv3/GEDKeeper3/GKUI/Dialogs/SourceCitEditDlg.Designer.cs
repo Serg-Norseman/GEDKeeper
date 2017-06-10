@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -18,74 +19,80 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            lblPage = new Label();
-            txtPage = new TextBox();
-            lblSource = new Label();
-            btnSourceAdd = new Button();
-            lblCertainty = new Label();
-            txtCertainty = new ComboBox();
-            cmbSource = new ComboBox();
             SuspendLayout();
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Location = new Point(216, 204);
-            btnAccept.Size = new Size(101, 31);
+            btnAccept.Size = new Size(80, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Location = new Point(325, 204);
-            btnCancel.Size = new Size(101, 31);
+            btnCancel.Size = new Size(80, 26);
             btnCancel.Text = "btnCancel";
 
-            lblPage.Location = new Point(15, 70);
-            lblPage.Size = new Size(50, 17);
+            lblPage = new Label();
             lblPage.Text = "lblPage";
 
-            txtPage.Location = new Point(15, 90);
-            txtPage.Size = new Size(410, 24);
+            txtPage = new TextBox();
 
-            lblSource.Location = new Point(15, 10);
-            lblSource.Size = new Size(63, 17);
+            lblSource = new Label();
             lblSource.Text = "lblSource";
 
-            btnSourceAdd.Location = new Point(391, 24);
+            btnSourceAdd = new Button();
             btnSourceAdd.Size = new Size(35, 35);
             btnSourceAdd.Click += btnSourceAdd_Click;
 
-            lblCertainty.Location = new Point(15, 130);
-            lblCertainty.Size = new Size(76, 17);
+            lblCertainty = new Label();
             lblCertainty.Text = "lblCertainty";
 
+            txtCertainty = new ComboBox();
             txtCertainty.ReadOnly = true;
-            txtCertainty.Location = new Point(15, 150);
-            txtCertainty.Size = new Size(410, 25);
 
-            cmbSource.Location = new Point(15, 30);
-            cmbSource.Size = new Size(368, 25);
-            cmbSource.Sorted = true;
+            cmbSource = new ComboBox();
+            //cmbSource.Sorted = true;
             cmbSource.KeyDown += cbSource_KeyDown;
             cmbSource.KeyUp += cbSource_KeyUp;
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
             ClientSize = new Size(441, 250);
-            Controls.Add(btnAccept);
-            Controls.Add(btnCancel);
-            Controls.Add(lblPage);
-            Controls.Add(txtPage);
-            Controls.Add(lblSource);
-            Controls.Add(btnSourceAdd);
-            Controls.Add(lblCertainty);
-            Controls.Add(txtCertainty);
-            Controls.Add(cmbSource);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
-            Maximizable = false;
-            Minimizable = false;
-            ShowInTaskbar = false;
             Title = "SourceCitEditDlg";
+
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { lblSource }
+                    },
+                    new TableRow {
+                        Cells = { cmbSource, btnSourceAdd }
+                    },
+                    new TableRow {
+                        Cells = { lblPage }
+                    },
+                    new TableRow {
+                        Cells = { txtPage }
+                    },
+                    new TableRow {
+                        Cells = { lblCertainty }
+                    },
+                    new TableRow {
+                        Cells = { txtCertainty }
+                    },
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { null }
+                    },
+                    new TableRow {
+                        Cells = { null, btnAccept, btnCancel }
+                    }
+                }
+            };
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

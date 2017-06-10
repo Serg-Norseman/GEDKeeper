@@ -83,6 +83,7 @@
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKMenuItem.cs" />
     <Compile Include="GKUI\Components\GKTreeNode.cs" />
+    <Compile Include="GKUI\Components\HyperView.cs" />
     <Compile Include="GKUI\Components\ImageBoxStub.cs" />
     <Compile Include="GKUI\Components\ImageView.cs" />
     <Compile Include="GKUI\Components\LogChart.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="GKUI\Components\ZedGraphControlStub.cs" />
     <None Include="packages.config" />
     <Compile Include="GKUI\Components\GKListViewStub.cs" />
-    <Compile Include="GKUI\Components\HyperViewStub.cs" />
     <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
     <EmbeddedResource Include="Resources\btn_zoom_in.png" />
     <EmbeddedResource Include="Resources\btn_zoom_out.png" />

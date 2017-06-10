@@ -478,29 +478,29 @@ namespace GKUI.Dialogs
             switch (page)
             {
                 case OptionsPage.opCommon:
-                    PageControl1.SelectedTab = pageCommon;
+                    PageControl1.SelectedPage = pageCommon;
                     break;
 
                 case OptionsPage.opTreeChart:
-                    PageControl1.SelectedTab = pageCharts;
+                    PageControl1.SelectedPage = pageCharts;
                     tabsCharts.SelectTab(0);
                     break;
 
                 case OptionsPage.opAncestorsCircle:
-                    PageControl1.SelectedTab = pageCharts;
+                    PageControl1.SelectedPage = pageCharts;
                     tabsCharts.SelectTab(1);
                     break;
 
                 case OptionsPage.opInterface:
-                    PageControl1.SelectedTab = pageUIView;
+                    PageControl1.SelectedPage = pageUIView;
                     break;
 
                 case OptionsPage.opPedigree:
-                    PageControl1.SelectedTab = pagePedigree;
+                    PageControl1.SelectedPage = pagePedigree;
                     break;
 
                 case OptionsPage.opMultimedia:
-                    PageControl1.SelectedTab = pageMultimedia;
+                    PageControl1.SelectedPage = pageMultimedia;
                     break;
             }
         }

@@ -35,7 +35,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -745,7 +745,7 @@ namespace GKUI.Charts
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (ModifierKeys == Keys.Control) {
+            if (e.Modifiers == Keys.Control) {
                 float newScale = (e.Delta > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
                 SetScale(newScale);
             } else {

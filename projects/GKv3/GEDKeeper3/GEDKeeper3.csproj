@@ -31,17 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\BaseWinSDI.cs" />
     <Compile Include="GKUI\BaseWinSDI.Designer.cs">
       <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\CircleChart.cs" />
-    <Compile Include="GKUI\Charts\CustomChart.cs" />
-    <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
-    <Compile Include="GKUI\Charts\TCPersonControl.cs" />
-    <Compile Include="GKUI\Charts\TCScaleControl.cs" />
-    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
-    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\CircleChartWin.cs" />
     <Compile Include="GKUI\CircleChartWin.Designer.cs">
       <DependentUpon>CircleChartWin.cs</DependentUpon>
@@ -50,14 +44,21 @@
     <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Components\CircleChart.cs" />
+    <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs" />
     <Compile Include="GKUI\Components\GKPortrait.cs" />
     <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Components\NativeMethods.cs" />
-    <Compile Include="GKUI\Components\PrintableForm.cs" />
+    <Compile Include="GKUI\Components\TCGenerationsControl.cs" />
+    <Compile Include="GKUI\Components\TCPersonControl.cs" />
+    <Compile Include="GKUI\Components\TCScaleControl.cs" />
     <Compile Include="GKUI\Components\TextBoxEx.cs" />
+    <Compile Include="GKUI\Components\TreeChartBox.cs" />
+    <Compile Include="GKUI\Components\TreeChartGfxRenderer.cs" />
+    <Compile Include="GKUI\Components\WinFormsAppHost.cs" />
     <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
       <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\PrintableForm.cs" />
     <Compile Include="GKUI\Dialogs\ProgressDlg.cs" />
     <Compile Include="GKUI\Dialogs\ProgressDlg.Designer.cs">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
@@ -230,12 +232,6 @@
     <Compile Include="GKUI\TreeToolsWin.cs" />
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\WinFormsAppHost.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MainForm.cs" />
-    <Compile Include="MainForm.eto.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -327,7 +323,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKUI" />
-    <Folder Include="GKUI\Charts" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
     <Folder Include="Resources" />

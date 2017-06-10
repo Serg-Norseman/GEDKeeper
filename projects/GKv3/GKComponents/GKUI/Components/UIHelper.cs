@@ -30,19 +30,6 @@ using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
-    public class ToolStripMenuItemEx : ButtonMenuItem, IMenuItem
-    {
-        public bool Checked
-        {
-            get; set;
-        }
-
-        public ToolStripMenuItemEx(string text) : base()
-        {
-            Text = text;
-        }
-    }
-
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>

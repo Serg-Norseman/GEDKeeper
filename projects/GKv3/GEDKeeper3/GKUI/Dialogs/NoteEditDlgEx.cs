@@ -164,7 +164,7 @@ namespace GKUI.Dialogs
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedTab == pagePreview) {
+            if (tabControl1.SelectedPage == pagePreview) {
                 hyperView1.Lines.Text = txtNote.Text;
             }
         }

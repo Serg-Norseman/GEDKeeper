@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ProgressDlg : Form
+    public sealed partial class ProgressDlg : Dialog
     {
         private DateTime fStartTime;
 

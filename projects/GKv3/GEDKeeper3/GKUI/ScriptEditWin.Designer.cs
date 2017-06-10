@@ -32,7 +32,6 @@ namespace GKUI
             splitContainer1.SuspendLayout();
             SuspendLayout();
 
-            ToolBar1.ImageScalingSize = new Size(20, 20);
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbNewScript,
                                         tbLoadScript,

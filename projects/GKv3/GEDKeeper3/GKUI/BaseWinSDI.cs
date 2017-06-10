@@ -64,17 +64,17 @@ namespace GKUI
         private readonly GKListViewStub ListCommunications;
         private readonly GKListViewStub ListLocations;
 
-        private readonly HyperViewStub mPersonSummary;
-        private readonly HyperViewStub mFamilySummary;
-        private readonly HyperViewStub mNoteSummary;
-        private readonly HyperViewStub mMediaSummary;
-        private readonly HyperViewStub mSourceSummary;
-        private readonly HyperViewStub mRepositorySummary;
-        private readonly HyperViewStub mGroupSummary;
-        private readonly HyperViewStub mResearchSummary;
-        private readonly HyperViewStub mTaskSummary;
-        private readonly HyperViewStub mCommunicationSummary;
-        private readonly HyperViewStub mLocationSummary;
+        private readonly HyperView mPersonSummary;
+        private readonly HyperView mFamilySummary;
+        private readonly HyperView mNoteSummary;
+        private readonly HyperView mMediaSummary;
+        private readonly HyperView mSourceSummary;
+        private readonly HyperView mRepositorySummary;
+        private readonly HyperView mGroupSummary;
+        private readonly HyperView mResearchSummary;
+        private readonly HyperView mTaskSummary;
+        private readonly HyperView mCommunicationSummary;
+        private readonly HyperView mLocationSummary;
 
         #endregion
 
@@ -361,9 +361,9 @@ namespace GKUI
         /// <param name="recType">Record type for which a hyper view control is
         /// required.</param>
         /// <returns>Hyper view control.</returns>
-        public HyperViewStub GetHyperViewByType(GEDCOMRecordType recType)
+        public HyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
-            HyperViewStub view = null;
+            HyperView view = null;
 
             switch (recType)
             {
@@ -535,14 +535,14 @@ namespace GKUI
             return result;
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListViewStub recView, out HyperViewStub summary)
+        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListViewStub recView, out HyperView summary)
         {
             tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
             tabsRecords.Controls.Add(sheet);
             tabsRecords.ResumeLayout();
 
-            summary = new HyperViewStub();
+            summary = new HyperView();
             summary.BorderWidth = 4;
             summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
@@ -661,7 +661,7 @@ namespace GKUI
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
-                            HyperViewStub hView = GetHyperViewByType(record.RecordType);
+                            HyperView hView = GetHyperViewByType(record.RecordType);
                             if ((hView != null) && (rView.ListMan.FilteredCount == 0)) {
                                 hView.Lines.Clear();
                             }
@@ -1078,8 +1078,8 @@ namespace GKUI
 
             try
             {
-                HyperViewStub HyperViewStub = GetHyperViewByType(record.RecordType);
-                if (HyperViewStub != null) {
+                HyperView HyperView = GetHyperViewByType(record.RecordType);
+                if (HyperView != null) {
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             }
@@ -1653,7 +1653,7 @@ namespace GKUI
                     IPlugin plugin = AppHost.Plugins[i];
                     string dispName = plugin.DisplayName;
 
-                    ButtonMenuItemEx mi = new ButtonMenuItemEx(dispName/*, i*/);
+                    MenuItemEx mi = new MenuItemEx(dispName/*, i*/);
                     mi.Click += Plugin_Click;
                     mi.Tag = plugin;
                     miPlugins.Items.Add(mi);

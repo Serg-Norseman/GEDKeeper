@@ -27,7 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanelStub, IPrintable
     {
@@ -106,10 +106,10 @@ namespace GKUI.Charts
                     break;
 
                 case Keys.PageUp:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         VerticalScroll.Value =
                             Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
-                    } else if (Keys.Shift == ModifierKeys) {
+                    } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value =
                             Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
                     }
@@ -117,27 +117,27 @@ namespace GKUI.Charts
                     break;
 
                 case Keys.PageDown:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         VerticalScroll.Value += VerticalScroll.LargeChange;
-                    } else if (Keys.Shift == ModifierKeys) {
+                    } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value += HorizontalScroll.LargeChange;
                     }
                     PerformLayout();
                     break;
 
                 case Keys.Home:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         VerticalScroll.Value = 0;
-                    } else if (Keys.Shift == ModifierKeys) {
+                    } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value = 0;
                     }
                     PerformLayout();
                     break;
 
                 case Keys.End:
-                    if (Keys.None == ModifierKeys) {
+                    if (Keys.None == e.Modifiers) {
                         VerticalScroll.Value = VerticalScroll.Maximum;
-                    } else if (Keys.Shift == ModifierKeys) {
+                    } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value = HorizontalScroll.Maximum;
                     }
                     PerformLayout();
@@ -166,10 +166,10 @@ namespace GKUI.Charts
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (Keys.None == ModifierKeys) {
+            if (Keys.None == e.Modifiers) {
                 VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
                 PerformLayout();
-            } else if (Keys.Shift == ModifierKeys) {
+            } else if (Keys.Shift == e.Modifiers) {
                 HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
                 PerformLayout();
             }

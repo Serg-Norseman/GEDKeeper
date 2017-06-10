@@ -19,9 +19,23 @@
  */
 
 using Eto.Forms;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
+    public class MenuItemEx : ButtonMenuItem, IMenuItem
+    {
+        public bool Checked
+        {
+            get; set;
+        }
+
+        public MenuItemEx(string text) : base()
+        {
+            Text = text;
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>

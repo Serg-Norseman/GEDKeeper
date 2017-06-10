@@ -27,7 +27,7 @@ using Eto.Forms;
 using GKCommon;
 using GKCore.Interfaces;
 
-namespace GKUI.Components
+namespace GKUI.Dialogs
 {
     /// <summary>
     /// Form's class, common for the implementation of the print.

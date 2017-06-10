@@ -29,8 +29,8 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Charts;
 using GKUI.Components;
+using GKUI.Dialogs;
 
 namespace GKUI
 {
@@ -61,13 +61,22 @@ namespace GKUI
             fCircleChart = new CircleChart();
             fCircleChart.Base = fBaseWin;
             fCircleChart.ChartType = type;
-            fCircleChart.Dock = DockStyle.Fill;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
-            Controls.Add(fCircleChart);
+
+            Content = fCircleChart;
 
             SetLang();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                fCircleChart.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         protected override IPrintable GetPrintable()
