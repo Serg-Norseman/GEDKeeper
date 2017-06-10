@@ -61,16 +61,50 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>libs\ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
-      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon</Name>
+    <Reference Include="Eto, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Forms.2.3.0\lib\portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Eto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GKUI" />
+    <Folder Include="GKUI\Components" />
+    <Folder Include="Resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GKUI\Components\ArborViewer.cs" />
+    <Compile Include="GKUI\Components\CustomPanel.cs" />
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\GKMenuItem.cs" />
+    <Compile Include="GKUI\Components\GKTreeNode.cs" />
+    <Compile Include="GKUI\Components\ImageBoxStub.cs" />
+    <Compile Include="GKUI\Components\ImageView.cs" />
+    <Compile Include="GKUI\Components\LogChart.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanelStub.cs" />
+    <Compile Include="GKUI\Components\UIHelper.cs" />
+    <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
+    <Compile Include="GKUI\Components\ZedGraphControlStub.cs" />
+    <None Include="packages.config" />
+    <Compile Include="GKUI\Components\GKListViewStub.cs" />
+    <Compile Include="GKUI\Components\HyperViewStub.cs" />
+    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GKCommon\GKCommon.pcl.csproj">
+      <Project>{a14ce3e2-b8ec-41c8-a7d1-75ae5d2509c4}</Project>
+      <Name>GKCommon.pcl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCore\GKCore.mswin.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore</Name>
+    <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore.pcl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

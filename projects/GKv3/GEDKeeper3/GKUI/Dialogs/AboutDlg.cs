@@ -30,7 +30,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : Dialog
+    public sealed partial class AboutDlg : ModalDialog
     {
         public AboutDlg()
         {

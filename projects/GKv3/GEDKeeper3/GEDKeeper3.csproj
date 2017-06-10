@@ -3,13 +3,14 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <ProjectGuid>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</ProjectGuid>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GEDKeeper3</AssemblyName>
-    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,10 +31,207 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GKUI\BaseWinSDI.cs" />
+    <Compile Include="GKUI\BaseWinSDI.Designer.cs">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Charts\CircleChart.cs" />
+    <Compile Include="GKUI\Charts\CustomChart.cs" />
+    <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
+    <Compile Include="GKUI\Charts\TCPersonControl.cs" />
+    <Compile Include="GKUI\Charts\TCScaleControl.cs" />
+    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
+    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
+    <Compile Include="GKUI\CircleChartWin.cs" />
+    <Compile Include="GKUI\CircleChartWin.Designer.cs">
+      <DependentUpon>CircleChartWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\ACOptionsControl.cs" />
+    <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
+      <DependentUpon>ACOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\GKInputBox.cs" />
+    <Compile Include="GKUI\Components\GKMapBrowser.cs" />
+    <Compile Include="GKUI\Components\GKMergeControl.cs" />
+    <Compile Include="GKUI\Components\GKPortrait.cs" />
+    <Compile Include="GKUI\Components\GKSheetList.cs" />
+    <Compile Include="GKUI\Components\NativeMethods.cs" />
+    <Compile Include="GKUI\Components\PrintableForm.cs" />
+    <Compile Include="GKUI\Components\TextBoxEx.cs" />
+    <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
+    <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs" />
-    <Compile Include="GKUI\Dialogs\AboutDlg.eto.cs">
+    <Compile Include="GKUI\Dialogs\AboutDlg.Designer.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\AddressEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\AddressEditDlg.Designer.cs">
+      <DependentUpon>AddressEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\AssociationEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\AssociationEditDlg.Designer.cs">
+      <DependentUpon>AssociationEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\CommonFilterDlg.cs" />
+    <Compile Include="GKUI\Dialogs\CommonFilterDlg.Designer.cs">
+      <DependentUpon>CommonFilterDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\CommunicationEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\CommunicationEditDlg.Designer.cs">
+      <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\DayTipsDlg.cs" />
+    <Compile Include="GKUI\Dialogs\DayTipsDlg.Designer.cs">
+      <DependentUpon>DayTipsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\EditorDialog.cs" />
+    <Compile Include="GKUI\Dialogs\EventEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\EventEditDlg.Designer.cs">
+      <DependentUpon>EventEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\FamilyEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\FamilyEditDlg.Designer.cs">
+      <DependentUpon>FamilyEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\FilePropertiesDlg.cs" />
+    <Compile Include="GKUI\Dialogs\FilePropertiesDlg.Designer.cs">
+      <DependentUpon>FilePropertiesDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\GroupEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
+      <DependentUpon>GroupEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.Designer.cs">
+      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
+      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LocationEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\LocationEditDlg.Designer.cs">
+      <DependentUpon>LocationEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\MediaEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\MediaEditDlg.Designer.cs">
+      <DependentUpon>MediaEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\ModalDialog.cs" />
+    <Compile Include="GKUI\Dialogs\NameEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\NameEditDlg.Designer.cs">
+      <DependentUpon>NameEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\NoteEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\NoteEditDlg.Designer.cs">
+      <DependentUpon>NoteEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.cs" />
+    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.Designer.cs">
+      <DependentUpon>NoteEditDlgEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\OptionsDlg.cs" />
+    <Compile Include="GKUI\Dialogs\OptionsDlg.Designer.cs">
+      <DependentUpon>OptionsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.Designer.cs">
+      <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PersonEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\PersonEditDlg.Designer.cs">
+      <DependentUpon>PersonEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PersonsFilterDlg.cs" />
+    <Compile Include="GKUI\Dialogs\PersonsFilterDlg.Designer.cs">
+      <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
+      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\ProgressDlg.cs" />
+    <Compile Include="GKUI\Dialogs\ProgressDlg.Designer.cs">
+      <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\QuickSearchDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RecordSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RecordSelectDlg.Designer.cs">
+      <DependentUpon>RecordSelectDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.Designer.cs">
+      <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.Designer.cs">
+      <DependentUpon>RepositoryEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\ResearchEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\ResearchEditDlg.Designer.cs">
+      <DependentUpon>ResearchEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\SexCheckDlg.cs" />
+    <Compile Include="GKUI\Dialogs\SexCheckDlg.Designer.cs">
+      <DependentUpon>SexCheckDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.Designer.cs">
+      <DependentUpon>SourceCitEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\SourceEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\SourceEditDlg.Designer.cs">
+      <DependentUpon>SourceEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TaskEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\TaskEditDlg.Designer.cs">
+      <DependentUpon>TaskEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TreeFilterDlg.cs" />
+    <Compile Include="GKUI\Dialogs\TreeFilterDlg.Designer.cs">
+      <DependentUpon>TreeFilterDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\UserRefEditDlg.cs" />
+    <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
+      <DependentUpon>UserRefEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\MapsViewerWin.cs" />
+    <Compile Include="GKUI\MapsViewerWin.Designer.cs">
+      <DependentUpon>MapsViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\MediaViewerWin.cs" />
+    <Compile Include="GKUI\MediaViewerWin.Designer.cs">
+      <DependentUpon>MediaViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\OrganizerWin.cs" />
+    <Compile Include="GKUI\OrganizerWin.Designer.cs">
+      <DependentUpon>OrganizerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\PatriarchsViewerWin.cs" />
+    <Compile Include="GKUI\PatriarchsViewerWin.Designer.cs">
+      <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\ScriptEditWin.cs" />
+    <Compile Include="GKUI\ScriptEditWin.Designer.cs">
+      <DependentUpon>ScriptEditWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\SlideshowWin.cs" />
+    <Compile Include="GKUI\SlideshowWin.Designer.cs">
+      <DependentUpon>SlideshowWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\StatisticsWin.cs" />
+    <Compile Include="GKUI\StatisticsWin.Designer.cs">
+      <DependentUpon>StatisticsWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TreeChartWin.cs" />
+    <Compile Include="GKUI\TreeChartWin.Designer.cs">
+      <DependentUpon>TreeChartWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TreeToolsWin.cs" />
+    <Compile Include="GKUI\TreeToolsWin.Designer.cs">
+      <DependentUpon>TreeToolsWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\WinFormsAppHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.eto.cs">
@@ -41,10 +239,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Reference Include="ArborGVT">
+      <HintPath>libs\ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="Eto, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Eto.Forms.2.3.0\lib\portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Eto.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>libs\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +320,10 @@
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore.pcl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKUI" />
@@ -122,5 +332,5 @@
     <Folder Include="GKUI\Dialogs" />
     <Folder Include="Resources" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
