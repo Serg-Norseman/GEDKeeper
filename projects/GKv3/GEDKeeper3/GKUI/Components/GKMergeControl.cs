@@ -108,7 +108,7 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             AdjustControls();
-            base.OnResize(e);
+            base.OnSizeChanged(e);
         }
 
         private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord sourceRec)

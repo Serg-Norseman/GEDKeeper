@@ -223,22 +223,22 @@ namespace GKUI.Dialogs
             txtMarriedSurname.Location = new Point(9, 70);
             txtMarriedSurname.Size = new Size(182, 21);
             txtMarriedSurname.KeyDown += edSurname_KeyDown;
-            txtMarriedSurname.KeyPress += edSurname_KeyPress;
+            //txtMarriedSurname.KeyPress += edSurname_KeyPress;
 
             txtSurname.Location = new Point(9, 31);
             txtSurname.Size = new Size(182, 21);
             txtSurname.KeyDown += edSurname_KeyDown;
-            txtSurname.KeyPress += edSurname_KeyPress;
+            //txtSurname.KeyPress += edSurname_KeyPress;
 
             txtName.Location = new Point(9, 108);
             txtName.Size = new Size(182, 21);
             txtName.KeyDown += edSurname_KeyDown;
-            txtName.KeyPress += edSurname_KeyPress;
+            //txtName.KeyPress += edSurname_KeyPress;
 
             cmbPatronymic.Location = new Point(9, 147);
             cmbPatronymic.Size = new Size(182, 21);
             cmbPatronymic.KeyDown += edSurname_KeyDown;
-            cmbPatronymic.KeyPress += edSurname_KeyPress;
+            //cmbPatronymic.KeyPress += edSurname_KeyPress;
 
             cmbSex.ReadOnly = true;
             cmbSex.Location = new Point(360, 108);

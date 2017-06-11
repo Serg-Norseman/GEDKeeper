@@ -37,11 +37,23 @@ namespace GKUI.Components
             set;
         }
 
+        public int HorizontalScrollValue
+        {
+            get;
+            set;
+        }
+
+        public int VerticalScrollValue
+        {
+            get;
+            set;
+        }
+
         public ScrollablePanelStub()
         {
         }
         
-        public void AdjustViewPort(ExtSize sz)
+        public void AdjustViewPort(ExtSize sz, bool noRedraw = true)
         {
             
         }

@@ -506,14 +506,13 @@ namespace GKUI
 
             ClientSize = new Size(976, 462);
             Content = tabsRecords;
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
             Title = "BaseWinSDI";
-            Activated += Form_Activated;
-            Deactivate += Form_Deactivate;
-            FormClosing += Form_Closing;
-            FormClosed += Form_Closed;
+            //Activated += Form_Activated;
+            //Deactivate += Form_Deactivate;
+            Closing += Form_Closing;
+            Closed += Form_Closed;
             Load += Form_Load;
-            VisibleChanged += Form_Show;
+            //VisibleChanged += Form_Show;
             //DragDrop += Form_DragDrop;
             //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;

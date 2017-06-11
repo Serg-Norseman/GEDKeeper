@@ -291,9 +291,9 @@ namespace GKUI.Dialogs
             Label pan = (sender as Label);
             if (pan == null) return;
 
-            ColorDialog1.FullOpen = true;
+            //ColorDialog1.FullOpen = true;
             ColorDialog1.Color = pan.BackgroundColor;
-            if (ColorDialog1.ShowDialog(this) == DialogResult.Ok) {
+            if (ColorDialog1.ShowDialog(this) == Eto.Forms.DialogResult.Ok) {
                 pan.BackgroundColor = ColorDialog1.Color;
             }
         }
@@ -352,31 +352,31 @@ namespace GKUI.Dialogs
                 fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
 
-            fOptions.PlacesWithAddress = chkPlacesWithAddress.Checked;
-            fOptions.ListHighlightUnparentedPersons = chkHighlightUnparented.Checked;
-            fOptions.ListHighlightUnmarriedPersons = chkHighlightUnmarried.Checked;
-            fOptions.ShowDatesCalendar = chkShowDatesCalendar.Checked;
-            fOptions.ShowDatesSign = chkShowDatesSigns.Checked;
-            fOptions.Autosave = chkAutosave.Checked;
+            fOptions.PlacesWithAddress = chkPlacesWithAddress.Checked.GetValueOrDefault();
+            fOptions.ListHighlightUnparentedPersons = chkHighlightUnparented.Checked.GetValueOrDefault();
+            fOptions.ListHighlightUnmarriedPersons = chkHighlightUnmarried.Checked.GetValueOrDefault();
+            fOptions.ShowDatesCalendar = chkShowDatesCalendar.Checked.GetValueOrDefault();
+            fOptions.ShowDatesSign = chkShowDatesSigns.Checked.GetValueOrDefault();
+            fOptions.Autosave = chkAutosave.Checked.GetValueOrDefault();
             fOptions.AutosaveInterval = (int)numASMin.Value;
-            fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
-            fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
-            fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
-            fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
+            fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked.GetValueOrDefault();
+            fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked.GetValueOrDefault();
+            fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked.GetValueOrDefault();
+            fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked.GetValueOrDefault();
 
-            fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
-            fOptions.ChartOptions.NameVisible = chkName.Checked;
-            fOptions.ChartOptions.PatronymicVisible = chkPatronymic.Checked;
-            fOptions.ChartOptions.DiffLines = chkDiffLines.Checked;
-            fOptions.ChartOptions.BirthDateVisible = chkBirthDate.Checked;
-            fOptions.ChartOptions.DeathDateVisible = chkDeathDate.Checked;
-            fOptions.ChartOptions.OnlyYears = chkOnlyYears.Checked;
-            fOptions.ChartOptions.Kinship = chkKinship.Checked;
-            fOptions.ChartOptions.SignsVisible = chkSignsVisible.Checked;
-            fOptions.ChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
-            fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked;
-            fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
-            fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
+            fOptions.ChartOptions.FamilyVisible = chkSurname.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.NameVisible = chkName.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.PatronymicVisible = chkPatronymic.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.DiffLines = chkDiffLines.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.BirthDateVisible = chkBirthDate.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.DeathDateVisible = chkDeathDate.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.OnlyYears = chkOnlyYears.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.Kinship = chkKinship.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.SignsVisible = chkSignsVisible.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.ChildlessExclude = chkChildlessExclude.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked.GetValueOrDefault();
 
             fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackgroundColor);
             fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackgroundColor);
@@ -401,7 +401,7 @@ namespace GKUI.Dialogs
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
 
-            fOptions.ShowTips = chkShowOnStart.Checked;
+            fOptions.ShowTips = chkShowOnStart.Checked.GetValueOrDefault();
 
             if (radFBNone.Checked) {
                 fOptions.FileBackup = FileBackup.fbNone;

@@ -558,10 +558,10 @@ namespace GKUI
             sheet.Controls.Add(spl);
 
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
-            recView.DoubleClick += miRecordEdit_Click;
+            recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
-            recView.ContextMenuStrip = contextMenu;
+            recView.ContextMenu = contextMenu;
 
             sheet.Controls.SetChildIndex(spl, 1);
             sheet.Controls.SetChildIndex(summary, 2);

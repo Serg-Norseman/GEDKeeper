@@ -46,7 +46,7 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbStart.Image = GKResources.iStart;
+            tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
             tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
             tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
@@ -151,11 +151,11 @@ namespace GKUI
         {
             if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = GKResources.iStop;
+                tbStart.Image = Bitmap.FromResource("Resources.btn_stop.gif");
                 timer1.Enabled = true;
             } else {
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = GKResources.iStart;
+                tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
                 timer1.Enabled = false;
             }
         }

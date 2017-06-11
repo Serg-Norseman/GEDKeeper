@@ -55,7 +55,7 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbExcelExport.Image = GKResources.iExcel;
+            tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
 
             fGraph = new ZedGraphControl();
             fGraph.IsShowPointValues = true;

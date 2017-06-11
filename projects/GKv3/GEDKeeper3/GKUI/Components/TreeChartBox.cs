@@ -216,32 +216,16 @@ namespace GKUI.Components
         internal int fSPX;
         internal int fSPY;
 
-        private static readonly object EventPersonModify;
-        private static readonly object EventRootChanged;
-        private static readonly object EventPersonProperties;
-
         #endregion
 
         #region Public properties
 
-        public event PersonModifyEventHandler PersonModify
-        {
-            add { Events.AddHandler(EventPersonModify, value); }
-            remove { Events.RemoveHandler(EventPersonModify, value); }
-        }
+        public event PersonModifyEventHandler PersonModify;
 
-        public event RootChangedEventHandler RootChanged
-        {
-            add { Events.AddHandler(EventRootChanged, value); }
-            remove { Events.RemoveHandler(EventRootChanged, value); }
-        }
+        public event RootChangedEventHandler RootChanged;
 
         // FIXME: GKv3 DevRestriction
-        public event /*Mouse*/ EventHandler PersonProperties
-        {
-            add { Events.AddHandler(EventPersonProperties, value); }
-            remove { Events.RemoveHandler(EventPersonProperties, value); }
-        }
+        public event /*Mouse*/ EventHandler PersonProperties;
 
         public IBaseWindow Base
         {
@@ -333,20 +317,13 @@ namespace GKUI.Components
 
         #region Instance control
 
-        static TreeChartBox()
-        {
-            EventPersonModify = new object();
-            EventRootChanged = new object();
-            EventPersonProperties = new object();
-        }
-
         public TreeChartBox()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            UpdateStyles();
+            //SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            //UpdateStyles();
 
-            BorderStyle = BorderStyle.Fixed3D;
-            DoubleBuffered = true;
+            //BorderStyle = BorderStyle.Fixed3D;
+            //DoubleBuffered = true;
             BackgroundColor = Colors.White;
 
             fModel = new TreeChartModel();
@@ -583,7 +560,7 @@ namespace GKUI.Components
 
         public ExtRect GetClientRect()
         {
-            Rectangle rt = ClientRectangle;
+            Rectangle rt = Bounds; // ClientRectangle;
             return ExtRect.CreateBounds(rt.Left, rt.Top, rt.Width, rt.Height);
         }
 
@@ -671,21 +648,21 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
+            var eventHandler = (PersonModifyEventHandler)PersonModify;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
+            var eventHandler = (RootChangedEventHandler)RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
+            var eventHandler = (MouseEventHandler)PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
@@ -718,7 +695,7 @@ namespace GKUI.Components
 
             RestoreSelection();
 
-            base.OnResize(e);
+            base.OnSizeChanged(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -769,12 +746,12 @@ namespace GKUI.Components
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meDown)
+                    if (e.Buttons == MouseButtons.Left && mouseEvent == MouseEvent.meDown)
                     {
                         result = MouseAction.maSelect;
                         break;
                     }
-                    else if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meUp)
+                    else if (e.Buttons == MouseButtons.Right && mouseEvent == MouseEvent.meUp)
                     {
                         result = MouseAction.maProperties;
                         break;
@@ -787,7 +764,7 @@ namespace GKUI.Components
                 }
 
                 ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
-                if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if ((e.Buttons == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.maExpand;
                     break;
@@ -820,7 +797,7 @@ namespace GKUI.Components
                             break;
 
                         case MouseAction.maDrag:
-                            Cursor = Cursors.SizeAll;
+                            Cursor = Cursors.Move; // SizeAll;
                             fMode = ChartControlMode.ccmDragImage;
                             break;
                     }

@@ -8,6 +8,7 @@
  */
 using System;
 using Eto.Forms;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -26,6 +27,46 @@ namespace GKUI.Components
     /// </summary>
     public class GKListViewStub : Scrollable
     {
+        public IListManager ListMan
+        {
+            get { return null; }
+        }
+
+        public object GetSelectedData()
+        {
+            return null;
+        }
+
+        public void UpdateContents(bool columnsChanged = false)
+        {
+            
+        }
+
+        public GKCore.Interfaces.IListItem AddItem(string text, object data)
+        {
+            return null;
+        }
+
+        public void DeleteRecord(object data)
+        {
+            
+        }
+
+        public void BeginUpdate()
+        {
+            
+        }
+
+        public void EndUpdate()
+        {
+            
+        }
+
+        public void AddColumn(string text, int width, bool autoSize)
+        {
+            
+        }
+
         public GKListViewStub()
         {
         }

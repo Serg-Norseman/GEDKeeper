@@ -248,6 +248,16 @@ namespace GKUI
             chkLinesVisible.Text = LangMan.LS(LSID.LSID_LinesVisible);
         }
 
+        protected override void Dispose(bool Disposing)
+        {
+            if (Disposing)
+            {
+                fPlaces.Dispose();
+                fMapPoints.Dispose();
+            }
+            base.Dispose(Disposing);
+        }
+
         private ITreeItem FindTreeNode(string place)
         {
             int num = fBaseRoot.Nodes.Count;

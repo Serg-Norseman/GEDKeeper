@@ -111,8 +111,7 @@ namespace GKUI.Components
                         //Rectangle srcRect = cutoutArea.ToRectangle();
                         graphic.DrawImage(bmp, destRect,
                                           cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                          GraphicsUnit.Pixel);
+                                          cutoutArea.GetWidth(), cutoutArea.GetHeight());
                     }
                 }
 
@@ -145,7 +144,7 @@ namespace GKUI.Components
         public IFont CreateFont(string fontName, float size, bool bold)
         {
             FontStyle style = (!bold) ? FontStyle.None : FontStyle.Bold;
-            var sdFont = new Font(fontName, size, style, GraphicsUnit.Point);
+            var sdFont = new Font(fontName, size, style);
             return new FontHandler(sdFont);
         }
 

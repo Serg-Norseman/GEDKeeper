@@ -325,11 +325,11 @@ namespace GKUI.Dialogs
 
                 switch (curSex) {
                     case GEDCOMSex.svMale:
-                        img = GKResources.piMale140;
+                        img = Bitmap.FromResource("Resources.pi_male_140.png");
                         break;
 
                     case GEDCOMSex.svFemale:
-                        img = GKResources.piFemale140;
+                        img = Bitmap.FromResource("Resources.pi_female_140.png");
                         break;
 
                     default:

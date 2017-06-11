@@ -72,54 +72,54 @@ namespace GKUI.Components
             e.Handled = true;
             switch (e.Key) {
                 case Keys.Left:
-                    HorizontalScroll.Value =
-                        Math.Max(HorizontalScroll.Value - SmallChange, 0);
+                    HorizontalScrollValue =
+                        Math.Max(HorizontalScrollValue - SmallChange, 0);
                     break;
 
                 case Keys.Right:
-                    HorizontalScroll.Value += SmallChange;
+                    HorizontalScrollValue += SmallChange;
                     break;
 
                 case Keys.Up:
-                    VerticalScroll.Value =
-                        Math.Max(VerticalScroll.Value - SmallChange, 0);
+                    VerticalScrollValue =
+                        Math.Max(VerticalScrollValue - SmallChange, 0);
                     break;
 
                 case Keys.Down:
-                    VerticalScroll.Value += SmallChange;
+                    VerticalScrollValue += SmallChange;
                     break;
 
                 case Keys.PageUp:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScroll.Value =
-                            Math.Max(VerticalScroll.Value - LargeChange, 0);
+                        VerticalScrollValue =
+                            Math.Max(VerticalScrollValue - LargeChange, 0);
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScroll.Value =
-                            Math.Max(HorizontalScroll.Value - LargeChange, 0);
+                        HorizontalScrollValue =
+                            Math.Max(HorizontalScrollValue - LargeChange, 0);
                     }
                     break;
 
                 case Keys.PageDown:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScroll.Value += LargeChange;
+                        VerticalScrollValue += LargeChange;
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScroll.Value += LargeChange;
+                        HorizontalScrollValue += LargeChange;
                     }
                     break;
 
                 case Keys.Home:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScroll.Value = 0;
+                        VerticalScrollValue = 0;
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScroll.Value = 0;
+                        HorizontalScrollValue = 0;
                     }
                     break;
 
                 case Keys.End:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScroll.Value = VerticalScroll.Maximum;
+                        VerticalScrollValue = VerticalScroll.Maximum;
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScroll.Value = HorizontalScroll.Maximum;
+                        HorizontalScrollValue = HorizontalScroll.Maximum;
                     }
                     break;
 
@@ -147,9 +147,9 @@ namespace GKUI.Components
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None == e.Modifiers) {
-                VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
+                VerticalScrollValue = Math.Max(VerticalScrollValue - e.Delta, 0);
             } else if (Keys.Shift == e.Modifiers) {
-                HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
+                HorizontalScrollValue = Math.Max(HorizontalScrollValue - e.Delta, 0);
             }
             else {
                 base.OnMouseWheel(e);
@@ -238,10 +238,8 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)Events[EventNavRefresh];
-            if (eventHandler == null) return;
-
-            eventHandler(this, null);
+            var eventHandler = (EventHandler)NavRefresh;
+            if (eventHandler != null) eventHandler(this, null);
         }
 
         protected abstract void SetNavObject(object obj);

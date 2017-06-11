@@ -219,7 +219,7 @@ namespace GKUI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            fTreeBox.Select();
+            //fTreeBox.Select();
         }
 
         private void tbImageSave_Click(object sender, EventArgs e)
@@ -489,20 +489,20 @@ namespace GKUI
         {
             if (colorDialog1.ShowDialog(this) != DialogResult.Ok) return;
 
-            fTreeBox.BackgroundImage = null;
+            //fTreeBox.BackgroundImage = null;
             fTreeBox.BackgroundColor = colorDialog1.Color;
             fTreeBox.Invalidate();
         }
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            /*string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
             fTreeBox.BackgroundImage = img;
             fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
-            fTreeBox.Invalidate();
+            fTreeBox.Invalidate();*/
         }
 
         private void miModeItem_Click(object sender, EventArgs e)
@@ -662,8 +662,8 @@ namespace GKUI
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
             
-            Rectangle client = ClientRectangle;
-            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
+            Rectangle client = Bounds; // ClientRectangle;
+            Point pt = new Point(PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height)));
             qsDlg.Location = pt;
 
             qsDlg.Show();

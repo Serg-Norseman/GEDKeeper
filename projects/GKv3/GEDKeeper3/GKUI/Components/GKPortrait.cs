@@ -166,7 +166,7 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            base.OnResize(e);
+            base.OnSizeChanged(e);
             btnPanel.Width = Width;
             CheckCursorPosition(this, e);
         }
