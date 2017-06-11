@@ -37,7 +37,7 @@
       <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\CircleChartWin.cs" />
-    <Compile Include="GKUI\CircleChartWin.Designer.cs">
+    <Compile Include="GKUI\CircleChartWin.design.cs">
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs" />
-    <Compile Include="GKUI\Dialogs\AboutDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\AboutDlg.design.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\AddressEditDlg.cs" />
@@ -70,7 +70,7 @@
       <DependentUpon>AddressEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\AssociationEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\AssociationEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\AssociationEditDlg.design.cs">
       <DependentUpon>AssociationEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\CommonFilterDlg.cs" />
@@ -91,7 +91,7 @@
       <DependentUpon>EventEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\FamilyEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\FamilyEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\FamilyEditDlg.design.cs">
       <DependentUpon>FamilyEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\FilePropertiesDlg.cs" />
@@ -99,15 +99,15 @@
       <DependentUpon>FilePropertiesDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\GroupEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\GroupEditDlg.design.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\LanguageEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\LanguageEditDlg.design.cs">
       <DependentUpon>LanguageEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs" />
-    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.design.cs">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\LocationEditDlg.cs" />
@@ -120,11 +120,11 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\ModalDialog.cs" />
     <Compile Include="GKUI\Dialogs\NameEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\NameEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\NameEditDlg.design.cs">
       <DependentUpon>NameEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\NoteEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\NoteEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\NoteEditDlg.design.cs">
       <DependentUpon>NoteEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\NoteEditDlgEx.cs" />
@@ -136,7 +136,7 @@
       <DependentUpon>OptionsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.design.cs">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\PersonEditDlg.cs" />
@@ -148,25 +148,25 @@
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\PortraitSelectDlg.cs" />
-    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.design.cs">
       <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\PrintableForm.cs" />
     <Compile Include="GKUI\Dialogs\ProgressDlg.cs" />
-    <Compile Include="GKUI\Dialogs\ProgressDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\ProgressDlg.design.cs">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\QuickSearchDlg.cs" />
     <Compile Include="GKUI\Dialogs\RecordSelectDlg.cs" />
-    <Compile Include="GKUI\Dialogs\RecordSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\RecordSelectDlg.design.cs">
       <DependentUpon>RecordSelectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs" />
-    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.design.cs">
       <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\RepositoryEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.design.cs">
       <DependentUpon>RepositoryEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\ResearchEditDlg.cs" />
@@ -174,11 +174,11 @@
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\SexCheckDlg.cs" />
-    <Compile Include="GKUI\Dialogs\SexCheckDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\SexCheckDlg.design.cs">
       <DependentUpon>SexCheckDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\SourceCitEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.design.cs">
       <DependentUpon>SourceCitEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\SourceEditDlg.cs" />
@@ -194,7 +194,7 @@
       <DependentUpon>TreeFilterDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\UserRefEditDlg.cs" />
-    <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
+    <Compile Include="GKUI\Dialogs\UserRefEditDlg.design.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\MapsViewerWin.cs" />
@@ -202,31 +202,31 @@
       <DependentUpon>MapsViewerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\MediaViewerWin.cs" />
-    <Compile Include="GKUI\MediaViewerWin.Designer.cs">
+    <Compile Include="GKUI\MediaViewerWin.design.cs">
       <DependentUpon>MediaViewerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\OrganizerWin.cs" />
-    <Compile Include="GKUI\OrganizerWin.Designer.cs">
+    <Compile Include="GKUI\OrganizerWin.design.cs">
       <DependentUpon>OrganizerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\PatriarchsViewerWin.cs" />
-    <Compile Include="GKUI\PatriarchsViewerWin.Designer.cs">
+    <Compile Include="GKUI\PatriarchsViewerWin.design.cs">
       <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\ScriptEditWin.cs" />
-    <Compile Include="GKUI\ScriptEditWin.Designer.cs">
+    <Compile Include="GKUI\ScriptEditWin.design.cs">
       <DependentUpon>ScriptEditWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\SlideshowWin.cs" />
-    <Compile Include="GKUI\SlideshowWin.Designer.cs">
+    <Compile Include="GKUI\SlideshowWin.design.cs">
       <DependentUpon>SlideshowWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\StatisticsWin.cs" />
-    <Compile Include="GKUI\StatisticsWin.Designer.cs">
+    <Compile Include="GKUI\StatisticsWin.design.cs">
       <DependentUpon>StatisticsWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TreeChartWin.cs" />
-    <Compile Include="GKUI\TreeChartWin.Designer.cs">
+    <Compile Include="GKUI\TreeChartWin.design.cs">
       <DependentUpon>TreeChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TreeToolsWin.cs" />

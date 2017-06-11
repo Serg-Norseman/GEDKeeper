@@ -357,10 +357,11 @@ namespace GKUI
             Title = LangMan.LS(LSID.LSID_MIStats);
             grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
 
-            ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter);
-            ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total);
-            ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
-            ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
+            //lvSummary.Columns
+            ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter); // 300
+            ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total); // 100
+            ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum); // 100
+            ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum); // 100
 
             tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             UpdateCommonStats();

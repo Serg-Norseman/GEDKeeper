@@ -211,8 +211,9 @@ namespace GKUI.Components
             ShowInTaskbar = false;
             Title = "InputBox";
             Topmost = true;
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
-            PerformLayout();
         }
 
         #endregion

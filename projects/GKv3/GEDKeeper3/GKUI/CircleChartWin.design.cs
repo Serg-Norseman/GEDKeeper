@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -49,10 +50,11 @@ namespace GKUI
                                         tbDocPrint});
 
             ClientSize = new Size(1093, 579);
-            ShowInTaskbar = false;
+            ShowInTaskbar = true;
             Title = "CircleChartWin";
             KeyDown += CircleChartWin_KeyDown;
 
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

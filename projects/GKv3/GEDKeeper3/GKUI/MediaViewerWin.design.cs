@@ -1,6 +1,6 @@
 ﻿using System;
 using Eto.Drawing;
-using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -11,11 +11,12 @@ namespace GKUI
             SuspendLayout();
 
             ClientSize = new Size(1027, 577);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
-            ShowInTaskbar = false;
+            ShowInTaskbar = true;
             Title = "MediaViewerWin";
-            FormClosing += MediaViewerWin_FormClosing;
+            Closing += MediaViewerWin_FormClosing;
             KeyDown += MediaViewerWin_KeyDown;
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

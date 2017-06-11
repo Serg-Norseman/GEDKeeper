@@ -31,23 +31,11 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanelStub, IPrintable
     {
-        private static readonly object EventNavRefresh;
-
-
         private readonly NavigationStack fNavman;
 
 
-        public event EventHandler NavRefresh
-        {
-            add { Events.AddHandler(EventNavRefresh, value); }
-            remove { Events.RemoveHandler(EventNavRefresh, value); }
-        }
+        public event EventHandler NavRefresh;
 
-
-        static CustomChart()
-        {
-            EventNavRefresh = new object();
-        }
 
         protected CustomChart() : base()
         {
@@ -85,44 +73,38 @@ namespace GKUI.Components
             switch (e.Key) {
                 case Keys.Left:
                     HorizontalScroll.Value =
-                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
-                    PerformLayout();
+                        Math.Max(HorizontalScroll.Value - SmallChange, 0);
                     break;
 
                 case Keys.Right:
-                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
-                    PerformLayout();
+                    HorizontalScroll.Value += SmallChange;
                     break;
 
                 case Keys.Up:
                     VerticalScroll.Value =
-                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
-                    PerformLayout();
+                        Math.Max(VerticalScroll.Value - SmallChange, 0);
                     break;
 
                 case Keys.Down:
-                    VerticalScroll.Value += VerticalScroll.SmallChange;
-                    PerformLayout();
+                    VerticalScroll.Value += SmallChange;
                     break;
 
                 case Keys.PageUp:
                     if (Keys.None == e.Modifiers) {
                         VerticalScroll.Value =
-                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
+                            Math.Max(VerticalScroll.Value - LargeChange, 0);
                     } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value =
-                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
+                            Math.Max(HorizontalScroll.Value - LargeChange, 0);
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.PageDown:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScroll.Value += VerticalScroll.LargeChange;
+                        VerticalScroll.Value += LargeChange;
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
+                        HorizontalScroll.Value += LargeChange;
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.Home:
@@ -131,7 +113,6 @@ namespace GKUI.Components
                     } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value = 0;
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.End:
@@ -140,7 +121,6 @@ namespace GKUI.Components
                     } else if (Keys.Shift == e.Modifiers) {
                         HorizontalScroll.Value = HorizontalScroll.Maximum;
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.Backspace:
@@ -155,9 +135,9 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (MouseButtons.XButton1 == e.Button) {
+            if (MouseButtons.XButton1 == e.Buttons) {
                 NavPrev();
-            } else if (MouseButtons.XButton2 == e.Button) {
+            } else if (MouseButtons.XButton2 == e.Buttons) {
                 NavNext();
             } else {
                 base.OnMouseUp(e);
@@ -168,10 +148,8 @@ namespace GKUI.Components
         {
             if (Keys.None == e.Modifiers) {
                 VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
-                PerformLayout();
             } else if (Keys.Shift == e.Modifiers) {
                 HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
-                PerformLayout();
             }
             else {
                 base.OnMouseWheel(e);

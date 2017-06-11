@@ -988,8 +988,8 @@ namespace GKUI
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
             Rectangle client = ClientRectangle;
-            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
-            qsDlg.Location = pt;
+            PointF pt = PointToScreen(new PointF(client.Left, client.Bottom - qsDlg.Height));
+            qsDlg.Location = new Point(pt);
 
             qsDlg.Show();
         }
@@ -1078,8 +1078,8 @@ namespace GKUI
 
             try
             {
-                HyperView HyperView = GetHyperViewByType(record.RecordType);
-                if (HyperView != null) {
+                HyperView hyperView = GetHyperViewByType(record.RecordType);
+                if (hyperView != null) {
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             }
@@ -1135,13 +1135,13 @@ namespace GKUI
 
         private void Form_Resize(object sender, EventArgs e)
         {
-            StatusBar.Panels[0].Width = Width - 50;
+            //StatusBar.Panels[0].Width = Width - 50;
         }
 
         public void Restore()
         {
-            if (WindowState == FormWindowState.Minimized) {
-                WindowState = FormWindowState.Normal;
+            if (this.WindowState == Eto.Forms.WindowState.Minimized) {
+                this.WindowState = Eto.Forms.WindowState.Normal;
             }
         }
 

@@ -35,9 +35,6 @@ namespace GKUI.Components
     /// </summary>
     public class GKSheetList : Panel, ISheetList
     {
-        private static readonly object EventModify;
-        private static readonly object EventItemValidating;
-
         private readonly ButtonToolItem fBtnAdd;
         private readonly ButtonToolItem fBtnDelete;
         private readonly ButtonToolItem fBtnEdit;
@@ -53,17 +50,10 @@ namespace GKUI.Components
         private ListModel fListModel;
 
 
-        public event ModifyEventHandler OnModify
-        {
-            add { Events.AddHandler(EventModify, value); }
-            remove { Events.RemoveHandler(EventModify, value); }
-        }
+        public event ModifyEventHandler OnModify;
 
-        public event ItemValidatingEventHandler OnItemValidating
-        {
-            add { Events.AddHandler(EventItemValidating, value); }
-            remove { Events.RemoveHandler(EventItemValidating, value); }
-        }
+        public event ItemValidatingEventHandler OnItemValidating;
+
 
         public EnumSet<SheetButton> Buttons
         {
@@ -102,11 +92,6 @@ namespace GKUI.Components
             set { SetReadOnly(value); }
         }
 
-        static GKSheetList()
-        {
-            EventModify = new object();
-            EventItemValidating = new object();
-        }
 
         public GKSheetList(Control owner)
         {
@@ -273,7 +258,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = (ModifyEventHandler)Events[EventModify];
+            var eventHandler = (ModifyEventHandler)OnModify;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -283,7 +268,7 @@ namespace GKUI.Components
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)Events[EventItemValidating];
+            var eventHandler = (ItemValidatingEventHandler)OnItemValidating;
             if (eventHandler == null)
             {
                 return true;

@@ -45,19 +45,10 @@ namespace GKUI.Components
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
         private List<BBTextChunk> fChunks;
+        private int fHorizontalMaximum;
+        private int fVerticalMaximum;
 
-        private static readonly object EventLink;
-
-        static HyperView()
-        {
-            EventLink = new object();
-        }
-
-        public event LinkEventHandler OnLink
-        {
-            add { Events.AddHandler(EventLink, value); }
-            remove { Events.RemoveHandler(EventLink, value); }
-        }
+        public event LinkEventHandler OnLink;
 
         public int BorderWidth
         {
@@ -168,7 +159,7 @@ namespace GKUI.Components
                         }
 
                         if (!string.IsNullOrEmpty(chunk.Text)) {
-                            using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style)) {
+                            using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
                                 SizeF strSize = gfx.MeasureString(font, chunk.Text);
                                 chunk.Width = (int)strSize.Width;
 
@@ -203,7 +194,7 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 try
                 {
-                    Rectangle clientRect = ClientRectangle;
+                    Rectangle clientRect = Bounds; //ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(BackgroundColor), clientRect);
                     Font defFont = this.Font;
 
@@ -236,7 +227,7 @@ namespace GKUI.Components
                         if (!string.IsNullOrEmpty(ct)) {
                             var chunkColor = ((ColorHandler)chunk.Color).Handle;
                             using (var brush = new SolidBrush(chunkColor)) {
-                                using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style)) {
+                                using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
                                     gfx.DrawText(font, brush, xOffset, yOffset, ct);
                                 }
                             }
@@ -262,7 +253,7 @@ namespace GKUI.Components
 
         private void DoLink(string linkName)
         {
-            LinkEventHandler eventHandler = (LinkEventHandler)Events[EventLink];
+            LinkEventHandler eventHandler = (LinkEventHandler)OnLink;
             if (eventHandler != null) eventHandler(this, linkName);
         }
 
@@ -283,35 +274,35 @@ namespace GKUI.Components
             switch (e.Key)
             {
                 case Keys.PageUp:
-                    AdjustScroll(0, -VerticalScroll.LargeChange);
+                    AdjustScroll(0, -LargeChange);
                     break;
 
                 case Keys.PageDown:
-                    AdjustScroll(0, VerticalScroll.LargeChange);
+                    AdjustScroll(0, LargeChange);
                     break;
 
                 case Keys.Home:
-                    AdjustScroll(-HorizontalScroll.Maximum, -VerticalScroll.Maximum);
+                    AdjustScroll(-fHorizontalMaximum, -fVerticalMaximum);
                     break;
 
                 case Keys.End:
-                    AdjustScroll(-HorizontalScroll.Maximum, VerticalScroll.Maximum);
+                    AdjustScroll(-fHorizontalMaximum, fVerticalMaximum);
                     break;
 
                 case Keys.Left:
-                    AdjustScroll(-(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange), 0);
+                    AdjustScroll(-(e.Modifiers == Keys.None ? SmallChange : LargeChange), 0);
                     break;
 
                 case Keys.Right:
-                    AdjustScroll(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange, 0);
+                    AdjustScroll(e.Modifiers == Keys.None ? SmallChange : LargeChange, 0);
                     break;
 
                 case Keys.Up:
-                    AdjustScroll(0, -(e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange));
+                    AdjustScroll(0, -(e.Modifiers == Keys.None ? SmallChange : LargeChange));
                     break;
 
                 case Keys.Down:
-                    AdjustScroll(0, e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange);
+                    AdjustScroll(0, e.Modifiers == Keys.None ? SmallChange : LargeChange);
                     break;
             }
 

@@ -50,8 +50,6 @@ namespace GKUI.Components
             mcDrag
         }
 
-        private static readonly object EventRootChanged;
-
         private readonly CircleChartModel fModel;
         private readonly ChartRenderer fRenderer;
 
@@ -105,11 +103,7 @@ namespace GKUI.Components
             }
         }
 
-        public event ARootChangedEventHandler RootChanged
-        {
-            add { Events.AddHandler(EventRootChanged, value); }
-            remove { Events.RemoveHandler(EventRootChanged, value); }
-        }
+        public event ARootChangedEventHandler RootChanged;
 
         public GEDCOMIndividualRecord RootPerson
         {
@@ -129,20 +123,15 @@ namespace GKUI.Components
         }
 
 
-        static CircleChart()
-        {
-            EventRootChanged = new object();
-        }
-
         public CircleChart()
         {
-            DoubleBuffered = true;
+            //DoubleBuffered = true;
 
             fRenderer = new TreeChartGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
             fModel.Options = new AncestorsCircleOptions();
-            fModel.Font = AppHost.GfxProvider.CreateFont(Font.Name, Font.Size, false);
+            fModel.Font = AppHost.GfxProvider.CreateFont(Font.FamilyName, Font.Size, false);
 
             fMouseCaptured = MouseCaptured.mcNone;
 
@@ -179,7 +168,7 @@ namespace GKUI.Components
 
         private void DoRootChanged(GEDCOMIndividualRecord person)
         {
-            var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
+            var eventHandler = (ARootChangedEventHandler)RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
@@ -364,11 +353,11 @@ namespace GKUI.Components
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Point pt = new Point(e.Location);
-            if ((e.Button == MouseButtons.Right) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
+            if ((e.Buttons == MouseButtons.Right) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
                 fMouseCaptured = MouseCaptured.mcDrag;
                 fMouseCaptureX = pt.X;
                 fMouseCaptureY = pt.Y;
-                Cursor = Cursors.SizeAll;
+                Cursor = Cursors.Move;
             }
 
             base.OnMouseDown(e);
@@ -382,7 +371,7 @@ namespace GKUI.Components
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
             }
-            else if (e.Button == MouseButtons.Left) {
+            else if (e.Buttons == MouseButtons.Left) {
                 CircleSegment selected = FindSegment(pt.X, pt.Y);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
@@ -394,11 +383,12 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
+            Point mpt = new Point(e.Location);
+
             switch (fMouseCaptured) {
                 case MouseCaptured.mcNone:
                     {
-                        CircleSegment selected = FindSegment(pt.X, pt.Y);
+                        CircleSegment selected = FindSegment(mpt.X, mpt.Y);
 
                         string hint = "";
                         if (!Equals(fModel.Selected, selected)) {
@@ -416,7 +406,7 @@ namespace GKUI.Components
                             fHint = hint;
 
                             if (!string.IsNullOrEmpty(hint)) {
-                                fToolTip.Show(hint, this, pt.X, pt.Y, 3000);
+                                fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
                             }
                         }
                     }
@@ -424,9 +414,9 @@ namespace GKUI.Components
 
                 case MouseCaptured.mcDrag:
                     {
-                        AdjustScroll(-(pt.Location.X - fMouseCaptureX), -(pt.Location.Y - fMouseCaptureY));
-                        fMouseCaptureX = pt.Location.X;
-                        fMouseCaptureY = pt.Location.Y;
+                        AdjustScroll(-(mpt.X - fMouseCaptureX), -(mpt.Y - fMouseCaptureY));
+                        fMouseCaptureX = mpt.X;
+                        fMouseCaptureY = mpt.Y;
                     }
                     break;
             }

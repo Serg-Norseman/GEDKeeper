@@ -42,7 +42,7 @@ namespace GKUI
                                           tbNext});
 
             ClientSize = new Size(792, 573);
-            ShowInTaskbar = false;
+            ShowInTaskbar = true;
             Title = "SlideshowWin";
             Load += SlideshowWin_Load;
             KeyDown += SlideshowWin_KeyDown;

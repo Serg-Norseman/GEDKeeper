@@ -65,7 +65,7 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { grpSex }
+                        Cells = { null }
                     },
                     new TableRow {
                         Cells = { null, btnAccept, btnCancel }

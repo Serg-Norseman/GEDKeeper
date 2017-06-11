@@ -7,7 +7,9 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Eto.Drawing;
 using Eto.Forms;
+using GKCommon;
 
 namespace GKUI.Components
 {
@@ -16,8 +18,37 @@ namespace GKUI.Components
     /// </summary>
     public class ScrollablePanelStub : CustomPanel
     {
+        public const int SmallChange = 1;
+        public const int LargeChange = 10;
+
+        public Font Font {
+            get;
+            set;
+        }
+
+        public Point AutoScrollPosition
+        {
+            get { return Point.Empty; }
+            set {  }
+        }
+
+        public Color TextColor {
+            get;
+            set;
+        }
+
         public ScrollablePanelStub()
         {
+        }
+        
+        public void AdjustViewPort(ExtSize sz)
+        {
+            
+        }
+        
+        public void AdjustScroll(int x, int y)
+        {
+            
         }
     }
 }

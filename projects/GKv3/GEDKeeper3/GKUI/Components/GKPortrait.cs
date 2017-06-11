@@ -201,18 +201,18 @@ namespace GKUI.Components
             timer = new Timer();
             SuspendLayout();
 
-            pictureBox1.BackgroundImageLayout = ImageLayout.Center;
+            //pictureBox1.BackgroundImageLayout = ImageLayout.Center;
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Size = new Size(178, 188);
             pictureBox1.MouseLeave += PictureBox1MouseLeave;
             pictureBox1.MouseHover += PictureBox1MouseHover;
 
-            btnPanel.BackgroundColor = SystemColors.ButtonShadow;
+            //btnPanel.BackgroundColor = SystemColors.ButtonShadow;
             btnPanel.Location = new Point(0, 152);
             btnPanel.Size = new Size(178, 36);
             btnPanel.MouseLeave += Panel1MouseLeave;
-            btnPanel.MouseHover += Panel1MouseHover;
+            btnPanel.MouseMove += Panel1MouseHover; // MouseHover
 
             timer.Tick += MoveSlidePanel;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -276,9 +277,11 @@ namespace GKUI
             miRebuildKinships.Click += miRebuildKinships_Click;
 
             ClientSize = new Size(822, 452);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
+            ShowInTaskbar = true;
             Title = "TreeChartWin";
             KeyDown += TreeChartWin_KeyDown;
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

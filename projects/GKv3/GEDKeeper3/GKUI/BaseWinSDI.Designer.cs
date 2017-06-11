@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.Remoting.Contexts;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -513,10 +514,12 @@ namespace GKUI
             FormClosed += Form_Closed;
             Load += Form_Load;
             VisibleChanged += Form_Show;
-            DragDrop += Form_DragDrop;
-            DragEnter += Form_DragEnter;
+            //DragDrop += Form_DragDrop;
+            //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;
-            Resize += Form_Resize;
+            SizeChanged += Form_Resize;
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }
