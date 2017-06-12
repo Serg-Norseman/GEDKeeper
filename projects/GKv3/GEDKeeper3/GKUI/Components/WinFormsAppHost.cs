@@ -125,11 +125,11 @@ namespace GKUI.Components
 
             if (keepModeless) {
                 #if !__MonoCS__
-                NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                 #endif
             }
 
-            UIHelper.CenterFormByParent((Form)form, mainHandle);
+            //UIHelper.CenterFormByParent((Form)form, mainHandle);
 
             return base.ShowModalX(form, keepModeless);
         }
@@ -140,7 +140,7 @@ namespace GKUI.Components
 
             if (frm != null) {
                 #if !__MonoCS__
-                NativeMethods.EnableWindow(frm.Handle, value);
+                //NativeMethods.EnableWindow(frm.Handle, value);
                 #endif
             }
         }
@@ -251,21 +251,25 @@ namespace GKUI.Components
 
         public override int GetKeyLayout()
         {
-            #if __MonoCS__
+            return CultureInfo.DefaultThreadCurrentUICulture.KeyboardLayoutId;
+
+            /*#if __MonoCS__
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
             return currentLang.Culture.KeyboardLayoutId;
-            #endif
+            #endif*/
         }
 
         public override void SetKeyLayout(int layout)
         {
             try {
-                CultureInfo cultureInfo = new CultureInfo(layout);
+                CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(layout);
+
+                /*CultureInfo cultureInfo = new CultureInfo(layout);
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;
+                InputLanguage.CurrentInputLanguage = currentLang;*/
             } catch (Exception ex) {
                 Logger.LogWrite("Utilities.SetKeyLayout(): " + ex.Message);
             }

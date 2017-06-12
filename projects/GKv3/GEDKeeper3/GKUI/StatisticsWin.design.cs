@@ -47,23 +47,8 @@ namespace GKUI
                                         new SeparatorToolItem(),
                                         tbExcelExport});
 
-            Panel2 = new Panel();
-
             Panel1 = new Panel();
             Panel1.Size = new Size(893, 307);
-            Panel1.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { ToolBar1 }
-                    },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { Panel2 }
-                    }
-                }
-            };
 
             Content = new TableLayout {
                 Padding = new Padding(10),
@@ -78,6 +63,7 @@ namespace GKUI
                     }
                 }
             };
+            ToolBar = ToolBar1;
 
             ClientSize = new Size(893, 574);
             Title = "StatisticsWin";

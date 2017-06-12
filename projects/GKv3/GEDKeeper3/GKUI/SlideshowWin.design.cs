@@ -32,7 +32,7 @@ namespace GKUI
 
             timer1 = new Timer();
             timer1.Interval = 1000;
-            timer1.Tick += Timer1Tick;
+            timer1.Elapsed += Timer1Tick;
 
             toolStrip1 = new ToolBar();
             toolStrip1.Items.AddRange(new ToolItem[] {

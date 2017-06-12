@@ -107,7 +107,7 @@ namespace GKUI
 
                                 case GEDCOMMultimediaFormat.mfRTF:
                                     {
-                                        RichTextBox rtfBox = new RichTextBox();
+                                        RichTextArea rtfBox = new RichTextArea();
                                         rtfBox.ReadOnly = true;
 
                                         try {
@@ -125,10 +125,10 @@ namespace GKUI
 
                                 case GEDCOMMultimediaFormat.mfHTM:
                                     {
-                                        var browser = new WebBrowser();
+                                        var browser = new WebView();
 
                                         try {
-                                            browser.DocumentStream = fs;
+                                            browser.LoadHtml(fs);
                                             /*using (StreamReader strd = new StreamReader(fs)) {
                                                 browser.DocumentText = strd.ReadToEnd();
                                                 // didn't work, because didn't defines codepage from page's header (?!)
@@ -142,7 +142,7 @@ namespace GKUI
                                     }
                                     break;
                             }
-                            if (fs != null && !(ctl is WebBrowser)) fs.Dispose();
+                            if (fs != null && !(ctl is WebView)) fs.Dispose();
                             
                             break;
                         }
@@ -158,7 +158,7 @@ namespace GKUI
 
         public void SetViewMedia(string mediaFile)
         {
-            var mediaPlayer = new GKUI.Components.MediaPlayer();
+            var mediaPlayer = new GKUI.Components.MediaPlayerStub();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);

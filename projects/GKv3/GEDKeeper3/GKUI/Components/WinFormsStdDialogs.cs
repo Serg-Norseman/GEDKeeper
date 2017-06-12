@@ -74,13 +74,13 @@ namespace GKUI.Components
 
             if (!string.IsNullOrEmpty(filter))
             {
-                ofd.Filter = filter;
+                ofd.Filters.Add(new FileDialogFilter(filter, ""));
 
-                if (filterIndex > 0) ofd.FilterIndex = filterIndex;
+                //if (filterIndex > 0) ofd.FilterIndex = filterIndex;
             }
 
-            if (!string.IsNullOrEmpty(defaultExt))
-                ofd.DefaultExt = defaultExt;
+            /*if (!string.IsNullOrEmpty(defaultExt))
+                ofd.DefaultExt = defaultExt;*/
 
             ofd.MultiSelect = multiSelect;
 
@@ -97,7 +97,7 @@ namespace GKUI.Components
         {
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
             {
-                sfd.OverwritePrompt = overwritePrompt;
+                //sfd.OverwritePrompt = overwritePrompt;
                 if (sfd.ShowDialog(null) == DialogResult.Ok) {
                     return sfd.FileName;
                 } else {
@@ -119,13 +119,13 @@ namespace GKUI.Components
 
             if (!string.IsNullOrEmpty(filter))
             {
-                sfd.Filter = filter;
+                sfd.Filters.Add(new FileDialogFilter(filter, ""));
 
-                if (filterIndex > 0) sfd.FilterIndex = filterIndex;
+                //if (filterIndex > 0) sfd.FilterIndex = filterIndex;
             }
 
-            if (!string.IsNullOrEmpty(defaultExt))
-                sfd.DefaultExt = defaultExt;
+            /*if (!string.IsNullOrEmpty(defaultExt))
+                sfd.DefaultExt = defaultExt;*/
 
             if (!string.IsNullOrEmpty(suggestedFileName))
                 sfd.FileName = suggestedFileName;

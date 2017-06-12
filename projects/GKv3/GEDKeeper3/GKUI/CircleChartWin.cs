@@ -124,7 +124,8 @@ namespace GKUI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            fCircleChart.Select();
+            //fCircleChart.Select();
+            fCircleChart.Focus();
             AppHost.Instance.UpdateControls(false);
         }
 

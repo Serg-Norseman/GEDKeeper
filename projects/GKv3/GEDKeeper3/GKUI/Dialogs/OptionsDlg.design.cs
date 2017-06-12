@@ -41,7 +41,7 @@ namespace GKUI.Dialogs
         private TabControl PageControl2;
         private TabPage pageViewCommon;
         private TabPage pageViewPersons;
-        private ListBox lstPersonColumns; // FIXME: GKv3 DevRestriction
+        private GKListViewStub lstPersonColumns; // FIXME: GKv3 DevRestriction
         private Button btnColumnUp;
         private Button btnColumnDown;
         private Button btnDefList;
@@ -202,7 +202,7 @@ namespace GKUI.Dialogs
             chkHighlightUnmarried = new CheckBox();
             pageViewPersons = new TabPage();
             panel1 = new Panel();
-            lstPersonColumns = new ListBox();
+            lstPersonColumns = new GKListViewStub();
             btnColumnUp = new Button();
             btnColumnDown = new Button();
             btnDefList = new Button();

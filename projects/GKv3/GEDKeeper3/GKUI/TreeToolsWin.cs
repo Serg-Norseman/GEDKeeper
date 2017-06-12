@@ -414,7 +414,7 @@ namespace GKUI
         {
             TreeTools.CheckBase(fBase, fChecksList);
 
-            ListChecks.Items.Clear();
+            ListChecks.ClearItems();
 
             foreach (TreeTools.CheckObj checkObj in fChecksList)
             {
@@ -478,7 +478,7 @@ namespace GKUI
             {
                 TreeTools.PlacesSearch(fTree, fPlaces, AppHost.Progress);
 
-                ListPlaces.Items.Clear();
+                ListPlaces.ClearItems();
 
                 int num4 = fPlaces.Count;
                 for (int i = 0; i < num4; i++)
@@ -672,7 +672,7 @@ namespace GKUI
             ExtList<PatriarchObj> lst = null;
             try
             {
-                ListPatriarchs.Items.Clear();
+                ListPatriarchs.ClearItems();
                 lst = PatriarchsMan.GetPatriarchsList(fBase.Context,
                                                       (int)edMinGens.Value, !chkWithoutDates.Checked.GetValueOrDefault());
                 lst.QuickSort(PatriarchsCompare);

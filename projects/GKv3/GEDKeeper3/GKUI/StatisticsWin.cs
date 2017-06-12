@@ -22,14 +22,12 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKUI.Components;
-//using ZedGraph;
 
 namespace GKUI
 {
@@ -42,7 +40,7 @@ namespace GKUI
 
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMRecord> fSelectedRecords;
-        private readonly ZedGraphControlStub fGraph;
+        private readonly ZGraphControl fGraph;
         private readonly GKListViewStub fListStats;
         private readonly TreeStats fTreeStats;
 
@@ -57,7 +55,7 @@ namespace GKUI
 
             tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
 
-            fGraph = new ZedGraphControl();
+            fGraph = new ZGraphControl();
             //fGraph.IsShowPointValues = true;
             fGraph.Size = new Size(400, 200);
 
@@ -100,7 +98,7 @@ namespace GKUI
                 int num = fListStats.Items.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    ListViewItem item = fListStats.Items[i];
+                    GKListItem item = fListStats.Items[i];
 
                     string s = item.Text;
                     double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
@@ -164,7 +162,7 @@ namespace GKUI
             fListStats.Sorting = SortOrder.None;
             fListStats.SortColumn = -1;
             fListStats.BeginUpdate();
-            fListStats.Items.Clear();
+            fListStats.ClearItems();
 
             List<StatsItem> vals = new List<StatsItem>();
             try

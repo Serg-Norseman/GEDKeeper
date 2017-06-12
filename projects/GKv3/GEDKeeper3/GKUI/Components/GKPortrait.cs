@@ -31,6 +31,8 @@ namespace GKUI.Components
     /// </summary>
     public partial class GKPortrait : Panel
     {
+        private PixelLayout fLayout;
+        
         public Image Image
         {
             get { return pictureBox1.Image; }
@@ -86,9 +88,21 @@ namespace GKUI.Components
 
         public GKPortrait()
         {
+            fLayout = new PixelLayout();
             InitializeComponent();
-            btnPanel.Top = Height;
+            fLayout.Move(btnPanel, 0, Height);
             timer.Stop();
+        }
+
+        /// <summary>
+        /// Disposes resources used by the control.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+            }
+            base.Dispose(disposing);
         }
 
         public void AddButton(Button b)
@@ -152,7 +166,7 @@ namespace GKUI.Components
 
         private void CheckCursorPosition(object sender, EventArgs e)
         {
-            Point p = PointToClient(Cursor.Position);
+            Point p = fLayout.PointToClient(Mouse.Position);
             bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
             if (!buf) {
                 timer.Start();
@@ -173,21 +187,9 @@ namespace GKUI.Components
 
         #region Design
 
-        
-        private ImageView pictureBox1;
+        private ImageBox pictureBox1;
         private Panel btnPanel;
         private Timer timer;
-
-        /// <summary>
-        /// Disposes resources used by the control.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
-        }
 
         /// <summary>
         /// This method is required for Windows Forms designer support.
@@ -196,28 +198,27 @@ namespace GKUI.Components
         /// </summary>
         private void InitializeComponent()
         {
-            pictureBox1 = new PictureBox();
+            pictureBox1 = new ImageBox();
             btnPanel = new Panel();
             timer = new Timer();
             SuspendLayout();
 
             //pictureBox1.BackgroundImageLayout = ImageLayout.Center;
-            pictureBox1.Dock = DockStyle.Fill;
-            pictureBox1.Location = new Point(0, 0);
+            Content = pictureBox1;
             pictureBox1.Size = new Size(178, 188);
             pictureBox1.MouseLeave += PictureBox1MouseLeave;
-            pictureBox1.MouseHover += PictureBox1MouseHover;
+            //pictureBox1.MouseHover += PictureBox1MouseHover;
 
             //btnPanel.BackgroundColor = SystemColors.ButtonShadow;
-            btnPanel.Location = new Point(0, 152);
+            //btnPanel.Location = new Point(0, 152);
             btnPanel.Size = new Size(178, 36);
             btnPanel.MouseLeave += Panel1MouseLeave;
             btnPanel.MouseMove += Panel1MouseHover; // MouseHover
 
-            timer.Tick += MoveSlidePanel;
+            timer.Elapsed += MoveSlidePanel;
 
-            Controls.Add(btnPanel);
-            Controls.Add(pictureBox1);
+            fLayout.Add(btnPanel, 0, Height);
+
             Size = new Size(178, 188);
             ResumeLayout();
         }

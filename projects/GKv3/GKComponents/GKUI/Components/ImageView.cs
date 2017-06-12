@@ -26,7 +26,7 @@ namespace GKUI.Components
 {
     public class ImageView : Panel
     {
-        private ImageBoxStub imageBox;
+        private ImageBox imageBox;
         private ToolBar toolStrip;
         //private ToolStripComboBox cbZoomLevels;
         public ButtonToolItem btnSizeToFit;
@@ -87,7 +87,7 @@ namespace GKUI.Components
             btnZoomIn = new ButtonToolItem();
             btnZoomOut = new ButtonToolItem();
             //cbZoomLevels = new ToolStripComboBox();
-            imageBox = new ImageBoxStub();
+            imageBox = new ImageBox();
             SuspendLayout();
 
             toolStrip.Items.AddRange(new ToolItem[] {

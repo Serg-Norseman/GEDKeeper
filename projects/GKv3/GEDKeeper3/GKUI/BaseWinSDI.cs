@@ -268,7 +268,9 @@ namespace GKUI
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            GKListViewStub recView = contextMenu.SourceControl as GKListViewStub;
+            //GKListViewStub recView = contextMenu.SourceControl as GKListViewStub;
+            var recType = GetSelectedRecordType();
+            GKListViewStub recView = GetRecordsViewByType(recType);
 
             miRecordDuplicate.Enabled = (recView == ListPersons);
         }
@@ -753,7 +755,7 @@ namespace GKUI
                     {
                         mediaViewer.FileRef = fileRef;
                         if (modal) {
-                            mediaViewer.ShowDialog();
+                            mediaViewer.Show();
                         } else {
                             mediaViewer.ShowInTaskbar = true;
                             mediaViewer.Show();
@@ -1675,7 +1677,7 @@ namespace GKUI
 
             try
             {
-                #if __MonoCS__
+                /*#if __MonoCS__
 
                 const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
                 string args = string.Format(mailto, address, subject, body, attach);
@@ -1693,7 +1695,7 @@ namespace GKUI
                 message.Files.Add(attach);
                 message.ShowDialog();
 
-                #endif
+                #endif*/
             }
             catch (Exception ex)
             {

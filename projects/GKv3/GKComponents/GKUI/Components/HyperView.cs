@@ -35,7 +35,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : ScrollablePanelStub
+    public class HyperView : ScrollablePanel
     {
         private bool fAcceptFontChange;
         private int fBorderWidth;

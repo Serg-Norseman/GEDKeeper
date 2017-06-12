@@ -233,49 +233,50 @@ namespace GKUI.Components
 
         public override void ResetTransform()
         {
-            fCanvas.ResetTransform();
-            fMatrix = fCanvas.Transform;
+            /*fCanvas.ResetTransform();
+            fMatrix = fCanvas.Transform;*/
         }
 
         public override void ScaleTransform(float sx, float sy)
         {
-            Matrix m = new Matrix(sx, 0, 0, sy, 0, 0);
+            /*Matrix m = new Matrix(sx, 0, 0, sy, 0, 0);
             m.Multiply(fMatrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+            fMatrix = m;*/
         }
 
         public override void TranslateTransform(float dx, float dy)
         {
-            Matrix m = new Matrix(1, 0, 0, 1, dx, dy);
+            /*Matrix m = new Matrix(1, 0, 0, 1, dx, dy);
             m.Multiply(fMatrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+            fMatrix = m;*/
         }
 
         public override void RotateTransform(float angle)
         {
-            float rotation = (float)((angle) * Math.PI / 180.0f);
+            /*float rotation = (float)((angle) * Math.PI / 180.0f);
             float cosine = (float)(Math.Cos(rotation));
             float sine = (float)(Math.Sin(rotation));
             Matrix m = new Matrix(cosine, sine, -sine, cosine, 0, 0);
             m.Multiply(fMatrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+            fMatrix = m;*/
         }
 
         public override object SaveTransform()
         {
-            fBackMatrix = fCanvas.Transform;
-            return fBackMatrix;
+            /*fBackMatrix = fCanvas.Transform;
+            return fBackMatrix;*/
+            return null;
         }
 
         public override void RestoreTransform(object matrix)
         {
-            var mtx = matrix as Matrix;
+            /*var mtx = matrix as Matrix;
 
             fCanvas.Transform = mtx;
-            fMatrix = mtx;
+            fMatrix = mtx;*/
         }
 
         public override void DrawArcText(string text, float centerX, float centerY, float radius,
@@ -295,7 +296,7 @@ namespace GKUI.Components
             }
             startAngle = -startAngle;
 
-            Matrix previousTransformation = fCanvas.Transform;
+            /*Matrix previousTransformation = fCanvas.Transform;*/
 
             for (int i = 0; i < text.Length; ++i)
             {
@@ -310,15 +311,15 @@ namespace GKUI.Components
                 float cosine = (float)(Math.Cos(charRotation));
                 float sine = (float)(Math.Sin(charRotation));
 
-                Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
+                /*Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
                 m.Multiply(previousTransformation, MatrixOrder.Append);
-                fCanvas.Transform = m;
+                fCanvas.Transform = m;*/
 
                 string chr = new string(text[i], 1);
                 DrawString(chr, font, brush, 0, 0);
             }
 
-            fCanvas.Transform = previousTransformation;
+            /*fCanvas.Transform = previousTransformation;*/
         }
     }
 }

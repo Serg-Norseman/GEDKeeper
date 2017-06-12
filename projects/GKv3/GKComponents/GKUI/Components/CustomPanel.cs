@@ -32,6 +32,20 @@ namespace GKUI.Components
     [Handler(typeof(CustomPanel.IHandler))]
     public class CustomPanel : Scrollable
     {
+        #region Temp for compatibility
+
+        public Font Font {
+            get;
+            set;
+        }
+
+        public Color TextColor {
+            get;
+            set;
+        }
+
+        #endregion
+
         public new interface ICallback : Control.ICallback, Widget.ICallback
         {
             void OnPaint(CustomPanel widget, PaintEventArgs e);

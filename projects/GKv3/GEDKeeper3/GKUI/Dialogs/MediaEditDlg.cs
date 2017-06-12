@@ -117,7 +117,8 @@ namespace GKUI.Dialogs
                 fSourcesList.ListModel.DataOwner = fMediaRec;
 
                 ControlsRefresh();
-                ActiveControl = txtName;
+                //ActiveControl = txtName;
+                txtName.Focus();
             }
             catch (Exception ex)
             {

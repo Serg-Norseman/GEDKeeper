@@ -20,9 +20,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 
 using GKCommon;
 
@@ -98,7 +97,7 @@ namespace GKUI.Components
         private Image fImage;
         private Color fImageBorderColor;
         private ImageBoxBorderStyle fImageBorderStyle;
-        private InterpolationMode fInterpolationMode;
+        private ImageInterpolation fInterpolationMode;
         private bool fIsPanning;
         private bool fIsSelecting;
         private int fScaledImageHeight;
@@ -145,8 +144,8 @@ namespace GKUI.Components
                 if (fAllowDoubleClick != value) {
                     fAllowDoubleClick = value;
 
-                    SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                    UpdateStyles();
+                    //SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
+                    //UpdateStyles();
                 }
             }
         }
@@ -195,24 +194,6 @@ namespace GKUI.Components
                     fAutoPan = value;
                     if (value)
                         SizeToFit = false;
-                }
-            }
-        }
-
-        /// <summary>
-        ///   Specifies if the control should auto size to fit the image contents.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
-        ///   <c>true</c> if enabled; otherwise, <c>false</c>
-        /// </returns>
-        public override bool AutoSize
-        {
-            get { return base.AutoSize; }
-            set {
-                if (base.AutoSize != value) {
-                    base.AutoSize = value;
-                    AdjustLayout();
                 }
             }
         }
@@ -282,11 +263,11 @@ namespace GKUI.Components
         ///   Gets or sets the interpolation mode.
         /// </summary>
         /// <value>The interpolation mode.</value>
-        public InterpolationMode InterpolationMode
+        public ImageInterpolation InterpolationMode
         {
             get { return fInterpolationMode; }
             set {
-                if (value != InterpolationMode.Invalid && fInterpolationMode != value) {
+                if (value != ImageInterpolation.None && fInterpolationMode != value) {
                     fInterpolationMode = value;
                     Invalidate();
                 }
@@ -308,7 +289,7 @@ namespace GKUI.Components
 
                     if (value) {
                         fStartScrollPosition = AutoScrollPosition;
-                        Cursor = Cursors.SizeAll;
+                        Cursor = Cursors.Move; // SizeAll;
                     } else Cursor = Cursors.Default;
                 }
             }
@@ -441,24 +422,24 @@ namespace GKUI.Components
         /// </summary>
         public ImageBox()
         {
-            SetStyle(ControlStyles.StandardDoubleClick, false);
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
-                     ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            UpdateStyles();
+            //SetStyle(ControlStyles.StandardDoubleClick, false);
+            //SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
+            //         ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            //UpdateStyles();
 
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
             AllowZoom = true;
             DropShadowSize = 3;
             ImageBorderStyle = ImageBoxBorderStyle.None;
-            BackColor = Color.White;
-            AutoSize = false;
-            AutoScroll = true;
+            BackgroundColor = Colors.White;
+            //AutoSize = false;
+            //AutoScroll = true;
             AutoPan = true;
-            InterpolationMode = InterpolationMode.NearestNeighbor;
+            InterpolationMode = ImageInterpolation.High; //NearestNeighbor;
             AutoCenter = true;
             SelectionColor = SystemColors.Highlight;
-            ImageBorderColor = SystemColors.ControlDark;
+            ImageBorderColor = SystemColors.ControlBackground; //ControlDark;
 
             ActualSize();
             UpdateParams();
@@ -565,13 +546,13 @@ namespace GKUI.Components
 
                 Rectangle innerRectangle = GetInsideViewPort(true);
 
-                if (!HScroll && !VScroll) // if no scrolling is present, tinker the view port so that the image and any applicable borders all fit inside
+                if (!HasScroll) // if no scrolling is present, tinker the view port so that the image and any applicable borders all fit inside
                     innerRectangle.Inflate(-GetImageBorderOffset(), -GetImageBorderOffset());
 
                 if (fAutoCenter)
                 {
-                    int x = !HScroll ? (innerRectangle.Width - (fScaledImageWidth + Padding.Horizontal)) / 2 : 0;
-                    int y = !VScroll ? (innerRectangle.Height - (fScaledImageHeight + Padding.Vertical)) / 2 : 0;
+                    int x = !HasScroll ? (innerRectangle.Width - (fScaledImageWidth + Padding.Horizontal)) / 2 : 0;
+                    int y = !HasScroll ? (innerRectangle.Height - (fScaledImageHeight + Padding.Vertical)) / 2 : 0;
 
                     offset = new Point(x, y);
                 }
@@ -769,7 +750,8 @@ namespace GKUI.Components
         {
             if (fViewSize.IsEmpty) return;
 
-            AutoScrollMinSize = Size.Empty;
+            //AutoScrollMinSize = Size.Empty;
+            ScrollSize = Size.Empty;
 
             Rectangle innerRectangle = GetInsideViewPort(true);
             double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
@@ -799,14 +781,15 @@ namespace GKUI.Components
         /// </summary>
         private void AdjustLayout()
         {
-            if (AutoSize) {
+            /*if (AutoSize) {
                 if (Dock == DockStyle.None)
                     Size = PreferredSize;
-            } else if (fSizeToFit)
+            } else */if (fSizeToFit)
                 ZoomToFit();
-            else if (AutoScroll) {
+            else /*if (AutoScroll)*/ {
                 if (!fViewSize.IsEmpty)
-                    AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
+                    ScrollSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
+                    //AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
             }
 
             Invalidate();
@@ -819,8 +802,8 @@ namespace GKUI.Components
         /// <param name="viewPort"> The view port. </param>
         private void DrawDropShadow(Graphics g, Rectangle viewPort)
         {
-            var rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
-            var bottomEdge = new Rectangle(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
+            var rightEdge = new RectangleF(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
+            var bottomEdge = new RectangleF(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
 
             using (Brush brush = new SolidBrush(fImageBorderColor))
                 g.FillRectangles(brush, new[] { rightEdge, bottomEdge });
@@ -833,7 +816,7 @@ namespace GKUI.Components
         /// <param name="viewPort">The view port.</param>
         private void DrawGlowShadow(Graphics g, Rectangle viewPort)
         {
-            g.SetClip(viewPort, CombineMode.Exclude); // make sure the inside glow doesn't appear
+            g.SetClip(viewPort/*, CombineMode.Exclude*/); // make sure the inside glow doesn't appear
 
             using (var path = new GraphicsPath())
             {
@@ -846,7 +829,8 @@ namespace GKUI.Components
                 {
                     int alpha = feather - ((feather / glowSize) * i);
 
-                    using (var pen = new Pen(Color.FromArgb(alpha, fImageBorderColor), i) { LineJoin = LineJoin.Round })
+                    var color = new Color(fImageBorderColor, alpha / 255);
+                    using (var pen = new Pen(color, i) { LineJoin = PenLineJoin.Round })
                         g.DrawPath(pen, path);
                 }
             }
@@ -858,16 +842,16 @@ namespace GKUI.Components
         /// <param name="g">The g.</param>
         private void DrawImage(Graphics g)
         {
-            InterpolationMode currentInterpolationMode = g.InterpolationMode;
+            ImageInterpolation currentInterpolationMode = g.ImageInterpolation;
             PixelOffsetMode currentPixelOffsetMode = g.PixelOffsetMode;
 
-            g.InterpolationMode = fInterpolationMode;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.ImageInterpolation = fInterpolationMode;
+            g.PixelOffsetMode = PixelOffsetMode.Half; //HighQuality;
 
-            g.DrawImage(fImage, GetImageViewPort(), GetSourceImageRegion(), GraphicsUnit.Pixel);
+            g.DrawImage(fImage, GetImageViewPort(), GetSourceImageRegion());
 
             g.PixelOffsetMode = currentPixelOffsetMode;
-            g.InterpolationMode = currentInterpolationMode;
+            g.ImageInterpolation = currentInterpolationMode;
         }
 
         /// <summary>
@@ -911,7 +895,8 @@ namespace GKUI.Components
 
             RectangleF rect = GetOffsetRectangle(fSelectionRegion);
 
-            using (Brush brush = new SolidBrush(Color.FromArgb(128, fSelectionColor)))
+            var color = new Color(fSelectionColor, 128 / 255);
+            using (Brush brush = new SolidBrush(color))
                 e.Graphics.FillRectangle(brush, rect);
 
             using (var pen = new Pen(fSelectionColor))
@@ -954,7 +939,7 @@ namespace GKUI.Components
         /// <returns>
         ///   An ordered pair of type <see cref="T:System.Drawing.Size" /> representing the width and height of a rectangle.
         /// </returns>
-        public override Size GetPreferredSize(Size proposedSize)
+        /*public override Size GetPreferredSize(Size proposedSize)
         {
             Size size;
 
@@ -969,7 +954,7 @@ namespace GKUI.Components
                 size = base.GetPreferredSize(proposedSize);
 
             return size;
-        }
+        }*/
 
         /// <summary>
         ///   Determines whether the specified key is a regular input key or a special key that requires preprocessing.
@@ -980,7 +965,7 @@ namespace GKUI.Components
         /// <returns>
         ///   true if the specified key is a regular input key; otherwise, false.
         /// </returns>
-        protected override bool IsInputKey(Keys keyData)
+        /*protected override bool IsInputKey(Keys keyData)
         {
             bool result;
 
@@ -991,7 +976,7 @@ namespace GKUI.Components
                 result = base.IsInputKey(keyData);
 
             return result;
-        }
+        }*/
 
         /// <summary>
         ///   Raises the <see cref="System.Windows.Forms.Control.BackColorChanged" /> event.
@@ -999,25 +984,11 @@ namespace GKUI.Components
         /// <param name="e">
         ///   An <see cref="T:System.EventArgs" /> that contains the event data.
         /// </param>
-        protected override void OnBackColorChanged(EventArgs e)
+        /*protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
             Invalidate();
-        }
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.DockChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnDockChanged(EventArgs e)
-        {
-            base.OnDockChanged(e);
-
-            if (Dock != DockStyle.None)
-                AutoSize = false;
-        }
+        }*/
 
         /// <summary>
         ///   Raises the <see cref="System.Windows.Forms.Control.KeyDown" /> event.
@@ -1043,10 +1014,10 @@ namespace GKUI.Components
         {
             base.OnMouseDown(e);
 
-            if (!Focused)
+            if (!HasFocus)
                 Focus();
 
-            if (e.Button == MouseButtons.Left && fSelectionMode != ImageBoxSelectionMode.None)
+            if (e.Buttons == MouseButtons.Primary && fSelectionMode != ImageBoxSelectionMode.None)
                 SelectionRegion = Rectangle.Empty;
         }
 
@@ -1060,13 +1031,13 @@ namespace GKUI.Components
         {
             base.OnMouseMove(e);
 
-            switch (e.Button) {
-                case MouseButtons.Left:
+            switch (e.Buttons) {
+                case MouseButtons.Primary:
                     ProcessPanning(e, ImageBoxSelectionMode.Zoom);
                     ProcessSelection(e);
                     break;
 
-                case MouseButtons.Right:
+                case MouseButtons.Alternate:
                     ProcessPanning(e, ImageBoxSelectionMode.None);
                     break;
             }
@@ -1100,19 +1071,7 @@ namespace GKUI.Components
             base.OnMouseWheel(e);
 
             if (fAllowZoom && !fSizeToFit)
-                ProcessMouseZoom(e.Delta > 0, e.Location);
-        }
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.PaddingChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnPaddingChanged(EventArgs e)
-        {
-            base.OnPaddingChanged(e);
-            AdjustLayout();
+                ProcessMouseZoom(e.Delta.Height > 0, new Point(e.Location));
         }
 
         /// <summary>
@@ -1128,7 +1087,7 @@ namespace GKUI.Components
             Rectangle innerRectangle = GetInsideViewPort(false);
 
             // draw the background
-            using (var brush = new SolidBrush(BackColor))
+            using (var brush = new SolidBrush(BackgroundColor))
                 e.Graphics.FillRectangle(brush, innerRectangle);
 
             // draw the image
@@ -1145,27 +1104,15 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.ParentChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-            AdjustLayout();
-        }
-
-        /// <summary>
         ///   Raises the <see cref="System.Windows.Forms.Control.Resize" /> event.
         /// </summary>
         /// <param name="e">
         ///   An <see cref="T:System.EventArgs" /> that contains the event data.
         /// </param>
-        protected override void OnResize(EventArgs e)
+        protected override void OnSizeChanged(EventArgs e)
         {
             AdjustLayout();
-            base.OnResize(e);
+            base.OnSizeChanged(e);
         }
 
         #endregion
@@ -1225,7 +1172,7 @@ namespace GKUI.Components
         {
             int previousZoom = fZoom;
 
-            switch (e.KeyCode)
+            switch (e.Key)
             {
                 case Keys.Home:
                     if (fAllowZoom)
@@ -1233,20 +1180,20 @@ namespace GKUI.Components
                     break;
 
                 case Keys.PageDown:
-                case Keys.Oemplus:
+                case Keys.Plus:
                     if (fAllowZoom)
                         ZoomIn();
                     break;
 
                 case Keys.PageUp:
-                case Keys.OemMinus:
+                case Keys.Minus:
                     if (fAllowZoom)
                         ZoomOut();
                     break;
             }
 
-            if (fZoom != previousZoom && fAutoCenter && !AutoScrollMinSize.IsEmpty)
-                AutoScrollPosition = new Point((AutoScrollMinSize.Width - ClientSize.Width) / 2, (AutoScrollMinSize.Height - ClientSize.Height) / 2);
+            if (fZoom != previousZoom && fAutoCenter && !ScrollSize.IsEmpty)
+                AutoScrollPosition = new Point((ScrollSize.Width - ClientSize.Width) / 2, (ScrollSize.Height - ClientSize.Height) / 2);
         }
 
         /// <summary>
@@ -1277,18 +1224,19 @@ namespace GKUI.Components
         /// </param>
         private void ProcessPanning(MouseEventArgs e, ImageBoxSelectionMode selectionMode)
         {
+            Point mpt = new Point(e.Location);
             if (fAutoPan && !fViewSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None)
             {
-                if (!fIsPanning && (HScroll || VScroll))
+                if (!fIsPanning && HasScroll)
                 {
-                    fStartMousePosition = e.Location;
+                    fStartMousePosition = mpt;
                     IsPanning = true;
                 }
 
                 if (fIsPanning)
                 {
-                    int x = -fStartScrollPosition.X + (fStartMousePosition.X - e.Location.X);
-                    int y = -fStartScrollPosition.Y + (fStartMousePosition.Y - e.Location.Y);
+                    int x = -fStartScrollPosition.X + (fStartMousePosition.X - mpt.X);
+                    int y = -fStartScrollPosition.Y + (fStartMousePosition.Y - mpt.Y);
 
                     UpdateScrollPosition(x, y);
                 }
@@ -1303,22 +1251,22 @@ namespace GKUI.Components
         /// </param>
         private void ProcessScrollingShortcuts(KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            switch (e.Key)
             {
                 case Keys.Left:
-                    AdjustScroll(-(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange), 0);
+                    AdjustScroll(-(e.Modifiers == Keys.None ? SmallChange : LargeChange), 0);
                     break;
 
                 case Keys.Right:
-                    AdjustScroll(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange, 0);
+                    AdjustScroll(e.Modifiers == Keys.None ? SmallChange : LargeChange, 0);
                     break;
 
                 case Keys.Up:
-                    AdjustScroll(0, -(e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange));
+                    AdjustScroll(0, -(e.Modifiers == Keys.None ? SmallChange : LargeChange));
                     break;
 
                 case Keys.Down:
-                    AdjustScroll(0, e.Modifiers == Keys.None ? VerticalScroll.SmallChange : VerticalScroll.LargeChange);
+                    AdjustScroll(0, e.Modifiers == Keys.None ? SmallChange : LargeChange);
                     break;
             }
         }
@@ -1333,9 +1281,10 @@ namespace GKUI.Components
         {
             if (fSelectionMode == ImageBoxSelectionMode.None) return;
 
+            Point mpt = new Point(e.Location);
             if (!fIsSelecting)
             {
-                fStartMousePosition = e.Location;
+                fStartMousePosition = mpt;
                 IsSelecting = true;
             }
 
@@ -1345,26 +1294,26 @@ namespace GKUI.Components
 
             Point imageOffset = GetImageViewPort().Location;
 
-            if (e.X < fStartMousePosition.X)
+            if (mpt.X < fStartMousePosition.X)
             {
-                x = e.X;
-                w = fStartMousePosition.X - e.X;
+                x = mpt.X;
+                w = fStartMousePosition.X - mpt.X;
             }
             else
             {
                 x = fStartMousePosition.X;
-                w = e.X - fStartMousePosition.X;
+                w = mpt.X - fStartMousePosition.X;
             }
 
-            if (e.Y < fStartMousePosition.Y)
+            if (mpt.Y < fStartMousePosition.Y)
             {
-                y = e.Y;
-                h = fStartMousePosition.Y - e.Y;
+                y = mpt.Y;
+                h = fStartMousePosition.Y - mpt.Y;
             }
             else
             {
                 y = fStartMousePosition.Y;
-                h = e.Y - fStartMousePosition.Y;
+                h = mpt.Y - fStartMousePosition.Y;
             }
 
             x = x - imageOffset.X - AutoScrollPosition.X;

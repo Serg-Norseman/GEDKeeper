@@ -28,6 +28,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -76,11 +77,11 @@ namespace GKUI.Dialogs
         {
             int[] stats = fBase.Context.Tree.GetRecordStats();
 
-            lvRecordStats.Items.Clear();
+            lvRecordStats.ClearItems();
             for (int i = 1; i < stats.Length; i++)
             {
-                ListViewItem item = lvRecordStats.Items.Add(LangMan.LS(GKData.RecordTypes[i]));
-                item.SubItems.Add(stats[i].ToString());
+                GKListItem item = lvRecordStats.AddItem(LangMan.LS(GKData.RecordTypes[i]), null);
+                item.AddSubItem(stats[i].ToString());
             }
         }
 

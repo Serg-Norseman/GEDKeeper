@@ -19,6 +19,11 @@ namespace GKUI.Components
 
     public class GKListItem : GKCore.Interfaces.IListItem
     {
+        public object Data
+        {
+            get; set;
+        }
+
         public GKListItem(object dataValue)
         {
             
@@ -48,7 +53,7 @@ namespace GKUI.Components
     /// <summary>
     /// Description of GKListViewStub.
     /// </summary>
-    public class GKListViewStub : Scrollable
+    public class GKListViewStub : Scrollable, IListView
     {
         public IListManager ListMan
         {
@@ -100,9 +105,22 @@ namespace GKUI.Components
             
         }
 
-        public void AddColumn(string text, int width, bool autoSize = false)
+        public void AddColumn(string caption, int width, bool autoSize = false)
         {
             
+        }
+
+        public void ResizeColumn(int columnIndex)
+        {
+            
+        }
+
+        public void SelectItem(int index)
+        {
+        }
+
+        public void SelectItem(object data)
+        {
         }
 
         public void ClearColumns()

@@ -271,7 +271,7 @@ namespace GKUI.Dialogs
 
         private void UpdatePlugins()
         {
-            lvPlugins.Items.Clear();
+            lvPlugins.ClearItems();
 
             int num = AppHost.Plugins.Count;
             for (int i = 0; i < num; i++)
@@ -279,10 +279,10 @@ namespace GKUI.Dialogs
                 IPlugin plugin = AppHost.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
 
-                ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
-                item.SubItems.Add(pInfo.Version);
-                item.SubItems.Add(pInfo.Copyright);
-                item.SubItems.Add(pInfo.Description);
+                GKListItem item = lvPlugins.AddItem(pInfo.Title, null);
+                item.AddSubItem(pInfo.Version);
+                item.AddSubItem(pInfo.Copyright);
+                item.AddSubItem(pInfo.Description);
             }
         }
 
@@ -483,12 +483,12 @@ namespace GKUI.Dialogs
 
                 case OptionsPage.opTreeChart:
                     PageControl1.SelectedPage = pageCharts;
-                    tabsCharts.SelectTab(0);
+                    tabsCharts.SelectedIndex = 0;
                     break;
 
                 case OptionsPage.opAncestorsCircle:
                     PageControl1.SelectedPage = pageCharts;
-                    tabsCharts.SelectTab(1);
+                    tabsCharts.SelectedIndex = 1;
                     break;
 
                 case OptionsPage.opInterface:

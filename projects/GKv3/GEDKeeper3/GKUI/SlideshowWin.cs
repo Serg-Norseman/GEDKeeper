@@ -37,7 +37,7 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
-        private readonly ImageBoxStub fImageCtl;
+        private readonly ImageBox fImageCtl;
 
         private int fCurrentIndex;
         private string fCurrentText;
@@ -51,12 +51,11 @@ namespace GKUI
             tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             SuspendLayout();
-            fImageCtl = new GKUI.Components.ImageBoxStub();
+            fImageCtl = new GKUI.Components.ImageBox();
             Content = fImageCtl;
             ResumeLayout();
 
-            fImageCtl.BackgroundColor = SystemColors.ControlDark;
-            fImageCtl.Margin = new Padding(4);
+            fImageCtl.BackgroundColor = SystemColors.ControlBackground; //ControlDark;
             fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImageCtl.ImageBorderColor = Colors.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;

@@ -19,24 +19,54 @@
  */
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 
 using GKCommon;
 
 namespace GKUI.Components
 {
-    public class ScrollablePanel : Panel
+    public class ScrollablePanel : CustomPanel
     {
         public ScrollablePanel()
         {
-            AutoScroll = true;
-            ResizeRedraw = true;
+            //AutoScroll = true;
+            //ResizeRedraw = true;
         }
+
+        #region Temp for compatibility
+
+        public const int SmallChange = 1;
+        public const int LargeChange = 10;
+
+        public bool HasScroll
+        {
+            get { return true; }
+        }
+
+        public int HorizontalScrollValue
+        {
+            get;
+            set;
+        }
+
+        public int VerticalScrollValue
+        {
+            get;
+            set;
+        }
+
+        public Point AutoScrollPosition
+        {
+            get { return Point.Empty; }
+            set {  }
+        }
+
+        #endregion
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (!Focused)
+            if (!HasFocus)
                 Focus();
 
             base.OnMouseDown(e);
@@ -50,20 +80,8 @@ namespace GKUI.Components
         /// </param>
         protected override void OnScroll(ScrollEventArgs se)
         {
-            if (se.Type != ScrollEventType.EndScroll) {
-                switch (se.ScrollOrientation)
-                {
-                    case ScrollOrientation.HorizontalScroll:
-                        ScrollByOffset(se.NewValue + AutoScrollPosition.X, 0);
-                        break;
-
-                    case ScrollOrientation.VerticalScroll:
-                        ScrollByOffset(0, se.NewValue + AutoScrollPosition.Y);
-                        break;
-                }
-            } else {
-                Invalidate();
-            }
+            ScrollByOffset(se.ScrollPosition.X + AutoScrollPosition.X, 
+                           se.ScrollPosition.Y + AutoScrollPosition.Y);
 
             base.OnScroll(se);
         }
@@ -98,14 +116,15 @@ namespace GKUI.Components
         /// <param name="y">The y.</param>
         protected void AdjustScroll(int x, int y)
         {
-            UpdateScrollPosition(HorizontalScroll.Value + x, VerticalScroll.Value + y);
+            UpdateScrollPosition(HorizontalScrollValue + x, VerticalScrollValue + y);
         }
 
         protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
         {
-            if (AutoScroll && !imageSize.IsEmpty) {
+            /*if (AutoScroll && !imageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
-            }
+            }*/
+            ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
 
             if (!noRedraw) Invalidate();
         }

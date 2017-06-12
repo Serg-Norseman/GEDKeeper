@@ -112,7 +112,8 @@ namespace GKUI.Dialogs
             fNotesList.ListModel.DataOwner = fLocationRecord;
             fMediaList.ListModel.DataOwner = fLocationRecord;
 
-            ActiveControl = txtName;
+            //ActiveControl = txtName;
+            txtName.Focus();
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
@@ -165,7 +166,7 @@ namespace GKUI.Dialogs
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
                 AppHost.Instance.RequestGeoCoords(txtName.Text, searchPoints);
-                ListGeoCoords.Items.Clear();
+                ListGeoCoords.ClearItems();
                 fMapBrowser.ClearPoints();
 
                 int num = searchPoints.Count;

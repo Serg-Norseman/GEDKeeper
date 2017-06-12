@@ -29,7 +29,7 @@ using GKUI.Components;
 
 namespace GKUI.Components
 {
-    public abstract class CustomChart : ScrollablePanelStub, IPrintable
+    public abstract class CustomChart : ScrollablePanel, IPrintable
     {
         private readonly NavigationStack fNavman;
 
@@ -117,9 +117,9 @@ namespace GKUI.Components
 
                 case Keys.End:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScrollValue = VerticalScroll.Maximum;
+                        VerticalScrollValue = ScrollSize.Height;
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScrollValue = HorizontalScroll.Maximum;
+                        HorizontalScrollValue = ScrollSize.Width;
                     }
                     break;
 
@@ -133,23 +133,12 @@ namespace GKUI.Components
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            if (MouseButtons.XButton1 == e.Buttons) {
-                NavPrev();
-            } else if (MouseButtons.XButton2 == e.Buttons) {
-                NavNext();
-            } else {
-                base.OnMouseUp(e);
-            }
-        }
-
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None == e.Modifiers) {
-                VerticalScrollValue = Math.Max(VerticalScrollValue - e.Delta, 0);
+                VerticalScrollValue = Math.Max(VerticalScrollValue - (int)e.Delta.Height, 0);
             } else if (Keys.Shift == e.Modifiers) {
-                HorizontalScrollValue = Math.Max(HorizontalScrollValue - e.Delta, 0);
+                HorizontalScrollValue = Math.Max(HorizontalScrollValue - (int)e.Delta.Width, 0);
             }
             else {
                 base.OnMouseWheel(e);

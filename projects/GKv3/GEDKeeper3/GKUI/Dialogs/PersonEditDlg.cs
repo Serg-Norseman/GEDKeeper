@@ -665,7 +665,7 @@ namespace GKUI.Dialogs
             btnParentsEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
             btnParentsDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
 
-            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
+            //imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();
         }

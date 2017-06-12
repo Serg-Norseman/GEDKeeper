@@ -127,25 +127,26 @@ namespace GKUI.Dialogs
             return idx;
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
+        private static GridColumn AddTextColumn(string colName, string headerText, int width)
         {
-            DataGridViewColumn col = new DataGridViewTextBoxColumn();
+            var col = new GridColumn();//DataGridViewTextBoxColumn();
             col.HeaderText = headerText;
-            col.Name = colName;
+            col.DataCell = new TextBoxCell();
+            //col.Name = colName;
             col.Width = width;
             return col;
         }
 
-        private static DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items, int width)
+        private static GridColumn AddComboColumn(string colName, string headerText, object[] items, int width)
         {
-            DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
+            var col = new GridColumn();//DataGridViewComboBoxColumn();
             col.HeaderText = headerText;
-            col.Name = colName;
+            col.DataCell = new ComboBoxCell();
+            //col.Name = colName;
             col.Width = width;
-            col.Items.AddRange(items);
+            //col.Items.AddRange(items);
             return col;
-        }*/
+        }
 
         private void InitGrid()
         {
@@ -157,14 +158,13 @@ namespace GKUI.Dialogs
             dataGridView1.Controls.Add(fMaskedTextBox);
 
             dataGridView1.Rows.Clear();
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] {
-                                               AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200),
-                                               AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
-                                               AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)});
+            dataGridView1.Columns.Add(AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200));
+            dataGridView1.Columns.Add(AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150));
+            dataGridView1.Columns.Add(AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300));
 
-            dataGridView1.CellBeginEdit += dataGridView1_CellBeginEdit;
-            dataGridView1.CellEndEdit += dataGridView1_CellEndEdit;
-            dataGridView1.Scroll += dataGridView1_Scroll;
+            //dataGridView1.CellEditing += dataGridView1_CellBeginEdit;
+            //dataGridView1.CellEdited += dataGridView1_CellEndEdit;
+            //dataGridView1.Scroll += dataGridView1_Scroll;
         }
 
         private bool IsGEDCOMDateCell(int rowIndex)

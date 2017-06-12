@@ -93,7 +93,7 @@ namespace GKUI.Components
         }
 
 
-        public GKSheetList(Control owner)
+        public GKSheetList(Container owner)
         {
             if (owner == null)
                 throw new ArgumentNullException("owner");
@@ -139,7 +139,7 @@ namespace GKUI.Components
             //fToolBar.AutoSize = true;
             //fToolBar.ShowToolTips = true;
 
-            fList = new GKListView();
+            fList = new GKListViewStub();
             fList.Size = new Size(500, 290);
             //fList.HideSelection = false;
             //fList.LabelEdit = false;
@@ -340,7 +340,7 @@ namespace GKUI.Components
 
         public void ClearColumns()
         {
-            fList.Columns.Clear();
+            fList.ClearColumns();
         }
 
         public void ResizeColumn(int columnIndex)
@@ -389,7 +389,7 @@ namespace GKUI.Components
 
             if (fListModel != null) {
                 if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
-                    fList.Columns.Clear();
+                    fList.ClearColumns();
                     fListModel.UpdateColumns(fList);
                 }
 

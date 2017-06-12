@@ -374,7 +374,8 @@ namespace GKUI.Dialogs
 
             ControlsRefresh();
 
-            ActiveControl = cmbEventType;
+            //ActiveControl = cmbEventType;
+            cmbEventType.Focus();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

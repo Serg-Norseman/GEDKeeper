@@ -367,7 +367,7 @@ namespace GKUI.Components
         {
             fTimer = new Timer();
             fTimer.Interval = 1;
-            fTimer.Tick += TickTimer;
+            fTimer.Elapsed += TickTimer;
             fTimer.Stop();
             fTimer.Enabled = false;
             fTimer.Enabled = true;
@@ -613,8 +613,8 @@ namespace GKUI.Components
             if (!imageSize.IsEmpty) {
                 Rectangle innerRectangle = GetInsideViewPort(true);
 
-                int x = !HScroll ? (innerRectangle.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
-                int y = !VScroll ? (innerRectangle.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
+                int x = !HasScroll ? (innerRectangle.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
+                int y = !HasScroll ? (innerRectangle.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
 
                 int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
                 int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
@@ -746,12 +746,12 @@ namespace GKUI.Components
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Buttons == MouseButtons.Left && mouseEvent == MouseEvent.meDown)
+                    if (e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meDown)
                     {
                         result = MouseAction.maSelect;
                         break;
                     }
-                    else if (e.Buttons == MouseButtons.Right && mouseEvent == MouseEvent.meUp)
+                    else if (e.Buttons == MouseButtons.Alternate && mouseEvent == MouseEvent.meUp)
                     {
                         result = MouseAction.maProperties;
                         break;
@@ -764,7 +764,7 @@ namespace GKUI.Components
                 }
 
                 ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
-                if ((e.Buttons == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.maExpand;
                     break;
@@ -772,7 +772,7 @@ namespace GKUI.Components
             }
 
             if (result == MouseAction.maNone && person == null) {
-                if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meDown) {
+                if (e.Buttons == MouseButtons.Alternate && mouseEvent == MouseEvent.meDown) {
                     result = MouseAction.maDrag;
                 }
             }
@@ -885,7 +885,7 @@ namespace GKUI.Components
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null)
                             {
-                                DoPersonProperties(new MouseEventArgs(e.Button, 1, pt.X, pt.Y, 0));
+                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, new PointF(pt.X, pt.Y)));
                             }
                             break;
 

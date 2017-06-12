@@ -12,7 +12,7 @@ namespace GKUI
         private SeparatorToolItem ToolButton2;
         private ButtonToolItem tbRun;
         private GKUI.Components.TextBoxEx txtDebugOutput;
-        private TextArea txtScriptText;
+        private TextBoxEx txtScriptText;
         private ButtonToolItem tbSaveScript;
         private ButtonToolItem tbNewScript;
         private Splitter splitContainer1;
@@ -39,7 +39,7 @@ namespace GKUI
                                         new SeparatorToolItem(),
                                         tbRun});
 
-            txtScriptText = new TextArea();
+            txtScriptText = new TextBoxEx();
             txtScriptText.Size = new Size(712, 240);
 
             txtDebugOutput = new GKUI.Components.TextBoxEx();

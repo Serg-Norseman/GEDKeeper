@@ -84,13 +84,14 @@
     <Compile Include="GKUI\Components\GKMenuItem.cs" />
     <Compile Include="GKUI\Components\GKTreeNode.cs" />
     <Compile Include="GKUI\Components\HyperView.cs" />
-    <Compile Include="GKUI\Components\ImageBoxStub.cs" />
+    <Compile Include="GKUI\Components\ImageBox.cs" />
     <Compile Include="GKUI\Components\ImageView.cs" />
     <Compile Include="GKUI\Components\LogChart.cs" />
-    <Compile Include="GKUI\Components\ScrollablePanelStub.cs" />
+    <Compile Include="GKUI\Components\MediaPlayerStub.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
-    <Compile Include="GKUI\Components\ZedGraphControlStub.cs" />
+    <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <None Include="packages.config" />
     <Compile Include="GKUI\Components\GKListViewStub.cs" />
     <EmbeddedResource Include="Resources\btn_size_to_fit.png" />

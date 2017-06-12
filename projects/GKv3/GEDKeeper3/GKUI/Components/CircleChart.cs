@@ -353,7 +353,7 @@ namespace GKUI.Components
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Point pt = new Point(e.Location);
-            if ((e.Buttons == MouseButtons.Right) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
+            if ((e.Buttons == MouseButtons.Alternate) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
                 fMouseCaptured = MouseCaptured.mcDrag;
                 fMouseCaptureX = pt.X;
                 fMouseCaptureY = pt.Y;
@@ -371,7 +371,7 @@ namespace GKUI.Components
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
             }
-            else if (e.Buttons == MouseButtons.Left) {
+            else if (e.Buttons == MouseButtons.Primary) {
                 CircleSegment selected = FindSegment(pt.X, pt.Y);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
