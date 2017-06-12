@@ -23,25 +23,25 @@ using Eto.Forms;
 
 namespace GKUI.Dialogs
 {
-    public enum DlgResult
+    /*public enum DlgResult
     {
         None, OK, Cancel
-    }
+    }*/
     
     /// <summary>
     /// 
     /// </summary>
-    public class ModalDialog : Dialog<DlgResult>
+    public class ModalDialog : Dialog<DialogResult>
     {
-        public DlgResult DialogResult
+        public DialogResult DialogResult
         {
             get { return base.Result; }
             set {
                 if (base.Result != value) {
                     base.Result = value;
-                    if (value != DlgResult.None) {
+                    /*if (value != DialogResult.None) {
                         Close();
-                    }
+                    }*/
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace GKUI.Dialogs
 
         public virtual bool ShowModalX()
         {
-            return (ShowModal() == DlgResult.OK);
+            return (ShowModal() == DialogResult.Ok);
         }
     }
 }

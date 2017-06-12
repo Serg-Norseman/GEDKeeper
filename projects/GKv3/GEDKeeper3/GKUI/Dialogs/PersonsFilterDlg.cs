@@ -61,6 +61,18 @@ namespace GKUI.Dialogs
             tabsFilters.SelectedIndex = 1;
         }
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+            base.Dispose(disposing);
+        }
+
         public void SetSpecificLang()
         {
             Title = LangMan.LS(LSID.LSID_MIFilter);
@@ -215,7 +227,7 @@ namespace GKUI.Dialogs
             fs = cmbEventVal.Text.Trim();
             SaveFilter(fs, GlobalOptions.Instance.EventFilters);
 
-            iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked;
+            iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked.GetValueOrDefault();
 
             int lifeSel = 0;
             if (rbAll.Checked) lifeSel = 0;
@@ -236,7 +248,7 @@ namespace GKUI.Dialogs
                     catch
                     {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
-                        DialogResult = DlgResult.None;
+                        DialogResult = DialogResult.None;
                     }
                 }
                 iFilter.FilterLifeMode = (FilterLifeMode)lifeSel;

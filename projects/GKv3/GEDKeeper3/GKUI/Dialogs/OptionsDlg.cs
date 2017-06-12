@@ -319,12 +319,12 @@ namespace GKUI.Dialogs
             try
             {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -418,7 +418,7 @@ namespace GKUI.Dialogs
 
             ancOptionsControl1.AcceptChanges();
 
-            if (!chkExtendWomanSurnames.Checked) {
+            if (!chkExtendWomanSurnames.Checked.GetValueOrDefault()) {
                 fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             } else {
                 if (radMaiden_Married.Checked) {
@@ -434,7 +434,7 @@ namespace GKUI.Dialogs
 
             fOptions.Geocoder = cmbGeocoder.Text;
 
-            DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.Ok;
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)
@@ -470,7 +470,7 @@ namespace GKUI.Dialogs
 
         private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
         {
-            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
+            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked.GetValueOrDefault();
         }
 
         public void SetPage(OptionsPage page)

@@ -26,6 +26,7 @@ using Eto.Forms;
 
 using GKCommon;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -51,16 +52,17 @@ namespace GKUI.Dialogs
         private void InitPrintDoc()
         {
             fPrintDoc = new PrintDocument();
-            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
+            //fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
+            //fPrintDoc.BeginPrint += printDocument1_BeginPrint;
             fPrintDoc.PrintPage += printDocument1_PrintPage;
         }
 
         private void InitCurDoc()
         {
-            fPrintDoc.DocumentName = Title;
-            fPrintDoc.DefaultPageSettings.Landscape = GetPrintable().IsLandscape();
-            fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
+            fPrintDoc.Name = Title;
+            fPrintDoc.PrintSettings.Orientation = GetPrintable().IsLandscape() ? PageOrientation.Landscape : PageOrientation.Portrait;
+            //fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
+            fPrintDoc.PageCount = 1;
         }
 
         // FIXME: GKv3 DevRestriction
@@ -98,7 +100,8 @@ namespace GKUI.Dialogs
 
             gfx.DrawImage(img, x, y, imgW, imgH);
 
-            e.HasMorePages = false;
+            // Look at InitCurDoc()
+            //e.HasMorePages = false;
         }
 
         public bool AllowPrint()
@@ -111,12 +114,8 @@ namespace GKUI.Dialogs
             InitCurDoc();
 
             using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = fPrintDoc;
-
-                if (printDlg.ShowDialog(this) == DialogResult.Ok) {
-                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    fPrintDoc.Print();
-                }
+                // Already includes all previous
+                printDlg.ShowDialog(this, fPrintDoc);
             }
         }
 
@@ -124,11 +123,12 @@ namespace GKUI.Dialogs
         {
             InitCurDoc();
 
-            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
+            // It's not supported! :(
+            /*using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
                 previewDlg.WindowState = FormWindowState.Maximized;
                 previewDlg.Document = fPrintDoc;
                 previewDlg.ShowDialog();
-            }
+            }*/
         }
 
         #endregion

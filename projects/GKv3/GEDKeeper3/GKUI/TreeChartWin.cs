@@ -679,7 +679,7 @@ namespace GKUI
             using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
                 dlgFilter.Filter = fTreeBox.Model.Filter;
 
-                if (dlgFilter.ShowModal() == DlgResult.OK)
+                if (dlgFilter.ShowModal() == DialogResult.Ok)
                 {
                     GenChart();
                 }

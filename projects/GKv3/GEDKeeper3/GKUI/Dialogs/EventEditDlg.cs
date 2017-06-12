@@ -130,11 +130,11 @@ namespace GKUI.Dialogs
 
             GEDCOMCalendar cal1 = GetComboCalendar(cmbDate1Calendar);
             GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(txtEventDate1.Text, cal1, true);
-            gcd1.YearBC = btnBC1.Checked;
+            gcd1.YearBC = btnBC1.Checked.GetValueOrDefault();
 
             GEDCOMCalendar cal2 = GetComboCalendar(cmbDate2Calendar);
             GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(txtEventDate2.Text, cal2, true);
-            gcd2.YearBC = btnBC2.Checked;
+            gcd2.YearBC = btnBC2.Checked.GetValueOrDefault();
 
             switch (cmbEventDateType.SelectedIndex) {
                 case 0:
@@ -382,12 +382,12 @@ namespace GKUI.Dialogs
             try
             {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("EventEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

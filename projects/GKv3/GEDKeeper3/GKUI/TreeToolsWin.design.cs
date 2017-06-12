@@ -401,7 +401,8 @@ namespace GKUI
             rgMode.Size = new Size(315, 118);
             rgMode.Text = "rgMode";
             rgMode.Content = new StackLayout {
-                radPersons, radFamilies, radNotes, radSources
+                Orientation = Orientation.Vertical,
+                Items = { radPersons, radFamilies, radNotes, radSources }
             };
 
             radSources.Size = new Size(269, 20);

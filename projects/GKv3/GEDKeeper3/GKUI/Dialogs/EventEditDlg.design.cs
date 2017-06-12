@@ -186,18 +186,20 @@ namespace GKUI.Dialogs
             cmbEventDateType.Size = new Size(168, 25);
             cmbEventDateType.SelectedIndexChanged += EditEventDateType_SelectedIndexChanged;
 
+            txtEventDate1.Provider = new FixedMaskedTextProvider("00/00/0000");
             //txtEventDate1.AllowDrop = true;
             txtEventDate1.BackgroundColor = SystemColors.WindowBackground;
-            txtEventDate1.Mask = "00/00/0000";
+            //txtEventDate1.Mask = "00/00/0000";
             txtEventDate1.Size = new Size(196, 24);
-            txtEventDate1.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            //txtEventDate1.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             //txtEventDate1.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate1.DragOver += new DragEventHandler(EditEventDate1_DragOver);
 
+            txtEventDate2.Provider = new FixedMaskedTextProvider("00/00/0000");
             //txtEventDate2.AllowDrop = true;
-            txtEventDate2.Mask = "00/00/0000";
+            //txtEventDate2.Mask = "00/00/0000";
             txtEventDate2.Size = new Size(196, 24);
-            txtEventDate2.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            //txtEventDate2.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             //txtEventDate2.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate2.DragOver += new DragEventHandler(EditEventDate1_DragOver);
 

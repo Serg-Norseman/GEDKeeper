@@ -129,12 +129,12 @@ namespace GKUI.Dialogs
         {
             try
             {
-                DialogResult = AcceptChanges() ? DlgResult.OK : DlgResult.None;
+                DialogResult = AcceptChanges() ? DialogResult.Ok : DialogResult.None;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

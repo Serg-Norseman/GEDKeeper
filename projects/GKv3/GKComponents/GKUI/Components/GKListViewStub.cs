@@ -17,9 +17,32 @@ namespace GKUI.Components
         
     }
 
-    public class GKListItem
+    public class GKListItem : GKCore.Interfaces.IListItem
     {
+        public GKListItem(object dataValue)
+        {
+            
+        }
+
+        public GKListItem(object dataValue, object tag)
+        {
+            
+        }
+
+        public void AddSubItem(object itemValue)
+        {
+            
+        }
+
+        public void SetBackColor(IColor color)
+        {
+            
+        }
         
+        public int CompareTo(object obj)
+        {
+            return 0;
+        }
     }
 
     /// <summary>
@@ -32,6 +55,11 @@ namespace GKUI.Components
             get { return null; }
         }
 
+        public GKListItem GetSelectedItem()
+        {
+            return null;
+        }
+
         public object GetSelectedData()
         {
             return null;
@@ -42,7 +70,12 @@ namespace GKUI.Components
             
         }
 
-        public GKCore.Interfaces.IListItem AddItem(string text, object data)
+        public GKListItem AddItem(string text, object data)
+        {
+            return null;
+        }
+
+        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
         {
             return null;
         }
@@ -62,7 +95,22 @@ namespace GKUI.Components
             
         }
 
-        public void AddColumn(string text, int width, bool autoSize)
+        public void SelectItemByData(object data)
+        {
+            
+        }
+
+        public void AddColumn(string text, int width, bool autoSize = false)
+        {
+            
+        }
+
+        public void ClearColumns()
+        {
+            
+        }
+
+        public void ClearItems()
         {
             
         }

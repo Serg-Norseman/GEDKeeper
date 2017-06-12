@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -71,12 +72,12 @@ namespace GKUI.Dialogs
             {
                 var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
                 fLanguageID = (GEDCOMLanguageID)item.Tag;
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("LanguageEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
     }

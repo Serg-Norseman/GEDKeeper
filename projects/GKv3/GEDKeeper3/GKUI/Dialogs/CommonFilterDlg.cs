@@ -151,8 +151,9 @@ namespace GKUI.Dialogs
         {
             fMaskedTextBox = new MaskedTextBox();
             fMaskedTextBox.Visible = false;
-            fMaskedTextBox.Mask = @"00/00/0000";
-            fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            fMaskedTextBox.Provider = new FixedMaskedTextProvider("00/00/0000");
+            //fMaskedTextBox.Mask = @"00/00/0000";
+            //fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             dataGridView1.Controls.Add(fMaskedTextBox);
 
             dataGridView1.Rows.Clear();
@@ -251,12 +252,12 @@ namespace GKUI.Dialogs
             try
             {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("CommonFilterDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -290,7 +291,7 @@ namespace GKUI.Dialogs
                 }
             }
 
-            DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.Ok;
         }
 
         public void SetLang()
@@ -308,11 +309,6 @@ namespace GKUI.Dialogs
         {
             fListMan.Filter.Clear();
             UpdateGrid();
-        }
-
-        public bool ShowModalX()
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

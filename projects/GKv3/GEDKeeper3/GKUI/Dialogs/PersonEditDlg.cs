@@ -363,8 +363,8 @@ namespace GKUI.Dialogs
             }
 
             fPerson.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
-            fPerson.Patriarch = chkPatriarch.Checked;
-            fPerson.Bookmark = chkBookmark.Checked;
+            fPerson.Patriarch = chkPatriarch.Checked.GetValueOrDefault();
+            fPerson.Bookmark = chkBookmark.Checked.GetValueOrDefault();
             fPerson.Restriction = (GEDCOMRestriction)cmbRestriction.SelectedIndex;
 
             if (fPerson.ChildToFamilyLinks.Count > 0)
@@ -382,12 +382,12 @@ namespace GKUI.Dialogs
             try
             {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -554,7 +554,9 @@ namespace GKUI.Dialogs
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(GKUtils.GetNameString(fPerson, true, false));
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = GKUtils.GetNameString(fPerson, true, false);
+            }
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

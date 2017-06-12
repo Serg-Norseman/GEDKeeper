@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -54,12 +55,12 @@ namespace GKUI.Dialogs
             {
                 fUserRef.StringValue = cmbRef.Text;
                 fUserRef.ReferenceType = cmbRefType.Text;
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

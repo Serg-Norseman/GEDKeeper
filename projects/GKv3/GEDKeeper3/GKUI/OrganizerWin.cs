@@ -112,7 +112,7 @@ namespace GKUI
 
         private static void AddItem(GKSheetList list, string name, string value)
         {
-            IListItem item = list.AddItem(name, null);
+            GKCore.Interfaces.IListItem item = list.AddItem(name, null);
             item.AddSubItem(value);
         }
 

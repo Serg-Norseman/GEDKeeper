@@ -37,9 +37,6 @@ namespace GKUI.Components
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;
 
-        private readonly HyperView fView1;
-        private readonly HyperView fView2;
-
         private IBaseWindow fBase;
         private GEDCOMRecordType fMergeMode;
         private bool fBookmark;
@@ -76,12 +73,6 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            fView1 = new HyperView();
-            Controls.Add(fView1);
-
-            fView2 = new HyperView();
-            Controls.Add(fView2);
-
             AdjustControls();
             SetRec1(null);
             SetRec2(null);
@@ -92,7 +83,7 @@ namespace GKUI.Components
 
         private void AdjustControls()
         {
-            if (fView1 == null || fView2 == null) return;
+            /*if (fView1 == null || fView2 == null) return;
 
             int y = Edit1.Top + Edit1.Height + 8;
             int h = btnMergeToLeft.Top - y - 8;
@@ -102,7 +93,7 @@ namespace GKUI.Components
             fView1.Size = new Size(w, h);
 
             fView2.Location = new Point(Edit2.Left, y);
-            fView2.Size = new Size(w, h);
+            fView2.Size = new Size(w, h);*/
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -220,6 +211,8 @@ namespace GKUI.Components
         private TextBox Edit1;
         private Label Lab2;
         private Label Lab1;
+        private HyperView fView1;
+        private HyperView fView2;
 
         /// <summary>
         /// This method is required for Windows Forms designer support.
@@ -236,56 +229,62 @@ namespace GKUI.Components
             btnRec2Select = new Button();
             btnMergeToLeft = new Button();
             btnMergeToRight = new Button();
+            fView1 = new HyperView();
+            fView2 = new HyperView();
             SuspendLayout();
 
-            Lab1.Location = new Point(14, 13);
             Lab1.Size = new Size(40, 17);
             Lab1.Text = "XXX1";
 
-            Lab2.Location = new Point(482, 13);
             Lab2.Size = new Size(40, 17);
             Lab2.Text = "XXX2";
 
-            Edit1.Location = new Point(14, 33);
             Edit1.ReadOnly = true;
             Edit1.Size = new Size(366, 24);
 
-            Edit2.Location = new Point(482, 33);
             Edit2.ReadOnly = true;
             Edit2.Size = new Size(373, 24);
 
-            btnRec1Select.Location = new Point(386, 32);
             btnRec1Select.Size = new Size(81, 25);
             btnRec1Select.Text = "btnRec1Select";
             btnRec1Select.Click += btnRec1Select_Click;
 
-            btnRec2Select.Location = new Point(861, 32);
             btnRec2Select.Size = new Size(81, 25);
             btnRec2Select.Text = "btnRec2Select";
             btnRec2Select.Click += btnRec2Select_Click;
 
             btnMergeToLeft.Enabled = false;
-            btnMergeToLeft.Location = new Point(386, 371);
             btnMergeToLeft.Size = new Size(81, 25);
             btnMergeToLeft.Text = "<<<";
             btnMergeToLeft.Click += btnMergeToLeft_Click;
 
             btnMergeToRight.Enabled = false;
-            btnMergeToRight.Location = new Point(482, 371);
             btnMergeToRight.Size = new Size(81, 25);
             btnMergeToRight.Text = ">>>";
             btnMergeToRight.Click += btnMergeToRight_Click;
 
-            Controls.Add(Lab1);
-            Controls.Add(Lab2);
-            Controls.Add(Edit1);
-            Controls.Add(Edit2);
-            Controls.Add(btnRec1Select);
-            Controls.Add(btnRec2Select);
-            Controls.Add(btnMergeToLeft);
-            Controls.Add(btnMergeToRight);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { Lab1, null, null, Lab2 }
+                    },
+                    new TableRow {
+                        Cells = { Edit1, btnRec1Select, Edit2, btnRec2Select }
+                    },
+                    new TableRow {
+                        Cells = { fView1, fView2 }
+                    },
+                    new TableRow {
+                        Cells = { null, btnMergeToLeft, btnMergeToRight, null }
+                    }
+                }
+            };
+
             Size = new Size(957, 402);
+
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
 

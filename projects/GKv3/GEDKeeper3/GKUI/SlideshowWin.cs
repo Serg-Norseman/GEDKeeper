@@ -51,21 +51,17 @@ namespace GKUI
             tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             SuspendLayout();
-            fImageCtl = new ImageBox();
-            fImageCtl.Dock = DockStyle.Fill;
-            fImageCtl.Location = new Point(0, 0);
-            fImageCtl.Size = new Size(100, 100);
-            Controls.Add(fImageCtl);
-            Controls.SetChildIndex(fImageCtl, 0);
+            fImageCtl = new GKUI.Components.ImageBoxStub();
+            Content = fImageCtl;
             ResumeLayout();
 
-            fImageCtl.BackColor = SystemColors.ControlDark;
+            fImageCtl.BackgroundColor = SystemColors.ControlDark;
             fImageCtl.Margin = new Padding(4);
             fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImageCtl.ImageBorderColor = Colors.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
 
-            WindowState = FormWindowState.Maximized;
+            WindowState = Eto.Forms.WindowState.Maximized;
 
             SetLang();
 

@@ -158,7 +158,7 @@ namespace GKUI
 
         public void SetViewMedia(string mediaFile)
         {
-            MediaPlayer mediaPlayer = new MediaPlayer();
+            var mediaPlayer = new GKUI.Components.MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);
@@ -166,7 +166,7 @@ namespace GKUI
 
         public void SetViewImage(Image img)
         {
-            ImageView imageCtl = new ImageView();
+            var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
             imageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
             imageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
@@ -182,11 +182,7 @@ namespace GKUI
 
             SuspendLayout();
 
-            ctl.Dock = DockStyle.Fill;
-            ctl.Location = new Point(0, 0);
-            ctl.Size = new Size(100, 100);
-            Controls.Add(ctl);
-            Controls.SetChildIndex(ctl, 0);
+            Content = ctl;
 
             ResumeLayout();
         }

@@ -88,7 +88,7 @@ namespace GKUI.Dialogs
 
         public bool ShowTipsChecked
         {
-            get { return chkShow.Checked; }
+            get { return chkShow.Checked.GetValueOrDefault(); }
             set { chkShow.Checked = value; }
         }
 
@@ -99,11 +99,6 @@ namespace GKUI.Dialogs
             lblTitle.Text = caption;
             fTips.Assign(tips);
             GetNextTip();
-        }
-
-        public bool ShowModalX()
-        {
-            return (ShowDialog() == DialogResult.Ok);
         }
     }
 }

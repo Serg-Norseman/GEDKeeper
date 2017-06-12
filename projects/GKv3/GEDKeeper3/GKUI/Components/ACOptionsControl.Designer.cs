@@ -37,103 +37,99 @@ namespace GKUI.Components
             chkHideEmptySegments = new CheckBox();
             SuspendLayout();
 
-            acbLine.BorderStyle = BorderStyle.Fixed3D;
+            //acbLine.BorderStyle = BorderStyle.Fixed3D;
             acbLine.Cursor = Cursors.Pointer;
             acbLine.TextColor = Colors.White;
-            acbLine.Location = new Point(344, 97);
             acbLine.Size = new Size(160, 28);
             acbLine.Text = "Line color";
-            acbLine.MouseClick += lblColorClick;
+            acbLine.MouseDown += lblColorClick;
 
-            acbBack.BorderStyle = BorderStyle.Fixed3D;
+            //acbBack.BorderStyle = BorderStyle.Fixed3D;
             acbBack.Cursor = Cursors.Pointer;
-            acbBack.Location = new Point(176, 97);
             acbBack.Size = new Size(160, 28);
             acbBack.Text = "Background color";
-            acbBack.MouseClick += lblColorClick;
+            acbBack.MouseDown += lblColorClick;
 
-            acbText.BorderStyle = BorderStyle.Fixed3D;
+            //acbText.BorderStyle = BorderStyle.Fixed3D;
             acbText.Cursor = Cursors.Pointer;
             acbText.TextColor = Colors.White;
-            acbText.Location = new Point(8, 97);
             acbText.Size = new Size(160, 28);
             acbText.Text = "Text color";
-            acbText.MouseClick += lblColorClick;
+            acbText.MouseDown += lblColorClick;
 
-            acb7.BorderStyle = BorderStyle.Fixed3D;
+            //acb7.BorderStyle = BorderStyle.Fixed3D;
             acb7.Cursor = Cursors.Pointer;
-            acb7.Location = new Point(512, 56);
             acb7.Size = new Size(160, 28);
             acb7.Text = "Circle 7";
-            acb7.MouseClick += lblColorClick;
+            acb7.MouseDown += lblColorClick;
 
-            acb6.BorderStyle = BorderStyle.Fixed3D;
+            //acb6.BorderStyle = BorderStyle.Fixed3D;
             acb6.Cursor = Cursors.Pointer;
-            acb6.Location = new Point(344, 56);
             acb6.Size = new Size(160, 28);
             acb6.Text = "Circle 6";
-            acb6.MouseClick += lblColorClick;
+            acb6.MouseDown += lblColorClick;
 
-            acb5.BorderStyle = BorderStyle.Fixed3D;
+            //acb5.BorderStyle = BorderStyle.Fixed3D;
             acb5.Cursor = Cursors.Pointer;
-            acb5.Location = new Point(176, 56);
             acb5.Size = new Size(160, 28);
             acb5.Text = "Circle 5";
-            acb5.MouseClick += lblColorClick;
+            acb5.MouseDown += lblColorClick;
 
-            acb4.BorderStyle = BorderStyle.Fixed3D;
+            //acb4.BorderStyle = BorderStyle.Fixed3D;
             acb4.Cursor = Cursors.Pointer;
-            acb4.Location = new Point(8, 56);
             acb4.Size = new Size(160, 28);
             acb4.Text = "Circle 4";
-            acb4.MouseClick += lblColorClick;
+            acb4.MouseDown += lblColorClick;
 
-            acb3.BorderStyle = BorderStyle.Fixed3D;
+            //acb3.BorderStyle = BorderStyle.Fixed3D;
             acb3.Cursor = Cursors.Pointer;
-            acb3.Location = new Point(512, 15);
             acb3.Size = new Size(160, 28);
             acb3.Text = "Circle 3";
-            acb3.MouseClick += lblColorClick;
+            acb3.MouseDown += lblColorClick;
 
-            acb2.BorderStyle = BorderStyle.Fixed3D;
+            //acb2.BorderStyle = BorderStyle.Fixed3D;
             acb2.Cursor = Cursors.Pointer;
-            acb2.Location = new Point(344, 15);
             acb2.Size = new Size(160, 28);
             acb2.Text = "Circle 2";
-            acb2.MouseClick += lblColorClick;
+            acb2.MouseDown += lblColorClick;
 
-            acb1.BorderStyle = BorderStyle.Fixed3D;
+            //acb1.BorderStyle = BorderStyle.Fixed3D;
             acb1.Cursor = Cursors.Pointer;
-            acb1.Location = new Point(176, 15);
             acb1.Size = new Size(160, 28);
             acb1.Text = "Circle 1";
-            acb1.MouseClick += lblColorClick;
+            acb1.MouseDown += lblColorClick;
 
-            acb0.BorderStyle = BorderStyle.Fixed3D;
+            //acb0.BorderStyle = BorderStyle.Fixed3D;
             acb0.Cursor = Cursors.Pointer;
-            acb0.Location = new Point(8, 15);
             acb0.Size = new Size(160, 28);
             acb0.Text = "Circle 0";
-            acb0.MouseClick += lblColorClick;
+            acb0.MouseDown += lblColorClick;
 
-            chkHideEmptySegments.Location = new Point(8, 142);
             chkHideEmptySegments.Size = new Size(328, 24);
             chkHideEmptySegments.Text = "chkHideEmptySegments";
 
-            Controls.Add(chkHideEmptySegments);
-            Controls.Add(acb0);
-            Controls.Add(acb1);
-            Controls.Add(acb2);
-            Controls.Add(acb3);
-            Controls.Add(acb4);
-            Controls.Add(acb5);
-            Controls.Add(acb6);
-            Controls.Add(acb7);
-            Controls.Add(acbText);
-            Controls.Add(acbBack);
-            Controls.Add(acbLine);
-            //Font = new Font("Tahoma", 8.25F, FontStyle.None);
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { acb0, acb1, acb2, acb3 }
+                    },
+                    new TableRow {
+                        Cells = { acb4, acb5, acb6, acb7 }
+                    },
+                    new TableRow {
+                        Cells = { acbText, acbBack, acbLine }
+                    },
+                    new TableRow {
+                        Cells = { chkHideEmptySegments }
+                    },
+                    null
+                }
+            };
+
             Size = new Size(690, 183);
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
     }

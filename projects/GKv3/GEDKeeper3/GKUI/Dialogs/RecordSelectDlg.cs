@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -158,13 +159,13 @@ namespace GKUI.Dialogs
             try
             {
                 ResultRecord = fListRecords.GetSelectedData() as GEDCOMRecord;
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
                 ResultRecord = null;
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -175,14 +176,14 @@ namespace GKUI.Dialogs
                 GEDCOMRecord rec;
                 if (BaseController.AddRecord(fBase, fRecType, fTarget, out rec)) {
                     ResultRecord = rec;
-                    DialogResult = DlgResult.OK;
+                    DialogResult = DialogResult.Ok;
                 }
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
                 ResultRecord = null;
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

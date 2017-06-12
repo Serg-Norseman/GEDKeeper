@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -77,12 +78,12 @@ namespace GKUI.Dialogs
 
                 PortraitsCache.Instance.RemoveObsolete(fMultimediaLink);
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

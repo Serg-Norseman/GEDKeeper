@@ -245,11 +245,11 @@ namespace GKUI.Dialogs
             fProgressForm.ProgressInit(fTitle, fMax);
             fProgressForm.Load += ProgressForm_Load;
 
-            if (fParentHandle != IntPtr.Zero) {
+            /*if (fParentHandle != IntPtr.Zero) {
                 UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
-            }
+            }*/
 
-            fProgressForm.ShowDialog();
+            fProgressForm.ShowModal(null);
             fProgressForm.Close();
         }
 

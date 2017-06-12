@@ -84,7 +84,7 @@ namespace GKUI.Components
             fOptions.BrushColor[ 9] = UIHelper.ConvertColor(acbBack.BackgroundColor);
             fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.BackgroundColor);
 
-            fOptions.HideEmptySegments = chkHideEmptySegments.Checked;
+            fOptions.HideEmptySegments = chkHideEmptySegments.Checked.GetValueOrDefault();
             //fOptions.Apply();
         }
 

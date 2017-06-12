@@ -149,9 +149,9 @@ namespace GKUI
             bool condResidence = false;
 
             if (radTotal.Checked) {
-                condBirth = chkBirth.Checked;
-                condDeath = chkDeath.Checked;
-                condResidence = chkResidence.Checked;
+                condBirth = chkBirth.Checked.GetValueOrDefault();
+                condDeath = chkDeath.Checked.GetValueOrDefault();
+                condResidence = chkResidence.Checked.GetValueOrDefault();
             } else if (radSelected.Checked) {
                 if (cmbPersons.SelectedIndex >= 0)
                 {
@@ -160,7 +160,7 @@ namespace GKUI
                 }
             }
 
-            fMapBrowser.ShowLines = (ind != null && chkLinesVisible.Checked);
+            fMapBrowser.ShowLines = (ind != null && chkLinesVisible.Checked.GetValueOrDefault());
             fMapPoints.Clear();
 
             int num = fPlaces.Count;
@@ -218,8 +218,7 @@ namespace GKUI
             InitializeComponent();
 
             fMapBrowser = new GKMapBrowser();
-            fMapBrowser.Dock = DockStyle.Fill;
-            Panel1.Controls.Add(fMapBrowser);
+            Panel1.Content = fMapBrowser;
 
             fBase = baseWin;
             fTree = baseWin.Context.Tree;

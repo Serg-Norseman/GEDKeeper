@@ -44,7 +44,7 @@ namespace GKUI.Components
             using (FontDialog fontDlg = new FontDialog())
             {
                 fontDlg.Font = sdFont;
-                return (fontDlg.ShowDialog() != DialogResult.Ok) ? null : new FontHandler(fontDlg.Font);
+                return (fontDlg.ShowDialog(null) != DialogResult.Ok) ? null : new FontHandler(fontDlg.Font);
             }
         }
 
@@ -53,7 +53,7 @@ namespace GKUI.Components
         {
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false))
             {
-                if (ofd.ShowDialog() == DialogResult.Ok) {
+                if (ofd.ShowDialog(null) == DialogResult.Ok) {
                     return ofd.FileName;
                 } else {
                     return string.Empty;
@@ -70,7 +70,7 @@ namespace GKUI.Components
                 ofd.Title = title;
 
             if (!string.IsNullOrEmpty(context))
-                ofd.Directory = context;
+                ofd.Directory = new Uri(context);
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -98,7 +98,7 @@ namespace GKUI.Components
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
             {
                 sfd.OverwritePrompt = overwritePrompt;
-                if (sfd.ShowDialog() == DialogResult.Ok) {
+                if (sfd.ShowDialog(null) == DialogResult.Ok) {
                     return sfd.FileName;
                 } else {
                     return string.Empty;
@@ -115,7 +115,7 @@ namespace GKUI.Components
                 sfd.Title = title;
 
             if (!string.IsNullOrEmpty(context))
-                sfd.Directory = context;
+                sfd.Directory = new Uri(context);
 
             if (!string.IsNullOrEmpty(filter))
             {

@@ -538,33 +538,30 @@ namespace GKUI
         private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListViewStub recView, out HyperView summary)
         {
             tabsRecords.SuspendLayout();
+
             TabPage sheet = new TabPage(pageText);
-            tabsRecords.Controls.Add(sheet);
-            tabsRecords.ResumeLayout();
+            tabsRecords.Pages.Add(sheet);
 
             summary = new HyperView();
             summary.BorderWidth = 4;
-            summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
 
-            Splitter spl = new Splitter();
-            spl.Dock = DockStyle.Right;
-            spl.Size = new Size(4, 290);
-            spl.MinExtra = 100;
-            spl.MinSize = 100;
-
-            sheet.Controls.Add(summary);
-            sheet.Controls.Add(spl);
-
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.MouseDoubleClick += miRecordEdit_Click;
-            recView.SelectedIndexChanged += List_SelectedIndexChanged;
+            //recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
 
-            sheet.Controls.SetChildIndex(spl, 1);
-            sheet.Controls.SetChildIndex(summary, 2);
+            Splitter spl = new Splitter();
+            spl.Panel1 = recView;
+            spl.Panel2 = summary;
+            spl.RelativePosition = 75;
+            spl.Orientation = Orientation.Horizontal;
+
+            sheet.Content = spl;
+
+            tabsRecords.ResumeLayout();
         }
 
         private void ChangeFileName()
@@ -987,7 +984,7 @@ namespace GKUI
 
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
-            Rectangle client = ClientRectangle;
+            Rectangle client = Bounds; // ClientRectangle;
             PointF pt = PointToScreen(new PointF(client.Left, client.Bottom - qsDlg.Height));
             qsDlg.Location = new Point(pt);
 
@@ -1067,7 +1064,7 @@ namespace GKUI
 
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
-                ActiveControl = rView;
+                //ActiveControl = rView;
                 rView.SelectItemByData(record);
             }
         }
@@ -1240,7 +1237,7 @@ namespace GKUI
 
         private void MRUFileClick(object sender, EventArgs e)
         {
-            int idx = (int)((GKButtonMenuItem)sender).Tag;
+            int idx = (int)((ButtonMenuItem)sender).Tag;
             AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
         }
 
@@ -1403,7 +1400,7 @@ namespace GKUI
                 fContext.BeginUpdate();
 
                 using (ScriptEditWin scriptWin = new ScriptEditWin(this)) {
-                    scriptWin.ShowDialog();
+                    scriptWin.ShowModal(this);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1416,7 +1413,7 @@ namespace GKUI
                 fContext.BeginUpdate();
 
                 using (TreeToolsWin fmTreeTools = new TreeToolsWin(this)) {
-                    fmTreeTools.ShowDialog();
+                    fmTreeTools.ShowModal(this);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1438,7 +1435,7 @@ namespace GKUI
                     }
                 }
 
-                if (dlgOptions.ShowDialog() == DialogResult.Ok) {
+                if (dlgOptions.ShowModal() == DialogResult.Ok) {
                     AppHost.Instance.ApplyOptions();
                 }
             }
@@ -1507,14 +1504,14 @@ namespace GKUI
         private void miOrganizer_Click(object sender, EventArgs e)
         {
             using (OrganizerWin dlg = new OrganizerWin(this)) {
-                dlg.ShowDialog();
+                dlg.ShowModal(this);
             }
         }
 
         private void miRelationshipCalculator_Click(object sender, EventArgs e)
         {
             using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(this)) {
-                relCalc.ShowDialog();
+                relCalc.ShowModal(this);
             }
         }
 

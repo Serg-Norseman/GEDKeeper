@@ -837,8 +837,9 @@ namespace GKUI.Components
                             ctl.MouseMove(pt.X, pt.Y);
                             fActiveControl = ctl;
 
-                            pt = new Point(pt.X + Left, pt.Y + Top);
-                            fToolTip.Show(ctl.Tip, this, pt, 1500);
+                            //pt = new Point(pt.X + Left, pt.Y + Top);
+                            //fToolTip.Show(ctl.Tip, this, pt, 1500);
+                            ToolTip = ctl.Tip;
                         }
                     }
                     break;
@@ -854,7 +855,8 @@ namespace GKUI.Components
                         if (!(fActiveControl.Contains(pt.X, pt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.ccmDefault;
                             fActiveControl.Visible = false;
-                            fToolTip.Hide(this);
+                            //fToolTip.Hide(this);
+                            ToolTip = "";
                             fActiveControl = null;
                         } else {
                             fActiveControl.MouseMove(pt.X, pt.Y);

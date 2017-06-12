@@ -58,26 +58,19 @@ namespace GKUI
             tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
 
             fGraph = new ZedGraphControl();
-            fGraph.IsShowPointValues = true;
-            fGraph.Dock = DockStyle.Right;
+            //fGraph.IsShowPointValues = true;
             fGraph.Size = new Size(400, 200);
 
             Splitter spl = new Splitter();
-            spl.Dock = DockStyle.Right;
-            spl.Size = new Size(4, 290);
-            spl.MinExtra = 100;
-            spl.MinSize = 100;
-            Panel1.Controls.Add(fGraph);
-            Panel1.Controls.Add(spl);
+            spl.Panel1 = fListStats;
+            spl.Panel1 = fGraph;
+            Panel1.Content = spl;
 
             fListStats = UIHelper.CreateListView(Panel1);
             fListStats.AddColumn("-", 250, false);
             fListStats.AddColumn("-", 150, false);
 
-            Panel1.Controls.SetChildIndex(fListStats, 0);
-            Panel1.Controls.SetChildIndex(spl, 2);
-            Panel1.Controls.SetChildIndex(fGraph, 3);
-            Panel1.Controls.SetChildIndex(ToolBar1, 4);
+            //Panel1.Controls.SetChildIndex(ToolBar1, 4);
 
             fBase = baseWin;
             fSelectedRecords = selectedRecords;
@@ -179,12 +172,12 @@ namespace GKUI
                 fTreeStats.GetSpecStats(mode, vals);
                 fCurrentValues = vals;
 
-                ListViewItem[] items = new ListViewItem[vals.Count];
+                GKListItem[] items = new GKListItem[vals.Count];
 
                 int i = 0;
                 foreach (StatsItem lv in vals)
                 {
-                    ListViewItem item = new ListViewItem(lv.Caption);
+                    GKListItem item = new GKListItem(lv.Caption);
 
                     string stVal = lv.GetDisplayString();
                     item.SubItems.Add(stVal);
@@ -287,22 +280,22 @@ namespace GKUI
         {
             CommonStats stats = fTreeStats.GetCommonStats();
 
-            lvSummary.Items.Clear();
+            lvSummary.ClearItems();
 
-            ListViewItem item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_People));
-            item.SubItems.Add(stats.persons.ToString());
-            item.SubItems.Add(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
-            item.SubItems.Add(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
+            GKListItem item = lvSummary.AddItem(LangMan.LS(LSID.LSID_People), null);
+            item.AddSubItem(stats.persons.ToString());
+            item.AddSubItem(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
+            item.AddSubItem(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
-            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Living));
-            item.SubItems.Add(stats.lives.ToString());
-            item.SubItems.Add(stats.lives_m.ToString());
-            item.SubItems.Add(stats.lives_f.ToString());
+            item = lvSummary.AddItem(LangMan.LS(LSID.LSID_Living), null);
+            item.AddSubItem(stats.lives.ToString());
+            item.AddSubItem(stats.lives_m.ToString());
+            item.AddSubItem(stats.lives_f.ToString());
 
-            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Deads));
-            item.SubItems.Add((stats.persons - stats.lives).ToString());
-            item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
-            item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
+            item = lvSummary.AddItem(LangMan.LS(LSID.LSID_Deads), null);
+            item.AddSubItem((stats.persons - stats.lives).ToString());
+            item.AddSubItem((stats.persons_m - stats.lives_m).ToString());
+            item.AddSubItem((stats.persons_f - stats.lives_f).ToString());
 
             AddCompositeItem(LSID.LSID_AvgAge, stats.age);
             AddCompositeItem(LSID.LSID_AvgLife, stats.life);
@@ -315,10 +308,10 @@ namespace GKUI
         
         private void AddCompositeItem(LSID name, CompositeItem item)
         {
-            ListViewItem lvItem = lvSummary.Items.Add(LangMan.LS(name));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.CommonVal));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.MaleVal));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.FemaleVal));
+            GKListItem lvItem = lvSummary.AddItem(LangMan.LS(name), null);
+            lvItem.AddSubItem(string.Format("{0:0.00}", item.CommonVal));
+            lvItem.AddSubItem(string.Format("{0:0.00}", item.MaleVal));
+            lvItem.AddSubItem(string.Format("{0:0.00}", item.FemaleVal));
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
@@ -357,11 +350,11 @@ namespace GKUI
             Title = LangMan.LS(LSID.LSID_MIStats);
             grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
 
-            //lvSummary.Columns
-            ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter); // 300
-            ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total); // 100
-            ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum); // 100
-            ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum); // 100
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
 
             tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             UpdateCommonStats();

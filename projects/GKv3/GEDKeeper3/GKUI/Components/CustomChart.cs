@@ -198,7 +198,7 @@ namespace GKUI.Components
             else
             {
                 ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
+                if (ext == ".bmp") { imFmt = ImageFormat.Bitmap; }
                 else
                     if (ext == ".emf") { imFmt = ImageFormat.Emf; }
                 else
@@ -223,7 +223,7 @@ namespace GKUI.Components
                         RenderStaticImage(gfx, false);
                     }
 
-                    pic.Save(fileName, imFmt);
+                    ((Bitmap)pic).Save(fileName, imFmt);
                 }
                 finally
                 {

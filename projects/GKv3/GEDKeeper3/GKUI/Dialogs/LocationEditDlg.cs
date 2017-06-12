@@ -66,9 +66,8 @@ namespace GKUI.Dialogs
 
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.InitMap();
-            fMapBrowser.Dock = DockStyle.Fill;
             fMapBrowser.ShowLines = false;
-            panMap.Controls.Add(fMapBrowser);
+            panMap.Content = fMapBrowser;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
@@ -136,12 +135,12 @@ namespace GKUI.Dialogs
 
                 fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

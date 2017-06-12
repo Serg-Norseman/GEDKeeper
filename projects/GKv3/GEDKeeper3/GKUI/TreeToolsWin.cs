@@ -224,9 +224,9 @@ namespace GKUI
             
             MatchParams mParams;
             //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
-            mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(edNameAccuracy.Value) / 100.0f;
-            mParams.DatesCheck = chkBirthYear.Checked;
-            mParams.YearsInaccuracy = decimal.ToInt32(edYearInaccuracy.Value);
+            mParams.NamesIndistinctThreshold = (float)(edNameAccuracy.Value / 100.0f);
+            mParams.DatesCheck = chkBirthYear.Checked.GetValueOrDefault();
+            mParams.YearsInaccuracy = (int)edYearInaccuracy.Value;
 
             bool res = false;
             btnSkip.Enabled = false;
@@ -290,7 +290,7 @@ namespace GKUI
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            MergeCtl.Bookmark = chkBookmarkMerged.Checked;
+            MergeCtl.Bookmark = chkBookmarkMerged.Checked.GetValueOrDefault();
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -365,7 +365,7 @@ namespace GKUI
                     }
 
                     progress.ProgressStep();
-                    Application.DoEvents();
+                    //Application.DoEvents();
                 }
             }
             finally
@@ -404,7 +404,7 @@ namespace GKUI
         {
             ListChecks = UIHelper.CreateListView(Panel1);
             ListChecks.CheckBoxes = true;
-            ListChecks.DoubleClick += ListChecks_DblClick;
+            ListChecks.MouseDoubleClick += ListChecks_DblClick;
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
@@ -466,7 +466,7 @@ namespace GKUI
         private void PreparePlacesList()
         {
             ListPlaces = UIHelper.CreateListView(Panel4);
-            ListPlaces.DoubleClick += ListPlaces_DblClick;
+            ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
@@ -642,7 +642,7 @@ namespace GKUI
         private void PreparePatriarchsList()
         {
             ListPatriarchs = UIHelper.CreateListView(Panel3);
-            ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
+            ListPatriarchs.MouseDoubleClick += ListPatriarchs_DblClick;
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
@@ -674,7 +674,7 @@ namespace GKUI
             {
                 ListPatriarchs.Items.Clear();
                 lst = PatriarchsMan.GetPatriarchsList(fBase.Context,
-                                                      (int)edMinGens.Value, !chkWithoutDates.Checked);
+                                                      (int)edMinGens.Value, !chkWithoutDates.Checked.GetValueOrDefault());
                 lst.QuickSort(PatriarchsCompare);
 
                 int num = lst.Count;

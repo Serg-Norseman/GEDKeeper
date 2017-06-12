@@ -106,12 +106,12 @@ namespace GKUI.Dialogs
 
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("CommunicationEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

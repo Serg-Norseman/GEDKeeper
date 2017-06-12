@@ -54,18 +54,18 @@ namespace GKUI.Dialogs
 
                 if (src == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
-                    DialogResult = DlgResult.None;
+                    DialogResult = DialogResult.None;
                 } else {
                     fSourceCitation.Value = src;
                     fSourceCitation.Page = txtPage.Text;
                     fSourceCitation.CertaintyAssessment = txtCertainty.SelectedIndex;
-                    DialogResult = DlgResult.OK;
+                    DialogResult = DialogResult.Ok;
                 }
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

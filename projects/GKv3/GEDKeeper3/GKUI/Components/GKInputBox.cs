@@ -34,6 +34,7 @@ namespace GKUI.Components
         private enum NumbersMode { nmNone, nmInt, nmFloat }
 
         private readonly NumbersMode fNumbersMode;
+        private readonly bool fPasswordMode;
 
         public string Value
         {
@@ -43,6 +44,8 @@ namespace GKUI.Components
 
         private GKInputBox(string caption, string prompt, string value, NumbersMode numbersMode, bool pwMode = false)
         {
+            fPasswordMode = pwMode;
+
             InitializeComponent();
 
             btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
@@ -52,10 +55,6 @@ namespace GKUI.Components
             label1.Text = prompt;
             Value = value;
             fNumbersMode = numbersMode;
-
-            if (pwMode) {
-                txtValue.PasswordChar = '*';
-            }
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
@@ -71,7 +70,7 @@ namespace GKUI.Components
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DlgResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
@@ -93,12 +92,12 @@ namespace GKUI.Components
                         break;
                 }
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch
             {
                 AppHost.StdDialogs.ShowError("Number format is invalid");
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -110,7 +109,7 @@ namespace GKUI.Components
 
             using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat))
             {
-                if (inputBox.ShowModal() == DlgResult.OK)
+                if (inputBox.ShowModal() == DialogResult.Ok)
                 {
                     result = double.TryParse(inputBox.Value, out value);
                 }
@@ -126,7 +125,7 @@ namespace GKUI.Components
 
             using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt))
             {
-                if (inputBox.ShowModal() == DlgResult.OK)
+                if (inputBox.ShowModal() == DialogResult.Ok)
                 {
                     result = int.TryParse(inputBox.Value, out value);
                 }
@@ -141,7 +140,7 @@ namespace GKUI.Components
 
             using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone))
             {
-                if (inputBox.ShowModal() == DlgResult.OK)
+                if (inputBox.ShowModal() == DialogResult.Ok)
                 {
                     value = inputBox.Value.Trim();
                     result = true;
@@ -157,7 +156,7 @@ namespace GKUI.Components
 
             using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true))
             {
-                if (inputBox.ShowModal() == DlgResult.OK)
+                if (inputBox.ShowModal() == DialogResult.Ok)
                 {
                     value = inputBox.Value.Trim();
                     result = true;
@@ -169,43 +168,57 @@ namespace GKUI.Components
 
         #region Design
 
-        private TextBox txtValue;
+        private TextControl txtValue;
         private Label label1;
         private Button btnCancel;
         private Button btnAccept;
 
         private void InitializeComponent()
         {
-            txtValue = new TextBox();
             label1 = new Label();
             btnAccept = new Button();
             btnCancel = new Button();
             SuspendLayout();
 
-            txtValue.Location = new Point(12, 25);
+            if (fPasswordMode) {
+                txtValue = new PasswordBox();
+                ((PasswordBox)txtValue).PasswordChar = '*';
+            } else {
+                txtValue = new TextBox();
+            }
             txtValue.Size = new Size(354, 20);
 
-            label1.Location = new Point(12, 9);
             label1.Size = new Size(35, 13);
             label1.Text = "label1";
 
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Location = new Point(197, 61);
             btnAccept.Size = new Size(81, 25);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Location = new Point(285, 61);
             btnCancel.Size = new Size(81, 25);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
 
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { label1 }
+                    },
+                    new TableRow {
+                        Cells = { txtValue }
+                    },
+                    new TableRow {
+                        ScaleHeight = false,
+                        Cells = { null, btnAccept, btnCancel }
+                    }
+                }
+            };
+
             ClientSize = new Size(378, 98);
-            Controls.Add(btnAccept);
-            Controls.Add(btnCancel);
-            Controls.Add(label1);
-            Controls.Add(txtValue);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;

@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Options;
@@ -52,12 +53,12 @@ namespace GKUI.Dialogs
                     SelectedLanguage = (int)item.Tag;
                 }
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("LanguageSelectDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

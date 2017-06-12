@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using Eto.Forms;
 
 using GKCommon;
@@ -126,7 +127,9 @@ namespace GKUI.Components
             //ScriptErrorsSuppressed = true;
             //AllowWebBrowserDrop = false;
 
-            #if !__MonoCS__
+            LoadHtml(strContent);
+
+            /*#if !__MonoCS__
             DocumentText = strContent;
 
             // Wait for document being loaded
@@ -134,13 +137,13 @@ namespace GKUI.Components
             {
                 if (DocumentText == strContent) break;
                 System.Threading.Thread.Sleep(20);
-                Application.DoEvents();
+                //Application.DoEvents();
             }
             //Refresh();
             #else
             DocumentText = strContent;
             Refresh();
-            #endif
+            #endif*/
         }
 
         public void InitMap()
@@ -293,6 +296,7 @@ namespace GKUI.Components
             script = script.Trim();
             if (string.IsNullOrEmpty(script)) return;
 
+            /*
             #if !__MonoCS__
             try
             {
@@ -324,6 +328,7 @@ namespace GKUI.Components
                 Logger.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
             }
             #endif
+            */
         }
 
         #endregion

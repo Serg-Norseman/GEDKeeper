@@ -406,7 +406,8 @@ namespace GKUI.Components
                             fHint = hint;
 
                             if (!string.IsNullOrEmpty(hint)) {
-                                fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
+                                //fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
+                                ToolTip = hint;
                             }
                         }
                     }

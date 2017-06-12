@@ -169,12 +169,12 @@ namespace GKUI.Dialogs
 
                 fAddress.SetAddressText(txtAddress.Text);
 
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("AddressEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -68,12 +69,12 @@ namespace GKUI.Dialogs
                 fNameEntry.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
                 fNameEntry.F_Patronymic = txtFPatr.Text;
                 fNameEntry.M_Patronymic = txtMPatr.Text;
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 

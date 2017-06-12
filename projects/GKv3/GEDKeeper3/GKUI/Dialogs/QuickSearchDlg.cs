@@ -25,6 +25,7 @@ using Eto.Drawing;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -54,32 +55,36 @@ namespace GKUI.Dialogs
             btnNext = new Button();
             SuspendLayout();
 
-            txtSearchPattern.Location = new Point(3, 3);
             txtSearchPattern.Width = 150;
             txtSearchPattern.Height = 24;
             txtSearchPattern.TextChanged += SearchPattern_TextChanged;
 
-            btnPrev.Location = new Point(156, 3);
             btnPrev.Height = 24;
             btnPrev.Width = 24;
             btnPrev.Click += FindPrev_Click;
             btnPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
-            btnNext.Location = new Point(156+27, 3);
             btnNext.Height = 24;
             btnNext.Width = 24;
             btnNext.Click += FindNext_Click;
             btnNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { txtSearchPattern, btnPrev, btnNext }
+                    }
+                }
+            };
+
             ClientSize = new Size(210, 30);
-            Controls.Add(txtSearchPattern);
-            Controls.Add(btnPrev);
-            Controls.Add(btnNext);
-            //Font = new Font("Tahoma", 8.25f, FontStyle.None, System.Drawing.GraphicsUnit.Point, 204);
             KeyDown += SearchPanel_KeyDown;
             ShowInTaskbar = false;
             Topmost = true;
 
+            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
         }
 

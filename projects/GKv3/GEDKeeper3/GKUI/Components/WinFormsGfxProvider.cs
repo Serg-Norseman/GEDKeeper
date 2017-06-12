@@ -59,7 +59,7 @@ namespace GKUI.Components
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
+            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
         public IImage CreateImage(Stream stream)

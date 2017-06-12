@@ -129,7 +129,6 @@ namespace GKUI.Components
             fBtnAdd.Click += ItemAdd;
 
             fToolBar = new ToolBar();
-            fToolBar.Dock = DockStyle.Right;
             fToolBar.Items.AddRange(new ToolItem[] {
                                         fBtnAdd,
                                         fBtnEdit,
@@ -141,27 +140,23 @@ namespace GKUI.Components
             //fToolBar.ShowToolTips = true;
 
             fList = new GKListView();
-            fList.Dock = DockStyle.Fill;
-            fList.Location = new Point(0, 0);
             fList.Size = new Size(500, 290);
-            fList.HideSelection = false;
-            fList.LabelEdit = false;
-            fList.FullRowSelect = true;
-            fList.View = View.Details;
-            fList.DoubleClick += List_DoubleClick;
+            //fList.HideSelection = false;
+            //fList.LabelEdit = false;
+            //fList.FullRowSelect = true;
+            //fList.View = View.Details;
+            fList.MouseDoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
 
             SuspendLayout();
-            Controls.Add(fList);
-            Controls.Add(fToolBar);
+            Content = fList;
+            //Controls.Add(fToolBar);
             //Controls.SetChildIndex(fList, 1);
             //Controls.SetChildIndex(fToolBar, 0);
             ResumeLayout();
 
-            Dock = DockStyle.Fill;
-
             owner.SuspendLayout();
-            owner.Controls.Add(this);
+            owner.Content = this;
             owner.ResumeLayout();
 
             fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
@@ -380,7 +375,7 @@ namespace GKUI.Components
 
         public void ClearItems()
         {
-            fList.Items.Clear();
+            fList.ClearItems();
         }
 
         public void SelectItem(int index)

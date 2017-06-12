@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -88,7 +89,7 @@ namespace GKUI.Dialogs
             GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
             if (eArgs.Action == RecordAction.raJump && member != null) {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = Eto.Forms.DialogResult.Ok;
                 fBase.SelectRecordByXRef(member.XRef);
                 Close();
             }
@@ -107,12 +108,12 @@ namespace GKUI.Dialogs
             try
             {
                 AcceptChanges();
-                DialogResult = DlgResult.OK;
+                DialogResult = DialogResult.Ok;
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DlgResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
