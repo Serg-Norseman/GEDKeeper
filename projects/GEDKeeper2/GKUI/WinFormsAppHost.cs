@@ -124,9 +124,21 @@ namespace GKUI
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
-                #if !__MonoCS__
-                NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
+                if (fIsMDI && fMainWindow != null) {
+                    #if !__MonoCS__
+                    NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                    #endif
+                } else {
+                    foreach (IWindow win in fRunningForms) {
+                        if (win is IBaseWindow) {
+                            IntPtr handle = ((Form)win).Handle;
+
+                            #if !__MonoCS__
+                            NativeMethods.PostMessage(handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                            #endif
+                        }
+                    }
+                }
             }
 
             UIHelper.CenterFormByParent((Form)form, mainHandle);

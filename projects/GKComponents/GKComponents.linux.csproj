@@ -62,6 +62,9 @@
     <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>libs\ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>libs\NLog.dll</HintPath>
     </Reference>
@@ -71,6 +74,9 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="ZedGraph">
+      <HintPath>libs\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -78,6 +84,7 @@
       <DependentUpon>ExtResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -107,6 +114,7 @@
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
+    <Compile Include="GKUI\Components\ZGraphControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKUI" />

@@ -148,14 +148,17 @@ namespace GKCore.Stats
 
             switch (mode) {
                 case StatsMode.smBirthYears:
+                case StatsMode.smDeathYears:
                     v = Convert.ToString(dtY);
                     break;
 
                 case StatsMode.smBirthTenYears:
+                case StatsMode.smDeathTenYears:
                     v = Convert.ToString(dtY / 10 * 10);
                     break;
 
                 case StatsMode.smBirthPlaces:
+                case StatsMode.smDeathPlaces:
                     v = evt.Place.StringValue;
                     break;
             }

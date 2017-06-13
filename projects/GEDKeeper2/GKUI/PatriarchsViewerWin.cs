@@ -27,6 +27,7 @@ using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKUI
 {
@@ -80,7 +81,7 @@ namespace GKUI
         private static void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
         {
             foreach (Vertex vtx in graph.Vertices) {
-                ArborNode arbNode = sys.addNode(vtx.Sign);
+                var arbNode = sys.addNode(vtx.Sign) as ArborNodeEx;
                 PGNode pgNode = (PGNode)vtx.Value;
 
                 arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;

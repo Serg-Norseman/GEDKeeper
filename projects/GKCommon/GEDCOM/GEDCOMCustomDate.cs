@@ -98,6 +98,10 @@ namespace GKCommon.GEDCOM
         public abstract void SetDateTime(DateTime value);
         public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
 
+        protected virtual void DateChanged()
+        {
+        }
+
         /// <summary>
         /// Obtaining UDN (Unified Date Number) for purposes of processing and sorting.
         /// </summary>
