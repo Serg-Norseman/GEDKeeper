@@ -110,15 +110,15 @@ namespace GKUI.Dialogs
             GlobalOptions options = GlobalOptions.Instance;
 
             txtName.Items.Clear();
-            txtName.Items.AddRange(options.NameFilters.ToArray());
-            txtName.Items.Insert(0, "*");
+            txtName.Items.AddRange(GKComboItemSmp.Convert(options.NameFilters.ToArray()));
+            txtName.Items.Insert(0, new GKComboItemSmp("*"));
 
             cmbResidence.Items.Clear();
-            cmbResidence.Items.AddRange(options.ResidenceFilters.ToArray());
-            cmbResidence.Items.Insert(0, "*");
+            cmbResidence.Items.AddRange(GKComboItemSmp.Convert(options.ResidenceFilters.ToArray()));
+            cmbResidence.Items.Insert(0, new GKComboItemSmp("*"));
 
             cmbEventVal.Items.Clear();
-            cmbEventVal.Items.AddRange(options.EventFilters.ToArray());
+            cmbEventVal.Items.AddRange(GKComboItemSmp.Convert(options.EventFilters.ToArray()));
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)

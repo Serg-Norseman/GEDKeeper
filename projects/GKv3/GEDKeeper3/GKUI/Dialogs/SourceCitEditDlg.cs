@@ -89,7 +89,7 @@ namespace GKUI.Dialogs
         private void cbSource_KeyUp(object sender, KeyEventArgs e)
         {
             RefreshSourcesList(cmbSource.Text);
-            cmbSource.SelectionStart = cmbSource.Text.Length;
+            //cmbSource.SelectionStart = cmbSource.Text.Length;
         }
 
         private void RefreshSourcesList(string filter)

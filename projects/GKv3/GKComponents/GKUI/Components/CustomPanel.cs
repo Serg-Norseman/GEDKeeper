@@ -29,7 +29,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    [Handler(typeof(CustomPanel.IHandler))]
+    //[Handler(typeof(CustomPanel.IHandler))]
     public class CustomPanel : Scrollable
     {
         #region Temp for compatibility
@@ -46,7 +46,7 @@ namespace GKUI.Components
 
         #endregion
 
-        public new interface ICallback : Control.ICallback, Widget.ICallback
+        /*public new interface ICallback : Control.ICallback, Widget.ICallback
         {
             void OnPaint(CustomPanel widget, PaintEventArgs e);
         }
@@ -113,31 +113,32 @@ namespace GKUI.Components
         {
             Handler.Create();
             base.Initialize();
-        }
+        }*/
 
         /*protected CustomPanel(CustomPanel.IHandler handler) : base(handler)
         {
         }*/
 
-        public CustomPanel(bool largeCanvas)
+        /*public CustomPanel(bool largeCanvas)
         {
             Handler.Create(largeCanvas);
             base.Initialize();
-        }
+        }*/
 
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            if (Paint != null) {
+            /*if (Paint != null) {
                 Paint(this, e);
-            }
+            }*/
         }
 
         public Graphics CreateGraphics()
         {
-            return Handler.CreateGraphics();
+            //return Handler.CreateGraphics();
+            return null;
         }
 
-        public void Update(Rectangle region)
+        /*public void Update(Rectangle region)
         {
             Handler.Update(region);
         }
@@ -145,6 +146,6 @@ namespace GKUI.Components
         protected override object GetCallback()
         {
             return CustomPanel.callback;
-        }
+        }*/
     }
 }

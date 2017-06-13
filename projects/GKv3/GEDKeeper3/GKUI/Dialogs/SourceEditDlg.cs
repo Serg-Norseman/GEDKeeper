@@ -64,7 +64,8 @@ namespace GKUI.Dialogs
             fNotesList.ListModel.DataOwner = fSourceRecord;
             fMediaList.ListModel.DataOwner = fSourceRecord;
             
-            ActiveControl = txtShortTitle;
+            //ActiveControl = txtShortTitle;
+            txtShortTitle.Focus();
         }
 
         public SourceEditDlg()
@@ -109,13 +110,13 @@ namespace GKUI.Dialogs
         {
             fSourceRecord.FiledByEntry = txtShortTitle.Text;
             fSourceRecord.Originator.Clear();
-            fSourceRecord.SetOriginatorArray(txtAuthor.Lines);
+            fSourceRecord.SetOriginatorArray(UIHelper.Convert(txtAuthor.Text));
             fSourceRecord.Title.Clear();
-            fSourceRecord.SetTitleArray(txtTitle.Lines);
+            fSourceRecord.SetTitleArray(UIHelper.Convert(txtTitle.Text));
             fSourceRecord.Publication.Clear();
-            fSourceRecord.SetPublicationArray(txtPublication.Lines);
+            fSourceRecord.SetPublicationArray(UIHelper.Convert(txtPublication.Text));
             fSourceRecord.Text.Clear();
-            fSourceRecord.SetTextArray(txtText.Lines);
+            fSourceRecord.SetTextArray(UIHelper.Convert(txtText.Text));
 
             CommitChanges();
 

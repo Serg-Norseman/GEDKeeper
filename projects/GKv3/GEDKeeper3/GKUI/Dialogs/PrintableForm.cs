@@ -78,7 +78,7 @@ namespace GKUI.Dialogs
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
         {
-            Graphics gfx = e.Graphics;
+            /*Graphics gfx = e.Graphics;
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 
@@ -98,7 +98,7 @@ namespace GKUI.Dialogs
             float x = (pageBounds.Width - imgW) / 2;
             float y = (pageBounds.Height - imgH) / 2;
 
-            gfx.DrawImage(img, x, y, imgW, imgH);
+            gfx.DrawImage(img, x, y, imgW, imgH);*/
 
             // Look at InitCurDoc()
             //e.HasMorePages = false;

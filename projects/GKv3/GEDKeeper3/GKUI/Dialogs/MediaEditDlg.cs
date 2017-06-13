@@ -53,7 +53,7 @@ namespace GKUI.Dialogs
 
         private bool AcceptChanges()
         {
-            GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            /*GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
             if (fIsNew)
             {
@@ -78,7 +78,7 @@ namespace GKUI.Dialogs
             ControlsRefresh();
 
             CommitChanges();
-            fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
+            fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);*/
 
             return true;
         }

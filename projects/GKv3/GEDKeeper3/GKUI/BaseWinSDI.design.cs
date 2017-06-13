@@ -504,6 +504,9 @@ namespace GKUI
             tabsRecords.Size = new Size(976, 385);
             tabsRecords.SelectedIndexChanged += PageRecords_SelectedIndexChanged;
 
+            Menu = MainMenu1;
+            ToolBar = ToolBar1;
+
             ClientSize = new Size(976, 462);
             Content = tabsRecords;
             Title = "BaseWinSDI";

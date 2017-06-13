@@ -2,6 +2,10 @@
 using System.Reflection;
 using Eto;
 using Eto.Forms;
+using GKCommon;
+using GKCore;
+using GKUI;
+using GKUI.Components;
 
 [assembly: AssemblyTitle("GEDKeeper3.WinForms")]
 [assembly: AssemblyDescription("")]
@@ -20,7 +24,19 @@ namespace GEDKeeper3.WinForms
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Platforms.WinForms).Run(new BaseWinSDI());
+            Logger.LogInit(GKUtils.GetLogFilename());
+            WinFormsAppHost.ConfigureBootstrap(false);
+
+            AppHost.InitSettings();
+            try
+            {
+                var appHost = (WinFormsAppHost)AppHost.Instance;
+                appHost.Init(args, false);
+
+                new Application(Platforms.WinForms).Run(new BaseWinSDI());
+            } finally {
+                AppHost.DoneSettings();
+            }
         }
     }
 }

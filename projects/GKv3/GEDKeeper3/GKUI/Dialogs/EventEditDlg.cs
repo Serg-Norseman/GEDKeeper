@@ -106,13 +106,14 @@ namespace GKUI.Dialogs
 
         private static GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
         {
-            GEDCOMCalendar result = (GEDCOMCalendar)(((GKComboItem)comboBox.SelectedItem).Tag);
-            return result;
+            //GEDCOMCalendar result = (GEDCOMCalendar)(((GKComboItem)comboBox.SelectedItem).Tag);
+            //return result;
+            return GEDCOMCalendar.dcGregorian;
         }
 
         private static void SetComboCalendar(ComboBox comboBox, GEDCOMCalendar calendar)
         {
-            foreach (object item in comboBox.Items) {
+            /*foreach (object item in comboBox.Items) {
                 GKComboItem comboItem = (GKComboItem)item;
 
                 if ((GEDCOMCalendar)comboItem.Tag == calendar) {
@@ -121,7 +122,7 @@ namespace GKUI.Dialogs
                 }
             }
 
-            comboBox.SelectedIndex = 0;
+            comboBox.SelectedIndex = 0;*/
         }
 
         private GEDCOMCustomDate AssembleDate()
@@ -504,12 +505,12 @@ namespace GKUI.Dialogs
                 //txtAttribute.Sorted = false;
 
                 txtAttribute.Items.Clear();
-                txtAttribute.Items.AddRange(vals);
+                txtAttribute.Items.AddRange(GKComboItemSmp.Convert(vals));
 
                 //txtAttribute.Sorted = canbeSorted;
                 txtAttribute.Text = tmp;
 
-                txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
+                //txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
             }
         }
 

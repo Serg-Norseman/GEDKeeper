@@ -481,9 +481,9 @@ namespace GKUI.Components
         {
             if (background == BackgroundMode.bmNone) return;
 
-            bool bgImage = ((BackgroundImage != null) &&
+            bool bgImage = false;/*((BackgroundImage != null) &&
                             (background == BackgroundMode.bmAny ||
-                             background == BackgroundMode.bmImage));
+                             background == BackgroundMode.bmImage));*/
 
             if (bgImage) {
                 /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
@@ -662,7 +662,7 @@ namespace GKUI.Components
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (MouseEventHandler)PersonProperties;
+            var eventHandler = (/*Mouse*/ EventHandler)PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
@@ -723,7 +723,7 @@ namespace GKUI.Components
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (e.Modifiers == Keys.Control) {
-                float newScale = (e.Delta > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
+                float newScale = (e.Delta.Height > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
                 SetScale(newScale);
             } else {
                 base.OnMouseWheel(e);
@@ -1004,9 +1004,9 @@ namespace GKUI.Components
                 UpdateScrollPosition(newX, newY);
             };
 
-            if (InvokeRequired) {
+            /*if (InvokeRequired) {
                 Invoke(invoker, x, y);
-            } else {
+            } else*/ {
                 invoker(x, y);
             }
         }

@@ -96,7 +96,7 @@ namespace GKUI
                         progress.ProgressStep();
                     }
 
-                    fBaseRoot.ExpandAll();
+                    //fBaseRoot.ExpandAll();
                     //cmbPersons.Sorted = true;
 
                     btnSelectPlaces.Enabled = true;
@@ -197,20 +197,21 @@ namespace GKUI
 
         private void TreePlaces_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = tvPlaces.SelectedNode as GKTreeNode;
+            /*GKTreeNode node = tvPlaces.SelectedNode as GKTreeNode;
             if (node == null) return;
 
             GeoPoint pt = node.Tag as GeoPoint;
             if (pt == null) return;
 
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);*/
         }
 
         public void ProcessMap()
         {
             AppHost.Instance.ShowWindow(this);
             PlacesLoad();
-            Activate();
+            //Activate();
+            Focus();
         }
 
         public MapsViewerWin(IBaseWindow baseWin)
@@ -226,7 +227,7 @@ namespace GKUI
 
             fMapPoints = new ExtList<GeoPoint>(true);
             fPlaces = new ExtList<MapPlace>(true);
-            fBaseRoot = tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
+            //fBaseRoot = tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
             radTotal.Checked = true;
 
             SetLang();
@@ -259,21 +260,21 @@ namespace GKUI
 
         private ITreeItem FindTreeNode(string place)
         {
-            int num = fBaseRoot.Nodes.Count;
+            /*int num = fBaseRoot.Nodes.Count;
             for (int i = 0; i < num; i++) {
                 TreeNode node = fBaseRoot.Nodes[i];
 
                 if (node.Text == place) {
                     return node;
                 }
-            }
+            }*/
 
             return null;
         }
 
         private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
         {
-            try
+            /*try
             {
                 GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
 
@@ -313,7 +314,7 @@ namespace GKUI
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
             } catch (Exception ex) {
                 Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
-            }
+            }*/
         }
     }
 }

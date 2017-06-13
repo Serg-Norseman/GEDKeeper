@@ -202,7 +202,10 @@ namespace GKUI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (fViewer != null) fViewer.Select();
+            if (fViewer != null) {
+                //fViewer.Select();
+                fViewer.Focus();
+            }
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
@@ -212,9 +215,9 @@ namespace GKUI
 
         private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
         {
-            if (fViewer is MediaPlayer) {
-                ((MediaPlayer)fViewer).btnStop_Click(null, null);
-            }
+            /*if (fViewer is MediaPlayerStub) {
+                ((MediaPlayerStub)fViewer).btnStop_Click(null, null);
+            }*/
         }
     }
 }

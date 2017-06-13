@@ -2,6 +2,7 @@
 using System.Reflection;
 using Eto;
 using Eto.Forms;
+using GKUI;
 
 [assembly: AssemblyTitle("GEDKeeper3.Gtk3")]
 [assembly: AssemblyDescription("")]

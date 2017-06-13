@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
             lblAddress.Text = LangMan.LS(LSID.LSID_Address);
             lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
             pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
+            //lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 
@@ -80,8 +80,8 @@ namespace GKUI.Dialogs
             lvRecordStats.ClearItems();
             for (int i = 1; i < stats.Length; i++)
             {
-                GKListItem item = lvRecordStats.AddItem(LangMan.LS(GKData.RecordTypes[i]), null);
-                item.AddSubItem(stats[i].ToString());
+                lvRecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]),
+                                      stats[i].ToString());
             }
         }
 
@@ -93,7 +93,7 @@ namespace GKUI.Dialogs
 
                 GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name.StringValue = txtName.Text;
-                submitter.Address.SetAddressArray(txtAddress.Lines);
+                submitter.Address.SetAddressArray(UIHelper.Convert(txtAddress.Text));
 
                 if (submitter.Address.PhoneNumbers.Count > 0) {
                     submitter.Address.PhoneNumbers[0].StringValue = txtTel.Text;

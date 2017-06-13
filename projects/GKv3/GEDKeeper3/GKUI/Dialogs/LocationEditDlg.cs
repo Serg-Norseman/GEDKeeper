@@ -82,9 +82,9 @@ namespace GKUI.Dialogs
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
             lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
+            /*ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
             ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
-            ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);
+            ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);*/
             btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
             grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
             btnSearch.Text = LangMan.LS(LSID.LSID_Search);
@@ -174,10 +174,9 @@ namespace GKUI.Dialogs
                 {
                     GeoPoint pt = searchPoints[i];
 
-                    GKListItem item = new GKListItem(pt.Hint, pt);
-                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Latitude));
-                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Longitude));
-                    ListGeoCoords.Items.Add(item);
+                    ListGeoCoords.AddItem(pt, pt.Hint,
+                                          PlacesLoader.CoordToStr(pt.Latitude),
+                                          PlacesLoader.CoordToStr(pt.Longitude));
 
                     fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
@@ -197,27 +196,28 @@ namespace GKUI.Dialogs
 
         private GKListItem GetSelectedGeoItem()
         {
-            if (ListGeoCoords.SelectedItems.Count <= 0) return null;
+            return null;
+            /*if (ListGeoCoords.SelectedItems.Count <= 0) return null;
 
             GKListItem item = (GKListItem)ListGeoCoords.SelectedItems[0];
-            return item;
+            return item;*/
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
+            /*GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
             txtLatitude.Text = item.SubItems[1].Text;
-            txtLongitude.Text = item.SubItems[2].Text;
+            txtLongitude.Text = item.SubItems[2].Text;*/
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
+            /*GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
-            txtName.Text = item.Text;
+            txtName.Text = item.Text;*/
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)

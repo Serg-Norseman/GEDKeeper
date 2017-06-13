@@ -165,7 +165,7 @@ namespace GKUI.Dialogs
             btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
 
             txtDir.Items.Clear();
-            txtDir.Items.AddRange(new object[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) });
+            txtDir.Items.AddRange(GKComboItemSmp.Convert(new string[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) }));
         }
 
         public override void InitDialog(IBaseWindow baseWin)

@@ -155,9 +155,9 @@ namespace GKUI.Dialogs
             fMaskedTextBox.Provider = new FixedMaskedTextProvider("00/00/0000");
             //fMaskedTextBox.Mask = @"00/00/0000";
             //fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            dataGridView1.Controls.Add(fMaskedTextBox);
+            //dataGridView1.Controls.Add(fMaskedTextBox);
 
-            dataGridView1.Rows.Clear();
+            //dataGridView1.Rows.Clear();
             dataGridView1.Columns.Add(AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200));
             dataGridView1.Columns.Add(AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150));
             dataGridView1.Columns.Add(AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300));
@@ -169,7 +169,7 @@ namespace GKUI.Dialogs
 
         private bool IsGEDCOMDateCell(int rowIndex)
         {
-            DataGridViewRow row = dataGridView1.Rows[rowIndex];
+            /*DataGridViewRow row = dataGridView1.Rows[rowIndex];
 
             string fld = (string)row.Cells[0].Value;
             if (!string.IsNullOrEmpty(fld)) {
@@ -177,7 +177,7 @@ namespace GKUI.Dialogs
                 DataType dataType = fListMan.GetColumnDataType(colId);
 
                 return (dataType == DataType.dtGEDCOMDate);
-            }
+            }*/
 
             return false;
         }
@@ -186,9 +186,9 @@ namespace GKUI.Dialogs
         {
             if (fMaskedTextBox.Visible)
             {
-                DataGridViewCell cell = dataGridView1.CurrentCell;
-                Rectangle rect = dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
-                fMaskedTextBox.Location = rect.Location;
+                //DataGridViewCell cell = dataGridView1.CurrentCell;
+                //Rectangle rect = dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
+                //fMaskedTextBox.Location = rect.Location;
             }
         }
 
@@ -224,7 +224,7 @@ namespace GKUI.Dialogs
 
         private void UpdateGrid()
         {
-            dataGridView1.Rows.Clear();
+            /*dataGridView1.Rows.Clear();
 
             int num = fListMan.Filter.Conditions.Count;
             for (int i = 0; i < num; i++)
@@ -244,7 +244,7 @@ namespace GKUI.Dialogs
             //dataGridView1.AutoResizeColumns();
             dataGridView1.Columns[0].Width = 150;
             dataGridView1.Columns[1].Width = 150;
-            dataGridView1.Columns[2].Width = 150;
+            dataGridView1.Columns[2].Width = 150;*/
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -270,7 +270,7 @@ namespace GKUI.Dialogs
 
         public virtual void AcceptChanges()
         {
-            fListMan.Filter.Clear();
+            /*fListMan.Filter.Clear();
 
             int num = dataGridView1.Rows.Count;
             for (int r = 0; r < num; r++)
@@ -289,7 +289,7 @@ namespace GKUI.Dialogs
                         fListMan.AddCondition((byte)colId, cond, val);
                     }
                 }
-            }
+            }*/
 
             DialogResult = DialogResult.Ok;
         }

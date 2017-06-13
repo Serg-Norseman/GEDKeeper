@@ -93,7 +93,7 @@ namespace GKUI.Components
                 #if !__MonoCS__
                 Invalidate();
                 #else
-                Update();
+                Update(Bounds);
                 #endif
             }
         }
