@@ -32,7 +32,7 @@ using GKCore.UIContracts;
 
 namespace GKCore
 {
-    #if !__MonoCS__
+    #if LUA_DLL
     using LuaInterface;
     #else
     using NLua;
