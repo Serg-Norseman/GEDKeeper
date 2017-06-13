@@ -167,10 +167,9 @@ namespace GKUI
         {
             base.WndProc(ref m);
 
-            // FIXME
-            /*if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+            if (m.Msg == GKUI.Components.NativeMethods.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
-            }*/
+            }
         }
 
         #endregion

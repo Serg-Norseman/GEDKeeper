@@ -901,13 +901,17 @@ namespace GKCommon.GEDCOM
             /* dcUnknown */     UDNCalendarType.ctGregorian
         };
 
-        private void DateChanged()
+        protected override void DateChanged()
         {
             int year;
             ushort month, day;
             bool yearBC;
             GetDateParts(out year, out month, out day, out yearBC);
-            if (yearBC) year = -year;
+            if (year == UNKNOWN_YEAR) {
+                year = UDN.UnknownYear;
+            } else {
+                if (yearBC) year = -year;
+            }
 
             UDNCalendarType udnCalendar = UDNCalendars[(int)fCalendar];
             fUDN = new UDN(udnCalendar, year, month, day);

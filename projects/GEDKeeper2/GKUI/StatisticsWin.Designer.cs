@@ -42,7 +42,7 @@ namespace GKUI
 			this.grpSummary.Dock = System.Windows.Forms.DockStyle.Top;
 			this.grpSummary.Location = new System.Drawing.Point(0, 0);
 			this.grpSummary.Name = "grpSummary";
-			this.grpSummary.Size = new System.Drawing.Size(893, 267);
+			this.grpSummary.Size = new System.Drawing.Size(893, 280);
 			this.grpSummary.TabIndex = 0;
 			this.grpSummary.TabStop = false;
 			this.grpSummary.Text = "grpSummary";
