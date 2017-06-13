@@ -20,35 +20,47 @@
 
 using System;
 using System.Collections.Generic;
-using Eto.Forms;
-
-using GKCore.Stats;
-//using ZedGraph;
 
 namespace GKUI.Components
 {
-    public enum ChartStyle
-    {
-        Bar,
-        Point,
-        ClusterBar
-    }
-
     /// <summary>
     /// 
     /// </summary>
-    public class ZGraphControl : Panel
+    public class GKComboItemSmp : Eto.Forms.IListItem
     {
-        public ZGraphControl()
+        public string Text
         {
+            get;
+            set;
         }
 
-        public void Clear()
+        public string Key
         {
+            get;
+            private set;
         }
 
-        public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
+        public GKComboItemSmp(string text)
         {
+            Text = text;
+            Key = null;
+        }
+
+        public GKComboItemSmp(string text, string key)
+        {
+            Text = text;
+            Key = key;
+        }
+
+        public static IEnumerable<GKComboItemSmp> Convert(IEnumerable<string> items)
+        {
+            var result = new List<GKComboItemSmp>();
+
+            foreach (var item in items) {
+                result.Add(new GKComboItemSmp(item));
+            }
+
+            return result;
         }
     }
 }

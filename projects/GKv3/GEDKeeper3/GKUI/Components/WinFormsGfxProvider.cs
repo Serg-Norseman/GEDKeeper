@@ -95,7 +95,7 @@ namespace GKUI.Components
                 }
 
                 Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = Graphics.FromImage(newImage)) {
+                using (Graphics graphic = new Graphics(newImage)) {
                     //graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     graphic.ImageInterpolation = ImageInterpolation.High;
                     //graphic.SmoothingMode = SmoothingMode.HighQuality;
@@ -107,11 +107,11 @@ namespace GKUI.Components
                     if (cutoutIsEmpty) {
                         graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
                     } else {
-                        Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                        //Rectangle srcRect = cutoutArea.ToRectangle();
-                        graphic.DrawImage(bmp, destRect,
-                                          cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight());
+                        RectangleF sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top,
+                                                             cutoutArea.GetWidth(), cutoutArea.GetHeight());
+                        RectangleF destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+
+                        graphic.DrawImage(bmp, sourRect, destRect);
                     }
                 }
 
@@ -121,16 +121,16 @@ namespace GKUI.Components
 
         public IImage GetResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = (Bitmap)GKResources.ResourceManager.GetObject(resName, GKResources.Culture);
+            Bitmap img = Bitmap.FromResource(resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();
 
-                #if __MonoCS__
+                /*#if __MonoCS__
                 img.MakeTransparent(); // FIXME: don't work
                 #else
                 img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
+                #endif*/
             }
 
             return new ImageHandler(img);

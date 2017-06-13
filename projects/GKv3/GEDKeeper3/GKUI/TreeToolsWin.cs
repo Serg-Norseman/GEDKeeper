@@ -99,7 +99,7 @@ namespace GKUI
             fPlaces = new StringList();
             fPlaces.Sorted = true;
             fChecksList = new List<TreeTools.CheckObj>();
-            gkLogChart1.OnHintRequest += HintRequestEventHandler;
+            //gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             PrepareChecksList();
             PreparePatriarchsList();
@@ -241,7 +241,7 @@ namespace GKUI
                 for (int i = fRMIndex; i < recNum; i++)
                 {
                     fRMIndex = i;
-                    ProgressBar1.Increment(1);
+                    ProgressBar1.Value += 1; //Increment(1);
 
                     GEDCOMRecord iRec = fTree[i];
                     if (iRec.RecordType != fRMMode) continue;
@@ -317,7 +317,7 @@ namespace GKUI
         {
             IProgressController progress = AppHost.Progress;
 
-            gkLogChart1.Clear();
+            /*gkLogChart1.Clear();
             progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
@@ -373,19 +373,19 @@ namespace GKUI
                 groupRecords.Clear();
                 //prepared.Dispose();
                 progress.ProgressDone();
-            }
+            }*/
         }
 
         private void tvGroups_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
+            /*GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
             if (node == null) return;
             
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
             
             Base.SelectRecordByXRef(iRec.XRef);
-            Close();
+            Close();*/
         }
 
         // FIXME: GKv3 DevRestriction
@@ -418,17 +418,17 @@ namespace GKUI
 
             foreach (TreeTools.CheckObj checkObj in fChecksList)
             {
-                GKListItem item = ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
-                item.AddSubItem(checkObj.Comment);
-                item.AddSubItem(LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
+                ListChecks.AddItem(checkObj, checkObj.GetRecordName(),
+                                   checkObj.Comment,
+                                   LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
             }
 
-            ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
         {
-            try
+            /*try
             {
                 int num = ListChecks.Items.Count;
                 for (int i = 0; i < num; i++)
@@ -444,7 +444,7 @@ namespace GKUI
             {
                 Base.RefreshLists(false);
                 CheckBase();
-            }
+            }*/
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)

@@ -72,24 +72,24 @@ namespace GKUI.Dialogs
 
         private void UpdateColumnsList()
         {
-            lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
+            //lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
             lstPersonColumns.BeginUpdate();
             try
             {
-                lstPersonColumns.Items.Clear();
+                lstPersonColumns.ClearItems();
 
                 int num = fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
                     ListColumn column = fTempColumns.OrderedColumns[i];
 
-                    lstPersonColumns.Items.Add(LangMan.LS(column.ColName), column.CurActive);
+                    lstPersonColumns.AddItem(null, column.CurActive, LangMan.LS(column.ColName));
                 }
             }
             finally
             {
                 lstPersonColumns.EndUpdate();
             }
-            lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
+            //lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
         }
 
         private void UpdateControls()
@@ -279,10 +279,10 @@ namespace GKUI.Dialogs
                 IPlugin plugin = AppHost.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
 
-                GKListItem item = lvPlugins.AddItem(pInfo.Title, null);
-                item.AddSubItem(pInfo.Version);
-                item.AddSubItem(pInfo.Copyright);
-                item.AddSubItem(pInfo.Description);
+                lvPlugins.AddItem(null, pInfo.Title,
+                                  pInfo.Version,
+                                  pInfo.Copyright,
+                                  pInfo.Description);
             }
         }
 

@@ -161,12 +161,17 @@ namespace GKUI.Components
             ExtSize imageSize = GetImageSize();
             var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
 
-            Image image;
+            /*Image image;
             using (var gfx = CreateGraphics()) {
                 image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
             }
-
             using (Graphics gfx = Graphics.FromImage(image)) {
+                RenderStaticImage(gfx, true);
+            }
+             */
+
+            var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+            using (Graphics gfx = new Graphics(image)) {
                 RenderStaticImage(gfx, true);
             }
 
@@ -188,8 +193,8 @@ namespace GKUI.Components
             {
                 ImageFormat imFmt = ImageFormat.Png;
                 if (ext == ".bmp") { imFmt = ImageFormat.Bitmap; }
-                else
-                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
+                /*else
+                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }*/
                 else
                     if (ext == ".png") { imFmt = ImageFormat.Png; }
                 else
@@ -197,18 +202,20 @@ namespace GKUI.Components
                 else
                     if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
 
-                Image pic;
+                /*Image pic;
                 if (Equals(imFmt, ImageFormat.Emf)) {
                     using (var gfx = CreateGraphics()) {
                         pic = new Metafile(fileName, gfx.GetHdc());
                     }
                 } else {
                     pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
-                }
+                }*/
+                Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
 
                 try
                 {
-                    using (Graphics gfx = Graphics.FromImage(pic)) {
+                    //using (Graphics gfx = Graphics.FromImage(pic)) {
+                    using (Graphics gfx = new Graphics(pic)) {
                         RenderStaticImage(gfx, false);
                     }
 

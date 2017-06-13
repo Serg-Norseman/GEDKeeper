@@ -50,14 +50,39 @@ namespace GKUI.Components
         }
     }
 
+    public enum SortOrder
+    {
+        None, Ascending, Descending
+    }
+
     /// <summary>
-    /// Description of GKListViewStub.
+    /// 
     /// </summary>
     public class GKListViewStub : Scrollable, IListView
     {
         public IListManager ListMan
         {
             get { return null; }
+        }
+
+        public int SortColumn
+        {
+            get; set;
+        }
+
+        public SortOrder Sorting
+        {
+            get; set;
+        }
+
+        public bool CheckBoxes
+        {
+            get; set;
+        }
+
+        public int SelectedIndex
+        {
+            get; set;
         }
 
         public GKListItem GetSelectedItem()
@@ -72,7 +97,8 @@ namespace GKUI.Components
 
         public void UpdateContents(bool columnsChanged = false)
         {
-            
+            //var gv = new GridView();
+            //gv.DataStore
         }
 
         public GKListItem AddItem(string text, object data)
@@ -85,34 +111,33 @@ namespace GKUI.Components
             return null;
         }
 
+        public GKListItem AddItem(object rowData, params object[] columnValues)
+        {
+            return null;
+        }
+
         public void DeleteRecord(object data)
         {
-            
         }
 
         public void BeginUpdate()
         {
-            
         }
 
         public void EndUpdate()
         {
-            
         }
 
         public void SelectItemByData(object data)
         {
-            
         }
 
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
-            
         }
 
         public void ResizeColumn(int columnIndex)
         {
-            
         }
 
         public void SelectItem(int index)
@@ -125,12 +150,10 @@ namespace GKUI.Components
 
         public void ClearColumns()
         {
-            
         }
 
         public void ClearItems()
         {
-            
         }
 
         public GKListViewStub()

@@ -267,5 +267,11 @@ namespace GKUI.Components
         {
             SetControlFont(ctl, new Font(family, size, style, decoration));
         }
+
+        public static string[] Convert(string text)
+        {
+            var strList = new StringList(text);
+            return strList.ToArray();
+        }
     }
 }

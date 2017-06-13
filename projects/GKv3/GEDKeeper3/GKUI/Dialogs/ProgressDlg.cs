@@ -76,9 +76,9 @@ namespace GKUI.Dialogs
             //initEvent.WaitOne();
 
             try {
-                if (InvokeRequired) {
+                /*if (InvokeRequired) {
                     Invoke(new PInit(DoInit), new object[] { title, max });
-                } else {
+                } else*/ {
                     DoInit(title, max);
                 }
             } catch { }
@@ -88,9 +88,9 @@ namespace GKUI.Dialogs
         {
             try {
                 if (requiresClose) {
-                    if (InvokeRequired) {
+                    /*if (InvokeRequired) {
                         Invoke(new PDone(DoDone));
-                    } else {
+                    } else*/ {
                         DoDone();
                     }
                 }
@@ -100,9 +100,9 @@ namespace GKUI.Dialogs
         internal void ProgressStep()
         {
             try {
-                if (InvokeRequired) {
+                /*if (InvokeRequired) {
                     Invoke(new PStep(DoStep), new object[] { fVal + 1 });
-                } else {
+                } else*/ {
                     DoStep(fVal + 1);
                 }
             } catch { }
@@ -111,9 +111,9 @@ namespace GKUI.Dialogs
         internal void ProgressStep(int value)
         {
             try {
-                if (InvokeRequired) {
+                /*if (InvokeRequired) {
                     Invoke(new PStep(DoStep), new object[] { value });
-                } else {
+                } else*/ {
                     DoStep(value);
                 }
             } catch { }
@@ -164,7 +164,8 @@ namespace GKUI.Dialogs
             lblRemainVal.Text = TimeSpanToString(restTime);
             lblTotalVal.Text = TimeSpanToString(sumTime);
 
-            Update();
+            //Update();
+            Invalidate();
         }
 
         #endregion

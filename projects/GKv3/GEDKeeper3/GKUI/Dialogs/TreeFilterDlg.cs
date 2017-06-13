@@ -224,9 +224,9 @@ namespace GKUI.Dialogs
             }
             //cmbSource.Sorted = false;
 
-            cmbSource.Items.Insert(0, LangMan.LS(LSID.LSID_SrcAll));
-            cmbSource.Items.Insert(1, LangMan.LS(LSID.LSID_SrcNot));
-            cmbSource.Items.Insert(2, LangMan.LS(LSID.LSID_SrcAny));
+            cmbSource.Items.Insert(0, new GKComboItemSmp(LangMan.LS(LSID.LSID_SrcAll)));
+            cmbSource.Items.Insert(1, new GKComboItemSmp(LangMan.LS(LSID.LSID_SrcNot)));
+            cmbSource.Items.Insert(2, new GKComboItemSmp(LangMan.LS(LSID.LSID_SrcAny)));
 
             UpdateControls();
         }

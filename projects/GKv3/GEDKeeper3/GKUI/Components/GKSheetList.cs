@@ -93,7 +93,7 @@ namespace GKUI.Components
         }
 
 
-        public GKSheetList(Container owner)
+        public GKSheetList(Panel owner)
         {
             if (owner == null)
                 throw new ArgumentNullException("owner");
@@ -388,10 +388,10 @@ namespace GKUI.Components
             UpdateButtons();
 
             if (fListModel != null) {
-                if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
+                /*if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
                     fList.ClearColumns();
                     fListModel.UpdateColumns(fList);
-                }
+                }*/
 
                 fListModel.UpdateContents();
             }

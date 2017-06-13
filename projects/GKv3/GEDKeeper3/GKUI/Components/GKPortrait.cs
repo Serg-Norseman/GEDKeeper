@@ -113,7 +113,7 @@ namespace GKUI.Components
 
         private void RedrawButtons()
         {
-            int lenwagon = 0;
+            /*int lenwagon = 0;
 
             btnPanel.Controls.Clear();
 
@@ -133,15 +133,15 @@ namespace GKUI.Components
                 fBtnsList[i].Location = new Point(startPosition, heightCenter - btnCenter);
                 btnPanel.Controls.Add(fBtnsList[i]);
                 startPosition += fBtnsList[i].Width + 8;
-            }
+            }*/
         }
 
         private void MoveSlidePanel(object sender, EventArgs e)
         {
-            if (btnPanel.Top <= Height - btnPanel.Height)
+            /*if (btnPanel.Top <= Height - btnPanel.Height)
                 timer.Stop();
             else
-                btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
+                btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);*/
         }
 
         private void PictureBox1MouseHover(object sender, EventArgs e)
@@ -166,7 +166,7 @@ namespace GKUI.Components
 
         private void CheckCursorPosition(object sender, EventArgs e)
         {
-            Point p = fLayout.PointToClient(Mouse.Position);
+            /*Point p = fLayout.PointToClient(Mouse.Position);
             bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
             if (!buf) {
                 timer.Start();
@@ -175,7 +175,7 @@ namespace GKUI.Components
             else {
                 btnPanel.Top = Height;
                 timer.Stop();
-            }
+            }*/
         }
 
         protected override void OnSizeChanged(EventArgs e)

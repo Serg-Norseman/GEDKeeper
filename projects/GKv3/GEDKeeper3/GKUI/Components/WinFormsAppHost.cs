@@ -69,7 +69,9 @@ namespace GKUI.Components
                 //return (IWindow)((Form)fMainWindow).ActiveMdiChild;
                 return null;
             } else {
-                Form activeForm = Form.ActiveForm;
+                //Application.Instance.
+                //Window.
+                Form activeForm = null;//Form.ActiveForm;
 
                 // only for tests!
                 if (activeForm == null && fRunningForms.Count > 0) {
@@ -91,7 +93,9 @@ namespace GKUI.Components
         {
             IntPtr mainHandle = IntPtr.Zero;
             if (fIsMDI && fMainWindow != null) {
-                mainHandle = ((Form)fMainWindow).Handle;
+                //mainHandle = ((Form)fMainWindow).Handle;
+            } else {
+                // FIXME
             }
             return mainHandle;
         }
@@ -101,7 +105,8 @@ namespace GKUI.Components
             base.CloseWindow(window);
 
             if (!fIsMDI && fRunningForms.Count == 0) {
-                fAppContext.ExitThread();
+                //fAppContext.ExitThread();
+                Application.Instance.Quit();
             }
         }
 
@@ -212,9 +217,21 @@ namespace GKUI.Components
                 var frm = baseWin as Form;
                 MRUFile mf = AppHost.Options.MRUFiles[idx];
                 mf.WinRect = UIHelper.GetFormRect(frm);
-                mf.WinState = (WindowState)frm.WindowState;
+                mf.WinState = gkWindowStates[(int)frm.WindowState];
             }
         }
+
+        private static Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
+            Eto.Forms.WindowState.Normal,
+            Eto.Forms.WindowState.Minimized,
+            Eto.Forms.WindowState.Maximized
+        };
+
+        private static GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
+            GKCore.Options.WindowState.Normal,
+            GKCore.Options.WindowState.Maximized,
+            GKCore.Options.WindowState.Minimized
+        };
 
         public override void RestoreWinMRU(IBaseWindow baseWin)
         {
@@ -222,7 +239,7 @@ namespace GKUI.Components
             if (idx >= 0) {
                 var frm = baseWin as Form;
                 MRUFile mf = AppHost.Options.MRUFiles[idx];
-                UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
+                UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
             }
         }
 

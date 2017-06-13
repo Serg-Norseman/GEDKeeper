@@ -26,6 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -53,13 +54,14 @@ namespace GKUI.Dialogs
             try
             {
                 int length = 0;
-                for (int it = 0; txtNote.Lines.Length > it; ++it)
+                /*for (int it = 0; txtNote.Lines.Length > it; ++it)
                 {
                     length += txtNote.Lines[it].Trim().Length;
-                }
+                }*/
+                length = txtNote.Text.Length;
                 if (0 != length)
                 {
-                    fNoteRecord.SetNotesArray(txtNote.Lines);
+                    fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
 

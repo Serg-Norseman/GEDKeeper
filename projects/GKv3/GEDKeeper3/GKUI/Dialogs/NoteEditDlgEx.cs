@@ -57,13 +57,14 @@ namespace GKUI.Dialogs
             try
             {
                 int length = 0;
-                for (int it = 0; txtNote.Lines.Length > it; ++it)
+                /*for (int it = 0; txtNote.Lines.Length > it; ++it)
                 {
                     length += txtNote.Lines[it].Trim().Length;
-                }
+                }*/
+                length = txtNote.Text.Length;
                 if (0 != length)
                 {
-                    fNoteRecord.SetNotesArray(txtNote.Lines);
+                    fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
 
@@ -103,11 +104,11 @@ namespace GKUI.Dialogs
 
         private void FillSizes()
         {
-            cmbSizes.Items.Add(new GKComboItem("", 0));
+            /*cmbSizes.Items.Add(new GKComboItem("", 0));
             for (int i = 1; i <= 7; i++) {
                 cmbSizes.Items.Add(new GKComboItem(i.ToString(), i));
             }
-            cmbSizes.SelectedIndex = 0;
+            cmbSizes.SelectedIndex = 0;*/
         }
 
         private void btnBold_Click(object sender, EventArgs e)
@@ -132,9 +133,9 @@ namespace GKUI.Dialogs
 
         private void miSelectAndCopy_Click(object sender, EventArgs e)
         {
-            txtNote.Select();
+            //txtNote.Select();
             txtNote.SelectAll();
-            txtNote.Copy();
+            //txtNote.Copy();
         }
 
         private void miImport_Click(object sender, EventArgs e)
@@ -171,11 +172,11 @@ namespace GKUI.Dialogs
 
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = cmbSizes.SelectedItem as GKComboItem;
+            /*var item = cmbSizes.SelectedItem as GKComboItem;
             if (item == null || item.Caption == "") return;
 
             string value = item.Tag.ToString();
-            txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);
+            txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);*/
         }
     }
 }

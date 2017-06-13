@@ -353,7 +353,7 @@ namespace GKUI.Components
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Point pt = new Point(e.Location);
-            if ((e.Buttons == MouseButtons.Alternate) && (HorizontalScroll.Visible || VerticalScroll.Visible)) {
+            if ((e.Buttons == MouseButtons.Alternate) && HasScroll) {
                 fMouseCaptured = MouseCaptured.mcDrag;
                 fMouseCaptureX = pt.X;
                 fMouseCaptureY = pt.Y;
@@ -428,7 +428,7 @@ namespace GKUI.Components
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None != (Keys.Control & e.Modifiers)) {
-                if (0 > e.Delta) {
+                if (0 > e.Delta.Height) {
                     Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
                 } else {
                     Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
