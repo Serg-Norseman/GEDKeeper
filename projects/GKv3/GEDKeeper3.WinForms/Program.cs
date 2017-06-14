@@ -4,7 +4,6 @@ using Eto;
 using Eto.Forms;
 using GKCommon;
 using GKCore;
-using GKUI;
 using GKUI.Components;
 
 [assembly: AssemblyTitle("GEDKeeper3.WinForms")]
@@ -30,10 +29,12 @@ namespace GEDKeeper3.WinForms
             AppHost.InitSettings();
             try
             {
+                var application = new Application(Platforms.WinForms);
+
                 var appHost = (WinFormsAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
-                new Application(Platforms.WinForms).Run(new BaseWinSDI());
+                application.Run();
             } finally {
                 AppHost.DoneSettings();
             }

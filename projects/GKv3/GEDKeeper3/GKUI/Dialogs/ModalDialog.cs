@@ -58,5 +58,11 @@ namespace GKUI.Dialogs
         {
             return (ShowModal() == DialogResult.Ok);
         }
+
+        protected virtual void CancelClickHandler(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
     }
 }

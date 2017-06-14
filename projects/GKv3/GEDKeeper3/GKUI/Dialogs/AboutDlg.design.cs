@@ -25,9 +25,9 @@ namespace GKUI.Dialogs
 
             btnClose = new Button();
             btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(91, 24);
+            btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
-            btnClose.Click += (sender, e) => Close();
+            btnClose.Click += CancelClickHandler;
 
             lblCopyright = new Label();
             lblCopyright.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
@@ -43,20 +43,20 @@ namespace GKUI.Dialogs
             lblProjSite.Text = "https://gedkeeper.github.io/";
             lblProjSite.Click += LabelMail_Click;
 
-            ClientSize = new Size(383, 221);
+            ClientSize = new Size(360, 220);
             Title = "AboutDlg";
 
-            Content = new TableLayout {
+            Content = new StackLayout {
                 Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
+                Spacing = 10,
+                Items = {
                     lblProduct,
                     lblVersion,
                     lblCopyright,
                     null,
                     lblProjSite,
                     lblMail,
-                    new TableRow(null, TableLayout.AutoSized(btnClose, centered: false))
+                    new StackLayoutItem(btnClose, HorizontalAlignment.Right)
                 }
             };
         }

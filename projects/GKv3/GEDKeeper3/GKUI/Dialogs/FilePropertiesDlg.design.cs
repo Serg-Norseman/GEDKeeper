@@ -25,39 +25,46 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            PageControl1 = new TabControl();
-            pageAuthor = new TabPage();
-            btnLangEdit = new Button();
-            lblName = new Label();
-            lblAddress = new Label();
-            lblLanguage = new Label();
-            lblTelephone = new Label();
-            txtName = new TextBox();
-            txtLanguage = new TextBox();
-            txtTel = new TextBox();
-            txtAddress = new TextArea();
-            pageOther = new TabPage();
-            lvRecordStats = new GKListViewStub();
-
             SuspendLayout();
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(112, 31);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(112, 31);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
 
-            PageControl1.Pages.Add(pageAuthor);
-            PageControl1.Pages.Add(pageOther);
-            PageControl1.SelectedIndex = 0;
-            PageControl1.Size = new Size(606, 331);
+            btnLangEdit = new Button();
+            btnLangEdit.Size = new Size(26, 26);
+            btnLangEdit.Click += btnLangEdit_Click;
 
-            pageAuthor.Size = new Size(598, 301);
+            lblName = new Label();
+            lblName.Text = "lblName";
+
+            lblAddress = new Label();
+            lblAddress.Text = "lblAddress";
+
+            lblLanguage = new Label();
+            lblLanguage.Text = "lblLanguage";
+
+            lblTelephone = new Label();
+            lblTelephone.Text = "lblTelephone";
+
+            txtName = new TextBox();
+
+            txtLanguage = new TextBox();
+            txtLanguage.ReadOnly = true;
+
+            txtTel = new TextBox();
+
+            txtAddress = new TextArea();
+
+            pageAuthor = new TabPage();
             pageAuthor.Text = "pageAuthor";
             pageAuthor.Content = new TableLayout {
                 Padding = new Padding(10),
@@ -74,50 +81,24 @@ namespace GKUI.Dialogs
                         Cells = { lblTelephone, txtTel }
                     },
                     new TableRow {
-                        Cells = { lblLanguage, txtLanguage, btnLangEdit }
+                        Cells = { lblLanguage, TableLayout.Horizontal(10, new TableCell(txtLanguage, true), new TableCell(btnLangEdit, false)) }
                     }
                 }
             };
 
-            btnLangEdit.Size = new Size(39, 34);
-            btnLangEdit.Click += btnLangEdit_Click;
+            lvRecordStats = new GKListViewStub();
+            lvRecordStats.FullRowSelect = true;
+            lvRecordStats.AllowMultipleSelection = false;
+            lvRecordStats.AddColumn("Records", 300);
+            lvRecordStats.AddColumn("Count", 100 /*, HorizontalAlignment.Right*/);
 
-            lblName.Size = new Size(55, 17);
-            lblName.Text = "lblName";
-
-            lblAddress.Size = new Size(68, 17);
-            lblAddress.Text = "lblAddress";
-
-            lblLanguage.Size = new Size(80, 17);
-            lblLanguage.Text = "lblLanguage";
-
-            lblTelephone.Size = new Size(83, 17);
-            lblTelephone.Text = "lblTelephone";
-
-            txtName.Size = new Size(439, 24);
-
-            txtLanguage.ReadOnly = true;
-            txtLanguage.Size = new Size(386, 24);
-
-            txtTel.Size = new Size(439, 24);
-
-            txtAddress.Size = new Size(439, 136);
-
-            pageOther.Size = new Size(598, 301);
+            pageOther = new TabPage();
             pageOther.Text = "pageOther";
             pageOther.Content = lvRecordStats;
 
-            //lvRecordStats.FullRowSelect = true;
-            //lvRecordStats.MultiSelect = false;
-            lvRecordStats.Size = new Size(598, 301);
-            //lvRecordStats.View = View.Details;
-
-            /*columnHeader1.Text = "Records";
-            columnHeader1.Width = 300;
-
-            columnHeader2.Text = "Count";
-            columnHeader2.TextAlign = HorizontalAlignment.Right;
-            columnHeader2.Width = 100;*/
+            PageControl1 = new TabControl();
+            PageControl1.Pages.Add(pageAuthor);
+            PageControl1.Pages.Add(pageOther);
 
             Content = new TableLayout {
                 Padding = new Padding(10),
@@ -127,16 +108,13 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { PageControl1 }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(630, 405);
+            ClientSize = new Size(620, 400);
             Title = "FilePropertiesDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

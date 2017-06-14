@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -46,27 +45,27 @@ namespace GKUI
             InitializeComponent();
 
             fBase = baseWin;
-            
+
             fAdrList = new GKSheetList(pageAddresses);
             fAdrList.Buttons = EnumSet<SheetButton>.Create();
             fAdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fAdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
-            
+
             fPhonesList = new GKSheetList(pageTelephones);
             fPhonesList.Buttons = EnumSet<SheetButton>.Create();
             fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
-            
+
             fMailsList = new GKSheetList(pageMails);
             fMailsList.Buttons = EnumSet<SheetButton>.Create();
             fMailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
-            
+
             fWebsList = new GKSheetList(pageWebs);
             fWebsList.Buttons = EnumSet<SheetButton>.Create();
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
-            
+
             Title = LangMan.LS(LSID.LSID_MIOrganizer);
             pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
             pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
@@ -120,7 +119,7 @@ namespace GKUI
         {
             GEDCOMAddress addr = ev.Address;
             if (addr == null) return;
-            
+
             string addrStr = addr.Address.Text.Trim();
             if (addrStr != "") {
                 AddItem(fAdrList, iName, addrStr);

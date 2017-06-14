@@ -9,7 +9,6 @@ namespace GKUI
     {
         private ToolBar ToolBar1;
         private ButtonToolItem tbLoadScript;
-        private SeparatorToolItem ToolButton2;
         private ButtonToolItem tbRun;
         private GKUI.Components.TextBoxEx txtDebugOutput;
         private TextBoxEx txtScriptText;
@@ -19,19 +18,21 @@ namespace GKUI
 
         private void InitializeComponent()
         {
-            ToolBar1 = new ToolBar();
-
             SuspendLayout();
 
             tbNewScript = new ButtonToolItem();
             tbNewScript.Click += tbNewScript_Click;
+
             tbLoadScript = new ButtonToolItem();
             tbLoadScript.Click += tbLoadScript_Click;
+
             tbSaveScript = new ButtonToolItem();
             tbSaveScript.Click += tbSaveScript_Click;
+
             tbRun = new ButtonToolItem();
             tbRun.Click += tbRun_Click;
 
+            ToolBar1 = new ToolBar();
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbNewScript,
                                         tbLoadScript,
@@ -40,20 +41,22 @@ namespace GKUI
                                         tbRun});
 
             txtScriptText = new TextBoxEx();
-            txtScriptText.Size = new Size(712, 240);
 
             txtDebugOutput = new GKUI.Components.TextBoxEx();
             txtDebugOutput.ReadOnly = true;
-            txtDebugOutput.Size = new Size(712, 165);
 
             splitContainer1 = new Splitter();
-            splitContainer1.Orientation = Orientation.Horizontal;
+            splitContainer1.Orientation = Orientation.Vertical;
             splitContainer1.Panel1 = txtScriptText;
             splitContainer1.Panel2 = txtDebugOutput;
+            splitContainer1.FixedPanel = SplitterFixedPanel.Panel2;
+            splitContainer1.Position = 300;
 
             Content = splitContainer1;
+            ToolBar = ToolBar1;
 
             ClientSize = new Size(712, 434);
+            Resizable = true;
             ShowInTaskbar = true;
             Title = "ScriptEditWin";
             Closing += ScriptEditWin_Closing;

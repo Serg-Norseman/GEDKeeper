@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.Remoting.Contexts;
 using Eto.Drawing;
 using Eto.Forms;
 using GKUI.Components;
@@ -16,22 +14,16 @@ namespace GKUI
         private ButtonToolItem tbFileNew;
         private ButtonToolItem tbFileLoad;
         private ButtonToolItem tbFileSave;
-        private SeparatorToolItem TBS1;
         private ButtonToolItem tbRecordAdd;
         private ButtonToolItem tbRecordEdit;
         private ButtonToolItem tbRecordDelete;
-        private SeparatorToolItem TBS2;
         private ButtonToolItem tbFilter;
         private ButtonToolItem tbTreeAncestors;
         private ButtonToolItem tbTreeDescendants;
-        private SeparatorToolItem TBS4;
         private ButtonToolItem tbPedigree; // FIXME: GKv3 DevRestriction
-        private SeparatorToolItem TBS6;
         private ButtonToolItem tbStats;
-        private SeparatorToolItem TBS5;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
-        private SeparatorToolItem TBS8;
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbDocPreview;
         private MenuBar MainMenu1;
@@ -42,48 +34,36 @@ namespace GKUI
         private ButtonMenuItem miFileSave;
         private ButtonMenuItem miFileSaveAs;
         private ButtonMenuItem miFileClose;
-        private SeparatorMenuItem N1;
         private ButtonMenuItem miFileProperties;
-        private SeparatorMenuItem N2;
         private ButtonMenuItem miExportToExcelFile;
         private ButtonMenuItem miExportToFamilyBook;
-        private SeparatorMenuItem N3;
         private ButtonMenuItem miTreeTools;
         private ButtonMenuItem miExit;
         private ButtonMenuItem miEdit;
         private ButtonMenuItem miRecordAdd;
         private ButtonMenuItem miRecordEdit;
         private ButtonMenuItem miRecordDelete;
-        private SeparatorMenuItem N15;
         private ButtonMenuItem miSearch;
-        private SeparatorMenuItem N6;
         private ButtonMenuItem miFilter;
-        private SeparatorMenuItem N7;
         private ButtonMenuItem miOptions;
         private ButtonMenuItem miPedigree;
         private ButtonMenuItem miTreeAncestors;
         private ButtonMenuItem miTreeDescendants;
-        private SeparatorMenuItem N8;
         private ButtonMenuItem miPedigree_dAboville;
         private ButtonMenuItem miPedigree_Konovalov;
-        private SeparatorMenuItem N9;
         private ButtonMenuItem miMap;
-        private SeparatorMenuItem N10;
         private ButtonMenuItem miStats;
         private ButtonMenuItem miHelp;
         private ButtonMenuItem miContext;
         private ButtonMenuItem miLogSend;
         private ButtonMenuItem miLogView;
-        private SeparatorMenuItem N13;
         private ButtonMenuItem miAbout;
         private ContextMenu MenuMRU;
         private ContextMenu MenuPedigree;
         private ButtonMenuItem miPedigree_dAboville2;
         private ButtonMenuItem miPedigree_Konovalov2;
-        private SeparatorToolItem TBS7;
         private ButtonMenuItem miOrganizer;
         private ButtonMenuItem miService;
-        private SeparatorMenuItem N12;
         private ButtonMenuItem miScripts;
         private ButtonMenuItem miExport;
         private ButtonMenuItem miTreeBoth;
@@ -94,7 +74,6 @@ namespace GKUI
         private ButtonToolItem tbLoadMRU; // FIXME: GKv3 DevRestriction
         private ButtonMenuItem miPedigreeAscend;
         private ButtonMenuItem miDescendantsCircle;
-        private SeparatorMenuItem SeparatorToolItem1;
         private ButtonMenuItem miRelationshipCalculator;
         private TabControl tabsRecords;
         private ButtonMenuItem miRecordDuplicate;
@@ -114,27 +93,20 @@ namespace GKUI
             tbLoadMRU = new ButtonToolItem();
             MenuMRU = new ContextMenu();
             tbFileSave = new ButtonToolItem();
-            TBS1 = new SeparatorToolItem();
             tbRecordAdd = new ButtonToolItem();
             tbRecordEdit = new ButtonToolItem();
             tbRecordDelete = new ButtonToolItem();
-            TBS2 = new SeparatorToolItem();
             tbFilter = new ButtonToolItem();
-            TBS4 = new SeparatorToolItem();
             tbTreeAncestors = new ButtonToolItem();
             tbTreeDescendants = new ButtonToolItem();
             tbTreeBoth = new ButtonToolItem();
-            TBS5 = new SeparatorToolItem();
             tbPedigree = new ButtonToolItem();
             MenuPedigree = new ContextMenu();
             miPedigree_dAboville2 = new ButtonMenuItem();
             miPedigree_Konovalov2 = new ButtonMenuItem();
-            TBS6 = new SeparatorToolItem();
             tbStats = new ButtonToolItem();
-            TBS7 = new SeparatorToolItem();
             tbPrev = new ButtonToolItem();
             tbNext = new ButtonToolItem();
-            TBS8 = new SeparatorToolItem();
             tbDocPreview = new ButtonToolItem();
             tbDocPrint = new ButtonToolItem();
             MainMenu1 = new MenuBar();
@@ -145,18 +117,14 @@ namespace GKUI
             miFileSave = new ButtonMenuItem();
             miFileSaveAs = new ButtonMenuItem();
             miFileClose = new ButtonMenuItem();
-            N1 = new SeparatorMenuItem();
             miFileProperties = new ButtonMenuItem();
-            N2 = new SeparatorMenuItem();
             miExport = new ButtonMenuItem();
             miExportToExcelFile = new ButtonMenuItem();
-            N3 = new SeparatorMenuItem();
             miExit = new ButtonMenuItem();
             miEdit = new ButtonMenuItem();
             miRecordAdd = new ButtonMenuItem();
             miRecordEdit = new ButtonMenuItem();
             miRecordDelete = new ButtonMenuItem();
-            N15 = new SeparatorMenuItem();
             miSearch = new ButtonMenuItem();
             miFilter = new ButtonMenuItem();
             miPedigree = new ButtonMenuItem();
@@ -165,39 +133,31 @@ namespace GKUI
             miTreeBoth = new ButtonMenuItem();
             miAncestorsCircle = new ButtonMenuItem();
             miDescendantsCircle = new ButtonMenuItem();
-            N6 = new SeparatorMenuItem();
             miPedigreeAscend = new ButtonMenuItem();
             miPedigree_dAboville = new ButtonMenuItem();
             miPedigree_Konovalov = new ButtonMenuItem();
             miExportToFamilyBook = new ButtonMenuItem();
-            N7 = new SeparatorMenuItem();
             miMap = new ButtonMenuItem();
-            N8 = new SeparatorMenuItem();
             miStats = new ButtonMenuItem();
-            SeparatorToolItem1 = new SeparatorMenuItem();
             miRelationshipCalculator = new ButtonMenuItem();
             miService = new ButtonMenuItem();
             miOrganizer = new ButtonMenuItem();
             miSlideshow = new ButtonMenuItem();
-            N9 = new SeparatorMenuItem();
             miScripts = new ButtonMenuItem();
             miTreeTools = new ButtonMenuItem();
-            N10 = new SeparatorMenuItem();
             miOptions = new ButtonMenuItem();
             miPlugins = new ButtonMenuItem();
             miHelp = new ButtonMenuItem();
             miContext = new ButtonMenuItem();
-            N12 = new SeparatorMenuItem();
             miLogSend = new ButtonMenuItem();
             miLogView = new ButtonMenuItem();
-            N13 = new SeparatorMenuItem();
             miAbout = new ButtonMenuItem();
             contextMenu = new ContextMenu();
             miContRecordAdd = new ButtonMenuItem();
             miContRecordEdit = new ButtonMenuItem();
             miContRecordDelete = new ButtonMenuItem();
             miRecordDuplicate = new ButtonMenuItem();
-            tabsRecords = new TabControl();
+
             SuspendLayout();
 
             /*StatusBar.Location = new Point(0, 438);
@@ -224,24 +184,24 @@ namespace GKUI
                                         tbFileLoad,
                                         tbLoadMRU,
                                         tbFileSave,
-                                        TBS1,
+                                        new SeparatorToolItem(),
                                         tbRecordAdd,
                                         tbRecordEdit,
                                         tbRecordDelete,
-                                        TBS2,
+                                        new SeparatorToolItem(),
                                         tbFilter,
-                                        TBS4,
+                                        new SeparatorToolItem(),
                                         tbTreeAncestors,
                                         tbTreeDescendants,
                                         tbTreeBoth,
-                                        TBS5,
+                                        new SeparatorToolItem(),
                                         tbPedigree,
-                                        TBS6,
+                                        new SeparatorToolItem(),
                                         tbStats,
-                                        TBS7,
+                                        new SeparatorToolItem(),
                                         tbPrev,
                                         tbNext,
-                                        TBS8,
+                                        new SeparatorToolItem(),
                                         tbDocPreview,
                                         tbDocPrint});
 
@@ -263,7 +223,7 @@ namespace GKUI
             tbTreeDescendants.Click += ToolBar1_ButtonClick;
             tbTreeBoth.Click += ToolBar1_ButtonClick;
 
-            tbLoadMRU.Click  += (sender, e) => MenuPedigree.Show(this);
+            tbPedigree.Click  += (sender, e) => MenuPedigree.Show(this);
 
             MenuPedigree.Items.AddRange(new MenuItem[] {
                                             miPedigree_dAboville2,
@@ -300,11 +260,11 @@ namespace GKUI
                                       miFileSave,
                                       miFileSaveAs,
                                       miFileClose,
-                                      N1,
+                                      new SeparatorMenuItem(),
                                       miFileProperties,
-                                      N2,
+                                      new SeparatorMenuItem(),
                                       miExport,
-                                      N3,
+                                      new SeparatorMenuItem(),
                                       miExit});
             miFile.Text = "File";
 
@@ -347,7 +307,7 @@ namespace GKUI
                                       miRecordAdd,
                                       miRecordEdit,
                                       miRecordDelete,
-                                      N15,
+                                      new SeparatorMenuItem(),
                                       miSearch,
                                       miFilter});
             miEdit.Text = "Edit";
@@ -376,16 +336,16 @@ namespace GKUI
                                           miTreeBoth,
                                           miAncestorsCircle,
                                           miDescendantsCircle,
-                                          N6,
+                                          new SeparatorMenuItem(),
                                           miPedigreeAscend,
                                           miPedigree_dAboville,
                                           miPedigree_Konovalov,
                                           miExportToFamilyBook,
-                                          N7,
+                                          new SeparatorMenuItem(),
                                           miMap,
-                                          N8,
+                                          new SeparatorMenuItem(),
                                           miStats,
-                                          SeparatorToolItem1,
+                                          new SeparatorMenuItem(),
                                           miRelationshipCalculator});
             miPedigree.Text = "Pedigree";
 
@@ -434,10 +394,10 @@ namespace GKUI
             miService.Items.AddRange(new MenuItem[] {
                                          miOrganizer,
                                          miSlideshow,
-                                         N9,
+                                         new SeparatorMenuItem(),
                                          miScripts,
                                          miTreeTools,
-                                         N10,
+                                         new SeparatorMenuItem(),
                                          miOptions});
             miService.Text = "Service";
 
@@ -461,10 +421,10 @@ namespace GKUI
 
             miHelp.Items.AddRange(new MenuItem[] {
                                       miContext,
-                                      N12,
+                                      new SeparatorMenuItem(),
                                       miLogSend,
                                       miLogView,
-                                      N13,
+                                      new SeparatorMenuItem(),
                                       miAbout});
             miHelp.Text = "Help";
 
@@ -500,15 +460,14 @@ namespace GKUI
             miRecordDuplicate.Text = "miRecordDuplicate";
             miRecordDuplicate.Click += miRecordDuplicate_Click;
 
-            tabsRecords.SelectedIndex = 0;
-            tabsRecords.Size = new Size(976, 385);
+            tabsRecords = new TabControl();
             tabsRecords.SelectedIndexChanged += PageRecords_SelectedIndexChanged;
 
+            Content = tabsRecords;
             Menu = MainMenu1;
             ToolBar = ToolBar1;
 
             ClientSize = new Size(976, 462);
-            Content = tabsRecords;
             Title = "BaseWinSDI";
             //Activated += Form_Activated;
             //Deactivate += Form_Deactivate;

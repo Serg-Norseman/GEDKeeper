@@ -26,6 +26,7 @@ using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -127,27 +128,6 @@ namespace GKUI.Dialogs
             return idx;
         }
 
-        private static GridColumn AddTextColumn(string colName, string headerText, int width)
-        {
-            var col = new GridColumn();//DataGridViewTextBoxColumn();
-            col.HeaderText = headerText;
-            col.DataCell = new TextBoxCell();
-            //col.Name = colName;
-            col.Width = width;
-            return col;
-        }
-
-        private static GridColumn AddComboColumn(string colName, string headerText, object[] items, int width)
-        {
-            var col = new GridColumn();//DataGridViewComboBoxColumn();
-            col.HeaderText = headerText;
-            col.DataCell = new ComboBoxCell();
-            //col.Name = colName;
-            col.Width = width;
-            //col.Items.AddRange(items);
-            return col;
-        }
-
         private void InitGrid()
         {
             fMaskedTextBox = new MaskedTextBox();
@@ -158,9 +138,9 @@ namespace GKUI.Dialogs
             //dataGridView1.Controls.Add(fMaskedTextBox);
 
             //dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Add(AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200));
-            dataGridView1.Columns.Add(AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150));
-            dataGridView1.Columns.Add(AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300));
+            dataGridView1.Columns.Add(UIHelper.CreateComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200));
+            dataGridView1.Columns.Add(UIHelper.CreateComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150));
+            dataGridView1.Columns.Add(UIHelper.CreateTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300));
 
             //dataGridView1.CellEditing += dataGridView1_CellBeginEdit;
             //dataGridView1.CellEdited += dataGridView1_CellEndEdit;

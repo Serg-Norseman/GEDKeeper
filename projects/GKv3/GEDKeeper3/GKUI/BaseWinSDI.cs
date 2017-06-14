@@ -109,7 +109,7 @@ namespace GKUI
             tbTreeAncestors.Image = Bitmap.FromResource("Resources.btn_tree_ancestry.gif");
             tbTreeDescendants.Image = Bitmap.FromResource("Resources.btn_tree_descendants.gif");
             tbTreeBoth.Image = Bitmap.FromResource("Resources.btn_tree_both.gif");
-            //tbPedigree.Image = Bitmap.FromResource("Resources.btn_scroll.gif");
+            tbPedigree.Image = Bitmap.FromResource("Resources.btn_scroll.gif");
             tbStats.Image = Bitmap.FromResource("Resources.btn_table.gif");
             tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
             tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
@@ -146,10 +146,10 @@ namespace GKUI
         {
             if (disposing)
             {
-                #if !__MonoCS__
+                //#if !__MonoCS__
                 fNavman.Dispose();
                 fContext.Dispose();
-                #endif
+                //#endif
             }
             base.Dispose(disposing);
         }
@@ -546,7 +546,7 @@ namespace GKUI
 
             summary = new HyperView();
             summary.BorderWidth = 4;
-            summary.Size = new Size(300, 290);
+            //summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
 
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
@@ -558,8 +558,9 @@ namespace GKUI
             Splitter spl = new Splitter();
             spl.Panel1 = recView;
             spl.Panel2 = summary;
-            spl.RelativePosition = 75;
+            spl.RelativePosition = 300;
             spl.Orientation = Orientation.Horizontal;
+            spl.FixedPanel = SplitterFixedPanel.Panel2;
 
             sheet.Content = spl;
 

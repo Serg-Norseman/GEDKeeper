@@ -24,7 +24,6 @@ using System.IO;
 using System.Text;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
@@ -73,8 +72,10 @@ namespace GKUI
                 case DialogResult.Yes:
                     tbSaveScript_Click(this, null);
                     break;
+
                 case DialogResult.No:
                     break;
+
                 case DialogResult.Cancel:
                     result = false;
                     break;
@@ -86,8 +87,7 @@ namespace GKUI
         private void SetTitle()
         {
             Title = Path.GetFileName(fFileName);
-            if (fModified)
-            {
+            if (fModified) {
                 Title = @"* " + Title;
             }
         }

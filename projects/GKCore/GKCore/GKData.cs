@@ -30,6 +30,7 @@ namespace GKCore
         // Until the next major version, we cannot change this line,
         // because it including defines the path to the profile of the program.
         public const string APP_TITLE = "GEDKeeper2";
+        public const string APP_TITLE_NEW = "GEDKeeper";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 

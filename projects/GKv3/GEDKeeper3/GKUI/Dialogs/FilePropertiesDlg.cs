@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
             lblAddress.Text = LangMan.LS(LSID.LSID_Address);
             lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
             pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            //lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
+            lvRecordStats.SetColumnCaption(0, LangMan.LS(LSID.LSID_RM_Records));
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 

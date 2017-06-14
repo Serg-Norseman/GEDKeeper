@@ -2,7 +2,10 @@
 using System.Reflection;
 using Eto;
 using Eto.Forms;
+using GKCommon;
+using GKCore;
 using GKUI;
+using GKUI.Components;
 
 [assembly: AssemblyTitle("GEDKeeper3.Gtk3")]
 [assembly: AssemblyDescription("")]
@@ -21,7 +24,19 @@ namespace GEDKeeper3.Gtk3
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Platforms.Gtk3).Run(new BaseWinSDI());
+            Logger.LogInit(GKUtils.GetLogFilename());
+            WinFormsAppHost.ConfigureBootstrap(false);
+
+            AppHost.InitSettings();
+            try
+            {
+                var appHost = (WinFormsAppHost)AppHost.Instance;
+                appHost.Init(args, false);
+
+                new Application(Platforms.Gtk3).Run(new BaseWinSDI());
+            } finally {
+                AppHost.DoneSettings();
+            }
         }
     }
 }

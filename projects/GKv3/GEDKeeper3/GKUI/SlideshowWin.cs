@@ -21,7 +21,6 @@
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

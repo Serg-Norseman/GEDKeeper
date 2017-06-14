@@ -66,6 +66,11 @@ namespace GKUI.Dialogs
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
+            lvPlugins.AddColumn("Title", 75);
+            lvPlugins.AddColumn("Version", 100);
+            lvPlugins.AddColumn("Copyright", 125);
+            lvPlugins.AddColumn("Description", 250);
+
             SetLang();
             UpdateForm();
         }
@@ -558,7 +563,7 @@ namespace GKUI.Dialogs
             lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
             lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
             lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
-            lblFont.Text = LangMan.LS(LSID.LSID_Font);
+            //lblFont.Text = LangMan.LS(LSID.LSID_Font);
             grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
             chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
             chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);

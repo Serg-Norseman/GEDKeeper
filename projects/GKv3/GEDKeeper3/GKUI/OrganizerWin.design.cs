@@ -34,7 +34,6 @@ namespace GKUI
             tabsData.Pages.Add(pageTelephones);
             tabsData.Pages.Add(pageMails);
             tabsData.Pages.Add(pageWebs);
-            tabsData.SelectedIndex = 0;
 
             Content = tabsData;
 
@@ -45,7 +44,6 @@ namespace GKUI
             Title = "OrganizerWin";
             Load += OrganizerWin_Load;
             KeyDown += OrganizerWin_KeyDown;
-            tabsData.ResumeLayout();
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

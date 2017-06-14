@@ -19,11 +19,10 @@
  */
 
 using System;
-using Eto.Forms;
 using Eto.Drawing;
-
-using GKCore;
+using Eto.Forms;
 using GKCommon;
+using GKCore;
 
 namespace GKUI.Dialogs
 {
@@ -40,9 +39,9 @@ namespace GKUI.Dialogs
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE;
-            //lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
-            //lblCopyright.Text = AppHost.Instance.GetAppCopyright();
+            lblProduct.Text = GKData.APP_TITLE_NEW;
+            lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
+            lblCopyright.Text = AppHost.Instance.GetAppCopyright();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

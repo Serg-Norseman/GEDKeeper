@@ -19,15 +19,12 @@ namespace GKUI
             SuspendLayout();
 
             tbStart = new ButtonToolItem();
-            tbStart.Text = "tbStart";
             tbStart.Click += tsbStart_Click;
 
             tbPrev = new ButtonToolItem();
-            tbPrev.Text = "tbPrev";
             tbPrev.Click += tsbPrev_Click;
 
             tbNext = new ButtonToolItem();
-            tbNext.Text = "tbNext";
             tbNext.Click += tsbNext_Click;
 
             timer1 = new Timer();
@@ -40,6 +37,7 @@ namespace GKUI
                                           new SeparatorToolItem(),
                                           tbPrev,
                                           tbNext});
+            ToolBar = toolStrip1;
 
             ClientSize = new Size(792, 573);
             ShowInTaskbar = true;

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.ObjectModel;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -265,13 +266,53 @@ namespace GKUI.Components
                                           float size, FontStyle style = FontStyle.None,
                                           FontDecoration decoration = FontDecoration.None)
         {
-            SetControlFont(ctl, new Font(family, size, style, decoration));
+            //SetControlFont(ctl, new Font(family, size, style, decoration));
         }
 
         public static string[] Convert(string text)
         {
             var strList = new StringList(text);
             return strList.ToArray();
+        }
+
+        public static GridColumn CreateTextColumn(string colName, string headerText, int width)
+        {
+            var col = new GridColumn();//DataGridViewTextBoxColumn();
+            if (!string.IsNullOrEmpty(colName)) col.ID = colName;
+            col.HeaderText = headerText;
+            col.DataCell = new TextBoxCell();
+            col.Width = width;
+            return col;
+        }
+
+        public static GridColumn CreateComboColumn(string colName, string headerText, object[] items, int width)
+        {
+            var col = new GridColumn();//DataGridViewComboBoxColumn();
+            if (!string.IsNullOrEmpty(colName)) col.ID = colName;
+            col.HeaderText = headerText;
+            col.DataCell = new ComboBoxCell();
+            col.Width = width;
+            //col.Items.AddRange(items);
+            return col;
+        }
+
+        public static TableRow MakeDialogFooter(params TableCell[] buttons)
+        {
+            var row = new TableRow();
+            foreach (var btn in buttons) row.Cells.Add(btn);
+
+            return new TableRow {
+                ScaleHeight = false,
+                Cells = {
+                    new TableLayout {
+                        Padding = 0,
+                        Spacing = new Size(10, 10),
+                        Rows = {
+                            row
+                        }
+                    }
+                }
+            };
         }
     }
 }

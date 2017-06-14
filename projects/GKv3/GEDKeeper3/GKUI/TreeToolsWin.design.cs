@@ -592,10 +592,7 @@ namespace GKUI
                         ScaleHeight = true,
                         Cells = { tabsTools }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnClose }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnClose)
                 }
             };
 
