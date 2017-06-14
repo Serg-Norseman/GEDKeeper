@@ -1,7 +1,7 @@
 ﻿;1031,deu,Deutsch
 &Datei
 &Bearbeiten
-Genealogie
+Stammbaum
 E&xtras
 &Fenster
 &?
@@ -16,8 +16,8 @@ Familienbuch...
 Speichern unter...
 Exportieren nach Excel Datei...
 Beenden
-<?>
-<?>
+Importieren
+Löschen
 Datensatz eintragen
 Datensatz aktualisieren
 Datensatz löschen
@@ -25,16 +25,16 @@ Datensatz löschen
 Stammbaum der Vorfahren
 Stammbaum der Nachfahren
 Ganze Stammbaum
-D'Aboville Listerstellung von Nachfahren
-Konowalow Listerstellung von Nachfahren
+D'Aboville Listerstellung von den Nachfahren
+Konowalow Listerstellung von den Nachfahren
 Karten
 Statistik
-Listerstellung von Vorfahren
+Listerstellung von den Vorfahren
 <?>
 <?>
 <?>
 Organizer
-Skripten
+Skripte
 <?>
 Extras
 Filter
@@ -106,28 +106,28 @@ Persondatensatz redigieren
 Geschlechtsprüfung
 Datensatzauswahl
 Quellzitat
-Benutzerreferenz
+Benutzerverweis
 Anmerkung
 Quelle
 Seite
 Datensicherheit
-Referenz
+Verweis
 Typ
 Familie
 Ehemann
 Ehefrau
 Status
 Kinder
-Löschen die Referenz an der Ehemann?
-Löschen die Referenz an die Ehefrau?
-Löschen die Referenz an das Kind?
+Löschen des Verweis an der Ehemann?
+Löschen des Verweis an die Ehefrau?
+Löschen des Verweis an das Kind?
 Geburtsdatum
 Todesdatum
 Sicherheitsbegrenzung
 Name
 Mitglieder
 Gruppe redigieren
-Löschen die Referenz an das Gruppenmitglied?
+Löschen des Verweis an das Gruppenmitglied?
 Ansicht
 Etappe
 Rufnummer
@@ -144,8 +144,8 @@ Kurzname
 Autor
 Publiziert
 Gesamt
-Löschen die Referenz an das Archiv?
-Способ хранения
+Löschen des Verweis an das Archiv?
+Abspeicherungweise
 Datei
 Ansicht
 Fragment {0}: {1} Personen
@@ -154,7 +154,7 @@ Mutter
 Eltern
 Ehegatten
 Assoziationen
-Benutzerreferenzen
+Benutzerverweise
 gregorianischer
 julianischer
 jüdischer
@@ -185,9 +185,9 @@ Ziel
 Thema
 Korrespondent
 Gruppe
-Löschen die Referenz an die Aufgabe?
-Löschen die Referenz an die Korrespondenz?
-Löschen die Referenz an die Gruppe?
+Löschen des Verweis an die Aufgabe?
+Löschen des Verweis an die Korrespondenz?
+Löschen des Verweis an die Gruppe?
 Forschung redigieren
 Aufgabe redigieren
 Kommunikation redigieren
@@ -209,7 +209,7 @@ Urkundenstelle
 Weibliche
 Männliche
 Persondatensatz ist nicht gawählt
-Das Geschlecht von diesem Person ist nicht bezeichnet.
+Das Geschlecht von dieser Person ist nicht bezeichnet.
 Diese Person hat keine Familie.
 Erwartungsanzahl der Vorfahren von {0} die zulässigen Limits übersteigen.
 Erwartungsanzahl der Nachfahren von {0} die zulässigen Limits übersteigen.
@@ -217,14 +217,14 @@ Generationen abbilden:
 Grenzenlos
 Ehepartner
 Ehedatum
-Löschen die Vaterreferenz?
-Löschen die Mutterreferenz?
-Löschen die Ehepartnerreferenz?
-Löschen die Elternreferenz?
+Löschen des Vaterverweis?
+Löschen des Mutterverweis?
+Löschen des Ehepartnerverweis?
+Löschen des Elternverweis?
 Alle
 Nur Vorfahren
 Nur Nachfahren
-Автосмена центра
+Autocenter
 Redigieren
 Familie eintragen
 Ehepartner eintragen
@@ -233,22 +233,22 @@ Tochter eintragen
 Löschen
 Stammbaum umgestalten
 Blutsverwandtschaft umgestalten
-Referenzen
+Verweise
 Ort und Attribut
 Ehe
 Familie
 Namensbrüder/Namensschwestern
 Löschen die Tatsache?
-Löschen die Anmerkungreferenz?
-Löschen die Multimediareferenz?
-Löschen die Quellereferenz?
+Löschen des Anmerkungverweis?
+Löschen des Multimediaverweis?
+Löschen des Quelleverweis?
 Löschen die Assoziation?
-Löschen die Benutzerreferenz "{0}"?
+Löschen des Benutzerverweis "{0}"?
 Dateiladen Fehler
 Formatverifikation Fehler
 Geburtstage
 Es ist {1} Tage vor dem Geburtstag von "{0}"
-Interface
+Schnittstelle
 Stammbäume
 Listerstellungen
 Dateispeichern Zeichensatz
@@ -290,7 +290,7 @@ Unbekannt Geschlecht
 geschiedener Ehemann
 geschiedene Ehefrau
 Schrift
-Bildung von die Listerstellungen
+Bildung von den Listerstellungen
 Inschließlich Personenattribute
 Inschließlich Anmerkungen
 Inschließlich Quellen
@@ -324,7 +324,7 @@ Geburt
 Adoption
 Taufe
 Graduierung
-Rentenabgang
+Pensionierung
 Einbürgerung
 Emigration
 Immigration
@@ -416,11 +416,11 @@ Eheschließungshandlung
 Die öffentliche Bekanntgabe der Ehe
 Abschluss eines Ehevertrages
 Bewilligung zum Ehekonsens
-Abschluss von Ehevertrages
+Abschluss von dem Ehevertrages
 Aufhebung der Ehe
 Einreichung des Scheidungsantrages
 Ehescheidung
-Dateireferenz
+Dateiverweise
 Einspeicherung ins Archiv
 Einspeicherung in Repositur
 -
@@ -462,7 +462,7 @@ Familie
 Quelle
 andere
 Unzuverlässig Beweise oder Vermutungen
-Fragwürdige Zuverlässigkeit von Bestätigung
+Fragwürdige Zuverlässigkeit von der Bestätigung
 Indizienbeweise
 Eindeutige und primäre Beweise
 Forschung
@@ -470,11 +470,11 @@ Aufgabe
 Korrespondenz
 Bezeichnerkorrektur
 Formatüberprüfung
-Требуется коррекция идентификаторов записей, продолжить?
-Количество объектов в основной базе: {0}
+Es ist nötig (Man soll) die Datenzatz-IDs korrigieren, weiter?
+Anzahl der Objekte in der Hauptdatenbank: {0}
 Synchronisierung abgeschlossen.
-Suche die Patriarchen
-Suche von wechselseitige Beziehungen
+Suche von den Patriarchen
+Suche von wechselseitigen Beziehungen
 Mediadatei ist nicht beladen, denn sie ist in Mediacontainer (Repositur oder Archiv) fehlen
 Maßstab
 GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselten GEDCOM-Dateien (*.geds)|*.geds
@@ -493,20 +493,20 @@ Jahr
 PDF-Dateien (*.pdf)|*.pdf
 RTF-Dateien (*.rtf)|*.rtf
 HTML-Dateien (*.html)|*.html
-Резервирование файлов (бэкап)
-только предыдущий файл
-Отсечение ветвей
-нет
-по границе лет
-по заданным лицам
+Das Sicherungskopieren (Backup)
+Nur vorherige Datei
+Zweigebeschneidung
+keine
+nach der Jahresgrenze
+nach bestimmten Personen
 - alle -
 - keine -
 - jede -
 Master-Datenbank
 Datenbank aktualisieren
 [aktuelle Datenbank]
-Установлен фильтр по источнику. Внести источник в новую персональную запись?
-Установлен фильтр по группе. Внести группу в новую персональную запись?
+Filter nach Quelle ist installiert. Soll die Quelle zu einem neuen persönlichen Datensatz hinzufügt werden?
+Filter nach Gruppe ist installiert. Soll die Gruppe zu einem neuen persönlichen Datensatz hinzufügt werden?
 Duplikatsuche
 Unrichtiger Wert
 Operation
@@ -514,13 +514,13 @@ Datenbanken vergleichen
 Datenbanken vereinigen
 Datenbanken trennen
 Duplikatsätze vereinigen
-Поиск несвязанных однофамильцев
-Проверка связности семей
-Проверка базы данных
+Suche nach nicht verwandten Vornamensvetter
+Überprüfung der Familienverbindungen
+Datenbankvalidierung
 Suche die Patriarchen
 Örterssteuerung
-Поиск совпадений...
-Проверка связности семей
+Suche nach der Übereinstimmungen
+Überprüfung der Familienverbindungen
 alle
 nur leben
 nur Verstorbene
@@ -555,7 +555,7 @@ Sterbejahre (Jahrzehnte)
 Verteilung der Anzahl der Kinder
 Alter der Geburt des Erstlings
 Alter der Verheiratung
-Unterschied von das Ehegattenalter
+Unterschied von dem Ehegattenalter
 Alle Verbindungen auswählen
 Familie auswählen
 Vorfahren auswählen
@@ -569,7 +569,7 @@ Strikter Vergleich
 Unstrikter Namenvergleich
 Nur beim Namen/Patronymikon (nur Frauen)
 Mit einem Geburtsjahr
-Genauigkeit von den Namen, %
+Genauigkeit von dem Namen, %
 Jahreungenauigkeit
 Reparieren
 Nachfahrengenerationen mindestens
@@ -584,11 +584,11 @@ Lösung
 vielleicht Verstorbene (Alter {0})
 Das Geschlecht ist nicht bezeichnet
 Geburtsjahr größer als Sterbejahr
-War die erste Ehe im Alter von {0} Jahren geschlossen?
-War das erste Kind im Alter von {0} Jahren gebiert?
+War die erste Ehe im Alter von {0} Jahre(n) geschlossen?
+War das erste Kind im Alter von {0} Jahre(n) gebiert?
 Nachfahren
 Generationen
-Anzahl der Referenzen
+Anzahl der Verweise
 Örterbearbeitung
 Dieser Ort ist schon in der Ortliste enthalten
 DNS Marken
@@ -618,7 +618,7 @@ Vergrößern
 Verkleinern
 Tatsache des Todes feststellen
 Geschlecht bezeichnen
-Nachträge
+Plugins
 Autospuren die Beziehungen
 Es hat keine Entsprechungen gefunden
 Suchen zurück
@@ -691,7 +691,7 @@ Ehefrau abstellen
 Zum Ehefraudatensatz übergehen
 Persondatensatz auswählen
 Ort auswählen oder eintragen
-Löschen die Referenz an den Ort
+Löschen des Verweis an den Ort
 Zeigen auf der Karte
 Quelledatensatz auswählen oder eintragen
 Zieldatensatz auswählen
@@ -720,7 +720,7 @@ Inklusive der Generationnummer
 Leersegmenten verstecken
 Nachfahrenkreis
 Porträtwahl
-Verwandtschaftliche Beziehungen Rechner
+Rechner von verwandtschaftlichen Beziehungen
 ist {0} von
 Heute ist Geburtstag von {0}
 Morgen wird Geburtstag von {0}
@@ -752,3 +752,8 @@ Morgen feiern "{0}"
 {1} Tag(e) vor dem "{0}"
 Feste
 Der eingebauten MediaPlayer verwenden
+Direkte Verweise auf Mediendatei erlauben
+Kopieren von den Dateien
+Aktionen
+Auswählen und kopieren
+№
