@@ -26,50 +26,49 @@ namespace GKUI.Dialogs
             lblPerson.Text = "lblPerson";
 
             btnPersonAdd = new Button();
-            btnPersonAdd.Size = new Size(39, 34);
+            btnPersonAdd.Size = new Size(26, 26);
             btnPersonAdd.Click += btnPersonAdd_Click;
+            btnPersonAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             cmbRelation = new ComboBox();
             //cmbRelation.Sorted = true;
 
             txtPerson = new TextBox();
-            txtPerson.BackgroundColor = SystemColors.Control;
             txtPerson.ReadOnly = true;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            var panel = new Panel();
+            panel.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblRelation }
+                        Cells = { lblRelation, cmbRelation }
                     },
                     new TableRow {
-                        Cells = { cmbRelation }
-                    },
-                    new TableRow {
-                        Cells = { lblPerson }
-                    },
-                    new TableRow {
-                        Cells = { txtPerson, btnPersonAdd }
-                    },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { null }
-                    },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
+                        Cells = { lblPerson, TableLayout.Horizontal(10, new TableCell(txtPerson, true), btnPersonAdd) }
                     }
+                }
+            };
+
+            Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { panel }
+                    },
+                    null,
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

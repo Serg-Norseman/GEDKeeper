@@ -27,15 +27,17 @@ namespace GKUI.Dialogs
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             pageMembers = new TabPage();
             pageMembers.Text = "pageMembers";
@@ -52,20 +54,16 @@ namespace GKUI.Dialogs
             tabsGroupData.Pages.Add(pageMultimedia);
             tabsGroupData.SelectedIndex = 0;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblName, edName }
+                        Cells = { UIHelper.CreateHSingleTable(0, 10, lblName, edName) }
                     },
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsGroupData }
                     },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

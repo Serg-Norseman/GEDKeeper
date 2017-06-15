@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -141,10 +140,6 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-            btnSourceAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
             {
                 txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
@@ -159,7 +154,6 @@ namespace GKUI.Dialogs
             lblSource.Text = LangMan.LS(LSID.LSID_Source);
             lblPage.Text = LangMan.LS(LSID.LSID_Page);
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
-
             btnSourceAdd.ToolTip = LangMan.LS(LSID.LSID_SourceAddTip);
         }
 

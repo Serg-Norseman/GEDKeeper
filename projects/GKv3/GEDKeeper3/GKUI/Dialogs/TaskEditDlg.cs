@@ -133,6 +133,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {
@@ -197,10 +198,6 @@ namespace GKUI.Dialogs
         public TaskEditDlg()
         {
             InitializeComponent();
-
-            btnGoalSelect.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             fTempRec = null;
 

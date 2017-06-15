@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -89,9 +87,6 @@ namespace GKUI.Dialogs
         public ResearchEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
             {
@@ -197,6 +192,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {

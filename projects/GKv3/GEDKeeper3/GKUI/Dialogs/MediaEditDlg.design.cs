@@ -26,119 +26,106 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            tabsData = new TabControl();
-            pageCommon = new TabPage();
-            lblName = new Label();
-            lblType = new Label();
-            lblStoreType = new Label();
-            lblFile = new Label();
-            txtName = new TextBox();
-            cmbMediaType = new ComboBox();
-            cmbStoreType = new ComboBox();
-            txtFile = new TextBox();
-            btnFileSelect = new Button();
-            pageNotes = new TabPage();
-            pageSources = new TabPage();
-            btnAccept = new Button();
-            btnCancel = new Button();
-            btnView = new Button();
-
             SuspendLayout();
 
-            tabsData.Pages.Add(pageCommon);
-            tabsData.Pages.Add(pageNotes);
-            tabsData.Pages.Add(pageSources);
-            tabsData.SelectedIndex = 0;
-            tabsData.Size = new Size(728, 302);
+            lblName = new Label();
+            //lblName.Size = new Size(55, 17);
+            lblName.Text = "lblName";
 
-            pageCommon.Size = new Size(720, 272);
+            lblType = new Label();
+            //lblType.Size = new Size(51, 17);
+            lblType.Text = "lblType";
+
+            lblStoreType = new Label();
+            //lblStoreType.Size = new Size(84, 17);
+            lblStoreType.Text = "lblStoreType";
+
+            lblFile = new Label();
+            //lblFile.Size = new Size(38, 17);
+            lblFile.Text = "lblFile";
+
+            txtName = new TextBox();
+            //txtName.Size = new Size(696, 24);
+            txtName.TextChanged += edName_TextChanged;
+
+            cmbMediaType = new ComboBox();
+            cmbMediaType.ReadOnly = true;
+            //cmbMediaType.Size = new Size(237, 25);
+
+            cmbStoreType = new ComboBox();
+            cmbStoreType.ReadOnly = true;
+            //cmbStoreType.Size = new Size(281, 25);
+
+            txtFile = new TextBox();
+            txtFile.ReadOnly = true;
+            //txtFile.Size = new Size(629, 24);
+
+            btnFileSelect = new Button();
+            btnFileSelect.Size = new Size(60, 26);
+            btnFileSelect.Text = "...";
+            btnFileSelect.Click += btnFileSelect_Click;
+
+            pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
-            pageCommon.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblName }
+                        Cells = { lblName, txtName }
                     },
                     new TableRow {
-                        Cells = { txtName }
+                        Cells = { lblFile, TableLayout.Horizontal(10, new TableCell(txtFile, true), new TableCell(btnFileSelect, false)) }
                     },
                     new TableRow {
-                        Cells = { lblFile }
+                        Cells = { lblType, cmbMediaType }
                     },
                     new TableRow {
-                        Cells = { txtFile, btnFileSelect }
-                    },
-                    new TableRow {
-                        Cells = { lblType, lblStoreType }
-                    },
-                    new TableRow {
-                        Cells = { cmbMediaType, cmbStoreType }
+                        Cells = { lblStoreType, cmbStoreType }
                     },
                     null
                 }
             };
 
-            lblName.Size = new Size(55, 17);
-            lblName.Text = "lblName";
-
-            lblType.Size = new Size(51, 17);
-            lblType.Text = "lblType";
-
-            lblStoreType.Size = new Size(84, 17);
-            lblStoreType.Text = "lblStoreType";
-
-            lblFile.Size = new Size(38, 17);
-            lblFile.Text = "lblFile";
-
-            txtName.Size = new Size(696, 24);
-            txtName.TextChanged += edName_TextChanged;
-
-            cmbMediaType.ReadOnly = true;
-            cmbMediaType.Size = new Size(237, 25);
-
-            cmbStoreType.ReadOnly = true;
-            cmbStoreType.Size = new Size(281, 25);
-
-            txtFile.ReadOnly = true;
-            txtFile.Size = new Size(629, 24);
-
-            btnFileSelect.Size = new Size(60, 25);
-            btnFileSelect.Text = "...";
-            btnFileSelect.Click += btnFileSelect_Click;
-
-            pageNotes.Size = new Size(720, 272);
+            pageNotes = new TabPage();
             pageNotes.Text = "pageNotes";
 
-            pageSources.Size = new Size(720, 272);
+            pageSources = new TabPage();
             pageSources.Text = "pageSources";
 
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(113, 30);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageCommon);
+            tabsData.Pages.Add(pageNotes);
+            tabsData.Pages.Add(pageSources);
 
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(113, 30);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
+            //
 
-            btnView.Size = new Size(114, 30);
+            btnView = new Button();
+            btnView.Size = new Size(130, 26);
             btnView.Text = "btnView";
             btnView.Click += btnView_Click;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+
+            //
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsData }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { btnView, null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(btnView, null, btnAccept, btnCancel)
                 }
             };
 

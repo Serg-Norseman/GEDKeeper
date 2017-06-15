@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -67,9 +66,6 @@ namespace GKUI.Dialogs
         public UserRefEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
             {

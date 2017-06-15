@@ -16,53 +16,47 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnReset = new Button();
-            btnAccept = new Button();
-            btnCancel = new Button();
-            tabsFilters = new TabControl();
-            tsFieldsFilter = new TabPage();
-            dataGridView1 = new GridView();
-
             SuspendLayout();
 
-            btnReset.Size = new Size(114, 30);
+            btnReset = new Button();
+            btnReset.Size = new Size(130, 26);
             btnReset.Text = "btnReset";
             btnReset.Click += btnReset_Click;
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(112, 30);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(114, 30);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            tabsFilters.Pages.Add(tsFieldsFilter);
-            tabsFilters.SelectedIndex = 0;
-            tabsFilters.Size = new Size(827, 494);
-
-            tsFieldsFilter.Content = dataGridView1;
-            tsFieldsFilter.Size = new Size(819, 464);
-            tsFieldsFilter.Text = "tsFieldsFilter";
-
+            dataGridView1 = new GridView();
             //dataGridView1.AllowUserToResizeRows = false;
             //dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             //dataGridView1.MultiSelect = false;
             dataGridView1.Size = new Size(819, 464);
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            tsFieldsFilter = new TabPage();
+            tsFieldsFilter.Content = dataGridView1;
+            tsFieldsFilter.Text = "tsFieldsFilter";
+
+            tabsFilters = new TabControl();
+            tabsFilters.Pages.Add(tsFieldsFilter);
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsFilters }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { btnReset, null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(btnReset, null, btnAccept, btnCancel)
                 }
             };
 

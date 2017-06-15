@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -181,9 +179,6 @@ namespace GKUI.Dialogs
         public AddressEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.OnModify += ListModify;

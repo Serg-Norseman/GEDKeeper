@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -40,10 +38,6 @@ namespace GKUI.Dialogs
         public FilePropertiesDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-            btnLangEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
 
             // SetLang()
             Title = LangMan.LS(LSID.LSID_MIFileProperties);

@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCore;
@@ -34,8 +33,6 @@ namespace GKUI.Dialogs
         public AboutDlg()
         {
             InitializeComponent();
-
-            btnClose.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);

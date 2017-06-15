@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -120,6 +118,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {
@@ -136,10 +135,6 @@ namespace GKUI.Dialogs
         public CommunicationEditDlg()
         {
             InitializeComponent();
-
-            btnPersonAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             fTempInd = null;
 
@@ -161,7 +156,6 @@ namespace GKUI.Dialogs
             lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblDate.Text = LangMan.LS(LSID.LSID_Date);
-
             btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
 
             txtDir.Items.Clear();

@@ -30,76 +30,79 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            lblSurname = new Label();
-            btnAccept = new Button();
-            lblName = new Label();
-            lblPatronymic = new Label();
-            btnCancel = new Button();
-            lblSurnamePrefix = new Label();
-            lblNamePrefix = new Label();
-            lblNameSuffix = new Label();
-            lblNickname = new Label();
-            txtSurname = new TextBox();
-            txtName = new TextBox();
-            txtPatronymic = new TextBox();
-            txtSurnamePrefix = new TextBox();
-            txtNamePrefix = new TextBox();
-            txtNameSuffix = new TextBox();
-            txtNickname = new TextBox();
-            lblType = new Label();
-            cmbNameType = new ComboBox();
-            lblMarriedSurname = new Label();
-            txtMarriedSurname = new TextBox();
             SuspendLayout();
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
+            lblSurname = new Label();
             lblSurname.Text = "lblSurname";
 
+            lblSurnamePrefix = new Label();
             lblSurnamePrefix.Text = "lblSurnamePrefix";
 
-            txtSurname.Size = new Size(226, 24);
+            txtSurname = new TextBox();
+            //txtSurname.Size = new Size(226, 24);
 
-            txtSurnamePrefix.Size = new Size(169, 24);
+            txtSurnamePrefix = new TextBox();
+            //txtSurnamePrefix.Size = new Size(169, 24);
 
+            lblMarriedSurname = new Label();
             lblMarriedSurname.Text = "lblMarriedSurname";
 
+            lblNamePrefix = new Label();
             lblNamePrefix.Text = "lblNamePrefix";
 
-            txtMarriedSurname.Size = new Size(226, 24);
+            txtMarriedSurname = new TextBox();
+            //txtMarriedSurname.Size = new Size(226, 24);
 
-            txtNamePrefix.Size = new Size(169, 24);
+            txtNamePrefix = new TextBox();
+            //txtNamePrefix.Size = new Size(169, 24);
 
+            lblName = new Label();
             lblName.Text = "lblName";
 
+            lblNameSuffix = new Label();
             lblNameSuffix.Text = "lblNameSuffix";
 
-            txtName.Size = new Size(226, 24);
+            txtName = new TextBox();
+            //txtName.Size = new Size(226, 24);
 
-            txtNameSuffix.Size = new Size(169, 24);
+            txtNameSuffix = new TextBox();
+            //txtNameSuffix.Size = new Size(169, 24);
 
+            lblPatronymic = new Label();
             lblPatronymic.Text = "lblPatronymic";
 
+            lblNickname = new Label();
             lblNickname.Text = "lblNickname";
 
-            txtPatronymic.Size = new Size(226, 24);
+            txtPatronymic = new TextBox();
+            //txtPatronymic.Size = new Size(226, 24);
 
-            txtNickname.Size = new Size(169, 24);
+            txtNickname = new TextBox();
+            //txtNickname.Size = new Size(169, 24);
 
+            lblType = new Label();
             lblType.Text = "lblType";
 
+            cmbNameType = new ComboBox();
             cmbNameType.ReadOnly = true;
-            cmbNameType.Size = new Size(225, 25);
+            //cmbNameType.Size = new Size(225, 25);
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
+            var panel = new TableLayout {
+                Padding = new Padding(0),
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
@@ -130,18 +133,25 @@ namespace GKUI.Dialogs
                         Cells = { lblType }
                     },
                     new TableRow {
-                        ScaleHeight = true,
+                        //ScaleHeight = true,
                         Cells = { cmbNameType }
-                    },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
                     }
+                }
+            };
+
+            Content = new TableLayout {
+                Padding = new Padding(10),
+                Spacing = new Size(10, 10),
+                Rows = {
+                    panel,
+                    null,
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(444, 323);
+            ClientSize = new Size(444, 360);
             Title = "PersonalNameEditDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

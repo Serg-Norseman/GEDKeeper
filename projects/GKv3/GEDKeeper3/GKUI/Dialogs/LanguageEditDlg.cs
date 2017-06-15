@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -50,9 +49,6 @@ namespace GKUI.Dialogs
         public LanguageEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++)
             {

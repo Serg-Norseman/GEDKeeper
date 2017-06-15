@@ -65,9 +65,6 @@ namespace GKUI.Dialogs
 
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             fBase = baseWin;
             fListMan = listMan;
 
@@ -133,8 +130,6 @@ namespace GKUI.Dialogs
             fMaskedTextBox = new MaskedTextBox();
             fMaskedTextBox.Visible = false;
             fMaskedTextBox.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //fMaskedTextBox.Mask = @"00/00/0000";
-            //fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             //dataGridView1.Controls.Add(fMaskedTextBox);
 
             //dataGridView1.Rows.Clear();

@@ -30,33 +30,57 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            GroupBox1 = new GroupBox();
-            lblName = new Label();
-            lblPriority = new Label();
-            lblStatus = new Label();
-            lblStartDate = new Label();
-            lblStopDate = new Label();
-            lblPercent = new Label();
-            txtName = new TextBox();
-            cmbPriority = new ComboBox();
-            cmbStatus = new ComboBox();
-            txtStartDate = new MaskedTextBox();
-            txtStopDate = new MaskedTextBox();
-            nudPercent = new NumericUpDown();
-            btnAccept = new Button();
-            btnCancel = new Button();
-            tabsData = new TabControl();
-            pageTasks = new TabPage();
-            pageCommunications = new TabPage();
-            pageGroups = new TabPage();
-            pageNotes = new TabPage();
-
             SuspendLayout();
 
-            GroupBox1.Size = new Size(852, 118);
-            GroupBox1.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            lblName = new Label();
+            //lblName.Size = new Size(67, 17);
+            lblName.Text = "lblName";
+
+            lblPriority = new Label();
+            //lblPriority.Size = new Size(80, 17);
+            lblPriority.Text = "lblPriority";
+
+            lblStatus = new Label();
+            //lblStatus.Size = new Size(78, 17);
+            lblStatus.Text = "lblStatus";
+
+            lblStartDate = new Label();
+            //lblStartDate.Size = new Size(72, 17);
+            lblStartDate.Text = "lblStartDate";
+
+            lblStopDate = new Label();
+            //lblStopDate.Size = new Size(77, 17);
+            lblStopDate.Text = "lblStopDate";
+
+            lblPercent = new Label();
+            //lblPercent.Size = new Size(64, 17);
+            lblPercent.Text = "lblPercent";
+
+            txtName = new TextBox();
+            //txtName.Size = new Size(740, 24);
+
+            cmbPriority = new ComboBox();
+            cmbPriority.ReadOnly = true;
+            //cmbPriority.Size = new Size(225, 25);
+
+            cmbStatus = new ComboBox();
+            cmbStatus.ReadOnly = true;
+            //cmbStatus.Size = new Size(225, 25);
+
+            txtStartDate = new MaskedTextBox();
+            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
+            //txtStartDate.Size = new Size(225, 24);
+
+            txtStopDate = new MaskedTextBox();
+            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
+            //txtStopDate.Size = new Size(225, 24);
+
+            nudPercent = new NumericUpDown();
+            nudPercent.Increment = 5;
+            //nudPercent.Size = new Size(57, 24);
+
+            GroupBox1 = new GroupBox();
+            GroupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblName, txtName }
@@ -66,78 +90,45 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { lblStartDate, txtStartDate, lblStopDate, txtStopDate }
-                    },
-                    null
+                    }
                 }
             };
 
-            lblName.Size = new Size(67, 17);
-            lblName.Text = "lblName";
+            //
 
-            lblPriority.Size = new Size(80, 17);
-            lblPriority.Text = "lblPriority";
+            pageTasks = new TabPage();
+            pageTasks.Text = "pageTasks";
 
-            lblStatus.Size = new Size(78, 17);
-            lblStatus.Text = "lblStatus";
+            pageCommunications = new TabPage();
+            pageCommunications.Text = "pageCommunications";
 
-            lblStartDate.Size = new Size(72, 17);
-            lblStartDate.Text = "lblStartDate";
+            pageGroups = new TabPage();
+            pageGroups.Text = "pageGroups";
 
-            lblStopDate.Size = new Size(77, 17);
-            lblStopDate.Text = "lblStopDate";
+            pageNotes = new TabPage();
+            pageNotes.Text = "pageNotes";
 
-            lblPercent.Size = new Size(64, 17);
-            lblPercent.Text = "lblPercent";
-
-            txtName.Size = new Size(740, 24);
-
-            cmbPriority.ReadOnly = true;
-            cmbPriority.Size = new Size(225, 25);
-
-            cmbStatus.ReadOnly = true;
-            cmbStatus.Size = new Size(225, 25);
-
-            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //txtStartDate.Mask = "00/00/0000";
-            txtStartDate.Size = new Size(225, 24);
-            //txtStartDate.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-
-            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //txtStopDate.Mask = "00/00/0000";
-            txtStopDate.Size = new Size(225, 24);
-            //txtStopDate.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-
-            nudPercent.Increment = 5;
-            nudPercent.Size = new Size(57, 24);
-
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(113, 30);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(113, 30);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
-
+            tabsData = new TabControl();
             tabsData.Pages.Add(pageTasks);
             tabsData.Pages.Add(pageCommunications);
             tabsData.Pages.Add(pageGroups);
             tabsData.Pages.Add(pageNotes);
-            tabsData.SelectedIndex = 0;
-            tabsData.Size = new Size(852, 379);
 
-            pageTasks.Text = "pageTasks";
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
-            pageCommunications.Text = "pageCommunications";
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            pageGroups.Text = "pageGroups";
-
-            pageNotes.Text = "pageNotes";
-
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { GroupBox1 }
@@ -146,10 +137,7 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { tabsData }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

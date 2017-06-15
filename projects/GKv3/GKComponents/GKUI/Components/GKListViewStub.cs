@@ -26,6 +26,10 @@ namespace GKUI.Components
             get; set;
         }
 
+        public GKListItem(params object[] values) : base(values)
+        {
+        }
+
         public GKListItem(object dataValue)
         {
             
@@ -100,6 +104,32 @@ namespace GKUI.Components
             DataStore = fItems;
         }
 
+        public void ClearColumns()
+        {
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize = false)
+        {
+            GridColumn column = new GridColumn();
+            column.HeaderText = caption;
+            column.DataCell = new TextBoxCell(Columns.Count);
+            column.Width = width;
+            column.AutoSize = autoSize;
+            Columns.Add(column);
+        }
+
+        public void SetColumnCaption(int index, string caption)
+        {
+            Columns[index].HeaderText = caption;
+        }
+
+        public GKListItem AddItem(object rowData, params object[] columnValues)
+        {
+            var item = new GKListItem(columnValues);
+            fItems.Add(item);
+            return item;
+        }
+
         public GKListItem GetSelectedItem()
         {
             return null;
@@ -126,13 +156,6 @@ namespace GKUI.Components
             return null;
         }
 
-        public GKListItem AddItem(object rowData, params object[] columnValues)
-        {
-            var item = new GKListItem(columnValues);
-            fItems.Add(item);
-            return item;
-        }
-
         public void DeleteRecord(object data)
         {
         }
@@ -149,21 +172,6 @@ namespace GKUI.Components
         {
         }
 
-        public void AddColumn(string caption, int width, bool autoSize = false)
-        {
-            GridColumn column = new GridColumn();
-            column.HeaderText = caption;
-            column.DataCell = new TextBoxCell(Columns.Count);
-            column.Width = width;
-            column.AutoSize = autoSize;
-            Columns.Add(column);
-        }
-
-        public void SetColumnCaption(int index, string caption)
-        {
-            Columns[index].HeaderText = caption;
-        }
-
         public void ResizeColumn(int columnIndex)
         {
         }
@@ -173,10 +181,6 @@ namespace GKUI.Components
         }
 
         public void SelectItem(object data)
-        {
-        }
-
-        public void ClearColumns()
         {
         }
 

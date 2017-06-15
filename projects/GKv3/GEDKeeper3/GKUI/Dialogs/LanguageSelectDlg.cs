@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCore;
@@ -39,9 +38,6 @@ namespace GKUI.Dialogs
         public LanguageSelectDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

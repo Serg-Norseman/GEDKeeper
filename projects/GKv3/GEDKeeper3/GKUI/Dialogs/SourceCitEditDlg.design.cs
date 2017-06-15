@@ -23,14 +23,17 @@ namespace GKUI.Dialogs
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             lblPage = new Label();
             lblPage.Text = "lblPage";
@@ -41,8 +44,9 @@ namespace GKUI.Dialogs
             lblSource.Text = "lblSource";
 
             btnSourceAdd = new Button();
-            btnSourceAdd.Size = new Size(35, 35);
+            btnSourceAdd.Size = new Size(26, 26);
             btnSourceAdd.Click += btnSourceAdd_Click;
+            btnSourceAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             lblCertainty = new Label();
             lblCertainty.Text = "lblCertainty";
@@ -55,42 +59,31 @@ namespace GKUI.Dialogs
             cmbSource.KeyDown += cbSource_KeyDown;
             cmbSource.KeyUp += cbSource_KeyUp;
 
+            Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { new DefTableLayout {
+                                Rows = {
+                                    new TableRow {
+                                        Cells = { lblSource, TableLayout.Horizontal(10, new TableCell(cmbSource, true), btnSourceAdd) }
+                                    },
+                                    new TableRow {
+                                        Cells = { lblPage, txtPage }
+                                    },
+                                    new TableRow {
+                                        Cells = { lblCertainty, txtCertainty }
+                                    }
+                                } } }
+                    },
+                    null,
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
+                }
+            };
+
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
             ClientSize = new Size(441, 250);
             Title = "SourceCitEditDlg";
-
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { lblSource }
-                    },
-                    new TableRow {
-                        Cells = { cmbSource, btnSourceAdd }
-                    },
-                    new TableRow {
-                        Cells = { lblPage }
-                    },
-                    new TableRow {
-                        Cells = { txtPage }
-                    },
-                    new TableRow {
-                        Cells = { lblCertainty }
-                    },
-                    new TableRow {
-                        Cells = { txtCertainty }
-                    },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { null }
-                    },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
-                    }
-                }
-            };
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

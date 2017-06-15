@@ -20,9 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -61,9 +59,6 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.InitMap();
             fMapBrowser.ShowLines = false;
@@ -82,15 +77,14 @@ namespace GKUI.Dialogs
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
             lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            /*ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
-            ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
-            ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);*/
+            ListGeoCoords.SetColumnCaption(0, LangMan.LS(LSID.LSID_Title));
+            ListGeoCoords.SetColumnCaption(1, LangMan.LS(LSID.LSID_Latitude));
+            ListGeoCoords.SetColumnCaption(2, LangMan.LS(LSID.LSID_Longitude));
             btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
             grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
             btnSearch.Text = LangMan.LS(LSID.LSID_Search);
             btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
             btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
-
             btnShowOnMap.ToolTip = LangMan.LS(LSID.LSID_ShowOnMapTip);
         }
 
@@ -150,6 +144,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {
@@ -205,19 +200,19 @@ namespace GKUI.Dialogs
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            /*GKListItem item = GetSelectedGeoItem();
+            GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
-            txtLatitude.Text = item.SubItems[1].Text;
-            txtLongitude.Text = item.SubItems[2].Text;*/
+            //txtLatitude.Text = item.SubItems[1].Text;
+            //txtLongitude.Text = item.SubItems[2].Text;
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
         {
-            /*GKListItem item = GetSelectedGeoItem();
+            GKListItem item = GetSelectedGeoItem();
             if (item == null) return;
 
-            txtName.Text = item.Text;*/
+            //txtName.Text = item.Text;
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)

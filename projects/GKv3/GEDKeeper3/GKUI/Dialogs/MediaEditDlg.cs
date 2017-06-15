@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -53,9 +51,9 @@ namespace GKUI.Dialogs
 
         private bool AcceptChanges()
         {
-            /*GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
-            if (fIsNew)
+            /*if (fIsNew)
             {
                 GKComboItem item = (GKComboItem)cmbStoreType.SelectedItem;
                 MediaStoreType gst = (MediaStoreType)item.Tag;
@@ -72,13 +70,13 @@ namespace GKUI.Dialogs
                 }
             }
 
-            fileRef.MediaType = (GEDCOMMediaType)cmbMediaType.SelectedIndex;
+            fileRef.MediaType = (GEDCOMMediaType)cmbMediaType.SelectedIndex;*/
             fileRef.Title = txtName.Text;
 
             ControlsRefresh();
 
             CommitChanges();
-            fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);*/
+            fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
 
             return true;
         }
@@ -144,6 +142,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {
@@ -208,9 +207,6 @@ namespace GKUI.Dialogs
         public MediaEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++)
             {

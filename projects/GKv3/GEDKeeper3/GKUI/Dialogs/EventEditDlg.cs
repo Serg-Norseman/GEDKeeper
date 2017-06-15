@@ -21,7 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -54,11 +53,6 @@ namespace GKUI.Dialogs
         public EventEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-            btnPlaceAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnPlaceDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
 
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)
@@ -398,6 +392,7 @@ namespace GKUI.Dialogs
             try
             {
                 RollbackChanges();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {

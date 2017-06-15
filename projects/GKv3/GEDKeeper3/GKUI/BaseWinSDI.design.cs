@@ -208,8 +208,12 @@ namespace GKUI
             tbFileNew.Click += ToolBar1_ButtonClick;
             tbFileLoad.Click += ToolBar1_ButtonClick;
 
-            tbLoadMRU.Text = "v";
-            tbLoadMRU.Click  += (sender, e) => MenuMRU.Show(this);
+            tbLoadMRU.Text = "▼";
+            tbLoadMRU.Click  += (sender, e) => {
+                if (MenuMRU.Items.Count > 0) {
+                    MenuMRU.Show(this);
+                }
+            };
 
             tbFileSave.Click += ToolBar1_ButtonClick;
 

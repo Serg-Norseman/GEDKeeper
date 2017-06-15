@@ -20,13 +20,10 @@
 
 using System;
 using System.IO;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -87,9 +84,6 @@ namespace GKUI.Dialogs
             InitializeComponent();
             FillSizes();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
@@ -100,6 +94,8 @@ namespace GKUI.Dialogs
             miImport.Text = LangMan.LS(LSID.LSID_Import);
             miExport.Text = LangMan.LS(LSID.LSID_MIExport);
             miClear.Text = LangMan.LS(LSID.LSID_Clear);
+            pageEditor.Text = LangMan.LS(LSID.LSID_Note);
+            pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
         }
 
         private void FillSizes()

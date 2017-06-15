@@ -9,7 +9,6 @@ namespace GKUI.Dialogs
     {
         private Button btnAccept;
         private Button btnCancel;
-        private GroupBox GroupBox1;
         private Label lblName;
         private TextBox txtName;
         private TabControl tabsData;
@@ -20,49 +19,48 @@ namespace GKUI.Dialogs
         {
             SuspendLayout();
 
-            btnAccept = new Button();
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-
-            btnCancel = new Button();
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
-
             lblName = new Label();
             lblName.Text = "lblName";
 
             txtName = new TextBox();
-
-            btnAddress = new Button();
-            btnAddress.Size = new Size(80, 26);
-            btnAddress.Text = "btnAddress";
-            btnAddress.Click += btnAddress_Click;
 
             pageNotes = new TabPage();
             pageNotes.Text = "pageNotes";
 
             tabsData = new TabControl();
             tabsData.Pages.Add(pageNotes);
-            tabsData.SelectedIndex = 0;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            //
+
+            btnAddress = new Button();
+            btnAddress.Size = new Size(130, 26);
+            btnAddress.Text = "btnAddress";
+            btnAddress.Click += btnAddress_Click;
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblName, txtName }
+                        Cells = { UIHelper.CreateHSingleTable(0, 10, lblName, txtName) }
                     },
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsData }
                     },
-                    new TableRow {
-                        Cells = { btnAddress, null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(btnAddress, null, btnAccept, btnCancel)
                 }
             };
 

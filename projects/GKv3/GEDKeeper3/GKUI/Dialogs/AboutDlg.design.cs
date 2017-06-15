@@ -1,6 +1,7 @@
 ﻿using System;
-using Eto.Forms;
 using Eto.Drawing;
+using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -15,6 +16,13 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
+            btnClose = new Button();
+            btnClose.ImagePosition = ButtonImagePosition.Left;
+            btnClose.Size = new Size(130, 26);
+            btnClose.Text = "btnClose";
+            btnClose.Click += CancelClickHandler;
+            btnClose.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
             lblProduct = new Label();
             lblProduct.Font = new Font("Times New Roman", 20.25F, FontStyle.Bold);
             lblProduct.Text = "lblProduct";
@@ -22,12 +30,6 @@ namespace GKUI.Dialogs
             lblVersion = new Label();
             lblVersion.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
             lblVersion.Text = "lblVersion";
-
-            btnClose = new Button();
-            btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(130, 26);
-            btnClose.Text = "btnClose";
-            btnClose.Click += CancelClickHandler;
 
             lblCopyright = new Label();
             lblCopyright.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
@@ -46,17 +48,15 @@ namespace GKUI.Dialogs
             ClientSize = new Size(360, 220);
             Title = "AboutDlg";
 
-            Content = new StackLayout {
-                Padding = new Padding(10),
-                Spacing = 10,
-                Items = {
+            Content = new DefTableLayout {
+                Rows = {
                     lblProduct,
                     lblVersion,
                     lblCopyright,
                     null,
                     lblProjSite,
                     lblMail,
-                    new StackLayoutItem(btnClose, HorizontalAlignment.Right)
+                    UIHelper.MakeDialogFooter(null, btnClose)
                 }
             };
         }

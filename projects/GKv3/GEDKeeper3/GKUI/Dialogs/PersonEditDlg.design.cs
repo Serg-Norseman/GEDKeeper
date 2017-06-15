@@ -62,82 +62,108 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            lblRestriction = new Label();
-            cmbRestriction = new ComboBox();
-            GroupBox1 = new GroupBox();
-            imgPortrait = new GKUI.Components.GKPortrait();
-            lblMarriedSurname = new Label();
-            lblSurname = new Label();
-            lblName = new Label();
-            lblPatronymic = new Label();
-            lblSex = new Label();
-            lblSurnamePrefix = new Label();
-            lblNamePrefix = new Label();
-            lblNameSuffix = new Label();
-            lblNickname = new Label();
-            btnPortraitAdd = new Button();
-            btnPortraitDelete = new Button();
-            txtMarriedSurname = new TextBox();
-            txtSurname = new TextBox();
-            txtName = new TextBox();
-            cmbPatronymic = new ComboBox();
-            cmbSex = new ComboBox();
-            chkPatriarch = new CheckBox();
-            panCtlParents = new Panel();
-            txtMother = new TextBox();
-            lblParents = new Label();
-            btnParentsAdd = new Button();
-            btnParentsEdit = new Button();
-            btnParentsDelete = new Button();
-            btnFatherAdd = new Button();
-            btnFatherDelete = new Button();
-            btnFatherSel = new Button();
-            btnMotherAdd = new Button();
-            btnMotherDelete = new Button();
-            btnMotherSel = new Button();
-            txtFather = new TextBox();
-            chkBookmark = new CheckBox();
-            txtSurnamePrefix = new TextBox();
-            txtNamePrefix = new TextBox();
-            txtNameSuffix = new TextBox();
-            txtNickname = new TextBox();
-            btnNameCopy = new Button();
-            tabsPersonData = new TabControl();
-            pageEvents = new TabPage();
-            pageSpouses = new TabPage();
-            pageNames = new TabPage();
-            pageAssociations = new TabPage();
-            pageGroups = new TabPage();
-            pageNotes = new TabPage();
-            pageMultimedia = new TabPage();
-            pageSources = new TabPage();
-            pageUserRefs = new TabPage();
-
             SuspendLayout();
 
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(91, 24);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
+            imgPortrait = new GKUI.Components.GKPortrait();
+            imgPortrait.Cursor = Cursors.Arrow;
+            imgPortrait.Image = null;
+            //imgPortrait.Size = new Size(149, 165);
+            //imgPortrait.SizeMode = PictureBoxSizeMode.Normal;
+            imgPortrait.SlidePanelHeight = 36;
+            imgPortrait.PixelSpeed = 5;
 
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(91, 24);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
+            lblMarriedSurname = new Label();
+            //lblMarriedSurname.Size = new Size(95, 13);
+            lblMarriedSurname.Text = "lblMarriedSurname";
 
-            lblRestriction.Size = new Size(68, 13);
-            lblRestriction.Text = "lblRestriction";
+            lblSurname = new Label();
+            //lblSurname.Size = new Size(59, 13);
+            lblSurname.Text = "lblSurname";
 
-            cmbRestriction.ReadOnly = true;
-            cmbRestriction.Size = new Size(163, 21);
-            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+            lblName = new Label();
+            //lblName.Size = new Size(44, 13);
+            lblName.Text = "lblName";
 
-            GroupBox1.Size = new Size(699, 258);
-            var personLayout = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            lblPatronymic = new Label();
+            //lblPatronymic.Size = new Size(70, 13);
+            lblPatronymic.Text = "lblPatronymic";
+
+            lblSex = new Label();
+            //lblSex.Size = new Size(35, 13);
+            lblSex.Text = "lblSex";
+
+            lblSurnamePrefix = new Label();
+            //lblSurnamePrefix.Size = new Size(87, 13);
+            lblSurnamePrefix.Text = "lblSurnamePrefix";
+
+            lblNamePrefix = new Label();
+            //lblNamePrefix.Size = new Size(72, 13);
+            lblNamePrefix.Text = "lblNamePrefix";
+
+            lblNameSuffix = new Label();
+            //lblNameSuffix.Size = new Size(72, 13);
+            lblNameSuffix.Text = "lblNameSuffix";
+
+            lblNickname = new Label();
+            //lblNickname.Size = new Size(62, 13);
+            lblNickname.Text = "lblNickname";
+
+            btnPortraitAdd = new Button();
+            btnPortraitAdd.Size = new Size(26, 26);
+            btnPortraitAdd.Click += btnPortraitAdd_Click;
+
+            btnPortraitDelete = new Button();
+            btnPortraitDelete.Size = new Size(26, 26);
+            btnPortraitDelete.Click += btnPortraitDelete_Click;
+
+            txtMarriedSurname = new TextBox();
+            //txtMarriedSurname.Size = new Size(182, 21);
+            txtMarriedSurname.KeyDown += edSurname_KeyDown;
+            //txtMarriedSurname.KeyPress += edSurname_KeyPress;
+
+            txtSurname = new TextBox();
+            //txtSurname.Size = new Size(182, 21);
+            txtSurname.KeyDown += edSurname_KeyDown;
+            //txtSurname.KeyPress += edSurname_KeyPress;
+
+            txtName = new TextBox();
+            //txtName.Size = new Size(182, 21);
+            txtName.KeyDown += edSurname_KeyDown;
+            //txtName.KeyPress += edSurname_KeyPress;
+
+            cmbPatronymic = new ComboBox();
+            //cmbPatronymic.Size = new Size(182, 21);
+            cmbPatronymic.KeyDown += edSurname_KeyDown;
+            //cmbPatronymic.KeyPress += edSurname_KeyPress;
+
+            cmbSex = new ComboBox();
+            cmbSex.ReadOnly = true;
+            //cmbSex.Size = new Size(154, 21);
+            cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
+
+            chkPatriarch = new CheckBox();
+            //chkPatriarch.Size = new Size(85, 17);
+            chkPatriarch.Text = "chkPatriarch";
+
+            chkBookmark = new CheckBox();
+            //chkBookmark.Size = new Size(88, 17);
+            chkBookmark.Text = "chkBookmark";
+
+            txtSurnamePrefix = new TextBox();
+            //txtSurnamePrefix.Size = new Size(136, 21);
+
+            txtNamePrefix = new TextBox();
+            //txtNamePrefix.Size = new Size(136, 21);
+
+            txtNameSuffix = new TextBox();
+            //txtNameSuffix.Size = new Size(136, 21);
+
+            txtNickname = new TextBox();
+            //txtNickname.Size = new Size(136, 21);
+
+            GroupBox1 = new GroupBox();
+            //GroupBox1.Size = new Size(699, 258);
+            var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblSurname, lblSurnamePrefix }
@@ -166,76 +192,65 @@ namespace GKUI.Dialogs
                     null
                 }
             };
-            GroupBox1.Content = new StackLayout {
-                Orientation = Orientation.Horizontal,
+            GroupBox1.Content = new HDefStackLayout {
                 Items = { personLayout, imgPortrait }
             };
 
-            imgPortrait.Cursor = Cursors.Arrow;
-            imgPortrait.Image = null;
-            imgPortrait.Size = new Size(149, 165);
-            //imgPortrait.SizeMode = PictureBoxSizeMode.Normal;
-            imgPortrait.SlidePanelHeight = 36;
-            imgPortrait.PixelSpeed = 5;
+            //
 
-            lblMarriedSurname.Size = new Size(95, 13);
-            lblMarriedSurname.Text = "lblMarriedSurname";
+            lblParents = new Label();
+            //lblParents.Size = new Size(54, 13);
+            lblParents.Text = "lblParents";
 
-            lblSurname.Size = new Size(59, 13);
-            lblSurname.Text = "lblSurname";
+            txtFather = new TextBox();
+            txtFather.TextColor = SystemColors.Control;
+            txtFather.ReadOnly = true;
+            //txtFather.Size = new Size(251, 21);
 
-            lblName.Size = new Size(44, 13);
-            lblName.Text = "lblName";
+            txtMother = new TextBox();
+            txtMother.TextColor = SystemColors.Control;
+            txtMother.ReadOnly = true;
+            //txtMother.Size = new Size(252, 21);
 
-            lblPatronymic.Size = new Size(70, 13);
-            lblPatronymic.Text = "lblPatronymic";
+            btnParentsAdd = new Button();
+            btnParentsAdd.Size = new Size(26, 26);
+            btnParentsAdd.Click += btnParentsAdd_Click;
 
-            lblSex.Size = new Size(35, 13);
-            lblSex.Text = "lblSex";
+            btnParentsEdit = new Button();
+            btnParentsEdit.Size = new Size(26, 26);
+            btnParentsEdit.Click += btnParentsEdit_Click;
 
-            lblSurnamePrefix.Size = new Size(87, 13);
-            lblSurnamePrefix.Text = "lblSurnamePrefix";
+            btnParentsDelete = new Button();
+            btnParentsDelete.Size = new Size(26, 26);
+            btnParentsDelete.Click += btnParentsDelete_Click;
 
-            lblNamePrefix.Size = new Size(72, 13);
-            lblNamePrefix.Text = "lblNamePrefix";
+            btnFatherAdd = new Button();
+            btnFatherAdd.Size = new Size(26, 26);
+            btnFatherAdd.Click += btnFatherAdd_Click;
 
-            lblNameSuffix.Size = new Size(72, 13);
-            lblNameSuffix.Text = "lblNameSuffix";
+            btnFatherDelete = new Button();
+            btnFatherDelete.Size = new Size(26, 26);
+            btnFatherDelete.Click += btnFatherDelete_Click;
 
-            lblNickname.Size = new Size(62, 13);
-            lblNickname.Text = "lblNickname";
+            btnFatherSel = new Button();
+            btnFatherSel.Size = new Size(26, 26);
+            btnFatherSel.Click += btnFatherSel_Click;
 
-            btnPortraitAdd.Size = new Size(29, 29);
-            btnPortraitAdd.Click += btnPortraitAdd_Click;
+            btnMotherAdd = new Button();
+            btnMotherAdd.Size = new Size(26, 26);
+            btnMotherAdd.Click += btnMotherAdd_Click;
 
-            btnPortraitDelete.Size = new Size(29, 29);
-            btnPortraitDelete.Click += btnPortraitDelete_Click;
+            btnMotherDelete = new Button();
+            btnMotherDelete.Size = new Size(26, 26);
+            btnMotherDelete.Click += btnMotherDelete_Click;
 
-            txtMarriedSurname.Size = new Size(182, 21);
-            txtMarriedSurname.KeyDown += edSurname_KeyDown;
-            //txtMarriedSurname.KeyPress += edSurname_KeyPress;
+            btnMotherSel = new Button();
+            btnMotherSel.Size = new Size(26, 26);
+            btnMotherSel.Click += btnMotherSel_Click;
 
-            txtSurname.Size = new Size(182, 21);
-            txtSurname.KeyDown += edSurname_KeyDown;
-            //txtSurname.KeyPress += edSurname_KeyPress;
-
-            txtName.Size = new Size(182, 21);
-            txtName.KeyDown += edSurname_KeyDown;
-            //txtName.KeyPress += edSurname_KeyPress;
-
-            cmbPatronymic.Size = new Size(182, 21);
-            cmbPatronymic.KeyDown += edSurname_KeyDown;
-            //cmbPatronymic.KeyPress += edSurname_KeyPress;
-
-            cmbSex.ReadOnly = true;
-            cmbSex.Size = new Size(154, 21);
-            cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
-
-            chkPatriarch.Size = new Size(85, 17);
-            chkPatriarch.Text = "chkPatriarch";
-
+            panCtlParents = new Panel();
             //panCtlParents.BorderStyle = BorderStyle.FixedSingle;
-            panCtlParents.Size = new Size(696, 69);
+            //panCtlParents.Size = new Size(696, 69);
             panCtlParents.Content = new TableLayout {
                 Padding = new Padding(10),
                 Spacing = new Size(10, 10),
@@ -249,58 +264,67 @@ namespace GKUI.Dialogs
                 }
             };
 
-            txtMother.TextColor = SystemColors.Control;
-            txtMother.ReadOnly = true;
-            txtMother.Size = new Size(252, 21);
+            //
 
-            lblParents.Size = new Size(54, 13);
-            lblParents.Text = "lblParents";
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
-            btnParentsAdd.Size = new Size(29, 29);
-            btnParentsAdd.Click += btnParentsAdd_Click;
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            btnParentsEdit.Size = new Size(29, 29);
-            btnParentsEdit.Click += btnParentsEdit_Click;
+            //
 
-            btnParentsDelete.Size = new Size(30, 29);
-            btnParentsDelete.Click += btnParentsDelete_Click;
+            lblRestriction = new Label();
+            //lblRestriction.Size = new Size(68, 13);
+            lblRestriction.Text = "lblRestriction";
 
-            btnFatherAdd.Size = new Size(29, 29);
-            btnFatherAdd.Click += btnFatherAdd_Click;
+            cmbRestriction = new ComboBox();
+            cmbRestriction.ReadOnly = true;
+            //cmbRestriction.Size = new Size(163, 21);
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
-            btnFatherDelete.Size = new Size(29, 29);
-            btnFatherDelete.Click += btnFatherDelete_Click;
-
-            btnFatherSel.Size = new Size(29, 29);
-            btnFatherSel.Click += btnFatherSel_Click;
-
-            btnMotherAdd.Size = new Size(29, 29);
-            btnMotherAdd.Click += btnMotherAdd_Click;
-
-            btnMotherDelete.Size = new Size(29, 29);
-            btnMotherDelete.Click += btnMotherDelete_Click;
-
-            btnMotherSel.Size = new Size(29, 29);
-            btnMotherSel.Click += btnMotherSel_Click;
-
-            txtFather.TextColor = SystemColors.Control;
-            txtFather.ReadOnly = true;
-            txtFather.Size = new Size(251, 21);
-
-            chkBookmark.Size = new Size(88, 17);
-            chkBookmark.Text = "chkBookmark";
-
-            txtSurnamePrefix.Size = new Size(136, 21);
-
-            txtNamePrefix.Size = new Size(136, 21);
-
-            txtNameSuffix.Size = new Size(136, 21);
-
-            txtNickname.Size = new Size(136, 21);
-
-            btnNameCopy.Size = new Size(37, 24);
+            btnNameCopy = new Button();
+            btnNameCopy.Size = new Size(26, 26);
             btnNameCopy.Click += btnNameCopy_Click;
 
+            //
+
+            pageEvents = new TabPage();
+            pageEvents.Text = "pageEvents";
+
+            pageSpouses = new TabPage();
+            pageSpouses.Text = "pageSpouses";
+
+            pageNames = new TabPage();
+            pageNames.Text = "pageNames";
+
+            pageAssociations = new TabPage();
+            pageAssociations.Text = "pageAssociations";
+
+            pageGroups = new TabPage();
+            pageGroups.Text = "pageGroups";
+
+            pageNotes = new TabPage();
+            pageNotes.Text = "pageNotes";
+
+            pageMultimedia = new TabPage();
+            pageMultimedia.Text = "pageMultimedia";
+
+            pageSources = new TabPage();
+            pageSources.Text = "pageSources";
+
+            pageUserRefs = new TabPage();
+            pageUserRefs.Text = "pageUserRefs";
+
+            tabsPersonData = new TabControl();
             tabsPersonData.Pages.Add(pageEvents);
             tabsPersonData.Pages.Add(pageSpouses);
             tabsPersonData.Pages.Add(pageNames);
@@ -310,40 +334,8 @@ namespace GKUI.Dialogs
             tabsPersonData.Pages.Add(pageMultimedia);
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
-            tabsPersonData.SelectedIndex = 0;
-            tabsPersonData.Size = new Size(699, 256);
 
-            pageEvents.Size = new Size(691, 230);
-            pageEvents.Text = "pageEvents";
-
-            pageSpouses.Size = new Size(691, 230);
-            pageSpouses.Text = "pageSpouses";
-
-            pageNames.BackgroundColor = SystemColors.Control;
-            pageNames.Size = new Size(691, 230);
-            pageNames.Text = "pageNames";
-
-            pageAssociations.Size = new Size(691, 230);
-            pageAssociations.Text = "pageAssociations";
-
-            pageGroups.Size = new Size(691, 230);
-            pageGroups.Text = "pageGroups";
-
-            pageNotes.Size = new Size(691, 230);
-            pageNotes.Text = "pageNotes";
-
-            pageMultimedia.Size = new Size(691, 230);
-            pageMultimedia.Text = "pageMultimedia";
-
-            pageSources.Size = new Size(691, 230);
-            pageSources.Text = "pageSources";
-
-            pageUserRefs.Size = new Size(691, 230);
-            pageUserRefs.Text = "pageUserRefs";
-
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { GroupBox1 }
@@ -355,15 +347,13 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { tabsPersonData }
                     },
-                    new TableRow {
-                        Cells = { lblRestriction, cmbRestriction, btnNameCopy, null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(lblRestriction, cmbRestriction, btnNameCopy, null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(699, 563);
+            ClientSize = new Size(700, 560);
             Title = "PersonEditDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

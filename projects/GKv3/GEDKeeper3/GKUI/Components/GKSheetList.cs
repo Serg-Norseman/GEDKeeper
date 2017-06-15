@@ -35,13 +35,12 @@ namespace GKUI.Components
     /// </summary>
     public class GKSheetList : Panel, ISheetList
     {
-        private readonly ButtonToolItem fBtnAdd;
-        private readonly ButtonToolItem fBtnDelete;
-        private readonly ButtonToolItem fBtnEdit;
-        private readonly ButtonToolItem fBtnLinkJump;
-        private readonly ButtonToolItem fBtnMoveUp;
-        private readonly ButtonToolItem fBtnMoveDown;
-        private readonly ToolBar fToolBar;
+        private readonly Button fBtnAdd;
+        private readonly Button fBtnDelete;
+        private readonly Button fBtnEdit;
+        private readonly Button fBtnLinkJump;
+        private readonly Button fBtnMoveUp;
+        private readonly Button fBtnMoveDown;
         private readonly GKListViewStub fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -98,61 +97,65 @@ namespace GKUI.Components
             if (owner == null)
                 throw new ArgumentNullException("owner");
 
-            fBtnMoveDown = new ButtonToolItem();
+            fBtnMoveDown = new Button();
             fBtnMoveDown.Image = Bitmap.FromResource("Resources.btn_down.gif");
+            fBtnMoveDown.Size = new Size(26, 26);
             fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
-            fBtnMoveUp = new ButtonToolItem();
+            fBtnMoveUp = new Button();
             fBtnMoveUp.Image = Bitmap.FromResource("Resources.btn_up.gif");
+            fBtnMoveUp.Size = new Size(26, 26);
             fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
-            fBtnLinkJump = new ButtonToolItem();
+            fBtnLinkJump = new Button();
             fBtnLinkJump.Image = Bitmap.FromResource("Resources.btn_jump.gif");
+            fBtnLinkJump.Size = new Size(26, 26);
             fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
-            fBtnDelete = new ButtonToolItem();
+            fBtnDelete = new Button();
             fBtnDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
+            fBtnDelete.Size = new Size(26, 26);
             fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
-            fBtnEdit = new ButtonToolItem();
+            fBtnEdit = new Button();
             fBtnEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
+            fBtnEdit.Size = new Size(26, 26);
             fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
-            fBtnAdd = new ButtonToolItem();
+            fBtnAdd = new Button();
             fBtnAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
+            fBtnAdd.Size = new Size(26, 26);
             fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 
-            fToolBar = new ToolBar();
-            fToolBar.Items.AddRange(new ToolItem[] {
-                                        fBtnAdd,
-                                        fBtnEdit,
-                                        fBtnDelete,
-                                        fBtnLinkJump,
-                                        fBtnMoveUp,
-                                        fBtnMoveDown});
-            //fToolBar.AutoSize = true;
-            //fToolBar.ShowToolTips = true;
-
             fList = new GKListViewStub();
-            fList.Size = new Size(500, 290);
+            //fList.Size = new Size(500, 290);
             //fList.HideSelection = false;
             //fList.LabelEdit = false;
-            //fList.FullRowSelect = true;
-            //fList.View = View.Details;
+            fList.FullRowSelect = true;
             fList.MouseDoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
 
             SuspendLayout();
-            Content = fList;
-            //Controls.Add(fToolBar);
-            //Controls.SetChildIndex(fList, 1);
-            //Controls.SetChildIndex(fToolBar, 0);
+            Content = new StackLayout() {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items = {
+                    new StackLayoutItem(fList, true),
+                    new StackLayoutItem(
+                        new StackLayout() {
+                            Orientation = Orientation.Vertical,
+                            Spacing = 5,
+                            Items = { fBtnAdd, fBtnEdit, fBtnDelete,
+                                fBtnLinkJump, fBtnMoveUp, fBtnMoveDown }
+                        }, false)
+                }
+            };
             ResumeLayout();
 
             owner.SuspendLayout();
@@ -174,7 +177,6 @@ namespace GKUI.Components
                 fBtnDelete.Dispose();
                 fBtnEdit.Dispose();
                 fBtnAdd.Dispose();
-                fToolBar.Dispose();
             }
             base.Dispose(disposing);
         }

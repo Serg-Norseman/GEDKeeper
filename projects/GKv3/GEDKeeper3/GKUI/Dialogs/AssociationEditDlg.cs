@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -80,10 +79,6 @@ namespace GKUI.Dialogs
         public AssociationEditDlg()
         {
             InitializeComponent();
-
-            btnPersonAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             int num = GlobalOptions.Instance.Relations.Count;
             for (int i = 0; i < num; i++)

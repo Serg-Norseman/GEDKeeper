@@ -27,49 +27,32 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            tabsData = new TabControl();
-            pageCommon = new TabPage();
-            lblShortTitle = new Label();
-            lblAuthor = new Label();
-            lblTitle = new Label();
-            lblPublication = new Label();
-            txtShortTitle = new TextBox();
-            txtAuthor = new TextArea();
-            txtTitle = new TextArea();
-            txtPublication = new TextArea();
-            pageText = new TabPage();
-            txtText = new TextArea();
-            pageRepositories = new TabPage();
-            pageNotes = new TabPage();
-            pageMultimedia = new TabPage();
-
             SuspendLayout();
 
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(113, 31);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
+            lblShortTitle = new Label();
+            lblShortTitle.Text = "lblShortTitle";
 
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(114, 31);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
+            lblAuthor = new Label();
+            lblAuthor.Text = "lblAuthor";
 
-            tabsData.Pages.Add(pageCommon);
-            tabsData.Pages.Add(pageText);
-            tabsData.Pages.Add(pageRepositories);
-            tabsData.Pages.Add(pageNotes);
-            tabsData.Pages.Add(pageMultimedia);
-            tabsData.SelectedIndex = 0;
-            tabsData.Size = new Size(752, 487);
+            lblTitle = new Label();
+            lblTitle.Text = "lblTitle";
 
-            pageCommon.Size = new Size(744, 457);
+            lblPublication = new Label();
+            lblPublication.Text = "lblPublication";
+
+            txtShortTitle = new TextBox();
+            txtShortTitle.TextChanged += EditShortTitle_TextChanged;
+
+            txtAuthor = new TextArea();
+
+            txtTitle = new TextArea();
+
+            txtPublication = new TextArea();
+
+            pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
-            pageCommon.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblShortTitle, txtShortTitle }
@@ -82,59 +65,57 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { lblPublication, txtPublication }
-                    },
-                    null
+                    }
                 }
             };
 
-            lblShortTitle.Size = new Size(78, 17);
-            lblShortTitle.Text = "lblShortTitle";
+            //
 
-            lblAuthor.Size = new Size(62, 17);
-            lblAuthor.Text = "lblAuthor";
+            txtText = new TextArea();
 
-            lblTitle.Size = new Size(44, 17);
-            lblTitle.Text = "lblTitle";
-
-            lblPublication.Size = new Size(85, 17);
-            lblPublication.Text = "lblPublication";
-
-            txtShortTitle.Size = new Size(326, 24);
-            txtShortTitle.TextChanged += EditShortTitle_TextChanged;
-
-            txtAuthor.Size = new Size(572, 127);
-
-            txtTitle.Size = new Size(572, 127);
-
-            txtPublication.Size = new Size(572, 127);
-
+            pageText = new TabPage();
             pageText.Content = txtText;
-            pageText.Size = new Size(744, 457);
             pageText.Text = "pageText";
 
-            txtText.Size = new Size(744, 457);
+            //
 
-            pageRepositories.Size = new Size(744, 457);
+            pageRepositories = new TabPage();
             pageRepositories.Text = "pageRepositories";
 
-            pageNotes.Size = new Size(744, 457);
+            pageNotes = new TabPage();
             pageNotes.Text = "pageNotes";
 
-            pageMultimedia.Size = new Size(744, 457);
+            pageMultimedia = new TabPage();
             pageMultimedia.Text = "pageMultimedia";
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageCommon);
+            tabsData.Pages.Add(pageText);
+            tabsData.Pages.Add(pageRepositories);
+            tabsData.Pages.Add(pageNotes);
+            tabsData.Pages.Add(pageMultimedia);
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsData }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

@@ -396,6 +396,7 @@ namespace GKUI.Dialogs
             try
             {
                 fLocalUndoman.Rollback();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {
@@ -605,8 +606,6 @@ namespace GKUI.Dialogs
             txtName.TextChanged += Names_TextChanged;
             cmbPatronymic.TextChanged += Names_TextChanged;
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
             btnPortraitAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
             btnPortraitDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
             btnParentsAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");

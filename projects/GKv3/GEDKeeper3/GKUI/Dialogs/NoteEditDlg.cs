@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -82,9 +81,6 @@ namespace GKUI.Dialogs
         public NoteEditDlg()
         {
             InitializeComponent();
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

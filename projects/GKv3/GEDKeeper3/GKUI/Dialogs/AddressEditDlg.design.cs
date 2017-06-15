@@ -27,47 +27,46 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            tabsAddrData = new TabControl();
-            pageCommon = new TabPage();
-            lblCountry = new Label();
-            lblState = new Label();
-            lblCity = new Label();
-            lblPostalCode = new Label();
-            lblAddress = new Label();
-            txtCountry = new TextBox();
-            txtState = new TextBox();
-            txtCity = new TextBox();
-            txtPostalCode = new TextBox();
-            txtAddress = new TextBox();
-            pagePhones = new TabPage();
-            pageEmails = new TabPage();
-            pageWebPages = new TabPage();
-
             SuspendLayout();
 
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
+            lblCountry = new Label();
+            //lblCountry.Size = new Size(55, 17);
+            lblCountry.Text = "lblCountry";
 
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
-            btnCancel.Text = "btnCancel";
+            lblState = new Label();
+            //lblState.Size = new Size(103, 17);
+            lblState.Text = "lblState";
 
-            tabsAddrData.Pages.Add(pageCommon);
-            tabsAddrData.Pages.Add(pagePhones);
-            tabsAddrData.Pages.Add(pageEmails);
-            tabsAddrData.Pages.Add(pageWebPages);
-            tabsAddrData.SelectedIndex = 0;
-            tabsAddrData.Size = new Size(572, 321);
+            lblCity = new Label();
+            //lblCity.Size = new Size(47, 17);
+            lblCity.Text = "lblCity";
 
-            pageCommon.Size = new Size(564, 291);
+            lblPostalCode = new Label();
+            //lblPostalCode.Size = new Size(101, 17);
+            lblPostalCode.Text = "lblPostalCode";
+
+            lblAddress = new Label();
+            //lblAddress.Size = new Size(46, 17);
+            lblAddress.Text = "lblAddress";
+
+            txtCountry = new TextBox();
+            //txtCountry.Size = new Size(282, 24);
+
+            txtState = new TextBox();
+            //txtState.Size = new Size(248, 24);
+
+            txtCity = new TextBox();
+            //txtCity.Size = new Size(282, 24);
+
+            txtPostalCode = new TextBox();
+            //txtPostalCode.Size = new Size(248, 24);
+
+            txtAddress = new TextBox();
+            //txtAddress.Size = new Size(539, 24);
+
+            pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
-            pageCommon.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblCountry, lblState }
@@ -91,52 +90,46 @@ namespace GKUI.Dialogs
                 }
             };
 
-            lblCountry.Size = new Size(55, 17);
-            lblCountry.Text = "lblCountry";
+            //
 
-            lblState.Size = new Size(103, 17);
-            lblState.Text = "lblState";
-
-            lblCity.Size = new Size(47, 17);
-            lblCity.Text = "lblCity";
-
-            lblPostalCode.Size = new Size(101, 17);
-            lblPostalCode.Text = "lblPostalCode";
-
-            lblAddress.Size = new Size(46, 17);
-            lblAddress.Text = "lblAddress";
-
-            txtCountry.Size = new Size(282, 24);
-
-            txtState.Size = new Size(248, 24);
-
-            txtCity.Size = new Size(282, 24);
-
-            txtPostalCode.Size = new Size(248, 24);
-
-            txtAddress.Size = new Size(539, 24);
-
-            pagePhones.Size = new Size(564, 291);
+            pagePhones = new TabPage();
             pagePhones.Text = "pagePhones";
 
-            pageEmails.Size = new Size(564, 291);
+            pageEmails = new TabPage();
             pageEmails.Text = "pageEmails";
 
-            pageWebPages.Size = new Size(564, 291);
+            pageWebPages = new TabPage();
             pageWebPages.Text = "pageWebPages";
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            tabsAddrData = new TabControl();
+            tabsAddrData.Pages.Add(pageCommon);
+            tabsAddrData.Pages.Add(pagePhones);
+            tabsAddrData.Pages.Add(pageEmails);
+            tabsAddrData.Pages.Add(pageWebPages);
+
+            //
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { tabsAddrData }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

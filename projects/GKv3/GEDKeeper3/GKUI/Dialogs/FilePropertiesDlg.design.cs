@@ -32,16 +32,19 @@ namespace GKUI.Dialogs
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             btnLangEdit = new Button();
             btnLangEdit.Size = new Size(26, 26);
             btnLangEdit.Click += btnLangEdit_Click;
+            btnLangEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
 
             lblName = new Label();
             lblName.Text = "lblName";
@@ -66,9 +69,7 @@ namespace GKUI.Dialogs
 
             pageAuthor = new TabPage();
             pageAuthor.Text = "pageAuthor";
-            pageAuthor.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageAuthor.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblName, txtName }
@@ -100,9 +101,7 @@ namespace GKUI.Dialogs
             PageControl1.Pages.Add(pageAuthor);
             PageControl1.Pages.Add(pageOther);
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,

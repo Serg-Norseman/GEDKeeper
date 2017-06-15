@@ -19,9 +19,7 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -115,15 +113,6 @@ namespace GKUI.Dialogs
             fMediaList = new GKSheetList(pageMultimedia);
 
             fSourcesList = new GKSheetList(pageSources);
-
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-            btnHusbandAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnHusbandDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
-            btnHusbandSel.Image = Bitmap.FromResource("Resources.btn_jump.gif");
-            btnWifeAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            btnWifeDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
-            btnWifeSel.Image = Bitmap.FromResource("Resources.btn_jump.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -244,6 +233,7 @@ namespace GKUI.Dialogs
             try
             {
                 fLocalUndoman.Rollback();
+                CancelClickHandler(sender, e);
             }
             catch (Exception ex)
             {

@@ -18,14 +18,17 @@ namespace GKUI.Dialogs
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(80, 26);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(80, 26);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             lblLanguage = new Label();
             lblLanguage.Text = "lblLanguage";
@@ -34,9 +37,7 @@ namespace GKUI.Dialogs
             cmbLanguage.ReadOnly = true;
             //cmbLanguage.Sorted = true;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblLanguage }
@@ -44,13 +45,8 @@ namespace GKUI.Dialogs
                     new TableRow {
                         Cells = { cmbLanguage }
                     },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { null }
-                    },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    null,
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

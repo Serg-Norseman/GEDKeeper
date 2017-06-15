@@ -31,6 +31,40 @@ using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
+    public class DefStackLayout : StackLayout
+    {
+        public DefStackLayout()
+        {
+            Padding = new Padding(10);
+            Spacing = 10;
+        }
+    }
+
+    public class HDefStackLayout : DefStackLayout
+    {
+        public HDefStackLayout()
+        {
+            Orientation = Orientation.Horizontal;
+        }
+    }
+
+    public class VDefStackLayout : DefStackLayout
+    {
+        public VDefStackLayout()
+        {
+            Orientation = Orientation.Vertical;
+        }
+    }
+
+    public class DefTableLayout : TableLayout
+    {
+        public DefTableLayout()
+        {
+            Padding = new Padding(10);
+            Spacing = new Size(10, 10);
+        }
+    }
+
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>
@@ -313,6 +347,23 @@ namespace GKUI.Components
                     }
                 }
             };
+        }
+
+        public static TableLayout CreateHSingleTable(params TableCell[] cells)
+        {
+            return CreateHSingleTable(10, 10, cells);
+        }
+
+        public static TableLayout CreateHSingleTable(int padding, int spacing, params TableCell[] cells)
+        {
+            var result = new DefTableLayout() {
+                Padding = new Padding(padding),
+                Spacing = new Size(spacing, spacing),
+                Rows = {
+                    new TableRow(cells)
+                }
+            };
+            return result;
         }
     }
 }
