@@ -16,6 +16,11 @@ echo "..\GKCommon.dll" >> %lstfile%
 echo "..\GKComponents.dll" >> %lstfile%
 echo "..\GKCore.dll" >> %lstfile%
 
+echo "..\LinqBridge.dll" >> %lstfile%
+echo "..\NLog.dll" >> %lstfile%
+echo "..\nVLC.dll" >> %lstfile%
+echo "..\YamlSerializer.dll" >> %lstfile%
+
 echo "..\ArborGVT.dll" >> %lstfile%
 echo "..\DotNetRtfWriter.dll" >> %lstfile%
 echo "..\ExcelLibrary.dll" >> %lstfile%

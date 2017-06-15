@@ -112,6 +112,18 @@ namespace GKTests.UITests
             var tester = new FormTester(formName);
             return (tester == null) ? null : (Form)tester.TheObject;
         }
+
+        public static void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            var openDlg = new OpenFileDialogTester(hWnd);
+            openDlg.ClickCancel();
+        }
+
+        public static void SaveFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
+        {
+            var saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.ClickCancel();
+        }
     }
 }
 

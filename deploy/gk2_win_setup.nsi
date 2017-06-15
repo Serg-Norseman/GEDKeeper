@@ -308,6 +308,16 @@ SectionGroup /e "$(gklang)"
 		SetOutPath "$INSTDIR\locales"
 		File "..\locales\italian.lng"
 	SectionEnd
+
+	Section "Deutsch"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\german.lng"
+	SectionEnd
+
+	Section "中文"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\chinese.lng"
+	SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"

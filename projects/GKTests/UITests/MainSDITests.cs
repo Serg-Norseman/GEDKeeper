@@ -92,6 +92,15 @@ namespace GKTests.UITests
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
+            var appHost = (WinFormsAppHost)AppHost.Instance;
+            Assert.IsNotNull(appHost.AppContext);
+
+            appHost.BaseClosed(null);
+            appHost.CloseWindow(null);
+            appHost.SaveWinMRU(null);
+
+            //
+
             // at complex tests, first form hasn't focus
             ((Form)AppHost.Instance.RunningForms[0]).Show(); // FIXME
 
@@ -721,12 +730,6 @@ namespace GKTests.UITests
             form.Dispose();
         }
 
-        private void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
-        {
-            var openDlg = new OpenFileDialogTester(hWnd);
-            openDlg.ClickCancel();
-        }
-
         public void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
@@ -805,6 +808,36 @@ namespace GKTests.UITests
 
                             ModalFormHandler = SaveFile_Cancel_Handler;
                             ClickButton("btnSave", form);
+                        }
+                        break;
+
+                    case TreeToolsWin.ToolType.ttTreeCompare:
+                        {
+                            var radBtn = new RadioButtonTester("radMatchInternal", form);
+                            radBtn.Click();
+                            ClickButton("btnMatch", form);
+
+                            radBtn = new RadioButtonTester("radAnalysis", form);
+                            radBtn.Click();
+                            ClickButton("btnMatch", form);
+
+                            radBtn = new RadioButtonTester("radMathExternal", form);
+                            radBtn.Click();
+                            ModalFormHandler = OpenFile_Cancel_Handler;
+                            ClickButton("btnFileChoose", form);
+                            //ClickButton("btnMatch", form);
+                        }
+                        break;
+
+                    case TreeToolsWin.ToolType.ttTreeCheck:
+                        {
+                            ClickButton("btnBaseRepair", form);
+                        }
+                        break;
+
+                    case TreeToolsWin.ToolType.ttPlaceManage:
+                        {
+                            ClickButton("btnIntoList", form);
                         }
                         break;
                 }
@@ -1551,6 +1584,10 @@ namespace GKTests.UITests
             Assert.AreEqual(fCurBase, ccWin.Base);
             ccWin.UpdateView();
 
+            Assert.IsFalse(ccWin.AllowFilter());
+            Assert.IsFalse(ccWin.AllowQuickSearch());
+            Assert.IsTrue(ccWin.AllowPrint());
+
             // forced update
             ccWin.Refresh();
 
@@ -1588,6 +1625,10 @@ namespace GKTests.UITests
             Assert.AreEqual(fCurBase, tcWin.Base);
             Assert.AreEqual(kind, tcWin.ChartKind);
             tcWin.UpdateView();
+
+            Assert.IsTrue(tcWin.AllowFilter());
+            Assert.IsTrue(tcWin.AllowQuickSearch());
+            Assert.IsTrue(tcWin.AllowPrint());
 
             // forced update
             tcWin.Refresh();
@@ -1742,12 +1783,6 @@ namespace GKTests.UITests
 
             KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();
-        }
-
-        private void SaveFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
-        {
-            var saveDlg = new SaveFileDialogTester(hWnd);
-            saveDlg.ClickCancel();
         }
 
         private void MapsViewerWin_Tests(Form frm, string stage)

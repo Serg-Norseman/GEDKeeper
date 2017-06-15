@@ -4,6 +4,7 @@ namespace GKChroniclePlugin
 {
 	partial class ChronicleWidget
 	{
+		private GKUI.Components.GKListView lvEvents;
 
 		private void InitializeComponent()
 		{
@@ -43,6 +44,5 @@ namespace GKChroniclePlugin
 		    this.Load += new System.EventHandler(this.CalcWidget_Load);
 		    this.ResumeLayout(false);
 		}
-		private GKUI.Components.GKListView lvEvents;
 	}
 }

@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define SDI_TEST
-
 using System;
 using System.Reflection;
 using System.Resources;
@@ -86,11 +84,7 @@ namespace GKUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            #if SDI_TEST
             WinFormsAppHost.ConfigureBootstrap(false);
-            #else
-            WinFormsAppHost.ConfigureBootstrap(true);
-            #endif
 
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
@@ -99,12 +93,7 @@ namespace GKUI
                     try
                     {
                         var appHost = (WinFormsAppHost)AppHost.Instance;
-
-                        #if SDI_TEST
                         appHost.Init(args, false);
-                        #else
-                        appHost.Init(args, true);
-                        #endif
 
                         Application.Run(appHost.AppContext);
                     } finally {

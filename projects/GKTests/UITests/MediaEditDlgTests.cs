@@ -23,6 +23,7 @@
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
+using GKUI;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -42,6 +43,8 @@ namespace GKTests.UITests
         public override void Setup()
         {
             base.Setup();
+
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
@@ -73,6 +76,9 @@ namespace GKTests.UITests
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);
+
+            //ModalFormHandler = OpenFile_Cancel_Handler;
+            //ClickButton("btnFileSelect", fDialog);
 
             ClickButton("btnAccept", fDialog);
 

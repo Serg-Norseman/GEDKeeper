@@ -49,6 +49,7 @@ namespace GKTests.UITests
         [Test]
         public void Test_Common()
         {
+            fDialog.Close();
         }
     }
 }

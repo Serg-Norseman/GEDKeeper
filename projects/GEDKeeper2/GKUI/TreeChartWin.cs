@@ -72,8 +72,8 @@ namespace GKUI
             tbDocPreview.Image = GKResources.iPreview;
             tbDocPrint.Image = GKResources.iPrint;
 
-            tbDocPrint.Visible = !AppHost.Instance.IsMDI;
-            tbDocPreview.Visible = !AppHost.Instance.IsMDI;
+            tbDocPrint.Visible = true;
+            tbDocPreview.Visible = true;
 
             tbModes.Image = GKResources.iTools;
             tbFilter.Image = GKResources.iFilter;

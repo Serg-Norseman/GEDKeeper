@@ -23,6 +23,7 @@
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
+using GKUI;
 using GKUI.Dialogs;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -42,6 +43,8 @@ namespace GKTests.UITests
         public override void Setup()
         {
             base.Setup();
+
+            WinFormsAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
@@ -69,9 +72,20 @@ namespace GKTests.UITests
             Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
 
+            ClickToolStripButton("btnBold", fDialog);
+            ClickToolStripButton("btnItalic", fDialog);
+            ClickToolStripButton("btnUnderline", fDialog);
+            ClickToolStripButton("btnURL", fDialog);
+
+            ClickToolStripMenuItem("miSelectAndCopy", fDialog);
+            ClickToolStripMenuItem("miClear", fDialog);
+
             var txtNote = new TextBoxTester("txtNote");
             txtNote.Enter("sample text");
             Assert.AreEqual("sample text", txtNote.Text);
+
+            //ClickToolStripMenuItem("miExport", fDialog);
+            //ClickToolStripMenuItem("miImport", fDialog);
 
             ClickButton("btnAccept", fDialog);
 
