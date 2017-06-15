@@ -363,7 +363,7 @@ namespace GKCore.Options
             fLoadRecentFiles = true;
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
-            fUseExtendedNotes = true;
+            fUseExtendedNotes = false;
 
             fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();

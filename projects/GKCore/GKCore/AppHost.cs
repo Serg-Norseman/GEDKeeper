@@ -55,10 +55,8 @@ namespace GKCore
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
-        protected bool fIsMDI;
         protected IList<IWindow> fRunningForms;
         private int fLoadingCount;
-        protected IMainWindow fMainWindow;
         private readonly StringList fTips;
         private readonly Timer fAutosaveTimer;
 
@@ -73,17 +71,6 @@ namespace GKCore
         public IList<WidgetInfo> ActiveWidgets
         {
             get { return fActiveWidgets; }
-        }
-
-        public bool IsMDI
-        {
-            get { return fIsMDI; }
-        }
-
-        public IMainWindow MainWindow
-        {
-            get { return fMainWindow; }
-            //set { fMainWindow = value; }
         }
 
         public IList<IWindow> RunningForms
@@ -124,14 +111,7 @@ namespace GKCore
         {
             LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
-
-            fIsMDI = isMDI;
-
-            if (fIsMDI) {
-                fMainWindow = fIocContainer.Resolve<IMainWindow>();
-            } else {
-                StartupWork();
-            }
+            StartupWork();
 
             //LangMan.SaveDefaultLanguage();
         }
@@ -148,7 +128,7 @@ namespace GKCore
 
                     int result = LoadArgs();
                     result += ReloadRecentBases();
-                    if (!fIsMDI && result == 0) {
+                    if (result == 0) {
                         CreateBase("");
                     }
 
@@ -340,6 +320,9 @@ namespace GKCore
         {
             bool forceDeactivate = (baseWin == null);
             AppHost.Instance.UpdateControls(forceDeactivate);
+
+            // In an SDI application, passing a null value produces an incorrect result
+            if (baseWin == null) return;
 
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.BaseChanged(baseWin);
@@ -555,26 +538,21 @@ namespace GKCore
             }
         }
 
+        // FIXME: rework this
         public void UpdateControls(bool forceDeactivate)
         {
-            if (fIsMDI && fMainWindow != null) {
-                fMainWindow.UpdateControls(forceDeactivate);
-            } else {
-                int num = fRunningForms.Count;
-                for (int i = 0; i < num; i++) {
-                    IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
-                    if (baseWin != null) {
-                        baseWin.UpdateControls(forceDeactivate);
-                    }
+            int num = fRunningForms.Count;
+            for (int i = 0; i < num; i++) {
+                IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
+                if (baseWin != null) {
+                    baseWin.UpdateControls(forceDeactivate);
                 }
             }
         }
 
         public void Restore()
         {
-            if (fIsMDI && fMainWindow != null) {
-                fMainWindow.Restore();
-            }
+            // FIXME!
         }
 
         private static ushort RequestLanguage()
@@ -696,6 +674,7 @@ namespace GKCore
 
         #region ISingleInstanceEnforcer implementation
 
+        // FIXME!
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {

@@ -53,7 +53,7 @@ namespace GKUI
             tbPrev.Image = GKResources.iLeft1;
             tbNext.Image = GKResources.iRight1;
 
-            ToolBar1.Visible = !AppHost.Instance.IsMDI;
+            ToolBar1.Visible = true;
 
             fBaseWin = baseWin;
 

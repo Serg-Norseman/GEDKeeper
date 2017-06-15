@@ -58,41 +58,26 @@ namespace GKUI
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
-
-            if (fIsMDI) {
-                fAppContext.MainForm = (Form)fMainWindow;
-            }
         }
 
+        // FIXME
         public override IWindow GetActiveWindow()
         {
-            if (fIsMDI) {
-                return (IWindow)((Form)fMainWindow).ActiveMdiChild;
-            } else {
-                Form activeForm = Form.ActiveForm;
+            Form activeForm = Form.ActiveForm;
 
-                // only for tests!
-                if (activeForm == null && fRunningForms.Count > 0) {
-                    activeForm = (Form)fRunningForms[0];
-                }
-
-                return (activeForm is IWindow) ? (IWindow)activeForm : null;
-
-                /*foreach (IWindow win in fRunningForms) {
-                    if ((win as Form).Focused) {
-                        return win;
-                    }
-                }
-                return null;*/
+            // only for tests!
+            if (activeForm == null && fRunningForms.Count > 0) {
+                activeForm = (Form)fRunningForms[0];
             }
+
+            return (activeForm is IWindow) ? (IWindow)activeForm : null;
         }
 
+        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
             IntPtr mainHandle = IntPtr.Zero;
-            if (fIsMDI && fMainWindow != null) {
-                mainHandle = ((Form)fMainWindow).Handle;
-            }
+
             return mainHandle;
         }
 
@@ -100,7 +85,7 @@ namespace GKUI
         {
             base.CloseWindow(window);
 
-            if (!fIsMDI && fRunningForms.Count == 0) {
+            if (fRunningForms.Count == 0) {
                 fAppContext.ExitThread();
             }
         }
@@ -110,11 +95,7 @@ namespace GKUI
             Form frm = window as Form;
 
             if (frm != null) {
-                if (fIsMDI) {
-                    frm.MdiParent = (Form)fMainWindow;
-                } else {
-                    frm.ShowInTaskbar = true;
-                }
+                frm.ShowInTaskbar = true;
                 frm.Show();
             }
         }
@@ -124,19 +105,13 @@ namespace GKUI
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
-                if (fIsMDI && fMainWindow != null) {
-                    #if !__MonoCS__
-                    NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                    #endif
-                } else {
-                    foreach (IWindow win in fRunningForms) {
-                        if (win is IBaseWindow) {
-                            IntPtr handle = ((Form)win).Handle;
+                foreach (IWindow win in fRunningForms) {
+                    if (win is IBaseWindow) {
+                        IntPtr handle = ((Form)win).Handle;
 
-                            #if !__MonoCS__
-                            NativeMethods.PostMessage(handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                            #endif
-                        }
+                        #if !__MonoCS__
+                        NativeMethods.PostMessage(handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                        #endif
                     }
                 }
             }
@@ -159,21 +134,8 @@ namespace GKUI
 
         protected override void UpdateLang()
         {
-            if (fIsMDI && fMainWindow != null) {
-                fMainWindow.SetLang();
-
-                var mdiForm = fMainWindow as Form;
-                foreach (Form child in mdiForm.MdiChildren) {
-                    ILocalization localChild = (child as ILocalization);
-
-                    if (localChild != null) {
-                        localChild.SetLang();
-                    }
-                }
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    win.SetLang();
-                }
+            foreach (IWindow win in fRunningForms) {
+                win.SetLang();
             }
         }
 
@@ -181,18 +143,9 @@ namespace GKUI
         {
             base.ApplyOptions();
 
-            if (fIsMDI && fMainWindow != null) {
-                var mdiForm = fMainWindow as Form;
-                foreach (Form child in mdiForm.MdiChildren) {
-                    if (child is IWorkWindow) {
-                        (child as IWorkWindow).UpdateView();
-                    }
-                }
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IWorkWindow) {
-                        (win as IWorkWindow).UpdateView();
-                    }
+            foreach (IWindow win in fRunningForms) {
+                if (win is IWorkWindow) {
+                    (win as IWorkWindow).UpdateView();
                 }
             }
         }
@@ -206,35 +159,35 @@ namespace GKUI
 
         protected override void UpdateMRU()
         {
-            if (fIsMDI && fMainWindow != null) {
-                //((MainWin)fMainWindow).UpdateMRU();
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        (win as BaseWinSDI).UpdateMRU();
-                    }
+            foreach (IWindow win in fRunningForms) {
+                if (win is IBaseWindow) {
+                    (win as BaseWinSDI).UpdateMRU();
                 }
             }
         }
 
         public override void SaveWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                mf.WinRect = UIHelper.GetFormRect(frm);
-                mf.WinState = (WindowState)frm.WindowState;
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    mf.WinRect = UIHelper.GetFormRect(frm);
+                    mf.WinState = (WindowState)frm.WindowState;
+                }
             }
         }
 
         public override void RestoreWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
+                }
             }
         }
 
@@ -242,19 +195,10 @@ namespace GKUI
         {
             AppHost.Options.ClearLastBases();
 
-            if (fIsMDI && fMainWindow != null) {
-                var mdiForm = fMainWindow as Form;
-                for (int i = mdiForm.MdiChildren.Length - 1; i >= 0; i--) {
-                    var baseWin = mdiForm.MdiChildren[i] as IBaseWindow;
-                    if (baseWin != null) {
-                        AppHost.Options.AddLastBase(baseWin.Context.FileName);
-                    }
-                }
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        AppHost.Options.AddLastBase((win as IBaseWindow).Context.FileName);
-                    }
+            foreach (IWindow win in fRunningForms) {
+                var baseWin = win as IBaseWindow;
+                if (baseWin != null) {
+                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
                 }
             }
         }
@@ -301,6 +245,9 @@ namespace GKUI
         /// </summary>
         public static void ConfigureBootstrap(bool mdi)
         {
+            if (mdi)
+                throw new ArgumentException("MDI obsolete");
+
             var appHost = new WinFormsAppHost();
             IContainer container = AppHost.Container;
 
@@ -311,12 +258,10 @@ namespace GKUI
 
             container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProvider, WinFormsGfxProvider>(LifeCycle.Singleton);
-            //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 
             // controls and other
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
-            //container.Register<IWizardPages, WizardPages>(LifeCycle.Transient);
 
             // dialogs
             container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
@@ -345,13 +290,7 @@ namespace GKUI
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
-
-            if (!mdi) {
-                container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
-            } else {
-                //container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
-                //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
-            }
+            container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
         }
 
         #endregion

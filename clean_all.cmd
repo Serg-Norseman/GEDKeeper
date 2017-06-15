@@ -7,3 +7,9 @@ del .\*.pdb
 del .\*.mdb
 del .\*.xml
 del .\plugins\*.* /q
+
+del .\GEDKeeper3.Gtk2.exe.*
+del .\GEDKeeper3.Gtk3.exe.*
+del .\GEDKeeper3.Mac.exe.*
+del .\GEDKeeper3.WinForms.exe.*
+del .\GEDKeeper3.Wpf.exe.*

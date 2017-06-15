@@ -67,38 +67,41 @@ namespace GKTimeLinePlugin
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (fBase != baseWin && fBase != null)
+            if (fBase != baseWin)
             {
-                IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-
-                listMan.ExternalFilter = null;
-                ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
-
-                fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
-            }
-
-            fBase = baseWin;
-
-            fYearMin = 10000;
-            fYearMax = 0;
-            fYearCurrent = -1;
-
-            if (fBase != null)
-            {
-                IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-
-                if (listMan != null)
+                // restore filter's default state
+                if (fBase != null)
                 {
-                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
-                    listMan.ExternalFilter = FilterHandler;
+                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
-                    CollectData();
+                    listMan.ExternalFilter = null;
+                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
 
                     fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
                 }
-            }
 
-            UpdateControls();
+                fBase = baseWin;
+                fYearMin = 10000;
+                fYearMax = 0;
+                fYearCurrent = -1;
+
+                if (fBase != null)
+                {
+                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+
+                    if (listMan != null)
+                    {
+                        ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
+                        listMan.ExternalFilter = FilterHandler;
+
+                        CollectData();
+
+                        fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                    }
+                }
+
+                UpdateControls();
+            }
         }
 
         private void CollectData()

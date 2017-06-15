@@ -89,19 +89,18 @@ namespace GKChroniclePlugin
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (fBase != baseWin && fBase != null)
+            if (fBase != baseWin)
             {
+                fBase = baseWin;
+                fEvents.Clear();
+
+                if (fBase != null)
+                {
+                    CollectData();
+                }
+
+                UpdateControls();
             }
-
-            fBase = baseWin;
-            fEvents.Clear();
-
-            if (fBase != null)
-            {
-                CollectData();
-            }
-
-            UpdateControls();
         }
 
         private void CollectData()
