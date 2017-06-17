@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Threading;
 using Eto.Forms;
 
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -39,6 +40,7 @@ namespace GKUI.Dialogs
         public ProgressDlg()
         {
             InitializeComponent();
+
             Title = LangMan.LS(LSID.LSID_Progress);
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
@@ -76,46 +78,55 @@ namespace GKUI.Dialogs
             //initEvent.WaitOne();
 
             try {
+                //Application.Instance.Invoke(delegate { DoInit(title, max); });
                 /*if (InvokeRequired) {
                     Invoke(new PInit(DoInit), new object[] { title, max });
-                } else*/ {
+                } else {
                     DoInit(title, max);
-                }
-            } catch { }
+                }*/
+            } catch (Exception ex) {
+                Logger.LogWrite("ProgressDlg.ProgressInit(): " + ex.Message);
+            }
         }
 
         internal void ProgressDone()
         {
             try {
                 if (requiresClose) {
+                    Application.Instance.Invoke(delegate { DoDone(); });
+                    //DoDone();
                     /*if (InvokeRequired) {
                         Invoke(new PDone(DoDone));
-                    } else*/ {
+                    } else {
                         DoDone();
-                    }
+                    }*/
                 }
-            } catch { }
+            } catch (Exception ex) {
+                Logger.LogWrite("ProgressDlg.ProgressDone(): " + ex.Message);
+            }
         }
 
         internal void ProgressStep()
         {
             try {
+                //Application.Instance.AsyncInvoke(delegate { DoStep(fVal + 1); });
                 /*if (InvokeRequired) {
                     Invoke(new PStep(DoStep), new object[] { fVal + 1 });
-                } else*/ {
+                } else {
                     DoStep(fVal + 1);
-                }
+                }*/
             } catch { }
         }
 
         internal void ProgressStep(int value)
         {
             try {
+                //Application.Instance.AsyncInvoke(delegate { DoStep(value); });
                 /*if (InvokeRequired) {
                     Invoke(new PStep(DoStep), new object[] { value });
-                } else*/ {
+                } else {
                     DoStep(value);
-                }
+                }*/
             } catch { }
         }
 
@@ -250,8 +261,8 @@ namespace GKUI.Dialogs
                 UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
             }*/
 
-            fProgressForm.ShowModal(null);
-            fProgressForm.Close();
+            fProgressForm.ShowModalAsync(null);
+            //fProgressForm.Close();
         }
 
         private void ProgressForm_Load(object sender, EventArgs e)

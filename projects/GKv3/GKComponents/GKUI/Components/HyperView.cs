@@ -25,6 +25,7 @@ using Eto.Forms;
 
 using GKCommon;
 using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -123,7 +124,6 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
-                Graphics gfx = CreateGraphics();
                 try
                 {
                     int xPos = 0;
@@ -160,7 +160,7 @@ namespace GKUI.Components
 
                         if (!string.IsNullOrEmpty(chunk.Text)) {
                             using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
-                                SizeF strSize = gfx.MeasureString(font, chunk.Text);
+                                SizeF strSize = font.MeasureString(chunk.Text);
                                 chunk.Width = (int)strSize.Width;
 
                                 xPos += chunk.Width;
@@ -176,7 +176,6 @@ namespace GKUI.Components
                 }
                 finally
                 {
-                    gfx.Dispose();
                     fAcceptFontChange = true;
                     AdjustViewPort(fTextSize);
                 }
@@ -225,7 +224,9 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            var chunkColor = ((ColorHandler)chunk.Color).Handle;
+                            // FIXME: null?!
+                            IColor clr = chunk.Color;
+                            var chunkColor = (clr == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
                             using (var brush = new SolidBrush(chunkColor)) {
                                 using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
                                     gfx.DrawText(font, brush, xOffset, yOffset, ct);

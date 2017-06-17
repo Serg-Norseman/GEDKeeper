@@ -57,46 +57,31 @@ namespace GKUI.Components
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
-
-            if (fIsMDI) {
-                //fAppContext.MainForm = (Form)fMainWindow;
-            }
         }
 
         public override IWindow GetActiveWindow()
         {
-            if (fIsMDI) {
-                //return (IWindow)((Form)fMainWindow).ActiveMdiChild;
-                return null;
-            } else {
-                //Application.Instance.
-                //Window.
-                Form activeForm = null;//Form.ActiveForm;
+            Form activeForm = null;//Form.ActiveForm;
 
-                // only for tests!
-                if (activeForm == null && fRunningForms.Count > 0) {
-                    activeForm = (Form)fRunningForms[0];
-                }
+            // only for tests!
+            if (activeForm == null && fRunningForms.Count > 0) {
+                activeForm = (Form)fRunningForms[0];
+            }
 
-                return (activeForm is IWindow) ? (IWindow)activeForm : null;
+            return (activeForm is IWindow) ? (IWindow)activeForm : null;
 
-                /*foreach (IWindow win in fRunningForms) {
+            /*foreach (IWindow win in fRunningForms) {
                     if ((win as Form).Focused) {
                         return win;
                     }
                 }
                 return null;*/
-            }
         }
 
         public override IntPtr GetTopWindowHandle()
         {
             IntPtr mainHandle = IntPtr.Zero;
-            if (fIsMDI && fMainWindow != null) {
-                //mainHandle = ((Form)fMainWindow).Handle;
-            } else {
-                // FIXME
-            }
+            // FIXME
             return mainHandle;
         }
 
@@ -104,8 +89,7 @@ namespace GKUI.Components
         {
             base.CloseWindow(window);
 
-            if (!fIsMDI && fRunningForms.Count == 0) {
-                //fAppContext.ExitThread();
+            if (fRunningForms.Count == 0) {
                 Application.Instance.Quit();
             }
         }
@@ -115,11 +99,7 @@ namespace GKUI.Components
             Form frm = window as Form;
 
             if (frm != null) {
-                if (fIsMDI) {
-                    //frm.MdiParent = (Form)fMainWindow;
-                } else {
-                    frm.ShowInTaskbar = true;
-                }
+                frm.ShowInTaskbar = true;
                 frm.Show();
             }
         }
@@ -152,21 +132,8 @@ namespace GKUI.Components
 
         protected override void UpdateLang()
         {
-            if (fIsMDI && fMainWindow != null) {
-                /*fMainWindow.SetLang();
-
-                var mdiForm = fMainWindow as Form;
-                foreach (Form child in mdiForm.MdiChildren) {
-                    ILocalization localChild = (child as ILocalization);
-
-                    if (localChild != null) {
-                        localChild.SetLang();
-                    }
-                }*/
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    win.SetLang();
-                }
+            foreach (IWindow win in fRunningForms) {
+                win.SetLang();
             }
         }
 
@@ -174,18 +141,9 @@ namespace GKUI.Components
         {
             base.ApplyOptions();
 
-            if (fIsMDI && fMainWindow != null) {
-                /*var mdiForm = fMainWindow as Form;
-                foreach (Form child in mdiForm.MdiChildren) {
-                    if (child is IWorkWindow) {
-                        (child as IWorkWindow).UpdateView();
-                    }
-                }*/
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IWorkWindow) {
-                        (win as IWorkWindow).UpdateView();
-                    }
+            foreach (IWindow win in fRunningForms) {
+                if (win is IWorkWindow) {
+                    (win as IWorkWindow).UpdateView();
                 }
             }
         }
@@ -199,13 +157,9 @@ namespace GKUI.Components
 
         protected override void UpdateMRU()
         {
-            if (fIsMDI && fMainWindow != null) {
-                //((MainWin)fMainWindow).UpdateMRU();
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        (win as BaseWinSDI).UpdateMRU();
-                    }
+            foreach (IWindow win in fRunningForms) {
+                if (win is IBaseWindow) {
+                    (win as BaseWinSDI).UpdateMRU();
                 }
             }
         }
@@ -247,19 +201,10 @@ namespace GKUI.Components
         {
             AppHost.Options.ClearLastBases();
 
-            if (fIsMDI && fMainWindow != null) {
-                /*var mdiForm = fMainWindow as Form;
-                for (int i = mdiForm.MdiChildren.Length - 1; i >= 0; i--) {
-                    var baseWin = mdiForm.MdiChildren[i] as IBaseWindow;
-                    if (baseWin != null) {
-                        AppHost.Options.AddLastBase(baseWin.Context.FileName);
-                    }
-                }*/
-            } else {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        AppHost.Options.AddLastBase((win as IBaseWindow).Context.FileName);
-                    }
+            foreach (IWindow win in fRunningForms) {
+                var baseWin = win as IBaseWindow;
+                if (baseWin != null) {
+                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
                 }
             }
         }
@@ -268,7 +213,7 @@ namespace GKUI.Components
 
         public override int GetKeyLayout()
         {
-            return CultureInfo.DefaultThreadCurrentUICulture.KeyboardLayoutId;
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
 
             /*#if __MonoCS__
             // There is a bug in Mono: does not work this CurrentInputLanguage

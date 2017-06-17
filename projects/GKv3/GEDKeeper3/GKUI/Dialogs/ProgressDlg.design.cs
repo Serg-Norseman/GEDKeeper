@@ -25,43 +25,39 @@ namespace GKUI.Dialogs
             //ProgressBar1.Style = ProgressBarStyle.Continuous;
 
             lblTitle = new Label();
-            lblTitle.Size = new Size(47, 17);
+            //lblTitle.Size = new Size(47, 17);
             lblTitle.Text = "lblTitle";
 
             lblTimePassed = new Label();
-            lblTimePassed.Size = new Size(117, 17);
+            //lblTimePassed.Size = new Size(117, 17);
             lblTimePassed.Text = "lblTimePassed";
 
             lblTimeRemain = new Label();
-            lblTimeRemain.Size = new Size(127, 17);
+            //lblTimeRemain.Size = new Size(127, 17);
             lblTimeRemain.Text = "lblTimeRemain";
 
             lblPassedVal = new Label();
-            lblPassedVal.Size = new Size(281, 20);
+            //lblPassedVal.Size = new Size(281, 20);
             lblPassedVal.Text = "lblPassedVal";
+            lblPassedVal.TextAlignment = TextAlignment.Right;
 
             lblRemainVal = new Label();
-            lblRemainVal.Size = new Size(281, 20);
+            //lblRemainVal.Size = new Size(281, 20);
             lblRemainVal.Text = "lblRemainVal";
+            lblRemainVal.TextAlignment = TextAlignment.Right;
 
             lblTimeTotal = new Label();
-            lblTimeTotal.Size = new Size(102, 17);
+            //lblTimeTotal.Size = new Size(102, 17);
             lblTimeTotal.Text = "lblTimeTotal";
+            lblTimeTotal.TextAlignment = TextAlignment.Right;
 
             lblTotalVal = new Label();
-            lblTotalVal.Size = new Size(281, 20);
+            //lblTotalVal.Size = new Size(281, 20);
             lblTotalVal.Text = "lblTotalVal";
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
+            var timesPanel = new TableLayout {
                 Spacing = new Size(10, 10),
                 Rows = {
-                    new TableRow {
-                        Cells = { lblTitle }
-                    },
-                    new TableRow {
-                        Cells = { ProgressBar1 }
-                    },
                     new TableRow {
                         Cells = { lblTimePassed, lblPassedVal }
                     },
@@ -70,6 +66,21 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { lblTimeTotal, lblTotalVal }
+                    }
+                }
+            };
+
+            Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { lblTitle }
+                    },
+                    new TableRow {
+                        Cells = { ProgressBar1 }
+                    },
+                    new TableRow {
+                        //ScaleHeight = true,
+                        Cells = { timesPanel }
                     },
                     null
                 }

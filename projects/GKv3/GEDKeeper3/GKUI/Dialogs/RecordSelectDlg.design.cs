@@ -19,28 +19,29 @@ namespace GKUI.Dialogs
 
             btnSelect = new Button();
             btnSelect.ImagePosition = ButtonImagePosition.Left;
-            btnSelect.Size = new Size(112, 32);
+            btnSelect.Size = new Size(130, 26);
             btnSelect.Text = "btnSelect";
             btnSelect.Click += btnSelect_Click;
+            btnSelect.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             btnCreate = new Button();
-            btnCreate.Size = new Size(112, 32);
+            btnCreate.Size = new Size(130, 26);
             btnCreate.Text = "btnCreate";
             btnCreate.Click += btnCreate_Click;
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(112, 32);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             txtFastFilter = new TextBox();
             txtFastFilter.TextChanged += txtFastFilter_TextChanged;
 
             panList = new Panel();
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { txtFastFilter }
@@ -49,15 +50,18 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { panList }
                     },
-                    new TableRow {
-                        Cells = { null, btnCreate, btnSelect, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnCreate, btnSelect, btnCancel)
                 }
             };
 
             AbortButton = btnCancel;
-            ClientSize = new Size(540, 511);
             Title = "RecordSelectDlg";
+
+            if (Platform.IsWinForms) {
+                ClientSize = new Size(540, 510);
+            } else {
+                panList.Height = 300;
+            }
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

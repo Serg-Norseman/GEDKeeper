@@ -98,9 +98,6 @@ namespace GKUI.Dialogs
         {
             InitializeComponent();
 
-            btnSelect.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             // SetLang()
             Title = LangMan.LS(LSID.LSID_WinRecordSelect);
             btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);

@@ -71,8 +71,8 @@ namespace GKUI
             tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
             tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
 
-            tbDocPrint.Enabled = !AppHost.Instance.IsMDI;
-            tbDocPreview.Enabled = !AppHost.Instance.IsMDI;
+            tbDocPrint.Enabled = true;
+            tbDocPreview.Enabled = true;
 
             tbModes.Image = Bitmap.FromResource("Resources.btn_tools.gif");
             tbFilter.Image = Bitmap.FromResource("Resources.btn_filter.gif");

@@ -9,7 +9,6 @@ namespace GKUI
     {
         private GroupBox grpSummary;
         private Panel Panel1;
-        private Panel Panel2;
         private ToolBar ToolBar1;
         private ButtonToolItem cbType; // FIXME: GKv3 DevRestriction
         private GKListViewStub lvSummary;
@@ -22,11 +21,12 @@ namespace GKUI
 
             lvSummary = new GKListViewStub();
             //lvSummary.FullRowSelect = true;
-            lvSummary.Size = new Size(887, 244);
+            //lvSummary.Size = new Size(887, 244);
+            lvSummary.Height = 240;
             //lvSummary.View = View.Details;
 
             grpSummary = new GroupBox();
-            grpSummary.Size = new Size(893, 267);
+            //grpSummary.Size = new Size(893, 267);
             grpSummary.Text = "grpSummary";
             grpSummary.Content = lvSummary;
 
@@ -37,6 +37,7 @@ namespace GKUI
 
             tbExcelExport = new ButtonToolItem();
             tbExcelExport.Click += tbExcelExport_Click;
+            tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
 
             cmStatTypes = new ContextMenu();
 
@@ -50,9 +51,7 @@ namespace GKUI
             Panel1 = new Panel();
             Panel1.Size = new Size(893, 307);
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { grpSummary }
@@ -69,8 +68,6 @@ namespace GKUI
             Title = "StatisticsWin";
             Load += StatisticsWin_Load;
             KeyDown += StatisticsWin_KeyDown;
-            grpSummary.ResumeLayout();
-            Panel1.ResumeLayout();
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

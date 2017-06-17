@@ -20,9 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -51,21 +49,20 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
-
             fGraph = new ZGraphControl();
-            fGraph.Size = new Size(400, 200);
+            //fGraph.Size = new Size(400, 200);
 
-            Splitter spl = new Splitter();
-            spl.Panel1 = fListStats;
-            spl.Panel1 = fGraph;
-            Panel1.Content = spl;
-
-            fListStats = UIHelper.CreateListView(Panel1);
+            fListStats = UIHelper.CreateListView(null);
             fListStats.AddColumn("-", 250, false);
             fListStats.AddColumn("-", 150, false);
 
-
+            Splitter spl = new Splitter();
+            spl.Panel1 = fListStats;
+            spl.Panel2 = fGraph;
+            spl.RelativePosition = 300;
+            spl.Orientation = Orientation.Horizontal;
+            spl.FixedPanel = SplitterFixedPanel.Panel2;
+            Panel1.Content = spl;
 
             fBase = baseWin;
             fSelectedRecords = selectedRecords;

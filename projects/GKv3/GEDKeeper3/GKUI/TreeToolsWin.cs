@@ -600,21 +600,21 @@ namespace GKUI
         private void btnDelete_Click(object sender, EventArgs e)
         {
             int num = fSplitList.Count;
-            for (int i = 0; i < num; i++)
-            {
+            if (num == 0) return;
+
+            for (int i = 0; i < num; i++) {
                 object obj = fSplitList[i];
 
-                if (obj is GEDCOMIndividualRecord)
-                {
+                if (obj is GEDCOMIndividualRecord) {
                     BaseController.DeleteRecord(Base, obj as GEDCOMIndividualRecord, false);
                 }
             }
 
-            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
             fSplitList.Clear();
             UpdateSplitLists();
-
             Base.RefreshLists(false);
+
+            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
         }
 
         private void btnSave_Click(object sender, EventArgs e)

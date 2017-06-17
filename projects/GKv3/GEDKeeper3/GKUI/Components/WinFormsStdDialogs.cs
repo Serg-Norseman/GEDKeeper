@@ -74,13 +74,10 @@ namespace GKUI.Components
 
             if (!string.IsNullOrEmpty(filter))
             {
-                ofd.Filters.Add(new FileDialogFilter(filter, ""));
+                UIHelper.ConvertFileDialogFilters(ofd, filter);
 
                 //if (filterIndex > 0) ofd.FilterIndex = filterIndex;
             }
-
-            /*if (!string.IsNullOrEmpty(defaultExt))
-                ofd.DefaultExt = defaultExt;*/
 
             ofd.MultiSelect = multiSelect;
 
@@ -119,13 +116,10 @@ namespace GKUI.Components
 
             if (!string.IsNullOrEmpty(filter))
             {
-                sfd.Filters.Add(new FileDialogFilter(filter, ""));
+                UIHelper.ConvertFileDialogFilters(sfd, filter);
 
                 //if (filterIndex > 0) sfd.FilterIndex = filterIndex;
             }
-
-            /*if (!string.IsNullOrEmpty(defaultExt))
-                sfd.DefaultExt = defaultExt;*/
 
             if (!string.IsNullOrEmpty(suggestedFileName))
                 sfd.FileName = suggestedFileName;

@@ -23,8 +23,10 @@ namespace GKUI.Dialogs
 
             btnClose = new Button();
             btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(91, 24);
+            btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
+            btnClose.Click += CancelClickHandler;
+            btnClose.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             Lab1 = new Label();
             Lab1.Text = "XXX1";
@@ -34,17 +36,19 @@ namespace GKUI.Dialogs
 
             Edit1 = new TextBox();
             Edit1.ReadOnly = true;
+            Edit1.Width = 300;
 
             Edit2 = new TextBox();
             Edit2.ReadOnly = true;
+            Edit2.Width = 300;
 
             btnRec1Select = new Button();
-            btnRec1Select.Size = new Size(77, 22);
+            btnRec1Select.Size = new Size(80, 26);
             btnRec1Select.Text = "btnRec1Select";
             btnRec1Select.Click += btnRec1Select_Click;
 
             btnRec2Select = new Button();
-            btnRec2Select.Size = new Size(77, 21);
+            btnRec2Select.Size = new Size(80, 26);
             btnRec2Select.Text = "btnRec2Select";
             btnRec2Select.Click += btnRec2Select_Click;
 
@@ -53,22 +57,26 @@ namespace GKUI.Dialogs
 
             txtResult = new TextArea();
             txtResult.ReadOnly = true;
+            txtResult.Height = 140;
+
+            var dataPanel = new TableLayout {
+                Spacing = new Size(10, 10),
+                Rows = {
+                    new TableRow {
+                        Cells = { Lab1, TableLayout.Horizontal(10, new TableCell(Edit1, true), btnRec1Select) }
+                    },
+                    new TableRow {
+                        Cells = { Lab2, TableLayout.Horizontal(10, new TableCell(Edit2, true), btnRec2Select) }
+                    }
+                }
+            };
 
             Content = new TableLayout {
                 Padding = new Padding(10),
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
-                        Cells = { Lab1 }
-                    },
-                    new TableRow {
-                        Cells = { Edit1, btnRec1Select }
-                    },
-                    new TableRow {
-                        Cells = { Lab2 }
-                    },
-                    new TableRow {
-                        Cells = { Edit2, btnRec2Select }
+                        Cells = { dataPanel }
                     },
                     new TableRow {
                         Cells = { lblKinship }
@@ -77,14 +85,12 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { txtResult }
                     },
-                    new TableRow {
-                        Cells = { null, btnClose }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnClose)
                 }
             };
 
             AbortButton = btnClose;
-            ClientSize = new Size(399, 286);
+            //ClientSize = new Size(399, 286);
             Title = "RelationshipCalculator";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

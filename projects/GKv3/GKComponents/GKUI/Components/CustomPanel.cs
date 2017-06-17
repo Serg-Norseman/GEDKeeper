@@ -19,8 +19,6 @@
  */
 
 using System;
-using System.Runtime.CompilerServices;
-using Eto;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -29,123 +27,59 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    //[Handler(typeof(CustomPanel.IHandler))]
     public class CustomPanel : Scrollable
     {
-        #region Temp for compatibility
+        private readonly Drawable fCanvas;
+        private Font fFont;
+        private Color fTextColor;
 
-        public Font Font {
-            get;
-            set;
-        }
 
-        public Color TextColor {
-            get;
-            set;
-        }
-
-        #endregion
-
-        /*public new interface ICallback : Control.ICallback, Widget.ICallback
+        public Font Font
         {
-            void OnPaint(CustomPanel widget, PaintEventArgs e);
+            get { return fFont; }
+            set { fFont = value; }
         }
 
-        protected new class Callback : Control.Callback, CustomPanel.ICallback, Control.ICallback, Widget.ICallback
+        public Color TextColor
         {
-            public void OnPaint(CustomPanel widget, PaintEventArgs e)
-            {
-                widget.Platform.Invoke(delegate {
-                                           widget.OnPaint(e);
-                                       });
-            }
+            get { return fTextColor; }
+            set { fTextColor = value; }
         }
 
-        [AutoInitialize(false)]
-        public new interface IHandler : Panel.IHandler, Container.IHandler, Control.IHandler, Widget.IHandler, IContextMenuHost
-        {
-            bool SupportsCreateGraphics {
-                get;
-            }
-
-            bool CanFocus {
-                get;
-                set;
-            }
-
-            void Create();
-
-            void Create(bool largeCanvas);
-
-            void Update(Rectangle region);
-
-            Graphics CreateGraphics();
-        }
-
-        private static readonly object callback = new CustomPanel.Callback();
-
-        [method: CompilerGenerated]
-        [CompilerGenerated]
-        public event EventHandler<PaintEventArgs> Paint;
-
-        private new CustomPanel.IHandler Handler {
-            get {
-                return (CustomPanel.IHandler)base.Handler;
-            }
-        }
-
-        public bool SupportsCreateGraphics {
-            get {
-                return Handler.SupportsCreateGraphics;
-            }
-        }
-
-        public bool CanFocus {
-            get {
-                return Handler.CanFocus;
-            }
-            set {
-                Handler.CanFocus = value;
-            }
-        }
 
         public CustomPanel()
         {
-            Handler.Create();
-            base.Initialize();
-        }*/
+            fCanvas = new Drawable();
+            fCanvas.Paint += PaintHandler;
+            fCanvas.CanFocus = true;
+            Content = fCanvas;
 
-        /*protected CustomPanel(CustomPanel.IHandler handler) : base(handler)
-        {
-        }*/
+            fFont = SystemFonts.Label();
+            fTextColor = Colors.Black;
+        }
 
-        /*public CustomPanel(bool largeCanvas)
+        private void PaintHandler(object sender, PaintEventArgs e)
         {
-            Handler.Create(largeCanvas);
-            base.Initialize();
-        }*/
+            OnPaint(e);
+        }
 
         protected virtual void OnPaint(PaintEventArgs e)
         {
-            /*if (Paint != null) {
-                Paint(this, e);
-            }*/
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            fCanvas.Size = this.ClientSize;
+            base.OnSizeChanged(e);
         }
 
         public Graphics CreateGraphics()
         {
-            //return Handler.CreateGraphics();
-            return null;
+            if (fCanvas.SupportsCreateGraphics) {
+                return fCanvas.CreateGraphics();
+            } else {
+                return null;
+            }
         }
-
-        /*public void Update(Rectangle region)
-        {
-            Handler.Update(region);
-        }
-
-        protected override object GetCallback()
-        {
-            return CustomPanel.callback;
-        }*/
     }
 }

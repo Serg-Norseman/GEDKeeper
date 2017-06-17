@@ -21,7 +21,6 @@
 //#define DEBUG_SOLVE
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -34,7 +33,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RelationshipCalculatorDlg : Dialog
+    public sealed partial class RelationshipCalculatorDlg : ModalDialog
     {
         private readonly IBaseWindow fBase;
 
@@ -46,8 +45,6 @@ namespace GKUI.Dialogs
             InitializeComponent();
 
             fBase = baseWin;
-
-            btnClose.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             // SetLang()
             Title = LangMan.LS(LSID.LSID_RelationshipCalculator);

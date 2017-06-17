@@ -30,63 +30,50 @@ namespace GKUI.Dialogs
             SuspendLayout();
 
             lblCountry = new Label();
-            //lblCountry.Size = new Size(55, 17);
             lblCountry.Text = "lblCountry";
 
             lblState = new Label();
-            //lblState.Size = new Size(103, 17);
             lblState.Text = "lblState";
 
             lblCity = new Label();
-            //lblCity.Size = new Size(47, 17);
             lblCity.Text = "lblCity";
 
             lblPostalCode = new Label();
-            //lblPostalCode.Size = new Size(101, 17);
             lblPostalCode.Text = "lblPostalCode";
 
             lblAddress = new Label();
-            //lblAddress.Size = new Size(46, 17);
             lblAddress.Text = "lblAddress";
 
             txtCountry = new TextBox();
-            //txtCountry.Size = new Size(282, 24);
+            txtCountry.Width = 280;
 
             txtState = new TextBox();
-            //txtState.Size = new Size(248, 24);
 
             txtCity = new TextBox();
-            //txtCity.Size = new Size(282, 24);
 
             txtPostalCode = new TextBox();
-            //txtPostalCode.Size = new Size(248, 24);
 
             txtAddress = new TextBox();
-            //txtAddress.Size = new Size(539, 24);
 
             pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
             pageCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblCountry, lblState }
+                        Cells = { lblCountry, txtCountry }
                     },
                     new TableRow {
-                        Cells = { txtCountry, txtState }
+                        Cells = { lblState, txtState }
                     },
                     new TableRow {
-                        Cells = { lblCity, lblPostalCode }
+                        Cells = { lblCity, txtCity }
                     },
                     new TableRow {
-                        Cells = { txtCity, txtPostalCode }
+                        Cells = { lblPostalCode, txtPostalCode }
                     },
                     new TableRow {
-                        Cells = { lblAddress }
-                    },
-                    new TableRow {
-                        Cells = { txtAddress }
-                    },
-                    null
+                        Cells = { lblAddress, txtAddress }
+                    }
                 }
             };
 
@@ -135,7 +122,7 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(572, 385);
+            //ClientSize = new Size(572, 385);
             Title = "AddressEditDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

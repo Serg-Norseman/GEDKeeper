@@ -36,14 +36,15 @@ namespace GKUI.Dialogs
             lblReference.Text = "lblReference";
 
             cmbRef = new ComboBox();
+            cmbRef.Width = 200;
 
             lblRefType = new Label();
             lblRefType.Text = "lblRefType";
 
             cmbRefType = new ComboBox();
 
-            var panel = new Panel();
-            panel.Content = new DefTableLayout {
+            var panelData = new TableLayout {
+                Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
                         Cells = { lblReference, cmbRef }
@@ -57,16 +58,16 @@ namespace GKUI.Dialogs
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { panel }
+                        Cells = { panelData }
                     },
-                    null,
+                    //null,
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(495, 179);
+            //ClientSize = new Size(495, 179);
             Title = "UserRefEditDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

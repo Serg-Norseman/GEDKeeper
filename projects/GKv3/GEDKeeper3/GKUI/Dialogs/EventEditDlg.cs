@@ -505,7 +505,7 @@ namespace GKUI.Dialogs
                 //txtAttribute.Sorted = canbeSorted;
                 txtAttribute.Text = tmp;
 
-                //txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
+                txtAttribute.ReadOnly = (!userInput);
             }
         }
 

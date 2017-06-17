@@ -124,7 +124,7 @@ namespace GKUI.Components
             /*if (AutoScroll && !imageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
             }*/
-            ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+            //ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
 
             if (!noRedraw) Invalidate();
         }

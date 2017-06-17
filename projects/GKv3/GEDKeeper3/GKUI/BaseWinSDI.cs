@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Eto.Drawing;
 using System.IO;
+using Eto.Drawing;
 using Eto.Forms;
 
 using GKCommon;
@@ -548,6 +548,7 @@ namespace GKUI
             summary.BorderWidth = 4;
             //summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
+            //summary.Font = new Font("Tahoma", 8.25f);
 
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.MouseDoubleClick += miRecordEdit_Click;

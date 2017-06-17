@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.ObjectModel;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -27,7 +26,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
@@ -204,7 +202,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListViewStub CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListViewStub CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -213,27 +211,30 @@ namespace GKUI.Components
                 throw new ArgumentNullException("baseContext");
 
             GKListViewStub recView = new GKListViewStub();
+            recView.ListMan = ListManager.Create(baseContext, recType);
+
+            parent.Content = recView;
+
             /*recView.HideSelection = false;
             recView.LabelEdit = false;
             recView.FullRowSelect = true;
             recView.View = View.Details;
-            recView.ListMan = ListManager.Create(baseContext, recType);
             recView.Dock = DockStyle.Fill;
-
             parent.Controls.Add(recView);
             parent.Controls.SetChildIndex(recView, 0);*/
 
             return recView;
         }
 
-        public static GKListViewStub CreateListView(Control parent)
+        public static GKListViewStub CreateListView(Panel parent)
         {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
+            //if (parent == null)
+            //    throw new ArgumentNullException("parent");
 
             GKListViewStub listView = new GKListViewStub();
-            //listView.Dock = DockStyle.Fill;
-            //parent.Controls.Add(listView);
+            if (parent != null) {
+                parent.Content = listView;
+            }
 
             return listView;
         }
@@ -300,7 +301,7 @@ namespace GKUI.Components
                                           float size, FontStyle style = FontStyle.None,
                                           FontDecoration decoration = FontDecoration.None)
         {
-            //SetControlFont(ctl, new Font(family, size, style, decoration));
+            SetControlFont(ctl, new Font(family, size, style, decoration));
         }
 
         public static string[] Convert(string text)
@@ -364,6 +365,23 @@ namespace GKUI.Components
                 }
             };
             return result;
+        }
+
+        public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
+        {
+            if (fileDlg == null)
+                throw new ArgumentNullException("fileDlg");
+
+            var filterParts = filter.Split('|');
+            int filtersNum = filterParts.Length / 2;
+            for (int i = 0; i < filtersNum; i++) {
+                int idx = i * 2;
+                string name = filterParts[idx];
+                string exts = filterParts[idx + 1];
+                string[] extensions = exts.Split(',');
+
+                fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
+            }
         }
     }
 }

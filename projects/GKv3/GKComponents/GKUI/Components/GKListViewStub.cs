@@ -67,10 +67,12 @@ namespace GKUI.Components
     public class GKListViewStub : GridView, IListView
     {
         private ObservableCollection<GridItem> fItems;
+        private IListManager fListMan;
 
         public IListManager ListMan
         {
-            get { return null; }
+            get { return fListMan; }
+            set { fListMan = value; }
         }
 
         public int SortColumn

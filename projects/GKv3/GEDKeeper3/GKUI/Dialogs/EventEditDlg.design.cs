@@ -42,35 +42,27 @@ namespace GKUI.Dialogs
             SuspendLayout();
 
             btnBC1 = new CheckBox();
-            //btnBC1.Size = new Size(47, 21);
             btnBC1.Text = "BC";
 
             btnBC2 = new CheckBox();
-            //btnBC2.Size = new Size(47, 21);
             btnBC2.Text = "BC";
 
             lblEvent = new Label();
-            //lblEvent.Size = new Size(56, 17);
             lblEvent.Text = "lblEvent";
 
             lblPlace = new Label();
-            //lblPlace.Size = new Size(51, 17);
             lblPlace.Text = "lblPlace";
 
             lblDate = new Label();
-            //lblDate.Size = new Size(49, 17);
             lblDate.Text = "lblDate";
 
             lblCause = new Label();
-            //lblCause.Size = new Size(57, 17);
             lblCause.Text = "lblCause";
 
             lblOrg = new Label();
-            //lblOrg.Size = new Size(43, 17);
             lblOrg.Text = "lblOrg";
 
             lblAttrValue = new Label();
-            //lblAttrValue.Size = new Size(75, 17);
             lblAttrValue.Text = "lblAttrValue";
 
             btnPlaceAdd = new Button();
@@ -87,52 +79,40 @@ namespace GKUI.Dialogs
 
             cmbEventType = new ComboBox();
             cmbEventType.ReadOnly = true;
-            //cmbEventType.Size = new Size(259, 25);
             cmbEventType.SelectedIndexChanged += EditEventType_SelectedIndexChanged;
 
             txtEventName = new TextBox();
-            //txtEventName.Size = new Size(316, 24);
 
             txtEventPlace = new TextBox();
-            //txtEventPlace.Size = new Size(492, 24);
             txtEventPlace.KeyDown += EditEventPlace_KeyDown;
 
             cmbEventDateType = new ComboBox();
             cmbEventDateType.ReadOnly = true;
-            //cmbEventDateType.Size = new Size(168, 25);
             cmbEventDateType.SelectedIndexChanged += EditEventDateType_SelectedIndexChanged;
 
             txtEventDate1 = new MaskedTextBox();
             txtEventDate1.Provider = new FixedMaskedTextProvider("00/00/0000");
             //txtEventDate1.AllowDrop = true;
-            //txtEventDate1.BackgroundColor = SystemColors.WindowBackground;
-            //txtEventDate1.Size = new Size(196, 24);
             //txtEventDate1.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate1.DragOver += new DragEventHandler(EditEventDate1_DragOver);
 
             txtEventDate2 = new MaskedTextBox();
             txtEventDate2.Provider = new FixedMaskedTextProvider("00/00/0000");
             //txtEventDate2.AllowDrop = true;
-            //txtEventDate2.Size = new Size(196, 24);
             //txtEventDate2.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate2.DragOver += new DragEventHandler(EditEventDate1_DragOver);
 
             txtEventCause = new TextBox();
-            //txtEventCause.Size = new Size(585, 24);
 
             txtEventOrg = new TextBox();
-            //txtEventOrg.Size = new Size(585, 24);
 
             txtAttribute = new ComboBox();
-            //txtAttribute.Size = new Size(585, 25);
 
             cmbDate1Calendar = new ComboBox();
             cmbDate1Calendar.ReadOnly = true;
-            //cmbDate1Calendar.Size = new Size(133, 25);
 
             cmbDate2Calendar = new ComboBox();
             cmbDate2Calendar.ReadOnly = true;
-            //cmbDate2Calendar.Size = new Size(133, 25);
 
             //
 

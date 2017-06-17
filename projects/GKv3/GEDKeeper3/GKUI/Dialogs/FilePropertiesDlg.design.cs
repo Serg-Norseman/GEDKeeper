@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
                         Cells = { lblTelephone, txtTel }
                     },
                     new TableRow {
-                        Cells = { lblLanguage, TableLayout.Horizontal(10, new TableCell(txtLanguage, true), new TableCell(btnLangEdit, false)) }
+                        Cells = { lblLanguage, TableLayout.Horizontal(10, new TableCell(txtLanguage, true), btnLangEdit) }
                     }
                 }
             };
