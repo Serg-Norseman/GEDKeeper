@@ -407,14 +407,9 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public IListItem AddItem(object itemValue, object data)
+        public IListItem AddItem(object rowData, params object[] columnValues)
         {
-            return fList.AddItem(itemValue, data);
-        }
-
-        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
-        {
-            return fList.AddItem(itemValue, data, subitemsValues);
+            return fList.AddItem(rowData, columnValues);
         }
 
         public void ClearItems()

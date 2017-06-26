@@ -141,19 +141,19 @@ namespace GKUI.Dialogs
             fPhonesList.ClearItems();
             foreach (GEDCOMTag tag in fAddress.PhoneNumbers)
             {
-                fPhonesList.AddItem(tag.StringValue, tag);
+                fPhonesList.AddItem(tag, tag.StringValue);
             }
 
             fMailsList.ClearItems();
             foreach (GEDCOMTag tag in fAddress.EmailAddresses)
             {
-                fMailsList.AddItem(tag.StringValue, tag);
+                fMailsList.AddItem(tag, tag.StringValue);
             }
 
             fWebsList.ClearItems();
             foreach (GEDCOMTag tag in fAddress.WebPages)
             {
-                fWebsList.AddItem(tag.StringValue, tag);
+                fWebsList.AddItem(tag, tag.StringValue);
             }
         }
 

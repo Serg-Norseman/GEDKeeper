@@ -56,8 +56,7 @@ namespace GKCore.Lists
                 foreach (GEDCOMAssociation ast in person.Associations) {
                     string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
 
-                    IListItem item = fSheetList.AddItem(ast.Relation, ast);
-                    item.AddSubItem(nm);
+                    fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }
             }
             catch (Exception ex)

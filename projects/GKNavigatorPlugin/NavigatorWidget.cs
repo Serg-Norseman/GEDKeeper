@@ -289,10 +289,10 @@ namespace GKNavigatorPlugin
                             break;
                     }
 
-                    GKListItem item = lvData.AddItem(act, null);
-                    item.SubItems.Add(recordInfo.XRef);
-                    item.SubItems.Add(recordInfo.Name);
-                    item.SubItems.Add(recordInfo.Time.ToString());
+                    GKListItem item = lvData.AddItem(null, new object[] { act,
+                                                         recordInfo.XRef,
+                                                         recordInfo.Name,
+                                                         recordInfo.Time.ToString() });
                 }
             }
             finally

@@ -61,6 +61,7 @@ namespace GKCore.Interfaces
         IListItem CreateListItem(object rowData, CreateListItemHandler handler);
         bool DeleteRecord(object data);
         GEDCOMRecord GetContentItem(int itemIndex);
+        object[] GetItemData(object rowData);
         List<GEDCOMRecord> GetRecordsList();
         int IndexOfRecord(object data);
         bool IsColumnAutosize(int colIndex);

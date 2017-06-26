@@ -261,6 +261,31 @@ namespace GKCore.Lists
         {
         }
 
+        public virtual object[] GetItemData(object rowData)
+        {
+            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            if (rec == null) return null;
+
+            Fetch(rec);
+
+            object[] result = new object[fColumnsMap.Count];
+            result[0] = rec.GetXRefNum();
+
+            int num = fColumnsMap.Count;
+            for (int i = 1; i < num; i++)
+            {
+                MapColumnRec colrec = fColumnsMap[i];
+
+                // aColIndex - from 1
+                ListColumn cs = fListColumns[colrec.ColType];
+                object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
+                string res = ConvertColumnValue(val, cs);
+                result[i] = res;
+            }
+
+            return result;
+        }
+
         public virtual void UpdateItem(IListItem item, object rowData)
         {
             GEDCOMRecord rec = rowData as GEDCOMRecord;
