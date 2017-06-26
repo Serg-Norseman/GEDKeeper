@@ -60,9 +60,9 @@ namespace GKCore.Lists
 
                     GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
 
-                    IListItem item = fSheetList.AddItem(idx, child);
-                    item.AddSubItem(GKUtils.GetNameString(child, true, false));
-                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetBirthDate(child)));
+                    fSheetList.AddItem(child, new object[] {
+                                           idx, GKUtils.GetNameString(child, true, false),
+                                           new GEDCOMDateItem(GKUtils.GetBirthDate(child)) });
                 }
 
                 fSheetList.EndUpdate();

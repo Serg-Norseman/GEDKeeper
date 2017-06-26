@@ -64,36 +64,22 @@ namespace GKCore.Lists
                 {
                     GEDCOMCustomEvent evt = dataOwner.Events[i];
 
-                    IListItem item = fSheetList.AddItem(i + 1, evt);
-                    item.AddSubItem(GKUtils.GetEventName(evt));
-                    item.AddSubItem(new GEDCOMDateItem(evt.Date.Value));
+                    object[] itemsData = new object[5];
+                    itemsData[0] = (i + 1);
+                    itemsData[1] = GKUtils.GetEventName(evt);
+                    itemsData[2] = new GEDCOMDateItem(evt.Date.Value);
                     if (fPersonsMode) {
                         string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {
                             st = st + " [" + evt.StringValue + "]";
                         }
-                        item.AddSubItem(st);
+                        itemsData[3] = st;
                     } else {
-                        item.AddSubItem(evt.Place.StringValue);
+                        itemsData[3] = evt.Place.StringValue;
                     }
-                    item.AddSubItem(GKUtils.GetEventCause(evt));
+                    itemsData[4] = GKUtils.GetEventCause(evt);
 
-                    /*GKListSubItem[] itemsData = new GKListSubItem[4];
-
-                    itemsData[0] = new GKListSubItem(GKUtils.GetEventName(evt));
-                    itemsData[1] = new GKListSubItem(new GEDCOMDateItem(evt.Date.Value));
-                    if (fPersonsMode) {
-                        string st = evt.Place.StringValue;
-                        if (evt.StringValue != "") {
-                            st = st + " [" + evt.StringValue + "]";
-                        }
-                        itemsData[2] = new GKListSubItem(st);
-                    } else {
-                        itemsData[2] = new GKListSubItem(evt.Place.StringValue);
-                    }
-                    itemsData[3] = new GKListSubItem(GKUtils.GetEventCause(evt));
-
-                    fSheetList.AddItem((i + 1), evt, itemsData);*/
+                    fSheetList.AddItem(evt, itemsData);
                 }
 
                 fSheetList.ResizeColumn(1);

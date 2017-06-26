@@ -57,8 +57,9 @@ namespace GKCore.Lists
                     if (mmRec.FileReferences.Count == 0) continue;
 
                     GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
-                    IListItem item = fSheetList.AddItem(fileRef.Title, mmLink);
-                    item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
+
+                    fSheetList.AddItem(mmLink, new object[] { fileRef.Title,
+                                           LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
                 }
             }
             catch (Exception ex)

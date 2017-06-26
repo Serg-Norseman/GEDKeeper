@@ -130,7 +130,7 @@ namespace GKCore.Lists
                     GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
                     if (rep == null) continue;
 
-                    fSheetList.AddItem(rep.RepositoryName, repCit);
+                    fSheetList.AddItem(repCit, new object[] { rep.RepositoryName });
                 }
 
                 fSheetList.EndUpdate();

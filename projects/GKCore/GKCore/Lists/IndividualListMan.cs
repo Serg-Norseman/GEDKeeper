@@ -650,7 +650,7 @@ namespace GKCore.Lists
                 foreach (GEDCOMPointer ptr in iRec.Groups) {
                     GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
                     if (grp != null) {
-                        fSheetList.AddItem(grp.GroupName, grp);
+                        fSheetList.AddItem(grp, new object[] { grp.GroupName });
                     }
                 }
 
@@ -724,8 +724,7 @@ namespace GKCore.Lists
 
                 foreach (GEDCOMPersonalName pn in iRec.PersonalNames)
                 {
-                    IListItem item = fSheetList.AddItem(pn.FullName, pn);
-                    item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
+                    fSheetList.AddItem(pn, new object[] { pn.FullName, LangMan.LS(GKData.NameTypes[(int)pn.NameType]) } );
                 }
 
                 fSheetList.EndUpdate();
@@ -855,9 +854,8 @@ namespace GKCore.Lists
                         relName = GKUtils.GetNameString(relPerson, true, false);
                     }
 
-                    IListItem item = fSheetList.AddItem(idx, family);
-                    item.AddSubItem(relName);
-                    item.AddSubItem(new GEDCOMDateItem(GKUtils.GetMarriageDate(family)));
+                    fSheetList.AddItem(family, new object[] { idx,
+                                           relName, new GEDCOMDateItem(GKUtils.GetMarriageDate(family)) } );
                 }
 
                 fSheetList.EndUpdate();
@@ -951,8 +949,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GEDCOMUserReference uref in iRec.UserReferences) {
-                    IListItem item = fSheetList.AddItem(uref.StringValue, uref);
-                    item.AddSubItem(uref.ReferenceType);
+                    fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
                 }
 
                 fSheetList.EndUpdate();

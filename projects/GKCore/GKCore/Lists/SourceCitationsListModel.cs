@@ -56,10 +56,9 @@ namespace GKCore.Lists
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    IListItem item = fSheetList.AddItem(sourceRec.Originator.Text.Trim(), cit);
-                    item.AddSubItem(sourceRec.FiledByEntry);
-                    item.AddSubItem(cit.Page);
-                    item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
+                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Text.Trim(),
+                                           sourceRec.FiledByEntry, cit.Page,
+                                           LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]) } );
                 }
 
                 fSheetList.ResizeColumn(1);

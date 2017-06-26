@@ -141,11 +141,11 @@ namespace GKChroniclePlugin
                     EventRecord eventRec = fEvents[i];
                     GEDCOMCustomEvent evt = eventRec.Event;
 
-                    GKListItem item = lvEvents.AddItem(new GEDCOMDateItem(evt.Date.Value), eventRec);
-                    item.AddSubItem(GKUtils.GetEventName(evt));
-                    item.AddSubItem(GKUtils.GetRecordName(eventRec.Record, false));
-                    item.AddSubItem(evt.Place.StringValue);
-                    item.AddSubItem(GKUtils.GetEventCause(evt));
+                    lvEvents.AddItem(eventRec, new object[] { new GEDCOMDateItem(evt.Date.Value),
+                                         GKUtils.GetEventName(evt),
+                                         GKUtils.GetRecordName(eventRec.Record, false),
+                                         evt.Place.StringValue,
+                                         GKUtils.GetEventCause(evt) });
                 }
 
                 lvEvents.ResizeColumn(0);

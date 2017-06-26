@@ -656,21 +656,23 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ExtListView.ResizeColumn(): " + ex.Message);
+                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
             }
         }
 
-        public GKListItem AddItem(object itemValue, object data)
+        public GKListItem AddItem(object rowData, params object[] columnValues)
         {
-            var result = new GKListItem(itemValue, data);
+            var result = new GKListItem(columnValues[0], rowData);
             Items.Add(result);
-            return result;
-        }
 
-        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
-        {
-            var result = AddItem(itemValue, data);
-            result.SubItems.AddRange(subitemsValues);
+            int num = columnValues.Length;
+            if (num > 1) {
+                for (int i = 1; i < num; i++) {
+                    object val = columnValues[i];
+                    result.SubItems.Add(new GKListSubItem(val));
+                }
+            }
+
             return result;
         }
 

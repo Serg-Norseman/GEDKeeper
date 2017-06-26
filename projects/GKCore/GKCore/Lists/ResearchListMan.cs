@@ -152,10 +152,10 @@ namespace GKCore.Lists
                     GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
                     if (task == null) continue;
 
-                    IListItem item = fSheetList.AddItem(GKUtils.GetTaskGoalStr(task), task);
-                    item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
-                    item.AddSubItem(new GEDCOMDateItem(task.StartDate));
-                    item.AddSubItem(new GEDCOMDateItem(task.StopDate));
+                    fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(task),
+                                           LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
+                                           new GEDCOMDateItem(task.StartDate),
+                                           new GEDCOMDateItem(task.StopDate) });
                 }
 
                 fSheetList.EndUpdate();
@@ -233,10 +233,10 @@ namespace GKCore.Lists
                     GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
                     if (corr == null) continue;
 
-                    IListItem item = fSheetList.AddItem(corr.CommName, corr);
-                    item.AddSubItem(GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false));
-                    item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
-                    item.AddSubItem(new GEDCOMDateItem(corr.Date));
+                    fSheetList.AddItem(corr, new object[] { corr.CommName,
+                                           GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false),
+                                           LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]),
+                                           new GEDCOMDateItem(corr.Date) });
                 }
 
                 fSheetList.EndUpdate();
@@ -311,7 +311,7 @@ namespace GKCore.Lists
                     GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
                     if (grp == null) continue;
 
-                    fSheetList.AddItem(grp.GroupName, grp);
+                    fSheetList.AddItem(grp, new object[] { grp.GroupName });
                 }
 
                 fSheetList.EndUpdate();

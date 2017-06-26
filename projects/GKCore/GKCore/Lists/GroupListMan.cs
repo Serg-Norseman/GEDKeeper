@@ -118,7 +118,7 @@ namespace GKCore.Lists
                     GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
                     if (member == null) continue;
 
-                    fSheetList.AddItem(GKUtils.GetNameString(member, true, false), member);
+                    fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
                 }
 
                 fSheetList.EndUpdate();
