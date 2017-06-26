@@ -113,7 +113,7 @@ namespace GKUI.Components
 
         private void LinesChanged(object sender)
         {
-            AutoScrollPosition = new Point(0, 0);
+            UpdateScrollPosition(0, 0);
             ArrangeText();
         }
 
@@ -193,12 +193,12 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 try
                 {
-                    Rectangle clientRect = Bounds; //ClientRectangle;
+                    Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(BackgroundColor), clientRect);
                     Font defFont = this.Font;
 
-                    int xOffset = fBorderWidth - -AutoScrollPosition.X;
-                    int yOffset = fBorderWidth - -AutoScrollPosition.Y;
+                    int xOffset = fBorderWidth;
+                    int yOffset = fBorderWidth;
                     int lineHeight = 0;
 
                     int line = -1;
@@ -210,7 +210,7 @@ namespace GKUI.Components
                         if (line != chunk.Line) {
                             line = chunk.Line;
 
-                            xOffset = fBorderWidth - -AutoScrollPosition.X;
+                            xOffset = fBorderWidth;
                             yOffset += lineHeight;
 
                             // this condition is dirty hack
@@ -309,22 +309,6 @@ namespace GKUI.Components
 
             base.OnKeyDown(e);
         }
-
-        // FIXME: GKv3 DevRestriction
-        /*protected override bool IsInputKey(Keys keyData)
-        {
-            bool result;
-
-            if ((keyData & Keys.Right) == Keys.Right || (keyData & Keys.Left) == Keys.Left ||
-                (keyData & Keys.Up) == Keys.Up || (keyData & Keys.Down) == Keys.Down ||
-                (keyData & Keys.Prior) == Keys.Prior || (keyData & Keys.Next) == Keys.Next ||
-                (keyData & Keys.End) == Keys.End || (keyData & Keys.Home) == Keys.Home)
-                result = true;
-            else
-                result = base.IsInputKey(keyData);
-
-            return result;
-        }*/
 
         protected override void OnMouseDown(MouseEventArgs e)
         {

@@ -23,11 +23,6 @@ using Eto.Forms;
 
 namespace GKUI.Dialogs
 {
-    /*public enum DlgResult
-    {
-        None, OK, Cancel
-    }*/
-    
     /// <summary>
     /// 
     /// </summary>
@@ -39,9 +34,9 @@ namespace GKUI.Dialogs
             set {
                 if (base.Result != value) {
                     base.Result = value;
-                    /*if (value != DialogResult.None) {
+                    if (value != DialogResult.None) {
                         Close();
-                    }*/
+                    }
                 }
             }
         }

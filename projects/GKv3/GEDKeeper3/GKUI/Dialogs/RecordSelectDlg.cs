@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         private string fFilter;
-        private GKListViewStub fListRecords;
+        private GKListView fListRecords;
         private GEDCOMRecordType fRecType;
         private Target fTarget;
 

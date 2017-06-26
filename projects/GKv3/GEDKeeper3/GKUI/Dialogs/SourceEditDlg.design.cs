@@ -64,6 +64,7 @@ namespace GKUI.Dialogs
                         Cells = { lblTitle, txtTitle }
                     },
                     new TableRow {
+                        ScaleHeight = true,
                         Cells = { lblPublication, txtPublication }
                     }
                 }
@@ -121,7 +122,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(752, 549);
+            //if (Platform.IsWinForms) {
+                ClientSize = new Size(752, 549);
+            //}
             Title = "SourceEditDlg";
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

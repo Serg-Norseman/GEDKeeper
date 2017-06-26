@@ -52,17 +52,17 @@ namespace GKUI
         private readonly IBaseContext fContext;
         private readonly NavigationStack fNavman;
 
-        private readonly GKListViewStub ListPersons;
-        private readonly GKListViewStub ListFamilies;
-        private readonly GKListViewStub ListNotes;
-        private readonly GKListViewStub ListMultimedia;
-        private readonly GKListViewStub ListSources;
-        private readonly GKListViewStub ListRepositories;
-        private readonly GKListViewStub ListGroups;
-        private readonly GKListViewStub ListResearches;
-        private readonly GKListViewStub ListTasks;
-        private readonly GKListViewStub ListCommunications;
-        private readonly GKListViewStub ListLocations;
+        private readonly GKListView ListPersons;
+        private readonly GKListView ListFamilies;
+        private readonly GKListView ListNotes;
+        private readonly GKListView ListMultimedia;
+        private readonly GKListView ListSources;
+        private readonly GKListView ListRepositories;
+        private readonly GKListView ListGroups;
+        private readonly GKListView ListResearches;
+        private readonly GKListView ListTasks;
+        private readonly GKListView ListCommunications;
+        private readonly GKListView ListLocations;
 
         private readonly HyperView mPersonSummary;
         private readonly HyperView mFamilySummary;
@@ -268,9 +268,9 @@ namespace GKUI
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            //GKListViewStub recView = contextMenu.SourceControl as GKListViewStub;
+            //GKListView recView = contextMenu.SourceControl as GKListViewStub;
             var recType = GetSelectedRecordType();
-            GKListViewStub recView = GetRecordsViewByType(recType);
+            GKListView recView = GetRecordsViewByType(recType);
 
             miRecordDuplicate.Enabled = (recView == ListPersons);
         }
@@ -304,9 +304,9 @@ namespace GKUI
             return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
         }
 
-        public GKListViewStub GetRecordsViewByType(GEDCOMRecordType recType)
+        public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
-            GKListViewStub list = null;
+            GKListView list = null;
 
             switch (recType) {
                 case GEDCOMRecordType.rtIndividual:
@@ -419,14 +419,14 @@ namespace GKUI
 
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
-            GKListViewStub rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListViewStub rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
         }
 
@@ -439,7 +439,7 @@ namespace GKUI
         {
             if (sender == null) return;
 
-            GEDCOMRecord rec = ((GKListViewStub) sender).GetSelectedData() as GEDCOMRecord;
+            GEDCOMRecord rec = ((GKListView) sender).GetSelectedData() as GEDCOMRecord;
             if (rec != null)
             {
                 NavAdd(rec);
@@ -449,7 +449,7 @@ namespace GKUI
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
         {
-            GKListViewStub rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
@@ -537,7 +537,7 @@ namespace GKUI
             return result;
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListViewStub recView, out HyperView summary)
+        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListView recView, out HyperView summary)
         {
             tabsRecords.SuspendLayout();
 
@@ -546,13 +546,12 @@ namespace GKUI
 
             summary = new HyperView();
             summary.BorderWidth = 4;
-            //summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
-            //summary.Font = new Font("Tahoma", 8.25f);
+            summary.Font = new Font("Tahoma", 8.25f);
 
             recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.MouseDoubleClick += miRecordEdit_Click;
-            //recView.SelectedIndexChanged += List_SelectedIndexChanged;
+            recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
 
@@ -637,7 +636,7 @@ namespace GKUI
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            GKListViewStub rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
                 PageRecords_SelectedIndexChanged(null, null);
@@ -658,7 +657,7 @@ namespace GKUI
 
                 case RecordAction.raDelete:
                     {
-                        GKListViewStub rView = GetRecordsViewByType(record.RecordType);
+                        GKListView rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
@@ -893,7 +892,7 @@ namespace GKUI
             string res = "";
 
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListViewStub rView = GetRecordsViewByType(recType);
+            GKListView rView = GetRecordsViewByType(recType);
 
             if (rView != null)
             {
@@ -1058,17 +1057,18 @@ namespace GKUI
         public void ShowRecordsTab(GEDCOMRecordType recType)
         {
             tabsRecords.SelectedIndex = (int)recType - 1;
-            PageRecords_SelectedIndexChanged(null, null);
+            //tabsRecords.Invalidate();
+            //PageRecords_SelectedIndexChanged(null, null);
         }
 
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            GKListViewStub rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+            GKListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
-                //ActiveControl = rView;
+                rView.Focus();
                 rView.SelectItemByData(record);
             }
         }
@@ -1106,7 +1106,7 @@ namespace GKUI
         {
             bool result = false;
             if (record != null) {
-                GKListViewStub rView = GetRecordsViewByType(record.RecordType);
+                GKListView rView = GetRecordsViewByType(record.RecordType);
                 result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
             }
             return result;

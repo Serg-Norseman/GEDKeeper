@@ -30,8 +30,6 @@ namespace GKUI.Components
     {
         public ScrollablePanel()
         {
-            //AutoScroll = true;
-            //ResizeRedraw = true;
         }
 
         #region Temp for compatibility
@@ -46,20 +44,20 @@ namespace GKUI.Components
 
         public int HorizontalScrollValue
         {
-            get;
-            set;
+            get { return base.ScrollPosition.X; }
+            set { base.ScrollPosition = new Point(value, base.ScrollPosition.Y); }
         }
 
         public int VerticalScrollValue
         {
-            get;
-            set;
+            get { return base.ScrollPosition.Y; }
+            set { base.ScrollPosition = new Point(base.ScrollPosition.X, value); }
         }
 
         public Point AutoScrollPosition
         {
-            get { return Point.Empty; }
-            set {  }
+            get { return new Point(-base.ScrollPosition.X, -base.ScrollPosition.Y); }
+            set { base.ScrollPosition = value; }
         }
 
         #endregion
@@ -114,17 +112,16 @@ namespace GKUI.Components
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        protected void AdjustScroll(int x, int y)
+        protected void AdjustScroll(int dx, int dy)
         {
-            UpdateScrollPosition(HorizontalScrollValue + x, VerticalScrollValue + y);
+            UpdateScrollPosition(HorizontalScrollValue + dx, VerticalScrollValue + dy);
         }
 
         protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
         {
-            /*if (AutoScroll && !imageSize.IsEmpty) {
-                AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
-            }*/
-            //ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+            if (!imageSize.IsEmpty) {
+                ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+            }
 
             if (!noRedraw) Invalidate();
         }

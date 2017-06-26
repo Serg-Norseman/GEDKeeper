@@ -37,7 +37,7 @@ namespace GKUI
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMRecord> fSelectedRecords;
         private readonly ZGraphControl fGraph;
-        private readonly GKListViewStub fListStats;
+        private readonly GKListView fListStats;
         private readonly TreeStats fTreeStats;
 
         private string fChartTitle;

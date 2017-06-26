@@ -41,7 +41,7 @@ namespace GKUI.Dialogs
         private TabControl PageControl2;
         private TabPage pageViewCommon;
         private TabPage pageViewPersons;
-        private GKListViewStub lstPersonColumns; // FIXME: GKv3 DevRestriction
+        private GKListView lstPersonColumns;
         private Button btnColumnUp;
         private Button btnColumnDown;
         private Button btnDefList;
@@ -75,7 +75,7 @@ namespace GKUI.Dialogs
         private RadioButton radCompact;
         private CheckBox chkShowDatesSigns;
         private CheckBox chkShowDatesCalendar;
-        private GKListViewStub lvPlugins;
+        private GKListView lvPlugins;
         private TabPage pagePlugins;
         private Label lblChartFont;
         private TabControl tabsCharts;
@@ -195,7 +195,7 @@ namespace GKUI.Dialogs
             chkHighlightUnmarried = new CheckBox();
             pageViewPersons = new TabPage();
             panel1 = new Panel();
-            lstPersonColumns = new GKListViewStub();
+            lstPersonColumns = new GKListView();
             btnColumnUp = new Button();
             btnColumnDown = new Button();
             btnDefList = new Button();
@@ -670,7 +670,7 @@ namespace GKUI.Dialogs
 
             //
 
-            lvPlugins = new GKListViewStub();
+            lvPlugins = new GKListView();
             lvPlugins.FullRowSelect = true;
             lvPlugins.AllowMultipleSelection = false;
 

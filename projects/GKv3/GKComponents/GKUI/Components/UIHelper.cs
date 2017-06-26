@@ -202,7 +202,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListViewStub CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -210,7 +210,9 @@ namespace GKUI.Components
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");
 
-            GKListViewStub recView = new GKListViewStub();
+            GKListView recView = new GKListView();
+            recView.AllowColumnReordering = false;
+            recView.AllowMultipleSelection = false;
             recView.ListMan = ListManager.Create(baseContext, recType);
 
             parent.Content = recView;
@@ -226,12 +228,15 @@ namespace GKUI.Components
             return recView;
         }
 
-        public static GKListViewStub CreateListView(Panel parent)
+        public static GKListView CreateListView(Panel parent)
         {
             //if (parent == null)
             //    throw new ArgumentNullException("parent");
 
-            GKListViewStub listView = new GKListViewStub();
+            GKListView listView = new GKListView();
+            listView.AllowColumnReordering = false;
+            listView.AllowMultipleSelection = false;
+
             if (parent != null) {
                 parent.Content = listView;
             }
@@ -301,7 +306,11 @@ namespace GKUI.Components
                                           float size, FontStyle style = FontStyle.None,
                                           FontDecoration decoration = FontDecoration.None)
         {
-            SetControlFont(ctl, new Font(family, size, style, decoration));
+            if (ctl != null) {
+                if (ctl.Platform.IsWinForms || ctl.Platform.IsWpf) {
+                    SetControlFont(ctl, new Font(family, size, style, decoration));
+                }
+            }
         }
 
         public static string[] Convert(string text)

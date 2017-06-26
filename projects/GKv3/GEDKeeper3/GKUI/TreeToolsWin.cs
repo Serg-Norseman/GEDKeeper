@@ -55,9 +55,9 @@ namespace GKUI
         private readonly List<TreeTools.CheckObj> fChecksList;
 
         // UI
-        private GKListViewStub ListPlaces;
-        private GKListViewStub ListChecks;
-        private GKListViewStub ListPatriarchs;
+        private GKListView ListPlaces;
+        private GKListView ListChecks;
+        private GKListView ListPatriarchs;
 
 
         public IBaseWindow Base
@@ -485,8 +485,7 @@ namespace GKUI
                 {
                     PlaceObj placeObj = (PlaceObj)fPlaces.GetObject(i);
 
-                    GKListItem item = ListPlaces.AddItem(fPlaces[i], placeObj);
-                    item.AddSubItem(placeObj.Facts.Count);
+                    ListPlaces.AddItem(placeObj, new object[] { fPlaces[i], placeObj.Facts.Count });
                 }
             }
             finally
@@ -683,10 +682,10 @@ namespace GKUI
                     PatriarchObj pObj = lst[i];
                     string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
-                    GKListItem item = ListPatriarchs.AddItem(pSign + GKUtils.GetNameString(pObj.IRec, true, false), pObj.IRec);
-                    item.AddSubItem(pObj.BirthYear);
-                    item.AddSubItem(pObj.DescendantsCount);
-                    item.AddSubItem(pObj.DescGenerations);
+                    ListPatriarchs.AddItem(pObj.IRec, new object[] { pSign + GKUtils.GetNameString(pObj.IRec, true, false),
+                                               pObj.BirthYear,
+                                               pObj.DescendantsCount,
+                                               pObj.DescGenerations });
                 }
             }
             finally

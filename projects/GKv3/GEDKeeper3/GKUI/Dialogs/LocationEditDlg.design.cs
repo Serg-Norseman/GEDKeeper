@@ -20,7 +20,7 @@ namespace GKUI.Dialogs
         private Label lblLongitude;
         private TextBox txtLongitude;
         private GroupBox grpSearch;
-        private GKListViewStub ListGeoCoords;
+        private GKListView ListGeoCoords;
         private Button btnSearch;
         private Button btnSelect;
         private Button btnSelectName;
@@ -48,7 +48,7 @@ namespace GKUI.Dialogs
 
             txtLongitude = new TextBox();
 
-            ListGeoCoords = new GKListViewStub();
+            ListGeoCoords = new GKListView();
             ListGeoCoords.FullRowSelect = true;
             ListGeoCoords.MouseDown += ListGeoCoords_Click;
             ListGeoCoords.AddColumn("Name", 200);

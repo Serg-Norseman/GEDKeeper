@@ -21,10 +21,8 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -41,12 +39,11 @@ namespace GKUI.Components
         private readonly Button fBtnLinkJump;
         private readonly Button fBtnMoveUp;
         private readonly Button fBtnMoveDown;
-        private readonly GKListViewStub fList;
+        private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
-        private bool fReadOnly;
-
         private ListModel fListModel;
+        private bool fReadOnly;
 
 
         public event ModifyEventHandler OnModify;
@@ -133,7 +130,7 @@ namespace GKUI.Components
             fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 
-            fList = new GKListViewStub();
+            fList = new GKListView();
             //fList.Size = new Size(500, 290);
             //fList.HideSelection = false;
             //fList.LabelEdit = false;
@@ -365,14 +362,9 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public GKCore.Interfaces.IListItem AddItem(object itemValue, object data)
+        public GKCore.Interfaces.IListItem AddItem(object rowData, params object[] columnValues)
         {
-            return fList.AddItem(itemValue, data);
-        }
-
-        public GKListItem AddItem(object itemValue, object data, GKListSubItem[] subitemsValues)
-        {
-            return fList.AddItem(itemValue, data, subitemsValues);
+            return fList.AddItem(rowData, columnValues);
         }
 
         public void ClearItems()
@@ -390,10 +382,10 @@ namespace GKUI.Components
             UpdateButtons();
 
             if (fListModel != null) {
-                /*if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
+                if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
                     fList.ClearColumns();
                     fListModel.UpdateColumns(fList);
-                }*/
+                }
 
                 fListModel.UpdateContents();
             }
@@ -401,8 +393,7 @@ namespace GKUI.Components
 
         public object GetSelectedData()
         {
-            GKListItem item = fList.GetSelectedItem();
-            return (item != null) ? item.Data : null;
+            return fList.GetSelectedData();
         }
     }
 }

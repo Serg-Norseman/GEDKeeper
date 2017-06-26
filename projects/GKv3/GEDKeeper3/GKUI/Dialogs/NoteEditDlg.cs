@@ -52,13 +52,7 @@ namespace GKUI.Dialogs
         {
             try
             {
-                int length = 0;
-                /*for (int it = 0; txtNote.Lines.Length > it; ++it)
-                {
-                    length += txtNote.Lines[it].Trim().Length;
-                }*/
-                length = txtNote.Text.Length;
-                if (0 != length)
+                if (txtNote.Text.Length != 0)
                 {
                     fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
 
@@ -66,10 +60,10 @@ namespace GKUI.Dialogs
 
                     DialogResult = DialogResult.Ok;
                 }
-                else
+                /*else
                 {
                     DialogResult = DialogResult.Cancel;
-                }
+                }*/
             }
             catch (Exception ex)
             {

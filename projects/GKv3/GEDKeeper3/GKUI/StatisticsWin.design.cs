@@ -11,7 +11,7 @@ namespace GKUI
         private Panel Panel1;
         private ToolBar ToolBar1;
         private ButtonToolItem cbType; // FIXME: GKv3 DevRestriction
-        private GKListViewStub lvSummary;
+        private GKListView lvSummary;
         private ButtonToolItem tbExcelExport;
         private ContextMenu cmStatTypes;
 
@@ -19,7 +19,7 @@ namespace GKUI
         {
             SuspendLayout();
 
-            lvSummary = new GKListViewStub();
+            lvSummary = new GKListView();
             //lvSummary.FullRowSelect = true;
             //lvSummary.Size = new Size(887, 244);
             lvSummary.Height = 240;

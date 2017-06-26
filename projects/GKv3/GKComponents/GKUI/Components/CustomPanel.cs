@@ -30,14 +30,31 @@ namespace GKUI.Components
     public class CustomPanel : Scrollable
     {
         private readonly Drawable fCanvas;
+
         private Font fFont;
         private Color fTextColor;
 
+
+        public Rectangle ClientRectangle
+        {
+            get { return fCanvas.Bounds; }
+        }
 
         public Font Font
         {
             get { return fFont; }
             set { fFont = value; }
+        }
+
+        public new Size ScrollSize
+        {
+            get {
+                return fCanvas.MinimumSize;
+            }
+            set {
+                fCanvas.MinimumSize = value;
+                base.UpdateScrollSizes();
+            }
         }
 
         public Color TextColor
@@ -49,6 +66,9 @@ namespace GKUI.Components
 
         public CustomPanel()
         {
+            base.ExpandContentHeight = true;
+            base.ExpandContentWidth = true;
+
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
             fCanvas.CanFocus = true;
@@ -65,12 +85,6 @@ namespace GKUI.Components
 
         protected virtual void OnPaint(PaintEventArgs e)
         {
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            fCanvas.Size = this.ClientSize;
-            base.OnSizeChanged(e);
         }
 
         public Graphics CreateGraphics()

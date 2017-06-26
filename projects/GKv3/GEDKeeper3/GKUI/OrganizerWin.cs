@@ -111,8 +111,7 @@ namespace GKUI
 
         private static void AddItem(GKSheetList list, string name, string value)
         {
-            GKCore.Interfaces.IListItem item = list.AddItem(name, null);
-            item.AddSubItem(value);
+            list.AddItem(null, new object[] { name, value });
         }
 
         private void PrepareEvent(string iName, GEDCOMCustomEvent ev)

@@ -18,7 +18,7 @@ namespace GKUI.Dialogs
         private TextArea txtAddress;
         private TabPage pageOther;
         private TabControl PageControl1;
-        private GKListViewStub lvRecordStats;
+        private GKListView lvRecordStats;
         private Button btnLangEdit;
         private TextBox txtLanguage;
         private Label lblLanguage;
@@ -87,7 +87,7 @@ namespace GKUI.Dialogs
                 }
             };
 
-            lvRecordStats = new GKListViewStub();
+            lvRecordStats = new GKListView();
             lvRecordStats.FullRowSelect = true;
             lvRecordStats.AllowMultipleSelection = false;
             lvRecordStats.AddColumn("Records", 300);

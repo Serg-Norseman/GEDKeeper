@@ -9,10 +9,8 @@ namespace GKUI
     {
         private ToolBar ToolBar1;
         private ButtonToolItem tbImageSave;
-        private SeparatorToolItem tbs1;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
-        private SeparatorToolItem tbs2;
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbDocPrint;
 

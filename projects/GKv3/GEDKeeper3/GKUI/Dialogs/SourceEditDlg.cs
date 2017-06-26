@@ -61,7 +61,7 @@ namespace GKUI.Dialogs
             fRepositoriesList.ListModel.DataOwner = fSourceRecord;
             fNotesList.ListModel.DataOwner = fSourceRecord;
             fMediaList.ListModel.DataOwner = fSourceRecord;
-            
+
             //ActiveControl = txtShortTitle;
             txtShortTitle.Focus();
         }
