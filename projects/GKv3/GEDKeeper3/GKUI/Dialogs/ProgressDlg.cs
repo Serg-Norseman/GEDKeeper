@@ -93,7 +93,7 @@ namespace GKUI.Dialogs
         {
             try {
                 if (requiresClose) {
-                    Application.Instance.Invoke(delegate { DoDone(); });
+                    //Application.Instance.Invoke(delegate { DoDone(); });
                     //DoDone();
                     /*if (InvokeRequired) {
                         Invoke(new PDone(DoDone));
@@ -193,11 +193,11 @@ namespace GKUI.Dialogs
 
         public void ProgressInit(string title, int max)
         {
-            if (fProxy != null) {
+            /*if (fProxy != null) {
                 fProxy.ProgressReset(title, max);
             } else {
                 fProxy = new ProgressProxy(title, max);
-            }
+            }*/
 
             fVal = 0;
         }
@@ -212,14 +212,16 @@ namespace GKUI.Dialogs
 
         public void ProgressStep()
         {
-            fProxy.UpdateProgress(fVal++);
-            //System.Threading.Thread.Sleep(0); // debug
+            if (fProxy != null) {
+                fProxy.UpdateProgress(fVal++);
+            }
         }
 
         public void ProgressStep(int value)
         {
-            fProxy.UpdateProgress(value);
-            //System.Threading.Thread.Sleep(0); // debug
+            if (fProxy != null) {
+                fProxy.UpdateProgress(value);
+            }
         }
     }
 

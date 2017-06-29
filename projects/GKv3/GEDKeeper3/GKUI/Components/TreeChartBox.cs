@@ -290,7 +290,7 @@ namespace GKUI.Components
             }
         }
 
-        public new float Scale
+        public float Scale
         {
             get { return fModel.Scale; }
         }
@@ -501,40 +501,41 @@ namespace GKUI.Components
             }
         }
 
+        /*
+         * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
+         */
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background)
         {
             fSPX = 0;
             fSPY = 0;
 
+            Rectangle visRect = this.Viewport;
+            Size clientSize = ClientRectangle.Size;
             if (drawMode == ChartDrawMode.dmInteractive) {
                 /*Rectangle viewPort = GetImageViewPort();
                 fSPX = -viewPort.Left;
                 fSPY = -viewPort.Top;*/
 
-                fSPX += fBorderWidth - -AutoScrollPosition.X;
-                fSPY += fBorderWidth - -AutoScrollPosition.Y;
+                fSPX += fBorderWidth /*- -AutoScrollPosition.X*/;
+                fSPY += fBorderWidth /*- -AutoScrollPosition.Y*/;
 
-                Size sz = ClientSize;
-
-                if (fModel.ImageWidth < sz.Width) {
-                    fSPX += (sz.Width - fModel.ImageWidth) / 2;
+                if (fModel.ImageWidth < clientSize.Width) {
+                    fSPX += (clientSize.Width - fModel.ImageWidth) / 2;
                 }
 
-                if (fModel.ImageHeight < sz.Height) {
-                    fSPY += (sz.Height - fModel.ImageHeight) / 2;
+                if (fModel.ImageHeight < clientSize.Height) {
+                    fSPY += (clientSize.Height - fModel.ImageHeight) / 2;
                 }
 
-                fModel.VisibleArea = GetSourceImageRegion();
+                fModel.VisibleArea = GetImageViewport();
             } else {
                 if (drawMode == ChartDrawMode.dmStaticCentered) {
-                    Size sz = ClientSize;
-
-                    if (fModel.ImageWidth < sz.Width) {
-                        fSPX += (sz.Width - fModel.ImageWidth) / 2;
+                    if (fModel.ImageWidth < clientSize.Width) {
+                        fSPX += (clientSize.Width - fModel.ImageWidth) / 2;
                     }
 
-                    if (fModel.ImageHeight < sz.Height) {
-                        fSPY += (sz.Height - fModel.ImageHeight) / 2;
+                    if (fModel.ImageHeight < clientSize.Height) {
+                        fSPY += (clientSize.Height - fModel.ImageHeight) / 2;
                     }
                 }
 
@@ -571,8 +572,8 @@ namespace GKUI.Components
 
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {
-                gfx = CreateGraphics();
-                fRenderer.SetTarget(gfx, false);
+                //gfx = CreateGraphics();
+                //fRenderer.SetTarget(gfx, false);
             }
 
             try {
@@ -587,59 +588,32 @@ namespace GKUI.Components
             AdjustViewPort(imageSize, noRedraw);
         }
 
-        private Rectangle GetInsideViewPort(bool includePadding)
+        /*
+         * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
+         */
+        private ExtRect GetImageViewport()
         {
-            int left = 0;
-            int top = 0;
-            int width = ClientSize.Width;
-            int height = ClientSize.Height;
-
-            if (includePadding)
-            {
-                left += Padding.Left;
-                top += Padding.Top;
-                width -= Padding.Horizontal;
-                height -= Padding.Vertical;
-            }
-
-            return new Rectangle(left, top, width, height);
-        }
-
-        private Rectangle GetImageViewPort()
-        {
-            Rectangle viewPort;
+            ExtRect viewport;
 
             var imageSize = GetImageSize();
             if (!imageSize.IsEmpty) {
-                Rectangle innerRectangle = GetInsideViewPort(true);
+                Rectangle scrollableViewport = this.Viewport; //ClientRectangle;
+                bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
 
-                int x = !HasScroll ? (innerRectangle.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
-                int y = !HasScroll ? (innerRectangle.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
+                int x = !hasScroll ? (scrollableViewport.Width - imageSize.Width) / 2 : 0;
+                int y = !hasScroll ? (scrollableViewport.Height - imageSize.Height) / 2 : 0;
 
-                int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
-                int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
+                int width = Math.Min(imageSize.Width /*- Math.Abs(AutoScrollPosition.X)*/, scrollableViewport.Width);
+                int height = Math.Min(imageSize.Height /*- Math.Abs(AutoScrollPosition.Y)*/, scrollableViewport.Height);
 
-                viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
+                //viewPort = ExtRect.CreateBounds(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
+                //viewport = ExtRect.CreateBounds(/*-AutoScrollPosition.X, -AutoScrollPosition.Y*/0, 0, width, height);
+                viewport = ExtRect.CreateBounds(scrollableViewport.Left, scrollableViewport.Top, width, height);
             } else {
-                viewPort = Rectangle.Empty;
+                viewport = ExtRect.Empty;
             }
 
-            return viewPort;
-        }
-
-        private ExtRect GetSourceImageRegion()
-        {
-            ExtRect region;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle viewPort = GetImageViewPort();
-                region = ExtRect.CreateBounds(-AutoScrollPosition.X, -AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
-            } else {
-                region = ExtRect.Empty;
-            }
-
-            return region;
+            return viewport;
         }
 
         #endregion
@@ -711,14 +685,13 @@ namespace GKUI.Components
             base.OnPaint(e);
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*protected override void OnDoubleClick(EventArgs e)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             TreeChartPerson p = fSelected;
             DoPersonModify(new PersonModifyEventArgs(p));
 
-            base.OnDoubleClick(e);
-        }*/
+            base.OnMouseDoubleClick(e);
+        }
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -978,8 +951,10 @@ namespace GKUI.Components
         {
             if (person == null) return;
 
-            int dstX = ((person.PtX) - (ClientSize.Width / 2));
-            int dstY = ((person.PtY + (person.Height / 2)) - (ClientSize.Height / 2));
+            Size clientSize = ClientRectangle.Size;
+
+            int dstX = ((person.PtX) - (clientSize.Width / 2));
+            int dstY = ((person.PtY + (person.Height / 2)) - (clientSize.Height / 2));
 
             if (dstX < 0) dstX = dstX + (0 - dstX);
             if (dstY < 0) dstY = dstY + (0 - dstY);

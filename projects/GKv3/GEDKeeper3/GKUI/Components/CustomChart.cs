@@ -21,7 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
@@ -29,7 +28,7 @@ using GKUI.Components;
 
 namespace GKUI.Components
 {
-    public abstract class CustomChart : ScrollablePanel, IPrintable
+    public abstract class CustomChart : CustomPanel, IPrintable
     {
         private readonly NavigationStack fNavman;
 
@@ -50,22 +49,6 @@ namespace GKUI.Components
             }
             base.Dispose(disposing);
         }
-
-        // FIXME: GKv3 DevRestriction
-        /*protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Back:
-                    return true;
-
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }*/
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

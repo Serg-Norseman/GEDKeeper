@@ -49,7 +49,6 @@ namespace GKUI.Dialogs
             txtLongitude = new TextBox();
 
             ListGeoCoords = new GKListView();
-            ListGeoCoords.FullRowSelect = true;
             ListGeoCoords.MouseDown += ListGeoCoords_Click;
             ListGeoCoords.AddColumn("Name", 200);
             ListGeoCoords.AddColumn("Latitude", 80);

@@ -221,68 +221,66 @@ namespace GKUI.Components
         /// </summary>
         private void InitializeComponent()
         {
-            Lab1 = new Label();
-            Lab2 = new Label();
-            Edit1 = new TextBox();
-            Edit2 = new TextBox();
-            btnRec1Select = new Button();
-            btnRec2Select = new Button();
-            btnMergeToLeft = new Button();
-            btnMergeToRight = new Button();
-            fView1 = new HyperView();
-            fView2 = new HyperView();
             SuspendLayout();
 
-            Lab1.Size = new Size(40, 17);
+            Lab1 = new Label();
             Lab1.Text = "XXX1";
 
-            Lab2.Size = new Size(40, 17);
+            Lab2 = new Label();
             Lab2.Text = "XXX2";
 
+            Edit1 = new TextBox();
             Edit1.ReadOnly = true;
-            Edit1.Size = new Size(366, 24);
+            //Edit1.Size = new Size(366, 24);
 
+            Edit2 = new TextBox();
             Edit2.ReadOnly = true;
-            Edit2.Size = new Size(373, 24);
+            //Edit2.Size = new Size(373, 24);
 
-            btnRec1Select.Size = new Size(81, 25);
+            btnRec1Select = new Button();
+            btnRec1Select.Size = new Size(80, 26);
             btnRec1Select.Text = "btnRec1Select";
             btnRec1Select.Click += btnRec1Select_Click;
 
-            btnRec2Select.Size = new Size(81, 25);
+            btnRec2Select = new Button();
+            btnRec2Select.Size = new Size(80, 26);
             btnRec2Select.Text = "btnRec2Select";
             btnRec2Select.Click += btnRec2Select_Click;
 
+            btnMergeToLeft = new Button();
             btnMergeToLeft.Enabled = false;
-            btnMergeToLeft.Size = new Size(81, 25);
+            btnMergeToLeft.Size = new Size(80, 26);
             btnMergeToLeft.Text = "<<<";
             btnMergeToLeft.Click += btnMergeToLeft_Click;
 
+            btnMergeToRight = new Button();
             btnMergeToRight.Enabled = false;
-            btnMergeToRight.Size = new Size(81, 25);
+            btnMergeToRight.Size = new Size(80, 26);
             btnMergeToRight.Text = ">>>";
             btnMergeToRight.Click += btnMergeToRight_Click;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            fView1 = new HyperView();
+            fView2 = new HyperView();
+
+            Content = new DefTableLayout() {
                 Rows = {
                     new TableRow {
-                        Cells = { Lab1, null, null, Lab2 }
+                        Cells = { Lab1, Lab2 }
                     },
                     new TableRow {
-                        Cells = { Edit1, btnRec1Select, Edit2, btnRec2Select }
+                        Cells = { TableLayout.Horizontal(Edit1, btnRec1Select), TableLayout.Horizontal(Edit2, btnRec2Select) }
                     },
                     new TableRow {
+                        ScaleHeight = true,
                         Cells = { fView1, fView2 }
                     },
                     new TableRow {
-                        Cells = { null, btnMergeToLeft, btnMergeToRight, null }
+                        Cells = { TableLayout.Horizontal(null, btnMergeToLeft), TableLayout.Horizontal(btnMergeToRight, null) }
                     }
                 }
             };
-
-            Size = new Size(957, 402);
+            //((DefTableLayout)Content).SetColumnScale(0, true);
+            //((DefTableLayout)Content).SetColumnScale(1, true);
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

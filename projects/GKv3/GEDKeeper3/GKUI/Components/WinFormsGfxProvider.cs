@@ -121,7 +121,7 @@ namespace GKUI.Components
 
         public IImage GetResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = Bitmap.FromResource(resName);
+            Bitmap img = Bitmap.FromResource("Resources." + resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();

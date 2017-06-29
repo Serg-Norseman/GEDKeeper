@@ -48,9 +48,6 @@ namespace GKUI.Components
 
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             Title = caption;
             label1.Text = prompt;
             Value = value;
@@ -175,9 +172,6 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            label1 = new Label();
-            btnAccept = new Button();
-            btnCancel = new Button();
             SuspendLayout();
 
             if (fPasswordMode) {
@@ -186,24 +180,27 @@ namespace GKUI.Components
             } else {
                 txtValue = new TextBox();
             }
-            txtValue.Size = new Size(354, 20);
+            //txtValue.Size = new Size(354, 20);
 
-            label1.Size = new Size(35, 13);
+            label1 = new Label();
+            //label1.Size = new Size(35, 13);
             label1.Text = "label1";
 
+            btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(81, 25);
+            btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
+            btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(81, 25);
+            btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { label1 }
@@ -211,10 +208,7 @@ namespace GKUI.Components
                     new TableRow {
                         Cells = { txtValue }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

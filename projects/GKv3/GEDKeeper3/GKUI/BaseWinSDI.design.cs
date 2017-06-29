@@ -473,8 +473,8 @@ namespace GKUI
 
             ClientSize = new Size(976, 462);
             Title = "BaseWinSDI";
-            //Activated += Form_Activated;
-            //Deactivate += Form_Deactivate;
+            GotFocus += Form_Activated;
+            LostFocus += Form_Deactivate;
             Closing += Form_Closing;
             Closed += Form_Closed;
             Load += Form_Load;

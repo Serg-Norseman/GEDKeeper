@@ -67,22 +67,6 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbImageSave.Image = Bitmap.FromResource("Resources.btn_save_image.gif");
-            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
-            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
-
-            tbDocPrint.Enabled = true;
-            tbDocPreview.Enabled = true;
-
-            tbModes.Image = Bitmap.FromResource("Resources.btn_tools.gif");
-            tbFilter.Image = Bitmap.FromResource("Resources.btn_filter.gif");
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
-
-            miModeBoth.Tag = TreeChartKind.ckBoth;
-            miModeAncestors.Tag = TreeChartKind.ckAncestors;
-            miModeDescendants.Tag = TreeChartKind.ckDescendants;
-
             fBase = baseWin;
             fPerson = startPerson;
 
@@ -95,13 +79,13 @@ namespace GKUI
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
             fTreeBox.Options = GlobalOptions.Instance.ChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
-
             Content = fTreeBox;
-            //Controls.Add(fTreeBox);
-            //Controls.SetChildIndex(fTreeBox, 0);
-            //Controls.SetChildIndex(ToolBar1, 1);
 
             SetLang();
+
+            miModeBoth.Tag = TreeChartKind.ckBoth;
+            miModeAncestors.Tag = TreeChartKind.ckAncestors;
+            miModeDescendants.Tag = TreeChartKind.ckDescendants;
 
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
@@ -487,11 +471,13 @@ namespace GKUI
 
         private void miFillColor_Click(object sender, EventArgs e)
         {
-            if (colorDialog1.ShowDialog(this) != DialogResult.Ok) return;
+            using (var colorDialog1 = new ColorDialog()) {
+                if (colorDialog1.ShowDialog(this) != DialogResult.Ok) return;
 
-            //fTreeBox.BackgroundImage = null;
-            fTreeBox.BackgroundColor = colorDialog1.Color;
-            fTreeBox.Invalidate();
+                //fTreeBox.BackgroundImage = null;
+                fTreeBox.BackgroundColor = colorDialog1.Color;
+                fTreeBox.Invalidate();
+            }
         }
 
         private void miFillImage_Click(object sender, EventArgs e)
@@ -544,6 +530,17 @@ namespace GKUI
         private void tbDocPrint_Click(object sender, EventArgs e)
         {
             DoPrint();
+        }
+
+        private void tbOptions_Click(object sender, EventArgs e)
+        {
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
+            {
+                dlgOptions.SetPage(OptionsPage.opTreeChart);
+                if (dlgOptions.ShowModal() == DialogResult.Ok) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
         }
 
         #endregion

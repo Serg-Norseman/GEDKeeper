@@ -132,9 +132,6 @@ namespace GKUI.Components
 
             fList = new GKListView();
             //fList.Size = new Size(500, 290);
-            //fList.HideSelection = false;
-            //fList.LabelEdit = false;
-            fList.FullRowSelect = true;
             fList.MouseDoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
 

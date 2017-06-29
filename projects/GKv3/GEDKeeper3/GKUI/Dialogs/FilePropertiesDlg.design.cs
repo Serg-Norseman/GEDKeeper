@@ -88,8 +88,6 @@ namespace GKUI.Dialogs
             };
 
             lvRecordStats = new GKListView();
-            lvRecordStats.FullRowSelect = true;
-            lvRecordStats.AllowMultipleSelection = false;
             lvRecordStats.AddColumn("Records", 300);
             lvRecordStats.AddColumn("Count", 100 /*, HorizontalAlignment.Right*/);
 

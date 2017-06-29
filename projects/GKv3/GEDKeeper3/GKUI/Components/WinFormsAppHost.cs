@@ -61,21 +61,15 @@ namespace GKUI.Components
 
         public override IWindow GetActiveWindow()
         {
-            Form activeForm = null;//Form.ActiveForm;
-
-            // only for tests!
-            if (activeForm == null && fRunningForms.Count > 0) {
-                activeForm = (Form)fRunningForms[0];
+            Window activeWnd = null;
+            foreach (var wnd in Application.Instance.Windows) {
+                if (wnd.HasFocus) {
+                    activeWnd = wnd;
+                    break;
+                }
             }
 
-            return (activeForm is IWindow) ? (IWindow)activeForm : null;
-
-            /*foreach (IWindow win in fRunningForms) {
-                    if ((win as Form).Focused) {
-                        return win;
-                    }
-                }
-                return null;*/
+            return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
         }
 
         public override IntPtr GetTopWindowHandle()

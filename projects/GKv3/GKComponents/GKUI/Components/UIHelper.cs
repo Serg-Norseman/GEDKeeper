@@ -61,6 +61,10 @@ namespace GKUI.Components
             Padding = new Padding(10);
             Spacing = new Size(10, 10);
         }
+
+        public DefTableLayout(int columns, int rows) : base(columns, rows)
+        {
+        }
     }
 
     /// <summary>
@@ -204,38 +208,22 @@ namespace GKUI.Components
 
         public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
         {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");
 
             GKListView recView = new GKListView();
-            recView.AllowColumnReordering = false;
-            recView.AllowMultipleSelection = false;
             recView.ListMan = ListManager.Create(baseContext, recType);
 
-            parent.Content = recView;
-
-            /*recView.HideSelection = false;
-            recView.LabelEdit = false;
-            recView.FullRowSelect = true;
-            recView.View = View.Details;
-            recView.Dock = DockStyle.Fill;
-            parent.Controls.Add(recView);
-            parent.Controls.SetChildIndex(recView, 0);*/
+            if (parent != null) {
+                parent.Content = recView;
+            }
 
             return recView;
         }
 
         public static GKListView CreateListView(Panel parent)
         {
-            //if (parent == null)
-            //    throw new ArgumentNullException("parent");
-
             GKListView listView = new GKListView();
-            listView.AllowColumnReordering = false;
-            listView.AllowMultipleSelection = false;
 
             if (parent != null) {
                 parent.Content = listView;

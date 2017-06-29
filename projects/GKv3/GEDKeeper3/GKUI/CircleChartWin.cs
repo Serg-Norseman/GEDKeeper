@@ -20,9 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -48,14 +46,6 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbImageSave.Image = Bitmap.FromResource("Resources.btn_save_image.gif");
-            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
-            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
-
-            //ToolBar1.Visible = !AppHost.Instance.IsMDI;
-
             fBaseWin = baseWin;
 
             fCircleChart = new CircleChart();
@@ -64,7 +54,6 @@ namespace GKUI
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
-
             Content = fCircleChart;
 
             SetLang();
@@ -145,6 +134,17 @@ namespace GKUI
         private void tbDocPrint_Click(object sender, EventArgs e)
         {
             DoPrint();
+        }
+
+        private void tbOptions_Click(object sender, EventArgs e)
+        {
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
+            {
+                dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
+                if (dlgOptions.ShowModal() == DialogResult.Ok) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
         }
 
         #region ILocalization implementation

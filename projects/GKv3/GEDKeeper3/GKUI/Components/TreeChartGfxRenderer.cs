@@ -67,14 +67,14 @@ namespace GKUI.Components
         {
             Font sdFnt = ((FontHandler)font).Handle;
 
-            return (int)fCanvas.MeasureString(sdFnt, STR_HEIGHT_SAMPLE).Height;
+            return (int)sdFnt.MeasureString(STR_HEIGHT_SAMPLE).Height;
         }
 
         public override int GetTextWidth(string text, IFont font)
         {
             Font sdFnt = ((FontHandler)font).Handle;
 
-            return (int)fCanvas.MeasureString(sdFnt, text).Width;
+            return (int)sdFnt.MeasureString(text).Width;
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)

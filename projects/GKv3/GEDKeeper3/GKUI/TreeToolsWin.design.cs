@@ -1,7 +1,6 @@
 ﻿using System;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon.GEDCOM;
 using GKUI.Components;
 
 namespace GKUI
@@ -78,111 +77,38 @@ namespace GKUI
 
         private void InitializeComponent()
         {
-            tabsTools = new TabControl();
-            pageTreeCompare = new TabPage();
-            btnMatch = new Button();
-            grpMatchType = new GroupBox();
-            radAnalysis = new RadioButton();
-            lblFile = new Label();
-            txtCompareFile = new TextBox();
-            btnFileChoose = new Button();
-            radMatchInternal = new RadioButton();
-            radMathExternal = new RadioButton();
-            ListCompare = new GKUI.Components.TextBoxEx();
-            pageTreeMerge = new TabPage();
-            lblMasterBase = new Label();
-            lblOtherBase = new Label();
-            edMasterBase = new TextBox();
-            edUpdateBase = new TextBox();
-            btnTreeMerge = new Button();
-            mSyncRes = new GKUI.Components.TextBoxEx();
-            pageTreeSplit = new TabPage();
-            btnSelectAll = new Button();
-            ListSelected = new ListBox();
-            ListSkipped = new ListBox();
-            btnSelectFamily = new Button();
-            btnSelectAncestors = new Button();
-            btnSelectDescendants = new Button();
-            btnDelete = new Button();
-            btnSave = new Button();
-            pageRecMerge = new TabPage();
-            PageControl1 = new TabControl();
-            pageMerge = new TabPage();
-            MergeCtl = new GKUI.Components.GKMergeControl();
-            btnAutoSearch = new Button();
-            btnSkip = new Button();
-            ProgressBar1 = new ProgressBar();
-            pageMergeOptions = new TabPage();
-            grpMergeOther = new GroupBox();
-            chkBookmarkMerged = new CheckBox();
-            rgMode = new GroupBox();
-            radSources = new RadioButton();
-            radFamilies = new RadioButton();
-            radNotes = new RadioButton();
-            radPersons = new RadioButton();
-            grpSearchPersons = new GroupBox();
-            lblNameAccuracy = new Label();
-            lblYearInaccuracy = new Label();
-            chkIndistinctMatching = new CheckBox();
-            edNameAccuracy = new NumericUpDown();
-            edYearInaccuracy = new NumericUpDown();
-            chkBirthYear = new CheckBox();
-            pageFamilyGroups = new TabPage();
-            gkLogChart1 = new GKUI.Components.LogChart();
-            tvGroups = new TreeView();
-            pageTreeCheck = new TabPage();
-            btnBaseRepair = new Button();
-            Panel1 = new Panel();
-            pagePatSearch = new TabPage();
-            btnPatriarchsDiagram = new Button();
-            chkWithoutDates = new CheckBox();
-            lblMinGenerations = new Label();
-            btnPatSearch = new Button();
-            Panel3 = new Panel();
-            edMinGens = new NumericUpDown();
-            btnSetPatriarch = new Button();
-            pagePlaceManage = new TabPage();
-            Panel4 = new Panel();
-            btnIntoList = new Button();
-            btnClose = new Button();
-
             SuspendLayout();
 
-            tabsTools.Pages.Add(pageTreeCompare);
-            tabsTools.Pages.Add(pageTreeMerge);
-            tabsTools.Pages.Add(pageTreeSplit);
-            tabsTools.Pages.Add(pageRecMerge);
-            tabsTools.Pages.Add(pageFamilyGroups);
-            tabsTools.Pages.Add(pageTreeCheck);
-            tabsTools.Pages.Add(pagePatSearch);
-            tabsTools.Pages.Add(pagePlaceManage);
-            tabsTools.SelectedIndex = 0;
-            tabsTools.SelectedIndexChanged += tabsTools_SelectedIndexChanged;
+            radMatchInternal = new RadioButton();
+            radMatchInternal.Checked = true;
+            radMatchInternal.Text = "radMatchInternal";
+            radMatchInternal.CheckedChanged += rbtnMatch_CheckedChanged;
 
-            pageTreeCompare.Text = "pageTreeCompare";
-            pageTreeCompare.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { grpMatchType, btnMatch }
-                    },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { ListCompare }
-                    }
-                }
-            };
+            radMathExternal = new RadioButton(radMatchInternal);
+            radMathExternal.Text = "radMathExternal";
+            radMathExternal.CheckedChanged += rbtnMatch_CheckedChanged;
 
-            btnMatch.Size = new Size(80, 26);
-            btnMatch.Text = "btnMatch";
-            btnMatch.Click += btnMatch_Click;
+            radAnalysis = new RadioButton(radMatchInternal);
+            radAnalysis.Text = "radAnalysis";
+            radAnalysis.CheckedChanged += rbtnMatch_CheckedChanged;
 
+            lblFile = new Label();
+            lblFile.Enabled = false;
+            lblFile.Text = "lblFile";
+
+            txtCompareFile = new TextBox();
+            txtCompareFile.Enabled = false;
+            txtCompareFile.ReadOnly = true;
+
+            btnFileChoose = new Button();
+            btnFileChoose.Enabled = false;
+            btnFileChoose.Size = new Size(130, 26);
+            btnFileChoose.Text = "btnFileChoose";
+            btnFileChoose.Click += btnFileChoose_Click;
+
+            grpMatchType = new GroupBox();
             grpMatchType.Text = "grpMatchType";
-            grpMatchType.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpMatchType.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { radMatchInternal }
@@ -192,7 +118,7 @@ namespace GKUI
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { lblFile, txtCompareFile, btnFileChoose }
+                        Cells = { lblFile, txtCompareFile, null, btnFileChoose }
                     },
                     new TableRow {
                         Cells = { radAnalysis }
@@ -200,274 +126,274 @@ namespace GKUI
                 }
             };
 
-            radAnalysis.Size = new Size(220, 21);
-            radAnalysis.Text = "radAnalysis";
-            radAnalysis.CheckedChanged += rbtnMatch_CheckedChanged;
+            btnMatch = new Button();
+            btnMatch.Size = new Size(130, 26);
+            btnMatch.Text = "btnMatch";
+            btnMatch.Click += btnMatch_Click;
 
-            lblFile.Enabled = false;
-            lblFile.Size = new Size(41, 17);
-            lblFile.Text = "lblFile";
-
-            txtCompareFile.Enabled = false;
-            txtCompareFile.ReadOnly = true;
-            txtCompareFile.Size = new Size(339, 24);
-
-            btnFileChoose.Enabled = false;
-            btnFileChoose.Size = new Size(113, 30);
-            btnFileChoose.Text = "btnFileChoose";
-            btnFileChoose.Click += btnFileChoose_Click;
-
-            radMatchInternal.Checked = true;
-            radMatchInternal.Size = new Size(311, 21);
-            radMatchInternal.Text = "radMatchInternal";
-            radMatchInternal.CheckedChanged += rbtnMatch_CheckedChanged;
-
-            radMathExternal.Size = new Size(200, 21);
-            radMathExternal.Text = "radMathExternal";
-            radMathExternal.CheckedChanged += rbtnMatch_CheckedChanged;
-
+            ListCompare = new GKUI.Components.TextBoxEx();
             ListCompare.ReadOnly = true;
-            ListCompare.Size = new Size(976, 351);
 
-            //
-
-            pageTreeMerge.Size = new Size(1002, 515);
-            pageTreeMerge.Text = "pageTreeMerge";
-            pageTreeMerge.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageTreeCompare = new TabPage();
+            pageTreeCompare.Text = "pageTreeCompare";
+            pageTreeCompare.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblMasterBase }
-                    },
-                    new TableRow {
-                        Cells = { edMasterBase }
-                    },
-                    new TableRow {
-                        Cells = { lblOtherBase }
-                    },
-                    new TableRow {
-                        Cells = { edUpdateBase, btnTreeMerge }
+                        Cells = { new HDefStackLayout { Items = { grpMatchType, btnMatch } } }
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { mSyncRes }
+                        Cells = { ListCompare }
                     }
                 }
             };
 
-            lblMasterBase.Size = new Size(88, 17);
+            //
+
+            lblMasterBase = new Label();
+            //lblMasterBase.Size = new Size(88, 17);
             lblMasterBase.Text = "lblMasterBase";
 
-            lblOtherBase.Size = new Size(122, 17);
+            lblOtherBase = new Label();
+            //lblOtherBase.Size = new Size(122, 17);
             lblOtherBase.Text = "lblOtherBase";
 
+            edMasterBase = new TextBox();
             edMasterBase.BackgroundColor = SystemColors.Control;
             edMasterBase.ReadOnly = true;
-            edMasterBase.Size = new Size(853, 24);
+            //edMasterBase.Size = new Size(853, 24);
             edMasterBase.Text = "edMasterBase";
 
+            edUpdateBase = new TextBox();
             edUpdateBase.ReadOnly = true;
-            edUpdateBase.Size = new Size(853, 24);
+            //edUpdateBase.Size = new Size(853, 24);
 
-            btnTreeMerge.Size = new Size(113, 30);
+            btnTreeMerge = new Button();
+            btnTreeMerge.Size = new Size(130, 26);
             btnTreeMerge.Text = "btnTreeMerge";
             btnTreeMerge.Click += btnTreeMerge_Click;
 
+            mSyncRes = new GKUI.Components.TextBoxEx();
             mSyncRes.ReadOnly = true;
-            mSyncRes.Size = new Size(976, 371);
 
-            //
-
-            pageTreeSplit.Size = new Size(1002, 515);
-            pageTreeSplit.Text = "pageTreeSplit";
-            pageTreeSplit.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageTreeMerge = new TabPage();
+            pageTreeMerge.Text = "pageTreeMerge";
+            pageTreeMerge.Content = new DefTableLayout {
                 Rows = {
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { ListSelected, ListSkipped }
+                    new DefTableLayout {
+                        Rows = {
+                            new TableRow {
+                                Cells = { lblMasterBase, edMasterBase, null }
+                            },
+                            new TableRow {
+                                Cells = { lblOtherBase, edUpdateBase, btnTreeMerge }
+                            }
+                        }
                     },
-                    new TableRow {
-                        Cells = { btnSelectAll, btnSelectFamily, btnSelectAncestors, btnSelectDescendants, btnSave, btnDelete }
-                    }
+                    mSyncRes
                 }
             };
 
-            btnSelectAll.Size = new Size(168, 31);
+            //
+
+            ListSelected = new ListBox();
+
+            ListSkipped = new ListBox();
+
+            btnSelectAll = new Button();
+            btnSelectAll.Size = new Size(130, 26);
             btnSelectAll.Text = "btnSelectAll";
             btnSelectAll.Click += btnSelectAll_Click;
 
-            //ListSelected.ItemHeight = 17;
-            ListSelected.Size = new Size(483, 395);
-
-            //ListSkipped.ItemHeight = 17;
-            ListSkipped.Size = new Size(483, 395);
-
-            btnSelectFamily.Size = new Size(168, 31);
+            btnSelectFamily = new Button();
+            btnSelectFamily.Size = new Size(130, 26);
             btnSelectFamily.Text = "btnSelectFamily";
             btnSelectFamily.Click += btnSelectFamily_Click;
 
-            btnSelectAncestors.Size = new Size(168, 31);
+            btnSelectAncestors = new Button();
+            btnSelectAncestors.Size = new Size(130, 26);
             btnSelectAncestors.Text = "btnSelectAncestors";
             btnSelectAncestors.Click += btnSelectAncestors_Click;
 
-            btnSelectDescendants.Size = new Size(168, 31);
+            btnSelectDescendants = new Button();
+            btnSelectDescendants.Size = new Size(130, 26);
             btnSelectDescendants.Text = "btnSelectDescendants";
             btnSelectDescendants.Click += btnSelectDescendants_Click;
 
-            btnDelete.Size = new Size(147, 31);
+            btnDelete = new Button();
+            btnDelete.Size = new Size(130, 26);
             btnDelete.Text = "btnDelete";
             btnDelete.Click += btnDelete_Click;
 
-            btnSave.Size = new Size(147, 31);
+            btnSave = new Button();
+            btnSave.Size = new Size(130, 26);
             btnSave.Text = "btnSave";
             btnSave.Click += btnSave_Click;
 
+            pageTreeSplit = new TabPage();
+            pageTreeSplit.Text = "pageTreeSplit";
+            pageTreeSplit.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { TableLayout.HorizontalScaled(10, ListSelected, ListSkipped) }
+                    },
+                    UIHelper.MakeDialogFooter(btnSelectAll, btnSelectFamily, btnSelectAncestors, btnSelectDescendants, null, btnSave, btnDelete)
+                }
+            };
+
             //
 
-            pageRecMerge.Content = PageControl1;
-            pageRecMerge.Size = new Size(1002, 515);
-            pageRecMerge.Text = "pageRecMerge";
+            MergeCtl = new GKUI.Components.GKMergeControl();
+            MergeCtl.Base = null;
+            MergeCtl.Bookmark = false;
+            MergeCtl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
+            //MergeCtl.Size = new Size(957, 402);
 
-            PageControl1.Pages.Add(pageMerge);
-            PageControl1.Pages.Add(pageMergeOptions);
-            PageControl1.SelectedIndex = 0;
-            PageControl1.Size = new Size(965, 493);
+            btnAutoSearch = new Button();
+            btnAutoSearch.Size = new Size(130, 26);
+            btnAutoSearch.Text = "btnAutoSearch";
+            btnAutoSearch.Click += btnSearch_Click;
 
-            pageMerge.Size = new Size(957, 463);
+            btnSkip = new Button();
+            btnSkip.Size = new Size(130, 26);
+            btnSkip.Text = "btnSkip";
+            btnSkip.Click += btnSkip_Click;
+
+            ProgressBar1 = new ProgressBar();
+            ProgressBar1.Size = new Size(700, 26);
+            //ProgressBar1.Step = 1;
+
+            pageMerge = new TabPage();
             pageMerge.Text = "pageMerge";
             //pageMerge.SizeChanged += SheetMergeResize;
-            pageMerge.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageMerge.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { MergeCtl }
                     },
-                    new TableRow {
-                        Cells = { btnAutoSearch, btnSkip, ProgressBar1 }
-                    }
+                    UIHelper.MakeDialogFooter(btnAutoSearch, btnSkip, null, ProgressBar1)
                 }
             };
 
-            MergeCtl.Base = null;
-            MergeCtl.Bookmark = false;
-            MergeCtl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
-            MergeCtl.Size = new Size(957, 402);
-
-            btnAutoSearch.Size = new Size(105, 31);
-            btnAutoSearch.Text = "btnAutoSearch";
-            btnAutoSearch.Click += btnSearch_Click;
-
-            btnSkip.Size = new Size(105, 31);
-            btnSkip.Text = "btnSkip";
-            btnSkip.Click += btnSkip_Click;
-
-            ProgressBar1.Size = new Size(700, 31);
-            //ProgressBar1.Step = 1;
-
             //
 
-            pageMergeOptions.Size = new Size(957, 463);
+            radPersons = new RadioButton();
+            radPersons.Checked = true;
+            radPersons.Text = "radPersons";
+            radPersons.Click += radMergeMode_Click;
+
+            radFamilies = new RadioButton(radPersons);
+            radFamilies.Text = "radFamilies";
+            radFamilies.Click += radMergeMode_Click;
+
+            radNotes = new RadioButton(radPersons);
+            radNotes.Text = "radNotes";
+            radNotes.Click += radMergeMode_Click;
+
+            radSources = new RadioButton(radPersons);
+            radSources.Text = "radSources";
+            radSources.Click += radMergeMode_Click;
+
+            rgMode = new GroupBox();
+            //rgMode.Size = new Size(315, 118);
+            rgMode.Text = "rgMode";
+            rgMode.Content = new VDefStackLayout {
+                Items = { radPersons, radFamilies, radNotes, radSources }
+            };
+
+            lblNameAccuracy = new Label();
+            //lblNameAccuracy.Size = new Size(152, 15);
+            lblNameAccuracy.Text = "lblNameAccuracy";
+
+            lblYearInaccuracy = new Label();
+            //lblYearInaccuracy.Size = new Size(152, 16);
+            lblYearInaccuracy.Text = "lblYearInaccuracy";
+
+            chkIndistinctMatching = new CheckBox();
+            //chkIndistinctMatching.Size = new Size(371, 21);
+            chkIndistinctMatching.Text = "chkIndistinctMatching";
+
+            edNameAccuracy = new NumericUpDown();
+            //edNameAccuracy.Size = new Size(152, 24);
+            edNameAccuracy.Value = 90;
+
+            edYearInaccuracy = new NumericUpDown();
+            //edYearInaccuracy.Size = new Size(152, 24);
+            edYearInaccuracy.Value = 3;
+
+            chkBirthYear = new CheckBox();
+            //chkBirthYear.Size = new Size(371, 21);
+            chkBirthYear.Text = "chkBirthYear";
+
+            grpSearchPersons = new GroupBox();
+            //grpSearchPersons.Size = new Size(315, 193);
+            grpSearchPersons.Text = "grpSearchPersons";
+            grpSearchPersons.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { chkIndistinctMatching, null }
+                    },
+                    new TableRow {
+                        Cells = { lblNameAccuracy, edNameAccuracy }
+                    },
+                    new TableRow {
+                        Cells = { chkBirthYear, null }
+                    },
+                    new TableRow {
+                        Cells = { lblYearInaccuracy, edYearInaccuracy }
+                    },
+                    null
+                }
+            };
+
+            chkBookmarkMerged = new CheckBox();
+            //chkBookmarkMerged.Size = new Size(319, 24);
+            chkBookmarkMerged.Text = "chkBookmarkMerged";
+            chkBookmarkMerged.CheckedChanged += chkBookmarkMerged_CheckedChanged;
+
+            grpMergeOther = new GroupBox();
+            //grpMergeOther.Size = new Size(331, 118);
+            grpMergeOther.Text = "grpMergeOther";
+            grpMergeOther.Content = chkBookmarkMerged;
+
+            pageMergeOptions = new TabPage();
             pageMergeOptions.Text = "pageMergeOptions";
-            pageMergeOptions.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageMergeOptions.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { rgMode }
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { grpSearchPersons }
+                        Cells = { grpSearchPersons, grpMergeOther }
                     },
-                    new TableRow {
-                        Cells = { grpMergeOther }
-                    }
+                    null
                 }
             };
 
-            grpMergeOther.Size = new Size(331, 118);
-            grpMergeOther.Text = "grpMergeOther";
-            grpMergeOther.Content = chkBookmarkMerged;
+            PageControl1 = new TabControl();
+            PageControl1.Pages.Add(pageMerge);
+            PageControl1.Pages.Add(pageMergeOptions);
 
-            chkBookmarkMerged.Size = new Size(319, 24);
-            chkBookmarkMerged.Text = "chkBookmarkMerged";
-            chkBookmarkMerged.CheckedChanged += chkBookmarkMerged_CheckedChanged;
-
-            rgMode.Size = new Size(315, 118);
-            rgMode.Text = "rgMode";
-            rgMode.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Items = { radPersons, radFamilies, radNotes, radSources }
-            };
-
-            radSources.Size = new Size(269, 20);
-            radSources.Text = "radSources";
-            radSources.Click += radMergeMode_Click;
-
-            radFamilies.Size = new Size(269, 19);
-            radFamilies.Text = "radFamilies";
-            radFamilies.Click += radMergeMode_Click;
-
-            radNotes.Size = new Size(269, 19);
-            radNotes.Text = "radNotes";
-            radNotes.Click += radMergeMode_Click;
-
-            radPersons.Checked = true;
-            radPersons.Size = new Size(269, 20);
-            radPersons.Text = "radPersons";
-            radPersons.Click += radMergeMode_Click;
-
-            grpSearchPersons.Size = new Size(315, 193);
-            grpSearchPersons.Text = "grpSearchPersons";
-            grpSearchPersons.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { chkIndistinctMatching }
-                    },
-                    new TableRow {
-                        Cells = { lblNameAccuracy, edNameAccuracy }
-                    },
-                    new TableRow {
-                        Cells = { chkBirthYear }
-                    },
-                    new TableRow {
-                        Cells = { lblYearInaccuracy, edYearInaccuracy }
-                    }
-                }
-            };
-
-            lblNameAccuracy.Size = new Size(152, 15);
-            lblNameAccuracy.Text = "lblNameAccuracy";
-
-            lblYearInaccuracy.Size = new Size(152, 16);
-            lblYearInaccuracy.Text = "lblYearInaccuracy";
-
-            chkIndistinctMatching.Size = new Size(371, 21);
-            chkIndistinctMatching.Text = "chkIndistinctMatching";
-
-            edNameAccuracy.Size = new Size(152, 24);
-            edNameAccuracy.Value = 90;
-
-            edYearInaccuracy.Size = new Size(152, 24);
-            edYearInaccuracy.Value = 3;
-
-            chkBirthYear.Size = new Size(371, 21);
-            chkBirthYear.Text = "chkBirthYear";
+            pageRecMerge = new TabPage();
+            pageRecMerge.Content = PageControl1;
+            pageRecMerge.Text = "pageRecMerge";
 
             //
 
-            pageFamilyGroups.Size = new Size(1002, 515);
+            gkLogChart1 = new GKUI.Components.LogChart();
+            gkLogChart1.Height = 34;
+            gkLogChart1.OnHintRequest += HintRequestEventHandler;
+
+            tvGroups = new TreeView();
+            tvGroups.LabelEdit = false;
+            tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
+
+            pageFamilyGroups = new TabPage();
             pageFamilyGroups.Text = "pageFamilyGroups";
-            pageFamilyGroups.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageFamilyGroups.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
@@ -480,113 +406,110 @@ namespace GKUI
                 }
             };
 
-            gkLogChart1.Size = new Size(976, 34);
-
-            tvGroups.Size = new Size(976, 437);
-            tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
-
             //
 
-            pageTreeCheck.Size = new Size(1002, 515);
+            btnBaseRepair = new Button();
+            btnBaseRepair.Size = new Size(130, 26);
+            btnBaseRepair.Text = "btnBaseRepair";
+            btnBaseRepair.Click += btnBaseRepair_Click;
+
+            Panel1 = new Panel();
+
+            pageTreeCheck = new TabPage();
             pageTreeCheck.Text = "pageTreeCheck";
-            pageTreeCheck.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageTreeCheck.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { Panel1 }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnBaseRepair }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnBaseRepair)
                 }
             };
 
-            btnBaseRepair.Size = new Size(203, 30);
-            btnBaseRepair.Text = "btnBaseRepair";
-            btnBaseRepair.Click += btnBaseRepair_Click;
-
-            Panel1.Size = new Size(998, 448);
-
             //
 
-            pagePatSearch.Size = new Size(1002, 515);
+            btnPatriarchsDiagram = new Button();
+            btnPatriarchsDiagram.Size = new Size(130, 26);
+            btnPatriarchsDiagram.Text = "btnPatriarchsDiagram";
+            btnPatriarchsDiagram.Click += btnPatriarchsDiagram_Click;
+
+            chkWithoutDates = new CheckBox();
+            chkWithoutDates.Text = "chkWithoutDates";
+
+            lblMinGenerations = new Label();
+            lblMinGenerations.Text = "lblMinGenerations";
+
+            btnPatSearch = new Button();
+            btnPatSearch.Size = new Size(130, 26);
+            btnPatSearch.Text = "btnPatSearch";
+            btnPatSearch.Click += btnPatSearch_Click;
+
+            Panel3 = new Panel();
+
+            edMinGens = new NumericUpDown();
+            edMinGens.Value = 2;
+
+            btnSetPatriarch = new Button();
+            btnSetPatriarch.Size = new Size(130, 26);
+            btnSetPatriarch.Text = "btnSetPatriarch";
+            btnSetPatriarch.Click += btnSetPatriarch_Click;
+
+            pagePatSearch = new TabPage();
             pagePatSearch.Text = "pagePatSearch";
-            pagePatSearch.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pagePatSearch.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { Panel3 }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { lblMinGenerations, edMinGens, chkWithoutDates, btnSetPatriarch, btnPatSearch, btnPatriarchsDiagram }
-                    }
+                    UIHelper.MakeDialogFooter(lblMinGenerations, edMinGens, chkWithoutDates, null, btnSetPatriarch, btnPatSearch, btnPatriarchsDiagram)
                 }
             };
 
-            btnPatriarchsDiagram.Size = new Size(105, 30);
-            btnPatriarchsDiagram.Text = "btnPatriarchsDiagram";
-            btnPatriarchsDiagram.Click += btnPatriarchsDiagram_Click;
-
-            //chkWithoutDates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            chkWithoutDates.Size = new Size(158, 21);
-            chkWithoutDates.Text = "chkWithoutDates";
-
-            lblMinGenerations.Size = new Size(207, 17);
-            lblMinGenerations.Text = "lblMinGenerations";
-
-            btnPatSearch.Size = new Size(105, 30);
-            btnPatSearch.Text = "btnPatSearch";
-            btnPatSearch.Click += btnPatSearch_Click;
-
-            Panel3.Size = new Size(998, 448);
-
-            edMinGens.Size = new Size(79, 24);
-            edMinGens.Value = 2;
-
-            btnSetPatriarch.Size = new Size(172, 30);
-            btnSetPatriarch.Text = "btnSetPatriarch";
-            btnSetPatriarch.Click += btnSetPatriarch_Click;
-
             //
 
-            pagePlaceManage.Size = new Size(1002, 515);
+            Panel4 = new Panel();
+            //Panel4.Size = new Size(998, 448);
+
+            btnIntoList = new Button();
+            btnIntoList.Size = new Size(160, 26);
+            btnIntoList.Text = "btnIntoList";
+            btnIntoList.Click += btnIntoList_Click;
+
+            pagePlaceManage = new TabPage();
             pagePlaceManage.Text = "pagePlaceManage";
-            pagePlaceManage.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pagePlaceManage.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { Panel4 }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { btnIntoList, null }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnIntoList)
                 }
             };
 
-            Panel4.Size = new Size(998, 448);
-
-            btnIntoList.Size = new Size(179, 31);
-            btnIntoList.Text = "btnIntoList";
-            btnIntoList.Click += btnIntoList_Click;
-
             //
 
-            btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(80, 26);
-            btnClose.Text = "btnClose";
+            tabsTools = new TabControl();
+            tabsTools.Pages.Add(pageTreeCompare);
+            tabsTools.Pages.Add(pageTreeMerge);
+            tabsTools.Pages.Add(pageTreeSplit);
+            tabsTools.Pages.Add(pageRecMerge);
+            tabsTools.Pages.Add(pageFamilyGroups);
+            tabsTools.Pages.Add(pageTreeCheck);
+            tabsTools.Pages.Add(pagePatSearch);
+            tabsTools.Pages.Add(pagePlaceManage);
+            tabsTools.SelectedIndex = 0;
+            tabsTools.SelectedIndexChanged += tabsTools_SelectedIndexChanged;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            btnClose = new Button();
+            btnClose.ImagePosition = ButtonImagePosition.Left;
+            btnClose.Size = new Size(130, 26);
+            btnClose.Text = "btnClose";
+            btnClose.Click += (sender, e) => { Close(); };
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,

@@ -13,6 +13,7 @@ namespace GKUI
         private ButtonToolItem tbNext;
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbOptions;
 
         private void InitializeComponent()
         {
@@ -20,22 +21,29 @@ namespace GKUI
 
             tbImageSave = new ButtonToolItem();
             tbImageSave.Click += tbImageSave_Click;
+            tbImageSave.Image = Bitmap.FromResource("Resources.btn_save_image.gif");
 
             tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
             tbPrev.Click += ToolBar1_ButtonClick;
+            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += ToolBar1_ButtonClick;
+            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             tbDocPreview = new ButtonToolItem();
-            tbDocPreview.Text = "ButtonToolItem1";
             tbDocPreview.Click += tbDocPreview_Click;
+            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
 
             tbDocPrint = new ButtonToolItem();
-            tbDocPrint.Text = "ButtonToolItem2";
             tbDocPrint.Click += tbDocPrint_Click;
+            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
+
+            tbOptions = new ButtonToolItem();
+            tbOptions.Click += tbOptions_Click;
+            tbOptions.Image = Bitmap.FromResource("Resources.btn_tools.gif");
 
             ToolBar1 = new ToolBar();
             ToolBar1.Items.AddRange(new ToolItem[] {
@@ -45,11 +53,14 @@ namespace GKUI
                                         tbNext,
                                         new SeparatorToolItem(),
                                         tbDocPreview,
-                                        tbDocPrint});
+                                        tbDocPrint,
+                                        new SeparatorToolItem(),
+                                        tbOptions});
 
             ClientSize = new Size(1093, 579);
             ShowInTaskbar = true;
             Title = "CircleChartWin";
+            ToolBar = ToolBar1;
             KeyDown += CircleChartWin_KeyDown;
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);

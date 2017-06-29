@@ -99,7 +99,6 @@ namespace GKUI
             fPlaces = new StringList();
             fPlaces.Sorted = true;
             fChecksList = new List<TreeTools.CheckObj>();
-            //gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             PrepareChecksList();
             PreparePatriarchsList();
@@ -171,6 +170,9 @@ namespace GKUI
 
         private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
+            tabsTools.Invalidate();
+            Application.Instance.RunIteration();
+
             if (tabsTools.SelectedPage == pageFamilyGroups)
             {
                 CheckGroups();
@@ -317,14 +319,16 @@ namespace GKUI
         {
             IProgressController progress = AppHost.Progress;
 
-            /*gkLogChart1.Clear();
+            gkLogChart1.Clear();
             progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
             {
                 int groupNum = 0;
-                tvGroups.Nodes.Clear();
+
+                var tvStore = new TreeItem();
+                tvGroups.DataStore = null;
 
                 int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
@@ -343,8 +347,9 @@ namespace GKUI
 
                             int cnt = groupRecords.Count;
 
-                            TreeNode root = tvGroups.Nodes.Add(
-                                groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
+                            TreeItem root = new TreeItem();
+                            root.Text = groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")";
+                            tvStore.Children.Add(root);
 
                             for (int j = 0; j < cnt; j++)
                             {
@@ -356,45 +361,49 @@ namespace GKUI
                                 {
                                     pn = "(*) " + pn;
                                 }
-                                root.Nodes.Add(new GKTreeNode(pn, iRec));
+
+                                root.Children.Add(new GKTreeNode(pn, iRec));
                             }
-                            root.ExpandAll();
+                            root.Expanded = true;
 
                             gkLogChart1.AddFragment(cnt);
                         }
                     }
 
                     progress.ProgressStep();
-                    //Application.DoEvents();
+                    Application.Instance.RunIteration();
                 }
+
+                tvGroups.DataStore = tvStore;
+                tvGroups.RefreshData();
+                gkLogChart1.Invalidate();
             }
             finally
             {
                 groupRecords.Clear();
                 //prepared.Dispose();
                 progress.ProgressDone();
-            }*/
+            }
         }
 
-        private void tvGroups_DoubleClick(object sender, EventArgs e)
+        private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
         {
-            /*GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
+            GKTreeNode node = tvGroups.SelectedItem as GKTreeNode;
             if (node == null) return;
             
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
             
             Base.SelectRecordByXRef(iRec.XRef);
-            Close();*/
+            Close();
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
+        private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
         {
             if (args == null) return;
 
             args.Hint = string.Format(LangMan.LS(LSID.LSID_LogHint), args.FragmentNumber, args.Size);
-        }*/
+        }
 
         #endregion
 
@@ -403,8 +412,8 @@ namespace GKUI
         private void PrepareChecksList()
         {
             ListChecks = UIHelper.CreateListView(Panel1);
-            ListChecks.CheckBoxes = true;
             ListChecks.MouseDoubleClick += ListChecks_DblClick;
+            ListChecks.AddCheckedColumn(@"x", 50, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
@@ -418,7 +427,7 @@ namespace GKUI
 
             foreach (TreeTools.CheckObj checkObj in fChecksList)
             {
-                ListChecks.AddItem(checkObj, checkObj.GetRecordName(),
+                ListChecks.AddItem(checkObj, false, checkObj.GetRecordName(),
                                    checkObj.Comment,
                                    LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
             }
@@ -428,23 +437,24 @@ namespace GKUI
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
         {
-            /*try
+            try
             {
                 int num = ListChecks.Items.Count;
                 for (int i = 0; i < num; i++)
                 {
                     GKListItem item = (GKListItem)ListChecks.Items[i];
-                    if (!item.Checked) continue;
-
-                    TreeTools.CheckObj checkObj = item.Data as TreeTools.CheckObj;
-                    TreeTools.RepairProblem(fBase, checkObj);
+                    bool check = (bool)item.Values[0];
+                    if (check) {
+                        var checkObj = item.Data as TreeTools.CheckObj;
+                        TreeTools.RepairProblem(fBase, checkObj);
+                    }
                 }
             }
             finally
             {
                 Base.RefreshLists(false);
                 CheckBase();
-            }*/
+            }
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)
@@ -742,7 +752,6 @@ namespace GKUI
         {
             ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
             ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
-            //ListCompare.AppendText("\r\n");
         }
 
         private TreeMatchType GetTreeMatchType()

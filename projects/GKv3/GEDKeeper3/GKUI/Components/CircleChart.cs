@@ -22,7 +22,6 @@ using System;
 using System.ComponentModel;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -89,7 +88,7 @@ namespace GKUI.Components
             get { return fModel.Options; }
         }
 
-        public float Zoom
+        public new float Zoom
         {
             get {
                 return fZoom;
@@ -163,7 +162,7 @@ namespace GKUI.Components
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            AdjustViewPort(boundary, false);
+            AdjustViewPort(boundary);
         }
 
         private void DoRootChanged(GEDCOMIndividualRecord person)
@@ -184,6 +183,9 @@ namespace GKUI.Components
         {
             var bounds = fModel.Bounds;
 
+            /*
+             * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
+             */
             if (target == RenderTarget.rtScreen) {
 
                 // Returns the center point of this chart relative to the upper left
@@ -195,17 +197,18 @@ namespace GKUI.Components
                 PointF center = new PointF();
 
                 SizeF boundary = new SizeF(fModel.ImageWidth * fZoom, fModel.ImageHeight * fZoom);
+                Size clientSize = ClientRectangle.Size;
 
-                if (ClientSize.Width > boundary.Width) {
-                    center.X = Math.Min(ClientSize.Width - bounds.Right * fZoom, ClientSize.Width >> 1);
+                if (clientSize.Width > boundary.Width) {
+                    center.X = Math.Min(clientSize.Width - bounds.Right * fZoom, clientSize.Width >> 1);
                 } else {
-                    center.X = AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom;
+                    center.X = /*AutoScrollPosition.X + */fOffsetX - bounds.Left * fZoom;
                 }
 
-                if (ClientSize.Height > boundary.Height) {
-                    center.Y = Math.Min(ClientSize.Height - bounds.Bottom * fZoom, ClientSize.Height >> 1);
+                if (clientSize.Height > boundary.Height) {
+                    center.Y = Math.Min(clientSize.Height - bounds.Bottom * fZoom, clientSize.Height >> 1);
                 } else {
-                    center.Y = AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom;
+                    center.Y = /*AutoScrollPosition.Y + */fOffsetY - bounds.Top * fZoom;
                 }
 
                 return center;
@@ -214,8 +217,8 @@ namespace GKUI.Components
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom,
-                                  AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom);
+                return new PointF(/*AutoScrollPosition.X + */fOffsetX - bounds.Left * fZoom,
+                                  /*AutoScrollPosition.Y + */fOffsetY - bounds.Top * fZoom);
 
             }
         }
@@ -279,15 +282,14 @@ namespace GKUI.Components
             RootPerson = obj as GEDCOMIndividualRecord;
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*protected override void OnDoubleClick(EventArgs e)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             if (fChartType == CircleChartType.Ancestors) {
                 fModel.GroupsMode = !fModel.GroupsMode;
             }
 
-            base.OnDoubleClick(e);
-        }*/
+            base.OnMouseDoubleClick(e);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {

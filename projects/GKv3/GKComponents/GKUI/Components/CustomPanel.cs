@@ -21,6 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCommon;
 
 namespace GKUI.Components
 {
@@ -29,10 +30,15 @@ namespace GKUI.Components
     /// </summary>
     public class CustomPanel : Scrollable
     {
-        private readonly Drawable fCanvas;
+        /*
+         * Attention: In Eto, using getScrollPosition at runtime Paint causes an exception.
+         * Therefore, by the time of drawing, the Viewport needs to have already been calculated.
+         */
 
+        private Drawable fCanvas;
         private Font fFont;
         private Color fTextColor;
+        private Rectangle fViewport;
 
 
         public Rectangle ClientRectangle
@@ -62,6 +68,46 @@ namespace GKUI.Components
             get { return fTextColor; }
             set { fTextColor = value; }
         }
+
+        protected Rectangle Viewport
+        {
+            get {
+                if (fViewport.IsEmpty) {
+                    Size clientSize = ClientRectangle.Size;
+                    fViewport = new Rectangle(0, 0, clientSize.Width, clientSize.Height);
+                }
+                return fViewport;
+            }
+        }
+
+        #region Temp for compatibility
+
+        public const int SmallChange = 1;
+        public const int LargeChange = 10;
+
+        public bool HasScroll
+        {
+            get { return true; }
+        }
+
+        public int HorizontalScrollValue
+        {
+            get { return AutoScrollPosition.X; }
+            set { UpdateScrollPosition(value, base.ScrollPosition.Y); }
+        }
+
+        public int VerticalScrollValue
+        {
+            get { return AutoScrollPosition.Y; }
+            set { UpdateScrollPosition(base.ScrollPosition.X, value); }
+        }
+
+        public Point AutoScrollPosition
+        {
+            get { return new Point(-base.ScrollPosition.X, -base.ScrollPosition.Y); }
+        }
+
+        #endregion
 
 
         public CustomPanel()
@@ -94,6 +140,63 @@ namespace GKUI.Components
             } else {
                 return null;
             }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (!HasFocus) {
+                Focus();
+            }
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            fViewport = VisibleRect;
+            base.OnSizeChanged(e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Eto.Forms.Scrollable.Scroll" /> event.
+        /// </summary>
+        /// <param name="e">
+        /// A <see cref="T:Eto.Forms.ScrollEventArgs" /> that contains the event data.
+        /// </param>
+        protected override void OnScroll(ScrollEventArgs e)
+        {
+            fViewport = VisibleRect;
+            fCanvas.Invalidate();
+
+            base.OnScroll(e);
+        }
+
+        /// <summary>
+        /// Updates the scroll position.
+        /// </summary>
+        /// <param name="posX">The X position.</param>
+        /// <param name="posY">The Y position.</param>
+        protected void UpdateScrollPosition(int posX, int posY)
+        {
+            ScrollPosition = new Point(posX, posY);
+        }
+
+        /// <summary>
+        /// Adjusts the scroll.
+        /// </summary>
+        /// <param name="dx">The X shift.</param>
+        /// <param name="dy">The Y shift.</param>
+        protected void AdjustScroll(int dx, int dy)
+        {
+            UpdateScrollPosition(HorizontalScrollValue + dx, VerticalScrollValue + dy);
+        }
+
+        protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
+        {
+            if (!imageSize.IsEmpty) {
+                ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+            }
+
+            if (!noRedraw) Invalidate();
         }
     }
 }

@@ -539,17 +539,12 @@ namespace GKUI
 
         private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListView recView, out HyperView summary)
         {
-            tabsRecords.SuspendLayout();
-
-            TabPage sheet = new TabPage(pageText);
-            tabsRecords.Pages.Add(sheet);
-
             summary = new HyperView();
             summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
-            summary.Font = new Font("Tahoma", 8.25f);
+            //summary.Font = new Font("Tahoma", 8.25f);
 
-            recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
+            recView = UIHelper.CreateRecordsView(null, fContext, recType);
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
@@ -562,7 +557,11 @@ namespace GKUI
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
 
-            sheet.Content = spl;
+            tabsRecords.SuspendLayout();
+
+            TabPage tabPage = new TabPage(pageText);
+            tabPage.Content = spl;
+            tabsRecords.Pages.Add(tabPage);
 
             tabsRecords.ResumeLayout();
         }
@@ -1057,6 +1056,8 @@ namespace GKUI
         public void ShowRecordsTab(GEDCOMRecordType recType)
         {
             tabsRecords.SelectedIndex = (int)recType - 1;
+            //TabPage page = tabsRecords.Pages[(int)recType - 1];
+            //tabsRecords.SelectedPage = page;
             //tabsRecords.Invalidate();
             //PageRecords_SelectedIndexChanged(null, null);
         }
@@ -1069,7 +1070,7 @@ namespace GKUI
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
                 rView.Focus();
-                rView.SelectItemByData(record);
+                rView.SelectItem(record);
             }
         }
 
@@ -1424,15 +1425,14 @@ namespace GKUI
             }
         }
 
-        // FIXME: implement button of options into charts windows
         private void miOptions_Click(object sender, EventArgs e)
         {
             using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
             {
-                IWindow activeWin = AppHost.Instance.GetActiveWindow();
-                if (activeWin is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
-                if (activeWin is IChartWindow) {
-                    if (activeWin is CircleChartWin) {
+                IWindow activeWnd = AppHost.Instance.GetActiveWindow();
+                if (activeWnd is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
+                if (activeWnd is IChartWindow) {
+                    if (activeWnd is CircleChartWin) {
                         dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
                     } else {
                         dlgOptions.SetPage(OptionsPage.opTreeChart);

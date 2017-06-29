@@ -68,9 +68,50 @@ namespace GKUI
             fSelectedRecords = selectedRecords;
             fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
 
-            UpdateStatsTypes();
-
             SetLang();
+        }
+
+        public void SetLang()
+        {
+            Title = LangMan.LS(LSID.LSID_MIStats);
+            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
+
+            tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            UpdateCommonStats();
+
+            //int oldIndex = cbType.SelectedIndex;
+            UpdateStatsTypes();
+            //cbType.SelectedIndex = oldIndex;
+        }
+
+        private void UpdateStatsTypes()
+        {
+            ICulture culture = fBase.Context.Culture;
+
+            cmStatTypes.Items.Clear();
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
+            {
+                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+
+                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
+                var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
+                menuItem.Click += miStatType_Click;
+                menuItem.Tag = sm;
+                cmStatTypes.Items.Add(menuItem);
+            }
+        }
+
+        private void miStatType_Click(object sender, EventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+            var sm = (StatsMode)menuItem.Tag;
+            CalcStats(sm);
         }
 
         private static string GetPercent(int dividend, int divisor)
@@ -106,10 +147,9 @@ namespace GKUI
         private void CalcStats(StatsMode mode)
         {
             fListStats.SortColumn = 0;
-            //fListStats.Columns[0].Text = LangMan.LS(GKData.StatsTitles[(int)mode].Cap);
-            //fListStats.Columns[1].Text = LangMan.LS(LSID.LSID_Value);
-
-            fListStats.Sorting = SortOrder.None;
+            fListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)mode].Cap));
+            fListStats.SetColumnCaption(1, LangMan.LS(LSID.LSID_Value));
+            fListStats.Order = SortOrder.None;
             fListStats.SortColumn = -1;
             fListStats.BeginUpdate();
             fListStats.ClearItems();
@@ -237,7 +277,7 @@ namespace GKUI
             AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
             AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
         }
-        
+
         private void AddCompositeItem(LSID name, CompositeItem item)
         {
             lvSummary.AddItem(null, LangMan.LS(name),
@@ -251,49 +291,9 @@ namespace GKUI
             if (e.Key == Keys.Escape) Close();
         }
 
-        private void cbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //CalcStats((StatsMode)cbType.SelectedIndex);
-        }
-
-        private void UpdateStatsTypes()
-        {
-            ICulture culture = fBase.Context.Culture;
-
-            /*cbType.BeginUpdate();
-            cbType.Items.Clear();
-            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
-            {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
-
-                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                cbType.Items.Add(LangMan.LS(tr.Title));
-            }
-            cbType.EndUpdate();*/
-        }
-
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
             UpdateCommonStats();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_MIStats);
-            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
-
-            lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
-
-            tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            UpdateCommonStats();
-
-            //int oldIndex = cbType.SelectedIndex;
-            UpdateStatsTypes();
-            //cbType.SelectedIndex = oldIndex;
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

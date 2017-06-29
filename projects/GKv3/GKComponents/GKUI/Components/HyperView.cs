@@ -36,18 +36,16 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : ScrollablePanel
+    public class HyperView : CustomPanel
     {
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private List<int> fHeights;
-        private ExtSize fTextSize;
-        private readonly StringList fLines;
-        private BBTextChunk fCurrentLink;
-        private Color fLinkColor;
         private List<BBTextChunk> fChunks;
-        private int fHorizontalMaximum;
-        private int fVerticalMaximum;
+        private BBTextChunk fCurrentLink;
+        private List<int> fHeights;
+        private readonly StringList fLines;
+        private Color fLinkColor;
+        private ExtSize fTextSize;
 
         public event LinkEventHandler OnLink;
 
@@ -270,6 +268,7 @@ namespace GKUI.Components
             base.OnFontChanged(e);
         }*/
 
+        // FIXME: move call to fCanvas handler
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.Key)
@@ -283,11 +282,11 @@ namespace GKUI.Components
                     break;
 
                 case Keys.Home:
-                    AdjustScroll(-fHorizontalMaximum, -fVerticalMaximum);
+                    AdjustScroll(-fTextSize.Width, -fTextSize.Height);
                     break;
 
                 case Keys.End:
-                    AdjustScroll(-fHorizontalMaximum, fVerticalMaximum);
+                    AdjustScroll(-fTextSize.Width, fTextSize.Height);
                     break;
 
                 case Keys.Left:

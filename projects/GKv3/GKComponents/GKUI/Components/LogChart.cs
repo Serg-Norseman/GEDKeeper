@@ -55,7 +55,7 @@ namespace GKUI.Components
 
             public int X;
             public int Width;
-            
+
             public Rectangle Rect;
         }
 
@@ -106,8 +106,9 @@ namespace GKUI.Components
         {
             int count = fList.Count;
             if (count == 0) return;
-            
+
             int wid = Width - (count - 1);
+            if (wid <= 0) return;
 
             Fragment frag;
 
@@ -152,7 +153,7 @@ namespace GKUI.Components
                     if (idx == count - 1) {
                         idx = 0;
                     } else idx++;
-                    
+
                     d--;
                 }
             }
@@ -178,10 +179,16 @@ namespace GKUI.Components
             }
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            UpdateContents();
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            
+
             if (Width <= 0 || Height <= 0) return;
 
             Graphics gfx = e.Graphics;

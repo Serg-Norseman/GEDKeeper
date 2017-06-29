@@ -120,9 +120,6 @@ namespace GKUI.Dialogs
             numASMin = new NumericUpDown();
             chkAutosave = new CheckBox();
             grpFileBackup = new GroupBox();
-            radFBEachRevision = new RadioButton();
-            radFBOnlyPrev = new RadioButton();
-            radFBNone = new RadioButton();
             lblGeocoder = new Label();
             lblLanguage = new Label();
             grpInternet = new GroupBox();
@@ -182,12 +179,7 @@ namespace GKUI.Dialogs
             grpAdvancedNames = new GroupBox();
             chkExtendWomanSurnames = new CheckBox();
             rgFNPFormat = new GroupBox();
-            radS_N_P = new RadioButton();
-            radS_NP = new RadioButton();
-            radSNP = new RadioButton();
             grpDateFormat = new GroupBox();
-            radYMD = new RadioButton();
-            radDMY = new RadioButton();
             chkPlacesWithAddress = new CheckBox();
             chkHighlightUnparented = new CheckBox();
             chkShowDatesSigns = new CheckBox();
@@ -210,9 +202,7 @@ namespace GKUI.Dialogs
             SuspendLayout();
 
             pageCommon.Text = "pageCommon";
-            pageCommon.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { grpInternet, groupBox1 }
@@ -224,9 +214,7 @@ namespace GKUI.Dialogs
                 }
             };
 
-            groupBox1.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            groupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
@@ -252,10 +240,17 @@ namespace GKUI.Dialogs
 
             chkAutosave.Text = "chkAutosave";
 
+            radFBNone = new RadioButton();
+            radFBNone.Text = "radFBNone";
+
+            radFBOnlyPrev = new RadioButton(radFBNone);
+            radFBOnlyPrev.Text = "radFBOnlyPrev";
+
+            radFBEachRevision = new RadioButton(radFBNone);
+            radFBEachRevision.Text = "radFBEachRevision";
+
             grpFileBackup.Text = "grpFileBackup";
-            grpFileBackup.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpFileBackup.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { radFBNone }
@@ -269,18 +264,10 @@ namespace GKUI.Dialogs
                 }
             };
 
-            radFBEachRevision.Text = "radFBEachRevision";
-
-            radFBOnlyPrev.Text = "radFBOnlyPrev";
-
-            radFBNone.Text = "radFBNone";
-
             //
 
             grpInternet.Text = "grpInternet";
-            grpInternet.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpInternet.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
@@ -337,9 +324,7 @@ namespace GKUI.Dialogs
             cmbLanguages.ReadOnly = true;
 
             grpOther.Text = "grpOther";
-            grpOther.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpOther.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { chkLoadRecentFiles }
@@ -365,10 +350,7 @@ namespace GKUI.Dialogs
             chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
 
             pageMultimedia.Text = "pageMultimedia";
-            pageMultimedia.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = new Padding(10),
-                Spacing = 10,
+            pageMultimedia.Content = new VDefStackLayout {
                 Items = { chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs }
             };
 
@@ -383,18 +365,12 @@ namespace GKUI.Dialogs
             //
 
             pageTreeChart.Text = "pageTreeChart";
-            pageTreeChart.Content = new StackLayout {
-                Orientation = Orientation.Horizontal,
-                Padding = 10,
-                Spacing = 10,
+            pageTreeChart.Content = new HDefStackLayout {
                 Items = { grpTreePersons, grpTreeDecor }
             };
 
             grpTreePersons.Text = "grpTreePersons";
-            grpTreePersons.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = 10,
-                Spacing = 10,
+            grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
                     chkChildlessExclude }
@@ -430,9 +406,7 @@ namespace GKUI.Dialogs
             //
 
             grpTreeDecor.Text = "grpTreeDecor";
-            grpTreeDecor.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpTreeDecor.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { new StackLayout { Orientation = Orientation.Horizontal, Spacing = 10, Items = { panMaleColor, panFemaleColor } } }
@@ -513,18 +487,13 @@ namespace GKUI.Dialogs
             PageControl2.Pages.Add(pageViewPersons);
 
             pageViewCommon.Text = "pageViewCommon";
-            pageViewCommon.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pageViewCommon.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { rgFNPFormat, grpDateFormat }
                     },
                     new TableRow {
-                        Cells = { grpAdvancedNames, new StackLayout{
-                                Orientation = Orientation.Vertical,
-                                Padding = 10,
-                                Spacing = 10,
+                        Cells = { grpAdvancedNames, new VDefStackLayout{
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried }
                             }
                         }
@@ -551,46 +520,42 @@ namespace GKUI.Dialogs
             chkExtendWomanSurnames.CheckedChanged += chkExtendWomanSurnames_CheckedChanged;
 
             grpAdvancedNames.Text = "AdvancedNames";
-            grpAdvancedNames.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = 10,
-                Spacing = 10,
+            grpAdvancedNames.Content = new VDefStackLayout {
                 Items = { chkExtendWomanSurnames, radMaiden_Married, radMarried_Maiden, radMaiden, radMarried }
             };
 
             //
 
+            radS_N_P = new RadioButton();
+            radS_N_P.Text = "radS_N_P";
+
+            radS_NP = new RadioButton(radS_N_P);
+            radS_NP.Text = "radS_NP";
+
+            radSNP = new RadioButton(radS_N_P);
+            radSNP.Text = "radSNP";
+
             rgFNPFormat.Text = "rgFNPFormat";
-            rgFNPFormat.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = 10,
-                Spacing = 10,
+            rgFNPFormat.Content = new VDefStackLayout {
                 Items = { radS_N_P, radS_NP, radSNP }
             };
 
-            radS_N_P.Text = "radS_N_P";
-
-            radS_NP.Text = "radS_NP";
-
-            radSNP.Text = "radSNP";
-
             //
 
-            grpDateFormat.Text = "grpDateFormat";
-            grpDateFormat.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = 10,
-                Spacing = 10,
-                Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
-            };
-
-            radYMD.Text = "YYYY.MM.DD";
-
+            radDMY = new RadioButton();
             radDMY.Text = "DD.MM.YYYY";
+
+            radYMD = new RadioButton(radDMY);
+            radYMD.Text = "YYYY.MM.DD";
 
             chkShowDatesSigns.Text = "chkShowDatesSigns";
 
             chkShowDatesCalendar.Text = "chkShowDatesCalendar";
+
+            grpDateFormat.Text = "grpDateFormat";
+            grpDateFormat.Content = new VDefStackLayout {
+                Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
+            };
 
             //
 
@@ -603,17 +568,11 @@ namespace GKUI.Dialogs
             //
 
             pageViewPersons.Text = "pageViewPersons";
-            pageViewPersons.Content = new StackLayout {
-                Orientation = Orientation.Horizontal,
-                Padding = 10,
-                Spacing = 10,
+            pageViewPersons.Content = new HDefStackLayout {
                 Items = { new StackLayoutItem(lstPersonColumns, true), new StackLayoutItem(panel1, false) }
             };
 
-            panel1.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = 10,
-                Spacing = 10,
+            panel1.Content = new VDefStackLayout {
                 Items = { btnColumnUp, btnColumnDown, null, btnDefList }
             };
 
@@ -635,15 +594,12 @@ namespace GKUI.Dialogs
             radExcess = new RadioButton();
             radExcess.Text = "radExcess";
 
-            radCompact = new RadioButton();
+            radCompact = new RadioButton(radExcess);
             radCompact.Text = "radCompact";
 
             grpPedigreeFormat = new GroupBox();
             grpPedigreeFormat.Text = "grpPedigreeFormat";
-            grpPedigreeFormat.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = new Padding(10),
-                Spacing = 10,
+            grpPedigreeFormat.Content = new VDefStackLayout {
                 Items = { radExcess, radCompact }
             };
 
@@ -658,10 +614,7 @@ namespace GKUI.Dialogs
             chkSources.Text = "chkSources";
 
             grpPedigree.Text = "grpPedigree";
-            grpPedigree.Content = new StackLayout {
-                Orientation = Orientation.Vertical,
-                Padding = new Padding(10),
-                Spacing = 10,
+            grpPedigree.Content = new VDefStackLayout {
                 Items = { chkAttributes, chkNotes, chkSources, chkGenerations, grpPedigreeFormat }
             };
 
@@ -671,8 +624,6 @@ namespace GKUI.Dialogs
             //
 
             lvPlugins = new GKListView();
-            lvPlugins.FullRowSelect = true;
-            lvPlugins.AllowMultipleSelection = false;
 
             pagePlugins = new TabPage();
             pagePlugins.Content = lvPlugins;
@@ -700,9 +651,7 @@ namespace GKUI.Dialogs
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,

@@ -77,7 +77,7 @@ namespace GKUI.Components
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
-    public sealed class ImageBox : ScrollablePanel
+    public sealed class ImageBox : CustomPanel
     {
         #region Constants
 
@@ -386,7 +386,7 @@ namespace GKUI.Components
         ///   Gets or sets the zoom.
         /// </summary>
         /// <value>The zoom.</value>
-        public int Zoom
+        public new int Zoom
         {
             get { return fZoom; }
             set {
@@ -494,7 +494,9 @@ namespace GKUI.Components
         /// <param name="imageLocation">The point of the image to attempt to center.</param>
         public void CenterAt(int x, int y)
         {
-            ScrollTo(new Point(x, y), new Point(ClientSize.Width / 2, ClientSize.Height / 2));
+            Size clientSize = ClientRectangle.Size;
+
+            ScrollTo(new Point(x, y), new Point(clientSize.Width / 2, clientSize.Height / 2));
         }
 
         /// <summary>
@@ -579,10 +581,12 @@ namespace GKUI.Components
         /// <returns></returns>
         private Rectangle GetInsideViewPort(bool includePadding)
         {
+            Size clientSize = ClientRectangle.Size;
+
             int left = 0;
             int top = 0;
-            int width = ClientSize.Width;
-            int height = ClientSize.Height;
+            int width = clientSize.Width;
+            int height = clientSize.Height;
 
             if (includePadding)
             {
@@ -690,7 +694,7 @@ namespace GKUI.Components
             int x = (int)(imageLocation.X * fZoomFactor) - relativeDisplayPoint.X;
             int y = (int)(imageLocation.Y * fZoomFactor) - relativeDisplayPoint.Y;
 
-            AutoScrollPosition = new Point(x, y);
+            UpdateScrollPosition(x, y);
         }
 
         /// <summary>
@@ -766,8 +770,10 @@ namespace GKUI.Components
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public void ZoomToRegion(RectangleF rectangle)
         {
-            double ratioX = ClientSize.Width / rectangle.Width;
-            double ratioY = ClientSize.Height / rectangle.Height;
+            Size clientSize = ClientRectangle.Size;
+
+            double ratioX = clientSize.Width / rectangle.Width;
+            double ratioY = clientSize.Height / rectangle.Height;
             double zoomFactor = Math.Min(ratioX, ratioY);
             int cx = (int)(rectangle.X + (rectangle.Width / 2));
             int cy = (int)(rectangle.Y + (rectangle.Height / 2));
@@ -1192,8 +1198,11 @@ namespace GKUI.Components
                     break;
             }
 
-            if (fZoom != previousZoom && fAutoCenter && !ScrollSize.IsEmpty)
-                AutoScrollPosition = new Point((ScrollSize.Width - ClientSize.Width) / 2, (ScrollSize.Height - ClientSize.Height) / 2);
+            if (fZoom != previousZoom && fAutoCenter && !ScrollSize.IsEmpty) {
+                Size clientSize = ClientRectangle.Size;
+
+                UpdateScrollPosition((ScrollSize.Width - clientSize.Width) / 2, (ScrollSize.Height - clientSize.Height) / 2);
+            }
         }
 
         /// <summary>
