@@ -4,7 +4,7 @@
 [![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
-
+[![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
 [![Join the chat at https://gitter.im/Serg-Norseman/GEDKeeper](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
@@ -27,7 +27,7 @@ multimedia materials. In addition there is an output of geographic data on
 Google maps (© Google).
 
 The aim of the program is as quick and effective means of conducting personal 
-genealogical database as a support tool to the traditional card index.
+genealogical database.
 
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
@@ -50,7 +50,7 @@ Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
 Google Maps (© Google).
 
 Цель программы - максимально быстрое и эффективное средство ведения личной 
-генеалогической базы данных - как вспомогательный инструмент к традиционной картотеке.
+генеалогической базы данных.
 
 Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
