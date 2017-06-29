@@ -61,6 +61,16 @@ namespace GKUI {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap btn_expand_gif {
+            get {
+                object obj = ResourceManager.GetObject("btn_expand.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon GK2_Icon {
@@ -136,16 +146,6 @@ namespace GKUI {
         internal static System.Drawing.Bitmap iExcel {
             get {
                 object obj = ResourceManager.GetObject("iExcel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iExpand {
-            get {
-                object obj = ResourceManager.GetObject("iExpand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -363,96 +363,6 @@ namespace GKUI {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap iTGBarbedWire {
-            get {
-                object obj = ResourceManager.GetObject("iTGBarbedWire", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGGeorgeCross {
-            get {
-                object obj = ResourceManager.GetObject("iTGGeorgeCross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGIslamSym {
-            get {
-                object obj = ResourceManager.GetObject("iTGIslamSym", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGLatinCross {
-            get {
-                object obj = ResourceManager.GetObject("iTGLatinCross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGOldRitualCross {
-            get {
-                object obj = ResourceManager.GetObject("iTGOldRitualCross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGOrthodoxCross {
-            get {
-                object obj = ResourceManager.GetObject("iTGOrthodoxCross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGSoldier {
-            get {
-                object obj = ResourceManager.GetObject("iTGSoldier", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGSoldierFall {
-            get {
-                object obj = ResourceManager.GetObject("iTGSoldierFall", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap iTGVeteranRear {
-            get {
-                object obj = ResourceManager.GetObject("iTGVeteranRear", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap iTipsLight {
             get {
                 object obj = ResourceManager.GetObject("iTipsLight", resourceCulture);
@@ -573,9 +483,19 @@ namespace GKUI {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap piFemale140 {
+        internal static System.Drawing.Bitmap pi_female_140_png {
             get {
-                object obj = ResourceManager.GetObject("piFemale140", resourceCulture);
+                object obj = ResourceManager.GetObject("pi_female_140.png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pi_male_140_png {
+            get {
+                object obj = ResourceManager.GetObject("pi_male_140.png", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -603,16 +523,6 @@ namespace GKUI {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap piMale140 {
-            get {
-                object obj = ResourceManager.GetObject("piMale140", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap piMale200 {
             get {
                 object obj = ResourceManager.GetObject("piMale200", resourceCulture);
@@ -626,6 +536,96 @@ namespace GKUI {
         internal static System.Drawing.Bitmap piMale400 {
             get {
                 object obj = ResourceManager.GetObject("piMale400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_barbed_wire_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_barbed_wire.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_george_cross_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_george_cross.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_islam_sym_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_islam_sym.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_latin_cross_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_latin_cross.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_oldritual_cross_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_oldritual_cross.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_orthodox_cross_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_orthodox_cross.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_soldier_fall_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_soldier_fall.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_soldier_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_soldier.gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tg_veteran_rear_gif {
+            get {
+                object obj = ResourceManager.GetObject("tg_veteran_rear.gif", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

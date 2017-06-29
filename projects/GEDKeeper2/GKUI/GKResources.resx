@@ -385,7 +385,7 @@
         jgMtFlgZIMAAjQJiAkBJEEDLli9hCpgZUkDOlzJpHgTgE+hOoQgN+AzqUOnRhwdMIm04FarVqw0DAgA7
 </value>
   </data>
-  <data name="iTGGeorgeCross" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_george_cross.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk0+BQAAAAAAAP4CAAAoAAAAGAAAABgAAAABAAgAAAAAAAAAAAASCwAAEgsAALIAAACyAAAAnJqm/4WE
         iv9sanT/Xl1h/3Nydv9ubHL/cXBz/2lmbv94dnv/k5GW/2pmbf94dnn/dXN2/4aDh/9dWV7/ZGBk/1VS
@@ -412,7 +412,7 @@
         sLCwsLCwsLCwsLCwsLCwsLCwsLCwsA==
 </value>
   </data>
-  <data name="iTGSoldier" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_soldier.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk2uBgAAAAAAADYAAAAoAAAAGAAAABcAAAABABgAAAAAAAAAAAASCwAAEgsAAAAAAAAAAAAA////////
         ////////////////////////////////////////////////////////////////////////////////
@@ -445,7 +445,7 @@
         ////////////////////////////////////////
 </value>
   </data>
-  <data name="iTGSoldierFall" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_soldier_fall.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk2uBgAAAAAAADYAAAAoAAAAGAAAABcAAAABABgAAAAAAAAAAAASCwAAEgsAAAAAAAAAAAAA////////
         ////////////////////////////////////////////////////////////////////////////////
@@ -478,7 +478,7 @@
         ////////////////////////////////////////
 </value>
   </data>
-  <data name="iTGVeteranRear" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_veteran_rear.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk2uBgAAAAAAADYAAAAoAAAAGAAAABcAAAABABgAAAAAAAAAAAASCwAAEgsAAAAAAAAAAAAA////////
         ////////////////////////////////////////////////////////////////////////////////
@@ -730,7 +730,7 @@
         QJKQgrHxaWTllUAY+Wb7b16/bUdE+C7EHEzAubQ8fPikxk84joPUUkFV+QAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="iExpand" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btn_expand.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAAAAAASCwAAEgsAAAABAAAAAQAA/////3u6
         8v9IoPD/JI/p/ySP6f8SZcb/DHjY/3Gp5/8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAA
@@ -771,7 +771,7 @@
         kyhRCiCJsSJHATBjypRYEECAmzhxwqRZsIDPnz8DCODZsEAAokWRFm1JkWnGp1AbBgQAOw==
 </value>
   </data>
-  <data name="iTGBarbedWire" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_barbed_wire.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk2WAQAAAAAAAHYAAAAoAAAAGAAAABgAAAABAAQAAAAAAAAAAAASCwAAEgsAABAAAAAQAAAAbi8y/72f
         n/+WZmj/5NfY/6iBgv+ETU7/zbe2//////8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/3d3
@@ -782,7 +782,7 @@
         d3ZGd3d3d3d3d3d3d3NHd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dw==
 </value>
   </data>
-  <data name="iTGOldRitualCross" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_oldritual_cross.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhGAAYAIcAAAAAACcnJyoqKmhoaKioqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -803,7 +803,7 @@
         lq3FlgkZBgQAOw==
 </value>
   </data>
-  <data name="iTGLatinCross" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_latin_cross.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhGAAYAIcAAAAAAGJiYmVlZX9/f8XFxcbGxsrKysvLywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -823,7 +823,7 @@
         okaD/gyJlGlRp0KhLiUalerUo0UNIqwYEAA7
 </value>
   </data>
-  <data name="iTGIslamSym" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_islam_sym.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhGAAXAIcAAAAAAAB/AAaBBhGGES2VLTKXMjmbOTqbOj2cPUGeQUOfQ0OgQ0eiR0+lT1CmUFGn
         UVKnUlurW12tXWKvYnK3cnO4c3e6d3i6eHm7eXq7eoC+gIG/gYK/goXBhYfCh4jCiIrDiovEi5LHkpTJ
@@ -844,7 +844,7 @@
         12ADjAxu9CXogWaCDSdMZCCBN0cHAxgJULAxuLJlgwEBADs=
 </value>
   </data>
-  <data name="iTGOrthodoxCross" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tg_orthodox_cross.gif" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhGAAYAIcAAAAAACcnJyoqKgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -2202,7 +2202,7 @@
         SCQSieSUksv9/ziQVlVZj1iXAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="piMale140" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="pi_male_140.png" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAAABGdBTUEAALGPC/xhBQAAHxZJREFUeF7t
         nXlwVdWWxo8DiuPjqa1idZfPodtW7G6twrH1dan9D6342nrSKOKAE8pUhEkmEZkhYUhCZBAIyuOpzGmR
@@ -2340,7 +2340,7 @@
         damDuqiTum0yRRBwAU40SdAkLnGJS1ziEhc3iuf9HwpcIk5t6xcOAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="piFemale140" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="pi_female_140.png" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAAABGdBTUEAALGPC/xhBQAAG0RJREFUeF7t
         nXmMFfWWxys+85L5x/fHJG8yk8mL23PXuC8P3LdxV0TNGJ9RGtxAA6KIIkuDCE1DC91Asws6DLY2WwDZ

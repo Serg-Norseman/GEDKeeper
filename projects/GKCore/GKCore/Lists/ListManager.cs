@@ -286,6 +286,10 @@ namespace GKCore.Lists
             return result;
         }
 
+        public virtual void UpdateItemProps(IListItem item, object rowData)
+        {
+        }
+
         public virtual void UpdateItem(IListItem item, object rowData)
         {
             GEDCOMRecord rec = rowData as GEDCOMRecord;

@@ -337,7 +337,7 @@ namespace GKCore.Charts
                             fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
-                                string resName = (fSex == GEDCOMSex.svFemale) ? "piFemale140" : "piMale140";
+                                string resName = (fSex == GEDCOMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
                                 fPortrait = AppHost.GfxProvider.GetResourceImage(resName, false);
                             }
                         }
