@@ -585,6 +585,20 @@ namespace GKCore.Lists
             }
         }
 
+        public override void UpdateItemProps(IListItem item, object rowData)
+        {
+            GlobalOptions gOptions = GlobalOptions.Instance;
+
+            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
+            {
+                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
+            }
+            else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
+            {
+                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
+            }
+        }
+
         public override void UpdateColumns(IListView listView)
         {
             ColumnsMap_Clear();

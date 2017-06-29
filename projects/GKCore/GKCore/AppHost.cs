@@ -238,20 +238,20 @@ namespace GKCore
 
         public IWorkWindow GetWorkWindow()
         {
-            IWindow activeForm = GetActiveWindow();
-            return (activeForm is IWorkWindow) ? (IWorkWindow) activeForm : null;
+            IWindow activeWnd = GetActiveWindow();
+            return (activeWnd is IWorkWindow) ? (IWorkWindow) activeWnd : null;
         }
 
         public IBaseWindow GetCurrentFile(bool extMode = false)
         {
-            IWindow activeWin = GetActiveWindow();
-            IChartWindow curChart = ((activeWin is IChartWindow) ? ((IChartWindow) activeWin) : null);
+            IWindow activeWnd = GetActiveWindow();
+            IChartWindow curChart = ((activeWnd is IChartWindow) ? ((IChartWindow) activeWnd) : null);
             IBaseWindow result;
 
             if (extMode && curChart != null) {
                 result = curChart.Base;
             } else {
-                result = ((activeWin is IBaseWindow) ? ((IBaseWindow) activeWin) : null);
+                result = ((activeWnd is IBaseWindow) ? ((IBaseWindow) activeWnd) : null);
             }
 
             return result;

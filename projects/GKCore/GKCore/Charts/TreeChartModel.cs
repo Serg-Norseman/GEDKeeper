@@ -266,18 +266,18 @@ namespace GKCore.Charts
             try {
                 var signsPic = new IImage[9];
 
-                signsPic[0] = PrepareImage("iTGGeorgeCross", true);
-                signsPic[1] = PrepareImage("iTGSoldier", true);
-                signsPic[2] = PrepareImage("iTGSoldierFall", true);
-                signsPic[3] = PrepareImage("iTGVeteranRear", true);
-                signsPic[4] = PrepareImage("iTGBarbedWire", true);
-                signsPic[5] = PrepareImage("iTGIslamSym", false);
-                signsPic[6] = PrepareImage("iTGLatinCross", false);
-                signsPic[7] = PrepareImage("iTGOrthodoxCross", false);
-                signsPic[8] = PrepareImage("iTGOldRitualCross", false);
+                signsPic[0] = PrepareImage("tg_george_cross.gif", true);
+                signsPic[1] = PrepareImage("tg_soldier.gif", true);
+                signsPic[2] = PrepareImage("tg_soldier_fall.gif", true);
+                signsPic[3] = PrepareImage("tg_veteran_rear.gif", true);
+                signsPic[4] = PrepareImage("tg_barbed_wire.gif", true);
+                signsPic[5] = PrepareImage("tg_islam_sym.gif", false);
+                signsPic[6] = PrepareImage("tg_latin_cross.gif", false);
+                signsPic[7] = PrepareImage("tg_orthodox_cross.gif", false);
+                signsPic[8] = PrepareImage("tg_oldritual_cross.gif", false);
 
                 fSignsPic = signsPic;
-                fExpPic = PrepareImage("iExpand", true);
+                fExpPic = PrepareImage("btn_expand.gif", true);
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
             }
