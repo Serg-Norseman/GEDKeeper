@@ -34,8 +34,8 @@ namespace GKUI.Components
     public sealed class TreeChartGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
-        //private Matrix fMatrix; // FIXME: GKv3 DevRestriction
-        //private Matrix fBackMatrix; // FIXME: GKv3 DevRestriction
+        private IMatrix fMatrix;
+        private IMatrix fBackMatrix;
 
         public TreeChartGfxRenderer() : base()
         {
@@ -233,12 +233,17 @@ namespace GKUI.Components
 
         public override void ResetTransform()
         {
+            //fMatrix = Matrix.Create();
+
             /*fCanvas.ResetTransform();
             fMatrix = fCanvas.Transform;*/
         }
 
         public override void ScaleTransform(float sx, float sy)
         {
+            fCanvas.ScaleTransform(sx, sy);
+            fMatrix = fCanvas.CurrentTransform;
+
             /*Matrix m = new Matrix(sx, 0, 0, sy, 0, 0);
             m.Multiply(fMatrix, MatrixOrder.Append);
             fCanvas.Transform = m;
@@ -247,6 +252,9 @@ namespace GKUI.Components
 
         public override void TranslateTransform(float dx, float dy)
         {
+            fCanvas.TranslateTransform(dx, dy);
+            fMatrix = fCanvas.CurrentTransform;
+
             /*Matrix m = new Matrix(1, 0, 0, 1, dx, dy);
             m.Multiply(fMatrix, MatrixOrder.Append);
             fCanvas.Transform = m;
@@ -255,6 +263,9 @@ namespace GKUI.Components
 
         public override void RotateTransform(float angle)
         {
+            fCanvas.RotateTransform(angle);
+            fMatrix = fCanvas.CurrentTransform;
+
             /*float rotation = (float)((angle) * Math.PI / 180.0f);
             float cosine = (float)(Math.Cos(rotation));
             float sine = (float)(Math.Sin(rotation));
@@ -266,13 +277,14 @@ namespace GKUI.Components
 
         public override object SaveTransform()
         {
-            /*fBackMatrix = fCanvas.Transform;
-            return fBackMatrix;*/
-            return null;
+            fCanvas.SaveTransform();
+            fBackMatrix = fCanvas.CurrentTransform;
+            return fBackMatrix;
         }
 
         public override void RestoreTransform(object matrix)
         {
+            fCanvas.RestoreTransform();
             /*var mtx = matrix as Matrix;
 
             fCanvas.Transform = mtx;

@@ -59,8 +59,12 @@ namespace GKUI.Dialogs
 
         private void InitCurDoc()
         {
+            var printSettings = new PrintSettings();
+            fPrintDoc.PrintSettings = printSettings;
+
             fPrintDoc.Name = Title;
             fPrintDoc.PrintSettings.Orientation = GetPrintable().IsLandscape() ? PageOrientation.Landscape : PageOrientation.Portrait;
+            fPrintDoc.PrintSettings.MaximumPageRange = new Eto.Forms.Range<int>(1, 1);
             //fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
             fPrintDoc.PageCount = 1;
         }

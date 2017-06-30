@@ -186,6 +186,14 @@ namespace GKUI.Components
         None, Ascending, Descending
     }
 
+    public class ItemCheckEventArgs : EventArgs
+    {
+        public int Index { get; set; }
+        public bool NewValue { get; set; }
+    }
+
+    public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
+
     /// <summary>
     /// 
     /// </summary>
@@ -280,6 +288,7 @@ namespace GKUI.Components
         private readonly LVColumnSorter fColumnSorter;
         private readonly ObservableCollection<GKListItem> fItems;
 
+        private bool fCheckedList;
         private IListManager fListMan;
         private int fSortColumn;
         private SortOrder fSortOrder;
@@ -300,7 +309,13 @@ namespace GKUI.Components
 
         public int SelectedIndex
         {
-            get; set;
+            get {
+                int index = fItems.IndexOf(SelectedItem as GKListItem);
+                return index;
+            }
+            set {
+                SelectItem(value);
+            }
         }
 
         public IList<GKListItem> Items
@@ -328,6 +343,7 @@ namespace GKUI.Components
             }
         }
 
+        public event ItemCheckEventHandler ItemCheck;
 
         public GKListView()
         {
@@ -344,6 +360,7 @@ namespace GKUI.Components
             fItems = new ObservableCollection<GKListItem>();
             DataStore = fItems;
 
+            fCheckedList = false;
             fListMan = null;
             fSortColumn = 0;
             fSortOrder = SortOrder.None;
@@ -520,6 +537,8 @@ namespace GKUI.Components
 
         private void UpdateItems()
         {
+            if (fListMan == null) return;
+
             fItems.Clear();
 
             int num = fListMan.FilteredCount;
@@ -628,6 +647,8 @@ namespace GKUI.Components
             column.Width = width;
             column.Editable = true;
             Columns.Add(column);
+
+            fCheckedList = true;
         }
 
         public void SetColumnCaption(int index, string caption)
@@ -725,6 +746,27 @@ namespace GKUI.Components
             } catch (Exception ex) {
                 Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
             }
+        }
+
+        #endregion
+
+        #region CheckedList
+
+        protected override void OnCellEdited(GridViewCellEventArgs e)
+        {
+            if (fCheckedList) {
+                if (e.Column == 0) {
+                    DoItemCheck(e.Row, ((bool)((GKListItem)e.Item).Values[0]));
+                }
+            }
+            base.OnCellEdited(e);
+        }
+
+        private void DoItemCheck(int index, bool newValue)
+        {
+            ItemCheckEventHandler handler = this.ItemCheck;
+            if (handler != null)
+                handler.Invoke(this, new ItemCheckEventArgs() { Index = index, NewValue = newValue });
         }
 
         #endregion

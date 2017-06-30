@@ -97,7 +97,7 @@ namespace GKUI.Components
                 fZoom = value;
 
                 ExtSize boundary = GetImageSize();
-                AdjustViewPort(boundary, true);
+                AdjustViewport(boundary, true);
                 Invalidate();
             }
         }
@@ -162,7 +162,7 @@ namespace GKUI.Components
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            AdjustViewPort(boundary);
+            AdjustViewport(boundary);
         }
 
         private void DoRootChanged(GEDCOMIndividualRecord person)

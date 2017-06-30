@@ -187,13 +187,15 @@ namespace GKUI.Components
         /// <param name="dy">The Y shift.</param>
         protected void AdjustScroll(int dx, int dy)
         {
-            UpdateScrollPosition(HorizontalScrollValue + dx, VerticalScrollValue + dy);
+            Point curScroll = base.ScrollPosition;
+            UpdateScrollPosition(curScroll.X + dx, curScroll.Y + dy);
         }
 
-        protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
+        protected void AdjustViewport(ExtSize imageSize, bool noRedraw = false)
         {
             if (!imageSize.IsEmpty) {
                 ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+                //base.ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
             }
 
             if (!noRedraw) Invalidate();

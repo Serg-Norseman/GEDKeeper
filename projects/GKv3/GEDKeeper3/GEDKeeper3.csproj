@@ -41,9 +41,6 @@
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
-    <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
-      <DependentUpon>ACOptionsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Components\CircleChart.cs" />
     <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\GKComboItemSmp.cs" />

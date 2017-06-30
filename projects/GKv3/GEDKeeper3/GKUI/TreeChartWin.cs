@@ -449,22 +449,17 @@ namespace GKUI
 
         private void miTraceSelected_Click(object sender, EventArgs e)
         {
-            miTraceSelected.Checked = !miTraceSelected.Checked;
-            
             fTreeBox.Options.TraceSelected = miTraceSelected.Checked;
             fTreeBox.TraceSelected = miTraceSelected.Checked;
         }
 
         private void miTraceKinships_Click(object sender, EventArgs e)
         {
-            miTraceKinships.Checked = !miTraceKinships.Checked;
             fTreeBox.TraceKinships = miTraceKinships.Checked;
         }
 
         private void miCertaintyIndex_Click(object sender, EventArgs e)
         {
-            miCertaintyIndex.Checked = !miCertaintyIndex.Checked;
-            
             fTreeBox.Options.CertaintyIndexVisible = miCertaintyIndex.Checked;
             fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
         }
@@ -493,7 +488,7 @@ namespace GKUI
 
         private void miModeItem_Click(object sender, EventArgs e)
         {
-            TreeChartKind newMode = (TreeChartKind)((ButtonMenuItem)sender).Tag;
+            TreeChartKind newMode = (TreeChartKind)((RadioMenuItem)sender).Tag;
             if (fChartKind == newMode) return;
 
             ChartKind = newMode;

@@ -64,14 +64,6 @@ namespace GKUI.Dialogs
         {
             SuspendLayout();
 
-            imgPortrait = new GKUI.Components.GKPortrait();
-            imgPortrait.Cursor = Cursors.Arrow;
-            imgPortrait.Image = null;
-            //imgPortrait.Size = new Size(149, 165);
-            //imgPortrait.SizeMode = PictureBoxSizeMode.Normal;
-            imgPortrait.SlidePanelHeight = 36;
-            imgPortrait.PixelSpeed = 5;
-
             lblMarriedSurname = new Label();
             //lblMarriedSurname.Size = new Size(95, 13);
             lblMarriedSurname.Text = "lblMarriedSurname";
@@ -108,14 +100,6 @@ namespace GKUI.Dialogs
             //lblNickname.Size = new Size(62, 13);
             lblNickname.Text = "lblNickname";
 
-            btnPortraitAdd = new Button();
-            btnPortraitAdd.Size = new Size(26, 26);
-            btnPortraitAdd.Click += btnPortraitAdd_Click;
-
-            btnPortraitDelete = new Button();
-            btnPortraitDelete.Size = new Size(26, 26);
-            btnPortraitDelete.Click += btnPortraitDelete_Click;
-
             txtMarriedSurname = new TextBox();
             //txtMarriedSurname.Size = new Size(182, 21);
             txtMarriedSurname.KeyDown += edSurname_KeyDown;
@@ -123,6 +107,7 @@ namespace GKUI.Dialogs
 
             txtSurname = new TextBox();
             //txtSurname.Size = new Size(182, 21);
+            txtSurname.Width = 200;
             txtSurname.KeyDown += edSurname_KeyDown;
             //txtSurname.KeyPress += edSurname_KeyPress;
 
@@ -139,6 +124,7 @@ namespace GKUI.Dialogs
             cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
             //cmbSex.Size = new Size(154, 21);
+            cmbSex.Width = 200;
             cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
 
             chkPatriarch = new CheckBox();
@@ -150,6 +136,7 @@ namespace GKUI.Dialogs
             chkBookmark.Text = "chkBookmark";
 
             txtSurnamePrefix = new TextBox();
+            txtSurnamePrefix.Width = 200;
             //txtSurnamePrefix.Size = new Size(136, 21);
 
             txtNamePrefix = new TextBox();
@@ -161,8 +148,6 @@ namespace GKUI.Dialogs
             txtNickname = new TextBox();
             //txtNickname.Size = new Size(136, 21);
 
-            GroupBox1 = new GroupBox();
-            //GroupBox1.Size = new Size(699, 258);
             var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
@@ -172,10 +157,10 @@ namespace GKUI.Dialogs
                         Cells = { txtSurname, txtSurnamePrefix }
                     },
                     new TableRow {
-                        Cells = { lblMarriedSurname, lblNamePrefix, btnPortraitAdd }
+                        Cells = { lblMarriedSurname, lblNamePrefix }
                     },
                     new TableRow {
-                        Cells = { txtMarriedSurname, txtNamePrefix, btnPortraitDelete }
+                        Cells = { txtMarriedSurname, txtNamePrefix }
                     },
                     new TableRow {
                         Cells = { lblName, lblNameSuffix, lblSex }
@@ -188,12 +173,48 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { cmbPatronymic, txtNickname, chkBookmark }
-                    },
-                    null
+                    }
                 }
             };
-            GroupBox1.Content = new HDefStackLayout {
-                Items = { personLayout, imgPortrait }
+
+            imgPortrait = new GKUI.Components.GKPortrait();
+            imgPortrait.Cursor = Cursors.Arrow;
+            imgPortrait.Image = null;
+            imgPortrait.Width = 150;
+            //imgPortrait.Size = new Size(149, 165);
+            //imgPortrait.SizeMode = PictureBoxSizeMode.Normal;
+            imgPortrait.SlidePanelHeight = 36;
+            imgPortrait.PixelSpeed = 5;
+
+            btnPortraitAdd = new Button();
+            btnPortraitAdd.Size = new Size(26, 26);
+            btnPortraitAdd.Click += btnPortraitAdd_Click;
+
+            btnPortraitDelete = new Button();
+            btnPortraitDelete.Size = new Size(26, 26);
+            btnPortraitDelete.Click += btnPortraitDelete_Click;
+
+            var portraitLayout = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { imgPortrait }
+                    },
+                    UIHelper.MakeDialogFooter(null, btnPortraitAdd, btnPortraitDelete)
+                }
+            };
+
+            GroupBox1 = new GroupBox();
+            //GroupBox1.Size = new Size(699, 258);
+            GroupBox1.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = {
+                            new TableCell(personLayout, true),
+                            portraitLayout
+                        }
+                    }
+                }
             };
 
             //
@@ -251,9 +272,7 @@ namespace GKUI.Dialogs
             panCtlParents = new Panel();
             //panCtlParents.BorderStyle = BorderStyle.FixedSingle;
             //panCtlParents.Size = new Size(696, 69);
-            panCtlParents.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            panCtlParents.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblParents, txtFather, txtMother, btnParentsAdd, btnParentsEdit, btnParentsDelete }
@@ -288,6 +307,7 @@ namespace GKUI.Dialogs
 
             cmbRestriction = new ComboBox();
             cmbRestriction.ReadOnly = true;
+            cmbRestriction.Width = 200;
             //cmbRestriction.Size = new Size(163, 21);
             cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
@@ -347,7 +367,7 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { tabsPersonData }
                     },
-                    UIHelper.MakeDialogFooter(lblRestriction, cmbRestriction, btnNameCopy, null, btnAccept, btnCancel)
+                    UIHelper.MakeDialogFooter(lblRestriction, cmbRestriction, null, btnNameCopy, btnAccept, btnCancel)
                 }
             };
 

@@ -196,7 +196,6 @@ namespace GKUI.Components
         private readonly TreeControlsList<ITreeControl> fTreeControls;
 
         private ITreeControl fActiveControl;
-        private int fBorderWidth;
         private long fHighlightedStart;
         private ChartControlMode fMode = ChartControlMode.ccmDefault;
         private TreeChartModel fModel;
@@ -212,10 +211,6 @@ namespace GKUI.Components
         private bool fTraceSelected;
         private TweenLibrary fTween;
 
-        // drawing relative offset of tree on graphics
-        internal int fSPX;
-        internal int fSPY;
-
         #endregion
 
         #region Public properties
@@ -224,26 +219,13 @@ namespace GKUI.Components
 
         public event RootChangedEventHandler RootChanged;
 
-        // FIXME: GKv3 DevRestriction
-        public event /*Mouse*/ EventHandler PersonProperties;
+        public event EventHandler PersonProperties;
+
 
         public IBaseWindow Base
         {
             get { return fModel.Base; }
             set { fModel.Base = value; }
-        }
-
-        public int BorderWidth
-        {
-            get {
-                return fBorderWidth;
-            }
-            set {
-                if (fBorderWidth != value) {
-                    fBorderWidth = value;
-                    Invalidate();
-                }
-            }
         }
 
         public bool CertaintyIndex
@@ -474,7 +456,7 @@ namespace GKUI.Components
 
         public ExtPoint GetOffsets()
         {
-            return new ExtPoint(fSPX, fSPY);
+            return fModel.GetOffsets();
         }
 
         private void DrawBackground(BackgroundMode background)
@@ -501,48 +483,40 @@ namespace GKUI.Components
             }
         }
 
-        /*
-         * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
-         */
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background)
         {
-            fSPX = 0;
-            fSPY = 0;
+            // drawing relative offset of tree on graphics
+            int spx = 0;
+            int spy = 0;
 
-            Rectangle visRect = this.Viewport;
             Size clientSize = ClientRectangle.Size;
             if (drawMode == ChartDrawMode.dmInteractive) {
-                /*Rectangle viewPort = GetImageViewPort();
-                fSPX = -viewPort.Left;
-                fSPY = -viewPort.Top;*/
-
-                fSPX += fBorderWidth /*- -AutoScrollPosition.X*/;
-                fSPY += fBorderWidth /*- -AutoScrollPosition.Y*/;
+                ExtRect viewport = GetImageViewport();
 
                 if (fModel.ImageWidth < clientSize.Width) {
-                    fSPX += (clientSize.Width - fModel.ImageWidth) / 2;
+                    spx += (clientSize.Width - fModel.ImageWidth) / 2;
                 }
 
                 if (fModel.ImageHeight < clientSize.Height) {
-                    fSPY += (clientSize.Height - fModel.ImageHeight) / 2;
+                    spy += (clientSize.Height - fModel.ImageHeight) / 2;
                 }
 
-                fModel.VisibleArea = GetImageViewport();
+                fModel.VisibleArea = viewport;
             } else {
                 if (drawMode == ChartDrawMode.dmStaticCentered) {
                     if (fModel.ImageWidth < clientSize.Width) {
-                        fSPX += (clientSize.Width - fModel.ImageWidth) / 2;
+                        spx += (clientSize.Width - fModel.ImageWidth) / 2;
                     }
 
                     if (fModel.ImageHeight < clientSize.Height) {
-                        fSPY += (clientSize.Height - fModel.ImageHeight) / 2;
+                        spy += (clientSize.Height - fModel.ImageHeight) / 2;
                     }
                 }
 
                 fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
 
-            fModel.SetOffsets(fSPX, fSPY);
+            fModel.SetOffsets(spx, spy);
 
             DrawBackground(background);
 
@@ -558,6 +532,51 @@ namespace GKUI.Components
         #endregion
 
         #region Sizes and adjustment routines
+
+        private ExtRect GetImageViewport()
+        {
+            ExtRect viewport;
+
+            var imageSize = GetImageSize();
+            if (!imageSize.IsEmpty) {
+                Rectangle scrollableViewport = this.Viewport;
+                viewport = ExtRect.CreateBounds(
+                    scrollableViewport.Left, scrollableViewport.Top,
+                    scrollableViewport.Width, scrollableViewport.Height);
+            } else {
+                viewport = ExtRect.Empty;
+            }
+
+            return viewport;
+        }
+
+        private ExtRect GetImageRegion()
+        {
+            ExtRect viewport;
+
+            var imageSize = GetImageSize();
+            if (!imageSize.IsEmpty) {
+                Rectangle scrollableViewport = this.Viewport;
+
+                bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
+                int x, y;
+                if (hasScroll) {
+                    x = scrollableViewport.Left;
+                    y = scrollableViewport.Top;
+                } else {
+                    x = (scrollableViewport.Width - imageSize.Width) / 2;
+                    y = (scrollableViewport.Height - imageSize.Height) / 2;
+                }
+                int width = Math.Min(imageSize.Width, scrollableViewport.Width);
+                int height = Math.Min(imageSize.Height, scrollableViewport.Height);
+
+                viewport = ExtRect.CreateBounds(x, y, width, height);
+            } else {
+                viewport = ExtRect.Empty;
+            }
+
+            return viewport;
+        }
 
         public ExtRect GetClientRect()
         {
@@ -585,35 +604,7 @@ namespace GKUI.Components
             }
 
             var imageSize = GetImageSize();
-            AdjustViewPort(imageSize, noRedraw);
-        }
-
-        /*
-         * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
-         */
-        private ExtRect GetImageViewport()
-        {
-            ExtRect viewport;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle scrollableViewport = this.Viewport; //ClientRectangle;
-                bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
-
-                int x = !hasScroll ? (scrollableViewport.Width - imageSize.Width) / 2 : 0;
-                int y = !hasScroll ? (scrollableViewport.Height - imageSize.Height) / 2 : 0;
-
-                int width = Math.Min(imageSize.Width /*- Math.Abs(AutoScrollPosition.X)*/, scrollableViewport.Width);
-                int height = Math.Min(imageSize.Height /*- Math.Abs(AutoScrollPosition.Y)*/, scrollableViewport.Height);
-
-                //viewPort = ExtRect.CreateBounds(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
-                //viewport = ExtRect.CreateBounds(/*-AutoScrollPosition.X, -AutoScrollPosition.Y*/0, 0, width, height);
-                viewport = ExtRect.CreateBounds(scrollableViewport.Left, scrollableViewport.Top, width, height);
-            } else {
-                viewport = ExtRect.Empty;
-            }
-
-            return viewport;
+            AdjustViewport(imageSize, noRedraw);
         }
 
         #endregion
@@ -664,7 +655,7 @@ namespace GKUI.Components
             SaveSelection();
 
             var imageSize = GetImageSize();
-            AdjustViewPort(imageSize);
+            AdjustViewport(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
@@ -703,14 +694,25 @@ namespace GKUI.Components
             }
         }
 
+        private Point GetChartMouseLocation(PointF mpt)
+        {
+            ExtRect imRect = GetImageRegion();
+
+            int x = (int)mpt.X + imRect.Left; //fSPX;
+            int y = (int)mpt.Y + imRect.Top; //fSPY;
+
+            return new Point(x, y);
+        }
+
         private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)
         {
-            Point pt = new Point(e.Location);
             var result = MouseAction.maNone;
             person = null;
 
-            int aX = pt.X - fSPX;
-            int aY = pt.Y - fSPY;
+            Point pt = GetChartMouseLocation(e.Location);
+            int aX = pt.X;
+            int aY = pt.Y;
+
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson p = fModel.Persons[i];

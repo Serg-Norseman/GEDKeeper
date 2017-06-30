@@ -465,7 +465,7 @@ namespace GKUI
             miRecordDuplicate.Click += miRecordDuplicate_Click;
 
             tabsRecords = new TabControl();
-            tabsRecords.SelectedIndexChanged += PageRecords_SelectedIndexChanged;
+            tabsRecords.SelectedIndexChanged += tabsRecords_SelectedIndexChanged;
 
             Content = tabsRecords;
             Menu = MainMenu1;

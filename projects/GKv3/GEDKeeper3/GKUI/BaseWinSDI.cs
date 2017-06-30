@@ -137,7 +137,6 @@ namespace GKUI
             CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask, out ListTasks, out mTaskSummary);
             CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out ListCommunications, out mCommunicationSummary);
             CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out ListLocations, out mLocationSummary);
-            tabsRecords.SelectedIndex = 0;
 
             SetLang();
         }
@@ -478,7 +477,7 @@ namespace GKUI
             }
         }
 
-        private void PageRecords_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabsRecords_SelectedIndexChanged(object sender, EventArgs e)
         {
             AppHost.Instance.UpdateControls(false);
         }
@@ -630,7 +629,7 @@ namespace GKUI
             ListCommunications.UpdateContents(columnsChanged);
             ListLocations.UpdateContents(columnsChanged);
 
-            PageRecords_SelectedIndexChanged(null, null);
+            AppHost.Instance.UpdateControls(false);
         }
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
@@ -638,7 +637,7 @@ namespace GKUI
             GKListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
-                PageRecords_SelectedIndexChanged(null, null);
+                AppHost.Instance.UpdateControls(false);
             }
         }
 
@@ -1056,10 +1055,6 @@ namespace GKUI
         public void ShowRecordsTab(GEDCOMRecordType recType)
         {
             tabsRecords.SelectedIndex = (int)recType - 1;
-            //TabPage page = tabsRecords.Pages[(int)recType - 1];
-            //tabsRecords.SelectedPage = page;
-            //tabsRecords.Invalidate();
-            //PageRecords_SelectedIndexChanged(null, null);
         }
 
         public void SelectRecordByXRef(string xref)

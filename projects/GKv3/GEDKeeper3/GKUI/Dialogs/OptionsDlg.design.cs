@@ -26,7 +26,6 @@ namespace GKUI.Dialogs
         private Scrollable panUnkSexColor;
         private Scrollable panUnHusbandColor;
         private Scrollable panUnWifeColor;
-        private ColorDialog ColorDialog1;
         private GroupBox grpInternet;
         private Label lblProxyServer;
         private Label lblProxyPort;
@@ -114,130 +113,18 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            pageCommon = new TabPage();
-            groupBox1 = new GroupBox();
-            lblMinutes = new Label();
-            numASMin = new NumericUpDown();
-            chkAutosave = new CheckBox();
-            grpFileBackup = new GroupBox();
-            lblGeocoder = new Label();
-            lblLanguage = new Label();
-            grpInternet = new GroupBox();
-            lblProxyServer = new Label();
-            lblProxyPort = new Label();
-            lblProxyLogin = new Label();
-            lblProxyPassword = new Label();
-            chkUseProxy = new CheckBox();
-            txtProxyServer = new TextBox();
-            txtProxyPort = new TextBox();
-            txtProxyLogin = new TextBox();
-            txtProxyPass = new PasswordBox();
-            grpOther = new GroupBox();
-            chkLoadRecentFiles = new CheckBox();
-            chkShowOnStart = new CheckBox();
-            cmbGeocoder = new ComboBox();
-            cmbLanguages = new ComboBox();
-            pageMultimedia = new TabPage();
-            chkAllowMediaDirectRefs = new CheckBox();
-            chkEmbeddedMediaPlayer = new CheckBox();
-            chkRemovableMediaWarning = new CheckBox();
-            pageCharts = new TabPage();
-            tabsCharts = new TabControl();
-            pageTreeChart = new TabPage();
-            grpTreePersons = new GroupBox();
-            chkSurname = new CheckBox();
-            chkName = new CheckBox();
-            chkPatronymic = new CheckBox();
-            chkDiffLines = new CheckBox();
-            chkBirthDate = new CheckBox();
-            chkDeathDate = new CheckBox();
-            chkKinship = new CheckBox();
-            chkDefaultPortraits = new CheckBox();
-            chkOnlyYears = new CheckBox();
-            chkSignsVisible = new CheckBox();
-            chkChildlessExclude = new CheckBox();
-            chkTreeDecorative = new CheckBox();
-            chkPortraitsVisible = new CheckBox();
-            grpTreeDecor = new GroupBox();
-            panMaleColor = new Scrollable();
-            lblMaleColor = new Label();
-            panFemaleColor = new Scrollable();
-            lblFemaleColor = new Label();
-            panUnkSexColor = new Scrollable();
-            lblUnkSexColor = new Label();
-            panUnHusbandColor = new Scrollable();
-            lblUnHusbandColor = new Label();
-            panUnWifeColor = new Scrollable();
-            lblUnWifeColor = new Label();
-            panDefFont = new Scrollable();
-            lblChartFont = new Label();
-            pageAncCircle = new TabPage();
-            ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
-            pageUIView = new TabPage();
-            PageControl2 = new TabControl();
-            pageViewCommon = new TabPage();
-            grpAdvancedNames = new GroupBox();
-            chkExtendWomanSurnames = new CheckBox();
-            rgFNPFormat = new GroupBox();
-            grpDateFormat = new GroupBox();
-            chkPlacesWithAddress = new CheckBox();
-            chkHighlightUnparented = new CheckBox();
-            chkShowDatesSigns = new CheckBox();
-            chkShowDatesCalendar = new CheckBox();
-            chkHighlightUnmarried = new CheckBox();
-            pageViewPersons = new TabPage();
-            panel1 = new Panel();
-            lstPersonColumns = new GKListView();
-            btnColumnUp = new Button();
-            btnColumnDown = new Button();
-            btnDefList = new Button();
-            pagePedigree = new TabPage();
-            grpPedigree = new GroupBox();
-            chkAttributes = new CheckBox();
-            chkNotes = new CheckBox();
-            chkGenerations = new CheckBox();
-            chkSources = new CheckBox();
-            ColorDialog1 = new ColorDialog();
-
             SuspendLayout();
 
-            pageCommon.Text = "pageCommon";
-            pageCommon.Content = new DefTableLayout {
-                Rows = {
-                    new TableRow {
-                        Cells = { grpInternet, groupBox1 }
-                    },
-                    new TableRow {
-                        Cells = { grpOther }
-                    },
-                    null
-                }
-            };
-
-            groupBox1.Content = new DefTableLayout {
-                Rows = {
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { grpFileBackup }
-                    },
-                    new TableRow {
-                        Cells = { new StackLayout {
-                                Orientation = Orientation.Horizontal,
-                                Padding = 10,
-                                Spacing = 10,
-                                Items = { chkAutosave, numASMin, lblMinutes }
-                            } }
-                    }
-                }
-            };
-
+            lblMinutes = new Label();
             lblMinutes.Text = "lblMinutes";
 
+            numASMin = new NumericUpDown();
             numASMin.MaxValue = 120;
             numASMin.MinValue = 1;
             numASMin.Width = 60;
             numASMin.Value = 1;
 
+            chkAutosave = new CheckBox();
             chkAutosave.Text = "chkAutosave";
 
             radFBNone = new RadioButton();
@@ -249,6 +136,7 @@ namespace GKUI.Dialogs
             radFBEachRevision = new RadioButton(radFBNone);
             radFBEachRevision.Text = "radFBEachRevision";
 
+            grpFileBackup = new GroupBox();
             grpFileBackup.Text = "grpFileBackup";
             grpFileBackup.Content = new DefTableLayout {
                 Rows = {
@@ -264,8 +152,54 @@ namespace GKUI.Dialogs
                 }
             };
 
+            groupBox1 = new GroupBox();
+            groupBox1.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { grpFileBackup }
+                    },
+                    new TableRow {
+                        Cells = {
+                            new HDefStackLayout {
+                                Items = { chkAutosave, numASMin, lblMinutes }
+                            }
+                        }
+                    }
+                }
+            };
+
             //
 
+            chkUseProxy = new CheckBox();
+            chkUseProxy.Text = "chkUseProxy";
+
+            lblProxyServer = new Label();
+            lblProxyServer.Text = "lblProxyServer";
+
+            lblProxyPort = new Label();
+            lblProxyPort.Text = "lblProxyPort";
+
+            lblProxyLogin = new Label();
+            lblProxyLogin.Text = "lblProxyLogin";
+
+            lblProxyPassword = new Label();
+            lblProxyPassword.Text = "lblProxyPassword";
+
+            txtProxyServer = new TextBox();
+            //txtProxyServer.Size = new Size(192, 24);
+
+            txtProxyPort = new TextBox();
+            //txtProxyPort.Size = new Size(192, 24);
+
+            txtProxyLogin = new TextBox();
+            //txtProxyLogin.Size = new Size(192, 24);
+
+            txtProxyPass = new PasswordBox();
+            txtProxyPass.PasswordChar = '*';
+            txtProxyPass.Text = "txtProxyPass";
+
+            grpInternet = new GroupBox();
             grpInternet.Text = "grpInternet";
             grpInternet.Content = new DefTableLayout {
                 Rows = {
@@ -288,41 +222,29 @@ namespace GKUI.Dialogs
                 }
             };
 
-            lblProxyServer.Text = "lblProxyServer";
-
-            lblProxyPort.Text = "lblProxyPort";
-
-            lblProxyLogin.Text = "lblProxyLogin";
-
-            lblProxyPassword.Text = "lblProxyPassword";
-
-            chkUseProxy.Text = "chkUseProxy";
-
-            //txtProxyServer.Size = new Size(192, 24);
-
-            //txtProxyPort.Size = new Size(192, 24);
-
-            //txtProxyLogin.Size = new Size(192, 24);
-
-            txtProxyPass.PasswordChar = '*';
-            txtProxyPass.Text = "txtProxyPass";
-
             //
 
+            chkLoadRecentFiles = new CheckBox();
             chkLoadRecentFiles.Text = "chkLoadRecentFiles";
 
+            chkShowOnStart = new CheckBox();
             chkShowOnStart.Text = "chkShowOnStart";
 
+            lblGeocoder = new Label();
             lblGeocoder.Text = "lblGeocoder";
 
+            cmbGeocoder = new ComboBox();
             cmbGeocoder.ReadOnly = true;
             cmbGeocoder.Items.Add("Google");
             cmbGeocoder.Items.Add("Yandex");
 
+            lblLanguage = new Label();
             lblLanguage.Text = "lblLanguage";
 
+            cmbLanguages = new ComboBox();
             cmbLanguages.ReadOnly = true;
 
+            grpOther = new GroupBox();
             grpOther.Text = "grpOther";
             grpOther.Content = new DefTableLayout {
                 Rows = {
@@ -341,14 +263,32 @@ namespace GKUI.Dialogs
                 }
             };
 
+            pageCommon = new TabPage();
+            pageCommon.Text = "pageCommon";
+            pageCommon.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { grpInternet, groupBox1 }
+                    },
+                    new TableRow {
+                        Cells = { grpOther }
+                    },
+                    null
+                }
+            };
+
             //
 
+            chkAllowMediaDirectRefs = new CheckBox();
             chkAllowMediaDirectRefs.Text = "chkAllowMediaDirectRefs";
 
+            chkEmbeddedMediaPlayer = new CheckBox();
             chkEmbeddedMediaPlayer.Text = "chkEmbeddedMediaPlayer";
 
+            chkRemovableMediaWarning = new CheckBox();
             chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
 
+            pageMultimedia = new TabPage();
             pageMultimedia.Text = "pageMultimedia";
             pageMultimedia.Content = new VDefStackLayout {
                 Items = { chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs }
@@ -356,19 +296,47 @@ namespace GKUI.Dialogs
 
             //
 
-            pageCharts.Content = tabsCharts;
-            pageCharts.Text = "pageCharts";
+            chkSurname = new CheckBox();
+            chkSurname.Text = "chkSurname";
 
-            tabsCharts.Pages.Add(pageTreeChart);
-            tabsCharts.Pages.Add(pageAncCircle);
+            chkName = new CheckBox();
+            chkName.Text = "chkName";
 
-            //
+            chkPatronymic = new CheckBox();
+            chkPatronymic.Text = "chkPatronymic";
 
-            pageTreeChart.Text = "pageTreeChart";
-            pageTreeChart.Content = new HDefStackLayout {
-                Items = { grpTreePersons, grpTreeDecor }
-            };
+            chkDiffLines = new CheckBox();
+            chkDiffLines.Text = "chkDiffLines";
 
+            chkBirthDate = new CheckBox();
+            chkBirthDate.Text = "chkBirthDate";
+
+            chkDeathDate = new CheckBox();
+            chkDeathDate.Text = "chkDeathDate";
+
+            chkKinship = new CheckBox();
+            chkKinship.Text = "chkKinship";
+
+            chkDefaultPortraits = new CheckBox();
+            chkDefaultPortraits.Text = "chkDefaultPortraits";
+
+            chkOnlyYears = new CheckBox();
+            chkOnlyYears.Text = "chkOnlyYears";
+
+            chkSignsVisible = new CheckBox();
+            chkSignsVisible.Text = "chkSignsVisible";
+
+            chkChildlessExclude = new CheckBox();
+            chkChildlessExclude.Text = "chkChildlessExclude";
+
+            chkTreeDecorative = new CheckBox();
+            chkTreeDecorative.Text = "chkTreeDecorative";
+
+            chkPortraitsVisible = new CheckBox();
+            chkPortraitsVisible.Text = "chkPortraitsVisible";
+            chkPortraitsVisible.CheckedChanged += chkPortraitsVisible_CheckedChanged;
+
+            grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
@@ -376,40 +344,86 @@ namespace GKUI.Dialogs
                     chkChildlessExclude }
             };
 
-            chkSurname.Text = "chkSurname";
-
-            chkName.Text = "chkName";
-
-            chkPatronymic.Text = "chkPatronymic";
-
-            chkDiffLines.Text = "chkDiffLines";
-
-            chkBirthDate.Text = "chkBirthDate";
-
-            chkDeathDate.Text = "chkDeathDate";
-
-            chkKinship.Text = "chkKinship";
-
-            chkDefaultPortraits.Text = "chkDefaultPortraits";
-
-            chkOnlyYears.Text = "chkOnlyYears";
-
-            chkSignsVisible.Text = "chkSignsVisible";
-
-            chkChildlessExclude.Text = "chkChildlessExclude";
-
-            chkTreeDecorative.Text = "chkTreeDecorative";
-
-            chkPortraitsVisible.Text = "chkPortraitsVisible";
-            chkPortraitsVisible.CheckedChanged += chkPortraitsVisible_CheckedChanged;
-
             //
 
+            lblMaleColor = new Label();
+            lblMaleColor.Size = new Size(100, 26);
+            lblMaleColor.Text = "lblMaleColor";
+            lblMaleColor.TextAlignment = TextAlignment.Center;
+            lblMaleColor.VerticalAlignment = VerticalAlignment.Center;
+            lblMaleColor.MouseDown += PanColor_Click;
+            lblMaleColor.Cursor = Cursors.Pointer;
+
+            panMaleColor = new Scrollable();
+            panMaleColor.Border = BorderType.Bezel;
+            panMaleColor.Content = lblMaleColor;
+
+            lblFemaleColor = new Label();
+            lblFemaleColor.Size = new Size(100, 26);
+            lblFemaleColor.Text = "lblFemaleColor";
+            lblFemaleColor.TextAlignment = TextAlignment.Center;
+            lblFemaleColor.VerticalAlignment = VerticalAlignment.Center;
+            lblFemaleColor.MouseDown += PanColor_Click;
+            lblFemaleColor.Cursor = Cursors.Pointer;
+
+            panFemaleColor = new Scrollable();
+            panFemaleColor.Border = BorderType.Bezel;
+            panFemaleColor.Content = lblFemaleColor;
+
+            lblUnkSexColor = new Label();
+            lblUnkSexColor.Size = new Size(210, 26);
+            lblUnkSexColor.Text = "label7";
+            lblUnkSexColor.TextAlignment = TextAlignment.Center;
+            lblUnkSexColor.VerticalAlignment = VerticalAlignment.Center;
+            lblUnkSexColor.MouseDown += PanColor_Click;
+            lblUnkSexColor.Cursor = Cursors.Pointer;
+
+            panUnkSexColor = new Scrollable();
+            panUnkSexColor.Border = BorderType.Bezel;
+            panUnkSexColor.Content = lblUnkSexColor;
+
+            lblUnHusbandColor = new Label();
+            lblUnHusbandColor.Size = new Size(210, 26);
+            lblUnHusbandColor.Text = "lblUnHusbandColor";
+            lblUnHusbandColor.TextAlignment = TextAlignment.Center;
+            lblUnHusbandColor.VerticalAlignment = VerticalAlignment.Center;
+            lblUnHusbandColor.MouseDown += PanColor_Click;
+            lblUnHusbandColor.Cursor = Cursors.Pointer;
+
+            panUnHusbandColor = new Scrollable();
+            panUnHusbandColor.Border = BorderType.Bezel;
+            panUnHusbandColor.Content = lblUnHusbandColor;
+
+            lblUnWifeColor = new Label();
+            lblUnWifeColor.Size = new Size(210, 26);
+            lblUnWifeColor.Text = "lblUnWifeColor";
+            lblUnWifeColor.TextAlignment = TextAlignment.Center;
+            lblUnWifeColor.VerticalAlignment = VerticalAlignment.Center;
+            lblUnWifeColor.MouseDown += PanColor_Click;
+            lblUnWifeColor.Cursor = Cursors.Pointer;
+
+            panUnWifeColor = new Scrollable();
+            panUnWifeColor.Border = BorderType.Bezel;
+            panUnWifeColor.Content = lblUnWifeColor;
+
+            lblChartFont = new Label();
+            lblChartFont.Size = new Size(210, 26);
+            lblChartFont.Text = "lblChartFont";
+            lblChartFont.TextAlignment = TextAlignment.Center;
+            lblChartFont.VerticalAlignment = VerticalAlignment.Center;
+            lblChartFont.MouseDown += panDefFont_Click;
+            lblChartFont.Cursor = Cursors.Pointer;
+
+            panDefFont = new Scrollable();
+            panDefFont.Border = BorderType.Bezel;
+            panDefFont.Content = lblChartFont;
+
+            grpTreeDecor = new GroupBox();
             grpTreeDecor.Text = "grpTreeDecor";
             grpTreeDecor.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { new StackLayout { Orientation = Orientation.Horizontal, Spacing = 10, Items = { panMaleColor, panFemaleColor } } }
+                        Cells = { TableLayout.HorizontalScaled(10, panMaleColor, panFemaleColor) }
                     },
                     new TableRow {
                         Cells = { panUnkSexColor }
@@ -428,64 +442,137 @@ namespace GKUI.Dialogs
                 }
             };
 
-            panMaleColor.Border = BorderType.Bezel;
-            panMaleColor.Content = lblMaleColor;
-            panMaleColor.Cursor = Cursors.Pointer;
+            //
 
-            lblMaleColor.Text = "lblMaleColor";
-            lblMaleColor.MouseDown += PanColor_Click;
-
-            panFemaleColor.Border = BorderType.Bezel;
-            panFemaleColor.Content = lblFemaleColor;
-            panFemaleColor.Cursor = Cursors.Pointer;
-
-            lblFemaleColor.Text = "lblFemaleColor";
-            lblFemaleColor.MouseDown += PanColor_Click;
-
-            panUnkSexColor.Border = BorderType.Bezel;
-            panUnkSexColor.Content = lblUnkSexColor;
-            panUnkSexColor.Cursor = Cursors.Pointer;
-
-            lblUnkSexColor.Text = "label7";
-            lblUnkSexColor.MouseDown += PanColor_Click;
-
-            panUnHusbandColor.Border = BorderType.Bezel;
-            panUnHusbandColor.Content = lblUnHusbandColor;
-            panUnHusbandColor.Cursor = Cursors.Pointer;
-
-            lblUnHusbandColor.Text = "lblUnHusbandColor";
-            lblUnHusbandColor.MouseDown += PanColor_Click;
-
-            panUnWifeColor.Border = BorderType.Bezel;
-            panUnWifeColor.Content = lblUnWifeColor;
-            panUnWifeColor.Cursor = Cursors.Pointer;
-
-            lblUnWifeColor.Text = "lblUnWifeColor";
-            lblUnWifeColor.MouseDown += PanColor_Click;
-
-            panDefFont.Border = BorderType.Bezel;
-            panDefFont.Content = lblChartFont;
-            panDefFont.Cursor = Cursors.Pointer;
-            panDefFont.MouseDown += panDefFont_Click;
-
-            lblChartFont.Text = "lblChartFont";
-            lblChartFont.MouseDown += panDefFont_Click;
+            pageTreeChart = new TabPage();
+            pageTreeChart.Text = "pageTreeChart";
+            pageTreeChart.Content = new HDefStackLayout {
+                Items = { grpTreePersons, grpTreeDecor }
+            };
 
             //
 
+            ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
+            ancOptionsControl1.Options = null;
+
+            pageAncCircle = new TabPage();
             pageAncCircle.Content = ancOptionsControl1;
             pageAncCircle.Text = "pageAncCircle";
 
-            ancOptionsControl1.Options = null;
+            //
+
+            tabsCharts = new TabControl();
+            tabsCharts.Pages.Add(pageTreeChart);
+            tabsCharts.Pages.Add(pageAncCircle);
+
+            pageCharts = new TabPage();
+            pageCharts.Content = tabsCharts;
+            pageCharts.Text = "pageCharts";
 
             //
 
-            pageUIView.Content = PageControl2;
-            pageUIView.Text = "pageUIView";
+            lstPersonColumns = new GKListView();
+            //lstPersonColumns.Size = new Size(468, 409);
+            //lstPersonColumns.ItemCheck += new ItemCheckEventHandler(ListPersonColumns_ItemCheck);
 
-            PageControl2.Pages.Add(pageViewCommon);
-            PageControl2.Pages.Add(pageViewPersons);
+            btnColumnUp = new Button();
+            btnColumnUp.Size = new Size(26, 26);
+            btnColumnUp.Click += btnColumnUp_Click;
 
+            btnColumnDown = new Button();
+            btnColumnDown.Size = new Size(26, 26);
+            btnColumnDown.Click += btnColumnDown_Click;
+
+            btnDefList = new Button();
+            btnDefList.Size = new Size(190, 26);
+            btnDefList.Text = "btnDefList";
+            btnDefList.Click += btnDefList_Click;
+
+            panel1 = new Panel();
+            panel1.Width = 210;
+            panel1.Content = new VDefStackLayout {
+                Items = { btnColumnUp, btnColumnDown, null, btnDefList }
+            };
+
+            pageViewPersons = new TabPage();
+            pageViewPersons.Text = "pageViewPersons";
+            pageViewPersons.Content = TableLayout.Horizontal(10, new TableCell(lstPersonColumns, true), panel1);
+
+            //
+
+            radS_N_P = new RadioButton();
+            radS_N_P.Text = "radS_N_P";
+
+            radS_NP = new RadioButton(radS_N_P);
+            radS_NP.Text = "radS_NP";
+
+            radSNP = new RadioButton(radS_N_P);
+            radSNP.Text = "radSNP";
+
+            rgFNPFormat = new GroupBox();
+            rgFNPFormat.Text = "rgFNPFormat";
+            rgFNPFormat.Content = new VDefStackLayout {
+                Items = { radS_N_P, radS_NP, radSNP }
+            };
+
+            //
+
+            radDMY = new RadioButton();
+            radDMY.Text = "DD.MM.YYYY";
+
+            radYMD = new RadioButton(radDMY);
+            radYMD.Text = "YYYY.MM.DD";
+
+            chkShowDatesSigns = new CheckBox();
+            chkShowDatesSigns.Text = "chkShowDatesSigns";
+
+            chkShowDatesCalendar = new CheckBox();
+            chkShowDatesCalendar.Text = "chkShowDatesCalendar";
+
+            grpDateFormat = new GroupBox();
+            grpDateFormat.Text = "grpDateFormat";
+            grpDateFormat.Content = new VDefStackLayout {
+                Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
+            };
+
+            //
+
+            radMarried = new RadioButton();
+            radMarried.Text = "radMarried";
+
+            radMaiden = new RadioButton(radMarried);
+            radMaiden.Text = "radMaiden";
+
+            radMarried_Maiden = new RadioButton(radMarried);
+            radMarried_Maiden.Text = "radMarried_Maiden";
+
+            radMaiden_Married = new RadioButton(radMarried);
+            radMaiden_Married.Text = "radMaiden_Married";
+
+            chkExtendWomanSurnames = new CheckBox();
+            chkExtendWomanSurnames.Text = "ExtendWomanSurnames";
+            chkExtendWomanSurnames.CheckedChanged += chkExtendWomanSurnames_CheckedChanged;
+
+            grpAdvancedNames = new GroupBox();
+            grpAdvancedNames.Text = "AdvancedNames";
+            grpAdvancedNames.Content = new VDefStackLayout {
+                Items = { chkExtendWomanSurnames, radMaiden_Married, radMarried_Maiden, radMaiden, radMarried }
+            };
+
+            //
+
+            chkPlacesWithAddress = new CheckBox();
+            chkPlacesWithAddress.Text = "chkPlacesWithAddress";
+
+            chkHighlightUnparented = new CheckBox();
+            chkHighlightUnparented.Text = "chkHighlightUnparented";
+
+            chkHighlightUnmarried = new CheckBox();
+            chkHighlightUnmarried.Text = "chkHighlightUnmarried";
+
+            //
+
+            pageViewCommon = new TabPage();
             pageViewCommon.Text = "pageViewCommon";
             pageViewCommon.Content = new DefTableLayout {
                 Rows = {
@@ -504,90 +591,13 @@ namespace GKUI.Dialogs
 
             //
 
-            radMarried = new RadioButton();
-            radMarried.Text = "radMarried";
+            PageControl2 = new TabControl();
+            PageControl2.Pages.Add(pageViewCommon);
+            PageControl2.Pages.Add(pageViewPersons);
 
-            radMaiden = new RadioButton(radMarried);
-            radMaiden.Text = "radMaiden";
-
-            radMarried_Maiden = new RadioButton(radMarried);
-            radMarried_Maiden.Text = "radMarried_Maiden";
-
-            radMaiden_Married = new RadioButton(radMarried);
-            radMaiden_Married.Text = "radMaiden_Married";
-
-            chkExtendWomanSurnames.Text = "ExtendWomanSurnames";
-            chkExtendWomanSurnames.CheckedChanged += chkExtendWomanSurnames_CheckedChanged;
-
-            grpAdvancedNames.Text = "AdvancedNames";
-            grpAdvancedNames.Content = new VDefStackLayout {
-                Items = { chkExtendWomanSurnames, radMaiden_Married, radMarried_Maiden, radMaiden, radMarried }
-            };
-
-            //
-
-            radS_N_P = new RadioButton();
-            radS_N_P.Text = "radS_N_P";
-
-            radS_NP = new RadioButton(radS_N_P);
-            radS_NP.Text = "radS_NP";
-
-            radSNP = new RadioButton(radS_N_P);
-            radSNP.Text = "radSNP";
-
-            rgFNPFormat.Text = "rgFNPFormat";
-            rgFNPFormat.Content = new VDefStackLayout {
-                Items = { radS_N_P, radS_NP, radSNP }
-            };
-
-            //
-
-            radDMY = new RadioButton();
-            radDMY.Text = "DD.MM.YYYY";
-
-            radYMD = new RadioButton(radDMY);
-            radYMD.Text = "YYYY.MM.DD";
-
-            chkShowDatesSigns.Text = "chkShowDatesSigns";
-
-            chkShowDatesCalendar.Text = "chkShowDatesCalendar";
-
-            grpDateFormat.Text = "grpDateFormat";
-            grpDateFormat.Content = new VDefStackLayout {
-                Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
-            };
-
-            //
-
-            chkPlacesWithAddress.Text = "chkPlacesWithAddress";
-
-            chkHighlightUnparented.Text = "chkHighlightUnparented";
-
-            chkHighlightUnmarried.Text = "chkHighlightUnmarried";
-
-            //
-
-            pageViewPersons.Text = "pageViewPersons";
-            pageViewPersons.Content = new HDefStackLayout {
-                Items = { new StackLayoutItem(lstPersonColumns, true), new StackLayoutItem(panel1, false) }
-            };
-
-            panel1.Content = new VDefStackLayout {
-                Items = { btnColumnUp, btnColumnDown, null, btnDefList }
-            };
-
-            //lstPersonColumns.Size = new Size(468, 409);
-            //lstPersonColumns.ItemCheck += new ItemCheckEventHandler(ListPersonColumns_ItemCheck);
-
-            btnColumnUp.Size = new Size(26, 26);
-            btnColumnUp.Click += btnColumnUp_Click;
-
-            btnColumnDown.Size = new Size(26, 26);
-            btnColumnDown.Click += btnColumnDown_Click;
-
-            btnDefList.Size = new Size(192, 26);
-            btnDefList.Text = "btnDefList";
-            btnDefList.Click += btnDefList_Click;
+            pageUIView = new TabPage();
+            pageUIView.Content = PageControl2;
+            pageUIView.Text = "pageUIView";
 
             //
 
@@ -605,19 +615,25 @@ namespace GKUI.Dialogs
 
             //
 
+            chkAttributes = new CheckBox();
             chkAttributes.Text = "chkAttributes";
 
+            chkNotes = new CheckBox();
             chkNotes.Text = "chkNotes";
 
+            chkGenerations = new CheckBox();
             chkGenerations.Text = "chkGenerations";
 
+            chkSources = new CheckBox();
             chkSources.Text = "chkSources";
 
+            grpPedigree = new GroupBox();
             grpPedigree.Text = "grpPedigree";
             grpPedigree.Content = new VDefStackLayout {
                 Items = { chkAttributes, chkNotes, chkSources, chkGenerations, grpPedigreeFormat }
             };
 
+            pagePedigree = new TabPage();
             pagePedigree.Content = grpPedigree;
             pagePedigree.Text = "pagePedigree";
 

@@ -66,6 +66,9 @@ namespace GKUI.Dialogs
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
+            lstPersonColumns.AddCheckedColumn("x", 75);
+            lstPersonColumns.AddColumn("Title", 100);
+
             lvPlugins.AddColumn("Title", 75);
             lvPlugins.AddColumn("Version", 100);
             lvPlugins.AddColumn("Copyright", 125);
@@ -77,7 +80,7 @@ namespace GKUI.Dialogs
 
         private void UpdateColumnsList()
         {
-            //lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
+            lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
             lstPersonColumns.BeginUpdate();
             try
             {
@@ -94,7 +97,7 @@ namespace GKUI.Dialogs
             {
                 lstPersonColumns.EndUpdate();
             }
-            //lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
+            lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
         }
 
         private void UpdateControls()
@@ -296,10 +299,11 @@ namespace GKUI.Dialogs
             Label pan = (sender as Label);
             if (pan == null) return;
 
-            //ColorDialog1.FullOpen = true;
-            ColorDialog1.Color = pan.BackgroundColor;
-            if (ColorDialog1.ShowDialog(this) == Eto.Forms.DialogResult.Ok) {
-                pan.BackgroundColor = ColorDialog1.Color;
+            using (var clrDlg = new ColorDialog()) {
+                clrDlg.Color = pan.BackgroundColor;
+                if (clrDlg.ShowDialog(this) == Eto.Forms.DialogResult.Ok) {
+                    pan.BackgroundColor = clrDlg.Color;
+                }
             }
         }
 
@@ -466,12 +470,10 @@ namespace GKUI.Dialogs
             UpdateColumnsList();
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            bool cs = (e.NewValue == CheckState.Checked);
-            fTempColumns.OrderedColumns[e.Index].CurActive = cs;
-        }*/
+            fTempColumns.OrderedColumns[e.Index].CurActive = e.NewValue;
+        }
 
         private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
         {

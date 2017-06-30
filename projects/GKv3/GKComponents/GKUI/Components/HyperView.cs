@@ -175,7 +175,7 @@ namespace GKUI.Components
                 finally
                 {
                     fAcceptFontChange = true;
-                    AdjustViewPort(fTextSize);
+                    AdjustViewport(fTextSize);
                 }
             }
             catch (Exception ex)
