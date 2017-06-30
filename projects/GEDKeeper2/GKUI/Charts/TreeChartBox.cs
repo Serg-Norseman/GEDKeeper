@@ -213,10 +213,6 @@ namespace GKUI.Charts
         private bool fTraceSelected;
         private TweenLibrary fTween;
 
-        // drawing relative offset of tree on graphics
-        internal int fSPX;
-        internal int fSPY;
-
         private static readonly object EventPersonModify;
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
@@ -501,7 +497,7 @@ namespace GKUI.Charts
 
         public ExtPoint GetOffsets()
         {
-            return new ExtPoint(fSPX, fSPY);
+            return fModel.GetOffsets();
         }
 
         private void DrawBackground(BackgroundMode background)
@@ -530,25 +526,26 @@ namespace GKUI.Charts
 
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background)
         {
-            fSPX = 0;
-            fSPY = 0;
+            // drawing relative offset of tree on graphics
+            int spx = 0;
+            int spy = 0;
 
             if (drawMode == ChartDrawMode.dmInteractive) {
                 /*Rectangle viewPort = GetImageViewPort();
                 fSPX = -viewPort.Left;
                 fSPY = -viewPort.Top;*/
 
-                fSPX += fBorderWidth - -AutoScrollPosition.X;
-                fSPY += fBorderWidth - -AutoScrollPosition.Y;
+                spx += fBorderWidth - -AutoScrollPosition.X;
+                spy += fBorderWidth - -AutoScrollPosition.Y;
 
                 Size sz = ClientSize;
 
                 if (fModel.ImageWidth < sz.Width) {
-                    fSPX += (sz.Width - fModel.ImageWidth) / 2;
+                    spx += (sz.Width - fModel.ImageWidth) / 2;
                 }
 
                 if (fModel.ImageHeight < sz.Height) {
-                    fSPY += (sz.Height - fModel.ImageHeight) / 2;
+                    spy += (sz.Height - fModel.ImageHeight) / 2;
                 }
 
                 fModel.VisibleArea = GetSourceImageRegion();
@@ -557,18 +554,18 @@ namespace GKUI.Charts
                     Size sz = ClientSize;
 
                     if (fModel.ImageWidth < sz.Width) {
-                        fSPX += (sz.Width - fModel.ImageWidth) / 2;
+                        spx += (sz.Width - fModel.ImageWidth) / 2;
                     }
 
                     if (fModel.ImageHeight < sz.Height) {
-                        fSPY += (sz.Height - fModel.ImageHeight) / 2;
+                        spy += (sz.Height - fModel.ImageHeight) / 2;
                     }
                 }
 
                 fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
 
-            fModel.SetOffsets(fSPX, fSPY);
+            fModel.SetOffsets(spx, spy);
 
             DrawBackground(background);
 
@@ -611,7 +608,7 @@ namespace GKUI.Charts
             }
 
             var imageSize = GetImageSize();
-            AdjustViewPort(imageSize, noRedraw);
+            AdjustViewport(imageSize, noRedraw);
         }
 
         private Rectangle GetInsideViewPort(bool includePadding)
@@ -719,7 +716,7 @@ namespace GKUI.Charts
             SaveSelection();
 
             var imageSize = GetImageSize();
-            AdjustViewPort(imageSize);
+            AdjustViewport(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
@@ -763,8 +760,10 @@ namespace GKUI.Charts
             var result = MouseAction.maNone;
             person = null;
 
-            int aX = e.X - fSPX;
-            int aY = e.Y - fSPY;
+            ExtPoint offsets = fModel.GetOffsets();
+            int aX = e.X - offsets.X;
+            int aY = e.Y - offsets.Y;
+
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson p = fModel.Persons[i];

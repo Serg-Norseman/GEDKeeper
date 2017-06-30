@@ -101,7 +101,7 @@ namespace GKUI.Components
             UpdateScrollPosition(HorizontalScroll.Value + x, VerticalScroll.Value + y);
         }
 
-        protected void AdjustViewPort(ExtSize imageSize, bool noRedraw = false)
+        protected void AdjustViewport(ExtSize imageSize, bool noRedraw = false)
         {
             if (AutoScroll && !imageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
