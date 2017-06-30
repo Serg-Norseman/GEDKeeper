@@ -1418,6 +1418,11 @@ namespace GKCore.Charts
             fSPY = spy;
         }
 
+        public ExtPoint GetOffsets()
+        {
+            return new ExtPoint(fSPX, fSPY);
+        }
+
         #endregion
 
         public static bool CheckTreeChartSize(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)

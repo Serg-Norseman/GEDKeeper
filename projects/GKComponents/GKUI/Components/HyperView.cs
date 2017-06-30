@@ -186,7 +186,7 @@ namespace GKUI.Components
                 {
                     gfx.Dispose();
                     fAcceptFontChange = true;
-                    AdjustViewPort(fTextSize);
+                    AdjustViewport(fTextSize);
                 }
             }
             catch (Exception ex)
