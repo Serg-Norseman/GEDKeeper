@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
+    <Compile Include="GKUI\Components\WinUITimer.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
   </ItemGroup>

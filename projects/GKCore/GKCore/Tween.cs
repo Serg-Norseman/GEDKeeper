@@ -19,11 +19,13 @@
  */
 
 using System;
-using System.Timers;
+using GKCore;
+using GKCore.Interfaces;
 
 namespace GKCommon
 {
-    public enum TweenAnimation {
+    public enum TweenAnimation
+    {
         Linear,
         EaseInQuad, EaseOutQuad, EaseInOutQuad,
         EaseInCubic, EaseOutCubic, EaseInOutCubic,
@@ -47,7 +49,7 @@ namespace GKCommon
         private float fStartX, fStartY;
         private int fTimeStart;
         private int fTimeDest;
-        private Timer fTimer;
+        private ITimer fTimer;
         private TweenDelegate fTweenDelegate;
 
         public TweenLibrary()
@@ -56,10 +58,7 @@ namespace GKCommon
             fCounter = 0;
             fStartX = 0.0f;
             fStartY = 0.0f;
-
-            fTimer = new Timer();
-            fTimer.Interval = 1;
-            fTimer.Elapsed += timer_Tick;
+            fTimer = AppHost.Instance.CreateTimer(10.0d, timer_Tick);
 
             StopTween();
         }
@@ -95,14 +94,12 @@ namespace GKCommon
             fDestX = destX;
             fDestY = destY;
 
-            fTimer.Enabled = true;
             fTimer.Start();
         }
 
         public void StopTween()
         {
             fTimer.Stop();
-            fTimer.Enabled = false;
             fBusy = false;
         }
 

@@ -203,6 +203,12 @@ namespace GKUI
             }
         }
 
+        public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
+        {
+            var result = new WinUITimer(msInterval, elapsedHandler);
+            return result;
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()

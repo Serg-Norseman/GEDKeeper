@@ -184,7 +184,6 @@
     <Compile Include="GKCommon\StringList.cs" />
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
-    <Compile Include="GKCommon\Tween.cs" />
     <Compile Include="GKCommon\TypeHandler.cs" />
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
@@ -214,6 +213,7 @@
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />
+    <Compile Include="GKCore\Interfaces\ITimer.cs" />
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />

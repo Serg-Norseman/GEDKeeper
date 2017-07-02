@@ -217,6 +217,8 @@ namespace GKCore
 
         public abstract void SetKeyLayout(int layout);
 
+        public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
+
         #region Executing environment
 
         public abstract Assembly GetExecutingAssembly();
