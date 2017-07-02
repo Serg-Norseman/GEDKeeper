@@ -1166,6 +1166,10 @@ namespace GKCore.Charts
 
         private bool IsLineVisible(int x1, int y1, int x2, int y2)
         {
+            if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
+                return false;
+            }
+
             var rangeX = new Range<int>(fVisibleArea.Left, fVisibleArea.Right);
             var rangeY = new Range<int>(fVisibleArea.Top, fVisibleArea.Bottom);
 
