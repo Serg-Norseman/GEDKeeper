@@ -19,9 +19,8 @@
  */
 
 using System;
-using Eto.Drawing;
 using System.IO;
-
+using Eto.Drawing;
 using GKCommon;
 using GKCore.Interfaces;
 
@@ -30,9 +29,9 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class WinFormsGfxProvider : IGraphicsProvider
+    public class EtoFormsGfxProvider : IGraphicsProvider
     {
-        public WinFormsGfxProvider()
+        public EtoFormsGfxProvider()
         {
         }
 

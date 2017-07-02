@@ -24,14 +24,14 @@ namespace GEDKeeper3.WinForms
         public static void Main(string[] args)
         {
             Logger.LogInit(GKUtils.GetLogFilename());
-            WinFormsAppHost.ConfigureBootstrap(false);
+            EtoFormsAppHost.ConfigureBootstrap(false);
 
             AppHost.InitSettings();
             try
             {
                 var application = new Application(Platforms.WinForms);
 
-                var appHost = (WinFormsAppHost)AppHost.Instance;
+                var appHost = (EtoFormsAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
                 application.Run();

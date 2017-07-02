@@ -26,7 +26,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Charts
 {
     public abstract class CustomChart : CustomPanel, IPrintable
     {

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -31,7 +30,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Components;
+using GKUI.Charts;
 using GKUI.Dialogs;
 
 namespace GKUI

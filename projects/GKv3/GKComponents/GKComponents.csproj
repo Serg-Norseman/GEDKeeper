@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\CustomPanel.cs" />
+    <Compile Include="GKUI\Components\EUITimer.cs" />
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMenuItem.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="GKUI\Components\ImageView.cs" />
     <Compile Include="GKUI\Components\LogChart.cs" />
     <Compile Include="GKUI\Components\MediaPlayerStub.cs" />
+    <Compile Include="GKUI\Components\ObservableExtList.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />

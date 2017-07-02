@@ -22,11 +22,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Eto.Drawing;
 using Eto.Forms;
-using System.Timers;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -35,7 +32,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Charts
 {
     /// <summary>
     /// 
@@ -206,7 +203,7 @@ namespace GKUI.Components
         private ChartRenderer fRenderer;
         private TreeChartPerson fSelected;
         private GEDCOMIndividualRecord fSaveSelection;
-        private Timer fTimer;
+        private ITimer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
         private TweenLibrary fTween;
@@ -334,6 +331,7 @@ namespace GKUI.Components
                 fTween.Dispose();
                 fModel.Dispose();
 
+                if (fTimer != null) fTimer.Dispose();
                 if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
@@ -347,12 +345,8 @@ namespace GKUI.Components
 
         private void InitTimer()
         {
-            fTimer = new Timer();
-            fTimer.Interval = 1;
-            fTimer.Elapsed += TickTimer;
-            fTimer.Stop();
-            fTimer.Enabled = false;
-            fTimer.Enabled = true;
+            fTimer = AppHost.Instance.CreateTimer(10, TickTimer);
+            fTimer.Start();
         }
 
         private void TickTimer(object sender, EventArgs e)
@@ -557,8 +551,8 @@ namespace GKUI.Components
             var imageSize = GetImageSize();
             if (!imageSize.IsEmpty) {
                 Rectangle scrollableViewport = this.Viewport;
-
                 bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
+
                 int x, y;
                 if (hasScroll) {
                     x = scrollableViewport.Left;
@@ -698,8 +692,20 @@ namespace GKUI.Components
         {
             ExtRect imRect = GetImageRegion();
 
-            int x = (int)mpt.X + imRect.Left; //fSPX;
-            int y = (int)mpt.Y + imRect.Top; //fSPY;
+            var imageSize = GetImageSize();
+            Rectangle scrollableViewport = this.Viewport;
+            bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
+
+            int x = (int)mpt.X;
+            int y = (int)mpt.Y;
+
+            if (hasScroll) {
+                x += imRect.Left;
+                y += imRect.Top;
+            } else {
+                x -= imRect.Left;
+                y -= imRect.Top;
+            }
 
             return new Point(x, y);
         }
@@ -953,39 +959,25 @@ namespace GKUI.Components
         {
             if (person == null) return;
 
-            Size clientSize = ClientRectangle.Size;
+            Rectangle viewport = this.Viewport;
+            int oldX = viewport.Left;
+            int oldY = viewport.Top;
+            int newX = Math.Max(0, ((person.PtX) - (viewport.Width / 2)));
+            int newY = Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2)));
 
-            int dstX = ((person.PtX) - (clientSize.Width / 2));
-            int dstY = ((person.PtY + (person.Height / 2)) - (clientSize.Height / 2));
-
-            if (dstX < 0) dstX = dstX + (0 - dstX);
-            if (dstY < 0) dstY = dstY + (0 - dstY);
-
-            int oldX = Math.Abs(AutoScrollPosition.X);
-            int oldY = Math.Abs(AutoScrollPosition.Y);
-
-            if ((oldX == dstX) && (oldY == dstY)) return;
+            if ((oldX == newX) && (oldY == newY)) return;
 
             if (animation) {
-                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
+                fTween.StartTween(SetScroll, oldX, oldY, newX, newY, TweenAnimation.EaseInOutQuad, 20);
             } else {
-                //fTween.StopTween();
-                //SetScroll(dstX, dstY);
-                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 1);
+                fTween.StopTween();
+                UpdateScrollPosition(newX, newY);
             }
         }
 
         private void SetScroll(int x, int y)
         {
-            TweenDelegate invoker = delegate(int newX, int newY) {
-                UpdateScrollPosition(newX, newY);
-            };
-
-            /*if (InvokeRequired) {
-                Invoke(invoker, x, y);
-            } else*/ {
-                invoker(x, y);
-            }
+            UpdateScrollPosition(x, y);
         }
 
         #endregion

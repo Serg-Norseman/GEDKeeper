@@ -21,7 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -36,11 +35,24 @@ namespace GKUI.Components
             Padding = new Padding(10);
             Spacing = 10;
         }
+
+        public DefStackLayout(int padding, int spacing)
+        {
+            Padding = new Padding(padding);
+            Spacing = spacing;
+        }
+
+        public DefStackLayout(int padding, int spacing, Orientation orientation)
+        {
+            Orientation = orientation;
+            Padding = new Padding(padding);
+            Spacing = spacing;
+        }
     }
 
     public class HDefStackLayout : DefStackLayout
     {
-        public HDefStackLayout()
+        public HDefStackLayout() : base()
         {
             Orientation = Orientation.Horizontal;
         }
@@ -48,7 +60,7 @@ namespace GKUI.Components
 
     public class VDefStackLayout : DefStackLayout
     {
-        public VDefStackLayout()
+        public VDefStackLayout() : base()
         {
             Orientation = Orientation.Vertical;
         }

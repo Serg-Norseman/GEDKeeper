@@ -22,7 +22,6 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.IoC;
 using GKCore;
@@ -30,12 +29,13 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.UIContracts;
+using GKUI.Charts;
 using GKUI.Components;
 using GKUI.Dialogs;
 
 namespace GKUI.Components
 {
-    public sealed class WinFormsAppHost : AppHost
+    public sealed class EtoFormsAppHost : AppHost
     {
         /*private readonly ApplicationContext fAppContext; // FIXME: GKv3 DevRestriction
 
@@ -44,7 +44,7 @@ namespace GKUI.Components
             get { return fAppContext; }
         }*/
 
-        public WinFormsAppHost() : base()
+        public EtoFormsAppHost() : base()
         {
             //fAppContext = new ApplicationContext();
             //Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
@@ -203,6 +203,12 @@ namespace GKUI.Components
             }
         }
 
+        public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
+        {
+            var result = new EUITimer(msInterval, elapsedHandler);
+            return result;
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
@@ -249,7 +255,7 @@ namespace GKUI.Components
         /// </summary>
         public static void ConfigureBootstrap(bool mdi)
         {
-            var appHost = new WinFormsAppHost();
+            var appHost = new EtoFormsAppHost();
             IContainer container = AppHost.Container;
 
             if (container == null)
@@ -257,8 +263,8 @@ namespace GKUI.Components
 
             container.Reset();
 
-            container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, WinFormsGfxProvider>(LifeCycle.Singleton);
+            container.Register<IStdDialogs, EtoFormsStdDialogs>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, EtoFormsGfxProvider>(LifeCycle.Singleton);
             //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 

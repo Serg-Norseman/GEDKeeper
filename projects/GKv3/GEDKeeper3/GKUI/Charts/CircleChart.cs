@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
@@ -30,7 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Charts
 {
     /// <summary>
     /// 

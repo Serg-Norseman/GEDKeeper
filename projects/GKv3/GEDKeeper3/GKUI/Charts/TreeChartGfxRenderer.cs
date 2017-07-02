@@ -20,13 +20,12 @@
 
 using System;
 using Eto.Drawing;
-
 using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Charts
 {
     /// <summary>
     /// 

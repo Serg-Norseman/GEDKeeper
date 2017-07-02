@@ -21,7 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.UIContracts;
@@ -31,9 +30,9 @@ namespace GKUI.Components
     /// <summary>
     /// The implementation of the contract for working with WinForms dialogs.
     /// </summary>
-    public sealed class WinFormsStdDialogs : IStdDialogs
+    public sealed class EtoFormsStdDialogs : IStdDialogs
     {
-        public WinFormsStdDialogs()
+        public EtoFormsStdDialogs()
         {
         }
 

@@ -50,7 +50,6 @@ namespace GKUI
             InitializeComponent();
 
             fGraph = new ZGraphControl();
-            //fGraph.Size = new Size(400, 200);
 
             fListStats = UIHelper.CreateListView(null);
             fListStats.AddColumn("-", 250, false);
@@ -85,34 +84,42 @@ namespace GKUI
             tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             UpdateCommonStats();
 
-            //int oldIndex = cbType.SelectedIndex;
+            int oldIndex = cbType.SelectedIndex;
             UpdateStatsTypes();
-            //cbType.SelectedIndex = oldIndex;
+            cbType.SelectedIndex = oldIndex;
         }
 
         private void UpdateStatsTypes()
         {
             ICulture culture = fBase.Context.Culture;
 
-            cmStatTypes.Items.Clear();
+            //cmStatTypes.Items.Clear();
+            cbType.Items.Clear();
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
             {
                 if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
+                /*var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
                 menuItem.Click += miStatType_Click;
                 menuItem.Tag = sm;
-                cmStatTypes.Items.Add(menuItem);
+                cmStatTypes.Items.Add(menuItem);*/
+
+                cbType.Items.Add(new GKComboItem(LangMan.LS(tr.Title), sm));
             }
         }
 
-        private void miStatType_Click(object sender, EventArgs e)
+        private void cbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CalcStats((StatsMode)cbType.SelectedIndex);
+        }
+
+        /*private void miStatType_Click(object sender, EventArgs e)
         {
             var menuItem = sender as MenuItem;
             var sm = (StatsMode)menuItem.Tag;
             CalcStats(sm);
-        }
+        }*/
 
         private static string GetPercent(int dividend, int divisor)
         {
@@ -146,20 +153,21 @@ namespace GKUI
 
         private void CalcStats(StatsMode mode)
         {
-            fListStats.SortColumn = 0;
             fListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)mode].Cap));
             fListStats.SetColumnCaption(1, LangMan.LS(LSID.LSID_Value));
-            fListStats.Order = SortOrder.None;
-            fListStats.SortColumn = -1;
-            fListStats.BeginUpdate();
-            fListStats.ClearItems();
 
+            fListStats.SortOrder = SortOrder.None;
+            fListStats.SortColumn = -1;
+            fListStats.Sorting = true;
+
+            fListStats.BeginUpdate();
             List<StatsItem> vals = new List<StatsItem>();
             try
             {
                 fTreeStats.GetSpecStats(mode, vals);
                 fCurrentValues = vals;
 
+                fListStats.ClearItems();
                 foreach (StatsItem lv in vals)
                 {
                     string stVal = lv.GetDisplayString();
@@ -173,7 +181,8 @@ namespace GKUI
 
             fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
 
-            switch (mode) {
+            switch (mode)
+            {
                 case StatsMode.smAge:
                     fChartXTitle = LangMan.LS(LSID.LSID_Age);
                     fChartYTitle = LangMan.LS(LSID.LSID_People);
@@ -252,30 +261,38 @@ namespace GKUI
         {
             CommonStats stats = fTreeStats.GetCommonStats();
 
-            lvSummary.ClearItems();
+            lvSummary.BeginUpdate();
+            try
+            {
+                lvSummary.ClearItems();
 
-            lvSummary.AddItem(null, LangMan.LS(LSID.LSID_People),
-                              stats.persons.ToString(),
-                              stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
-                              stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
+                lvSummary.AddItem(null, LangMan.LS(LSID.LSID_People),
+                                  stats.persons.ToString(),
+                                  stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
+                                  stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
-            lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Living),
-                              stats.lives.ToString(),
-                              stats.lives_m.ToString(),
-                              stats.lives_f.ToString());
+                lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Living),
+                                  stats.lives.ToString(),
+                                  stats.lives_m.ToString(),
+                                  stats.lives_f.ToString());
 
-            lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Deads),
-                              (stats.persons - stats.lives).ToString(),
-                              (stats.persons_m - stats.lives_m).ToString(),
-                              (stats.persons_f - stats.lives_f).ToString());
+                lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Deads),
+                                  (stats.persons - stats.lives).ToString(),
+                                  (stats.persons_m - stats.lives_m).ToString(),
+                                  (stats.persons_f - stats.lives_f).ToString());
 
-            AddCompositeItem(LSID.LSID_AvgAge, stats.age);
-            AddCompositeItem(LSID.LSID_AvgLife, stats.life);
-            AddCompositeItem(LSID.LSID_AvgChilds, stats.childs);
-            AddCompositeItem(LSID.LSID_AvgBorn, stats.fba);
-            AddCompositeItem(LSID.LSID_AvgMarriagesCount, stats.marr);
-            AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
-            AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
+                AddCompositeItem(LSID.LSID_AvgAge, stats.age);
+                AddCompositeItem(LSID.LSID_AvgLife, stats.life);
+                AddCompositeItem(LSID.LSID_AvgChilds, stats.childs);
+                AddCompositeItem(LSID.LSID_AvgBorn, stats.fba);
+                AddCompositeItem(LSID.LSID_AvgMarriagesCount, stats.marr);
+                AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
+                AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
+            }
+            finally
+            {
+                lvSummary.EndUpdate();
+            }
         }
 
         private void AddCompositeItem(LSID name, CompositeItem item)
@@ -293,7 +310,7 @@ namespace GKUI
 
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
-            UpdateCommonStats();
+            //UpdateCommonStats();
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

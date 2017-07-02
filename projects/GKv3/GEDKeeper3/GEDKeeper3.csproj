@@ -36,13 +36,18 @@
     <Compile Include="GKUI\BaseWinSDI.design.cs">
       <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Charts\CircleChart.cs" />
+    <Compile Include="GKUI\Charts\CustomChart.cs" />
+    <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
+    <Compile Include="GKUI\Charts\TCPersonControl.cs" />
+    <Compile Include="GKUI\Charts\TCScaleControl.cs" />
+    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
+    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\CircleChartWin.cs" />
     <Compile Include="GKUI\CircleChartWin.design.cs">
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
-    <Compile Include="GKUI\Components\CircleChart.cs" />
-    <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\GKComboItemSmp.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
@@ -50,15 +55,10 @@
     <Compile Include="GKUI\Components\GKPortrait.cs" />
     <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Components\NativeMethods.cs" />
-    <Compile Include="GKUI\Components\TCGenerationsControl.cs" />
-    <Compile Include="GKUI\Components\TCPersonControl.cs" />
-    <Compile Include="GKUI\Components\TCScaleControl.cs" />
     <Compile Include="GKUI\Components\TextBoxEx.cs" />
-    <Compile Include="GKUI\Components\TreeChartBox.cs" />
-    <Compile Include="GKUI\Components\TreeChartGfxRenderer.cs" />
-    <Compile Include="GKUI\Components\WinFormsAppHost.cs" />
-    <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
-    <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
+    <Compile Include="GKUI\Components\EtoFormsAppHost.cs" />
+    <Compile Include="GKUI\Components\EtoFormsGfxProvider.cs" />
+    <Compile Include="GKUI\Components\EtoFormsStdDialogs.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.cs" />
     <Compile Include="GKUI\Dialogs\AboutDlg.design.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
@@ -323,6 +323,7 @@
     <Folder Include="GKUI" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Dialogs" />
+    <Folder Include="GKUI\Charts" />
     <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

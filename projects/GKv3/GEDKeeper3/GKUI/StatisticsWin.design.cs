@@ -9,11 +9,11 @@ namespace GKUI
     {
         private GroupBox grpSummary;
         private Panel Panel1;
-        private ToolBar ToolBar1;
-        private ButtonToolItem cbType;
+        private /*ToolBar*/Panel ToolBar1;
+        private /*ButtonToolItem*/ComboBox cbType;
         private GKListView lvSummary;
-        private ButtonToolItem tbExcelExport;
-        private ContextMenu cmStatTypes;
+        private /*ButtonToolItem*/Button tbExcelExport;
+        //private ContextMenu cmStatTypes;
 
         private void InitializeComponent()
         {
@@ -28,22 +28,31 @@ namespace GKUI
             grpSummary.Text = "grpSummary";
             grpSummary.Content = lvSummary;
 
-            cbType = new ButtonToolItem();
+            /*cbType = new ButtonToolItem();
             cbType.Text = "Stat Types ▼";
-            cbType.Click += (sender, e) => cmStatTypes.Show(this);
+            cbType.Click += (sender, e) => cmStatTypes.Show(this);*/
+            cbType = new ComboBox();
+            cbType.Width = 200;
+            cbType.ReadOnly = true;
+            cbType.SelectedIndexChanged += cbType_SelectedIndexChanged;
 
-            tbExcelExport = new ButtonToolItem();
+            tbExcelExport = new Button();//ButtonToolItem();
             tbExcelExport.Click += tbExcelExport_Click;
             tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
+            tbExcelExport.Size = new Size(26, 26);
 
-            cmStatTypes = new ContextMenu();
+            //cmStatTypes = ContextMenu();
 
-            ToolBar1 = new ToolBar();
+            ToolBar1 = new Panel();
+            ToolBar1.Content = new DefStackLayout(0, 10, Orientation.Horizontal) {
+                Items = { cbType, tbExcelExport }
+            };
+            /*ToolBar1 = new ToolBar();
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         new SeparatorToolItem(),
                                         cbType,
                                         new SeparatorToolItem(),
-                                        tbExcelExport});
+                                        tbExcelExport});*/
 
             Panel1 = new Panel();
 
@@ -51,6 +60,9 @@ namespace GKUI
                 Rows = {
                     new TableRow {
                         Cells = { grpSummary }
+                    },
+                    new TableRow {
+                        Cells = { ToolBar1 }
                     },
                     new TableRow {
                         ScaleHeight = true,
@@ -63,7 +75,7 @@ namespace GKUI
             Load += StatisticsWin_Load;
             KeyDown += StatisticsWin_KeyDown;
             Title = "StatisticsWin";
-            ToolBar = ToolBar1;
+            //ToolBar = ToolBar1;
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();
