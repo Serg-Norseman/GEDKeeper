@@ -551,10 +551,9 @@ namespace GKUI.Charts
             var imageSize = GetImageSize();
             if (!imageSize.IsEmpty) {
                 Rectangle scrollableViewport = this.Viewport;
-                bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
 
                 int x, y;
-                if (hasScroll) {
+                if (HasScroll) {
                     x = scrollableViewport.Left;
                     y = scrollableViewport.Top;
                 } else {
@@ -598,7 +597,7 @@ namespace GKUI.Charts
             }
 
             var imageSize = GetImageSize();
-            AdjustViewport(imageSize, noRedraw);
+            SetCanvasSize(imageSize, noRedraw);
         }
 
         #endregion
@@ -649,7 +648,7 @@ namespace GKUI.Charts
             SaveSelection();
 
             var imageSize = GetImageSize();
-            AdjustViewport(imageSize);
+            SetCanvasSize(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
@@ -691,15 +690,10 @@ namespace GKUI.Charts
         private Point GetChartMouseLocation(PointF mpt)
         {
             ExtRect imRect = GetImageRegion();
-
-            var imageSize = GetImageSize();
-            Rectangle scrollableViewport = this.Viewport;
-            bool hasScroll = (scrollableViewport.Width < imageSize.Width || scrollableViewport.Height < imageSize.Height);
-
             int x = (int)mpt.X;
             int y = (int)mpt.Y;
 
-            if (hasScroll) {
+            if (HasScroll) {
                 x += imRect.Left;
                 y += imRect.Top;
             } else {
@@ -960,10 +954,13 @@ namespace GKUI.Charts
             if (person == null) return;
 
             Rectangle viewport = this.Viewport;
+            int widthMax = fModel.ImageWidth - viewport.Width;
+            int heightMax = fModel.ImageHeight - viewport.Height;
+
             int oldX = viewport.Left;
             int oldY = viewport.Top;
-            int newX = Math.Max(0, ((person.PtX) - (viewport.Width / 2)));
-            int newY = Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2)));
+            int newX = Math.Min(Math.Max(0, ((person.PtX) - (viewport.Width / 2))), widthMax);
+            int newY = Math.Min(Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2))), heightMax);
 
             if ((oldX == newX) && (oldY == newY)) return;
 

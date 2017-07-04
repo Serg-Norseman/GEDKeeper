@@ -30,6 +30,9 @@ namespace GKUI.Components
     /// </summary>
     public class CustomPanel : Scrollable
     {
+        public const int SmallChange = 1;
+        public const int LargeChange = 10;
+
         /*
          * Attention: In Eto, using getScrollPosition at runtime Paint causes an exception.
          * Therefore, by the time of drawing, the Viewport needs to have already been calculated.
@@ -37,6 +40,8 @@ namespace GKUI.Components
 
         private Drawable fCanvas;
         private Font fFont;
+        private bool fHasScroll;
+        private Size fImageSize;
         private Color fTextColor;
         private Rectangle fViewport;
 
@@ -49,7 +54,17 @@ namespace GKUI.Components
         public Font Font
         {
             get { return fFont; }
-            set { fFont = value; }
+            set {
+                if (fFont == value) {
+                    fFont = value;
+                    DoFontChanged();
+                }
+            }
+        }
+
+        public bool HasScroll
+        {
+            get { return fHasScroll; }
         }
 
         public new Size ScrollSize
@@ -74,21 +89,14 @@ namespace GKUI.Components
             get {
                 if (fViewport.IsEmpty) {
                     Size clientSize = ClientRectangle.Size;
-                    fViewport = new Rectangle(0, 0, clientSize.Width, clientSize.Height);
+                    SetViewport(new Rectangle(0, 0, clientSize.Width, clientSize.Height));
                 }
                 return fViewport;
             }
         }
 
+        // FIXME: need to refactor and remove
         #region Temp for compatibility
-
-        public const int SmallChange = 1;
-        public const int LargeChange = 10;
-
-        public bool HasScroll
-        {
-            get { return true; }
-        }
 
         public int HorizontalScrollValue
         {
@@ -114,6 +122,7 @@ namespace GKUI.Components
         {
             base.ExpandContentHeight = true;
             base.ExpandContentWidth = true;
+            base.Padding = new Padding(0);
 
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
@@ -124,9 +133,29 @@ namespace GKUI.Components
             fTextColor = Colors.Black;
         }
 
+        protected void DoFontChanged()
+        {
+            OnFontChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnFontChanged(EventArgs e)
+        {
+        }
+
         private void PaintHandler(object sender, PaintEventArgs e)
         {
             OnPaint(e);
+        }
+
+        private void UpdateProperties()
+        {
+            fHasScroll = (fViewport.Width < fImageSize.Width || fViewport.Height < fImageSize.Height);
+        }
+
+        private void SetViewport(Rectangle viewport)
+        {
+            fViewport = viewport;
+            UpdateProperties();
         }
 
         protected virtual void OnPaint(PaintEventArgs e)
@@ -152,7 +181,7 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            fViewport = VisibleRect;
+            SetViewport(VisibleRect);
             base.OnSizeChanged(e);
         }
 
@@ -164,7 +193,7 @@ namespace GKUI.Components
         /// </param>
         protected override void OnScroll(ScrollEventArgs e)
         {
-            fViewport = VisibleRect;
+            SetViewport(VisibleRect);
             fCanvas.Invalidate();
 
             base.OnScroll(e);
@@ -191,11 +220,17 @@ namespace GKUI.Components
             UpdateScrollPosition(curScroll.X + dx, curScroll.Y + dy);
         }
 
-        protected void AdjustViewport(ExtSize imageSize, bool noRedraw = false)
+        /// <summary>
+        /// Sets the sizes of nested canvas.
+        /// </summary>
+        /// <param name="imageSize">The size of canvas.</param>
+        /// <param name="noRedraw">Flag of the need to redraw.</param>
+        protected void SetCanvasSize(ExtSize imageSize, bool noRedraw = false)
         {
             if (!imageSize.IsEmpty) {
-                ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
-                //base.ScrollSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+                fImageSize = new Size(imageSize.Width, imageSize.Height);
+                ScrollSize = fImageSize;
+                UpdateProperties();
             }
 
             if (!noRedraw) Invalidate();

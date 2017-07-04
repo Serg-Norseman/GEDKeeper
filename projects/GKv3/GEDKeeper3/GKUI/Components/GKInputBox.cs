@@ -212,14 +212,13 @@ namespace GKUI.Components
                 }
             };
 
-            ClientSize = new Size(378, 98);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;
             Title = "InputBox";
             Topmost = true;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(380, 100);
             ResumeLayout();
         }
 

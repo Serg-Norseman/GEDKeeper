@@ -19,7 +19,9 @@
  */
 
 using System;
+using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Dialogs
 {
@@ -54,10 +56,26 @@ namespace GKUI.Dialogs
             return (ShowModal() == DialogResult.Ok);
         }
 
+        public virtual bool ShowModalX(Control owner)
+        {
+            return (ShowModal(owner) == DialogResult.Ok);
+        }
+
         protected virtual void CancelClickHandler(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            Close(DialogResult.Cancel);
+        }
+
+        public void SetPredefProperties(int width, int height, bool fontPreset = true)
+        {
+            if (Platform.IsWinForms) {
+                ClientSize = new Size(width, height);
+            } else {
+            }
+
+            if (fontPreset && (Platform.IsWinForms || Platform.IsWpf)) {
+                UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            }
         }
     }
 }

@@ -269,7 +269,7 @@ namespace GKUI
             MenuPerson.Opening += MenuPerson_Opening;
 
 
-            ClientSize = new Size(822, 452);
+            ClientSize = new Size(820, 450);
             ShowInTaskbar = true;
             Title = "TreeChartWin";
             ToolBar = ToolBar1;

@@ -25,16 +25,15 @@ namespace GKUI.Dialogs
             rbNone = new RadioButton();
             rbNone.Text = "?";
 
-            rbMale = new RadioButton();
+            rbMale = new RadioButton(rbNone);
             rbMale.Text = "rbMale";
 
-            rbFemale = new RadioButton();
+            rbFemale = new RadioButton(rbNone);
             rbFemale.Text = "rbFemale";
 
             grpSex = new GroupBox();
             grpSex.Text = "grpSex";
-            grpSex.Content = new StackLayout {
-                Orientation = Orientation.Horizontal,
+            grpSex.Content = new HDefStackLayout {
                 Items = { rbNone, rbMale, rbFemale }
             };
 
@@ -48,9 +47,7 @@ namespace GKUI.Dialogs
             btnCancel.Size = new Size(80, 26);
             btnCancel.Text = "btnCancel";
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { txtName }
@@ -59,19 +56,16 @@ namespace GKUI.Dialogs
                         ScaleHeight = true,
                         Cells = { grpSex }
                     },
-                    new TableRow {
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(504, 158);
             Title = "SexCheckDlg";
             Topmost = true;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(500, 160);
             ResumeLayout();
         }
     }

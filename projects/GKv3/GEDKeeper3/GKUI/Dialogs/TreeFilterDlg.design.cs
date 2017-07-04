@@ -133,11 +133,10 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(553, 442);
             Title = "TreeFilterDlg";
             Load += TreeFilterDlg_Load;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(550, 440);
             ResumeLayout();
         }
     }

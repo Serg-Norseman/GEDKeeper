@@ -40,6 +40,7 @@ namespace GKUI
 
         private int fCurrentIndex;
         private string fCurrentText;
+        private ITimer fTimer;
 
         public SlideshowWin(IBaseWindow baseWin)
         {
@@ -59,6 +60,8 @@ namespace GKUI
             fImageCtl.ImageBorderColor = Colors.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
 
+            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
+
             WindowState = Eto.Forms.WindowState.Maximized;
 
             SetLang();
@@ -68,6 +71,15 @@ namespace GKUI
             fCurrentIndex = -1;
 
             LoadList();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (fTimer != null) fTimer.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         private void SlideshowWin_Load(object sender, System.EventArgs e)
@@ -146,11 +158,11 @@ namespace GKUI
             if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
                 tbStart.Image = Bitmap.FromResource("Resources.btn_stop.gif");
-                timer1.Enabled = true;
+                fTimer.Start();
             } else {
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
                 tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
-                timer1.Enabled = false;
+                fTimer.Stop();
             }
         }
 

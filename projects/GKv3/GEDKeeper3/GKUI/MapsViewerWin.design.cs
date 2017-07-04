@@ -7,7 +7,6 @@ namespace GKUI
 {
     partial class MapsViewerWin
     {
-        //private StatusBar StatusBar1; // FIXME: GKv3 DevRestriction
         private TabControl PageControl1;
         private TabPage pagePlaces;
         private TreeView tvPlaces;
@@ -25,55 +24,44 @@ namespace GKUI
 
         private void InitializeComponent()
         {
-            //StatusBar1 = new StatusBar();
-            PageControl1 = new TabControl();
-            pagePlaces = new TabPage();
-            tvPlaces = new TreeView();
-            grpSelection = new GroupBox();
-            cmbPersons = new ComboBox();
-            chkResidence = new CheckBox();
-            chkDeath = new CheckBox();
-            chkBirth = new CheckBox();
-            btnSelectPlaces = new Button();
-            btnSaveImage = new Button();
-            radTotal = new RadioButton();
-            radSelected = new RadioButton();
-            chkLinesVisible = new CheckBox();
-            Panel1 = new Panel();
-
             SuspendLayout();
 
-            //StatusBar1.Location = new Point(0, 549);
-            //StatusBar1.Size = new Size(1101, 23);
+            cmbPersons = new ComboBox();
+            cmbPersons.ReadOnly = true;
 
-            PageControl1.Pages.Add(pagePlaces);
-            PageControl1.SelectedIndex = 0;
-            PageControl1.Size = new Size(405, 549);
+            chkResidence = new CheckBox();
+            chkResidence.Text = "chkResidence";
 
-            pagePlaces.Size = new Size(397, 519);
-            pagePlaces.Text = "pagePlaces";
-            pagePlaces.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { grpSelection }
-                    },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { tvPlaces }
-                    }
-                }
-            };
+            chkDeath = new CheckBox();
+            chkDeath.Text = "chkDeath";
 
-            tvPlaces.Size = new Size(397, 294);
-            tvPlaces.MouseDoubleClick += TreePlaces_DoubleClick;
+            chkBirth = new CheckBox();
+            chkBirth.Text = "chkBirth";
 
-            grpSelection.Size = new Size(397, 225);
+            radTotal = new RadioButton();
+            radTotal.Text = "radTotal";
+            radTotal.Click += radTotal_Click;
+
+            radSelected = new RadioButton(radTotal);
+            radSelected.Text = "radSelected";
+            radSelected.Click += radTotal_Click;
+
+            chkLinesVisible = new CheckBox();
+            chkLinesVisible.Checked = true;
+            chkLinesVisible.Text = "chkLinesVisible";
+
+            btnSelectPlaces = new Button();
+            btnSelectPlaces.Enabled = false;
+            btnSelectPlaces.Text = "btnSelectPlaces";
+            btnSelectPlaces.Click += btnSelectPlaces_Click;
+
+            btnSaveImage = new Button();
+            btnSaveImage.Text = "btnSaveImage";
+            btnSaveImage.Click += btnSaveImage_Click;
+
+            grpSelection = new GroupBox();
             grpSelection.Text = "grpSelection";
-            grpSelection.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpSelection.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { radTotal }
@@ -98,58 +86,36 @@ namespace GKUI
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { btnSelectPlaces, btnSaveImage }
+                        Cells = { TableLayout.Horizontal(10, btnSelectPlaces, btnSaveImage) }
                     }
                 }
             };
 
-            cmbPersons.ReadOnly = true;
-            cmbPersons.Size = new Size(371, 25);
+            tvPlaces = new TreeView();
+            tvPlaces.MouseDoubleClick += TreePlaces_DoubleClick;
 
-            chkResidence.Size = new Size(152, 21);
-            chkResidence.Text = "chkResidence";
-
-            chkDeath.Size = new Size(120, 21);
-            chkDeath.Text = "chkDeath";
-
-            chkBirth.Size = new Size(137, 21);
-            chkBirth.Text = "chkBirth";
-
-            btnSelectPlaces.Enabled = false;
-            btnSelectPlaces.Size = new Size(105, 30);
-            btnSelectPlaces.Text = "btnSelectPlaces";
-            btnSelectPlaces.Click += btnSelectPlaces_Click;
-
-            btnSaveImage.Size = new Size(170, 30);
-            btnSaveImage.Text = "btnSaveImage";
-            btnSaveImage.Click += btnSaveImage_Click;
-
-            radTotal.Size = new Size(127, 21);
-            radTotal.Text = "radTotal";
-            radTotal.Click += radTotal_Click;
-
-            radSelected.Size = new Size(180, 21);
-            radSelected.Text = "radSelected";
-            radSelected.Click += radTotal_Click;
-
-            chkLinesVisible.Checked = true;
-            chkLinesVisible.Size = new Size(155, 21);
-            chkLinesVisible.Text = "chkLinesVisible";
-
-            Panel1.Size = new Size(696, 549);
-
-            //Controls.Add(StatusBar1);
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            pagePlaces = new TabPage();
+            pagePlaces.Text = "pagePlaces";
+            pagePlaces.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { PageControl1, Panel1 }
+                        Cells = { grpSelection }
+                    },
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { tvPlaces }
                     }
                 }
             };
 
-            ClientSize = new Size(1101, 572);
+            PageControl1 = new TabControl();
+            PageControl1.Pages.Add(pagePlaces);
+
+            Panel1 = new Panel();
+
+            Content = TableLayout.Horizontal(4, PageControl1, Panel1);
+
+            ClientSize = new Size(1100, 570);
             Title = "MapsViewerWin";
             KeyDown += MapsViewerWin_KeyDown;
 

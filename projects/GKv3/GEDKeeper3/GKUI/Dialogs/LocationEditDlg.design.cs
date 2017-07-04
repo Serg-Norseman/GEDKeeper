@@ -79,13 +79,19 @@ namespace GKUI.Dialogs
 
             grpSearch = new GroupBox();
             grpSearch.Text = "grpSearch";
-            grpSearch.Content = new DefTableLayout {
+            grpSearch.Content = new TableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { new HDefStackLayout {
-                                Items = { ListGeoCoords, new VDefStackLayout {
-                                        Items = { btnSearch, btnSelect, btnSelectName }
-                                    } }
+                        Cells = { new TableLayout {
+                                Spacing = new Size(10, 10),
+                                Rows = {
+                                    new TableRow {
+                                        Cells = {
+                                            ListGeoCoords,
+                                            new DefStackLayout(Orientation.Vertical, 10, btnSearch, btnSelect, btnSelectName)
+                                        }
+                                    }
+                                }
                             } }
                     },
                     new TableRow {
@@ -97,16 +103,16 @@ namespace GKUI.Dialogs
 
             pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
-            pageCommon.Content = new DefTableLayout {
+            pageCommon.Content = new TableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { new DefTableLayout {
                                 Rows = {
                                     new TableRow {
-                                        Cells = { lblName, lblLatitude, lblLongitude, null, null }
+                                        Cells = { lblName, lblLatitude, lblLongitude, null }
                                     },
                                     new TableRow {
-                                        Cells = { txtName, txtLatitude, txtLongitude, null, new TableCell(btnShowOnMap, false) }
+                                        Cells = { txtName, txtLatitude, txtLongitude, new TableCell(btnShowOnMap, false) }
                                     }
                                 }
                             } }
@@ -155,10 +161,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(784, 578);
             Title = "LocationEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(780, 580);
             ResumeLayout();
         }
     }

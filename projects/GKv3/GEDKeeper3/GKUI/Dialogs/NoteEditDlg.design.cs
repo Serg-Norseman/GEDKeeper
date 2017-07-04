@@ -31,6 +31,8 @@ namespace GKUI.Dialogs
 
             txtNote = new TextArea();
             txtNote.AcceptsReturn = true;
+            txtNote.Height = 190;
+            txtNote.Width = 380;
 
             Content = new DefTableLayout {
                 Rows = {
@@ -44,10 +46,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(402, 249);
             Title = "NoteEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(400, 250);
             ResumeLayout();
         }
     }

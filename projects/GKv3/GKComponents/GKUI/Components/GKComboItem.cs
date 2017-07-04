@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -64,6 +65,17 @@ namespace GKUI.Components
         public override string ToString()
         {
             return Caption;
+        }
+
+        public static IEnumerable<GKComboItem> Convert(IEnumerable<string> items)
+        {
+            var result = new List<GKComboItem>();
+
+            foreach (var item in items) {
+                result.Add(new GKComboItem(item));
+            }
+
+            return result;
         }
     }
 }

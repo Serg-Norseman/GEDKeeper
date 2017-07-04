@@ -75,10 +75,10 @@ namespace GKUI.Dialogs
                         Cells = { lblTheme, txtName }
                     },
                     new TableRow {
-                        Cells = { lblCorresponder, txtDir, txtCorresponder, btnPersonAdd }
+                        Cells = { lblCorresponder, TableLayout.Horizontal(10, new TableCell(txtDir, true), new TableCell(txtCorresponder, true), btnPersonAdd) }
                     },
                     new TableRow {
-                        Cells = { lblType, cmbCorrType, lblDate, txtDate }
+                        Cells = { lblType, TableLayout.Horizontal(10, cmbCorrType, lblDate, txtDate) }
                     }
                 }
             };
@@ -124,10 +124,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(675, 513);
             Title = "CommunicationEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(680, 520);
             ResumeLayout();
         }
     }

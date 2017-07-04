@@ -80,11 +80,10 @@ namespace GKUI.Dialogs
             layout.Add(Shape2, 22, 10);
 
             AbortButton = btnClose;
-            ClientSize = new Size(547, 313);
             Title = " ";
             Topmost = true;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(550, 310);
             ResumeLayout();
         }
     }

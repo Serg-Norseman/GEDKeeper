@@ -48,6 +48,14 @@ namespace GKUI.Components
             Padding = new Padding(padding);
             Spacing = spacing;
         }
+
+        public DefStackLayout(Orientation orientation, int spacing, params Control[] items)
+        {
+            Orientation = orientation;
+            Padding = new Padding(0);
+            Spacing = spacing;
+            foreach (var item in items) Items.Add(item);
+        }
     }
 
     public class HDefStackLayout : DefStackLayout
@@ -76,6 +84,8 @@ namespace GKUI.Components
 
         public DefTableLayout(int columns, int rows) : base(columns, rows)
         {
+            Padding = new Padding(10);
+            Spacing = new Size(10, 10);
         }
     }
 
@@ -340,6 +350,7 @@ namespace GKUI.Components
             return col;
         }
 
+        // FIXME: replace to TableLayout.Horizontal(), same
         public static TableRow MakeDialogFooter(params TableCell[] buttons)
         {
             var row = new TableRow();

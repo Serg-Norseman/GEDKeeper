@@ -130,31 +130,28 @@ namespace GKUI.Dialogs
                         Cells = { txtPatronymic, txtNickname }
                     },
                     new TableRow {
-                        Cells = { lblType }
+                        Cells = { lblType, null }
                     },
                     new TableRow {
                         //ScaleHeight = true,
-                        Cells = { cmbNameType }
-                    }
+                        Cells = { cmbNameType, null }
+                    },
+                    null
                 }
             };
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     panel,
-                    null,
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(444, 360);
             Title = "PersonalNameEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(440, 360);
             ResumeLayout();
         }
     }

@@ -122,12 +122,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            //if (Platform.IsWinForms) {
-                ClientSize = new Size(752, 549);
-            //}
             Title = "SourceEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(580, 460);
             ResumeLayout();
         }
     }

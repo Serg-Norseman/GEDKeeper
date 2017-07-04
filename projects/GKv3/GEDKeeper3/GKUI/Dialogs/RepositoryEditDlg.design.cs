@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { UIHelper.CreateHSingleTable(0, 10, lblName, txtName) }
+                        Cells = { TableLayout.Horizontal(10, lblName, txtName) }
                     },
                     new TableRow {
                         ScaleHeight = true,
@@ -66,10 +66,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(586, 455);
             Title = "RepositoryEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(580, 460);
             ResumeLayout();
         }
     }

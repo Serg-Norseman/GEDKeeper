@@ -48,14 +48,11 @@
       <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
-    <Compile Include="GKUI\Components\GKComboItemSmp.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs" />
     <Compile Include="GKUI\Components\GKPortrait.cs" />
     <Compile Include="GKUI\Components\GKSheetList.cs" />
-    <Compile Include="GKUI\Components\NativeMethods.cs" />
-    <Compile Include="GKUI\Components\TextBoxEx.cs" />
     <Compile Include="GKUI\Components\EtoFormsAppHost.cs" />
     <Compile Include="GKUI\Components\EtoFormsGfxProvider.cs" />
     <Compile Include="GKUI\Components\EtoFormsStdDialogs.cs" />

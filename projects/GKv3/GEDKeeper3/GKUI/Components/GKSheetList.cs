@@ -131,25 +131,23 @@ namespace GKUI.Components
             fBtnAdd.Click += ItemAdd;
 
             fList = new GKListView();
-            //fList.Size = new Size(500, 290);
             fList.MouseDoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
 
             SuspendLayout();
-            Content = new StackLayout() {
-                Orientation = Orientation.Horizontal,
-                Spacing = 5,
-                Items = {
-                    new StackLayoutItem(fList, true),
-                    new StackLayoutItem(
-                        new StackLayout() {
-                            Orientation = Orientation.Vertical,
-                            Spacing = 5,
-                            Items = { fBtnAdd, fBtnEdit, fBtnDelete,
-                                fBtnLinkJump, fBtnMoveUp, fBtnMoveDown }
-                        }, false)
-                }
-            };
+
+            var toolbar = new DefStackLayout(Orientation.Vertical, 4,
+                                             fBtnAdd, fBtnEdit, fBtnDelete,
+                                             fBtnLinkJump, fBtnMoveUp, fBtnMoveDown);
+
+            var tab = new TableLayout(2, 1);
+            tab.Spacing = new Size(4, 4);
+            tab.SetColumnScale(0, true);
+            tab.SetColumnScale(1, false);
+            tab.Add(fList, 0, 0);
+            tab.Add(toolbar, 1, 0);
+
+            Content = tab;
             ResumeLayout();
 
             owner.SuspendLayout();

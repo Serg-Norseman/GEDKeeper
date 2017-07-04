@@ -111,10 +111,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(620, 400);
             Title = "FilePropertiesDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(580, 400);
             ResumeLayout();
         }
     }

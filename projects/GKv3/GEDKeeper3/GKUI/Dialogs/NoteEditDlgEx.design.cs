@@ -11,15 +11,14 @@ namespace GKUI.Dialogs
         private Button btnCancel;
         private TextArea txtNote;
         private GKUI.Components.HyperView hyperView1;
-        private ButtonToolItem cmbSizes; // FIXME: GKv3 DevRestriction
+        private ButtonToolItem cmbSizes;
         private ContextMenu menuSizes;
         private ButtonMenuItem miClear;
         private ButtonMenuItem miExport;
         private ButtonMenuItem miImport;
         private ButtonMenuItem miSelectAndCopy;
-        private ButtonToolItem ddbtnActions; // FIXME: GKv3 DevRestriction
+        private ButtonToolItem ddbtnActions;
         private ContextMenu menuActions;
-        private SeparatorToolItem SeparatorToolItem1;
         private ButtonToolItem btnURL;
         private ButtonToolItem btnUnderline;
         private ButtonToolItem btnItalic;
@@ -31,84 +30,82 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            txtNote = new TextArea();
-            toolStrip1 = new ToolBar();
-            btnBold = new ButtonToolItem();
-            btnItalic = new ButtonToolItem();
-            btnUnderline = new ButtonToolItem();
-            btnURL = new ButtonToolItem();
-            cmbSizes = new ButtonToolItem();
-            SeparatorToolItem1 = new SeparatorToolItem();
-            ddbtnActions = new ButtonToolItem();
-            miSelectAndCopy = new ButtonMenuItem();
-            miImport = new ButtonMenuItem();
-            miExport = new ButtonMenuItem();
-            miClear = new ButtonMenuItem();
-            hyperView1 = new GKUI.Components.HyperView();
-            menuSizes = new ContextMenu();
-            menuActions = new ContextMenu();
-
             SuspendLayout();
 
-            txtNote.AcceptsReturn = true;
-            txtNote.Size = new Size(763, 319);
-
+            toolStrip1 = new ToolBar();
             toolStrip1.Items.AddRange(new ToolItem[] {
                                           btnBold,
                                           btnItalic,
                                           btnUnderline,
                                           btnURL,
                                           cmbSizes,
-                                          SeparatorToolItem1,
+                                          new SeparatorToolItem(),
                                           ddbtnActions});
 
+            btnBold = new ButtonToolItem();
             //btnBold.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             btnBold.Text = "B";
             btnBold.Click += btnBold_Click;
 
+            btnItalic = new ButtonToolItem();
             //btnItalic.Font = new Font("Tahoma", 9F, FontStyle.Italic);
             btnItalic.Text = "I";
             btnItalic.Click += btnItalic_Click;
 
+            btnUnderline = new ButtonToolItem();
             //btnUnderline.Font = new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
             btnUnderline.Text = "U";
             btnUnderline.Click += btnUnderline_Click;
 
+            btnURL = new ButtonToolItem();
             //btnURL.Font = new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
             //btnURL.TextColor = Colors.Blue;
             btnURL.Text = "URL";
             btnURL.Click += btnURL_Click;
 
+            cmbSizes = new ButtonToolItem();
             cmbSizes.Text = "cmbSizes";
             //cmbSizes.SelectedIndexChanged += cmbSizes_SelectedIndexChanged;
             cmbSizes.Click += (sender, e) => menuSizes.Show(this);
 
+            menuSizes = new ContextMenu();
+
+            menuActions = new ContextMenu();
             menuActions.Items.AddRange(new MenuItem[] {
                                            miSelectAndCopy,
                                            miImport,
                                            miExport,
                                            miClear});
+            ddbtnActions = new ButtonToolItem();
             ddbtnActions.Text = "Actions";
             ddbtnActions.Click += (sender, e) => menuActions.Show(this);
 
+            miSelectAndCopy = new ButtonMenuItem();
             miSelectAndCopy.Text = "miSelectAndCopy";
             miSelectAndCopy.Click += miSelectAndCopy_Click;
 
+            miImport = new ButtonMenuItem();
             miImport.Text = "miImport";
             miImport.Click += miImport_Click;
 
+            miExport = new ButtonMenuItem();
             miExport.Text = "miExport";
             miExport.Click += miExport_Click;
 
+            miClear = new ButtonMenuItem();
             miClear.Text = "miClear";
             miClear.Click += miClear_Click;
 
-            //hyperView1.AutoScroll = true;
-            //hyperView1.AutoScrollMinSize = new Size(4, 0);
-            //hyperView1.BorderStyle = BorderStyle.Fixed3D;
+            //
+
+            txtNote = new TextArea();
+            txtNote.AcceptsReturn = true;
+            //txtNote.Size = new Size(763, 319);
+
+            hyperView1 = new GKUI.Components.HyperView();
             hyperView1.BorderWidth = 0;
             hyperView1.LinkColor = Colors.Blue;
-            hyperView1.Size = new Size(763, 347);
+            //hyperView1.Size = new Size(763, 347);
 
             //
 
@@ -151,11 +148,10 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(797, 457);
             Title = "NoteEditDlg";
             ToolBar = toolStrip1;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(800, 460);
             ResumeLayout();
         }
     }

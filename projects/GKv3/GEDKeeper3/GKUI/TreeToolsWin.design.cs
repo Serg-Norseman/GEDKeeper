@@ -520,7 +520,7 @@ namespace GKUI
             };
 
             AbortButton = btnClose;
-            ClientSize = new Size(1034, 625);
+            ClientSize = new Size(1030, 620);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;

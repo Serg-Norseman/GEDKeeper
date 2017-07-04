@@ -122,10 +122,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            //ClientSize = new Size(572, 385);
             Title = "AddressEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(570, 380);
             ResumeLayout();
         }
     }

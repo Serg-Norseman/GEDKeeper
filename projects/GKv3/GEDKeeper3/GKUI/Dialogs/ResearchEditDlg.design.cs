@@ -86,10 +86,10 @@ namespace GKUI.Dialogs
                         Cells = { lblName, txtName }
                     },
                     new TableRow {
-                        Cells = { lblPriority, cmbPriority, lblStatus, cmbStatus, lblPercent, nudPercent }
+                        Cells = { lblPriority, TableLayout.Horizontal(10, cmbPriority, lblStatus, cmbStatus, lblPercent, nudPercent) }
                     },
                     new TableRow {
-                        Cells = { lblStartDate, txtStartDate, lblStopDate, txtStopDate }
+                        Cells = { lblStartDate, TableLayout.Horizontal(10, txtStartDate, lblStopDate, txtStopDate) }
                     }
                 }
             };
@@ -143,10 +143,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(852, 557);
             Title = "ResearchEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(850, 560);
             ResumeLayout();
         }
     }

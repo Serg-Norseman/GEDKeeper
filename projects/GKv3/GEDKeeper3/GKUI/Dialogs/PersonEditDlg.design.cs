@@ -163,16 +163,16 @@ namespace GKUI.Dialogs
                         Cells = { txtMarriedSurname, txtNamePrefix }
                     },
                     new TableRow {
-                        Cells = { lblName, lblNameSuffix, lblSex }
+                        Cells = { lblName, TableLayout.Horizontal(10, lblNameSuffix, lblSex) }
                     },
                     new TableRow {
-                        Cells = { txtName, txtNameSuffix, cmbSex }
+                        Cells = { txtName, TableLayout.Horizontal(10, txtNameSuffix, cmbSex) }
                     },
                     new TableRow {
-                        Cells = { lblPatronymic, lblNickname, chkPatriarch }
+                        Cells = { lblPatronymic, lblNickname }
                     },
                     new TableRow {
-                        Cells = { cmbPatronymic, txtNickname, chkBookmark }
+                        Cells = { cmbPatronymic, TableLayout.Horizontal(10, txtNickname, chkBookmark, chkPatriarch) }
                     }
                 }
             };
@@ -205,17 +205,7 @@ namespace GKUI.Dialogs
             };
 
             GroupBox1 = new GroupBox();
-            //GroupBox1.Size = new Size(699, 258);
-            GroupBox1.Content = new DefTableLayout {
-                Rows = {
-                    new TableRow {
-                        Cells = {
-                            new TableCell(personLayout, true),
-                            portraitLayout
-                        }
-                    }
-                }
-            };
+            GroupBox1.Content = TableLayout.Horizontal(10, new TableCell(personLayout, true), portraitLayout);
 
             //
 
@@ -269,10 +259,23 @@ namespace GKUI.Dialogs
             btnMotherSel.Size = new Size(26, 26);
             btnMotherSel.Click += btnMotherSel_Click;
 
-            panCtlParents = new Panel();
+            var parentsTab = new DefTableLayout(4, 2);
+            parentsTab.SetColumnScale(0, false);
+            parentsTab.SetColumnScale(1, true);
+            parentsTab.SetColumnScale(2, true);
+            parentsTab.SetColumnScale(3, false);
+            parentsTab.Add(lblParents, 0, 0);
+            parentsTab.Add(txtFather, 1, 0);
+            parentsTab.Add(txtMother, 2, 0);
+            parentsTab.Add(new DefStackLayout(Orientation.Horizontal, 10, btnParentsAdd, btnParentsEdit, btnParentsDelete), 3, 0);
+            parentsTab.Add(new DefStackLayout(Orientation.Horizontal, 10, btnFatherAdd, btnFatherDelete, btnFatherSel), 1, 1);
+            parentsTab.Add(new DefStackLayout(Orientation.Horizontal, 10, btnMotherAdd, btnMotherDelete, btnMotherSel), 2, 1);
+
+            panCtlParents = new GroupBox();
+            panCtlParents.Content = parentsTab;
             //panCtlParents.BorderStyle = BorderStyle.FixedSingle;
             //panCtlParents.Size = new Size(696, 69);
-            panCtlParents.Content = new DefTableLayout {
+            /*panCtlParents.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblParents, txtFather, txtMother, btnParentsAdd, btnParentsEdit, btnParentsDelete }
@@ -281,7 +284,7 @@ namespace GKUI.Dialogs
                         Cells = { btnFatherAdd, btnFatherDelete, btnFatherSel, btnMotherAdd, btnMotherDelete, btnMotherSel }
                     }
                 }
-            };
+            };*/
 
             //
 
@@ -373,10 +376,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(700, 560);
             Title = "PersonEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(700, 560);
             ResumeLayout();
         }
     }

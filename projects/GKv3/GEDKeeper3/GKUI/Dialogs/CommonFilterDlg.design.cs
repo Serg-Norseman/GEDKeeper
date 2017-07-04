@@ -7,9 +7,10 @@ namespace GKUI.Dialogs
 {
     partial class CommonFilterDlg
     {
+        protected TabControl tabsFilters;
+
         private Button btnAccept;
         private Button btnCancel;
-        protected TabControl tabsFilters;
         private TabPage tsFieldsFilter;
         private Button btnReset;
         private GridView dataGridView1;
@@ -38,10 +39,7 @@ namespace GKUI.Dialogs
             btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             dataGridView1 = new GridView();
-            //dataGridView1.AllowUserToResizeRows = false;
-            //dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            //dataGridView1.MultiSelect = false;
-            dataGridView1.Size = new Size(819, 464);
+            dataGridView1.Height = 460;
 
             tsFieldsFilter = new TabPage();
             tsFieldsFilter.Content = dataGridView1;
@@ -62,10 +60,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(859, 588);
             Title = "CommonFilterDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(860, 580);
             ResumeLayout();
         }
     }

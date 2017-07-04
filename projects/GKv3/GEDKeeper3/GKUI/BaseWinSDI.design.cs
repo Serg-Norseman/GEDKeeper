@@ -179,31 +179,7 @@ namespace GKUI
             StatusBarPanel2.Style = StatusBarPanelStyle.OwnerDraw;
             StatusBarPanel2.Width = 24;*/
 
-            ToolBar1.Items.AddRange(new ToolItem[] {
-                                        tbFileNew,
-                                        tbFileLoad,
-                                        tbLoadMRU,
-                                        tbFileSave,
-                                        new SeparatorToolItem(),
-                                        tbRecordAdd,
-                                        tbRecordEdit,
-                                        tbRecordDelete,
-                                        new SeparatorToolItem(),
-                                        tbFilter,
-                                        new SeparatorToolItem(),
-                                        tbTreeAncestors,
-                                        tbTreeDescendants,
-                                        tbTreeBoth,
-                                        new SeparatorToolItem(),
-                                        tbPedigree,
-                                        new SeparatorToolItem(),
-                                        tbStats,
-                                        new SeparatorToolItem(),
-                                        tbPrev,
-                                        tbNext,
-                                        new SeparatorToolItem(),
-                                        tbDocPreview,
-                                        tbDocPrint});
+            //
 
             tbFileNew.Click += ToolBar1_ButtonClick;
             tbFileLoad.Click += ToolBar1_ButtonClick;
@@ -248,6 +224,34 @@ namespace GKUI
             tbDocPreview.Click += ToolBar1_ButtonClick;
 
             tbDocPrint.Click += ToolBar1_ButtonClick;
+
+            ToolBar1.Items.AddRange(new ToolItem[] {
+                                        tbFileNew,
+                                        tbFileLoad,
+                                        tbLoadMRU,
+                                        tbFileSave,
+                                        new SeparatorToolItem(),
+                                        tbRecordAdd,
+                                        tbRecordEdit,
+                                        tbRecordDelete,
+                                        new SeparatorToolItem(),
+                                        tbFilter,
+                                        new SeparatorToolItem(),
+                                        tbTreeAncestors,
+                                        tbTreeDescendants,
+                                        tbTreeBoth,
+                                        new SeparatorToolItem(),
+                                        tbPedigree,
+                                        new SeparatorToolItem(),
+                                        tbStats,
+                                        new SeparatorToolItem(),
+                                        tbPrev,
+                                        tbNext,
+                                        new SeparatorToolItem(),
+                                        tbDocPreview,
+                                        tbDocPrint});
+
+            //
 
             MainMenu1.Items.AddRange(new MenuItem[] {
                                          miFile,
@@ -445,12 +449,7 @@ namespace GKUI
             miAbout.Text = "miAbout";
             miAbout.Click += miAbout_Click;
 
-            contextMenu.Items.AddRange(new MenuItem[] {
-                                           miContRecordAdd,
-                                           miContRecordEdit,
-                                           miContRecordDelete,
-                                           miRecordDuplicate});
-            contextMenu.Opening += contextMenu_Opening;
+            //
 
             miContRecordAdd.Text = "miContRecordAdd";
             miContRecordAdd.Click += miRecordAdd_Click;
@@ -464,6 +463,15 @@ namespace GKUI
             miRecordDuplicate.Text = "miRecordDuplicate";
             miRecordDuplicate.Click += miRecordDuplicate_Click;
 
+            contextMenu.Items.AddRange(new MenuItem[] {
+                                           miContRecordAdd,
+                                           miContRecordEdit,
+                                           miContRecordDelete,
+                                           miRecordDuplicate});
+            contextMenu.Opening += contextMenu_Opening;
+
+            //
+
             tabsRecords = new TabControl();
             tabsRecords.SelectedIndexChanged += tabsRecords_SelectedIndexChanged;
 
@@ -471,7 +479,7 @@ namespace GKUI
             Menu = MainMenu1;
             ToolBar = ToolBar1;
 
-            ClientSize = new Size(976, 462);
+            ClientSize = new Size(980, 460);
             Title = "BaseWinSDI";
             GotFocus += Form_Activated;
             LostFocus += Form_Deactivate;

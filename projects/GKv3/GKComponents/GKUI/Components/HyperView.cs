@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
@@ -175,7 +174,7 @@ namespace GKUI.Components
                 finally
                 {
                     fAcceptFontChange = true;
-                    AdjustViewport(fTextSize);
+                    SetCanvasSize(fTextSize);
                 }
             }
             catch (Exception ex)
@@ -258,15 +257,14 @@ namespace GKUI.Components
 
         #region Protected methods
 
-        // FIXME: GKv3 DevRestriction
-        /*protected override void OnFontChanged(EventArgs e)
+        protected override void OnFontChanged(EventArgs e)
         {
             if (fAcceptFontChange) {
                 ArrangeText();
             }
 
             base.OnFontChanged(e);
-        }*/
+        }
 
         // FIXME: move call to fCanvas handler
         protected override void OnKeyDown(KeyEventArgs e)
@@ -306,20 +304,20 @@ namespace GKUI.Components
                     break;
             }
 
+            //e.Handled = true;
             base.OnKeyDown(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-
             if (fCurrentLink != null) DoLink(fCurrentLink.URL);
+
+            e.Handled = true;
+            base.OnMouseDown(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
             Point mpt = new Point(e.Location);
             int xOffset = (fBorderWidth - -AutoScrollPosition.X);
             int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
@@ -339,6 +337,9 @@ namespace GKUI.Components
             }
 
             Cursor = (fCurrentLink == null) ? Cursors.Default : Cursors.Pointer;
+
+            e.Handled = true;
+            base.OnMouseMove(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)

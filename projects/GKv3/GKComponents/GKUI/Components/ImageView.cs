@@ -27,18 +27,19 @@ namespace GKUI.Components
     public class ImageView : Panel
     {
         private ImageBox imageBox;
-        private ToolBar toolStrip;
-        //private ToolStripComboBox cbZoomLevels;
-        public ButtonToolItem btnSizeToFit;
-        public ButtonToolItem btnZoomIn;
-        public ButtonToolItem btnZoomOut;
+        private Panel toolStrip;
+        private ComboBox cbZoomLevels;
+
+        public Button btnSizeToFit;
+        public Button btnZoomIn;
+        public Button btnZoomOut;
 
 
-        /*public bool ShowToolbar
+        public bool ShowToolbar
         {
             get { return toolStrip.Visible; }
             set { toolStrip.Visible = value; }
-        }*/
+        }
 
         public ImageBoxSelectionMode SelectionMode
         {
@@ -58,67 +59,61 @@ namespace GKUI.Components
             InitializeComponent();
 
             FillZoomLevels();
-            /*imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            imageBox.ImageBorderColor = Color.AliceBlue;
-            imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            imageBox.AllowDoubleClick = false;
-            imageBox.AllowZoom = true;
-            imageBox.InterpolationMode = InterpolationMode.HighQualityBicubic;*/
         }
 
         #region Component design
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-            base.Dispose(disposing);
-        }
-
         private void InitializeComponent()
         {
-            toolStrip = new ToolBar();
-            btnSizeToFit = new ButtonToolItem();
-            btnZoomIn = new ButtonToolItem();
-            btnZoomOut = new ButtonToolItem();
-            //cbZoomLevels = new ToolStripComboBox();
-            imageBox = new ImageBox();
             SuspendLayout();
 
-            toolStrip.Items.AddRange(new ToolItem[] {
-                                         btnSizeToFit,
-                                         btnZoomIn,
-                                         btnZoomOut,
-                                         new SeparatorToolItem(),
-                                         //cbZoomLevels,
-                                         new SeparatorToolItem()});
-
-            btnSizeToFit.Image = Bitmap.FromResource("Resources.btn_size_to_fit.gif");
+            btnSizeToFit = new Button();
+            btnSizeToFit.Image = Bitmap.FromResource("Resources.btn_size_to_fit.png");
             btnSizeToFit.Click += btnSizeToFit_Click;
 
-            btnZoomIn.Image = Bitmap.FromResource("Resources.btn_zoom_in.gif");
+            btnZoomIn = new Button();
+            btnZoomIn.Image = Bitmap.FromResource("Resources.btn_zoom_in.png");
             btnZoomIn.Click += btnZoomIn_Click;
 
-            btnZoomOut.Image = Bitmap.FromResource("Resources.btn_zoom_out.gif");
+            btnZoomOut = new Button();
+            btnZoomOut.Image = Bitmap.FromResource("Resources.btn_zoom_out.png");
             btnZoomOut.Click += btnZoomOut_Click;
 
-            /*cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
+            cbZoomLevels = new ComboBox();
+            cbZoomLevels.ReadOnly = true;
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += new System.EventHandler(zoomLevelsToolStripComboBox_SelectedIndexChanged);*/
+            cbZoomLevels.SelectedIndexChanged += zoomLevelsToolStripComboBox_SelectedIndexChanged;
 
+            toolStrip = new Panel();
+            toolStrip.Content = new StackLayout() {
+                Orientation = Orientation.Horizontal,
+                Spacing = 10,
+                Items = {
+                    btnSizeToFit,
+                    btnZoomIn,
+                    btnZoomOut,
+                    cbZoomLevels
+                }
+            };
+
+            imageBox = new ImageBox();
+            imageBox.AllowDoubleClick = false;
+            imageBox.AllowZoom = true;
             imageBox.BackgroundColor = SystemColors.ControlBackground; // ControlDark;
-            //imageBox.Dock = DockStyle.Fill;
-            //imageBox.ZoomChanged += new System.EventHandler(imageBox_ZoomChanged);
+            imageBox.ImageBorderColor = Colors.AliceBlue;
+            imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
+            imageBox.InterpolationMode = ImageInterpolation.High;
+            imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
+            imageBox.ZoomChanged += imageBox_ZoomChanged;
 
-            Content = imageBox;
-            //Controls.Add(toolStrip);
-            Size = new Size(944, 389);
+            Content = new StackLayout() {
+                Orientation = Orientation.Vertical,
+                Items = {
+                    toolStrip,
+                    imageBox
+                }
+            };
+
             ResumeLayout();
         }
 
@@ -159,27 +154,21 @@ namespace GKUI.Components
 
         private void FillZoomLevels()
         {
-            /*cbZoomLevels.Items.Clear();
+            cbZoomLevels.Items.Clear();
 
             foreach (int zoom in imageBox.ZoomLevels)
-                cbZoomLevels.Items.Add(string.Format("{0}%", zoom));*/
+                cbZoomLevels.Items.Add(string.Format("{0}%", zoom));
         }
 
         private void UpdateZoomLevels()
         {
-            //cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
+            cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
         }
 
-        /*private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
             imageBox.Zoom = zoom;
-        }*/
-
-        /*protected override void Select(bool directed, bool forward)
-        {
-            base.Select(directed, forward);
-            imageBox.Select();
-        }*/
+        }
     }
 }

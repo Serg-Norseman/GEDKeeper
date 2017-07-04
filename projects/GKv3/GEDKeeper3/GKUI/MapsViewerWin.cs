@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -37,7 +36,7 @@ namespace GKUI
     /// </summary>
     public sealed partial class MapsViewerWin : Form, ILocalization, IWindow
     {
-        private readonly ITreeItem fBaseRoot;
+        private readonly GKTreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
         private readonly ExtList<MapPlace> fPlaces;
@@ -61,6 +60,7 @@ namespace GKUI
 
                 //cmbPersons.BeginUpdate();
                 //tvPlaces.BeginUpdate();
+                tvPlaces.DataStore = null;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), fTree.RecordsCount);
                 try
                 {
@@ -96,7 +96,7 @@ namespace GKUI
                         progress.ProgressStep();
                     }
 
-                    //fBaseRoot.ExpandAll();
+                    fBaseRoot.Expanded = true; //ExpandAll();
                     //cmbPersons.Sorted = true;
 
                     btnSelectPlaces.Enabled = true;
@@ -106,6 +106,7 @@ namespace GKUI
                     progress.ProgressDone();
                     //tvPlaces.EndUpdate();
                     //cmbPersons.EndUpdate();
+                    tvPlaces.DataStore = fBaseRoot;
                 }
             }
             catch (Exception ex)
@@ -197,13 +198,13 @@ namespace GKUI
 
         private void TreePlaces_DoubleClick(object sender, EventArgs e)
         {
-            /*GKTreeNode node = tvPlaces.SelectedNode as GKTreeNode;
+            GKTreeNode node = tvPlaces.SelectedItem as GKTreeNode;
             if (node == null) return;
 
             GeoPoint pt = node.Tag as GeoPoint;
             if (pt == null) return;
 
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);*/
+            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
         public void ProcessMap()
@@ -227,7 +228,7 @@ namespace GKUI
 
             fMapPoints = new ExtList<GeoPoint>(true);
             fPlaces = new ExtList<MapPlace>(true);
-            //fBaseRoot = tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
+            fBaseRoot = new GKTreeNode(LangMan.LS(LSID.LSID_RPLocations), null);
             radTotal.Checked = true;
 
             SetLang();
@@ -258,29 +259,29 @@ namespace GKUI
             base.Dispose(Disposing);
         }
 
-        private ITreeItem FindTreeNode(string place)
+        private GKTreeNode FindTreeNode(string place)
         {
-            /*int num = fBaseRoot.Nodes.Count;
+            int num = fBaseRoot.Children.Count;
             for (int i = 0; i < num; i++) {
-                TreeNode node = fBaseRoot.Nodes[i];
+                GKTreeNode node = fBaseRoot.Children[i] as GKTreeNode;
 
                 if (node.Text == place) {
                     return node;
                 }
-            }*/
+            }
 
             return null;
         }
 
         private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
         {
-            /*try
+            try
             {
                 GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
 
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
-                TreeNode node = FindTreeNode(placeName);
+                var node = FindTreeNode(placeName);
                 MapPlace mapPlace;
 
                 if (node == null) {
@@ -289,7 +290,7 @@ namespace GKUI
                     fPlaces.Add(mapPlace);
 
                     node = new GKTreeNode(placeName, mapPlace);
-                    fBaseRoot.Nodes.Add(node);
+                    fBaseRoot.Children.Add(node);
 
                     if (locRec == null) {
                         AppHost.Instance.RequestGeoCoords(placeName, mapPlace.Points);
@@ -298,14 +299,14 @@ namespace GKUI
                         for (int i = 0; i < num; i++) {
                             GeoPoint pt = mapPlace.Points[i];
                             string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-                            node.Nodes.Add(new GKTreeNode(ptTitle, pt));
+                            node.Children.Add(new GKTreeNode(ptTitle, pt));
                         }
                     } else {
                         GeoPoint pt = new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
                         mapPlace.Points.Add(pt);
 
                         string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-                        node.Nodes.Add(new GKTreeNode(ptTitle, pt));
+                        node.Children.Add(new GKTreeNode(ptTitle, pt));
                     }
                 } else {
                     mapPlace = (((GKTreeNode) node).Tag as MapPlace);
@@ -314,7 +315,7 @@ namespace GKUI
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
             } catch (Exception ex) {
                 Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
-            }*/
+            }
         }
     }
 }

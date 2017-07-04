@@ -45,9 +45,6 @@ namespace GKUI.Dialogs
             lblProjSite.Text = "https://gedkeeper.github.io/";
             lblProjSite.Click += LabelMail_Click;
 
-            ClientSize = new Size(360, 220);
-            Title = "AboutDlg";
-
             Content = new DefTableLayout {
                 Rows = {
                     lblProduct,
@@ -59,6 +56,10 @@ namespace GKUI.Dialogs
                     UIHelper.MakeDialogFooter(null, btnClose)
                 }
             };
+
+            Title = "AboutDlg";
+
+            SetPredefProperties(360, 220, false);
         }
     }
 }

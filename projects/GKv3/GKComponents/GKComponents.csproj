@@ -82,8 +82,9 @@
     <Compile Include="GKUI\Components\LogChart.cs" />
     <Compile Include="GKUI\Components\MediaPlayerStub.cs" />
     <Compile Include="GKUI\Components\ObservableExtList.cs" />
+    <Compile Include="GKUI\Components\TextBoxEx.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
+    <Compile Include="GKUI\Components\EtoGraphics.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\btn_size_to_fit.png" />

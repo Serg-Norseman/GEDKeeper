@@ -35,26 +35,12 @@ namespace GKUI.Dialogs
         {
             SuspendLayout();
 
-            btnAccept = new Button();
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-
-            btnCancel = new Button();
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
             lblHusband = new Label();
-            lblHusband.Size = new Size(74, 17);
+            //lblHusband.Size = new Size(74, 17);
             lblHusband.Text = "lblHusband";
 
             lblWife = new Label();
-            lblWife.Size = new Size(47, 17);
+            //lblWife.Size = new Size(47, 17);
             lblWife.Text = "lblWife";
 
             btnHusbandAdd = new Button();
@@ -94,41 +80,33 @@ namespace GKUI.Dialogs
             txtHusband = new TextBox();
             txtHusband.TextColor = SystemColors.Control;
             txtHusband.ReadOnly = true;
-            txtHusband.Size = new Size(460, 24);
+            //txtHusband.Size = new Size(460, 24);
 
             txtWife = new TextBox();
             txtWife.TextColor = SystemColors.Control;
             txtWife.ReadOnly = true;
-            txtWife.Size = new Size(460, 24);
+            //txtWife.Size = new Size(460, 24);
 
             lblStatus = new Label();
             lblStatus.Text = "lblStatus";
 
             cmbMarriageStatus = new ComboBox();
             cmbMarriageStatus.ReadOnly = true;
-            cmbMarriageStatus.Size = new Size(203, 25);
-
-            lblRestriction = new Label();
-            lblRestriction.Text = "lblRestriction";
-
-            cmbRestriction = new ComboBox();
-            cmbRestriction.ReadOnly = true;
-            cmbRestriction.Size = new Size(203, 25);
-            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+            //cmbMarriageStatus.Size = new Size(203, 25);
 
             GroupBox1 = new GroupBox();
             GroupBox1.Text = "GroupBox1";
             GroupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblHusband, txtHusband, btnHusbandAdd, btnHusbandDelete, btnHusbandSel }
+                        Cells = { lblHusband, TableLayout.Horizontal(10, new TableCell(txtHusband, true), btnHusbandAdd, btnHusbandDelete, btnHusbandSel) }
                     },
                     new TableRow {
-                        Cells = { lblWife, txtWife, btnWifeAdd, btnWifeDelete, btnWifeSel }
+                        Cells = { lblWife, TableLayout.Horizontal(10, new TableCell(txtWife, true), btnWifeAdd, btnWifeDelete, btnWifeSel) }
                     },
                     new TableRow {
                         //ScaleHeight = true,
-                        Cells = { lblStatus, cmbMarriageStatus, null }
+                        Cells = { lblStatus, cmbMarriageStatus }
                     }
                 }
             };
@@ -157,6 +135,28 @@ namespace GKUI.Dialogs
             tabsFamilyData.Pages.Add(pageMultimedia);
             tabsFamilyData.Pages.Add(pageSources);
 
+            lblRestriction = new Label();
+            lblRestriction.Text = "lblRestriction";
+
+            cmbRestriction = new ComboBox();
+            cmbRestriction.ReadOnly = true;
+            //cmbRestriction.Size = new Size(203, 25);
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
@@ -172,10 +172,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(708, 535);
             Title = "FamilyEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(700, 540);
             ResumeLayout();
         }
     }

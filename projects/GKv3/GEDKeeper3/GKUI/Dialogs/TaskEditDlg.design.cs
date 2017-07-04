@@ -64,13 +64,10 @@ namespace GKUI.Dialogs
             GroupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblGoal, cmbGoalType, txtGoal, btnGoalSelect }
+                        Cells = { lblGoal, cmbGoalType, TableLayout.Horizontal(10, new TableCell(txtGoal, true), btnGoalSelect) }
                     },
                     new TableRow {
-                        Cells = { lblPriority, txtPriority, null, null }
-                    },
-                    new TableRow {
-                        Cells = { lblStartDate, txtStartDate, lblStopDate, txtStopDate }
+                        Cells = { lblPriority, txtPriority, TableLayout.Horizontal(10, lblStartDate, txtStartDate, lblStopDate, txtStopDate) }
                     }
                 }
             };
@@ -112,10 +109,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(674, 494);
             Title = "TaskEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(680, 500);
             ResumeLayout();
         }
     }

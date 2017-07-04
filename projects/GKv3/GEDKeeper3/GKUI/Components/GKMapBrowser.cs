@@ -19,9 +19,7 @@
  */
 
 using System;
-using System.IO;
 using Eto.Forms;
-
 using GKCommon;
 using GKCore.Geocoding;
 using GKCore.Maps;
@@ -69,6 +67,8 @@ namespace GKUI.Components
 
         public GKMapBrowser()
         {
+            BrowserContextMenuEnabled = false;
+
             fMapPoints = new ExtList<GeoPoint>(true);
             fUpdateCount = 0;
             fShowPoints = true;
@@ -119,33 +119,6 @@ namespace GKUI.Components
             }
         }
 
-        private void SetWebBrowserDocument(string documentText)
-        {
-            string strContent = (documentText ?? string.Empty);
-
-            //AllowNavigation = false;
-            //ScriptErrorsSuppressed = true;
-            //AllowWebBrowserDrop = false;
-
-            LoadHtml(strContent);
-
-            /*#if !__MonoCS__
-            DocumentText = strContent;
-
-            // Wait for document being loaded
-            for (int i = 0; i < 50; ++i)
-            {
-                if (DocumentText == strContent) break;
-                System.Threading.Thread.Sleep(20);
-                //Application.DoEvents();
-            }
-            //Refresh();
-            #else
-            DocumentText = strContent;
-            Refresh();
-            #endif*/
-        }
-
         public void InitMap()
         {
             try
@@ -184,7 +157,7 @@ namespace GKUI.Components
                     "<noscript>JavaScript must be switched on for use Google Maps.</noscript>" +
                     "</body></html>";
 
-                SetWebBrowserDocument(MapContent);
+                LoadHtml(MapContent);
             }
             catch (Exception ex)
             {
@@ -296,39 +269,14 @@ namespace GKUI.Components
             script = script.Trim();
             if (string.IsNullOrEmpty(script)) return;
 
-            /*
-            #if !__MonoCS__
             try
             {
-                HtmlElement script1 = Document.GetElementById("gkScript");
-
-                if (script1 == null) {
-                    HtmlElement head = Document.GetElementsByTagName("head")[0];
-                    script1 = Document.CreateElement("script");
-                    script1.Id = "gkScript";
-                    head.AppendChild(script1);
-                }
-
-                script1.SetAttribute("text", "function gkFunc() { " + script + " }");
-                Document.InvokeScript("gkFunc");
-
-                //string jCode = "alert("Hello");"
-                //webBrowser1.Document.InvokeScript("eval", new object[] { jCode });
-                
-                //var jsCode="alert('hello world from injected code');";
-                //WebBrowser.Document.InvokeScript("execScript", new Object[] { jsCode, "JavaScript" });
-                
-                //mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)Document.Window.DomWindow;
-                //if (win != null) {
-                //    win.execScript(script, "JavaScript");
-                //}
+                ExecuteScript(script);
             }
             catch (Exception ex)
             {
                 Logger.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
             }
-            #endif
-            */
         }
 
         #endregion

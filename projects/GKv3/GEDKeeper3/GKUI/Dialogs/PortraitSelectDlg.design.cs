@@ -44,10 +44,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(871, 681);
             Title = "PortraitSelectDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(870, 680);
             ResumeLayout();
         }
     }

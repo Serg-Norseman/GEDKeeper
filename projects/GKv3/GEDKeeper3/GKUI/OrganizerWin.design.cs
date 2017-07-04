@@ -37,7 +37,7 @@ namespace GKUI
 
             Content = tabsData;
 
-            ClientSize = new Size(785, 539);
+            ClientSize = new Size(780, 540);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;

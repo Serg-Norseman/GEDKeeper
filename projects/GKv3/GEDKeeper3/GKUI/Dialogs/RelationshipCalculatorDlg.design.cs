@@ -71,9 +71,7 @@ namespace GKUI.Dialogs
                 }
             };
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { dataPanel }
@@ -90,10 +88,9 @@ namespace GKUI.Dialogs
             };
 
             AbortButton = btnClose;
-            //ClientSize = new Size(399, 286);
             Title = "RelationshipCalculator";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(400, 280);
             ResumeLayout();
         }
     }

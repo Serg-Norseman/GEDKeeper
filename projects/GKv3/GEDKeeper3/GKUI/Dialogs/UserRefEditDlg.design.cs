@@ -51,7 +51,8 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { lblRefType, cmbRefType }
-                    }
+                    },
+                    null
                 }
             };
 
@@ -60,17 +61,15 @@ namespace GKUI.Dialogs
                     new TableRow {
                         Cells = { panelData }
                     },
-                    //null,
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            //ClientSize = new Size(495, 179);
             Title = "UserRefEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(500, 180);
             ResumeLayout();
         }
     }

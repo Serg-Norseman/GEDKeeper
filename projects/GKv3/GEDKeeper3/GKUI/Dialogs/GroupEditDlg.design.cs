@@ -52,12 +52,11 @@ namespace GKUI.Dialogs
             tabsGroupData.Pages.Add(pageMembers);
             tabsGroupData.Pages.Add(pageNotes);
             tabsGroupData.Pages.Add(pageMultimedia);
-            tabsGroupData.SelectedIndex = 0;
 
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { UIHelper.CreateHSingleTable(0, 10, lblName, edName) }
+                        Cells = { TableLayout.Horizontal(10, lblName, edName) }
                     },
                     new TableRow {
                         ScaleHeight = true,
@@ -69,10 +68,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(673, 560);
             Title = "GroupEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(580, 460);
             ResumeLayout();
         }
     }

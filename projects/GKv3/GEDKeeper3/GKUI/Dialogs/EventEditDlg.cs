@@ -500,7 +500,7 @@ namespace GKUI.Dialogs
                 //txtAttribute.Sorted = false;
 
                 txtAttribute.Items.Clear();
-                txtAttribute.Items.AddRange(GKComboItemSmp.Convert(vals));
+                txtAttribute.Items.AddRange(GKComboItem.Convert(vals));
 
                 //txtAttribute.Sorted = canbeSorted;
                 txtAttribute.Text = tmp;

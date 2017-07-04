@@ -55,7 +55,7 @@ namespace GKUI
             Content = splitContainer1;
             ToolBar = ToolBar1;
 
-            ClientSize = new Size(712, 434);
+            ClientSize = new Size(710, 430);
             Resizable = true;
             ShowInTaskbar = true;
             Title = "ScriptEditWin";

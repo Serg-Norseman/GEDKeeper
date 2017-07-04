@@ -68,17 +68,15 @@ namespace GKUI.Dialogs
                     new TableRow {
                         Cells = { panelData }
                     },
-                    //null,
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            //ClientSize = new Size(496, 181);
             Title = "AssociationEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(500, 180);
             ResumeLayout();
         }
     }

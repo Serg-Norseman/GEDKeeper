@@ -10,7 +10,7 @@ namespace GKUI
         {
             SuspendLayout();
 
-            ClientSize = new Size(1027, 577);
+            ClientSize = new Size(1030, 580);
             ShowInTaskbar = true;
             Title = "MediaViewerWin";
             Closing += MediaViewerWin_FormClosing;

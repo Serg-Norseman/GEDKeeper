@@ -57,7 +57,7 @@ namespace GKUI
                                         new SeparatorToolItem(),
                                         tbOptions});
 
-            ClientSize = new Size(1093, 579);
+            ClientSize = new Size(1100, 580);
             ShowInTaskbar = true;
             Title = "CircleChartWin";
             ToolBar = ToolBar1;

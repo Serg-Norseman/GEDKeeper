@@ -8,7 +8,6 @@ namespace GKUI
 {
     partial class SlideshowWin
     {
-        private Timer timer1;
         private ButtonToolItem tbNext;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbStart;
@@ -27,10 +26,6 @@ namespace GKUI
             tbNext = new ButtonToolItem();
             tbNext.Click += tsbNext_Click;
 
-            timer1 = new Timer();
-            timer1.Interval = 1000;
-            timer1.Elapsed += Timer1Tick;
-
             toolStrip1 = new ToolBar();
             toolStrip1.Items.AddRange(new ToolItem[] {
                                           tbStart,
@@ -39,7 +34,7 @@ namespace GKUI
                                           tbNext});
             ToolBar = toolStrip1;
 
-            ClientSize = new Size(792, 573);
+            ClientSize = new Size(790, 570);
             ShowInTaskbar = true;
             Title = "SlideshowWin";
             Load += SlideshowWin_Load;

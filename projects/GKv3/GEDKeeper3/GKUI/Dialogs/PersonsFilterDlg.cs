@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -105,15 +104,15 @@ namespace GKUI.Dialogs
             GlobalOptions options = GlobalOptions.Instance;
 
             txtName.Items.Clear();
-            txtName.Items.AddRange(GKComboItemSmp.Convert(options.NameFilters.ToArray()));
-            txtName.Items.Insert(0, new GKComboItemSmp("*"));
+            txtName.Items.AddRange(GKComboItem.Convert(options.NameFilters.ToArray()));
+            txtName.Items.Insert(0, new GKComboItem("*"));
 
             cmbResidence.Items.Clear();
-            cmbResidence.Items.AddRange(GKComboItemSmp.Convert(options.ResidenceFilters.ToArray()));
-            cmbResidence.Items.Insert(0, new GKComboItemSmp("*"));
+            cmbResidence.Items.AddRange(GKComboItem.Convert(options.ResidenceFilters.ToArray()));
+            cmbResidence.Items.Insert(0, new GKComboItem("*"));
 
             cmbEventVal.Items.Clear();
-            cmbEventVal.Items.AddRange(GKComboItemSmp.Convert(options.EventFilters.ToArray()));
+            cmbEventVal.Items.AddRange(GKComboItem.Convert(options.EventFilters.ToArray()));
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)

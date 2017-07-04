@@ -40,6 +40,7 @@ namespace GKUI.Dialogs
             txtFastFilter.TextChanged += txtFastFilter_TextChanged;
 
             panList = new Panel();
+            panList.Size = new Size(540, 400);
 
             Content = new DefTableLayout {
                 Rows = {
@@ -57,13 +58,7 @@ namespace GKUI.Dialogs
             AbortButton = btnCancel;
             Title = "RecordSelectDlg";
 
-            if (Platform.IsWinForms) {
-                ClientSize = new Size(540, 510);
-            } else {
-                panList.Height = 300;
-            }
-
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(560, 510);
             ResumeLayout();
         }
     }

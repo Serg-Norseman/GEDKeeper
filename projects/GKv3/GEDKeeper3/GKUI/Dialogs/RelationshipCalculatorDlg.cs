@@ -21,7 +21,6 @@
 //#define DEBUG_SOLVE
 
 using System;
-using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

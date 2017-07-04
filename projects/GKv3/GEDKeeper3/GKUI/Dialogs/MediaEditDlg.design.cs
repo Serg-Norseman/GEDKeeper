@@ -61,7 +61,8 @@ namespace GKUI.Dialogs
             //txtFile.Size = new Size(629, 24);
 
             btnFileSelect = new Button();
-            btnFileSelect.Size = new Size(60, 26);
+            //btnFileSelect.Size = new Size(60, 26);
+            btnFileSelect.Width = 60;
             btnFileSelect.Text = "...";
             btnFileSelect.Click += btnFileSelect_Click;
 
@@ -73,13 +74,10 @@ namespace GKUI.Dialogs
                         Cells = { lblName, txtName }
                     },
                     new TableRow {
-                        Cells = { lblFile, TableLayout.Horizontal(10, new TableCell(txtFile, true), new TableCell(btnFileSelect, false)) }
+                        Cells = { lblFile, TableLayout.Horizontal(10, new TableCell(txtFile, true), btnFileSelect) }
                     },
                     new TableRow {
-                        Cells = { lblType, cmbMediaType }
-                    },
-                    new TableRow {
-                        Cells = { lblStoreType, cmbStoreType }
+                        Cells = { lblType, TableLayout.Horizontal(10, cmbMediaType, lblStoreType, cmbStoreType) }
                     },
                     null
                 }
@@ -131,10 +129,9 @@ namespace GKUI.Dialogs
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            ClientSize = new Size(728, 365);
             Title = "MediaEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(580, 460);
             ResumeLayout();
         }
     }

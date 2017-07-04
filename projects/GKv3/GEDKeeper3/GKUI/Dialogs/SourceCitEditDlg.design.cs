@@ -68,7 +68,8 @@ namespace GKUI.Dialogs
                     },
                     new TableRow {
                         Cells = { lblPage, TableLayout.Horizontal(10, txtPage, lblCertainty, txtCertainty) }
-                    }
+                    },
+                    null
                 }
             };
 
@@ -77,17 +78,15 @@ namespace GKUI.Dialogs
                     new TableRow {
                         Cells = { panelData }
                     },
-                    //null,
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            //ClientSize = new Size(441, 250);
             Title = "SourceCitEditDlg";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            SetPredefProperties(440, 250);
             ResumeLayout();
         }
     }
