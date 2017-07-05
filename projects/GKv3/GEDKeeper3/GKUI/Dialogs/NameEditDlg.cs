@@ -77,14 +77,12 @@ namespace GKUI.Dialogs
             }
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*private void edName_KeyPress(object sender, KeyPressEventArgs e)
+        private void edName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyChar == '/')
-            {
+            if (e.KeyChar == '/') {
                 e.Handled = true;
             }
-        }*/
+        }
 
         public NameEditDlg()
         {

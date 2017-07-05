@@ -78,15 +78,6 @@ namespace GKUI.Components
 
         public HyperView() : base()
         {
-            // FIXME: GKv3 DevRestriction
-            /*SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
-                     ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            UpdateStyles();
-
-            BorderStyle = BorderStyle.Fixed3D;
-            DoubleBuffered = true;
-            TabStop = true;*/
-
             fAcceptFontChange = true;
             fChunks = new List<BBTextChunk>();
             fCurrentLink = null;

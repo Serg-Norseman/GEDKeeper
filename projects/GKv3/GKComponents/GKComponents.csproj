@@ -80,7 +80,10 @@
     <Compile Include="GKUI\Components\ImageBox.cs" />
     <Compile Include="GKUI\Components\ImageView.cs" />
     <Compile Include="GKUI\Components\LogChart.cs" />
-    <Compile Include="GKUI\Components\MediaPlayerStub.cs" />
+    <Compile Include="GKUI\Components\MediaPlayer.cs" />
+    <Compile Include="GKUI\Components\MediaPlayer.design.cs">
+      <DependentUpon>MediaPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Components\ObservableExtList.cs" />
     <Compile Include="GKUI\Components\TextBoxEx.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />

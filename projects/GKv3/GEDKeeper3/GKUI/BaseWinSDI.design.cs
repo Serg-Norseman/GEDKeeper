@@ -7,9 +7,10 @@ namespace GKUI
 {
     partial class BaseWinSDI
     {
-        //private StatusBar StatusBar; // FIXME: GKv3 DevRestriction
-        //private StatusBarPanel StatusBarPanel1; // FIXME: GKv3 DevRestriction
-        //private StatusBarPanel StatusBarPanel2; // FIXME: GKv3 DevRestriction
+        private TableLayout StatusBar;
+        private Label StatusBarPanel1;
+        private Eto.Forms.ImageView StatusBarPanel2;
+
         private ToolBar ToolBar1;
         private ButtonToolItem tbFileNew;
         private ButtonToolItem tbFileLoad;
@@ -20,7 +21,7 @@ namespace GKUI
         private ButtonToolItem tbFilter;
         private ButtonToolItem tbTreeAncestors;
         private ButtonToolItem tbTreeDescendants;
-        private ButtonToolItem tbPedigree; // FIXME: GKv3 DevRestriction
+        private ButtonToolItem tbPedigree;
         private ButtonToolItem tbStats;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
@@ -71,7 +72,7 @@ namespace GKUI
         private ButtonToolItem tbTreeBoth;
         private ButtonMenuItem miPlugins;
         private ButtonMenuItem miSlideshow;
-        private ButtonToolItem tbLoadMRU; // FIXME: GKv3 DevRestriction
+        private ButtonToolItem tbLoadMRU;
         private ButtonMenuItem miPedigreeAscend;
         private ButtonMenuItem miDescendantsCircle;
         private ButtonMenuItem miRelationshipCalculator;
@@ -84,106 +85,44 @@ namespace GKUI
 
         private void InitializeComponent()
         {
-            /*StatusBar = new StatusBar();
-            StatusBarPanel1 = new StatusBarPanel();
-            StatusBarPanel2 = new StatusBarPanel();*/
-            ToolBar1 = new ToolBar();
-            tbFileNew = new ButtonToolItem();
-            tbFileLoad = new ButtonToolItem();
-            tbLoadMRU = new ButtonToolItem();
-            MenuMRU = new ContextMenu();
-            tbFileSave = new ButtonToolItem();
-            tbRecordAdd = new ButtonToolItem();
-            tbRecordEdit = new ButtonToolItem();
-            tbRecordDelete = new ButtonToolItem();
-            tbFilter = new ButtonToolItem();
-            tbTreeAncestors = new ButtonToolItem();
-            tbTreeDescendants = new ButtonToolItem();
-            tbTreeBoth = new ButtonToolItem();
-            tbPedigree = new ButtonToolItem();
-            MenuPedigree = new ContextMenu();
-            miPedigree_dAboville2 = new ButtonMenuItem();
-            miPedigree_Konovalov2 = new ButtonMenuItem();
-            tbStats = new ButtonToolItem();
-            tbPrev = new ButtonToolItem();
-            tbNext = new ButtonToolItem();
-            tbDocPreview = new ButtonToolItem();
-            tbDocPrint = new ButtonToolItem();
-            MainMenu1 = new MenuBar();
-            miFile = new ButtonMenuItem();
-            miFileNew = new ButtonMenuItem();
-            miFileLoad = new ButtonMenuItem();
-            miMRUFiles = new ButtonMenuItem();
-            miFileSave = new ButtonMenuItem();
-            miFileSaveAs = new ButtonMenuItem();
-            miFileClose = new ButtonMenuItem();
-            miFileProperties = new ButtonMenuItem();
-            miExport = new ButtonMenuItem();
-            miExportToExcelFile = new ButtonMenuItem();
-            miExit = new ButtonMenuItem();
-            miEdit = new ButtonMenuItem();
-            miRecordAdd = new ButtonMenuItem();
-            miRecordEdit = new ButtonMenuItem();
-            miRecordDelete = new ButtonMenuItem();
-            miSearch = new ButtonMenuItem();
-            miFilter = new ButtonMenuItem();
-            miPedigree = new ButtonMenuItem();
-            miTreeAncestors = new ButtonMenuItem();
-            miTreeDescendants = new ButtonMenuItem();
-            miTreeBoth = new ButtonMenuItem();
-            miAncestorsCircle = new ButtonMenuItem();
-            miDescendantsCircle = new ButtonMenuItem();
-            miPedigreeAscend = new ButtonMenuItem();
-            miPedigree_dAboville = new ButtonMenuItem();
-            miPedigree_Konovalov = new ButtonMenuItem();
-            miExportToFamilyBook = new ButtonMenuItem();
-            miMap = new ButtonMenuItem();
-            miStats = new ButtonMenuItem();
-            miRelationshipCalculator = new ButtonMenuItem();
-            miService = new ButtonMenuItem();
-            miOrganizer = new ButtonMenuItem();
-            miSlideshow = new ButtonMenuItem();
-            miScripts = new ButtonMenuItem();
-            miTreeTools = new ButtonMenuItem();
-            miOptions = new ButtonMenuItem();
-            miPlugins = new ButtonMenuItem();
-            miHelp = new ButtonMenuItem();
-            miContext = new ButtonMenuItem();
-            miLogSend = new ButtonMenuItem();
-            miLogView = new ButtonMenuItem();
-            miAbout = new ButtonMenuItem();
-            contextMenu = new ContextMenu();
-            miContRecordAdd = new ButtonMenuItem();
-            miContRecordEdit = new ButtonMenuItem();
-            miContRecordDelete = new ButtonMenuItem();
-            miRecordDuplicate = new ButtonMenuItem();
-
             SuspendLayout();
 
-            /*StatusBar.Location = new Point(0, 438);
-            StatusBar.Margin = new Padding(2);
-            StatusBar.Name = "StatusBar";
-            StatusBar.Panels.AddRange(new StatusBarPanel[] {
-                                          StatusBarPanel1,
-                                          StatusBarPanel2});
-            StatusBar.ShowPanels = true;
-            StatusBar.Size = new Size(976, 24);
-            StatusBar.TabIndex = 0;
-            StatusBar.DrawItem += new StatusBarDrawItemEventHandler(StatusBar_DrawItem);
-            StatusBar.PanelClick += new StatusBarPanelClickEventHandler(StatusBar_PanelClick);
+            StatusBarPanel1 = new Label();
 
-            StatusBarPanel1.Name = "StatusBarPanel1";
-            StatusBarPanel1.Width = 50;
+            StatusBarPanel2 = new Eto.Forms.ImageView();
+            StatusBarPanel2.Size = new Size(18, 18);
+            StatusBarPanel2.MouseDoubleClick += StatusBar_MouseDoubleClick;
 
-            StatusBarPanel2.Name = "StatusBarPanel2";
-            StatusBarPanel2.Style = StatusBarPanelStyle.OwnerDraw;
-            StatusBarPanel2.Width = 24;*/
+            var StatusBarPanel3 = new Label();
+            StatusBarPanel3.Width = 20;
+
+            StatusBar = new TableLayout();
+            StatusBar.Rows.Add(new TableRow() { Cells = { new TableCell(StatusBarPanel1, true), null, StatusBarPanel2, StatusBarPanel3 } });
 
             //
 
+            MenuMRU = new ContextMenu();
+
+            miPedigree_dAboville2 = new ButtonMenuItem();
+            miPedigree_dAboville2.Click += miPedigree_dAbovilleClick;
+
+            miPedigree_Konovalov2 = new ButtonMenuItem();
+            miPedigree_Konovalov2.Click += miPedigree_KonovalovClick;
+
+            MenuPedigree = new ContextMenu();
+            MenuPedigree.Items.AddRange(new MenuItem[] {
+                                            miPedigree_dAboville2,
+                                            miPedigree_Konovalov2});
+
+            //
+
+            tbFileNew = new ButtonToolItem();
             tbFileNew.Click += ToolBar1_ButtonClick;
+
+            tbFileLoad = new ButtonToolItem();
             tbFileLoad.Click += ToolBar1_ButtonClick;
 
+            tbLoadMRU = new ButtonToolItem();
             tbLoadMRU.Text = "▼";
             tbLoadMRU.Click  += (sender, e) => {
                 if (MenuMRU.Items.Count > 0) {
@@ -191,40 +130,53 @@ namespace GKUI
                 }
             };
 
+            tbFileSave = new ButtonToolItem();
             tbFileSave.Click += ToolBar1_ButtonClick;
 
+            tbRecordAdd = new ButtonToolItem();
             tbRecordAdd.Click += ToolBar1_ButtonClick;
+
+            tbRecordEdit = new ButtonToolItem();
             tbRecordEdit.Click += ToolBar1_ButtonClick;
+
+            tbRecordDelete = new ButtonToolItem();
             tbRecordDelete.Click += ToolBar1_ButtonClick;
 
+            tbFilter = new ButtonToolItem();
             tbFilter.Click += ToolBar1_ButtonClick;
 
+            tbTreeAncestors = new ButtonToolItem();
             tbTreeAncestors.Click += ToolBar1_ButtonClick;
+
+            tbTreeDescendants = new ButtonToolItem();
             tbTreeDescendants.Click += ToolBar1_ButtonClick;
+
+            tbTreeBoth = new ButtonToolItem();
             tbTreeBoth.Click += ToolBar1_ButtonClick;
 
+            tbPedigree = new ButtonToolItem();
             tbPedigree.Click  += (sender, e) => MenuPedigree.Show(this);
 
-            MenuPedigree.Items.AddRange(new MenuItem[] {
-                                            miPedigree_dAboville2,
-                                            miPedigree_Konovalov2});
-
-            miPedigree_dAboville2.Click += miPedigree_dAbovilleClick;
-
-            miPedigree_Konovalov2.Click += miPedigree_KonovalovClick;
-
+            tbStats = new ButtonToolItem();
             tbStats.Click += ToolBar1_ButtonClick;
 
+            tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
             tbPrev.Click += ToolBar1_ButtonClick;
 
+            tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += ToolBar1_ButtonClick;
 
+            tbDocPreview = new ButtonToolItem();
             tbDocPreview.Click += ToolBar1_ButtonClick;
 
+            tbDocPrint = new ButtonToolItem();
             tbDocPrint.Click += ToolBar1_ButtonClick;
 
+            //
+
+            ToolBar1 = new ToolBar();
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbFileNew,
                                         tbFileLoad,
@@ -253,14 +205,53 @@ namespace GKUI
 
             //
 
-            MainMenu1.Items.AddRange(new MenuItem[] {
-                                         miFile,
-                                         miEdit,
-                                         miPedigree,
-                                         miService,
-                                         miPlugins,
-                                         miHelp});
+            miFileNew = new ButtonMenuItem();
+            miFileNew.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.N)));
+            miFileNew.Text = "miFileNew";
+            miFileNew.Click += miFileNew_Click;
 
+            miFileLoad = new ButtonMenuItem();
+            miFileLoad.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.O)));
+            miFileLoad.Text = "miFileLoad";
+            miFileLoad.Click += miFileLoad_Click;
+
+            miMRUFiles = new ButtonMenuItem();
+            miMRUFiles.Enabled = false;
+            miMRUFiles.Text = "miMRUFiles";
+
+            miFileSave = new ButtonMenuItem();
+            miFileSave.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.S)));
+            miFileSave.Text = "miFileSave";
+            miFileSave.Click += miFileSave_Click;
+
+            miFileSaveAs = new ButtonMenuItem();
+            miFileSaveAs.Text = "miFileSaveAs";
+            miFileSaveAs.Click += miFileSaveAs_Click;
+
+            miFileClose = new ButtonMenuItem();
+            miFileClose.Text = "miFileClose";
+            miFileClose.Click += miFileClose_Click;
+
+            miFileProperties = new ButtonMenuItem();
+            miFileProperties.Text = "miFileProperties";
+            miFileProperties.Click += miFileProperties_Click;
+
+            miExportToExcelFile = new ButtonMenuItem();
+            miExportToExcelFile.Text = "miExportToExcelFile";
+            miExportToExcelFile.Click += miExportToExcelFile_Click;
+
+            miExport = new ButtonMenuItem();
+            miExport.Items.AddRange(new MenuItem[] {
+                                        miExportToExcelFile});
+            miExport.Text = "miExport";
+
+            miExit = new ButtonMenuItem();
+            miExit.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.X)));
+            miExit.Text = "miExit";
+            miExit.Click += miExit_Click;
+
+            miFile = new ButtonMenuItem();
+            miFile.Text = "File";
             miFile.Items.AddRange(new MenuItem[] {
                                       miFileNew,
                                       miFileLoad,
@@ -274,43 +265,32 @@ namespace GKUI
                                       miExport,
                                       new SeparatorMenuItem(),
                                       miExit});
-            miFile.Text = "File";
 
-            miFileNew.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.N)));
-            miFileNew.Text = "miFileNew";
-            miFileNew.Click += miFileNew_Click;
+            miRecordAdd = new ButtonMenuItem();
+            miRecordAdd.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.I)));
+            miRecordAdd.Text = "miRecordAdd";
+            miRecordAdd.Click += miRecordAdd_Click;
 
-            miFileLoad.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.O)));
-            miFileLoad.Text = "miFileLoad";
-            miFileLoad.Click += miFileLoad_Click;
+            miRecordEdit = new ButtonMenuItem();
+            miRecordEdit.Text = "miRecordEdit";
+            miRecordEdit.Click += miRecordEdit_Click;
 
-            miMRUFiles.Enabled = false;
-            miMRUFiles.Text = "miMRUFiles";
+            miRecordDelete = new ButtonMenuItem();
+            miRecordDelete.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.L)));
+            miRecordDelete.Text = "miRecordDelete";
+            miRecordDelete.Click += miRecordDelete_Click;
 
-            miFileSave.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.S)));
-            miFileSave.Text = "miFileSave";
-            miFileSave.Click += miFileSave_Click;
+            miSearch = new ButtonMenuItem();
+            miSearch.Text = "miSearch";
+            miSearch.Click += miSearch_Click;
 
-            miFileSaveAs.Text = "miFileSaveAs";
-            miFileSaveAs.Click += miFileSaveAs_Click;
+            miFilter = new ButtonMenuItem();
+            miFilter.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F)));
+            miFilter.Text = "miFilter";
+            miFilter.Click += miFilter_Click;
 
-            miFileClose.Text = "miFileClose";
-            miFileClose.Click += miFileClose_Click;
-
-            miFileProperties.Text = "miFileProperties";
-            miFileProperties.Click += miFileProperties_Click;
-
-            miExport.Items.AddRange(new MenuItem[] {
-                                        miExportToExcelFile});
-            miExport.Text = "miExport";
-
-            miExportToExcelFile.Text = "miExportToExcelFile";
-            miExportToExcelFile.Click += miExportToExcelFile_Click;
-
-            miExit.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.X)));
-            miExit.Text = "miExit";
-            miExit.Click += miExit_Click;
-
+            miEdit = new ButtonMenuItem();
+            miEdit.Text = "Edit";
             miEdit.Items.AddRange(new MenuItem[] {
                                       miRecordAdd,
                                       miRecordEdit,
@@ -318,26 +298,63 @@ namespace GKUI
                                       new SeparatorMenuItem(),
                                       miSearch,
                                       miFilter});
-            miEdit.Text = "Edit";
 
-            miRecordAdd.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.I)));
-            miRecordAdd.Text = "miRecordAdd";
-            miRecordAdd.Click += miRecordAdd_Click;
+            miTreeAncestors = new ButtonMenuItem();
+            miTreeAncestors.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.A)));
+            miTreeAncestors.Text = "miTreeAncestors";
+            miTreeAncestors.Click += miTreeAncestors_Click;
 
-            miRecordEdit.Text = "miRecordEdit";
-            miRecordEdit.Click += miRecordEdit_Click;
+            miTreeDescendants = new ButtonMenuItem();
+            miTreeDescendants.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.D)));
+            miTreeDescendants.Text = "miTreeDescendants";
+            miTreeDescendants.Click += miTreeDescendants_Click;
 
-            miRecordDelete.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.L)));
-            miRecordDelete.Text = "miRecordDelete";
-            miRecordDelete.Click += miRecordDelete_Click;
+            miTreeBoth = new ButtonMenuItem();
+            miTreeBoth.Text = "miTreeBoth";
+            miTreeBoth.Click += miTreeBoth_Click;
 
-            miSearch.Text = "miSearch";
-            miSearch.Click += miSearch_Click;
+            miAncestorsCircle = new ButtonMenuItem();
+            miAncestorsCircle.Text = "miAncestorsCircle";
+            miAncestorsCircle.Click += miAncestorsCircle_Click;
 
-            miFilter.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F)));
-            miFilter.Text = "miFilter";
-            miFilter.Click += miFilter_Click;
+            miDescendantsCircle = new ButtonMenuItem();
+            miDescendantsCircle.Text = "miDescendantsCircle";
+            miDescendantsCircle.Click += miDescendantsCircle_Click;
 
+            miPedigreeAscend = new ButtonMenuItem();
+            miPedigreeAscend.Text = "miPedigreeAscend";
+            miPedigreeAscend.Click += miPedigreeAscend_Click;
+
+            miPedigree_dAboville = new ButtonMenuItem();
+            miPedigree_dAboville.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.P)));
+            miPedigree_dAboville.Text = "miPedigree_dAboville";
+            miPedigree_dAboville.Click += miPedigree_dAbovilleClick;
+
+            miPedigree_Konovalov = new ButtonMenuItem();
+            miPedigree_Konovalov.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.K)));
+            miPedigree_Konovalov.Text = "miPedigree_Konovalov";
+            miPedigree_Konovalov.Click += miPedigree_KonovalovClick;
+
+            miExportToFamilyBook = new ButtonMenuItem();
+            miExportToFamilyBook.Text = "miExportToFamilyBook";
+            miExportToFamilyBook.Click += miExportToFamilyBook_Click;
+
+            miMap = new ButtonMenuItem();
+            miMap.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.M)));
+            miMap.Text = "miMap";
+            miMap.Click += miMap_Click;
+
+            miStats = new ButtonMenuItem();
+            miStats.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.T)));
+            miStats.Text = "miStats";
+            miStats.Click += miStats_Click;
+
+            miRelationshipCalculator = new ButtonMenuItem();
+            miRelationshipCalculator.Text = "miRelationshipCalculator";
+            miRelationshipCalculator.Click += miRelationshipCalculator_Click;
+
+            miPedigree = new ButtonMenuItem();
+            miPedigree.Text = "Pedigree";
             miPedigree.Items.AddRange(new MenuItem[] {
                                           miTreeAncestors,
                                           miTreeDescendants,
@@ -355,50 +372,30 @@ namespace GKUI
                                           miStats,
                                           new SeparatorMenuItem(),
                                           miRelationshipCalculator});
-            miPedigree.Text = "Pedigree";
 
-            miTreeAncestors.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.A)));
-            miTreeAncestors.Text = "miTreeAncestors";
-            miTreeAncestors.Click += miTreeAncestors_Click;
+            miOrganizer = new ButtonMenuItem();
+            miOrganizer.Text = "miOrganizer";
+            miOrganizer.Click += miOrganizer_Click;
 
-            miTreeDescendants.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.D)));
-            miTreeDescendants.Text = "miTreeDescendants";
-            miTreeDescendants.Click += miTreeDescendants_Click;
+            miSlideshow = new ButtonMenuItem();
+            miSlideshow.Text = "miSlideshow";
+            miSlideshow.Click += miSlideshow_Click;
 
-            miTreeBoth.Text = "miTreeBoth";
-            miTreeBoth.Click += miTreeBoth_Click;
+            miScripts = new ButtonMenuItem();
+            miScripts.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F11)));
+            miScripts.Text = "miScripts";
+            miScripts.Click += miScripts_Click;
 
-            miAncestorsCircle.Text = "miAncestorsCircle";
-            miAncestorsCircle.Click += miAncestorsCircle_Click;
+            miTreeTools = new ButtonMenuItem();
+            miTreeTools.Text = "miTreeTools";
+            miTreeTools.Click += miTreeTools_Click;
 
-            miDescendantsCircle.Text = "miDescendantsCircle";
-            miDescendantsCircle.Click += miDescendantsCircle_Click;
+            miOptions = new ButtonMenuItem();
+            miOptions.Text = "miOptions";
+            miOptions.Click += miOptions_Click;
 
-            miPedigreeAscend.Text = "miPedigreeAscend";
-            miPedigreeAscend.Click += miPedigreeAscend_Click;
-
-            miPedigree_dAboville.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.P)));
-            miPedigree_dAboville.Text = "miPedigree_dAboville";
-            miPedigree_dAboville.Click += miPedigree_dAbovilleClick;
-
-            miPedigree_Konovalov.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.K)));
-            miPedigree_Konovalov.Text = "miPedigree_Konovalov";
-            miPedigree_Konovalov.Click += miPedigree_KonovalovClick;
-
-            miExportToFamilyBook.Text = "miExportToFamilyBook";
-            miExportToFamilyBook.Click += miExportToFamilyBook_Click;
-
-            miMap.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.M)));
-            miMap.Text = "miMap";
-            miMap.Click += miMap_Click;
-
-            miStats.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.T)));
-            miStats.Text = "miStats";
-            miStats.Click += miStats_Click;
-
-            miRelationshipCalculator.Text = "miRelationshipCalculator";
-            miRelationshipCalculator.Click += miRelationshipCalculator_Click;
-
+            miService = new ButtonMenuItem();
+            miService.Text = "Service";
             miService.Items.AddRange(new MenuItem[] {
                                          miOrganizer,
                                          miSlideshow,
@@ -407,26 +404,29 @@ namespace GKUI
                                          miTreeTools,
                                          new SeparatorMenuItem(),
                                          miOptions});
-            miService.Text = "Service";
 
-            miOrganizer.Text = "miOrganizer";
-            miOrganizer.Click += miOrganizer_Click;
-
-            miSlideshow.Text = "miSlideshow";
-            miSlideshow.Click += miSlideshow_Click;
-
-            miScripts.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F11)));
-            miScripts.Text = "miScripts";
-            miScripts.Click += miScripts_Click;
-
-            miTreeTools.Text = "miTreeTools";
-            miTreeTools.Click += miTreeTools_Click;
-
-            miOptions.Text = "miOptions";
-            miOptions.Click += miOptions_Click;
-
+            miPlugins = new ButtonMenuItem();
             miPlugins.Text = "Plugins";
 
+            miContext = new ButtonMenuItem();
+            miContext.Shortcut = Keys.F1;
+            miContext.Text = "miContext";
+            miContext.Click += miContext_Click;
+
+            miLogSend = new ButtonMenuItem();
+            miLogSend.Text = "miLogSend";
+            miLogSend.Click += miLogSend_Click;
+
+            miLogView = new ButtonMenuItem();
+            miLogView.Text = "miLogView";
+            miLogView.Click += miLogView_Click;
+
+            miAbout = new ButtonMenuItem();
+            miAbout.Text = "miAbout";
+            miAbout.Click += miAbout_Click;
+
+            miHelp = new ButtonMenuItem();
+            miHelp.Text = "Help";
             miHelp.Items.AddRange(new MenuItem[] {
                                       miContext,
                                       new SeparatorMenuItem(),
@@ -434,35 +434,35 @@ namespace GKUI
                                       miLogView,
                                       new SeparatorMenuItem(),
                                       miAbout});
-            miHelp.Text = "Help";
 
-            miContext.Shortcut = Keys.F1;
-            miContext.Text = "miContext";
-            miContext.Click += miContext_Click;
-
-            miLogSend.Text = "miLogSend";
-            miLogSend.Click += miLogSend_Click;
-
-            miLogView.Text = "miLogView";
-            miLogView.Click += miLogView_Click;
-
-            miAbout.Text = "miAbout";
-            miAbout.Click += miAbout_Click;
+            MainMenu1 = new MenuBar();
+            MainMenu1.Items.AddRange(new MenuItem[] {
+                                         miFile,
+                                         miEdit,
+                                         miPedigree,
+                                         miService,
+                                         miPlugins,
+                                         miHelp});
 
             //
 
+            miContRecordAdd = new ButtonMenuItem();
             miContRecordAdd.Text = "miContRecordAdd";
             miContRecordAdd.Click += miRecordAdd_Click;
 
+            miContRecordEdit = new ButtonMenuItem();
             miContRecordEdit.Text = "miContRecordEdit";
             miContRecordEdit.Click += miRecordEdit_Click;
 
+            miContRecordDelete = new ButtonMenuItem();
             miContRecordDelete.Text = "miContRecordDelete";
             miContRecordDelete.Click += miRecordDelete_Click;
 
+            miRecordDuplicate = new ButtonMenuItem();
             miRecordDuplicate.Text = "miRecordDuplicate";
             miRecordDuplicate.Click += miRecordDuplicate_Click;
 
+            contextMenu = new ContextMenu();
             contextMenu.Items.AddRange(new MenuItem[] {
                                            miContRecordAdd,
                                            miContRecordEdit,
@@ -475,7 +475,15 @@ namespace GKUI
             tabsRecords = new TabControl();
             tabsRecords.SelectedIndexChanged += tabsRecords_SelectedIndexChanged;
 
-            Content = tabsRecords;
+            Content = new TableLayout() {
+                Rows = {
+                    new TableRow() {
+                        ScaleHeight = true,
+                        Cells = { tabsRecords }
+                    },
+                    StatusBar
+                }
+            };
             Menu = MainMenu1;
             ToolBar = ToolBar1;
 

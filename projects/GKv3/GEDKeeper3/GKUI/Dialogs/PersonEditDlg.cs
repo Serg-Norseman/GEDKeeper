@@ -575,22 +575,15 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void edSurname_KeyDown(object sender, KeyEventArgs e)
+        private void edNameX_KeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && e.Key == Keys.Down && e.Control) {
                 tb.Text = SysUtils.NormalizeName(tb.Text);
-            }
-        }
-
-        // FIXME: GKv3 DevRestriction
-        /*private void edSurname_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '/')
-            {
+            } else if (e.KeyChar == '/') {
                 e.Handled = true;
             }
-        }*/
+        }
 
         public void SetNeedSex(GEDCOMSex needSex)
         {
@@ -663,8 +656,6 @@ namespace GKUI.Dialogs
             btnParentsAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
             btnParentsEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
             btnParentsDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
-
-            //imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();
         }

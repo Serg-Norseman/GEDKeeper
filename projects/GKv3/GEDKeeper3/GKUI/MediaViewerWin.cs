@@ -158,7 +158,7 @@ namespace GKUI
 
         public void SetViewMedia(string mediaFile)
         {
-            var mediaPlayer = new GKUI.Components.MediaPlayerStub();
+            var mediaPlayer = new GKUI.Components.MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);

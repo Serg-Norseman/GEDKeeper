@@ -54,6 +54,7 @@ namespace GKUI.Dialogs
 
             txtSurname = new TextBox();
             //txtSurname.Size = new Size(226, 24);
+            txtSurname.KeyDown += edName_KeyDown;
 
             txtSurnamePrefix = new TextBox();
             //txtSurnamePrefix.Size = new Size(169, 24);
@@ -66,6 +67,7 @@ namespace GKUI.Dialogs
 
             txtMarriedSurname = new TextBox();
             //txtMarriedSurname.Size = new Size(226, 24);
+            txtMarriedSurname.KeyDown += edName_KeyDown;
 
             txtNamePrefix = new TextBox();
             //txtNamePrefix.Size = new Size(169, 24);
@@ -78,6 +80,7 @@ namespace GKUI.Dialogs
 
             txtName = new TextBox();
             //txtName.Size = new Size(226, 24);
+            txtName.KeyDown += edName_KeyDown;
 
             txtNameSuffix = new TextBox();
             //txtNameSuffix.Size = new Size(169, 24);
@@ -90,6 +93,7 @@ namespace GKUI.Dialogs
 
             txtPatronymic = new TextBox();
             //txtPatronymic.Size = new Size(226, 24);
+            txtPatronymic.KeyDown += edName_KeyDown;
 
             txtNickname = new TextBox();
             //txtNickname.Size = new Size(169, 24);

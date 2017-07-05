@@ -323,6 +323,18 @@ namespace GKUI.Components
             }
         }
 
+        public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
+        {
+            if (window.Platform.IsWinForms) {
+                window.ClientSize = new Size(width, height);
+            } else {
+            }
+
+            if (fontPreset && (window.Platform.IsWinForms || window.Platform.IsWpf)) {
+                UIHelper.SetControlFont(window, "Tahoma", 8.25f);
+            }
+        }
+
         public static string[] Convert(string text)
         {
             var strList = new StringList(text);

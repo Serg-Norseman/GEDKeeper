@@ -53,13 +53,7 @@ namespace GKUI.Dialogs
         {
             try
             {
-                int length = 0;
-                /*for (int it = 0; txtNote.Lines.Length > it; ++it)
-                {
-                    length += txtNote.Lines[it].Trim().Length;
-                }*/
-                length = txtNote.Text.Length;
-                if (0 != length)
+                if (txtNote.Text.Length != 0)
                 {
                     fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
 
@@ -100,6 +94,11 @@ namespace GKUI.Dialogs
 
         private void FillSizes()
         {
+            for (int i = 1; i <= 7; i++) {
+                var item = new GKToolStripMenuItem(i.ToString(), i);
+                item.Click += cmbSizes_SelectedIndexChanged;
+                menuSizes.Items.Add(item);
+            }
             /*cmbSizes.Items.Add(new GKComboItem("", 0));
             for (int i = 1; i <= 7; i++) {
                 cmbSizes.Items.Add(new GKComboItem(i.ToString(), i));
@@ -132,6 +131,9 @@ namespace GKUI.Dialogs
             //txtNote.Select();
             txtNote.SelectAll();
             //txtNote.Copy();
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = txtNote.Text;
+            }
         }
 
         private void miImport_Click(object sender, EventArgs e)
@@ -168,11 +170,11 @@ namespace GKUI.Dialogs
 
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            /*var item = cmbSizes.SelectedItem as GKComboItem;
-            if (item == null || item.Caption == "") return;
+            var item = sender as GKToolStripMenuItem; //menuSizes.SelectedItem as GKComboItem;
+            if (item == null || item.Text == "") return;
 
             string value = item.Tag.ToString();
-            txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);*/
+            txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);
         }
     }
 }

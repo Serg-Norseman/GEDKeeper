@@ -202,7 +202,7 @@ namespace GKUI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            //fTreeBox.Select();
+            fTreeBox.Focus();
         }
 
         private void tbImageSave_Click(object sender, EventArgs e)

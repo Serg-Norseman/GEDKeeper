@@ -121,7 +121,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private void rbCutNoneClick(object sender, EventArgs e)
+        private void rbCutX_CheckedChanged(object sender, EventArgs e)
         {
             if (rbCutNone.Checked)
             {
@@ -207,6 +207,7 @@ namespace GKUI.Dialogs
         private void btnCancel_Click(object sender, EventArgs e)
         {
             fFilter.Reset();
+            Close(DialogResult.Cancel);
         }
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)
@@ -239,7 +240,7 @@ namespace GKUI.Dialogs
             btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             fBase = baseWin;
-            fPersonsList = new GKSheetList(Panel1);
+            fPersonsList = new GKSheetList(Panel2);
             fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             fPersonsList.OnModify += ListModify;
             fPersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);

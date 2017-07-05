@@ -22,42 +22,33 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            btnAccept = new Button();
-            btnCancel = new Button();
-            lblRPSources = new Label();
-            cmbSource = new ComboBox();
-            rgBranchCut = new GroupBox();
-            lblYear = new Label();
-            rbCutNone = new RadioButton();
-            rbCutYears = new RadioButton();
-            rbCutPersons = new RadioButton();
-            edYear = new NumericUpDown();
-            Panel1 = new Panel();
-            Panel2 = new Panel();
-
             SuspendLayout();
 
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(114, 31);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
+            Panel2 = new Panel();
 
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(113, 31);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
+            rbCutNone = new RadioButton();
+            rbCutNone.Checked = true;
+            rbCutNone.Text = "rbCutNone";
+            rbCutNone.CheckedChanged += rbCutX_CheckedChanged;
 
-            lblRPSources.Size = new Size(79, 17);
-            lblRPSources.Text = "lblRPSources";
+            rbCutYears = new RadioButton(rbCutNone);
+            rbCutYears.Text = "rbCutYears";
+            rbCutYears.CheckedChanged += rbCutX_CheckedChanged;
 
-            cmbSource.ReadOnly = true;
-            cmbSource.Size = new Size(528, 25);
+            lblYear = new Label();
+            lblYear.Text = "lblYear";
 
-            rgBranchCut.Size = new Size(528, 322);
+            edYear = new NumericUpDown();
+            edYear.Increment = 10;
+            edYear.MaxValue = 3000;
+
+            rbCutPersons = new RadioButton(rbCutNone);
+            rbCutPersons.Text = "rbCutPersons";
+            rbCutPersons.CheckedChanged += rbCutX_CheckedChanged;
+
+            rgBranchCut = new GroupBox();
             rgBranchCut.Text = "rgBranchCut";
-            Panel1.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            rgBranchCut.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { rbCutNone }
@@ -66,7 +57,7 @@ namespace GKUI.Dialogs
                         Cells = { rbCutYears }
                     },
                     new TableRow {
-                        Cells = { lblYear, edYear }
+                        Cells = { TableLayout.Horizontal(10, lblYear, edYear) }
                     },
                     new TableRow {
                         Cells = { rbCutPersons }
@@ -78,56 +69,48 @@ namespace GKUI.Dialogs
                 }
             };
 
-            lblYear.Size = new Size(31, 17);
-            lblYear.Text = "lblYear";
+            //
 
-            rbCutNone.Checked = true;
-            rbCutNone.Size = new Size(52, 21);
-            rbCutNone.Text = "rbCutNone";
-            rbCutNone.Click += rbCutNoneClick;
+            lblRPSources = new Label();
+            //lblRPSources.Size = new Size(79, 17);
+            lblRPSources.Text = "lblRPSources";
 
-            rbCutYears.Size = new Size(128, 21);
-            rbCutYears.Text = "rbCutYears";
-            rbCutYears.Click += rbCutNoneClick;
+            cmbSource = new ComboBox();
+            cmbSource.ReadOnly = true;
+            //cmbSource.Size = new Size(528, 25);
 
-            rbCutPersons.Size = new Size(156, 21);
-            rbCutPersons.Text = "rbCutPersons";
-            rbCutPersons.Click += rbCutNoneClick;
-
-            edYear.Increment = 10;
-            edYear.MaxValue = 3000;
-            edYear.Size = new Size(169, 24);
-
-            Panel1.Size = new Size(504, 166);
-            Panel1.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            Panel1 = new Panel();
+            Panel1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { rgBranchCut }
                     },
                     new TableRow {
-                        Cells = { lblRPSources }
-                    },
-                    new TableRow {
-                        Cells = { cmbSource }
+                        Cells = { TableLayout.Horizontal(10, lblRPSources, cmbSource) }
                     }
                 }
             };
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+
+            Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { Panel1 }
                     },
-                    new TableRow {
-                        ScaleHeight = false,
-                        Cells = { null, btnAccept, btnCancel }
-                    }
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

@@ -19,9 +19,8 @@
  */
 
 using System;
-using Eto.Forms;
 using Eto.Drawing;
-
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -50,41 +49,30 @@ namespace GKUI.Dialogs
 
         private void InitializeComponent()
         {
-            txtSearchPattern = new TextBox();
-            btnPrev = new Button();
-            btnNext = new Button();
             SuspendLayout();
 
-            txtSearchPattern.Width = 150;
-            txtSearchPattern.Height = 24;
+            txtSearchPattern = new TextBox();
+            //txtSearchPattern.Width = 150;
+            //txtSearchPattern.Height = 24;
             txtSearchPattern.TextChanged += SearchPattern_TextChanged;
 
-            btnPrev.Height = 24;
-            btnPrev.Width = 24;
+            btnPrev = new Button();
+            btnPrev.Size = new Size(24, 24);
             btnPrev.Click += FindPrev_Click;
             btnPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
-            btnNext.Height = 24;
-            btnNext.Width = 24;
+            btnNext = new Button();
+            btnNext.Size = new Size(24, 24);
             btnNext.Click += FindNext_Click;
             btnNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
-            Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { txtSearchPattern, btnPrev, btnNext }
-                    }
-                }
-            };
+            Content = TableLayout.Horizontal(10, new TableCell(txtSearchPattern, true), btnPrev, btnNext);
 
-            ClientSize = new Size(210, 30);
             KeyDown += SearchPanel_KeyDown;
             ShowInTaskbar = false;
             Topmost = true;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 210, 30);
             ResumeLayout();
         }
 
@@ -152,8 +140,8 @@ namespace GKUI.Dialogs
         {
             Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            //btnPrev.Text = LangMan.LS(LSID.LSID_FindPrevious);
-            //btnNext.Text = LangMan.LS(LSID.LSID_FindNext);
+            btnPrev.ToolTip = LangMan.LS(LSID.LSID_FindPrevious);
+            btnNext.ToolTip = LangMan.LS(LSID.LSID_FindNext);
         }
     }
 }

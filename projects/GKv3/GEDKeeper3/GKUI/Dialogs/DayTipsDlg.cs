@@ -19,9 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
-using Eto.Forms;
-
 using GKCommon;
 using GKCore;
 using GKCore.UIContracts;
@@ -35,12 +32,15 @@ namespace GKUI.Dialogs
     {
         private readonly StringList fTips;
 
+        public bool ShowTipsChecked
+        {
+            get { return chkShow.Checked.GetValueOrDefault(); }
+            set { chkShow.Checked = value; }
+        }
+
         public DayTipsDlg()
         {
             InitializeComponent();
-
-            Image1.Image = Bitmap.FromResource("Resources.image_tips_light.png");
-            btnClose.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             fTips = new StringList();
 
@@ -84,12 +84,6 @@ namespace GKUI.Dialogs
         private void btnNextTip_Click(object sender, EventArgs e)
         {
             GetNextTip();
-        }
-
-        public bool ShowTipsChecked
-        {
-            get { return chkShow.Checked.GetValueOrDefault(); }
-            set { chkShow.Checked = value; }
         }
 
         public void Init(string caption, bool showTipsChecked, StringList tips)

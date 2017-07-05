@@ -7,83 +7,99 @@ namespace GKUI.Dialogs
 {
     partial class DayTipsDlg
     {
-        private Panel Shape1;
+        private Scrollable Shape1;
         private CheckBox chkShow;
         private Button btnNextTip;
         private Button btnClose;
-        private Panel Shape2;
-        private Panel Shape3;
+        private Scrollable Shape2;
+        private Scrollable Shape3;
         private Label lblTitle;
         private Eto.Forms.ImageView Image1;
-        private TextArea txtTip;
+        private Label txtTip;
 
         private void InitializeComponent()
         {
-            Shape1 = new Panel();
-            chkShow = new CheckBox();
-            btnNextTip = new Button();
-            btnClose = new Button();
-            Shape2 = new Panel();
-            Shape3 = new Panel();
-            lblTitle = new Label();
-            Image1 = new Eto.Forms.ImageView();
-            txtTip = new TextArea();
-
             SuspendLayout();
 
-            Shape1.BackgroundColor = Colors.White;
-            //Shape1.BorderStyle = BorderStyle.FixedSingle;
-            //Shape1.TextColor = Colors.Black;
-            Shape1.Size = new Size(405, 48);
+            lblTitle = new Label();
+            lblTitle.Text = "lblTitle";
+            lblTitle.TextAlignment = TextAlignment.Left;
+            lblTitle.VerticalAlignment = VerticalAlignment.Center;
 
+            Shape1 = new Scrollable();
+            Shape1.BackgroundColor = Colors.White;
+            Shape1.Border = BorderType.Line;
+            Shape1.Height = 50;
+            Shape1.Content = new HDefStackLayout() { Items = { lblTitle } };
+
+            Image1 = new Eto.Forms.ImageView();
+            Image1.Size = new Size(41, 43);
+            Image1.Image = Bitmap.FromResource("Resources.image_tips_light.png");
+
+            var imgLayout = new VDefStackLayout();
+            imgLayout.HorizontalContentAlignment = HorizontalAlignment.Center;
+            imgLayout.VerticalContentAlignment = VerticalAlignment.Top;
+            imgLayout.Items.Add(Image1);
+
+            Shape2 = new Scrollable();
+            Shape2.BackgroundColor = Colors.Gray;
+            Shape2.Border = BorderType.Line;
+            Shape2.Width = 100;
+            Shape2.Content = imgLayout;
+
+            txtTip = new Label();
+            txtTip.Wrap = WrapMode.Word;
+            txtTip.TextAlignment = TextAlignment.Left;
+            txtTip.VerticalAlignment = VerticalAlignment.Top;
+
+            Shape3 = new Scrollable();
+            Shape3.BackgroundColor = Colors.White;
+            Shape3.Border = BorderType.Line;
+            Shape3.Height = 204;
+            Shape3.Content = new DefTableLayout() { Rows = { new TableRow(txtTip) { ScaleHeight = true } } };
+
+            var panel1 = new DynamicLayout();
+            panel1.BeginHorizontal();
+            panel1.Add(Shape2);
+            panel1.BeginVertical();
+            panel1.Add(Shape1);
+            panel1.Add(Shape3);
+            panel1.EndVertical();
+            panel1.EndHorizontal();
+
+            chkShow = new CheckBox();
             chkShow.Checked = true;
-            chkShow.Size = new Size(234, 21);
             chkShow.Text = "chkShow";
 
-            btnNextTip.Size = new Size(105, 31);
+            btnNextTip = new Button();
+            btnNextTip.Size = new Size(130, 26);
             btnNextTip.Text = "btnNextTip";
             btnNextTip.Click += btnNextTip_Click;
 
+            btnClose = new Button();
             btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(105, 31);
+            btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
+            btnClose.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnClose.Click += CancelClickHandler;
 
-            Shape2.BackgroundColor = Colors.Gray;
-            //Shape2.BorderStyle = BorderStyle.FixedSingle;
-            Shape2.Size = new Size(103, 224);
-
-            Shape3.BackgroundColor = Colors.White;
-            //Shape3.BorderStyle = BorderStyle.FixedSingle;
-            //Shape3.TextColor = Colors.Black;
-            Shape3.Size = new Size(405, 177);
-
-            lblTitle.BackgroundColor = Colors.White;
-            lblTitle.Font = new Font("Arial", 16F, FontStyle.Bold);
-            lblTitle.Size = new Size(378, 36);
-            lblTitle.Text = "lblTitle";
-
-            Image1.Size = new Size(57, 52);
-            //Image1.SizeMode = PictureBoxSizeMode.StretchImage;
-
-            //txtTip.BorderStyle = BorderStyle.None;
-            txtTip.Size = new Size(371, 154);
-
-            var layout = new PixelLayout();
-            layout.Add(lblTitle, 134, 19);
-            layout.Add(Image1, 45, 29);
-            layout.Add(chkShow, 25, 267);
-            layout.Add(txtTip, 137, 69);
-            layout.Add(btnNextTip, 302, 262);
-            layout.Add(btnClose, 414, 262);
-            layout.Add(Shape1, 123, 10);
-            layout.Add(Shape3, 123, 57);
-            layout.Add(Shape2, 22, 10);
+            Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { panel1 }
+                    },
+                    UIHelper.MakeDialogFooter(chkShow, null, btnNextTip, btnClose)
+                }
+            };
 
             AbortButton = btnClose;
             Title = " ";
             Topmost = true;
 
             SetPredefProperties(550, 310);
+            lblTitle.Font = new Font("Arial", 16F, FontStyle.Bold);
+
             ResumeLayout();
         }
     }

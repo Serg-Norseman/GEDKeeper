@@ -22,7 +22,8 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-using System.Timers;
+using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -31,31 +32,29 @@ namespace GKUI.Components
     /// </summary>
     public partial class GKPortrait : Panel
     {
+        private List<Button> fBtnsList = new List<Button>();
         private PixelLayout fLayout;
-        
+        private int fPixelSpeed = 5;
+        private ITimer fTimer;
+
+        private ImageBox pictureBox1;
+        private Panel fSlidePanel;
+
         public Image Image
         {
             get { return pictureBox1.Image; }
             set { pictureBox1.Image = value; }
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*public override Image BackgroundImage
-        {
-            get { return pictureBox1.BackgroundImage; }
-            set { pictureBox1.BackgroundImage = value; }
-        }*/
-
         public int SlidePanelHeight
         {
-            get { return btnPanel.Height; }
-            set { btnPanel.Height = value; }
+            get { return fSlidePanel.Height; }
+            set { fSlidePanel.Height = value; }
         }
 
         public Panel SlidePanel
         {
-            get { return btnPanel; }
-            set { btnPanel = value; }
+            get { return fSlidePanel; }
         }
 
         public int PixelSpeed
@@ -64,34 +63,44 @@ namespace GKUI.Components
             set { fPixelSpeed = value; }
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*public PictureBoxSizeMode SizeMode
-        {
-            get { return pictureBox1.SizeMode; }
-            set { pictureBox1.SizeMode = value;}
-        }*/
-
-        public override Cursor Cursor
-        {
-            get {
-                return base.Cursor;
-            }
-            set {
-                base.Cursor = value;
-                pictureBox1.Cursor = value;
-                btnPanel.Cursor = value;
-            }
-        }
-
-        private int fPixelSpeed = 5;
-        private List<Button> fBtnsList = new List<Button>();
-
         public GKPortrait()
         {
             fLayout = new PixelLayout();
+
             InitializeComponent();
-            fLayout.Move(btnPanel, 0, Height);
-            timer.Stop();
+
+            pictureBox1.Cursor = Cursors.Arrow;
+            fSlidePanel.Cursor = Cursors.Arrow;
+
+            fLayout.Move(fSlidePanel, 0, Height);
+            fTimer.Stop();
+        }
+
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+
+            pictureBox1 = new ImageBox();
+            pictureBox1.Size = new Size(178, 188);
+            pictureBox1.MouseLeave += PictureBox1MouseLeave;
+            //pictureBox1.MouseHover += PictureBox1MouseHover;
+
+            fSlidePanel = new Panel();
+            //fSlidePanel.BackgroundColor = SystemColors.ButtonShadow;
+            //fSlidePanel.Location = new Point(0, 152);
+            fSlidePanel.Size = new Size(178, 36);
+            fSlidePanel.MouseLeave += Panel1MouseLeave;
+            fSlidePanel.MouseMove += Panel1MouseHover; // MouseHover
+
+            fTimer = AppHost.Instance.CreateTimer(100.0f, MoveSlidePanel);
+
+            //pictureBox1.BackgroundImageLayout = ImageLayout.Center;
+            Content = pictureBox1;
+
+            fLayout.Add(fSlidePanel, 0, Height);
+
+            Size = new Size(178, 188);
+            ResumeLayout();
         }
 
         /// <summary>
@@ -181,48 +190,8 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            btnPanel.Width = Width;
+            fSlidePanel.Width = Width;
             CheckCursorPosition(this, e);
         }
-
-        #region Design
-
-        private ImageBox pictureBox1;
-        private Panel btnPanel;
-        private Timer timer;
-
-        /// <summary>
-        /// This method is required for Windows Forms designer support.
-        /// Do not change the method contents inside the source code editor. The Forms designer might
-        /// not be able to load this method if it was changed manually.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            pictureBox1 = new ImageBox();
-            btnPanel = new Panel();
-            timer = new Timer();
-            SuspendLayout();
-
-            //pictureBox1.BackgroundImageLayout = ImageLayout.Center;
-            Content = pictureBox1;
-            pictureBox1.Size = new Size(178, 188);
-            pictureBox1.MouseLeave += PictureBox1MouseLeave;
-            //pictureBox1.MouseHover += PictureBox1MouseHover;
-
-            //btnPanel.BackgroundColor = SystemColors.ButtonShadow;
-            //btnPanel.Location = new Point(0, 152);
-            btnPanel.Size = new Size(178, 36);
-            btnPanel.MouseLeave += Panel1MouseLeave;
-            btnPanel.MouseMove += Panel1MouseHover; // MouseHover
-
-            timer.Elapsed += MoveSlidePanel;
-
-            fLayout.Add(btnPanel, 0, Height);
-
-            Size = new Size(178, 188);
-            ResumeLayout();
-        }
-
-        #endregion
     }
 }

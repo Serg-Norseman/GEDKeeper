@@ -24,7 +24,6 @@ using System.ComponentModel;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -158,21 +157,20 @@ namespace GKUI
             SetMainTitle();
         }
 
+        // FIXME: GKv3 DevRestriction
         /*[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
 
-            // FIXME
             if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
         }*/
 
-        // FIXME: GKv3 DevRestriction
         public void Activate()
         {
-            
+            Focus();
         }
 
         #endregion
@@ -906,6 +904,7 @@ namespace GKUI
         {
             UpdateListsSettings();
             RefreshLists(true);
+            UpdateShieldState();
         }
 
         void IWorkWindow.NavNext()
@@ -1169,36 +1168,35 @@ namespace GKUI
             }
         }*/
 
-        // FIXME: GKv3 DevRestriction
-        /*private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
+        private void UpdateShieldState()
         {
             Bitmap pic = null;
             switch (fContext.ShieldState)
             {
                 case ShieldState.None:
-                    pic = (Bitmap)GKResources.iRGShieldNone.Clone();
+                    pic = Bitmap.FromResource("Resources.rg_shield_none.gif").Clone();
                     break;
                 case ShieldState.Middle:
-                    pic = (Bitmap)GKResources.iRGShieldMid.Clone();
+                    pic = Bitmap.FromResource("Resources.rg_shield_mid.gif").Clone();
                     break;
                 case ShieldState.Maximum:
-                    pic = (Bitmap)GKResources.iRGShieldMax.Clone();
+                    pic = Bitmap.FromResource("Resources.rg_shield_max.gif").Clone();
                     break;
             }
 
             if (pic != null) {
-                pic.MakeTransparent(pic.GetPixel(0, 0));
-                sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+                //pic.MakeTransparent(pic.GetPixel(0, 0));
+                //sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+                StatusBarPanel2.Image = pic;
             }
         }
 
-        private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
+        private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
-                fContext.SwitchShieldState();
-                StatusBar.Invalidate();
-            }
-        }*/
+            fContext.SwitchShieldState();
+            UpdateShieldState();
+            e.Handled = true;
+        }
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {

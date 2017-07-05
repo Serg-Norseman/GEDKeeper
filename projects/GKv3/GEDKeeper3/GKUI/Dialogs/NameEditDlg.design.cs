@@ -56,16 +56,14 @@ namespace GKUI.Dialogs
             lblMale.Text = "lblMale";
 
             txtFPatr = new TextBox();
-            //txtFPatr.KeyPress += edName_KeyPress;
+            txtFPatr.KeyDown += edName_KeyDown;
 
             txtMPatr = new TextBox();
-            //txtMPatr.KeyPress += edName_KeyPress;
+            txtMPatr.KeyDown += edName_KeyDown;
 
             grpPatronymics = new GroupBox();
             grpPatronymics.Text = "grpPatronymics";
-            grpPatronymics.Content = new TableLayout {
-                Padding = new Padding(10),
-                Spacing = new Size(10, 10),
+            grpPatronymics.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { lblFemale, txtFPatr }

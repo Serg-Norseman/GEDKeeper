@@ -20,17 +20,18 @@
 
 using System;
 using System.ComponentModel;
-using System.Windows.Forms;
-
-using nVLC;
-using nVLC.Events;
-using nVLC.Media;
-using nVLC.Players;
+using Eto.Forms;
 
 namespace GKUI.Components
 {
-    public partial class MediaPlayer : UserControl
+/*using nVLC;
+using nVLC.Events;
+using nVLC.Media;
+using nVLC.Players;*/
+
+    public partial class MediaPlayer : Panel
     {
+        /*
         #if !__MonoCS__
         private const bool FIND_LIBVLC = true;
         #else
@@ -39,7 +40,8 @@ namespace GKUI.Components
 
         private readonly IMediaPlayerFactory fFactory;
         private readonly IDiskPlayer fPlayer;
-        private IMedia fMedia;
+        private IMedia fMedia;*/
+
         private string fMediaFile;
 
         public string MediaFile
@@ -52,7 +54,7 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            fFactory = new MediaPlayerFactory(FIND_LIBVLC);
+            /*fFactory = new MediaPlayerFactory(FIND_LIBVLC);
             fPlayer = fFactory.CreatePlayer<IDiskPlayer>();
 
             fPlayer.Events.PlayerPositionChanged += Events_PlayerPositionChanged;
@@ -62,44 +64,42 @@ namespace GKUI.Components
 
             fPlayer.WindowHandle = pnlVideo.Handle;
 
-            trkVolume.Value = Math.Max(0, fPlayer.Volume);
-            trkVolume_Scroll(null, null);
+            fMedia = null;*/
 
-            fMedia = null;
+            //trkVolume.Value = Math.Max(0, fPlayer.Volume);
+            //trkVolume_Scroll(null, null);
 
-            UISync.Init(this);
+            //UISync.Init(this);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                fPlayer.Stop();
-                components.Dispose();
+                //fPlayer.Stop();
             }
             base.Dispose(disposing);
         }
 
         private void InitControls()
         {
-            trkPosition.Value = 0;
-            lblTime.Text = @"00:00:00";
-            lblDuration.Text = @"00:00:00";
+            //trkPosition.Value = 0;
+            lblDuration.Text = @"00:00:00 / 00:00:00";
         }
 
         #region Event handlers
 
         private void Events_PlayerStopped(object sender, EventArgs e)
         {
-            UISync.Execute(InitControls);
+            //UISync.Execute(InitControls);
         }
 
         private void Events_MediaEnded(object sender, EventArgs e)
         {
-            UISync.Execute(InitControls);
+            //UISync.Execute(InitControls);
         }
 
-        private void Events_TimeChanged(object sender, MediaPlayerTimeChanged e)
+        /*private void Events_TimeChanged(object sender, MediaPlayerTimeChanged e)
         {
             UISync.Execute(() => lblTime.Text = TimeSpan.FromMilliseconds(e.NewTime).ToString().Substring(0, 8));
         }
@@ -126,7 +126,7 @@ namespace GKUI.Components
         private void Events_ParsedChanged(object sender, MediaParseChange e)
         {
             //Console.WriteLine(e.Parsed);
-        }
+        }*/
 
         #endregion
 
@@ -134,7 +134,7 @@ namespace GKUI.Components
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (fMedia == null) {
+            /*if (fMedia == null) {
                 if (string.IsNullOrEmpty(fMediaFile)) {
                     MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -149,12 +149,12 @@ namespace GKUI.Components
                 fMedia.Parse(true);
             }
 
-            fPlayer.Play();
+            fPlayer.Play();*/
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)
         {
-            fPlayer.Mute = false;
+            /*fPlayer.Mute = false;
             fPlayer.Volume = trkVolume.Value;
 
             if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
@@ -168,40 +168,40 @@ namespace GKUI.Components
             }
             if (fPlayer.Volume == 0) {
                 btnMute.BackgroundImage = ExtResources.btnVolumeMute;
-            }
+            }*/
         }
 
         private void trkPosition_Scroll(object sender, EventArgs e)
         {
-            fPlayer.Position = trkPosition.Value / 100.0f;
+            //fPlayer.Position = trkPosition.Value / 100.0f;
         }
 
         public void btnStop_Click(object sender, EventArgs e)
         {
-            fPlayer.Stop();
+            //fPlayer.Stop();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            fPlayer.Pause();
+            //fPlayer.Pause();
         }
 
         private void btnMute_Click(object sender, EventArgs e)
         {
-            fPlayer.ToggleMute();
+            /*fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {
                 btnMute.BackgroundImage = ExtResources.btnVolumeMute;
             } else {
                 trkVolume_Scroll(sender, e);
-            }
+            }*/
         }
 
         #endregion
 
         #region UI synchronization
 
-        private static class UISync
+        /*private static class UISync
         {
             private static ISynchronizeInvoke fSync;
 
@@ -216,7 +216,7 @@ namespace GKUI.Components
                 // when closing window during playback
                 fSync.BeginInvoke(action, null);
             }
-        }
+        }*/
 
         #endregion
     }

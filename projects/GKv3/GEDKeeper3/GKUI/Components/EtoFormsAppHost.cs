@@ -37,20 +37,12 @@ namespace GKUI.Components
 {
     public sealed class EtoFormsAppHost : AppHost
     {
-        /*private readonly ApplicationContext fAppContext; // FIXME: GKv3 DevRestriction
-
-        public ApplicationContext AppContext
-        {
-            get { return fAppContext; }
-        }*/
-
         public EtoFormsAppHost() : base()
         {
-            //fAppContext = new ApplicationContext();
-            //Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+            Application.Instance.Terminating += OnApplicationExit;
         }
 
-        private void OnApplicationExit(object sender, EventArgs e)
+        private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }
 

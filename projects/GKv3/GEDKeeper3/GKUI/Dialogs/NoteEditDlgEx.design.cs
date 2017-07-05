@@ -32,16 +32,6 @@ namespace GKUI.Dialogs
         {
             SuspendLayout();
 
-            toolStrip1 = new ToolBar();
-            toolStrip1.Items.AddRange(new ToolItem[] {
-                                          btnBold,
-                                          btnItalic,
-                                          btnUnderline,
-                                          btnURL,
-                                          cmbSizes,
-                                          new SeparatorToolItem(),
-                                          ddbtnActions});
-
             btnBold = new ButtonToolItem();
             //btnBold.Font = new Font("Tahoma", 9F, FontStyle.Bold);
             btnBold.Text = "B";
@@ -68,17 +58,21 @@ namespace GKUI.Dialogs
             //cmbSizes.SelectedIndexChanged += cmbSizes_SelectedIndexChanged;
             cmbSizes.Click += (sender, e) => menuSizes.Show(this);
 
-            menuSizes = new ContextMenu();
-
-            menuActions = new ContextMenu();
-            menuActions.Items.AddRange(new MenuItem[] {
-                                           miSelectAndCopy,
-                                           miImport,
-                                           miExport,
-                                           miClear});
             ddbtnActions = new ButtonToolItem();
             ddbtnActions.Text = "Actions";
             ddbtnActions.Click += (sender, e) => menuActions.Show(this);
+
+            toolStrip1 = new ToolBar();
+            toolStrip1.Items.AddRange(new ToolItem[] {
+                                          btnBold,
+                                          btnItalic,
+                                          btnUnderline,
+                                          btnURL,
+                                          cmbSizes,
+                                          new SeparatorToolItem(),
+                                          ddbtnActions});
+
+            menuSizes = new ContextMenu();
 
             miSelectAndCopy = new ButtonMenuItem();
             miSelectAndCopy.Text = "miSelectAndCopy";
@@ -95,6 +89,13 @@ namespace GKUI.Dialogs
             miClear = new ButtonMenuItem();
             miClear.Text = "miClear";
             miClear.Click += miClear_Click;
+
+            menuActions = new ContextMenu();
+            menuActions.Items.AddRange(new MenuItem[] {
+                                           miSelectAndCopy,
+                                           miImport,
+                                           miExport,
+                                           miClear});
 
             //
 
@@ -151,7 +152,7 @@ namespace GKUI.Dialogs
             Title = "NoteEditDlg";
             ToolBar = toolStrip1;
 
-            SetPredefProperties(800, 460);
+            SetPredefProperties(460, 400);
             ResumeLayout();
         }
     }

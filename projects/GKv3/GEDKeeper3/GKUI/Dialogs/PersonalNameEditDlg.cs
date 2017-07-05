@@ -54,6 +54,13 @@ namespace GKUI.Dialogs
             }
         }
 
+        private void edName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
+        }
+
         private bool IsExtendedWomanSurname()
         {
             GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;

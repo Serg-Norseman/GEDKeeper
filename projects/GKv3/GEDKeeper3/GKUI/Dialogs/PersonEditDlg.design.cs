@@ -102,23 +102,23 @@ namespace GKUI.Dialogs
 
             txtMarriedSurname = new TextBox();
             //txtMarriedSurname.Size = new Size(182, 21);
-            txtMarriedSurname.KeyDown += edSurname_KeyDown;
+            txtMarriedSurname.KeyDown += edNameX_KeyDown;
             //txtMarriedSurname.KeyPress += edSurname_KeyPress;
 
             txtSurname = new TextBox();
             //txtSurname.Size = new Size(182, 21);
             txtSurname.Width = 200;
-            txtSurname.KeyDown += edSurname_KeyDown;
+            txtSurname.KeyDown += edNameX_KeyDown;
             //txtSurname.KeyPress += edSurname_KeyPress;
 
             txtName = new TextBox();
             //txtName.Size = new Size(182, 21);
-            txtName.KeyDown += edSurname_KeyDown;
+            txtName.KeyDown += edNameX_KeyDown;
             //txtName.KeyPress += edSurname_KeyPress;
 
             cmbPatronymic = new ComboBox();
             //cmbPatronymic.Size = new Size(182, 21);
-            cmbPatronymic.KeyDown += edSurname_KeyDown;
+            cmbPatronymic.KeyDown += edNameX_KeyDown;
             //cmbPatronymic.KeyPress += edSurname_KeyPress;
 
             cmbSex = new ComboBox();
@@ -178,11 +178,9 @@ namespace GKUI.Dialogs
             };
 
             imgPortrait = new GKUI.Components.GKPortrait();
-            imgPortrait.Cursor = Cursors.Arrow;
             imgPortrait.Image = null;
             imgPortrait.Width = 150;
             //imgPortrait.Size = new Size(149, 165);
-            //imgPortrait.SizeMode = PictureBoxSizeMode.Normal;
             imgPortrait.SlidePanelHeight = 36;
             imgPortrait.PixelSpeed = 5;
 

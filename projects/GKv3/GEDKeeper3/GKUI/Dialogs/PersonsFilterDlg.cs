@@ -87,7 +87,7 @@ namespace GKUI.Dialogs
             chkOnlyPatriarchs.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
 
-        private void rgLifeClick(object sender, EventArgs e)
+        private void rgLife_CheckedChanged(object sender, EventArgs e)
         {
             txtAliveBeforeDate.Enabled = rbAliveBefore.Checked;
         }
@@ -113,6 +113,7 @@ namespace GKUI.Dialogs
 
             cmbEventVal.Items.Clear();
             cmbEventVal.Items.AddRange(GKComboItem.Convert(options.EventFilters.ToArray()));
+            cmbEventVal.Items.Insert(0, new GKComboItem("*"));
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)
@@ -203,6 +204,7 @@ namespace GKUI.Dialogs
 
         private static void SaveFilter(string flt, StringList filters)
         {
+            flt = flt.Trim();
             if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
         }
 
@@ -212,14 +214,9 @@ namespace GKUI.Dialogs
 
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
-            string fs = txtName.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.NameFilters);
-
-            fs = cmbResidence.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.ResidenceFilters);
-
-            fs = cmbEventVal.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.EventFilters);
+            SaveFilter(txtName.Text, GlobalOptions.Instance.NameFilters);
+            SaveFilter(cmbResidence.Text, GlobalOptions.Instance.ResidenceFilters);
+            SaveFilter(cmbEventVal.Text, GlobalOptions.Instance.EventFilters);
 
             iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked.GetValueOrDefault();
 
