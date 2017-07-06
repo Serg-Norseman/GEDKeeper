@@ -50,14 +50,9 @@ namespace GKUI.Dialogs
             ShowInTaskbar = false;
         }
 
-        public virtual bool ShowModalX()
+        public virtual bool ShowModalX(object owner)
         {
-            return (ShowModal() == DialogResult.Ok);
-        }
-
-        public virtual bool ShowModalX(Control owner)
-        {
-            return (ShowModal(owner) == DialogResult.Ok);
+            return (ShowModal((Control)owner) == DialogResult.Ok);
         }
 
         protected virtual void CancelClickHandler(object sender, EventArgs e)

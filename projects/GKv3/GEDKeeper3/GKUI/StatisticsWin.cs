@@ -51,7 +51,7 @@ namespace GKUI
 
             fGraph = new ZGraphControl();
 
-            fListStats = UIHelper.CreateListView(null);
+            fListStats = new GKListView();
             fListStats.AddColumn("-", 250, false);
             fListStats.AddColumn("-", 150, false);
 

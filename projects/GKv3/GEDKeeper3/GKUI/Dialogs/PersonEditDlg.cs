@@ -84,7 +84,10 @@ namespace GKUI.Dialogs
                 GKUtils.GetNameParts(fPerson, out fam, out nam, out pat, false);
                 txtSurname.Text = fam;
                 txtName.Text = nam;
+
+                cmbPatronymic.AutoComplete = true; // FIXME: Wrapper for EtoBug in ComboBox.setText
                 cmbPatronymic.Text = pat;
+                cmbPatronymic.AutoComplete = false;
 
                 cmbSex.SelectedIndex = (sbyte)fPerson.Sex;
                 chkPatriarch.Checked = fPerson.Patriarch;

@@ -22,9 +22,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Lists;
 
 namespace GKUI.Components
 {
@@ -226,32 +224,6 @@ namespace GKUI.Components
             if (allowDefault) {
                 listBox.SelectedIndex = 0;
             }
-        }
-
-        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
-        {
-            if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
-
-            GKListView recView = new GKListView();
-            recView.ListMan = ListManager.Create(baseContext, recType);
-
-            if (parent != null) {
-                parent.Content = recView;
-            }
-
-            return recView;
-        }
-
-        public static GKListView CreateListView(Panel parent)
-        {
-            GKListView listView = new GKListView();
-
-            if (parent != null) {
-                parent.Content = listView;
-            }
-
-            return listView;
         }
 
         public static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,

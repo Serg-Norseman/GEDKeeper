@@ -175,6 +175,11 @@ namespace GKUI.Components
             DataStore = fItems;
         }
 
+        public GKListView(IListManager listMan) : this()
+        {
+            ListMan = listMan;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -493,9 +498,11 @@ namespace GKUI.Components
             //if (autoSize) width = -1;
             //Columns.Add(caption, width, HorizontalAlignment.Left);
 
+            var cell = new TextBoxCell(Columns.Count);
+
             GridColumn column = new GridColumn();
             column.HeaderText = caption;
-            column.DataCell = new TextBoxCell(Columns.Count);
+            column.DataCell = cell;
             column.AutoSize = autoSize;
             column.Width = width;
             Columns.Add(column);
@@ -506,15 +513,44 @@ namespace GKUI.Components
             //if (autoSize) width = -1;
             //Columns.Add(caption, width, HorizontalAlignment.Left);
 
+            var cell = new CheckBoxCell(Columns.Count);
+
             GridColumn column = new GridColumn();
             column.HeaderText = caption;
-            column.DataCell = new CheckBoxCell(Columns.Count);
+            column.DataCell = cell;
             column.AutoSize = autoSize;
             column.Width = width;
             column.Editable = true;
             Columns.Add(column);
 
             fCheckedList = true;
+        }
+
+        public void AddTextColumn(string caption, int width, bool autoSize = false)
+        {
+            var cell = new TextBoxCell(Columns.Count);
+
+            GridColumn column = new GridColumn();
+            column.HeaderText = caption;
+            column.DataCell = cell;
+            column.AutoSize = autoSize;
+            column.Width = width;
+            column.Editable = true;
+            Columns.Add(column);
+        }
+
+        public void AddComboColumn(string caption, int width, bool autoSize, object[] items)
+        {
+            var cell = new ComboBoxCell(Columns.Count);
+            cell.DataStore = items;
+
+            GridColumn column = new GridColumn();
+            column.HeaderText = caption;
+            column.DataCell = cell;
+            column.AutoSize = autoSize;
+            column.Width = width;
+            column.Editable = true;
+            Columns.Add(column);
         }
 
         public void SetColumnCaption(int index, string caption)

@@ -124,13 +124,15 @@ namespace GKUI.Dialogs
         {
             if (fListRecords != null)
             {
+                fListRecords.ListMan = null;
                 fListRecords.Dispose();
                 fListRecords = null;
             }
 
-            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context, fRecType);
+            fListRecords = new GKListView(ListManager.Create(fBase.Context, fRecType));
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;
+            panList.Content = fListRecords;
 
             if (fRecType == GEDCOMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;

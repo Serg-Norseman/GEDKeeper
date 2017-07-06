@@ -33,17 +33,17 @@ namespace GKUI.Components
     public partial class GKPortrait : Panel
     {
         private List<Button> fBtnsList = new List<Button>();
+        private ImageBox fImageBox;
         private PixelLayout fLayout;
         private int fPixelSpeed = 5;
+        private Panel fSlidePanel;
         private ITimer fTimer;
 
-        private ImageBox pictureBox1;
-        private Panel fSlidePanel;
 
         public Image Image
         {
-            get { return pictureBox1.Image; }
-            set { pictureBox1.Image = value; }
+            get { return fImageBox.Image; }
+            set { fImageBox.Image = value; }
         }
 
         public int SlidePanelHeight
@@ -63,13 +63,12 @@ namespace GKUI.Components
             set { fPixelSpeed = value; }
         }
 
+
         public GKPortrait()
         {
-            fLayout = new PixelLayout();
-
             InitializeComponent();
 
-            pictureBox1.Cursor = Cursors.Arrow;
+            fImageBox.Cursor = Cursors.Arrow;
             fSlidePanel.Cursor = Cursors.Arrow;
 
             fLayout.Move(fSlidePanel, 0, Height);
@@ -80,9 +79,13 @@ namespace GKUI.Components
         {
             SuspendLayout();
 
-            pictureBox1 = new ImageBox();
-            pictureBox1.Size = new Size(178, 188);
-            pictureBox1.MouseLeave += PictureBox1MouseLeave;
+            fLayout = new PixelLayout();
+
+            fImageBox = new ImageBox();
+            fImageBox.AllowZoom = false;
+            fImageBox.SelectionMode = ImageBoxSelectionMode.None;
+            fImageBox.Size = new Size(178, 188);
+            fImageBox.MouseLeave += PictureBox1MouseLeave;
             //pictureBox1.MouseHover += PictureBox1MouseHover;
 
             fSlidePanel = new Panel();
@@ -94,8 +97,7 @@ namespace GKUI.Components
 
             fTimer = AppHost.Instance.CreateTimer(100.0f, MoveSlidePanel);
 
-            //pictureBox1.BackgroundImageLayout = ImageLayout.Center;
-            Content = pictureBox1;
+            Content = fImageBox;
 
             fLayout.Add(fSlidePanel, 0, Height);
 

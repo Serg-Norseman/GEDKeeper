@@ -26,22 +26,33 @@ using GKCore.Interfaces;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    /// Eto-specific UI timer.
     /// </summary>
     public class EUITimer : BaseObject, ITimer
     {
         private readonly UITimer fInnerTimer;
         private EventHandler fElapsedHandler;
 
-        /*
+        public bool Enabled
+        {
+            get { return fInnerTimer.Started; }
+            set {
+                if (value) {
+                    fInnerTimer.Start();
+                } else {
+                    fInnerTimer.Stop();
+                }
+            }
+        }
+
         /// <summary>
-        /// Gets or sets the interval, in seconds.
+        /// Gets or sets the interval, in milliseconds.
         /// </summary>
         public double Interval
         {
-            get { return fInnerTimer.Interval; }
-            set { fInnerTimer.Interval = value; }
-        }*/
+            get { return fInnerTimer.Interval * 1000; }
+            set { fInnerTimer.Interval = value / 1000; }
+        }
 
         public EUITimer(double msInterval, EventHandler elapsedHandler)
         {

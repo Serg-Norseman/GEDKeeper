@@ -411,12 +411,13 @@ namespace GKUI
 
         private void PrepareChecksList()
         {
-            ListChecks = UIHelper.CreateListView(Panel1);
+            ListChecks = new GKListView();
             ListChecks.MouseDoubleClick += ListChecks_DblClick;
             ListChecks.AddCheckedColumn(@"x", 50, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            Panel1.Content = ListChecks;
         }
 
         private void CheckBase()
@@ -475,10 +476,11 @@ namespace GKUI
 
         private void PreparePlacesList()
         {
-            ListPlaces = UIHelper.CreateListView(Panel4);
+            ListPlaces = new GKListView();
             ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+            Panel4.Content = ListPlaces;
         }
 
         private void CheckPlaces()
@@ -650,12 +652,13 @@ namespace GKUI
 
         private void PreparePatriarchsList()
         {
-            ListPatriarchs = UIHelper.CreateListView(Panel3);
+            ListPatriarchs = new GKListView();
             ListPatriarchs.MouseDoubleClick += ListPatriarchs_DblClick;
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
+            Panel3.Content = ListPatriarchs;
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)

@@ -9,7 +9,7 @@ namespace GKUI
     {
         private TableLayout StatusBar;
         private Label StatusBarPanel1;
-        private Eto.Forms.ImageView StatusBarPanel2;
+        private Eto.Forms.ImageView StatusBarShieldImage;
 
         private ToolBar ToolBar1;
         private ButtonToolItem tbFileNew;
@@ -25,8 +25,11 @@ namespace GKUI
         private ButtonToolItem tbStats;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
-        private ButtonToolItem tbDocPrint;
-        private ButtonToolItem tbDocPreview;
+
+        // Obsolete
+        /*private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbDocPreview;*/
+
         private MenuBar MainMenu1;
         private ButtonMenuItem miFile;
         private ButtonMenuItem miFileNew;
@@ -89,15 +92,15 @@ namespace GKUI
 
             StatusBarPanel1 = new Label();
 
-            StatusBarPanel2 = new Eto.Forms.ImageView();
-            StatusBarPanel2.Size = new Size(18, 18);
-            StatusBarPanel2.MouseDoubleClick += StatusBar_MouseDoubleClick;
+            StatusBarShieldImage = new Eto.Forms.ImageView();
+            StatusBarShieldImage.Size = new Size(18, 18);
+            StatusBarShieldImage.MouseDoubleClick += StatusBar_MouseDoubleClick;
 
             var StatusBarPanel3 = new Label();
             StatusBarPanel3.Width = 20;
 
             StatusBar = new TableLayout();
-            StatusBar.Rows.Add(new TableRow() { Cells = { new TableCell(StatusBarPanel1, true), null, StatusBarPanel2, StatusBarPanel3 } });
+            StatusBar.Rows.Add(new TableRow() { Cells = { new TableCell(StatusBarPanel1, true), null, StatusBarShieldImage, StatusBarPanel3 } });
 
             //
 
@@ -162,17 +165,20 @@ namespace GKUI
 
             tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
-            tbPrev.Click += ToolBar1_ButtonClick;
+            tbPrev.Click += tbPrev_Click;
 
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
-            tbNext.Click += ToolBar1_ButtonClick;
+            tbNext.Click += tbNext_Click;
 
-            tbDocPreview = new ButtonToolItem();
-            tbDocPreview.Click += ToolBar1_ButtonClick;
+            // Obsolete
+            /*tbDocPreview = new ButtonToolItem();
+            tbDocPreview.Click += tbDocPreview_Click;
+            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
 
             tbDocPrint = new ButtonToolItem();
-            tbDocPrint.Click += ToolBar1_ButtonClick;
+            tbDocPrint.Click += tbDocPrint_Click;
+            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");*/
 
             //
 
@@ -198,10 +204,7 @@ namespace GKUI
                                         tbStats,
                                         new SeparatorToolItem(),
                                         tbPrev,
-                                        tbNext,
-                                        new SeparatorToolItem(),
-                                        tbDocPreview,
-                                        tbDocPrint});
+                                        tbNext});
 
             //
 
@@ -494,11 +497,9 @@ namespace GKUI
             Closing += Form_Closing;
             Closed += Form_Closed;
             Load += Form_Load;
-            //VisibleChanged += Form_Show;
             //DragDrop += Form_DragDrop;
             //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;
-            SizeChanged += Form_Resize;
 
             UIHelper.SetControlFont(this, "Tahoma", 8.25f);
             ResumeLayout();

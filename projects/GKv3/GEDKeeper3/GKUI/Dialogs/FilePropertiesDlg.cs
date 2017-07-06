@@ -110,7 +110,7 @@ namespace GKUI.Dialogs
             using (var dlg = new LanguageEditDlg()) {
                 dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
 
-                if (dlg.ShowModalX()) {
+                if (AppHost.Instance.ShowModalX(dlg)) {
                     // Assignment in control, instead of the header's property to work Cancel.
                     txtLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(dlg.LanguageID);
                 }

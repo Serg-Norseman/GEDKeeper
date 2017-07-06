@@ -212,13 +212,11 @@ namespace GKUI.Dialogs
             lblParents.Text = "lblParents";
 
             txtFather = new TextBox();
-            txtFather.TextColor = SystemColors.Control;
-            txtFather.ReadOnly = true;
+            txtFather.Enabled = false;
             //txtFather.Size = new Size(251, 21);
 
             txtMother = new TextBox();
-            txtMother.TextColor = SystemColors.Control;
-            txtMother.ReadOnly = true;
+            txtMother.Enabled = false;
             //txtMother.Size = new Size(252, 21);
 
             btnParentsAdd = new Button();

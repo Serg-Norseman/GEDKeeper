@@ -30,6 +30,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
@@ -112,11 +113,6 @@ namespace GKUI
             tbStats.Image = Bitmap.FromResource("Resources.btn_table.gif");
             tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
             tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
-            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
-            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
-
-            tbDocPrint.Enabled = false;
-            tbDocPreview.Enabled = false;
 
             AppHost.Instance.LoadWindow(this);
 
@@ -199,10 +195,6 @@ namespace GKUI
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
             }
-        }
-
-        private void Form_Show(object sender, EventArgs e)
-        {
         }
 
         private void Form_Closing(object sender, CancelEventArgs e)
@@ -541,7 +533,7 @@ namespace GKUI
             summary.OnLink += mPersonSummaryLink;
             //summary.Font = new Font("Tahoma", 8.25f);
 
-            recView = UIHelper.CreateRecordsView(null, fContext, recType);
+            recView = new GKListView(ListManager.Create(fContext, recType));
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
@@ -848,8 +840,8 @@ namespace GKUI
             miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
             tbStats.ToolTip = LangMan.LS(LSID.LSID_StatsTip);
 
-            tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
-            tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
+            //tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
+            //tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
 
             tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
             tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
@@ -1111,28 +1103,22 @@ namespace GKUI
 
         #region From MainWin
 
-        // FIXME
-        private void tbDocPrint_Click(object sender, EventArgs e)
+        // Obsolete
+        /*private void tbDocPrint_Click(object sender, EventArgs e)
         {
-            /*IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
+            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
             if (chartWin != null && chartWin.AllowPrint()) {
                 chartWin.DoPrint();
-            }*/
+            }
         }
 
-        // FIXME
         private void tbDocPreview_Click(object sender, EventArgs e)
         {
-            /*IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
+            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
             if (chartWin != null && chartWin.AllowPrint()) {
                 chartWin.DoPrintPreview();
-            }*/
-        }
-
-        private void Form_Resize(object sender, EventArgs e)
-        {
-            //StatusBar.Panels[0].Width = Width - 50;
-        }
+            }
+        }*/
 
         public void Restore()
         {
@@ -1170,24 +1156,22 @@ namespace GKUI
 
         private void UpdateShieldState()
         {
-            Bitmap pic = null;
+            Bitmap img = null;
             switch (fContext.ShieldState)
             {
                 case ShieldState.None:
-                    pic = Bitmap.FromResource("Resources.rg_shield_none.gif").Clone();
+                    img = Bitmap.FromResource("Resources.rg_shield_none.gif").Clone();
                     break;
                 case ShieldState.Middle:
-                    pic = Bitmap.FromResource("Resources.rg_shield_mid.gif").Clone();
+                    img = Bitmap.FromResource("Resources.rg_shield_mid.gif").Clone();
                     break;
                 case ShieldState.Maximum:
-                    pic = Bitmap.FromResource("Resources.rg_shield_max.gif").Clone();
+                    img = Bitmap.FromResource("Resources.rg_shield_max.gif").Clone();
                     break;
             }
 
-            if (pic != null) {
-                //pic.MakeTransparent(pic.GetPixel(0, 0));
-                //sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
-                StatusBarPanel2.Image = pic;
+            if (img != null) {
+                StatusBarShieldImage.Image = img;
             }
         }
 
@@ -1222,14 +1206,6 @@ namespace GKUI
                 miTreeBoth_Click(null, null);
             } else if (sender == tbStats) {
                 miStats_Click(null, null);
-            } else if (sender == tbPrev) {
-                tbPrev_Click(null, null);
-            } else if (sender == tbNext) {
-                tbNext_Click(null, null);
-            } else if (sender == tbDocPrint) {
-                tbDocPrint_Click(null, null);
-            } else if (sender == tbDocPreview) {
-                tbDocPreview_Click(null, null);
             }
         }
 
@@ -1305,8 +1281,8 @@ namespace GKUI
 
                 miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
 
-                tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
-                tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
+                /*tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
+                tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());*/
 
                 miTreeTools.Enabled = baseEn;
                 miExportToFamilyBook.Enabled = baseEn;
@@ -1344,8 +1320,6 @@ namespace GKUI
 
         private void miExit_Click(object sender, EventArgs e)
         {
-            // FIXME: Controversial issue...
-            //AppHost.Instance.SaveLastBases();
             Application.Instance.Quit();
         }
 
@@ -1614,7 +1588,7 @@ namespace GKUI
         private void miAbout_Click(object sender, EventArgs e)
         {
             using (AboutDlg dlg = new AboutDlg()) {
-                dlg.ShowModalX();
+                AppHost.Instance.ShowModalX(dlg);
             }
         }
 

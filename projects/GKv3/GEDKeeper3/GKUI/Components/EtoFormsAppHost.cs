@@ -39,25 +39,29 @@ namespace GKUI.Components
     {
         public EtoFormsAppHost() : base()
         {
-            Application.Instance.Terminating += OnApplicationExit;
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //AppHost.Instance.SaveLastBases();
         }
 
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
+            Application.Instance.Terminating += OnApplicationExit;
         }
 
         public override IWindow GetActiveWindow()
         {
-            Window activeWnd = null;
-            foreach (var wnd in Application.Instance.Windows) {
-                if (wnd.HasFocus) {
-                    activeWnd = wnd;
-                    break;
+            Window activeWnd = fActiveBase as Window;
+
+            if (activeWnd == null) {
+                foreach (var wnd in Application.Instance.Windows) {
+                    if (wnd.HasFocus) {
+                        activeWnd = wnd;
+                        break;
+                    }
                 }
             }
 
@@ -195,11 +199,15 @@ namespace GKUI.Components
             }
         }
 
+        #region UI Timers
+
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new EUITimer(msInterval, elapsedHandler);
             return result;
         }
+
+        #endregion
 
         #region KeyLayout functions
 

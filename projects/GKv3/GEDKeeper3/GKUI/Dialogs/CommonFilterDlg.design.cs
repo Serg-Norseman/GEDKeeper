@@ -13,7 +13,7 @@ namespace GKUI.Dialogs
         private Button btnCancel;
         private TabPage tsFieldsFilter;
         private Button btnReset;
-        private GridView dataGridView1;
+        private GKListView dataGridView1;
 
         private void InitializeComponent()
         {
@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
             btnCancel.Click += CancelClickHandler;
             btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            dataGridView1 = new GridView();
+            dataGridView1 = new GKListView();
             dataGridView1.Height = 460;
 
             tsFieldsFilter = new TabPage();

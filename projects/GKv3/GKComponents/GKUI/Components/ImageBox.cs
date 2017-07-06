@@ -89,7 +89,6 @@ namespace GKUI.Components
 
         #region Instance Fields
 
-        private bool fAllowDoubleClick;
         private bool fAllowZoom;
         private bool fAutoCenter;
         private bool fAutoPan;
@@ -136,19 +135,6 @@ namespace GKUI.Components
         #endregion
 
         #region Properties
-
-        public bool AllowDoubleClick
-        {
-            get { return fAllowDoubleClick; }
-            set {
-                if (fAllowDoubleClick != value) {
-                    fAllowDoubleClick = value;
-
-                    //SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                    //UpdateStyles();
-                }
-            }
-        }
 
         /// <summary>
         ///   Gets or sets a value indicating whether the user can change the zoom level.
@@ -422,10 +408,7 @@ namespace GKUI.Components
         /// </summary>
         public ImageBox()
         {
-            //SetStyle(ControlStyles.StandardDoubleClick, false);
-            //SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
-            //         ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            //UpdateStyles();
+            CenteredImage = true;
 
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
@@ -433,8 +416,6 @@ namespace GKUI.Components
             DropShadowSize = 3;
             ImageBorderStyle = ImageBoxBorderStyle.None;
             BackgroundColor = Colors.White;
-            //AutoSize = false;
-            //AutoScroll = true;
             AutoPan = true;
             InterpolationMode = ImageInterpolation.High; //NearestNeighbor;
             AutoCenter = true;
@@ -467,6 +448,8 @@ namespace GKUI.Components
 
             fScaledImageHeight = (int)(fViewSize.Height * fZoomFactor);
             fScaledImageWidth = (int)(fViewSize.Width * fZoomFactor);
+
+            SetCanvasSize(new ExtSize(fScaledImageWidth, fScaledImageHeight), true);
         }
 
         /// <summary>
@@ -754,9 +737,6 @@ namespace GKUI.Components
         {
             if (fViewSize.IsEmpty) return;
 
-            //AutoScrollMinSize = Size.Empty;
-            ScrollSize = Size.Empty;
-
             Rectangle innerRectangle = GetInsideViewPort(true);
             double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
             double zoom = aspectRatio * 100.0;
@@ -787,15 +767,10 @@ namespace GKUI.Components
         /// </summary>
         private void AdjustLayout()
         {
-            /*if (AutoSize) {
-                if (Dock == DockStyle.None)
-                    Size = PreferredSize;
-            } else */if (fSizeToFit)
+            if (fSizeToFit) {
                 ZoomToFit();
-            else /*if (AutoScroll)*/ {
-                if (!fViewSize.IsEmpty)
-                    ScrollSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
-                    //AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
+            } else if (!fViewSize.IsEmpty) {
+                SetCanvasSize(new ExtSize(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical), true);
             }
 
             Invalidate();
@@ -854,7 +829,7 @@ namespace GKUI.Components
             g.ImageInterpolation = fInterpolationMode;
             g.PixelOffsetMode = PixelOffsetMode.Half; //HighQuality;
 
-            g.DrawImage(fImage, GetImageViewPort(), GetSourceImageRegion());
+            g.DrawImage(fImage, GetSourceImageRegion(), GetImageViewPort());
 
             g.PixelOffsetMode = currentPixelOffsetMode;
             g.ImageInterpolation = currentInterpolationMode;
@@ -960,40 +935,6 @@ namespace GKUI.Components
                 size = base.GetPreferredSize(proposedSize);
 
             return size;
-        }*/
-
-        /// <summary>
-        ///   Determines whether the specified key is a regular input key or a special key that requires preprocessing.
-        /// </summary>
-        /// <param name="keyData">
-        ///   One of the <see cref="T:System.Windows.Forms.Keys" /> values.
-        /// </param>
-        /// <returns>
-        ///   true if the specified key is a regular input key; otherwise, false.
-        /// </returns>
-        /*protected override bool IsInputKey(Keys keyData)
-        {
-            bool result;
-
-            if ((keyData & Keys.Right) == Keys.Right || (keyData & Keys.Left) == Keys.Left ||
-                (keyData & Keys.Up) == Keys.Up || (keyData & Keys.Down) == Keys.Down)
-                result = true;
-            else
-                result = base.IsInputKey(keyData);
-
-            return result;
-        }*/
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.BackColorChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        /*protected override void OnBackColorChanged(EventArgs e)
-        {
-            base.OnBackColorChanged(e);
-            Invalidate();
         }*/
 
         /// <summary>

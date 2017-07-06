@@ -22,13 +22,14 @@ using System;
 using Eto.Forms;
 using GKCommon;
 using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : ModalDialog
+    public sealed partial class AboutDlg : ModalDialog, ICommonDialog
     {
         public AboutDlg()
         {

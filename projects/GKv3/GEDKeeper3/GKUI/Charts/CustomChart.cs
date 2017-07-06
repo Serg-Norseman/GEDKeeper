@@ -38,6 +38,8 @@ namespace GKUI.Charts
 
         protected CustomChart() : base()
         {
+            CenteredImage = true;
+
             fNavman = new NavigationStack();
         }
 

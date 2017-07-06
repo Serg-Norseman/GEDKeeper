@@ -20,11 +20,10 @@
 
 using System;
 using System.ComponentModel;
-using Eto.Drawing;
 using System.IO;
 using System.Text;
+using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -168,9 +167,9 @@ namespace GKUI
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
-            imageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-            imageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-            imageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            imageCtl.btnSizeToFit.ToolTip = LangMan.LS(LSID.LSID_SizeToFit);
+            imageCtl.btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
+            imageCtl.btnZoomOut.ToolTip = LangMan.LS(LSID.LSID_ZoomOut);
 
             SetViewControl(imageCtl);
         }
@@ -201,11 +200,11 @@ namespace GKUI
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
+            /*base.OnLoad(e);
             if (fViewer != null) {
                 //fViewer.Select();
                 fViewer.Focus();
-            }
+            }*/
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)

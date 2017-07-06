@@ -232,15 +232,20 @@ namespace GKUI.Charts
             int numberOfSegments = fModel.Segments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fModel.Segments[i];
-                /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
-                 * const Graphics*)` doesn't work for me. */
-                if (segment.Path.IsVisible(mX / fZoom, mY / fZoom)) {
+                if (IsVisible(segment, mX / fZoom, mY / fZoom)) {
                     result = segment;
                     break;
                 }
             }
 
             return result;
+        }
+
+        private bool IsVisible(CircleSegment segment, float x, float y)
+        {
+            /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
+             * const Graphics*)` doesn't work for me. */
+            return segment.Path.IsVisible(x, y);
         }
 
         /// <summary>

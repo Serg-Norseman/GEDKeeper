@@ -78,13 +78,11 @@ namespace GKUI.Dialogs
             btnWifeAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             txtHusband = new TextBox();
-            txtHusband.TextColor = SystemColors.Control;
-            txtHusband.ReadOnly = true;
+            txtHusband.Enabled = false;
             //txtHusband.Size = new Size(460, 24);
 
             txtWife = new TextBox();
-            txtWife.TextColor = SystemColors.Control;
-            txtWife.ReadOnly = true;
+            txtWife.Enabled = false;
             //txtWife.Size = new Size(460, 24);
 
             lblStatus = new Label();

@@ -68,21 +68,24 @@ namespace GKUI.Components
             SuspendLayout();
 
             btnSizeToFit = new Button();
+            btnSizeToFit.Size = new Size(28, 28);
             btnSizeToFit.Image = Bitmap.FromResource("Resources.btn_size_to_fit.png");
             btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn = new Button();
+            btnZoomIn.Size = new Size(28, 28);
             btnZoomIn.Image = Bitmap.FromResource("Resources.btn_zoom_in.png");
             btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut = new Button();
+            btnZoomOut.Size = new Size(28, 28);
             btnZoomOut.Image = Bitmap.FromResource("Resources.btn_zoom_out.png");
             btnZoomOut.Click += btnZoomOut_Click;
 
             cbZoomLevels = new ComboBox();
             cbZoomLevels.ReadOnly = true;
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += zoomLevelsToolStripComboBox_SelectedIndexChanged;
+            cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
 
             toolStrip = new Panel();
             toolStrip.Content = new StackLayout() {
@@ -97,7 +100,6 @@ namespace GKUI.Components
             };
 
             imageBox = new ImageBox();
-            imageBox.AllowDoubleClick = false;
             imageBox.AllowZoom = true;
             imageBox.BackgroundColor = SystemColors.ControlBackground; // ControlDark;
             imageBox.ImageBorderColor = Colors.AliceBlue;
@@ -165,7 +167,7 @@ namespace GKUI.Components
             cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
         }
 
-        private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
             imageBox.Zoom = zoom;

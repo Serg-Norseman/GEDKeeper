@@ -296,13 +296,8 @@ namespace GKUI.Charts
 
         #region Instance control
 
-        public TreeChartBox()
+        public TreeChartBox() : base()
         {
-            //SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            //UpdateStyles();
-
-            //BorderStyle = BorderStyle.Fixed3D;
-            //DoubleBuffered = true;
             BackgroundColor = Colors.White;
 
             fModel = new TreeChartModel();
@@ -544,33 +539,6 @@ namespace GKUI.Charts
             return viewport;
         }
 
-        private ExtRect GetImageRegion()
-        {
-            ExtRect viewport;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle scrollableViewport = this.Viewport;
-
-                int x, y;
-                if (HasScroll) {
-                    x = scrollableViewport.Left;
-                    y = scrollableViewport.Top;
-                } else {
-                    x = (scrollableViewport.Width - imageSize.Width) / 2;
-                    y = (scrollableViewport.Height - imageSize.Height) / 2;
-                }
-                int width = Math.Min(imageSize.Width, scrollableViewport.Width);
-                int height = Math.Min(imageSize.Height, scrollableViewport.Height);
-
-                viewport = ExtRect.CreateBounds(x, y, width, height);
-            } else {
-                viewport = ExtRect.Empty;
-            }
-
-            return viewport;
-        }
-
         public ExtRect GetClientRect()
         {
             Rectangle rt = Bounds; // ClientRectangle;
@@ -687,29 +655,12 @@ namespace GKUI.Charts
             }
         }
 
-        private Point GetChartMouseLocation(PointF mpt)
-        {
-            ExtRect imRect = GetImageRegion();
-            int x = (int)mpt.X;
-            int y = (int)mpt.Y;
-
-            if (HasScroll) {
-                x += imRect.Left;
-                y += imRect.Top;
-            } else {
-                x -= imRect.Left;
-                y -= imRect.Top;
-            }
-
-            return new Point(x, y);
-        }
-
         private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)
         {
             var result = MouseAction.maNone;
             person = null;
 
-            Point pt = GetChartMouseLocation(e.Location);
+            Point pt = ConvertMouseLocation(e.Location);
             int aX = pt.X;
             int aY = pt.Y;
 

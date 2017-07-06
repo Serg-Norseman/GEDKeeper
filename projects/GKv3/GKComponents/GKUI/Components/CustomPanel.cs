@@ -39,12 +39,24 @@ namespace GKUI.Components
          */
 
         private Drawable fCanvas;
+        private Size fCanvasSize;
+        private bool fCenteredImage;
         private Font fFont;
         private bool fHasScroll;
-        private Size fImageSize;
         private Color fTextColor;
         private Rectangle fViewport;
 
+
+        public Size CanvasSize
+        {
+            get { return fCanvasSize; }
+        }
+
+        protected bool CenteredImage
+        {
+            get { return fCenteredImage; }
+            set { fCenteredImage = value; }
+        }
 
         public Rectangle ClientRectangle
         {
@@ -112,7 +124,8 @@ namespace GKUI.Components
 
         public Point AutoScrollPosition
         {
-            get { return new Point(-base.ScrollPosition.X, -base.ScrollPosition.Y); }
+            //get { return new Point(-base.ScrollPosition.X, -base.ScrollPosition.Y); }
+            get { return fViewport.Location; }
         }
 
         #endregion
@@ -149,7 +162,7 @@ namespace GKUI.Components
 
         private void UpdateProperties()
         {
-            fHasScroll = (fViewport.Width < fImageSize.Width || fViewport.Height < fImageSize.Height);
+            fHasScroll = (fViewport.Width < fCanvasSize.Width || fViewport.Height < fCanvasSize.Height);
         }
 
         private void SetViewport(Rectangle viewport)
@@ -228,12 +241,58 @@ namespace GKUI.Components
         protected void SetCanvasSize(ExtSize imageSize, bool noRedraw = false)
         {
             if (!imageSize.IsEmpty) {
-                fImageSize = new Size(imageSize.Width, imageSize.Height);
-                ScrollSize = fImageSize;
+                fCanvasSize = new Size(imageSize.Width, imageSize.Height);
+                ScrollSize = fCanvasSize;
                 UpdateProperties();
             }
 
             if (!noRedraw) Invalidate();
+        }
+
+        protected ExtRect GetImageRegion()
+        {
+            ExtRect imageRegion;
+
+            if (!fCanvasSize.IsEmpty) {
+                int x, y;
+                if (fHasScroll) {
+                    x = fViewport.Left;
+                    y = fViewport.Top;
+                } else {
+                    if (fCenteredImage) {
+                        x = (fViewport.Width - fCanvasSize.Width) / 2;
+                        y = (fViewport.Height - fCanvasSize.Height) / 2;
+                    } else {
+                        x = 0;
+                        y = 0;
+                    }
+                }
+                int width = Math.Min(fCanvasSize.Width, fViewport.Width);
+                int height = Math.Min(fCanvasSize.Height, fViewport.Height);
+
+                imageRegion = ExtRect.CreateBounds(x, y, width, height);
+            } else {
+                imageRegion = ExtRect.Empty;
+            }
+
+            return imageRegion;
+        }
+
+        protected Point ConvertMouseLocation(PointF mpt)
+        {
+            ExtRect imRect = GetImageRegion();
+            int x = (int)mpt.X;
+            int y = (int)mpt.Y;
+
+            if (fHasScroll) {
+                x += imRect.Left;
+                y += imRect.Top;
+            } else {
+                x -= imRect.Left;
+                y -= imRect.Top;
+            }
+
+            return new Point(x, y);
         }
     }
 }

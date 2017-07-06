@@ -78,6 +78,8 @@ namespace GKUI.Components
 
         public HyperView() : base()
         {
+            CenteredImage = false;
+
             fAcceptFontChange = true;
             fChunks = new List<BBTextChunk>();
             fCurrentLink = null;

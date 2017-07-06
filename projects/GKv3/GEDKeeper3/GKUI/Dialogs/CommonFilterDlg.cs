@@ -132,10 +132,11 @@ namespace GKUI.Dialogs
             fMaskedTextBox.Provider = new FixedMaskedTextProvider("00/00/0000");
             //dataGridView1.Controls.Add(fMaskedTextBox);
 
-            //dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Add(UIHelper.CreateComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200));
-            dataGridView1.Columns.Add(UIHelper.CreateComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150));
-            dataGridView1.Columns.Add(UIHelper.CreateTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300));
+            dataGridView1.ClearItems();
+            dataGridView1.ClearColumns();
+            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Field), 200, false, fFields);
+            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Condition), 150, false, GKData.CondSigns);
+            dataGridView1.AddTextColumn(LangMan.LS(LSID.LSID_Value), 300);
 
             //dataGridView1.CellEditing += dataGridView1_CellBeginEdit;
             //dataGridView1.CellEdited += dataGridView1_CellEndEdit;
