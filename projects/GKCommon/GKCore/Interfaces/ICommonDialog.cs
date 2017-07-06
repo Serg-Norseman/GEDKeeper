@@ -27,6 +27,6 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface ICommonDialog : IDisposable
     {
-        bool ShowModalX();
+        bool ShowModalX(object owner);
     }
 }

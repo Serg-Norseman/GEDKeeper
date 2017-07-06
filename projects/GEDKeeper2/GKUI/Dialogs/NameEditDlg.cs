@@ -109,7 +109,7 @@ namespace GKUI.Dialogs
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
         }
 
-        public bool ShowModalX()
+        public bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
         }

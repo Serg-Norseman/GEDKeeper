@@ -72,7 +72,7 @@ namespace GKUI.Dialogs
             UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
         }
 
-        public bool ShowModalX()
+        public bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
         }

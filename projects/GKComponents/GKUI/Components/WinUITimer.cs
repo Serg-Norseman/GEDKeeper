@@ -33,15 +33,26 @@ namespace GKUI.Components
         private readonly Timer fInnerTimer;
         private EventHandler fElapsedHandler;
 
-        /*
+        public bool Enabled
+        {
+            get { return fInnerTimer.Enabled; }
+            set {
+                if (value) {
+                    fInnerTimer.Start();
+                } else {
+                    fInnerTimer.Stop();
+                }
+            }
+        }
+
         /// <summary>
-        /// Gets or sets the interval, in seconds.
+        /// Gets or sets the interval, in milliseconds.
         /// </summary>
         public double Interval
         {
             get { return fInnerTimer.Interval; }
             set { fInnerTimer.Interval = value; }
-        }*/
+        }
 
         public WinUITimer(double msInterval, EventHandler elapsedHandler)
         {

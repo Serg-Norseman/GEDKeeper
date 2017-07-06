@@ -67,7 +67,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public virtual bool ShowModalX()
+        public virtual bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
         }

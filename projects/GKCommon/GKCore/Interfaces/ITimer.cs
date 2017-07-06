@@ -27,11 +27,19 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface ITimer : IDisposable
     {
-        /*double Interval
+        /// <summary>
+        /// Gets or sets the interval, in milliseconds.
+        /// </summary>
+        double Interval
         {
             get;
             set;
-        }*/
+        }
+
+        bool Enabled
+        {
+            get; set;
+        }
 
         void Start();
         void Stop();

@@ -54,7 +54,7 @@ namespace GKCore.Interfaces
         void WidgetClose(IWidget widget);
 
         void EnableWindow(IWidgetForm form, bool value);
-        bool ShowModalX(ICommonDialog form, bool keepModeless);
+        bool ShowModalX(ICommonDialog form, bool keepModeless = false);
         void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);

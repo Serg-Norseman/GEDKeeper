@@ -312,7 +312,7 @@ namespace GKUI.Dialogs
             UpdateGrid();
         }
 
-        public bool ShowModalX()
+        public bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
         }
