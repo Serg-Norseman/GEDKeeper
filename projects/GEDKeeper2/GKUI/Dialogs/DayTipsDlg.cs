@@ -100,7 +100,7 @@ namespace GKUI.Dialogs
             GetNextTip();
         }
 
-        public bool ShowModalX()
+        public bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
         }

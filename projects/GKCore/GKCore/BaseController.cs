@@ -1053,7 +1053,7 @@ namespace GKCore
             {
                 selectDlg.InitDialog(baseWin);
                 selectDlg.MultimediaLink = mmLink;
-                result = selectDlg.ShowModalX();
+                result = AppHost.Instance.ShowModalX(selectDlg, false);
             }
 
             return result;

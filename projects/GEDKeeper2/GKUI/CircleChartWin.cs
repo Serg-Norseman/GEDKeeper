@@ -66,6 +66,7 @@ namespace GKUI
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
             Controls.Add(fCircleChart);
+            Controls.SetChildIndex(fCircleChart, 0);
 
             SetLang();
         }

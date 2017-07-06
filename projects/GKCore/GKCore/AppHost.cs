@@ -53,12 +53,13 @@ namespace GKCore
     {
         protected static AppHost fInstance = null;
 
+        protected IBaseWindow fActiveBase;
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
         protected IList<IWindow> fRunningForms;
         private int fLoadingCount;
         private readonly StringList fTips;
-        private readonly Timer fAutosaveTimer;
+        private ITimer fAutosaveTimer;
 
         public static AppHost Instance
         {
@@ -81,12 +82,6 @@ namespace GKCore
         protected AppHost()
         {
             fInstance = this;
-
-            fAutosaveTimer = new Timer();
-            fAutosaveTimer.Stop();
-            fAutosaveTimer.Enabled = false;
-            fAutosaveTimer.Interval = 10 * 60 * 1000;
-            fAutosaveTimer.Elapsed += AutosaveTimer_Tick;
 
             fActiveWidgets = new List<WidgetInfo>();
             fRunningForms = new List<IWindow>();
@@ -326,6 +321,8 @@ namespace GKCore
             // In an SDI application, passing a null value produces an incorrect result
             if (baseWin == null) return;
 
+            fActiveBase = baseWin;
+
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.BaseChanged(baseWin);
             }
@@ -333,6 +330,8 @@ namespace GKCore
 
         public virtual void BaseClosed(IBaseWindow baseWin)
         {
+            fActiveBase = null;
+
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.BaseClosed(baseWin);
             }
@@ -343,9 +342,10 @@ namespace GKCore
             // TODO: implementation of Base.SaveAs
         }
 
-        public virtual bool ShowModalX(ICommonDialog form, bool keepModeless)
+        public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
-            return (form == null) ? false : form.ShowModalX();
+            var owner = GetActiveWindow();
+            return (form == null) ? false : form.ShowModalX(owner);
         }
 
         public void ShowHelpTopic(string topic)
@@ -668,7 +668,13 @@ namespace GKCore
 
         public virtual void ApplyOptions()
         {
-            fAutosaveTimer.Interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
+            double interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
+
+            if (fAutosaveTimer == null) {
+                fAutosaveTimer = CreateTimer(interval, AutosaveTimer_Tick);
+            } else {
+                fAutosaveTimer.Interval = interval;
+            }
             fAutosaveTimer.Enabled = AppHost.Options.Autosave;
         }
 

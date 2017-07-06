@@ -38,7 +38,11 @@ namespace GKCore.Charts
         public int Gen;
         public GEDCOMIndividualRecord IRec;
         public IGfxPath Path;
-        public float Rad;
+
+        public float Rad; // ?
+        public float IntRad; // Internal radius
+        public float ExtRad; // External radius
+
         public float StartAngle;
         public float WedgeAngle;
 
@@ -526,6 +530,12 @@ namespace GKCore.Charts
 
                 if (segment != null && gen < fMaxGenerations)
                 {
+                    float inRad = rad;
+                    float extRad = rad + fGenWidth;
+
+                    segment.IntRad = inRad;
+                    segment.ExtRad = extRad;
+
                     GEDCOMIndividualRecord father, mother;
                     iRec.GetParents(out father, out mother);
 
@@ -628,6 +638,8 @@ namespace GKCore.Charts
                 segment.StartAngle = startAngle;
                 segment.WedgeAngle = wedgeAngle;
                 segment.Rad = inRad + 50;
+                segment.IntRad = inRad;
+                segment.ExtRad = extRad;
 
                 fRenderer.CreateCircleSegment(path, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
             }
