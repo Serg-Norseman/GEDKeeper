@@ -64,9 +64,7 @@ namespace GKUI.Components
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            imageBox.AllowDoubleClick = false;
             imageBox.AllowZoom = true;
-            imageBox.InterpolationMode = InterpolationMode.HighQualityBicubic;
         }
 
         #region Component design

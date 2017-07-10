@@ -42,6 +42,11 @@ namespace GKCore.Charts
             get { return fImageWidth; }
         }
 
+        public ExtSize ImageSize
+        {
+            get { return new ExtSize(fImageWidth, fImageHeight); }
+        }
+
         public ChartRenderer Renderer
         {
             get { return fRenderer; }
