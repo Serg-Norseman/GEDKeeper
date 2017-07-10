@@ -70,9 +70,6 @@ namespace GKTests.GKComponents
             Assert.AreEqual(img, fImageBox.Image);
             fImageBox.EndUpdate();
 
-            fImageBox.InterpolationMode = InterpolationMode.Bicubic;
-            Assert.AreEqual(InterpolationMode.Bicubic, fImageBox.InterpolationMode);
-
             fImageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleDropShadow;
             Assert.AreEqual(ImageBoxBorderStyle.FixedSingleDropShadow, fImageBox.ImageBorderStyle);
 
@@ -103,9 +100,6 @@ namespace GKTests.GKComponents
             fImageBox.SizeToFit = true;
             Assert.AreEqual(true, fImageBox.SizeToFit);
 
-            fImageBox.AllowDoubleClick = true;
-            Assert.AreEqual(true, fImageBox.AllowDoubleClick);
-
             fImageBox.AllowZoom = true;
             Assert.AreEqual(true, fImageBox.AllowZoom);
 
@@ -114,11 +108,6 @@ namespace GKTests.GKComponents
 
             fImageBox.AutoCenter = true;
             Assert.AreEqual(true, fImageBox.AutoCenter);
-
-            fImageBox.AutoSize = false;
-            Assert.AreEqual(false, fImageBox.AutoSize);
-            fImageBox.AutoSize = true;
-            Assert.AreEqual(true, fImageBox.AutoSize);
 
             fImageBox.IsPanning = true;
             Assert.AreEqual(true, fImageBox.IsPanning);

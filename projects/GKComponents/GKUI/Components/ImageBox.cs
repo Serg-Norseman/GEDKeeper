@@ -90,7 +90,6 @@ namespace GKUI.Components
 
         #region Instance Fields
 
-        private bool fAllowDoubleClick;
         private bool fAllowZoom;
         private bool fAutoCenter;
         private bool fAutoPan;
@@ -98,7 +97,6 @@ namespace GKUI.Components
         private Image fImage;
         private Color fImageBorderColor;
         private ImageBoxBorderStyle fImageBorderStyle;
-        private InterpolationMode fInterpolationMode;
         private bool fIsPanning;
         private bool fIsSelecting;
         private int fScaledImageHeight;
@@ -137,19 +135,6 @@ namespace GKUI.Components
         #endregion
 
         #region Properties
-
-        public bool AllowDoubleClick
-        {
-            get { return fAllowDoubleClick; }
-            set {
-                if (fAllowDoubleClick != value) {
-                    fAllowDoubleClick = value;
-
-                    SetStyle(ControlStyles.StandardDoubleClick, fAllowDoubleClick);
-                    UpdateStyles();
-                }
-            }
-        }
 
         /// <summary>
         ///   Gets or sets a value indicating whether the user can change the zoom level.
@@ -195,24 +180,6 @@ namespace GKUI.Components
                     fAutoPan = value;
                     if (value)
                         SizeToFit = false;
-                }
-            }
-        }
-
-        /// <summary>
-        ///   Specifies if the control should auto size to fit the image contents.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
-        ///   <c>true</c> if enabled; otherwise, <c>false</c>
-        /// </returns>
-        public override bool AutoSize
-        {
-            get { return base.AutoSize; }
-            set {
-                if (base.AutoSize != value) {
-                    base.AutoSize = value;
-                    AdjustLayout();
                 }
             }
         }
@@ -273,21 +240,6 @@ namespace GKUI.Components
             set {
                 if (fImageBorderStyle != value) {
                     fImageBorderStyle = value;
-                    Invalidate();
-                }
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets the interpolation mode.
-        /// </summary>
-        /// <value>The interpolation mode.</value>
-        public InterpolationMode InterpolationMode
-        {
-            get { return fInterpolationMode; }
-            set {
-                if (value != InterpolationMode.Invalid && fInterpolationMode != value) {
-                    fInterpolationMode = value;
                     Invalidate();
                 }
             }
@@ -455,10 +407,10 @@ namespace GKUI.Components
             AutoSize = false;
             AutoScroll = true;
             AutoPan = true;
-            InterpolationMode = InterpolationMode.NearestNeighbor;
             AutoCenter = true;
             SelectionColor = SystemColors.Highlight;
             ImageBorderColor = SystemColors.ControlDark;
+            Padding = new Padding(0);
 
             ActualSize();
             UpdateParams();
@@ -529,59 +481,36 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Fits a given rectangle's coordinates to match image boundaries
-        /// </summary>
-        /// <returns>
-        ///   A <see cref="T:System.Drawing.RectangleF" /> structure remapped to fit the image boundaries
-        /// </returns>
-        private RectangleF FitRectangle(float x, float y, float w, float h)
-        {
-            if (x < 0)
-                x = 0;
-
-            if (y < 0)
-                y = 0;
-
-            if (x + w > fViewSize.Width)
-                w = fViewSize.Width - x;
-
-            if (y + h > fViewSize.Height)
-                h = fViewSize.Height - y;
-
-            return new RectangleF(x, y, w, h);
-        }
-
-        /// <summary>
         ///   Gets the image view port.
         /// </summary>
         /// <returns></returns>
-        private Rectangle GetImageViewPort()
+        private Rectangle GetImageViewport()
         {
             Rectangle viewPort;
 
             if (!fViewSize.IsEmpty)
             {
-                Point offset;
+                Rectangle innerRectangle = GetInsideViewport();
 
-                Rectangle innerRectangle = GetInsideViewPort(true);
-
-                if (!HScroll && !VScroll) // if no scrolling is present, tinker the view port so that the image and any applicable borders all fit inside
-                    innerRectangle.Inflate(-GetImageBorderOffset(), -GetImageBorderOffset());
-
-                if (fAutoCenter)
-                {
-                    int x = !HScroll ? (innerRectangle.Width - (fScaledImageWidth + Padding.Horizontal)) / 2 : 0;
-                    int y = !VScroll ? (innerRectangle.Height - (fScaledImageHeight + Padding.Vertical)) / 2 : 0;
-
-                    offset = new Point(x, y);
+                if (!HScroll && !VScroll) {
+                    // if no scrolling is present, tinker the view port so that the image and any applicable borders all fit inside
+                    int borderOffset = -GetImageBorderOffset();
+                    innerRectangle.Inflate(borderOffset, borderOffset);
                 }
-                else
-                    offset = Point.Empty;
+
+                int x, y;
+                if (fAutoCenter) {
+                    x = !HScroll ? (innerRectangle.Width - fScaledImageWidth) / 2 : 0;
+                    y = !VScroll ? (innerRectangle.Height - fScaledImageHeight) / 2 : 0;
+                } else {
+                    x = 0;
+                    y = 0;
+                }
 
                 int width = Math.Min(fScaledImageWidth - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
                 int height = Math.Min(fScaledImageHeight - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
 
-                viewPort = new Rectangle(offset.X + innerRectangle.Left, offset.Y + innerRectangle.Top, width, height);
+                viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
             }
             else
                 viewPort = Rectangle.Empty;
@@ -596,22 +525,10 @@ namespace GKUI.Components
         ///   if set to <c>true</c> [include padding].
         /// </param>
         /// <returns></returns>
-        private Rectangle GetInsideViewPort(bool includePadding)
+        private Rectangle GetInsideViewport()
         {
-            int left = 0;
-            int top = 0;
-            int width = ClientSize.Width;
-            int height = ClientSize.Height;
-
-            if (includePadding)
-            {
-                left += Padding.Left;
-                top += Padding.Top;
-                width -= Padding.Horizontal;
-                height -= Padding.Vertical;
-            }
-
-            return new Rectangle(left, top, width, height);
+            Size clientSize = ClientSize;
+            return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
         }
 
         /// <summary>
@@ -621,7 +538,7 @@ namespace GKUI.Components
         /// <returns>A Rectangle which has been resized and repositioned to match the current zoom level and image offset</returns>
         private RectangleF GetOffsetRectangle(RectangleF source)
         {
-            RectangleF viewport = GetImageViewPort();
+            RectangleF viewport = GetImageViewport();
             float offsetX = viewport.Left + Padding.Left + AutoScrollPosition.X;
             float offsetY = viewport.Top + Padding.Top + AutoScrollPosition.Y;
 
@@ -642,7 +559,7 @@ namespace GKUI.Components
 
             if (!fViewSize.IsEmpty)
             {
-                Rectangle viewPort = GetImageViewPort();
+                Rectangle viewPort = GetImageViewport();
                 float sourceLeft = (-AutoScrollPosition.X / fZoomFactor);
                 float sourceTop = (-AutoScrollPosition.Y / fZoomFactor);
                 float sourceWidth = (viewPort.Width / fZoomFactor);
@@ -670,7 +587,7 @@ namespace GKUI.Components
             int x;
             int y;
 
-            Rectangle viewport = GetImageViewPort();
+            Rectangle viewport = GetImageViewport();
 
             if (viewport.Contains(point) || fitToBounds)
             {
@@ -709,7 +626,7 @@ namespace GKUI.Components
             int x = (int)(imageLocation.X * fZoomFactor) - relativeDisplayPoint.X;
             int y = (int)(imageLocation.Y * fZoomFactor) - relativeDisplayPoint.Y;
 
-            AutoScrollPosition = new Point(x, y);
+            UpdateScrollPosition(x, y);
         }
 
         /// <summary>
@@ -771,7 +688,7 @@ namespace GKUI.Components
 
             AutoScrollMinSize = Size.Empty;
 
-            Rectangle innerRectangle = GetInsideViewPort(true);
+            Rectangle innerRectangle = GetInsideViewport();
             double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
             double zoom = aspectRatio * 100.0;
 
@@ -799,14 +716,10 @@ namespace GKUI.Components
         /// </summary>
         private void AdjustLayout()
         {
-            if (AutoSize) {
-                if (Dock == DockStyle.None)
-                    Size = PreferredSize;
-            } else if (fSizeToFit)
+            if (fSizeToFit) {
                 ZoomToFit();
-            else if (AutoScroll) {
-                if (!fViewSize.IsEmpty)
-                    AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
+            } else if (!fViewSize.IsEmpty) {
+                AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
             }
 
             Invalidate();
@@ -853,24 +766,6 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Draws the image.
-        /// </summary>
-        /// <param name="g">The g.</param>
-        private void DrawImage(Graphics g)
-        {
-            InterpolationMode currentInterpolationMode = g.InterpolationMode;
-            PixelOffsetMode currentPixelOffsetMode = g.PixelOffsetMode;
-
-            g.InterpolationMode = fInterpolationMode;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            g.DrawImage(fImage, GetImageViewPort(), GetSourceImageRegion(), GraphicsUnit.Pixel);
-
-            g.PixelOffsetMode = currentPixelOffsetMode;
-            g.InterpolationMode = currentInterpolationMode;
-        }
-
-        /// <summary>
         ///   Draws a border around the image.
         /// </summary>
         /// <param name="graphics"> The graphics. </param>
@@ -878,9 +773,9 @@ namespace GKUI.Components
         {
             if (fImageBorderStyle == ImageBoxBorderStyle.None) return;
 
-            graphics.SetClip(GetInsideViewPort(false)); // make sure the image border doesn't overwrite the control border
+            graphics.SetClip(GetInsideViewport()); // make sure the image border doesn't overwrite the control border
 
-            Rectangle viewPort = GetImageViewPort();
+            Rectangle viewPort = GetImageViewport();
             viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
 
             using (var borderPen = new Pen(fImageBorderColor))
@@ -907,7 +802,7 @@ namespace GKUI.Components
         /// </param>
         private void DrawSelection(PaintEventArgs e)
         {
-            e.Graphics.SetClip(GetInsideViewPort(true));
+            e.Graphics.SetClip(GetInsideViewport());
 
             RectangleF rect = GetOffsetRectangle(fSelectionRegion);
 
@@ -948,30 +843,6 @@ namespace GKUI.Components
         #region Overriden methods
 
         /// <summary>
-        ///   Retrieves the size of a rectangular area into which a control can be fitted.
-        /// </summary>
-        /// <param name="proposedSize">The custom-sized area for a control.</param>
-        /// <returns>
-        ///   An ordered pair of type <see cref="T:System.Drawing.Size" /> representing the width and height of a rectangle.
-        /// </returns>
-        public override Size GetPreferredSize(Size proposedSize)
-        {
-            Size size;
-
-            if (!fViewSize.IsEmpty)
-            {
-                int width = fScaledImageWidth + Padding.Horizontal + GetImageBorderOffset();
-                int height = fScaledImageHeight + Padding.Vertical + GetImageBorderOffset();
-
-                size = new Size(width, height);
-            }
-            else
-                size = base.GetPreferredSize(proposedSize);
-
-            return size;
-        }
-
-        /// <summary>
         ///   Determines whether the specified key is a regular input key or a special key that requires preprocessing.
         /// </summary>
         /// <param name="keyData">
@@ -1003,20 +874,6 @@ namespace GKUI.Components
         {
             base.OnBackColorChanged(e);
             Invalidate();
-        }
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.DockChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnDockChanged(EventArgs e)
-        {
-            base.OnDockChanged(e);
-
-            if (Dock != DockStyle.None)
-                AutoSize = false;
         }
 
         /// <summary>
@@ -1104,18 +961,6 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.PaddingChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnPaddingChanged(EventArgs e)
-        {
-            base.OnPaddingChanged(e);
-            AdjustLayout();
-        }
-
-        /// <summary>
         ///   Raises the <see cref="System.Windows.Forms.Control.Paint" /> event.
         /// </summary>
         /// <param name="e">
@@ -1125,35 +970,29 @@ namespace GKUI.Components
         {
             if (!AllowPainting()) return;
 
-            Rectangle innerRectangle = GetInsideViewPort(false);
+            Graphics gfx = e.Graphics;
+
+            Rectangle innerRectangle = GetInsideViewport();
 
             // draw the background
             using (var brush = new SolidBrush(BackColor))
-                e.Graphics.FillRectangle(brush, innerRectangle);
+                gfx.FillRectangle(brush, innerRectangle);
 
             // draw the image
             if (!fViewSize.IsEmpty)
-                DrawImageBorder(e.Graphics);
-            if (fImage != null)
-                DrawImage(e.Graphics);
+                DrawImageBorder(gfx);
+
+            if (fImage != null) {
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gfx.DrawImage(fImage, GetImageViewport(), GetSourceImageRegion(), GraphicsUnit.Pixel);
+            }
 
             // draw the selection
             if (fSelectionRegion != Rectangle.Empty)
                 DrawSelection(e);
 
             base.OnPaint(e);
-        }
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.ParentChanged" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-            AdjustLayout();
         }
 
         /// <summary>
@@ -1343,7 +1182,7 @@ namespace GKUI.Components
 
             float x, y, w, h;
 
-            Point imageOffset = GetImageViewPort().Location;
+            Point imageOffset = GetImageViewport().Location;
 
             if (e.X < fStartMousePosition.X)
             {
@@ -1375,7 +1214,13 @@ namespace GKUI.Components
             w = w / fZoomFactor;
             h = h / fZoomFactor;
 
-            SelectionRegion = FitRectangle(x, y, w, h);
+            // Fits a given rectangle's coordinates to match image boundaries
+            x = Math.Max(0, x);
+            y = Math.Max(0, y);
+            w = Math.Min(fViewSize.Width, w);
+            h = Math.Min(fViewSize.Height, h);
+
+            SelectionRegion = new RectangleF(x, y, w, h);
         }
 
         private int FindNearestZoom(int zoomLevel)

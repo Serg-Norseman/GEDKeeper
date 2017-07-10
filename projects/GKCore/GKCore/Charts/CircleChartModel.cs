@@ -443,6 +443,8 @@ namespace GKCore.Charts
             float inRad = CircleChartModel.CENTER_RAD - 50;
 
             AncPersonSegment segment = new AncPersonSegment(0);
+            segment.IntRad = 0;
+            segment.ExtRad = inRad;
             IGfxPath path = segment.Path;
             path.StartFigure();
             path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
@@ -623,6 +625,8 @@ namespace GKCore.Charts
             float extRad;
             if (segment.Gen == 0) {
                 segment.WedgeAngle = 360.0f;
+                segment.IntRad = 0;
+                segment.ExtRad = inRad;
 
                 path.StartFigure();
                 path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
