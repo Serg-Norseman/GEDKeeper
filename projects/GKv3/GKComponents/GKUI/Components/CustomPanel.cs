@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define DEBUG_VIEWPORT
+
 using System;
 using Eto.Drawing;
 using Eto.Forms;
@@ -39,18 +41,16 @@ namespace GKUI.Components
          */
 
         private Drawable fCanvas;
-        private Size fCanvasSize;
         private bool fCenteredImage;
         private Font fFont;
-        private bool fHasScroll;
+        private bool fHasHScroll;
+        private bool fHasVScroll;
+        private Size fImageSize;
+        private Rectangle fImageViewport;
+        private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
         private Rectangle fViewport;
 
-
-        public Size CanvasSize
-        {
-            get { return fCanvasSize; }
-        }
 
         protected bool CenteredImage
         {
@@ -58,36 +58,30 @@ namespace GKUI.Components
             set { fCenteredImage = value; }
         }
 
-        public Rectangle ClientRectangle
-        {
-            get { return fCanvas.Bounds; }
-        }
-
         public Font Font
         {
             get { return fFont; }
             set {
-                if (fFont == value) {
+                if (fFont != value) {
                     fFont = value;
-                    DoFontChanged();
+                    OnFontChanged(EventArgs.Empty);
                 }
             }
         }
 
-        public bool HasScroll
+        protected Rectangle ImageViewport
         {
-            get { return fHasScroll; }
+            get { return fImageViewport; }
         }
 
-        public new Size ScrollSize
+        public bool HScroll
         {
-            get {
-                return fCanvas.MinimumSize;
-            }
-            set {
-                fCanvas.MinimumSize = value;
-                base.UpdateScrollSizes();
-            }
+            get { return fHasHScroll; }
+        }
+
+        public bool VScroll
+        {
+            get { return fHasVScroll; }
         }
 
         public Color TextColor
@@ -99,27 +93,22 @@ namespace GKUI.Components
         protected Rectangle Viewport
         {
             get {
-                if (fViewport.IsEmpty) {
+                // FIXME: bad, very bad!
+                if (fViewport.IsEmpty || fViewport.Width <= 0 || fViewport.Height <= 0) {
                     Size clientSize = ClientRectangle.Size;
+                    //Size clientSize = VisibleRect.Size;
                     SetViewport(new Rectangle(0, 0, clientSize.Width, clientSize.Height));
                 }
                 return fViewport;
             }
         }
 
-        // FIXME: need to refactor and remove
+        // FIXME: need to refactor and remove all references
         #region Temp for compatibility
 
-        public int HorizontalScrollValue
+        public Rectangle ClientRectangle
         {
-            get { return AutoScrollPosition.X; }
-            set { UpdateScrollPosition(value, base.ScrollPosition.Y); }
-        }
-
-        public int VerticalScrollValue
-        {
-            get { return AutoScrollPosition.Y; }
-            set { UpdateScrollPosition(base.ScrollPosition.X, value); }
+            get { return fCanvas.Bounds; }
         }
 
         public Point AutoScrollPosition
@@ -140,15 +129,17 @@ namespace GKUI.Components
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
             fCanvas.CanFocus = true;
+            //fCanvas.Size = new Size(100, 100);
+
+            //var layout = new PixelLayout();
+            //layout.Add(fCanvas, 0, 0);
+            //Content = layout;
             Content = fCanvas;
 
             fFont = SystemFonts.Label();
             fTextColor = Colors.Black;
-        }
 
-        protected void DoFontChanged()
-        {
-            OnFontChanged(EventArgs.Empty);
+            SetImageSize(new ExtSize(100, 100), false);
         }
 
         protected virtual void OnFontChanged(EventArgs e)
@@ -158,11 +149,64 @@ namespace GKUI.Components
         private void PaintHandler(object sender, PaintEventArgs e)
         {
             OnPaint(e);
+
+            #if DEBUG_VIEWPORT
+            using (var pen = new Pen(Colors.Red, 1.0f)) {
+                var gfx = e.Graphics;
+                gfx.DrawRectangle(pen, new Rectangle(fImageViewport.Left, fImageViewport.Top, fImageSize.Width - 1, fImageSize.Height - 1));
+            }
+            #endif
+        }
+
+        protected virtual void OnPaint(PaintEventArgs e)
+        {
         }
 
         private void UpdateProperties()
         {
-            fHasScroll = (fViewport.Width < fCanvasSize.Width || fViewport.Height < fCanvasSize.Height);
+            //if (fViewport.IsEmpty) return;
+
+            fHasHScroll = (fViewport.Width < fImageSize.Width);
+            fHasVScroll = (fViewport.Height < fImageSize.Height);
+
+            int sourX, sourY, destX, destY;
+
+            if (fHasHScroll) {
+                sourX = 0;
+                destX = 0;
+                fMouseOffsetX = fViewport.Left;
+            } else {
+                if (fCenteredImage) {
+                    sourX = 0;
+                    destX = (fViewport.Width - fImageSize.Width) / 2;
+                    fMouseOffsetX = -destX;
+                } else {
+                    sourX = 0;
+                    destX = 0;
+                    fMouseOffsetX = 0;
+                }
+            }
+
+            if (fHasVScroll) {
+                sourY = 0;
+                destY = 0;
+                fMouseOffsetY = fViewport.Top;
+            } else {
+                if (fCenteredImage) {
+                    sourY = 0;
+                    destY = (fViewport.Height - fImageSize.Height) / 2;
+                    fMouseOffsetY = -destY;
+                } else {
+                    sourY = 0;
+                    destY = 0;
+                    fMouseOffsetY = 0;
+                }
+            }
+
+            int width = Math.Min(fImageSize.Width, fViewport.Width);
+            int height = Math.Min(fImageSize.Height, fViewport.Height);
+
+            fImageViewport = new Rectangle(destX, destY, width, height);
         }
 
         private void SetViewport(Rectangle viewport)
@@ -171,10 +215,7 @@ namespace GKUI.Components
             UpdateProperties();
         }
 
-        protected virtual void OnPaint(PaintEventArgs e)
-        {
-        }
-
+        // unsupported, don't use
         public Graphics CreateGraphics()
         {
             if (fCanvas.SupportsCreateGraphics) {
@@ -189,7 +230,23 @@ namespace GKUI.Components
             if (!HasFocus) {
                 Focus();
             }
+
+            e.Handled = true;
             base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            int delta = -(int)(e.Delta.Height * 120.0f);
+
+            if (Keys.None == e.Modifiers) {
+                AdjustScroll(0, delta);
+            } else if (Keys.Shift == e.Modifiers) {
+                AdjustScroll(delta, 0);
+            }
+
+            e.Handled = true;
+            base.OnMouseWheel(e);
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -238,61 +295,32 @@ namespace GKUI.Components
         /// </summary>
         /// <param name="imageSize">The size of canvas.</param>
         /// <param name="noRedraw">Flag of the need to redraw.</param>
-        protected void SetCanvasSize(ExtSize imageSize, bool noRedraw = false)
+        protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
             if (!imageSize.IsEmpty) {
-                fCanvasSize = new Size(imageSize.Width, imageSize.Height);
-                ScrollSize = fCanvasSize;
+                fImageSize = new Size(imageSize.Width, imageSize.Height);
+
+                Size clientSize = base.ClientSize; // always -1, -1
+                int canvWidth = Math.Max(imageSize.Width, clientSize.Width);
+                int canvHeight = Math.Max(imageSize.Height, clientSize.Height);
+                fCanvas.Size = new Size(canvWidth, canvHeight);
+
+                //fCanvas.Size = fImageSize;
+                base.UpdateScrollSizes();
                 UpdateProperties();
             }
 
             if (!noRedraw) Invalidate();
         }
 
-        protected ExtRect GetImageRegion()
+        protected Point GetImageRelativeLocation(PointF mpt)
         {
-            ExtRect imageRegion;
-
-            if (!fCanvasSize.IsEmpty) {
-                int x, y;
-                if (fHasScroll) {
-                    x = fViewport.Left;
-                    y = fViewport.Top;
-                } else {
-                    if (fCenteredImage) {
-                        x = (fViewport.Width - fCanvasSize.Width) / 2;
-                        y = (fViewport.Height - fCanvasSize.Height) / 2;
-                    } else {
-                        x = 0;
-                        y = 0;
-                    }
-                }
-                int width = Math.Min(fCanvasSize.Width, fViewport.Width);
-                int height = Math.Min(fCanvasSize.Height, fViewport.Height);
-
-                imageRegion = ExtRect.CreateBounds(x, y, width, height);
-            } else {
-                imageRegion = ExtRect.Empty;
-            }
-
-            return imageRegion;
+            return new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
         }
 
-        protected Point ConvertMouseLocation(PointF mpt)
+        protected Point GetScrollRelativeLocation(PointF mpt)
         {
-            ExtRect imRect = GetImageRegion();
-            int x = (int)mpt.X;
-            int y = (int)mpt.Y;
-
-            if (fHasScroll) {
-                x += imRect.Left;
-                y += imRect.Top;
-            } else {
-                x -= imRect.Left;
-                y -= imRect.Top;
-            }
-
-            return new Point(x, y);
+            return new Point((int)mpt.X + fViewport.Left, (int)mpt.Y + fViewport.Top);
         }
     }
 }

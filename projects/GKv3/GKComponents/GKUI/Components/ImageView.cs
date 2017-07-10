@@ -85,7 +85,7 @@ namespace GKUI.Components
             cbZoomLevels = new ComboBox();
             cbZoomLevels.ReadOnly = true;
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
+            cbZoomLevels.TextChanged /*SelectedIndexChanged*/ += cbZoomLevels_SelectedIndexChanged;
 
             toolStrip = new Panel();
             toolStrip.Content = new StackLayout() {
@@ -101,18 +101,21 @@ namespace GKUI.Components
 
             imageBox = new ImageBox();
             imageBox.AllowZoom = true;
-            imageBox.BackgroundColor = SystemColors.ControlBackground; // ControlDark;
+            imageBox.BackgroundColor = Colors.Gray;
             imageBox.ImageBorderColor = Colors.AliceBlue;
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            imageBox.InterpolationMode = ImageInterpolation.High;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.ZoomChanged += imageBox_ZoomChanged;
 
-            Content = new StackLayout() {
-                Orientation = Orientation.Vertical,
-                Items = {
-                    toolStrip,
-                    imageBox
+            Content = new TableLayout() {
+                Rows = {
+                    new TableRow() {
+                        Cells = { toolStrip }
+                    },
+                    new TableRow() {
+                        ScaleHeight = true,
+                        Cells = { imageBox }
+                    }
                 }
             };
 
@@ -170,6 +173,7 @@ namespace GKUI.Components
         private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
+            //int zoom = imageBox.ZoomLevels[cbZoomLevels.SelectedIndex];
             imageBox.Zoom = zoom;
         }
     }

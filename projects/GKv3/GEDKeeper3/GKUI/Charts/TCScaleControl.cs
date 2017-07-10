@@ -98,11 +98,11 @@ namespace GKUI.Charts
             ExtRect cr = fChart.GetClientRect();
             if (fGrowOver) {
                 int height = cr.GetHeight() - (PADDING_Y << 1);
-                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), PADDING_Y, Width, height);
+                fDestRect = new Rectangle(cr.Right - (PADDING_X + Width), cr.Top + PADDING_Y, Width, height);
             } else {
                 int height = Math.Min(cr.GetHeight() - (PADDING_Y << 1), Height);
                 fDestRect = new Rectangle(cr.Right - (PADDING_X + Width),
-                                          Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
+                                          cr.Top + Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
                                           Width, height);
             }
         }
@@ -116,35 +116,31 @@ namespace GKUI.Charts
         {
             if (gfx == null) return;
 
-            //gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gfx.ImageInterpolation = ImageInterpolation.High;
-            //gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.AntiAlias = true;
-            //gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            gfx.ImageInterpolation = ImageInterpolation.High;
             gfx.PixelOffsetMode = PixelOffsetMode.Half;
-            //gfx.CompositingQuality = CompositingQuality.HighQuality;
 
             /* Render the top icon without scaling. */
             Rectangle sourceRect = new Rectangle(0, 0, Width, SCALE_Y1 + SHADOW_TOP);
             Rectangle destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top,
                                                       Width, SCALE_Y1 + SHADOW_TOP);
-            gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
+            gfx.DrawImage(fControlsImage, sourceRect, destinationRect);
             /* Render the bottom icon without scaling. */
             sourceRect = new Rectangle(0, SCALE_Y2, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
             destinationRect = new Rectangle(fDestRect.Left,
                                             fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)),
                                             Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
+            gfx.DrawImage(fControlsImage, sourceRect, destinationRect);
             /* Render the vertical bar with scaling of Y's (there's still no
              * scaling for X's). Image source must ignore some shadows at the
              * top and bottom. */
             sourceRect = new Rectangle(0, SCALE_Y1 + SHADOW_TOP, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
             destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
                                             fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
-            gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
+            gfx.DrawImage(fControlsImage, sourceRect, destinationRect);
             if (0 < fDCount)
             {
-                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT);
+                gfx.DrawImage(fControlsImage, THUMB_RECT, GetDRect(fThumbPos));
             }
         }
 

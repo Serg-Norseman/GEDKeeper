@@ -220,7 +220,6 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
             Point mpt = new Point(e.Location);
 
             string hint = "";
@@ -239,6 +238,9 @@ namespace GKUI.Components
                 //fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
                 ToolTip = hint;
             }
+
+            e.Handled = true;
+            base.OnMouseMove(e);
         }
     }
 }

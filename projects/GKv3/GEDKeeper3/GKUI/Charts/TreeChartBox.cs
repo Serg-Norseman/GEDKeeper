@@ -480,7 +480,7 @@ namespace GKUI.Charts
 
             Size clientSize = ClientRectangle.Size;
             if (drawMode == ChartDrawMode.dmInteractive) {
-                ExtRect viewport = GetImageViewport();
+                /*ExtRect viewport = GetImageViewport();
 
                 if (fModel.ImageWidth < clientSize.Width) {
                     spx += (clientSize.Width - fModel.ImageWidth) / 2;
@@ -488,9 +488,12 @@ namespace GKUI.Charts
 
                 if (fModel.ImageHeight < clientSize.Height) {
                     spy += (clientSize.Height - fModel.ImageHeight) / 2;
-                }
+                }*/
+                var imageViewport = base.ImageViewport;
+                spx = imageViewport.Left;
+                spy = imageViewport.Top;
 
-                fModel.VisibleArea = viewport;
+                fModel.VisibleArea = UIHelper.Rt2Rt(base.Viewport);
             } else {
                 if (drawMode == ChartDrawMode.dmStaticCentered) {
                     if (fModel.ImageWidth < clientSize.Width) {
@@ -522,7 +525,7 @@ namespace GKUI.Charts
 
         #region Sizes and adjustment routines
 
-        private ExtRect GetImageViewport()
+        /*private ExtRect GetImageViewport()
         {
             ExtRect viewport;
 
@@ -537,12 +540,11 @@ namespace GKUI.Charts
             }
 
             return viewport;
-        }
+        }*/
 
         public ExtRect GetClientRect()
         {
-            Rectangle rt = Bounds; // ClientRectangle;
-            return ExtRect.CreateBounds(rt.Left, rt.Top, rt.Width, rt.Height);
+            return UIHelper.Rt2Rt(base.Viewport);
         }
 
         public void RecalcChart(bool noRedraw = false)
@@ -565,7 +567,7 @@ namespace GKUI.Charts
             }
 
             var imageSize = GetImageSize();
-            SetCanvasSize(imageSize, noRedraw);
+            SetImageSize(imageSize, noRedraw);
         }
 
         #endregion
@@ -613,15 +615,26 @@ namespace GKUI.Charts
 
         protected override void OnSizeChanged(EventArgs e)
         {
+            base.OnSizeChanged(e);
+
             SaveSelection();
 
             var imageSize = GetImageSize();
-            SetCanvasSize(imageSize);
+            SetImageSize(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
+        }
 
-            base.OnSizeChanged(e);
+        protected override void OnScroll(ScrollEventArgs e)
+        {
+            base.OnScroll(e);
+
+            //SaveSelection();
+            //var imageSize = GetImageSize();
+            //SetImageSize(imageSize);
+            fTreeControls.UpdateView();
+            //RestoreSelection();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -642,6 +655,7 @@ namespace GKUI.Charts
             TreeChartPerson p = fSelected;
             DoPersonModify(new PersonModifyEventArgs(p));
 
+            e.Handled = true;
             base.OnMouseDoubleClick(e);
         }
 
@@ -650,9 +664,10 @@ namespace GKUI.Charts
             if (e.Modifiers == Keys.Control) {
                 float newScale = (e.Delta.Height > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
                 SetScale(newScale);
-            } else {
-                base.OnMouseWheel(e);
             }
+
+            e.Handled = true;
+            base.OnMouseWheel(e);
         }
 
         private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)
@@ -660,9 +675,9 @@ namespace GKUI.Charts
             var result = MouseAction.maNone;
             person = null;
 
-            Point pt = ConvertMouseLocation(e.Location);
-            int aX = pt.X;
-            int aY = pt.Y;
+            Point mpt = GetImageRelativeLocation(e.Location);
+            int aX = mpt.X;
+            int aY = mpt.Y;
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -712,6 +727,8 @@ namespace GKUI.Charts
             fMouseX = pt.X;
             fMouseY = pt.Y;
 
+            Point scrPt = GetScrollRelativeLocation(e.Location);
+
             switch (fMode) {
                 case ChartControlMode.ccmDefault:
                     TreeChartPerson mPers;
@@ -733,16 +750,17 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    fTreeControls.MouseDown(pt.X, pt.Y);
+                    fTreeControls.MouseDown(scrPt.X, scrPt.Y);
                     break;
             }
 
+            e.Handled = true;
             base.OnMouseDown(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
+            Point scrPt = GetScrollRelativeLocation(e.Location);
 
             switch (fMode)
             {
@@ -755,12 +773,12 @@ namespace GKUI.Charts
                     } else {
                         SetHighlight(null);
 
-                        ITreeControl ctl = fTreeControls.Contains(pt.X, pt.Y);
+                        ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ccmControlsVisible;
                             ctl.Visible = true;
-                            ctl.MouseMove(pt.X, pt.Y);
+                            ctl.MouseMove(scrPt.X, scrPt.Y);
                             fActiveControl = ctl;
 
                             //pt = new Point(pt.X + Left, pt.Y + Top);
@@ -771,6 +789,7 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmDragImage:
+                    Point pt = new Point(e.Location);
                     AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
                     fMouseX = pt.X;
                     fMouseY = pt.Y;
@@ -778,25 +797,26 @@ namespace GKUI.Charts
 
                 case ChartControlMode.ccmControlsVisible:
                     if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(pt.X, pt.Y) || fActiveControl.MouseCaptured)) {
+                        if (!(fActiveControl.Contains(scrPt.X, scrPt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.ccmDefault;
                             fActiveControl.Visible = false;
                             //fToolTip.Hide(this);
                             ToolTip = "";
                             fActiveControl = null;
                         } else {
-                            fActiveControl.MouseMove(pt.X, pt.Y);
+                            fActiveControl.MouseMove(scrPt.X, scrPt.Y);
                         }
                     }
                     break;
             }
 
+            e.Handled = true;
             base.OnMouseMove(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
+            Point scrPt = GetScrollRelativeLocation(e.Location);
 
             switch (fMode) {
                 case ChartControlMode.ccmDefault:
@@ -811,7 +831,7 @@ namespace GKUI.Charts
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null)
                             {
-                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, new PointF(pt.X, pt.Y)));
+                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, e.Location));
                             }
                             break;
 
@@ -828,10 +848,11 @@ namespace GKUI.Charts
                     break;
 
                 case ChartControlMode.ccmControlsVisible:
-                    fTreeControls.MouseUp(pt.X, pt.Y);
+                    fTreeControls.MouseUp(scrPt.X, scrPt.Y);
                     break;
             }
 
+            e.Handled = true;
             base.OnMouseUp(e);
         }
 
@@ -934,7 +955,7 @@ namespace GKUI.Charts
 
         public override ExtSize GetImageSize()
         {
-            return new ExtSize(fModel.ImageWidth, fModel.ImageHeight);
+            return fModel.ImageSize;
         }
 
         public override void RenderStaticImage(Graphics gfx, bool printer)

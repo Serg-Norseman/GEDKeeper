@@ -96,7 +96,7 @@ namespace GKUI.Charts
                 fZoom = value;
 
                 ExtSize boundary = GetImageSize();
-                SetCanvasSize(boundary, true);
+                SetImageSize(boundary, true);
                 Invalidate();
             }
         }
@@ -123,7 +123,7 @@ namespace GKUI.Charts
 
         public CircleChart()
         {
-            //DoubleBuffered = true;
+            CenteredImage = true;
 
             fRenderer = new TreeChartGfxRenderer();
             fModel = new CircleChartModel();
@@ -161,7 +161,7 @@ namespace GKUI.Charts
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            SetCanvasSize(boundary);
+            SetImageSize(boundary);
         }
 
         private void DoRootChanged(GEDCOMIndividualRecord person)
@@ -222,13 +222,21 @@ namespace GKUI.Charts
             }
         }
 
-        private CircleSegment FindSegment(float mX, float mY)
+        private CircleSegment FindSegment(PointF mpt)
         {
+            Point imPt = GetImageRelativeLocation(mpt);
+            float mX = imPt.X;
+            float mY = imPt.Y;
+            //ExtSize imSize = GetImageSize();
             PointF center = GetCenter(RenderTarget.rtScreen);
-            mX -= center.X;
-            mY -= center.Y;
+            mX -= /*imSize.Width / 2; //*/center.X;
+            mY -= /*imSize.Height / 2; //*/center.Y;
             CircleSegment result = null;
 
+            /*if (Math.Abs(mX) < 10 && Math.Abs(mY) < 10) {
+                return null; // for test
+            }*/
+            
             int numberOfSegments = fModel.Segments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fModel.Segments[i];
@@ -241,8 +249,22 @@ namespace GKUI.Charts
             return result;
         }
 
+        public static double distance(float x1, float y1, float x2, float y2)
+        {
+            float dX = x2 - x1;
+            float dY = y2 - y1;
+            return Math.Sqrt(dX * dX + dY * dY);
+        }
+
         private bool IsVisible(CircleSegment segment, float x, float y)
         {
+            //PointF center = GetCenter(RenderTarget.rtScreen);
+
+            double rad = distance(0, 0, x, y);
+            if (rad >= segment.IntRad && rad <= segment.ExtRad) {
+                return true;
+            }
+
             /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
              * const Graphics*)` doesn't work for me. */
             return segment.Path.IsVisible(x, y);
@@ -256,6 +278,8 @@ namespace GKUI.Charts
         /// <param name="target">Rendering target.</param>
         private void Render(Graphics context, RenderTarget target)
         {
+            //context.SetClip(Viewport);
+
             PointF center = GetCenter(target);
 
             fModel.Renderer.SetTarget(context, true);
@@ -277,6 +301,10 @@ namespace GKUI.Charts
                     fModel.DrawDescendants();
                     break;
             }
+
+            fModel.Renderer.ResetTransform();
+
+            //context.ResetClip();
         }
 
         #region Protected inherited methods
@@ -292,6 +320,7 @@ namespace GKUI.Charts
                 fModel.GroupsMode = !fModel.GroupsMode;
             }
 
+            e.Handled = true;
             base.OnMouseDoubleClick(e);
         }
 
@@ -304,9 +333,8 @@ namespace GKUI.Charts
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            Changed();
-
             base.OnSizeChanged(e);
+            Changed();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -358,43 +386,41 @@ namespace GKUI.Charts
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
-            if ((e.Buttons == MouseButtons.Alternate) && HasScroll) {
+            if ((e.Buttons == MouseButtons.Alternate) && (HScroll || VScroll)) {
+                Point pt = new Point(e.Location);
                 fMouseCaptured = MouseCaptured.mcDrag;
                 fMouseCaptureX = pt.X;
                 fMouseCaptureY = pt.Y;
                 Cursor = Cursors.Move;
             }
 
+            e.Handled = true;
             base.OnMouseDown(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
-
             if (fMouseCaptured == MouseCaptured.mcDrag) {
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
             }
             else if (e.Buttons == MouseButtons.Primary) {
-                CircleSegment selected = FindSegment(pt.X, pt.Y);
+                CircleSegment selected = FindSegment(e.Location);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
                 }
             }
 
+            e.Handled = true;
             base.OnMouseUp(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point mpt = new Point(e.Location);
-
             switch (fMouseCaptured) {
                 case MouseCaptured.mcNone:
                     {
-                        CircleSegment selected = FindSegment(mpt.X, mpt.Y);
+                        CircleSegment selected = FindSegment(e.Location);
 
                         string hint = "";
                         if (!Equals(fModel.Selected, selected)) {
@@ -421,13 +447,15 @@ namespace GKUI.Charts
 
                 case MouseCaptured.mcDrag:
                     {
-                        AdjustScroll(-(mpt.X - fMouseCaptureX), -(mpt.Y - fMouseCaptureY));
-                        fMouseCaptureX = mpt.X;
-                        fMouseCaptureY = mpt.Y;
+                        Point pt = new Point(e.Location);
+                        AdjustScroll(-(pt.X - fMouseCaptureX), -(pt.Y - fMouseCaptureY));
+                        fMouseCaptureX = pt.X;
+                        fMouseCaptureY = pt.Y;
                     }
                     break;
             }
 
+            e.Handled = true;
             base.OnMouseMove(e);
         }
 
@@ -441,6 +469,7 @@ namespace GKUI.Charts
                 }
             }
 
+            e.Handled = true;
             base.OnMouseWheel(e);
         }
 

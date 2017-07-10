@@ -102,6 +102,16 @@ namespace GKUI.Components
             return new RectangleF(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
         }
 
+        public static ExtRect Rt2Rt(Rectangle ert)
+        {
+            return ExtRect.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
+        }
+
+        public static ExtRectF Rt2Rt(RectangleF ert)
+        {
+            return ExtRectF.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
+        }
+
         public static void NormalizeFormRect(ref ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.

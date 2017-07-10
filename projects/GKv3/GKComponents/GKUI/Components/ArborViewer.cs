@@ -233,7 +233,6 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
             if (!HasFocus) base.Focus();
 
             Point mpt = new Point(e.Location);
@@ -246,29 +245,34 @@ namespace GKUI.Components
                     fDragged.Fixed = true;
                 }
             }
+
+            e.Handled = true;
+            base.OnMouseDown(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            base.OnMouseUp(e);
-
             if (fNodesDragging && fDragged != null)
             {
                 fDragged.Fixed = false;
                 //fDragged.Mass = 1000;
                 fDragged = null;
             }
+
+            e.Handled = true;
+            base.OnMouseUp(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
             Point mpt = new Point(e.Location);
             if (fNodesDragging && fDragged != null)
             {
                 fDragged.Pt = fSys.fromScreen(mpt.X, mpt.Y);
             }
+
+            e.Handled = true;
+            base.OnMouseMove(e);
         }
 
         public RectangleF getNodeRect(Graphics gfx, ArborNode node)

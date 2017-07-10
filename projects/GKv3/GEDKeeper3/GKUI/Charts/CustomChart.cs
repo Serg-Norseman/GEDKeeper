@@ -57,54 +57,50 @@ namespace GKUI.Charts
             e.Handled = true;
             switch (e.Key) {
                 case Keys.Left:
-                    HorizontalScrollValue =
-                        Math.Max(HorizontalScrollValue - SmallChange, 0);
+                    AdjustScroll(-SmallChange, 0);
                     break;
 
                 case Keys.Right:
-                    HorizontalScrollValue += SmallChange;
+                    AdjustScroll(+SmallChange, 0);
                     break;
 
                 case Keys.Up:
-                    VerticalScrollValue =
-                        Math.Max(VerticalScrollValue - SmallChange, 0);
+                    AdjustScroll(0, -SmallChange);
                     break;
 
                 case Keys.Down:
-                    VerticalScrollValue += SmallChange;
+                    AdjustScroll(0, +SmallChange);
                     break;
 
                 case Keys.PageUp:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScrollValue =
-                            Math.Max(VerticalScrollValue - LargeChange, 0);
+                        AdjustScroll(0, -LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScrollValue =
-                            Math.Max(HorizontalScrollValue - LargeChange, 0);
+                        AdjustScroll(-LargeChange, 0);
                     }
                     break;
 
                 case Keys.PageDown:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScrollValue += LargeChange;
+                        AdjustScroll(0, +LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScrollValue += LargeChange;
+                        AdjustScroll(+LargeChange, 0);
                     }
                     break;
 
                 case Keys.Home:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScrollValue = 0;
+                        AdjustScroll(0, -Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScrollValue = 0;
+                        AdjustScroll(-Viewport.Width, 0);
                     }
                     break;
 
                 case Keys.End:
                     if (Keys.None == e.Modifiers) {
-                        VerticalScrollValue = ScrollSize.Height;
+                        AdjustScroll(0, Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
-                        HorizontalScrollValue = ScrollSize.Width;
+                        AdjustScroll(+Viewport.Width, 0);
                     }
                     break;
 
@@ -115,18 +111,6 @@ namespace GKUI.Charts
                 default:
                     base.OnKeyDown(e);
                     break;
-            }
-        }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (Keys.None == e.Modifiers) {
-                VerticalScrollValue = Math.Max(VerticalScrollValue - (int)e.Delta.Height, 0);
-            } else if (Keys.Shift == e.Modifiers) {
-                HorizontalScrollValue = Math.Max(HorizontalScrollValue - (int)e.Delta.Width, 0);
-            }
-            else {
-                base.OnMouseWheel(e);
             }
         }
 

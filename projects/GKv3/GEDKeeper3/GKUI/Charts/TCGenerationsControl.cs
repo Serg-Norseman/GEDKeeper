@@ -84,7 +84,7 @@ namespace GKUI.Charts
             int width = (int)GetChordLength(height, (float)(SEGMENT_ANGLE * (Math.PI / 180.0f)));
 
             fDestRect = new Rectangle(cr.Left + PADDING_X,
-                                      Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
+                                      cr.Top + Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
                                       width, height);
         }
 
@@ -92,13 +92,9 @@ namespace GKUI.Charts
         {
             if (gfx == null) return;
 
-            //gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gfx.ImageInterpolation = ImageInterpolation.High;
-            //gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.AntiAlias = true;
-            //gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            gfx.ImageInterpolation = ImageInterpolation.High;
             gfx.PixelOffsetMode = PixelOffsetMode.Half;
-            //gfx.CompositingQuality = CompositingQuality.HighQuality;
 
             int intervalHeight = 2;
             int segmentHeight = (int)((fDestRect.Height - (9 /* intervals */ * intervalHeight)) / 10);

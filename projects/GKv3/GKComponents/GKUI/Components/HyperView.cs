@@ -148,6 +148,9 @@ namespace GKUI.Components
                             lineHeight = 0;
                         }
 
+                        int prevX = xPos;
+                        int prevY = yPos;
+
                         if (!string.IsNullOrEmpty(chunk.Text)) {
                             using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
                                 SizeF strSize = font.MeasureString(chunk.Text);
@@ -159,6 +162,10 @@ namespace GKUI.Components
                                 int h = (int)strSize.Height;
                                 if (lineHeight < h) lineHeight = h;
                             }
+
+                            if (!string.IsNullOrEmpty(chunk.URL)) {
+                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                            }
                         }
                     }
 
@@ -167,7 +174,7 @@ namespace GKUI.Components
                 finally
                 {
                     fAcceptFontChange = true;
-                    SetCanvasSize(fTextSize);
+                    SetImageSize(fTextSize);
                 }
             }
             catch (Exception ex)
@@ -183,12 +190,11 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 try
                 {
-                    Rectangle clientRect = ClientRectangle;
-                    gfx.FillRectangle(new SolidBrush(BackgroundColor), clientRect);
+                    gfx.FillRectangle(new SolidBrush(BackgroundColor), Viewport);
                     Font defFont = this.Font;
 
-                    int xOffset = fBorderWidth;
-                    int yOffset = fBorderWidth;
+                    int xOffset = fBorderWidth + ImageViewport.Left;
+                    int yOffset = fBorderWidth + ImageViewport.Top;
                     int lineHeight = 0;
 
                     int line = -1;
@@ -200,7 +206,7 @@ namespace GKUI.Components
                         if (line != chunk.Line) {
                             line = chunk.Line;
 
-                            xOffset = fBorderWidth;
+                            xOffset = fBorderWidth + ImageViewport.Left;
                             yOffset += lineHeight;
 
                             // this condition is dirty hack
@@ -224,10 +230,6 @@ namespace GKUI.Components
                             }
 
                             xOffset += chunk.Width;
-
-                            if (!string.IsNullOrEmpty(chunk.URL)) {
-                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xOffset - prevX, lineHeight);
-                            }
                         }
                     }
                 }
@@ -297,7 +299,7 @@ namespace GKUI.Components
                     break;
             }
 
-            //e.Handled = true;
+            e.Handled = true;
             base.OnKeyDown(e);
         }
 
@@ -311,9 +313,8 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point mpt = new Point(e.Location);
-            int xOffset = (fBorderWidth - -AutoScrollPosition.X);
-            int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
+            Point mpt = GetImageRelativeLocation(e.Location);
+            mpt.Offset(-fBorderWidth, -fBorderWidth);
             fCurrentLink = null;
 
             int num = fChunks.Count;
@@ -322,7 +323,7 @@ namespace GKUI.Components
                 BBTextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
-                if (chunk.HasCoord(mpt.X, mpt.Y, xOffset, yOffset))
+                if (chunk.HasCoord(mpt.X, mpt.Y))
                 {
                     fCurrentLink = chunk;
                     break;
@@ -338,7 +339,6 @@ namespace GKUI.Components
         protected override void OnPaint(PaintEventArgs e)
         {
             DoPaint(e.Graphics);
-            base.OnPaint(e);
         }
 
         #endregion
