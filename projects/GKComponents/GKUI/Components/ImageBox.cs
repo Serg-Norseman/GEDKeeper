@@ -1215,10 +1215,10 @@ namespace GKUI.Components
             h = h / fZoomFactor;
 
             // Fits a given rectangle's coordinates to match image boundaries
-            x = Math.Max(0, x);
-            y = Math.Max(0, y);
-            w = Math.Min(fViewSize.Width, w);
-            h = Math.Min(fViewSize.Height, h);
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+            if (x + w > fViewSize.Width) w = fViewSize.Width - x;
+            if (y + h > fViewSize.Height) h = fViewSize.Height - y;
 
             SelectionRegion = new RectangleF(x, y, w, h);
         }
