@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define DEBUG_VIEWPORT
+//#define DEBUG_VIEWPORT
 
 using System;
 using Eto.Drawing;
@@ -46,6 +46,7 @@ namespace GKUI.Components
         private bool fHasHScroll;
         private bool fHasVScroll;
         private Size fImageSize;
+        private Rectangle fImageRect;
         private Rectangle fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
@@ -69,6 +70,11 @@ namespace GKUI.Components
             }
         }
 
+        protected Rectangle ImageRect
+        {
+            get { return fImageRect; }
+        }
+
         protected Rectangle ImageViewport
         {
             get { return fImageViewport; }
@@ -90,7 +96,7 @@ namespace GKUI.Components
             set { fTextColor = value; }
         }
 
-        protected Rectangle Viewport
+        public Rectangle Viewport
         {
             get { return fViewport; }
         }
@@ -196,6 +202,8 @@ namespace GKUI.Components
                     fMouseOffsetY = 0;
                 }
             }
+
+            fImageRect = new Rectangle(destX, destY, fImageSize.Width, fImageSize.Height);
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);

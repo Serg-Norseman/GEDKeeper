@@ -53,6 +53,11 @@ namespace GKUI.Components
             set { imageBox.SelectionRegion = value; }
         }
 
+        public Rectangle Viewport
+        {
+            get { return imageBox.Viewport; }
+        }
+
 
         public ImageView()
         {
@@ -136,10 +141,15 @@ namespace GKUI.Components
             }
         }
 
-        private void btnSizeToFit_Click(object sender, EventArgs e)
+        public void ZoomToFit()
         {
             imageBox.ZoomToFit();
             UpdateZoomLevels();
+        }
+
+        private void btnSizeToFit_Click(object sender, EventArgs e)
+        {
+            ZoomToFit();
         }
 
         private void btnZoomIn_Click(object sender, EventArgs e)

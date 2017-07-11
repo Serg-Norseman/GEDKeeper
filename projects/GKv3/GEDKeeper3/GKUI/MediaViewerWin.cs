@@ -40,6 +40,7 @@ namespace GKUI
     {
         private readonly IBaseWindow fBase;
         private GEDCOMFileReferenceWithTitle fFileRef;
+        private ITimer fTimer;
         private Control fViewer;
 
         public GEDCOMFileReferenceWithTitle FileRef
@@ -171,6 +172,9 @@ namespace GKUI
             imageCtl.btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
             imageCtl.btnZoomOut.ToolTip = LangMan.LS(LSID.LSID_ZoomOut);
 
+            fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
+            fTimer.Start();
+
             SetViewControl(imageCtl);
         }
 
@@ -200,11 +204,27 @@ namespace GKUI
 
         protected override void OnLoad(EventArgs e)
         {
-            /*base.OnLoad(e);
+            base.OnLoad(e);
+
             if (fViewer != null) {
-                //fViewer.Select();
                 fViewer.Focus();
-            }*/
+                fViewer.Invalidate();
+
+                /*var imageViewer = fViewer as GKUI.Components.ImageView;
+                if (imageViewer != null) {
+                    imageViewer.ZoomToFit();
+                }*/
+            }
+        }
+
+        // dirty temporary hack
+        private void InitViewer_Tick(object sender, EventArgs e)
+        {
+            var imageViewer = fViewer as GKUI.Components.ImageView;
+            if (imageViewer != null && !imageViewer.Viewport.Size.IsEmpty) {
+                imageViewer.ZoomToFit();
+                fTimer.Stop();
+            }
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
@@ -214,8 +234,9 @@ namespace GKUI
 
         private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
         {
-            if (fViewer is MediaPlayer) {
-                ((MediaPlayer)fViewer).btnStop_Click(null, null);
+            var mediaPlayer = fViewer as MediaPlayer;
+            if (mediaPlayer != null) {
+                mediaPlayer.btnStop_Click(null, null);
             }
         }
     }
