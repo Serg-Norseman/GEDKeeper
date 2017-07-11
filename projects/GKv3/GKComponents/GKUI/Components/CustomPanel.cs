@@ -92,15 +92,7 @@ namespace GKUI.Components
 
         protected Rectangle Viewport
         {
-            get {
-                // FIXME: bad, very bad!
-                if (fViewport.IsEmpty || fViewport.Width <= 0 || fViewport.Height <= 0) {
-                    Size clientSize = ClientRectangle.Size;
-                    //Size clientSize = VisibleRect.Size;
-                    SetViewport(new Rectangle(0, 0, clientSize.Width, clientSize.Height));
-                }
-                return fViewport;
-            }
+            get { return fViewport; }
         }
 
         // FIXME: need to refactor and remove all references
@@ -129,7 +121,6 @@ namespace GKUI.Components
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
             fCanvas.CanFocus = true;
-            //fCanvas.Size = new Size(100, 100);
 
             //var layout = new PixelLayout();
             //layout.Add(fCanvas, 0, 0);
@@ -151,9 +142,12 @@ namespace GKUI.Components
             OnPaint(e);
 
             #if DEBUG_VIEWPORT
+            var gfx = e.Graphics;
             using (var pen = new Pen(Colors.Red, 1.0f)) {
-                var gfx = e.Graphics;
                 gfx.DrawRectangle(pen, new Rectangle(fImageViewport.Left, fImageViewport.Top, fImageSize.Width - 1, fImageSize.Height - 1));
+            }
+            using (var pen = new Pen(Colors.Blue, 1.0f)) {
+                gfx.DrawRectangle(pen, new Rectangle(fViewport.Left, fViewport.Top, fViewport.Width - 1, fViewport.Height - 1));
             }
             #endif
         }
@@ -209,13 +203,19 @@ namespace GKUI.Components
             fImageViewport = new Rectangle(destX, destY, width, height);
         }
 
-        private void SetViewport(Rectangle viewport)
+        private void SetViewportLocation(Point location)
         {
-            fViewport = viewport;
+            fViewport.Location = location;
             UpdateProperties();
         }
 
-        // unsupported, don't use
+        private void SetViewportSize(Size size)
+        {
+            fViewport.Size = size;
+            UpdateProperties();
+        }
+
+        // unsupported in Wpf and maybe in other platforms (exclude WinForms), don't use
         public Graphics CreateGraphics()
         {
             if (fCanvas.SupportsCreateGraphics) {
@@ -251,7 +251,7 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            SetViewport(VisibleRect);
+            SetViewportSize(VisibleRect.Size);
             base.OnSizeChanged(e);
         }
 
@@ -263,7 +263,7 @@ namespace GKUI.Components
         /// </param>
         protected override void OnScroll(ScrollEventArgs e)
         {
-            SetViewport(VisibleRect);
+            SetViewportLocation(VisibleRect.Location);
             fCanvas.Invalidate();
 
             base.OnScroll(e);
@@ -300,12 +300,11 @@ namespace GKUI.Components
             if (!imageSize.IsEmpty) {
                 fImageSize = new Size(imageSize.Width, imageSize.Height);
 
-                Size clientSize = base.ClientSize; // always -1, -1
+                Size clientSize = fViewport.Size;
                 int canvWidth = Math.Max(imageSize.Width, clientSize.Width);
                 int canvHeight = Math.Max(imageSize.Height, clientSize.Height);
                 fCanvas.Size = new Size(canvWidth, canvHeight);
 
-                //fCanvas.Size = fImageSize;
                 base.UpdateScrollSizes();
                 UpdateProperties();
             }

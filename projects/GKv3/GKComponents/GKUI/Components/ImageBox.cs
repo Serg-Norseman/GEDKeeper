@@ -706,11 +706,10 @@ namespace GKUI.Components
         {
             if (fImageSize.IsEmpty) return;
 
-            base.UpdateScrollSizes();
-
-            Size viewportSize = base.VisibleRect.Size;
-            viewportSize = base.Viewport.Size;
-            viewportSize = base.ScrollSize;
+            //base.UpdateScrollSizes();
+            Size viewportSize = base.Viewport.Size;
+            viewportSize.Height -= 40;
+            viewportSize.Width -= 40;
 
             double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width, viewportSize.Height);
             double zoom = aspectRatio * 100.0;
