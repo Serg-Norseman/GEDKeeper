@@ -140,10 +140,8 @@ namespace GKUI
         {
             if (disposing)
             {
-                //#if !__MonoCS__
                 fNavman.Dispose();
                 fContext.Dispose();
-                //#endif
             }
             base.Dispose(disposing);
         }

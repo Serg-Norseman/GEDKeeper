@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_VIEWPORT
+#define DEBUG_VIEWPORT
 
 using System;
 using Eto.Drawing;
@@ -154,6 +154,10 @@ namespace GKUI.Components
             }
             using (var pen = new Pen(Colors.Blue, 1.0f)) {
                 gfx.DrawRectangle(pen, new Rectangle(fViewport.Left, fViewport.Top, fViewport.Width - 1, fViewport.Height - 1));
+            }
+            using (var brush = new SolidBrush(Colors.Fuchsia)) {
+                Point center = fImageRect.Center;
+                gfx.FillRectangle(brush, new Rectangle(center.X - 3, center.Y - 3, 6, 6));
             }
             #endif
         }

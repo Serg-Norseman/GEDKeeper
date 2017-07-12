@@ -180,11 +180,6 @@ namespace GKUI.Charts
         /// <returns>Center point of this chart.</returns>
         private PointF GetCenter(RenderTarget target)
         {
-            var bounds = fModel.Bounds;
-
-            /*
-             * FIXME: In Eto, using getScrollPosition at runtime Paint causes an exception.
-             */
             if (target == RenderTarget.rtScreen) {
 
                 // Returns the center point of this chart relative to the upper left
@@ -193,26 +188,12 @@ namespace GKUI.Charts
                 // chart on an axis when there's no scrolling required along that axis.
                 // And if scrolling is required, this member aligns this chart on its
                 // left edge.
-                PointF center = new PointF();
-
-                SizeF boundary = new SizeF(fModel.ImageWidth * fZoom, fModel.ImageHeight * fZoom);
-                Size clientSize = ClientRectangle.Size;
-
-                if (clientSize.Width > boundary.Width) {
-                    center.X = Math.Min(clientSize.Width - bounds.Right * fZoom, clientSize.Width >> 1);
-                } else {
-                    center.X = /*AutoScrollPosition.X + */fOffsetX - bounds.Left * fZoom;
-                }
-
-                if (clientSize.Height > boundary.Height) {
-                    center.Y = Math.Min(clientSize.Height - bounds.Bottom * fZoom, clientSize.Height >> 1);
-                } else {
-                    center.Y = /*AutoScrollPosition.Y + */fOffsetY - bounds.Top * fZoom;
-                }
-
+                PointF center = new PointF(base.ImageRect.Center);
                 return center;
 
             } else {
+
+                var bounds = fModel.Bounds;
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
@@ -225,22 +206,17 @@ namespace GKUI.Charts
         private CircleSegment FindSegment(PointF mpt)
         {
             Point imPt = GetImageRelativeLocation(mpt);
-            float mX = imPt.X;
-            float mY = imPt.Y;
-            //ExtSize imSize = GetImageSize();
-            PointF center = GetCenter(RenderTarget.rtScreen);
-            mX -= /*imSize.Width / 2; //*/center.X;
-            mY -= /*imSize.Height / 2; //*/center.Y;
+            ExtSize imSize = GetImageSize();
+            Point offset = new Point(imSize.Width / 2, imSize.Height / 2);
+            float mX = (imPt.X - offset.X) / fZoom;
+            float mY = (imPt.Y - offset.Y) / fZoom;
+
             CircleSegment result = null;
 
-            /*if (Math.Abs(mX) < 10 && Math.Abs(mY) < 10) {
-                return null; // for test
-            }*/
-            
             int numberOfSegments = fModel.Segments.Count;
             for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fModel.Segments[i];
-                if (IsVisible(segment, mX / fZoom, mY / fZoom)) {
+                if (IsVisible(segment, mX, mY)) {
                     result = segment;
                     break;
                 }
@@ -249,25 +225,12 @@ namespace GKUI.Charts
             return result;
         }
 
-        public static double distance(float x1, float y1, float x2, float y2)
+        private bool IsVisible(CircleSegment segment, float dX, float dY)
         {
-            float dX = x2 - x1;
-            float dY = y2 - y1;
-            return Math.Sqrt(dX * dX + dY * dY);
-        }
-
-        private bool IsVisible(CircleSegment segment, float x, float y)
-        {
-            //PointF center = GetCenter(RenderTarget.rtScreen);
-
-            double rad = distance(0, 0, x, y);
-            if (rad >= segment.IntRad && rad <= segment.ExtRad) {
-                return true;
-            }
-
-            /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
-             * const Graphics*)` doesn't work for me. */
-            return segment.Path.IsVisible(x, y);
+            double rad = Math.Sqrt(dX * dX + dY * dY);
+            double angle = SysUtils.RadiansToDegrees(Math.Asin(dX / rad)) - 90.0f;
+            return ((segment.IntRad < rad && rad < segment.ExtRad) &&
+                    (segment.StartAngle < angle && angle < segment.StartAngle + segment.WedgeAngle));
         }
 
         /// <summary>
@@ -283,7 +246,7 @@ namespace GKUI.Charts
             PointF center = GetCenter(target);
 
             fModel.Renderer.SetTarget(context, true);
-            fModel.Renderer.ResetTransform();
+            fModel.Renderer.SaveTransform();
             fModel.Renderer.TranslateTransform(center.X, center.Y);
 
             if (target == RenderTarget.rtScreen) {
@@ -302,7 +265,7 @@ namespace GKUI.Charts
                     break;
             }
 
-            fModel.Renderer.ResetTransform();
+            fModel.Renderer.RestoreTransform(null);
 
             //context.ResetClip();
         }

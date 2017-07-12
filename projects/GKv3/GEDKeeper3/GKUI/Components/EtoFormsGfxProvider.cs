@@ -123,13 +123,15 @@ namespace GKUI.Components
             Bitmap img = Bitmap.FromResource("Resources." + resName);
 
             if (makeTransp) {
-                img = (Bitmap)img.Clone();
+                // only for 24, 32 bit images
+                /*Color pixColor = img.GetPixel(0, 0);
+                if (pixColor != Colors.Transparent) {
+                    img = (Bitmap)img.Clone();
 
-                /*#if __MonoCS__
-                img.MakeTransparent(); // FIXME: don't work
-                #else
-                img.MakeTransparent(img.GetPixel(0, 0));
-                #endif*/
+                    using (Graphics gfx = new Graphics(img)) {
+                        gfx.Clear(pixColor);
+                    }
+                }*/
             }
 
             return new ImageHandler(img);
