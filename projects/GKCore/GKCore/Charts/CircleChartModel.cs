@@ -388,7 +388,10 @@ namespace GKCore.Charts
                             size = fRenderer.GetTextSize(givn, Font);
                             dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
                             dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
+
                             fRenderer.RestoreTransform(mtx);
+                            mtx = fRenderer.SaveTransform();
+
                             fRenderer.TranslateTransform(dx, -dy);
                             fRenderer.RotateTransform(angle);
 
@@ -440,11 +443,14 @@ namespace GKCore.Charts
         {
             fSegments.Clear();
 
-            float inRad = CircleChartModel.CENTER_RAD - 50;
+            const float startRad = CircleChartModel.CENTER_RAD - 50;
+            float inRad = startRad;
 
             AncPersonSegment segment = new AncPersonSegment(0);
             segment.IntRad = 0;
             segment.ExtRad = inRad;
+            segment.StartAngle = 0 - 90.0f;
+            segment.WedgeAngle = segment.StartAngle + 360.0f;
             IGfxPath path = segment.Path;
             path.StartFigure();
             path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
@@ -453,11 +459,10 @@ namespace GKCore.Charts
 
             int maxSteps = 1;
             for (int gen = 1; gen <= fMaxGenerations; gen++) {
-                inRad = (CircleChartModel.CENTER_RAD - 50) + ((gen - 1) * fGenWidth);
-
+                inRad = startRad + ((gen - 1) * fGenWidth);
                 float extRad = inRad + fGenWidth;
-                maxSteps *= 2;
 
+                maxSteps *= 2;
                 float stepAngle = (360.0f / maxSteps);
 
                 for (int step = 0; step < maxSteps; step++)
@@ -535,8 +540,8 @@ namespace GKCore.Charts
                     float inRad = rad;
                     float extRad = rad + fGenWidth;
 
-                    segment.IntRad = inRad;
-                    segment.ExtRad = extRad;
+                    segment.IntRad = inRad - 50;
+                    segment.ExtRad = extRad - 50;
 
                     GEDCOMIndividualRecord father, mother;
                     iRec.GetParents(out father, out mother);
