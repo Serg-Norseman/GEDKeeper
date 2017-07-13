@@ -629,6 +629,7 @@ namespace GKCore.Charts
 
             float extRad;
             if (segment.Gen == 0) {
+                segment.StartAngle = startAngle;
                 segment.WedgeAngle = 360.0f;
                 segment.IntRad = 0;
                 segment.ExtRad = inRad;
