@@ -173,35 +173,36 @@ namespace GKUI.Components
             fHasHScroll = (fViewport.Width < fImageSize.Width);
             fHasVScroll = (fViewport.Height < fImageSize.Height);
 
-            int sourX, sourY, destX, destY;
+            //int sourX, sourY;
+            int destX, destY;
 
             if (fHasHScroll) {
-                sourX = 0;
+                //sourX = 0;
                 destX = 0;
                 fMouseOffsetX = fViewport.Left;
             } else {
                 if (fCenteredImage) {
-                    sourX = 0;
+                    //sourX = 0;
                     destX = (fViewport.Width - fImageSize.Width) / 2;
                     fMouseOffsetX = -destX;
                 } else {
-                    sourX = 0;
+                    //sourX = 0;
                     destX = 0;
                     fMouseOffsetX = 0;
                 }
             }
 
             if (fHasVScroll) {
-                sourY = 0;
+                //sourY = 0;
                 destY = 0;
                 fMouseOffsetY = fViewport.Top;
             } else {
                 if (fCenteredImage) {
-                    sourY = 0;
+                    //sourY = 0;
                     destY = (fViewport.Height - fImageSize.Height) / 2;
                     fMouseOffsetY = -destY;
                 } else {
-                    sourY = 0;
+                    //sourY = 0;
                     destY = 0;
                     fMouseOffsetY = 0;
                 }
@@ -211,7 +212,6 @@ namespace GKUI.Components
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);
-
             fImageViewport = new Rectangle(destX, destY, width, height);
         }
 

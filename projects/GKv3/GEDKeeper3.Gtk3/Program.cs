@@ -25,15 +25,17 @@ namespace GEDKeeper3.Gtk3
         public static void Main(string[] args)
         {
             Logger.LogInit(GKUtils.GetLogFilename());
-            WinFormsAppHost.ConfigureBootstrap(false);
+            EtoFormsAppHost.ConfigureBootstrap(false);
 
             AppHost.InitSettings();
             try
             {
-                var appHost = (WinFormsAppHost)AppHost.Instance;
+                var application = new Application(Platforms.Gtk3);
+
+                var appHost = (EtoFormsAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
-                new Application(Platforms.Gtk3).Run(new BaseWinSDI());
+                application.Run();
             } finally {
                 AppHost.DoneSettings();
             }

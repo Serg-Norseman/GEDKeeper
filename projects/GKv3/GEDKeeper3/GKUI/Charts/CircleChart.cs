@@ -207,30 +207,30 @@ namespace GKUI.Charts
         {
             Point imPt = GetImageRelativeLocation(mpt);
             ExtSize imSize = GetImageSize();
-            Point offset = new Point(imSize.Width / 2, imSize.Height / 2);
-            float mX = (imPt.X - offset.X) / fZoom;
-            float mY = (imPt.Y - offset.Y) / fZoom;
+            Point imgCenter = new Point(imSize.Width / 2, imSize.Height / 2);
+            float dX = (imPt.X - imgCenter.X) / fZoom;
+            float dY = (imPt.Y - imgCenter.Y) / fZoom;
+            double rad = Math.Sqrt(dX * dX + dY * dY);
+            double angle = SysUtils.RadiansToDegrees(Math.Atan2(dY, dX));
 
             CircleSegment result = null;
 
             int numberOfSegments = fModel.Segments.Count;
-            for (int i = 0; i < numberOfSegments; i++) {
+            for (int i = 0; i < numberOfSegments; i++)
+            {
                 CircleSegment segment = fModel.Segments[i];
-                if (IsVisible(segment, mX, mY)) {
+                double startAng = segment.StartAngle;
+                double endAng = startAng + segment.WedgeAngle;
+
+                if ((segment.IntRad < rad && rad < segment.ExtRad) &&
+                    (startAng < angle && angle < endAng))
+                {
                     result = segment;
                     break;
                 }
             }
 
             return result;
-        }
-
-        private bool IsVisible(CircleSegment segment, float dX, float dY)
-        {
-            double rad = Math.Sqrt(dX * dX + dY * dY);
-            double angle = SysUtils.RadiansToDegrees(Math.Asin(dX / rad)) - 90.0f;
-            return ((segment.IntRad < rad && rad < segment.ExtRad) &&
-                    (segment.StartAngle < angle && angle < segment.StartAngle + segment.WedgeAngle));
         }
 
         /// <summary>
