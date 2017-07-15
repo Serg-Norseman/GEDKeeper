@@ -69,6 +69,7 @@
     <Folder Include="Resources" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\CustomPanel.cs" />
     <Compile Include="GKUI\Components\EUITimer.cs" />

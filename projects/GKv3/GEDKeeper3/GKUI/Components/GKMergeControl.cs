@@ -282,7 +282,7 @@ namespace GKUI.Components
             //((DefTableLayout)Content).SetColumnScale(0, true);
             //((DefTableLayout)Content).SetColumnScale(1, true);
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetControlFont(this, UIHelper.GetDefaultFont());
             ResumeLayout();
         }
 

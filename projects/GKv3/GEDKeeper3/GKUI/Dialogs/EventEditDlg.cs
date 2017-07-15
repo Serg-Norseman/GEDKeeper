@@ -498,6 +498,9 @@ namespace GKUI.Dialogs
             if (vals != null) {
                 string tmp = txtAttribute.Text;
                 //txtAttribute.Sorted = false;
+                if (canbeSorted) {
+                    // sort
+                }
 
                 txtAttribute.Items.Clear();
                 txtAttribute.Items.AddRange(GKComboItem.Convert(vals));

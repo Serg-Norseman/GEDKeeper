@@ -63,6 +63,7 @@ namespace GKUI.Dialogs
             ddbtnActions.Click += (sender, e) => menuActions.Show(this);
 
             toolStrip1 = new ToolBar();
+            toolStrip1.TextAlign = ToolBarTextAlign.Right;
             toolStrip1.Items.AddRange(new ToolItem[] {
                                           btnBold,
                                           btnItalic,

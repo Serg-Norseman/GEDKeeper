@@ -121,9 +121,11 @@ namespace GKUI
 
             tbFileNew = new ButtonToolItem();
             tbFileNew.Click += ToolBar1_ButtonClick;
+            tbFileNew.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
 
             tbFileLoad = new ButtonToolItem();
             tbFileLoad.Click += ToolBar1_ButtonClick;
+            tbFileLoad.Image = Bitmap.FromResource("Resources.btn_load.gif");
 
             tbLoadMRU = new ButtonToolItem();
             tbLoadMRU.Text = "▼";
@@ -133,43 +135,61 @@ namespace GKUI
                 }
             };
 
+            /*var cmdFileSave = new Command(ToolBar1_ButtonClick) {
+                    MenuText = "Quit",
+                    Image = Bitmap.FromResource("Resources.btn_save.bmp"),
+                    Shortcut = Application.Instance.CommonModifier | Keys.Q
+            };*/
+
             tbFileSave = new ButtonToolItem();
             tbFileSave.Click += ToolBar1_ButtonClick;
+            tbFileSave.Image = Bitmap.FromResource("Resources.btn_save.gif");
 
             tbRecordAdd = new ButtonToolItem();
             tbRecordAdd.Click += ToolBar1_ButtonClick;
+            tbRecordAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             tbRecordEdit = new ButtonToolItem();
             tbRecordEdit.Click += ToolBar1_ButtonClick;
+            tbRecordEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
 
             tbRecordDelete = new ButtonToolItem();
             tbRecordDelete.Click += ToolBar1_ButtonClick;
+            tbRecordDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
 
             tbFilter = new ButtonToolItem();
             tbFilter.Click += ToolBar1_ButtonClick;
+            tbFilter.Image = Bitmap.FromResource("Resources.btn_filter.gif");
 
             tbTreeAncestors = new ButtonToolItem();
             tbTreeAncestors.Click += ToolBar1_ButtonClick;
+            tbTreeAncestors.Image = Bitmap.FromResource("Resources.btn_tree_ancestry.gif");
 
             tbTreeDescendants = new ButtonToolItem();
             tbTreeDescendants.Click += ToolBar1_ButtonClick;
+            tbTreeDescendants.Image = Bitmap.FromResource("Resources.btn_tree_descendants.gif");
 
             tbTreeBoth = new ButtonToolItem();
             tbTreeBoth.Click += ToolBar1_ButtonClick;
+            tbTreeBoth.Image = Bitmap.FromResource("Resources.btn_tree_both.gif");
 
             tbPedigree = new ButtonToolItem();
             tbPedigree.Click  += (sender, e) => MenuPedigree.Show(this);
+            tbPedigree.Image = Bitmap.FromResource("Resources.btn_scroll.gif");
 
             tbStats = new ButtonToolItem();
             tbStats.Click += ToolBar1_ButtonClick;
+            tbStats.Image = Bitmap.FromResource("Resources.btn_table.gif");
 
             tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
             tbPrev.Click += tbPrev_Click;
+            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += tbNext_Click;
+            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             // Obsolete
             /*tbDocPreview = new ButtonToolItem();
@@ -183,6 +203,7 @@ namespace GKUI
             //
 
             ToolBar1 = new ToolBar();
+            ToolBar1.TextAlign = ToolBarTextAlign.Right;
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbFileNew,
                                         tbFileLoad,
@@ -490,7 +511,7 @@ namespace GKUI
             Menu = MainMenu1;
             ToolBar = ToolBar1;
 
-            ClientSize = new Size(980, 460);
+            Icon = Icon.FromResource("Resources.icon_gedkeeper.ico");
             Title = "BaseWinSDI";
             GotFocus += Form_Activated;
             LostFocus += Form_Deactivate;
@@ -501,7 +522,7 @@ namespace GKUI
             //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 980, 460, true);
             ResumeLayout();
         }
     }

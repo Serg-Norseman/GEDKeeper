@@ -19,12 +19,15 @@ namespace GKUI
 
             tbStart = new ButtonToolItem();
             tbStart.Click += tsbStart_Click;
+            tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
 
             tbPrev = new ButtonToolItem();
             tbPrev.Click += tsbPrev_Click;
+            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Click += tsbNext_Click;
+            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             toolStrip1 = new ToolBar();
             toolStrip1.Items.AddRange(new ToolItem[] {
@@ -34,13 +37,12 @@ namespace GKUI
                                           tbNext});
             ToolBar = toolStrip1;
 
-            ClientSize = new Size(790, 570);
             ShowInTaskbar = true;
             Title = "SlideshowWin";
             Load += SlideshowWin_Load;
             KeyDown += SlideshowWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 790, 570);
             ResumeLayout();
         }
     }

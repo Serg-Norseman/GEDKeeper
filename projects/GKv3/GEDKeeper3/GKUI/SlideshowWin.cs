@@ -46,10 +46,6 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
-
             SuspendLayout();
             fImageCtl = new GKUI.Components.ImageBox();
             Content = fImageCtl;

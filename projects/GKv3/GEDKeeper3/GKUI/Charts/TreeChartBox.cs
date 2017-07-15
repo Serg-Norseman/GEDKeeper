@@ -478,24 +478,15 @@ namespace GKUI.Charts
             int spx = 0;
             int spy = 0;
 
-            Size clientSize = ClientRectangle.Size;
             if (drawMode == ChartDrawMode.dmInteractive) {
-                /*ExtRect viewport = GetImageViewport();
-
-                if (fModel.ImageWidth < clientSize.Width) {
-                    spx += (clientSize.Width - fModel.ImageWidth) / 2;
-                }
-
-                if (fModel.ImageHeight < clientSize.Height) {
-                    spy += (clientSize.Height - fModel.ImageHeight) / 2;
-                }*/
                 var imageViewport = base.ImageViewport;
                 spx = imageViewport.Left;
                 spy = imageViewport.Top;
-
                 fModel.VisibleArea = UIHelper.Rt2Rt(base.Viewport);
             } else {
                 if (drawMode == ChartDrawMode.dmStaticCentered) {
+                    Size clientSize = CanvasRectangle.Size;
+
                     if (fModel.ImageWidth < clientSize.Width) {
                         spx += (clientSize.Width - fModel.ImageWidth) / 2;
                     }

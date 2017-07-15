@@ -46,6 +46,7 @@ namespace GKUI
             tbOptions.Image = Bitmap.FromResource("Resources.btn_tools.gif");
 
             ToolBar1 = new ToolBar();
+            ToolBar1.TextAlign = ToolBarTextAlign.Right;
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbImageSave,
                                         new SeparatorToolItem(),
@@ -57,13 +58,12 @@ namespace GKUI
                                         new SeparatorToolItem(),
                                         tbOptions});
 
-            ClientSize = new Size(1100, 580);
             ShowInTaskbar = true;
             Title = "CircleChartWin";
             ToolBar = ToolBar1;
             KeyDown += CircleChartWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 1100, 580);
             ResumeLayout();
         }
     }

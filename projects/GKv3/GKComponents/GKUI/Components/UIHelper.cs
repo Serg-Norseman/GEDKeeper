@@ -22,6 +22,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKUI.Components
@@ -282,7 +283,7 @@ namespace GKUI.Components
         public static void SetControlFont(Control ctl, Font font)
         {
             var cmCtl = ctl as CommonControl;
-            if (cmCtl != null) {
+            if (cmCtl != null && font != null) {
                 cmCtl.Font = font;
             }
 
@@ -299,21 +300,33 @@ namespace GKUI.Components
                                           FontDecoration decoration = FontDecoration.None)
         {
             if (ctl != null) {
-                if (ctl.Platform.IsWinForms || ctl.Platform.IsWpf) {
-                    SetControlFont(ctl, new Font(family, size, style, decoration));
+                Font font = null;
+                try {
+                    font = new Font(family, size, style, decoration);
+                } catch {
                 }
+                SetControlFont(ctl, font);
             }
+        }
+
+        public static Font GetDefaultFont(float size = 9.0f, FontStyle style = FontStyle.None)
+        {
+            #if __MonoCS__
+            return new Font(GKData.DEF_FONT, size);//9.0f);
+            #else
+            return new Font(GKData.DEF_FONT, size);//8.25f);
+            #endif
         }
 
         public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
         {
-            if (window.Platform.IsWinForms) {
-                window.ClientSize = new Size(width, height);
-            } else {
-            }
+            //if (window.Platform.IsWinForms) {
+            window.ClientSize = new Size(width, height);
+            //} else {
+            //}
 
-            if (fontPreset && (window.Platform.IsWinForms || window.Platform.IsWpf)) {
-                UIHelper.SetControlFont(window, "Tahoma", 8.25f);
+            if (fontPreset) {
+                UIHelper.SetControlFont(window, GetDefaultFont());
             }
         }
 

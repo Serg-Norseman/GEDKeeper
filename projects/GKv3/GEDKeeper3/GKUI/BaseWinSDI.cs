@@ -98,22 +98,6 @@ namespace GKUI
         {
             InitializeComponent();
 
-            Icon = Icon.FromResource("Resources.icon_gedkeeper.ico");
-            tbFileNew.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
-            tbFileLoad.Image = Bitmap.FromResource("Resources.btn_load.gif");
-            tbFileSave.Image = Bitmap.FromResource("Resources.btn_save.gif");
-            tbRecordAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
-            tbRecordEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
-            tbRecordDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
-            tbFilter.Image = Bitmap.FromResource("Resources.btn_filter.gif");
-            tbTreeAncestors.Image = Bitmap.FromResource("Resources.btn_tree_ancestry.gif");
-            tbTreeDescendants.Image = Bitmap.FromResource("Resources.btn_tree_descendants.gif");
-            tbTreeBoth.Image = Bitmap.FromResource("Resources.btn_tree_both.gif");
-            tbPedigree.Image = Bitmap.FromResource("Resources.btn_scroll.gif");
-            tbStats.Image = Bitmap.FromResource("Resources.btn_table.gif");
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
-
             AppHost.Instance.LoadWindow(this);
 
             fContext = new BaseContext(this);
@@ -529,7 +513,7 @@ namespace GKUI
             summary = new HyperView();
             summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
-            //summary.Font = new Font("Tahoma", 8.25f);
+            summary.Font = UIHelper.GetDefaultFont();
 
             recView = new GKListView(ListManager.Create(fContext, recType));
             recView.MouseDoubleClick += miRecordEdit_Click;
@@ -973,12 +957,10 @@ namespace GKUI
             if (!AllowQuickSearch()) return;
 
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-
-            Rectangle client = Bounds; // ClientRectangle;
-            PointF pt = PointToScreen(new PointF(client.Left, client.Bottom - qsDlg.Height));
-            qsDlg.Location = new Point(pt);
-
             qsDlg.Show();
+
+            Rectangle client = Bounds;
+            qsDlg.Location = new Point(client.Left, client.Bottom - qsDlg.Height);
         }
 
         #endregion

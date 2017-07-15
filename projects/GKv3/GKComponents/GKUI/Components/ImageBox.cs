@@ -103,7 +103,6 @@ namespace GKUI.Components
         private RectangleF fSelectionRegion;
         private bool fSizeToFit;
         private Point fStartMousePosition;
-        private Point fStartScrollPosition;
         private int fUpdateCount;
         private int fZoom;
         private Size fImageSize;
@@ -237,11 +236,7 @@ namespace GKUI.Components
             set {
                 if (fIsPanning != value) {
                     fIsPanning = value;
-
-                    if (value) {
-                        fStartScrollPosition = ScrollPosition;
-                        Cursor = Cursors.Move;
-                    } else Cursor = Cursors.Default;
+                    Cursor = fIsPanning ? Cursors.Move : Cursors.Default;
                 }
             }
         }
@@ -554,8 +549,8 @@ namespace GKUI.Components
             if (viewport.Contains(new Point(point)) || fitToBounds)
             {
                 Point pt = GetImageRelativeLocation(point);
-                x = (int)(point.X / fZoomFactor);
-                y = (int)(point.Y / fZoomFactor);
+                x = (int)(pt.X / fZoomFactor);
+                y = (int)(pt.Y / fZoomFactor);
 
                 //Size viewSize = Viewport.Size;
                 /*if (x < 0)
@@ -665,7 +660,7 @@ namespace GKUI.Components
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public void ZoomToRegion(RectangleF rectangle)
         {
-            Size clientSize = ClientRectangle.Size;
+            Size clientSize = Viewport.Size;
 
             double ratioX = clientSize.Width / rectangle.Width;
             double ratioY = clientSize.Height / rectangle.Height;

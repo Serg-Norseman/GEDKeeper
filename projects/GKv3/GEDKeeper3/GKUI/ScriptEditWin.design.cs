@@ -22,17 +22,22 @@ namespace GKUI
 
             tbNewScript = new ButtonToolItem();
             tbNewScript.Click += tbNewScript_Click;
+            tbNewScript.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
 
             tbLoadScript = new ButtonToolItem();
             tbLoadScript.Click += tbLoadScript_Click;
+            tbLoadScript.Image = Bitmap.FromResource("Resources.btn_load.gif");
 
             tbSaveScript = new ButtonToolItem();
             tbSaveScript.Click += tbSaveScript_Click;
+            tbSaveScript.Image = Bitmap.FromResource("Resources.btn_save.gif");
 
             tbRun = new ButtonToolItem();
             tbRun.Click += tbRun_Click;
+            tbRun.Image = Bitmap.FromResource("Resources.btn_start.gif");
 
             ToolBar1 = new ToolBar();
+            ToolBar1.TextAlign = ToolBarTextAlign.Right;
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbNewScript,
                                         tbLoadScript,
@@ -41,6 +46,7 @@ namespace GKUI
                                         tbRun});
 
             txtScriptText = new TextBoxEx();
+            txtScriptText.TextChanged += mmScriptText_TextChanged;
 
             txtDebugOutput = new GKUI.Components.TextBoxEx();
             txtDebugOutput.ReadOnly = true;
@@ -55,14 +61,13 @@ namespace GKUI
             Content = splitContainer1;
             ToolBar = ToolBar1;
 
-            ClientSize = new Size(710, 430);
             Resizable = true;
             ShowInTaskbar = true;
             Title = "ScriptEditWin";
             Closing += ScriptEditWin_Closing;
             KeyDown += ScriptEditWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 710, 430);
             ResumeLayout();
         }
     }

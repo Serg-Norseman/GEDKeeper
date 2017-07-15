@@ -520,13 +520,12 @@ namespace GKUI
             };
 
             AbortButton = btnClose;
-            ClientSize = new Size(1030, 620);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;
             Title = "TreeToolsWin";
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 1030, 620);
             ResumeLayout();
         }
     }

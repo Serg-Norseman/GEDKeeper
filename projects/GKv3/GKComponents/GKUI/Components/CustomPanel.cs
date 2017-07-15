@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define DEBUG_VIEWPORT
+//#define DEBUG_VIEWPORT
 
 using System;
 using Eto.Drawing;
@@ -35,11 +35,6 @@ namespace GKUI.Components
         public const int SmallChange = 1;
         public const int LargeChange = 10;
 
-        /*
-         * Attention: In Eto, using getScrollPosition at runtime Paint causes an exception.
-         * Therefore, by the time of drawing, the Viewport needs to have already been calculated.
-         */
-
         private Drawable fCanvas;
         private bool fCenteredImage;
         private Font fFont;
@@ -52,6 +47,11 @@ namespace GKUI.Components
         private Color fTextColor;
         private Rectangle fViewport;
 
+
+        public Rectangle CanvasRectangle
+        {
+            get { return fCanvas.Bounds; }
+        }
 
         protected bool CenteredImage
         {
@@ -101,22 +101,6 @@ namespace GKUI.Components
             get { return fViewport; }
         }
 
-        // FIXME: need to refactor and remove all references
-        #region Temp for compatibility
-
-        public Rectangle ClientRectangle
-        {
-            get { return fCanvas.Bounds; }
-        }
-
-        public Point AutoScrollPosition
-        {
-            //get { return new Point(-base.ScrollPosition.X, -base.ScrollPosition.Y); }
-            get { return fViewport.Location; }
-        }
-
-        #endregion
-
 
         public CustomPanel()
         {
@@ -127,10 +111,6 @@ namespace GKUI.Components
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
             fCanvas.CanFocus = true;
-
-            //var layout = new PixelLayout();
-            //layout.Add(fCanvas, 0, 0);
-            //Content = layout;
             Content = fCanvas;
 
             fFont = SystemFonts.Label();

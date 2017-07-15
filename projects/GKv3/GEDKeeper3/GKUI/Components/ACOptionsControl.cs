@@ -252,7 +252,7 @@ namespace GKUI.Components
                 }
             };
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetControlFont(this, UIHelper.GetDefaultFont());
             ResumeLayout();
         }
 

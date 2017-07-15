@@ -115,11 +115,10 @@ namespace GKUI
 
             Content = TableLayout.Horizontal(4, PageControl1, Panel1);
 
-            ClientSize = new Size(1100, 570);
             Title = "MapsViewerWin";
             KeyDown += MapsViewerWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 1100, 570);
             ResumeLayout();
         }
     }

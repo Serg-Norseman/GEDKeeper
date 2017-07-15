@@ -215,9 +215,6 @@ namespace GKUI.Components
                             }
                         }
 
-                        int prevX = xOffset;
-                        int prevY = yOffset;
-
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
                             // FIXME: null?!

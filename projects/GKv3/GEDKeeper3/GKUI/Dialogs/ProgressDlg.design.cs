@@ -86,14 +86,13 @@ namespace GKUI.Dialogs
                 }
             };
 
-            ClientSize = new Size(531, 152);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;
             Title = "ProgressDlg";
             Topmost = true;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f, FontStyle.Bold);
+            UIHelper.SetPredefProperties(this, 531, 152);
             ResumeLayout();
         }
     }

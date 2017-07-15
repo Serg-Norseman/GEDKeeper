@@ -10,13 +10,12 @@ namespace GKUI
         {
             SuspendLayout();
 
-            ClientSize = new Size(1030, 580);
             ShowInTaskbar = true;
             Title = "MediaViewerWin";
             Closing += MediaViewerWin_FormClosing;
             KeyDown += MediaViewerWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 1030, 580);
             ResumeLayout();
         }
     }

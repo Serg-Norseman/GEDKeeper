@@ -95,6 +95,7 @@ namespace GKUI
             tbOptions.Image = Bitmap.FromResource("Resources.btn_tools.gif");
 
             ToolBar1 = new ToolBar();
+            ToolBar1.TextAlign = ToolBarTextAlign.Right;
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbImageSave,
                                         new SeparatorToolItem(),
@@ -269,13 +270,12 @@ namespace GKUI
             MenuPerson.Opening += MenuPerson_Opening;
 
 
-            ClientSize = new Size(820, 450);
             ShowInTaskbar = true;
             Title = "TreeChartWin";
             ToolBar = ToolBar1;
             KeyDown += TreeChartWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 820, 450);
             ResumeLayout();
         }
     }

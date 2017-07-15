@@ -161,14 +161,7 @@ namespace GKUI
         {
             InitializeComponent();
 
-            tbNewScript.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
-            tbLoadScript.Image = Bitmap.FromResource("Resources.btn_load.gif");
-            tbSaveScript.Image = Bitmap.FromResource("Resources.btn_save.gif");
-            tbRun.Image = Bitmap.FromResource("Resources.btn_start.gif");
-
             fBase = baseWin;
-
-            txtScriptText.TextChanged += mmScriptText_TextChanged;
 
             tbNewScript_Click(this, null);
 

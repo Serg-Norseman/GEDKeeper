@@ -37,7 +37,6 @@ namespace GKUI
 
             Content = tabsData;
 
-            ClientSize = new Size(780, 540);
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;
@@ -45,7 +44,7 @@ namespace GKUI
             Load += OrganizerWin_Load;
             KeyDown += OrganizerWin_KeyDown;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 780, 540);
             ResumeLayout();
         }
     }

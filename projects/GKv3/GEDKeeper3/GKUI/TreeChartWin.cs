@@ -652,12 +652,10 @@ namespace GKUI
         public void QuickSearch()
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-            
-            Rectangle client = Bounds; // ClientRectangle;
-            Point pt = new Point(PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height)));
-            qsDlg.Location = pt;
-
             qsDlg.Show();
+
+            Rectangle client = Bounds;
+            qsDlg.Location = new Point(client.Left, client.Bottom - qsDlg.Height);
         }
 
         public bool AllowFilter()

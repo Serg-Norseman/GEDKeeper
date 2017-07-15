@@ -24,24 +24,24 @@ namespace GKUI.Dialogs
             btnClose.Image = Bitmap.FromResource("Resources.btn_accept.gif");
 
             lblProduct = new Label();
-            lblProduct.Font = new Font("Times New Roman", 20.25F, FontStyle.Bold);
+            lblProduct.Font = UIHelper.GetDefaultFont(20.25F, FontStyle.Bold);
             lblProduct.Text = "lblProduct";
 
             lblVersion = new Label();
-            lblVersion.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
+            lblVersion.Font = UIHelper.GetDefaultFont(11.25F, FontStyle.Bold);
             lblVersion.Text = "lblVersion";
 
             lblCopyright = new Label();
-            lblCopyright.Font = new Font("Times New Roman", 11.25F, FontStyle.Bold);
+            lblCopyright.Font = UIHelper.GetDefaultFont(11.25F, FontStyle.Bold);
             lblCopyright.Text = "lblCopyright";
 
             lblMail = new LinkButton();
-            lblMail.Font = new Font("Tahoma", 8.25F, FontStyle.Bold);
+            lblMail.Font = UIHelper.GetDefaultFont(9.0f, FontStyle.Bold);
             lblMail.Text = "mailto:gedkeeper@yandex.ru";
             lblMail.Click += LabelMail_Click;
 
             lblProjSite = new LinkButton();
-            lblProjSite.Font = new Font("Tahoma", 8.25F, FontStyle.Bold);
+            lblProjSite.Font = UIHelper.GetDefaultFont(9.0f, FontStyle.Bold);
             lblProjSite.Text = "https://gedkeeper.github.io/";
             lblProjSite.Click += LabelMail_Click;
 

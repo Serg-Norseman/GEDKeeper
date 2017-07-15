@@ -71,13 +71,12 @@ namespace GKUI
                 }
             };
 
-            ClientSize = new Size(900, 600);
             Load += StatisticsWin_Load;
             KeyDown += StatisticsWin_KeyDown;
             Title = "StatisticsWin";
             //ToolBar = ToolBar1;
 
-            UIHelper.SetControlFont(this, "Tahoma", 8.25f);
+            UIHelper.SetPredefProperties(this, 900, 600);
             ResumeLayout();
         }
     }

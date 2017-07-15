@@ -197,8 +197,8 @@ namespace GKUI.Charts
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(/*AutoScrollPosition.X + */fOffsetX - bounds.Left * fZoom,
-                                  /*AutoScrollPosition.Y + */fOffsetY - bounds.Top * fZoom);
+                return new PointF(fOffsetX - bounds.Left * fZoom,
+                                  fOffsetY - bounds.Top * fZoom);
 
             }
         }
@@ -207,30 +207,9 @@ namespace GKUI.Charts
         {
             Point imPt = GetImageRelativeLocation(mpt);
             ExtSize imSize = GetImageSize();
-            Point imgCenter = new Point(imSize.Width / 2, imSize.Height / 2);
-            float dX = (imPt.X - imgCenter.X) / fZoom;
-            float dY = (imPt.Y - imgCenter.Y) / fZoom;
-            double rad = Math.Sqrt(dX * dX + dY * dY);
-            double angle = SysUtils.RadiansToDegrees(Math.Atan2(dY, dX));
-
-            CircleSegment result = null;
-
-            int numberOfSegments = fModel.Segments.Count;
-            for (int i = 0; i < numberOfSegments; i++)
-            {
-                CircleSegment segment = fModel.Segments[i];
-                double startAng = segment.StartAngle;
-                double endAng = startAng + segment.WedgeAngle;
-
-                if ((segment.IntRad < rad && rad < segment.ExtRad) &&
-                    (startAng < angle && angle < endAng))
-                {
-                    result = segment;
-                    break;
-                }
-            }
-
-            return result;
+            float dX = (imPt.X - imSize.Width / 2) / fZoom;
+            float dY = (imPt.Y - imSize.Height / 2) / fZoom;
+            return fModel.FindSegment(dX, dY);
         }
 
         /// <summary>
