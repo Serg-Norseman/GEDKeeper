@@ -30,6 +30,7 @@ namespace GKCore
         // Until the next major version, we cannot change this line,
         // because it including defines the path to the profile of the program.
         public const string APP_TITLE = "GEDKeeper2";
+        public const string APP_TITLE_NEW = "GEDKeeper";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
@@ -46,6 +47,12 @@ namespace GKCore
 
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
+
+        #if __MonoCS__
+        public const string DEF_FONT = "Noto Sans";
+        #else
+        public const string DEF_FONT = "Tahoma";
+        #endif
 
         public struct SexStruct
         {

@@ -26,13 +26,13 @@ namespace GKCore.Options
 {
     public sealed class LangRecord
     {
-        public readonly ushort Code;
+        public readonly int Code;
         public readonly string Sign;
         public readonly string Name;
         public readonly string FileName;
         public readonly GEDCOMLanguageID LangID;
 
-        public LangRecord(ushort code, string sign, string name, string fileName)
+        public LangRecord(int code, string sign, string name, string fileName)
         {
             Code = code;
             Sign = sign;

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
@@ -200,32 +201,27 @@ namespace GKCommon
 
         public bool IsEmpty
         {
-            get
-            {
+            get {
                 return this.x == 0 && this.y == 0;
             }
         }
 
         public int X
         {
-            get
-            {
+            get {
                 return this.x;
             }
-            set
-            {
+            set {
                 this.x = value;
             }
         }
 
         public int Y
         {
-            get
-            {
+            get {
                 return this.y;
             }
-            set
-            {
+            set {
                 this.y = value;
             }
         }
@@ -238,27 +234,7 @@ namespace GKCommon
 
         public static implicit operator ExtPointF(ExtPoint p)
         {
-            return new ExtPointF((float)p.X, (float)p.Y);
-        }
-
-        public static ExtPoint operator +(ExtPoint pt, ExtSize sz)
-        {
-            return ExtPoint.Add(pt, sz);
-        }
-
-        public static ExtPoint operator -(ExtPoint pt, ExtSize sz)
-        {
-            return ExtPoint.Subtract(pt, sz);
-        }
-
-        public static bool operator ==(ExtPoint left, ExtPoint right)
-        {
-            return left.X == right.X && left.Y == right.Y;
-        }
-
-        public static bool operator !=(ExtPoint left, ExtPoint right)
-        {
-            return !(left == right);
+            return new ExtPointF(p.X, p.Y);
         }
 
         public static ExtPoint Add(ExtPoint pt, ExtSize sz)
@@ -271,19 +247,9 @@ namespace GKCommon
             return new ExtPoint(pt.X - sz.Width, pt.Y - sz.Height);
         }
 
-        public static ExtPoint Ceiling(ExtPointF value)
-        {
-            return new ExtPoint((int)Math.Ceiling((double)value.X), (int)Math.Ceiling((double)value.Y));
-        }
-
         public static ExtPoint Truncate(ExtPointF value)
         {
             return new ExtPoint((int)value.X, (int)value.Y);
-        }
-
-        public static ExtPoint Round(ExtPointF value)
-        {
-            return new ExtPoint((int)Math.Round((double)value.X), (int)Math.Round((double)value.Y));
         }
 
         public override bool Equals(object obj)
@@ -312,17 +278,17 @@ namespace GKCommon
             this.Offset(p.X, p.Y);
         }
 
-        /*public override string ToString()
-		{
-			return string.Concat(new string[]
-			{
-				"{X=",
-				this.X.ToString(CultureInfo.CurrentCulture),
-				",Y=",
-				this.Y.ToString(CultureInfo.CurrentCulture),
-				"}"
-			});
-		}*/
+        public override string ToString()
+        {
+            return string.Concat(new string[]
+                                 {
+                                     "{X=",
+                                     this.X.ToString(CultureInfo.CurrentCulture),
+                                     ",Y=",
+                                     this.Y.ToString(CultureInfo.CurrentCulture),
+                                     "}"
+                                 });
+        }
     }
 
 
@@ -336,32 +302,27 @@ namespace GKCommon
 
         public bool IsEmpty
         {
-            get
-            {
+            get {
                 return this.x == 0f && this.y == 0f;
             }
         }
 
         public float X
         {
-            get
-            {
+            get {
                 return this.x;
             }
-            set
-            {
+            set {
                 this.x = value;
             }
         }
 
         public float Y
         {
-            get
-            {
+            get {
                 return this.y;
             }
-            set
-            {
+            set {
                 this.y = value;
             }
         }
@@ -370,36 +331,6 @@ namespace GKCommon
         {
             this.x = x;
             this.y = y;
-        }
-
-        public static ExtPointF operator +(ExtPointF pt, ExtSize sz)
-        {
-            return ExtPointF.Add(pt, sz);
-        }
-
-        public static ExtPointF operator -(ExtPointF pt, ExtSize sz)
-        {
-            return ExtPointF.Subtract(pt, sz);
-        }
-
-        public static ExtPointF operator +(ExtPointF pt, ExtSizeF sz)
-        {
-            return ExtPointF.Add(pt, sz);
-        }
-
-        public static ExtPointF operator -(ExtPointF pt, ExtSizeF sz)
-        {
-            return ExtPointF.Subtract(pt, sz);
-        }
-
-        public static bool operator ==(ExtPointF left, ExtPointF right)
-        {
-            return left.X == right.X && left.Y == right.Y;
-        }
-
-        public static bool operator !=(ExtPointF left, ExtPointF right)
-        {
-            return !(left == right);
         }
 
         public static ExtPointF Add(ExtPointF pt, ExtSize sz)
@@ -437,14 +368,14 @@ namespace GKCommon
             return base.GetHashCode();
         }
 
-        /*public override string ToString()
-		{
-			return string.Format(CultureInfo.CurrentCulture, "{{X={0}, Y={1}}}", new object[]
-			{
-				this.x,
-				this.y
-			});
-		}*/
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, "{{X={0}, Y={1}}}", new object[]
+                                 {
+                                     this.x,
+                                     this.y
+                                 });
+        }
     }
 
 
@@ -458,32 +389,27 @@ namespace GKCommon
 
         public bool IsEmpty
         {
-            get
-            {
+            get {
                 return this.width == 0 && this.height == 0;
             }
         }
 
         public int Width
         {
-            get
-            {
+            get {
                 return this.width;
             }
-            set
-            {
+            set {
                 this.width = value;
             }
         }
 
         public int Height
         {
-            get
-            {
+            get {
                 return this.height;
             }
-            set
-            {
+            set {
                 this.height = value;
             }
         }
@@ -499,26 +425,6 @@ namespace GKCommon
             return new ExtSizeF((float)p.Width, (float)p.Height);
         }
 
-        public static ExtSize operator +(ExtSize sz1, ExtSize sz2)
-        {
-            return ExtSize.Add(sz1, sz2);
-        }
-
-        public static ExtSize operator -(ExtSize sz1, ExtSize sz2)
-        {
-            return ExtSize.Subtract(sz1, sz2);
-        }
-
-        public static bool operator ==(ExtSize sz1, ExtSize sz2)
-        {
-            return sz1.Width == sz2.Width && sz1.Height == sz2.Height;
-        }
-
-        public static bool operator !=(ExtSize sz1, ExtSize sz2)
-        {
-            return !(sz1 == sz2);
-        }
-
         public static explicit operator ExtPoint(ExtSize size)
         {
             return new ExtPoint(size.Width, size.Height);
@@ -529,11 +435,6 @@ namespace GKCommon
             return new ExtSize(sz1.Width + sz2.Width, sz1.Height + sz2.Height);
         }
 
-        public static ExtSize Ceiling(ExtSizeF value)
-        {
-            return new ExtSize((int)Math.Ceiling((double)value.Width), (int)Math.Ceiling((double)value.Height));
-        }
-
         public static ExtSize Subtract(ExtSize sz1, ExtSize sz2)
         {
             return new ExtSize(sz1.Width - sz2.Width, sz1.Height - sz2.Height);
@@ -542,11 +443,6 @@ namespace GKCommon
         public static ExtSize Truncate(ExtSizeF value)
         {
             return new ExtSize((int)value.Width, (int)value.Height);
-        }
-
-        public static ExtSize Round(ExtSizeF value)
-        {
-            return new ExtSize((int)Math.Round((double)value.Width), (int)Math.Round((double)value.Height));
         }
 
         public override bool Equals(object obj)
@@ -564,17 +460,17 @@ namespace GKCommon
             return this.width ^ this.height;
         }
 
-        /*public override string ToString()
-		{
-			return string.Concat(new string[]
-			{
-				"{Width=",
-				this.width.ToString(CultureInfo.CurrentCulture),
-				", Height=",
-				this.height.ToString(CultureInfo.CurrentCulture),
-				"}"
-			});
-		}*/
+        public override string ToString()
+        {
+            return string.Concat(new string[]
+                                 {
+                                     "{Width=",
+                                     this.width.ToString(CultureInfo.CurrentCulture),
+                                     ", Height=",
+                                     this.height.ToString(CultureInfo.CurrentCulture),
+                                     "}"
+                                 });
+        }
     }
 
 
@@ -588,32 +484,27 @@ namespace GKCommon
 
         public bool IsEmpty
         {
-            get
-            {
+            get {
                 return this.width == 0f && this.height == 0f;
             }
         }
 
         public float Width
         {
-            get
-            {
+            get {
                 return this.width;
             }
-            set
-            {
+            set {
                 this.width = value;
             }
         }
 
         public float Height
         {
-            get
-            {
+            get {
                 return this.height;
             }
-            set
-            {
+            set {
                 this.height = value;
             }
         }
@@ -628,26 +519,6 @@ namespace GKCommon
         {
             this.width = width;
             this.height = height;
-        }
-
-        public static ExtSizeF operator +(ExtSizeF sz1, ExtSizeF sz2)
-        {
-            return ExtSizeF.Add(sz1, sz2);
-        }
-
-        public static ExtSizeF operator -(ExtSizeF sz1, ExtSizeF sz2)
-        {
-            return ExtSizeF.Subtract(sz1, sz2);
-        }
-
-        public static bool operator ==(ExtSizeF sz1, ExtSizeF sz2)
-        {
-            return sz1.Width == sz2.Width && sz1.Height == sz2.Height;
-        }
-
-        public static bool operator !=(ExtSizeF sz1, ExtSizeF sz2)
-        {
-            return !(sz1 == sz2);
         }
 
         public static ExtSizeF Add(ExtSizeF sz1, ExtSizeF sz2)
@@ -680,16 +551,16 @@ namespace GKCommon
             return ExtSize.Truncate(this);
         }
 
-        /*public override string ToString()
-		{
-			return string.Concat(new string[]
-			{
-				"{Width=",
-				this.width.ToString(CultureInfo.CurrentCulture),
-				", Height=",
-				this.height.ToString(CultureInfo.CurrentCulture),
-				"}"
-			});
-		}*/
+        public override string ToString()
+        {
+            return string.Concat(new string[]
+                                 {
+                                     "{Width=",
+                                     this.width.ToString(CultureInfo.CurrentCulture),
+                                     ", Height=",
+                                     this.height.ToString(CultureInfo.CurrentCulture),
+                                     "}"
+                                 });
+        }
     }
 }

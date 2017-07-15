@@ -115,13 +115,13 @@ namespace GKCommon
             return span.Days;
         }
 
-        private static readonly ushort[][] MONTH_DAYS = new ushort[][]
+        private static readonly byte[][] MONTH_DAYS = new byte[][]
         {
-            new ushort[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-            new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+            new byte[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+            new byte[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
         };
 
-        public static ushort DaysInAMonth(ushort year, ushort month)
+        public static byte DaysInAMonth(short year, byte month)
         {
             return MONTH_DAYS[(month == 2 && DateTime.IsLeapYear(year)) ? 1 : 0][month - 1];
         }

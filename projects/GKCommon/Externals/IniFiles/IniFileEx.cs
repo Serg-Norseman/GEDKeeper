@@ -18,6 +18,62 @@ namespace Externals.IniFiles
     /// <summary>Object model for INI file, which stores a whole structure in memory.</summary>
     public class IniFileEx
     {
+        #region Settings
+
+        /// <summary>Gets or sets array of strings which start a comment line.
+        /// Default is {"#" (hash), ";" (semicolon)}. If empty or null, commentaries
+        /// will not be allowed.</summary>
+        internal static readonly string[] CommentChars = { ";", "#" };
+
+        /// <summary>Gets or sets a character which is used as quote. Default null (not using quotation marks).</summary>
+        internal static readonly char? QuoteChar = null;
+
+        /// <summary>A string which determines default formatting of values used in Format() method. '?' (question mark) means a key,
+        /// '$' (dollar) means a value and '=' (equality sign) means EqualsString; optionally, ';' is an inline comment.
+        /// If QouteChar is not null, '$' will be automatically surrounded with qouetes. Default "?=$  ;" (e.g. "Key=Value  ;comment".</summary>
+        internal static readonly string DefaultValueFormatting = "?=$   ;";
+
+        /// <summary>A string which determines default formatting of section headers used in Format() method.
+        /// '$' (dollar) means a section's name; '[' and ']' mean brackets; optionally, ';' is an inline comment. Default is "[$]  ;" (e.g. "[Section]  ;comment")</summary>
+        internal static readonly string DefaultSectionFormatting = "[$]   ;";
+
+        /// <summary>The string which all tabs in intendentation will be replaced with. If null, tabs will not be replaced. Default "    " (four spaces).</summary>
+        internal static readonly string TabReplacement = "    ";
+
+        internal const string EqualsString = "=";
+        internal const string SectionCloseBracket = "]";
+        internal const string SectionOpenBracket = "[";
+
+        /// <summary>If true, blank lines will be written to a file. Otherwise, they will ignored.</summary>
+        internal static readonly bool AllowBlankLines = true;
+
+        /// <summary>If true empty keys will not be removed. Default TRUE.</summary>
+        internal static readonly bool AllowEmptyValues = true;
+
+        /// <summary>If true, blank lines will be written to a file. Otherwise, they will ignored.</summary>
+        internal static readonly bool AllowInlineComments = true;
+
+        /// <summary>If Quotes are on, then it in such situation: |KEY = "VALUE" blabla|, 'blabla' is
+        /// a "text on the right". If this field is set to False, then such string will be ignored.</summary>
+        internal static readonly bool AllowTextOnTheRight = true;
+
+        /// <summary>Determines whether all searching/testing operation are case-sensitive. Default TRUE.</summary>
+        internal static readonly bool CaseSensitive = true;
+
+        /// <summary>Indicates whether comments and blank lines should be grouped
+        /// (if true then multiple line comment will be parsed to the one single IniFileComment object).
+        /// Otherwise, one IniFileElement will be always representing one single line in the file. Default TRUE.</summary>
+        internal static readonly bool GroupElements = true;
+
+        /// <summary>Inficates whether parser should preserve formatting. Default TRUE.</summary>
+        internal static readonly bool PreserveFormatting = true;
+
+        /// <summary>Determines whether a header comment of an INI file is separate from a comment of first section.
+        /// If false, comment at the beginning of file may be considered both as header and commentary of the first section. Default TRUE.</summary>
+        internal static readonly bool SeparateHeader = true;
+
+        #endregion
+
         internal List<IniFileSection> sections = new List<IniFileSection>();
         internal List<IniFileElement> elements = new List<IniFileElement>();
 
@@ -54,7 +110,7 @@ namespace Externals.IniFiles
         {
             string lower = name.ToLowerInvariant();
             for (int i = 0; i < sections.Count; i++)
-                if (sections[i].Name == name || (!IniFileSettings.CaseSensitive && sections[i].Name.ToLowerInvariant() == lower))
+                if (sections[i].Name == name || (!IniFileEx.CaseSensitive && sections[i].Name.ToLowerInvariant() == lower))
                     return sections[i];
             return null;
         }
@@ -116,7 +172,7 @@ namespace Externals.IniFiles
             return ret;
         }
 
-        /// <summary>Writes a INI file to a disc, using options in IniFileSettings class</summary>
+        /// <summary>Writes a INI file to a disc, using options in IniFileEx class</summary>
         public void Save(string path)
         {
             using (StreamWriter writer = new StreamWriter(path)) {
@@ -124,7 +180,7 @@ namespace Externals.IniFiles
             }
         }
 
-        /// <summary>Writes a INI file to a stream, using options in IniFileSettings class</summary>
+        /// <summary>Writes a INI file to a stream, using options in IniFileEx class</summary>
         public void Save(StreamWriter writer)
         {
             if (writer == null)
@@ -168,7 +224,7 @@ namespace Externals.IniFiles
             {
                 IniFileElement currEl = ParseLine(reader.ReadLine());
 
-                if (IniFileSettings.GroupElements) {
+                if (IniFileEx.GroupElements) {
                     if (lastEl != null)
                     {
                         if (currEl is IniFileBlankLine && lastEl is IniFileBlankLine) {
@@ -194,14 +250,14 @@ namespace Externals.IniFiles
         /// <param name="element">Element to write.</param>
         private static void WriteElement(StreamWriter writer, IniFileElement element)
         {
-            if (!IniFileSettings.PreserveFormatting)
+            if (!IniFileEx.PreserveFormatting)
                 element.FormatDefault();
 
             // do not write if:
             if (!( // 1) element is a blank line AND blank lines are not allowed
-                  (element is IniFileBlankLine && !IniFileSettings.AllowBlankLines)
+                  (element is IniFileBlankLine && !IniFileEx.AllowBlankLines)
                   // 2) element is an empty value AND empty values are not allowed
-                  || (!IniFileSettings.AllowEmptyValues && element is IniFileValue && ((IniFileValue)element).Value == "")))
+                  || (!IniFileEx.AllowEmptyValues && element is IniFileValue && ((IniFileValue)element).Value == "")))
                 writer.WriteLine(element.Line);
         }
 
@@ -281,25 +337,25 @@ namespace Externals.IniFiles
             get
             {
                 if (elements.Count > 0)
-                    if (elements[0] is IniFileCommentary && !(!IniFileSettings.SeparateHeader
+                    if (elements[0] is IniFileCommentary && !(!IniFileEx.SeparateHeader
                                                               && elements.Count > 1 && !(elements[1] is IniFileBlankLine)))
                         return ((IniFileCommentary)elements[0]).Comment;
                 return "";
             }
             set
             {
-                if (elements.Count > 0 && elements[0] is IniFileCommentary && !(!IniFileSettings.SeparateHeader
+                if (elements.Count > 0 && elements[0] is IniFileCommentary && !(!IniFileEx.SeparateHeader
                                                                                 && elements.Count > 1 && !(elements[1] is IniFileBlankLine))) {
                     if (value == "") {
                         elements.RemoveAt(0);
-                        if (IniFileSettings.SeparateHeader && elements.Count > 0 && elements[0] is IniFileBlankLine)
+                        if (IniFileEx.SeparateHeader && elements.Count > 0 && elements[0] is IniFileBlankLine)
                             elements.RemoveAt(0);
                     }
                     else
                         ((IniFileCommentary)elements[0]).Comment = value;
                 }
                 else if (value != "") {
-                    if ((elements.Count == 0 || !(elements[0] is IniFileBlankLine)) && IniFileSettings.SeparateHeader)
+                    if ((elements.Count == 0 || !(elements[0] is IniFileBlankLine)) && IniFileEx.SeparateHeader)
                         elements.Insert(0, new IniFileBlankLine(1));
                     elements.Insert(0, IniFileCommentary.FromComment(value));
                 }
@@ -335,7 +391,7 @@ namespace Externals.IniFiles
                         else
                             elements.Add(IniFileCommentary.FromComment(value));
                         if (elements.Count > 2) {
-                            if (!(elements[elements.Count - 2] is IniFileBlankLine) && IniFileSettings.SeparateHeader)
+                            if (!(elements[elements.Count - 2] is IniFileBlankLine) && IniFileEx.SeparateHeader)
                                 elements.Insert(elements.Count - 1, new IniFileBlankLine(1));
                             else if (value == "")
                                 elements.RemoveAt(elements.Count - 2);

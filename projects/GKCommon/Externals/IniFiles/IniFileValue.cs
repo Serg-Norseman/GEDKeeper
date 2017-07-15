@@ -16,29 +16,35 @@ namespace Externals.IniFiles
         {
         }
 
+        private IniFileValue(string key, string value) : base()
+        {
+            fKey = key; 
+            fValue = value;
+        }
+
         /// <summary>Initializes a new instance IniFileValue.</summary>
         /// <param name="content">Actual content of a line in an INI file. Initializer assumes that it is valid.</param>
         public IniFileValue(string content) : base(content)
         {
-            string[] split = Content.Split(new string[] { IniFileSettings.EqualsString }, StringSplitOptions.None);
+            string[] split = Content.Split(new string[] { IniFileEx.EqualsString }, StringSplitOptions.None);
             fFormatting = ExtractFormat(content);
             string split0 = split[0].Trim();
             string split1 = split.Length >= 1 ? split[1].Trim() : "";
             
             if (split0.Length > 0) {
-                if (IniFileSettings.AllowInlineComments) {
-                    IndexOfAnyResult result = IndexOfAny(split1, IniFileSettings.CommentChars);
+                if (IniFileEx.AllowInlineComments) {
+                    IndexOfAnyResult result = IndexOfAny(split1, IniFileEx.CommentChars);
                     if (result.Index != -1) {
                         fInlineComment = split1.Substring(result.Index + result.Any.Length);
                         split1 = split1.Substring(0, result.Index).TrimEnd();
                         fInlineCommentChar = result.Any;
                     }
                 }
-                if (IniFileSettings.QuoteChar != null && split1.Length >= 2) {
-                    char quoteChar = (char)IniFileSettings.QuoteChar;
+                if (IniFileEx.QuoteChar != null && split1.Length >= 2) {
+                    char quoteChar = (char)IniFileEx.QuoteChar;
                     if (split1[0] == quoteChar) {
                         int lastQuotePos;
-                        if (IniFileSettings.AllowTextOnTheRight) {
+                        if (IniFileEx.AllowTextOnTheRight) {
                             lastQuotePos = split1.LastIndexOf(quoteChar);
                             if (lastQuotePos != split1.Length - 1)
                                 fTextOnTheRight = split1.Substring(lastQuotePos + 1);
@@ -77,10 +83,10 @@ namespace Externals.IniFiles
             get { return fInlineComment; }
             set
             {
-                if (!IniFileSettings.AllowInlineComments || IniFileSettings.CommentChars.Length == 0)
+                if (!IniFileEx.AllowInlineComments || IniFileEx.CommentChars.Length == 0)
                     throw new NotSupportedException("Inline comments are disabled.");
                 if (fInlineCommentChar == null)
-                    fInlineCommentChar = IniFileSettings.CommentChars[0];
+                    fInlineCommentChar = IniFileEx.CommentChars[0];
                 fInlineComment = value; Format();
             }
         }
@@ -94,7 +100,7 @@ namespace Externals.IniFiles
         public string ExtractFormat(string content)
         {
             //bool afterKey = false; bool beforeVal = false; bool beforeEvery = true; bool afterVal = false;
-            //return IniFileSettings.DefaultValueFormatting;
+            //return IniFileEx.DefaultValueFormatting;
             FEState pos = FEState.BeforeEvery;
             string insideWhiteChars = "";
 
@@ -113,20 +119,20 @@ namespace Externals.IniFiles
                     }
                 }
 
-                else if (pos == FEState.AfterKey && content.Length - i >= IniFileSettings.EqualsString.Length && content.Substring(i, IniFileSettings.EqualsString.Length) == IniFileSettings.EqualsString) {
+                else if (pos == FEState.AfterKey && content.Length - i >= IniFileEx.EqualsString.Length && content.Substring(i, IniFileEx.EqualsString.Length) == IniFileEx.EqualsString) {
                     form.Append(insideWhiteChars);
                     pos = FEState.BeforeVal;
                     //afterKey = false; beforeVal = true;
                     form.Append('=');
                 }
-                else if ((OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((OfAny(i, content, IniFileEx.CommentChars)) != null) {
                     form.Append(insideWhiteChars);
                     form.Append(';');
                 }
                 else if (char.IsWhiteSpace(currC)) {
                     string theWhiteChar;
-                    if (currC == '\t' && IniFileSettings.TabReplacement != null)
-                        theWhiteChar = IniFileSettings.TabReplacement;
+                    if (currC == '\t' && IniFileEx.TabReplacement != null)
+                        theWhiteChar = IniFileEx.TabReplacement;
                     else
                         theWhiteChar = currC.ToString();
                     
@@ -166,27 +172,27 @@ namespace Externals.IniFiles
                 if (currC == '?')
                     build.Append(fKey);
                 else if (currC == '$') {
-                    if (IniFileSettings.QuoteChar != null) {
-                        char quoteChar = (char)IniFileSettings.QuoteChar;
+                    if (IniFileEx.QuoteChar != null) {
+                        char quoteChar = (char)IniFileEx.QuoteChar;
                         build.Append(quoteChar).Append(fValue).Append(quoteChar);
                     }
                     else
                         build.Append(fValue);
                 }
                 else if (currC == '=')
-                    build.Append(IniFileSettings.EqualsString);
+                    build.Append(IniFileEx.EqualsString);
                 else if (currC == ';')
                     build.Append(fInlineCommentChar + fInlineComment);
                 else if (char.IsWhiteSpace(pFormatting[i]))
                     build.Append(currC);
             }
-            Content = build.ToString().TrimEnd() + (IniFileSettings.AllowTextOnTheRight ? fTextOnTheRight : "");
+            Content = build.ToString().TrimEnd() + (IniFileEx.AllowTextOnTheRight ? fTextOnTheRight : "");
         }
 
-        /// <summary>Formats content using a scheme specified in IniFileSettings.DefaultValueFormatting.</summary>
+        /// <summary>Formats content using a scheme specified in IniFileEx.DefaultValueFormatting.</summary>
         public override void FormatDefault()
         {
-            Formatting = IniFileSettings.DefaultValueFormatting;
+            Formatting = IniFileEx.DefaultValueFormatting;
             Format();
         }
 
@@ -195,12 +201,11 @@ namespace Externals.IniFiles
         /// <param name="pValue">Value</param>
         public IniFileValue CreateNew(string pKey, string pValue)
         {
-            IniFileValue ret = new IniFileValue();
-            ret.fKey = pKey; ret.fValue = pValue;
+            IniFileValue ret = new IniFileValue(pKey, pValue);
 
-            if (IniFileSettings.PreserveFormatting) {
+            if (IniFileEx.PreserveFormatting) {
                 ret.fFormatting = fFormatting;
-                if (IniFileSettings.AllowInlineComments)
+                if (IniFileEx.AllowInlineComments)
                     ret.fInlineCommentChar = fInlineCommentChar;
                 ret.Format();
             }
@@ -214,7 +219,7 @@ namespace Externals.IniFiles
         /// <param name="testLine">Trimmed test string.</param>
         public static bool IsLineValid(string testLine)
         {
-            int index = testLine.IndexOf(IniFileSettings.EqualsString);
+            int index = testLine.IndexOf(IniFileEx.EqualsString);
             return index > 0;
         }
 
@@ -229,8 +234,7 @@ namespace Externals.IniFiles
         /// <param name="value">Associated value.</param>
         public static IniFileValue FromData(string key, string value)
         {
-            IniFileValue ret = new IniFileValue();
-            ret.fKey = key; ret.fValue = value;
+            IniFileValue ret = new IniFileValue(key, value);
             ret.FormatDefault();
             return ret;
         }

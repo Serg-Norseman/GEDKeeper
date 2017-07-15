@@ -487,9 +487,7 @@ namespace GKCore
                 throw new ArgumentNullException("date");
 
             string result = "";
-            int year;
-            ushort month;
-            ushort day;
+            int year, month, day;
             bool ybc;
             date.GetDateParts(out year, out month, out day, out ybc);
 
@@ -889,30 +887,25 @@ namespace GKCore
                             GEDCOMDate dt = evt.Date.Value as GEDCOMDate;
                             if (dt != null)
                             {
-                                int bdY;
-                                ushort bdM;
-                                ushort bdD;
+                                int bdY, bdM, bdD;
                                 bool ybc;
 
-                                dt.GetDateParts(out bdY, out bdM, out bdD,
-                                                out ybc);
+                                dt.GetDateParts(out bdY, out bdM, out bdD, out ybc);
                                 if (bdM != 0 && bdD != 0)
                                 {
                                     DateTime dtNow = DateTime.Now.Date;
-                                    ushort curY = (ushort)dtNow.Year;
-                                    ushort curM = (ushort)dtNow.Month;
-                                    ushort curD = (ushort)dtNow.Day;
-                                    double dt2 =
-                                        curY + bdM / 12.0 + bdD / 12.0 / 31.0;
-                                    double dt3 =
-                                        curY + curM / 12.0 + curD / 12.0 / 31.0;
+                                    int curY = dtNow.Year;
+                                    int curM = dtNow.Month;
+                                    int curD = dtNow.Day;
+                                    double dt2 = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
+                                    double dt3 = curY + curM / 12.0 + curD / 12.0 / 31.0;
                                     if (dt2 < dt3)
                                     {
-                                        bdY = curY + 1;
+                                        bdY = (short)(curY + 1);
                                     }
                                     else
                                     {
-                                        bdY = curY;
+                                        bdY = (short)curY;
                                     }
                                     distance = SysUtils.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
                                     result = true;

@@ -311,10 +311,9 @@ namespace GKCore.Stats
                     if (ev != null) {
                         GEDCOMCustomDate dtx = ev.Date.Value;
                         if (dtx != null) {
-                            int ay;
-                            ushort month, ad;
+                            int ay, month, ad;
                             bool ybc;
-                            dtx.GetDateParts(out ay, out month,out ad, out ybc);
+                            dtx.GetDateParts(out ay, out month, out ad, out ybc);
                             if (month > 0) CheckVal(values, month.ToString());
                         }
                     }

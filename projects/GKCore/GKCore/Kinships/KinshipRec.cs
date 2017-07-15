@@ -30,10 +30,10 @@ namespace GKCore.Kinships
         public EnumSet<RelationKind> PrevRels;
         public EnumSet<RelationKind> CurrRels;
         public RelationKind FinRel;
-        public sbyte Great;
-        public sbyte Level;
+        public short Great;
+        public short Level;
 
-        public KinshipRec(EnumSet<RelationKind> prevRels, EnumSet<RelationKind> currRels, RelationKind finRel, sbyte great, sbyte level)
+        public KinshipRec(EnumSet<RelationKind> prevRels, EnumSet<RelationKind> currRels, RelationKind finRel, short great, short level)
         {
             PrevRels = prevRels;
             CurrRels = currRels;

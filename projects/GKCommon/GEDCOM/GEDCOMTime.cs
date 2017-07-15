@@ -24,33 +24,34 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMTime : GEDCOMTag
     {
-        private ushort fHour;
-        private ushort fMinutes;
-        private ushort fSeconds;
-        private ushort fFraction;
+        private byte fHour;
+        private byte fMinutes;
+        private byte fSeconds;
+        private short fFraction;
 
-        public ushort Fraction
-        {
-            get { return fFraction; }
-            set { fFraction = value; }
-        }
 
-        public ushort Hour
+        public byte Hour
         {
             get { return fHour; }
             set { fHour = value; }
         }
 
-        public ushort Minutes
+        public byte Minutes
         {
             get { return fMinutes; }
             set { fMinutes = value; }
         }
 
-        public ushort Seconds
+        public byte Seconds
         {
             get { return fSeconds; }
             set { fSeconds = value; }
+        }
+
+        public short Fraction
+        {
+            get { return fFraction; }
+            set { fFraction = value; }
         }
 
         public TimeSpan Value
@@ -59,13 +60,13 @@ namespace GKCommon.GEDCOM
                 return new TimeSpan(0, fHour, fMinutes, fSeconds, (int)(100u * fFraction));
             }
             set {
-                fHour = (ushort)value.Hours;
-                fMinutes = (ushort)value.Minutes;
-                fSeconds = (ushort)value.Seconds;
-                ushort mSec = (ushort)value.Milliseconds;
-                fFraction = (ushort)Math.Truncate(mSec / 100.0);
+                fHour = (byte)value.Hours;
+                fMinutes = (byte)value.Minutes;
+                fSeconds = (byte)value.Seconds;
+                fFraction = (short)Math.Truncate(value.Milliseconds / 100.0);
             }
         }
+
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
@@ -120,26 +121,26 @@ namespace GKCommon.GEDCOM
 
                 int tmp;
                 result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                fHour = (ushort)tmp;
+                fHour = (byte)tmp;
                 if (result != "" && result[0] == ':')
                 {
                     result = result.Remove(0, 1);
                 }
 
                 result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                fMinutes = (ushort)tmp;
+                fMinutes = (byte)tmp;
                 if (result != "" && result[0] == ':')
                 {
                     result = result.Remove(0, 1);
 
                     result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                    fSeconds = (ushort)tmp;
+                    fSeconds = (byte)tmp;
                     if (result != "" && result[0] == '.')
                     {
                         result = result.Remove(0, 1);
 
                         result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                        fFraction = (ushort)tmp;
+                        fFraction = (short)tmp;
                     }
                 }
             }

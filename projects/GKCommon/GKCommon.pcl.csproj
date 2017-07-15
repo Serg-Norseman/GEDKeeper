@@ -48,7 +48,6 @@
     <Compile Include="Externals\IniFiles\IniFileCommentary.cs" />
     <Compile Include="Externals\IniFiles\IniFileSection.cs" />
     <Compile Include="Externals\IniFiles\IniFileSectionStart.cs" />
-    <Compile Include="Externals\IniFiles\IniFileSettings.cs" />
     <Compile Include="Externals\IniFiles\IniFileValue.cs" />
     <Compile Include="Externals\IniFiles\IniFileElement.cs" />
     <Compile Include="Externals\IniFiles\IniFileEx.cs" />

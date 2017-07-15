@@ -102,7 +102,7 @@ namespace GKCommon
 
             if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
                 uint unmaskedVal = GetUnmaskedValue();
-                CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
+                CalendarConverter.jd_to_gregorian2((int)unmaskedVal, out y, out m, out d);
             }
 
             int sign = Math.Sign(y);
@@ -364,19 +364,19 @@ namespace GKCommon
             switch (calendar)
             {
                 case UDNCalendarType.ctGregorian:
-                    result = CalendarConverter.gregorian_to_jd2(uYear, uMonth, uDay); // fixed
+                    result = (uint)CalendarConverter.gregorian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctJulian:
-                    result = CalendarConverter.julian_to_jd2(uYear, uMonth, uDay); // fixed
+                    result = (uint)CalendarConverter.julian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctHebrew:
-                    result = CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
+                    result = (uint)CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
 
                 case UDNCalendarType.ctIslamic:
-                    result = CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
+                    result = (uint)CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
             }
 

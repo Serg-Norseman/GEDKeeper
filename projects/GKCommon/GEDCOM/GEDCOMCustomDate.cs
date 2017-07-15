@@ -96,7 +96,7 @@ namespace GKCommon.GEDCOM
 
         public abstract DateTime GetDateTime();
         public abstract void SetDateTime(DateTime value);
-        public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
+        public abstract void GetDateParts(out int year, out int month, out int day, out bool yearBC);
 
         protected virtual void DateChanged()
         {
@@ -122,7 +122,7 @@ namespace GKCommon.GEDCOM
             UDN udn = GetUDN();
             if (udn.HasKnownYear()) {
                 int m, d;
-                CalendarConverter.jd_to_gregorian2(udn.GetUnmaskedValue(), out resultYear, out m, out d);
+                CalendarConverter.jd_to_gregorian2((int)udn.GetUnmaskedValue(), out resultYear, out m, out d);
             } else {
                 resultYear = 0;
             }

@@ -22,30 +22,30 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMCutoutPosition : GEDCOMTag
     {
-        private ushort fX1;
-        private ushort fY1;
-        private ushort fX2;
-        private ushort fY2;
+        private int fX1;
+        private int fY1;
+        private int fX2;
+        private int fY2;
 
-        public ushort X1
+        public int X1
         {
             get { return fX1; }
             set { fX1 = value; }
         }
 
-        public ushort Y1
+        public int Y1
         {
             get { return fY1; }
             set { fY1 = value; }
         }
 
-        public ushort X2
+        public int X2
         {
             get { return fX2; }
             set { fX2 = value; }
         }
 
-        public ushort Y2
+        public int Y2
         {
             get { return fY2; }
             set { fY2 = value; }
@@ -58,10 +58,10 @@ namespace GKCommon.GEDCOM
                 return ExtRect.Create(fX1, fY1, fX2, fY2);
             }
             set {
-                fX1 = (ushort)value.Left;
-                fY1 = (ushort)value.Top;
-                fX2 = (ushort)value.Right;
-                fY2 = (ushort)value.Bottom;
+                fX1 = value.Left;
+                fY1 = value.Top;
+                fX2 = value.Right;
+                fY2 = value.Bottom;
             }
         }
 
@@ -114,13 +114,13 @@ namespace GKCommon.GEDCOM
                 strTok.RecognizeDecimals = false;
 
                 Token token = strTok.Next();
-                fX1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fX1 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
                 token = strTok.Next();
-                fY1 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fY1 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
                 token = strTok.Next();
-                fX2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fX2 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
                 token = strTok.Next();
-                fY2 = (ushort)((token.Kind != TokenKind.Number) ? 0 : ushort.Parse(token.Value));
+                fY2 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
             }
 
             return result;
