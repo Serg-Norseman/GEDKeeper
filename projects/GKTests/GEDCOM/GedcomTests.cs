@@ -561,7 +561,8 @@ namespace GKTests.GEDCOM
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
 
-                int year; ushort month, day; bool yearBC;
+                int year, month, day;
+                bool yearBC;
                 dtx1.GetDateParts(out year, out month, out day, out yearBC);
                 Assert.AreEqual(-1, year);
                 Assert.AreEqual(0, month);
@@ -614,7 +615,8 @@ namespace GKTests.GEDCOM
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
 
-                int year; ushort month, day; bool yearBC;
+                int year, month, day;
+                bool yearBC;
                 dtx1.GetDateParts(out year, out month, out day, out yearBC);
                 Assert.AreEqual(-1, year);
                 Assert.AreEqual(0, month);
@@ -691,7 +693,8 @@ namespace GKTests.GEDCOM
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
-                int year; ushort month, day; bool yearBC;
+                int year, month, day;
+                bool yearBC;
                 dtx1.GetDateParts(out year, out month, out day, out yearBC);
                 Assert.AreEqual(-1, year);
                 Assert.AreEqual(0, month);

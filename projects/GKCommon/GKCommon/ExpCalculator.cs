@@ -455,7 +455,6 @@ namespace GKCommon
 
                 default:
                     throw new CalculateException("Syntax error");
-                    break;
             }
         }
 

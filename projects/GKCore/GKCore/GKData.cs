@@ -48,6 +48,12 @@ namespace GKCore
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
 
+        #if __MonoCS__
+        public const string DEF_FONT = "Noto Sans";
+        #else
+        public const string DEF_FONT = "Tahoma";
+        #endif
+
         public struct SexStruct
         {
             public LSID NameId;

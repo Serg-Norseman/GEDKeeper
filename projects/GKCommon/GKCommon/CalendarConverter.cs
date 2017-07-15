@@ -104,20 +104,20 @@ namespace GKCommon
         }
 
         // Based on https://en.wikipedia.org/wiki/Julian_day
-        public static uint gregorian_to_jd2(int year, int month, int day)
+        public static int gregorian_to_jd2(int year, int month, int day)
         {
             int a = (14 - month) / 12;
             int y = year + 4800 - a;
             int m = month + 12 * a - 3;
 
-            return (uint) (day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045);
+            return (day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045);
         }
 
         // Based on https://en.wikipedia.org/wiki/Julian_day
         // astronomical years, 0 = "-4713/11/24"
-        public static void jd_to_gregorian2(uint jd, out int year, out int month, out int day)
+        public static void jd_to_gregorian2(int jd, out int year, out int month, out int day)
         {
-            int a = ((int) (jd)) + 32044;
+            int a = jd + 32044;
             int b = (4 * a + 3) / 146097;
             int c = a - (146097 * b) / 4;
             int d = (4 * c + 3) / 1461;
@@ -171,18 +171,18 @@ namespace GKCommon
             }
         }
 
-        public static uint julian_to_jd2(int year, int month, int day)
+        public static int julian_to_jd2(int year, int month, int day)
         {
             int a = (14 - month) / 12;
             int y = year + 4800 - a;
             int m = month + 12 * a - 3;
 
-            return (uint) (day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083);
+            return (day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083);
         }
 
-        public static void jd_to_julian2(uint jd, out int year, out int month, out int day)
+        public static void jd_to_julian2(int jd, out int year, out int month, out int day)
         {
-            int c = ((int) (jd)) + 32082;
+            int c = jd + 32082;
             int d = (4 * c + 3) / 1461;
             int e = c - (1461 * d) / 4;
             int m = (5 * e + 2) / 153;
@@ -397,7 +397,7 @@ namespace GKCommon
             return getTheSecondDelay(year + 1) - getTheSecondDelay(year);
         }
 
-        public static uint hebrew_to_jd3(int year, int month, int day)
+        public static int hebrew_to_jd3(int year, int month, int day)
         {
             int c0 = downwardRounding(13 - month, 7);
             int x1 = year - 1 + c0;
@@ -412,13 +412,13 @@ namespace GKCommon
             int c3 = downwardRounding(384 * x3 + 7, 13) +
                 c8 * downwardRounding(x3 + 4, 12) +
                 c9 * downwardRounding(x3 + 3, 12);
-            return (uint) (347821 + c2 + c3 + z4);
+            return (347821 + c2 + c3 + z4);
         }
 
-        public static void jd_to_hebrew3(uint jd, out int year, out int month,
+        public static void jd_to_hebrew3(int jd, out int year, out int month,
                                          out int day)
         {
-            int y4 = ((int) (jd)) - 347821;
+            int y4 = jd - 347821;
             int q = downwardRounding(y4, 1447);
             int r = y4 - 1447 * q;
             int gamma1 = 49 * q +
@@ -492,18 +492,18 @@ namespace GKCommon
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static uint islamic_to_jd3(int year, int month, int day)
+        public static int islamic_to_jd3(int year, int month, int day)
         {
             year = downwardRounding(10631 * year - 10617, 30);
             month = downwardRounding(325 * month - 320, 11);
-            return (uint) (year + month + day + 1948439);
+            return (year + month + day + 1948439);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_islamic3(uint jd, out int year, out int month,
+        public static void jd_to_islamic3(int jd, out int year, out int month,
                                           out int day)
         {
-            int k2 = 30 * (((int) (jd)) - 1948440) + 15;
+            int k2 = 30 * (jd - 1948440) + 15;
             int temp = k2 - 10631 * downwardRounding(k2, 10631);
             int k1 = downwardRounding(temp, 30) * 11 + 5;
             year = downwardRounding(k2, 10631) + 1;

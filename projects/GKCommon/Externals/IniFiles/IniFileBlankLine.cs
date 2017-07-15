@@ -41,7 +41,7 @@ namespace Externals.IniFiles
             return Amount.ToString() + " blank line(s)";
         }
 
-        /// <summary>Formats the IniFileElement object using directions in IniFileSettings.</summary>
+        /// <summary>Formats the IniFileElement object using directions in IniFileEx.</summary>
         public override void FormatDefault()
         {
             Amount = 1;

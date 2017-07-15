@@ -43,7 +43,7 @@ namespace GKCore.Options
         private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
         private readonly StringList fEventFilters;
-        private ushort fInterfaceLang;
+        private int fInterfaceLang;
         private readonly List<LangRecord> fLanguages;
         private string fLastDir;
         private readonly List<MRUFile> fMRUFiles;
@@ -128,7 +128,7 @@ namespace GKCore.Options
             get { return fEventFilters; }
         }
 
-        public ushort InterfaceLang
+        public int InterfaceLang
         {
             get { return fInterfaceLang; }
             set { fInterfaceLang = value; }

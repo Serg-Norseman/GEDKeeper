@@ -17,10 +17,10 @@ namespace Externals.IniFiles
         /// <param name="content">Actual content of a line in a INI file.</param>
         public IniFileCommentary(string content) : base(content)
         {
-            if (IniFileSettings.CommentChars.Length == 0)
-                throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
+            if (IniFileEx.CommentChars.Length == 0)
+                throw new NotSupportedException("Comments are disabled. Set the IniFileEx.CommentChars property to turn them on.");
 
-            fCommentChar = StartsWith(Content, IniFileSettings.CommentChars);
+            fCommentChar = StartsWith(Content, IniFileEx.CommentChars);
 
             if (fCommentChar != null && Content.Length > fCommentChar.Length)
                 fComment = Content.Substring(fCommentChar.Length);
@@ -66,7 +66,7 @@ namespace Externals.IniFiles
         /// <param name="testLine">Trimmed test string.</param>
         public static bool IsLineValid(string testLine)
         {
-            return StartsWith(testLine.TrimStart(), IniFileSettings.CommentChars) != null;
+            return StartsWith(testLine.TrimStart(), IniFileEx.CommentChars) != null;
         }
 
         /// <summary>Gets a string representation of this IniFileCommentary object.</summary>
@@ -79,12 +79,12 @@ namespace Externals.IniFiles
         /// <param name="comment">Commentary text.</param>
         public static IniFileCommentary FromComment(string comment)
         {
-            if (IniFileSettings.CommentChars.Length == 0)
-                throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
+            if (IniFileEx.CommentChars.Length == 0)
+                throw new NotSupportedException("Comments are disabled. Set the IniFileEx.CommentChars property to turn them on.");
 
             IniFileCommentary ret = new IniFileCommentary();
             ret.fComment = comment;
-            ret.CommentChar = IniFileSettings.CommentChars[0];
+            ret.CommentChar = IniFileEx.CommentChars[0];
             return ret;
         }
 
@@ -92,7 +92,7 @@ namespace Externals.IniFiles
         public override void FormatDefault()
         {
             base.FormatDefault();
-            CommentChar = IniFileSettings.CommentChars[0];
+            CommentChar = IniFileEx.CommentChars[0];
             Rewrite();
         }
     }

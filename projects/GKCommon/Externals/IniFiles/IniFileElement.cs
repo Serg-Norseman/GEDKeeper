@@ -36,7 +36,7 @@ namespace Externals.IniFiles
         }
 
         /// <summary>Gets or sets a formatting string of this INI file element, spicific to it's type.
-        /// See DefaultFormatting property in IniFileSettings for more info.</summary>
+        /// See DefaultFormatting property in IniFileEx for more info.</summary>
         public string Formatting
         {
             get { return fFormatting; }
@@ -59,8 +59,8 @@ namespace Externals.IniFiles
             {
                 if (value.TrimStart().Length > 0)
                     throw new ArgumentException("Intendation property cannot contain any characters which are not condsidered as white ones.");
-                if (IniFileSettings.TabReplacement != null)
-                    value = value.Replace("\t", IniFileSettings.TabReplacement);
+                if (IniFileEx.TabReplacement != null)
+                    value = value.Replace("\t", IniFileEx.TabReplacement);
                 fFormatting = value + fFormatting.TrimStart();
                 fLine = value + fLine.TrimStart();
             }

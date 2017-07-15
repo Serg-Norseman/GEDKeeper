@@ -294,6 +294,32 @@ namespace GKCore.Charts
             return result;
         }
 
+        public CircleSegment FindSegment(float dX, float dY)
+        {
+            double rad = Math.Sqrt(dX * dX + dY * dY);
+            double angle = SysUtils.RadiansToDegrees(Math.Atan2(dY, dX));
+            if (angle <= -90) angle += 360.0f;
+
+            CircleSegment result = null;
+
+            int numberOfSegments = fSegments.Count;
+            for (int i = 0; i < numberOfSegments; i++)
+            {
+                CircleSegment segment = fSegments[i];
+                double startAng = segment.StartAngle;
+                double endAng = startAng + segment.WedgeAngle;
+
+                if ((segment.IntRad <= rad && rad < segment.ExtRad) &&
+                    (startAng <= angle && angle < endAng))
+                {
+                    result = segment;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Renders a specified <paramref name="segment"/>'s person name within
         /// the segment.

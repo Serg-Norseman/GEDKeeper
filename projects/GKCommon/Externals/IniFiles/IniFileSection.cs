@@ -40,7 +40,7 @@ namespace Externals.IniFiles
         private void setComment(IniFileElement el, string comment)
         {
             int index = parent.elements.IndexOf(el);
-            if (IniFileSettings.CommentChars.Length == 0)
+            if (IniFileEx.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are currently disabled. Setup ConfigFileSettings.CommentChars property to enable them.");
             IniFileCommentary com;
             if (index > 0 && parent.elements[index - 1] is IniFileCommentary) {
@@ -77,7 +77,7 @@ namespace Externals.IniFiles
                 IniFileValue value = elements[i] as IniFileValue;
                 if (value == null) continue;
 
-                if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
+                if (value.Key == key || (!IniFileEx.CaseSensitive && value.Key.ToLowerInvariant() == lower))
                     return value;
             }
 
@@ -153,7 +153,7 @@ namespace Externals.IniFiles
             set
             {
                 IniFileValue v = GetValue(key);
-                //if (!IniFileSettings.AllowEmptyValues && value == "") {
+                //if (!IniFileEx.AllowEmptyValues && value == "") {
                 //    if (v != null) {
                 //        elements.Remove(v);
                 //        parent.elements.Remove(v);
@@ -186,7 +186,7 @@ namespace Externals.IniFiles
             IniFileValue ret = null;
             IniFileValue prev = LastValue();
             
-            if (IniFileSettings.PreserveFormatting) {
+            if (IniFileEx.PreserveFormatting) {
                 if (prev != null && prev.Intendation.Length >= sectionStart.Intendation.Length)
                     ret = prev.CreateNew(key, value);
                 else {

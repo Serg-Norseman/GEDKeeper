@@ -158,7 +158,7 @@ namespace GKCommon.GEDCOM
             return (match / matches);
         }
 
-        public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
+        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
         {
             if (fValue == null) {
                 year = -1;

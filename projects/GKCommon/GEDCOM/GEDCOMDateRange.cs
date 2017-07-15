@@ -190,7 +190,7 @@ namespace GKCommon.GEDCOM
             return new GEDCOMDateRange(owner, parent, tagName, tagValue);
         }
 
-        public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
+        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
         {
             year = -1;
             month = 0;
