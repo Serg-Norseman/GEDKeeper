@@ -58,7 +58,7 @@ namespace GKCore.SingleInstance
 
     public sealed class IpcMessage
     {
-        public ulong ID;
+        public long ID;
         public long Time;
         public AppMessage Message;
         public int LParam;
@@ -85,7 +85,7 @@ namespace GKCore.SingleInstance
 
             IpcMessage msg = new IpcMessage();
 
-            msg.ID = br.ReadUInt64();
+            msg.ID = br.ReadInt64();
             msg.Time = br.ReadInt64();
             msg.Message = (AppMessage)br.ReadInt32();
             msg.LParam = br.ReadInt32();
