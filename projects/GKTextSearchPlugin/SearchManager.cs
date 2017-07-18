@@ -230,7 +230,7 @@ namespace GKTextSearchPlugin
         public class SearchEntry
         {
             public string XRef;
-            public uint Rank;
+            public long Rank;
             public int Percent;
         }
 

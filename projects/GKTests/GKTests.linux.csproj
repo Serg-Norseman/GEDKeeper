@@ -18,6 +18,7 @@
     <WarningLevel>4</WarningLevel>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -161,10 +162,6 @@
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.linux.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2.linux</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
-      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon.linux</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>

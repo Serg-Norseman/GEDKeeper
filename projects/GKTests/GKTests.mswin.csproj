@@ -166,10 +166,6 @@
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
-      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>

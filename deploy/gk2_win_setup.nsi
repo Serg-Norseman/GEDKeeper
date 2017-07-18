@@ -189,7 +189,6 @@ Section "$(gkreq)"
   SetOutPath $INSTDIR
 
   File "..\GEDKeeper2.exe"
-  File "..\GKCommon.dll"
   File "..\GKComponents.dll"
   File "..\GKCore.dll"
 
@@ -216,7 +215,6 @@ Section "$(gkreq)"
 
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
-  File "..\plugins\GKCommon.dll"
 
   CreateDirectory "$INSTDIR\samples"
   SetOutPath "$INSTDIR\samples"

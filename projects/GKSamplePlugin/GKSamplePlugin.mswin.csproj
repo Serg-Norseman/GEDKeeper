@@ -95,9 +95,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
-      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon</Name>
+    <ProjectReference Include="..\GKCore\GKCore.mswin.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

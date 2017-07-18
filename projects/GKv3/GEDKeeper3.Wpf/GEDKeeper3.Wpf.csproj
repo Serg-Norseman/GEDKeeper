@@ -62,10 +62,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCommon\GKCommon.pcl.csproj">
-      <Project>{a14ce3e2-b8ec-41c8-a7d1-75ae5d2509c4}</Project>
-      <Name>GKCommon.pcl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore.pcl</Name>

@@ -21,6 +21,7 @@
     <TargetFrameworkProfile />
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -115,13 +116,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
-      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>GKCommon.linux</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore.linux</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
