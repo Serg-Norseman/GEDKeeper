@@ -22,6 +22,9 @@ using System;
 using System.Globalization;
 using System.Threading;
 
+using GKCore;
+using GKCore.Types;
+
 namespace GKCommon.GEDCOM
 {
     public class GEDCOMDateException : EGEDCOMException
@@ -740,10 +743,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
+        public int GetMonthNumber()
         {
-            year = fYear;
-
+            int month;
             switch (fCalendar) {
                 case GEDCOMCalendar.dcHebrew:
                     month = GEDCOMMonthHebrewToInt(fMonth);
@@ -757,9 +759,7 @@ namespace GKCommon.GEDCOM
                     month = GEDCOMMonthToInt(fMonth);
                     break;
             }
-
-            day = fDay;
-            yearBC = fYearBC;
+            return month;
         }
 
         public void SetDate(GEDCOMCalendar calendar, int day, int month, int year)
@@ -872,13 +872,14 @@ namespace GKCommon.GEDCOM
 
         protected override void DateChanged()
         {
-            int year, month, day;
-            bool yearBC;
-            GetDateParts(out year, out month, out day, out yearBC);
+            int year = fYear;
+            int month = GetMonthNumber();
+            int day = fDay;
+
             if (year == UNKNOWN_YEAR) {
                 year = UDN.UnknownYear;
             } else {
-                if (yearBC) year = -year;
+                if (fYearBC) year = -year;
             }
 
             UDNCalendarType udnCalendar = UDNCalendars[(int)fCalendar];
@@ -949,6 +950,73 @@ namespace GKCommon.GEDCOM
                 Logger.LogWrite("GEDCOMDate.GetUDNByFormattedStr(" + dateStr + "): " + ex.Message);
                 return UDN.CreateEmpty();
             }
+        }
+
+        public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)
+        {
+            string result = "";
+
+            int year = fYear;
+            int month = GetMonthNumber();
+            int day = fDay;
+            bool ybc = fYearBC;
+
+            if (year > 0 || month > 0 || day > 0)
+            {
+                switch (format) {
+                    case DateFormat.dfDD_MM_YYYY:
+                        result += day > 0 ? SysUtils.AdjustNum(day, 2) + "." : "__.";
+                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
+                        result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                        break;
+
+                    case DateFormat.dfYYYY_MM_DD:
+                        result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
+                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? SysUtils.AdjustNum(day, 2) : "__";
+                        break;
+
+                    case DateFormat.dfYYYY:
+                        if (year > 0) {
+                            result = year.ToString().PadLeft(4, '_');
+                        }
+                        break;
+                }
+            }
+
+            if (includeBC && ybc)
+            {
+                switch (format) {
+                    case DateFormat.dfDD_MM_YYYY:
+                        result = result + " BC";
+                        break;
+                    case DateFormat.dfYYYY_MM_DD:
+                        result = "BC " + result;
+                        break;
+                    case DateFormat.dfYYYY:
+                        result = "BC " + result;
+                        break;
+                }
+            }
+
+            if (showCalendar)
+            {
+                result = result + GKData.DateCalendars[(int)fCalendar].Sign;
+            }
+
+            return result;
+        }
+
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        {
+            string result = "";
+
+            result = GetDisplayString(format, true, showCalendar);
+            if (sign && fApproximated != GEDCOMApproximated.daExact) {
+                result = "~ " + result;
+            }
+
+            return result;
         }
 
         #endregion

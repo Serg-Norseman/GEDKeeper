@@ -22,10 +22,10 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Types;
 using GKUI;
 using NUnit.Framework;
 
@@ -560,45 +560,28 @@ namespace GKTests.GEDCOM
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
-
-                int year, month, day;
-                bool yearBC;
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(-1, year);
-                Assert.AreEqual(0, month);
-                Assert.AreEqual(0, day);
-                Assert.AreEqual(false, yearBC);
-
+                Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // date is empty
                 UDN udn = dtx1.GetUDN();
                 Assert.IsTrue(udn.IsEmpty());
 
                 dtx1.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
                 Assert.AreEqual("BET 04 JAN 2013 AND 25 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(04, day);
+                Assert.AreEqual("2013.01.04 [G] - 2013.01.25 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
                 dtx1.ParseString("BEF 20 JAN 2013");
                 Assert.AreEqual("BEF 20 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(20, day);
+                Assert.AreEqual("< 2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
                 dtx1.ParseString("AFT 20 JAN 2013");
                 Assert.AreEqual("AFT 20 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(20, day);
+                Assert.AreEqual("2013.01.20 [G] >", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
@@ -615,14 +598,7 @@ namespace GKTests.GEDCOM
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
 
-                int year, month, day;
-                bool yearBC;
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(-1, year);
-                Assert.AreEqual(0, month);
-                Assert.AreEqual(0, day);
-                Assert.AreEqual(false, yearBC);
-
+                Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // date is empty
                 UDN udn = dtx1.GetUDN();
                 Assert.IsTrue(udn.IsEmpty());
 
@@ -633,10 +609,7 @@ namespace GKTests.GEDCOM
 
                 Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(04, day);
+                Assert.AreEqual("2013.01.04 [G] - 2013.01.23 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
@@ -650,10 +623,7 @@ namespace GKTests.GEDCOM
                 dtx1.ParseString("FROM 04 JAN 2013");
                 Assert.AreEqual("FROM 04 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(ParseDT("04.01.2013"), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(04, day);
+                Assert.AreEqual("2013.01.04 [G] >", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
@@ -661,10 +631,7 @@ namespace GKTests.GEDCOM
                 dtx1.ParseString("TO 23 JAN 2013");
                 Assert.AreEqual("TO 23 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(ParseDT("23.01.2013"), dtx1.Date);
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(23, day);
+                Assert.AreEqual("< 2013.01.23 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
@@ -688,25 +655,13 @@ namespace GKTests.GEDCOM
                 }
             }
 
-            // check GetDateParts
             using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
-
-                int year, month, day;
-                bool yearBC;
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(-1, year);
-                Assert.AreEqual(0, month);
-                Assert.AreEqual(0, day);
-                Assert.AreEqual(false, yearBC);
+                Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // value is empty
 
                 dtx1.ParseString("20 JAN 2013");
-                dtx1.GetDateParts(out year, out month, out day, out yearBC);
-                Assert.AreEqual(2013, year);
-                Assert.AreEqual(1, month);
-                Assert.AreEqual(20, day);
-                Assert.AreEqual(false, yearBC);
+                Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
             }
 
             using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", "20 JAN 2013"))

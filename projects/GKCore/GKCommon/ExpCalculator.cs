@@ -402,13 +402,15 @@ namespace GKCommon
                 throw new CalculateException("Syntax error");
         }
 
-        private void term(ref double R)
+        private double term()
         {
+            double R = 0.0d;
+
             switch (fToken)
             {
                 case ExpToken.tkLBRACE:
                     lex();
-                    expr6(ref R);
+                    R = expr6();
                     checkToken(ExpToken.tkRBRACE);
                     lex();
                     break;
@@ -433,7 +435,7 @@ namespace GKCommon
                                 if (st == "if") {
                                     exprIf(out R);
                                 } else {
-                                    expr6(ref R);
+                                    R = expr6();
                                     DefaultCallback(CallbackType.Function, st, ref R);
                                 }
                                 checkToken(ExpToken.tkRBRACE);
@@ -442,7 +444,7 @@ namespace GKCommon
 
                             case ExpToken.tkASSIGN:
                                 lex();
-                                expr6(ref R);
+                                R = expr6();
                                 DefaultCallback(CallbackType.SetValue, st, ref R);
                                 break;
 
@@ -456,45 +458,50 @@ namespace GKCommon
                 default:
                     throw new CalculateException("Syntax error");
             }
+
+            return R;
         }
 
         private void exprIf(out double R)
         {
             double resCond = 0.0d, resThen = 0.0d, resElse = 0.0d;
 
-            expr6(ref resCond);
+            resCond = expr6();
 
             checkToken(ExpToken.tkSEMICOLON);
             lex();
-            expr6(ref resThen);
+            resThen = expr6();
 
             checkToken(ExpToken.tkSEMICOLON);
             lex();
-            expr6(ref resElse);
+            resElse = expr6();
 
             R = (resCond == 1.0d) ? resThen : resElse;
         }
 
-        private void expr1(ref double R)
+        private double expr1()
         {
-            term(ref R);
+            double R = term();
 
             if (fToken == ExpToken.tkPOW)
             {
                 lex();
-                double V = 0.0;
-                term(ref V);
+                double V = term();
                 R = Math.Pow(R, V);
             }
+
+            return R;
         }
 
-        private void expr2(ref double R)
+        private double expr2()
         {
+            double R;
+
             if (fToken >= ExpToken.tkINV && (fToken < ExpToken.tkMUL || (fToken >= ExpToken.tkADD && fToken < ExpToken.tkLT)))
             {
                 ExpToken oldt = fToken;
                 lex();
-                expr2(ref R);
+                R = expr2();
 
                 switch (oldt) {
                     case ExpToken.tkINV:
@@ -510,21 +517,23 @@ namespace GKCommon
                         break;
                 }
             } else {
-                expr1(ref R);
+                R = expr1();
             }
+
+            return R;
         }
 
-        private void expr3(ref double R)
+        private double expr3()
         {
-            expr2(ref R);
+            double R = expr2();
+
             while (true)
             {
                 if (fToken < ExpToken.tkMUL || fToken > ExpToken.tkPER) break;
 
                 ExpToken oldt = fToken;
                 lex();
-                double V = 0.0;
-                expr2(ref V);
+                double V = expr2();
 
                 switch (oldt) {
                     case ExpToken.tkMUL:
@@ -544,19 +553,21 @@ namespace GKCommon
                         break;
                 }
             }
+
+            return R;
         }
 
-        private void expr4(ref double R)
+        private double expr4()
         {
-            expr3(ref R);
+            double R = expr3();
+
             while (true)
             {
                 if (fToken < ExpToken.tkADD || fToken > ExpToken.tkSUB) break;
 
                 ExpToken oldt = fToken;
                 lex();
-                double V = 0.0;
-                expr3(ref V);
+                double V = expr3();
 
                 switch (oldt) {
                     case ExpToken.tkADD:
@@ -568,19 +579,21 @@ namespace GKCommon
                         break;
                 }
             }
+
+            return R;
         }
 
-        private void expr5(ref double R)
+        private double expr5()
         {
-            expr4(ref R);
+            double R = expr4();
+
             while (true)
             {
                 if (fToken < ExpToken.tkLT || fToken > ExpToken.tkGT) break;
 
                 ExpToken oldt = fToken;
                 lex();
-                double V = 0.0;
-                expr4(ref V);
+                double V = expr4();
 
                 switch (oldt) {
                     case ExpToken.tkLT:
@@ -608,19 +621,21 @@ namespace GKCommon
                         break;
                 }
             }
+
+            return R;
         }
 
-        private void expr6(ref double R)
+        private double expr6()
         {
-            expr5(ref R);
+            double R = expr5();
+
             while (true)
             {
                 if (fToken < ExpToken.tkOR || fToken > ExpToken.tkAND) break;
 
                 ExpToken oldt = fToken;
                 lex();
-                double V = 0.0;
-                expr5(ref V);
+                double V = expr5();
 
                 switch (oldt) {
                     case ExpToken.tkOR:
@@ -636,16 +651,21 @@ namespace GKCommon
                         break;
                 }
             }
+
+            return R;
         }
 
-        private void expr7(ref double R)
+        private double expr7()
         {
-            expr6(ref R);
+            double R = expr6();
+
             while (fToken == ExpToken.tkSEMICOLON)
             {
                 lex();
-                expr6(ref R);
+                R = expr6();
             }
+
+            return R;
         }
 
         #endregion
@@ -664,7 +684,7 @@ namespace GKCommon
             fTokenizer.Next();
 
             lex();
-            expr7(ref result);
+            result = expr7();
             checkToken(ExpToken.tkEOF);
 
             return result;

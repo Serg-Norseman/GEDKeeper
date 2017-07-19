@@ -66,7 +66,7 @@ namespace GKUI.Dialogs
                 {
                     txtName.Text = fCommunication.CommName;
                     cmbCorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    txtDate.Text = GKUtils.GetDateFmtString(fCommunication.Date, DateFormat.dfDD_MM_YYYY);
+                    txtDate.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                     GKCommunicationDir dir;
                     fCommunication.GetCorresponder(out dir, out fTempInd);

@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
@@ -190,27 +191,6 @@ namespace GKCommon.GEDCOM
             return new GEDCOMDateRange(owner, parent, tagName, tagValue);
         }
 
-        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
-        {
-            year = -1;
-            month = 0;
-            day = 0;
-            yearBC = false;
-
-            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "")
-            {
-                fDateBefore.GetDateParts(out year, out month, out day, out yearBC);
-            }
-            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "")
-            {
-                fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
-            }
-            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "")
-            {
-                fDateAfter.GetDateParts(out year, out month, out day, out yearBC);
-            }
-        }
-
         public override UDN GetUDN()
         {
             UDN result;
@@ -230,6 +210,28 @@ namespace GKCommon.GEDCOM
             else
             {
                 result = UDN.CreateEmpty();
+            }
+
+            return result;
+        }
+
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        {
+            string result = "";
+
+            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "")
+            {
+                result = fDateBefore.GetDisplayString(format, true, showCalendar);
+                if (sign) result = "< " + result;
+            }
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "")
+            {
+                result = fDateAfter.GetDisplayString(format, true, showCalendar);
+                if (sign) result += " >";
+            }
+            else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "")
+            {
+                result = fDateAfter.GetDisplayString(format, true, showCalendar) + " - " + fDateBefore.GetDisplayString(format, true, showCalendar);
             }
 
             return result;

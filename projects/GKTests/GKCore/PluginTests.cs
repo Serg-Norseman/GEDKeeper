@@ -56,7 +56,7 @@ namespace GKTests.GKCore
             public ILangMan LangMan { get { return null; } }
 
             public void Execute() { }
-            public void OnHostClosing(ref bool cancelClosing) {}
+            public void OnHostClosing(HostClosingEventArgs eventArgs) {}
             public void OnHostActivate() {}
             public void OnHostDeactivate() {}
             public void OnLanguageChange() {}

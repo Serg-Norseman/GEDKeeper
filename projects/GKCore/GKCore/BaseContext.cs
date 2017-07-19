@@ -697,9 +697,9 @@ namespace GKCore
 
             using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read))
             {
-                ZipStorer.ZipFileEntry? entry = zip.FindFile(targetFn);
+                ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
                 if (entry != null) {
-                    zip.ExtractStream(entry.Value, toStream);
+                    zip.ExtractStream(entry, toStream);
                 }
             }
         }

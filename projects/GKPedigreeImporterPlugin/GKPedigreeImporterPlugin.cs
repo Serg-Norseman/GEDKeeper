@@ -102,7 +102,7 @@ namespace GKPedigreeImporterPlugin
             frm.ShowDialog();
         }
 
-        public void OnHostClosing(ref bool cancelClosing) {}
+        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
         public void OnHostActivate() {}
         public void OnHostDeactivate() {}
 

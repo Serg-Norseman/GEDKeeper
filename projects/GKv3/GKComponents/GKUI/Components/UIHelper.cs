@@ -113,7 +113,7 @@ namespace GKUI.Components
             return ExtRectF.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
         }
 
-        public static void NormalizeFormRect(ref ExtRect winRect)
+        public static ExtRect NormalizeFormRect(ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
             #if !CI_MODE
@@ -143,6 +143,8 @@ namespace GKUI.Components
             }
 
             #endif
+
+            return winRect;
         }
 
         public static ExtRect GetFormRect(Form form)

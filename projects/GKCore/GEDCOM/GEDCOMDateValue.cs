@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
@@ -158,18 +159,6 @@ namespace GKCommon.GEDCOM
             return (match / matches);
         }
 
-        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
-        {
-            if (fValue == null) {
-                year = -1;
-                month = 0;
-                day = 0;
-                yearBC = false;
-            } else {
-                fValue.GetDateParts(out year, out month, out day, out yearBC);
-            }
-        }
-
         public override UDN GetUDN()
         {
             return (fValue == null) ? UDN.CreateEmpty() : fValue.GetUDN();
@@ -185,6 +174,12 @@ namespace GKCommon.GEDCOM
         public override int GetChronologicalYear()
         {
             return (fValue == null) ? 0 : fValue.GetChronologicalYear();
+        }
+
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        {
+            string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar);
+            return result;
         }
 
         #endregion

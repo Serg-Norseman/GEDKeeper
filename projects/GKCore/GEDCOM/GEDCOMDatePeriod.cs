@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
@@ -175,27 +176,6 @@ namespace GKCommon.GEDCOM
             return new GEDCOMDatePeriod(owner, parent, tagName, tagValue);
         }
 
-        public override void GetDateParts(out int year, out int month, out int day, out bool yearBC)
-        {
-            year = -1;
-            month = 0;
-            day = 0;
-            yearBC = false;
-
-            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "")
-            {
-                fDateFrom.GetDateParts(out year, out month, out day, out yearBC);
-            }
-            else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "")
-            {
-                fDateTo.GetDateParts(out year, out month, out day, out yearBC);
-            }
-            else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "")
-            {
-                fDateFrom.GetDateParts(out year, out month, out day, out yearBC);
-            }
-        }
-
         public override UDN GetUDN()
         {
             UDN result;
@@ -215,6 +195,28 @@ namespace GKCommon.GEDCOM
             else
             {
                 result = UDN.CreateEmpty();
+            }
+
+            return result;
+        }
+
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        {
+            string result = "";
+
+            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "")
+            {
+                result = fDateFrom.GetDisplayString(format, true, showCalendar);
+                if (sign) result += " >";
+            }
+            else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "")
+            {
+                result = fDateTo.GetDisplayString(format, true, showCalendar);
+                if (sign) result = "< " + result;
+            }
+            else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "")
+            {
+                result = fDateFrom.GetDisplayString(format, true, showCalendar) + " - " + fDateTo.GetDisplayString(format, true, showCalendar);
             }
 
             return result;

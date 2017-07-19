@@ -481,122 +481,9 @@ namespace GKCore
 
         #region Date functions
 
-        public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false, bool showCalendar = false)
-        {
-            if (date == null)
-                throw new ArgumentNullException("date");
-
-            string result = "";
-            int year, month, day;
-            bool ybc;
-            date.GetDateParts(out year, out month, out day, out ybc);
-
-            if (year > 0 || month > 0 || day > 0)
-            {
-                switch (format) {
-                    case DateFormat.dfDD_MM_YYYY:
-                        result += day > 0 ? SysUtils.AdjustNum(day, 2) + "." : "__.";
-                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
-                        result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
-                        break;
-
-                    case DateFormat.dfYYYY_MM_DD:
-                        result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
-                        result += day > 0 ? SysUtils.AdjustNum(day, 2) : "__";
-                        break;
-
-                    case DateFormat.dfYYYY:
-                        if (year > 0) {
-                            result = year.ToString().PadLeft(4, '_');
-                        }
-                        break;
-                }
-            }
-
-            if (includeBC && ybc) {
-                switch (format) {
-                    case DateFormat.dfDD_MM_YYYY:
-                        result = result + " BC";
-                        break;
-                    case DateFormat.dfYYYY_MM_DD:
-                        result = "BC " + result;
-                        break;
-                    case DateFormat.dfYYYY:
-                        result = "BC " + result;
-                        break;
-                }
-            }
-
-            if (showCalendar)
-            {
-                result = result + GKData.DateCalendars[(int)date.DateCalendar].Sign;
-            }
-
-            return result;
-        }
-
-        public static string GetCustomDateFmtString(GEDCOMCustomDate date, DateFormat format, bool sign, bool showCalendar)
-        {
-            string result = "";
-
-            if (date != null)
-            {
-                if (date is GEDCOMDate)
-                {
-                    GEDCOMDate dtx = (GEDCOMDate) date;
-                    result = GetDateFmtString(dtx, format, true, showCalendar);
-
-                    if (sign && dtx.Approximated != GEDCOMApproximated.daExact) {
-                        result = "~ " + result;
-                    }
-                }
-                else if (date is GEDCOMDateRange)
-                {
-                    GEDCOMDateRange range = (GEDCOMDateRange) date;
-
-                    if (range.After.StringValue == "" && range.Before.StringValue != "")
-                    {
-                        result = GetDateFmtString(range.Before, format, true, showCalendar);
-                        if (sign) result = "< " + result;
-                    }
-                    else if (range.After.StringValue != "" && range.Before.StringValue == "")
-                    {
-                        result = GetDateFmtString(range.After, format, true, showCalendar);
-                        if (sign) result += " >";
-                    }
-                    else if (range.After.StringValue != "" && range.Before.StringValue != "")
-                    {
-                        result = GetDateFmtString(range.After, format, true, showCalendar) + " - " + GetDateFmtString(range.Before, format, true, showCalendar);
-                    }
-                }
-                else if (date is GEDCOMDatePeriod)
-                {
-                    GEDCOMDatePeriod period = (GEDCOMDatePeriod) date;
-
-                    if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
-                    {
-                        result = GetDateFmtString(period.DateFrom, format, true, showCalendar);
-                        if (sign) result += " >";
-                    }
-                    else if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
-                    {
-                        result = GetDateFmtString(period.DateTo, format, true, showCalendar);
-                        if (sign) result = "< " + result;
-                    }
-                    else if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
-                    {
-                        result = GetDateFmtString(period.DateFrom, format, true, showCalendar) + " - " + GetDateFmtString(period.DateTo, format, true, showCalendar);
-                    }
-                }
-            }
-
-            return result;
-        }
-
         public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
         {
-            return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Date.Value, format, sign, false);
+            return (evt == null) ? string.Empty : evt.Date.GetDisplayStringExt(format, sign, false);
         }
 
         public static string CompactDate(string date)
@@ -855,7 +742,7 @@ namespace GKCore
         public static string GetMarriageDateStr(GEDCOMFamilyRecord fRec, DateFormat dateFormat)
         {
             GEDCOMCustomDate date = GetMarriageDate(fRec);
-            return (date == null) ? string.Empty : GetCustomDateFmtString(date, dateFormat, false, false);
+            return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, false, false);
         }
 
         /// <summary>
@@ -884,13 +771,12 @@ namespace GKCore
                         evt = iRec.FindEvent("BIRT");
                         if (evt != null)
                         {
-                            GEDCOMDate dt = evt.Date.Value as GEDCOMDate;
+                            var dt = evt.Date.Value as GEDCOMDate;
                             if (dt != null)
                             {
-                                int bdY, bdM, bdD;
-                                bool ybc;
+                                int bdM = dt.GetMonthNumber();
+                                int bdD = dt.Day;
 
-                                dt.GetDateParts(out bdY, out bdM, out bdD, out ybc);
                                 if (bdM != 0 && bdD != 0)
                                 {
                                     DateTime dtNow = DateTime.Now.Date;
@@ -899,14 +785,7 @@ namespace GKCore
                                     int curD = dtNow.Day;
                                     double dt2 = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
                                     double dt3 = curY + curM / 12.0 + curD / 12.0 / 31.0;
-                                    if (dt2 < dt3)
-                                    {
-                                        bdY = (short)(curY + 1);
-                                    }
-                                    else
-                                    {
-                                        bdY = (short)curY;
-                                    }
+                                    int bdY = (dt2 < dt3) ? (curY + 1) : curY;
                                     distance = SysUtils.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
                                     result = true;
                                 }
@@ -2311,8 +2190,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
                         summary.Add(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GetDateFmtString(researchRec.StartDate, DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GetDateFmtString(researchRec.StopDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
 
                         if (researchRec.Tasks.Count > 0)
                         {
@@ -2384,8 +2263,8 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(taskRec) + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GetDateFmtString(taskRec.StartDate, DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GetDateFmtString(taskRec.StopDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + taskRec.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + taskRec.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
 
                         RecListNotesRefresh(taskRec, summary);
                     }
@@ -2420,7 +2299,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Corresponder) + ": " + GetCorresponderStr(tree, commRec, true));
                         summary.Add(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
-                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + GetDateFmtString(commRec.Date, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + commRec.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY));
 
                         RecListNotesRefresh(commRec, summary);
                         RecListMediaRefresh(commRec, summary);

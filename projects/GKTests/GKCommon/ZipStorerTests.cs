@@ -53,16 +53,16 @@ namespace GKTests.GKCommon
             using (ZipStorer zip = ZipStorer.Open(fileName, FileAccess.Read)) {
                 Assert.Throws(typeof(ArgumentNullException), () => { zip.FindFile(null); });
 
-                ZipStorer.ZipFileEntry? entry = zip.FindFile("invalid");
+                ZipStorer.ZipFileEntry entry = zip.FindFile("invalid");
                 Assert.IsNull(entry);
 
                 entry = zip.FindFile("csv_file.csv");
                 Assert.IsNotNull(entry);
 
                 using (MemoryStream csvStream = new MemoryStream()) {
-                    Assert.Throws(typeof(ArgumentNullException), () => { zip.ExtractStream(entry.Value, null); });
+                    Assert.Throws(typeof(ArgumentNullException), () => { zip.ExtractStream(entry, null); });
 
-                    zip.ExtractStream(entry.Value, csvStream);
+                    zip.ExtractStream(entry, csvStream);
 
                     csvStream.Seek(0, SeekOrigin.Begin);
                     using (var reader = new StreamReader(csvStream, Encoding.ASCII)) {

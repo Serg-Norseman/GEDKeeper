@@ -305,7 +305,6 @@ namespace GKTests.GKCore
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetPedigreeLifeStr(null, PedigreeFormat.Compact); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetDateFmtString(null, DateFormat.dfDD_MM_YYYY, false, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });

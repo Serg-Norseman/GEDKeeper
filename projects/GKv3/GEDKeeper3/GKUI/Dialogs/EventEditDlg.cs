@@ -295,8 +295,8 @@ namespace GKUI.Dialogs
                     cmbEventDateType.SelectedIndex = 3;
                 }
 
-                txtEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
-                txtEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
+                txtEventDate1.Text = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                txtEventDate2.Text = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 SetComboCalendar(cmbDate1Calendar, dtRange.After.DateCalendar);
                 SetComboCalendar(cmbDate2Calendar, dtRange.Before.DateCalendar);
                 btnBC1.Checked = dtRange.After.YearBC;
@@ -319,8 +319,8 @@ namespace GKUI.Dialogs
                     cmbEventDateType.SelectedIndex = 6;
                 }
 
-                txtEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
-                txtEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
+                txtEventDate1.Text = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                txtEventDate2.Text = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 SetComboCalendar(cmbDate1Calendar, dtPeriod.DateFrom.DateCalendar);
                 SetComboCalendar(cmbDate2Calendar, dtPeriod.DateTo.DateCalendar);
                 btnBC1.Checked = dtPeriod.DateFrom.YearBC;
@@ -345,7 +345,7 @@ namespace GKUI.Dialogs
                         break;
                 }
 
-                txtEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+                txtEventDate1.Text = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 SetComboCalendar(cmbDate1Calendar, (date as GEDCOMDate).DateCalendar);
                 btnBC1.Checked = (date as GEDCOMDate).YearBC;
             }

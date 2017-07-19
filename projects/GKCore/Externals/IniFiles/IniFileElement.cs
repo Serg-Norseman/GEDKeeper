@@ -120,10 +120,10 @@ namespace Externals.IniFiles
             public int Index;
             public string Any;
 
-            public IndexOfAnyResult(int i, string any)
+            public IndexOfAnyResult(int index, string any)
             {
+                Index = index;
                 Any = any;
-                Index = i;
             }
         }
 

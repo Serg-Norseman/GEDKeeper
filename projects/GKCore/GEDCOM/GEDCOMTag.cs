@@ -62,7 +62,7 @@ namespace GKCommon.GEDCOM
             get { return fTags[index]; }
         }
 
-        public int Level
+        internal int Level
         {
             get { return fLevel; }
         }

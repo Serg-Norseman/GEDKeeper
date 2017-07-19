@@ -65,8 +65,8 @@ namespace GKUI.Dialogs
                 else
                 {
                     txtPriority.SelectedIndex = (sbyte)fTask.Priority;
-                    txtStartDate.Text = GKUtils.GetDateFmtString(fTask.StartDate, DateFormat.dfDD_MM_YYYY);
-                    txtStopDate.Text = GKUtils.GetDateFmtString(fTask.StopDate, DateFormat.dfDD_MM_YYYY);
+                    txtStartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    txtStopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                     GKGoalType gt;
                     fTask.GetTaskGoal(out gt, out fTempRec);

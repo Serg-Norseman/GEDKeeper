@@ -68,8 +68,8 @@ namespace GKUI.Dialogs
                     txtName.Text = fResearch.ResearchName;
                     cmbPriority.SelectedIndex = (int)fResearch.Priority;
                     cmbStatus.SelectedIndex = (int)fResearch.Status;
-                    txtStartDate.Text = GKUtils.GetDateFmtString(fResearch.StartDate, DateFormat.dfDD_MM_YYYY);
-                    txtStopDate.Text = GKUtils.GetDateFmtString(fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
+                    txtStartDate.Text = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    txtStopDate.Text = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                     nudPercent.Value = fResearch.Percent;
                 }
 

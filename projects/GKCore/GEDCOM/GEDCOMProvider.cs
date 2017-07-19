@@ -39,7 +39,7 @@ namespace GKCommon.GEDCOM
         }
     }
 
-    public struct GEDCOMAppFormat
+    public sealed class GEDCOMAppFormat
     {
         public string Sign;
         public string Name;

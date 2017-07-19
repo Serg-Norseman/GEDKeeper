@@ -18,8 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GKCore.Interfaces
 {
+    public class HostClosingEventArgs : EventArgs
+    {
+        private bool fCancel;
+
+        public bool Cancel
+        {
+            get { return fCancel; }
+            set { fCancel = value; }
+        }
+
+        public HostClosingEventArgs()
+        {
+            fCancel = false;
+        }
+    }
+
     public interface IPlugin
     {
         /// <summary>
@@ -38,7 +56,7 @@ namespace GKCore.Interfaces
         bool Startup(IHost host);
         bool Shutdown();
 
-        void OnHostClosing(ref bool cancelClosing);
+        void OnHostClosing(HostClosingEventArgs eventArgs);
         void OnHostActivate();
         void OnHostDeactivate();
         void OnLanguageChange();

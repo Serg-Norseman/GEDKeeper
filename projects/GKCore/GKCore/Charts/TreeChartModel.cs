@@ -76,6 +76,7 @@ namespace GKCore.Charts
         private IPen fDecorativeLinePen;
         private int fDepthLimit;
         private IFont fDrawFont;
+        private int[] fEdges;
         private IImage fExpPic;
         private KinshipsGraph fGraph;
         private TreeChartPerson fHighlightedPerson;
@@ -783,7 +784,7 @@ namespace GKCore.Charts
             if (fTreeBounds.Bottom < prt.Bottom) fTreeBounds.Bottom = prt.Bottom;
         }
 
-        private static void ShiftAnc(ref int[] edges, TreeChartPerson person, int offset)
+        private void ShiftAnc(TreeChartPerson person, int offset)
         {
             TreeChartPerson pp = person;
             if (pp == null) return;
@@ -791,14 +792,14 @@ namespace GKCore.Charts
             do
             {
                 pp.PtX += offset;
-                edges[pp.Generation] = pp.Rect.Right;
+                fEdges[pp.Generation] = pp.Rect.Right;
 
                 pp = (pp.GetChildsCount() < 1) ? null : pp.GetChild(0);
             }
             while (pp != null);
         }
 
-        private void RecalcAnc(ExtList<TreeChartPerson> prev, ref int[] edges, TreeChartPerson person, int ptX, int ptY)
+        private void RecalcAnc(ExtList<TreeChartPerson> prev, TreeChartPerson person, int ptX, int ptY)
         {
             if (person == null) return;
 
@@ -807,13 +808,13 @@ namespace GKCore.Charts
 
             int gen = person.Generation;
 
-            int offset = (edges[gen] > 0) ? fBranchDistance : fMargins;
-            int bound = edges[gen] + offset;
+            int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
+            int bound = fEdges[gen] + offset;
             if (person.Rect.Left <= bound) {
-                ShiftAnc(ref edges, person, bound - person.Rect.Left);
+                ShiftAnc(person, bound - person.Rect.Left);
             }
 
-            edges[gen] = person.Rect.Right;
+            fEdges[gen] = person.Rect.Right;
 
             prev.Add(person);
             if (person.Rect.Top < 0)
@@ -827,11 +828,11 @@ namespace GKCore.Charts
 
             if (person.Father != null && person.Mother != null)
             {
-                RecalcAnc(prev, ref edges, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), person.PtY - fLevelDistance - person.Height);
-                RecalcAnc(prev, ref edges, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), person.PtY - fLevelDistance - person.Height);
+                RecalcAnc(prev, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), person.PtY - fLevelDistance - person.Height);
+                RecalcAnc(prev, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), person.PtY - fLevelDistance - person.Height);
 
                 person.PtX = (person.Father.PtX + person.Mother.PtX) / 2;
-                edges[gen] = person.Rect.Right;
+                fEdges[gen] = person.Rect.Right;
             }
             else
             {
@@ -843,24 +844,25 @@ namespace GKCore.Charts
                 }
 
                 if (anc != null) {
-                    RecalcAnc(prev, ref edges, anc, person.PtX, person.PtY - fLevelDistance - person.Height);
+                    RecalcAnc(prev, anc, person.PtX, person.PtY - fLevelDistance - person.Height);
                 }
             }
         }
 
         private void RecalcAncestorsChart()
         {
-            var edges = new int[256];
-            Array.Clear(edges, 0, edges.Length);
+            fEdges = new int[256];
+            Array.Clear(fEdges, 0, fEdges.Length);
 
             var prev = new ExtList<TreeChartPerson>();
             try
             {
-                RecalcAnc(prev, ref edges, fRoot, fMargins, fMargins);
+                RecalcAnc(prev, fRoot, fMargins, fMargins);
             }
             finally
             {
                 prev.Dispose();
+                fEdges = new int[0];
             }
         }
 
@@ -893,7 +895,7 @@ namespace GKCore.Charts
             }
         }
 
-        private void RecalcDescChilds(ref int[] edges, TreeChartPerson person)
+        private void RecalcDescChilds(TreeChartPerson person)
         {
             int childrenCount = person.GetChildsCount();
             if (childrenCount == 0) return;
@@ -930,7 +932,7 @@ namespace GKCore.Charts
 
             for (int i = 0; i < childrenCount; i++) {
                 TreeChartPerson child = person.GetChild(i);
-                RecalcDesc(ref edges, child, new ExtPoint(curX + child.Width / 2, curY), true);
+                RecalcDesc(child, new ExtPoint(curX + child.Width / 2, curY), true);
                 curX = child.Rect.Right + fBranchDistance;
             }
 
@@ -956,7 +958,7 @@ namespace GKCore.Charts
             }
         }
 
-        private void RecalcDesc(ref int[] edges, TreeChartPerson person, ExtPoint aPt, bool predef)
+        private void RecalcDesc(TreeChartPerson person, ExtPoint aPt, bool predef)
         {
             if (person == null) return;
 
@@ -966,15 +968,15 @@ namespace GKCore.Charts
                 person.PtY = aPt.Y;
             }
 
-            int offset = (edges[gen] > 0) ? fBranchDistance : fMargins;
-            int bound = edges[gen] + offset;
+            int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
+            int bound = fEdges[gen] + offset;
             if (person.Rect.Left <= bound) {
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
 
             if (person.Sex == GEDCOMSex.svMale) {
-                RecalcDescChilds(ref edges, person);
-                edges[gen] = person.Rect.Right;
+                RecalcDescChilds(person);
+                fEdges[gen] = person.Rect.Right;
             }
 
             if (person.GetSpousesCount() > 0) {
@@ -994,7 +996,7 @@ namespace GKCore.Charts
                             break;
                     }
 
-                    RecalcDesc(ref edges, sp, spPt, true);
+                    RecalcDesc(sp, spPt, true);
 
                     if (sp.Sex != GEDCOMSex.svMale) {
                         prev = sp;
@@ -1003,23 +1005,30 @@ namespace GKCore.Charts
             }
 
             if (person.Sex == GEDCOMSex.svFemale) {
-                RecalcDescChilds(ref edges, person);
-                edges[gen] = person.Rect.Right;
+                RecalcDescChilds(person);
+                fEdges[gen] = person.Rect.Right;
             }
 
             // FIXME: Temporary hack: if this person does not specify a particular sex,
             // then breaks the normal sequence of formation of coordinates.
             if (person.Sex == GEDCOMSex.svNone || person.Sex == GEDCOMSex.svUndetermined) {
-                edges[gen] = person.Rect.Right;
+                fEdges[gen] = person.Rect.Right;
             }
         }
 
         private void RecalcDescendantsChart(bool predef)
         {
-            var edges = new int[256];
-            Array.Clear(edges, 0, edges.Length);
+            fEdges = new int[256];
+            Array.Clear(fEdges, 0, fEdges.Length);
 
-            RecalcDesc(ref edges, fRoot, new ExtPoint(fMargins, fMargins), predef);
+            try
+            {
+                RecalcDesc(fRoot, new ExtPoint(fMargins, fMargins), predef);
+            }
+            finally
+            {
+                fEdges = new int[0];
+            }
         }
 
         #endregion
@@ -1155,15 +1164,6 @@ namespace GKCore.Charts
             return fVisibleArea.IntersectsWith(pnRect);
         }
 
-        private static void CheckSwap(ref int val1, ref int val2)
-        {
-            if (val2 > val1) return;
-
-            int tmp = val1;
-            val1 = val2;
-            val2 = tmp;
-        }
-
         private bool IsLineVisible(int x1, int y1, int x2, int y2)
         {
             if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
@@ -1173,8 +1173,17 @@ namespace GKCore.Charts
             var rangeX = new Range<int>(fVisibleArea.Left, fVisibleArea.Right);
             var rangeY = new Range<int>(fVisibleArea.Top, fVisibleArea.Bottom);
 
-            CheckSwap(ref x1, ref x2);
-            CheckSwap(ref y1, ref y2);
+            if (x2 < x1) {
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+            }
+
+            if (y2 < y1) {
+                int tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+            }
 
             return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
         }

@@ -135,17 +135,6 @@ namespace GKUI
             SetMainTitle();
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
-                AppHost.Instance.WidgetsEnable();
-            }
-        }*/
-
         public void Activate()
         {
             Focus();

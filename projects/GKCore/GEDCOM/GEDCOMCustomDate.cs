@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
@@ -96,7 +97,7 @@ namespace GKCommon.GEDCOM
 
         public abstract DateTime GetDateTime();
         public abstract void SetDateTime(DateTime value);
-        public abstract void GetDateParts(out int year, out int month, out int day, out bool yearBC);
+        public abstract string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar);
 
         protected virtual void DateChanged()
         {

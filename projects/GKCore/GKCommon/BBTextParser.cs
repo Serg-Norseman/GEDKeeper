@@ -112,7 +112,7 @@ namespace GKCommon
             }
         }
 
-        private void SetChunkColor(int tokenLine, ref BBTextChunk chunk, IColor color)
+        private BBTextChunk SetChunkColor(int tokenLine, BBTextChunk chunk, IColor color)
         {
             float fntSize;
             ExtFontStyle fntStyle;
@@ -124,9 +124,11 @@ namespace GKCommon
             }
 
             chunk.Color = color;
+
+            return chunk;
         }
 
-        private void SetChunkFontSize(int tokenLine, ref BBTextChunk chunk, float newSize)
+        private BBTextChunk SetChunkFontSize(int tokenLine, BBTextChunk chunk, float newSize)
         {
             float fntSize;
             ExtFontStyle fntStyle;
@@ -138,30 +140,33 @@ namespace GKCommon
             }
 
             chunk.Size = newSize;
+
+            return chunk;
         }
 
-        private void SetChunkFontStyle(int tokenLine, ref BBTextChunk chunk, ExtFontStyle style, bool active)
+        private BBTextChunk SetChunkFontStyle(int tokenLine, BBTextChunk chunk, ExtFontStyle style, bool active)
         {
             float fntSize;
             ExtFontStyle fntStyle;
             GetPrevFontParams(chunk, out fntSize, out fntStyle);
 
-            ExtFontStyle newStyle = fntStyle;
             if (active) {
-                newStyle |= style;
+                fntStyle |= style;
             } else {
-                newStyle &= ~style;
+                fntStyle &= ~style;
             }
 
             if (chunk == null || chunk.Text.Length != 0) {
-                chunk = new BBTextChunk(tokenLine, fntSize, newStyle, fTextColor);
+                chunk = new BBTextChunk(tokenLine, fntSize, fntStyle, fTextColor);
                 fChunks.Add(chunk);
             }
 
-            chunk.Style = newStyle;
+            chunk.Style = fntStyle;
+
+            return chunk;
         }
 
-        private void SetChunkText(int tokenLine, ref BBTextChunk chunk, string text)
+        private BBTextChunk SetChunkText(int tokenLine, BBTextChunk chunk, string text)
         {
             float fntSize;
             ExtFontStyle fntStyle;
@@ -173,6 +178,8 @@ namespace GKCommon
             }
 
             chunk.Text += text;
+
+            return chunk;
         }
 
         public void ParseText(List<BBTextChunk> chunksList, string text)
@@ -188,7 +195,7 @@ namespace GKCommon
 
             if (string.IsNullOrEmpty(text)) {
                 text = EMPTY_CHUNK;
-                SetChunkText(0, ref lastChunk, text);
+                lastChunk = SetChunkText(0, lastChunk, text);
                 return;
             }
 
@@ -213,7 +220,7 @@ namespace GKCommon
 
                     if (tok.Kind != TokenKind.Word) {
                         // not tag
-                        SetChunkText(tok.Line, ref lastChunk, temp + tok.Value);
+                        lastChunk = SetChunkText(tok.Line, lastChunk, temp + tok.Value);
                     } else {
                         string tag = tok.Value;
                         //bool skipTag = false;
@@ -227,13 +234,13 @@ namespace GKCommon
                                     tok = strTok.Next();
                                     if (tok.Kind == TokenKind.Word) {
                                         color = fGfxProvider.CreateColor(tok.Value);
-                                        SetChunkColor(tok.Line, ref lastChunk, color);
+                                        lastChunk = SetChunkColor(tok.Line, lastChunk, color);
                                     }
                                 }
                             } else {
                                 // TODO: colorStack
                                 color = fTextColor;
-                                SetChunkColor(tok.Line, ref lastChunk, color);
+                                lastChunk = SetChunkColor(tok.Line, lastChunk, color);
                             }
                         }
                         else if (tag == "size") {
@@ -254,33 +261,33 @@ namespace GKCommon
                                     if (tok.Kind == TokenKind.Number) {
                                         float newSize = lastFontSize + factor * SysUtils.ParseInt(tok.Value, 0);
                                         stackSizes.Push(new SizeChange(lastFontSize, newSize));
-                                        SetChunkFontSize(tok.Line, ref lastChunk, newSize);
+                                        lastChunk = SetChunkFontSize(tok.Line, lastChunk, newSize);
                                         lastFontSize = newSize;
                                     }
                                 }
                             } else {
                                 if (stackSizes.Count > 0) {
                                     SizeChange sizeChange = stackSizes.Pop();
-                                    SetChunkFontSize(tok.Line, ref lastChunk, sizeChange.PrevSize);
+                                    lastChunk = SetChunkFontSize(tok.Line, lastChunk, sizeChange.PrevSize);
                                     lastFontSize = sizeChange.PrevSize;
                                 }
                             }
                         }
                         else if (tag == "b") {
                             // [b][/b]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, ExtFontStyle.Bold, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Bold, !closedTag);
                         }
                         else if (tag == "i") {
                             // [i][/i]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, ExtFontStyle.Italic, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Italic, !closedTag);
                         }
                         else if (tag == "s") {
                             // [s][/s]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, ExtFontStyle.Strikeout, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Strikeout, !closedTag);
                         }
                         else if (tag == "u") {
                             // [u][/u]
-                            SetChunkFontStyle(tok.Line, ref lastChunk, ExtFontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Underline, !closedTag);
                         }
                         else if (tag == "url") {
                             // bad impementation
@@ -298,16 +305,16 @@ namespace GKCommon
                                 //
                             }
 
-                            SetChunkFontStyle(tok.Line, ref lastChunk, ExtFontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Underline, !closedTag);
                             IColor color = (closedTag) ? fTextColor : fLinkColor;
-                            SetChunkColor(tok.Line, ref lastChunk, color);
+                            lastChunk = SetChunkColor(tok.Line, lastChunk, color);
                             if (!closedTag) {
                                 lastChunk.URL = url;
                             }
                         }
                         else {
                             // not tag
-                            SetChunkText(tok.Line, ref lastChunk, temp + tok.Value);
+                            lastChunk = SetChunkText(tok.Line, lastChunk, temp + tok.Value);
                         }
 
                         if (tok.Kind != TokenKind.Symbol || tok.Value != "]") {
@@ -317,10 +324,10 @@ namespace GKCommon
                     }
                 } else if (tok.Kind == TokenKind.EOL) {
                     lastChunk = null;
-                    SetChunkText(tok.Line, ref lastChunk, EMPTY_CHUNK);
+                    lastChunk = SetChunkText(tok.Line, lastChunk, EMPTY_CHUNK);
                     lastChunk = null;
                 } else {
-                    SetChunkText(tok.Line, ref lastChunk, tok.Value);
+                    lastChunk = SetChunkText(tok.Line, lastChunk, tok.Value);
                 }
 
                 tok = strTok.Next();
@@ -328,7 +335,7 @@ namespace GKCommon
 
             // eof
             lastChunk = null;
-            SetChunkText(tok.Line, ref lastChunk, EMPTY_CHUNK);
+            lastChunk = SetChunkText(tok.Line, lastChunk, EMPTY_CHUNK);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Externals
         /// <summary>
         /// Represents an entry in Zip file directory
         /// </summary>
-        public struct ZipFileEntry
+        public sealed class ZipFileEntry
         {
             /// <summary>Compression method</summary>
             public Compression Method;
@@ -245,14 +245,14 @@ namespace Externals
             zfe.ModifyTime = modTime;
 
             // Write local header
-            WriteLocalHeader(ref zfe);
+            WriteLocalHeader(zfe);
             zfe.FileOffset = (uint)fZipFileStream.Position;
 
             // Write file to zip (store)
-            Store(ref zfe, source);
+            Store(zfe, source);
             source.Close();
 
-            UpdateCrcAndSizes(ref zfe);
+            UpdateCrcAndSizes(zfe);
 
             fFiles.Add(zfe);
         }
@@ -342,7 +342,7 @@ namespace Externals
             return result;
         }
 
-        public ZipFileEntry? FindFile(string fileName)
+        public ZipFileEntry FindFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
@@ -481,7 +481,7 @@ namespace Externals
         /// <param name="zfes">List of Entries to remove from storage</param>
         /// <returns>True if success, false if not</returns>
         /// <remarks>This method only works for storage of type FileStream</remarks>
-        public static bool RemoveEntries(ref ZipStorer zip, List<ZipFileEntry> zfes)
+        public static ZipStorer RemoveEntries(ZipStorer zip, List<ZipFileEntry> zfes)
         {
             if (zip == null)
                 throw new ArgumentNullException("zip");
@@ -491,7 +491,6 @@ namespace Externals
 
             if (!(zip.fZipFileStream is FileStream))
                 throw new InvalidOperationException("RemoveEntries is allowed just over streams of type FileStream");
-
 
             //Get full list of entries
             List<ZipFileEntry> fullList = zip.ReadCentralDir();
@@ -523,7 +522,7 @@ namespace Externals
             }
             catch
             {
-                return false;
+                return null;
             }
             finally
             {
@@ -532,7 +531,8 @@ namespace Externals
                 if (File.Exists(tempEntryName))
                     File.Delete(tempEntryName);
             }
-            return true;
+
+            return zip;
         }
 
         #endregion
@@ -569,7 +569,7 @@ namespace Externals
             filename (variable size)
             extra field (variable size)
          */
-        private void WriteLocalHeader(ref ZipFileEntry zfe)
+        private void WriteLocalHeader(ZipFileEntry zfe)
         {
             long pos = fZipFileStream.Position;
             Encoding encoder = zfe.EncodeUTF8 ? Encoding.UTF8 : fDefaultEncoding;
@@ -668,7 +668,7 @@ namespace Externals
         }
 
         // Copies all source file into storage file
-        private void Store(ref ZipFileEntry zfe, Stream source)
+        private void Store(ZipFileEntry zfe, Stream source)
         {
             var buffer = new byte[16384];
             int bytesRead;
@@ -716,7 +716,7 @@ namespace Externals
                 fZipFileStream.Position = posStart;
                 fZipFileStream.SetLength(posStart);
                 source.Position = sourceStart;
-                Store(ref zfe, source);
+                Store(zfe, source);
             }
         }
 
@@ -765,7 +765,7 @@ namespace Externals
           value is put in the data descriptor and in the central
           directory.
          */
-        private void UpdateCrcAndSizes(ref ZipFileEntry zfe)
+        private void UpdateCrcAndSizes(ZipFileEntry zfe)
         {
             long lastPos = fZipFileStream.Position;  // remember position
 

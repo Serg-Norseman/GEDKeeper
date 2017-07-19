@@ -54,7 +54,7 @@ namespace GKCore
         public const string DEF_FONT = "Tahoma";
         #endif
 
-        public struct SexStruct
+        public sealed class SexStruct
         {
             public LSID NameId;
             public string Sign;
@@ -65,7 +65,7 @@ namespace GKCore
             }
         }
 
-        public struct MarStatusStruct
+        public sealed class MarStatusStruct
         {
             public LSID Name;
             public string StatSign;
@@ -76,7 +76,7 @@ namespace GKCore
             }
         }
 
-        public struct PersonEventStruct
+        public sealed class PersonEventStruct
         {
             public LSID Name;
             public string Sign;
@@ -89,7 +89,7 @@ namespace GKCore
             }
         }
 
-        public struct DateKindStruct
+        public sealed class DateKindStruct
         {
             public LSID Name;
             public byte Dates;
@@ -100,7 +100,7 @@ namespace GKCore
             }
         }
 
-        public struct FamilyEventStruct
+        public sealed class FamilyEventStruct
         {
             public LSID Name;
             public string Sign;
@@ -111,7 +111,7 @@ namespace GKCore
             }
         }
 
-        public struct CalendarStruct
+        public sealed class CalendarStruct
         {
             public LSID Name;
             public string Sign;
@@ -124,7 +124,7 @@ namespace GKCore
             }
         }
 
-        public struct StoreTypeRec
+        public sealed class StoreTypeRec
         {
             public LSID Name;
             public string Sign;
@@ -135,7 +135,7 @@ namespace GKCore
             }
         }
 
-        public struct StatsTitleStruct
+        public sealed class StatsTitleStruct
         {
             public LSID Title;
             public LSID Cap;

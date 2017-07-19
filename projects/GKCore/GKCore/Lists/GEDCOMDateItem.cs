@@ -44,7 +44,7 @@ namespace GKCore.Lists
                 strVal = "";
             } else {
                 GlobalOptions glob = GlobalOptions.Instance;
-                strVal = GKUtils.GetCustomDateFmtString(fDate, glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                strVal = fDate.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
             }
 
             return strVal;

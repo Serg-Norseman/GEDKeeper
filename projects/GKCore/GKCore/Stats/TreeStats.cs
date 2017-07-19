@@ -309,11 +309,9 @@ namespace GKCore.Stats
                 case StatsMode.smBirthByMonth:
                     GEDCOMCustomEvent ev = iRec.FindEvent("BIRT");
                     if (ev != null) {
-                        GEDCOMCustomDate dtx = ev.Date.Value;
+                        var dtx = ev.Date.Value as GEDCOMDate;
                         if (dtx != null) {
-                            int ay, month, ad;
-                            bool ybc;
-                            dtx.GetDateParts(out ay, out month, out ad, out ybc);
+                            int month = dtx.GetMonthNumber();
                             if (month > 0) CheckVal(values, month.ToString());
                         }
                     }

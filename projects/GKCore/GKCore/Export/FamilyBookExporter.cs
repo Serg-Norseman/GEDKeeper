@@ -55,7 +55,7 @@ namespace GKCore.Export
             Catalog_Last = Catalog_Sources
         }
 
-        private struct CatalogProps
+        private sealed class CatalogProps
         {
             public readonly string Sign;
             public readonly string Title;
