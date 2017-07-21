@@ -27,10 +27,10 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class ExpCalculatorTests
     {
-        private static bool GetVarEventHandler(object sender, string varName, ref double varValue)
+        private static bool GetVarEventHandler(object sender, VarRequestEventArgs eventArgs)
         {
-            if (varName.Equals("alpha")) {
-                varValue = 15.0;
+            if (eventArgs.VarName.Equals("alpha")) {
+                eventArgs.VarValue = 15.0;
                 return true;
             }
 

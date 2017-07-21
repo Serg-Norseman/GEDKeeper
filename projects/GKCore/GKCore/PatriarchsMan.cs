@@ -53,15 +53,14 @@ namespace GKCore
                     {
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                        string nf, nn, np;
-                        GKUtils.GetNameParts(iRec, out nf, out nn, out np);
+                        var parts = GKUtils.GetNameParts(iRec);
 
                         int birthDate = context.FindBirthYear(iRec);
                         int descGens = GKUtils.GetDescGenerations(iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
                         res = (res && iRec.Sex == GEDCOMSex.svMale);
-                        res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
+                        res = (res && /*nf != "" && nf != "?" &&*/ parts.Name != "" && parts.Name != "?");
                         res = (res && descGens >= gensMin);
 
                         if (datesCheck)

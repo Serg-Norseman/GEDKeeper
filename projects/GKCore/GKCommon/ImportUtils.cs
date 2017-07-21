@@ -59,11 +59,11 @@ namespace GKCommon
             return (rs != "" && rs == str);
         }
 
-        public static bool IsPersonLine_DAboville(string str, out string pId)
+        public static string IsPersonLine_DAboville(string str)
         {
             // "11.21.31.11."
 
-            pId = "";
+            string pId = "";
 
             StringTokenizer strTok = new StringTokenizer(str);
             strTok.RecognizeDecimals = false;
@@ -91,22 +91,21 @@ namespace GKCommon
             // TODO: testing and transfer to parse!
             if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".")/* || (token.Kind != TokenKind.WhiteSpace || token.Value != " ")*/)
             {
-                return false;
+                return null;
             }
 
-            return true;
+            return pId;
         }
 
-        public static bool ParsePersonLine_DAboville(string str, out string persId, out string parentId, out string marNum,
-                                                     out string extData, out int pos)
+        public static PersonLineRet ParsePersonLine_DAboville(string str)
         {
             // "11.21.31.11."
 
-            persId = "";
-            parentId = "";
-            marNum = "";
-            extData = "";
-            pos = 0;
+            string persId = "";
+            string parentId = "";
+            string marNum = "";
+            string extData = "";
+            int pos = 0;
 
             StringTokenizer strTok = new StringTokenizer(str);
             strTok.RecognizeDecimals = false;
@@ -132,7 +131,7 @@ namespace GKCommon
             } while (token.Kind != TokenKind.EOF);
 
             if (token.Kind != TokenKind.WhiteSpace || token.Value != " ") {
-                return false;
+                return null;
             }
 
             int idx = persId.LastIndexOf(".", persId.Length - 2);
@@ -142,14 +141,20 @@ namespace GKCommon
 
             pos = strTok.Position;
 
-            return true;
+            return new PersonLineRet(persId, parentId, marNum, extData, pos);
         }
 
-        public static bool IsPersonLine_Konovalov(string str, out string pId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="pId"></param>
+        /// <returns>Personal identifier or empty if line isn't valid Konovalov's line</returns>
+        public static string IsPersonLine_Konovalov(string str)
         {
             // "11-21/1 (test+2, test)."
 
-            pId = "";
+            string pId = "";
 
             StringTokenizer strTok = new StringTokenizer(str);
             strTok.RecognizeDecimals = false;
@@ -159,7 +164,7 @@ namespace GKCommon
             if (token.Kind == TokenKind.Number) {
                 pId += token.Value;
             } else {
-                return false;
+                return null;
             }
 
             token = strTok.Next();
@@ -170,7 +175,7 @@ namespace GKCommon
                 if (token.Kind == TokenKind.Number) {
                     pId += token.Value;
                 } else {
-                    return false;
+                    return null;
                 }
 
                 token = strTok.Next();
@@ -181,7 +186,7 @@ namespace GKCommon
                     if (token.Kind == TokenKind.Number || (token.Kind == TokenKind.Symbol && token.Value == "?")) {
                         pId += token.Value;
                     } else {
-                        return false;
+                        return null;
                     }
 
                     token = strTok.Next();
@@ -199,7 +204,7 @@ namespace GKCommon
                 do {
                     token = strTok.Next();
                     if (token.Kind == TokenKind.EOL || token.Kind == TokenKind.EOF) {
-                        return false;
+                        return null;
                     }
                     pId += token.Value;
                 } while (token.Kind != TokenKind.Symbol || token.Value != ")");
@@ -210,7 +215,7 @@ namespace GKCommon
             if (token.Kind == TokenKind.Symbol && token.Value == ".") {
                 pId += token.Value;
             } else {
-                return false;
+                return null;
             }
 
             /*token = strTok.Next();
@@ -218,19 +223,18 @@ namespace GKCommon
                 return false;
             }*/
 
-            return true;
+            return pId;
         }
 
-        public static bool ParsePersonLine_Konovalov(string str, out string persId, out string parentId, out string marNum,
-                                                     out string extData, out int pos)
+        public static PersonLineRet ParsePersonLine_Konovalov(string str)
         {
             // "11-21/1 (test+2, test)."
 
-            persId = "";
-            parentId = "";
-            marNum = "";
-            extData = "";
-            pos = 0;
+            string persId = "";
+            string parentId = "";
+            string marNum = "";
+            string extData = "";
+            int pos = 0;
 
             StringTokenizer strTok = new StringTokenizer(str);
             strTok.RecognizeDecimals = false;
@@ -240,7 +244,7 @@ namespace GKCommon
             if (token.Kind == TokenKind.Number) {
                 persId = token.Value;
             } else {
-                return false;
+                return null;
             }
 
             token = strTok.Next();
@@ -251,7 +255,7 @@ namespace GKCommon
                 if (token.Kind == TokenKind.Number) {
                     parentId = token.Value;
                 } else {
-                    return false;
+                    return null;
                 }
 
                 token = strTok.Next();
@@ -262,7 +266,7 @@ namespace GKCommon
                     if (token.Kind == TokenKind.Number || (token.Kind == TokenKind.Symbol && token.Value == "?")) {
                         marNum = token.Value;
                     } else {
-                        return false;
+                        return null;
                     }
 
                     token = strTok.Next();
@@ -280,7 +284,7 @@ namespace GKCommon
                 do {
                     token = strTok.Next();
                     if (token.Kind == TokenKind.EOL || token.Kind == TokenKind.EOF) {
-                        return false;
+                        return null;
                     }
                     extData += token.Value;
                 } while (token.Kind != TokenKind.Symbol || token.Value != ")");
@@ -291,7 +295,7 @@ namespace GKCommon
             if (token.Kind == TokenKind.Symbol && token.Value == ".") {
                 //p_id += token.Value;
             } else {
-                return false;
+                return null;
             }
 
             /*token = strTok.Next();
@@ -301,19 +305,54 @@ namespace GKCommon
 
             pos = strTok.Position;
 
-            return true;
+            return new PersonLineRet(persId, parentId, marNum, extData, pos);
+        }
+
+        public sealed class PersonLineRet
+        {
+            public string PersId;
+            public string ParentId;
+            public string MarNum;
+            public string ExtData;
+            public int Pos;
+
+            internal PersonLineRet(string persId, string parentId, string marNum,
+                                   string extData, int pos)
+            {
+                PersId = persId;
+                ParentId = parentId;
+                MarNum = marNum;
+                ExtData = extData;
+                Pos = pos;
+            }
         }
 
         ////////////////////
 
-        public static bool ParseSpouseLine(string str, out string spouse, out int marrNum, out string extData, out int pos)
+        public sealed class SpouseLineRet
+        {
+            public string Spouse;
+            public int MarrNum;
+            public string ExtData;
+            public int Pos;
+
+            internal SpouseLineRet(string spouse, int marrNum, string extData, int pos)
+            {
+                Spouse = spouse;
+                MarrNum = marrNum;
+                ExtData = extData;
+                Pos = pos;
+            }
+        }
+
+        public static SpouseLineRet ParseSpouseLine(string str)
         {
             // "М/Ж[N]{": " | " - "}name"
 
-            spouse = "";
-            marrNum = 1;
-            extData = "";
-            pos = 0;
+            string spouse = "";
+            int marrNum = 1;
+            string extData = "";
+            int pos = 0;
 
             StringTokenizer strTok = new StringTokenizer(str);
             strTok.IgnoreWhiteSpace = false;
@@ -326,7 +365,7 @@ namespace GKCommon
                 spouse = token.Value;
                 token = strTok.Next();
             } else {
-                return false;
+                return null;
             }
 
             if (token.Kind == TokenKind.Number) {
@@ -346,7 +385,7 @@ namespace GKCommon
                 do {
                     token = strTok.Next();
                     if (token.Kind == TokenKind.EOL || token.Kind == TokenKind.EOF) {
-                        return false;
+                        return null;
                     }
                     extData += token.Value;
                 } while (token.Kind != TokenKind.Symbol || token.Value != ")");
@@ -361,12 +400,12 @@ namespace GKCommon
             if (token.Kind == TokenKind.Symbol && (token.Value == ":" || token.Value == "-")) {
                 token = strTok.Next();
             } else {
-                return false;
+                return null;
             }
 
             pos = strTok.Position;
 
-            return true;
+            return new SpouseLineRet(spouse, marrNum, extData, pos);
         }
     }
 }

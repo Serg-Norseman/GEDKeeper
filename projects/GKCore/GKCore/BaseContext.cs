@@ -263,7 +263,7 @@ namespace GKCore
             iRec.Sex = iSex;
 
             GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(fTree, iRec, "", ""));
-            GKUtils.SetRusNameParts(pName, iSurname, iName, iPatronymic);
+            GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
             if (birthEvent) CreateEventEx(iRec, "BIRT", "", "");
 
@@ -658,9 +658,8 @@ namespace GKCore
 
                 if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
                 {
-                    string fFam, fName, fPatr;
-                    GKUtils.GetNameParts(iRec, out fFam, out fName, out fPatr);
-                    iRec.Sex = DefineSex(fName, fPatr);
+                    var parts = GKUtils.GetNameParts(iRec);
+                    iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
                 }
             } finally {
                 EndUpdate();

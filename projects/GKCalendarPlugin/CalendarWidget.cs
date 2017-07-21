@@ -68,41 +68,39 @@ namespace GKCalendarPlugin
             try
             {
                 string s;
-                int year, month, day;
 
                 lvDates.Items.Clear();
 
                 DateTime gdt = qtc.SelectionStart;
                 double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 
-                CalendarConverter.jd_to_gregorian(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.ClassicMonths[month - 1], year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
+                var dtx = CalendarConverter.jd_to_gregorian(jd);
+                s = d2s(dtx.Day, CalendarData.ClassicMonths[dtx.Month - 1], dtx.Year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 
-                CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.ClassicMonths[month - 1], year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_julian(jd);
+                s = d2s(dtx.Day, CalendarData.ClassicMonths[dtx.Month - 1], dtx.Year, CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), s);
 
-                CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.HebrewMonths[month - 1], year, CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_hebrew(jd);
+                s = d2s(dtx.Day, CalendarData.HebrewMonths[dtx.Month - 1], dtx.Year, CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew), s);
 
-                CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.IslamicMonths[month - 1], year, CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_islamic(jd);
+                s = d2s(dtx.Day, CalendarData.IslamicMonths[dtx.Month - 1], dtx.Year, CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Islamic), s);
 
-                CalendarConverter.jd_to_persian(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.PersianMonths[month - 1], year, CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_persian(jd);
+                s = d2s(dtx.Day, CalendarData.PersianMonths[dtx.Month - 1], dtx.Year, CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Persian), s);
 
-                CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
-                s = d2s(day, CalendarData.IndianCivilMonths[month - 1], year, CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_indian_civil(jd);
+                s = d2s(dtx.Day, CalendarData.IndianCivilMonths[dtx.Month - 1], dtx.Year, CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Indian), s);
 
-                int major, cycle;
-                CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
-                s = string.Format(fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), major, cycle) + ", ";
-                s = s + d2s(day, CalendarData.BahaiMonths[month - 1], year, CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)]);
+                dtx = CalendarConverter.jd_to_bahai(jd);
+                s = string.Format(fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), dtx.BahaiMajor, dtx.BahaiCycle) + ", ";
+                s = s + d2s(dtx.Day, CalendarData.BahaiMonths[dtx.Month - 1], dtx.Year, CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)]);
                 AddItem(fPlugin.LangMan.LS(PLS.LSID_Cal_Bahai), s);
             }
             finally

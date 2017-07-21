@@ -303,7 +303,7 @@ namespace GKCore.Lists
                 result = GKUtils.GetNameString(fRec, true, false);
             } else {
                 NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-                string f, i, p;
+                GKUtils.NamePartsRet parts;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
@@ -311,28 +311,28 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_NP:
-                        GKUtils.GetNameParts(fRec, out f, out i, out p);
+                        parts = GKUtils.GetNameParts(fRec);
                         switch (colSubtype) {
                             case 0:
-                                result = f;
+                                result = parts.Surname;
                                 break;
                             case 1:
-                                result = i + " " + p;
+                                result = parts.Name + " " + parts.Patronymic;
                                 break;
                         }
                         break;
 
                     case NameFormat.nfF_N_P:
-                        GKUtils.GetNameParts(fRec, out f, out i, out p);
+                        parts = GKUtils.GetNameParts(fRec);
                         switch (colSubtype) {
                             case 0:
-                                result = f;
+                                result = parts.Surname;
                                 break;
                             case 1:
-                                result = i;
+                                result = parts.Name;
                                 break;
                             case 2:
-                                result = p;
+                                result = parts.Patronymic;
                                 break;
                         }
                         break;

@@ -128,10 +128,11 @@ namespace GKCore.Kinships
 
                     if (prevRel != RelationKind.rkUndefined)
                     {
-                        int g, lev;
+                        //int g, lev;
 
-                        finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
-                        great += g;
+                        var ks = KinshipsMan.FindKinship(prevRel, curRel);
+                        finRel = ks.FinRel;
+                        great += ks.Great;
 
                         // it's gap
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
@@ -143,8 +144,9 @@ namespace GKCore.Kinships
                             if (fullRel.Length > 0) fullRel += ", ";
                             fullRel += part;
 
-                            finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
-                            great += g;
+                            ks = KinshipsMan.FindKinship(prevRel, curRel);
+                            finRel = ks.FinRel;
+                            great += ks.Great;
                         }
 
                         prevRel = finRel;

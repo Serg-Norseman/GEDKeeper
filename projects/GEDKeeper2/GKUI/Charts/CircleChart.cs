@@ -244,21 +244,9 @@ namespace GKUI.Charts
         private CircleSegment FindSegment(float mX, float mY)
         {
             PointF center = GetCenter(RenderTarget.rtScreen);
-            mX -= center.X;
-            mY -= center.Y;
-            CircleSegment result = null;
-
-            int numberOfSegments = fModel.Segments.Count;
-            for (int i = 0; i < numberOfSegments; i++) {
-                CircleSegment segment = fModel.Segments[i];
-                /* Unfortunatelly, member `GraphicsPath.IsVisible(REAL, REAL,
-                 * const Graphics*)` doesn't work for me. */
-                if (segment.Path.IsVisible(mX / fZoom, mY / fZoom)) {
-                    result = segment;
-                    break;
-                }
-            }
-
+            mX = (mX - center.X) / fZoom;
+            mY = (mY - center.Y) / fZoom;
+            CircleSegment result = fModel.FindSegment(mX, mY);
             return result;
         }
 

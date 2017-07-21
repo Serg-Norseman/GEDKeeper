@@ -295,11 +295,10 @@ namespace GKCore.Charts
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
-                    string fam, nam, pat;
-                    GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-                    fSurname = fam;
-                    fName = nam;
-                    fPatronymic = pat;
+                    var parts = GKUtils.GetNameParts(iRec);
+                    fSurname = parts.Surname;
+                    fName = parts.Name;
+                    fPatronymic = parts.Patronymic;
                     fNick = GKUtils.GetNickString(iRec);
                     fSex = iRec.Sex;
 

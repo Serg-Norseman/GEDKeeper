@@ -169,20 +169,19 @@ namespace GKCore.Stats
         private void GetIndiName(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
         {
             string v = "";
-            string fam, nam, pat;
-            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
+            var parts = GKUtils.GetNameParts(iRec);
 
             switch (mode) {
                 case StatsMode.smSurnames:
-                    v = fContext.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                    v = fContext.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale);
                     break;
 
                 case StatsMode.smNames:
-                    v = nam;
+                    v = parts.Name;
                     break;
 
                 case StatsMode.smPatronymics:
-                    v = pat;
+                    v = parts.Patronymic;
                     break;
             }
 

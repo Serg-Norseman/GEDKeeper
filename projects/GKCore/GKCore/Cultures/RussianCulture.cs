@@ -176,11 +176,10 @@ namespace GKCore.Cultures
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string fam, nam, pat;
-            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
+            var parts = GKUtils.GetNameParts(iRec);
             bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
-            return GetSurnames(fam, female);
+            return GetSurnames(parts.Surname, female);
         }
 
         public string GetPossessiveName(string name)

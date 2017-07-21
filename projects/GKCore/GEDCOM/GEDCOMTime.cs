@@ -114,37 +114,40 @@ namespace GKCommon.GEDCOM
             fSeconds = 0;
             fFraction = 0;
 
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(strValue))
             {
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                var strTok = new StringTokenizer(strValue);
+                strTok.IgnoreWhiteSpace = true;
 
-                int tmp;
-                result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                fHour = (byte)tmp;
-                if (result != "" && result[0] == ':')
+                strTok.Next(); // initialize first token
+                fHour = (byte)strTok.RequestInt();
+
+                strTok.Next();
+                strTok.RequestSymbol(':');
+
+                strTok.Next();
+                fMinutes = (byte)strTok.RequestInt();
+
+                strTok.Next();
+                var tok = strTok.CurrentToken;
+                if (tok.Kind == TokenKind.Symbol && tok.Value[0] == ':')
                 {
-                    result = result.Remove(0, 1);
-                }
+                    strTok.Next();
+                    fSeconds = (byte)strTok.RequestInt();
 
-                result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                fMinutes = (byte)tmp;
-                if (result != "" && result[0] == ':')
-                {
-                    result = result.Remove(0, 1);
-
-                    result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                    fSeconds = (byte)tmp;
-                    if (result != "" && result[0] == '.')
+                    strTok.Next();
+                    tok = strTok.CurrentToken;
+                    if (tok.Kind == TokenKind.Symbol && tok.Value[0] == '.')
                     {
-                        result = result.Remove(0, 1);
-
-                        result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
-                        fFraction = (short)tmp;
+                        strTok.Next();
+                        fFraction = (short)strTok.RequestInt();
                     }
                 }
+
+                strValue = strTok.GetRest();
             }
-            return result;
+
+            return strValue;
         }
 
         public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

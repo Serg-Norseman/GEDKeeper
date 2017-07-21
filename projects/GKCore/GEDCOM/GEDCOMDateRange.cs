@@ -141,34 +141,28 @@ namespace GKCommon.GEDCOM
                     result = GEDCOMUtils.ExtractDelimiter(result, 0);
                     result = fDateAfter.ParseString(result);
                 }
-                else
+                else if (su == GEDCOMDateRangeArray[1])
                 {
-                    if (su == GEDCOMDateRangeArray[1])
+                    result = result.Remove(0, 3);
+                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                    result = fDateBefore.ParseString(result);
+                }
+                else if (su == GEDCOMDateRangeArray[2])
+                {
+                    result = result.Remove(0, 3);
+                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                    result = GEDCOMProvider.FixFTB(result);
+                    result = fDateAfter.ParseString(result);
+                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+
+                    su = result.Substring(0, 3).ToUpper();
+
+                    if (su == GEDCOMDateRangeArray[3])
                     {
                         result = result.Remove(0, 3);
                         result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                        result = GEDCOMProvider.FixFTB(result);
                         result = fDateBefore.ParseString(result);
-                    }
-                    else
-                    {
-                        if (su == GEDCOMDateRangeArray[2])
-                        {
-                            result = result.Remove(0, 3);
-                            result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                            result = GEDCOMProvider.FixFTB(result);
-                            result = fDateAfter.ParseString(result);
-                            result = GEDCOMUtils.ExtractDelimiter(result, 0);
-
-                            su = result.Substring(0, 3).ToUpper();
-
-                            if (su == GEDCOMDateRangeArray[3])
-                            {
-                                result = result.Remove(0, 3);
-                                result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                                result = GEDCOMProvider.FixFTB(result);
-                                result = fDateBefore.ParseString(result);
-                            }
-                        }
                     }
                 }
             }

@@ -1389,10 +1389,8 @@ namespace GKCore.Tools
                         int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GEDCOMIndividualRecord>());
                         ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
-                        string fam, nam, pat;
-                        GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-
-                        fams.AddObject(context.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
+                        var parts = GKUtils.GetNameParts(iRec);
+                        fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale), null);
                     }
                 }
 
@@ -1411,10 +1409,8 @@ namespace GKCore.Tools
                             ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
                         }
 
-                        string fam, nam, pat;
-                        GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-
-                        tm = context.Culture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                        var parts = GKUtils.GetNameParts(iRec);
+                        tm = context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0)
                         {

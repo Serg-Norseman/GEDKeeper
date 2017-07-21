@@ -443,6 +443,21 @@ namespace GKTests.GEDCOM
             }
         }
 
+        /*[Test]
+        public void GEDCOMTimePerf_Tests()
+        {
+            using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", ""))
+            {
+                for (int k = 0; k < 100000; k++) {
+                    string rest = time.ParseString("11:12:13.145");
+                    //Assert.IsNullOrEmpty(rest);
+
+                    rest = time.ParseStringTokenizer("  11:12:13.145");
+                    //Assert.IsNullOrEmpty(rest);
+                }
+            }
+        }*/
+
         [Test]
         public void GEDCOMDate_Tests()
         {
@@ -1306,17 +1321,16 @@ namespace GKTests.GEDCOM
             using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
                 Assert.IsNotNull(indi);
 
-                string surname, name, patronymic;
-                GKUtils.GetNameParts(indi, out surname, out name, out patronymic); // test with empty PersonalNames
-                Assert.AreEqual("", surname);
-                Assert.AreEqual("", name);
-                Assert.AreEqual("", patronymic);
+                var parts = GKUtils.GetNameParts(indi); // test with empty PersonalNames
+                Assert.AreEqual("", parts.Surname);
+                Assert.AreEqual("", parts.Name);
+                Assert.AreEqual("", parts.Patronymic);
 
                 indi.AddPersonalName(new GEDCOMPersonalName(fContext.Tree, indi, "", "")); // test with empty Name
-                GKUtils.GetNameParts(indi, out surname, out name, out patronymic);
-                Assert.AreEqual("", surname);
-                Assert.AreEqual("", name);
-                Assert.AreEqual("", patronymic);
+                parts = GKUtils.GetNameParts(indi);
+                Assert.AreEqual("", parts.Surname);
+                Assert.AreEqual("", parts.Name);
+                Assert.AreEqual("", parts.Patronymic);
                 indi.PersonalNames.Clear();
 
                 string st;
@@ -1382,11 +1396,10 @@ namespace GKTests.GEDCOM
 //			Assert.AreEqual(pieces.Name, "name");
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
 
-            string surname, name, patronymic;
-            GKUtils.GetNameParts(iRec, out surname, out name, out patronymic);
-            Assert.AreEqual("Ivanov", surname);
-            Assert.AreEqual("Ivan", name);
-            Assert.AreEqual("Ivanovich", patronymic);
+            var parts = GKUtils.GetNameParts(iRec);
+            Assert.AreEqual("Ivanov", parts.Surname);
+            Assert.AreEqual("Ivan", parts.Name);
+            Assert.AreEqual("Ivanovich", parts.Patronymic);
 
 
             GEDCOMPersonalName persName = GEDCOMPersonalName.Create(iRec.Owner, iRec, "", "") as GEDCOMPersonalName;

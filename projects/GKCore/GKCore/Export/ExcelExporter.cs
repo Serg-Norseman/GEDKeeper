@@ -74,16 +74,15 @@ namespace GKCore.Export
                     if (rec is GEDCOMIndividualRecord) {
                         GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
-                            string fam, nam, pat;
-                            GKUtils.GetNameParts(ind, out fam, out nam, out pat);
+                            var parts = GKUtils.GetNameParts(ind);
 
                             string sx = "" + GKUtils.SexStr(ind.Sex)[0];
                             row++;
 
                             worksheet.Cells[row, 1] = new Cell(ind.GetXRefNum());
-                            worksheet.Cells[row, 2] = new Cell(fam);
-                            worksheet.Cells[row, 3] = new Cell(nam);
-                            worksheet.Cells[row, 4] = new Cell(pat);
+                            worksheet.Cells[row, 2] = new Cell(parts.Surname);
+                            worksheet.Cells[row, 3] = new Cell(parts.Name);
+                            worksheet.Cells[row, 4] = new Cell(parts.Patronymic);
                             worksheet.Cells[row, 5] = new Cell(sx);
                             worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, DateFormat.dfDD_MM_YYYY, false));
                             worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, DateFormat.dfDD_MM_YYYY, false));

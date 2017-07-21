@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Globalization;
+using GKCommon.GEDCOM;
 
 namespace GKCommon
 {
@@ -32,11 +34,20 @@ namespace GKCommon
         public readonly string Value;
         public readonly int Line;
         public readonly int Column;
+        public readonly int IntVal;
 
         public Token(TokenKind kind, string value, int line, int column)
         {
             Kind = kind;
             Value = value;
+            Line = line;
+            Column = column;
+        }
+
+        public Token(TokenKind kind, int intValue, int line, int column)
+        {
+            Kind = kind;
+            IntVal = intValue;
             Line = line;
             Column = column;
         }
@@ -47,6 +58,8 @@ namespace GKCommon
     /// </summary>
     public class StringTokenizer
     {
+        private static readonly NumberFormatInfo NumberFormat = SysUtils.CreateDefaultNumberFormat();
+
         private const char EOF = (char)0;
 
         private readonly char[] fData;
@@ -129,7 +142,7 @@ namespace GKCommon
         {
             fCurrentToken = null;
             fIgnoreWhiteSpace = false;
-            fRecognizeDecimals = true;
+            fRecognizeDecimals = false;
             fSymbolChars = new char[] {'=', '+', '-', '/', ',', '.', '*', '~', '!', '@', '#', '$', '%', '^', '&', '(', ')', '{', '}', '[', ']', ':', ';', '<', '>', '?', '|', '\\'};
 
             fLine = 1;
@@ -169,9 +182,15 @@ namespace GKCommon
 
         protected Token CreateToken(TokenKind kind)
         {
-            string tokenData = new string(fData, fSavePos, fPos - fSavePos);
-            fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
-            return fCurrentToken;
+            /*if (kind == TokenKind.Number) {
+                int tokenData = ConvertIntNumber(fData, fSavePos, fPos, 10);
+                fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
+                return fCurrentToken;
+            } else {*/
+                string tokenData = new string(fData, fSavePos, fPos - fSavePos);
+                fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
+                return fCurrentToken;
+            //}
         }
 
         /// <summary>
@@ -336,6 +355,13 @@ namespace GKCommon
             Reset();
         }
 
+        public string GetRest()
+        {
+            int len = fData.Length;
+            string result = (fPos >= len) ? string.Empty : new string(fData, fPos, len - fPos);
+            return result;
+        }
+
         public Token Next()
         {
             while (true) {
@@ -420,6 +446,86 @@ namespace GKCommon
         public bool RequireToken(TokenKind tokenKind)
         {
             return (fCurrentToken != null && fCurrentToken.Kind == tokenKind);
+        }
+
+        public void RequestSymbol(char symbol)
+        {
+            if (fCurrentToken == null || fCurrentToken.Kind != TokenKind.Symbol || fCurrentToken.Value[0] != symbol) {
+                throw new Exception("Required symbol not found");
+            }
+        }
+
+        public void SkipWhiteSpaces()
+        {
+            while (fCurrentToken != null && fCurrentToken.Kind == TokenKind.WhiteSpace) {
+                Next();
+            }
+        }
+
+        public int RequestInt()
+        {
+            if (fCurrentToken == null || fCurrentToken.Kind != TokenKind.Number) {
+                throw new Exception("Required integer not found");
+            }
+
+            int result = /*fCurrentToken.IntVal; //*/ConvertNumber(fCurrentToken.Value, 10);
+            //int.Parse(fCurrentToken.Value, NumberStyles.Integer, NumberFormat);
+            return result;
+        }
+
+        private static int ConvertIntNumber(char[] buf, int first, int last, byte numBase)
+        {
+            int fvalue = 0;
+
+            while (first < last)
+            {
+                char ch = buf[first];
+                byte c = (byte)((int)ch - 48);
+                if (c > 9)
+                {
+                    c -= 7;
+
+                    if (c > 15) {
+                        c -= 32;
+                    }
+                }
+
+                if (c >= numBase) {
+                    break;
+                }
+
+                fvalue = (fvalue * numBase + c);
+                first++;
+            }
+
+            return fvalue;
+        }
+
+        private static int ConvertNumber(string expr, byte numBase)
+        {
+            int fvalue = 0;
+
+            for (int i = 0; i < expr.Length; i++)
+            {
+                char ch = expr[i];
+                byte c = (byte)((int)ch - 48);
+                if (c > 9)
+                {
+                    c -= 7;
+
+                    if (c > 15) {
+                        c -= 32;
+                    }
+                }
+
+                if (c >= numBase) {
+                    break;
+                }
+
+                fvalue = (fvalue * numBase + c);
+            }
+
+            return fvalue;
         }
     }
 }

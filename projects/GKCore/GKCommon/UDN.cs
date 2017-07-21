@@ -33,14 +33,14 @@ namespace GKCommon
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct UDN : ICloneable, IComparable, IComparable<UDN>, IEquatable<UDN>
     {
-        private const uint IgnoreYear = 1u << 31;
-        private const uint IgnoreMonth = 1u << 30;
-        private const uint IgnoreDay = 1u << 29;
-        private const uint DateAfter = 1u << 28;
-        private const uint DateBefore = 1u << 27;
-        private const uint ApproximateDate = 1u << 26;
+        private const int IgnoreYear = 1 << 31;
+        private const int IgnoreMonth = 1 << 30;
+        private const int IgnoreDay = 1 << 29;
+        private const int DateAfter = 1 << 28;
+        private const int DateBefore = 1 << 27;
+        private const int ApproximateDate = 1 << 26;
 
-        private const uint ValueMask = 0x3FFFFFF;
+        private const int ValueMask = 0x3FFFFFF;
 
         public const int UnknownYear = 0;
         public const int UnknownMonth = 0;
@@ -67,17 +67,17 @@ namespace GKCommon
         /// Why can we use the flags.
         /// Because normal Julian day number is based on the Julian Period. Which size is 7980 years. The next Julian
         /// Period begins in the year 3268 AD. Thus, JDN upper limit is 0x2c7986 (0b1011000111100110000110). We need at
-        /// least 22 bits available for JDN. But in .NET's uint (the current type for `fValue`) we have 32 bits -- isn't
+        /// least 22 bits available for JDN. But in .NET's int (the current type for `fValue`) we have 32 bits -- isn't
         /// a waste of resources, heh! Therefore, we use upper unused bits as flags.
         /// </summary>
-        private readonly uint fValue;
+        private readonly int fValue;
 
 
         /// <summary>
         /// Private constructor for internal purposes.
         /// </summary>
         /// <param name="value"></param>
-        private UDN(uint value)
+        private UDN(int value)
         {
             fValue = value;
         }
@@ -101,8 +101,11 @@ namespace GKCommon
             int y = 0, m = 0, d = 0;
 
             if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
-                uint unmaskedVal = GetUnmaskedValue();
-                CalendarConverter.jd_to_gregorian2((int)unmaskedVal, out y, out m, out d);
+                int unmaskedVal = GetUnmaskedValue();
+                var dtx = CalendarConverter.jd_to_gregorian2((int)unmaskedVal);
+                y = dtx.Year;
+                m = dtx.Month;
+                d = dtx.Day;
             }
 
             int sign = Math.Sign(y);
@@ -195,7 +198,7 @@ namespace GKCommon
         /// <param name="r">The right value to compare</param>
         /// <returns>'-1' when the `l` is less than the `r`, '1' when the `l` is greater than the `r` and '0' when
         /// the `l` and the `r` are equal.</returns>
-        private static int CompareVal(uint l, uint r)
+        private static int CompareVal(int l, int r)
         {
             int result = 0;
             if (0 == (IgnoreYear & l))
@@ -327,9 +330,9 @@ namespace GKCommon
         ///
         /// This method doesn't change the 27th and 28th bit ("date before" and "date after").
         /// </returns>
-        private static uint CreateVal(UDNCalendarType calendar, int year, int month, int day)
+        private static int CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
-            uint result = 0;
+            int result = 0;
 
             /*
              * @ruslangaripov:
@@ -353,7 +356,7 @@ namespace GKCommon
              * stick with "0th year always valid for calculation JDN". And therefore, a
              * `CalendarConverter::{calendar type}_to_jd` succeeds with `UnknownYear`:
              *
-             * uint result = (uint) (CalendarConverter::{calendar type}_to_jd(UnknownYear, uMonth, uDay));
+             * int result = (int) (CalendarConverter::{calendar type}_to_jd(UnknownYear, uMonth, uDay));
              *
              * `result` after the code from above is a valid JDN.
              */
@@ -364,19 +367,19 @@ namespace GKCommon
             switch (calendar)
             {
                 case UDNCalendarType.ctGregorian:
-                    result = (uint)CalendarConverter.gregorian_to_jd2(uYear, uMonth, uDay); // fixed
+                    result = CalendarConverter.gregorian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctJulian:
-                    result = (uint)CalendarConverter.julian_to_jd2(uYear, uMonth, uDay); // fixed
+                    result = CalendarConverter.julian_to_jd2(uYear, uMonth, uDay); // fixed
                     break;
 
                 case UDNCalendarType.ctHebrew:
-                    result = (uint)CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
+                    result = CalendarConverter.hebrew_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
 
                 case UDNCalendarType.ctIslamic:
-                    result = (uint)CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
+                    result = CalendarConverter.islamic_to_jd3(uYear, uMonth, uDay); // fixed to the 3rd variant
                     break;
             }
 
@@ -506,7 +509,7 @@ namespace GKCommon
              * Next, if we found a month between an unknown month and a known one, result is a known month. If we found
              * a month between two unknown monthes, result is an unknown month. The same stuff is applied to days.
              */
-            uint value = (left.GetUnmaskedValue() + right.GetUnmaskedValue()) >> 1;
+            int value = (left.GetUnmaskedValue() + right.GetUnmaskedValue()) >> 1;
             value |=
                 (IgnoreMonth & left.fValue) & (IgnoreMonth & right.fValue) |
                 (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue) &
@@ -573,7 +576,7 @@ namespace GKCommon
         /// Utility function for debugging and testing.
         /// </summary>
         /// <returns></returns>
-        public uint GetUnmaskedValue()
+        public int GetUnmaskedValue()
         {
             return (ValueMask & fValue);
         }

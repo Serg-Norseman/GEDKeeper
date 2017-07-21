@@ -48,7 +48,6 @@ namespace GKCore.Interfaces
         void AddEllipse(float x, float y, float width, float height);
         void CloseFigure();
         void StartFigure();
-        bool IsVisible(float x, float y);
 
         ExtRectF GetBounds();
     }

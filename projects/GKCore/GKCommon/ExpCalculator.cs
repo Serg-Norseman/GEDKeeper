@@ -17,7 +17,18 @@ namespace GKCommon
         public CalculateException(string message) : base(message) {}
     }
 
-    public delegate bool GetVarEventHandler(object sender, string varName, ref double varValue);
+    public class VarRequestEventArgs : EventArgs
+    {
+        public readonly string VarName;
+        public double VarValue;
+
+        public VarRequestEventArgs(string varName)
+        {
+            VarName = varName;
+        }
+    }
+
+    public delegate bool GetVarEventHandler(object sender, VarRequestEventArgs eventArgs);
 
     /// <summary>
     /// The simple calculator for standard expressions.
@@ -154,10 +165,8 @@ namespace GKCommon
             return (value - fint(value));
         }
 
-        private static bool DefaultFunction(string name, ref double val)
+        private static double DefaultFunction(string name, double val)
         {
-            bool result = true;
-
             if (name == "round")
             {
                 val = (long)Math.Round(val);
@@ -207,16 +216,14 @@ namespace GKCommon
                 }
             }
             else {
-                result = false;
+                val = double.NaN;
             }
 
-            return result;
+            return val;
         }
 
-        private void DefaultCallback(CallbackType ctype, string name, ref double val)
+        private double DefaultCallback(CallbackType ctype, string name, double val)
         {
-            bool result = true;
-
             switch (ctype) {
                 case CallbackType.GetValue:
                     if (name == "pi") {
@@ -225,9 +232,6 @@ namespace GKCommon
                         val = Math.E;
                     } else {
                         val = GetVar(name);
-                        if (double.IsNaN(val)) {
-                            result = DoGetVar(name, ref val);
-                        }
                     }
                     break;
 
@@ -236,18 +240,14 @@ namespace GKCommon
                     break;
 
                 case CallbackType.Function:
-                    result = DefaultFunction(name, ref val);
+                    val = DefaultFunction(name, val);
                     break;
             }
 
-            if (!result)
+            if (double.IsNaN(val))
                 throw new CalculateException("Unknown function or variable \"" + name + "\".");
-        }
 
-        private bool DoGetVar(string varName, ref double varValue)
-        {
-            GetVarEventHandler eventHandler = OnGetVar; //base.Events[ExpCalculator.EventGetVar];
-            return (eventHandler != null) && eventHandler(this, varName, ref varValue);
+            return val;
         }
 
         private void lex()
@@ -433,10 +433,10 @@ namespace GKCommon
                             case ExpToken.tkLBRACE:
                                 lex();
                                 if (st == "if") {
-                                    exprIf(out R);
+                                    R = exprIf();
                                 } else {
                                     R = expr6();
-                                    DefaultCallback(CallbackType.Function, st, ref R);
+                                    R = DefaultCallback(CallbackType.Function, st, R);
                                 }
                                 checkToken(ExpToken.tkRBRACE);
                                 lex();
@@ -445,11 +445,11 @@ namespace GKCommon
                             case ExpToken.tkASSIGN:
                                 lex();
                                 R = expr6();
-                                DefaultCallback(CallbackType.SetValue, st, ref R);
+                                R = DefaultCallback(CallbackType.SetValue, st, R);
                                 break;
 
                             default:
-                                DefaultCallback(CallbackType.GetValue, st, ref R);
+                                R = DefaultCallback(CallbackType.GetValue, st, R);
                                 break;
                         }
                     }
@@ -462,7 +462,7 @@ namespace GKCommon
             return R;
         }
 
-        private void exprIf(out double R)
+        private double exprIf()
         {
             double resCond = 0.0d, resThen = 0.0d, resElse = 0.0d;
 
@@ -476,7 +476,8 @@ namespace GKCommon
             lex();
             resElse = expr6();
 
-            R = (resCond == 1.0d) ? resThen : resElse;
+            double R = (resCond == 1.0d) ? resThen : resElse;
+            return R;
         }
 
         private double expr1()
@@ -692,17 +693,30 @@ namespace GKCommon
 
         public double GetVar(string name)
         {
+            double result = double.NaN;
+
             int num = fVars.Count;
             for (int i = 0; i < num; i++) {
                 NamedVar nVar = fVars[i];
 
                 if (string.Compare(nVar.Name, name, !fCaseSensitive) == 0)
                 {
-                    return nVar.Value;
+                    result = nVar.Value;
+                    break;
                 }
             }
-            
-            return double.NaN;
+
+            if (double.IsNaN(result)) {
+                GetVarEventHandler eventHandler = OnGetVar;
+                if (eventHandler != null) {
+                    var eventArgs = new VarRequestEventArgs(name);
+                    if (eventHandler(this, eventArgs)) {
+                        result = eventArgs.VarValue;
+                    }
+                }
+            }
+
+            return result;
         }
 
         public void SetVar(string name, double value)

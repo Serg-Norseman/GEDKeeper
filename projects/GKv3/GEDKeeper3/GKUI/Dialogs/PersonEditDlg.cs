@@ -80,13 +80,12 @@ namespace GKUI.Dialogs
 
             try
             {
-                string fam, nam, pat;
-                GKUtils.GetNameParts(fPerson, out fam, out nam, out pat, false);
-                txtSurname.Text = fam;
-                txtName.Text = nam;
+                var parts = GKUtils.GetNameParts(fPerson, false);
+                txtSurname.Text = parts.Surname;
+                txtName.Text = parts.Name;
 
                 cmbPatronymic.AutoComplete = true; // FIXME: Wrapper for EtoBug in ComboBox.setText
-                cmbPatronymic.Text = pat;
+                cmbPatronymic.Text = parts.Patronymic;
                 cmbPatronymic.AutoComplete = false;
 
                 cmbSex.SelectedIndex = (sbyte)fPerson.Sex;
@@ -138,20 +137,19 @@ namespace GKUI.Dialogs
                     ICulture culture = fBase.Context.Culture;
                     INamesTable namesTable = AppHost.NamesTable;
 
-                    string surname, name, patronymic;
-                    GKUtils.GetNameParts(fTarget, out surname, out name, out patronymic);
-                    txtSurname.Text = surname;
+                    var parts = GKUtils.GetNameParts(fTarget);
+                    txtSurname.Text = parts.Surname;
                     GEDCOMSex sx = (GEDCOMSex)cmbSex.SelectedIndex;
 
                     switch (fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                SetMarriedSurname(surname);
+                                SetMarriedSurname(parts.Surname);
                             }
                             if (culture.HasPatronymic()) {
-                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svMale));
-                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(name, GEDCOMSex.svFemale));
-                                cmbPatronymic.Text = namesTable.GetPatronymicByName(name, sx);
+                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svMale));
+                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svFemale));
+                                cmbPatronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
                             }
                             break;
 
@@ -159,18 +157,18 @@ namespace GKUI.Dialogs
                             switch (sx) {
                                 case GEDCOMSex.svMale:
                                     if (culture.HasPatronymic()) {
-                                        txtName.Text = namesTable.GetNameByPatronymic(patronymic);
+                                        txtName.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
                                     }
                                     break;
 
                                 case GEDCOMSex.svFemale:
-                                    SetMarriedSurname(surname);
+                                    SetMarriedSurname(parts.Surname);
                                     break;
                             }
                             break;
 
                         case TargetMode.tmWife:
-                            SetMarriedSurname(surname);
+                            SetMarriedSurname(parts.Surname);
                             break;
                     }
                 }
@@ -354,7 +352,7 @@ namespace GKUI.Dialogs
         private void AcceptChanges()
         {
             GEDCOMPersonalName np = fPerson.PersonalNames[0];
-            GKUtils.SetRusNameParts(np, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
+            GKUtils.SetNameParts(np, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
 
             GEDCOMPersonalNamePieces pieces = np.Pieces;
             pieces.Nickname = txtNickname.Text;

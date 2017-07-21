@@ -2700,7 +2700,7 @@ namespace GKCore
             personalName.Pieces.MarriedName = marriedSurname.Trim();
         }
 
-        public static void SetRusNameParts(GEDCOMPersonalName personalName, string surname, string name, string patronymic)
+        public static void SetNameParts(GEDCOMPersonalName personalName, string surname, string name, string patronymic)
         {
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
@@ -2715,14 +2715,14 @@ namespace GKCore
             personalName.Pieces.PatronymicName = patronymic;
         }
 
-        public static void GetRusNameParts(GEDCOMPersonalName personalName, out string surname, out string name, out string patronymic)
+        public static NamePartsRet GetNameParts(GEDCOMPersonalName personalName)
         {
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
-            surname = personalName.Pieces.Surname;
-            name = personalName.Pieces.Given;
-            patronymic = personalName.Pieces.PatronymicName;
+            string surname = personalName.Pieces.Surname;
+            string name = personalName.Pieces.Given;
+            string patronymic = personalName.Pieces.PatronymicName;
 
             if (string.IsNullOrEmpty(surname) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic))
             {
@@ -2739,24 +2739,40 @@ namespace GKCore
                     patronymic = "";
                 }
             }
+
+            return new NamePartsRet(surname, name, patronymic);
         }
 
-        public static void GetNameParts(GEDCOMIndividualRecord iRec, out string surname, out string name, out string patronymic, bool formatted = true)
+        public static NamePartsRet GetNameParts(GEDCOMIndividualRecord iRec, bool formatted = true)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
             if (iRec.PersonalNames.Count > 0) {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
-                GetRusNameParts(np, out surname, out name, out patronymic);
+                var parts = GetNameParts(np);
 
                 if (formatted) {
-                    surname = GetFmtSurname(iRec, np, surname);
+                    parts.Surname = GetFmtSurname(iRec, np, parts.Surname);
                 }
+
+                return parts;
             } else {
-                surname = "";
-                name = "";
-                patronymic = "";
+                return new NamePartsRet("", "", "");
+            }
+        }
+
+        public sealed class NamePartsRet
+        {
+            public string Surname;
+            public string Name;
+            public string Patronymic;
+
+            public NamePartsRet(string surname, string name, string patronymic)
+            {
+                Surname = surname;
+                Name = name;
+                Patronymic = patronymic;
             }
         }
 

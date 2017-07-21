@@ -49,15 +49,13 @@ namespace GKCore.Operations
                 result = false;
             } else {
                 GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                var parts = GKUtils.GetNameParts(np);
 
-                string surname, name, patr;
-                GKUtils.GetRusNameParts(np, out surname, out name, out patr);
+                fOldSurname = parts.Surname;
+                fOldName = parts.Name;
+                fOldPatronymic = parts.Patronymic;
 
-                fOldSurname = surname;
-                fOldName = name;
-                fOldPatronymic = patr;
-
-                GKUtils.SetRusNameParts(np, fNewSurname, fNewName, fNewPatronymic);
+                GKUtils.SetNameParts(np, fNewSurname, fNewName, fNewPatronymic);
             }
 
             return result;
@@ -68,7 +66,7 @@ namespace GKCore.Operations
             if (fPerson == null) return;
 
             GEDCOMPersonalName np = fPerson.PersonalNames[0];
-            GKUtils.SetRusNameParts(np, fOldSurname, fOldName, fOldPatronymic);
+            GKUtils.SetNameParts(np, fOldSurname, fOldName, fOldPatronymic);
         }
     }
 }

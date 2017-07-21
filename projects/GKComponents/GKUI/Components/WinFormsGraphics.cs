@@ -168,11 +168,6 @@ namespace GKUI.Components
             Handle.StartFigure();
         }
 
-        public bool IsVisible(float x, float y)
-        {
-            return Handle.IsVisible(x, y);
-        }
-
         public ExtRectF GetBounds()
         {
             RectangleF rect = Handle.GetBounds();

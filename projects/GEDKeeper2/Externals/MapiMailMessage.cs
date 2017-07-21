@@ -176,7 +176,7 @@ namespace Externals.MapiMail
                 const int MAPI_DIALOG = 0x8;
                 //const int MAPI_LOGON_UI = 0x1;
                 const int SUCCESS_SUCCESS = 0;
-                uint error = NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
+                int error = (int)NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
 
                 if (_files.Count > 0)
                 {
@@ -263,7 +263,7 @@ namespace Externals.MapiMail
         /// <summary>
         /// Logs any Mapi errors.
         /// </summary>
-        public string LogErrorMapi(uint errorCode)
+        public string LogErrorMapi(int errorCode)
         {
             string error = string.Empty;
             switch (errorCode)

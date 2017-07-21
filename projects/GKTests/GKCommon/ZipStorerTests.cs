@@ -45,9 +45,8 @@ namespace GKTests.GKCommon
                 Assert.Throws(typeof(InvalidOperationException), () => { zip.ReadCentralDir(); });
 
                 ZipStorer xzip = null;
-                Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.RemoveEntries(ref xzip, null); });
-                xzip = zip;
-                Assert.Throws(typeof(ArgumentNullException), () => { ZipStorer.RemoveEntries(ref xzip, null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { xzip = ZipStorer.RemoveEntries(xzip, null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { xzip = ZipStorer.RemoveEntries(xzip, null); });
             }
 
             using (ZipStorer zip = ZipStorer.Open(fileName, FileAccess.Read)) {

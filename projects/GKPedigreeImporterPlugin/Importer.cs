@@ -319,37 +319,31 @@ namespace GKPedigreeImporterPlugin
             //return true;
         }
 
-        private bool IsPersonLine(string str, ref string p_id)
+        private string IsPersonLine(string str)
         {
             switch (NumbersType) {
                 case PersonNumbersType.pnDAboville:
-                    return ImportUtils.IsPersonLine_DAboville(str, out p_id);
+                    return ImportUtils.IsPersonLine_DAboville(str);
 
                 case PersonNumbersType.pnKonovalov:
-                    return ImportUtils.IsPersonLine_Konovalov(str, out p_id);
+                    return ImportUtils.IsPersonLine_Konovalov(str);
 
                 default:
-                    return false;
+                    return null;
             }
         }
 
-        private bool ParsePersonLine(string str, out string persId, out string parentId, out string marNum,
-                                     out string extData, out int pos)
+        private ImportUtils.PersonLineRet ParsePersonLine(string str)
         {
             switch (NumbersType) {
                 case PersonNumbersType.pnDAboville:
-                    return ImportUtils.ParsePersonLine_DAboville(str, out persId, out parentId, out marNum, out extData, out pos);
+                    return ImportUtils.ParsePersonLine_DAboville(str);
 
                 case PersonNumbersType.pnKonovalov:
-                    return ImportUtils.ParsePersonLine_Konovalov(str, out persId, out parentId, out marNum, out extData, out pos);
+                    return ImportUtils.ParsePersonLine_Konovalov(str);
 
                 default:
-                    persId = "";
-                    parentId = "";
-                    marNum = "";
-                    extData = "";
-                    pos = 0;
-                    return false;
+                    return null;
             }
         }
 
@@ -468,22 +462,23 @@ namespace GKPedigreeImporterPlugin
                 int marrNum = -1;
                 int pid_end = 0;
 
-                string persId, parentId, marNum, extData;
-                bool res = ParsePersonLine(str, out persId, out parentId, out marNum, out extData, out pid_end);
+                var plRet = ParsePersonLine(str);
                 // extData - (в/б)
 
-                if (!res) {
+                if (plRet == null) {
                     return null;
                 }
 
-                if (fPersonsList.ContainsKey(persId)) {
-                    fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + persId + "\".");
+                pid_end = plRet.Pos;
+
+                if (fPersonsList.ContainsKey(plRet.PersId)) {
+                    fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + plRet.PersId + "\".");
                     return null;
                 }
 
                 if (NumbersType == PersonNumbersType.pnKonovalov) {
-                    selfId = int.Parse(persId);
-                    int.TryParse(marNum, out marrNum);
+                    selfId = int.Parse(plRet.PersId);
+                    int.TryParse(plRet.MarNum, out marrNum);
                 }
 
                 str = str.Substring(pid_end).Trim();
@@ -492,15 +487,15 @@ namespace GKPedigreeImporterPlugin
 
                 GEDCOMIndividualRecord result = DefinePerson(str, proposeSex);
 
-                fPersonsList.Add(persId, result);
+                fPersonsList.Add(plRet.PersId, result);
 
-                if (!string.IsNullOrEmpty(parentId))
+                if (!string.IsNullOrEmpty(plRet.ParentId))
                 {
                     GEDCOMIndividualRecord parent;
-                    if (fPersonsList.TryGetValue(parentId, out parent)) {
+                    if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
                         AddChild(parent, marrNum, result);
                     } else {
-                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parentId + "\".");
+                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");
                     }
                 }
 
@@ -563,27 +558,26 @@ namespace GKPedigreeImporterPlugin
 
                 try
                 {
-                    string spSex, extData;
-                    int marrNum;
-                    int pos;
-                    if (ImportUtils.ParseSpouseLine(line, out spSex, out marrNum, out extData, out pos))
+                    var slRet = ImportUtils.ParseSpouseLine(line);
+                    if (slRet != null)
                     {
                         // define sex
+                        string spSex = slRet.Spouse;
                         GEDCOMSex sx = (spSex[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
 
                         // extract name
-                        line = line.Substring(pos).Trim();
+                        line = line.Substring(slRet.Pos).Trim();
 
                         if (!string.IsNullOrEmpty(line))
                         {
                             GEDCOMIndividualRecord spouse = DefinePerson(line, sx);
 
-                            GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, marrNum);
+                            GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, slRet.MarrNum);
                             family.AddSpouse(spouse);
 
                             // extract marriage date
-                            if (!string.IsNullOrEmpty(extData)) {
-                                string marrDate = extData.Substring(1, extData.Length - 2).Trim();
+                            if (!string.IsNullOrEmpty(slRet.ExtData)) {
+                                string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
 
                                 if (marrDate != "") SetEvent(family, "MARR", marrDate);
                             }
@@ -621,9 +615,9 @@ namespace GKPedigreeImporterPlugin
                     return;
                 }
 
-                string personId = "";
                 string s = buffer[0];
-                if (IsPersonLine(s, ref personId))
+                string personId = IsPersonLine(s);
+                if (!string.IsNullOrEmpty(personId))
                 {
                     fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
 
@@ -700,13 +694,13 @@ namespace GKPedigreeImporterPlugin
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
                                 string dummy;
 
-                                if (ImportUtils.IsPersonLine_DAboville(txt, out dummy))
+                                if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_DAboville(txt)))
                                 {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnDAboville;
                                     numberStats[1]++;
                                 }
-                                else if (ImportUtils.IsPersonLine_Konovalov(txt, out dummy))
+                                else if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_Konovalov(txt)))
                                 {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnKonovalov;
@@ -900,7 +894,8 @@ namespace GKPedigreeImporterPlugin
 
                             line = line.Trim();
 
-                            if (IsPersonLine(line, ref p_id)) {
+                            p_id = IsPersonLine(line);
+                            if (!string.IsNullOrEmpty(p_id)) {
                                 lineType = RawLineType.rltPerson;
                             }
                         }

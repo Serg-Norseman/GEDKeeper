@@ -52,7 +52,7 @@ namespace GKCommon
             InitRome();
         }
 
-        public static bool IsSetBit(uint val, int pos)
+        public static bool IsSetBit(int val, int pos)
         {
             return (val & (1 << pos)) != 0;
         }
@@ -376,6 +376,14 @@ namespace GKCommon
                 }
             }
             return rome;
+        }
+
+        public static NumberFormatInfo CreateDefaultNumberFormat()
+        {
+            var result = new NumberFormatInfo();
+            result.NumberDecimalSeparator = ".";
+            result.NumberGroupSeparator = "";
+            return result;
         }
 
         public static int ParseInt(string str, int Default)

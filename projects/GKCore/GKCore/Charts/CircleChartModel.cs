@@ -343,8 +343,9 @@ namespace GKCore.Charts
                     return;
                 }
             } else {
-                string dummy;
-                GKUtils.GetNameParts(iRec, out surn, out givn, out dummy);
+                var parts = GKUtils.GetNameParts(iRec);
+                surn = parts.Surname;
+                givn = parts.Name;
             }
 
             ExtSizeF size;

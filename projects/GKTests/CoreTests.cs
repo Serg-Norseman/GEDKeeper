@@ -332,9 +332,9 @@ namespace GKTests.GKCore
             //
 
             string surname = "", name = "", patronymic = "";
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetRusNameParts(null, out surname, out name, out patronymic); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetRusNameParts(null, surname, name, patronymic); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, out surname, out name, out patronymic); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetNameParts(null, surname, name, patronymic); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
 
             //
 
@@ -754,14 +754,11 @@ namespace GKTests.GKCore
         [Test]
         public void Kinships_Tests()
         {
-            RelationKind rel;
-            int great, level;
+            var ks = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon);
+            Assert.AreEqual(RelationKind.rkBrother, ks.FinRel);
 
-            rel = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon, out great, out level);
-            Assert.AreEqual(RelationKind.rkBrother, rel);
-
-            rel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out great, out level);
-            Assert.AreEqual(RelationKind.rkSon, rel);
+            ks = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon);
+            Assert.AreEqual(RelationKind.rkSon, ks.FinRel);
 
             GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;

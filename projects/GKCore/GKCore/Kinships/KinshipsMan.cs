@@ -221,11 +221,11 @@ namespace GKCore.Kinships
                 RelationKind.rkSisterInLaw_W, 0, 1);
         }
 
-        public static RelationKind FindKinship(RelationKind prev, RelationKind cur, out int great, out int level)
+        public static KinshipRet FindKinship(RelationKind prev, RelationKind cur)
         {
-            RelationKind result = RelationKind.rkUndefined;
-            great = 0;
-            level = 0;
+            RelationKind finRel = RelationKind.rkUndefined;
+            int great = 0;
+            int level = 0;
 
             int num = fKinships.Count;
             for (int i = 0; i < num; i++)
@@ -241,11 +241,25 @@ namespace GKCore.Kinships
                         rel = cur;
                     }
 
-                    result = rel;
+                    finRel = rel;
                 }
             }
 
-            return result;
+            return new KinshipRet(finRel, great, level);
+        }
+
+        public sealed class KinshipRet
+        {
+            public RelationKind FinRel;
+            public int Great;
+            public int Level;
+
+            internal KinshipRet(RelationKind finRel, int great, int level)
+            {
+                FinRel = finRel;
+                Great = great;
+                Level = level;
+            }
         }
     }
 }

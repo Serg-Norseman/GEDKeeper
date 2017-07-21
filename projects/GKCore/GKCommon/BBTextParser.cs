@@ -101,8 +101,10 @@ namespace GKCommon
             fTextColor = textColor;
         }
 
-        private void GetPrevFontParams(BBTextChunk chunk, out float fntSize, out ExtFontStyle fntStyle)
+        private BBTextChunk SetChunkColor(int tokenLine, BBTextChunk chunk, IColor color)
         {
+            float fntSize;
+            ExtFontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
@@ -110,13 +112,6 @@ namespace GKCommon
                 fntSize = fDefaultFontSize;
                 fntStyle = ExtFontStyle.Regular;
             }
-        }
-
-        private BBTextChunk SetChunkColor(int tokenLine, BBTextChunk chunk, IColor color)
-        {
-            float fntSize;
-            ExtFontStyle fntStyle;
-            GetPrevFontParams(chunk, out fntSize, out fntStyle);
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, fntSize, fntStyle, color);
@@ -132,7 +127,13 @@ namespace GKCommon
         {
             float fntSize;
             ExtFontStyle fntStyle;
-            GetPrevFontParams(chunk, out fntSize, out fntStyle);
+            if (chunk != null) {
+                fntSize = chunk.Size;
+                fntStyle = chunk.Style;
+            } else {
+                fntSize = fDefaultFontSize;
+                fntStyle = ExtFontStyle.Regular;
+            }
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, newSize, fntStyle, fTextColor);
@@ -148,7 +149,13 @@ namespace GKCommon
         {
             float fntSize;
             ExtFontStyle fntStyle;
-            GetPrevFontParams(chunk, out fntSize, out fntStyle);
+            if (chunk != null) {
+                fntSize = chunk.Size;
+                fntStyle = chunk.Style;
+            } else {
+                fntSize = fDefaultFontSize;
+                fntStyle = ExtFontStyle.Regular;
+            }
 
             if (active) {
                 fntStyle |= style;
@@ -170,7 +177,13 @@ namespace GKCommon
         {
             float fntSize;
             ExtFontStyle fntStyle;
-            GetPrevFontParams(chunk, out fntSize, out fntStyle);
+            if (chunk != null) {
+                fntSize = chunk.Size;
+                fntStyle = chunk.Style;
+            } else {
+                fntSize = fDefaultFontSize;
+                fntStyle = ExtFontStyle.Regular;
+            }
 
             if (chunk == null) {
                 chunk = new BBTextChunk(tokenLine, fntSize, fntStyle, fTextColor);
