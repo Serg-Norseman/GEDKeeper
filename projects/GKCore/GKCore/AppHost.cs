@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Timers;
 
 using GKCommon;
 using GKCommon.IoC;

@@ -33,7 +33,7 @@ namespace GKUI.Components
 
         public ArborNodeEx(string sign) : base(sign)
         {
-            this.Color = Colors.Gray;
+            Color = Colors.Gray;
         }
     }
 

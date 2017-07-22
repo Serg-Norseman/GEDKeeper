@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -32,7 +31,7 @@ namespace GKUI.Components
         public GKTabControl() : base()
         {
             DrawMode = TabDrawMode.OwnerDrawFixed;
-            Padding = new System.Drawing.Point(20, 4);
+            Padding = new Point(20, 4);
             SizeMode = TabSizeMode.Normal;
         }
 

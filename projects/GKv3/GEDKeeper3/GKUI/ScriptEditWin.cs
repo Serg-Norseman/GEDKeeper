@@ -22,7 +22,6 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
 using GKCore;

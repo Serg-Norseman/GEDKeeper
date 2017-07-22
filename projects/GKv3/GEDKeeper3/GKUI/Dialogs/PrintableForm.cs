@@ -20,13 +20,8 @@
 
 //define DEBUG_PRINT
 
-using System;
-using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Dialogs
 {

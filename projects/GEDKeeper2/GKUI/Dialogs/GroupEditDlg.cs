@@ -26,7 +26,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Operations;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;

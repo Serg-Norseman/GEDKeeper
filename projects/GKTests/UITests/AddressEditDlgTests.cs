@@ -24,7 +24,6 @@ using System;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKTests.ControlTesters;
 using GKTests.Mocks;

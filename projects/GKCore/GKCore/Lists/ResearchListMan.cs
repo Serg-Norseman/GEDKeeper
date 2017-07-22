@@ -186,7 +186,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)) != false)
+                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)))
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
                     }

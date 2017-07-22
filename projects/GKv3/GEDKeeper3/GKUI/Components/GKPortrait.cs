@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public partial class GKPortrait : Panel
+    public class GKPortrait : Panel
     {
         private List<Button> fBtnsList = new List<Button>();
         private ImageBox fImageBox;

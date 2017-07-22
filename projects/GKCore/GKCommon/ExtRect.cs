@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -275,7 +274,7 @@ namespace GKCommon
 
         public void Offset(ExtPoint p)
         {
-            this.Offset(p.X, p.Y);
+            Offset(p.X, p.Y);
         }
 
         public override string ToString()

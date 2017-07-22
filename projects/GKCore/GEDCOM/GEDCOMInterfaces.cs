@@ -18,12 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 
 namespace GKCommon.GEDCOM
 {
-    public interface IGEDCOMListEnumerator<T> : IEnumerator, IEnumerator<T>
+    public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
     {
         GEDCOMObject Owner
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using Eto.Drawing;
+﻿using Eto.Drawing;
 using GKUI.Components;
 
 namespace GKUI

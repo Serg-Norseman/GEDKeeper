@@ -46,7 +46,7 @@ namespace GKCore.Charts
         public float StartAngle;
         public float WedgeAngle;
 
-        public CircleSegment(int generation)
+        protected CircleSegment(int generation)
         {
             Gen = generation;
             IRec = null;
@@ -196,8 +196,9 @@ namespace GKCore.Charts
                 return fRootPerson;
             }
             set {
-                if (fRootPerson == value) return;
-                fRootPerson = value;
+                if (fRootPerson != value) {
+                    fRootPerson = value;
+                }
             }
         }
 

@@ -19,14 +19,12 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKUI.Components;
 
 namespace GKUI.Dialogs
 {

@@ -32,7 +32,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public partial class GKMergeControl : Panel
+    public class GKMergeControl : Panel
     {
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;

@@ -20,10 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Lists;
+
 using GKTests.ControlTesters;
 using GKTests.Mocks;
 using GKUI.Dialogs;

@@ -30,7 +30,6 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Charts;
-using GKUI.Components;
 using GKUI.Dialogs;
 
 namespace GKUI.Components

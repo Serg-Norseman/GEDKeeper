@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using GKCore;
 using GKUI;
 using GKUI.Dialogs;
 using NUnit.Framework;

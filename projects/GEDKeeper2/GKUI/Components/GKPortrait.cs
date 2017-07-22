@@ -28,7 +28,7 @@ namespace GKUI.Components
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public partial class GKPortrait : UserControl
+    public class GKPortrait : UserControl
     {
         public Image Image
         {
@@ -171,9 +171,9 @@ namespace GKUI.Components
         #region Design
 
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Panel btnPanel;
-        private System.Windows.Forms.Timer timer;
+        private PictureBox pictureBox1;
+        private Panel btnPanel;
+        private Timer timer;
 
         /// <summary>
         /// Disposes resources used by the control.
@@ -198,38 +198,38 @@ namespace GKUI.Components
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GKPortrait));
-            pictureBox1 = new System.Windows.Forms.PictureBox();
-            btnPanel = new System.Windows.Forms.Panel();
-            timer = new System.Windows.Forms.Timer(components);
+            pictureBox1 = new PictureBox();
+            btnPanel = new Panel();
+            timer = new Timer(components);
             ((System.ComponentModel.ISupportInitialize)(pictureBox1)).BeginInit();
             SuspendLayout();
 
-            pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            pictureBox1.Location = new System.Drawing.Point(0, 0);
+            pictureBox1.BackgroundImageLayout = ImageLayout.Center;
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new System.Drawing.Size(178, 188);
+            pictureBox1.Size = new Size(178, 188);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            pictureBox1.MouseLeave += new System.EventHandler(PictureBox1MouseLeave);
-            pictureBox1.MouseHover += new System.EventHandler(PictureBox1MouseHover);
+            pictureBox1.MouseLeave += PictureBox1MouseLeave;
+            pictureBox1.MouseHover += PictureBox1MouseHover;
 
-            btnPanel.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            btnPanel.Location = new System.Drawing.Point(0, 152);
+            btnPanel.BackColor = SystemColors.ButtonShadow;
+            btnPanel.Location = new Point(0, 152);
             btnPanel.Name = "panel1";
-            btnPanel.Size = new System.Drawing.Size(178, 36);
+            btnPanel.Size = new Size(178, 36);
             btnPanel.TabIndex = 1;
-            btnPanel.MouseLeave += new System.EventHandler(Panel1MouseLeave);
-            btnPanel.MouseHover += new System.EventHandler(Panel1MouseHover);
+            btnPanel.MouseLeave += Panel1MouseLeave;
+            btnPanel.MouseHover += Panel1MouseHover;
 
-            timer.Tick += new System.EventHandler(MoveSlidePanel);
+            timer.Tick += MoveSlidePanel;
 
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(6F, 13F);
+            AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(btnPanel);
             Controls.Add(pictureBox1);
             Name = "GKPortrait";
-            Size = new System.Drawing.Size(178, 188);
+            Size = new Size(178, 188);
             ((System.ComponentModel.ISupportInitialize)(pictureBox1)).EndInit();
             ResumeLayout(false);
         }

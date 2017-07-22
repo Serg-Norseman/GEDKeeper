@@ -32,7 +32,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public partial class GKMergeControl : UserControl
+    public class GKMergeControl : UserControl
     {
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;
@@ -284,14 +284,14 @@ namespace GKUI.Components
             btnRec1Select.Size = new System.Drawing.Size(81, 25);
             btnRec1Select.TabIndex = 13;
             btnRec1Select.Text = "btnRec1Select";
-            btnRec1Select.Click += new System.EventHandler(btnRec1Select_Click);
+            btnRec1Select.Click += btnRec1Select_Click;
 
             btnRec2Select.Location = new System.Drawing.Point(861, 32);
             btnRec2Select.Name = "btnRec2Select";
             btnRec2Select.Size = new System.Drawing.Size(81, 25);
             btnRec2Select.TabIndex = 14;
             btnRec2Select.Text = "btnRec2Select";
-            btnRec2Select.Click += new System.EventHandler(btnRec2Select_Click);
+            btnRec2Select.Click += btnRec2Select_Click;
 
             btnMergeToLeft.Enabled = false;
             btnMergeToLeft.Location = new System.Drawing.Point(386, 371);
@@ -299,7 +299,7 @@ namespace GKUI.Components
             btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
             btnMergeToLeft.TabIndex = 15;
             btnMergeToLeft.Text = "<<<";
-            btnMergeToLeft.Click += new System.EventHandler(btnMergeToLeft_Click);
+            btnMergeToLeft.Click += btnMergeToLeft_Click;
 
             btnMergeToRight.Enabled = false;
             btnMergeToRight.Location = new System.Drawing.Point(482, 371);
@@ -307,7 +307,7 @@ namespace GKUI.Components
             btnMergeToRight.Size = new System.Drawing.Size(81, 25);
             btnMergeToRight.TabIndex = 16;
             btnMergeToRight.Text = ">>>";
-            btnMergeToRight.Click += new System.EventHandler(btnMergeToRight_Click);
+            btnMergeToRight.Click += btnMergeToRight_Click;
 
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;

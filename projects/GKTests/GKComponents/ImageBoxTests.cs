@@ -20,9 +20,7 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -41,7 +39,7 @@ namespace GKTests.GKComponents
         public void Init()
         {
             fForm = new Form();
-            fForm.ClientSize = new System.Drawing.Size(383, 221);
+            fForm.ClientSize = new Size(383, 221);
             fForm.Text = "ImageViewTests";
 
             fImageBox = new ImageBox();

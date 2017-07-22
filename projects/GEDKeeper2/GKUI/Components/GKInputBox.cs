@@ -27,7 +27,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class GKInputBox : Form
+    public sealed class GKInputBox : Form
     {
         private enum NumbersMode { nmNone, nmInt, nmFloat }
 
@@ -166,17 +166,17 @@ namespace GKUI.Components
 
         #region Design
 
-        private System.Windows.Forms.TextBox txtValue;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnAccept;
+        private TextBox txtValue;
+        private Label label1;
+        private Button btnCancel;
+        private Button btnAccept;
 
         private void InitializeComponent()
         {
-            txtValue = new System.Windows.Forms.TextBox();
-            label1 = new System.Windows.Forms.Label();
-            btnAccept = new System.Windows.Forms.Button();
-            btnCancel = new System.Windows.Forms.Button();
+            txtValue = new TextBox();
+            label1 = new Label();
+            btnAccept = new Button();
+            btnCancel = new Button();
             SuspendLayout();
 
             txtValue.Location = new System.Drawing.Point(12, 25);
@@ -198,9 +198,9 @@ namespace GKUI.Components
             btnAccept.TabIndex = 4;
             btnAccept.Text = "btnAccept";
             btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            btnAccept.Click += new System.EventHandler(btnAccept_Click);
+            btnAccept.Click += btnAccept_Click;
 
-            btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             btnCancel.Location = new System.Drawing.Point(285, 61);
             btnCancel.Name = "btnCancel";
@@ -208,21 +208,21 @@ namespace GKUI.Components
             btnCancel.TabIndex = 5;
             btnCancel.Text = "btnCancel";
             btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            btnCancel.Click += new System.EventHandler(btnCancel_Click);
+            btnCancel.Click += btnCancel_Click;
 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(378, 98);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(label1);
             Controls.Add(txtValue);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-		    this.MaximizeBox = false;
-		    this.MinimizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "InputBox";
             ShowInTaskbar = false;
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "InputBox";
             TopMost = true;
             ResumeLayout(false);

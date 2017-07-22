@@ -48,7 +48,7 @@ namespace GKUI
         public WinFormsAppHost() : base()
         {
             fAppContext = new ApplicationContext();
-            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+            Application.ApplicationExit += this.OnApplicationExit;
         }
 
         private void OnApplicationExit(object sender, EventArgs e)

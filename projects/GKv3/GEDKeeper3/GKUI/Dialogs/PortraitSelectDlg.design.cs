@@ -1,5 +1,4 @@
-﻿using System;
-using Eto.Forms;
+﻿using Eto.Forms;
 using GKUI.Components;
 
 namespace GKUI.Dialogs

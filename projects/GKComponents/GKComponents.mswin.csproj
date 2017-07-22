@@ -11,6 +11,11 @@
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\</OutputPath>
@@ -95,34 +100,45 @@
     <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKTabControl.cs" />
+    <Compile Include="GKUI\Components\GKTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
-    <Compile Include="GKUI\Components\GKTreeNode.cs" />
-    <Compile Include="GKUI\Components\HyperView.cs" />
-    <Compile Include="GKUI\Components\ImageBox.cs" />
-    <Compile Include="GKUI\Components\ImageView.cs" />
-    <Compile Include="GKUI\Components\LogChart.cs">
+    <Compile Include="GKUI\Components\ScrollablePanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\GKTreeNode.cs" />
+    <Compile Include="GKUI\Components\HyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\LogChart.cs" />
     <Compile Include="GKUI\Components\MediaPlayer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Components\UIHelper.cs" />
+    <Compile Include="GKUI\Components\UIHelper.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
     <Compile Include="GKUI\Components\WinUITimer.cs" />
-    <Compile Include="GKUI\Components\WizardPages.cs" />
-    <Compile Include="GKUI\Components\ZGraphControl.cs" />
+    <Compile Include="GKUI\Components\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ZGraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI" />
-    <Folder Include="GKUI\Components" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="ExtResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

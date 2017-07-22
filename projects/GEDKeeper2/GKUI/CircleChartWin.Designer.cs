@@ -1,9 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace GKUI
+﻿namespace GKUI
 {
     partial class CircleChartWin
     {

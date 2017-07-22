@@ -32,7 +32,7 @@ namespace GKTests.GKCommon
         {
             Assert.Throws(typeof(ArgumentException), () => { new Range<int>((2), (1)); });
 
-            Assert.IsTrue(new Range<int>((1), (2)).IsOverlapped(new Range<int>((1), (2))), "chk1"); // true
+            Assert.IsTrue(new Range<int>((1), (2)).IsOverlapped(new Range<int>(1, 2)), "chk1"); // true
             Assert.IsTrue(new Range<int>((1), (3)).IsOverlapped(new Range<int>((2), (4))), "chk2"); // true
             Assert.IsTrue(new Range<int>((2), (4)).IsOverlapped(new Range<int>((1), (3))), "chk3"); // true
             Assert.IsFalse(new Range<int>((3), (4)).IsOverlapped(new Range<int>((1), (2))), "chk4"); // false

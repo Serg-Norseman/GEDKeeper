@@ -20,7 +20,6 @@
 
 //#define HV_DEBUG
 
-using System;
 using System.Collections.Generic;
 using GKCore.Interfaces;
 
@@ -336,8 +335,7 @@ namespace GKCommon
                         }
                     }
                 } else if (tok.Kind == TokenKind.EOL) {
-                    lastChunk = null;
-                    lastChunk = SetChunkText(tok.Line, lastChunk, EMPTY_CHUNK);
+                    lastChunk = SetChunkText(tok.Line, null, EMPTY_CHUNK);
                     lastChunk = null;
                 } else {
                     lastChunk = SetChunkText(tok.Line, lastChunk, tok.Value);
@@ -347,8 +345,7 @@ namespace GKCommon
             }
 
             // eof
-            lastChunk = null;
-            lastChunk = SetChunkText(tok.Line, lastChunk, EMPTY_CHUNK);
+            lastChunk = SetChunkText(tok.Line, null, EMPTY_CHUNK);
         }
     }
 }

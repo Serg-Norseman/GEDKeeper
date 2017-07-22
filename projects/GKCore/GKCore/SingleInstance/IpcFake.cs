@@ -45,14 +45,14 @@ namespace GKCore.SingleInstance
 
         public IpcParamEx()
         {
-            this.Message = string.Empty;
-            this.Params = string.Empty;
+            Message = string.Empty;
+            Params = string.Empty;
         }
 
         public IpcParamEx(string strMessage, string strParams)
         {
-            this.Message = (strMessage ?? string.Empty);
-            this.Params = (strParams ?? string.Empty);
+            Message = (strMessage ?? string.Empty);
+            Params = (strParams ?? string.Empty);
         }
     }
 

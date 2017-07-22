@@ -29,7 +29,7 @@ namespace GKCommon
     {
         public readonly T Handle;
 
-        public TypeHandler(T handle)
+        protected TypeHandler(T handle)
         {
             if (handle == null)
                 throw new ArgumentNullException("handle");

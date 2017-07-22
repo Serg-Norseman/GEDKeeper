@@ -27,7 +27,7 @@ using Externals;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMList<T> : IDisposable, IEnumerable, IEnumerable<T> where T : GEDCOMObject
+    public sealed class GEDCOMList<T> : IDisposable, IEnumerable<T> where T : GEDCOMObject
     {
         #region ListEnumerator
 

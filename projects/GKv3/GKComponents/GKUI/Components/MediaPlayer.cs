@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using Eto.Forms;
 
 namespace GKUI.Components

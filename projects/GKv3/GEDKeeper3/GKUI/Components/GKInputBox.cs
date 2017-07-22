@@ -29,7 +29,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class GKInputBox : ModalDialog
+    public sealed class GKInputBox : ModalDialog
     {
         private enum NumbersMode { nmNone, nmInt, nmFloat }
 

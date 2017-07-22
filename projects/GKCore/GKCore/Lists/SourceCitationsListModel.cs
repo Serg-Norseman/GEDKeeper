@@ -86,7 +86,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)) != false)
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)))
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }

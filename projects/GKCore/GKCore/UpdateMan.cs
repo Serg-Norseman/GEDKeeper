@@ -95,7 +95,7 @@ namespace GKCore
                     string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
 
                     #if !CI_MODE
-                    if (true == AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
+                    if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
                     {
                         Process.Start(url);
                     }

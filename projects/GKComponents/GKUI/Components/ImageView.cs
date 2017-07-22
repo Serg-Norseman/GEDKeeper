@@ -21,12 +21,11 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace GKUI.Components
 {
-    public partial class ImageView : UserControl
+    public class ImageView : UserControl
     {
         private IContainer components = null;
         private ImageBox imageBox;
@@ -105,28 +104,28 @@ namespace GKUI.Components
             btnSizeToFit.Image = ExtResources.iSizeToFit;
             btnSizeToFit.ImageTransparentColor = Color.Magenta;
             btnSizeToFit.Name = "btnSizeToFit";
-            btnSizeToFit.Click += new System.EventHandler(btnSizeToFit_Click);
+            btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             btnZoomIn.Image = ExtResources.iZoomIn;
             btnZoomIn.ImageTransparentColor = Color.Magenta;
             btnZoomIn.Name = "btnZoomIn";
-            btnZoomIn.Click += new System.EventHandler(btnZoomIn_Click);
+            btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
             btnZoomOut.Image = ExtResources.iZoomOut;
             btnZoomOut.ImageTransparentColor = Color.Magenta;
             btnZoomOut.Name = "btnZoomOut";
-            btnZoomOut.Click += new System.EventHandler(btnZoomOut_Click);
+            btnZoomOut.Click += btnZoomOut_Click;
 
             cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
             cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += new System.EventHandler(zoomLevelsToolStripComboBox_SelectedIndexChanged);
+            cbZoomLevels.SelectedIndexChanged += zoomLevelsToolStripComboBox_SelectedIndexChanged;
 
             imageBox.BackColor = SystemColors.ControlDark;
             imageBox.Dock = DockStyle.Fill;
-            imageBox.ZoomChanged += new System.EventHandler(imageBox_ZoomChanged);
+            imageBox.ZoomChanged += imageBox_ZoomChanged;
 
             Controls.Add(imageBox);
             Controls.Add(toolStrip);

@@ -159,7 +159,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery)) != false) {
+                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GEDCOMRepositoryRecord);
                     }
                     break;

@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -39,7 +38,7 @@ namespace GKTests.GKComponents
         public void Init()
         {
             fForm = new Form();
-            fForm.ClientSize = new System.Drawing.Size(383, 221);
+            fForm.ClientSize = new Size(383, 221);
             fForm.Text = "ImageViewTests";
 
             fHyperView = new HyperView();

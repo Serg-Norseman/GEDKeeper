@@ -148,7 +148,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)) != false);
+                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, grp, member);
                     }

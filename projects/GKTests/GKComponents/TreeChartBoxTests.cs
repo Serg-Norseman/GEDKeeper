@@ -20,7 +20,6 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Windows.Forms;
 
 using GKCore.Charts;

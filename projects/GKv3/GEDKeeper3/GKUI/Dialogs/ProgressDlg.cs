@@ -26,7 +26,6 @@ using Eto.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Dialogs
 {

@@ -20,7 +20,6 @@
 
 //define DEBUG_PRINT
 
-using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
