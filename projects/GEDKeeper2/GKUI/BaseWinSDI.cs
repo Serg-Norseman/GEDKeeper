@@ -48,34 +48,23 @@ namespace GKUI
     /// </summary>
     public sealed partial class BaseWinSDI : Form, IBaseWindow
     {
+        private sealed class TabParts
+        {
+            public readonly GKListView ListView;
+            public readonly HyperView Summary;
+
+            public TabParts(GKListView listView, HyperView summary)
+            {
+                ListView = listView;
+                Summary = summary;
+            }
+        }
+
         #region Private fields
 
         private readonly IBaseContext fContext;
         private readonly NavigationStack fNavman;
-
-        private readonly GKListView ListPersons;
-        private readonly GKListView ListFamilies;
-        private readonly GKListView ListNotes;
-        private readonly GKListView ListMultimedia;
-        private readonly GKListView ListSources;
-        private readonly GKListView ListRepositories;
-        private readonly GKListView ListGroups;
-        private readonly GKListView ListResearches;
-        private readonly GKListView ListTasks;
-        private readonly GKListView ListCommunications;
-        private readonly GKListView ListLocations;
-
-        private readonly HyperView mPersonSummary;
-        private readonly HyperView mFamilySummary;
-        private readonly HyperView mNoteSummary;
-        private readonly HyperView mMediaSummary;
-        private readonly HyperView mSourceSummary;
-        private readonly HyperView mRepositorySummary;
-        private readonly HyperView mGroupSummary;
-        private readonly HyperView mResearchSummary;
-        private readonly HyperView mTaskSummary;
-        private readonly HyperView mCommunicationSummary;
-        private readonly HyperView mLocationSummary;
+        private readonly TabParts[] fTabParts;
 
         #endregion
 
@@ -127,17 +116,18 @@ namespace GKUI
 
             fNavman = new NavigationStack();
 
-            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out ListPersons, out mPersonSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily, out ListFamilies, out mFamilySummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote, out ListNotes, out mNoteSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GEDCOMRecordType.rtMultimedia, out ListMultimedia, out mMediaSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPSources), GEDCOMRecordType.rtSource, out ListSources, out mSourceSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GEDCOMRecordType.rtRepository, out ListRepositories, out mRepositorySummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GEDCOMRecordType.rtGroup, out ListGroups, out mGroupSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GEDCOMRecordType.rtResearch, out ListResearches, out mResearchSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask, out ListTasks, out mTaskSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out ListCommunications, out mCommunicationSummary);
-            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out ListLocations, out mLocationSummary);
+            fTabParts = new TabParts[(int)GEDCOMRecordType.rtLast + 1];
+            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual);
+            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily);
+            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote);
+            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GEDCOMRecordType.rtMultimedia);
+            CreatePage(LangMan.LS(LSID.LSID_RPSources), GEDCOMRecordType.rtSource);
+            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GEDCOMRecordType.rtRepository);
+            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GEDCOMRecordType.rtGroup);
+            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GEDCOMRecordType.rtResearch);
+            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask);
+            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication);
+            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation);
             tabsRecords.SelectedIndex = 0;
 
             SetLang();
@@ -266,7 +256,7 @@ namespace GKUI
         {
             GKListView recView = contextMenu.SourceControl as GKListView;
 
-            miRecordDuplicate.Visible = (recView == ListPersons);
+            miRecordDuplicate.Visible = (recView == fTabParts[(int)GEDCOMRecordType.rtIndividual].ListView);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -300,54 +290,7 @@ namespace GKUI
 
         public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
-            GKListView list = null;
-
-            switch (recType) {
-                case GEDCOMRecordType.rtIndividual:
-                    list = ListPersons;
-                    break;
-
-                case GEDCOMRecordType.rtFamily:
-                    list = ListFamilies;
-                    break;
-
-                case GEDCOMRecordType.rtNote:
-                    list = ListNotes;
-                    break;
-
-                case GEDCOMRecordType.rtMultimedia:
-                    list = ListMultimedia;
-                    break;
-
-                case GEDCOMRecordType.rtSource:
-                    list = ListSources;
-                    break;
-
-                case GEDCOMRecordType.rtRepository:
-                    list = ListRepositories;
-                    break;
-
-                case GEDCOMRecordType.rtGroup:
-                    list = ListGroups;
-                    break;
-
-                case GEDCOMRecordType.rtResearch:
-                    list = ListResearches;
-                    break;
-
-                case GEDCOMRecordType.rtTask:
-                    list = ListTasks;
-                    break;
-
-                case GEDCOMRecordType.rtCommunication:
-                    list = ListCommunications;
-                    break;
-
-                case GEDCOMRecordType.rtLocation:
-                    list = ListLocations;
-                    break;
-            }
-
+            GKListView list = fTabParts[(int)recType].ListView;
             return list;
         }
 
@@ -359,55 +302,7 @@ namespace GKUI
         /// <returns>Hyper view control.</returns>
         public HyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
-            HyperView view = null;
-
-            switch (recType)
-            {
-                case GEDCOMRecordType.rtIndividual:
-                    view = mPersonSummary;
-                    break;
-
-                case GEDCOMRecordType.rtFamily:
-                    view = mFamilySummary;
-                    break;
-
-                case GEDCOMRecordType.rtNote:
-                    view = mNoteSummary;
-                    break;
-
-                case GEDCOMRecordType.rtMultimedia:
-                    view = mMediaSummary;
-                    break;
-
-                case GEDCOMRecordType.rtSource:
-                    view = mSourceSummary;
-                    break;
-
-                case GEDCOMRecordType.rtRepository:
-                    view = mRepositorySummary;
-                    break;
-
-                case GEDCOMRecordType.rtGroup:
-                    view = mGroupSummary;
-                    break;
-
-                case GEDCOMRecordType.rtResearch:
-                    view = mResearchSummary;
-                    break;
-
-                case GEDCOMRecordType.rtTask:
-                    view = mTaskSummary;
-                    break;
-
-                case GEDCOMRecordType.rtCommunication:
-                    view = mCommunicationSummary;
-                    break;
-
-                case GEDCOMRecordType.rtLocation:
-                    view = mLocationSummary;
-                    break;
-            }
-
+            HyperView view = fTabParts[(int)recType].Summary;
             return view;
         }
 
@@ -531,14 +426,14 @@ namespace GKUI
             return result;
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType, out GKListView recView, out HyperView summary)
+        private void CreatePage(string pageText, GEDCOMRecordType recType)
         {
             tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
             tabsRecords.Controls.Add(sheet);
             tabsRecords.ResumeLayout(false);
 
-            summary = new HyperView();
+            var summary = new HyperView();
             summary.BorderWidth = 4;
             summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
@@ -553,7 +448,7 @@ namespace GKUI
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
+            var recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
             recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
@@ -561,6 +456,8 @@ namespace GKUI
 
             sheet.Controls.SetChildIndex(spl, 1);
             sheet.Controls.SetChildIndex(summary, 2);
+
+            fTabParts[(int)recType] = new TabParts(recView, summary);
         }
 
         private void ChangeFileName()
@@ -580,7 +477,7 @@ namespace GKUI
         {
             Clear();
             RefreshLists(false);
-            GKUtils.ShowPersonInfo(fContext, null, mPersonSummary.Lines);
+            ClearSummaries();
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
             fContext.Modified = false;
@@ -613,19 +510,24 @@ namespace GKUI
             }
         }
 
+        public void ClearSummaries()
+        {
+            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                HyperView summary = fTabParts[(int)rt].Summary;
+                if (summary != null) {
+                    summary.Lines.Clear();
+                }
+            }
+        }
+
         public void RefreshLists(bool columnsChanged)
         {
-            ListPersons.UpdateContents(columnsChanged);
-            ListFamilies.UpdateContents(columnsChanged);
-            ListNotes.UpdateContents(columnsChanged);
-            ListMultimedia.UpdateContents(columnsChanged);
-            ListSources.UpdateContents(columnsChanged);
-            ListRepositories.UpdateContents(columnsChanged);
-            ListGroups.UpdateContents(columnsChanged);
-            ListResearches.UpdateContents(columnsChanged);
-            ListTasks.UpdateContents(columnsChanged);
-            ListCommunications.UpdateContents(columnsChanged);
-            ListLocations.UpdateContents(columnsChanged);
+            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                GKListView listview = fTabParts[(int)rt].ListView;
+                if (listview != null) {
+                    listview.UpdateContents(columnsChanged);
+                }
+            }
 
             PageRecords_SelectedIndexChanged(null, null);
         }

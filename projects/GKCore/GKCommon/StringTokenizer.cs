@@ -33,7 +33,7 @@ namespace GKCommon
         public readonly string Value;
         public readonly int Line;
         public readonly int Column;
-        public readonly int IntVal;
+        public readonly object ValObj;
 
         public Token(TokenKind kind, string value, int line, int column)
         {
@@ -43,10 +43,11 @@ namespace GKCommon
             Column = column;
         }
 
-        public Token(TokenKind kind, int intValue, int line, int column)
+        public Token(TokenKind kind, string value, object valObj, int line, int column)
         {
             Kind = kind;
-            IntVal = intValue;
+            Value = value;
+            ValObj = valObj;
             Line = line;
             Column = column;
         }
@@ -173,23 +174,17 @@ namespace GKCommon
             return ret;
         }
 
-        protected Token CreateToken(TokenKind kind, string value)
+        protected Token CreateToken(TokenKind kind, string value, object valObj)
         {
-            fCurrentToken = new Token(kind, value, fLine, fColumn);
+            fCurrentToken = new Token(kind, value, valObj, fLine, fColumn);
             return fCurrentToken;
         }
 
         protected Token CreateToken(TokenKind kind)
         {
-            /*if (kind == TokenKind.Number) {
-                int tokenData = ConvertIntNumber(fData, fSavePos, fPos, 10);
-                fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
-                return fCurrentToken;
-            } else {*/
-                string tokenData = new string(fData, fSavePos, fPos - fSavePos);
-                fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
-                return fCurrentToken;
-            //}
+            string tokenData = new string(fData, fSavePos, fPos - fSavePos);
+            fCurrentToken = new Token(kind, tokenData, fSaveLine, fSaveCol);
+            return fCurrentToken;
         }
 
         /// <summary>
@@ -253,7 +248,28 @@ namespace GKCommon
                 else break;
             }
 
-            return CreateToken(kind);
+            string tokVal = new string(fData, fSavePos, fPos - fSavePos);
+            object val = null;
+
+            switch (kind) {
+                case TokenKind.Number:
+                    if (hadDot) {
+                        val = Convert.ToDouble(tokVal, NumberFormat);
+                    } else {
+                        val = ConvertIntNumber(fData, fSavePos, fPos, 10);
+                    }
+                    break;
+
+                case TokenKind.HexNumber:
+                    val = Convert.ToInt32(tokVal, 16);
+                    break;
+
+                case TokenKind.BinNumber:
+                    val = Convert.ToInt32(tokVal.Substring(2), 2);
+                    break;
+            }
+
+            return CreateToken(kind, tokVal, val);
         }
 
         /// <summary>
@@ -368,7 +384,7 @@ namespace GKCommon
                 switch (ch)
                 {
                     case EOF:
-                        return CreateToken(TokenKind.EOF, string.Empty);
+                        return CreateToken(TokenKind.EOF, string.Empty, null);
 
                     case ' ':
                     case '\t':

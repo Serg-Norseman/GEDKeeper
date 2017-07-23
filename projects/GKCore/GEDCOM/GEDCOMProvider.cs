@@ -196,18 +196,52 @@ namespace GKCommon.GEDCOM
                     else
                     {
                         int tagLevel;
-                        string tagXRef, tagName, tagValue;
+                        string tagXRef = "", tagName, tagValue = "";
 
                         try
                         {
-                            str = GEDCOMUtils.ExtractNumber(str, out tagLevel, false, 0);
-                            str = GEDCOMUtils.ExtractDelimiter(str, 0);
-                            str = GEDCOMUtils.ExtractXRef(str, out tagXRef, true, "");
-                            str = GEDCOMUtils.ExtractDelimiter(str, 0);
-                            str = GEDCOMUtils.ExtractString(str, out tagName, "");
-                            tagName = tagName.ToUpperInvariant();
-                            str = GEDCOMUtils.ExtractDelimiter(str, 1);
-                            tagValue = str;
+                            var strTok = new StringTokenizer(str);
+                            strTok.RecognizeDecimals = false;
+                            strTok.IgnoreWhiteSpace = false;
+
+                            var token = strTok.Next(); // already trimmed
+                            if (token.Kind != TokenKind.Number) {
+                                // syntax error
+                                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", str));
+                            }
+                            tagLevel = (int)token.ValObj;
+
+                            token = strTok.Next();
+                            if (token.Kind != TokenKind.WhiteSpace) {
+                                // syntax error
+                            }
+
+                            token = strTok.Next();
+                            if (token.Kind == TokenKind.Symbol && token.Value[0] == '@')
+                            {
+                                token = strTok.Next();
+                                while (token.Kind != TokenKind.Symbol && token.Value[0] != '@') {
+                                    tagXRef += token.Value;
+                                    token = strTok.Next();
+                                }
+                                // FIXME: check for errors
+                                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
+                                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
+
+                                token = strTok.Next();
+                                strTok.SkipWhiteSpaces();
+                            }
+
+                            token = strTok.CurrentToken;
+                            if (token.Kind != TokenKind.Word) {
+                                // syntax error
+                            }
+                            tagName = token.Value.ToUpperInvariant();
+
+                            token = strTok.Next();
+                            if (token.Kind == TokenKind.WhiteSpace) {
+                                tagValue = strTok.GetRest();
+                            }
                         }
                         catch (EGEDCOMException ex)
                         {
@@ -504,9 +538,11 @@ namespace GKCommon.GEDCOM
             result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
             result.Add("ALIA", new TagProperties("ALIA", true, false));
 
+            #if !DEBUG
             // need for compatibility with Agelong Tree (ALTREE), and other
             result.Add("HUSB", new TagProperties("HUSB", true, false));
             result.Add("WIFE", new TagProperties("WIFE", true, false));
+            #endif
 
             result.Add("_BGRO", new TagProperties("_BGRO", true,  true));
             result.Add("_HAIR", new TagProperties("_HAIR", true,  true));

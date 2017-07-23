@@ -140,74 +140,6 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public static string ExtractDotDelimiter(string str, int max)
-        {
-            string result = str;
-
-            if (result != null)
-            {
-                while (result.Length > 0 && result[0] == '.')
-                {
-                    result = result.Remove(0, 1);
-                    if (max > 0)
-                    {
-                        max--;
-                        if (max == 0) break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public static string ExtractString(string str, out string value, string defValue)
-        {
-            string result = str;
-
-            if (!string.IsNullOrEmpty(result)) {
-                int I = 0;
-                while (I < result.Length && result[I] != ' ') {
-                    I++;
-                }
-
-                if (I > 0) {
-                    value = result.Substring(0, I);
-                    result = result.Remove(0, I);
-                } else {
-                    value = defValue;
-                }
-            } else {
-                value = defValue;
-            }
-
-            return result;
-        }
-
-        public static string ExtractXRef(string str, out string aXRef, bool noException, string defValue)
-        {
-            string result = str;
-
-            if (!string.IsNullOrEmpty(result) && result[0] == '@') {
-                int p = result.IndexOf('@', 1);
-                if (p > 0) {
-                    aXRef = result.Substring(1, p - 1);
-                    result = result.Remove(0, p + 1);
-                } else {
-                    if (!noException) {
-                        throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
-                    }
-                    aXRef = defValue;
-                }
-            } else {
-                if (!noException) {
-                    throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
-                }
-                aXRef = defValue;
-            }
-
-            return result;
-        }
-
         public static string CleanXRef(string xref)
         {
             string result = xref;
@@ -237,32 +169,6 @@ namespace GKCommon.GEDCOM
                 }
             }
             return xref;
-        }
-
-        public static string ExtractNumber(string str, out int value, bool noException, int defValue)
-        {
-            string result = str;
-
-            if (!string.IsNullOrEmpty(result)) {
-                int I = 0;
-                while (I < result.Length && SysUtils.IsDigit(result[I])) {
-                    I++;
-                }
-
-                if (I > 0) {
-                    value = int.Parse(result.Substring(0, I));
-                    result = result.Remove(0, I);
-                } else {
-                    if (!noException) {
-                        throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", str));
-                    }
-                    value = defValue;
-                }
-            } else {
-                value = defValue;
-            }
-
-            return result;
         }
 
         #endregion

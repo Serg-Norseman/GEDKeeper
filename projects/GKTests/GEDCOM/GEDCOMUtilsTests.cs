@@ -69,77 +69,23 @@ namespace GKTests.GEDCOM
 
             //
             string st;
-            string s1 = "abcd 12345 efgh";
-            string s2;
-            s2 = GEDCOMUtils.ExtractString(s1, out st, "");
-            Assert.AreEqual("abcd", st);
-            Assert.AreEqual(" 12345 efgh", s2);
+            string s1 = " 12345 efgh";
+            string s2 = "";
 
-            s2 = GEDCOMUtils.ExtractDelimiter(s2, 0);
+            s2 = GEDCOMUtils.ExtractDelimiter(s1, 0);
             Assert.AreEqual("12345 efgh", s2);
 
             //
 
             string s3 = GEDCOMUtils.ExtractDelimiter("    abrvalg", 2);
             Assert.AreEqual("  abrvalg", s3);
-
-            s3 = GEDCOMUtils.ExtractDotDelimiter("....abrvalg", 2);
-            Assert.AreEqual("..abrvalg", s3);
-
-            //
-
-            s3 = GEDCOMUtils.ExtractString("  abrvalg", out st, "test");
-            Assert.AreEqual("test", st);
-            Assert.AreEqual("  abrvalg", s3);
-
-            s3 = GEDCOMUtils.ExtractString("", out st, "test");
-            Assert.AreEqual("test", st);
-            Assert.AreEqual("", s3);
-
-            //
-
-            int N;
-            s2 = GEDCOMUtils.ExtractNumber(s2, out N, true, 0);
-            Assert.AreEqual(" efgh", s2);
-            Assert.AreEqual(12345, N);
-
-            s2 = GEDCOMUtils.ExtractNumber("x12345", out N, true, 54321);
-            Assert.AreEqual("x12345", s2);
-            Assert.AreEqual(54321, N);
-
-            s2 = GEDCOMUtils.ExtractNumber("", out N, true, 1111);
-            Assert.AreEqual("", s2);
-            Assert.AreEqual(1111, N);
-
-            Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractNumber("num", out N, false, 2222); });
-
-            //
-
-            string xref;
-            s2 = GEDCOMUtils.ExtractXRef("@I101@ sample", out xref, true, "");
-            Assert.AreEqual(" sample", s2);
-            Assert.AreEqual("I101", xref);
-
-            s2 = GEDCOMUtils.ExtractXRef("", out xref, true, "test");
-            Assert.AreEqual("", s2);
-            Assert.AreEqual("test", xref);
-
-            s2 = GEDCOMUtils.ExtractXRef("@sample", out xref, true, "test");
-            Assert.AreEqual("@sample", s2);
-            Assert.AreEqual("test", xref);
-
-            Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("", out xref, false, "test"); });
-
-            Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("@sample", out xref, false, "test"); });
         }
 
-        [TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
+        /*[TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
         [TestCase("@sample", Description = "Bad XRef Test", ExpectedException = typeof(EGEDCOMException))]
         public void GEDCOMUtils_ExtractXRef_Tests(string arg)
         {
-            string xref;
-            GEDCOMUtils.ExtractXRef(arg, out xref, false, "test");
-        }
+        }*/
 
         [Test]
         public void GEDCOMEnumSx_Tests()

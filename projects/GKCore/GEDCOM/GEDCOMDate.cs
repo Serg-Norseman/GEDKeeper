@@ -200,6 +200,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(Owner);
 
+            fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
@@ -207,50 +208,169 @@ namespace GKCommon.GEDCOM
             fMonth = "";
             fDay = 0;
 
-            string result = strValue;
-
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(strValue))
             {
                 if (format == GEDCOMFormat.gf_Ahnenblatt) {
-                    result = PrepareAhnenblattDate(result);
+                    strValue = PrepareAhnenblattDate(strValue);
                 }
 
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                result = ExtractApproximated(result);
+                var strTok = new StringTokenizer(strValue);
+                strTok.IgnoreWhiteSpace = false;
+                strTok.Next();
+                strTok.SkipWhiteSpaces();
 
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                result = ExtractEscape(result);
+                // extract approximated
+                var token = strTok.CurrentToken;
+                if (token.Kind == TokenKind.Word) {
+                    string su = token.Value.ToUpperInvariant();
+                    int idx = SysUtils.IndexOf(GEDCOMDateApproximatedArray, su);
+                    if (idx >= 0) {
+                        fApproximated = (GEDCOMApproximated)idx;
+                        strTok.Next();
+                        strTok.SkipWhiteSpaces();
+                    }
+                }
 
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                result = ExtractDay(result);
-
-                if (result.Length > 0)
+                // extract escape
+                token = strTok.CurrentToken;
+                if (token.Kind == TokenKind.Symbol && token.Value[0] == '@')
                 {
-                    if (result[0] == ' ')
-                    {
-                        fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+                    var escapeStr = token.Value;
+                    do {
+                        token = strTok.Next();
+                        escapeStr += token.Value;
+                    } while (token.Kind != TokenKind.Symbol || token.Value[0] != '@');
+                    // FIXME: check for errors
+
+                    int idx = SysUtils.IndexOf(GEDCOMDateEscapeArray, escapeStr);
+                    if (idx >= 0) {
+                        fCalendar = (GEDCOMCalendar)idx;
                     }
-                    else
-                    {
-                        if (result[0] == '.')
-                        {
-                            fDateFormat = GEDCOMDateFormat.dfSystem;
-                        }
+
+                    token = strTok.Next();
+                    strTok.SkipWhiteSpaces();
+                }
+
+                // extract day
+                token = strTok.CurrentToken;
+                if (token.Kind == TokenKind.Number && token.Value.Length <= 2) {
+                    fDay = (byte)(int)token.ValObj;
+                    token = strTok.Next();
+                }
+
+                // extract delimiter
+                if (token.Kind == TokenKind.WhiteSpace && token.Value[0] == ' ') {
+                    fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+                    token = strTok.Next();
+                } else if (token.Kind == TokenKind.Symbol && token.Value[0] == '.') {
+                    fDateFormat = GEDCOMDateFormat.dfSystem;
+                    token = strTok.Next();
+                } 
+
+                // extract month
+                string[] monthes = GetMonthNames(fCalendar);
+                if (token.Kind == TokenKind.Word) {
+                    string mth = token.Value;
+
+                    int idx = SysUtils.IndexOf(monthes, mth);
+                    if (idx >= 0) {
+                        fMonth = mth;
+                    }
+
+                    token = strTok.Next();
+                } else if (fDateFormat == GEDCOMDateFormat.dfSystem && token.Kind == TokenKind.Number) {
+                    int idx = (int)token.ValObj;
+                    fMonth = monthes[idx - 1];
+
+                    token = strTok.Next();
+                }
+
+                // extract delimiter
+                if (fDateFormat == GEDCOMDateFormat.dfSystem) {
+                    if (token.Kind == TokenKind.Symbol && token.Value[0] == '.') {
+                        token = strTok.Next();
+                    }
+                } else {
+                    if (token.Kind == TokenKind.WhiteSpace && token.Value[0] == ' ') {
+                        token = strTok.Next();
                     }
                 }
 
-                result = ExtractDelimiterEx(result);
-                result = ExtractMonth(result);
-                result = ExtractDelimiterEx(result);
-                result = ExtractYear(result);
+                // extract year
+                if (token.Kind == TokenKind.Number) {
+                    fYear = (short)(int)token.ValObj;
+                    token = strTok.Next();
+
+                    // extract year modifier
+                    if (token.Kind == TokenKind.Symbol && token.Value[0] == '/') {
+                        token = strTok.Next();
+                        if (token.Kind != TokenKind.Number) {
+                            // error
+                        }
+                        fYearModifier = token.Value;
+                        token = strTok.Next();
+                    }
+
+                    // extract bc/ad
+                    if (token.Kind == TokenKind.Word && token.Value[0] == 'B') {
+                        token = strTok.Next();
+                        if (token.Kind != TokenKind.Symbol || token.Value[0] != '.') {
+                            // error
+                        }
+                        token = strTok.Next();
+                        if (token.Kind != TokenKind.Word || token.Value[0] != 'C') {
+                            // error
+                        }
+                        token = strTok.Next();
+                        if (token.Kind != TokenKind.Symbol || token.Value[0] != '.') {
+                            // error
+                        }
+                        strTok.Next();
+                        fYearBC = true;
+                    }
+                }
+
+                strValue = strTok.GetRest();
             }
 
             DateChanged();
 
-            return result;
+            return strValue;
         }
 
         #region Private methods of parsing of the input format
+
+        // FIXME
+        private static string[] GetMonthNames(GEDCOMCalendar calendar)
+        {
+            string[] monthes;
+            switch (calendar)
+            {
+                case GEDCOMCalendar.dcGregorian:
+                case GEDCOMCalendar.dcJulian:
+                case GEDCOMCalendar.dcRoman:
+                    monthes = GEDCOMMonthArray;
+                    break;
+
+                case GEDCOMCalendar.dcHebrew:
+                    monthes = GEDCOMMonthHebrewArray;
+                    break;
+
+                case GEDCOMCalendar.dcFrench:
+                    monthes = GEDCOMMonthFrenchArray;
+                    break;
+
+                case GEDCOMCalendar.dcIslamic:
+                    monthes = GEDCOMMonthArray;
+                    break;
+
+                case GEDCOMCalendar.dcUnknown:
+                default:
+                    monthes = GEDCOMMonthArray;
+                    break;
+            }
+            return monthes;
+        }
 
         private static string PrepareAhnenblattDate(string str)
         {
@@ -268,314 +388,6 @@ namespace GKCommon.GEDCOM
                     result = result.Replace(' ', '.');
                 }
             }
-            return result;
-        }
-
-        private string DayString(bool noDelimiter)
-        {
-            string result;
-
-            if (fDay <= 0)
-            {
-                result = "";
-            }
-            else
-            {
-                result = fDay.ToString();
-                if (result.Length == 1)
-                {
-                    result = "0" + result;
-                }
-                if (!noDelimiter)
-                {
-                    result += " ";
-                }
-            }
-
-            return result;
-        }
-
-        private string EscapeString(bool noDelimiter, bool alwaysShowEscape)
-        {
-            string result;
-            if (alwaysShowEscape || fCalendar != GEDCOMCalendar.dcGregorian)
-            {
-                result = GEDCOMDateEscapeArray[(int)fCalendar];
-                if (!noDelimiter)
-                {
-                    result += " ";
-                }
-            }
-            else
-            {
-                result = "";
-            }
-            return result;
-        }
-
-        private string MonthString(bool noDelimiter)
-        {
-            string result;
-            if (fMonth == "")
-            {
-                result = "";
-            }
-            else
-            {
-                result = fMonth;
-                if (!noDelimiter)
-                {
-                    result += " ";
-                }
-            }
-            return result;
-        }
-
-        private string YearGregString(bool noDelimiter)
-        {
-            string result;
-
-            if (fYear == UNKNOWN_YEAR)
-            {
-                result = "";
-            }
-            else
-            {
-                result = fYear.ToString();
-                if (fYearModifier != "")
-                {
-                    result = result + "/" + fYearModifier;
-                }
-                if (fYearBC)
-                {
-                    result += GEDCOMProvider.GEDCOM_YEAR_BC;
-                }
-                if (!noDelimiter)
-                {
-                    result += " ";
-                }
-            }
-
-            return result;
-        }
-
-        private string YearString(bool noDelimiter)
-        {
-            string result;
-
-            if (fYear == UNKNOWN_YEAR)
-            {
-                result = "";
-            }
-            else
-            {
-                result = fYear.ToString();
-                if (fYearBC)
-                {
-                    result += GEDCOMProvider.GEDCOM_YEAR_BC;
-                }
-                if (!noDelimiter)
-                {
-                    result += " ";
-                }
-            }
-
-            return result;
-        }
-
-        private string ExtractApproximated(string str)
-        {
-            string result = str;
-            string su = result.Substring(0, 3).ToUpperInvariant();
-
-            for (GEDCOMApproximated i = GEDCOMApproximated.daAbout; i <= GEDCOMApproximated.daEstimated; i++) {
-                if (su == GEDCOMDateApproximatedArray[(int)i]) {
-                    fApproximated = i;
-                    result = result.Remove(0, 3);
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        private string ExtractEscape(string str)
-        {
-            string result = str;
-
-            if (result.StartsWith("@#"))
-            {
-                int p = result.IndexOf("@", 2);
-                if (p >= 0)
-                {
-                    string su = result.Substring(0, p + 1);
-
-                    for (GEDCOMCalendar I = GEDCOMCalendar.dcGregorian; I <= GEDCOMCalendar.dcLast; I++)
-                    {
-                        if (GEDCOMDateEscapeArray[(int)I] == su)
-                        {
-                            fCalendar = I;
-                            result = result.Remove(0, su.Length);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private string ExtractDay(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return str;
-
-            string result = str;
-
-            int I = 0;
-            int num = result.Length;
-            while (I < num && SysUtils.IsDigit(result[I]))
-            {
-                I++;
-            }
-
-            if (I >= 1 && I <= 2)
-            {
-                fDay = byte.Parse(result.Substring(0, I));
-                result = result.Remove(0, I);
-            }
-
-            return result;
-        }
-
-        private string ExtractDelimiterEx(string str)
-        {
-            string result = (fDateFormat == GEDCOMDateFormat.dfSystem) ? GEDCOMUtils.ExtractDotDelimiter(str, 0) : GEDCOMUtils.ExtractDelimiter(str, 0);
-            return result;
-        }
-
-        private string ExtractMonth(string str)
-        {
-            string result = str;
-            if (!string.IsNullOrEmpty(result))
-            {
-                switch (fCalendar)
-                {
-                    case GEDCOMCalendar.dcHebrew:
-                        {
-                            string su = result.Substring(0, 3).ToUpperInvariant();
-
-                            for (int I = 1; I <= GEDCOMMonthHebrewArray.Length; I++)
-                            {
-                                if (GEDCOMMonthHebrewArray[I - 1] == su)
-                                {
-                                    fMonth = su;
-                                    result = result.Remove(0, 3);
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-
-                    case GEDCOMCalendar.dcFrench:
-                        {
-                            string su = result.Substring(0, 4).ToUpperInvariant();
-
-                            for (int I = 1; I <= GEDCOMMonthFrenchArray.Length; I++)
-                            {
-                                if (GEDCOMMonthFrenchArray[I - 1] == su)
-                                {
-                                    fMonth = su;
-                                    result = result.Remove(0, 4);
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-
-                    default:
-                        {
-                            if (!SysUtils.IsDigit(result[0]))
-                            {
-                                DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-
-                                string su = result.Substring(0, 3).ToUpper();
-
-                                for (int I = 1; I <= GEDCOMMonthArray.Length; I++)
-                                {
-                                    if (GEDCOMMonthArray[I - 1] == su || dtInfo.AbbreviatedMonthNames[I - 1].ToUpper() == su)
-                                    {
-                                        fMonth = GEDCOMMonthArray[I - 1];
-                                        result = result.Remove(0, 3);
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                string su = result.Substring(0, 3).ToUpper();
-
-                                for (int I = 1; I <= GEDCOMMonthSysArray.Length; I++)
-                                {
-                                    if (GEDCOMMonthSysArray[I - 1] == su)
-                                    {
-                                        fMonth = GEDCOMMonthArray[I - 1];
-                                        result = result.Remove(0, 2);
-                                        break;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                }
-            }
-            return result;
-        }
-
-        private string ExtractYear(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return str;
-
-            string result = str;
-
-            int I = 0;
-            int num = result.Length;
-            while (I < num && SysUtils.IsDigit(result[I]))
-            {
-                I++;
-            }
-
-            if (I > 0)
-            {
-                fYear = short.Parse(result.Substring(0, I));
-                result = result.Remove(0, I);
-
-                if (result != "" && result[0] == '/')
-                {
-                    result = result.Remove(0, 1);
-
-                    if (result.Length > 0) {
-                        int len = (result.Length >= 4) ? 4 : 2;
-                        if (!SysUtils.IsDigits(result.Substring(0, len))) {
-                            len = (result.Length >= 2) ? 2 : 0;
-                            if (!SysUtils.IsDigits(result.Substring(0, len))) {
-                                len = 0;
-                            }
-                        }
-
-                        if (len > 0) {
-                            fYearModifier = result.Substring(0, len);
-                            result = result.Remove(0, len);
-                        }
-                    }
-                }
-
-                if (result != "" && result.Substring(0, 4).ToUpper() == GEDCOMProvider.GEDCOM_YEAR_BC)
-                {
-                    fYearBC = true;
-                    result = result.Remove(0, 4);
-                }
-            }
-
             return result;
         }
 
@@ -724,22 +536,42 @@ namespace GKCommon.GEDCOM
 
         protected override string GetStringValue()
         {
-            string result;
-
-            string prefix;
-            if (fApproximated == GEDCOMApproximated.daExact) {
-                prefix = "";
-            } else {
-                prefix = GEDCOMDateApproximatedArray[(int)fApproximated];
-                prefix += " ";
+            string prefix = string.Empty;
+            if (fApproximated != GEDCOMApproximated.daExact) {
+                prefix = GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
             }
 
-            if (fCalendar == GEDCOMCalendar.dcGregorian) {
-                result = prefix + EscapeString(false, false) + DayString(false) + MonthString(false) + YearGregString(true);
-            } else {
-                result = prefix + EscapeString(false, false) + DayString(false) + MonthString(false) + YearString(true);
+            string escapeStr = string.Empty;
+            if (fCalendar != GEDCOMCalendar.dcGregorian) {
+                escapeStr = GEDCOMDateEscapeArray[(int)fCalendar] + " ";
             }
 
+            string dayStr = string.Empty;
+            if (fDay > 0) {
+                dayStr = fDay.ToString();
+                if (dayStr.Length == 1) {
+                    dayStr = "0" + dayStr;
+                }
+                dayStr += " ";
+            }
+
+            string monthStr = string.Empty;
+            if (fMonth != "") {
+                monthStr = fMonth + " ";
+            }
+
+            string yearStr = string.Empty;
+            if (fYear != UNKNOWN_YEAR) {
+                yearStr = fYear.ToString();
+                if (fYearModifier != "") {
+                    yearStr = yearStr + "/" + fYearModifier;
+                }
+                if (fYearBC) {
+                    yearStr += GEDCOMProvider.GEDCOM_YEAR_BC;
+                }
+            }
+
+            string result = prefix + escapeStr + dayStr + monthStr + yearStr;
             return result;
         }
 

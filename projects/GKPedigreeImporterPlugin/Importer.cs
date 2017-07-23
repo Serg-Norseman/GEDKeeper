@@ -227,37 +227,31 @@ namespace GKPedigreeImporterPlugin
             return str;
         }
 
-        private static void ParseDatesLine(string tmp, out string bd, out string dd)
+        internal sealed class PersonNameRet
         {
-            bd = "";
-            dd = "";
+            public string Name;
+            public string Patr;
+            public string Surname;
+            public string BirthDate;
+            public string DeathDate;
 
-            int b_pos = tmp.IndexOf(ImportUtils.STD_BIRTH_SIGN);
-            int d_pos = tmp.IndexOf(ImportUtils.STD_DEATH_SIGN);
-
-            if (d_pos >= 0 && d_pos > b_pos) {
-                dd = tmp.Substring(d_pos + 1, tmp.Length - d_pos - 1);
-                int num2 = ((dd != null) ? dd.Length : 0) + 1;
-                tmp = tmp.Remove(d_pos, num2);
-                tmp = tmp.Trim();
+            public PersonNameRet(string name, string patr, string surname, string bd, string dd)
+            {
+                this.Name = name;
+                this.Patr = patr;
+                this.Surname = surname;
+                this.BirthDate = bd;
+                this.DeathDate = dd;
             }
-
-            if (b_pos >= 0) {
-                bd = tmp.Substring(b_pos + 1, tmp.Length - b_pos - 1);
-                int num3 = ((bd != null) ? bd.Length : 0) + 1;
-                tmp = tmp.Remove(b_pos, num3);
-                tmp = tmp.Trim();
-            }
-
-            bd = RemoveDot(bd);
-            dd = RemoveDot(dd);
         }
-        
-        private void DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
+
+        private PersonNameRet DefinePersonName(string str)
         {
-            f_name = "";
-            f_pat = "";
-            f_fam = "";
+            string f_name = "";
+            string f_pat = "";
+            string f_fam = "";
+            string bd = "";
+            string dd = "";
 
             string tmp = str;
 
@@ -292,7 +286,28 @@ namespace GKPedigreeImporterPlugin
                 }
             }
 
-            ParseDatesLine(dates, out bd, out dd);
+            // parse dates line
+            if (!string.IsNullOrEmpty(dates)) {
+                int b_pos = dates.IndexOf(ImportUtils.STD_BIRTH_SIGN);
+                int d_pos = dates.IndexOf(ImportUtils.STD_DEATH_SIGN);
+
+                if (d_pos >= 0 && d_pos > b_pos) {
+                    dd = dates.Substring(d_pos + 1, dates.Length - d_pos - 1);
+                    int num2 = ((dd != null) ? dd.Length : 0) + 1;
+                    dates = dates.Remove(d_pos, num2);
+                    dates = dates.Trim();
+                }
+
+                if (b_pos >= 0) {
+                    bd = dates.Substring(b_pos + 1, dates.Length - b_pos - 1);
+                    int num3 = ((bd != null) ? bd.Length : 0) + 1;
+                    dates = dates.Remove(b_pos, num3);
+                    dates = dates.Trim();
+                }
+
+                bd = RemoveDot(bd);
+                dd = RemoveDot(dd);
+            }
 
             tmp = RemoveCommaDot(tmp); // &Trim()
 
@@ -316,7 +331,7 @@ namespace GKPedigreeImporterPlugin
                 f_fam = SysUtils.NormalizeName(f_fam);
             }
 
-            //return true;
+            return new PersonNameRet(f_name, f_pat, f_fam, bd, dd);
         }
 
         private string IsPersonLine(string str)
@@ -439,17 +454,16 @@ namespace GKPedigreeImporterPlugin
 
         private GEDCOMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
         {
-            string iName, iPatr, iSurname, bd, dd;
-            DefinePersonName(str, out iName, out iPatr, out iSurname, out bd, out dd);
+            var persName = DefinePersonName(str);
 
-            GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
+            GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
 
             if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
                 fBase.Context.CheckPersonSex(result);
             }
 
-            if (bd != "") SetEvent(result, "BIRT", bd);
-            if (dd != "") SetEvent(result, "DEAT", dd);
+            if (persName.BirthDate != "") SetEvent(result, "BIRT", persName.BirthDate);
+            if (persName.DeathDate != "") SetEvent(result, "DEAT", persName.DeathDate);
 
             return result;
         }

@@ -446,14 +446,67 @@ namespace GKTests.GEDCOM
         /*[Test]
         public void GEDCOMTimePerf_Tests()
         {
-            using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", ""))
+            using (var dtx1 = new GEDCOMDate(null, null, "DATE", ""))
             {
                 for (int k = 0; k < 100000; k++) {
-                    string rest = time.ParseString("11:12:13.145");
-                    //Assert.IsNullOrEmpty(rest);
+                    string rest = dtx1.ParseString("01 FEB 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    string dts = dtx1.StringValue;
 
-                    rest = time.ParseStringTokenizer("  11:12:13.145");
-                    //Assert.IsNullOrEmpty(rest);
+                    rest = dtx1.ParseStringTok("01 FEB 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("01 FEB 1934/11B.C.", dtx1.StringValue);
+
+
+                    rest = dtx1.ParseString("ABT @#DJULIAN@ 01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    dts = dtx1.StringValue;
+
+                    rest = dtx1.ParseStringTok("ABT @#DJULIAN@ 01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("ABT @#DJULIAN@ 01 APR 1934/11B.C.", dtx1.StringValue);
+
+
+                    rest = dtx1.ParseString("@#DJULIAN@ 01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    dts = dtx1.StringValue;
+
+                    rest = dtx1.ParseStringTok("@#DJULIAN@ 01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("@#DJULIAN@ 01 APR 1934/11B.C.", dtx1.StringValue);
+
+
+                    rest = dtx1.ParseString("01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    dts = dtx1.StringValue;
+
+                    rest = dtx1.ParseStringTok("01 APR 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("01 APR 1934/11B.C.", dtx1.StringValue);
+
+
+                    rest = dtx1.ParseString("01 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    dts = dtx1.StringValue;
+
+                    rest = dtx1.ParseStringTok("01 1934/11B.C.");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("01 1934/11B.C.", dtx1.StringValue);
+
+
+                    rest = dtx1.ParseString("AUG 1934/11");
+                    Assert.IsNullOrEmpty(rest);
+                    dts = dtx1.StringValue;
+
+                    rest = dtx1.ParseStringTok("AUG 1934/11");
+                    Assert.IsNullOrEmpty(rest);
+                    Assert.AreEqual(dts, dtx1.StringValue);
+                    Assert.AreEqual("AUG 1934/11", dtx1.StringValue);
                 }
             }
         }*/

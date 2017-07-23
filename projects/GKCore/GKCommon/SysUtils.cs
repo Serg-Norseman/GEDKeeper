@@ -83,6 +83,18 @@ namespace GKCommon
             return res;
         }
 
+        public static int IndexOf<T>(T[] array, T value)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i].Equals(value))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         #region Math helpers
 
         public static long Trunc(double value)

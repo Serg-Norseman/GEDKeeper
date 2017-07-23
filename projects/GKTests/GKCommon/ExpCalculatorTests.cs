@@ -50,7 +50,7 @@ namespace GKTests.GKCommon
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("12+"); }); // syntax error
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("(12+"); }); // syntax error
-            Assert.Throws(typeof(CalculateException), () => { calc.Calc("5 + 0x"); }); // syntax error
+            Assert.Throws(typeof(FormatException), () => { calc.Calc("5 + 0x"); }); // syntax error
             Assert.Throws(typeof(CalculateException), () => { calc.Calc(")"); }); // syntax error
 
             double val = calc.Calc("2 + 7.703 - 3");
@@ -202,7 +202,7 @@ namespace GKTests.GKCommon
             //Assert.AreEqual(0.01745, Math.Round(val, 5));
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0x15j"); });
-            Assert.Throws(typeof(CalculateException), () => { calc.Calc("0b015"); });
+            Assert.Throws(typeof(FormatException), () => { calc.Calc("0b015"); });
 
             val = calc.Calc("if(3 == 3; 2; 3)");
             Assert.AreEqual(2, Math.Round(val, 0));
