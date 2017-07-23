@@ -15,6 +15,8 @@ using System.Threading;
 
 namespace GKCore.SingleInstance
 {
+    using GKCommon;
+
     /// <summary>
     /// Represents an object used to check for a previous instance of an application, and sending messages to it.
     /// </summary>

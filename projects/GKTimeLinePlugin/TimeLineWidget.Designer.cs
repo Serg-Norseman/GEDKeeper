@@ -1,9 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace GKTimeLinePlugin
+﻿namespace GKTimeLinePlugin
 {
 	partial class TimeLineWidget
 	{

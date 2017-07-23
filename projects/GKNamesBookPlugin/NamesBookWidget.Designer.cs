@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKNamesBookPlugin
+﻿namespace GKNamesBookPlugin
 {
 	partial class NamesBookWidget
 	{

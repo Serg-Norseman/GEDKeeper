@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKChroniclePlugin
+﻿namespace GKChroniclePlugin
 {
 	partial class ChronicleWidget
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKImageViewerPlugin
+﻿namespace GKImageViewerPlugin
 {
 	partial class ImageViewerWin
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKFlowInputPlugin
+﻿namespace GKFlowInputPlugin
 {
 	partial class FlowInputDlg
 	{

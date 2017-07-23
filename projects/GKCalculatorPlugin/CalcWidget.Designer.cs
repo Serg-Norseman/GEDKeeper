@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCalculatorPlugin
+﻿namespace GKCalculatorPlugin
 {
 	partial class CalcWidget
 	{
