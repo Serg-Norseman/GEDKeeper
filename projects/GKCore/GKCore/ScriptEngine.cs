@@ -657,15 +657,15 @@ namespace GKCore
 
             int usages;
 
-            StringList linkList = new StringList();
+            StringList linkList = null;
             try
             {
-                GKUtils.GetLocationLinks(fBase.Context.Tree, loc, ref linkList);
+                linkList = GKUtils.GetLocationLinks(fBase.Context.Tree, loc);
                 usages = linkList.Count;
             }
             finally
             {
-                linkList.Dispose();
+                if (linkList != null) linkList.Dispose();
             }
 
             return usages;

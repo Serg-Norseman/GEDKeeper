@@ -479,16 +479,18 @@ namespace GKTreeVizPlugin
                     int descGens = patObj.DescGenerations;
 
                     TVPerson patr = PreparePerson(null, iRec, TVPersonType.Patriarch);
-                    patr.Pt = new PointF((float)node.Pt.X * MAGIC_SCALE, (float)node.Pt.Y * MAGIC_SCALE);
-                    patr.DescGenerations = descGens;
-                    patr.BaseRadius = 100;
+                    if (patr != null) {
+                        patr.Pt = new PointF((float)node.Pt.X * MAGIC_SCALE, (float)node.Pt.Y * MAGIC_SCALE);
+                        patr.DescGenerations = descGens;
+                        patr.BaseRadius = 100;
 
-                    ProcessPersonStem(patr, null, TVPersonType.Patriarch);
+                        ProcessPersonStem(patr, null, TVPersonType.Patriarch);
 
-                    if (fMinYear == 0) {
-                        fMinYear = patr.BirthYear;
-                    } else {
-                        if (fMinYear > patr.BirthYear) fMinYear = patr.BirthYear;
+                        if (fMinYear == 0) {
+                            fMinYear = patr.BirthYear;
+                        } else {
+                            if (fMinYear > patr.BirthYear) fMinYear = patr.BirthYear;
+                        }
                     }
                 }
 

@@ -68,15 +68,15 @@ namespace GKUI.Dialogs
                     txtStartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                     txtStopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                    GKGoalType gt;
-                    fTask.GetTaskGoal(out gt, out fTempRec);
-                    cmbGoalType.SelectedIndex = (sbyte)gt;
+                    var goal = fTask.GetTaskGoal();
+                    fTempRec = goal.GoalRec;
+                    cmbGoalType.SelectedIndex = (sbyte)goal.GoalType;
 
-                    switch (gt) {
+                    switch (goal.GoalType) {
                         case GKGoalType.gtIndividual:
                         case GKGoalType.gtFamily:
                         case GKGoalType.gtSource:
-                            txtGoal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                            txtGoal.Text = GKUtils.GetGoalStr(goal.GoalType, fTempRec);
                             break;
 
                         case GKGoalType.gtOther:

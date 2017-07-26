@@ -68,7 +68,6 @@ namespace GKTests.GEDCOM
             Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
 
             //
-            string st;
             string s1 = " 12345 efgh";
             string s2 = "";
 

@@ -242,6 +242,7 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
+    <Compile Include="GKCore\Interfaces\MediaStore.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />

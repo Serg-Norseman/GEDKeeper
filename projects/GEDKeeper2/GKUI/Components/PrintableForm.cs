@@ -59,8 +59,11 @@ namespace GKUI.Components
         private void InitCurDoc()
         {
             fPrintDoc.DocumentName = Text;
-            fPrintDoc.DefaultPageSettings.Landscape = GetPrintable().IsLandscape();
-            fPrintDoc.DefaultPageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+            var printable = GetPrintable();
+            if (printable != null) {
+                fPrintDoc.DefaultPageSettings.Landscape = printable.IsLandscape();
+                fPrintDoc.DefaultPageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+            }
         }
 
         private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
@@ -69,8 +72,11 @@ namespace GKUI.Components
 
         private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
         {
-            e.PageSettings.Landscape = GetPrintable().IsLandscape();
-            e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+            var printable = GetPrintable();
+            if (printable != null) {
+                e.PageSettings.Landscape = printable.IsLandscape();
+                e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+            }
         }
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
@@ -83,19 +89,22 @@ namespace GKUI.Components
             gfx.DrawRectangle(Pens.Gray, marginBounds);
             #endif
 
-            ImageHandler imgHandler = (ImageHandler)GetPrintable().GetPrintableImage();
-            Image img = imgHandler.Handle;
+            var printable = GetPrintable();
+            if (printable != null) {
+                ImageHandler imgHandler = (ImageHandler)printable.GetPrintableImage();
+                Image img = imgHandler.Handle;
 
-            float imgW = img.Width;
-            float imgH = img.Height;
-            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
-            if (factor > 1.0f) factor = 1.0f;
-            imgW = (imgW * factor);
-            imgH = (imgH * factor);
-            float x = (pageBounds.Width - imgW) / 2;
-            float y = (pageBounds.Height - imgH) / 2;
+                float imgW = img.Width;
+                float imgH = img.Height;
+                float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+                if (factor > 1.0f) factor = 1.0f;
+                imgW = (imgW * factor);
+                imgH = (imgH * factor);
+                float x = (pageBounds.Width - imgW) / 2;
+                float y = (pageBounds.Height - imgH) / 2;
 
-            gfx.DrawImage(img, x, y, imgW, imgH);
+                gfx.DrawImage(img, x, y, imgW, imgH);
+            }
 
             e.HasMorePages = false;
         }

@@ -38,7 +38,7 @@ using GKCore.SingleInstance;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper")]
-[assembly: AssemblyVersion("2.12.0.0")]
+[assembly: AssemblyVersion("2.13.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]

@@ -244,13 +244,13 @@ namespace GKCore
                 GEDCOMSex iSex = iRec.Sex;
                 SetNameSex(childName, iSex);
 
-                GEDCOMIndividualRecord iFather, iMother;
-                iRec.GetParents(out iFather, out iMother);
+                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                GEDCOMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
 
-                if (iFather != null)
+                if (father != null)
                 {
                     string fatherNam;
-                    parts = GKUtils.GetNameParts(iFather);
+                    parts = GKUtils.GetNameParts(father);
                     fatherNam = parts.Name;
 
                     if (IsComparable(fatherNam, childPat))

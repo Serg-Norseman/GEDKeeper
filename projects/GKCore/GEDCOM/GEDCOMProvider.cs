@@ -101,6 +101,8 @@ namespace GKCommon.GEDCOM
 
         private const int DEF_CODEPAGE = 1251;
         private static readonly Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
+        private Encoding fSourceEncoding;
+        private EncodingState fEncodingState;
 
         private static string ConvertStr(Encoding encoding, string str)
         {
@@ -109,26 +111,26 @@ namespace GKCommon.GEDCOM
             return str;
         }
 
-        private void DefineEncoding(StreamReader reader, ref Encoding sourceEncoding, ref EncodingState encodingState)
+        private void DefineEncoding(StreamReader reader)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet;
             switch (charSet)
             {
                 case GEDCOMCharacterSet.csUTF8:
                     if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
-                        sourceEncoding = Encoding.UTF8;
-                        encodingState = EncodingState.esChanged; // file without BOM
+                        fSourceEncoding = Encoding.UTF8;
+                        fEncodingState = EncodingState.esChanged; // file without BOM
                     } else {
-                        encodingState = EncodingState.esUnchanged;
+                        fEncodingState = EncodingState.esUnchanged;
                     }
                     break;
 
                 case GEDCOMCharacterSet.csUNICODE:
                     if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
-                        sourceEncoding = Encoding.Unicode;
-                        encodingState = EncodingState.esChanged; // file without BOM
+                        fSourceEncoding = Encoding.Unicode;
+                        fEncodingState = EncodingState.esChanged; // file without BOM
                     } else {
-                        encodingState = EncodingState.esUnchanged;
+                        fEncodingState = EncodingState.esUnchanged;
                     }
                     break;
 
@@ -136,11 +138,11 @@ namespace GKCommon.GEDCOM
                     string cpVers = fTree.Header.CharacterSetVersion;
                     if (!string.IsNullOrEmpty(cpVers)) {
                         int sourceCodepage = SysUtils.ParseInt(cpVers, DEF_CODEPAGE);
-                        sourceEncoding = Encoding.GetEncoding(sourceCodepage);
-                        encodingState = EncodingState.esChanged;
+                        fSourceEncoding = Encoding.GetEncoding(sourceCodepage);
+                        fEncodingState = EncodingState.esChanged;
                     } else {
-                        sourceEncoding = Encoding.GetEncoding(DEF_CODEPAGE);
-                        encodingState = EncodingState.esChanged;
+                        fSourceEncoding = Encoding.GetEncoding(DEF_CODEPAGE);
+                        fEncodingState = EncodingState.esChanged;
                     }
                     break;
             }
@@ -173,8 +175,8 @@ namespace GKCommon.GEDCOM
             {
                 ProgressEventHandler progressHandler = fTree.OnProgress;
 
-                Encoding sourceEncoding = DEFAULT_ENCODING;
-                EncodingState encodingState = EncodingState.esUnchecked;
+                fSourceEncoding = DEFAULT_ENCODING;
+                fEncodingState = EncodingState.esUnchecked;
                 long fileSize = fileStream.Length;
                 int progress = 0;
 
@@ -249,17 +251,17 @@ namespace GKCommon.GEDCOM
                         }
 
                         // convert codepages
-                        if (!string.IsNullOrEmpty(tagValue) && encodingState == EncodingState.esChanged)
+                        if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged)
                         {
-                            tagValue = ConvertStr(sourceEncoding, tagValue);
+                            tagValue = ConvertStr(fSourceEncoding, tagValue);
                         }
 
                         if (tagLevel == 0)
                         {
-                            if (curRecord == fTree.Header && encodingState == EncodingState.esUnchecked) {
+                            if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
                                 // beginning recognition of the first is not header record
                                 // to check for additional versions of the code page
-                                DefineEncoding(reader, ref sourceEncoding, ref encodingState);
+                                DefineEncoding(reader);
                             }
 
                             if (tagName == "INDI")

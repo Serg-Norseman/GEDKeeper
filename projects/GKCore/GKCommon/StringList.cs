@@ -266,12 +266,15 @@ namespace GKCommon
             if (!fSorted) {
                 result = fList.Count;
             } else {
-                if (Find(str, out result)) {
+                result = Find(str);
+                if (result >= 0) {
                     if (fDuplicateSolve == DuplicateSolve.Ignore)
                         return result;
 
                     if (fDuplicateSolve == DuplicateSolve.Error)
                         throw new StringListException("String list does not allow duplicates");
+                } else {
+                    result = -(result + 1);
                 }
             }
 
@@ -460,7 +463,8 @@ namespace GKCommon
                     }
                 }
             } else {
-                if (!Find(str, out result)) {
+                result = Find(str);
+                if (result < 0) {
                     result = -1;
                 }
             }
@@ -476,10 +480,11 @@ namespace GKCommon
         /// <param name="str"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private bool Find(string str, out int index)
+        private int Find(string str)
         {
             bool result = false;
 
+            int index = 0;
             int low = 0;
             int high = fList.Count - 1;
 
@@ -504,7 +509,7 @@ namespace GKCommon
 
             index = low;
 
-            return result;
+            return (result) ? index : (-index - 1);
         }
 
         #endregion

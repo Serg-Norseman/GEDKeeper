@@ -302,9 +302,8 @@ namespace GKUI.Charts
 
                 case Keys.Left:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMIndividualRecord father, mother;
-                        fModel.RootPerson.GetParents(out father, out mother);
-
+                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var father = (fam == null) ? null : fam.GetHusband();
                         if (father != null) {
                             RootPerson = father;
                         }
@@ -313,9 +312,8 @@ namespace GKUI.Charts
 
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMIndividualRecord father, mother;
-                        fModel.RootPerson.GetParents(out father, out mother);
-
+                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var mother = (fam == null) ? null : fam.GetWife();
                         if (mother != null) {
                             RootPerson = mother;
                         }

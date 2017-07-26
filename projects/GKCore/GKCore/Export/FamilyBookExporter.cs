@@ -394,7 +394,14 @@ namespace GKCore.Export
             }
 
             GEDCOMIndividualRecord father, mother;
-            iRec.GetParents(out father, out mother);
+            GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
 
             if (father != null) {
                 pg = new Paragraph();

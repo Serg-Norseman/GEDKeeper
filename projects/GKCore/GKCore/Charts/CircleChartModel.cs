@@ -518,7 +518,14 @@ namespace GKCore.Charts
             rootSegment.WedgeAngle = 360.0f;
 
             GEDCOMIndividualRecord father, mother;
-            fRootPerson.GetParents(out father, out mother);
+            GEDCOMFamilyRecord fam = fRootPerson.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
 
             if (mother != null) {
                 rootSegment.MotherSegment = TraverseAncestors(mother, 90f, 1, CircleChartModel.CENTER_RAD, 90.0f, 1, -1);
@@ -572,7 +579,14 @@ namespace GKCore.Charts
                     segment.ExtRad = extRad - 50;
 
                     GEDCOMIndividualRecord father, mother;
-                    iRec.GetParents(out father, out mother);
+                    GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                    if (fam == null) {
+                        father = null;
+                        mother = null;
+                    } else {
+                        father = fam.GetHusband();
+                        mother = fam.GetWife();
+                    }
 
                     int ps = prevSteps + genSize;
 

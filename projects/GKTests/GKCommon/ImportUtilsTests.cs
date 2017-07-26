@@ -29,7 +29,6 @@ namespace GKTests.GKCommon
         [Test]
         public void Test_ValidCases()
         {
-            bool res;
             string pid;
 
             pid = ImportUtils.IsPersonLine_Konovalov("1. Ivan");

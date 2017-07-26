@@ -339,7 +339,14 @@ namespace GKUI
             if (!familyExist) return true;
 
             GEDCOMIndividualRecord mother, father;
-            p.Rec.GetParents(out father, out mother);
+            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
 
             bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
                 (mother == null && needSex == GEDCOMSex.svFemale);
@@ -356,7 +363,15 @@ namespace GKUI
 
             if (familyExist) {
                 GEDCOMIndividualRecord mother, father;
-                p.Rec.GetParents(out father, out mother);
+                GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+                if (fam == null) {
+                    father = null;
+                    mother = null;
+                } else {
+                    father = fam.GetHusband();
+                    mother = fam.GetWife();
+                }
+
                 needParent = (father == null && needSex == GEDCOMSex.svMale) ||
                     (mother == null && needSex == GEDCOMSex.svFemale);
             }

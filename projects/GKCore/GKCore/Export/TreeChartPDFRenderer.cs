@@ -56,12 +56,11 @@ namespace GKCore.Export
 
         #region Private methods
 
-        private static void GetFontInfo(IFont font, out BaseFont baseFont, out float fontSize)
+        private static BaseFont GetBaseFont(IFont font)
         {
             string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\" + font.FontFamilyName + ".ttf");
-
-            baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            fontSize = font.Size;
+            BaseFont baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            return baseFont;
         }
 
         private void SetPen(IPen pen)
@@ -111,23 +110,17 @@ namespace GKCore.Export
 
         public override int GetTextHeight(IFont font)
         {
-            BaseFont baseFont;
-            float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
-
-            float ascent = baseFont.GetAscentPoint(STR_HEIGHT_SAMPLE, fontSize);
-            float descent = baseFont.GetDescentPoint(STR_HEIGHT_SAMPLE, fontSize);
+            BaseFont baseFont = GetBaseFont(font);
+            float ascent = baseFont.GetAscentPoint(STR_HEIGHT_SAMPLE, font.Size);
+            float descent = baseFont.GetDescentPoint(STR_HEIGHT_SAMPLE, font.Size);
             float height = (ascent - descent) * 1.33f; // Line spacing
             return (int)(height);
         }
 
         public override int GetTextWidth(string text, IFont font)
         {
-            BaseFont baseFont;
-            float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
-
-            float width = baseFont.GetWidthPoint(text, fontSize);
+            BaseFont baseFont = GetBaseFont(font);
+            float width = baseFont.GetWidthPoint(text, font.Size);
             return (int)(width);
         }
 
@@ -140,16 +133,13 @@ namespace GKCore.Export
         {
             SetFillColor(brush.Color);
 
-            BaseFont baseFont;
-            float fontSize;
-            GetFontInfo(font, out baseFont, out fontSize);
-
             int h = GetTextHeight(font);
             x = CheckVal(x, false);
             y = CheckVal(y, true, h);
 
             try {
-                fCanvas.SetFontAndSize(baseFont, fontSize);
+                BaseFont baseFont = GetBaseFont(font);
+                fCanvas.SetFontAndSize(baseFont, font.Size);
 
                 fCanvas.BeginText();
                 fCanvas.SetTextMatrix(x, y);

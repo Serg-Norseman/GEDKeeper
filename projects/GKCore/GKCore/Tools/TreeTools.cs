@@ -66,9 +66,15 @@ namespace GKCore.Tools
             return res;
         }
 
-        public static bool PL_SearchDesc(GEDCOMIndividualRecord ancestorRec, GEDCOMIndividualRecord searchRec, out GEDCOMIndividualRecord cross)
+        /// <summary>
+        /// Search of crossing of two individuals.
+        /// </summary>
+        /// <param name="ancestorRec"></param>
+        /// <param name="searchRec"></param>
+        /// <returns>crossing of two individuals</returns>
+        public static GEDCOMIndividualRecord PL_SearchDesc(GEDCOMIndividualRecord ancestorRec, GEDCOMIndividualRecord searchRec)
         {
-            cross = null;
+            GEDCOMIndividualRecord cross = null;
 
             int num = ancestorRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
@@ -82,7 +88,7 @@ namespace GKCore.Tools
                     res = PL_SearchAnc(spouse, searchRec, (ancestorRec.Sex == GEDCOMSex.svFemale));
                     if (res) {
                         cross = ancestorRec;
-                        return res;
+                        return cross;
                     }
                 }
 
@@ -92,13 +98,13 @@ namespace GKCore.Tools
                     {
                         GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
-                        res = PL_SearchDesc(child, searchRec, out cross);
-                        if (res) return true;
+                        cross = PL_SearchDesc(child, searchRec);
+                        if (cross != null) return cross;
                     }
                 }
             }
 
-            return false;
+            return null;
         }
 
         public static GEDCOMFamilyRecord PL_SearchIntersection(GEDCOMIndividualRecord ancestor, GEDCOMIndividualRecord searchRec)
@@ -450,8 +456,8 @@ namespace GKCore.Tools
                     // the transition to normalized names after GKv39
                     // only for not direct references (platform specific paths)
 
-                    MediaStoreType storeType = GKUtils.GetStoreType(fileRef);
-                    if (storeType != MediaStoreType.mstReference) {
+                    var mediaStore = GKUtils.GetStoreType(fileRef);
+                    if (mediaStore.StoreType != MediaStoreType.mstReference) {
                         fileRef.StringValue = SysUtils.NormalizeFilename(fileRef.StringValue);
                     }
                 }
@@ -658,7 +664,14 @@ namespace GKCore.Tools
             if ((mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) && iRec.ChildToFamilyLinks.Count > 0)
             {
                 GEDCOMIndividualRecord father, mother;
-                iRec.GetParents(out father, out mother);
+                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                if (fam == null) {
+                    father = null;
+                    mother = null;
+                } else {
+                    father = fam.GetHusband();
+                    mother = fam.GetWife();
+                }
 
                 TreeWalkInt(father, mode, walkList);
                 TreeWalkInt(mother, mode, walkList);
@@ -741,7 +754,14 @@ namespace GKCore.Tools
             if (iRec.ChildToFamilyLinks.Count > 0)
             {
                 GEDCOMIndividualRecord father, mother;
-                iRec.GetParents(out father, out mother);
+                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                if (fam == null) {
+                    father = null;
+                    mother = null;
+                } else {
+                    father = fam.GetHusband();
+                    mother = fam.GetWife();
+                }
 
                 SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
                 SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
@@ -912,8 +932,7 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            GEDCOMIndividualRecord iDummy;
-            iAge = GKUtils.GetFirstbornAge(iRec, out iDummy);
+            iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec));
             if (iAge > 0 && (iAge <= 13 || iAge >= 50))
             {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);

@@ -203,7 +203,7 @@ namespace GKCommon
             BBTextChunk lastChunk = null;
             Stack<SizeChange> stackSizes = new Stack<SizeChange>();
 
-            //SetChunkFontSize(0, ref lastChunk, fDefaultFontSize);
+            //lastChunk = SetChunkFontSize(0, lastChunk, fDefaultFontSize);
 
             if (string.IsNullOrEmpty(text)) {
                 text = EMPTY_CHUNK;

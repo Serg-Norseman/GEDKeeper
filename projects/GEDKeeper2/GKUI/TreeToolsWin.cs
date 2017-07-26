@@ -569,7 +569,13 @@ namespace GKUI
         private void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
         {
             fSplitList.Clear();
-            TreeTools.TreeWalk(startPerson, walkMode, fSplitList);
+
+            if (startPerson == null) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+            } else {
+                TreeTools.TreeWalk(startPerson, walkMode, fSplitList);
+            }
+
             UpdateSplitLists();
         }
 

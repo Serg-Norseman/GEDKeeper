@@ -173,6 +173,8 @@ namespace GKUI.Components
             {
                 Debug.WriteLine("ArborViewer.OnPaint(): " + ex.Message);
             }
+
+            base.OnPaint(pe);
         }
 
         public static ArborPoint intersect_line_line(ArborPoint p1, ArborPoint p2, ArborPoint p3, ArborPoint p4)

@@ -606,8 +606,7 @@ namespace GKUI
                 ((mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo));
 
             if (externalViewer) {
-                string targetFile = "";
-                fContext.MediaLoad(fileRef, ref targetFile);
+                string targetFile = fContext.MediaLoad(fileRef);
                 SysUtils.LoadExtFile(targetFile);
             } else {
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
@@ -886,8 +885,8 @@ namespace GKUI
         {
             GEDCOMRecordType rt = GetSelectedRecordType();
 
-            GEDCOMRecord rec;
-            if (BaseController.AddRecord(this, rt, null, out rec)) {
+            GEDCOMRecord rec = BaseController.AddRecord(this, rt, null);
+            if (rec != null) {
                 RefreshLists(false);
                 SelectRecordByXRef(rec.XRef);
             }

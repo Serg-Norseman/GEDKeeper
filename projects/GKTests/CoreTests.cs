@@ -119,11 +119,13 @@ namespace GKTests.GKCore
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateCommunication()));
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
 
-            string fn = "";
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null, ref fn); });
-            Assert.AreEqual(MediaStoreType.mstReference, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "file.txt"), ref fn));
-            Assert.AreEqual(MediaStoreType.mstStorage, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "stg:file.txt"), ref fn));
-            Assert.AreEqual(MediaStoreType.mstArchive, fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "arc:file.txt"), ref fn));
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
+            var mediaStore = fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "file.txt"));
+            Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
+            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "stg:file.txt"));
+            Assert.AreEqual(MediaStoreType.mstStorage, mediaStore.StoreType);
+            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(fContext.Tree, null, "", "arc:file.txt"));
+            Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
 
             fContext.CollectEventValues(null);
 
@@ -320,7 +322,7 @@ namespace GKTests.GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
 
-            Assert.AreEqual(null, GKUtils.GetDaysForBirth(null));
+            Assert.AreEqual(-1, GKUtils.GetDaysForBirth(null));
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
             Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
 

@@ -75,8 +75,7 @@ namespace GKTests.GKCore
             using (TreeChartPerson tcPerson = new TreeChartPerson(null)) {
                 Assert.IsNotNull(tcPerson);
 
-                bool hasFail = false;
-                tcPerson.BuildBy(null, ref hasFail);
+                tcPerson.BuildBy(null);
 
                 Assert.AreEqual(null, tcPerson.Rec);
 
@@ -140,8 +139,7 @@ namespace GKTests.GKCore
                 tcPerson.SetFlag(PersonFlag.pfDescWalk);
                 Assert.IsTrue(tcPerson.HasFlag(PersonFlag.pfDescWalk));
 
-                bool hasMediaFail = false;
-                tcPerson.BuildBy(null, ref hasMediaFail);
+                tcPerson.BuildBy(null);
 
                 ExtRect psnRt = tcPerson.Rect;
                 Assert.IsTrue(psnRt.IsEmpty());

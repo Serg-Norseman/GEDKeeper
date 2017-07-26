@@ -244,7 +244,7 @@ namespace GKCommon.GEDCOM
                         fCalendar = (GEDCOMCalendar)idx;
                     }
 
-                    token = strTok.Next();
+                    strTok.Next();
                     strTok.SkipWhiteSpaces();
                 }
 

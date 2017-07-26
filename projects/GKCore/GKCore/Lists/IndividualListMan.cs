@@ -393,7 +393,8 @@ namespace GKCore.Lists
                     break;
 
                 case PersonColumnType.ctDaysForBirth:
-                    result = GKUtils.GetDaysForBirth(fRec);
+                    int days = GKUtils.GetDaysForBirth(fRec);
+                    result = (days >= 0) ? (object)days : null;
                     break;
 
                 case PersonColumnType.ctGroups:

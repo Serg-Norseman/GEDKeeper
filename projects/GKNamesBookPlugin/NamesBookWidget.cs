@@ -141,7 +141,7 @@ namespace GKNamesBookPlugin
             }
         }
 
-        private static bool ExtractFlags(ref string st)
+        private static string ExtractFlags(string st)
         {
             bool res = (st != null);
             if (res) {
@@ -149,8 +149,10 @@ namespace GKNamesBookPlugin
                 if (res) {
                     st = st.Substring(1, st.Length - 2);
                 }
+                return st;
+            } else {
+                return string.Empty;
             }
-            return res;
         }
 
         private void PrepareList()
@@ -177,7 +179,8 @@ namespace GKNamesBookPlugin
                                 rec.Desc = toks[2].Trim();
                                 string st = toks[1].Trim();
 
-                                if (ExtractFlags(ref st))
+                                st = ExtractFlags(st);
+                                if (!string.IsNullOrEmpty(st))
                                 {
                                     char c = st[0];
                                     switch (c)

@@ -516,8 +516,8 @@ namespace GKCore
 
                         GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
 
-                        int days;
-                        if (GKUtils.GetDaysForBirth(iRec, out days))
+                        int days = GKUtils.GetDaysForBirth(iRec);
+                        if (days >= 0)
                         {
                             string nm = GKUtils.GetNameString(iRec, true, false);
                             nm = Culture.GetPossessiveName(nm);
@@ -767,18 +767,19 @@ namespace GKCore
             return result;
         }
 
-        public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
+        public MediaStore GetStoreType(GEDCOMFileReference fileReference)
         {
-            return GKUtils.GetStoreType(fileReference, ref fileName);
+            return GKUtils.GetStoreType(fileReference);
         }
 
-        public void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException)
+        public Stream MediaLoad(GEDCOMFileReference fileReference, bool throwException)
         {
-            stream = null;
-            if (fileReference == null) return;
+            Stream stream = null;
+            if (fileReference == null) return null;
 
-            string targetFn = "";
-            MediaStoreType gst = GetStoreType(fileReference, ref targetFn);
+            var mediaStore = GetStoreType(fileReference);
+            string targetFn = mediaStore.FileName;
+            MediaStoreType gst = mediaStore.StoreType;
 
             switch (gst) {
                 case MediaStoreType.mstStorage:
@@ -817,18 +818,21 @@ namespace GKCore
                     stream = new FileStream(targetFn, FileMode.Open);
                     break;
             }
+
+            return stream;
         }
 
-        public void MediaLoad(GEDCOMFileReference fileReference, ref string fileName)
+        public string MediaLoad(GEDCOMFileReference fileReference)
         {
-            if (fileReference == null) return;
+            string fileName = string.Empty;
+            if (fileReference == null) return string.Empty;
 
             try
             {
-                string targetFn = "";
-                MediaStoreType gst = GetStoreType(fileReference, ref targetFn);
+                MediaStore mediaStore = GetStoreType(fileReference);
+                string targetFn = mediaStore.FileName;
 
-                switch (gst)
+                switch (mediaStore.StoreType)
                 {
                     case MediaStoreType.mstStorage:
                         fileName = GetStgFolder(false) + targetFn;
@@ -856,8 +860,8 @@ namespace GKCore
                         {
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
-                                string newPath;
-                                if (AppHost.PathReplacer.TryReplacePath(fileName, out newPath)) {
+                                string newPath = AppHost.PathReplacer.TryReplacePath(fileName);
+                                if (!string.IsNullOrEmpty(newPath)) {
                                     fileName = newPath;
                                 }
                             }
@@ -870,6 +874,8 @@ namespace GKCore
                 Logger.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
                 fileName = "";
             }
+
+            return fileName;
         }
 
         public bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType)
@@ -973,14 +979,13 @@ namespace GKCore
             IImage result = null;
             try
             {
-                Stream stm;
-                MediaLoad(fileReference, out stm, throwException);
-
-                if (stm != null) {
-                    if (stm.Length != 0) {
+                Stream stm = MediaLoad(fileReference, throwException);
+                if (stm != null && stm.Length != 0) {
+                    try {
                         result = AppHost.GfxProvider.CreateImage(stm);
+                    } finally {
+                        stm.Dispose();
                     }
-                    stm.Dispose();
                 }
             }
             catch (MediaFileNotFoundException)
@@ -1002,14 +1007,13 @@ namespace GKCore
             IImage result = null;
             try
             {
-                Stream stm;
-                MediaLoad(fileReference, out stm, throwException);
-
-                if (stm != null) {
-                    if (stm.Length != 0) {
+                Stream stm = MediaLoad(fileReference, throwException);
+                if (stm != null && stm.Length != 0) {
+                    try {
                         result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                    } finally {
+                        stm.Dispose();
                     }
-                    stm.Dispose();
                 }
             }
             catch (MediaFileNotFoundException)

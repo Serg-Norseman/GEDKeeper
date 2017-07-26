@@ -109,10 +109,8 @@ namespace GKCore
                     {
                         PatriarchObj patr2 = patList[j];
 
-                        GEDCOMIndividualRecord cross;
-                        bool res = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec, out cross);
-
-                        if (res)
+                        GEDCOMIndividualRecord cross = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec);
+                        if (cross != null)
                         {
                             patr.HasLinks = true;
                             patr2.HasLinks = true;

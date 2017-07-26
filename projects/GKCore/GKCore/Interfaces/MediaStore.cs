@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,30 +19,22 @@
  */
 
 using System;
-using GKCore;
-using NUnit.Framework;
+using GKCore.Types;
 
-namespace GKTests.GKCore
+namespace GKCore.Interfaces
 {
-    [TestFixture]
-    public class PathReplacerTests
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class MediaStore
     {
-        private PathReplacer fPathReplacer;
-
-        [TestFixtureSetUp]
-        public void SetUp()
+        public readonly MediaStoreType StoreType;
+        public readonly string FileName;
+        
+        public MediaStore(MediaStoreType storeType, string fileName)
         {
-            fPathReplacer = new PathReplacer();
-        }
-
-        [Test]
-        public void Test_TryReplacePath()
-        {
-            string newPath;
-            Assert.Throws(typeof(ArgumentNullException), () => { newPath = fPathReplacer.TryReplacePath(null); });
-
-            newPath = fPathReplacer.TryReplacePath(@"C:\TEST\x.yyy");
-            Assert.IsNullOrEmpty(newPath);
+            StoreType = storeType;
+            FileName = fileName;
         }
     }
 }

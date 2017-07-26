@@ -71,7 +71,7 @@ namespace GKCore
             }
         }
 
-        public bool TryReplacePath(string path, out string newPath)
+        public string TryReplacePath(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -82,9 +82,9 @@ namespace GKCore
                     var pathsMapping = fPathsMappings.PathsMappings[i];
 
                     if (path.StartsWith(pathsMapping.Source)) {
-                        newPath = SysUtils.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
+                        string newPath = SysUtils.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
                         if (File.Exists(newPath)) {
-                            return true;
+                            return newPath;
                         }
                     }
                 }
@@ -94,8 +94,7 @@ namespace GKCore
                 Logger.LogWrite("PathReplacer.TryReplacePath(): " + ex.Message);
             }
 
-            newPath = "";
-            return false;
+            return string.Empty;
         }
     }
 }

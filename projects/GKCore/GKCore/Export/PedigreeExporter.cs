@@ -208,7 +208,15 @@ namespace GKCore.Export
             }
 
             GEDCOMIndividualRecord father, mother;
-            person.IRec.GetParents(out father, out mother);
+            GEDCOMFamilyRecord fam = person.IRec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
+
             PedigreePerson prs;
             string id;
             if (father != null) {

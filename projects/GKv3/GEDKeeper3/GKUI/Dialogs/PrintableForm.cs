@@ -56,12 +56,15 @@ namespace GKUI.Dialogs
         {
             var printSettings = new PrintSettings();
             fPrintDoc.PrintSettings = printSettings;
-
             fPrintDoc.Name = Title;
-            fPrintDoc.PrintSettings.Orientation = GetPrintable().IsLandscape() ? PageOrientation.Landscape : PageOrientation.Portrait;
-            fPrintDoc.PrintSettings.MaximumPageRange = new Eto.Forms.Range<int>(1, 1);
-            //fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
-            fPrintDoc.PageCount = 1;
+
+            var printable = GetPrintable();
+            if (printable != null) {
+                fPrintDoc.PrintSettings.Orientation = printable.IsLandscape() ? PageOrientation.Landscape : PageOrientation.Portrait;
+                fPrintDoc.PrintSettings.MaximumPageRange = new Eto.Forms.Range<int>(1, 1);
+                //fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
+                fPrintDoc.PageCount = 1;
+            }
         }
 
         // FIXME: GKv3 DevRestriction
@@ -71,8 +74,11 @@ namespace GKUI.Dialogs
 
         private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
         {
-            e.PageSettings.Landscape = GetPrintable().IsLandscape();
-            e.PageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
+            var printable = GetPrintable();
+            if (printable != null) {
+                e.PageSettings.Landscape = printable.IsLandscape();
+                e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+            }
         }*/
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
@@ -85,22 +91,25 @@ namespace GKUI.Dialogs
             gfx.DrawRectangle(Pens.Gray, marginBounds);
             #endif
 
-            ImageHandler imgHandler = (ImageHandler)GetPrintable().GetPrintableImage();
-            Image img = imgHandler.Handle;
+            var printable = GetPrintable();
+            if (printable != null) {
+                ImageHandler imgHandler = (ImageHandler)printable.GetPrintableImage();
+                Image img = imgHandler.Handle;
 
-            float imgW = img.Width;
-            float imgH = img.Height;
-            float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
-            if (factor > 1.0f) factor = 1.0f;
-            imgW = (imgW * factor);
-            imgH = (imgH * factor);
-            float x = (pageBounds.Width - imgW) / 2;
-            float y = (pageBounds.Height - imgH) / 2;
+                float imgW = img.Width;
+                float imgH = img.Height;
+                float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+                if (factor > 1.0f) factor = 1.0f;
+                imgW = (imgW * factor);
+                imgH = (imgH * factor);
+                float x = (pageBounds.Width - imgW) / 2;
+                float y = (pageBounds.Height - imgH) / 2;
 
-            gfx.DrawImage(img, x, y, imgW, imgH);*/
+                gfx.DrawImage(img, x, y, imgW, imgH);
+            }
 
             // Look at InitCurDoc()
-            //e.HasMorePages = false;
+            //e.HasMorePages = false;*/
         }
 
         public bool AllowPrint()

@@ -1307,7 +1307,15 @@ namespace GKTests.GEDCOM
             Assert.Throws(typeof(ArgumentException), () => { indiRec.AddEvent(GEDCOMFamilyEvent.Create(null, null, "", "") as GEDCOMCustomEvent); });
 
             GEDCOMIndividualRecord father, mother;
-            indiRec.GetParents(out father, out mother);
+            GEDCOMFamilyRecord fam = indiRec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
+
             Assert.IsNull(father);
             Assert.IsNull(mother);
 
@@ -2495,16 +2503,14 @@ namespace GKTests.GEDCOM
 
                 comRec.SetCorresponder(GKCommunicationDir.cdFrom, iRec);
 
-                GKCommunicationDir dir;
-                GEDCOMIndividualRecord corr;
-                comRec.GetCorresponder(out dir, out corr);
-                Assert.AreEqual(GKCommunicationDir.cdFrom, dir);
-                Assert.AreEqual(iRec, corr);
+                var corr = comRec.GetCorresponder();
+                Assert.AreEqual(GKCommunicationDir.cdFrom, corr.CommDir);
+                Assert.AreEqual(iRec, corr.Corresponder);
 
                 comRec.SetCorresponder(GKCommunicationDir.cdTo, iRec);
-                comRec.GetCorresponder(out dir, out corr);
-                Assert.AreEqual(GKCommunicationDir.cdTo, dir);
-                Assert.AreEqual(iRec, corr);
+                corr = comRec.GetCorresponder();
+                Assert.AreEqual(GKCommunicationDir.cdTo, corr.CommDir);
+                Assert.AreEqual(iRec, corr.Corresponder);
 
                 Assert.IsFalse(comRec.IsEmpty());
                 comRec.Clear();
@@ -2548,9 +2554,6 @@ namespace GKTests.GEDCOM
             {
                 Assert.IsNotNull(taskRec);
 
-                GKGoalType gType;
-                GEDCOMRecord gRec;
-
                 taskRec.Priority = GKResearchPriority.rpNormal;
                 Assert.AreEqual(GKResearchPriority.rpNormal, taskRec.Priority);
 
@@ -2562,24 +2565,24 @@ namespace GKTests.GEDCOM
 
                 taskRec.Goal = "Test Goal";
                 Assert.AreEqual("Test Goal", taskRec.Goal);
-                taskRec.GetTaskGoal(out gType, out gRec);
-                Assert.AreEqual(GKGoalType.gtOther, gType);
-                Assert.AreEqual(null, gRec);
+                var goal = taskRec.GetTaskGoal();
+                Assert.AreEqual(GKGoalType.gtOther, goal.GoalType);
+                Assert.AreEqual(null, goal.GoalRec);
 
                 taskRec.Goal = iRec.XRef;
-                taskRec.GetTaskGoal(out gType, out gRec);
-                Assert.AreEqual(GKGoalType.gtIndividual, gType);
-                Assert.AreEqual(iRec, gRec);
+                goal = taskRec.GetTaskGoal();
+                Assert.AreEqual(GKGoalType.gtIndividual, goal.GoalType);
+                Assert.AreEqual(iRec, goal.GoalRec);
 
                 taskRec.Goal = famRec.XRef;
-                taskRec.GetTaskGoal(out gType, out gRec);
-                Assert.AreEqual(GKGoalType.gtFamily, gType);
-                Assert.AreEqual(famRec, gRec);
+                goal = taskRec.GetTaskGoal();
+                Assert.AreEqual(GKGoalType.gtFamily, goal.GoalType);
+                Assert.AreEqual(famRec, goal.GoalRec);
 
                 taskRec.Goal = srcRec.XRef;
-                taskRec.GetTaskGoal(out gType, out gRec);
-                Assert.AreEqual(GKGoalType.gtSource, gType);
-                Assert.AreEqual(srcRec, gRec);
+                goal = taskRec.GetTaskGoal();
+                Assert.AreEqual(GKGoalType.gtSource, goal.GoalType);
+                Assert.AreEqual(srcRec, goal.GoalRec);
 
                 Assert.IsFalse(taskRec.IsEmpty());
                 taskRec.Clear();

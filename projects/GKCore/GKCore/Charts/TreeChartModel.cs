@@ -79,6 +79,7 @@ namespace GKCore.Charts
         private int[] fEdges;
         private IImage fExpPic;
         private KinshipsGraph fGraph;
+        private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
@@ -141,6 +142,12 @@ namespace GKCore.Charts
         public ChartFilter Filter
         {
             get { return fFilter; }
+        }
+
+        internal bool HasMediaFail
+        {
+            get { return fHasMediaFail; }
+            set { fHasMediaFail = value; }
         }
 
         public TreeChartPerson HighlightedPerson
@@ -323,8 +330,6 @@ namespace GKCore.Charts
 
         #region Tree walking
 
-        private bool hasMediaFail = false;
-
         private TreeChartPerson AddDescPerson(TreeChartPerson parent, GEDCOMIndividualRecord iRec, bool outsideKin, int generation)
         {
             try
@@ -336,7 +341,7 @@ namespace GKCore.Charts
                     result.Parent = parent;
                 } else {
                     result = new TreeChartPerson(this);
-                    result.BuildBy(iRec, ref hasMediaFail);
+                    result.BuildBy(iRec);
                     result.Generation = generation;
                     result.Parent = parent;
                     fPersons.Add(result);
@@ -371,7 +376,7 @@ namespace GKCore.Charts
                 if (aPerson != null)
                 {
                     result = new TreeChartPerson(this);
-                    result.BuildBy(aPerson, ref hasMediaFail);
+                    result.BuildBy(aPerson);
                     result.Generation = generation;
                     result.SetFlag(PersonFlag.pfAncWalk);
                     fPersons.Add(result);

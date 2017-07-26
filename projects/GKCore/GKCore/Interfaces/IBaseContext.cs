@@ -62,9 +62,9 @@ namespace GKCore.Interfaces
 
         // Multimedia support
         bool CheckBasePath();
-        MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName);
-        void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException);
-        void MediaLoad(GEDCOMFileReference fileReference, ref string fileName);
+        MediaStore GetStoreType(GEDCOMFileReference fileReference);
+        Stream MediaLoad(GEDCOMFileReference fileReference, bool throwException);
+        string MediaLoad(GEDCOMFileReference fileReference);
         bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
 
         // Used only in MediaViewer and Slideshow

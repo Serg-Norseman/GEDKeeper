@@ -79,10 +79,22 @@ namespace GKCommon.GEDCOM
         
         #region Auxiliary
 
-        public void GetCorresponder(out GKCommunicationDir commDir, out GEDCOMIndividualRecord corresponder)
+        public sealed class CorresponderRet
         {
-            commDir = GKCommunicationDir.cdFrom;
-            corresponder = null;
+            public readonly GKCommunicationDir CommDir;
+            public readonly GEDCOMIndividualRecord Corresponder;
+
+            public CorresponderRet(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+            {
+                CommDir = commDir;
+                Corresponder = corresponder;
+            }
+        }
+
+        public CorresponderRet GetCorresponder()
+        {
+            GKCommunicationDir commDir = GKCommunicationDir.cdFrom;
+            GEDCOMIndividualRecord corresponder = null;
 
             GEDCOMTag corrTag = FindTag("FROM", 0);
             if (corrTag == null) {
@@ -98,6 +110,8 @@ namespace GKCommon.GEDCOM
                     commDir = GKCommunicationDir.cdTo;
                 }
             }
+
+            return new CorresponderRet(commDir, corresponder);
         }
 
         public void SetCorresponder(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)

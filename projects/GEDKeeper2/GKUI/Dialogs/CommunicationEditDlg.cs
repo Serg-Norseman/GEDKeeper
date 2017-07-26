@@ -68,12 +68,12 @@ namespace GKUI.Dialogs
                     cmbCorrType.SelectedIndex = (int)fCommunication.CommunicationType;
                     txtDate.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                    GKCommunicationDir dir;
-                    fCommunication.GetCorresponder(out dir, out fTempInd);
+                    var corr = fCommunication.GetCorresponder();
+                    fTempInd = corr.Corresponder;
 
                     if (fTempInd != null)
                     {
-                        txtDir.SelectedIndex = (int)dir;
+                        txtDir.SelectedIndex = (int)corr.CommDir;
                         txtCorresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
                     }
                     else

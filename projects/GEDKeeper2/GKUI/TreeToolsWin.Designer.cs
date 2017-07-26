@@ -1,7 +1,4 @@
-﻿using System;
-using GKCommon.GEDCOM;
-
-namespace GKUI
+﻿namespace GKUI
 {
 	partial class TreeToolsWin
 	{

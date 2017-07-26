@@ -95,9 +95,9 @@ namespace GKUI.Dialogs
             if (fIsNew) {
                 RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, MediaStoreType.mstReference);
             } else {
-                string dummy = "";
-                MediaStoreType gst = fBase.Context.GetStoreType(fileRef, ref dummy);
-                RefreshStoreTypes((gst == MediaStoreType.mstReference), (gst == MediaStoreType.mstArchive), gst);
+                MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
+                RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
+                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
             }
 
             btnFileSelect.Enabled = fIsNew;

@@ -658,10 +658,10 @@ namespace GKCore
 
         #region Data modification functions for UI
 
-        public static bool AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target, out GEDCOMRecord rec)
+        public static GEDCOMRecord AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target)
         {
             bool result = false;
-            rec = null;
+            GEDCOMRecord rec = null;
 
             switch (rt)
             {
@@ -757,7 +757,7 @@ namespace GKCore
                     }
             }
 
-            return result;
+            return (result) ? rec : null;
         }
 
         public static bool EditRecord(IBaseWindow baseWin, GEDCOMRecord rec)

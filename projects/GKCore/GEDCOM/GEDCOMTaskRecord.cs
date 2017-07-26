@@ -78,11 +78,24 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-        public void GetTaskGoal(out GKGoalType goalType, out GEDCOMRecord goalRec)
+        public sealed class TaskGoalRet
+        {
+            public readonly GKGoalType GoalType;
+            public readonly GEDCOMRecord GoalRec;
+
+            public TaskGoalRet(GKGoalType goalType, GEDCOMRecord goalRec)
+            {
+                GoalType = goalType;
+                GoalRec = goalRec;
+            }
+        }
+
+        public TaskGoalRet GetTaskGoal()
         {
             GEDCOMTree tree = Owner;
-            goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
+            GEDCOMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
+            GKGoalType goalType;
             if (goalRec is GEDCOMIndividualRecord)
             {
                 goalType = GKGoalType.gtIndividual;
@@ -99,6 +112,8 @@ namespace GKCommon.GEDCOM
             {
                 goalType = GKGoalType.gtOther;
             }
+
+            return new TaskGoalRet(goalType, goalRec);
         }
 
         #endregion

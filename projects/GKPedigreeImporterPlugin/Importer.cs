@@ -621,12 +621,20 @@ namespace GKPedigreeImporterPlugin
             buffer.Clear();
         }
 
-        private void ParseBuffer(StringList buffer, ref int prevId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="prevId"></param>
+        /// <returns>prevId, identifier of person</returns>
+        private int ParseBuffer(StringList buffer)
         {
+            int prevId = 0;
+
             try
             {
                 if (buffer.IsEmpty()) {
-                    return;
+                    return prevId;
                 }
 
                 string s = buffer[0];
@@ -653,6 +661,8 @@ namespace GKPedigreeImporterPlugin
                 Logger.LogWrite("Importer.ParseBuffer(): " + ex.Message);
                 throw;
             }
+
+            return prevId;
         }
 
         private bool IsGenerationLine(string str)
@@ -706,7 +716,6 @@ namespace GKPedigreeImporterPlugin
                                 rawLine.Type = RawLineType.rltRomeGeneration;
                             } else {
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
-                                string dummy;
 
                                 if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_DAboville(txt)))
                                 {
@@ -797,7 +806,7 @@ namespace GKPedigreeImporterPlugin
                             case RawLineType.rltRomeGeneration:
                             case RawLineType.rltEOF:
                                 {
-                                    ParseBuffer(buffer, ref prev_id);
+                                    prev_id = ParseBuffer(buffer);
                                     buffer.Clear();
 
                                     switch (rawLine.Type) {
@@ -924,7 +933,7 @@ namespace GKPedigreeImporterPlugin
                             case RawLineType.rltRomeGeneration:
                             case RawLineType.rltEOF:
                                 {
-                                    ParseBuffer(buffer, ref prevId);
+                                    prevId = ParseBuffer(buffer);
                                     buffer.Clear();
 
                                     switch (lineType) {
@@ -946,7 +955,7 @@ namespace GKPedigreeImporterPlugin
                     }
 
                     // hack: processing last items before end
-                    ParseBuffer(buffer, ref prevId);
+                    prevId = ParseBuffer(buffer);
 
                     return true;
                 }

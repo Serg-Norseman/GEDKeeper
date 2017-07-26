@@ -284,7 +284,7 @@ namespace GKCore.Charts
             fSpouses.Add(spouse);
         }
 
-        public void BuildBy(GEDCOMIndividualRecord iRec, ref bool hasMediaFail)
+        public void BuildBy(GEDCOMIndividualRecord iRec)
         {
             try
             {
@@ -304,13 +304,12 @@ namespace GKCore.Charts
 
                     TreeChartOptions options = fModel.Options;
 
-                    GEDCOMCustomEvent birthEvent, deathEvent;
-                    iRec.GetLifeDates(out birthEvent, out deathEvent);
+                    var lifeDates = iRec.GetLifeDates();
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
 
-                    IsDead = (deathEvent != null);
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, false);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, false);
+                    IsDead = (lifeDates.DeathEvent != null);
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
 
                     if (options.SignsVisible) {
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
@@ -342,9 +341,9 @@ namespace GKCore.Charts
                         }
                         catch (MediaFileNotFoundException)
                         {
-                            if (!hasMediaFail) {
+                            if (!fModel.HasMediaFail) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-                                hasMediaFail = true;
+                                fModel.HasMediaFail = true;
                             }
                         }
                     }

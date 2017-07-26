@@ -171,8 +171,8 @@ namespace GKUI.Dialogs
         {
             try
             {
-                GEDCOMRecord rec;
-                if (BaseController.AddRecord(fBase, fRecType, fTarget, out rec)) {
+                GEDCOMRecord rec = BaseController.AddRecord(fBase, fRecType, fTarget);
+                if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.Ok;
                 }

@@ -38,7 +38,7 @@ namespace GKTests.GKComponents
         private ImageView fImageView;
 
         [TestFixtureSetUp]
-        public void Init()
+        public void init()
         {
             fForm = new Form();
             fForm.ClientSize = new Size(383, 221);

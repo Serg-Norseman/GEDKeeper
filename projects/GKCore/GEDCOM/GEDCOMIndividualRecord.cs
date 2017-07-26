@@ -645,10 +645,22 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-        public void GetLifeDates(out GEDCOMCustomEvent birthEvent, out GEDCOMCustomEvent deathEvent)
+        public sealed class LifeDatesRet
         {
-            birthEvent = null;
-            deathEvent = null;
+            public readonly GEDCOMCustomEvent BirthEvent;
+            public readonly GEDCOMCustomEvent DeathEvent;
+
+            public LifeDatesRet(GEDCOMCustomEvent birthEvent, GEDCOMCustomEvent deathEvent)
+            {
+                BirthEvent = birthEvent;
+                DeathEvent = deathEvent;
+            }
+        }
+
+        public LifeDatesRet GetLifeDates()
+        {
+            GEDCOMCustomEvent birthEvent = null;
+            GEDCOMCustomEvent deathEvent = null;
 
             int num = Events.Count;
             for (int i = 0; i < num; i++)
@@ -661,6 +673,8 @@ namespace GKCommon.GEDCOM
                     deathEvent = evt;
                 }
             }
+
+            return new LifeDatesRet(birthEvent, deathEvent);
         }
 
         /// <summary>
@@ -695,19 +709,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public void GetParents(out GEDCOMIndividualRecord father, out GEDCOMIndividualRecord mother)
-        {
-            GEDCOMFamilyRecord fam = GetParentsFamily();
-
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
-            }
         }
 
         public string GetPrimaryFullName()
@@ -780,15 +781,13 @@ namespace GKCommon.GEDCOM
             // 0% name match would be pointless checking other details
             if (nameMatch != 0.0f && matchParams.DatesCheck)
             {
-                GEDCOMCustomEvent birth, death, indiBirth, indiDeath;
+                var dates = GetLifeDates();
+                var indiDates = indi.GetLifeDates();
 
-                GetLifeDates(out birth, out death);
-                indi.GetLifeDates(out indiBirth, out indiDeath);
-
-                if (birth != null && indiBirth != null) {
-                    birthMatch = birth.IsMatch(indiBirth, matchParams);
+                if (dates.BirthEvent != null && indiDates.BirthEvent != null) {
+                    birthMatch = dates.BirthEvent.IsMatch(indiDates.BirthEvent, matchParams);
                     matchesCount++;
-                } else if (birth == null && indiBirth == null) {
+                } else if (dates.BirthEvent == null && indiDates.BirthEvent == null) {
                     birthMatch = 100.0f;
                     matchesCount++;
                 } else {

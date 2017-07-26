@@ -72,16 +72,14 @@ namespace GKUI
                     case MultimediaKind.mkAudio:
                     case MultimediaKind.mkVideo:
                         {
-                            string targetFile = "";
-                            fBase.Context.MediaLoad(fFileRef, ref targetFile);
+                            string targetFile = fBase.Context.MediaLoad(fFileRef);
                             SetViewMedia(targetFile);
                             break;
                         }
 
                     case MultimediaKind.mkText:
                         {
-                            Stream fs;
-                            fBase.Context.MediaLoad(fFileRef, out fs, false);
+                            Stream fs = fBase.Context.MediaLoad(fFileRef, false);
 
                             switch (fFileRef.MultimediaFormat)
                             {

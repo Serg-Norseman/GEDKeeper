@@ -86,8 +86,7 @@ namespace GKCore.Stats
                 int chCnt = ind.GetTotalChildsCount();
                 stats.childs.TakeVal(chCnt, ind.Sex, true);
 
-                GEDCOMIndividualRecord iDummy;
-                int vFba = GKUtils.GetFirstbornAge(ind, out iDummy);
+                int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(ind));
                 stats.fba.TakeVal(vFba, ind.Sex, true);
 
                 int mCnt = GKUtils.GetMarriagesCount(ind);
@@ -211,8 +210,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smFirstbornAge:
-                    GEDCOMIndividualRecord iDummy;
-                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, out iDummy)));
+                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec))));
                     break;
 
                 case StatsMode.smMarriages:
@@ -357,8 +355,8 @@ namespace GKCore.Stats
                     }
                     else
                     {
-                        GEDCOMIndividualRecord iChild;
-                        int fba = GKUtils.GetFirstbornAge(iRec, out iChild);
+                        GEDCOMIndividualRecord iChild = GKUtils.GetFirstborn(iRec);
+                        int fba = GKUtils.GetFirstbornAge(iRec, iChild);
                         if (fba > 0 && iChild != null) {
                             string key;
                             List<int> valsList;
