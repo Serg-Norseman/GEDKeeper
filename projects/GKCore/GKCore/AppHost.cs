@@ -52,6 +52,8 @@ namespace GKCore
     {
         protected static AppHost fInstance = null;
 
+        private static string fAppSign;
+
         protected IBaseWindow fActiveBase;
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
@@ -228,6 +230,37 @@ namespace GKCore
             return (attr == null) ? string.Empty : attr.Copyright;
         }
 
+        protected static string GetAppSign()
+        {
+            return fAppSign;
+        }
+
+        protected static void SetAppSign(string value)
+        {
+            fAppSign = value;
+        }
+
+        public static string GetAppDataPathStatic()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public static string GetCachePath()
+        {
+            string path = GetAppDataPathStatic() + "imagecache" + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public static string GetLogFilename()
+        {
+            string path = GetAppDataPathStatic() + "GEDKeeper2.log";
+            return path;
+        }
+
         #endregion
 
         #region IHost implementation
@@ -265,7 +298,7 @@ namespace GKCore
 
         public string GetAppDataPath()
         {
-            return GKUtils.GetAppDataPath();
+            return GetAppDataPathStatic();
         }
 
         private WidgetInfo FindWidgetInfo(IWidget widget)
@@ -815,13 +848,13 @@ namespace GKCore
 
         public static void InitSettings()
         {
-            Logger.LogInit(GKUtils.GetLogFilename());
+            Logger.LogInit(GetLogFilename());
 
             var options = GlobalOptions.Instance;
-            options.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
+            options.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.FindLanguages();
 
-            NamesTable.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
+            NamesTable.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
 
@@ -832,10 +865,10 @@ namespace GKCore
         {
             Plugins.Unload();
 
-            NamesTable.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
+            NamesTable.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             var options = GlobalOptions.Instance;
-            options.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
+            options.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.Dispose();
         }
 

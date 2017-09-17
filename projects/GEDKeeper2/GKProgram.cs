@@ -74,7 +74,8 @@ namespace GKUI
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         private static void Main(string[] args)
         {
-            Logger.LogInit(GKUtils.GetLogFilename());
+            WinFormsAppHost.ConfigureBootstrap(false);
+            Logger.LogInit(WinFormsAppHost.GetLogFilename());
             LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
@@ -83,8 +84,6 @@ namespace GKUI
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            WinFormsAppHost.ConfigureBootstrap(false);
 
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {

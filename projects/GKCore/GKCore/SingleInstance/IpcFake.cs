@@ -346,7 +346,7 @@ namespace GKCore.SingleInstance
 
         private static string GetIpcPath()
         {
-            string strPath = GKUtils.GetAppDataPath();
+            string strPath = AppHost.GetAppDataPathStatic();
             return strPath;
         }
 

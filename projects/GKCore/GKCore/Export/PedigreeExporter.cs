@@ -550,9 +550,9 @@ namespace GKCore.Export
             }
 
             string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            #if !__MonoCS__
+            //#if !__MonoCS__
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
-            #endif
+            //#endif
 
             fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;

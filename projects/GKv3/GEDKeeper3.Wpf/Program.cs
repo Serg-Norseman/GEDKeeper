@@ -20,11 +20,29 @@ namespace GEDKeeper3.Wpf
 {
     public class Program
     {
+        private static void LogSysInfo()
+        {
+            try
+            {
+                //#if __MonoCS__
+                //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
+                //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
+                //#endif
+
+                // There should be no links to the application infrastructure
+                Assembly execAssembly = Assembly.GetExecutingAssembly();
+                Logger.LogWrite("CLR Version: " + execAssembly.ImageRuntimeVersion);
+                Logger.LogWrite("GK Version: " + execAssembly.GetName().Version.ToString());
+            }
+            catch { }
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
-            Logger.LogInit(GKUtils.GetLogFilename());
             EtoFormsAppHost.ConfigureBootstrap(false);
+            Logger.LogInit(EtoFormsAppHost.GetLogFilename());
+            LogSysInfo();
 
             AppHost.InitSettings();
             try

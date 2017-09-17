@@ -45,6 +45,11 @@ namespace GKUI
             get { return fAppContext; }
         }
 
+        static WinFormsAppHost()
+        {
+            SetAppSign("GEDKeeper2");
+        }
+
         public WinFormsAppHost() : base()
         {
             fAppContext = new ApplicationContext();

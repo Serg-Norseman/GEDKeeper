@@ -67,12 +67,14 @@ namespace GKCore.Export
 
         public PDFWriter()
         {
-            #if !__MonoCS__
+            fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            /*#if !__MonoCS__
             fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             #else
             //BaseFont.TIMES_ROMAN, "Cp1251"
             this.fBaseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            #endif
+            #endif*/
         }
 
         protected override void Dispose(bool disposing)

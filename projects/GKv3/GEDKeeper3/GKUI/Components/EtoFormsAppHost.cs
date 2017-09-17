@@ -36,6 +36,11 @@ namespace GKUI.Components
 {
     public sealed class EtoFormsAppHost : AppHost
     {
+        static EtoFormsAppHost()
+        {
+            SetAppSign("GEDKeeper3e");
+        }
+
         public EtoFormsAppHost() : base()
         {
         }

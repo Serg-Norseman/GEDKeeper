@@ -1197,26 +1197,6 @@ namespace GKCore
             return homePath + Path.DirectorySeparatorChar;
         }
 
-        public static string GetAppDataPath()
-        {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + GKData.APP_TITLE + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path;
-        }
-
-        public static string GetCachePath()
-        {
-            string path = GetAppDataPath() + "imagecache" + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path;
-        }
-
-        public static string GetLogFilename()
-        {
-            string path = GetAppDataPath() + "GEDKeeper2.log";
-            return path;
-        }
-
         public static void CopyFile(FileInfo source, FileInfo target, IProgressController progressController)
         {
             const int bufferSize = 1024 * 1024; // 1MB

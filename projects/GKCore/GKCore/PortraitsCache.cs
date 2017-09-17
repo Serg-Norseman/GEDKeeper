@@ -63,7 +63,7 @@ namespace GKCore
 
         private static string GetCachedFilename(string imageUID)
         {
-            return GKUtils.GetCachePath() + imageUID + ".bmp";
+            return AppHost.GetCachePath() + imageUID + ".bmp";
         }
 
         public IImage GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)

@@ -1504,12 +1504,12 @@ namespace GKUI
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", GKUtils.GetLogFilename());
+            SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
         }
 
         private void miLogView_Click(object sender, EventArgs e)
         {
-            SysUtils.LoadExtFile(GKUtils.GetLogFilename());
+            SysUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
         private void miAbout_Click(object sender, EventArgs e)
