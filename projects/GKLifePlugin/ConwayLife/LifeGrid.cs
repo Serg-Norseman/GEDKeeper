@@ -1,11 +1,6 @@
 ﻿/*
- *  ULife
- *  Author: Ian Lane (email: lanei@ideal.net.au)
- *  Copyright (C) 1998 Ian Lane
- *
- *  Synopsis: A Delphi control which implements the old computer simulation
- *  of Life. Useful for about boxes, screen savers or even as the
- *  core of a "Life" application.
+ *  ULife, the old computer simulation of Life.
+ *  Copyright (C) 1998 by Ian Lane (email: lanei@ideal.net.au)
  *
  *  Distribution: This control is free for public use and components may be
  *  freely descended from it as long as credit is given to the author.
@@ -17,7 +12,7 @@ using System;
 
 namespace ConwayLife
 {
-	public sealed class LifeGrid : IDisposable
+    public sealed class LifeGrid : IDisposable
     {
         private short[] fGrid;
         private int fGridHeight;
@@ -25,57 +20,57 @@ namespace ConwayLife
 
         public short this[int X, int Y]
         {
-            get { return this.fGrid[this.CellCoordToGridOffset(X, Y)]; }
-            set { this.fGrid[this.CellCoordToGridOffset(X, Y)] = value; }
+            get { return fGrid[CellCoordToGridOffset(X, Y)]; }
+            set { fGrid[CellCoordToGridOffset(X, Y)] = value; }
         }
 
         public int GridHeight
         {
-            get { return this.fGridHeight; }
+            get { return fGridHeight; }
         }
 
         public int GridWidth
         {
-            get { return this.fGridWidth; }
+            get { return fGridWidth; }
         }
 
         public int LiveCellCount
         {
             get {
-        		int result = 0;
-        		for (int i = 0; i < this.fGridWidth * this.fGridHeight; i++) result += bool2int(this.fGrid[i]);
-        		return result;
-        	}
+                int result = 0;
+                for (int i = 0; i < fGridWidth * fGridHeight; i++) result += bool2int(fGrid[i]);
+                return result;
+            }
         }
 
-		
+        
         public LifeGrid()
         {
         }
 
         public LifeGrid(int gridWidth, int gridHeight)
         {
-            this.fGridHeight = gridHeight;
-            this.fGridWidth = gridWidth;
-            this.AllocGrid();
+            fGridHeight = gridHeight;
+            fGridWidth = gridWidth;
+            AllocGrid();
         }
 
         public void Dispose()
         {
-            this.FreeGrid();
+            FreeGrid();
         }
 
         public void Assign(LifeGrid source)
         {
-            this.SetGridSize(source.fGridWidth, source.fGridHeight);
-            Array.Copy(source.fGrid, this.fGrid, fGridWidth * fGridHeight);
+            SetGridSize(source.fGridWidth, source.fGridHeight);
+            Array.Copy(source.fGrid, fGrid, fGridWidth * fGridHeight);
         }
 
         public void Clear()
         {
-            Array.Clear(this.fGrid, 0, this.fGridWidth * this.fGridHeight);
+            Array.Clear(fGrid, 0, fGridWidth * fGridHeight);
         }
-		
+        
         /// <summary>
         /// Conway's default rule.
         /// </summary>
@@ -104,20 +99,20 @@ namespace ConwayLife
 
         public override bool Equals(object obj)
         {
-        	LifeGrid source = obj as LifeGrid;
-        	if (source == null) return false;
-        	
-        	if (this == source) return true;
-        	
-            if (source.fGridWidth != this.fGridWidth || source.fGridHeight != this.fGridHeight) {
+            LifeGrid source = obj as LifeGrid;
+            if (source == null) return false;
+            
+            if (this == source) return true;
+            
+            if (source.fGridWidth != fGridWidth || source.fGridHeight != fGridHeight) {
                 return false;
             } else {
-        		short[] sourceGrid = source.fGrid;
-        		for (int i = 0; i < this.fGridHeight * this.fGridWidth; i++) {
-        			if (this.fGrid[i] != sourceGrid[i]) {
-        				return false;
-        			}
-        		}
+                short[] sourceGrid = source.fGrid;
+                for (int i = 0; i < fGridHeight * fGridWidth; i++) {
+                    if (fGrid[i] != sourceGrid[i]) {
+                        return false;
+                    }
+                }
 
                 return true;
             }
@@ -144,28 +139,28 @@ namespace ConwayLife
             if (this[xMinus1, yPlus1] > 0) result++;
             if (this[X, yPlus1] > 0) result++;
             if (this[xPlus1, yPlus1] > 0) result++;
-			
+            
             return result;
         }
 
         public void SetGridSize(int newGridWidth, int newGridHeight)
         {
-            this.FreeGrid();
-            this.fGridWidth = newGridWidth;
-            this.fGridHeight = newGridHeight;
-            this.AllocGrid();
+            FreeGrid();
+            fGridWidth = newGridWidth;
+            fGridHeight = newGridHeight;
+            AllocGrid();
         }
 
         private void AllocGrid()
         {
-            this.fGrid = new short[this.fGridWidth * this.fGridHeight];
+            fGrid = new short[fGridWidth * fGridHeight];
         }
 
         private void FreeGrid()
         {
-            this.fGrid = null;
+            fGrid = null;
         }
-		
+        
         private int CellCoordToGridOffset(int X, int Y)
         {
             if (X >= fGridWidth) throw new IndexOutOfRangeException("X parameter out of range");

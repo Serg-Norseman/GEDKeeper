@@ -1,11 +1,6 @@
 ﻿/*
- *  ULife
- *  Author: Ian Lane (email: lanei@ideal.net.au)
- *  Copyright (C) 1998 Ian Lane
- *
- *  Synopsis: A Delphi control which implements the old computer simulation
- *  of Life. Useful for about boxes, screen savers or even as the
- *  core of a "Life" application.
+ *  ULife, the old computer simulation of Life.
+ *  Copyright (C) 1998 by Ian Lane (email: lanei@ideal.net.au)
  *
  *  Distribution: This control is free for public use and components may be
  *  freely descended from it as long as credit is given to the author.
@@ -38,156 +33,156 @@ namespace ConwayLife
         public short this[int X, int Y]
         {
             get {
-                return this.fGrid[X, Y];
+                return fGrid[X, Y];
             }
             set {
-                if (this.fGrid[X, Y] != value) {
-                    this.SetCell(X, Y, value);
-                    this.ResetGeneration();
-                    this.fHistory.Clear();
+                if (fGrid[X, Y] != value) {
+                    SetCell(X, Y, value);
+                    ResetGeneration();
+                    fHistory.Clear();
                 }
             }
         }
 
         public int Generation
         {
-            get { return this.fGeneration; }
+            get { return fGeneration; }
         }
-		
+        
         public LifeHistory History
         {
-            get { return this.fHistory; }
+            get { return fHistory; }
         }
-		
+        
         public int LiveCellCount
         {
-            get { return this.fGrid.LiveCellCount; }
+            get { return fGrid.LiveCellCount; }
         }
 
         public bool AcceptMouseClicks
         {
-            get { return this.fAcceptMouseClicks; }
+            get { return fAcceptMouseClicks; }
             set {
-                if (value != this.fAcceptMouseClicks) {
-                    this.fAcceptMouseClicks = value;
-                    this.Change();
+                if (value != fAcceptMouseClicks) {
+                    fAcceptMouseClicks = value;
+                    Change();
                 }
             }
         }
 
         public int GridHeight
         {
-            get { return this.fGrid.GridHeight; }
-            set { this.SetGridSize(GridWidth, value); }
+            get { return fGrid.GridHeight; }
+            set { SetGridSize(GridWidth, value); }
         }
-		
+        
         public Color GridLineColor
         {
-            get { return this.fGridLineColor; }
+            get { return fGridLineColor; }
             set {
-                if (value != this.fGridLineColor) {
-                    this.fGridLineColor = value;
-                    this.Invalidate();
+                if (value != fGridLineColor) {
+                    fGridLineColor = value;
+                    Invalidate();
                 }
             }
         }
-		
+
         public DashStyle GridLineStyle
         {
-            get { return this.fGridLineStyle; }
+            get { return fGridLineStyle; }
             set {
-                if (value != this.fGridLineStyle) {
-                    this.fGridLineStyle = value;
-                    this.Invalidate();
+                if (value != fGridLineStyle) {
+                    fGridLineStyle = value;
+                    Invalidate();
                 }
             }
         }
-		
+        
         public int GridWidth
         {
-            get { return this.fGrid.GridWidth; }
-            set { this.SetGridSize(value, GridHeight); }
+            get { return fGrid.GridWidth; }
+            set { SetGridSize(value, GridHeight); }
         }
-		
+        
         public int MaxNumberOfHistoryLevels
         {
-            get { return this.fHistory.MaxLevels; }
+            get { return fHistory.MaxLevels; }
             set {
                 if (value < 1)
                     throw new IndexOutOfRangeException("MaxNumberOfHistoryLevels must be greater than 0");
                 if (value > LifeConsts.MaxNumberOfHistoryLevels)
                     throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeConsts.MaxNumberOfHistoryLevels));
 
-                this.fHistory.MaxLevels = value;
+                fHistory.MaxLevels = value;
             }
         }
 
         public bool ShowGridLines
         {
-            get { return this.fShowGridLines; }
+            get { return fShowGridLines; }
             set {
-                if (value != this.fShowGridLines) {
-                    this.fShowGridLines = value;
-                    this.Invalidate();
+                if (value != fShowGridLines) {
+                    fShowGridLines = value;
+                    Invalidate();
                 }
             }
         }
 
         public LifeOptions Options
         {
-        	get { return this.fOptions; }
+            get { return fOptions; }
         }
         
         public NotifyEvent OnChange
         {
-            get { return this.fOnChange; }
-            set { this.fOnChange = value; }
+            get { return fOnChange; }
+            set { fOnChange = value; }
         }
 
         public DoesCellLiveEvent OnDoesCellLive
         {
-            get { return this.fOnDoesCellLive; }
-            set { this.fOnDoesCellLive = value; }
+            get { return fOnDoesCellLive; }
+            set { fOnDoesCellLive = value; }
         }
-		
+        
         public LifeRules Rules
         {
-            get { return this.fRules; }
+            get { return fRules; }
         }
-		
+        
         public LifeViewer()
         {
-            this.DoubleBuffered = true;
-			
-            this.fOptions = new LifeOptions();
-            this.fRules = new LifeRules();
-            this.fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
-            this.fHistory = new LifeHistory(LifeConsts.DefaultNumberOfHistoryLevels);
-            this.fGridLineColor = LifeConsts.DefaultGridLineColor;
-            this.fGridLineStyle = LifeConsts.DefaultGridLineStyle;
+            DoubleBuffered = true;
+            
+            fOptions = new LifeOptions();
+            fRules = new LifeRules();
+            fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
+            fHistory = new LifeHistory(LifeConsts.DefaultNumberOfHistoryLevels);
+            fGridLineColor = LifeConsts.DefaultGridLineColor;
+            fGridLineStyle = LifeConsts.DefaultGridLineStyle;
         }
 
         protected override void Dispose(bool disposing)
         {
-        	if (disposing) {
-        		this.fGrid.Dispose();
-        		this.fHistory.Dispose();
-        	}
-        	base.Dispose(disposing);
+            if (disposing) {
+                fGrid.Dispose();
+                fHistory.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         protected Point CellAtPos(int X, int Y)
         {
-            int ClientWidth = this.Width;
-            int ClientHeight = this.Height;
-			
+            int ClientWidth = Width;
+            int ClientHeight = Height;
+            
             if ((X < 0) || (X >= ClientWidth))
                 throw new IndexOutOfRangeException("X coordinate is outside the control's bounds");
             if ((Y < 0) || (Y >= ClientHeight))
                 throw new IndexOutOfRangeException("Y coordinate is outside the control's bounds");
 
             Point result = new Point();
-			
+            
             int cellWidth = ClientWidth / GridWidth;
             int offsetX = (ClientWidth % GridWidth) / 2;
 
@@ -205,7 +200,7 @@ namespace ConwayLife
             } else {
                 result.Y = offsetY + (Y - offsetY * (cellHeight + 1)) / cellHeight;
             }
-			
+            
             return result;
         }
 
@@ -226,25 +221,25 @@ namespace ConwayLife
         
         protected Rectangle CellCoords(int X, int Y)
         {
-            int ClientWidth = this.Width;
-            int ClientHeight = this.Height;
-			
+            int ClientWidth = Width;
+            int ClientHeight = Height;
+            
             if (X >= GridWidth) throw new IndexOutOfRangeException("X parameter out of range");
             if (Y >= GridHeight) throw new IndexOutOfRangeException("Y parameter out of range");
 
             Rectangle result = CreateRect(
-            	CellEdge(X, ClientWidth, GridWidth),
-            	CellEdge(Y, ClientHeight, GridHeight),
-            	CellEdge(X + 1, ClientWidth, GridWidth),
-            	CellEdge(Y + 1, ClientHeight, GridHeight));
+                CellEdge(X, ClientWidth, GridWidth),
+                CellEdge(Y, ClientHeight, GridHeight),
+                CellEdge(X + 1, ClientWidth, GridWidth),
+                CellEdge(Y + 1, ClientHeight, GridHeight));
             return result;
         }
 
         protected void Change()
         {
-            this.Invalidate();
+            Invalidate();
 
-            if (this.fOnChange != null) this.fOnChange(this);
+            if (fOnChange != null) fOnChange(this);
         }
 
         protected bool DoesCellLive(int X, int Y, LifeGrid grid)
@@ -262,13 +257,13 @@ namespace ConwayLife
                 throw new IndexOutOfRangeException("Y parameter out of range");
 
             //ExtRect Rect = CellCoords(X, Y);
-            //this.InvalidateRect(Handle, @Rect, True);
+            //InvalidateRect(Handle, @Rect, True);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (this.AcceptMouseClicks && (e.Button == MouseButtons.Left)) {
-                Point pt = this.CellAtPos(e.X, e.Y);
+            if (AcceptMouseClicks && (e.Button == MouseButtons.Left)) {
+                Point pt = CellAtPos(e.X, e.Y);
                 short val = this[pt.X, pt.Y];
                 this[pt.X, pt.Y] = (short)((val > 0) ? 0 : 1);
             }
@@ -285,9 +280,9 @@ namespace ConwayLife
 			Pen.Mode = pmMask;
 			Pen.Style = GridLineStyle;*/
 
-            int clientWidth = this.Width;
-            int clientHeight = this.Height;
-			
+            int clientWidth = Width;
+            int clientHeight = Height;
+            
             int coord, i;
 
             for (i = 1; i < GridWidth; i++)
@@ -306,111 +301,146 @@ namespace ConwayLife
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics gfx = e.Graphics;
-			
-            if (this.fShowGridLines) {
+            
+            if (fShowGridLines) {
                 using (Pen pen = new Pen(Color.Black)) {
-                    this.DrawGridLines(gfx, pen);
+                    DrawGridLines(gfx, pen);
                 }
             }
 
-            Color cellColor = this.fOptions.LivingCellColor;
-            Color bordColor = ColorUtils.lighter(cellColor, 0.5f);
+            Color cellColor = fOptions.LivingCellColor;
+            Color bordColor = lighter(cellColor, 0.5f);
 
             // Draw all the live cells
             using (Brush brush = new SolidBrush(cellColor))
             {
-            	using (Pen pen = new Pen(bordColor))
-            	{
-            		for (int y = 0; y < this.GridHeight; y++) {
-            			for (int x = 0; x < this.GridWidth; x++) {
-            				if (this[x, y] > 0) {
-            					Rectangle r = this.CellCoords(x, y);
-            					r.Inflate(-1, -1);
-            					gfx.FillEllipse(brush, r);
-            					gfx.DrawEllipse(pen, r);
-            				}
-            			}
-            		}
-            	}
+                using (Pen pen = new Pen(bordColor))
+                {
+                    for (int y = 0; y < GridHeight; y++) {
+                        for (int x = 0; x < GridWidth; x++) {
+                            if (this[x, y] > 0) {
+                                Rectangle r = CellCoords(x, y);
+                                r.Inflate(-1, -1);
+                                gfx.FillEllipse(brush, r);
+                                gfx.DrawEllipse(pen, r);
+                            }
+                        }
+                    }
+                }
             }
         }
 
-		protected override void OnResize(EventArgs e)
-		{
-			this.Invalidate();
-			base.OnResize(e);
-		}
+        public static Color lighter(Color color, float fraction)
+        {
+            float factor = (1.0f + fraction);
+            
+            int rgb = color.ToArgb();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = (rgb >> 0) & 0xFF;
+            //int alpha = (rgb >> 24) & 0xFF;
 
-		protected void SetCell(int X, int Y, short value)
+            red = (int) (red * factor);
+            green = (int) (green * factor);
+            blue = (int) (blue * factor);
+
+            if (red < 0) {
+                red = 0;
+            } else if (red > 255) {
+                red = 255;
+            }
+            if (green < 0) {
+                green = 0;
+            } else if (green > 255) {
+                green = 255;
+            }
+            if (blue < 0) {
+                blue = 0;
+            } else if (blue > 255) {
+                blue = 255;
+            }
+
+            //int alpha = color.getAlpha();
+
+            return Color.FromArgb(red, green, blue);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            Invalidate();
+            base.OnResize(e);
+        }
+
+        protected void SetCell(int X, int Y, short value)
         {
             if (this[X, Y] != value) {
-                this.fGrid[X, Y] = value;
-                this.InvalidateCell(X, Y);
+                fGrid[X, Y] = value;
+                InvalidateCell(X, Y);
             }
         }
 
         private void cmpLifeDoesCellLive(int X, int Y, LifeGrid grid, ref bool result)
         {
             if (grid[X, Y] > 0) {
-                result = this.fRules.GetLiveCells(grid.NumberOfNeighbours(X, Y));
+                result = fRules.GetLiveCells(grid.NumberOfNeighbours(X, Y));
             } else {
-                result = this.fRules.GetDeadCells(grid.NumberOfNeighbours(X, Y));
+                result = fRules.GetDeadCells(grid.NumberOfNeighbours(X, Y));
             }
         }
 
         public void ClearCells()
         {
-            this.fGrid.Clear();
-            this.fHistory.Clear();
-            this.Change();
+            fGrid.Clear();
+            fHistory.Clear();
+            Change();
         }
 
         public void RandomCells()
         {
             Random rnd = new Random();
-			
-            for (int x = 0; x < this.GridWidth; x++) {
-                for (int y = 0; y < this.GridHeight; y++) {
-            		this[x, y] = (byte)((rnd.NextDouble() < 0.4) ? 1 : 0);
+            
+            for (int x = 0; x < GridWidth; x++) {
+                for (int y = 0; y < GridHeight; y++) {
+                    this[x, y] = (byte)((rnd.NextDouble() < 0.4) ? 1 : 0);
                 }
             }
 
-            this.Invalidate();
+            Invalidate();
         }
 
         public int NextGeneration()
         {
-            LifeGrid MostRecentGrid = this.fHistory.Add(this.fGrid);
+            LifeGrid MostRecentGrid = fHistory.Add(fGrid);
 
             for (int y = 0; y < GridHeight; y++) {
-            	for (int x = 0; x < GridWidth; x++) {
-            		bool live = this.DoesCellLive(x, y, MostRecentGrid);
-            		short val = this.fGrid[x, y];
-            		this.SetCell(x, y, (short)((live) ? 1 : 0));
-            	}
+                for (int x = 0; x < GridWidth; x++) {
+                    bool live = DoesCellLive(x, y, MostRecentGrid);
+                    short val = fGrid[x, y];
+                    SetCell(x, y, (short)((live) ? 1 : 0));
+                }
             }
 
-            this.fGeneration++;
-            this.Change();
+            fGeneration++;
+            Change();
 
-            int result = this.fHistory.Contains(fGrid) + 1;
+            int result = fHistory.Contains(fGrid) + 1;
             return result;
         }
 
         public void SetGridSize(int newGridWidth, int newGridHeight)
         {
             if (newGridWidth != GridWidth || newGridHeight != GridHeight) {
-                this.fHistory.Clear();
-                this.fGrid.SetGridSize(newGridWidth, newGridHeight);
+                fHistory.Clear();
+                fGrid.SetGridSize(newGridWidth, newGridHeight);
 
-                this.Change();
+                Change();
             }
         }
 
         public void ResetGeneration()
         {
-            this.fGeneration = 0;
-            this.Change();
+            fGeneration = 0;
+            Change();
         }
     }
 }

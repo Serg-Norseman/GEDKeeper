@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GKLifePlugin</RootNamespace>
     <AssemblyName>GKLifePlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -19,7 +20,6 @@
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -94,14 +94,25 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConwayLife">
-      <HintPath>ConwayLife.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConwayLife\LifeConsts.cs" />
+    <Compile Include="ConwayLife\LifeForm.cs" />
+    <Compile Include="ConwayLife\LifeForm.Designer.cs">
+      <DependentUpon>LifeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConwayLife\LifeGrid.cs" />
+    <Compile Include="ConwayLife\LifeHistory.cs" />
+    <Compile Include="ConwayLife\LifeOptions.cs" />
+    <Compile Include="ConwayLife\LifeRules.cs" />
+    <Compile Include="ConwayLife\LifeViewer.cs" />
+    <Compile Include="ConwayLife\OptionsForm.cs" />
+    <Compile Include="ConwayLife\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKLifePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +134,9 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore.linux</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConwayLife" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
