@@ -19,8 +19,6 @@
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkProfile />
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -122,7 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore.linux</Name>
     </ProjectReference>
   </ItemGroup>

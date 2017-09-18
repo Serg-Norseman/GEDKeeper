@@ -7,7 +7,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>GEDKeeper3.Gtk2</RootNamespace>
     <AssemblyName>GEDKeeper3.Gtk2</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
     <TargetFrameworkProfile />
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -62,16 +62,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCommon\GKCommon.pcl.csproj">
-      <Project>{a14ce3e2-b8ec-41c8-a7d1-75ae5d2509c4}</Project>
-      <Name>GKCommon.pcl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore.pcl</Name>
     </ProjectReference>
     <ProjectReference Include="..\GEDKeeper3\GEDKeeper3.csproj">
-      <Project>{af191bd5-4fdd-4fe2-aa5b-86c20c26a2ff}</Project>
+      <Project>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</Project>
       <Name>GEDKeeper3</Name>
     </ProjectReference>
   </ItemGroup>

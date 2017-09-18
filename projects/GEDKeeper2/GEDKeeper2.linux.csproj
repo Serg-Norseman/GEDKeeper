@@ -37,8 +37,6 @@
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <StartupObject>GKUI.GKProgram</StartupObject>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -457,18 +455,12 @@
   <ItemGroup>
     <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents</Name>
+      <Name>GKComponents.linux</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore</Name>
+      <Name>GKCore.linux</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Charts" />
-    <Folder Include="GKUI\Components" />
-    <Folder Include="GKUI\Dialogs" />
-    <Folder Include="Externals" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

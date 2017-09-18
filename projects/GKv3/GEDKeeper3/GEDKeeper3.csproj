@@ -10,7 +10,7 @@
     <AssemblyName>GEDKeeper3</AssemblyName>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -301,11 +301,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore.pcl</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.csproj">
-      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>

@@ -7,7 +7,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>GEDKeeper3.Wpf</RootNamespace>
     <AssemblyName>GEDKeeper3.Wpf</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
     <TargetFrameworkProfile />
     <NoWin32Manifest>False</NoWin32Manifest>

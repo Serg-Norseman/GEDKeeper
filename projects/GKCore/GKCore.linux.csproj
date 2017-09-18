@@ -373,22 +373,5 @@
     <Compile Include="GKCore\UIContracts\UIContracts.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="GKCore" />
-    <Folder Include="GKCore\Cultures" />
-    <Folder Include="GKCore\Export" />
-    <Folder Include="GKCore\Geocoding" />
-    <Folder Include="GKCore\Kinships" />
-    <Folder Include="GKCore\Lists" />
-    <Folder Include="GKCore\Maps" />
-    <Folder Include="GKCore\Operations" />
-    <Folder Include="GKCore\Options" />
-    <Folder Include="GKCore\Plugins" />
-    <Folder Include="GKCore\SingleInstance" />
-    <Folder Include="GKCore\Stats" />
-    <Folder Include="GKCore\Tools" />
-    <Folder Include="GKCore\Charts" />
-    <Folder Include="GKCore\UIContracts" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
