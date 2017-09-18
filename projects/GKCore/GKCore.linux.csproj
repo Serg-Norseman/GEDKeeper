@@ -40,11 +40,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>TRACE</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -56,10 +56,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>TRACE</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
@@ -87,12 +88,6 @@
     </Reference>
     <Reference Include="NLua">
       <HintPath>libs\linux\NLua.dll</HintPath>
-    </Reference>
-    <Reference Include="PDFClown">
-      <HintPath>libs\linux\PDFClown.dll</HintPath>
-    </Reference>
-    <Reference Include="PDFjet">
-      <HintPath>libs\linux\PDFjet.dll</HintPath>
     </Reference>
     <Reference Include="LinqBridge">
       <HintPath>libs\LinqBridge.dll</HintPath>
@@ -288,9 +283,7 @@
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\HTMLWriter.cs" />
-    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
-    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
@@ -374,4 +367,12 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
+      <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf">
+      <LogicalName>Resources.fonts.FreeSansBold.ttf</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

@@ -245,9 +245,7 @@
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\HTMLWriter.cs" />
-    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
-    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
@@ -329,7 +327,10 @@
     <Compile Include="GKCore\Charts\ChartRenderer.cs" />
     <Compile Include="GKCore\UIContracts\UIContracts.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf" />
+    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf" />
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCore" />
     <Folder Include="GKCore\Cultures" />
@@ -346,6 +347,8 @@
     <Folder Include="GKCore\Tools" />
     <Folder Include="GKCore\Charts" />
     <Folder Include="GKCore\UIContracts" />
+    <Folder Include="Resources" />
+    <Folder Include="Resources\fonts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

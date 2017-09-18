@@ -550,9 +550,7 @@ namespace GKCore.Export
             }
 
             string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            //#if !__MonoCS__
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
-            //#endif
 
             fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
@@ -565,11 +563,7 @@ namespace GKCore.Export
             } else if (string.Equals(ext, ".rtf")) {
                 writer = new RTFWriter();
             } else {
-                #if !__MonoCS__
                 writer = new PDFWriter();
-                #else
-                writer = new PDFWriter();//PDFJetWriter();//PDFClownWriter();
-                #endif
             }
 
             bool success = Generate(writer);

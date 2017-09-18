@@ -29,10 +29,6 @@ using it = iTextSharp.text;
 
 namespace GKCore.Export
 {
-    /*
-     * Total: worked, but unicode and russian text don't work in any way. Recipe not found.
-     */
-
     public class PDFWriter : CustomWriter
     {
         private sealed class FontHandler: TypeHandler<it.Font>, IFont
@@ -67,7 +63,11 @@ namespace GKCore.Export
 
         public PDFWriter()
         {
-            fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
+            var fontBytes = SysUtils.ReadByteArray(fontStream);
+            fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
 
             /*#if !__MonoCS__
             fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
