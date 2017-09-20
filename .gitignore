@@ -81,6 +81,8 @@ code_heat.sh
 /projects/GKChroniclePlugin/bin/
 /projects/GKChroniclePlugin/obj/
 
+/projects/GKWordsCloudPlugin/bin/
+/projects/GKWordsCloudPlugin/obj/
 
 
 /projects/GKv3/GEDKeeper3/bin/

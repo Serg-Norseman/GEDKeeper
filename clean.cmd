@@ -82,3 +82,6 @@ rmdir .\projects\GKLifePlugin\obj /s /q
 
 rmdir .\projects\GKChroniclePlugin\bin /s /q
 rmdir .\projects\GKChroniclePlugin\obj /s /q
+
+rmdir .\projects\GKWordsCloudPlugin\bin /s /q
+rmdir .\projects\GKWordsCloudPlugin\obj /s /q
