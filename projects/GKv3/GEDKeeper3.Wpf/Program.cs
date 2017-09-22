@@ -4,7 +4,7 @@ using Eto;
 using Eto.Forms;
 using GKCommon;
 using GKCore;
-using GKUI.Components;
+using GKUI;
 
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]
