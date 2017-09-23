@@ -157,11 +157,11 @@
     <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.linux.csproj">
+    <ProjectReference Include="..\GKv2\GEDKeeper2\GEDKeeper2.linux.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2.linux</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+    <ProjectReference Include="..\GKv2\GKComponents\GKComponents.linux.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents.linux</Name>
     </ProjectReference>

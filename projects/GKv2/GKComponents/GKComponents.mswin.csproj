@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>GKComponents</AssemblyName>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CIMode)'=='true'">
+    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>libs\ArborGVT.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqBridge">
+      <HintPath>libs\LinqBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>libs\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nVLC">
+      <HintPath>libs\mswin\nVLC.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="ZedGraph">
+      <HintPath>libs\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ExtResources.Designer.cs">
+      <DependentUpon>ExtResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="GKUI\Components\ArborViewer.cs" />
+    <Compile Include="GKUI\Components\GKComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\GKListView.cs" />
+    <Compile Include="GKUI\Components\GKMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ScrollablePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKTreeNode.cs" />
+    <Compile Include="GKUI\Components\HyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\LogChart.cs" />
+    <Compile Include="GKUI\Components\MediaPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
+      <DependentUpon>MediaPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\UIHelper.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\WinFormsGraphics.cs" />
+    <Compile Include="GKUI\Components\WinUITimer.cs" />
+    <Compile Include="GKUI\Components\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ZGraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="ExtResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

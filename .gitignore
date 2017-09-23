@@ -13,26 +13,20 @@ build_coverity.cmd
 sonarqube.cmd
 code_heat.sh
 
-/projects/GEDKeeper2/bin/
-/projects/GEDKeeper2/obj/
+/projects/GKv2/GEDKeeper2/bin/
+/projects/GKv2/GEDKeeper2/obj/
 
 /projects/GKCore/bin/
 /projects/GKCore/obj/
 
-/projects/GKCommon/bin/
-/projects/GKCommon/obj/
-
-/projects/GKComponents/bin/
-/projects/GKComponents/obj/
-
-/projects/GKMediaPlayer/bin/
-/projects/GKMediaPlayer/obj/
+/projects/GKv2/GKComponents/bin/
+/projects/GKv2/GKComponents/obj/
 
 /projects/GKIntl/bin/
 /projects/GKIntl/obj/
 
-/projects/GKSandbox/bin/
-/projects/GKSandbox/obj/
+/projects/GKv2/GKSandbox/bin/
+/projects/GKv2/GKSandbox/obj/
 
 /projects/GKUpdater/bin/
 /projects/GKUpdater/obj/
@@ -42,47 +36,47 @@ code_heat.sh
 /projects/GKTests/OpenCover/
 /projects/GKTests/PartCover/
 
-/projects/GKSamplePlugin/bin/
-/projects/GKSamplePlugin/obj/
+/projects/GKv2/GKSamplePlugin/bin/
+/projects/GKv2/GKSamplePlugin/obj/
 
-/projects/GKCalculatorPlugin/bin/
-/projects/GKCalculatorPlugin/obj/
+/projects/GKv2/GKCalculatorPlugin/bin/
+/projects/GKv2/GKCalculatorPlugin/obj/
 
-/projects/GKCalendarPlugin/bin/
-/projects/GKCalendarPlugin/obj/
+/projects/GKv2/GKCalendarPlugin/bin/
+/projects/GKv2/GKCalendarPlugin/obj/
 
-/projects/GKFlowInputPlugin/bin/
-/projects/GKFlowInputPlugin/obj/
+/projects/GKv2/GKFlowInputPlugin/bin/
+/projects/GKv2/GKFlowInputPlugin/obj/
 
-/projects/GKImageViewerPlugin/bin/
-/projects/GKImageViewerPlugin/obj/
+/projects/GKv2/GKImageViewerPlugin/bin/
+/projects/GKv2/GKImageViewerPlugin/obj/
 
-/projects/GKNamesBookPlugin/bin/
-/projects/GKNamesBookPlugin/obj/
+/projects/GKv2/GKNamesBookPlugin/bin/
+/projects/GKv2/GKNamesBookPlugin/obj/
 
-/projects/GKNavigatorPlugin/bin/
-/projects/GKNavigatorPlugin/obj/
+/projects/GKv2/GKNavigatorPlugin/bin/
+/projects/GKv2/GKNavigatorPlugin/obj/
 
-/projects/GKPedigreeImporterPlugin/bin/
-/projects/GKPedigreeImporterPlugin/obj/
+/projects/GKv2/GKPedigreeImporterPlugin/bin/
+/projects/GKv2/GKPedigreeImporterPlugin/obj/
 
-/projects/GKTextSearchPlugin/bin/
-/projects/GKTextSearchPlugin/obj/
+/projects/GKv2/GKTextSearchPlugin/bin/
+/projects/GKv2/GKTextSearchPlugin/obj/
 
-/projects/GKTimeLinePlugin/bin/
-/projects/GKTimeLinePlugin/obj/
+/projects/GKv2/GKTimeLinePlugin/bin/
+/projects/GKv2/GKTimeLinePlugin/obj/
 
-/projects/GKTreeVizPlugin/bin/
-/projects/GKTreeVizPlugin/obj/
+/projects/GKv2/GKTreeVizPlugin/bin/
+/projects/GKv2/GKTreeVizPlugin/obj/
 
-/projects/GKLifePlugin/bin/
-/projects/GKLifePlugin/obj/
+/projects/GKv2/GKLifePlugin/bin/
+/projects/GKv2/GKLifePlugin/obj/
 
-/projects/GKChroniclePlugin/bin/
-/projects/GKChroniclePlugin/obj/
+/projects/GKv2/GKChroniclePlugin/bin/
+/projects/GKv2/GKChroniclePlugin/obj/
 
-/projects/GKWordsCloudPlugin/bin/
-/projects/GKWordsCloudPlugin/obj/
+/projects/GKv2/GKWordsCloudPlugin/bin/
+/projects/GKv2/GKWordsCloudPlugin/obj/
 
 
 /projects/GKv3/GEDKeeper3/bin/

@@ -4,43 +4,43 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # SharpDevelop 5.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{F5B0E1E6-6FA7-4EEA-905A-B32125985C14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTreeVizPlugin", "GKTreeVizPlugin\GKTreeVizPlugin.mswin.csproj", "{29156CC1-79B1-473D-93F4-62340686FFC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTreeVizPlugin", "GKv2\GKTreeVizPlugin\GKTreeVizPlugin.mswin.csproj", "{29156CC1-79B1-473D-93F4-62340686FFC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTimeLinePlugin", "GKTimeLinePlugin\GKTimeLinePlugin.mswin.csproj", "{ECED32B7-1081-48D3-A223-1CB67A2D7016}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTimeLinePlugin", "GKv2\GKTimeLinePlugin\GKTimeLinePlugin.mswin.csproj", "{ECED32B7-1081-48D3-A223-1CB67A2D7016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "GKTextSearchPlugin\GKTextSearchPlugin.mswin.csproj", "{BB2FCE6E-DF1F-40CC-9D7E-01CC9BE97EFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "GKv2\GKTextSearchPlugin\GKTextSearchPlugin.mswin.csproj", "{BB2FCE6E-DF1F-40CC-9D7E-01CC9BE97EFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSamplePlugin", "GKSamplePlugin\GKSamplePlugin.mswin.csproj", "{BD2B94CA-5913-415B-9428-ED3C6D270602}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSamplePlugin", "GKv2\GKSamplePlugin\GKSamplePlugin.mswin.csproj", "{BD2B94CA-5913-415B-9428-ED3C6D270602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.mswin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "GKv2\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.mswin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNamesBookPlugin", "GKNamesBookPlugin\GKNamesBookPlugin.mswin.csproj", "{182AFE98-D3A5-471A-B9D9-C1C53DD72829}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNamesBookPlugin", "GKv2\GKNamesBookPlugin\GKNamesBookPlugin.mswin.csproj", "{182AFE98-D3A5-471A-B9D9-C1C53DD72829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKImageViewerPlugin", "GKImageViewerPlugin\GKImageViewerPlugin.mswin.csproj", "{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKImageViewerPlugin", "GKv2\GKImageViewerPlugin\GKImageViewerPlugin.mswin.csproj", "{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "GKFlowInputPlugin\GKFlowInputPlugin.mswin.csproj", "{66B64B00-C457-404E-AA2B-90F18127E394}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "GKv2\GKFlowInputPlugin\GKFlowInputPlugin.mswin.csproj", "{66B64B00-C457-404E-AA2B-90F18127E394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "GKCalculatorPlugin\GKCalculatorPlugin.mswin.csproj", "{782E9338-ECA7-4095-9157-6CA003801F05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "GKv2\GKCalculatorPlugin\GKCalculatorPlugin.mswin.csproj", "{782E9338-ECA7-4095-9157-6CA003801F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "GKCalendarPlugin\GKCalendarPlugin.mswin.csproj", "{091DFD9D-5599-4EEA-A616-A55FC12E9613}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "GKv2\GKCalendarPlugin\GKCalendarPlugin.mswin.csproj", "{091DFD9D-5599-4EEA-A616-A55FC12E9613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "GKLifePlugin\GKLifePlugin.mswin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "GKv2\GKLifePlugin\GKLifePlugin.mswin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "GKNavigatorPlugin\GKNavigatorPlugin.mswin.csproj", "{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "GKv2\GKNavigatorPlugin\GKNavigatorPlugin.mswin.csproj", "{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKChroniclePlugin", "GKChroniclePlugin\GKChroniclePlugin.mswin.csproj", "{1423A6AE-E85A-4E76-91CA-704A1C59F7DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKChroniclePlugin", "GKv2\GKChroniclePlugin\GKChroniclePlugin.mswin.csproj", "{1423A6AE-E85A-4E76-91CA-704A1C59F7DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "GKWordsCloudPlugin\GKWordsCloudPlugin.mswin.csproj", "{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "GKv2\GKWordsCloudPlugin\GKWordsCloudPlugin.mswin.csproj", "{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2\GEDKeeper2.mswin.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GKv2\GEDKeeper2\GEDKeeper2.mswin.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.mswin.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCore", "GKCore\GKCore.mswin.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSandbox", "GKSandbox\GKSandbox.csproj", "{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSandbox", "GKv2\GKSandbox\GKSandbox.csproj", "{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponents\GKComponents.mswin.csproj", "{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKv2\GKComponents\GKComponents.mswin.csproj", "{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
