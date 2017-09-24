@@ -98,12 +98,18 @@ namespace GKUI.Forms
             txtCompareFile = new TextBox();
             txtCompareFile.Enabled = false;
             txtCompareFile.ReadOnly = true;
+            txtCompareFile.Width = 500;
 
             btnFileChoose = new Button();
             btnFileChoose.Enabled = false;
             btnFileChoose.Size = new Size(130, 26);
             btnFileChoose.Text = "btnFileChoose";
             btnFileChoose.Click += btnFileChoose_Click;
+
+            btnMatch = new Button();
+            btnMatch.Size = new Size(130, 26);
+            btnMatch.Text = "btnMatch";
+            btnMatch.Click += btnMatch_Click;
 
             grpMatchType = new GroupBox();
             grpMatchType.Text = "grpMatchType";
@@ -113,22 +119,14 @@ namespace GKUI.Forms
                         Cells = { radMatchInternal }
                     },
                     new TableRow {
-                        Cells = { radMathExternal }
-                    },
-                    new TableRow {
                         ScaleHeight = true,
-                        Cells = { lblFile, txtCompareFile, null, btnFileChoose }
+                        Cells = { TableLayout.Horizontal(10, radMathExternal, txtCompareFile, null, btnFileChoose) }
                     },
                     new TableRow {
-                        Cells = { radAnalysis }
+                        Cells = { TableLayout.Horizontal(10, radAnalysis, null, btnMatch) }
                     }
                 }
             };
-
-            btnMatch = new Button();
-            btnMatch.Size = new Size(130, 26);
-            btnMatch.Text = "btnMatch";
-            btnMatch.Click += btnMatch_Click;
 
             ListCompare = new GKUI.Components.TextBoxEx();
             ListCompare.ReadOnly = true;
@@ -138,7 +136,7 @@ namespace GKUI.Forms
             pageTreeCompare.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { new HDefStackLayout { Items = { grpMatchType, btnMatch } } }
+                        Cells = { grpMatchType }
                     },
                     new TableRow {
                         ScaleHeight = true,
@@ -165,7 +163,7 @@ namespace GKUI.Forms
 
             edUpdateBase = new TextBox();
             edUpdateBase.ReadOnly = true;
-            //edUpdateBase.Size = new Size(853, 24);
+            edUpdateBase.Width = 600;
 
             btnTreeMerge = new Button();
             btnTreeMerge.Size = new Size(130, 26);
@@ -182,10 +180,10 @@ namespace GKUI.Forms
                     new DefTableLayout {
                         Rows = {
                             new TableRow {
-                                Cells = { lblMasterBase, edMasterBase, null }
+                                Cells = { lblMasterBase, edMasterBase }
                             },
                             new TableRow {
-                                Cells = { lblOtherBase, edUpdateBase, btnTreeMerge }
+                                Cells = { lblOtherBase, TableLayout.Horizontal(10, edUpdateBase, btnTreeMerge) }
                             }
                         }
                     },
@@ -265,7 +263,6 @@ namespace GKUI.Forms
 
             pageMerge = new TabPage();
             pageMerge.Text = "pageMerge";
-            //pageMerge.SizeChanged += SheetMergeResize;
             pageMerge.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
@@ -362,11 +359,11 @@ namespace GKUI.Forms
             pageMergeOptions.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { rgMode }
+                        ScaleHeight = true,
+                        Cells = { rgMode, grpSearchPersons }
                     },
                     new TableRow {
-                        ScaleHeight = true,
-                        Cells = { grpSearchPersons, grpMergeOther }
+                        Cells = { grpMergeOther, null }
                     },
                     null
                 }

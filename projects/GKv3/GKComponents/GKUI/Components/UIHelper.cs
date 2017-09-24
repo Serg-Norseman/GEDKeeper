@@ -29,10 +29,8 @@ namespace GKUI.Components
 {
     public class DefStackLayout : StackLayout
     {
-        public DefStackLayout()
+        public DefStackLayout() : this(10, 10)
         {
-            Padding = new Padding(10);
-            Spacing = 10;
         }
 
         public DefStackLayout(int padding, int spacing)

@@ -43,7 +43,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class LogChart : CustomPanel
+    public sealed class LogChart : Drawable
     {
         private class Fragment
         {

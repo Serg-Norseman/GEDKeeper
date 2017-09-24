@@ -19,40 +19,31 @@ namespace GKUI.Forms
         {
             SuspendLayout();
 
-            ProgressBar1 = new ProgressBar();
-            //ProgressBar1.Step = 1;
-            //ProgressBar1.Style = ProgressBarStyle.Continuous;
-
             lblTitle = new Label();
-            //lblTitle.Size = new Size(47, 17);
             lblTitle.Text = "lblTitle";
 
+            ProgressBar1 = new ProgressBar();
+
             lblTimePassed = new Label();
-            //lblTimePassed.Size = new Size(117, 17);
             lblTimePassed.Text = "lblTimePassed";
 
             lblTimeRemain = new Label();
-            //lblTimeRemain.Size = new Size(127, 17);
             lblTimeRemain.Text = "lblTimeRemain";
 
+            lblTimeTotal = new Label();
+            lblTimeTotal.Text = "lblTimeTotal";
+
             lblPassedVal = new Label();
-            //lblPassedVal.Size = new Size(281, 20);
             lblPassedVal.Text = "lblPassedVal";
             lblPassedVal.TextAlignment = TextAlignment.Right;
 
             lblRemainVal = new Label();
-            //lblRemainVal.Size = new Size(281, 20);
             lblRemainVal.Text = "lblRemainVal";
             lblRemainVal.TextAlignment = TextAlignment.Right;
 
-            lblTimeTotal = new Label();
-            //lblTimeTotal.Size = new Size(102, 17);
-            lblTimeTotal.Text = "lblTimeTotal";
-            lblTimeTotal.TextAlignment = TextAlignment.Right;
-
             lblTotalVal = new Label();
-            //lblTotalVal.Size = new Size(281, 20);
             lblTotalVal.Text = "lblTotalVal";
+            lblTotalVal.TextAlignment = TextAlignment.Right;
 
             var timesPanel = new TableLayout {
                 Spacing = new Size(10, 10),
@@ -78,10 +69,9 @@ namespace GKUI.Forms
                         Cells = { ProgressBar1 }
                     },
                     new TableRow {
-                        //ScaleHeight = true,
+                        ScaleHeight = true,
                         Cells = { timesPanel }
-                    },
-                    null
+                    }
                 }
             };
 
@@ -91,7 +81,7 @@ namespace GKUI.Forms
             Title = "ProgressDlg";
             Topmost = true;
 
-            UIHelper.SetPredefProperties(this, 531, 152);
+            UIHelper.SetPredefProperties(this, 400, 150);
             ResumeLayout();
         }
     }

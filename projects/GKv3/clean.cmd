@@ -26,8 +26,8 @@ rmdir .\GEDKeeper3.Wpf\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\plugins\GKSamplePlugin\bin /s /q
-rmdir .\plugins\GKSamplePlugin\obj /s /q
+rmdir .\GKSamplePlugin\bin /s /q
+rmdir .\GKSamplePlugin\obj /s /q
 
 rmdir .\plugins\GKCalculatorPlugin\bin /s /q
 rmdir .\plugins\GKCalculatorPlugin\obj /s /q

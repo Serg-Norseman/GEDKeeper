@@ -202,12 +202,8 @@ namespace GKUI.Components
 
             Content = new DefTableLayout {
                 Rows = {
-                    new TableRow {
-                        Cells = { label1 }
-                    },
-                    new TableRow {
-                        Cells = { txtValue }
-                    },
+                    new TableRow(label1),
+                    new TableRow(txtValue),
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };

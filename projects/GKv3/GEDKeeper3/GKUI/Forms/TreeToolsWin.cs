@@ -169,20 +169,24 @@ namespace GKUI.Forms
 
         private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tabsTools.Invalidate();
-            Application.Instance.RunIteration();
+            try {
+                if (tabsTools.SelectedPage == pageFamilyGroups)
+                {
+                    CheckGroups();
+                }
+                else if (tabsTools.SelectedPage == pageTreeCheck)
+                {
+                    CheckBase();
+                }
+                else if (tabsTools.SelectedPage == pagePlaceManage)
+                {
+                    CheckPlaces();
+                }
 
-            if (tabsTools.SelectedPage == pageFamilyGroups)
-            {
-                CheckGroups();
-            }
-            else if (tabsTools.SelectedPage == pageTreeCheck)
-            {
-                CheckBase();
-            }
-            else if (tabsTools.SelectedPage == pagePlaceManage)
-            {
-                CheckPlaces();
+                tabsTools.Invalidate();
+                Application.Instance.RunIteration();
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeToolsWin.tabsTools_SelectedIndexChanged(): " + ex.Message);
             }
         }
 
@@ -334,7 +338,7 @@ namespace GKUI.Forms
                 {
                     GEDCOMRecord rec = fTree[i];
 
-                    if (rec is GEDCOMIndividualRecord)
+                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                     {
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
                         if (prepared.IndexOf(iRec) < 0)
