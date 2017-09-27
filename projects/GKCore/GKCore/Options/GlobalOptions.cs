@@ -401,18 +401,20 @@ namespace GKCore.Options
             {
                 using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
                 {
-                    string st = lngFile.ReadLine();
+                    string st = lngFile.ReadLine(); // header
 
                     if (!string.IsNullOrEmpty(st) && st[0] == ';')
                     {
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
-                        if (lngParams.Length != 3)
+                        if (lngParams.Length < 3)
                             throw new Exception("Header is incorrect");
 
                         string lngCode = lngParams[0];
                         string lngSign = lngParams[1];
                         string lngName = lngParams[2];
+
+                        bool xt = (lngParams.Length == 4 && lngParams[3] == "xt");
 
                         LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngSign, lngName, fileName);
                         fLanguages.Add(lngRec);

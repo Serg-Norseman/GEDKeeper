@@ -814,7 +814,60 @@ namespace GKCore
         /* 757 */ LSID_SelectAndCopy,
         /* 758 */ LSID_NumberSym,
 
-        /* 000 */ LSID_Last = LSID_NumberSym
+        /* 759 */ // reserved begin
+        /* 760 */
+        /* 761 */
+        /* 762 */
+        /* 763 */
+        /* 764 */
+        /* 765 */
+        /* 766 */
+        /* 767 */
+        /* 768 */
+        /* 769 */
+        /* 770 */
+        /* 771 */
+        /* 772 */
+        /* 773 */
+        /* 774 */
+        /* 775 */
+        /* 776 */
+        /* 777 */
+        /* 778 */
+        /* 779 */
+        /* 780 */
+        /* 781 */
+        /* 782 */
+        /* 783 */
+        /* 784 */
+        /* 785 */
+        /* 786 */
+        /* 787 */
+        /* 788 */
+        /* 789 */
+        /* 790 */
+        /* 791 */
+        /* 792 */
+        /* 793 */
+        /* 794 */
+        /* 795 */
+        /* 796 */
+        /* 797 */
+        /* 798 */
+        /* 799 */
+        /* 800 */ // reserved end
+
+        /* 801 */ LSID_RI_GeorgeKnight,
+        /* 802 */ LSID_USSR_WWII_Combatant,
+        /* 803 */ LSID_USSR_WWII_KilledInBattle,
+        /* 804 */ LSID_USSR_WWII_WorkerInRear,
+        /* 805 */ LSID_USSR_Repressed,
+        /* 806 */ LSID_Religion_Islam,
+        /* 807 */ LSID_Religion_Catholicism,
+        /* 808 */ LSID_Religion_Orthodoxy,
+        /* 809 */ LSID_Religion_TheOldBelievers,
+
+        /* 000 */ LSID_Last = LSID_Religion_TheOldBelievers
     }
 
     // TODO: remove and merge with LangManager
@@ -1532,7 +1585,7 @@ namespace GKCore
             /* 704 */ "Type of comparison",
             /* 705 */ "Internal comparing (search for duplicates)",
             /* 706 */ "Comparing with another database",
-            /* 707 */ "Analysis (experimental)",
+            /* 707 */ "Analysis",
             /* 708 */ "Compare",
             /* 709 */ "Ignore dates",
             /* 710 */ "Chart",
@@ -1584,6 +1637,59 @@ namespace GKCore
             /* 756 */ "Actions",
             /* 757 */ "Select and copy",
             /* 758 */ "№",
+
+            /* 759 */ "", // reserved begin
+            /* 760 */ "",
+            /* 761 */ "",
+            /* 762 */ "",
+            /* 763 */ "",
+            /* 764 */ "",
+            /* 765 */ "",
+            /* 766 */ "",
+            /* 767 */ "",
+            /* 768 */ "",
+            /* 769 */ "",
+            /* 770 */ "",
+            /* 771 */ "",
+            /* 772 */ "",
+            /* 773 */ "",
+            /* 774 */ "",
+            /* 775 */ "",
+            /* 776 */ "",
+            /* 777 */ "",
+            /* 778 */ "",
+            /* 779 */ "",
+            /* 780 */ "",
+            /* 781 */ "",
+            /* 782 */ "",
+            /* 783 */ "",
+            /* 784 */ "",
+            /* 785 */ "",
+            /* 786 */ "",
+            /* 787 */ "",
+            /* 788 */ "",
+            /* 789 */ "",
+            /* 790 */ "",
+            /* 791 */ "",
+            /* 792 */ "",
+            /* 793 */ "",
+            /* 794 */ "",
+            /* 795 */ "",
+            /* 796 */ "",
+            /* 797 */ "",
+            /* 798 */ "",
+            /* 799 */ "",
+            /* 800 */ "", // reserved end
+
+            /* 801 */ "RI:GeorgeKnight",
+            /* 802 */ "USSR:WWII:Combatant",
+            /* 803 */ "USSR:WWII:Killed in battle",
+            /* 804 */ "USSR:WWII:Worker in rear",
+            /* 805 */ "USSR:Repressed",
+            /* 806 */ "Religion:Islam",
+            /* 807 */ "Religion:Catholicism",
+            /* 808 */ "Religion:Orthodoxy",
+            /* 809 */ "Religion:The Old Believers",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
@@ -1647,13 +1753,38 @@ namespace GKCore
 
                 using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
                 {
-                    lngFile.ReadLine(); // skip declaration line
+                    bool xt = false;
+
+                    string st;
+                    st = lngFile.ReadLine(); // header
+                    if (!string.IsNullOrEmpty(st) && st[0] == ';')
+                    {
+                        st = st.Remove(0, 1);
+                        string[] lngParams = st.Split(',');
+                        if (lngParams.Length < 3)
+                            throw new Exception("Header is incorrect");
+
+                        xt = (lngParams.Length == 4 && lngParams[3] == "xt");
+                    }
+
                     int i = 0 + (offset);
                     while (lngFile.Peek() != -1)
                     {
-                        string st = lngFile.ReadLine().Trim();
-                        fList.Add(i, st);
-                        i++;
+                        st = lngFile.ReadLine().Trim();
+
+                        if (xt) {
+                            // allowed empty and comment strings
+                            if (string.IsNullOrEmpty(st) || st[0] == ';') {
+                                continue;
+                            }
+
+                            string[] parts = st.Split('=');
+                            i = int.Parse(parts[0]);
+                            fList.Add(i, parts[1]);
+                        } else {
+                            fList.Add(i, st);
+                            i++;
+                        }
                     }
                     result = true;
                 }

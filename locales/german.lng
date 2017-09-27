@@ -1,759 +1,759 @@
-﻿;1031,deu,Deutsch
-&Datei
-&Bearbeiten
-Stammbaum
-E&xtras
-&Fenster
-&?
-Neu
-Öffnen...
-Letzte Dokumente
-Speichern
-Schließen
-Dateieigenschaften
-Exportieren
-Familienbuch...
-Speichern unter...
-Exportieren nach Excel Datei...
-Beenden
-Importieren
-Löschen
-Datensatz eintragen
-Datensatz aktualisieren
-Datensatz löschen
-<?>
-Stammbaum der Vorfahren
-Stammbaum der Nachfahren
-Ganze Stammbaum
-D'Aboville Listerstellung von den Nachfahren
-Konowalow Listerstellung von den Nachfahren
-Karten
-Statistik
-Listerstellung von den Vorfahren
-<?>
-<?>
-<?>
-Organizer
-Skripte
-<?>
-Extras
-Filter
-Einstellungen
-Überlappend
-Untereinander
-Nebeneinander
-Alles minimieren
-Alles andorden
-<?>
-<?>
-<?>
-Inhalt
-Info
-Datensätze
-gefiltert
-Personen
-Familien
-Anmerkungen
-Multimedia
-Quellen
-Archive
-Gruppen
-Forschungen
-Aufgaben
-Kommunikationen
-Örter
-unbekannte
-unbekannt
-?
-Männliches Geschlecht
-Weibliches Geschlecht
-Unbekannt Geschlecht
-Speichern die Dateiänderungen?
-Der angegebene Vorfahr hat die Familie "{0}". Wird das Kind dahin aufgenommen?
-Löschen den Persondatensatz "{0}"?
-Löschen die Familie "{0}"?
-Löschen die Anmerkung?
-Löschen die Quelle "{0}"?
-Löschen die Multimedia "{0}"?
-Löschen das Archiv "{0}"?
-Löschen die Gruppe "{0}"?
-Löschen die Forschung "{0}"?
-Löschen die Aufgabe "{0}"?
-Löschen die Kommunikation "{0}"?
-Löschen den Ort "{0}"?
-Adress
-Tatsachen
-Vorname
-Name
-Patronymikon
-Geschlecht
-Beiname
-Vorsilbe des Vornamens
-Vorsilbe des Namens
-Suffix des Namens
-Patriarch
-Bezeichnung
-Assoziation
-Beziehung
-Person
-Akzeptieren
-Abbrechen
-Schließen
-Auswählen
-Eintragen
-Neu Persondatensatz
-Persondatensatz redigieren
-Geschlechtsprüfung
-Datensatzauswahl
-Quellzitat
-Benutzerverweis
-Anmerkung
-Quelle
-Seite
-Datensicherheit
-Verweis
-Typ
-Familie
-Ehemann
-Ehefrau
-Status
-Kinder
-Löschen des Verweis an der Ehemann?
-Löschen des Verweis an die Ehefrau?
-Löschen des Verweis an das Kind?
-Geburtsdatum
-Todesdatum
-Sicherheitsbegrenzung
-Name
-Mitglieder
-Gruppe redigieren
-Löschen des Verweis an das Gruppenmitglied?
-Ansicht
-Etappe
-Rufnummer
-E-Mail
-Web-Seite
-Archiv
-Fortschritt
-Vergangenzeit
-Restzeit
-Allgemeine Zeit
-Datum
-Text
-Kurzname
-Autor
-Publiziert
-Gesamt
-Löschen des Verweis an das Archiv?
-Abspeicherungweise
-Datei
-Ansicht
-Fragment {0}: {1} Personen
-Vater
-Mutter
-Eltern
-Ehegatten
-Assoziationen
-Benutzerverweise
-gregorianischer
-julianischer
-jüdischer
-islamischer
-iranischer
-indischer
-baha'i
-französischer
-römischer
-unbekannt
-Zusammenstellung
-Andere
-Einreichung
-Antragsteller
-Standort
-Breite
-Länge
-Abbilden
-Suchen Koordinate
-Suchen
-Auswählen Koordinate
-Auswählen Name
-Vorrang
-Prozent
-Gestartet
-Abgestellt
-Ziel
-Thema
-Korrespondent
-Gruppe
-Löschen des Verweis an die Aufgabe?
-Löschen des Verweis an die Korrespondenz?
-Löschen des Verweis an die Gruppe?
-Forschung redigieren
-Aufgabe redigieren
-Kommunikation redigieren
-Fehler
-Lua Anfangfehler!
-Inkorrekt Datumformat
-Staat/Land
-Gebiet
-Stadt
-Postleitzahl
-Rufnummern
-E-Mail
-Web-Seiten
-Bedeutung
-Ereignis
-Ort
-Ursache
-Urkundenstelle
-Weibliche
-Männliche
-Persondatensatz ist nicht gawählt
-Das Geschlecht von dieser Person ist nicht bezeichnet.
-Diese Person hat keine Familie.
-Erwartungsanzahl der Vorfahren von {0} die zulässigen Limits übersteigen.
-Erwartungsanzahl der Nachfahren von {0} die zulässigen Limits übersteigen.
-Generationen abbilden:
-Grenzenlos
-Ehepartner
-Ehedatum
-Löschen des Vaterverweis?
-Löschen des Mutterverweis?
-Löschen des Ehepartnerverweis?
-Löschen des Elternverweis?
-Alle
-Nur Vorfahren
-Nur Nachfahren
-Autocenter
-Redigieren
-Familie eintragen
-Ehepartner eintragen
-Sohn eintragen
-Tochter eintragen
-Löschen
-Stammbaum umgestalten
-Blutsverwandtschaft umgestalten
-Verweise
-Ort und Attribut
-Ehe
-Familie
-Namensbrüder/Namensschwestern
-Löschen die Tatsache?
-Löschen des Anmerkungverweis?
-Löschen des Multimediaverweis?
-Löschen des Quelleverweis?
-Löschen die Assoziation?
-Löschen des Benutzerverweis "{0}"?
-Dateiladen Fehler
-Formatverifikation Fehler
-Geburtstage
-Es ist {1} Tage vor dem Geburtstag von "{0}"
-Schnittstelle
-Stammbäume
-Listerstellungen
-Dateispeichern Zeichensatz
-Adressen
-E-Mail
-Web-Seiten
-Herunterladung aus Internet
-Proxy-Server verwenden
-Server
-Port
-Login
-Passwort
-Das Passwort ist nicht bezeichnet
-Tipps bei jedem Start anzeigen
-Sprache
-Alle Listen
-Personenliste
-Namenformat in den Listen
-Vorname_Name_Patronymikon
-Vorname; Name_Patronymikon
-Vorname; Name; Patronymikon
-Datumformat in die Listen
-Adresse in die Ortzeilen einschließen
-Personen ohne Eltern markieren
-Personen ohne Familien markieren
-Standardwert
-Personen im Stammbaum abbilden
-Einzelzeilen (Name und Patronymikon)
-Nur Jahre
-Verwandtschaftsgrad
-Zusätzliche Symbole
-Dekoration
-Porträte abbilden
-Todesfälle im Kindesalter ausschließen
-Gestaltung
-Mann
-Frau
-Unbekannt Geschlecht
-geschiedener Ehemann
-geschiedene Ehefrau
-Schrift
-Bildung von den Listerstellungen
-Inschließlich Personenattribute
-Inschließlich Anmerkungen
-Inschließlich Quellen
-Format
-Überschüssig
-Konventionell
-Zum Datensatz übergehen
-Datensatz aufrücken
-Datensatz nach unten rücken
-Ganze Name
-Geburtsort
-Todesort
-Lebensort
-(Lebens)Alter
-Lebensdauer
-Tage bis zum GT
-Konfession
-Nationalität
-Bildungsniveau
-Beruf
-Soziale Lage
-Kriegsdienst
-Kriegsdienstrekrutierung
-Kriegsdienstaufkündigung
-Dienstgrad
-Modifiziert
-Standesamtlich getraut Ehe
-Gewissensehe
-Geschieden
-Geburt
-Adoption
-Taufe
-Graduierung
-Pensionierung
-Einbürgerung
-Emigration
-Immigration
-(Volks)zählung
-Testament
-Bestätigung des Testamentes
-Tod
-Bestattung
-Einäscherung
-Tatsache
-Personalbeschreibung
-Identifizierungsnummer
-Sozialversicherungskode
-Kinderzahl
-Ehenzahl
-Eigentum
-Titel
-Reise
-Hobby
-Auszeichnung
-?
-Vater
-Mutter
-Ehemann
-Ehefrau
-Sohn
-Tochter
-Großvater
-Großmutter
-Enkel
-Enkelin
-Bruder
-Schwester
-Schwiegersohn
-Schwiegertochter
-Vater von Ehemann (Schwiegervater)
-Mutter von Ehemann (Schwiegermutter)
-Vater von Ehefrau (Schwiegervater)
-Mutter von Ehefrau (Schwiegermutter)
-Onkel
-Tante
-Neffe
-Nichte
-Cousin
-Cousine
-Bruder von Ehemann (Schwager)
-Schwester von Ehemann (Schwägerin)
-Bruder von Ehefrau (Schwager)
-Bruder von Ehefrau (Schwägerin)
-ur
-<?>
-<?>
-<?>
-<?>
-Bildbreite ist mehr als 65,000 pixels. Unmöglich zu speichern
-Zurück
-Vorwärts
-<?>
-Weiter
-Wußtest du schon?
-Örter herunterladen und suchen
-( nicht ausgewählt )
-Auswahl
-In allen Personen
-Geburtsörter
-Todesörter
-Lebensörter
-Nur Ausgewählt
-Bild speichern...
-Ununterstützert Format
-Datenladungfehler.
-Drucken
-Vorschau
-Generation
-enthalt
-enthalt nicht
-Genau
-Früher
-Später
-Zwischen
-Periode bis
-Periode nach
-Periode zwischen
-Etwa
-Berechnete
-Bewertete
-Eheverlöbnis
-Eheschließungshandlung
-Die öffentliche Bekanntgabe der Ehe
-Abschluss eines Ehevertrages
-Bewilligung zum Ehekonsens
-Abschluss von dem Ehevertrages
-Aufhebung der Ehe
-Einreichung des Scheidungsantrages
-Ehescheidung
-Dateiverweise
-Einspeicherung ins Archiv
-Einspeicherung in Repositur
--
-Tonaufzeichnung
-Buch
-Karte
-Elektronisch
-Mikrofische
-Film
-Magazin
-Manuskript
-Karte
-Zeitung
-Fotografie
-Grabmal
-Video
-- Andere -
-Ist nicht bezeichnet
-Niedrig
-Normal
-Hoch
-Vordringlich
-Bestimmt
-Im Gange
-Unterbrechung
-Erschwerungen
-Fertig
-Abberuft
-Anruf
-E-Mail
-Fax
-Brief
-Kassette
-Besuch
-von
-zu
-Person
-Familie
-Quelle
-andere
-Unzuverlässig Beweise oder Vermutungen
-Fragwürdige Zuverlässigkeit von der Bestätigung
-Indizienbeweise
-Eindeutige und primäre Beweise
-Forschung
-Aufgabe
-Korrespondenz
-Bezeichnerkorrektur
-Formatüberprüfung
-Es ist nötig (Man soll) die Datenzatz-IDs korrigieren, weiter?
-Anzahl der Objekte in der Hauptdatenbank: {0}
-Synchronisierung abgeschlossen.
-Suche von den Patriarchen
-Suche von wechselseitigen Beziehungen
-Mediadatei ist nicht beladen, denn sie ist in Mediacontainer (Repositur oder Archiv) fehlen
-Maßstab
-GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselten GEDCOM-Dateien (*.geds)|*.geds
-Alle Dateien (*.*)|*.*
-Bilder (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
-Skripte (*.lua)|*.lua
-BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|EMF-Dateien (*.emf)|*.emf|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
-Todesursachen
-Stammbaum Listerstellung
-Parameter
-Im Ganzen
-Männer
-Frauen
-Felderfilter
-Jahr
-PDF-Dateien (*.pdf)|*.pdf
-RTF-Dateien (*.rtf)|*.rtf
-HTML-Dateien (*.html)|*.html
-Das Sicherungskopieren (Backup)
-Nur vorherige Datei
-Zweigebeschneidung
-keine
-nach der Jahresgrenze
-nach bestimmten Personen
-- alle -
-- keine -
-- jede -
-Master-Datenbank
-Datenbank aktualisieren
-[aktuelle Datenbank]
-Filter nach Quelle ist installiert. Soll die Quelle zu einem neuen persönlichen Datensatz hinzufügt werden?
-Filter nach Gruppe ist installiert. Soll die Gruppe zu einem neuen persönlichen Datensatz hinzufügt werden?
-Duplikatsuche
-Unrichtiger Wert
-Operation
-Datenbanken vergleichen
-Datenbanken vereinigen
-Datenbanken trennen
-Duplikatsätze vereinigen
-Suche nach nicht verwandten Vornamensvetter
-Überprüfung der Familienverbindungen
-Datenbankvalidierung
-Suche die Patriarchen
-Örterssteuerung
-Suche nach der Übereinstimmungen
-Überprüfung der Familienverbindungen
-alle
-nur leben
-nur Verstorbene
-lebte vorher
-nur Männer
-nur Frauen
-Namemaske
-Lebensortmaske
-Tatsachenmaske
-Nur Familienoberhäupter
-Unrichtig Datum
-Leute
-Jahre
-Jahrzehnte
-Geboren
-Gestorben
-Lebenden
-Verstorbene
-Durchschnittsalter
-Lebenserwartung
-Die durchschnittliche Zahl der Kinder
-Das Durchschnittsalter der Geburt des Erstlings
-Die durchschnittliche Zahl der Ehen
-Das Durchschnittsalter der Verheiratung
-Vorfahrenzahl
-Nachfahrenzahl
-Nachfahrengenerationzahl
-Geburtsjahre
-Geburtsjahre (Jahrzehnte)
-Sterbejahre
-Sterbejahre (Jahrzehnte)
-Verteilung der Anzahl der Kinder
-Alter der Geburt des Erstlings
-Alter der Verheiratung
-Unterschied von dem Ehegattenalter
-Alle Verbindungen auswählen
-Familie auswählen
-Vorfahren auswählen
-Nachfahren auswählen
-Vereinigung
-Automatisches Suchen
-Auslassen
-Datensätze
-Personensuche
-Strikter Vergleich
-Unstrikter Namenvergleich
-Nur beim Namen/Patronymikon (nur Frauen)
-Mit einem Geburtsjahr
-Genauigkeit von dem Namen, %
-Jahreungenauigkeit
-Reparieren
-Nachfahrengenerationen mindestens
-Merkmal aufstellen
-In die Liste eingetragen
-Ähnliche Familiennamen:
-Ähnliche Namen:
-Ausgewählte Personaldatensätze sind gelöscht
-Datensatz
-Problem
-Lösung
-vielleicht Verstorbene (Alter {0})
-Das Geschlecht ist nicht bezeichnet
-Geburtsjahr größer als Sterbejahr
-War die erste Ehe im Alter von {0} Jahre(n) geschlossen?
-War das erste Kind im Alter von {0} Jahre(n) gebiert?
-Nachfahren
-Generationen
-Anzahl der Verweise
-Örterbearbeitung
-Dieser Ort ist schon in der Ortliste enthalten
-DNS Marken
-Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Elternteils
-Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Kindes
-Familiedatensatz ist leer
-jede Dateiversion speichern
-Beladung
-Dateispeichern Fehler "{0}"{1}.
-Hintergrundfarbe...
-Hintergrundbild...
-Personen im Stammbaum: {0}
-Fehlerprotokoll anzeigen
-Vorfahrenkreis
-Kreis
-Vordergrundfarbe
-Hintergrundfarbe
-Liniefarbe
-keine
-blockiert
-vertraulich
-geheim
-Fehlerprotokoll senden
-Diagramme
-Bild in Fenster einpassen
-Vergrößern
-Verkleinern
-Tatsache des Todes feststellen
-Geschlecht bezeichnen
-Plugins
-Autospuren die Beziehungen
-Es hat keine Entsprechungen gefunden
-Suchen zurück
-Suchen vorwärts
-Zuverlässigkeitindex
-Geburtsmonaten
-Monat
-Abrechnen
-Feld
-Bedingung
-Quelle ist nicht bezeichnet
-Diaschau
-Vorherige Datensatz
-Nächste Datensatz
-Erzeugung ist ausgefallen
-Start
-Abbrechen
-Demographie
-Namen
-Pseudonym
-Geburtsname
-In Immigration
-Mädchenname
-Ehename
-Löschen einen Namen?
-Die einzige Name darf man nicht löschen
-Zitat
-Vereinigte Datensätze bezeichnen
-Kalender neben dem Datum anzeigen
-Datensatz duplizieren
-Achtung: bei der Persondatensatzdublierung die verwandtschaftliche Verbindungen und Assoziationen werden nicht kopiert
-Datumtypen anzeigen
-Neu Stammbaumdatei erstellen
-Stammbaumdatei öffnen
-Stammbaumdatei speichern
-Datensatz eintragen (Strg+I)
-Datensatz aktualisieren (Strg+Enter)
-Datensatz löschen (Strg+L)
-Datensatzlistefilterung
-Stammbaum der Vorfahren abbilden
-Stammbaum der Nachfahren abbilden
-Ganze Stammbaum abbilden
-Stammbaum Listerstellung
-D'Aboville Listerstellung
-Konowalow Listerstellung
-Statistische Auswertung
-Bild speichern
-Anzeigebetrieb
-Neu Skript erstellen
-Skript öffnen
-Skript speichern
-Skript ausführen
-Porträt verbinden
-Porträt abstellen
-Elternfamilie verbinden
-Elternfamilie aktualisieren
-Elternfamilie abstellen
-Vater auswählen oder eintragen
-Vater abstellen
-Zum Vaterdatensatz übergehen
-Mutter auswählen oder eintragen
-Mutter abstellen
-Zum Mutterdatensatz übergehen
-Name zum Tauschbuffer kopieren
-Ehemann auswählen oder eintragen
-Ehemann abstellen
-Zum Ehemanndatensatz übergehen
-Ehefrau auswählen oder eintragen
-Ehefrau abstellen
-Zum Ehefraudatensatz übergehen
-Persondatensatz auswählen
-Ort auswählen oder eintragen
-Löschen des Verweis an den Ort
-Zeigen auf der Karte
-Quelledatensatz auswählen oder eintragen
-Zieldatensatz auswählen
-Für die Abspeicherntypen "Archiv" und "Repositur" eine neuen Datenbank soll vorher gespeichert werden
-Es gibt jetzt Datei mit diesem Namen im Repositur
-Das ist nicht GEDSEC-kompatibel Datei
-Diese Person ist Mitglied der einigen Famielien. Man soll die Kinder über ihre Eltern zusetzen.
-Fehler bei der Datenexportierung nach Excel
-Spezifisches Filter
-Linien abbilden
-Vergleichtyp
-Innenvergleich (Duplikatsuche)
-Vergleicherung mit anderen Datenbank
-Analyse (experimental)
-Vergleichen
-Datum ignorieren
-Diagramm
-Familienbuch
-Inhaltsverzeichnis
-Persondatensätze
-Katalogen
-Nach dem Namen von "{1}" das Geschlecht ist nicht klar. Ist es Männliches Geschlecht?
-Autospeichern jeden
-Minuten
-Inklusive der Generationnummer
-Leersegmenten verstecken
-Nachfahrenkreis
-Porträtwahl
-Rechner von verwandtschaftlichen Beziehungen
-ist {0} von
-Heute ist Geburtstag von {0}
-Morgen wird Geburtstag von {0}
-Blutgruppe
-Haarfarbe
-Augenfarbe
-Haplogruppe mtDNS
-Haplogruppe Y-DNS
-Datensatzverriegelung wegen des Redigierunges
-Mädchenname
-Ehename
-Zusatznamen
-Erweitertes Weiblichenamen
-"Mädchenname (Ehename)" Format
-"Ehename (Mädchenname)" Format
-"Mädchenname" Format
-"Ehename" Format
-M
-F
-Geokoder
-Vater eintragen
-Mutter eintragen
-Porträts standardmäßig anzeigen
-Die Mediendatei wird aus dem Wechselmedium hinzugefügt. Fortsetzen?
-Wenn Multimedia-Dateien von einem Wechselmedium hinzugefügt haben, warnen
-Zuletzt geöffnete Dokumente beim Start laden
-Heute feiern "{0}"
-Morgen feiern "{0}"
-{1} Tag(e) vor dem "{0}"
-Feste
-Der eingebauten MediaPlayer verwenden
-Direkte Verweise auf Mediendatei erlauben
-Kopieren von den Dateien
-Aktionen
-Auswählen und kopieren
-№
+﻿;1031,deu,Deutsch,xt
+001=&Datei
+002=&Bearbeiten
+003=Stammbaum
+004=E&xtras
+005=&Fenster
+006=&?
+007=Neu
+008=Öffnen...
+009=Letzte Dokumente
+010=Speichern
+011=Schließen
+012=Dateieigenschaften
+013=Exportieren
+014=Familienbuch...
+015=Speichern unter...
+016=Exportieren nach Excel Datei...
+017=Beenden
+018=Importieren
+019=Löschen
+020=Datensatz eintragen
+021=Datensatz aktualisieren
+022=Datensatz löschen
+023=<?>
+024=Stammbaum der Vorfahren
+025=Stammbaum der Nachfahren
+026=Ganze Stammbaum
+027=D'Aboville Listerstellung von den Nachfahren
+028=Konowalow Listerstellung von den Nachfahren
+029=Karten
+030=Statistik
+031=Listerstellung von den Vorfahren
+032=<?>
+033=<?>
+034=<?>
+035=Organizer
+036=Skripte
+037=<?>
+038=Extras
+039=Filter
+040=Einstellungen
+041=Überlappend
+042=Untereinander
+043=Nebeneinander
+044=Alles minimieren
+045=Alles andorden
+046=<?>
+047=<?>
+048=<?>
+049=Inhalt
+050=Info
+051=Datensätze
+052=gefiltert
+053=Personen
+054=Familien
+055=Anmerkungen
+056=Multimedia
+057=Quellen
+058=Archive
+059=Gruppen
+060=Forschungen
+061=Aufgaben
+062=Kommunikationen
+063=Örter
+064=unbekannte
+065=unbekannt
+066=?
+067=Männliches Geschlecht
+068=Weibliches Geschlecht
+069=Unbekannt Geschlecht
+070=Speichern die Dateiänderungen?
+071=Der angegebene Vorfahr hat die Familie "{0}". Wird das Kind dahin aufgenommen?
+072=Löschen den Persondatensatz "{0}"?
+073=Löschen die Familie "{0}"?
+074=Löschen die Anmerkung?
+075=Löschen die Quelle "{0}"?
+076=Löschen die Multimedia "{0}"?
+077=Löschen das Archiv "{0}"?
+078=Löschen die Gruppe "{0}"?
+079=Löschen die Forschung "{0}"?
+080=Löschen die Aufgabe "{0}"?
+081=Löschen die Kommunikation "{0}"?
+082=Löschen den Ort "{0}"?
+083=Adress
+084=Tatsachen
+085=Vorname
+086=Name
+087=Patronymikon
+088=Geschlecht
+089=Beiname
+090=Vorsilbe des Vornamens
+091=Vorsilbe des Namens
+092=Suffix des Namens
+093=Patriarch
+094=Bezeichnung
+095=Assoziation
+096=Beziehung
+097=Person
+098=Akzeptieren
+099=Abbrechen
+100=Schließen
+101=Auswählen
+102=Eintragen
+103=Neu Persondatensatz
+104=Persondatensatz redigieren
+105=Geschlechtsprüfung
+106=Datensatzauswahl
+107=Quellzitat
+108=Benutzerverweis
+109=Anmerkung
+110=Quelle
+111=Seite
+112=Datensicherheit
+113=Verweis
+114=Typ
+115=Familie
+116=Ehemann
+117=Ehefrau
+118=Status
+119=Kinder
+120=Löschen des Verweis an der Ehemann?
+121=Löschen des Verweis an die Ehefrau?
+122=Löschen des Verweis an das Kind?
+123=Geburtsdatum
+124=Todesdatum
+125=Sicherheitsbegrenzung
+126=Name
+127=Mitglieder
+128=Gruppe redigieren
+129=Löschen des Verweis an das Gruppenmitglied?
+130=Ansicht
+131=Etappe
+132=Rufnummer
+133=E-Mail
+134=Web-Seite
+135=Archiv
+136=Fortschritt
+137=Vergangenzeit
+138=Restzeit
+139=Allgemeine Zeit
+140=Datum
+141=Text
+142=Kurzname
+143=Autor
+144=Publiziert
+145=Gesamt
+146=Löschen des Verweis an das Archiv?
+147=Abspeicherungweise
+148=Datei
+149=Ansicht
+150=Fragment {0}: {1} Personen
+151=Vater
+152=Mutter
+153=Eltern
+154=Ehegatten
+155=Assoziationen
+156=Benutzerverweise
+157=gregorianischer
+158=julianischer
+159=jüdischer
+160=islamischer
+161=iranischer
+162=indischer
+163=baha'i
+164=französischer
+165=römischer
+166=unbekannt
+167=Zusammenstellung
+168=Andere
+169=Einreichung
+170=Antragsteller
+171=Standort
+172=Breite
+173=Länge
+174=Abbilden
+175=Suchen Koordinate
+176=Suchen
+177=Auswählen Koordinate
+178=Auswählen Name
+179=Vorrang
+180=Prozent
+181=Gestartet
+182=Abgestellt
+183=Ziel
+184=Thema
+185=Korrespondent
+186=Gruppe
+187=Löschen des Verweis an die Aufgabe?
+188=Löschen des Verweis an die Korrespondenz?
+189=Löschen des Verweis an die Gruppe?
+190=Forschung redigieren
+191=Aufgabe redigieren
+192=Kommunikation redigieren
+193=Fehler
+194=Lua Anfangfehler!
+195=Inkorrekt Datumformat
+196=Staat/Land
+197=Gebiet
+198=Stadt
+199=Postleitzahl
+200=Rufnummern
+201=E-Mail
+202=Web-Seiten
+203=Bedeutung
+204=Ereignis
+205=Ort
+206=Ursache
+207=Urkundenstelle
+208=Weibliche
+209=Männliche
+210=Persondatensatz ist nicht gawählt
+211=Das Geschlecht von dieser Person ist nicht bezeichnet.
+212=Diese Person hat keine Familie.
+213=Erwartungsanzahl der Vorfahren von {0} die zulässigen Limits übersteigen.
+214=Erwartungsanzahl der Nachfahren von {0} die zulässigen Limits übersteigen.
+215=Generationen abbilden:
+216=Grenzenlos
+217=Ehepartner
+218=Ehedatum
+219=Löschen des Vaterverweis?
+220=Löschen des Mutterverweis?
+221=Löschen des Ehepartnerverweis?
+222=Löschen des Elternverweis?
+223=Alle
+224=Nur Vorfahren
+225=Nur Nachfahren
+226=Autocenter
+227=Redigieren
+228=Familie eintragen
+229=Ehepartner eintragen
+230=Sohn eintragen
+231=Tochter eintragen
+232=Löschen
+233=Stammbaum umgestalten
+234=Blutsverwandtschaft umgestalten
+235=Verweise
+236=Ort und Attribut
+237=Ehe
+238=Familie
+239=Namensbrüder/Namensschwestern
+240=Löschen die Tatsache?
+241=Löschen des Anmerkungverweis?
+242=Löschen des Multimediaverweis?
+243=Löschen des Quelleverweis?
+244=Löschen die Assoziation?
+245=Löschen des Benutzerverweis "{0}"?
+246=Dateiladen Fehler
+247=Formatverifikation Fehler
+248=Geburtstage
+249=Es ist {1} Tage vor dem Geburtstag von "{0}"
+250=Schnittstelle
+251=Stammbäume
+252=Listerstellungen
+253=Dateispeichern Zeichensatz
+254=Adressen
+255=E-Mail
+256=Web-Seiten
+257=Herunterladung aus Internet
+258=Proxy-Server verwenden
+259=Server
+260=Port
+261=Login
+262=Passwort
+263=Das Passwort ist nicht bezeichnet
+264=Tipps bei jedem Start anzeigen
+265=Sprache
+266=Alle Listen
+267=Personenliste
+268=Namenformat in den Listen
+269=Vorname_Name_Patronymikon
+270=Vorname; Name_Patronymikon
+271=Vorname; Name; Patronymikon
+272=Datumformat in die Listen
+273=Adresse in die Ortzeilen einschließen
+274=Personen ohne Eltern markieren
+275=Personen ohne Familien markieren
+276=Standardwert
+277=Personen im Stammbaum abbilden
+278=Einzelzeilen (Name und Patronymikon)
+279=Nur Jahre
+280=Verwandtschaftsgrad
+281=Zusätzliche Symbole
+282=Dekoration
+283=Porträte abbilden
+284=Todesfälle im Kindesalter ausschließen
+285=Gestaltung
+286=Mann
+287=Frau
+288=Unbekannt Geschlecht
+289=geschiedener Ehemann
+290=geschiedene Ehefrau
+291=Schrift
+292=Bildung von den Listerstellungen
+293=Inschließlich Personenattribute
+294=Inschließlich Anmerkungen
+295=Inschließlich Quellen
+296=Format
+297=Überschüssig
+298=Konventionell
+299=Zum Datensatz übergehen
+300=Datensatz aufrücken
+301=Datensatz nach unten rücken
+302=Ganze Name
+303=Geburtsort
+304=Todesort
+305=Lebensort
+306=(Lebens)Alter
+307=Lebensdauer
+308=Tage bis zum GT
+309=Konfession
+310=Nationalität
+311=Bildungsniveau
+312=Beruf
+313=Soziale Lage
+314=Kriegsdienst
+315=Kriegsdienstrekrutierung
+316=Kriegsdienstaufkündigung
+317=Dienstgrad
+318=Modifiziert
+319=Standesamtlich getraut Ehe
+320=Gewissensehe
+321=Geschieden
+322=Geburt
+323=Adoption
+324=Taufe
+325=Graduierung
+326=Pensionierung
+327=Einbürgerung
+328=Emigration
+329=Immigration
+330=(Volks)zählung
+331=Testament
+332=Bestätigung des Testamentes
+333=Tod
+334=Bestattung
+335=Einäscherung
+336=Tatsache
+337=Personalbeschreibung
+338=Identifizierungsnummer
+339=Sozialversicherungskode
+340=Kinderzahl
+341=Ehenzahl
+342=Eigentum
+343=Titel
+344=Reise
+345=Hobby
+346=Auszeichnung
+347=?
+348=Vater
+349=Mutter
+350=Ehemann
+351=Ehefrau
+352=Sohn
+353=Tochter
+354=Großvater
+355=Großmutter
+356=Enkel
+357=Enkelin
+358=Bruder
+359=Schwester
+360=Schwiegersohn
+361=Schwiegertochter
+362=Vater von Ehemann (Schwiegervater)
+363=Mutter von Ehemann (Schwiegermutter)
+364=Vater von Ehefrau (Schwiegervater)
+365=Mutter von Ehefrau (Schwiegermutter)
+366=Onkel
+367=Tante
+368=Neffe
+369=Nichte
+370=Cousin
+371=Cousine
+372=Bruder von Ehemann (Schwager)
+373=Schwester von Ehemann (Schwägerin)
+374=Bruder von Ehefrau (Schwager)
+375=Bruder von Ehefrau (Schwägerin)
+376=ur
+377=<?>
+378=<?>
+379=<?>
+380=<?>
+381=Bildbreite ist mehr als 65,000 pixels. Unmöglich zu speichern
+382=Zurück
+383=Vorwärts
+384=<?>
+385=Weiter
+386=Wußtest du schon?
+387=Örter herunterladen und suchen
+388=( nicht ausgewählt )
+389=Auswahl
+390=In allen Personen
+391=Geburtsörter
+392=Todesörter
+393=Lebensörter
+394=Nur Ausgewählt
+395=Bild speichern...
+396=Ununterstützert Format
+397=Datenladungfehler.
+398=Drucken
+399=Vorschau
+400=Generation
+401=enthalt
+402=enthalt nicht
+403=Genau
+404=Früher
+405=Später
+406=Zwischen
+407=Periode bis
+408=Periode nach
+409=Periode zwischen
+410=Etwa
+411=Berechnete
+412=Bewertete
+413=Eheverlöbnis
+414=Eheschließungshandlung
+415=Die öffentliche Bekanntgabe der Ehe
+416=Abschluss eines Ehevertrages
+417=Bewilligung zum Ehekonsens
+418=Abschluss von dem Ehevertrages
+419=Aufhebung der Ehe
+420=Einreichung des Scheidungsantrages
+421=Ehescheidung
+422=Dateiverweise
+423=Einspeicherung ins Archiv
+424=Einspeicherung in Repositur
+425=-
+426=Tonaufzeichnung
+427=Buch
+428=Karte
+429=Elektronisch
+430=Mikrofische
+431=Film
+432=Magazin
+433=Manuskript
+434=Karte
+435=Zeitung
+436=Fotografie
+437=Grabmal
+438=Video
+439=- Andere -
+440=Ist nicht bezeichnet
+441=Niedrig
+442=Normal
+443=Hoch
+444=Vordringlich
+445=Bestimmt
+446=Im Gange
+447=Unterbrechung
+448=Erschwerungen
+449=Fertig
+450=Abberuft
+451=Anruf
+452=E-Mail
+453=Fax
+454=Brief
+455=Kassette
+456=Besuch
+457=von
+458=zu
+459=Person
+460=Familie
+461=Quelle
+462=andere
+463=Unzuverlässig Beweise oder Vermutungen
+464=Fragwürdige Zuverlässigkeit von der Bestätigung
+465=Indizienbeweise
+466=Eindeutige und primäre Beweise
+467=Forschung
+468=Aufgabe
+469=Korrespondenz
+470=Bezeichnerkorrektur
+471=Formatüberprüfung
+472=Es ist nötig (Man soll) die Datenzatz-IDs korrigieren, weiter?
+473=Anzahl der Objekte in der Hauptdatenbank: {0}
+474=Synchronisierung abgeschlossen.
+475=Suche von den Patriarchen
+476=Suche von wechselseitigen Beziehungen
+477=Mediadatei ist nicht beladen, denn sie ist in Mediacontainer (Repositur oder Archiv) fehlen
+478=Maßstab
+479=GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselten GEDCOM-Dateien (*.geds)|*.geds
+480=Alle Dateien (*.*)|*.*
+481=Bilder (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+482=Skripte (*.lua)|*.lua
+483=BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|EMF-Dateien (*.emf)|*.emf|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
+484=Todesursachen
+485=Stammbaum Listerstellung
+486=Parameter
+487=Im Ganzen
+488=Männer
+489=Frauen
+490=Felderfilter
+491=Jahr
+492=PDF-Dateien (*.pdf)|*.pdf
+493=RTF-Dateien (*.rtf)|*.rtf
+494=HTML-Dateien (*.html)|*.html
+495=Das Sicherungskopieren (Backup)
+496=Nur vorherige Datei
+497=Zweigebeschneidung
+498=keine
+499=nach der Jahresgrenze
+500=nach bestimmten Personen
+501=- alle -
+502=- keine -
+503=- jede -
+504=Master-Datenbank
+505=Datenbank aktualisieren
+506=[aktuelle Datenbank]
+507=Filter nach Quelle ist installiert. Soll die Quelle zu einem neuen persönlichen Datensatz hinzufügt werden?
+508=Filter nach Gruppe ist installiert. Soll die Gruppe zu einem neuen persönlichen Datensatz hinzufügt werden?
+509=Duplikatsuche
+510=Unrichtiger Wert
+511=Operation
+512=Datenbanken vergleichen
+513=Datenbanken vereinigen
+514=Datenbanken trennen
+515=Duplikatsätze vereinigen
+516=Suche nach nicht verwandten Vornamensvetter
+517=Überprüfung der Familienverbindungen
+518=Datenbankvalidierung
+519=Suche die Patriarchen
+520=Örterssteuerung
+521=Suche nach der Übereinstimmungen
+522=Überprüfung der Familienverbindungen
+523=alle
+524=nur leben
+525=nur Verstorbene
+526=lebte vorher
+527=nur Männer
+528=nur Frauen
+529=Namemaske
+530=Lebensortmaske
+531=Tatsachenmaske
+532=Nur Familienoberhäupter
+533=Unrichtig Datum
+534=Leute
+535=Jahre
+536=Jahrzehnte
+537=Geboren
+538=Gestorben
+539=Lebenden
+540=Verstorbene
+541=Durchschnittsalter
+542=Lebenserwartung
+543=Die durchschnittliche Zahl der Kinder
+544=Das Durchschnittsalter der Geburt des Erstlings
+545=Die durchschnittliche Zahl der Ehen
+546=Das Durchschnittsalter der Verheiratung
+547=Vorfahrenzahl
+548=Nachfahrenzahl
+549=Nachfahrengenerationzahl
+550=Geburtsjahre
+551=Geburtsjahre (Jahrzehnte)
+552=Sterbejahre
+553=Sterbejahre (Jahrzehnte)
+554=Verteilung der Anzahl der Kinder
+555=Alter der Geburt des Erstlings
+556=Alter der Verheiratung
+557=Unterschied von dem Ehegattenalter
+558=Alle Verbindungen auswählen
+559=Familie auswählen
+560=Vorfahren auswählen
+561=Nachfahren auswählen
+562=Vereinigung
+563=Automatisches Suchen
+564=Auslassen
+565=Datensätze
+566=Personensuche
+567=Strikter Vergleich
+568=Unstrikter Namenvergleich
+569=Nur beim Namen/Patronymikon (nur Frauen)
+570=Mit einem Geburtsjahr
+571=Genauigkeit von dem Namen, %
+572=Jahreungenauigkeit
+573=Reparieren
+574=Nachfahrengenerationen mindestens
+575=Merkmal aufstellen
+576=In die Liste eingetragen
+577=Ähnliche Familiennamen:
+578=Ähnliche Namen:
+579=Ausgewählte Personaldatensätze sind gelöscht
+580=Datensatz
+581=Problem
+582=Lösung
+583=vielleicht Verstorbene (Alter {0})
+584=Das Geschlecht ist nicht bezeichnet
+585=Geburtsjahr größer als Sterbejahr
+586=War die erste Ehe im Alter von {0} Jahre(n) geschlossen?
+587=War das erste Kind im Alter von {0} Jahre(n) gebiert?
+588=Nachfahren
+589=Generationen
+590=Anzahl der Verweise
+591=Örterbearbeitung
+592=Dieser Ort ist schon in der Ortliste enthalten
+593=DNS Marken
+594=Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Elternteils
+595=Das Durchschnittsalter der Geburt des Erstlings im Verhältnis zum Alter des Kindes
+596=Familiedatensatz ist leer
+597=jede Dateiversion speichern
+598=Beladung
+599=Dateispeichern Fehler "{0}"{1}.
+600=Hintergrundfarbe...
+601=Hintergrundbild...
+602=Personen im Stammbaum: {0}
+603=Fehlerprotokoll anzeigen
+604=Vorfahrenkreis
+605=Kreis
+606=Vordergrundfarbe
+607=Hintergrundfarbe
+608=Liniefarbe
+609=keine
+610=blockiert
+611=vertraulich
+612=geheim
+613=Fehlerprotokoll senden
+614=Diagramme
+615=Bild in Fenster einpassen
+616=Vergrößern
+617=Verkleinern
+618=Tatsache des Todes feststellen
+619=Geschlecht bezeichnen
+620=Plugins
+621=Autospuren die Beziehungen
+622=Es hat keine Entsprechungen gefunden
+623=Suchen zurück
+624=Suchen vorwärts
+625=Zuverlässigkeitindex
+626=Geburtsmonaten
+627=Monat
+628=Abrechnen
+629=Feld
+630=Bedingung
+631=Quelle ist nicht bezeichnet
+632=Diaschau
+633=Vorherige Datensatz
+634=Nächste Datensatz
+635=Erzeugung ist ausgefallen
+636=Start
+637=Abbrechen
+638=Demographie
+639=Namen
+640=Pseudonym
+641=Geburtsname
+642=In Immigration
+643=Mädchenname
+644=Ehename
+645=Löschen einen Namen?
+646=Die einzige Name darf man nicht löschen
+647=Zitat
+648=Vereinigte Datensätze bezeichnen
+649=Kalender neben dem Datum anzeigen
+650=Datensatz duplizieren
+651=Achtung: bei der Persondatensatzdublierung die verwandtschaftliche Verbindungen und Assoziationen werden nicht kopiert
+652=Datumtypen anzeigen
+653=Neu Stammbaumdatei erstellen
+654=Stammbaumdatei öffnen
+655=Stammbaumdatei speichern
+656=Datensatz eintragen (Strg+I)
+657=Datensatz aktualisieren (Strg+Enter)
+658=Datensatz löschen (Strg+L)
+659=Datensatzlistefilterung
+660=Stammbaum der Vorfahren abbilden
+661=Stammbaum der Nachfahren abbilden
+662=Ganze Stammbaum abbilden
+663=Stammbaum Listerstellung
+664=D'Aboville Listerstellung
+665=Konowalow Listerstellung
+666=Statistische Auswertung
+667=Bild speichern
+668=Anzeigebetrieb
+669=Neu Skript erstellen
+670=Skript öffnen
+671=Skript speichern
+672=Skript ausführen
+673=Porträt verbinden
+674=Porträt abstellen
+675=Elternfamilie verbinden
+676=Elternfamilie aktualisieren
+677=Elternfamilie abstellen
+678=Vater auswählen oder eintragen
+679=Vater abstellen
+680=Zum Vaterdatensatz übergehen
+681=Mutter auswählen oder eintragen
+682=Mutter abstellen
+683=Zum Mutterdatensatz übergehen
+684=Name zum Tauschbuffer kopieren
+685=Ehemann auswählen oder eintragen
+686=Ehemann abstellen
+687=Zum Ehemanndatensatz übergehen
+688=Ehefrau auswählen oder eintragen
+689=Ehefrau abstellen
+690=Zum Ehefraudatensatz übergehen
+691=Persondatensatz auswählen
+692=Ort auswählen oder eintragen
+693=Löschen des Verweis an den Ort
+694=Zeigen auf der Karte
+695=Quelledatensatz auswählen oder eintragen
+696=Zieldatensatz auswählen
+697=Für die Abspeicherntypen "Archiv" und "Repositur" eine neuen Datenbank soll vorher gespeichert werden
+698=Es gibt jetzt Datei mit diesem Namen im Repositur
+699=Das ist nicht GEDSEC-kompatibel Datei
+700=Diese Person ist Mitglied der einigen Famielien. Man soll die Kinder über ihre Eltern zusetzen.
+701=Fehler bei der Datenexportierung nach Excel
+702=Spezifisches Filter
+703=Linien abbilden
+704=Vergleichtyp
+705=Innenvergleich (Duplikatsuche)
+706=Vergleicherung mit anderen Datenbank
+707=Analyse (experimental)
+708=Vergleichen
+709=Datum ignorieren
+710=Diagramm
+711=Familienbuch
+712=Inhaltsverzeichnis
+713=Persondatensätze
+714=Katalogen
+715=Nach dem Namen von "{1}" das Geschlecht ist nicht klar. Ist es Männliches Geschlecht?
+716=Autospeichern jeden
+717=Minuten
+718=Inklusive der Generationnummer
+719=Leersegmenten verstecken
+720=Nachfahrenkreis
+721=Porträtwahl
+722=Rechner von verwandtschaftlichen Beziehungen
+723=ist {0} von
+724=Heute ist Geburtstag von {0}
+725=Morgen wird Geburtstag von {0}
+726=Blutgruppe
+727=Haarfarbe
+728=Augenfarbe
+729=Haplogruppe mtDNS
+730=Haplogruppe Y-DNS
+731=Datensatzverriegelung wegen des Redigierunges
+732=Mädchenname
+733=Ehename
+734=Zusatznamen
+735=Erweitertes Weiblichenamen
+736="Mädchenname (Ehename)" Format
+737="Ehename (Mädchenname)" Format
+738="Mädchenname" Format
+739="Ehename" Format
+740=M
+741=F
+742=Geokoder
+743=Vater eintragen
+744=Mutter eintragen
+745=Porträts standardmäßig anzeigen
+746=Die Mediendatei wird aus dem Wechselmedium hinzugefügt. Fortsetzen?
+747=Wenn Multimedia-Dateien von einem Wechselmedium hinzugefügt haben, warnen
+748=Zuletzt geöffnete Dokumente beim Start laden
+749=Heute feiern "{0}"
+750=Morgen feiern "{0}"
+751={1} Tag(e) vor dem "{0}"
+752=Feste
+753=Der eingebauten MediaPlayer verwenden
+754=Direkte Verweise auf Mediendatei erlauben
+755=Kopieren von den Dateien
+756=Aktionen
+757=Auswählen und kopieren
+758=№

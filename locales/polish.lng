@@ -1,759 +1,759 @@
-﻿;1045,pol,Polski
-Plik
-Korekta
-Rodowód
-Usługa
-&Окna
-Pomoc
-Nowy
-Оywórz...
-Оtwórz ostatni
-Zapisz
-Zamknij
-Właściwości pliku...
-Eksport
-Książka rodziny PDF...
-Zapisz Jako...
-Eksport do pliku Excela...
-Wyjście
-Import
-Wyczyścić
-Dodaj rekord
-Edytuj rekord
-Usuń rekord
-<?>
-Drzewo przodków
-Drzewo potomków
-Pełne drzewo
-schodzące po pokoleniu
-schodzący po pokoleniu
-Mapy
-Statystyka
-Wspinając się na rodowód
-<?>
-<?>
-<?>
-Organizator
-Skrypty...
-<?>
-Narzędzia...
-Filtr
-Opcje
-& Kaskada
-& Sąsiadująco w poziomie
-Idealna dachówka pionowe
-& Minimalizuj wszystkie
-& Ponowne rozmieszczanie wszystkich
-Zasoby internetowe...
-Warunki pokrewieństwa...
-FAQ...
-Zawartość
-O programie
-Rekordy
-Filtrowane
-Osoby
-Rodziny
-Notatki
-Multimedia
-Źródła
-Repozytoria
-Grupy
-Badania
-Zadania
-Komunikacja
-Lokalizacje
-nieznany
-nieznany
-?
-Mężczyzna
-Kobieta
-Nieokreślona
-Czy chcesz zapisać zmiany w zmodyfikowany plik?
-Określony obiekt nadrzędny ma istniejącą rodzine "{0}". Czy chcesz dodać dziecko do tej rodziny?
-Usuwanie pojedynczych "{0}"?
-Usunąć z rodziny "{0}"?
-Usunąć Uwaga "{0}"?
-Usuń Źródło "{0}"?
-Usunąć multimedia "{0}"?
-Usunąć repozytorium "{0}"?
-Usuwanie grupy "{0}"?
-Usunąć badania "{0}"?
-Usuń zadanie "{0}"?
-Usuń komunikat "{0}"?
-Usuwanie lokalizacji "{0}"?
-Adres
-Zdarzenia
-Nazwisko
-Imię
-Nazwisko rodowe
-Płeć
-Pseudonim
-Ostatni prefiks nazwy
-Prefiks nazwy
-Sufiks nazwy
-Patriarcha
-Zakładki
-Stowarzyszenie
-Relacja
-Osób
-Zatwierdź
-Anuluj
-Zamknij
-Wybierz
-Dołączyć
-Nowe jednostki
-Edytowanie poszczególnych
-Sprawdzanie płci
-Wybranie rekordu
-Cytowania źródeł
-Dokumentacja użytkownika
-Uwaga:
-Źródło
-Strona
-Pewność
-Odwołanie
-Typu
-Rodziny
-Mąż
-Żona
-Dzieci
-?
-Odłączyć łącze do męża?
-Odłączyć łącze do żony?
-Odłączyć łącze do dziecka?
-Data urodzenia
-Data śmierci
-Ograniczenie zabezpieczeń
-Tytuł
-Członkowie
-Edytuj grupę
-Odłączyć łącze do elementu członkowskiego?
-Widok
-Etap
-Numer telefonu
-Adres e-mail
-Witryna sieci Web
-Repozytorium
-Postęp
-Upłynęło czasu
-Pozostały czas
-Całkowity czas
-Data
-Tekst
-Krótki tytuł
-Autor
-Opublikowany
-Ogólne
-Odłączyć łącze do repozytorium?
-Typ magazynu
-Plik
-Widok
-Tryb rozszerzenia nie jest włączona dla wybranego sklepu typu
-Ojciec
-Matka
-Rodzice
-Małżonkowie
-Stowarzyszenia
-Odwołania do użytkownika
-Gregoriański
-Juliański
-Hebrajski
-Islamski
-Perski
-Indyjski
-Bahai
-Francuski
-Roman
-Nieznane
-Krótki opis
-Inne
-Składanie
-Wnioskodawca
-Lokalizacja
-Szerokość geograficzna
-Długość geograficzna
-Pokaż
-Szukaj coords
-Szukaj
-Wybierz coords
-Wybierz nazwę
-Priorytet
-Procent
-Rozpoczęcie
-Zatrzymanie
-Cel
-Tematu
-Muszą być w grze
-Grupa
-Odłączyć łącze do zadania?
-Odłączyć łącze do komunikacji?
-Odłączyć łącze do grupy?
-Edytuj badanie
-Edytuj zadanie
-Edytować komunikacji
-Błąd
-Lua uruchomić nie powiodło się!
-Format daty jest nieprawidłowy
-Kraj
-Państwo
-Miasto
-Kod pocztowy
-Numery telefonów
-E-maile
-Witryny sieci Web
-Wartość
-Zdarzenia
-Miejsce
-Przyczyna
-Agencja
-Kobieta
-Mężczyzna
-Pojedynczego rekordu nie jest zaznaczone.
-Osoba ta ma nie seks zdefiniowane.
-Ta osoba ma nie rodzin.
-Szacunkowa liczba przodków {0} jest więcej niż dopuszczalne granice.
-Szacunkowa liczba potomków {0} jest więcej niż dopuszczalne granice.
-Pokoleń widoczne:
-nieograniczony
-Małżonka
-Data ślubu
-Odłączyć łącze do ojca?
-Odłączyć łącze do matki?
-Odłączyć łącze do małżonka?
-Odłączyć łącze do rodziców?
-Wszystkie
-Przodków tylko
-Potomkowie tylko
-Śledzenia głównego
-Edycja
-Dodaj rodzinę
-Dodaj małżonka
-Dodaj syn
-Dodać córką
-Usuń
-Przebudować drzewo
-Odbudować Musarum
-Linki
-Miejsce zgonu
-małżeństwo
-Rodzina
-Imienniczki
-Usuwanie zdarzenia?
-Odłączyć łącze, aby pamiętać?
-Odłączyć łącze do multimediów?
-Odłączyć link do źródła?
-Należy usunąć skojarzenie?
-Usuń odwołanie do użytkownika?
-Nie powiodło się ładowanie gedcom.
-Sprawdź format gedcom nie powiodło się.
-Narodziny dni
-Przed dniem narodzin "{0}" pozostało {1} dni
-Interfejs
-Drzewa
-Rodowody
-Kodowanie plików
-Adresy
-E-mail
-Wstęgi
-Internet
-Użyj serwera proxy
-Serwer
-Port
-Login
-Hasło
-Hasło nie jest określony.
-Pokaż wskazówki przy starcie
-Język
-Wszystkie listy
-Lista osób
-Format nazwy w listach
-Nazwisko_Nazwa_Nazwisko rodowe
-Nazwisko; Nazwa; Nazwisko_rodowe
-Nazwisko; Nazwa; Nazwisko rodowe
-Format daty w listach
-Dołączyć adres w miejsce tekstu
-Bez podświetlenia elementów nadrzędnych.
-Podświetl niezamężna
-Wartości domyślne
-Pokaż osoby w drzewie
-Oddzielne wiersze
-Tylko lata
-Pokrewieństwo
-Dodatkowe symbole
-Drzewa dekoracyjne
-Pokaż portrety
-Ukryj zmarł w dzieciństwie
-Decor
-Człowiek
-Kobieta
-Nieznana płeć
-Rozwiedziony
-Rozwódka
-Czcionki
-Rodowód pokolenia
-Dołączyć atrybuty osób
-Dołączyć notatki
-Dołączyć źródła
-Rodowód w formacie
-Nadmiarowym
-Kompaktowym
-Przejdź do rekordu
-Wrzucić rekord
-Przesunąć rekord
-Imię i nazwisko
-Miejsce urodzenia
-Miejsce śmierci
-Rezydencja
-Wiek
-Okres istnienia
-Dni przed urodzeniem
-Religia
-Narodowość
-Edukacja
-Zawód
-Kasta
-Mili
-Mili ind
-Mili dis
-Ranga mili
-Zmiana
-Małżeństwo, zarejestrowany
-Małżeństwo nie jest zarejestrowany.
-Rozwiedziony
-Urodzenia
-Przyjęcie
-Chrzciny
-Miejsce urodzenia
-Przejścia na emeryturę
-Naturalizacji
-Emigracja
-Imigracji
-Spisu powszechnego
-Będzie
-Spadkowych woli
-Śmierć
-Pogrzeb
-Kremacja
-Fakt
-Opis fizyczny
-Numer identyfikacyjny krajowego
-Numer ubezpieczenia społecznego
-Liczba dzieci
-Liczba małżeństw
-Właściwość
-Tytuł
-Podróży
-Hobby
-Nagroda
-?
-Ojciec
-matka
-mąż
-żona
-Syn
-Córka
-Dziadek
-Babcia
-wnuk
-wnuczka
-brat
-Siostra
-zięć
-synowa
-teść
-teściowa
-teść
-teściowa
-Wujek
-Ciotka
-bratanek
-siostrzenica
-kuzyn
-kuzyn
-<?>
-<?>
-<?>
-<?>
-<?>
-<?>
-<?>
-<?>
-<?>
-Szerokość obrazu jest ponad 65 000 pikseli. Nie można zapisać.
-Wstecz
-Następny
-<?>
-Następny
-Czy wiesz, że...
-Obciążenia i wyszukiwanie miejsc
-(nie wybrano)
-Próbki
-Dla wszystkich ludzi
-Miejsca urodzenia
-Miejsce śmierci
-Miejsca zamieszkania
-Tylko wybrane
-Zapisz obraz...
-Format nie obsługiwany.
-Błąd podczas ładowania danych.
-Drukuj
-Podgląd
-Pokolenie
-<?>
-<?>
-Dokładny
-Przed
-Po
-Między
-Okres przed
-Okres od
-Okres między
-O programie
-Obliczone
-Szacowana
-Miejsce ślubu
-Małżeństwo
-Publiczne ogłoszenie małżeństwa
-Umowy majątkowej małżeńskiej
-Uzyskanie uprawnień do zawarcia małżeństwa
-Zawarcie umowy małżeńskiej
-Unieważnienie małżeństwa
-Zgłoszenia rozwodu
-Rozwód
-Link do pliku
-Zapisywanie do archiwum
-Zapisywanie w magazynie
--
-Dźwięk
-Książka
-Karta
-Elektroniczne
-Dylatacyjne
-Film
-Magazyn
-Rękopis
-Mapa
-Gazeta
-Zdjęcie
-Nagrobek
-Wideo
--Nieznane-
-Brak
-Niski
-Normalny
-Wysoki
-Najwyższy
-Zdefiniowane przez
-W toku
-Zawieszone
-Problemy
-Zakończone
-Wycofane
-Zadzwoń
-Adres e-mail
-Faks
-Litera
-Taśma
-Odwiedź
-od
-do
-indywidualne
-Rodziny
-źródła
-inne
-Wiarygodne dowody
-Wątpliwa wiarygodność dowodów
-Poszlaki
-Bezpośrednie i podstawowych dowodów
-Badania
-Zadania
-Korespondencja
-Korekcja identyfikatory
-Sprawdź format
-Korekta rekordów tożsamości jest wymagany, kontynuować?
-Liczba obiektów w baza danych master: {0}
-Synchronizacji.
-Szukaj patriarchów
-Szukaj linki
-Archiwum nie znaleziono, dane nie jest załadowany
-Skali
-Pliki GEDKeeper GEDCOM (*.ged)|*.ged|GEDKeeper GEDCOM zaszyfrowanych plików (*.geds)|*.geds
-Wszystkie pliki (*.*)|*.*
-Obrazy (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
-Skrypty (*.lua)|*.lua
-Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki EMF (*.emf)|*.emf|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
-Przyczyny śmierci
-Rodowód
-Parametr
-Łącznie
-Mężczyźni
-Kobiety
-Pole filtra
-Rok
-Pliki PDF (*.pdf)|*.pdf
-Pliki RTF (*.rtf)|*.rtf
-Pliki HTML (*.html)|*.html
-Pliki kopii zapasowej
-Tylko poprzedni plik
-Odcinając gałęzie
-Nie
-Na lata
-W wybranych osób
--Wszystkie-
--Żaden--
--Wszelkie-
-Wzorzec bazy danych
-Bazy danych do korespondencji seryjnej
-[aktualne bazy danych]
-Źródłem jest filtr. Czy chcesz dodać źródło do nowej jednostki?
-Przez grupę jest filtr. Czy chcesz dodać grupę do nowej jednostki?
-Szukaj duplikatów
-Nieprawidłowa wartość
-Operacja
-Porównywanie bazy danych
-Scalanie baz danych
-Dzielona baza danych
-Scalanie rekordów
-Rodowody importu
-Sprawdź połączenie rodzin
-Sprawdź bazy danych
-Szukaj patriarchów
-Zarządzanie miejscami
-Pasujące...
-Sprawdź połączenie rodzin
-wszystkie
-Tylko żyjące
-Tylko martwe
-Żyjący przed
-Tylkolko mężczyźni
-Tylko kobiety
-Maska nazwy
-Maska zamieszkania
-Maska faktów
-Patriarchowie tylko
-Data jest nieprawidłowa
-Ludzie
-Lata
-Dziesięć lat
-Ur.
-Zmarł
-Życia
-Martwe
-Średni wiek
-Oczekiwana długość życia
-Średnia liczba dzieci
-Średni wiek urodzenia pierwszego dziecka
-Średnia liczba małżeństw
-Średni wiek małżeństwa
-Liczba przodków
-Liczba potomków
-Liczba pokoleń potomków
-Narodziny lat
-Urodzenia lat (lat)
-Lat śmierć
-Lat śmierć (lat)
-Rozkład liczby dzieci
-Wiek urodzenia pierwszego dziecka
-Wiek w małżeństwie
-Różnica wieku małżonków
-Wybierz wszystkie linki
-Wybierz rodzinę
-Wybierz przodków
-Wybierz elementy podrzędne
-Korespondencji seryjnej
-Szukaj
-Pomiń
-Rekordy
-Szukaj osób
-Bezpośrednie, dopasowywania
-Niewyraźne pasujące
-Tylko z nazwy / drugie imię (tylko kobiety)
-Sprawdź rok urodzenia
-Dokładność opisu, %
-Lat niedokładności
-Naprawy
-Pokolenia potomków, nie mniej niż
-Zestaw znak
-Rejestracja w liście lokalizacji
-Podobne nazwiska:
-Podobne nazwy:
-Wybrane osobiste rekordy usunięte 
-Rekord
-Problem
-Rozwiązania
-Być może zmarł (wiek {0})
-Seks jest niezdefiniowana
-Rok urodzenia więcej niż w roku śmierci
-Pierwsze małżeństwo w wieku lat {0}?
-Pierwsze dziecko urodziło się w wieku lat {0}?
-Potomkowie
-Pokoleń
-Liczba linków
-Przetwarzania miejsc
-Miejsce jest już na liście lokalizacji
-Markerów DNA
-Średni wiek rodziców w tym czasie pierworodnego pojawił się względem wieku rodziców
-Średni wiek rodziców w tym czasie pierworodnego pojawił się w stosunku do wieku dzieci
-Pusty rekord dla rodzin z dziećmi
-Tworzenie kopii zapasowych każdej wersji pliku
-Ładowanie
-Plik zapisywanie błędów "{0}" {1}.
-Kolor tła...
-Zdjęcia w tle...
-Osób w drzewo: {0}
-Zobacz dzienniku błędów
-Przodkowie koło
-Koło
-Kolor tekstu
-Kolor tła
-Kolor linii
-Brak
-Zablokowane
-Poufne
-Prywatne
-Wysyłanie dziennika błędów
-Wykresy
-Rozmiar okna
-Powiększyć
-Pomniejsz
-Ustalenia faktu śmierci
-Określić płeć
-Wtyczki
-Auto śledzenia relacji
-Nie znaleziono odpowiedników
-Znajdź poprzedni
-Znajdź następny
-Indeks pewności
-Monthes urodzenia
-Miesiąc
-Reset
-Pole
-Warunek
-Źródło nie jest określone.
-Pokaz slajdów
-Poprzedni rekord
-Następny rekord
-Tworzenie nie powiodła się
-Początek
-Przystanek
-Dane demograficzne
-Nazwy
-Nazwa pseudonim
-Imię i nazwisko
-Imigracji
-Nazwisko panieńskie
-Nazwa małżeństwa
-Usuwanie nazwy?
-Nie można usunąć jedną nazwą
-Cytat
-Umieścić zakładkę na scalone rekordy
-Pokaż kalendarz w pobliżu daty
-Zduplikowany rekord
-Uwaga: w przypadku zduplikowania indywidualnego, więzi rodzinne i stowarzyszenia nie są kopiowane
-Pokaż typ daty
-Utwórz nowy plik
-Otwórz plik 
-Zapisz plik
-Dodaj rekord (Ctrl + I)
-Edytowanie rekordu (Ctrl + Enter)
-Usuń rekord (Ctrl + L)
-Filtrowanie listy rekordów
-Pokaż drzewo przodków
-Pokaż drzewo potomków
-Pokaż pełne drzewo
-Rodowód
-Rodowód przez d'Aboville
-Rodowód przez Konowałow
-Statystyczna analiza danych
-Zapisz obraz
-Tryby wyświetlania
-Utworzyć nowy skrypt
-Otwórz skrypt
-Zapisz skrypt
-Wykonać skryptu
-Dołączyć portret
-Odłączyć portret
-Dołącz do rodziny rodziców
-Edycję rodziny rodziców
-Odłączyć rodziców dla rodzin z dziećmi
-Wybierz lub Dodaj ojca
-Odłączyć ojca
-Przejdź do rekordu ojca
-Wybierz lub Dodaj matki
-Odłączyć matki
-Przejdź do rekordu matki
-Kopiuj nazwę do schowka
-Wybierz lub Dodaj męża
-Odłączyć męża
-Przejdź do rekordu męża
-Wybierz lub Dodaj żonę
-Odłączyć żona
-Przejdź do rekordu żony
-Wybierz jednostki
-Wybierz lub Dodaj lokalizację
-Usuń łącze do miejsca
-Pokaż mapę
-Wybierz lub Dodaj rekord źródła
-Wybierz rekord docelowy
-Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
-Plik o tej samej nazwie już istnieje w repozytorium
-Nie jest to zgodne z GEDSEC plik
-Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
-Eksport do programu Excel nie powiódł się
-Określony filtr
-Wyświetlanie linii
-Typ porównania
-Wewnętrzne porównanie (Szukaj duplikatów)
-Porównanaj z inną bazą danych
-Analizy (eksperymentalne)
-Porównaj
-Ignoruj daty
-Wykres
-Książki dla rodzin z dziećmi
-Spis treści
-Zapisy osób fizycznych
-Katalogi
-Nie można automatycznie wykryć płci przy użyciu nazwy "{1}". Jest płci męskiej?
-Automatyczne zapisywanie co
-Minut
-Łączna liczba pokoleń
-Ukryj puste segmenty
-Potomkowie koło
-Wybór portretu
-Kalkulator Relacje
-{0} to {1} z {2}
-Dziś urodziny {0}
-Jutro urodziny {0}
-Grupa krwi
-Kolor włosów
-Kolor oczu
-Гаплогруппа mtДНК
-Гаплогруппа Y-ДНК
-Rekord jest zablokowany edytor
-Nazwisko panieńskie
-Zamężna nazwisko
-Dodatkowe nazwy
-Zaawansowane damskie nazwiska
-Format "Nazwisko panieńskie (Nazwisko w małżeństwie)"
-Format "Nazwisko w małżeństwie (Nazwisko panieńskie)"
-Format "Nazwisko panieńskie"
-Format "Nazwisko w małżeństwie"
-M
-Ż
-Geocoder
-Dodaj ojca
-Dodaj matki
-Pokaż portrety domyślnie
-Media-plik jest dodawany z nośnika wymiennego. Kontynuować?
-Ostrzec podczas dodawania plików multimedialnych z nośników wymiennych
-Ładować podczas uruchamiania ostatnio otwartych plików
-Dziś święto "{0}"
-Jutro święto "{0}"
-{1} dni pozostało do święta "{0}"
-Święta
-Użyć wbudowany odtwarzacz multimedialny
-Pozwól bezpośrednie linki do plików multimedialnych
-Kopiowanie pliku
-Działania
-Zaznacz i skopiuj
-№
+﻿;1045,pol,Polski,xt
+001=Plik
+002=Korekta
+003=Rodowód
+004=Usługa
+005=&Окna
+006=Pomoc
+007=Nowy
+008=Оywórz...
+009=Оtwórz ostatni
+010=Zapisz
+011=Zamknij
+012=Właściwości pliku...
+013=Eksport
+014=Książka rodziny PDF...
+015=Zapisz Jako...
+016=Eksport do pliku Excela...
+017=Wyjście
+018=Import
+019=Wyczyścić
+020=Dodaj rekord
+021=Edytuj rekord
+022=Usuń rekord
+023=<?>
+024=Drzewo przodków
+025=Drzewo potomków
+026=Pełne drzewo
+027=schodzące po pokoleniu
+028=schodzący po pokoleniu
+029=Mapy
+030=Statystyka
+031=Wspinając się na rodowód
+032=<?>
+033=<?>
+034=<?>
+035=Organizator
+036=Skrypty...
+037=<?>
+038=Narzędzia...
+039=Filtr
+040=Opcje
+041=& Kaskada
+042=& Sąsiadująco w poziomie
+043=Idealna dachówka pionowe
+044=& Minimalizuj wszystkie
+045=& Ponowne rozmieszczanie wszystkich
+046=Zasoby internetowe...
+047=Warunki pokrewieństwa...
+048=FAQ...
+049=Zawartość
+050=O programie
+051=Rekordy
+052=Filtrowane
+053=Osoby
+054=Rodziny
+055=Notatki
+056=Multimedia
+057=Źródła
+058=Repozytoria
+059=Grupy
+060=Badania
+061=Zadania
+062=Komunikacja
+063=Lokalizacje
+064=nieznany
+065=nieznany
+066=?
+067=Mężczyzna
+068=Kobieta
+069=Nieokreślona
+070=Czy chcesz zapisać zmiany w zmodyfikowany plik?
+071=Określony obiekt nadrzędny ma istniejącą rodzine "{0}". Czy chcesz dodać dziecko do tej rodziny?
+072=Usuwanie pojedynczych "{0}"?
+073=Usunąć z rodziny "{0}"?
+074=Usunąć Uwaga "{0}"?
+075=Usuń Źródło "{0}"?
+076=Usunąć multimedia "{0}"?
+077=Usunąć repozytorium "{0}"?
+078=Usuwanie grupy "{0}"?
+079=Usunąć badania "{0}"?
+080=Usuń zadanie "{0}"?
+081=Usuń komunikat "{0}"?
+082=Usuwanie lokalizacji "{0}"?
+083=Adres
+084=Zdarzenia
+085=Nazwisko
+086=Imię
+087=Nazwisko rodowe
+088=Płeć
+089=Pseudonim
+090=Ostatni prefiks nazwy
+091=Prefiks nazwy
+092=Sufiks nazwy
+093=Patriarcha
+094=Zakładki
+095=Stowarzyszenie
+096=Relacja
+097=Osób
+098=Zatwierdź
+099=Anuluj
+100=Zamknij
+101=Wybierz
+102=Dołączyć
+103=Nowe jednostki
+104=Edytowanie poszczególnych
+105=Sprawdzanie płci
+106=Wybranie rekordu
+107=Cytowania źródeł
+108=Dokumentacja użytkownika
+109=Uwaga:
+110=Źródło
+111=Strona
+112=Pewność
+113=Odwołanie
+114=Typu
+115=Rodziny
+116=Mąż
+117=Żona
+118=Dzieci
+119=?
+120=Odłączyć łącze do męża?
+121=Odłączyć łącze do żony?
+122=Odłączyć łącze do dziecka?
+123=Data urodzenia
+124=Data śmierci
+125=Ograniczenie zabezpieczeń
+126=Tytuł
+127=Członkowie
+128=Edytuj grupę
+129=Odłączyć łącze do elementu członkowskiego?
+130=Widok
+131=Etap
+132=Numer telefonu
+133=Adres e-mail
+134=Witryna sieci Web
+135=Repozytorium
+136=Postęp
+137=Upłynęło czasu
+138=Pozostały czas
+139=Całkowity czas
+140=Data
+141=Tekst
+142=Krótki tytuł
+143=Autor
+144=Opublikowany
+145=Ogólne
+146=Odłączyć łącze do repozytorium?
+147=Typ magazynu
+148=Plik
+149=Widok
+150=Tryb rozszerzenia nie jest włączona dla wybranego sklepu typu
+151=Ojciec
+152=Matka
+153=Rodzice
+154=Małżonkowie
+155=Stowarzyszenia
+156=Odwołania do użytkownika
+157=Gregoriański
+158=Juliański
+159=Hebrajski
+160=Islamski
+161=Perski
+162=Indyjski
+163=Bahai
+164=Francuski
+165=Roman
+166=Nieznane
+167=Krótki opis
+168=Inne
+169=Składanie
+170=Wnioskodawca
+171=Lokalizacja
+172=Szerokość geograficzna
+173=Długość geograficzna
+174=Pokaż
+175=Szukaj coords
+176=Szukaj
+177=Wybierz coords
+178=Wybierz nazwę
+179=Priorytet
+180=Procent
+181=Rozpoczęcie
+182=Zatrzymanie
+183=Cel
+184=Tematu
+185=Muszą być w grze
+186=Grupa
+187=Odłączyć łącze do zadania?
+188=Odłączyć łącze do komunikacji?
+189=Odłączyć łącze do grupy?
+190=Edytuj badanie
+191=Edytuj zadanie
+192=Edytować komunikacji
+193=Błąd
+194=Lua uruchomić nie powiodło się!
+195=Format daty jest nieprawidłowy
+196=Kraj
+197=Państwo
+198=Miasto
+199=Kod pocztowy
+200=Numery telefonów
+201=E-maile
+202=Witryny sieci Web
+203=Wartość
+204=Zdarzenia
+205=Miejsce
+206=Przyczyna
+207=Agencja
+208=Kobieta
+209=Mężczyzna
+210=Pojedynczego rekordu nie jest zaznaczone.
+211=Osoba ta ma nie seks zdefiniowane.
+212=Ta osoba ma nie rodzin.
+213=Szacunkowa liczba przodków {0} jest więcej niż dopuszczalne granice.
+214=Szacunkowa liczba potomków {0} jest więcej niż dopuszczalne granice.
+215=Pokoleń widoczne:
+216=nieograniczony
+217=Małżonka
+218=Data ślubu
+219=Odłączyć łącze do ojca?
+220=Odłączyć łącze do matki?
+221=Odłączyć łącze do małżonka?
+222=Odłączyć łącze do rodziców?
+223=Wszystkie
+224=Przodków tylko
+225=Potomkowie tylko
+226=Śledzenia głównego
+227=Edycja
+228=Dodaj rodzinę
+229=Dodaj małżonka
+230=Dodaj syn
+231=Dodać córką
+232=Usuń
+233=Przebudować drzewo
+234=Odbudować Musarum
+235=Linki
+236=Miejsce zgonu
+237=małżeństwo
+238=Rodzina
+239=Imienniczki
+240=Usuwanie zdarzenia?
+241=Odłączyć łącze, aby pamiętać?
+242=Odłączyć łącze do multimediów?
+243=Odłączyć link do źródła?
+244=Należy usunąć skojarzenie?
+245=Usuń odwołanie do użytkownika?
+246=Nie powiodło się ładowanie gedcom.
+247=Sprawdź format gedcom nie powiodło się.
+248=Narodziny dni
+249=Przed dniem narodzin "{0}" pozostało {1} dni
+250=Interfejs
+251=Drzewa
+252=Rodowody
+253=Kodowanie plików
+254=Adresy
+255=E-mail
+256=Wstęgi
+257=Internet
+258=Użyj serwera proxy
+259=Serwer
+260=Port
+261=Login
+262=Hasło
+263=Hasło nie jest określony.
+264=Pokaż wskazówki przy starcie
+265=Język
+266=Wszystkie listy
+267=Lista osób
+268=Format nazwy w listach
+269=Nazwisko_Nazwa_Nazwisko rodowe
+270=Nazwisko; Nazwa; Nazwisko_rodowe
+271=Nazwisko; Nazwa; Nazwisko rodowe
+272=Format daty w listach
+273=Dołączyć adres w miejsce tekstu
+274=Bez podświetlenia elementów nadrzędnych.
+275=Podświetl niezamężna
+276=Wartości domyślne
+277=Pokaż osoby w drzewie
+278=Oddzielne wiersze
+279=Tylko lata
+280=Pokrewieństwo
+281=Dodatkowe symbole
+282=Drzewa dekoracyjne
+283=Pokaż portrety
+284=Ukryj zmarł w dzieciństwie
+285=Decor
+286=Człowiek
+287=Kobieta
+288=Nieznana płeć
+289=Rozwiedziony
+290=Rozwódka
+291=Czcionki
+292=Rodowód pokolenia
+293=Dołączyć atrybuty osób
+294=Dołączyć notatki
+295=Dołączyć źródła
+296=Rodowód w formacie
+297=Nadmiarowym
+298=Kompaktowym
+299=Przejdź do rekordu
+300=Wrzucić rekord
+301=Przesunąć rekord
+302=Imię i nazwisko
+303=Miejsce urodzenia
+304=Miejsce śmierci
+305=Rezydencja
+306=Wiek
+307=Okres istnienia
+308=Dni przed urodzeniem
+309=Religia
+310=Narodowość
+311=Edukacja
+312=Zawód
+313=Kasta
+314=Mili
+315=Mili ind
+316=Mili dis
+317=Ranga mili
+318=Zmiana
+319=Małżeństwo, zarejestrowany
+320=Małżeństwo nie jest zarejestrowany.
+321=Rozwiedziony
+322=Urodzenia
+323=Przyjęcie
+324=Chrzciny
+325=Miejsce urodzenia
+326=Przejścia na emeryturę
+327=Naturalizacji
+328=Emigracja
+329=Imigracji
+330=Spisu powszechnego
+331=Będzie
+332=Spadkowych woli
+333=Śmierć
+334=Pogrzeb
+335=Kremacja
+336=Fakt
+337=Opis fizyczny
+338=Numer identyfikacyjny krajowego
+339=Numer ubezpieczenia społecznego
+340=Liczba dzieci
+341=Liczba małżeństw
+342=Właściwość
+343=Tytuł
+344=Podróży
+345=Hobby
+346=Nagroda
+347=?
+348=Ojciec
+349=matka
+350=mąż
+351=żona
+352=Syn
+353=Córka
+354=Dziadek
+355=Babcia
+356=wnuk
+357=wnuczka
+358=brat
+359=Siostra
+360=zięć
+361=synowa
+362=teść
+363=teściowa
+364=teść
+365=teściowa
+366=Wujek
+367=Ciotka
+368=bratanek
+369=siostrzenica
+370=kuzyn
+371=kuzyn
+372=<?>
+373=<?>
+374=<?>
+375=<?>
+376=<?>
+377=<?>
+378=<?>
+379=<?>
+380=<?>
+381=Szerokość obrazu jest ponad 65 000 pikseli. Nie można zapisać.
+382=Wstecz
+383=Następny
+384=<?>
+385=Następny
+386=Czy wiesz, że...
+387=Obciążenia i wyszukiwanie miejsc
+388=(nie wybrano)
+389=Próbki
+390=Dla wszystkich ludzi
+391=Miejsca urodzenia
+392=Miejsce śmierci
+393=Miejsca zamieszkania
+394=Tylko wybrane
+395=Zapisz obraz...
+396=Format nie obsługiwany.
+397=Błąd podczas ładowania danych.
+398=Drukuj
+399=Podgląd
+400=Pokolenie
+401=<?>
+402=<?>
+403=Dokładny
+404=Przed
+405=Po
+406=Między
+407=Okres przed
+408=Okres od
+409=Okres między
+410=O programie
+411=Obliczone
+412=Szacowana
+413=Miejsce ślubu
+414=Małżeństwo
+415=Publiczne ogłoszenie małżeństwa
+416=Umowy majątkowej małżeńskiej
+417=Uzyskanie uprawnień do zawarcia małżeństwa
+418=Zawarcie umowy małżeńskiej
+419=Unieważnienie małżeństwa
+420=Zgłoszenia rozwodu
+421=Rozwód
+422=Link do pliku
+423=Zapisywanie do archiwum
+424=Zapisywanie w magazynie
+425=-
+426=Dźwięk
+427=Książka
+428=Karta
+429=Elektroniczne
+430=Dylatacyjne
+431=Film
+432=Magazyn
+433=Rękopis
+434=Mapa
+435=Gazeta
+436=Zdjęcie
+437=Nagrobek
+438=Wideo
+439=-Nieznane-
+440=Brak
+441=Niski
+442=Normalny
+443=Wysoki
+444=Najwyższy
+445=Zdefiniowane przez
+446=W toku
+447=Zawieszone
+448=Problemy
+449=Zakończone
+450=Wycofane
+451=Zadzwoń
+452=Adres e-mail
+453=Faks
+454=Litera
+455=Taśma
+456=Odwiedź
+457=od
+458=do
+459=indywidualne
+460=Rodziny
+461=źródła
+462=inne
+463=Wiarygodne dowody
+464=Wątpliwa wiarygodność dowodów
+465=Poszlaki
+466=Bezpośrednie i podstawowych dowodów
+467=Badania
+468=Zadania
+469=Korespondencja
+470=Korekcja identyfikatory
+471=Sprawdź format
+472=Korekta rekordów tożsamości jest wymagany, kontynuować?
+473=Liczba obiektów w baza danych master: {0}
+474=Synchronizacji.
+475=Szukaj patriarchów
+476=Szukaj linki
+477=Archiwum nie znaleziono, dane nie jest załadowany
+478=Skali
+479=Pliki GEDKeeper GEDCOM (*.ged)|*.ged|GEDKeeper GEDCOM zaszyfrowanych plików (*.geds)|*.geds
+480=Wszystkie pliki (*.*)|*.*
+481=Obrazy (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+482=Skrypty (*.lua)|*.lua
+483=Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki EMF (*.emf)|*.emf|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
+484=Przyczyny śmierci
+485=Rodowód
+486=Parametr
+487=Łącznie
+488=Mężczyźni
+489=Kobiety
+490=Pole filtra
+491=Rok
+492=Pliki PDF (*.pdf)|*.pdf
+493=Pliki RTF (*.rtf)|*.rtf
+494=Pliki HTML (*.html)|*.html
+495=Pliki kopii zapasowej
+496=Tylko poprzedni plik
+497=Odcinając gałęzie
+498=Nie
+499=Na lata
+500=W wybranych osób
+501=-Wszystkie-
+502=-Żaden--
+503=-Wszelkie-
+504=Wzorzec bazy danych
+505=Bazy danych do korespondencji seryjnej
+506=[aktualne bazy danych]
+507=Źródłem jest filtr. Czy chcesz dodać źródło do nowej jednostki?
+508=Przez grupę jest filtr. Czy chcesz dodać grupę do nowej jednostki?
+509=Szukaj duplikatów
+510=Nieprawidłowa wartość
+511=Operacja
+512=Porównywanie bazy danych
+513=Scalanie baz danych
+514=Dzielona baza danych
+515=Scalanie rekordów
+516=Rodowody importu
+517=Sprawdź połączenie rodzin
+518=Sprawdź bazy danych
+519=Szukaj patriarchów
+520=Zarządzanie miejscami
+521=Pasujące...
+522=Sprawdź połączenie rodzin
+523=wszystkie
+524=Tylko żyjące
+525=Tylko martwe
+526=Żyjący przed
+527=Tylkolko mężczyźni
+528=Tylko kobiety
+529=Maska nazwy
+530=Maska zamieszkania
+531=Maska faktów
+532=Patriarchowie tylko
+533=Data jest nieprawidłowa
+534=Ludzie
+535=Lata
+536=Dziesięć lat
+537=Ur.
+538=Zmarł
+539=Życia
+540=Martwe
+541=Średni wiek
+542=Oczekiwana długość życia
+543=Średnia liczba dzieci
+544=Średni wiek urodzenia pierwszego dziecka
+545=Średnia liczba małżeństw
+546=Średni wiek małżeństwa
+547=Liczba przodków
+548=Liczba potomków
+549=Liczba pokoleń potomków
+550=Narodziny lat
+551=Urodzenia lat (lat)
+552=Lat śmierć
+553=Lat śmierć (lat)
+554=Rozkład liczby dzieci
+555=Wiek urodzenia pierwszego dziecka
+556=Wiek w małżeństwie
+557=Różnica wieku małżonków
+558=Wybierz wszystkie linki
+559=Wybierz rodzinę
+560=Wybierz przodków
+561=Wybierz elementy podrzędne
+562=Korespondencji seryjnej
+563=Szukaj
+564=Pomiń
+565=Rekordy
+566=Szukaj osób
+567=Bezpośrednie, dopasowywania
+568=Niewyraźne pasujące
+569=Tylko z nazwy / drugie imię (tylko kobiety)
+570=Sprawdź rok urodzenia
+571=Dokładność opisu, %
+572=Lat niedokładności
+573=Naprawy
+574=Pokolenia potomków, nie mniej niż
+575=Zestaw znak
+576=Rejestracja w liście lokalizacji
+577=Podobne nazwiska:
+578=Podobne nazwy:
+579=Wybrane osobiste rekordy usunięte 
+580=Rekord
+581=Problem
+582=Rozwiązania
+583=Być może zmarł (wiek {0})
+584=Seks jest niezdefiniowana
+585=Rok urodzenia więcej niż w roku śmierci
+586=Pierwsze małżeństwo w wieku lat {0}?
+587=Pierwsze dziecko urodziło się w wieku lat {0}?
+588=Potomkowie
+589=Pokoleń
+590=Liczba linków
+591=Przetwarzania miejsc
+592=Miejsce jest już na liście lokalizacji
+593=Markerów DNA
+594=Średni wiek rodziców w tym czasie pierworodnego pojawił się względem wieku rodziców
+595=Średni wiek rodziców w tym czasie pierworodnego pojawił się w stosunku do wieku dzieci
+596=Pusty rekord dla rodzin z dziećmi
+597=Tworzenie kopii zapasowych każdej wersji pliku
+598=Ładowanie
+599=Plik zapisywanie błędów "{0}" {1}.
+600=Kolor tła...
+601=Zdjęcia w tle...
+602=Osób w drzewo: {0}
+603=Zobacz dzienniku błędów
+604=Przodkowie koło
+605=Koło
+606=Kolor tekstu
+607=Kolor tła
+608=Kolor linii
+609=Brak
+610=Zablokowane
+611=Poufne
+612=Prywatne
+613=Wysyłanie dziennika błędów
+614=Wykresy
+615=Rozmiar okna
+616=Powiększyć
+617=Pomniejsz
+618=Ustalenia faktu śmierci
+619=Określić płeć
+620=Wtyczki
+621=Auto śledzenia relacji
+622=Nie znaleziono odpowiedników
+623=Znajdź poprzedni
+624=Znajdź następny
+625=Indeks pewności
+626=Monthes urodzenia
+627=Miesiąc
+628=Reset
+629=Pole
+630=Warunek
+631=Źródło nie jest określone.
+632=Pokaz slajdów
+633=Poprzedni rekord
+634=Następny rekord
+635=Tworzenie nie powiodła się
+636=Początek
+637=Przystanek
+638=Dane demograficzne
+639=Nazwy
+640=Nazwa pseudonim
+641=Imię i nazwisko
+642=Imigracji
+643=Nazwisko panieńskie
+644=Nazwa małżeństwa
+645=Usuwanie nazwy?
+646=Nie można usunąć jedną nazwą
+647=Cytat
+648=Umieścić zakładkę na scalone rekordy
+649=Pokaż kalendarz w pobliżu daty
+650=Zduplikowany rekord
+651=Uwaga: w przypadku zduplikowania indywidualnego, więzi rodzinne i stowarzyszenia nie są kopiowane
+652=Pokaż typ daty
+653=Utwórz nowy plik
+654=Otwórz plik 
+655=Zapisz plik
+656=Dodaj rekord (Ctrl + I)
+657=Edytowanie rekordu (Ctrl + Enter)
+658=Usuń rekord (Ctrl + L)
+659=Filtrowanie listy rekordów
+660=Pokaż drzewo przodków
+661=Pokaż drzewo potomków
+662=Pokaż pełne drzewo
+663=Rodowód
+664=Rodowód przez d'Aboville
+665=Rodowód przez Konowałow
+666=Statystyczna analiza danych
+667=Zapisz obraz
+668=Tryby wyświetlania
+669=Utworzyć nowy skrypt
+670=Otwórz skrypt
+671=Zapisz skrypt
+672=Wykonać skryptu
+673=Dołączyć portret
+674=Odłączyć portret
+675=Dołącz do rodziny rodziców
+676=Edycję rodziny rodziców
+677=Odłączyć rodziców dla rodzin z dziećmi
+678=Wybierz lub Dodaj ojca
+679=Odłączyć ojca
+680=Przejdź do rekordu ojca
+681=Wybierz lub Dodaj matki
+682=Odłączyć matki
+683=Przejdź do rekordu matki
+684=Kopiuj nazwę do schowka
+685=Wybierz lub Dodaj męża
+686=Odłączyć męża
+687=Przejdź do rekordu męża
+688=Wybierz lub Dodaj żonę
+689=Odłączyć żona
+690=Przejdź do rekordu żony
+691=Wybierz jednostki
+692=Wybierz lub Dodaj lokalizację
+693=Usuń łącze do miejsca
+694=Pokaż mapę
+695=Wybierz lub Dodaj rekord źródła
+696=Wybierz rekord docelowy
+697=Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
+698=Plik o tej samej nazwie już istnieje w repozytorium
+699=Nie jest to zgodne z GEDSEC plik
+700=Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
+701=Eksport do programu Excel nie powiódł się
+702=Określony filtr
+703=Wyświetlanie linii
+704=Typ porównania
+705=Wewnętrzne porównanie (Szukaj duplikatów)
+706=Porównanaj z inną bazą danych
+707=Analizy (eksperymentalne)
+708=Porównaj
+709=Ignoruj daty
+710=Wykres
+711=Książki dla rodzin z dziećmi
+712=Spis treści
+713=Zapisy osób fizycznych
+714=Katalogi
+715=Nie można automatycznie wykryć płci przy użyciu nazwy "{1}". Jest płci męskiej?
+716=Automatyczne zapisywanie co
+717=Minut
+718=Łączna liczba pokoleń
+719=Ukryj puste segmenty
+720=Potomkowie koło
+721=Wybór portretu
+722=Kalkulator Relacje
+723={0} to {1} z {2}
+724=Dziś urodziny {0}
+725=Jutro urodziny {0}
+726=Grupa krwi
+727=Kolor włosów
+728=Kolor oczu
+729=Гаплогруппа mtДНК
+730=Гаплогруппа Y-ДНК
+731=Rekord jest zablokowany edytor
+732=Nazwisko panieńskie
+733=Zamężna nazwisko
+734=Dodatkowe nazwy
+735=Zaawansowane damskie nazwiska
+736=Format "Nazwisko panieńskie (Nazwisko w małżeństwie)"
+737=Format "Nazwisko w małżeństwie (Nazwisko panieńskie)"
+738=Format "Nazwisko panieńskie"
+739=Format "Nazwisko w małżeństwie"
+740=M
+741=Ż
+742=Geocoder
+743=Dodaj ojca
+744=Dodaj matki
+745=Pokaż portrety domyślnie
+746=Media-plik jest dodawany z nośnika wymiennego. Kontynuować?
+747=Ostrzec podczas dodawania plików multimedialnych z nośników wymiennych
+748=Ładować podczas uruchamiania ostatnio otwartych plików
+749=Dziś święto "{0}"
+750=Jutro święto "{0}"
+751={1} dni pozostało do święta "{0}"
+752=Święta
+753=Użyć wbudowany odtwarzacz multimedialny
+754=Pozwól bezpośrednie linki do plików multimedialnych
+755=Kopiowanie pliku
+756=Działania
+757=Zaznacz i skopiuj
+758=№
