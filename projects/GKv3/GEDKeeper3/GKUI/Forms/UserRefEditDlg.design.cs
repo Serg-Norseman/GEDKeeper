@@ -35,7 +35,7 @@ namespace GKUI.Forms
             lblReference.Text = "lblReference";
 
             cmbRef = new ComboBox();
-            cmbRef.Width = 200;
+            cmbRef.Width = 300;
 
             lblRefType = new Label();
             lblRefType.Text = "lblRefType";
@@ -58,6 +58,7 @@ namespace GKUI.Forms
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
+                        ScaleHeight = true,
                         Cells = { panelData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)

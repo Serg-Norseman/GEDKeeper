@@ -318,9 +318,13 @@ namespace GKCore.Charts
                         for (int i = 0; i < num; i++)
                         {
                             string rs = fRec.UserReferences[i].StringValue;
+
                             for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
                             {
-                                if (rs == GKData.SpecialUserRefs[(int)cps]) signs.Include(cps);
+                                string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
+                                if (rs == sur) {
+                                    signs.Include(cps);
+                                }
                             }
                         }
 

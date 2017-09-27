@@ -146,6 +146,16 @@ namespace GKCore
             }
         }
 
+        public sealed class SpecialUserRef
+        {
+            public LSID Title;
+            public string ResName;
+
+            public SpecialUserRef(LSID title, string resName) {
+                Title = title;
+                ResName = resName;
+            }
+        }
 
         public static readonly LSID[] Restrictions;
         public static readonly LSID[] RecordTypes;
@@ -163,7 +173,7 @@ namespace GKCore
         public static readonly LSID[] CommunicationDirs;
         public static readonly LSID[] GoalNames;
         public static readonly LSID[] CertaintyAssessments;
-        public static readonly string[] SpecialUserRefs;
+        public static readonly SpecialUserRef[] SpecialUserRefs;
         public static readonly LSID[] RelationKinds;
         public static readonly string[] RelationSigns;
         public static readonly string[] Numerals;
@@ -293,30 +303,19 @@ namespace GKCore
                 LSID.LSID_RK_Unk
             };
 
-            // TODO: need to find a way of localization
-            SpecialUserRefs = new string[]
-            {
-                "",
-                "РИ:Георгиевский кавалер",
-                "СССР:ВОВ:Участник боевых действий",
-                "СССР:ВОВ:Погиб в бою",
-                "СССР:ВОВ:Труженик тыла",
-                "СССР:Репрессирован",
-                "Вероисповедание:Ислам",
-                "Вероисповедание:Католицизм",
-                "Вероисповедание:Православие",
-                "Вероисповедание:Старообрядчество"
-            };
 
-            // /* 723 */ LSID_RI_GeorgeKnight,
-            // /* 724 */ LSID_USSR_WWII_Combatant,
-            // /* 725 */ LSID_USSR_WWII_KilledInBattle,
-            // /* 726 */ LSID_USSR_WWII_HomeFrontWorker,
-            // /* 727 */ LSID_USSR_Repressed,
-            // /* 728 */ LSID_Religion_Islam,
-            // /* 729 */ LSID_Religion_Catholicism,
-            // /* 730 */ LSID_Religion_Orthodoxy,
-            // /* 731 */ LSID_Religion_TheOldBelievers,
+            SpecialUserRefs = new SpecialUserRef[]
+            {
+                new SpecialUserRef(LSID.LSID_RI_GeorgeKnight, ""),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_Combatant, ""),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_KilledInBattle, ""),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_WorkerInRear, ""),
+                new SpecialUserRef(LSID.LSID_USSR_Repressed, ""),
+                new SpecialUserRef(LSID.LSID_Religion_Islam, ""),
+                new SpecialUserRef(LSID.LSID_Religion_Catholicism, ""),
+                new SpecialUserRef(LSID.LSID_Religion_Orthodoxy, ""),
+                new SpecialUserRef(LSID.LSID_Religion_TheOldBelievers, "")
+            };
 
 
             CertaintyAssessments = new LSID[]

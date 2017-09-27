@@ -22,8 +22,8 @@ namespace GKCore.Types
 {
     public enum SpecialUserRef
     {
-        urCustom,
         urRI_StGeorgeCross,
+
         urUSSR_Soldier,
         urUSSR_FallInBattle,
         urUSSR_RearVeteran,

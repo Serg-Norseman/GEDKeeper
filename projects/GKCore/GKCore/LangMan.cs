@@ -857,7 +857,7 @@ namespace GKCore
         /* 799 */
         /* 800 */ // reserved end
 
-        /* 801 */ LSID_RI_GeorgeKnight,
+        /* 801 */ LSID_RI_GeorgeKnight = 801,
         /* 802 */ LSID_USSR_WWII_Combatant,
         /* 803 */ LSID_USSR_WWII_KilledInBattle,
         /* 804 */ LSID_USSR_WWII_WorkerInRear,

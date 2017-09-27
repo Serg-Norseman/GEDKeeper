@@ -71,9 +71,11 @@ namespace GKUI.Dialogs
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
+            cmbRef.Items.Add("");
+            for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++)
             {
-                cmbRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
+                string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
+                cmbRef.Items.Add(sur);
             }
 
             // SetLang()

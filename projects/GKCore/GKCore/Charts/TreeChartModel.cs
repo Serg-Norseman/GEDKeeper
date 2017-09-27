@@ -1280,7 +1280,7 @@ namespace GKCore.Charts
                     for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                         if (!person.Signs.Contains(cps)) continue;
 
-                        IImage pic = fSignsPic[(int)cps - 1];
+                        IImage pic = fSignsPic[(int)cps];
                         fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height);
                         i++;
                     }
