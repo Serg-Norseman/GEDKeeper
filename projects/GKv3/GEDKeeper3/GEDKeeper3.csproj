@@ -143,9 +143,6 @@
       <DependentUpon>OrganizerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.cs" />
-    <Compile Include="GKUI\Forms\PatriarchsViewerWin.design.cs">
-      <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Forms\PersonalNameEditDlg.cs" />
     <Compile Include="GKUI\Forms\PersonalNameEditDlg.design.cs">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>

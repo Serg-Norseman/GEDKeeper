@@ -165,29 +165,10 @@ namespace GKUI.Forms
             btnMatch.Text = LangMan.LS(LSID.LSID_Match);
             chkWithoutDates.Text = LangMan.LS(LSID.LSID_WithoutDates);
             btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
-        }
 
-        private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try {
-                if (tabsTools.SelectedPage == pageFamilyGroups)
-                {
-                    CheckGroups();
-                }
-                else if (tabsTools.SelectedPage == pageTreeCheck)
-                {
-                    CheckBase();
-                }
-                else if (tabsTools.SelectedPage == pagePlaceManage)
-                {
-                    CheckPlaces();
-                }
-
-                tabsTools.Invalidate();
-                Application.Instance.RunIteration();
-            } catch (Exception ex) {
-                Logger.LogWrite("TreeToolsWin.tabsTools_SelectedIndexChanged(): " + ex.Message);
-            }
+            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnCheckBase.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analysis);
         }
 
         #region TreeMerge
@@ -205,11 +186,6 @@ namespace GKUI.Forms
         #endregion
 
         #region Duplicates Search
-
-        private void SheetMergeResize(object sender, EventArgs e)
-        {
-            //MergeCtl.Height = SheetMerge.Height - btnSearch.Top - 20;
-        }
 
         private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
         {
@@ -318,20 +294,26 @@ namespace GKUI.Forms
 
         #region CheckGroups
 
+        private void btnAnalyseGroups_Click(object sender, EventArgs e)
+        {
+            CheckGroups();
+        }
+
         private void CheckGroups()
         {
             IProgressController progress = AppHost.Progress;
 
             gkLogChart1.Clear();
+            tvGroups.DataStore = null;
+
             progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
             {
-                int groupNum = 0;
+                var rootItem = new TreeItem();
 
-                var tvStore = new TreeItem();
-                tvGroups.DataStore = null;
+                int groupNum = 0;
 
                 int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
@@ -350,9 +332,9 @@ namespace GKUI.Forms
 
                             int cnt = groupRecords.Count;
 
-                            TreeItem root = new TreeItem();
-                            root.Text = groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")";
-                            tvStore.Children.Add(root);
+                            TreeItem groupItem = new TreeItem();
+                            groupItem.Text = groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")";
+                            rootItem.Children.Add(groupItem);
 
                             for (int j = 0; j < cnt; j++)
                             {
@@ -365,21 +347,19 @@ namespace GKUI.Forms
                                     pn = "(*) " + pn;
                                 }
 
-                                root.Children.Add(new GKTreeNode(pn, iRec));
+                                groupItem.Children.Add(new GKTreeNode(pn, iRec));
                             }
-                            root.Expanded = true;
+                            groupItem.Expanded = true;
 
                             gkLogChart1.AddFragment(cnt);
                         }
                     }
 
                     progress.ProgressStep();
-                    Application.Instance.RunIteration();
                 }
 
-                tvGroups.DataStore = tvStore;
+                tvGroups.DataStore = rootItem;
                 tvGroups.RefreshData();
-                gkLogChart1.Invalidate();
             }
             finally
             {
@@ -420,7 +400,12 @@ namespace GKUI.Forms
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
-            Panel1.Content = ListChecks;
+            panProblemsContainer.Content = ListChecks;
+        }
+
+        private void btnCheckBase_Click(object sender, EventArgs e)
+        {
+            CheckBase();
         }
 
         private void CheckBase()
@@ -483,7 +468,12 @@ namespace GKUI.Forms
             ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
-            Panel4.Content = ListPlaces;
+            panPlacesContainer.Content = ListPlaces;
+        }
+
+        private void btnAnalysePlaces_Click(object sender, EventArgs e)
+        {
+            CheckPlaces();
         }
 
         private void CheckPlaces()
@@ -667,7 +657,7 @@ namespace GKUI.Forms
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
-            Panel3.Content = ListPatriarchs;
+            panPatriarchsContainer.Content = ListPatriarchs;
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)

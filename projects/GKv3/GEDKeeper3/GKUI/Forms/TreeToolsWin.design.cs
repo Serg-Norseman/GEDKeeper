@@ -40,8 +40,9 @@ namespace GKUI.Forms
         private TabPage pageFamilyGroups;
         private TreeView tvGroups;
         private TabPage pageTreeCheck;
+        private Button btnCheckBase;
         private Button btnBaseRepair;
-        private Panel Panel1;
+        private Panel panProblemsContainer;
         private Label lblMasterBase;
         private TextBox edMasterBase;
         private Label lblOtherBase;
@@ -50,12 +51,13 @@ namespace GKUI.Forms
         private GKUI.Components.TextBoxEx mSyncRes;
         private TabPage pagePatSearch;
         private Button btnPatSearch;
-        private Panel Panel3;
+        private Panel panPatriarchsContainer;
         private Label lblMinGenerations;
         private NumericUpDown edMinGens;
         private TabPage pagePlaceManage;
-        private Panel Panel4;
+        private Panel panPlacesContainer;
         private Button btnSetPatriarch;
+        private Button btnAnalysePlaces;
         private Button btnIntoList;
         private RadioButton radPersons;
         private RadioButton radNotes;
@@ -64,6 +66,7 @@ namespace GKUI.Forms
         private CheckBox chkBookmarkMerged;
         private GroupBox grpMergeOther;
         private GKUI.Components.LogChart gkLogChart1;
+        private Button btnAnalyseGroups;
         private GKUI.Components.GKMergeControl MergeCtl;
         private Button btnPatriarchsDiagram;
         private CheckBox chkIndistinctMatching;
@@ -245,7 +248,6 @@ namespace GKUI.Forms
             MergeCtl.Base = null;
             MergeCtl.Bookmark = false;
             MergeCtl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
-            //MergeCtl.Size = new Size(957, 402);
 
             btnAutoSearch = new Button();
             btnAutoSearch.Size = new Size(130, 26);
@@ -259,7 +261,6 @@ namespace GKUI.Forms
 
             ProgressBar1 = new ProgressBar();
             ProgressBar1.Size = new Size(700, 26);
-            //ProgressBar1.Step = 1;
 
             pageMerge = new TabPage();
             pageMerge.Text = "pageMerge";
@@ -293,7 +294,6 @@ namespace GKUI.Forms
             radSources.Click += radMergeMode_Click;
 
             rgMode = new GroupBox();
-            //rgMode.Size = new Size(315, 118);
             rgMode.Text = "rgMode";
             rgMode.Content = new VDefStackLayout {
                 Items = { radPersons, radFamilies, radNotes, radSources }
@@ -324,7 +324,6 @@ namespace GKUI.Forms
             chkBirthYear.Text = "chkBirthYear";
 
             grpSearchPersons = new GroupBox();
-            //grpSearchPersons.Size = new Size(315, 193);
             grpSearchPersons.Text = "grpSearchPersons";
             grpSearchPersons.Content = new DefTableLayout {
                 Rows = {
@@ -339,8 +338,7 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { lblYearInaccuracy, edYearInaccuracy }
-                    },
-                    null
+                    }
                 }
             };
 
@@ -350,7 +348,6 @@ namespace GKUI.Forms
             chkBookmarkMerged.CheckedChanged += chkBookmarkMerged_CheckedChanged;
 
             grpMergeOther = new GroupBox();
-            //grpMergeOther.Size = new Size(331, 118);
             grpMergeOther.Text = "grpMergeOther";
             grpMergeOther.Content = chkBookmarkMerged;
 
@@ -359,7 +356,6 @@ namespace GKUI.Forms
             pageMergeOptions.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        ScaleHeight = true,
                         Cells = { rgMode, grpSearchPersons }
                     },
                     new TableRow {
@@ -387,6 +383,11 @@ namespace GKUI.Forms
             tvGroups.LabelEdit = false;
             tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
 
+            btnAnalyseGroups = new Button();
+            btnAnalyseGroups.Size = new Size(130, 26);
+            btnAnalyseGroups.Text = "btnSkip";
+            btnAnalyseGroups.Click += btnAnalyseGroups_Click;
+
             pageFamilyGroups = new TabPage();
             pageFamilyGroups.Text = "pageFamilyGroups";
             pageFamilyGroups.Content = new DefTableLayout {
@@ -397,19 +398,24 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         ScaleHeight = false,
-                        Cells = { gkLogChart1 }
+                        Cells = { TableLayout.Horizontal(10, btnAnalyseGroups, new TableCell(gkLogChart1, true)) }
                     }
                 }
             };
 
             //
 
+            btnCheckBase = new Button();
+            btnCheckBase.Size = new Size(130, 26);
+            btnCheckBase.Text = "btnSkip";
+            btnCheckBase.Click += btnCheckBase_Click;
+
             btnBaseRepair = new Button();
             btnBaseRepair.Size = new Size(130, 26);
             btnBaseRepair.Text = "btnBaseRepair";
             btnBaseRepair.Click += btnBaseRepair_Click;
 
-            Panel1 = new Panel();
+            panProblemsContainer = new Panel();
 
             pageTreeCheck = new TabPage();
             pageTreeCheck.Text = "pageTreeCheck";
@@ -417,9 +423,9 @@ namespace GKUI.Forms
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { Panel1 }
+                        Cells = { panProblemsContainer }
                     },
-                    UIHelper.MakeDialogFooter(null, btnBaseRepair)
+                    UIHelper.MakeDialogFooter(btnCheckBase, null, btnBaseRepair)
                 }
             };
 
@@ -441,7 +447,7 @@ namespace GKUI.Forms
             btnPatSearch.Text = "btnPatSearch";
             btnPatSearch.Click += btnPatSearch_Click;
 
-            Panel3 = new Panel();
+            panPatriarchsContainer = new Panel();
 
             edMinGens = new NumericUpDown();
             edMinGens.Value = 2;
@@ -457,7 +463,7 @@ namespace GKUI.Forms
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { Panel3 }
+                        Cells = { panPatriarchsContainer }
                     },
                     UIHelper.MakeDialogFooter(lblMinGenerations, edMinGens, chkWithoutDates, null, btnSetPatriarch, btnPatSearch, btnPatriarchsDiagram)
                 }
@@ -465,8 +471,12 @@ namespace GKUI.Forms
 
             //
 
-            Panel4 = new Panel();
-            //Panel4.Size = new Size(998, 448);
+            panPlacesContainer = new Panel();
+
+            btnAnalysePlaces = new Button();
+            btnAnalysePlaces.Size = new Size(130, 26);
+            btnAnalysePlaces.Text = "btnSkip";
+            btnAnalysePlaces.Click += btnAnalysePlaces_Click;
 
             btnIntoList = new Button();
             btnIntoList.Size = new Size(160, 26);
@@ -479,9 +489,9 @@ namespace GKUI.Forms
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { Panel4 }
+                        Cells = { panPlacesContainer }
                     },
-                    UIHelper.MakeDialogFooter(null, btnIntoList)
+                    UIHelper.MakeDialogFooter(btnAnalysePlaces, null, btnIntoList)
                 }
             };
 
@@ -497,7 +507,6 @@ namespace GKUI.Forms
             tabsTools.Pages.Add(pagePatSearch);
             tabsTools.Pages.Add(pagePlaceManage);
             tabsTools.SelectedIndex = 0;
-            tabsTools.SelectedIndexChanged += tabsTools_SelectedIndexChanged;
 
             btnClose = new Button();
             btnClose.ImagePosition = ButtonImagePosition.Left;

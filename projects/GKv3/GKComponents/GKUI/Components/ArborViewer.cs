@@ -39,9 +39,35 @@ namespace GKUI.Components
 
     public sealed class ArborSystemEx : ArborSystem
     {
+        private UITimer fTimer;
+
         public ArborSystemEx(double repulsion, double stiffness, double friction, IArborRenderer renderer)
             : base(repulsion, stiffness, friction, renderer)
         {
+            this.fTimer = null;
+        }
+
+        private void TimerElapsed(object sender, EventArgs e)
+        {
+            TickTimer();
+        }
+
+        protected override void StartTimer()
+        {
+            fTimer = new UITimer();
+            fTimer.Interval = ParamTimeout / 1000;
+            fTimer.Elapsed += TimerElapsed;
+            fTimer.Start();
+        }
+
+        protected override void StopTimer()
+        {
+            if (fTimer != null)
+            {
+                fTimer.Stop();
+                fTimer.Dispose();
+                fTimer = null;
+            }
         }
 
         protected override ArborNode CreateNode(string sign)
