@@ -57,18 +57,21 @@ namespace GKUI.Forms
             txtSearchPattern.TextChanged += SearchPattern_TextChanged;
 
             btnPrev = new Button();
-            btnPrev.Size = new Size(24, 24);
+            btnPrev.Size = new Size(26, 26);
             btnPrev.Click += FindPrev_Click;
             btnPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
 
             btnNext = new Button();
-            btnNext.Size = new Size(24, 24);
+            btnNext.Size = new Size(26, 26);
             btnNext.Click += FindNext_Click;
             btnNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
 
             Content = TableLayout.Horizontal(10, new TableCell(txtSearchPattern, true), btnPrev, btnNext);
 
             KeyDown += SearchPanel_KeyDown;
+            Maximizable = false;
+            Minimizable = false;
+            Resizable = false;
             ShowInTaskbar = false;
             Topmost = true;
 

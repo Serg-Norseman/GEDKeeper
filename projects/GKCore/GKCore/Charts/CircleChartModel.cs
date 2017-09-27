@@ -687,6 +687,12 @@ namespace GKCore.Charts
                 int size = Math.Max(1, segment.TotalSubSegments);
                 float wedgeAngle = stepAngle * size;
 
+                // in Eto.Drawings 360 degrees for the segments
+                // leads to a crash of drawing
+                if (wedgeAngle == 360.0f) {
+                    wedgeAngle -= 0.1f;
+                }
+
                 segment.StartAngle = startAngle;
                 segment.WedgeAngle = wedgeAngle;
                 segment.Rad = inRad + 50;

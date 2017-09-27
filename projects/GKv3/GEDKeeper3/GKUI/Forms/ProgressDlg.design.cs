@@ -77,6 +77,7 @@ namespace GKUI.Forms
 
             Maximizable = false;
             Minimizable = false;
+            Resizable = false;
             ShowInTaskbar = false;
             Title = "ProgressDlg";
             Topmost = true;
