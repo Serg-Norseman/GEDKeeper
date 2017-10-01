@@ -75,6 +75,7 @@ namespace GKUI.Forms
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
+                        ScaleHeight = true,
                         Cells = { panelData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)

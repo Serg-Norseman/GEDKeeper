@@ -311,19 +311,17 @@ namespace GKUI.Components
 
         public static Font GetDefaultFont(float size = 9.0f, FontStyle style = FontStyle.None)
         {
-            #if __MonoCS__
-            return new Font(GKData.DEF_FONT, size);//9.0f);
-            #else
-            return new Font(GKData.DEF_FONT, size);//8.25f);
-            #endif
+            string fontName = AppHost.Instance.GetDefaultFontName();
+            return new Font(fontName, size);
         }
+
+        private const bool USE_CLIENT_SIZE_PRESET = true;
 
         public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
         {
-            //if (window.Platform.IsWinForms) {
-            window.ClientSize = new Size(width, height);
-            //} else {
-            //}
+            if (USE_CLIENT_SIZE_PRESET) {
+                window.ClientSize = new Size(width, height);
+            }
 
             if (fontPreset) {
                 UIHelper.SetControlFont(window, GetDefaultFont());
@@ -358,10 +356,10 @@ namespace GKUI.Components
         }
 
         // FIXME: replace to TableLayout.Horizontal(), same
-        public static TableRow MakeDialogFooter(params TableCell[] buttons)
+        public static TableRow MakeDialogFooter(params TableCell[] cells)
         {
             var row = new TableRow();
-            foreach (var btn in buttons) row.Cells.Add(btn);
+            foreach (var cell in cells) row.Cells.Add(cell);
 
             return new TableRow {
                 ScaleHeight = false,

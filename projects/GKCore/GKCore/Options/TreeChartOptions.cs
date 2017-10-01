@@ -85,7 +85,7 @@ namespace GKCore.Options
             UnHusbandColor = ChartRenderer.GetColor(-2631681);
             UnWifeColor = ChartRenderer.GetColor(-10281);
 
-            DefFontName = "Verdana";
+            DefFontName = AppHost.Instance.GetDefaultFontName();
             DefFontSize = 8;
             DefFontColor = ChartRenderer.GetColor(ChartRenderer.Black);
             //DefFontStyle = FontStyle.Regular;
@@ -153,7 +153,7 @@ namespace GKCore.Options
             UnHusbandColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnHusbandColor", -2631681));
             UnWifeColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnWifeColor", -10281));
 
-            DefFontName = iniFile.ReadString("Chart", "FontName", "Verdana");
+            DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.Instance.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
             DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", ChartRenderer.Black));
             //DefFontStyle = (FontStyle)((uint)iniFile.ReadInteger("Chart", "FontStyle", 0));

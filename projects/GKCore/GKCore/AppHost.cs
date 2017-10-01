@@ -653,6 +653,8 @@ namespace GKCore
             UpdateMRU();
         }
 
+        public abstract string GetDefaultFontName();
+
         #region Geocoding
 
         public IGeocoder CreateGeocoder()

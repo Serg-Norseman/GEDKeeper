@@ -44,7 +44,8 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { lblPerson, TableLayout.Horizontal(10, new TableCell(txtPerson, true), btnPersonAdd) }
-                    }
+                    },
+                    null
                 }
             };
 
@@ -65,6 +66,7 @@ namespace GKUI.Forms
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
+                        ScaleHeight = true,
                         Cells = { panelData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)

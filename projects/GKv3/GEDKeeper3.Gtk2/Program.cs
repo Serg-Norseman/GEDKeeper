@@ -26,14 +26,14 @@ namespace GEDKeeper3.Gtk2
         [STAThread]
         public static void Main(string[] args)
         {
-            Logger.LogInit(EtoFormsAppHost.GetLogFilename());
             EtoFormsAppHost.ConfigureBootstrap(false);
+            Logger.LogInit(EtoFormsAppHost.GetLogFilename());
+
+            var application = new Application(Platforms.Gtk2);
 
             AppHost.InitSettings();
             try
             {
-                var application = new Application(Platforms.Gtk2);
-
                 var appHost = (EtoFormsAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 

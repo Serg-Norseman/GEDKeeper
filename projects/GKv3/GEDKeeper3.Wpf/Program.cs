@@ -44,11 +44,11 @@ namespace GEDKeeper3.Wpf
             Logger.LogInit(EtoFormsAppHost.GetLogFilename());
             LogSysInfo();
 
+            var application = new Application(Platforms.Wpf);
+
             AppHost.InitSettings();
             try
             {
-                var application = new Application(Platforms.Wpf);
-
                 var appHost = (EtoFormsAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
