@@ -63,7 +63,8 @@ namespace GKUI.Forms
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
-                        Cells = { lblSource, TableLayout.Horizontal(10, new TableCell(cmbSource, true), btnSourceAdd) }
+                        //Cells = { lblSource, TableLayout.Horizontal(10, new TableCell(cmbSource, true), btnSourceAdd) }
+                        Cells = { lblSource, UIHelper.CreateRCS(new StackLayoutItem(cmbSource, true), btnSourceAdd) }
                     },
                     new TableRow {
                         Cells = { lblPage, TableLayout.Horizontal(10, txtPage, lblCertainty, txtCertainty) }

@@ -234,8 +234,19 @@ namespace GKUI
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
                 InputLanguage.CurrentInputLanguage = currentLang;
             } catch (Exception ex) {
-                Logger.LogWrite("Utilities.SetKeyLayout(): " + ex.Message);
+                Logger.LogWrite("WinFormsAppHost.SetKeyLayout(): " + ex.Message);
             }
+        }
+
+        public override string GetDefaultFontName()
+        {
+            string fontName;
+            #if __MonoCS__
+            fontName = "Noto Sans";
+            #else
+            fontName = "Verdana"; // "Tahoma";
+            #endif
+            return fontName;
         }
 
         #endregion

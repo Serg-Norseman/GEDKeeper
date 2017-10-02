@@ -43,7 +43,8 @@ namespace GKUI.Forms
                         Cells = { lblRelation, cmbRelation }
                     },
                     new TableRow {
-                        Cells = { lblPerson, TableLayout.Horizontal(10, new TableCell(txtPerson, true), btnPersonAdd) }
+                        //Cells = { lblPerson, TableLayout.Horizontal(10, new TableCell(txtPerson, true), btnPersonAdd) }
+                        Cells = { lblPerson, UIHelper.CreateRCS(new StackLayoutItem(txtPerson, true), btnPersonAdd) }
                     },
                     null
                 }

@@ -5,6 +5,8 @@ using Eto.Forms;
 using GKCommon;
 using GKCore;
 using GKUI;
+using Eto.Wpf.Forms.ToolBar;
+using Eto.Wpf.Forms.Controls;
 
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]
@@ -40,6 +42,9 @@ namespace GEDKeeper3.Wpf
         [STAThread]
         public static void Main(string[] args)
         {
+            //Style.Add<ButtonToolItemHandler>("icons", h => h.Widget.Image.);
+            //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
+
             EtoFormsAppHost.ConfigureBootstrap(false);
             Logger.LogInit(EtoFormsAppHost.GetLogFilename());
             LogSysInfo();

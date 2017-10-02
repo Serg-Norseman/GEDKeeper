@@ -375,21 +375,24 @@ namespace GKUI.Components
             };
         }
 
-        public static TableLayout CreateHSingleTable(params TableCell[] cells)
+        public static StackLayout CreateRCS(params StackLayoutItem[] items)
         {
-            return CreateHSingleTable(10, 10, cells);
+            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
         }
 
-        public static TableLayout CreateHSingleTable(int padding, int spacing, params TableCell[] cells)
+        public static StackLayout CreateStackLayout(Orientation orientation,
+                                                    int padding, int spacing,
+                                                    params StackLayoutItem[] items)
         {
-            var result = new DefTableLayout() {
-                Padding = new Padding(padding),
-                Spacing = new Size(spacing, spacing),
-                Rows = {
-                    new TableRow(cells)
-                }
-            };
-            return result;
+            var res = new DefStackLayout();
+            res.Orientation = orientation;
+            res.Padding = new Padding(padding);
+            res.Spacing = spacing;
+            foreach (var itm in items) {
+                //itm.VerticalAlignment = VerticalAlignment.Center;
+                res.Items.Add(itm);
+            }
+            return res;
         }
 
         public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
