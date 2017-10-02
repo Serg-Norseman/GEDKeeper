@@ -23,6 +23,7 @@ using GKCommon;
 
 namespace GKCore
 {
+    // FIXME: remove stack, refactor this!
     /// <summary>
     /// 
     /// </summary>

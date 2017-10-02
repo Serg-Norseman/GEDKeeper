@@ -52,44 +52,56 @@ namespace Externals
         /// <summary>
         /// This reader will read all of the CSV data
         /// </summary>
-        private readonly BinaryReader reader;
+        private readonly BinaryReader fReader;
 
         #region Instance control
 
         /// <summary>
         /// Read CSV-formatted data from a file
         /// </summary>
-        /// <param name="csvFileInfo">Name of the CSV file</param>
-        public CSVReader(FileInfo csvFileInfo)
+        /// <param name="csvFileName">Name of the CSV file</param>
+        public static CSVReader CreateFromFile(string csvFileName)
         {
-            if (csvFileInfo == null)
-                throw new ArgumentNullException("csvFileInfo", @"Null FileInfo passed to CSVReader");
+            if (csvFileName == null)
+                throw new ArgumentNullException("csvFileName", @"Null FileInfo passed to CSVReader");
 
-            reader = new BinaryReader(File.OpenRead(csvFileInfo.FullName));
+            return new CSVReader(new BinaryReader(File.OpenRead(csvFileName)));
         }
 
         /// <summary>
         /// Read CSV-formatted data from a string
         /// </summary>
         /// <param name="csvData">String containing CSV data</param>
-        public CSVReader(string csvData)
+        public static CSVReader CreateFromString(string csvData)
         {
             if (csvData == null)
                 throw new ArgumentNullException("csvData", @"Null string passed to CSVReader");
 
-            reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(csvData)));
+            return new CSVReader(new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(csvData))));
         }
 
         /// <summary>
         /// Read CSV-formatted data from a TextReader
         /// </summary>
         /// <param name="reader">TextReader that's reading CSV-formatted data</param>
-        public CSVReader(TextReader reader)
+        public static CSVReader CreateFromTextReader(TextReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException("reader", @"Null TextReader passed to CSVReader");
 
-            this.reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd())));
+            return new CSVReader(new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd()))));
+        }
+
+        /// <summary>
+        /// Read CSV-formatted data from a BinaryReader
+        /// </summary>
+        /// <param name="reader">TextReader that's reading CSV-formatted data</param>
+        public CSVReader(BinaryReader reader)
+        {
+            if (reader == null)
+                throw new ArgumentNullException("reader", @"Null BinaryReader passed to CSVReader");
+
+            fReader = reader;
         }
 
         public void Dispose()
@@ -97,7 +109,7 @@ namespace Externals
             try
             {
                 // Can't call BinaryReader.Dispose due to its protection level
-                if (reader != null) reader.Close();
+                if (fReader != null) fReader.Close();
             }
             catch { }
         }
@@ -110,7 +122,7 @@ namespace Externals
         /// <returns>System.Data.DataTable object that contains the CSV data</returns>
         public static DataTable ReadCSVFile(string filename, bool headerRow)
         {
-            using (CSVReader reader = new CSVReader(new FileInfo(filename)))
+            using (CSVReader reader = CreateFromFile(filename))
                 return reader.CreateDataTable(headerRow);
         }
 
@@ -127,15 +139,15 @@ namespace Externals
         public List<object> ReadRow()
         {
             // ReadLine() will return null if there's no next line
-            if (reader.BaseStream.Position >= reader.BaseStream.Length)
+            if (fReader.BaseStream.Position >= fReader.BaseStream.Length)
                 return null;
 
             StringBuilder builder = new StringBuilder();
 
             // Read the next line
-            while ((reader.BaseStream.Position < reader.BaseStream.Length) && (!builder.ToString().EndsWith(NEWLINE)))
+            while ((fReader.BaseStream.Position < fReader.BaseStream.Length) && (!builder.ToString().EndsWith(NEWLINE)))
             {
-                char c = reader.ReadChar();
+                char c = fReader.ReadChar();
                 builder.Append(c);
             }
 

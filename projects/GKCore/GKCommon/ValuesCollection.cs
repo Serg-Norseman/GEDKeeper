@@ -19,28 +19,35 @@
  */
 
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace GKCommon
 {
-    public sealed class ValuesCollection : NameObjectCollectionBase
+    public sealed class ValuesCollection
     {
+        private readonly Dictionary<string, ArrayList> fValues;
+
+        public int Count
+        {
+            get { return fValues.Count; }
+        }
+
         public ValuesCollection()
         {
+            fValues = new Dictionary<string, ArrayList>();
         }
 
         public void Clear()
         {
-            BaseClear();
+            fValues.Clear();
         }
 
         public void Add(string name, string value, bool excludeDuplicates = false)
         {
-            ArrayList arrayList = (ArrayList)BaseGet(name);
-
-            if (arrayList == null) {
+            ArrayList arrayList;
+            if (!fValues.TryGetValue(name, out arrayList)) {
                 arrayList = new ArrayList(1);
-                BaseAdd(name, arrayList);
+                fValues.Add(name, arrayList);
             }
 
             if (value == null) return;
@@ -54,13 +61,13 @@ namespace GKCommon
 
         public void Remove(string name)
         {
-            BaseRemove(name);
+            fValues.Remove(name);
         }
 
         public string[] GetValues(string name)
         {
-            ArrayList list = (ArrayList)BaseGet(name);
-            if (list == null) {
+            ArrayList list;
+            if (!fValues.TryGetValue(name, out list)) {
                 return null;
             }
 

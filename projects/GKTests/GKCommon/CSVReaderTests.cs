@@ -32,7 +32,7 @@ namespace GKTests.GKCommon
         [Test]
         public void Test_Common()
         {
-            using (CSVReader csv = new CSVReader(TestStubs.CSVData)) {
+            using (CSVReader csv = CSVReader.CreateFromString(TestStubs.CSVData)) {
                 List<object> row;
 
                 row = csv.ReadRow(); // header
@@ -65,7 +65,7 @@ namespace GKTests.GKCommon
                 Assert.IsNull(row);
             }
 
-            using (CSVReader csv = new CSVReader(TestStubs.CSVData)) {
+            using (CSVReader csv = CSVReader.CreateFromString(TestStubs.CSVData)) {
                 DataTable tbl = csv.CreateDataTable(true);
                 Assert.AreEqual(4, tbl.Rows.Count);
                 Assert.AreEqual(4, tbl.Columns.Count);
