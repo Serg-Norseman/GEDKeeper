@@ -18,34 +18,33 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections;
+using System.Collections.Generic;
 using GKCommon;
 
 namespace GKCore
 {
-    // FIXME: remove stack, refactor this!
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NavigationStack : BaseObject
+    public sealed class NavigationStack<T> : BaseObject where T : class
     {
         private bool fNavBusy;
-        private readonly Stack fStackBackward;
-        private readonly Stack fStackForward;
-        private object fCurrent;
+        private readonly Stack<T> fStackBackward;
+        private readonly Stack<T> fStackForward;
+        private T fCurrent;
 
         public bool Busy
         {
             get { return fNavBusy; }
         }
 
-        public object Current
+        public T Current
         {
             get { return fCurrent; }
             set { SetCurrent(value); }
         }
 
-        private void SetCurrent(object value)
+        private void SetCurrent(T value)
         {
             if (fCurrent == value) return;
 
@@ -59,9 +58,9 @@ namespace GKCore
 
         public NavigationStack()
         {
-            fStackBackward = new Stack();
-            fStackForward = new Stack();
-            fCurrent = null;
+            fStackBackward = new Stack<T>();
+            fStackForward = new Stack<T>();
+            fCurrent = default(T);
         }
 
         protected override void Dispose(bool disposing)

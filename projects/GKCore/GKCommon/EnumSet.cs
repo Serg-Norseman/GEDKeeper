@@ -23,7 +23,10 @@ using System.Text;
 
 namespace GKCommon
 {
-    public struct EnumSet<T> : ICloneable where T : IComparable, IFormattable, IConvertible
+    public struct EnumSet<T> : ICloneable where T : struct, IComparable, IFormattable
+        #if !PCL
+        , IConvertible
+        #endif
     {
         private ulong fData;
 
@@ -138,7 +141,7 @@ namespace GKCommon
 
             StringBuilder b = new StringBuilder(64);
             for (int i = 1; i <= 64; i++) {
-                char sym = ((val & bt) > 0) ? '1' : '0';
+                string sym = ((val & bt) > 0) ? "1" : "0";
                 b.Insert(0, sym);
                 bt = bt << 1;
             }

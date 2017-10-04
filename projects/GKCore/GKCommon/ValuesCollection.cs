@@ -25,7 +25,7 @@ namespace GKCommon
 {
     public sealed class ValuesCollection
     {
-        private readonly Dictionary<string, ArrayList> fValues;
+        private readonly Dictionary<string, List<string>> fValues;
 
         public int Count
         {
@@ -34,7 +34,7 @@ namespace GKCommon
 
         public ValuesCollection()
         {
-            fValues = new Dictionary<string, ArrayList>();
+            fValues = new Dictionary<string, List<string>>();
         }
 
         public void Clear()
@@ -44,9 +44,9 @@ namespace GKCommon
 
         public void Add(string name, string value, bool excludeDuplicates = false)
         {
-            ArrayList arrayList;
+            List<string> arrayList;
             if (!fValues.TryGetValue(name, out arrayList)) {
-                arrayList = new ArrayList(1);
+                arrayList = new List<string>(1);
                 fValues.Add(name, arrayList);
             }
 
@@ -66,7 +66,7 @@ namespace GKCommon
 
         public string[] GetValues(string name)
         {
-            ArrayList list;
+            List<string> list;
             if (!fValues.TryGetValue(name, out list)) {
                 return null;
             }

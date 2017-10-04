@@ -1500,7 +1500,7 @@ namespace GKTests.GKCore
         [Test]
         public void NavStack_Tests()
         {
-            using (NavigationStack navStack = new NavigationStack())
+            using (var navStack = new NavigationStack<object>())
             {
                 Assert.IsNotNull(navStack);
                 Assert.AreEqual(false, navStack.Busy);

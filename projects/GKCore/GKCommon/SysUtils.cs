@@ -30,6 +30,13 @@ using System.Threading;
 
 namespace GKCommon
 {
+    #if PCL
+    public interface ICloneable
+    {
+        object Clone();
+    }
+    #endif
+
     public enum DesktopType
     {
         None = 0,
@@ -448,7 +455,7 @@ namespace GKCommon
         {
             StringBuilder res = new StringBuilder(up);
             res.Append(val.ToString());
-            while (res.Length < up) res.Insert(0, '0');
+            while (res.Length < up) res.Insert(0, "0");
             return res.ToString();
         }
 

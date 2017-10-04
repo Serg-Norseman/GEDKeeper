@@ -63,7 +63,7 @@ namespace GKUI
         #region Private fields
 
         private readonly IBaseContext fContext;
-        private readonly NavigationStack fNavman;
+        private readonly NavigationStack<GEDCOMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
         #endregion
@@ -75,7 +75,7 @@ namespace GKUI
             get { return fContext; }
         }
 
-        public NavigationStack Navman
+        public NavigationStack<GEDCOMRecord> Navman
         {
             get { return fNavman; }
         }
@@ -114,7 +114,7 @@ namespace GKUI
             fContext = new BaseContext(this);
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
-            fNavman = new NavigationStack();
+            fNavman = new NavigationStack<GEDCOMRecord>();
 
             fTabParts = new TabParts[(int)GEDCOMRecordType.rtLast + 1];
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual);

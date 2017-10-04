@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 namespace GKCommon.GEDCOM
@@ -28,7 +27,10 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable, IConvertible
+    public class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable
+        #if !PCL
+        , IConvertible
+        #endif
     {
         private readonly string[] fStrValues;
         private readonly Dictionary<string, int> fValues;
@@ -60,7 +62,11 @@ namespace GKCommon.GEDCOM
 
         public string GetStrValue(T enumVal)
         {
+            #if PCL
+            int idx = (int)Convert.ChangeType(enumVal, typeof(int), null);
+            #else
             int idx = (int)((IConvertible)enumVal);
+            #endif
 
             if (idx < 0 || idx >= fStrValues.Length) {
                 return string.Empty;
@@ -72,12 +78,16 @@ namespace GKCommon.GEDCOM
         public T GetEnumValue(string key)
         {
             if (!fCaseSensitive) {
-                key = key.Trim().ToLower(CultureInfo.InvariantCulture);
+                key = key.Trim().ToLowerInvariant();
             }
 
             int result;
             if (fValues.TryGetValue(key, out result)) {
+                #if PCL
+                return (T)Convert.ChangeType(result, typeof(T), null);
+                #else
                 return (T)((IConvertible)result);
+                #endif
             } else {
                 return fDefaultValue;
             }
@@ -620,7 +630,7 @@ namespace GKCommon.GEDCOM
             GEDCOMMediaType result = GEDCOMMediaType.mtUnknown;
             if (string.IsNullOrEmpty(str)) return result;
 
-            str = str.Trim().ToLower(CultureInfo.InvariantCulture);
+            str = str.Trim().ToLowerInvariant();
 
             if (string.Equals(str, "audio"))
             {
