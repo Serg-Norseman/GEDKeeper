@@ -28,36 +28,28 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lblName = new Label();
-            //lblName.Size = new Size(55, 17);
             lblName.Text = "lblName";
 
             lblType = new Label();
-            //lblType.Size = new Size(51, 17);
             lblType.Text = "lblType";
 
             lblStoreType = new Label();
-            //lblStoreType.Size = new Size(84, 17);
             lblStoreType.Text = "lblStoreType";
 
             lblFile = new Label();
-            //lblFile.Size = new Size(38, 17);
             lblFile.Text = "lblFile";
 
             txtName = new TextBox();
-            //txtName.Size = new Size(696, 24);
             txtName.TextChanged += edName_TextChanged;
 
             cmbMediaType = new ComboBox();
             cmbMediaType.ReadOnly = true;
-            //cmbMediaType.Size = new Size(237, 25);
 
             cmbStoreType = new ComboBox();
             cmbStoreType.ReadOnly = true;
-            //cmbStoreType.Size = new Size(281, 25);
 
             txtFile = new TextBox();
             txtFile.ReadOnly = true;
-            //txtFile.Size = new Size(629, 24);
 
             btnFileSelect = new Button();
             //btnFileSelect.Size = new Size(60, 26);
@@ -73,10 +65,16 @@ namespace GKUI.Forms
                         Cells = { lblName, txtName }
                     },
                     new TableRow {
-                        Cells = { lblFile, TableLayout.Horizontal(10, new TableCell(txtFile, true), btnFileSelect) }
+                        Cells = {
+                            lblFile,
+                            TableLayout.Horizontal(10, new TableCell(txtFile, true), btnFileSelect)
+                        }
                     },
                     new TableRow {
-                        Cells = { lblType, TableLayout.Horizontal(10, cmbMediaType, lblStoreType, cmbStoreType) }
+                        Cells = {
+                            lblType,
+                            TableLayout.Horizontal(10, cmbMediaType, lblStoreType, cmbStoreType)
+                        }
                     },
                     null
                 }
@@ -92,6 +90,7 @@ namespace GKUI.Forms
             tabsData.Pages.Add(pageCommon);
             tabsData.Pages.Add(pageNotes);
             tabsData.Pages.Add(pageSources);
+            tabsData.Size = new Size(600, 260);
 
             //
 

@@ -40,34 +40,26 @@ namespace GKUI.Forms
         public GEDCOMNoteRecord NoteRecord
         {
             get { return fNoteRecord; }
-            set { SetNoteRecord(value); }
-        }
-
-        private void SetNoteRecord(GEDCOMNoteRecord value)
-        {
-            fNoteRecord = value;
-            txtNote.Text = fNoteRecord.Note.Text.Trim();
+            set {
+                fNoteRecord = value;
+                txtNote.Text = fNoteRecord.Note.Text.Trim();
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (txtNote.Text.Length != 0)
-                {
-                    fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
+            try {
+                string text = txtNote.Text.Trim();
+                if (text.Length != 0) {
+                    fNoteRecord.SetNotesArray(UIHelper.Convert(text));
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
 
                     DialogResult = DialogResult.Ok;
-                }
-                else
-                {
+                } else {
                     DialogResult = DialogResult.Cancel;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -76,6 +68,7 @@ namespace GKUI.Forms
         public NoteEditDlgEx()
         {
             InitializeComponent();
+
             FillSizes();
 
             // SetLang()
@@ -128,9 +121,7 @@ namespace GKUI.Forms
 
         private void miSelectAndCopy_Click(object sender, EventArgs e)
         {
-            //txtNote.Select();
             txtNote.SelectAll();
-            //txtNote.Copy();
             using (var clipboard = new Clipboard()) {
                 clipboard.Text = txtNote.Text;
             }
@@ -139,7 +130,8 @@ namespace GKUI.Forms
         private void miImport_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             using (var sr = new StreamReader(fileName)) {
                 txtNote.Text = sr.ReadToEnd();
@@ -149,7 +141,8 @@ namespace GKUI.Forms
         private void miExport_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             using (var sw = new StreamWriter(fileName)) {
                 sw.Write(txtNote.Text);
@@ -171,7 +164,8 @@ namespace GKUI.Forms
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
             var item = sender as GKToolStripMenuItem; //menuSizes.SelectedItem as GKComboItem;
-            if (item == null || item.Text == "") return;
+            if (item == null || item.Text == "")
+                return;
 
             string value = item.Tag.ToString();
             txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);

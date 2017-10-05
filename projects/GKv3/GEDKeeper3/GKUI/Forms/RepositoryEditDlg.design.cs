@@ -28,6 +28,7 @@ namespace GKUI.Forms
 
             tabsData = new TabControl();
             tabsData.Pages.Add(pageNotes);
+            tabsData.Size = new Size(600, 260);
 
             //
 

@@ -178,22 +178,22 @@ namespace GKUI.Components
         private void UpdateButtons()
         {
             if (fListModel == null) {
-                fBtnAdd.Enabled = fButtons.Contains(SheetButton.lbAdd);
-                fBtnDelete.Enabled = fButtons.Contains(SheetButton.lbDelete);
-                fBtnEdit.Enabled = fButtons.Contains(SheetButton.lbEdit);
-                fBtnLinkJump.Enabled = fButtons.Contains(SheetButton.lbJump);
-                fBtnMoveUp.Enabled = fButtons.Contains(SheetButton.lbMoveUp);
-                fBtnMoveDown.Enabled = fButtons.Contains(SheetButton.lbMoveDown);
+                fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
+                fBtnDelete.Visible = fButtons.Contains(SheetButton.lbDelete);
+                fBtnEdit.Visible = fButtons.Contains(SheetButton.lbEdit);
+                fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
+                fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
+                fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
                 //fToolBar.Enabled = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
-                fBtnAdd.Enabled = allowedActions.Contains(RecordAction.raAdd);
-                fBtnDelete.Enabled = allowedActions.Contains(RecordAction.raDelete);
-                fBtnEdit.Enabled = allowedActions.Contains(RecordAction.raEdit);
-                fBtnLinkJump.Enabled = allowedActions.Contains(RecordAction.raJump);
-                fBtnMoveUp.Enabled = allowedActions.Contains(RecordAction.raMoveUp);
-                fBtnMoveDown.Enabled = allowedActions.Contains(RecordAction.raMoveDown);
-                //fToolBar.Enabled = !allowedActions.IsEmpty();
+                fBtnAdd.Visible = allowedActions.Contains(RecordAction.raAdd);
+                fBtnDelete.Visible = allowedActions.Contains(RecordAction.raDelete);
+                fBtnEdit.Visible = allowedActions.Contains(RecordAction.raEdit);
+                fBtnLinkJump.Visible = allowedActions.Contains(RecordAction.raJump);
+                fBtnMoveUp.Visible = allowedActions.Contains(RecordAction.raMoveUp);
+                fBtnMoveDown.Visible = allowedActions.Contains(RecordAction.raMoveDown);
+                //fToolBar.Visible = !allowedActions.IsEmpty();
             }
         }
 

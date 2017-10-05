@@ -90,8 +90,7 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
             }
             base.Dispose(disposing);
         }
@@ -106,22 +105,19 @@ namespace GKUI.Forms
             fNotesList.ListModel.DataOwner = fLocationRecord;
             fMediaList.ListModel.DataOwner = fLocationRecord;
 
-            //ActiveControl = txtName;
             txtName.Focus();
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Keys.Down && e.Control)
-            {
+            if (e.Key == Keys.Down && e.Control) {
                 txtName.Text = txtName.Text.ToLower();
             }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fLocationRecord.LocationName = txtName.Text;
                 fLocationRecord.Map.Lati = SysUtils.ParseFloat(txtLatitude.Text, 0.0);
                 fLocationRecord.Map.Long = SysUtils.ParseFloat(txtLongitude.Text, 0.0);
@@ -131,9 +127,7 @@ namespace GKUI.Forms
                 fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
 
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -141,37 +135,37 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
                 CancelClickHandler(sender, e);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            string location = txtName.Text.Trim();
+            if (string.IsNullOrEmpty(location)) {
+                return;
+            }
+
             ListGeoCoords.BeginUpdate();
             fMapBrowser.BeginUpdate();
-            try
-            {
+            try {
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
-                AppHost.Instance.RequestGeoCoords(txtName.Text, searchPoints);
+                AppHost.Instance.RequestGeoCoords(location, searchPoints);
                 ListGeoCoords.ClearItems();
                 fMapBrowser.ClearPoints();
 
                 int num = searchPoints.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GeoPoint pt = searchPoints[i];
 
                     ListGeoCoords.AddItem(pt, pt.Hint,
-                                          PlacesLoader.CoordToStr(pt.Latitude),
-                                          PlacesLoader.CoordToStr(pt.Longitude));
+                        PlacesLoader.CoordToStr(pt.Latitude),
+                        PlacesLoader.CoordToStr(pt.Longitude));
 
                     fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
@@ -181,49 +175,38 @@ namespace GKUI.Forms
                 }
 
                 //fMapBrowser.ZoomToBounds();
-            }
-            finally
-            {
+            } finally {
                 fMapBrowser.EndUpdate();
                 ListGeoCoords.EndUpdate();
             }
         }
 
-        private GKListItem GetSelectedGeoItem()
-        {
-            return null;
-            /*if (ListGeoCoords.SelectedItems.Count <= 0) return null;
-
-            GKListItem item = (GKListItem)ListGeoCoords.SelectedItems[0];
-            return item;*/
-        }
-
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            //txtLatitude.Text = item.SubItems[1].Text;
-            //txtLongitude.Text = item.SubItems[2].Text;
+            GKListItem item = ListGeoCoords.GetSelectedItem();
+            if (item != null) {
+                GeoPoint pt = (GeoPoint)item.Data;
+                txtLatitude.Text = PlacesLoader.CoordToStr(pt.Latitude);
+                txtLongitude.Text = PlacesLoader.CoordToStr(pt.Longitude);
+            }
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            //txtName.Text = item.Text;
+            GKListItem item = ListGeoCoords.GetSelectedItem();
+            if (item != null) {
+                GeoPoint pt = (GeoPoint)item.Data;
+                txtName.Text = pt.Hint;
+            }
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            GeoPoint pt = item.Data as GeoPoint;
-            if (pt == null) return;
-
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            GKListItem item = ListGeoCoords.GetSelectedItem();
+            if (item != null) {
+                GeoPoint pt = (GeoPoint)item.Data;
+                fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            }
         }
 
         private void EditName_TextChanged(object sender, EventArgs e)
@@ -233,8 +216,7 @@ namespace GKUI.Forms
 
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
-            if (txtLatitude.Text != "" && txtLongitude.Text != "")
-            {
+            if (txtLatitude.Text != "" && txtLongitude.Text != "") {
                 fMapBrowser.SetCenter(SysUtils.ParseFloat(txtLatitude.Text, 0), SysUtils.ParseFloat(txtLongitude.Text, 0), -1);
             }
         }

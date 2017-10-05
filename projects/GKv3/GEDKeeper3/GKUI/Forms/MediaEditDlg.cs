@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         private bool fIsNew;
@@ -53,13 +50,11 @@ namespace GKUI.Forms
         {
             GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
-            /*if (fIsNew)
-            {
-                GKComboItem item = (GKComboItem)cmbStoreType.SelectedItem;
+            if (fIsNew) {
+                GKComboItem item = (GKComboItem)cmbStoreType.SelectedValue;
                 MediaStoreType gst = (MediaStoreType)item.Tag;
 
-                if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath())
-                {
+                if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
                     return false;
                 }
 
@@ -70,7 +65,7 @@ namespace GKUI.Forms
                 }
             }
 
-            fileRef.MediaType = (GEDCOMMediaType)cmbMediaType.SelectedIndex;*/
+            fileRef.MediaType = (GEDCOMMediaType)cmbMediaType.SelectedIndex;
             fileRef.Title = txtName.Text;
 
             ControlsRefresh();
@@ -96,7 +91,7 @@ namespace GKUI.Forms
             } else {
                 MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
                 RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
-                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
+                    (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
             }
 
             btnFileSelect.Enabled = fIsNew;
@@ -109,29 +104,23 @@ namespace GKUI.Forms
         private void SetMediaRec(GEDCOMMultimediaRecord value)
         {
             fMediaRec = value;
-            try
-            {
+            try {
                 fNotesList.ListModel.DataOwner = fMediaRec;
                 fSourcesList.ListModel.DataOwner = fMediaRec;
 
                 ControlsRefresh();
                 //ActiveControl = txtName;
                 txtName.Focus();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
             }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 DialogResult = AcceptChanges() ? DialogResult.Ok : DialogResult.None;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -139,13 +128,10 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
                 CancelClickHandler(sender, e);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -153,7 +139,8 @@ namespace GKUI.Forms
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
                 if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
@@ -188,17 +175,17 @@ namespace GKUI.Forms
             if (allowRef) {
                 cmbStoreType.Items.Add(
                     new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
-                                    MediaStoreType.mstReference));
+                        MediaStoreType.mstReference));
             }
 
             cmbStoreType.Items.Add(
                 new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
-                                MediaStoreType.mstStorage));
+                    MediaStoreType.mstStorage));
 
             if (allowArc) {
                 cmbStoreType.Items.Add(
                     new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
-                                    MediaStoreType.mstArchive));
+                        MediaStoreType.mstArchive));
             }
 
             UIHelper.SelectComboItem(cmbStoreType, selectType, true);
@@ -208,8 +195,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++)
-            {
+            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
                 cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 

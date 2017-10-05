@@ -315,7 +315,7 @@ namespace GKUI.Components
             return new Font(fontName, size);
         }
 
-        private const bool USE_CLIENT_SIZE_PRESET = true;
+        private const bool USE_CLIENT_SIZE_PRESET = false;
 
         public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
         {
@@ -375,6 +375,11 @@ namespace GKUI.Components
             };
         }
 
+        /// <summary>
+        /// Create stack for row cell (RCS).
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static StackLayout CreateRCS(params StackLayoutItem[] items)
         {
             return CreateStackLayout(Orientation.Horizontal, 0, 10, items);

@@ -7,8 +7,8 @@ namespace GKUI.Forms
     partial class BaseWinSDI
     {
         private TableLayout StatusBar;
-        private Label StatusBarPanel1;
-        private Eto.Forms.ImageView StatusBarShieldImage;
+        private Label panStatusText;
+        private Eto.Forms.ImageView panStatusShieldImage;
 
         private ToolBar ToolBar1;
         private ButtonToolItem tbFileNew;
@@ -89,17 +89,17 @@ namespace GKUI.Forms
         {
             SuspendLayout();
 
-            StatusBarPanel1 = new Label();
+            panStatusText = new Label();
 
-            StatusBarShieldImage = new Eto.Forms.ImageView();
-            StatusBarShieldImage.Size = new Size(18, 18);
-            StatusBarShieldImage.MouseDoubleClick += StatusBar_MouseDoubleClick;
+            panStatusShieldImage = new Eto.Forms.ImageView();
+            panStatusShieldImage.Size = new Size(18, 18);
+            panStatusShieldImage.MouseDoubleClick += StatusBar_MouseDoubleClick;
 
-            var StatusBarPanel3 = new Label();
-            StatusBarPanel3.Width = 20;
+            var panStatusDummy = new Label();
+            panStatusDummy.Width = 20;
 
             StatusBar = new TableLayout();
-            StatusBar.Rows.Add(new TableRow() { Cells = { new TableCell(StatusBarPanel1, true), null, StatusBarShieldImage, StatusBarPanel3 } });
+            StatusBar.Rows.Add(new TableRow() { Cells = { new TableCell(panStatusText, true), null, panStatusShieldImage, panStatusDummy } });
 
             //
 
@@ -497,6 +497,7 @@ namespace GKUI.Forms
 
             tabsRecords = new TabControl();
             tabsRecords.SelectedIndexChanged += tabsRecords_SelectedIndexChanged;
+            tabsRecords.Size = new Size(980, 460);
 
             Content = new TableLayout() {
                 Rows = {

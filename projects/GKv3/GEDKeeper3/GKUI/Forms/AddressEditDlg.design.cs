@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private Button btnAccept;
         private Button btnCancel;
-        private TabControl tabsAddrData;
+        private TabControl tabsData;
         private TabPage pagePhones;
         private TabPage pageEmails;
         private TabPage pageCommon;
@@ -87,11 +87,12 @@ namespace GKUI.Forms
             pageWebPages = new TabPage();
             pageWebPages.Text = "pageWebPages";
 
-            tabsAddrData = new TabControl();
-            tabsAddrData.Pages.Add(pageCommon);
-            tabsAddrData.Pages.Add(pagePhones);
-            tabsAddrData.Pages.Add(pageEmails);
-            tabsAddrData.Pages.Add(pageWebPages);
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageCommon);
+            tabsData.Pages.Add(pagePhones);
+            tabsData.Pages.Add(pageEmails);
+            tabsData.Pages.Add(pageWebPages);
+            tabsData.Height = 260;
 
             //
 
@@ -113,7 +114,7 @@ namespace GKUI.Forms
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { tabsAddrData }
+                        Cells = { tabsData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }

@@ -21,7 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         private readonly GKSheetList fNotesList;
@@ -52,18 +48,14 @@ namespace GKUI.Forms
         private void SetTask(GEDCOMTaskRecord value)
         {
             fTask = value;
-            try
-            {
-                if (fTask == null)
-                {
+            try {
+                if (fTask == null) {
                     txtPriority.SelectedIndex = -1;
                     txtStartDate.Text = "";
                     txtStopDate.Text = "";
                     cmbGoalType.SelectedIndex = 0;
                     txtGoal.Text = "";
-                }
-                else
-                {
+                } else {
                     txtPriority.SelectedIndex = (sbyte)fTask.Priority;
                     txtStartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                     txtStopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
@@ -88,17 +80,14 @@ namespace GKUI.Forms
                 fNotesList.ListModel.DataOwner = fTask;
 
                 cmbGoalType_SelectedIndexChanged(null, null);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TaskEditDlg.SetTask(): " + ex.Message);
             }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fTask.Priority = (GKResearchPriority)txtPriority.SelectedIndex;
                 fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStartDate.Text, true));
                 fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
@@ -120,9 +109,7 @@ namespace GKUI.Forms
                 Base.NotifyRecord(fTask, RecordAction.raEdit);
 
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TaskEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -130,13 +117,10 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
                 CancelClickHandler(sender, e);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -201,13 +185,11 @@ namespace GKUI.Forms
 
             fTempRec = null;
 
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
-            {
+            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
                 txtPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++)
-            {
+            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
                 cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 

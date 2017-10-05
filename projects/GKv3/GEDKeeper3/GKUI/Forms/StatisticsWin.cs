@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class StatisticsWin : Form, ILocalization, IWindow
     {
         private readonly IBaseWindow fBase;
@@ -44,6 +41,7 @@ namespace GKUI.Forms
         private string fChartXTitle;
         private string fChartYTitle;
         private List<StatsItem> fCurrentValues;
+        private StatsMode fCurrentMode;
 
         public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
@@ -61,11 +59,12 @@ namespace GKUI.Forms
             spl.RelativePosition = 300;
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
-            Panel1.Content = spl;
+            panDataPlaceholder.Content = spl;
 
             fBase = baseWin;
             fSelectedRecords = selectedRecords;
             fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
+            fCurrentMode = StatsMode.smAncestors;
 
             SetLang();
         }
@@ -95,9 +94,9 @@ namespace GKUI.Forms
 
             //cmStatTypes.Items.Clear();
             cbType.Items.Clear();
-            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
-            {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
+                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic())
+                    continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
                 /*var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
@@ -111,7 +110,8 @@ namespace GKUI.Forms
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcStats((StatsMode)cbType.SelectedIndex);
+            fCurrentMode = (StatsMode)cbType.SelectedIndex;
+            CalcStats(fCurrentMode);
         }
 
         /*private void miStatType_Click(object sender, EventArgs e)
@@ -162,27 +162,22 @@ namespace GKUI.Forms
 
             fListStats.BeginUpdate();
             List<StatsItem> vals = new List<StatsItem>();
-            try
-            {
+            try {
                 fTreeStats.GetSpecStats(mode, vals);
                 fCurrentValues = vals;
 
                 fListStats.ClearItems();
-                foreach (StatsItem lv in vals)
-                {
+                foreach (StatsItem lv in vals) {
                     string stVal = lv.GetDisplayString();
                     fListStats.AddItem(null, lv.Caption, stVal);
                 }
-            }
-            finally
-            {
+            } finally {
                 fListStats.EndUpdate();
             }
 
             fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
 
-            switch (mode)
-            {
+            switch (mode) {
                 case StatsMode.smAge:
                     fChartXTitle = LangMan.LS(LSID.LSID_Age);
                     fChartYTitle = LangMan.LS(LSID.LSID_People);
@@ -198,7 +193,8 @@ namespace GKUI.Forms
                 case StatsMode.smBirthYears:
                 case StatsMode.smBirthTenYears:
                 case StatsMode.smDeathYears:
-                    case StatsMode.smDeathTenYears: {
+                case StatsMode.smDeathTenYears:
+                    {
                         switch (mode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smDeathYears:
@@ -262,24 +258,23 @@ namespace GKUI.Forms
             CommonStats stats = fTreeStats.GetCommonStats();
 
             lvSummary.BeginUpdate();
-            try
-            {
+            try {
                 lvSummary.ClearItems();
 
                 lvSummary.AddItem(null, LangMan.LS(LSID.LSID_People),
-                                  stats.persons.ToString(),
-                                  stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
-                                  stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
+                    stats.persons.ToString(),
+                    stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
+                    stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
                 lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Living),
-                                  stats.lives.ToString(),
-                                  stats.lives_m.ToString(),
-                                  stats.lives_f.ToString());
+                    stats.lives.ToString(),
+                    stats.lives_m.ToString(),
+                    stats.lives_f.ToString());
 
                 lvSummary.AddItem(null, LangMan.LS(LSID.LSID_Deads),
-                                  (stats.persons - stats.lives).ToString(),
-                                  (stats.persons_m - stats.lives_m).ToString(),
-                                  (stats.persons_f - stats.lives_f).ToString());
+                    (stats.persons - stats.lives).ToString(),
+                    (stats.persons_m - stats.lives_m).ToString(),
+                    (stats.persons_f - stats.lives_f).ToString());
 
                 AddCompositeItem(LSID.LSID_AvgAge, stats.age);
                 AddCompositeItem(LSID.LSID_AvgLife, stats.life);
@@ -288,9 +283,7 @@ namespace GKUI.Forms
                 AddCompositeItem(LSID.LSID_AvgMarriagesCount, stats.marr);
                 AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
                 AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
-            }
-            finally
-            {
+            } finally {
                 lvSummary.EndUpdate();
             }
         }
@@ -298,25 +291,28 @@ namespace GKUI.Forms
         private void AddCompositeItem(LSID name, CompositeItem item)
         {
             lvSummary.AddItem(null, LangMan.LS(name),
-                              string.Format("{0:0.00}", item.CommonVal),
-                              string.Format("{0:0.00}", item.MaleVal),
-                              string.Format("{0:0.00}", item.FemaleVal));
+                string.Format("{0:0.00}", item.CommonVal),
+                string.Format("{0:0.00}", item.MaleVal),
+                string.Format("{0:0.00}", item.FemaleVal));
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Keys.Escape) Close();
+            if (e.Key == Keys.Escape)
+                Close();
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
-            //UpdateCommonStats();
+            UpdateCommonStats();
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            //fTreeStats.WriteStatsReport(cbType.Text, fListStats.Columns[0].Text,
-            //                            fListStats.Columns[1].Text, fCurrentValues);
+            fTreeStats.WriteStatsReport(cbType.Text,
+                LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
+                LangMan.LS(LSID.LSID_Value),
+                fCurrentValues);
         }
     }
 }

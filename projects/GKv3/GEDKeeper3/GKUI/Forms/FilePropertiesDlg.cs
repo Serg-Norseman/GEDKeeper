@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
     {
         public FilePropertiesDlg()
@@ -72,17 +69,15 @@ namespace GKUI.Forms
             int[] stats = fBase.Context.Tree.GetRecordStats();
 
             lvRecordStats.ClearItems();
-            for (int i = 1; i < stats.Length; i++)
-            {
+            for (int i = 1; i < stats.Length; i++) {
                 lvRecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]),
-                                      stats[i].ToString());
+                    stats[i].ToString());
             }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fBase.Context.Tree.Header.Language.ParseString(txtLanguage.Text);
 
                 GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
@@ -97,9 +92,7 @@ namespace GKUI.Forms
 
                 fBase.NotifyRecord(submitter, RecordAction.raEdit);
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }

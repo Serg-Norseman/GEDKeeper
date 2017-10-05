@@ -7,7 +7,7 @@ namespace GKUI.Forms
     partial class StatisticsWin
     {
         private GroupBox grpSummary;
-        private Panel Panel1;
+        private Panel panDataPlaceholder;
         private /*ToolBar*/Panel ToolBar1;
         private /*ButtonToolItem*/ComboBox cbType;
         private GKListView lvSummary;
@@ -53,7 +53,8 @@ namespace GKUI.Forms
                                         new SeparatorToolItem(),
                                         tbExcelExport});*/
 
-            Panel1 = new Panel();
+            panDataPlaceholder = new Panel();
+            panDataPlaceholder.Size = new Size(800, 300);
 
             Content = new DefTableLayout {
                 Rows = {
@@ -65,7 +66,7 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { Panel1 }
+                        Cells = { panDataPlaceholder }
                     }
                 }
             };

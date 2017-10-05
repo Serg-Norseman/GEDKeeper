@@ -243,7 +243,9 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            SetViewportSize(VisibleRect.Size);
+            if (Loaded) {
+                SetViewportSize(VisibleRect.Size);
+            }
             base.OnSizeChanged(e);
         }
 
@@ -255,8 +257,10 @@ namespace GKUI.Components
         /// </param>
         protected override void OnScroll(ScrollEventArgs e)
         {
-            SetViewportLocation(VisibleRect.Location);
-            fCanvas.Invalidate();
+            if (Loaded) {
+                SetViewportLocation(VisibleRect.Location);
+                fCanvas.Invalidate();
+            }
 
             base.OnScroll(e);
         }

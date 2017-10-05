@@ -44,8 +44,10 @@ namespace GKUI.Forms
             txtName.KeyDown += EditName_KeyDown;
 
             txtLatitude = new TextBox();
+            txtLatitude.Width = 100;
 
             txtLongitude = new TextBox();
+            txtLongitude.Width = 100;
 
             ListGeoCoords = new GKListView();
             ListGeoCoords.MouseDown += ListGeoCoords_Click;
@@ -86,8 +88,8 @@ namespace GKUI.Forms
                                 Rows = {
                                     new TableRow {
                                         Cells = {
-                                            ListGeoCoords,
-                                            new DefStackLayout(Orientation.Vertical, 10, btnSearch, btnSelect, btnSelectName)
+                                            new TableCell(ListGeoCoords, true),
+                                            new DefStackLayout(Orientation.Vertical, 10, btnSearch, btnSelect, btnSelectName, btnShowOnMap)
                                         }
                                     }
                                 }
@@ -108,10 +110,10 @@ namespace GKUI.Forms
                         Cells = { new DefTableLayout {
                                 Rows = {
                                     new TableRow {
-                                        Cells = { lblName, lblLatitude, lblLongitude, null }
+                                        Cells = { lblName, lblLatitude, lblLongitude }
                                     },
                                     new TableRow {
-                                        Cells = { txtName, txtLatitude, txtLongitude, new TableCell(btnShowOnMap, false) }
+                                        Cells = { new TableCell(txtName, true), txtLatitude, txtLongitude }
                                     }
                                 }
                             } }

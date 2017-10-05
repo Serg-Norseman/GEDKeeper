@@ -121,50 +121,51 @@ namespace GKUI.Components
                     int xMax = 0;
                     int lineHeight = 0;
 
-                    string text = fLines.Text;
-                    Font defFont = this.Font;
+                    string text = fLines.Text.Trim();
+                    if (!string.IsNullOrEmpty(text)) {
+                        Font defFont = this.Font;
+                        var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
+                                                      new ColorHandler(fLinkColor),
+                                                      new ColorHandler(TextColor));
 
-                    var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
-                                                  new ColorHandler(fLinkColor),
-                                                  new ColorHandler(TextColor));
+                        parser.ParseText(fChunks, text);
 
-                    parser.ParseText(fChunks, text);
+                        int line = -1;
+                        int chunksCount = fChunks.Count;
+                        for (int k = 0; k < chunksCount; k++)
+                        {
+                            BBTextChunk chunk = fChunks[k];
 
-                    int line = -1;
-                    int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++)
-                    {
-                        BBTextChunk chunk = fChunks[k];
+                            if (line != chunk.Line) {
+                                line = chunk.Line;
 
-                        if (line != chunk.Line) {
-                            line = chunk.Line;
+                                if (line > 0) {
+                                    yPos += lineHeight;
+                                    fHeights.Add(lineHeight);
+                                }
 
-                            if (line > 0) {
-                                yPos += lineHeight;
-                                fHeights.Add(lineHeight);
+                                xPos = 0;
+                                lineHeight = 0;
                             }
 
-                            xPos = 0;
-                            lineHeight = 0;
-                        }
+                            int prevX = xPos;
+                            int prevY = yPos;
 
-                        int prevX = xPos;
-                        int prevY = yPos;
+                            if (!string.IsNullOrEmpty(chunk.Text)) {
+                                using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
+                                    SizeF strSize = font.MeasureString(chunk.Text);
+                                    chunk.Width = (int)strSize.Width;
 
-                        if (!string.IsNullOrEmpty(chunk.Text)) {
-                            using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
-                                SizeF strSize = font.MeasureString(chunk.Text);
-                                chunk.Width = (int)strSize.Width;
+                                    xPos += chunk.Width;
+                                    if (xMax < xPos) xMax = xPos;
 
-                                xPos += chunk.Width;
-                                if (xMax < xPos) xMax = xPos;
+                                    int h = (int)strSize.Height;
+                                    if (lineHeight < h) lineHeight = h;
+                                }
 
-                                int h = (int)strSize.Height;
-                                if (lineHeight < h) lineHeight = h;
-                            }
-
-                            if (!string.IsNullOrEmpty(chunk.URL)) {
-                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                                if (!string.IsNullOrEmpty(chunk.URL)) {
+                                    chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                                }
                             }
                         }
                     }

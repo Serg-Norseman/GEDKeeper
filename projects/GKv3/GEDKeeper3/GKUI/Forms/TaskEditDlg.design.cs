@@ -63,10 +63,18 @@ namespace GKUI.Forms
             GroupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblGoal, cmbGoalType, TableLayout.Horizontal(10, new TableCell(txtGoal, true), btnGoalSelect) }
+                        Cells = {
+                            lblGoal,
+                            cmbGoalType,
+                            TableLayout.Horizontal(10, new TableCell(txtGoal, true), btnGoalSelect)
+                        }
                     },
                     new TableRow {
-                        Cells = { lblPriority, txtPriority, TableLayout.Horizontal(10, lblStartDate, txtStartDate, lblStopDate, txtStopDate) }
+                        Cells = {
+                            lblPriority,
+                            txtPriority,
+                            TableLayout.Horizontal(10, lblStartDate, txtStartDate, lblStopDate, txtStopDate)
+                        }
                     }
                 }
             };
@@ -78,6 +86,7 @@ namespace GKUI.Forms
 
             tabsData = new TabControl();
             tabsData.Pages.Add(pageNotes);
+            tabsData.Size = new Size(600, 260);
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;

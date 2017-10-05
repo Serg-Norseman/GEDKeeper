@@ -32,51 +32,39 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lblName = new Label();
-            //lblName.Size = new Size(67, 17);
             lblName.Text = "lblName";
 
             lblPriority = new Label();
-            //lblPriority.Size = new Size(80, 17);
             lblPriority.Text = "lblPriority";
 
             lblStatus = new Label();
-            //lblStatus.Size = new Size(78, 17);
             lblStatus.Text = "lblStatus";
 
             lblStartDate = new Label();
-            //lblStartDate.Size = new Size(72, 17);
             lblStartDate.Text = "lblStartDate";
 
             lblStopDate = new Label();
-            //lblStopDate.Size = new Size(77, 17);
             lblStopDate.Text = "lblStopDate";
 
             lblPercent = new Label();
-            //lblPercent.Size = new Size(64, 17);
             lblPercent.Text = "lblPercent";
 
             txtName = new TextBox();
-            //txtName.Size = new Size(740, 24);
 
             cmbPriority = new ComboBox();
             cmbPriority.ReadOnly = true;
-            //cmbPriority.Size = new Size(225, 25);
 
             cmbStatus = new ComboBox();
             cmbStatus.ReadOnly = true;
-            //cmbStatus.Size = new Size(225, 25);
 
             txtStartDate = new MaskedTextBox();
             txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //txtStartDate.Size = new Size(225, 24);
 
             txtStopDate = new MaskedTextBox();
             txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //txtStopDate.Size = new Size(225, 24);
 
             nudPercent = new NumericUpDown();
             nudPercent.Increment = 5;
-            //nudPercent.Size = new Size(57, 24);
 
             GroupBox1 = new GroupBox();
             GroupBox1.Content = new DefTableLayout {
@@ -85,10 +73,16 @@ namespace GKUI.Forms
                         Cells = { lblName, txtName }
                     },
                     new TableRow {
-                        Cells = { lblPriority, TableLayout.Horizontal(10, cmbPriority, lblStatus, cmbStatus, lblPercent, nudPercent) }
+                        Cells = {
+                            lblPriority,
+                            TableLayout.Horizontal(10, cmbPriority, lblStatus, cmbStatus, lblPercent, nudPercent)
+                        }
                     },
                     new TableRow {
-                        Cells = { lblStartDate, TableLayout.Horizontal(10, txtStartDate, lblStopDate, txtStopDate) }
+                        Cells = {
+                            lblStartDate,
+                            TableLayout.Horizontal(10, txtStartDate, lblStopDate, txtStopDate)
+                        }
                     }
                 }
             };
@@ -112,6 +106,7 @@ namespace GKUI.Forms
             tabsData.Pages.Add(pageCommunications);
             tabsData.Pages.Add(pageGroups);
             tabsData.Pages.Add(pageNotes);
+            tabsData.Size = new Size(600, 260);
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;

@@ -6,7 +6,7 @@ namespace GKUI.Forms
 {
     partial class FamilyEditDlg
     {
-        private TabControl tabsFamilyData;
+        private TabControl tabsData;
         private TabPage pageEvents;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
@@ -35,12 +35,16 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lblHusband = new Label();
-            //lblHusband.Size = new Size(74, 17);
             lblHusband.Text = "lblHusband";
 
             lblWife = new Label();
-            //lblWife.Size = new Size(47, 17);
             lblWife.Text = "lblWife";
+
+            txtHusband = new TextBox();
+            txtHusband.Enabled = false;
+
+            txtWife = new TextBox();
+            txtWife.Enabled = false;
 
             btnHusbandAdd = new Button();
             btnHusbandAdd.Enabled = false;
@@ -76,30 +80,27 @@ namespace GKUI.Forms
             btnWifeAdd.Click += btnWifeAddClick;
             btnWifeAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
-            txtHusband = new TextBox();
-            txtHusband.Enabled = false;
-            //txtHusband.Size = new Size(460, 24);
-
-            txtWife = new TextBox();
-            txtWife.Enabled = false;
-            //txtWife.Size = new Size(460, 24);
-
             lblStatus = new Label();
             lblStatus.Text = "lblStatus";
 
             cmbMarriageStatus = new ComboBox();
             cmbMarriageStatus.ReadOnly = true;
-            //cmbMarriageStatus.Size = new Size(203, 25);
 
             GroupBox1 = new GroupBox();
             GroupBox1.Text = "GroupBox1";
             GroupBox1.Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblHusband, TableLayout.Horizontal(10, new TableCell(txtHusband, true), btnHusbandAdd, btnHusbandDelete, btnHusbandSel) }
+                        Cells = {
+                            lblHusband,
+                            TableLayout.Horizontal(10, new TableCell(txtHusband, true), btnHusbandAdd, btnHusbandDelete, btnHusbandSel)
+                        }
                     },
                     new TableRow {
-                        Cells = { lblWife, TableLayout.Horizontal(10, new TableCell(txtWife, true), btnWifeAdd, btnWifeDelete, btnWifeSel) }
+                        Cells = {
+                            lblWife,
+                            TableLayout.Horizontal(10, new TableCell(txtWife, true), btnWifeAdd, btnWifeDelete, btnWifeSel)
+                        }
                     },
                     new TableRow {
                         //ScaleHeight = true,
@@ -125,12 +126,13 @@ namespace GKUI.Forms
             pageSources = new TabPage();
             pageSources.Text = "pageSources";
 
-            tabsFamilyData = new TabControl();
-            tabsFamilyData.Pages.Add(pageChilds);
-            tabsFamilyData.Pages.Add(pageEvents);
-            tabsFamilyData.Pages.Add(pageNotes);
-            tabsFamilyData.Pages.Add(pageMultimedia);
-            tabsFamilyData.Pages.Add(pageSources);
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageChilds);
+            tabsData.Pages.Add(pageEvents);
+            tabsData.Pages.Add(pageNotes);
+            tabsData.Pages.Add(pageMultimedia);
+            tabsData.Pages.Add(pageSources);
+            tabsData.Size = new Size(600, 260);
 
             lblRestriction = new Label();
             lblRestriction.Text = "lblRestriction";
@@ -161,7 +163,7 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { tabsFamilyData }
+                        Cells = { tabsData }
                     },
                     UIHelper.MakeDialogFooter(lblRestriction, cmbRestriction, null, btnAccept, btnCancel)
                 }

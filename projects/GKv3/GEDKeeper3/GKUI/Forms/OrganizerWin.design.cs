@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,6 +33,7 @@ namespace GKUI.Forms
             tabsData.Pages.Add(pageTelephones);
             tabsData.Pages.Add(pageMails);
             tabsData.Pages.Add(pageWebs);
+            tabsData.Size = new Size(600, 400);
 
             Content = tabsData;
 

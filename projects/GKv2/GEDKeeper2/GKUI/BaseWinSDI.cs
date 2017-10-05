@@ -639,6 +639,10 @@ namespace GKUI
 
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+            if (mmKind == MultimediaKind.mkNone) {
+                return;
+            }
+
             bool externalViewer = !GlobalOptions.Instance.EmbeddedMediaPlayer &&
                 ((mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo));
 

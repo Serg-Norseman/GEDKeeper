@@ -16,7 +16,7 @@ namespace GKUI.Forms
         private TextBox txtTel;
         private TextArea txtAddress;
         private TabPage pageOther;
-        private TabControl PageControl1;
+        private TabControl tabsData;
         private GKListView lvRecordStats;
         private Button btnLangEdit;
         private TextBox txtLanguage;
@@ -25,20 +25,6 @@ namespace GKUI.Forms
         private void InitializeComponent()
         {
             SuspendLayout();
-
-            btnAccept = new Button();
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-
-            btnCancel = new Button();
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             btnLangEdit = new Button();
             btnLangEdit.Size = new Size(26, 26);
@@ -81,7 +67,10 @@ namespace GKUI.Forms
                         Cells = { lblTelephone, txtTel }
                     },
                     new TableRow {
-                        Cells = { lblLanguage, TableLayout.Horizontal(10, new TableCell(txtLanguage, true), btnLangEdit) }
+                        Cells = {
+                            lblLanguage,
+                            TableLayout.Horizontal(10, new TableCell(txtLanguage, true), btnLangEdit)
+                        }
                     }
                 }
             };
@@ -94,15 +83,30 @@ namespace GKUI.Forms
             pageOther.Text = "pageOther";
             pageOther.Content = lvRecordStats;
 
-            PageControl1 = new TabControl();
-            PageControl1.Pages.Add(pageAuthor);
-            PageControl1.Pages.Add(pageOther);
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageAuthor);
+            tabsData.Pages.Add(pageOther);
+            tabsData.Size = new Size(500, 340);
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = new Size(130, 26);
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += CancelClickHandler;
+            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { PageControl1 }
+                        Cells = { tabsData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }

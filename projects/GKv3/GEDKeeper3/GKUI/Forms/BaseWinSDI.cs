@@ -93,6 +93,8 @@ namespace GKUI.Forms
 
             fNavman = new NavigationStack<GEDCOMRecord>();
 
+            tabsRecords.SuspendLayout();
+
             fTabParts = new TabParts[(int)GEDCOMRecordType.rtLast + 1];
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual);
             CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily);
@@ -105,6 +107,8 @@ namespace GKUI.Forms
             CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask);
             CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication);
             CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation);
+
+            tabsRecords.ResumeLayout();
 
             SetLang();
         }
@@ -411,13 +415,10 @@ namespace GKUI.Forms
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
 
-            tabsRecords.SuspendLayout();
-
-            TabPage tabPage = new TabPage(pageText);
+            TabPage tabPage = new TabPage();
+            tabPage.Text = pageText;
             tabPage.Content = spl;
             tabsRecords.Pages.Add(tabPage);
-
-            tabsRecords.ResumeLayout();
 
             fTabParts[(int)recType] = new TabParts(recView, summary);
         }
@@ -601,6 +602,10 @@ namespace GKUI.Forms
 
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+            if (mmKind == MultimediaKind.mkNone) {
+                return;
+            }
+
             bool externalViewer = !GlobalOptions.Instance.EmbeddedMediaPlayer &&
                 ((mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo));
 
@@ -1040,7 +1045,7 @@ namespace GKUI.Forms
             }
 
             if (img != null) {
-                StatusBarShieldImage.Image = img;
+                panStatusShieldImage.Image = img;
             }
         }
 
@@ -1177,11 +1182,11 @@ namespace GKUI.Forms
 
                 UpdateNavControls();
 
-                /*if (workWin != null) {
-                    StatusBar.Panels[0].Text = workWin.GetStatusString();
+                if (workWin != null) {
+                    panStatusText.Text = workWin.GetStatusString();
                 }
 
-                StatusBar.Invalidate();*/
+                StatusBar.Invalidate();
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
             }

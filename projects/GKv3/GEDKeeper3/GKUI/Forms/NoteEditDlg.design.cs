@@ -30,8 +30,7 @@ namespace GKUI.Forms
 
             txtNote = new TextArea();
             txtNote.AcceptsReturn = true;
-            txtNote.Height = 190;
-            txtNote.Width = 380;
+            txtNote.Size = new Size(400, 260);
 
             Content = new DefTableLayout {
                 Rows = {

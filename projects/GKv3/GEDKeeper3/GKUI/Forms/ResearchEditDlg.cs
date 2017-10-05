@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         private readonly GKSheetList fTasksList;
@@ -52,19 +49,15 @@ namespace GKUI.Forms
         private void SetResearch(GEDCOMResearchRecord value)
         {
             fResearch = value;
-            try
-            {
-                if (fResearch == null)
-                {
+            try {
+                if (fResearch == null) {
                     txtName.Text = "";
                     cmbPriority.SelectedIndex = -1;
                     cmbStatus.SelectedIndex = -1;
                     txtStartDate.Text = "";
                     txtStopDate.Text = "";
                     nudPercent.Value = 0;
-                }
-                else
-                {
+                } else {
                     txtName.Text = fResearch.ResearchName;
                     cmbPriority.SelectedIndex = (int)fResearch.Priority;
                     cmbStatus.SelectedIndex = (int)fResearch.Status;
@@ -77,9 +70,7 @@ namespace GKUI.Forms
                 fTasksList.ListModel.DataOwner = fResearch;
                 fCommunicationsList.ListModel.DataOwner = fResearch;
                 fGroupsList.ListModel.DataOwner = fResearch;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
             }
         }
@@ -88,13 +79,11 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
-            {
+            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
                 cmbPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++)
-            {
+            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++) {
                 cmbStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
 
@@ -175,13 +164,10 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -189,13 +175,10 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
                 CancelClickHandler(sender, e);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }

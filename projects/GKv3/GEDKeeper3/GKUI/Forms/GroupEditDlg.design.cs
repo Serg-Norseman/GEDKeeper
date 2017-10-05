@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private TextBox edName;
         private Label lblName;
-        private TabControl tabsGroupData;
+        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageMembers;
@@ -24,6 +24,21 @@ namespace GKUI.Forms
 
             edName = new TextBox();
 
+            pageMembers = new TabPage();
+            pageMembers.Text = "pageMembers";
+
+            pageNotes = new TabPage();
+            pageNotes.Text = "pageNotes";
+
+            pageMultimedia = new TabPage();
+            pageMultimedia.Text = "pageMultimedia";
+
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageMembers);
+            tabsData.Pages.Add(pageNotes);
+            tabsData.Pages.Add(pageMultimedia);
+            tabsData.Size = new Size(600, 260);
+
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
             btnAccept.Size = new Size(130, 26);
@@ -38,20 +53,6 @@ namespace GKUI.Forms
             btnCancel.Click += btnCancel_Click;
             btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
 
-            pageMembers = new TabPage();
-            pageMembers.Text = "pageMembers";
-
-            pageNotes = new TabPage();
-            pageNotes.Text = "pageNotes";
-
-            pageMultimedia = new TabPage();
-            pageMultimedia.Text = "pageMultimedia";
-
-            tabsGroupData = new TabControl();
-            tabsGroupData.Pages.Add(pageMembers);
-            tabsGroupData.Pages.Add(pageNotes);
-            tabsGroupData.Pages.Add(pageMultimedia);
-
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
@@ -59,7 +60,7 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { tabsGroupData }
+                        Cells = { tabsData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }

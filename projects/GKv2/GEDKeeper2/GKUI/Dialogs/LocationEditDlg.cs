@@ -159,13 +159,18 @@ namespace GKUI.Dialogs
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            string location = txtName.Text.Trim();
+            if (string.IsNullOrEmpty(location)) {
+                return;
+            }
+
             ListGeoCoords.BeginUpdate();
             fMapBrowser.BeginUpdate();
             try
             {
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
-                AppHost.Instance.RequestGeoCoords(txtName.Text, searchPoints);
+                AppHost.Instance.RequestGeoCoords(location, searchPoints);
                 ListGeoCoords.Items.Clear();
                 fMapBrowser.ClearPoints();
 

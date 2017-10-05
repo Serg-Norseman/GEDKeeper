@@ -94,6 +94,7 @@ namespace GKUI.Forms
             tabsData.Pages.Add(pageRepositories);
             tabsData.Pages.Add(pageNotes);
             tabsData.Pages.Add(pageMultimedia);
+            tabsData.Size = new Size(600, 260);
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;

@@ -9,7 +9,7 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private TextArea txtNote;
-        private GKUI.Components.HyperView hyperView1;
+        private HyperView hyperView1;
         private ButtonToolItem cmbSizes;
         private ContextMenu menuSizes;
         private ButtonMenuItem miClear;
@@ -101,12 +101,12 @@ namespace GKUI.Forms
 
             txtNote = new TextArea();
             txtNote.AcceptsReturn = true;
-            //txtNote.Size = new Size(763, 319);
 
-            hyperView1 = new GKUI.Components.HyperView();
+            hyperView1 = new HyperView();
             hyperView1.BorderWidth = 0;
-            hyperView1.LinkColor = Colors.Blue;
-            //hyperView1.Size = new Size(763, 347);
+
+            var pan2 = new Panel();
+            //pan2.Content = hyperView1;
 
             //
 
@@ -115,13 +115,14 @@ namespace GKUI.Forms
             pageEditor.Text = "pageEditor";
 
             pagePreview = new TabPage();
-            pagePreview.Content = hyperView1;
+            pagePreview.Content = pan2;
             pagePreview.Text = "pagePreview";
 
             tabControl1 = new TabControl();
             tabControl1.Pages.Add(pageEditor);
             tabControl1.Pages.Add(pagePreview);
             tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
+            tabControl1.Size = new Size(400, 260);
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
@@ -149,7 +150,7 @@ namespace GKUI.Forms
 
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
-            Title = "NoteEditDlg";
+            Title = "NoteEditDlgEx";
             ToolBar = toolStrip1;
 
             SetPredefProperties(460, 400);

@@ -28,19 +28,15 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lblTheme = new Label();
-            //lblTheme.Size = new Size(62, 17);
             lblTheme.Text = "lblTheme";
 
             lblDate = new Label();
-            //lblDate.Size = new Size(49, 17);
             lblDate.Text = "lblDate";
 
             lblType = new Label();
-            //lblType.Size = new Size(51, 17);
             lblType.Text = "lblType";
 
             lblCorresponder = new Label();
-            //lblCorresponder.Size = new Size(104, 17);
             lblCorresponder.Text = "lblCorresponder";
 
             btnPersonAdd = new Button();
@@ -49,23 +45,19 @@ namespace GKUI.Forms
             btnPersonAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             txtName = new TextBox();
-            //txtName.Size = new Size(528, 24);
 
             txtDate = new MaskedTextBox();
             txtDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //txtDate.Size = new Size(225, 24);
 
             cmbCorrType = new ComboBox();
             cmbCorrType.ReadOnly = true;
-            //cmbCorrType.Size = new Size(147, 25);
 
             txtDir = new ComboBox();
             txtDir.ReadOnly = true;
-            //txtDir.Size = new Size(91, 25);
+            txtDir.Width = 100;
 
             txtCorresponder = new TextBox();
             txtCorresponder.ReadOnly = true;
-            //txtCorresponder.Size = new Size(382, 24);
 
             GroupBox1 = new GroupBox();
             GroupBox1.Content = new DefTableLayout {
@@ -74,10 +66,17 @@ namespace GKUI.Forms
                         Cells = { lblTheme, txtName }
                     },
                     new TableRow {
-                        Cells = { lblCorresponder, TableLayout.Horizontal(10, new TableCell(txtDir, true), new TableCell(txtCorresponder, true), btnPersonAdd) }
+                        //Cells = { lblCorresponder, TableLayout.Horizontal(10, new TableCell(txtDir, false), new TableCell(txtCorresponder, true), btnPersonAdd) }
+                        Cells = {
+                            lblCorresponder,
+                            UIHelper.CreateRCS(txtDir, new StackLayoutItem(txtCorresponder, true), btnPersonAdd)
+                        }
                     },
                     new TableRow {
-                        Cells = { lblType, TableLayout.Horizontal(10, cmbCorrType, lblDate, txtDate) }
+                        Cells = {
+                            lblType,
+                            TableLayout.Horizontal(10, cmbCorrType, lblDate, txtDate)
+                        }
                     }
                 }
             };
@@ -93,6 +92,7 @@ namespace GKUI.Forms
             tabsData = new TabControl();
             tabsData.Pages.Add(pageNotes);
             tabsData.Pages.Add(pageMultimedia);
+            tabsData.Size = new Size(600, 260);
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
