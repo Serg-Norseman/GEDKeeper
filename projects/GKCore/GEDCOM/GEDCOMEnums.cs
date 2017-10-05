@@ -49,14 +49,14 @@ namespace GKCommon.GEDCOM
         gf_AGES,
         gf_PAF,
         gf_Ahnenblatt,
-        
+
         gf_Last = gf_Ahnenblatt
     }
 
     public enum GEDCOMCharacterSet
     {
         csASCII,
-        csANSEL, // unsupported
+        csANSEL,
         csUNICODE,
         csUTF8
     }
@@ -276,7 +276,7 @@ namespace GKCommon.GEDCOM
         ctLetter,
         ctTape,
         ctVisit,
-        
+
         ctLast = ctVisit
     }
 

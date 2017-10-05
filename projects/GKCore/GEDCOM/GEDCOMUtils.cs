@@ -191,9 +191,8 @@ namespace GKCommon.GEDCOM
 
             switch (cs) {
                 case GEDCOMCharacterSet.csANSEL:
-                    // [16/03/2016] not supported
-                    //res = new AnselEncoding();
-                    //break;
+                    res = new AnselEncoding();
+                    break;
 
                 case GEDCOMCharacterSet.csASCII:
                     res = Encoding.GetEncoding(1251);

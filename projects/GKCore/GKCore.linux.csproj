@@ -107,6 +107,7 @@
     <Compile Include="Externals\IniFiles\IniFileElement.cs" />
     <Compile Include="Externals\IniFiles\IniFileEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
+    <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GKCommon\BaseObject.cs" />
