@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -34,6 +35,17 @@ namespace GKUI.Components
         public Button btnZoomIn;
         public Button btnZoomOut;
 
+
+        public List<NamedRegion> NamedRegions
+        {
+            get { return imageBox.NamedRegions; }
+        }
+
+        public bool ShowNamedRegionTips
+        {
+            get { return imageBox.ShowNamedRegionTips; }
+            set { imageBox.ShowNamedRegionTips = value; }
+        }
 
         public bool ShowToolbar
         {

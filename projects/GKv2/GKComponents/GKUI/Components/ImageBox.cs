@@ -75,6 +75,18 @@ namespace GKUI.Components
         FixedSingleGlowShadow
     }
 
+    public class NamedRegion
+    {
+        public readonly string Name;
+        public readonly RectangleF Region;
+
+        public NamedRegion(string name, RectangleF region)
+        {
+            Name = name;
+            Region = region;
+        }
+    }
+
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
@@ -99,14 +111,18 @@ namespace GKUI.Components
         private ImageBoxBorderStyle fImageBorderStyle;
         private bool fIsPanning;
         private bool fIsSelecting;
+        private List<NamedRegion> fNamedRegions;
         private int fScaledImageHeight;
         private int fScaledImageWidth;
         private Color fSelectionColor;
         private ImageBoxSelectionMode fSelectionMode;
         private RectangleF fSelectionRegion;
+        private bool fShowNamedRegionTips;
         private bool fSizeToFit;
         private Point fStartMousePosition;
         private Point fStartScrollPosition;
+        private string fTip;
+        private ToolTip fToolTip;
         private int fUpdateCount;
         private int fZoom;
         private Size fViewSize;
@@ -290,6 +306,11 @@ namespace GKUI.Components
             }
         }
 
+        public List<NamedRegion> NamedRegions
+        {
+            get { return fNamedRegions; }
+        }
+
         /// <summary>
         ///   Gets or sets the color of selection regions.
         /// </summary>
@@ -329,6 +350,12 @@ namespace GKUI.Components
                     OnSelectionRegionChanged(EventArgs.Empty);
                 }
             }
+        }
+
+        public bool ShowNamedRegionTips
+        {
+            get { return fShowNamedRegionTips; }
+            set { fShowNamedRegionTips = value; }
         }
 
         /// <summary>
@@ -398,6 +425,7 @@ namespace GKUI.Components
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
+            fNamedRegions = new List<NamedRegion>();
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
             AllowZoom = true;
@@ -411,6 +439,12 @@ namespace GKUI.Components
             SelectionColor = SystemColors.Highlight;
             ImageBorderColor = SystemColors.ControlDark;
             Padding = new Padding(0);
+
+            fToolTip = new ToolTip();
+            fToolTip.AutoPopDelay = 5000;
+            fToolTip.InitialDelay = 250;
+            fToolTip.ReshowDelay = 50;
+            fToolTip.ShowAlways = true;
 
             ActualSize();
             UpdateParams();
@@ -584,11 +618,9 @@ namespace GKUI.Components
         /// <remarks>If a match is made, the return will be offset by 1</remarks>
         private Point PointToImage(Point point, bool fitToBounds)
         {
-            int x;
-            int y;
+            int x, y;
 
             Rectangle viewport = GetImageViewport();
-
             if (viewport.Contains(point) || fitToBounds)
             {
                 if (AutoScrollPosition != Point.Empty)
@@ -802,8 +834,6 @@ namespace GKUI.Components
         /// </param>
         private void DrawSelection(PaintEventArgs e)
         {
-            e.Graphics.SetClip(GetInsideViewport());
-
             RectangleF rect = GetOffsetRectangle(fSelectionRegion);
 
             using (Brush brush = new SolidBrush(Color.FromArgb(128, fSelectionColor)))
@@ -811,8 +841,19 @@ namespace GKUI.Components
 
             using (var pen = new Pen(fSelectionColor))
                 e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+        }
 
-            e.Graphics.ResetClip();
+        private void DrawNamedRegions(Graphics gfx)
+        {
+            foreach (var region in fNamedRegions) {
+                RectangleF rect = GetOffsetRectangle(region.Region);
+
+                using (Brush brush = new SolidBrush(Color.FromArgb(128, fSelectionColor)))
+                    gfx.FillRectangle(brush, rect);
+
+                using (var pen = new Pen(fSelectionColor))
+                    gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+            }
         }
 
         /// <summary>
@@ -926,6 +967,28 @@ namespace GKUI.Components
                 case MouseButtons.Right:
                     ProcessPanning(e, ImageBoxSelectionMode.None);
                     break;
+
+                case MouseButtons.None:
+                    if (fShowNamedRegionTips) {
+                        string tip = "";
+                        foreach (var region in fNamedRegions) {
+                            RectangleF rect = GetOffsetRectangle(region.Region);
+                            if (rect.Contains(e.Location)) {
+                                tip = region.Name;
+                                break;
+                            }
+                        }
+
+                        if (fTip != tip) {
+                            fTip = tip;
+                            if (tip != "") {
+                                fToolTip.Show(tip, this, e.X, e.Y, 3000);
+                            } else {
+                                fToolTip.Hide(this);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -988,9 +1051,15 @@ namespace GKUI.Components
                 gfx.DrawImage(fImage, GetImageViewport(), GetSourceImageRegion(), GraphicsUnit.Pixel);
             }
 
+            gfx.SetClip(GetInsideViewport());
+
             // draw the selection
             if (fSelectionRegion != Rectangle.Empty)
                 DrawSelection(e);
+
+            DrawNamedRegions(gfx);
+
+            gfx.ResetClip();
 
             base.OnPaint(e);
         }
@@ -1172,9 +1241,10 @@ namespace GKUI.Components
         {
             if (fSelectionMode == ImageBoxSelectionMode.None) return;
 
+            Point mpt = e.Location;
             if (!fIsSelecting)
             {
-                fStartMousePosition = e.Location;
+                fStartMousePosition = mpt;
                 IsSelecting = true;
             }
 
@@ -1182,35 +1252,31 @@ namespace GKUI.Components
 
             float x, y, w, h;
 
-            Point imageOffset = GetImageViewport().Location;
-
-            if (e.X < fStartMousePosition.X)
+            if (mpt.X < fStartMousePosition.X)
             {
-                x = e.X;
-                w = fStartMousePosition.X - e.X;
+                x = mpt.X;
+                w = fStartMousePosition.X - mpt.X;
             }
             else
             {
                 x = fStartMousePosition.X;
-                w = e.X - fStartMousePosition.X;
+                w = mpt.X - fStartMousePosition.X;
             }
 
-            if (e.Y < fStartMousePosition.Y)
+            if (mpt.Y < fStartMousePosition.Y)
             {
-                y = e.Y;
-                h = fStartMousePosition.Y - e.Y;
+                y = mpt.Y;
+                h = fStartMousePosition.Y - mpt.Y;
             }
             else
             {
                 y = fStartMousePosition.Y;
-                h = e.Y - fStartMousePosition.Y;
+                h = mpt.Y - fStartMousePosition.Y;
             }
 
-            x = x - imageOffset.X - AutoScrollPosition.X;
-            y = y - imageOffset.Y - AutoScrollPosition.Y;
-
-            x = x / fZoomFactor;
-            y = y / fZoomFactor;
+            Point imageOffset = GetImageViewport().Location;
+            x = (x - imageOffset.X - AutoScrollPosition.X) / fZoomFactor;
+            y = (y - imageOffset.Y - AutoScrollPosition.Y) / fZoomFactor;
             w = w / fZoomFactor;
             h = h / fZoomFactor;
 

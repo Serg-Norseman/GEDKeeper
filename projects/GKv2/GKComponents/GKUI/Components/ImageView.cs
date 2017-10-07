@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -35,6 +36,17 @@ namespace GKUI.Components
         public ToolStripButton btnZoomIn;
         public ToolStripButton btnZoomOut;
 
+
+        public List<NamedRegion> NamedRegions
+        {
+            get { return imageBox.NamedRegions; }
+        }
+
+        public bool ShowNamedRegionTips
+        {
+            get { return imageBox.ShowNamedRegionTips; }
+            set { imageBox.ShowNamedRegionTips = value; }
+        }
 
         public bool ShowToolbar
         {

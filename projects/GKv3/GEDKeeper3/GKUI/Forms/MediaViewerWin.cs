@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
@@ -57,15 +58,13 @@ namespace GKUI.Forms
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
 
-            try
-            {
-                switch (mmKind)
-                {
+            try {
+                switch (mmKind) {
                     case MultimediaKind.mkImage:
                         {
                             IImage img = fBase.Context.LoadMediaImage(fFileRef, false);
                             if (img != null) {
-                                SetViewImage(((ImageHandler)img).Handle);
+                                SetViewImage(((ImageHandler)img).Handle, fFileRef);
                             }
                             break;
                         }
@@ -82,8 +81,7 @@ namespace GKUI.Forms
                         {
                             Stream fs = fBase.Context.MediaLoad(fFileRef, false);
 
-                            switch (fFileRef.MultimediaFormat)
-                            {
+                            switch (fFileRef.MultimediaFormat) {
                                 case GEDCOMMultimediaFormat.mfTXT:
                                     {
                                         TextArea txtBox = new TextArea();
@@ -140,15 +138,15 @@ namespace GKUI.Forms
                                     }
                                     break;
                             }
-                            if (fs != null && !(ctl is WebView)) fs.Dispose();
+                            if (fs != null && !(ctl is WebView))
+                                fs.Dispose();
                             
                             break;
                         }
                 }
-            }
-            catch (Exception ex)
-            {
-                if (ctl != null) ctl.Dispose();
+            } catch (Exception ex) {
+                if (ctl != null)
+                    ctl.Dispose();
 
                 Logger.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
             }
@@ -162,7 +160,7 @@ namespace GKUI.Forms
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(Image img)
+        public void SetViewImage(Image img, GEDCOMFileReferenceWithTitle fileRef)
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
@@ -170,22 +168,45 @@ namespace GKUI.Forms
             imageCtl.btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
             imageCtl.btnZoomOut.ToolTip = LangMan.LS(LSID.LSID_ZoomOut);
 
+            ProcessPortraits(imageCtl, fileRef);
+
             fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
             fTimer.Start();
 
             SetViewControl(imageCtl);
         }
 
+        private void ProcessPortraits(GKUI.Components.ImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        {
+            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
+
+            var linksList = new List<GEDCOMObject>();
+            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
+
+            foreach (var link in linksList) {
+                var mmLink = link as GEDCOMMultimediaLink;
+                if (mmLink != null && mmLink.IsPrimary) {
+                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
+                    string indiName = GKUtils.GetNameString(indiRec, true, false);
+                    var region = UIHelper.Rt2Rt(mmLink.CutoutPosition.Value);
+
+                    imageCtl.NamedRegions.Add(new NamedRegion(indiName, region));
+                }
+            }
+
+            imageCtl.ShowNamedRegionTips = (imageCtl.NamedRegions.Count > 0);
+        }
+
         private void SetViewControl(Control ctl)
         {
-            if (ctl == null) return;
-            fViewer = ctl;
+            if (ctl != null) {
+                fViewer = ctl;
+                fViewer.Size = new Size(1000, 600);
 
-            SuspendLayout();
-
-            Content = ctl;
-
-            ResumeLayout();
+                SuspendLayout();
+                Content = fViewer;
+                ResumeLayout();
+            }
         }
 
         public MediaViewerWin(IBaseWindow baseWin)
@@ -227,7 +248,8 @@ namespace GKUI.Forms
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Keys.Escape) Close();
+            if (e.Key == Keys.Escape)
+                Close();
         }
 
         private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)

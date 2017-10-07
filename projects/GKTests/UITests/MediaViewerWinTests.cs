@@ -73,7 +73,7 @@ namespace GKTests.UITests
 
             GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
             Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
-            fDialog.SetViewImage(img);
+            fDialog.SetViewImage(img, fileRef);
 
             fDialog.Refresh();
 

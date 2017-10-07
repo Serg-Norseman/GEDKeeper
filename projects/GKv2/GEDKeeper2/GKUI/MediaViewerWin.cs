@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -64,7 +65,7 @@ namespace GKUI
                         {
                             IImage img = fBase.Context.LoadMediaImage(fFileRef, false);
                             if (img != null) {
-                                SetViewImage(((ImageHandler)img).Handle);
+                                SetViewImage(((ImageHandler)img).Handle, fFileRef);
                             }
                             break;
                         }
@@ -163,7 +164,7 @@ namespace GKUI
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(Image img)
+        public void SetViewImage(Image img, GEDCOMFileReferenceWithTitle fileRef)
         {
             ImageView imageCtl = new ImageView();
             imageCtl.OpenImage(img);
@@ -171,7 +172,30 @@ namespace GKUI
             imageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
             imageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
 
+            ProcessPortraits(imageCtl, fileRef);
+
             SetViewControl(imageCtl);
+        }
+
+        private void ProcessPortraits(ImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        {
+            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
+
+            var linksList = new List<GEDCOMObject>();
+            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
+
+            foreach (var link in linksList) {
+                var mmLink = link as GEDCOMMultimediaLink;
+                if (mmLink != null && mmLink.IsPrimary) {
+                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
+                    string indiName = GKUtils.GetNameString(indiRec, true, false);
+                    var region = UIHelper.Rt2Rt(mmLink.CutoutPosition.Value);
+
+                    imageCtl.NamedRegions.Add(new NamedRegion(indiName, region));
+                }
+            }
+
+            imageCtl.ShowNamedRegionTips = (imageCtl.NamedRegions.Count > 0);
         }
 
         private void SetViewControl(Control ctl)

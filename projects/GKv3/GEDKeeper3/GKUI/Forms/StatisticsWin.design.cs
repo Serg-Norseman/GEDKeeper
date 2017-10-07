@@ -19,13 +19,11 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lvSummary = new GKListView();
-            //lvSummary.Size = new Size(887, 244);
-            lvSummary.Height = 240;
 
             grpSummary = new GroupBox();
-            //grpSummary.Size = new Size(893, 267);
             grpSummary.Text = "grpSummary";
             grpSummary.Content = lvSummary;
+            grpSummary.Size = new Size(800, 260);
 
             /*cbType = new ButtonToolItem();
             cbType.Text = "Stat Types ▼";
@@ -54,9 +52,9 @@ namespace GKUI.Forms
                                         tbExcelExport});*/
 
             panDataPlaceholder = new Panel();
-            panDataPlaceholder.Size = new Size(800, 300);
+            panDataPlaceholder.Size = new Size(800, 260);
 
-            Content = new DefTableLayout {
+            Content = new TableLayout {
                 Rows = {
                     new TableRow {
                         Cells = { grpSummary }

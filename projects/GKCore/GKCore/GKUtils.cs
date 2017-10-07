@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -1464,8 +1465,9 @@ namespace GKCore
                     }
                 }
 
-                if (aInRecord is GEDCOMRecordWithEvents) {
-                    GEDCOMRecordWithEvents evsRec = (GEDCOMRecordWithEvents) aInRecord;
+                var recordWithEvents = aInRecord as GEDCOMRecordWithEvents;
+                if (recordWithEvents != null) {
+                    GEDCOMRecordWithEvents evsRec = recordWithEvents;
 
                     num = evsRec.Events.Count;
                     for (int i = 0; i < num; i++) {
@@ -1476,6 +1478,64 @@ namespace GKCore
             catch (Exception ex)
             {
                 Logger.LogWrite("GKUtils.ShowSubjectLinks(): " + ex.Message);
+            }
+        }
+
+        public static void SearchRecordLinks(List<GEDCOMObject> linksList, GEDCOMRecord inRecord, GEDCOMRecord searchRec)
+        {
+            try {
+                int num;
+                switch (searchRec.RecordType) {
+                    case GEDCOMRecordType.rtNote:
+                        num = inRecord.Notes.Count;
+                        for (int i = 0; i < num; i++) {
+                            var notes = inRecord.Notes[i];
+                            if (notes.Value == searchRec) {
+                                linksList.Add(notes);
+                            }
+                        }
+                        break;
+
+                    case GEDCOMRecordType.rtMultimedia:
+                        num = inRecord.MultimediaLinks.Count;
+                        for (int i = 0; i < num; i++) {
+                            var mmLink = inRecord.MultimediaLinks[i];
+                            if (mmLink.Value == searchRec) {
+                                linksList.Add(mmLink);
+                            }
+                        }
+                        break;
+
+                    case GEDCOMRecordType.rtSource:
+                        num = inRecord.SourceCitations.Count;
+                        for (int i = 0; i < num; i++) {
+                            var sourCit = inRecord.SourceCitations[i];
+                            if (sourCit.Value == searchRec) {
+                                linksList.Add(sourCit);
+                            }
+                        }
+                        break;
+                }
+
+                /*var recordWithEvents = aInRecord as GEDCOMRecordWithEvents;
+                if (recordWithEvents != null) {
+                    GEDCOMRecordWithEvents evsRec = recordWithEvents;
+
+                    num = evsRec.Events.Count;
+                    for (int i = 0; i < num; i++) {
+                        ShowEvent(subject, linksList, evsRec, evsRec.Events[i]);
+                    }
+                }*/
+            } catch (Exception ex) {
+                Logger.LogWrite("GKUtils.SearchRecordLinks(): " + ex.Message);
+            }
+        }
+
+        public static void SearchRecordLinks(List<GEDCOMObject> linksList, GEDCOMTree tree, GEDCOMRecord searchRec)
+        {
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                SearchRecordLinks(linksList, tree[i], searchRec);
             }
         }
 

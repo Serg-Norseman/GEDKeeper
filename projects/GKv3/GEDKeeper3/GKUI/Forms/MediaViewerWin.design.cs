@@ -13,7 +13,7 @@ namespace GKUI.Forms
             Closing += MediaViewerWin_FormClosing;
             KeyDown += MediaViewerWin_KeyDown;
 
-            UIHelper.SetPredefProperties(this, 1030, 580);
+            UIHelper.SetPredefProperties(this, 1000, 600);
             ResumeLayout();
         }
     }

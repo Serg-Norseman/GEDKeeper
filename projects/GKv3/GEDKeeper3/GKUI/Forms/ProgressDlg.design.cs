@@ -23,6 +23,7 @@ namespace GKUI.Forms
             lblTitle.Text = "lblTitle";
 
             ProgressBar1 = new ProgressBar();
+            ProgressBar1.Size = new Size(380, 20);
 
             lblTimePassed = new Label();
             lblTimePassed.Text = "lblTimePassed";

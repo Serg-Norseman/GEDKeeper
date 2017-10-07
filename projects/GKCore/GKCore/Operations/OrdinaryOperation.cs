@@ -66,6 +66,9 @@ namespace GKCore.Operations
         otIndividualURefAdd,
         otIndividualURefRemove,
 
+        otIndividualPortraitAttach,
+        otIndividualPortraitDetach,
+
         otIndividualBookmarkChange,
         otIndividualPatriarchChange,
         otIndividualSexChange
@@ -183,6 +186,11 @@ namespace GKCore.Operations
                 case OperationType.otIndividualURefAdd:
                 case OperationType.otIndividualURefRemove:
                     result = ProcessIndividualURef(redo);
+                    break;
+
+                case OperationType.otIndividualPortraitAttach:
+                case OperationType.otIndividualPortraitDetach:
+                    result = ProcessIndividualPortrait(redo);
                     break;
 
                 case OperationType.otIndividualBookmarkChange:
@@ -510,6 +518,27 @@ namespace GKCore.Operations
             } else {
                 iRec.UserReferences.Extract(uRef);
             }
+            return true;
+        }
+
+        private bool ProcessIndividualPortrait(bool redo)
+        {
+            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GEDCOMMultimediaLink mmNewLink = fNewVal as GEDCOMMultimediaLink;
+            GEDCOMMultimediaLink mmOldLink = fOldVal as GEDCOMMultimediaLink;
+
+            if (iRec == null || mmNewLink == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otIndividualPortraitDetach) {
+                redo = !redo;
+            }
+
+            if (redo) {
+            } else {
+            }
+
             return true;
         }
 

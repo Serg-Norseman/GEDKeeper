@@ -73,6 +73,18 @@ namespace GKUI.Components
         FixedSingleGlowShadow
     }
 
+    public class NamedRegion
+    {
+        public readonly string Name;
+        public readonly RectangleF Region;
+
+        public NamedRegion(string name, RectangleF region)
+        {
+            Name = name;
+            Region = region;
+        }
+    }
+
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
@@ -96,6 +108,8 @@ namespace GKUI.Components
         private ImageBoxBorderStyle fImageBorderStyle;
         private bool fIsPanning;
         private bool fIsSelecting;
+        private List<NamedRegion> fNamedRegions;
+        private bool fShowNamedRegionTips;
         private int fScaledImageHeight;
         private int fScaledImageWidth;
         private Color fSelectionColor;
@@ -103,6 +117,7 @@ namespace GKUI.Components
         private RectangleF fSelectionRegion;
         private bool fSizeToFit;
         private Point fStartMousePosition;
+        private string fTip;
         private int fUpdateCount;
         private int fZoom;
         private Size fImageSize;
@@ -265,6 +280,11 @@ namespace GKUI.Components
             }
         }
 
+        public List<NamedRegion> NamedRegions
+        {
+            get { return fNamedRegions; }
+        }
+
         /// <summary>
         ///   Gets or sets the color of selection regions.
         /// </summary>
@@ -304,6 +324,12 @@ namespace GKUI.Components
                     OnSelectionRegionChanged(EventArgs.Empty);
                 }
             }
+        }
+
+        public bool ShowNamedRegionTips
+        {
+            get { return fShowNamedRegionTips; }
+            set { fShowNamedRegionTips = value; }
         }
 
         /// <summary>
@@ -370,6 +396,7 @@ namespace GKUI.Components
         {
             CenteredImage = true;
 
+            fNamedRegions = new List<NamedRegion>();
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
             AllowZoom = true;
@@ -496,7 +523,7 @@ namespace GKUI.Components
         /// <returns>A Rectangle which has been resized and repositioned to match the current zoom level and image offset</returns>
         private RectangleF GetOffsetRectangle(RectangleF source)
         {
-            Point imageOffset = ImageViewport.Location;
+            Point imageOffset = ImageRect.Location; // ImageViewport.Location;
             RectangleF scaledRect = new RectangleF(
                 imageOffset.X + (source.Left * fZoomFactor),
                 imageOffset.Y + (source.Top * fZoomFactor),
@@ -541,27 +568,24 @@ namespace GKUI.Components
         /// <remarks>If a match is made, the return will be offset by 1</remarks>
         private Point PointToImage(PointF point, bool fitToBounds)
         {
-            int x;
-            int y;
+            int x, y;
 
             Rectangle viewport = Viewport;//GetImageViewPort();
-
             if (viewport.Contains(new Point(point)) || fitToBounds)
             {
                 Point pt = GetImageRelativeLocation(point);
                 x = (int)(pt.X / fZoomFactor);
                 y = (int)(pt.Y / fZoomFactor);
 
-                //Size viewSize = Viewport.Size;
-                /*if (x < 0)
+                if (x < 0)
                     x = 0;
-                else if (x > viewSize.Width)
-                    x = viewSize.Width;
+                else if (x > fImageSize.Width)
+                    x = fImageSize.Width;
 
                 if (y < 0)
                     y = 0;
-                else if (y > viewSize.Height)
-                    y = viewSize.Height;*/
+                else if (y > fImageSize.Height)
+                    y = fImageSize.Height;
             }
             else
             {
@@ -776,6 +800,20 @@ namespace GKUI.Components
                 e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
         }
 
+        private void DrawNamedRegions(Graphics gfx)
+        {
+            var color = new Color(fSelectionColor, 0.25f);
+            foreach (var region in fNamedRegions) {
+                RectangleF rect = GetOffsetRectangle(region.Region);
+
+                using (Brush brush = new SolidBrush(color))
+                    gfx.FillRectangle(brush, rect);
+
+                using (var pen = new Pen(fSelectionColor))
+                    gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+            }
+        }
+
         /// <summary>
         ///   Gets an offset based on the current image border style.
         /// </summary>
@@ -853,6 +891,24 @@ namespace GKUI.Components
                 case MouseButtons.Alternate:
                     ProcessPanning(e, ImageBoxSelectionMode.None);
                     break;
+
+                case MouseButtons.None:
+                    if (fShowNamedRegionTips) {
+                        string tip = "";
+                        foreach (var region in fNamedRegions) {
+                            RectangleF rect = GetOffsetRectangle(region.Region);
+                            if (rect.Contains(e.Location)) {
+                                tip = region.Name;
+                                break;
+                            }
+                        }
+
+                        if (fTip != tip) {
+                            fTip = tip;
+                            ToolTip = tip;
+                        }
+                    }
+                    break;
             }
 
             e.Handled = true;
@@ -927,6 +983,8 @@ namespace GKUI.Components
                 // draw the selection
                 if (fSelectionRegion != Rectangle.Empty)
                     DrawSelection(e);
+
+                DrawNamedRegions(gfx);
             }
         }
 
