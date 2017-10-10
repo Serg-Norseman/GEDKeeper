@@ -78,7 +78,7 @@ namespace GKUI.Forms
             rbSexAll.Text = LangMan.LS(LSID.LSID_All);
             rbSexMale.Text = LangMan.LS(LSID.LSID_OnlyMans);
             rbSexFemale.Text = LangMan.LS(LSID.LSID_OnlyWomans);
-            lblAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore) + ':';
+            lblAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore) + ":";
             lblNameMask.Text = LangMan.LS(LSID.LSID_NameMask);
             lblPlaceMask.Text = LangMan.LS(LSID.LSID_PlaceMask);
             lblEventsMask.Text = LangMan.LS(LSID.LSID_EventMask);

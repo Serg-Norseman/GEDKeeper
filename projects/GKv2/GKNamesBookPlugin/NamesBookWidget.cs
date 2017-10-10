@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -157,13 +158,11 @@ namespace GKNamesBookPlugin
 
         private void PrepareList()
         {
-            GKResourceManager resMgr = new GKResourceManager("NBResources", typeof(NamesBookWidget).Assembly);
+            Assembly assembly = typeof(NamesBookWidget).Assembly;
 
-            byte[] bookNames = (byte[])resMgr.GetObjectEx("book_names");
-
-            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/bookNames))
+            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names.txt"))
             {
-                using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
+                using (StreamReader strd = new StreamReader(book_names, Encoding.GetEncoding(1251)))
                 {
                     while (strd.Peek() != -1)
                     {
@@ -201,11 +200,9 @@ namespace GKNamesBookPlugin
                 }
             }
 
-            byte[] bookNamesCf = (byte[])resMgr.GetObjectEx("book_names_cf");
-
-            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/bookNamesCf))
+            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names_cf.txt"))
             {
-                using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
+                using (StreamReader strd = new StreamReader(book_names, Encoding.GetEncoding(1251)))
                 {
                     while (strd.Peek() != -1) {
                         string ns = strd.ReadLine().Trim();
@@ -214,11 +211,9 @@ namespace GKNamesBookPlugin
                 }
             }
 
-            byte[] bookNamesCm = (byte[])resMgr.GetObjectEx("book_names_cm");
-
-            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/bookNamesCm))
+            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names_cm.txt"))
             {
-                using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
+                using (StreamReader strd = new StreamReader(book_names, Encoding.GetEncoding(1251)))
                 {
                     while (strd.Peek() != -1)
                     {

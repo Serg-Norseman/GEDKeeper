@@ -36,6 +36,7 @@ namespace GKUI.Forms
     public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
     {
         private GEDCOMMultimediaLink fMultimediaLink;
+        private ITimer fTimer;
 
         public GEDCOMMultimediaLink MultimediaLink
         {
@@ -91,15 +92,33 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
-            imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_PortraitSelect);
+
+            fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
+            fTimer.Start();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (imageView1 != null) {
+                imageView1.Focus();
+                imageView1.Invalidate();
+                imageView1.ZoomToFit();
+            }
+        }
+
+        // dirty temporary hack
+        private void InitViewer_Tick(object sender, EventArgs e)
+        {
+            if (imageView1 != null && !imageView1.Viewport.Size.IsEmpty) {
+                imageView1.ZoomToFit();
+                fTimer.Stop();
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ using GKUI.Components;
 namespace GKUI.Forms
 {
     #if !__MonoCS__
-    //using Externals.MapiMail;
+    using Externals.MapiMail;
     #endif
 
     /// <summary>
@@ -1336,6 +1336,14 @@ namespace GKUI.Forms
             (this as IWorkWindow).NavNext();
         }
 
+        private void tbSendMail_Click(object sender, EventArgs e)
+        {
+            if (CheckModified()) {
+                string fileName = Path.GetFileName(fContext.FileName);
+                SendMail("?", fileName, "?", fContext.FileName);
+            }
+        }
+
         private void miMap_Click(object sender, EventArgs e)
         {
             #if __MonoCS__
@@ -1520,7 +1528,7 @@ namespace GKUI.Forms
 
             try
             {
-                /*#if __MonoCS__
+                #if __MonoCS__
 
                 const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
                 string args = string.Format(mailto, address, subject, body, attach);
@@ -1538,7 +1546,7 @@ namespace GKUI.Forms
                 message.Files.Add(attach);
                 message.ShowDialog();
 
-                #endif*/
+                #endif
             }
             catch (Exception ex)
             {

@@ -31,6 +31,58 @@ namespace GKUI.Forms
         {
             SuspendLayout();
 
+            lblSurname = new Label();
+            lblSurname.Text = "lblSurname";
+
+            lblSurnamePrefix = new Label();
+            lblSurnamePrefix.Text = "lblSurnamePrefix";
+
+            txtSurname = new TextBox();
+            txtSurname.Width = 200;
+            txtSurname.KeyDown += edName_KeyDown;
+
+            txtSurnamePrefix = new TextBox();
+            txtSurnamePrefix.Width = 200;
+
+            lblMarriedSurname = new Label();
+            lblMarriedSurname.Text = "lblMarriedSurname";
+
+            lblNamePrefix = new Label();
+            lblNamePrefix.Text = "lblNamePrefix";
+
+            txtMarriedSurname = new TextBox();
+            txtMarriedSurname.KeyDown += edName_KeyDown;
+
+            txtNamePrefix = new TextBox();
+
+            lblName = new Label();
+            lblName.Text = "lblName";
+
+            lblNameSuffix = new Label();
+            lblNameSuffix.Text = "lblNameSuffix";
+
+            txtName = new TextBox();
+            txtName.KeyDown += edName_KeyDown;
+
+            txtNameSuffix = new TextBox();
+
+            lblPatronymic = new Label();
+            lblPatronymic.Text = "lblPatronymic";
+
+            lblNickname = new Label();
+            lblNickname.Text = "lblNickname";
+
+            txtPatronymic = new TextBox();
+            txtPatronymic.KeyDown += edName_KeyDown;
+
+            txtNickname = new TextBox();
+
+            lblType = new Label();
+            lblType.Text = "lblType";
+
+            cmbNameType = new ComboBox();
+            cmbNameType.ReadOnly = true;
+
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
             btnAccept.Size = new Size(130, 26);
@@ -44,65 +96,6 @@ namespace GKUI.Forms
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
             btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
-
-            lblSurname = new Label();
-            lblSurname.Text = "lblSurname";
-
-            lblSurnamePrefix = new Label();
-            lblSurnamePrefix.Text = "lblSurnamePrefix";
-
-            txtSurname = new TextBox();
-            //txtSurname.Size = new Size(226, 24);
-            txtSurname.KeyDown += edName_KeyDown;
-
-            txtSurnamePrefix = new TextBox();
-            //txtSurnamePrefix.Size = new Size(169, 24);
-
-            lblMarriedSurname = new Label();
-            lblMarriedSurname.Text = "lblMarriedSurname";
-
-            lblNamePrefix = new Label();
-            lblNamePrefix.Text = "lblNamePrefix";
-
-            txtMarriedSurname = new TextBox();
-            //txtMarriedSurname.Size = new Size(226, 24);
-            txtMarriedSurname.KeyDown += edName_KeyDown;
-
-            txtNamePrefix = new TextBox();
-            //txtNamePrefix.Size = new Size(169, 24);
-
-            lblName = new Label();
-            lblName.Text = "lblName";
-
-            lblNameSuffix = new Label();
-            lblNameSuffix.Text = "lblNameSuffix";
-
-            txtName = new TextBox();
-            //txtName.Size = new Size(226, 24);
-            txtName.KeyDown += edName_KeyDown;
-
-            txtNameSuffix = new TextBox();
-            //txtNameSuffix.Size = new Size(169, 24);
-
-            lblPatronymic = new Label();
-            lblPatronymic.Text = "lblPatronymic";
-
-            lblNickname = new Label();
-            lblNickname.Text = "lblNickname";
-
-            txtPatronymic = new TextBox();
-            //txtPatronymic.Size = new Size(226, 24);
-            txtPatronymic.KeyDown += edName_KeyDown;
-
-            txtNickname = new TextBox();
-            //txtNickname.Size = new Size(169, 24);
-
-            lblType = new Label();
-            lblType.Text = "lblType";
-
-            cmbNameType = new ComboBox();
-            cmbNameType.ReadOnly = true;
-            //cmbNameType.Size = new Size(225, 25);
 
             var panel = new TableLayout {
                 Padding = new Padding(0),

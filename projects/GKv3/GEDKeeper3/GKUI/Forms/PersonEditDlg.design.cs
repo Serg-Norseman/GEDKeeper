@@ -64,61 +64,48 @@ namespace GKUI.Forms
             SuspendLayout();
 
             lblMarriedSurname = new Label();
-            //lblMarriedSurname.Size = new Size(95, 13);
             lblMarriedSurname.Text = "lblMarriedSurname";
 
             lblSurname = new Label();
-            //lblSurname.Size = new Size(59, 13);
             lblSurname.Text = "lblSurname";
 
             lblName = new Label();
-            //lblName.Size = new Size(44, 13);
             lblName.Text = "lblName";
 
             lblPatronymic = new Label();
-            //lblPatronymic.Size = new Size(70, 13);
             lblPatronymic.Text = "lblPatronymic";
 
             lblSex = new Label();
-            //lblSex.Size = new Size(35, 13);
             lblSex.Text = "lblSex";
 
             lblSurnamePrefix = new Label();
-            //lblSurnamePrefix.Size = new Size(87, 13);
             lblSurnamePrefix.Text = "lblSurnamePrefix";
 
             lblNamePrefix = new Label();
-            //lblNamePrefix.Size = new Size(72, 13);
             lblNamePrefix.Text = "lblNamePrefix";
 
             lblNameSuffix = new Label();
-            //lblNameSuffix.Size = new Size(72, 13);
             lblNameSuffix.Text = "lblNameSuffix";
 
             lblNickname = new Label();
-            //lblNickname.Size = new Size(62, 13);
             lblNickname.Text = "lblNickname";
 
             txtMarriedSurname = new TextBox();
             //txtMarriedSurname.Size = new Size(182, 21);
             txtMarriedSurname.KeyDown += edNameX_KeyDown;
-            //txtMarriedSurname.KeyPress += edSurname_KeyPress;
 
             txtSurname = new TextBox();
             //txtSurname.Size = new Size(182, 21);
             txtSurname.Width = 200;
             txtSurname.KeyDown += edNameX_KeyDown;
-            //txtSurname.KeyPress += edSurname_KeyPress;
 
             txtName = new TextBox();
             //txtName.Size = new Size(182, 21);
             txtName.KeyDown += edNameX_KeyDown;
-            //txtName.KeyPress += edSurname_KeyPress;
 
             cmbPatronymic = new ComboBox();
             //cmbPatronymic.Size = new Size(182, 21);
             cmbPatronymic.KeyDown += edNameX_KeyDown;
-            //cmbPatronymic.KeyPress += edSurname_KeyPress;
 
             cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
@@ -127,11 +114,9 @@ namespace GKUI.Forms
             cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
 
             chkPatriarch = new CheckBox();
-            //chkPatriarch.Size = new Size(85, 17);
             chkPatriarch.Text = "chkPatriarch";
 
             chkBookmark = new CheckBox();
-            //chkBookmark.Size = new Size(88, 17);
             chkBookmark.Text = "chkBookmark";
 
             txtSurnamePrefix = new TextBox();
@@ -150,33 +135,33 @@ namespace GKUI.Forms
             var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblSurname, lblSurnamePrefix }
+                        Cells = { lblSurname, lblSurnamePrefix, null }
                     },
                     new TableRow {
-                        Cells = { txtSurname, txtSurnamePrefix }
+                        Cells = { txtSurname, txtSurnamePrefix, null }
                     },
                     new TableRow {
-                        Cells = { lblMarriedSurname, lblNamePrefix }
+                        Cells = { lblMarriedSurname, lblNamePrefix, null }
                     },
                     new TableRow {
-                        Cells = { txtMarriedSurname, txtNamePrefix }
+                        Cells = { txtMarriedSurname, txtNamePrefix, null }
                     },
                     new TableRow {
-                        Cells = { lblName, TableLayout.Horizontal(10, lblNameSuffix, lblSex) }
+                        Cells = { lblName, lblNameSuffix, lblSex }
                     },
                     new TableRow {
-                        Cells = { txtName, TableLayout.Horizontal(10, txtNameSuffix, cmbSex) }
+                        Cells = { txtName, txtNameSuffix, cmbSex }
                     },
                     new TableRow {
-                        Cells = { lblPatronymic, lblNickname }
+                        Cells = { lblPatronymic, lblNickname, null }
                     },
                     new TableRow {
-                        Cells = { cmbPatronymic, TableLayout.Horizontal(10, txtNickname, chkBookmark, chkPatriarch) }
+                        Cells = { cmbPatronymic, txtNickname, TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
                     }
                 }
             };
 
-            imgPortrait = new GKUI.Components.GKPortrait();
+            imgPortrait = new GKPortrait();
             imgPortrait.Image = null;
             imgPortrait.Width = 150;
             //imgPortrait.Size = new Size(149, 165);
@@ -197,7 +182,7 @@ namespace GKUI.Forms
                         ScaleHeight = true,
                         Cells = { imgPortrait }
                     },
-                    UIHelper.MakeDialogFooter(null, btnPortraitAdd, btnPortraitDelete)
+                    UIHelper.MakeDialogFooter(null, btnPortraitAdd, btnPortraitDelete, null)
                 }
             };
 
@@ -207,15 +192,16 @@ namespace GKUI.Forms
             //
 
             lblParents = new Label();
-            //lblParents.Size = new Size(54, 13);
             lblParents.Text = "lblParents";
 
             txtFather = new TextBox();
             txtFather.Enabled = false;
+            txtFather.Width = 260;
             //txtFather.Size = new Size(251, 21);
 
             txtMother = new TextBox();
             txtMother.Enabled = false;
+            txtMother.Width = 260;
             //txtMother.Size = new Size(252, 21);
 
             btnParentsAdd = new Button();
@@ -268,18 +254,6 @@ namespace GKUI.Forms
 
             panCtlParents = new GroupBox();
             panCtlParents.Content = parentsTab;
-            //panCtlParents.BorderStyle = BorderStyle.FixedSingle;
-            //panCtlParents.Size = new Size(696, 69);
-            /*panCtlParents.Content = new DefTableLayout {
-                Rows = {
-                    new TableRow {
-                        Cells = { lblParents, txtFather, txtMother, btnParentsAdd, btnParentsEdit, btnParentsDelete }
-                    },
-                    new TableRow {
-                        Cells = { btnFatherAdd, btnFatherDelete, btnFatherSel, btnMotherAdd, btnMotherDelete, btnMotherSel }
-                    }
-                }
-            };*/
 
             //
 
@@ -300,7 +274,6 @@ namespace GKUI.Forms
             //
 
             lblRestriction = new Label();
-            //lblRestriction.Size = new Size(68, 13);
             lblRestriction.Text = "lblRestriction";
 
             cmbRestriction = new ComboBox();
@@ -352,6 +325,7 @@ namespace GKUI.Forms
             tabsPersonData.Pages.Add(pageMultimedia);
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
+            tabsPersonData.Size = new Size(600, 300);
 
             Content = new DefTableLayout {
                 Rows = {

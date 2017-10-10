@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs" />
     <Compile Include="GKUI\Charts\CustomChart.cs" />
     <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
@@ -295,6 +296,13 @@
     <EmbeddedResource Include="Resources\tg_soldier.gif" />
     <EmbeddedResource Include="Resources\tg_soldier_fall.gif" />
     <EmbeddedResource Include="Resources\tg_veteran_rear.gif" />
+    <EmbeddedResource Include="Resources\btn_organizer.gif" />
+    <EmbeddedResource Include="Resources\btn_slideshow.png" />
+    <EmbeddedResource Include="Resources\btn_mail.gif" />
+    <EmbeddedResource Include="Resources\btn_properties.gif" />
+    <EmbeddedResource Include="Resources\btn_help.gif" />
+    <EmbeddedResource Include="Resources\btn_export.gif" />
+    <EmbeddedResource Include="Resources\btn_exit.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
@@ -307,6 +315,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Externals" />
     <Folder Include="GKUI" />
     <Folder Include="GKUI\Components" />
     <Folder Include="GKUI\Forms" />

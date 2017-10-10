@@ -66,17 +66,6 @@ namespace GKUI.Components
 
         public GKPortrait()
         {
-            InitializeComponent();
-
-            fImageBox.Cursor = Cursors.Arrow;
-            fSlidePanel.Cursor = Cursors.Arrow;
-
-            fLayout.Move(fSlidePanel, 0, Height);
-            fTimer.Stop();
-        }
-
-        private void InitializeComponent()
-        {
             SuspendLayout();
 
             fLayout = new PixelLayout();
@@ -84,7 +73,7 @@ namespace GKUI.Components
             fImageBox = new ImageBox();
             fImageBox.AllowZoom = false;
             fImageBox.SelectionMode = ImageBoxSelectionMode.None;
-            fImageBox.Size = new Size(178, 188);
+            fImageBox.Size = new Size(140, 140);
             fImageBox.MouseLeave += PictureBox1MouseLeave;
             //pictureBox1.MouseHover += PictureBox1MouseHover;
 
@@ -95,20 +84,22 @@ namespace GKUI.Components
             fSlidePanel.MouseLeave += Panel1MouseLeave;
             fSlidePanel.MouseMove += Panel1MouseHover; // MouseHover
 
+            fLayout.Add(fImageBox, 0, 0);
+            fLayout.Add(fSlidePanel, 0, Height);
+            Content = fLayout;
+
+            //Size = new Size(178, 188);
+            ResumeLayout();
+
             fTimer = AppHost.Instance.CreateTimer(100.0f, MoveSlidePanel);
 
-            Content = fImageBox;
+            fImageBox.Cursor = Cursors.Arrow;
+            fSlidePanel.Cursor = Cursors.Arrow;
 
-            fLayout.Add(fSlidePanel, 0, Height);
-
-            Size = new Size(178, 188);
-            ResumeLayout();
+            fLayout.Move(fSlidePanel, 0, Height);
+            fTimer.Stop();
         }
 
-        /// <summary>
-        /// Disposes resources used by the control.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

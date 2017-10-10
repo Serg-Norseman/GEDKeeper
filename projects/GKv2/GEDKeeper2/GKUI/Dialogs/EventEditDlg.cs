@@ -441,7 +441,7 @@ namespace GKUI.Dialogs
                 {
                     string txt = e.Data.GetData(typeof(string)) as string;
                     string[] dt = ((MaskedTextBox)sender).Text.Split('.');
-                    ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
+                    ((MaskedTextBox)sender).Text = dt[0] + "." + dt[1] + "." + txt;
                 }
             }
             catch (Exception ex)

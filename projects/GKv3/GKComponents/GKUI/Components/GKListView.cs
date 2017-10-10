@@ -76,6 +76,12 @@ namespace GKUI.Components
     {
         public int Index { get; set; }
         public bool NewValue { get; set; }
+
+        public ItemCheckEventArgs(int index, bool newValue)
+        {
+            Index = index;
+            NewValue = newValue;
+        }
     }
 
     public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
@@ -668,7 +674,7 @@ namespace GKUI.Components
         {
             ItemCheckEventHandler handler = this.ItemCheck;
             if (handler != null)
-                handler.Invoke(this, new ItemCheckEventArgs() { Index = index, NewValue = newValue });
+                handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
         }
 
         #endregion

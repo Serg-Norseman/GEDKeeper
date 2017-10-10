@@ -185,7 +185,7 @@ namespace GKUI.Forms
             if (IsExtendedWomanSurname()) {
                 txtMarriedSurname.Text = surname;
             } else {
-                txtSurname.Text = '(' + surname + ')';
+                txtSurname.Text = "(" + surname + ")";
             }
         }
 

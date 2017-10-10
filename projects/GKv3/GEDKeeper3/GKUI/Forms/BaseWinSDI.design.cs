@@ -24,6 +24,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbStats;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
+        private ButtonToolItem tbSendMail;
 
         // Obsolete
         /*private ButtonToolItem tbDocPrint;
@@ -199,6 +200,10 @@ namespace GKUI.Forms
             tbDocPrint.Click += tbDocPrint_Click;
             tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");*/
 
+            tbSendMail = new ButtonToolItem();
+            tbSendMail.Click += tbSendMail_Click;
+            tbSendMail.Image = Bitmap.FromResource("Resources.btn_mail.gif");
+
             //
 
             ToolBar1 = new ToolBar();
@@ -224,7 +229,9 @@ namespace GKUI.Forms
                                         tbStats,
                                         new SeparatorToolItem(),
                                         tbPrev,
-                                        tbNext});
+                                        tbNext,
+                                        new SeparatorToolItem(),
+                                        tbSendMail});
 
             //
 
@@ -232,11 +239,13 @@ namespace GKUI.Forms
             miFileNew.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.N)));
             miFileNew.Text = "miFileNew";
             miFileNew.Click += miFileNew_Click;
+            miFileNew.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
 
             miFileLoad = new ButtonMenuItem();
             miFileLoad.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.O)));
             miFileLoad.Text = "miFileLoad";
             miFileLoad.Click += miFileLoad_Click;
+            miFileLoad.Image = Bitmap.FromResource("Resources.btn_load.gif");
 
             miMRUFiles = new ButtonMenuItem();
             miMRUFiles.Enabled = false;
@@ -246,6 +255,7 @@ namespace GKUI.Forms
             miFileSave.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.S)));
             miFileSave.Text = "miFileSave";
             miFileSave.Click += miFileSave_Click;
+            miFileSave.Image = Bitmap.FromResource("Resources.btn_save.gif");
 
             miFileSaveAs = new ButtonMenuItem();
             miFileSaveAs.Text = "miFileSaveAs";
@@ -258,20 +268,24 @@ namespace GKUI.Forms
             miFileProperties = new ButtonMenuItem();
             miFileProperties.Text = "miFileProperties";
             miFileProperties.Click += miFileProperties_Click;
+            miFileProperties.Image = Bitmap.FromResource("Resources.btn_properties.gif");
 
             miExportToExcelFile = new ButtonMenuItem();
             miExportToExcelFile.Text = "miExportToExcelFile";
             miExportToExcelFile.Click += miExportToExcelFile_Click;
+            miExportToExcelFile.Image = Bitmap.FromResource("Resources.btn_excel.gif");
 
             miExport = new ButtonMenuItem();
             miExport.Items.AddRange(new MenuItem[] {
                                         miExportToExcelFile});
             miExport.Text = "miExport";
+            miExport.Image = Bitmap.FromResource("Resources.btn_export.gif");
 
             miExit = new ButtonMenuItem();
             miExit.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.X)));
             miExit.Text = "miExit";
             miExit.Click += miExit_Click;
+            miExit.Image = Bitmap.FromResource("Resources.btn_exit.gif");
 
             miFile = new ButtonMenuItem();
             miFile.Text = "File";
@@ -293,15 +307,18 @@ namespace GKUI.Forms
             miRecordAdd.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.I)));
             miRecordAdd.Text = "miRecordAdd";
             miRecordAdd.Click += miRecordAdd_Click;
+            miRecordAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             miRecordEdit = new ButtonMenuItem();
             miRecordEdit.Text = "miRecordEdit";
             miRecordEdit.Click += miRecordEdit_Click;
+            miRecordEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
 
             miRecordDelete = new ButtonMenuItem();
             miRecordDelete.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.L)));
             miRecordDelete.Text = "miRecordDelete";
             miRecordDelete.Click += miRecordDelete_Click;
+            miRecordDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
 
             miSearch = new ButtonMenuItem();
             miSearch.Text = "miSearch";
@@ -311,6 +328,7 @@ namespace GKUI.Forms
             miFilter.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F)));
             miFilter.Text = "miFilter";
             miFilter.Click += miFilter_Click;
+            miFilter.Image = Bitmap.FromResource("Resources.btn_filter.gif");
 
             miEdit = new ButtonMenuItem();
             miEdit.Text = "Edit";
@@ -326,15 +344,18 @@ namespace GKUI.Forms
             miTreeAncestors.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.A)));
             miTreeAncestors.Text = "miTreeAncestors";
             miTreeAncestors.Click += miTreeAncestors_Click;
+            miTreeAncestors.Image = Bitmap.FromResource("Resources.btn_tree_ancestry.gif");
 
             miTreeDescendants = new ButtonMenuItem();
             miTreeDescendants.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.D)));
             miTreeDescendants.Text = "miTreeDescendants";
             miTreeDescendants.Click += miTreeDescendants_Click;
+            miTreeDescendants.Image = Bitmap.FromResource("Resources.btn_tree_descendants.gif");
 
             miTreeBoth = new ButtonMenuItem();
             miTreeBoth.Text = "miTreeBoth";
             miTreeBoth.Click += miTreeBoth_Click;
+            miTreeBoth.Image = Bitmap.FromResource("Resources.btn_tree_both.gif");
 
             miAncestorsCircle = new ButtonMenuItem();
             miAncestorsCircle.Text = "miAncestorsCircle";
@@ -371,6 +392,7 @@ namespace GKUI.Forms
             miStats.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.T)));
             miStats.Text = "miStats";
             miStats.Click += miStats_Click;
+            miStats.Image = Bitmap.FromResource("Resources.btn_table.gif");
 
             miRelationshipCalculator = new ButtonMenuItem();
             miRelationshipCalculator.Text = "miRelationshipCalculator";
@@ -399,10 +421,12 @@ namespace GKUI.Forms
             miOrganizer = new ButtonMenuItem();
             miOrganizer.Text = "miOrganizer";
             miOrganizer.Click += miOrganizer_Click;
+            miOrganizer.Image = Bitmap.FromResource("Resources.btn_organizer.gif");
 
             miSlideshow = new ButtonMenuItem();
             miSlideshow.Text = "miSlideshow";
             miSlideshow.Click += miSlideshow_Click;
+            miSlideshow.Image = Bitmap.FromResource("Resources.btn_slideshow.png");
 
             miScripts = new ButtonMenuItem();
             miScripts.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F11)));
@@ -435,6 +459,7 @@ namespace GKUI.Forms
             miContext.Shortcut = Keys.F1;
             miContext.Text = "miContext";
             miContext.Click += miContext_Click;
+            miContext.Image = Bitmap.FromResource("Resources.btn_help.gif");
 
             miLogSend = new ButtonMenuItem();
             miLogSend.Text = "miLogSend";
@@ -447,6 +472,7 @@ namespace GKUI.Forms
             miAbout = new ButtonMenuItem();
             miAbout.Text = "miAbout";
             miAbout.Click += miAbout_Click;
+            miAbout.Image = Bitmap.FromResource("Resources.btn_scroll.gif");
 
             miHelp = new ButtonMenuItem();
             miHelp.Text = "Help";
