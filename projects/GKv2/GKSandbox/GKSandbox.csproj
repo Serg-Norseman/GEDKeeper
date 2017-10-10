@@ -96,12 +96,18 @@
     <Compile Include="MPlayerTest.Designer.cs">
       <DependentUpon>MPlayerTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Obsolete\SyncTool.cs" />
+    <Compile Include="Obsolete\WebTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Validation\NumericFieldValidator.cs" />
+    <Compile Include="Validation\RequiredFieldValidator.cs" />
+    <Compile Include="Validation\ValidatableControlConverter.cs" />
+    <Compile Include="Validation\ValidatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
@@ -115,6 +121,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components" />
+    <Folder Include="Obsolete" />
+    <Folder Include="Validation" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKIFlags.resx">
