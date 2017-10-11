@@ -105,11 +105,6 @@
     <Compile Include="NamesBookWidget.Designer.cs">
       <DependentUpon>NamesBookWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="NBResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NBResources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="GKNamesBookPlugin.enu">
@@ -124,12 +119,9 @@
     <None Include="GKNamesBookPlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="NBResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>NBResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\bk_names.txt" />
+    <EmbeddedResource Include="Resources\bk_names_cf.txt" />
+    <EmbeddedResource Include="Resources\bk_names_cm.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
