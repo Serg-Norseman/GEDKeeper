@@ -216,8 +216,11 @@ namespace GKCommon
             int num = fList.Count;
             for (int i = 0; i < num; i++)
             {
+                if (buffer.Length > 0) {
+                    buffer.Append(LINE_BREAK);
+                }
+
                 buffer.Append(this[i]);
-                buffer.Append(LINE_BREAK);
             }
 
             return buffer.ToString();

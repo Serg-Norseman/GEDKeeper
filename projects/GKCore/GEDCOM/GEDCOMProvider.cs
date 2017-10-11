@@ -152,6 +152,13 @@ namespace GKCommon.GEDCOM
 
         #region Loading functions
 
+        public void LoadFromString(string gedcomText)
+        {
+            using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(gedcomText))) {
+                LoadFromStreamExt(stream, stream, "");
+            }
+        }
+
         public void LoadFromFile(string fileName)
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
@@ -205,6 +212,7 @@ namespace GKCommon.GEDCOM
                             var strTok = new StringTokenizer(str);
                             strTok.RecognizeDecimals = false;
                             strTok.IgnoreWhiteSpace = false;
+                            strTok.RecognizeIdents = true;
 
                             var token = strTok.Next(); // already trimmed
                             if (token.Kind != TokenKind.Number) {
@@ -235,7 +243,7 @@ namespace GKCommon.GEDCOM
                             }
 
                             token = strTok.CurrentToken;
-                            if (token.Kind != TokenKind.Word) {
+                            if (token.Kind != TokenKind.Word && token.Kind != TokenKind.Ident) {
                                 // syntax error
                             }
                             tagName = token.Value.ToUpperInvariant();

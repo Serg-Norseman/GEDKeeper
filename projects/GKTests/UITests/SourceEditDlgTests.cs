@@ -80,7 +80,7 @@ namespace GKTests.UITests
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fSourceRecord.FiledByEntry);
-            Assert.AreEqual("sample text\r\n", fSourceRecord.Originator.Text);
+            Assert.AreEqual("sample text", fSourceRecord.Originator.Text);
         }
     }
 }

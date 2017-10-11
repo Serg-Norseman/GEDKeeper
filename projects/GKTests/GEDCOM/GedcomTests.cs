@@ -2085,10 +2085,10 @@ namespace GKTests.GEDCOM
                 src1.Text = new StringList("test text");
 
                 Assert.AreEqual("test source", src1.FiledByEntry);
-                Assert.AreEqual("test title\r\n", src1.Title.Text);
-                Assert.AreEqual("test author\r\n", src1.Originator.Text);
-                Assert.AreEqual("test publ\r\n", src1.Publication.Text);
-                Assert.AreEqual("test text\r\n", src1.Text.Text);
+                Assert.AreEqual("test title", src1.Title.Text);
+                Assert.AreEqual("test author", src1.Originator.Text);
+                Assert.AreEqual("test publ", src1.Publication.Text);
+                Assert.AreEqual("test text", src1.Text.Text);
 
                 GEDCOMRepositoryRecord repRec = tree.CreateRepository();
                 repRec.RepositoryName = "test repository";
@@ -2105,10 +2105,10 @@ namespace GKTests.GEDCOM
 
                     Assert.AreEqual("test source 2", src2.FiledByEntry);
 
-                    Assert.AreEqual("test title\r\n", src2.Title.Text);
-                    Assert.AreEqual("test author\r\n", src2.Originator.Text);
-                    Assert.AreEqual("test publ\r\n", src2.Publication.Text);
-                    Assert.AreEqual("test text\r\n", src2.Text.Text);
+                    Assert.AreEqual("test title", src2.Title.Text);
+                    Assert.AreEqual("test author", src2.Originator.Text);
+                    Assert.AreEqual("test publ", src2.Publication.Text);
+                    Assert.AreEqual("test text", src2.Text.Text);
 
                     Assert.AreEqual(1, src2.RepositoryCitations.Count);
                 }
@@ -2201,7 +2201,7 @@ namespace GKTests.GEDCOM
             srcCit.Description = strs;
             
             strs = srcCit.Description;
-            Assert.AreEqual("test\r\n", strs.Text);
+            Assert.AreEqual("test", strs.Text);
         }
 
         private static void GEDCOMRepositoryCitationTest(GEDCOMSourceRecord sourRec, GEDCOMRepositoryRecord repRec)
@@ -2597,7 +2597,7 @@ namespace GKTests.GEDCOM
                 Assert.IsTrue(notes.IsEmpty());
                 notes.Notes = new StringList("Test note");
                 Assert.IsFalse(notes.IsEmpty());
-                Assert.AreEqual("Test note\r\n", notes.Notes.Text);
+                Assert.AreEqual("Test note", notes.Notes.Text);
             }
         }
 

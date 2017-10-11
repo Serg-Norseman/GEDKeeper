@@ -33,7 +33,7 @@ namespace GKTests.GKCommon
 
             using (var strList0 = new StringList()) {
                 strList0.Text = "The string list test";
-                Assert.AreEqual("The string list test\r\n", strList0.Text);
+                Assert.AreEqual("The string list test", strList0.Text);
             }
 
             StringList strList = new StringList(list);
@@ -46,7 +46,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("list", strList[2]);
             Assert.AreEqual("test", strList[3]);
 
-            Assert.AreEqual("The\r\nstring\r\nlist\r\ntest\r\n", strList.Text);
+            Assert.AreEqual("The\r\nstring\r\nlist\r\ntest", strList.Text);
 
             StringList strList2 = new StringList();
             strList2.Assign(null);

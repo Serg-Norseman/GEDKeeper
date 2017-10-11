@@ -71,7 +71,11 @@
   <ItemGroup>
     <Compile Include="CommonTests.cs" />
     <Compile Include="CoreTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMAddressTests.cs" />
     <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMDateTests2.cs" />
+    <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMPersonalNameTests.cs" />
     <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GEDCOM\GedcomTests.cs" />
     <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
@@ -98,6 +102,11 @@
     <Compile Include="GKCommon\UDNTests.cs" />
     <Compile Include="GKCommon\ValuesCollectionTests.cs" />
     <Compile Include="GKCommon\ZipStorerTests.cs" />
+    <Compile Include="GKComponents\CircleChartTests.cs" />
+    <Compile Include="GKComponents\HyperViewTests.cs" />
+    <Compile Include="GKComponents\ImageBoxTests.cs" />
+    <Compile Include="GKComponents\ImageViewTests.cs" />
+    <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />

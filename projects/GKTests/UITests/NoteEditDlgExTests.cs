@@ -89,7 +89,7 @@ namespace GKTests.UITests
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text\r\n", fNoteRecord.Note.Text);
+            Assert.AreEqual("sample text", fNoteRecord.Note.Text);
         }
     }
 }

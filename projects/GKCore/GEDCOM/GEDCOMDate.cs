@@ -767,18 +767,16 @@ namespace GKCommon.GEDCOM
             return date;
         }
 
-        public static UDN GetUDNByFormattedStr(string dateStr, GEDCOMCalendar calendar)
+        public static UDN GetUDNByFormattedStr(string dateStr, GEDCOMCalendar calendar, bool aException = false)
         {
-            try
-            {
-                GEDCOMDate dtx = GEDCOMDate.CreateByFormattedStr(dateStr, calendar, false);
-                return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
-            }
-            catch (Exception ex)
-            {
+            GEDCOMDate dtx = GEDCOMDate.CreateByFormattedStr(dateStr, calendar, aException);
+            return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
+
+            /*try {
+            } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMDate.GetUDNByFormattedStr(" + dateStr + "): " + ex.Message);
                 return UDN.CreateEmpty();
-            }
+            }*/
         }
 
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)

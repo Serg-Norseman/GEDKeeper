@@ -115,7 +115,7 @@ namespace GKCommon.GEDCOM
             if (p2 < 0) return string.Empty;
 
             p++;
-            fSurname = sv.Substring(p, p2 - p);
+            fSurname = sv.Substring(p, p2 - p).Trim();
 
             if (p2 >= sv.Length - 1) return string.Empty;
 
@@ -125,9 +125,9 @@ namespace GKCommon.GEDCOM
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            fFirstPart = firstPart.Trim();
-            fSurname = surname.Trim();
-            fLastPart = lastPart.Trim();
+            fFirstPart = (string.IsNullOrEmpty(firstPart)) ? "" : firstPart.Trim();
+            fSurname = (string.IsNullOrEmpty(surname)) ? "" : surname.Trim();
+            fLastPart = (string.IsNullOrEmpty(lastPart)) ? "" : lastPart.Trim();
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -225,6 +225,11 @@ namespace GKCommon.GEDCOM
             fPieces.SaveToStream(stream);
         }
 
+        private static bool IsUnknown(string str)
+        {
+            return string.Equals(str, "?") || (string.Compare(str, "unknown", true) == 0);
+        }
+
         public float IsMatch(GEDCOMPersonalName otherName, bool onlyFirstPart)
         {
             if (otherName == null) return 0.0f;
@@ -239,27 +244,24 @@ namespace GKCommon.GEDCOM
                 if (otherName.FirstPart == fFirstPart) matches++;
             }
 
-            if (!(string.IsNullOrEmpty(otherName.Surname) && string.IsNullOrEmpty(fSurname)))
-            {
-                if ((otherName.Surname == "?" && fSurname == "?") ||
-                    ((string.Compare(otherName.Surname, "unknown", true) == 0) &&
-                     (string.Compare(fSurname, "unknown", true) == 0)))
-                {
-                    // not really matched, surname isn't known,
-                    // don't count as part being checked, and don't penalize
+            if (!onlyFirstPart) {
+                if (!(string.IsNullOrEmpty(otherName.Surname) && string.IsNullOrEmpty(fSurname))) {
+                    if (IsUnknown(otherName.Surname) && IsUnknown(fSurname)) {
+                        // not really matched, surname isn't known,
+                        // don't count as part being checked, and don't penalize
+                        surnameMatched = true;
+                    } else {
+                        parts++;
+                        if (otherName.Surname == fSurname) {
+                            matches++;
+                            surnameMatched = true;
+                        }
+                    }
+                } else {
+                    // pretend the surname matches
                     surnameMatched = true;
                 }
-                else
-                {
-                    parts++;
-                    if (otherName.Surname == fSurname) {
-                        matches++;
-                        surnameMatched = true;
-                    }
-                }
-            }
-            else
-            {
+            } else {
                 // pretend the surname matches
                 surnameMatched = true;
             }
@@ -275,7 +277,9 @@ namespace GKCommon.GEDCOM
             // heavily penalise the surname not matching
             // for this to work correctly better matching needs to be
             // performed, not just string comparison
-            if (!surnameMatched) match *= 0.25f;
+            if (!onlyFirstPart && !surnameMatched) {
+                match *= 0.25f;
+            }
 
             return match;
         }
