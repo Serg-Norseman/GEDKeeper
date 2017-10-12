@@ -35,6 +35,8 @@ namespace GKCore.Options
     /// </summary>
     public sealed class GlobalOptions : BaseObject
     {
+        public const int OPTS_VERSION = 1;
+
         private static GlobalOptions fInstance = null;
 
         private readonly TreeChartOptions fChartOptions;
@@ -454,6 +456,8 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
+            int optsVersion = ini.ReadInteger("Common", "OptsVersion", 0);
+
             /*fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);*/
             fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
             fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
@@ -565,6 +569,8 @@ namespace GKCore.Options
         {
             if (ini == null)
                 throw new ArgumentNullException("ini");
+
+            ini.WriteInteger("Common", "OptsVersion", OPTS_VERSION);
 
             /*ini.WriteInteger("Common", "DefCharacterSet", (int)fDefCharacterSet);*/
             ini.WriteInteger("Common", "DefNameFormat", (int)fDefNameFormat);

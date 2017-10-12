@@ -102,10 +102,6 @@
   <ItemGroup>
     <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKProgram.cs" />
-    <Compile Include="GKUI\BaseWinSDI.cs" />
-    <Compile Include="GKUI\BaseWinSDI.Designer.cs">
-      <DependentUpon>BaseWinSDI.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -138,287 +134,291 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
-    <Compile Include="GKUI\Components\PrintableForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\TextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\WinFormsStdDialogs.cs" />
-    <Compile Include="GKUI\Components\WinFormsGfxProvider.cs" />
-    <Compile Include="GKUI\Dialogs\AboutDlg.cs">
+    <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\AboutDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\AboutDlg.Designer.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\AddressEditDlg.cs">
+    <Compile Include="GKUI\Forms\AddressEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\AddressEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\AddressEditDlg.Designer.cs">
       <DependentUpon>AddressEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\AssociationEditDlg.cs">
+    <Compile Include="GKUI\Forms\AssociationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\AssociationEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\AssociationEditDlg.Designer.cs">
       <DependentUpon>AssociationEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\CommonFilterDlg.cs">
+    <Compile Include="GKUI\Forms\BaseWinSDI.cs" />
+    <Compile Include="GKUI\Forms\BaseWinSDI.Designer.cs">
+      <DependentUpon>BaseWinSDI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\CircleChartWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\CommonFilterDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\CircleChartWin.Designer.cs">
+      <DependentUpon>CircleChartWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\CommonFilterDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\CommonFilterDlg.Designer.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\CommunicationEditDlg.cs">
+    <Compile Include="GKUI\Forms\CommunicationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\CommunicationEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\CommunicationEditDlg.Designer.cs">
       <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\EditorDialog.cs">
+    <Compile Include="GKUI\Forms\EditorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\EventEditDlg.cs">
+    <Compile Include="GKUI\Forms\EventEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\EventEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\EventEditDlg.Designer.cs">
       <DependentUpon>EventEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\FamilyEditDlg.cs">
+    <Compile Include="GKUI\Forms\FamilyEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\FamilyEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\FamilyEditDlg.Designer.cs">
       <DependentUpon>FamilyEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\FilePropertiesDlg.cs">
+    <Compile Include="GKUI\Forms\FilePropertiesDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\FilePropertiesDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\FilePropertiesDlg.Designer.cs">
       <DependentUpon>FilePropertiesDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\GroupEditDlg.cs">
+    <Compile Include="GKUI\Forms\GroupEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\GroupEditDlg.Designer.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LanguageEditDlg.cs">
+    <Compile Include="GKUI\Forms\LanguageEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LanguageEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\LanguageEditDlg.Designer.cs">
       <DependentUpon>LanguageEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
+    <Compile Include="GKUI\Forms\LanguageSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\LanguageSelectDlg.Designer.cs">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LocationEditDlg.cs">
+    <Compile Include="GKUI\Forms\LocationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LocationEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\LocationEditDlg.Designer.cs">
       <DependentUpon>LocationEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\MediaEditDlg.cs">
+    <Compile Include="GKUI\Forms\MapsViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\MediaEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\MapsViewerWin.Designer.cs">
+      <DependentUpon>MapsViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\MediaEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\MediaEditDlg.Designer.cs">
       <DependentUpon>MediaEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NameEditDlg.cs">
+    <Compile Include="GKUI\Forms\MediaViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NameEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\MediaViewerWin.Designer.cs">
+      <DependentUpon>MediaViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\NameEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\NameEditDlg.Designer.cs">
       <DependentUpon>NameEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NoteEditDlg.cs">
+    <Compile Include="GKUI\Forms\NoteEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NoteEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\NoteEditDlg.Designer.cs">
       <DependentUpon>NoteEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.cs">
+    <Compile Include="GKUI\Forms\NoteEditDlgEx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\NoteEditDlgEx.Designer.cs">
+    <Compile Include="GKUI\Forms\NoteEditDlgEx.Designer.cs">
       <DependentUpon>NoteEditDlgEx.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\OptionsDlg.cs">
+    <Compile Include="GKUI\Forms\OptionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\OptionsDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\OptionsDlg.Designer.cs">
       <DependentUpon>OptionsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.cs">
+    <Compile Include="GKUI\Forms\OrganizerWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonalNameEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\OrganizerWin.Designer.cs">
+      <DependentUpon>OrganizerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\PatriarchsViewerWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\PatriarchsViewerWin.Designer.cs">
+      <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\PersonalNameEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\PersonalNameEditDlg.Designer.cs">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonEditDlg.cs">
+    <Compile Include="GKUI\Forms\PersonEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\PersonEditDlg.Designer.cs">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonsFilterDlg.cs">
+    <Compile Include="GKUI\Forms\PersonsFilterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PersonsFilterDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\PersonsFilterDlg.Designer.cs">
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.cs">
+    <Compile Include="GKUI\Forms\PortraitSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\PortraitSelectDlg.Designer.cs">
       <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\ProgressDlg.cs">
+    <Compile Include="GKUI\Forms\PrintableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\ProgressDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\ProgressDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\ProgressDlg.Designer.cs">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RecordSelectDlg.cs">
+    <Compile Include="GKUI\Forms\RecordSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RecordSelectDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\RecordSelectDlg.Designer.cs">
       <DependentUpon>RecordSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs">
+    <Compile Include="GKUI\Forms\RelationshipCalculatorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\RelationshipCalculatorDlg.Designer.cs">
       <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.cs">
+    <Compile Include="GKUI\Forms\RepositoryEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\RepositoryEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\RepositoryEditDlg.Designer.cs">
       <DependentUpon>RepositoryEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\ResearchEditDlg.cs">
+    <Compile Include="GKUI\Forms\ResearchEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\ResearchEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\ResearchEditDlg.Designer.cs">
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\QuickSearchDlg.cs">
+    <Compile Include="GKUI\Forms\QuickSearchDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SexCheckDlg.cs">
+    <Compile Include="GKUI\Forms\ScriptEditWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SexCheckDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\ScriptEditWin.Designer.cs">
+      <DependentUpon>ScriptEditWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\SexCheckDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\SexCheckDlg.Designer.cs">
       <DependentUpon>SexCheckDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.cs">
+    <Compile Include="GKUI\Forms\SlideshowWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SourceCitEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\SlideshowWin.Designer.cs">
+      <DependentUpon>SlideshowWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\SourceCitEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\SourceCitEditDlg.Designer.cs">
       <DependentUpon>SourceCitEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SourceEditDlg.cs">
+    <Compile Include="GKUI\Forms\SourceEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\SourceEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\SourceEditDlg.Designer.cs">
       <DependentUpon>SourceEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TaskEditDlg.cs">
+    <Compile Include="GKUI\Forms\StatisticsWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TaskEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\StatisticsWin.Designer.cs">
+      <DependentUpon>StatisticsWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TaskEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\TaskEditDlg.Designer.cs">
       <DependentUpon>TaskEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\DayTipsDlg.cs">
+    <Compile Include="GKUI\Forms\DayTipsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\DayTipsDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\DayTipsDlg.Designer.cs">
       <DependentUpon>DayTipsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TreeFilterDlg.cs">
+    <Compile Include="GKUI\Forms\TreeChartWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TreeFilterDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\TreeChartWin.Designer.cs">
+      <DependentUpon>TreeChartWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TreeFilterDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\TreeFilterDlg.Designer.cs">
       <DependentUpon>TreeFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\UserRefEditDlg.cs">
+    <Compile Include="GKUI\Forms\TreeToolsWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\UserRefEditDlg.Designer.cs">
+    <Compile Include="GKUI\Forms\TreeToolsWin.Designer.cs">
+      <DependentUpon>TreeToolsWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\UserRefEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\OrganizerWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\OrganizerWin.Designer.cs">
-      <DependentUpon>OrganizerWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\PatriarchsViewerWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\PatriarchsViewerWin.Designer.cs">
-      <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\CircleChartWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\CircleChartWin.Designer.cs">
-      <DependentUpon>CircleChartWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\TreeChartWin.Designer.cs">
-      <DependentUpon>TreeChartWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\MapsViewerWin.Designer.cs">
-      <DependentUpon>MapsViewerWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\MediaViewerWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\MediaViewerWin.Designer.cs">
-      <DependentUpon>MediaViewerWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\ScriptEditWin.Designer.cs">
-      <DependentUpon>ScriptEditWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Charts\TreeChartBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\TreeChartWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\MapsViewerWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\ScriptEditWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\SlideshowWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\SlideshowWin.Designer.cs">
-      <DependentUpon>SlideshowWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\StatisticsWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\StatisticsWin.Designer.cs">
-      <DependentUpon>StatisticsWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\TreeToolsWin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TreeToolsWin.Designer.cs">
-      <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\WinFormsAppHost.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\WinFormsGfxProvider.cs" />
+    <Compile Include="GKUI\WinFormsStdDialogs.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKUI\GKResources.resx">

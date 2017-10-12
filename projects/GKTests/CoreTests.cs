@@ -1419,11 +1419,11 @@ namespace GKTests.GKCore
             //
 
             List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
-            TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
+            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(3, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(null, TreeTools.TreeWalkMode.twmAll, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(null, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, null); });
 
             //
 
@@ -1449,8 +1449,8 @@ namespace GKTests.GKCore
 
             //
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(fContext.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTree(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTree(fContext.Tree, null, null); });
 
             //
 
@@ -1479,19 +1479,19 @@ namespace GKTests.GKCore
 
             //
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(fContext, null, null); });
 
             //
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch_Clear(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces_Clear(null); });
 
             StringList placesList = new StringList();
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, placesList, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces(fContext.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces(fContext.Tree, placesList, null); });
 
-            TreeTools.PlacesSearch(fContext.Tree, placesList, AppHost.Progress);
+            TreeTools.SearchPlaces(fContext.Tree, placesList, AppHost.Progress);
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs

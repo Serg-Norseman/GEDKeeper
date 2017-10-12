@@ -124,27 +124,15 @@ namespace GKUI.Forms
         {
             if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
 
+            // Only images are in the list
             GEDCOMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
 
             fCurrentText = fileRef.Title;
 
-            switch (fileRef.MultimediaFormat)
-            {
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                case GEDCOMMultimediaFormat.mfPNG:
-                    {
-                        IImage img = fBase.Context.LoadMediaImage(fileRef, false);
-                        if (img != null) {
-                            fImageCtl.Image = ((ImageHandler)img).Handle;
-                            fImageCtl.ZoomToFit();
-                        }
-                        break;
-                    }
+            IImage img = fBase.Context.LoadMediaImage(fileRef, false);
+            if (img != null) {
+                fImageCtl.Image = ((ImageHandler)img).Handle;
+                fImageCtl.ZoomToFit();
             }
 
             UpdateControls();

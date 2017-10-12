@@ -45,12 +45,7 @@ namespace GKUI.Charts
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
-
-            if (antiAlias) {
-                //fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
-                fCanvas.AntiAlias = true;
-                //fCanvas.SmoothingMode = SmoothingMode.AntiAlias;
-            }
+            fCanvas.AntiAlias = antiAlias;
         }
 
         public override void DrawImage(IImage image, float x, float y,

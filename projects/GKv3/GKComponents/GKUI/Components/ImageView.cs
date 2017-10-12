@@ -22,18 +22,19 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
-    public class ImageView : Panel
+    public class ImageView : Panel, ILocalization
     {
         private ImageBox imageBox;
         private Panel toolStrip;
         private ComboBox cbZoomLevels;
-
-        public Button btnSizeToFit;
-        public Button btnZoomIn;
-        public Button btnZoomOut;
+        private Button btnSizeToFit;
+        private Button btnZoomIn;
+        private Button btnZoomOut;
 
 
         public List<NamedRegion> NamedRegions
@@ -76,6 +77,13 @@ namespace GKUI.Components
             InitializeComponent();
 
             FillZoomLevels();
+        }
+
+        public void SetLang()
+        {
+            btnSizeToFit.ToolTip = LangMan.LS(LSID.LSID_SizeToFit);
+            btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
+            btnZoomOut.ToolTip = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
         #region Component design

@@ -102,13 +102,9 @@ namespace GKUI.Charts
             rect.X = rect.Right;
             rect.Width = 40;*/
             
-            //gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gfx.ImageInterpolation = ImageInterpolation.High;
-            //gfx.SmoothingMode = SmoothingMode.HighQuality;
             gfx.AntiAlias = true;
-            //gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            gfx.ImageInterpolation = ImageInterpolation.High;
             gfx.PixelOffsetMode = PixelOffsetMode.Half;
-            //gfx.CompositingQuality = CompositingQuality.HighQuality;
             
             gfx.FillRectangle(fCtlBrush, fDestRect);
             gfx.DrawRectangle(fCtlPen, fDestRect);

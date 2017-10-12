@@ -23,7 +23,7 @@
 using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
-using GKUI.Dialogs;
+using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

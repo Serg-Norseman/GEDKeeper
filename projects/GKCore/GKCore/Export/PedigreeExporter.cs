@@ -514,16 +514,16 @@ namespace GKCore.Export
                 IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
                 IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-                fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
-                fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
-                fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
-                fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
-                fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
-                fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, clrBlue);
-
                 fWriter.beginWrite();
                 try
                 {
+                    fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
+                    fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
+                    fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
+                    fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
+                    fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
+                    fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, clrBlue);
+
                     InternalGenerate();
                     result = true;
                 }

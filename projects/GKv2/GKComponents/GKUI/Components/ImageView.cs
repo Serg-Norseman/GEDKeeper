@@ -23,18 +23,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
-    public class ImageView : UserControl
+    public class ImageView : UserControl, ILocalization
     {
         private IContainer components = null;
         private ImageBox imageBox;
         private ToolStrip toolStrip;
         private ToolStripComboBox cbZoomLevels;
-        public ToolStripButton btnSizeToFit;
-        public ToolStripButton btnZoomIn;
-        public ToolStripButton btnZoomOut;
+        private ToolStripButton btnSizeToFit;
+        private ToolStripButton btnZoomIn;
+        private ToolStripButton btnZoomOut;
 
 
         public List<NamedRegion> NamedRegions
@@ -76,6 +78,13 @@ namespace GKUI.Components
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.AllowZoom = true;
+        }
+
+        public void SetLang()
+        {
+            btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+            btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+            btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
         #region Component design

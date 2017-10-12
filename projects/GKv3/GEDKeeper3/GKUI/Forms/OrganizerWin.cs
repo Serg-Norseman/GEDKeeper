@@ -121,6 +121,10 @@ namespace GKUI.Forms
 
             string addrStr = addr.Address.Text.Trim();
             if (addrStr != "") {
+                string city = addr.AddressCity;
+                if (city != "") {
+                    addrStr = city + ", " + addrStr;
+                }
                 AddItem(fAdrList, iName, addrStr);
             }
 

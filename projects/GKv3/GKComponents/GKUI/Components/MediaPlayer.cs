@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Forms;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -28,7 +29,7 @@ using nVLC.Events;
 using nVLC.Media;
 using nVLC.Players;*/
 
-    public partial class MediaPlayer : Panel
+    public partial class MediaPlayer : Panel, ILocalization
     {
         /*
         #if !__MonoCS__
@@ -78,6 +79,10 @@ using nVLC.Players;*/
                 //fPlayer.Stop();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetLang()
+        {
         }
 
         private void InitControls()

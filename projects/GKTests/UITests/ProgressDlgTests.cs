@@ -20,7 +20,7 @@
 
 #if !__MonoCS__
 
-using GKUI.Dialogs;
+using GKUI.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests

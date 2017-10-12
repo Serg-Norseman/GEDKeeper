@@ -642,7 +642,7 @@ namespace GKCore.Tools
             twmNone
         }
 
-        public static void TreeWalk(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
+        public static void WalkTree(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -650,10 +650,10 @@ namespace GKCore.Tools
             if (walkList == null)
                 throw new ArgumentNullException("walkList");
 
-            TreeWalkInt(iRec, mode, walkList);
+            WalkTreeInt(iRec, mode, walkList);
         }
 
-        private static void TreeWalkInt(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
+        private static void WalkTreeInt(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
         {
             if (iRec == null || walkList.IndexOf(iRec) >= 0) return;
 
@@ -673,8 +673,8 @@ namespace GKCore.Tools
                     mother = fam.GetWife();
                 }
 
-                TreeWalkInt(father, mode, walkList);
-                TreeWalkInt(mother, mode, walkList);
+                WalkTreeInt(father, mode, walkList);
+                WalkTreeInt(mother, mode, walkList);
             }
 
             // twmAll, twmFamily, twmDescendants
@@ -689,7 +689,7 @@ namespace GKCore.Tools
                     GEDCOMIndividualRecord spouse = spPtr.Value as GEDCOMIndividualRecord;
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
-                    TreeWalkInt(spouse, intMode, walkList);
+                    WalkTreeInt(spouse, intMode, walkList);
 
                     switch (mode) {
                         case TreeWalkMode.twmAll:
@@ -709,7 +709,7 @@ namespace GKCore.Tools
                     for (int j = 0; j < num2; j++)
                     {
                         GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
-                        TreeWalkInt(child, intMode, walkList);
+                        WalkTreeInt(child, intMode, walkList);
                     }
                 }
             }
@@ -790,7 +790,7 @@ namespace GKCore.Tools
 
         #region Tree Merge
 
-        public static void TreeMerge(GEDCOMTree mainTree, string fileName, ITextControl logBox)
+        public static void MergeTree(GEDCOMTree mainTree, string fileName, ITextControl logBox)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -1290,7 +1290,7 @@ namespace GKCore.Tools
                     GEDCOMIndividualRecord iRec = ps[i];
 
                     List<GEDCOMRecord> lst = new List<GEDCOMRecord>();
-                    TreeWalk(iRec, TreeWalkMode.twmAll, lst);
+                    WalkTree(iRec, TreeWalkMode.twmAll, lst);
 
                     int num3 = lst.Count;
                     for (int k = 0; k < num3; k++)
@@ -1375,7 +1375,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void TreeCompare(IBaseContext context, string fileName, ITextControl logBox)
+        public static void CompareTree(IBaseContext context, string fileName, ITextControl logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -1504,7 +1504,7 @@ namespace GKCore.Tools
 
         #region Places Management
 
-        public static void PlacesSearch_Clear(StringList placesList)
+        public static void SearchPlaces_Clear(StringList placesList)
         {
             if (placesList == null)
                 throw new ArgumentNullException("placesList");
@@ -1513,7 +1513,7 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void PlacesSearch_CheckEventPlace(StringList placesList, GEDCOMCustomEvent evt)
+        private static void SearchPlaces_CheckEventPlace(StringList placesList, GEDCOMCustomEvent evt)
         {
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
@@ -1535,7 +1535,7 @@ namespace GKCore.Tools
             placeObj.Facts.Add(evt);
         }
 
-        public static void PlacesSearch(GEDCOMTree tree, StringList placesList, IProgressController pc)
+        public static void SearchPlaces(GEDCOMTree tree, StringList placesList, IProgressController pc)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
@@ -1546,7 +1546,7 @@ namespace GKCore.Tools
             if (pc == null)
                 throw new ArgumentNullException("pc");
 
-            PlacesSearch_Clear(placesList);
+            SearchPlaces_Clear(placesList);
 
             try
             {
@@ -1564,7 +1564,7 @@ namespace GKCore.Tools
                         for (int j = 0; j < num2; j++) {
                             GEDCOMCustomEvent evt = evsRec.Events[j];
 
-                            PlacesSearch_CheckEventPlace(placesList, evt);
+                            SearchPlaces_CheckEventPlace(placesList, evt);
                         }
                     }
                 }

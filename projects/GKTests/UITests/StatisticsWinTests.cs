@@ -27,7 +27,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests.Mocks;
-using GKUI;
+using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

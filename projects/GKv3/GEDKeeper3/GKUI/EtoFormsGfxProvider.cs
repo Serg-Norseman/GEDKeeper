@@ -96,13 +96,9 @@ namespace GKUI
 
                 Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                 using (Graphics graphic = new Graphics(newImage)) {
-                    //graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphic.ImageInterpolation = ImageInterpolation.High;
-                    //graphic.SmoothingMode = SmoothingMode.HighQuality;
                     graphic.AntiAlias = true;
-                    //graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    graphic.ImageInterpolation = ImageInterpolation.High;
                     graphic.PixelOffsetMode = PixelOffsetMode.Half;
-                    //graphic.CompositingQuality = CompositingQuality.HighQuality;
 
                     if (cutoutIsEmpty) {
                         graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
@@ -152,7 +148,7 @@ namespace GKUI
 
         public IColor CreateColor(int argb)
         {
-            // Dirty hack!
+            // FIXME: Dirty hack!
             //argb = (int)unchecked((long)argb & (long)((ulong)-1));
             //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
             int red = (argb >> 16) & 0xFF;

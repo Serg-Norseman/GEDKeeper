@@ -62,7 +62,11 @@ namespace GKCommon
     }
 
     /// <summary>
+    /// The parser of BB-markup text.
     /// 
+    /// It is located in this package, with the support of cross-platform wrappers
+    /// because of the future use when exporting text notes to the program's output
+    /// reports.
     /// </summary>
     public class BBTextParser
     {

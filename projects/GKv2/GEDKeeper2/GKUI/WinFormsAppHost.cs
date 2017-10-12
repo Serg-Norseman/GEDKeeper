@@ -32,7 +32,7 @@ using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Charts;
 using GKUI.Components;
-using GKUI.Dialogs;
+using GKUI.Forms;
 
 namespace GKUI
 {

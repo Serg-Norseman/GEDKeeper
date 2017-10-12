@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
+using GKCore.Interfaces;
 using nVLC;
 using nVLC.Events;
 using nVLC.Media;
@@ -29,7 +30,7 @@ using nVLC.Players;
 
 namespace GKUI.Components
 {
-    public partial class MediaPlayer : UserControl
+    public partial class MediaPlayer : UserControl, ILocalization
     {
         #if !__MonoCS__
         private const bool FIND_LIBVLC = true;
@@ -78,6 +79,10 @@ namespace GKUI.Components
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetLang()
+        {
         }
 
         private void InitControls()

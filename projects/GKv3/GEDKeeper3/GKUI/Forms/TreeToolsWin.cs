@@ -69,7 +69,7 @@ namespace GKUI.Forms
             if (disposing)
             {
                 //fChecksList.Dispose();
-                TreeTools.PlacesSearch_Clear(fPlaces);
+                TreeTools.SearchPlaces_Clear(fPlaces);
                 fPlaces.Dispose();
                 fRMSkip.Dispose();
                 //fSplitList.Dispose();
@@ -179,7 +179,7 @@ namespace GKUI.Forms
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.TreeMerge(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
+            TreeTools.MergeTree(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
             Base.RefreshLists(false);
         }
 
@@ -195,7 +195,7 @@ namespace GKUI.Forms
             return (!Equals(fam1, fam2));
         }
 
-        private void SearchDups()
+        private void SearchDuplicates()
         {
             MergeCtl.Base = fBase;
             MergeCtl.MergeMode = fRMMode;
@@ -280,14 +280,14 @@ namespace GKUI.Forms
             {
                 fRMSkip.Add(MergeCtl.Rec1.XRef + "-" + MergeCtl.Rec2.XRef);
             }
-            SearchDups();
+            SearchDuplicates();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
             fRMIndex = 0;
             fRMSkip.Clear();
-            SearchDups();
+            SearchDuplicates();
         }
 
         #endregion
@@ -328,7 +328,7 @@ namespace GKUI.Forms
                             groupNum++;
                             groupRecords.Clear();
 
-                            TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
 
                             int cnt = groupRecords.Count;
 
@@ -481,7 +481,7 @@ namespace GKUI.Forms
             ListPlaces.BeginUpdate();
             try
             {
-                TreeTools.PlacesSearch(fTree, fPlaces, AppHost.Progress);
+                TreeTools.SearchPlaces(fTree, fPlaces, AppHost.Progress);
 
                 ListPlaces.ClearItems();
 
@@ -581,7 +581,7 @@ namespace GKUI.Forms
             if (startPerson == null) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
             } else {
-                TreeTools.TreeWalk(startPerson, walkMode, fSplitList);
+                TreeTools.WalkTree(startPerson, walkMode, fSplitList);
             }
 
             UpdateSplitLists();
@@ -778,7 +778,7 @@ namespace GKUI.Forms
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.TreeCompare(fBase.Context, external_match_db, ListCompare);
+                    TreeTools.CompareTree(fBase.Context, external_match_db, ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

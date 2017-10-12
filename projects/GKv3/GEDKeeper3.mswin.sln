@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSamplePlugin", "GKSamplePlugin\GKSamplePlugin.csproj", "{BD2B94CA-5913-415B-9428-ED3C6D270602}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTestsE", "GKTestsE\GKTestsE.csproj", "{FA7FD3A9-4C18-41B2-A652-53AF546B6138}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA7FD3A9-4C18-41B2-A652-53AF546B6138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA7FD3A9-4C18-41B2-A652-53AF546B6138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA7FD3A9-4C18-41B2-A652-53AF546B6138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA7FD3A9-4C18-41B2-A652-53AF546B6138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

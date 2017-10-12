@@ -23,7 +23,7 @@
 using GKCore;
 using GKCore.Interfaces;
 using GKTests.Mocks;
-using GKUI.Dialogs;
+using GKUI.Forms;
 using NUnit.Framework;
 
 namespace GKTests.UITests

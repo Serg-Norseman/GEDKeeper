@@ -746,16 +746,13 @@ namespace GKCore
         /// person.
         /// </summary>
         /// <param name="iRec">A person record to check.</param>
-        /// <param name="distance">Number of days remained until the birthday of
+        /// <returns>Number of days remained until the birthday of
         /// the <paramref name="iRec" />. The caller must ignore this value if
-        /// the method returns false.</param>
-        /// <returns>true if the method succeeded and false otherwise. If the
-        /// method failed, the caller must ignore value of the
-        /// <paramref name="distance" />.</returns>
+        /// the method returns -1.</returns>
         public static int GetDaysForBirth(GEDCOMIndividualRecord iRec)
         {
-            int distance = 0;
-            bool result = false;
+            int distance = -1;
+
             if (iRec != null)
             {
                 try
@@ -782,7 +779,6 @@ namespace GKCore
                                     double dt3 = curY + curM / 12.0 + curD / 12.0 / 31.0;
                                     int bdY = (dt2 < dt3) ? (curY + 1) : curY;
                                     distance = SysUtils.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
-                                    result = true;
                                 }
                             }
                         }
@@ -793,7 +789,8 @@ namespace GKCore
                     Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
                 }
             }
-            return (result) ? distance : -1;
+
+            return distance;
         }
 
         #endregion

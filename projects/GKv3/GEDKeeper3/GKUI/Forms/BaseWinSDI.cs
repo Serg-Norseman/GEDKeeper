@@ -864,8 +864,7 @@ namespace GKUI.Forms
         public void DuplicateRecord()
         {
             GEDCOMRecord original = GetSelectedRecordEx();
-            if (original == null) return;
-            if (original.RecordType != GEDCOMRecordType.rtIndividual) return;
+            if (original == null || original.RecordType != GEDCOMRecordType.rtIndividual) return;
 
             AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
 
@@ -899,9 +898,7 @@ namespace GKUI.Forms
         public void EditRecord()
         {
             GEDCOMRecord record = GetSelectedRecordEx();
-            if (record == null) return;
-
-            if (BaseController.EditRecord(this, record)) {
+            if (record != null && BaseController.EditRecord(this, record)) {
                 RefreshLists(false);
                 ShowRecordInfo(record);
             }
@@ -910,9 +907,7 @@ namespace GKUI.Forms
         public void DeleteRecord()
         {
             GEDCOMRecord record = GetSelectedRecordEx();
-            if (record == null) return;
-
-            if (BaseController.DeleteRecord(this, record, true)) {
+            if (record != null && BaseController.DeleteRecord(this, record, true)) {
                 RefreshLists(false);
             }
         }

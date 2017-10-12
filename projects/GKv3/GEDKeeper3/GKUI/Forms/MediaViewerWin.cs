@@ -164,9 +164,6 @@ namespace GKUI.Forms
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
-            imageCtl.btnSizeToFit.ToolTip = LangMan.LS(LSID.LSID_SizeToFit);
-            imageCtl.btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
-            imageCtl.btnZoomOut.ToolTip = LangMan.LS(LSID.LSID_ZoomOut);
 
             ProcessPortraits(imageCtl, fileRef);
 
@@ -202,6 +199,7 @@ namespace GKUI.Forms
             if (ctl != null) {
                 fViewer = ctl;
                 fViewer.Size = new Size(1000, 600);
+                SetLang();
 
                 SuspendLayout();
                 Content = fViewer;
@@ -219,6 +217,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
+            var localizable = fViewer as ILocalization;
+            if (localizable != null) localizable.SetLang();
         }
 
         protected override void OnLoad(EventArgs e)

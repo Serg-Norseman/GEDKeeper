@@ -517,38 +517,30 @@ namespace GKCore
                         GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
 
                         int days = GKUtils.GetDaysForBirth(iRec);
-                        if (days >= 0)
-                        {
+                        if (days >= 0 && days < 3) {
+                            string tip;
+
+                            if (firstTip) {
+                                tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                                firstTip = false;
+                            }
+
                             string nm = GKUtils.GetNameString(iRec, true, false);
                             nm = Culture.GetPossessiveName(nm);
 
-                            if (days >= 0 && 3 > days) {
-                                string tip;
-
-                                if (firstTip) {
-                                    tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
-                                    firstTip = false;
-                                }
-
-                                if (0 == days)
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_BirthdayToday), nm);
-                                }
-                                else if (1 == days)
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
-                                }
-                                else
-                                {
-                                    tip = string.Format(
-                                        LangMan.LS(LSID.LSID_DaysRemained),
-                                        nm, days);
-                                }
-
-                                tipsList.Add(tip);
+                            switch (days) {
+                                case 0:
+                                    tip = string.Format(LangMan.LS(LSID.LSID_BirthdayToday), nm);
+                                    break;
+                                case 1:
+                                    tip = string.Format(LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
+                                    break;
+                                default:
+                                    tip = string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days);
+                                    break;
                             }
+
+                            tipsList.Add(tip);
                         }
                     }
                 }
@@ -690,8 +682,12 @@ namespace GKCore
             return result;
         }
 
+        // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
         private void ArcFileLoad(string targetFn, Stream toStream)
         {
+            int treeVer = 0;
+            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+
             targetFn = SysUtils.NormalizeFilename(targetFn);
 
             using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read))
@@ -703,8 +699,12 @@ namespace GKCore
             }
         }
 
+        // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
         private void ArcFileSave(string fileName, string sfn)
         {
+            int treeVer = 0;
+            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+
             string arcFn = GetArcFileName();
             ZipStorer zip = null;
 
@@ -1492,6 +1492,7 @@ namespace GKCore
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
                     dlg.RecType = GEDCOMRecordType.rtIndividual;
+
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GEDCOMIndividualRecord);
                     } else {
