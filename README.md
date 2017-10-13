@@ -13,7 +13,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
-
+[![Technical debt ratio](https://sonarcloud.io/api/badges/measure?key=gedkeeper&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard?id=gedkeeper)
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
 
