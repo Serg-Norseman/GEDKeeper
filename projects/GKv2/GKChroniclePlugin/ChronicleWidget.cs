@@ -56,22 +56,10 @@ namespace GKChroniclePlugin
             InitializeComponent();
 
             fPlugin = plugin;
-
-            //Screen scr = Screen.PrimaryScreen;
-            //Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
-
             fEvents = new List<EventRecord>();
             lvEvents.Clear();
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-            base.Dispose(disposing);
         }
 
         private void CalcWidget_Load(object sender, EventArgs e)

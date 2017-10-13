@@ -220,7 +220,7 @@ namespace GKCommon.GEDCOM
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
 
             StreamWriter stream = null;
-            Assert.Throws(typeof(NullReferenceException), () => {
+            Assert.Throws(typeof(ArgumentNullException), () => {
                 instance.SaveToStream(stream);
             });
         }

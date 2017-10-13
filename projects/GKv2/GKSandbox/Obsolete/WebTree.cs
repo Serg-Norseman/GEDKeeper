@@ -23,7 +23,7 @@ using System.IO;
 using GKCommon;
 using GKCommon.GEDCOM;
 
-namespace GKCore.Export
+namespace GKCore
 {
     public class WebTree
     {

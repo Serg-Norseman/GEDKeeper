@@ -50,15 +50,6 @@ namespace GKCalculatorPlugin
             SetLang();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                //fCalc.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         private void CalcWidget_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);

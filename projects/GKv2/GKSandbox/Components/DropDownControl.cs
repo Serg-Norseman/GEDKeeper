@@ -35,7 +35,7 @@ namespace GKCommon.Controls
             Dropped
         }
 
-        private IContainer components;
+        private readonly IContainer components;
 
         private Rectangle fAnchorClientBounds;
         private Size fAnchorSize = new Size(121, 21);

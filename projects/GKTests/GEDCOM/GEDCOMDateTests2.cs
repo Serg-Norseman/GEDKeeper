@@ -223,7 +223,7 @@ namespace GKCommon.GEDCOM
             GEDCOMDate instance = new GEDCOMDate(null, null, "", "");
 
             GEDCOMTag source = null;
-            //Assert.Throws(typeof(NullReferenceException), () => {
+            //Assert.Throws(typeof(ArgumentNullException), () => {
             instance.Assign(source);
             //});
         }

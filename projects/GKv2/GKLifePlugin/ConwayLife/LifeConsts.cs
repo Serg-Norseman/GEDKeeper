@@ -32,13 +32,13 @@ namespace ConwayLife
 
         public const int DefaultAnimationDelay = 100;
 
-        public static Color DefaultCellColor = Color.Green;
-        public static Color DefaultBackgroundColor = Color.Silver;
+        public static readonly Color DefaultCellColor = Color.Green;
+        public static readonly Color DefaultBackgroundColor = Color.Silver;
 
-        public static Color DefaultGridLineColor = Color.Black;
+        public static readonly Color DefaultGridLineColor = Color.Black;
         public const DashStyle DefaultGridLineStyle = DashStyle.Dot;
 
-        public static bool[] DefaultDeadCells = new bool[] {false, false, false, true, false, false, false, false, false};
-        public static bool[] DefaultLiveCells = new bool[] {false, false, true, true, false, false, false, false, false};
+        public static readonly bool[] DefaultDeadCells = new bool[] {false, false, false, true, false, false, false, false, false};
+        public static readonly bool[] DefaultLiveCells = new bool[] {false, false, true, true, false, false, false, false, false};
     }
 }

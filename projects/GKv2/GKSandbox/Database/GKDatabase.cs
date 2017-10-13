@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace GKCommon.Database
 {
-    [Serializable]
     public class GKDatabaseException : Exception
     {
         public GKDatabaseException(string message) : base(message)

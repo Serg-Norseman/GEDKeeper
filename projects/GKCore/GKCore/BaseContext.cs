@@ -203,9 +203,7 @@ namespace GKCore
         {
             if (disposing) {
                 fUndoman.Dispose();
-
                 fTree.Dispose();
-                //fTree = null;
             }
             base.Dispose(disposing);
         }
@@ -355,7 +353,6 @@ namespace GKCore
 
                 string recName = GKUtils.GetRecordName(rec, false);
                 if (SysUtils.MatchesRegex(recName, regex)) {
-                    //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(rec));
                 }
             }
@@ -482,8 +479,8 @@ namespace GKCore
                         GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
 
                         int chbDate = FindBirthYear(child);
-                        if (chbDate != 0) {
-                            if (maxBirth < chbDate) maxBirth = chbDate;
+                        if (chbDate != 0 && maxBirth < chbDate) {
+                            maxBirth = chbDate;
                         }
                     }
                 }
@@ -878,6 +875,7 @@ namespace GKCore
             return fileName;
         }
 
+        // TODO: check existing of file
         public bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType)
         {
             if (fileReference == null) return false;
@@ -932,7 +930,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
-                        CopyFile(fileName, targetFn, false);
+                        CopyFile(fileName, targetFn);
                     }
                     catch (IOException)
                     {
@@ -950,7 +948,7 @@ namespace GKCore
             return result;
         }
 
-        private void CopyFile(string sourceFileName, string destFileName, bool overwrite)
+        private void CopyFile(string sourceFileName, string destFileName)
         {
             #if FILECOPY_EX
 
@@ -967,7 +965,7 @@ namespace GKCore
 
             #else
 
-            File.Copy(sourceFileName, destFileName, overwrite);
+            File.Copy(sourceFileName, destFileName, false);
 
             #endif
         }

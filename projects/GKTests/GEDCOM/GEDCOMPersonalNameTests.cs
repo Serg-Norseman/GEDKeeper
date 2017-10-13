@@ -282,7 +282,7 @@ namespace GKCommon.GEDCOM
             StreamWriter stream = null;
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
 
-            Assert.Throws(typeof(NullReferenceException), () => {
+            Assert.Throws(typeof(ArgumentNullException), () => {
                 instance.SaveToStream(stream);
             });
         }

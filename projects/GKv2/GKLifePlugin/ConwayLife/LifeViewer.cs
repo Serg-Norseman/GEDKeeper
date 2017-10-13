@@ -19,15 +19,16 @@ namespace ConwayLife
     {
         private bool fAcceptMouseClicks;
         private int fGeneration;
-        private LifeGrid fGrid;
         private Color fGridLineColor;
         private DashStyle fGridLineStyle;
-        private LifeHistory fHistory;
         private NotifyEvent fOnChange;
         private DoesCellLiveEvent fOnDoesCellLive;
-        private LifeOptions fOptions;
         private bool fShowGridLines;
-        private LifeRules fRules;
+
+        private readonly LifeGrid fGrid;
+        private readonly LifeHistory fHistory;
+        private readonly LifeOptions fOptions;
+        private readonly LifeRules fRules;
 
 
         public short this[int X, int Y]
