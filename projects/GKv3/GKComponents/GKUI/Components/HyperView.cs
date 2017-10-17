@@ -37,12 +37,13 @@ namespace GKUI.Components
     /// </summary>
     public class HyperView : CustomPanel
     {
+        private readonly List<BBTextChunk> fChunks;
+        private readonly List<int> fHeights;
+        private readonly StringList fLines;
+
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private List<BBTextChunk> fChunks;
         private BBTextChunk fCurrentLink;
-        private List<int> fHeights;
-        private readonly StringList fLines;
         private Color fLinkColor;
         private ExtSize fTextSize;
 

@@ -155,7 +155,7 @@ namespace GKUI.Forms
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
-                if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage)) == false) {
+                if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
                     return;
                 }
             }

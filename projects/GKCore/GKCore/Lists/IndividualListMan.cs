@@ -696,7 +696,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)) != false);
+                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, iRec);
                     }
@@ -786,7 +786,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (iRec.PersonalNames.Count > 1) {
-                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)) != false);
+                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, iRec, persName);
                         }
@@ -903,7 +903,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != false)
+                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)))
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, iRec);
                     }
@@ -1016,7 +1016,7 @@ namespace GKCore.Lists
                             userRef.StringValue : userRef.ReferenceType;
                         confirmation = string.Format(
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation) != false)
+                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation))
                         {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
                             fBaseWin.Context.Modified = true;

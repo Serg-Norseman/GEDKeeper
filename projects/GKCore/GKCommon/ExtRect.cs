@@ -23,9 +23,6 @@ using System.Runtime.InteropServices;
 
 namespace GKCommon
 {
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtRect
     {
         public static readonly ExtRect Empty = default(ExtRect);
@@ -109,9 +106,6 @@ namespace GKCommon
     }
 
 
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtRectF
     {
         public static readonly ExtRect Empty = default(ExtRect);
@@ -195,9 +189,6 @@ namespace GKCommon
     }
 
 
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtPoint
     {
         public static readonly ExtPoint Empty = default(ExtPoint);
@@ -298,9 +289,6 @@ namespace GKCommon
     }
 
 
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtPointF
     {
         public static readonly ExtPointF Empty = default(ExtPointF);
@@ -387,9 +375,6 @@ namespace GKCommon
     }
 
 
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtSize
     {
         public static readonly ExtSize Empty = default(ExtSize);
@@ -484,9 +469,6 @@ namespace GKCommon
     }
 
 
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct ExtSizeF
     {
         public static readonly ExtSizeF Empty = default(ExtSizeF);

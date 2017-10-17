@@ -607,7 +607,7 @@ namespace GKCore.Tools
                         pc.ProgressStep();
                     }
 
-                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)) == true)
+                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)))
                     {
                         CorrectIds(tree, pc);
                     }

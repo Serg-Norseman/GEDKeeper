@@ -23,9 +23,9 @@ namespace WordCloud
 
     public class CloudModel
     {
-        private PointF fCenter;
-        private QuadTree<Word> fQuadTree;
-        private RectangleF fSurface;
+        private readonly PointF fCenter;
+        private readonly QuadTree<Word> fQuadTree;
+        private readonly RectangleF fSurface;
 
         public CloudModel(SizeF size)
         {

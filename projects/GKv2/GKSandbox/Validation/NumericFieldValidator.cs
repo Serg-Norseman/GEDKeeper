@@ -12,16 +12,9 @@
         protected override bool EvaluateIsValid()
         {
             string text = ControlToValidate.Text;
-            bool result;
-            try
-            {
-                double.Parse(text);
-                result = true;
-            }
-            catch
-            {
-                result = false;
-            }
+
+            double value;
+            bool result = double.TryParse(text, out value);
             return result;
         }
     }

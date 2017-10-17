@@ -18,7 +18,7 @@ namespace WordCloud
 {
     public class QuadTreeNode<T> where T : Word
     {
-        private RectangleF fBounds;
+        private readonly RectangleF fBounds;
         private readonly Stack<T> fContents;
         private QuadTreeNode<T>[] fNodes;
 

@@ -69,8 +69,8 @@ namespace GKCore.Operations
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }

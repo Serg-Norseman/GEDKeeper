@@ -176,14 +176,6 @@ namespace GKFlowInputPlugin
             return res;
         }
 
-        private void CheckMain(GEDCOMIndividualRecord main)
-        {
-            if (main == null)
-            {
-                throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
-            }
-        }
-
         public static DataGridViewColumn AddTextColumn(string colName, string headerText)
         {
             DataGridViewColumn col = new DataGridViewTextBoxColumn();
@@ -356,6 +348,10 @@ namespace GKFlowInputPlugin
 
                         GEDCOMFamilyRecord family = null;
 
+                        if (link > PersonLink.plPerson && iMain == null) {
+                            throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
+                        }
+
                         switch (link) {
                             case PersonLink.plNone:
                                 break;
@@ -386,24 +382,20 @@ namespace GKFlowInputPlugin
 
                             case PersonLink.plFather:
                             case PersonLink.plMother:
-                                CheckMain(iMain);
                                 family = iMain.GetParentsFamily(true);
                                 family.AddSpouse(iRec);
                                 break;
 
                             case PersonLink.plGodparent:
-                                CheckMain(iMain);
                                 iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
                                 break;
 
                             case PersonLink.plSpouse:
-                                CheckMain(iMain);
                                 family = iMain.GetMarriageFamily(true);
                                 family.AddSpouse(iRec);
                                 break;
 
                             case PersonLink.plChild:
-                                CheckMain(iMain);
                                 family = iMain.GetMarriageFamily(true);
                                 family.AddChild(iRec);
                                 break;

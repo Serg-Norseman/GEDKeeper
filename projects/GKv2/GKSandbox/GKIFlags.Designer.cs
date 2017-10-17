@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GKIntl {
+namespace GKSandbox {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GKIntl {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GKIntl.GKIFlags", typeof(GKIFlags).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GKSandbox.GKIFlags", typeof(GKIFlags).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

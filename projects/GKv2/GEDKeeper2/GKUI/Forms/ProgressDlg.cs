@@ -81,7 +81,9 @@ namespace GKUI.Forms
                 } else {
                     DoInit(title, max);
                 }
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         internal void ProgressDone()
@@ -94,7 +96,9 @@ namespace GKUI.Forms
                         DoDone();
                     }
                 }
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         internal void ProgressStep()
@@ -105,7 +109,9 @@ namespace GKUI.Forms
                 } else {
                     DoStep(fVal + 1);
                 }
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         internal void ProgressStep(int value)
@@ -116,7 +122,9 @@ namespace GKUI.Forms
                 } else {
                     DoStep(value);
                 }
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         /*public bool IsAborting

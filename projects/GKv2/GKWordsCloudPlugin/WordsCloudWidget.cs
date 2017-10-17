@@ -75,9 +75,6 @@ namespace GKWordsCloudPlugin
             }
             fMode = StatsMode.smNames;
 
-            //Screen scr = Screen.PrimaryScreen;
-            //Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
-
             SetLang();
         }
 

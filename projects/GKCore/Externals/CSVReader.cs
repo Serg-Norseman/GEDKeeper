@@ -106,12 +106,13 @@ namespace Externals
 
         public void Dispose()
         {
-            try
-            {
+            try {
                 // Can't call BinaryReader.Dispose due to its protection level
-                if (fReader != null) fReader.Close();
+                if (fReader != null)
+                    fReader.Close();
+            } catch {
+                // dummy
             }
-            catch { }
         }
 
         /// <summary>

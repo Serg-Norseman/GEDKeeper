@@ -79,10 +79,9 @@ namespace GKUI.Forms
             cmbSource.Text = src.FiledByEntry;
         }
 
-        // FIXME
         private void cbSource_KeyDown(object sender, KeyEventArgs e)
         {
-            //
+            // dummy
         }
 
         private void cbSource_KeyUp(object sender, KeyEventArgs e)

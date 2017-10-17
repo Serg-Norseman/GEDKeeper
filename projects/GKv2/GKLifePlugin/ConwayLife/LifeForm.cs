@@ -44,7 +44,7 @@ namespace ConwayLife
             cmpLife.RandomCells();
         }
 
-        void tmrNextGeneration_Tick(object sender, EventArgs e)
+        private void tmrNextGeneration_Tick(object sender, EventArgs e)
         {
             if (fIsMinimised) return;
             
@@ -102,35 +102,35 @@ namespace ConwayLife
             MessageBox.Show(msg, PatternStabilisedTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         
-        void tbStep_Click(object sender, EventArgs e)
+        private void tbStep_Click(object sender, EventArgs e)
         {
             int Periodicity = cmpLife.NextGeneration();
             if (Periodicity > 0) PatternStabilised(Periodicity);
         }
         
-        void tbStart_Click(object sender, EventArgs e)
+        private void tbStart_Click(object sender, EventArgs e)
         {
             tmrNextGeneration.Enabled = tbStart.Checked;
             UpdateMenusAndButtons();
         }
 
-        void tbClear_Click(object sender, EventArgs e)
+        private void tbClear_Click(object sender, EventArgs e)
         {
             cmpLife.ClearCells();
         }
 
-        void PluginFormResize(object sender, EventArgs e)
+        private void PluginFormResize(object sender, EventArgs e)
         {
             fIsMinimised = (WindowState == FormWindowState.Minimized);
         }
 
-        void tbSetCells_Click(object sender, EventArgs e)
+        private void tbSetCells_Click(object sender, EventArgs e)
         {
             cmpLife.AcceptMouseClicks = btnSetCells.Checked;
             cmpLife.ShowGridLines = cmpLife.AcceptMouseClicks;
         }
 
-        void PluginForm_Load(object sender, EventArgs e)
+        private void PluginForm_Load(object sender, EventArgs e)
         {
             SetLang();
             UpdateMenusAndButtons();
@@ -147,13 +147,14 @@ namespace ConwayLife
             tbOptions.Text = Viewer.Options.LS_Options;
         }
         
-        void tbOptions_Click(object sender, EventArgs e)
+        private void tbOptions_Click(object sender, EventArgs e)
         {
-            OptionsForm optsForm = new OptionsForm(cmpLife.Options, cmpLife.Rules);
-            if (optsForm.ShowDialog() == DialogResult.OK) {
-                tmrNextGeneration.Interval = cmpLife.Options.AnimationDelay;
-                
-                cmpLife.SetGridSize(cmpLife.Options.GridWidth, cmpLife.Options.GridHeight);
+            using (OptionsForm optsForm = new OptionsForm(cmpLife.Options, cmpLife.Rules)) {
+                if (optsForm.ShowDialog() == DialogResult.OK) {
+                    tmrNextGeneration.Interval = cmpLife.Options.AnimationDelay;
+
+                    cmpLife.SetGridSize(cmpLife.Options.GridWidth, cmpLife.Options.GridHeight);
+                }
             }
         }
     }

@@ -88,8 +88,8 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }

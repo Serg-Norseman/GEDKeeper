@@ -54,7 +54,7 @@ namespace GKCore.Interfaces
         int TotalCount { get; }
 
         void AddCondition(byte columnId, ConditionKind condition, string value);
-        DataType GetColumnDataType(int index);
+        DataType GetColumnDataType(int columnId);
         string GetColumnName(byte columnId);
 
         void ChangeColumnWidth(int colIndex, int colWidth);

@@ -34,6 +34,7 @@ using GKCore.SingleInstance;
 using GKCore.Types;
 using GKCore.UIContracts;
 
+// TODO: total search and fix references to Encoding.GetEncoding(1251)!
 namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
@@ -91,11 +92,11 @@ namespace GKCore
 
         private void AutosaveTimer_Tick(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        ((IBaseWindow) win).CheckAutosave();
+                    var baseWin = win as IBaseWindow;
+                    if (baseWin != null) {
+                        baseWin.CheckAutosave();
                     }
                 }
             } catch (Exception ex) {

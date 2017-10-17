@@ -204,11 +204,9 @@ namespace GKImageViewerPlugin
             Text = fPlugin.LangMan.LS(IVLS.LSID_ImgViewer);
             tbFileLoad.ToolTipText = fPlugin.LangMan.LS(IVLS.LSID_FileLoad);
 
-            /*if (fImageCtl != null) {
-                fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-                fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-                fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
-            }*/
+            if (fImageCtl != null) {
+                fImageCtl.SetLang();
+            }
         }
 
         #endregion

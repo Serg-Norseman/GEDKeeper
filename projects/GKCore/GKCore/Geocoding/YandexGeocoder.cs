@@ -29,7 +29,6 @@ namespace GKCore.Geocoding
     public sealed class YandexGeocoder : IGeocoder
     {
         private const string REQUEST_URL = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&results={1}&lang={2}";
-        //const string REQUEST_URL = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&lang={2}";
 
         public YandexGeocoder()
         {
@@ -64,7 +63,6 @@ namespace GKCore.Geocoding
                     foreach (XmlNode node in nodes)
                     {
                         var pointNode = node.SelectSingleNode("opengis:Point/opengis:pos", ns);
-                        //var boundsNode = node.SelectSingleNode("opengis:boundedBy/opengis:Envelope", ns);
                         var metaNode = node.SelectSingleNode("opengis:metaDataProperty/geocoder:GeocoderMetaData", ns);
 
                         string[] splitted = pointNode.InnerText.Split(new char[] { ' ' }, 2);

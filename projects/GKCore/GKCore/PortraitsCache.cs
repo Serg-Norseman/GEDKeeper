@@ -43,7 +43,7 @@ namespace GKCore
             }
         }
 
-        private Dictionary<string, IImage> fMemoryCache;
+        private readonly Dictionary<string, IImage> fMemoryCache;
 
         private PortraitsCache()
         {

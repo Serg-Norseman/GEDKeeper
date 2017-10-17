@@ -63,7 +63,7 @@ namespace GKUI.Forms
             lstLanguages.Items.Clear();
             lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
-                lstLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
+                lstLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
             }
             UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
         }

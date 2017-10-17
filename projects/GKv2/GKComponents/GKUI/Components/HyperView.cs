@@ -37,14 +37,15 @@ namespace GKUI.Components
     /// </summary>
     public class HyperView : ScrollablePanel
     {
+        private readonly List<BBTextChunk> fChunks;
+        private readonly List<int> fHeights;
+        private readonly StringList fLines;
+
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private List<int> fHeights;
         private ExtSize fTextSize;
-        private readonly StringList fLines;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
-        private List<BBTextChunk> fChunks;
 
         private static readonly object EventLink;
 

@@ -136,6 +136,13 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
+        /// <summary>
+        /// This function compares dates only by chronological year.
+        /// Month and day are not taken into account, the year is compared with the calendar.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="matchParams"></param>
+        /// <returns></returns>
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             if (tag == null) return 0.0f;
@@ -143,7 +150,6 @@ namespace GKCommon.GEDCOM
 
             if (IsEmpty() || date.IsEmpty()) return 0.0f;
 
-            // TODO: I'm here some kind of nonsense wrote
             int absVal1 = this.GetChronologicalYear();
             int absVal2 = date.GetChronologicalYear();
 

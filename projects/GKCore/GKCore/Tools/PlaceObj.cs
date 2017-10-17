@@ -40,9 +40,8 @@ namespace GKCore.Tools
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //this.Facts.Dispose();
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }

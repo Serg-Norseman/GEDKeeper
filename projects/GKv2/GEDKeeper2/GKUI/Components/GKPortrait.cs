@@ -102,7 +102,7 @@ namespace GKUI.Components
 
             for (int i = 0, c = fBtnsList.Count; i < c; i++)
             {
-                lenwagon += (i != c) ? (fBtnsList[i].Width + 8) : fBtnsList[i].Width;
+                lenwagon += (i > 0) ? (8 + fBtnsList[i].Width) : fBtnsList[i].Width;
             }
 
             int center = lenwagon / 2;

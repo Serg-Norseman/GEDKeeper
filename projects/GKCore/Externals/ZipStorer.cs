@@ -76,8 +76,9 @@ namespace Externals
 
         // Static CRC32 Table
         private static readonly uint[] fCrcTable = null;
+
         // Default filename encoder
-        private static readonly Encoding fDefaultEncoding = Encoding.GetEncoding(/*437*/866);
+        private Encoding fDefaultEncoding = Encoding.GetEncoding(/*437*/866);
 
         // List of files to store
         private readonly List<ZipFileEntry> fFiles = new List<ZipFileEntry>();
@@ -150,13 +151,18 @@ namespace Externals
             return zip;
         }
 
+        public static ZipStorer Open(string filename, FileAccess access)
+        {
+            return Open(filename, access, Encoding.GetEncoding("CP437"));
+        }
+
         /// <summary>
         /// Method to open an existing storage file
         /// </summary>
         /// <param name="filename">Full path of Zip file to open</param>
         /// <param name="access">File access mode as used in FileStream constructor</param>
         /// <returns>A valid ZipStorer object</returns>
-        public static ZipStorer Open(string filename, FileAccess access)
+        public static ZipStorer Open(string filename, FileAccess access, Encoding encoding)
         {
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename");
@@ -165,6 +171,7 @@ namespace Externals
 
             ZipStorer zip = Open(stream, access);
             zip.fFileName = filename;
+            zip.fDefaultEncoding = encoding;
 
             return zip;
         }
@@ -184,7 +191,6 @@ namespace Externals
                 throw new InvalidOperationException("Stream cannot seek");
 
             var zip = new ZipStorer();
-            //zip.FileName = _filename;
             zip.fZipFileStream = stream;
             zip.fAccess = access;
 
@@ -504,12 +510,9 @@ namespace Externals
                 using (var tempZip = Create(tempZipName, string.Empty)) {
                     foreach (ZipFileEntry zfe in fullList)
                     {
-                        if (!zfes.Contains(zfe))
+                        if (!zfes.Contains(zfe) && zip.ExtractFile(zfe, tempEntryName))
                         {
-                            if (zip.ExtractFile(zfe, tempEntryName))
-                            {
-                                tempZip.AddFile(zfe.Method, tempEntryName, zfe.FilenameInZip, zfe.Comment);
-                            }
+                            tempZip.AddFile(zfe.Method, tempEntryName, zfe.FilenameInZip, zfe.Comment);
                         }
                     }
                 }
@@ -518,7 +521,7 @@ namespace Externals
                 File.Delete(zip.fFileName);
                 File.Move(tempZipName, zip.fFileName);
 
-                zip = Open(zip.fFileName, zip.fAccess);
+                zip = Open(zip.fFileName, zip.fAccess, zip.fDefaultEncoding);
             }
             catch
             {
@@ -831,7 +834,9 @@ namespace Externals
                     }
                 } while (fZipFileStream.Position > 0);
             }
-            catch { }
+            catch {
+                // dummy
+            }
 
             return false;
         }

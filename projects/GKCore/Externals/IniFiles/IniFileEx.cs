@@ -214,12 +214,12 @@ namespace Externals.IniFiles
         /// <summary>Parses given text.</summary>
         private static List<IniFileElement> ParseText(StreamReader reader)
         {
-            if (reader == null)
-                return null;
-
             List<IniFileElement> ret = new List<IniFileElement>();
-            IniFileElement lastEl = null;
 
+            if (reader == null)
+                return ret;
+
+            IniFileElement lastEl = null;
             while (reader.Peek() != -1)
             {
                 IniFileElement currEl = ParseLine(reader.ReadLine());

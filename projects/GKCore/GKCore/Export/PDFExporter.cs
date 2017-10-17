@@ -82,8 +82,5 @@ namespace GKCore.Export
         }
 
         protected abstract void InternalGenerate();
-
-        //var line1 = new iTextSharp.text.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.Black, Element.ALIGN_LEFT, 1);
-        //pdfDoc.Add(New Chunk(line1));
     }
 }

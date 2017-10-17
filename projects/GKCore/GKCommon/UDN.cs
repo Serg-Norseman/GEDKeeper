@@ -30,9 +30,6 @@ namespace GKCommon
     /// Unification of any dates, given a calendar and unknown components for the needs of comparison and sorting.
     /// Works on the basis of algorithms Julian day.
     /// </summary>
-    #if !PCL
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    #endif
     public struct UDN : ICloneable, IComparable, IComparable<UDN>, IEquatable<UDN>
     {
         private const int IgnoreYear = 1 << 31;
@@ -133,6 +130,14 @@ namespace GKCommon
         public override int GetHashCode()
         {
             return fValue.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is UDN) {
+                return (fValue == ((UDN)obj).fValue);
+            }
+            return false;
         }
 
         #endregion

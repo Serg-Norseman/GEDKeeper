@@ -276,8 +276,9 @@ namespace GKCommon
                         uVersion = (mi.Invoke(null, null) as string);
                     }
                 }
+            } catch {
+                // dummy
             }
-            catch { }
 
             return uVersion;
         }

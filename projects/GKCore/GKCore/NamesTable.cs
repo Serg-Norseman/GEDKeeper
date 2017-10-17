@@ -45,7 +45,7 @@ namespace GKCore
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                //this.FNames.Dispose();
+                // dummy
             }
             base.Dispose(disposing);
         }
@@ -86,7 +86,7 @@ namespace GKCore
             try {
                 fNames.Clear();
 
-                using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+                using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                     using (StreamReader reader = SysUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
                         while (reader.Peek() != -1) {
                             string line = reader.ReadLine();
@@ -117,11 +117,11 @@ namespace GKCore
 
         public void SaveToFile(string fileName)
         {
-            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
+            using (var strd = new StreamWriter(fileName, false, Encoding.UTF8))
             {
                 foreach (KeyValuePair<string, NameEntry> de in fNames)
                 {
-                    NameEntry nm = (NameEntry)de.Value;
+                    NameEntry nm = de.Value;
                     string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + GKData.SexData[(int)nm.Sex].Sign;
                     strd.WriteLine(st);
                 }

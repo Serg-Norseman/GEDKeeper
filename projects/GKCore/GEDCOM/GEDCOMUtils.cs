@@ -943,7 +943,7 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(su)) return GEDCOMOrdinanceProcessFlag.opNone;
 
             GEDCOMOrdinanceProcessFlag result;
-            su = su.Trim().ToUpperInvariant(); // FIXME
+            su = su.Trim().ToUpperInvariant();
             
             if (su == "YES")
             {

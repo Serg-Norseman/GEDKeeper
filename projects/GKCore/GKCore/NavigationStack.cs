@@ -65,10 +65,8 @@ namespace GKCore
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //this.fStackBackward.Dispose();
-                //this.fStackForward.Dispose();
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }

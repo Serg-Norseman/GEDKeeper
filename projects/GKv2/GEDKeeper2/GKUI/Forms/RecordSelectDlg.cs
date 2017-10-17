@@ -112,8 +112,8 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }
@@ -152,7 +152,7 @@ namespace GKUI.Forms
         private static bool ChildSelectorHandler(GEDCOMRecord record)
         {
             GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-            return (iRec == null) ? false : (iRec.ChildToFamilyLinks.Count == 0);
+            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 
         private void btnSelect_Click(object sender, EventArgs e)

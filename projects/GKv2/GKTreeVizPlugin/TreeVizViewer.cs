@@ -133,7 +133,7 @@ namespace GKTreeVizPlugin
             ulong timerFrequency = fHighresTimer.Frequency;
 
             if ((currentFrameTime - fLastCalculationTime) > timerFrequency) {
-                fCurrentFramerate = (fFramesDrawn * timerFrequency) / (currentFrameTime - fLastCalculationTime);
+                fCurrentFramerate = (double)(fFramesDrawn * timerFrequency) / (currentFrameTime - fLastCalculationTime);
                 fLastCalculationTime = currentFrameTime;
                 fFramesDrawn = 0;
             }

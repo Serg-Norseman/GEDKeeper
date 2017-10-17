@@ -482,7 +482,7 @@ namespace GKCore
             if (iFilter.SourceMode == FilterGroupMode.Selected)
             {
                 GEDCOMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == true)
+                if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)))
                 {
                     indivRec.AddSource(src, "", 0);
                 }
@@ -491,7 +491,7 @@ namespace GKCore
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
             {
                 GEDCOMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == true)
+                if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)))
                 {
                     grp.AddMember(indivRec);
                 }

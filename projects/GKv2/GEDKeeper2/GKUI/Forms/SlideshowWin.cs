@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class SlideshowWin : Form, ILocalization, IWorkWindow
+    public partial class SlideshowWin : Form, IWorkWindow
     {
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
@@ -111,10 +111,6 @@ namespace GKUI.Forms
             Text = LangMan.LS(LSID.LSID_Slideshow);
             tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
             tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
-
-            //fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-            //fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-            //fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
         private void SetFileRef()

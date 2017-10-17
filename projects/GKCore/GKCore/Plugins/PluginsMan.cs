@@ -35,7 +35,7 @@ namespace GKCore.Plugins
     /// </summary>
     public class PluginsMan
     {
-        private List<IPlugin> fPlugins;
+        private readonly List<IPlugin> fPlugins;
 
         public int Count
         {

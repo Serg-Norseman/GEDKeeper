@@ -329,7 +329,7 @@ namespace GKUI.Forms
                 {
                     GEDCOMRecord rec = fTree[i];
 
-                    if (rec is GEDCOMIndividualRecord)
+                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                     {
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
                         if (prepared.IndexOf(iRec) < 0)

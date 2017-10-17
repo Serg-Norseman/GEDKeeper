@@ -124,11 +124,15 @@ namespace GKUI.Forms
             GEDCOMCustomDate result = null;
 
             GEDCOMCalendar cal1 = GetComboCalendar(cmbDate1Calendar);
-            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(txtEventDate1.Text, cal1, true);
-            gcd1.YearBC = btnBC1.Checked.GetValueOrDefault();
-
             GEDCOMCalendar cal2 = GetComboCalendar(cmbDate2Calendar);
+
+            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(txtEventDate1.Text, cal1, true);
+            if (gcd1 == null) throw new ArgumentNullException("gcd1");
+
             GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(txtEventDate2.Text, cal2, true);
+            if (gcd2 == null) throw new ArgumentNullException("gcd2");
+
+            gcd1.YearBC = btnBC1.Checked.GetValueOrDefault();
             gcd2.YearBC = btnBC2.Checked.GetValueOrDefault();
 
             switch (cmbEventDateType.SelectedIndex) {
@@ -185,6 +189,8 @@ namespace GKUI.Forms
             fEvent.Agency = txtEventOrg.Text;
 
             GEDCOMCustomDate dt = AssembleDate();
+            if (dt == null) throw new ArgumentNullException("dt");
+
             fEvent.Date.ParseString(dt.StringValue);
 
             if (fEvent is GEDCOMFamilyEvent)

@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : Form, ILocalization, IWindow
+    public sealed partial class MapsViewerWin : Form, IWindow
     {
         private readonly GKTreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;

@@ -73,9 +73,10 @@ namespace GKTimeLinePlugin
                 if (fBase != null)
                 {
                     IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-
-                    listMan.ExternalFilter = null;
-                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
+                    if (listMan != null) {
+                        listMan.ExternalFilter = null;
+                        ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
+                    }
 
                     fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
                 }

@@ -186,8 +186,6 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = new GEDCOMFactory();
             fTagsFactory = f;
 
-            //f.RegisterTag("xxxx", xxxxxx.Create);
-            
             f.RegisterTag("FAMC", GEDCOMChildToFamilyLink.Create);
             f.RegisterTag("FAMS", GEDCOMSpouseToFamilyLink.Create);
             f.RegisterTag("ASSO", GEDCOMAssociation.Create);

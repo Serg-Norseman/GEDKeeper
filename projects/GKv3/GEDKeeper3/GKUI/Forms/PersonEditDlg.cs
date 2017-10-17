@@ -545,7 +545,7 @@ namespace GKUI.Forms
 
         private void btnParentsDelete_Click(object sender, EventArgs e)
         {
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery)) == false) return;
+            if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) return;
 
             GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;

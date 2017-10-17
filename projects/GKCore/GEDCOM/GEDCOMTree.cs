@@ -176,8 +176,6 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("_POSITION", GEDCOMCutoutPosition.Create);
             f.RegisterTag("LANG", GEDCOMLanguage.Create);
             f.RegisterTag("FAMC", GEDCOMPointer.Create);
-
-            //f.RegisterTag("xxxx", xxxx.Create);
         }
 
         private static string GetSignByRecord(GEDCOMRecord record)

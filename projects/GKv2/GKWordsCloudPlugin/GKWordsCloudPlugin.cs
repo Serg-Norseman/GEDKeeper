@@ -66,7 +66,7 @@ namespace GKWordsCloudPlugin
         {
             if (disposing)
             {
-                if (fForm != null) fForm.Dispose();
+                CloseForm();
             }
             base.Dispose(disposing);
         }
@@ -127,6 +127,7 @@ namespace GKWordsCloudPlugin
             bool result = true;
             try
             {
+                CloseForm();
             }
             catch (Exception ex)
             {

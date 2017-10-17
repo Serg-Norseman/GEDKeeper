@@ -135,7 +135,9 @@ namespace GKUI.Forms
             try {
                 //DoStep(fVal + 1);
                 Application.Instance.Invoke(delegate { DoStep(fVal + 1); });
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         internal void ProgressStep(int value)
@@ -143,7 +145,9 @@ namespace GKUI.Forms
             try {
                 //DoStep(value);
                 Application.Instance.Invoke(delegate { DoStep(value); });
-            } catch { }
+            } catch {
+                // dummy
+            }
         }
 
         #endregion

@@ -156,8 +156,6 @@ namespace GKCommon.GEDCOM
 
         public override void Assign(GEDCOMTag source)
         {
-            //base.Assign(source);
-
             GEDCOMDate srcDate = source as GEDCOMDate;
             if (srcDate != null) {
                 fCalendar = srcDate.fCalendar;
@@ -262,7 +260,7 @@ namespace GKCommon.GEDCOM
                 } else if (token.Kind == TokenKind.Symbol && token.Value[0] == '.') {
                     fDateFormat = GEDCOMDateFormat.dfSystem;
                     token = strTok.Next();
-                } 
+                }
 
                 // extract month
                 string[] monthes = GetMonthNames(fCalendar);
@@ -373,17 +371,15 @@ namespace GKCommon.GEDCOM
         {
             // TODO: remove this dirty hack!
             string result = str.Trim();
-            if (!string.IsNullOrEmpty(result)) {
-                if (result.StartsWith("(") && result.EndsWith(")")) {
-                    result = result.Substring(1, result.Length - 2);
+            if (!string.IsNullOrEmpty(result) && result.StartsWith("(") && result.EndsWith(")")) {
+                result = result.Substring(1, result.Length - 2);
 
-                    // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
-                    // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
-                    // FIXME: this code need to move to GEDCOMDateInterpreted
-                    result = result.Replace('/', '.');
-                    result = result.Replace('-', '.');
-                    result = result.Replace(' ', '.');
-                }
+                // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
+                // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
+                // FIXME: this code need to move to GEDCOMDateInterpreted
+                result = result.Replace('/', '.');
+                result = result.Replace('-', '.');
+                result = result.Replace(' ', '.');
             }
             return result;
         }
@@ -688,7 +684,7 @@ namespace GKCommon.GEDCOM
 
         #region UDN processing
 
-        // GEDCOMCalendar { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcIslamic, dcUnknown }
+        // GEDCOMCalendar: dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcIslamic, dcUnknown.
         private static readonly UDNCalendarType[] UDNCalendars = new UDNCalendarType[] {
             /* dcGregorian */   UDNCalendarType.ctGregorian,
             /* dcJulian */      UDNCalendarType.ctJulian,
@@ -771,12 +767,6 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMDate dtx = GEDCOMDate.CreateByFormattedStr(dateStr, calendar, aException);
             return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
-
-            /*try {
-            } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMDate.GetUDNByFormattedStr(" + dateStr + "): " + ex.Message);
-                return UDN.CreateEmpty();
-            }*/
         }
 
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)

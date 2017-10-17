@@ -49,6 +49,7 @@ namespace GKCommon.GEDCOM
 
             void IDisposable.Dispose()
             {
+                // Stub. The method is required by the interface.
             }
 
             void IEnumerator.Reset()

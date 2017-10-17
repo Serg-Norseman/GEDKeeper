@@ -102,6 +102,10 @@ namespace GKUI.Components
 
         #region Instance Fields
 
+        private readonly List<NamedRegion> fNamedRegions;
+        private readonly ToolTip fToolTip;
+        private readonly List<int> fZoomLevels;
+
         private bool fAllowZoom;
         private bool fAutoCenter;
         private bool fAutoPan;
@@ -111,7 +115,6 @@ namespace GKUI.Components
         private ImageBoxBorderStyle fImageBorderStyle;
         private bool fIsPanning;
         private bool fIsSelecting;
-        private List<NamedRegion> fNamedRegions;
         private int fScaledImageHeight;
         private int fScaledImageWidth;
         private Color fSelectionColor;
@@ -122,12 +125,10 @@ namespace GKUI.Components
         private Point fStartMousePosition;
         private Point fStartScrollPosition;
         private string fTip;
-        private ToolTip fToolTip;
         private int fUpdateCount;
         private int fZoom;
         private Size fViewSize;
         private float fZoomFactor;
-        private readonly List<int> fZoomLevels;
 
         #endregion
 

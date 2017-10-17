@@ -64,6 +64,9 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing) {
+                // dummy
+            }
             base.Dispose(disposing);
         }
 

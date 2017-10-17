@@ -101,9 +101,9 @@ namespace GKUI.Forms
             cmbLanguages.Items.Clear();
             cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
-                cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
+                cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
             }
-            UIHelper.SelectComboItem(cmbLanguages, (int)fOptions.InterfaceLang, true);
+            UIHelper.SelectComboItem(cmbLanguages, fOptions.InterfaceLang, true);
         }
 
         private void UpdateForm()

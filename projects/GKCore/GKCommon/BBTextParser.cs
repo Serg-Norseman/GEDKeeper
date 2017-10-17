@@ -128,15 +128,7 @@ namespace GKCommon
 
         private BBTextChunk SetChunkFontSize(int tokenLine, BBTextChunk chunk, float newSize)
         {
-            float fntSize;
-            ExtFontStyle fntStyle;
-            if (chunk != null) {
-                fntSize = chunk.Size;
-                fntStyle = chunk.Style;
-            } else {
-                fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.Regular;
-            }
+            ExtFontStyle fntStyle = (chunk != null) ? chunk.Style : ExtFontStyle.Regular;
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, newSize, fntStyle, fTextColor);

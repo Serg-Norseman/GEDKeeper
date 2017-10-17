@@ -41,8 +41,8 @@ namespace GKCommon.GEDCOM
 
     public sealed class GEDCOMAppFormat
     {
-        public string Sign;
-        public string Name;
+        public readonly string Sign;
+        public readonly string Name;
 
         public GEDCOMAppFormat(string sign, string name)
         {

@@ -562,8 +562,6 @@ namespace GKCore
 
             string resStr = "";
 
-            //PedigreeFormat fmt = this.fOptions.PedigreeOptions.Format;
-
             switch (fmt) {
                 case PedigreeFormat.Excess:
                     {
@@ -1209,8 +1207,10 @@ namespace GKCore
                 targetStm.SetLength(sourceStm.Length);
                 for (long size = 0; size < len; size += read)
                 {
-                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress)
-                        progressController.ProgressStep(reportedProgress = progress);
+                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress) {
+                        reportedProgress = progress;
+                        progressController.ProgressStep(reportedProgress);
+                    }
 
                     read = sourceStm.Read(buffer, 0, bufferSize);
                     targetStm.Write(buffer, 0, read);
@@ -2466,6 +2466,34 @@ namespace GKCore
         #endregion
 
         #region Multimedia support (static)
+
+        public static string GetStoreFolder(MultimediaKind mmKind)
+        {
+            string result = "";
+            switch (mmKind)
+            {
+                case MultimediaKind.mkNone:
+                    result = "unknown";
+                    break;
+
+                case MultimediaKind.mkImage:
+                    result = "images";
+                    break;
+
+                case MultimediaKind.mkAudio:
+                    result = "audio";
+                    break;
+
+                case MultimediaKind.mkText:
+                    result = "texts";
+                    break;
+
+                case MultimediaKind.mkVideo:
+                    result = "video";
+                    break;
+            }
+            return result + Path.DirectorySeparatorChar;
+        }
 
         public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
         {

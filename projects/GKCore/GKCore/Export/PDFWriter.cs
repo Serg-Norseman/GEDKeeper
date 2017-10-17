@@ -55,11 +55,12 @@ namespace GKCore.Export
 
         private readonly int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
         
+        private readonly BaseFont fBaseFont;
+
         private Document fDocument;
         private PdfWriter fWriter;
         private List fList;
         private Paragraph p;
-        private BaseFont fBaseFont;
 
         public PDFWriter()
         {
@@ -213,6 +214,13 @@ namespace GKCore.Export
         public override void addNote(string text, IFont font)
         {
             
+        }
+
+        // FIXME: add to other writers?
+        public void addLineSeparator()
+        {
+            var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
+            fDocument.Add(new Chunk(line1));
         }
     }
 }

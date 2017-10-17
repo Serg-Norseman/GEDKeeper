@@ -236,15 +236,13 @@ namespace GKCore.SingleInstance
                 return;
             }
 
-            lock (fProcessLock)
-            {
-                for (int r = 0; r < IpcComRetryCount; ++r)
-                {
+            lock (fProcessLock) {
+                for (int r = 0; r < IpcComRetryCount; ++r) {
                     try {
                         ProcessIpcMessagesPriv();
                         break;
+                    } catch (Exception) {
                     }
-                    catch (Exception) { }
 
                     Thread.Sleep(IpcComRetryDelay);
                 }
@@ -412,7 +410,7 @@ namespace GKCore.SingleInstance
                 Random rnd = new Random();
                 int nId = rnd.Next() & 0x7FFFFFFF;
 
-                if (WriteIpcInfoFile(nId, ipcMsg) == false) return;
+                if (!WriteIpcInfoFile(nId, ipcMsg)) return;
 
                 Send(AppMessage.IpcByFile, nId, true);
 

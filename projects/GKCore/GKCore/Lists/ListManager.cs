@@ -181,10 +181,8 @@ namespace GKCore.Lists
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 // dummy
-                //fContentList = null;
             }
             base.Dispose(disposing);
         }
@@ -339,10 +337,8 @@ namespace GKCore.Lists
 
         public DataType GetColumnDataType(int columnId)
         {
-            int col = columnId/* - 1*/;
-
-            if (col >= 0 && col < fListColumns.Count) {
-                return fListColumns[col].DataType;
+            if (columnId >= 0 && columnId < fListColumns.Count) {
+                return fListColumns[columnId].DataType;
             }
 
             return DataType.dtString;
@@ -529,19 +525,13 @@ namespace GKCore.Lists
             object cv1 = item1.ColumnValue;
             object cv2 = item2.ColumnValue;
 
-            if (cv1 != null && cv2 != null)
-            {
+            if (cv1 != null && cv2 != null) {
                 compRes = ((IComparable)cv1).CompareTo(cv2);
-            }
-            else if (cv1 != null && cv2 == null)
-            {
+            } else if (cv1 != null) {
                 compRes = -1;
-            }
-            else if (cv1 == null && cv2 != null)
-            {
+            } else if (cv2 != null) {
                 compRes = 1;
-            }
-            else {
+            } else {
                 compRes = 0;
             }
 

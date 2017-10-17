@@ -69,7 +69,6 @@ namespace GKCore
 
         #region Public properties
 
-        // TODO: rework
         public ICulture Culture
         {
             get {
@@ -609,7 +608,6 @@ namespace GKCore
 
         public GEDCOMSex DefineSex(string iName, string iPatr)
         {
-            //ICulture culture = fContext.Culture;
             INamesTable namesTable = AppHost.NamesTable;
 
             GEDCOMSex result = namesTable.GetSexByName(iName);
@@ -687,7 +685,7 @@ namespace GKCore
 
             targetFn = SysUtils.NormalizeFilename(targetFn);
 
-            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read))
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset))
             {
                 ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
                 if (entry != null) {
@@ -708,7 +706,7 @@ namespace GKCore
             try
             {
                 if (File.Exists(arcFn)) {
-                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite);
+                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, zipCharset);
                 } else {
                     zip = ZipStorer.Create(arcFn, "");
                 }
@@ -886,30 +884,7 @@ namespace GKCore
             string storePath = "";
             string refPath = "";
 
-            switch (GKUtils.GetMultimediaKind(GEDCOMFileReference.RecognizeFormat(fileName)))
-            {
-                case MultimediaKind.mkNone:
-                    storePath = "unknown";
-                    break;
-
-                case MultimediaKind.mkImage:
-                    storePath = "images";
-                    break;
-
-                case MultimediaKind.mkAudio:
-                    storePath = "audio";
-                    break;
-
-                case MultimediaKind.mkText:
-                    storePath = "texts";
-                    break;
-
-                case MultimediaKind.mkVideo:
-                    storePath = "video";
-                    break;
-            }
-
-            storePath = storePath + Path.DirectorySeparatorChar;
+            storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GEDCOMFileReference.RecognizeFormat(fileName)));
 
             switch (storeType)
             {
@@ -978,9 +953,11 @@ namespace GKCore
             try
             {
                 Stream stm = MediaLoad(fileReference, throwException);
-                if (stm != null && stm.Length != 0) {
+                if (stm != null) {
                     try {
-                        result = AppHost.GfxProvider.CreateImage(stm);
+                        if (stm.Length != 0) {
+                            result = AppHost.GfxProvider.CreateImage(stm);
+                        }
                     } finally {
                         stm.Dispose();
                     }
@@ -1006,9 +983,11 @@ namespace GKCore
             try
             {
                 Stream stm = MediaLoad(fileReference, throwException);
-                if (stm != null && stm.Length != 0) {
+                if (stm != null) {
                     try {
-                        result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                        if (stm.Length != 0) {
+                            result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                        }
                     } finally {
                         stm.Dispose();
                     }
@@ -1110,11 +1089,9 @@ namespace GKCore
             {
                 string pw = null;
                 string ext = SysUtils.GetFileExtension(fileName);
-                if (ext == ".geds") {
-                    if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
-                        return false;
-                    }
+                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                    return false;
                 }
 
                 IProgressController progress = AppHost.Progress;
@@ -1161,11 +1138,9 @@ namespace GKCore
             {
                 string pw = null;
                 string ext = SysUtils.GetFileExtension(fileName);
-                if (ext == ".geds") {
-                    if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
-                        return false;
-                    }
+                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                    return false;
                 }
 
                 FileSave(fileName, pw);
@@ -1393,15 +1368,11 @@ namespace GKCore
         public void DoCommit()
         {
             fUndoman.Commit();
-            //fViewer.RefreshLists(false);
-            //fHost.UpdateControls(false);
         }
 
         public void DoRollback()
         {
             fUndoman.Rollback();
-            //fViewer.RefreshLists(false);
-            //fHost.UpdateControls(false);
         }
 
         #endregion

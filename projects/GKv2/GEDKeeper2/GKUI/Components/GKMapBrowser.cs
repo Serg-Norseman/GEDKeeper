@@ -224,8 +224,10 @@ namespace GKUI.Components
 
             if (ShowLines)
             {
-                int num2 = (polylineScript != null) ? polylineScript.Length : 0;
-                polylineScript = polylineScript.Remove(num2 - 1, 1);
+                if (!string.IsNullOrEmpty(polylineScript)) {
+                    polylineScript = polylineScript.Remove(polylineScript.Length - 1, 1);
+                }
+
                 polylineScript =
                     "var polyline = new google.maps.Polyline({path: [" + polylineScript + "],strokeColor: '#FF0000', strokeWeight: 3}); " +
                     "polyline.setMap(map);"/*+

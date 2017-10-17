@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using GKCommon.Controls;
+using GKSandbox;
 
 namespace GKIntl
 {
@@ -63,7 +64,9 @@ namespace GKIntl
                     item.ImageKey = regName;
 
                     fListView.Items.Add(item);
-                } catch (Exception) { }
+                } catch (Exception) {
+                    // dummy
+                }
             }
         }
 
@@ -94,7 +97,6 @@ namespace GKIntl
             fListView.Name = "fListView";
             fListView.Size = new Size(243, 181);
             fListView.TabIndex = 0;
-            //fListView.TileSize = new Size(160, 28);
             fListView.UseCompatibleStateImageBehavior = false;
             fListView.View = View.Tile;
             fListView.SelectedIndexChanged += listView1_SelectedIndexChanged;

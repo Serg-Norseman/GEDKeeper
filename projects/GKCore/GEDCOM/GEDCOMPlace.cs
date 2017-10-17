@@ -44,12 +44,6 @@ namespace GKCommon.GEDCOM
             SetName("PLAC");
         }
 
-        /*public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-		{
-			// "MAP", "_LOC" defines by default
-			return base.AddTag(tagName, tagValue, tagConstructor);
-		}*/
-
         public GEDCOMPlace(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }

@@ -537,21 +537,24 @@ namespace GKCore.Charts
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         TreeChartPerson resParent = null;
-                        GEDCOMSex sex = person.Sex;
                         TreeChartPerson ft = null;
                         TreeChartPerson mt = null;
                         PersonFlag descFlag = PersonFlag.pfDescByFather;
-
                         bool invalidSpouse = false;
 
-                        switch (sex) {
+                        switch (person.Sex) {
                             case GEDCOMSex.svFemale:
                                 {
                                     GEDCOMIndividualRecord sp = family.GetHusband();
                                     resParent = AddDescPerson(null, sp, true, level);
                                     resParent.Sex = GEDCOMSex.svMale;
+
                                     ft = resParent;
+                                    ft.IsDup = isDup;
+
                                     mt = res;
+                                    mt.IsDup = isDup;
+
                                     descFlag = PersonFlag.pfDescByFather;
                                     break;
                                 }
@@ -561,8 +564,13 @@ namespace GKCore.Charts
                                     GEDCOMIndividualRecord sp = family.GetWife();
                                     resParent = AddDescPerson(null, sp, true, level);
                                     resParent.Sex = GEDCOMSex.svFemale;
+
                                     ft = res;
+                                    ft.IsDup = isDup;
+
                                     mt = resParent;
+                                    mt.IsDup = isDup;
+
                                     descFlag = PersonFlag.pfDescByMother;
                                     break;
                                 }
@@ -574,10 +582,8 @@ namespace GKCore.Charts
                                 break;
                         }
 
-                        if (resParent != null)
-                        {
-                            if (fOptions.Kinship)
-                            {
+                        if (resParent != null) {
+                            if (fOptions.Kinship) {
                                 fGraph.AddRelation(res.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                             }
 
@@ -601,9 +607,6 @@ namespace GKCore.Charts
                         if (invalidSpouse) {
                             continue;
                         }
-
-                        ft.IsDup = isDup;
-                        mt.IsDup = isDup;
 
                         if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
                         {

@@ -214,6 +214,10 @@ namespace GKTests.GKCommon
             Assert.AreEqual(-1, testUDNBef.CompareTo((object) testUDNAft));
             Assert.AreEqual(-1, testUDNBef.CompareTo(null));
 
+            Assert.IsFalse(testUDNBef.Equals((object)testUDNAft));
+            Assert.IsFalse(testUDNBef.Equals(null));
+            Assert.IsTrue(testUDNBef.Equals((object)testUDNBef));
+
             UDN testUDN2 = (UDN)testUDNApp.Clone();
             Assert.AreEqual("~????/05/14", testUDN2.ToString());
             Assert.IsFalse(testUDN2.IsEmpty());

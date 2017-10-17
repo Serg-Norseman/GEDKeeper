@@ -32,6 +32,8 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public class GEDCOMTag : GEDCOMObject
     {
+        private const int MAX_LINE_LENGTH = 248;
+
         #region Protected fields
 
         private int fLevel;
@@ -428,7 +430,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public StringList GetTagStrings(GEDCOMTag strTag)
+        public static StringList GetTagStrings(GEDCOMTag strTag)
         {
             StringList strings = new StringList();
 
@@ -460,7 +462,7 @@ namespace GKCommon.GEDCOM
             return strings;
         }
 
-        public void SetTagStrings(GEDCOMTag tag, StringList strings)
+        public static void SetTagStrings(GEDCOMTag tag, StringList strings)
         {
             if (tag == null) return;
 
@@ -475,24 +477,26 @@ namespace GKCommon.GEDCOM
 
             if (strings != null)
             {
+                bool isRecordTag = (tag is GEDCOMRecord);
+
                 int num = strings.Count;
                 for (int i = 0; i < num; i++)
                 {
                     string str = strings[i];
 
-                    int len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+                    int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                     string sub = str.Substring(0, len);
                     str = str.Remove(0, len);
 
-                    if (i == 0 && !(tag is GEDCOMRecord)) {
+                    if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
                         tag.AddTag("CONT", sub, null);
                     }
 
-                    while (((str != null) ? str.Length : 0) > 0)
+                    while (str.Length > 0)
                     {
-                        len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+                        len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }
@@ -500,7 +504,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void SetTagStrings(GEDCOMTag tag, string[] strings)
+        public static void SetTagStrings(GEDCOMTag tag, string[] strings)
         {
             if (tag == null) return;
 
@@ -515,24 +519,26 @@ namespace GKCommon.GEDCOM
 
             if (strings != null)
             {
+                bool isRecordTag = (tag is GEDCOMRecord);
+
                 int num = strings.Length;
                 for (int i = 0; i < num; i++)
                 {
                     string str = strings[i];
 
-                    int len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+                    int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                     string sub = str.Substring(0, len);
                     str = str.Remove(0, len);
 
-                    if (i == 0 && !(tag is GEDCOMRecord)) {
+                    if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
                         tag.AddTag("CONT", sub, null);
                     }
 
-                    while (((str != null) ? str.Length : 0) > 0)
+                    while (str.Length > 0)
                     {
-                        len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+                        len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }

@@ -158,8 +158,7 @@ namespace WordCloud
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Word nextItemUnderMouse;
-            TryGetItemAtLocation(e.Location, out nextItemUnderMouse);
+            Word nextItemUnderMouse = GetItemAtLocation(e.Location);
             if (nextItemUnderMouse != fItemUnderMouse) {
                 if (nextItemUnderMouse != null) {
                     Rectangle newRectangleToInvalidate = RectangleGrow(nextItemUnderMouse.Rectangle, 6);
@@ -198,15 +197,13 @@ namespace WordCloud
             return fModel.GetWordsInArea(area);
         }
 
-        public bool TryGetItemAtLocation(Point location, out Word foundItem)
+        public Word GetItemAtLocation(Point location)
         {
-            foundItem = null;
             IEnumerable<Word> itemsInArea = GetItemsInArea(new RectangleF(location, new SizeF(0, 0)));
             foreach (Word item in itemsInArea) {
-                foundItem = item;
-                return true;
+                return item;
             }
-            return false;
+            return null;
         }
     }
 }

@@ -156,10 +156,10 @@ namespace GKCommon
 
         public override bool Equals(object obj)
         {
-            if (!(obj is EnumSet<T>)) return false;
-
-            EnumSet<T> setObj = (EnumSet<T>)obj;
-            return (this == setObj);
+            if (obj is EnumSet<T>) {
+                return (fData == ((EnumSet<T>)obj).fData);
+            }
+            return false;
         }
 
         // ICloneable

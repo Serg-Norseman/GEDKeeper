@@ -257,8 +257,8 @@ namespace ConwayLife
             if (Y >= GridHeight)
                 throw new IndexOutOfRangeException("Y parameter out of range");
 
-            //ExtRect Rect = CellCoords(X, Y);
-            //InvalidateRect(Handle, @Rect, True);
+            Rectangle rect = CellCoords(X, Y);
+            Invalidate(new Region(rect));
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -268,32 +268,22 @@ namespace ConwayLife
                 short val = this[pt.X, pt.Y];
                 this[pt.X, pt.Y] = (short)((val > 0) ? 0 : 1);
             }
-        }
 
-        /*protected void MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer)
-		{
-		}*/
+            base.OnMouseUp(e);
+        }
 
         private void DrawGridLines(Graphics gfx, Pen pen)
         {
-            /*Brush.Color = Color;
-			Pen.Color = GridLineColor;
-			Pen.Mode = pmMask;
-			Pen.Style = GridLineStyle;*/
-
             int clientWidth = Width;
             int clientHeight = Height;
-            
             int coord, i;
 
-            for (i = 1; i < GridWidth; i++)
-            {
+            for (i = 1; i < GridWidth; i++) {
                 coord = CellEdge(i, clientWidth, GridWidth);
                 gfx.DrawLine(pen, coord, 0, coord, clientHeight);
             }
 
-            for (i = 1; i < GridHeight; i++)
-            {
+            for (i = 1; i < GridHeight; i++) {
                 coord = CellEdge(i, clientHeight, GridHeight);
                 gfx.DrawLine(pen, 0, coord, clientWidth, coord);
             }
@@ -329,6 +319,8 @@ namespace ConwayLife
                     }
                 }
             }
+
+            base.OnPaint(e);
         }
 
         public static Color lighter(Color color, float fraction)
@@ -376,7 +368,7 @@ namespace ConwayLife
         {
             if (this[X, Y] != value) {
                 fGrid[X, Y] = value;
-                InvalidateCell(X, Y);
+                //InvalidateCell(X, Y);
             }
         }
 
@@ -416,7 +408,6 @@ namespace ConwayLife
             for (int y = 0; y < GridHeight; y++) {
                 for (int x = 0; x < GridWidth; x++) {
                     bool live = DoesCellLive(x, y, MostRecentGrid);
-                    short val = fGrid[x, y];
                     SetCell(x, y, (short)((live) ? 1 : 0));
                 }
             }
