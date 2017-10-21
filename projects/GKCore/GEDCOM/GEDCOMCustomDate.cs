@@ -23,7 +23,7 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable
+    public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable, IEquatable<GEDCOMCustomDate>
     {
         public static readonly string[] GEDCOMDateApproximatedArray;
         public static readonly string[] GEDCOMDateRangeArray;
@@ -122,7 +122,7 @@ namespace GKCommon.GEDCOM
 
             UDN udn = GetUDN();
             if (udn.HasKnownYear()) {
-                var dtx = CalendarConverter.jd_to_gregorian2((int)udn.GetUnmaskedValue());
+                var dtx = CalendarConverter.jd_to_gregorian2(udn.GetUnmaskedValue());
                 resultYear = dtx.Year;
             } else {
                 resultYear = 0;
@@ -142,6 +142,26 @@ namespace GKCommon.GEDCOM
             }
 
             return -1;
+        }
+
+        public override bool Equals(object obj)
+        {
+            GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
+
+            if (otherDate != null) {
+                UDN abs1 = GetUDN();
+                UDN abs2 = otherDate.GetUDN();
+                return abs1.Equals(abs2);
+            }
+
+            return false;
+        }
+
+        public bool Equals(GEDCOMCustomDate other)
+        {
+            UDN abs1 = GetUDN();
+            UDN abs2 = other.GetUDN();
+            return abs1.Equals(abs2);
         }
 
         public static GEDCOMDate CreateApproximated(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate date, GEDCOMApproximated approximated)

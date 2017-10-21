@@ -1224,7 +1224,29 @@ namespace GKCore
 
         private const string GEDSEC_HEADER = "GEDSECAA";
         private const byte GS_MAJOR_VER = 1;
-        private const byte GS_MINOR_VER = 1;
+        private const byte GS_MINOR_VER = 2;
+
+        private static SymmetricAlgorithm CreateCryptoServiceProvider(byte majorVer, byte minorVer, PasswordDeriveBytes pdb)
+        {
+            if (majorVer >= 1) {
+                SymmetricAlgorithm csp = null;
+
+                switch (minorVer) {
+                    case 1:
+                        csp = new DESCryptoServiceProvider();
+                        csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
+                        break;
+
+                    case 2:
+                        csp = new AesCryptoServiceProvider();
+                        csp.Key = pdb.CryptDeriveKey("AES", "SHA1", csp.KeySize, csp.IV);
+                        break;
+                }
+
+                return csp;
+            }
+            return null;
+        }
 
         private void LoadFromSecFile(string fileName, string password)
         {
@@ -1253,9 +1275,7 @@ namespace GKCore
                 PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
 
                 try {
-                    using (DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider()) {
-                        cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
-
+                    using (var cryptic = CreateCryptoServiceProvider(gsMajVer, gsMinVer, pdb)) {
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
                         {
                             var gedcomProvider = new GEDCOMProvider(fTree);
@@ -1289,9 +1309,7 @@ namespace GKCore
                 PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
 
                 try {
-                    using (DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider()) {
-                        cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
-
+                    using (var cryptic = CreateCryptoServiceProvider(GS_MAJOR_VER, GS_MINOR_VER, pdb)) {
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
                         {
                             GKUtils.PrepareHeader(fTree, fileName, charSet, false);

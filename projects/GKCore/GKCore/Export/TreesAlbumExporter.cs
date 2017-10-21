@@ -34,7 +34,6 @@ namespace GKCore.Export
 
     public sealed class TreesAlbumExporter : PDFExporter
     {
-        private readonly ShieldState fShieldState;
         private readonly StringList fPatList;
 
         private itFont fTitleFont;
@@ -47,7 +46,6 @@ namespace GKCore.Export
 
         public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fShieldState = fBase.Context.ShieldState;
             fPatList = new StringList();
         }
 
@@ -122,8 +120,9 @@ namespace GKCore.Export
                     GlobalOptions.Instance.ChartOptions.Kinship = prevKinship;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogWrite("TreesAlbumExporter.InternalGenerate(): " + ex.Message);
                 throw;
             }
         }

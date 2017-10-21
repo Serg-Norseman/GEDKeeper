@@ -58,12 +58,11 @@ namespace GKCore.Charts
         public const int Moccasin = 0xFFE4B5;
         public const int PaleGreen = 0x98FB98;
 
-        //public const int Black = 0x000000;
-
 
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
         protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
+
 
         protected ChartRenderer()
         {

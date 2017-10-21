@@ -158,9 +158,9 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        protected override void OnPaint(PaintEventArgs pe)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            Graphics gfx = pe.Graphics;
+            Graphics gfx = e.Graphics;
 
             try
             {

@@ -3,10 +3,12 @@
 ; This file is part of "GEDKeeper".
 
 !include "MUI2.nsh"
+!include "DotNetChecker.nsh"
+
 
 Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.12.0_winsetup.exe"
+OutFile "gedkeeper_2.13.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
@@ -187,6 +189,8 @@ Section "$(gkreq)"
   SectionIn RO
 
   SetOutPath $INSTDIR
+
+  !insertmacro CheckNetFramework 35
 
   File "..\GEDKeeper2.exe"
   File "..\GKComponents.dll"
@@ -408,7 +412,6 @@ SectionGroup /e "$(gkplg)"
 
 	Section "$(gkp_cl)"
   		SetOutPath "$INSTDIR\plugins"
-  		File "..\plugins\ConwayLife.dll"
   		File "..\plugins\GKLifePlugin.dll"
   		File "..\plugins\GKLifePlugin.rus"
   		File "..\plugins\GKLifePlugin.enu"
@@ -436,10 +439,15 @@ Section "Uninstall"
   DeleteRegKey HKLM "SOFTWARE\GEDKeeper2"
 
   ; Remove files and uninstaller
+  Delete $INSTDIR\LICENSE
   Delete $INSTDIR\GEDKeeper2.exe
-  Delete $INSTDIR\GKCommon.dll
   Delete $INSTDIR\GKComponents.dll
   Delete $INSTDIR\GKCore.dll
+
+  Delete $INSTDIR\LinqBridge.dll
+  Delete $INSTDIR\NLog.dll
+  Delete $INSTDIR\nVLC.dll
+  Delete $INSTDIR\YamlSerializer.dll
 
   Delete $INSTDIR\ArborGVT.dll
   Delete $INSTDIR\DotNetRtfWriter.dll

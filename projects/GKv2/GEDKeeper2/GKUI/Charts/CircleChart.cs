@@ -50,6 +50,9 @@ namespace GKUI.Charts
             mcDrag
         }
 
+        private const float ZOOM_LOW_LIMIT = 0.0125f;
+        private const float ZOOM_HIGH_LIMIT = 1000.0f;
+
         private static readonly object EventRootChanged;
 
         private readonly IContainer fComponents;
@@ -63,8 +66,6 @@ namespace GKUI.Charts
         private float fOffsetY = 0;
         /* Zoom factors */
         private float fZoom = 1.0f;
-        private float fZoomLowLimit = 0.0125f;
-        private float fZoomHighLimit = 1000.0f;
         /* Mouse capturing. */
         private MouseCaptured fMouseCaptured;
         private int fMouseCaptureX;
@@ -317,14 +318,14 @@ namespace GKUI.Charts
                 case Keys.Add:
                 case Keys.Oemplus:
                     if (Keys.None == ModifierKeys) {
-                        Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
+                        Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
                     }
                     break;
 
                 case Keys.Subtract:
                 case Keys.OemMinus:
                     if (Keys.None == ModifierKeys) {
-                        Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
+                        Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                     }
                     break;
 
@@ -431,9 +432,9 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & ModifierKeys)) {
                 if (0 > e.Delta) {
-                    Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
+                    Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                 } else {
-                    Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
+                    Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
                 }
             }
 

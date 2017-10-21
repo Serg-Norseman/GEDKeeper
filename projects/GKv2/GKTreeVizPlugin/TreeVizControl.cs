@@ -208,9 +208,9 @@ namespace GKTreeVizPlugin
             return 0;
         }
 
-        protected override bool IsInputKey(Keys key)
+        protected override bool IsInputKey(Keys keyData)
         {
-            switch(key) {
+            switch(keyData) {
                 case Keys.Up:
                 case Keys.Down:
                 case Keys.Right:
@@ -218,7 +218,7 @@ namespace GKTreeVizPlugin
                 case Keys.Tab:
                     return true;
                 default:
-                    return base.IsInputKey(key);
+                    return base.IsInputKey(keyData);
             }
         }
 

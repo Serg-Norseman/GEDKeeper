@@ -31,8 +31,7 @@ namespace GKCommon.SmartGraph
         {
             fBuffer = new StringBuilder();
             fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_') + "{");
-            foreach (string option in options)
-            {
+            foreach (string option in options) {
                 fBuffer.AppendLine("\t" + option + ";");
             }
         }
@@ -50,9 +49,7 @@ namespace GKCommon.SmartGraph
         public void SaveFile(string path)
         {
             fBuffer.AppendLine("}");
-            // FIXME: fix and test encoding!
-            using (StreamWriter sw = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
-            {
+            using (StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8)) {
                 sw.Write(fBuffer.ToString());
             }
         }

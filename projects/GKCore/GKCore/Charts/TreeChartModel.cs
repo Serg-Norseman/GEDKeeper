@@ -93,7 +93,6 @@ namespace GKCore.Charts
         private readonly IList<string> fPreparedIndividuals;
         private TreeChartPerson fRoot;
         private float fScale;
-        private ShieldState fShieldState;
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
         private int fSpouseDistance;
@@ -110,7 +109,6 @@ namespace GKCore.Charts
             set {
                 fBase = value;
                 fGraph = new KinshipsGraph(fBase.Context);
-                fShieldState = fBase.Context.ShieldState;
                 fTree = fBase.Context.Tree;
             }
         }
@@ -496,12 +494,8 @@ namespace GKCore.Charts
                     break;
             }
 
-            if (fFilter.BranchCut != ChartFilter.BranchCutType.None)
-            {
-                if (!(bool)person.ExtData)
-                {
-                    result = false;
-                }
+            if ((fFilter.BranchCut != ChartFilter.BranchCutType.None) && (!(bool)person.ExtData)) {
+                result = false;
             }
 
             return result;
@@ -575,11 +569,14 @@ namespace GKCore.Charts
                                     break;
                                 }
 
-                            case GEDCOMSex.svNone:
-                            case GEDCOMSex.svUndetermined:
+                            default:
                                 invalidSpouse = true;
                                 Logger.LogWrite("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
+                        }
+
+                        if (invalidSpouse) {
+                            continue;
                         }
 
                         if (resParent != null) {
@@ -604,10 +601,6 @@ namespace GKCore.Charts
                             resParent = res;
                         }
 
-                        if (invalidSpouse) {
-                            continue;
-                        }
-
                         if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
                         {
                             int num2 = family.Children.Count;
@@ -628,7 +621,6 @@ namespace GKCore.Charts
 
                                 child.Father = ft;
                                 child.Mother = mt;
-                                //int d = (int)desc_flag;
                                 child.SetFlag(descFlag);
                                 if (fOptions.Kinship)
                                 {
@@ -1104,7 +1096,6 @@ namespace GKCore.Charts
 
                 string fullname = GKUtils.GetNameString(iRec, true, false);
                 if (SysUtils.MatchesRegex(fullname, regex)) {
-                    //yield return new SearchResult(iRec);
                     result.Add(new SearchResult(iRec));
                 }
             }
@@ -1430,7 +1421,7 @@ namespace GKCore.Charts
 
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background, int fSPX, int fSPY)
         {
-            
+            // FIXME: dummy
         }
 
         public void SetOffsets(int spx, int spy)

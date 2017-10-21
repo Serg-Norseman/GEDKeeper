@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Text;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
@@ -156,19 +157,19 @@ namespace GKCore.Lists
 
         private string GetGroups()
         {
-            string result = "";
+            StringBuilder result = new StringBuilder();
 
             int count = fRec.Groups.Count;
-            for (int idx = 0; idx < count; idx++)
-            {
+            for (int idx = 0; idx < count; idx++) {
                 GEDCOMGroupRecord grp = fRec.Groups[idx].Value as GEDCOMGroupRecord;
-                if (grp == null) continue;
+                if (grp != null) {
+                    if (idx > 0) result.Append("; ");
 
-                result += grp.GroupName;
-                if (idx < count - 1) result += "; ";
+                    result.Append(grp.GroupName);
+                }
             }
 
-            return result;
+            return result.ToString();
         }
 
         private bool HasPlace()

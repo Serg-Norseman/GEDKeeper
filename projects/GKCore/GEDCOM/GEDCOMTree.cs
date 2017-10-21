@@ -145,16 +145,14 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMTree()
         {
-            fRecords = new GEDCOMList<GEDCOMRecord>(this);
             fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
+            fRecords = new GEDCOMList<GEDCOMRecord>(this);
             fHeader = new GEDCOMHeader(this, this, "", "");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //fXRefIndex.Dispose();
+            if (disposing) {
                 fHeader.Dispose();
                 fRecords.Dispose();
             }
@@ -681,12 +679,9 @@ namespace GKCommon.GEDCOM
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
-
-                if (rec is GEDCOMRecordWithEvents)
+                var evsRec = this[i] as GEDCOMRecordWithEvents;
+                if (evsRec != null)
                 {
-                    GEDCOMRecordWithEvents evsRec = (GEDCOMRecordWithEvents) rec;
-
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--)
                     {
                         GEDCOMCustomEvent ev = evsRec.Events[j];

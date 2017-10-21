@@ -239,8 +239,9 @@ namespace GKUI.Forms
 
         private void MediaViewerWin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (fViewer is MediaPlayer) {
-                ((MediaPlayer)fViewer).btnStop_Click(null, null);
+            var mediaPlayer = fViewer as MediaPlayer;
+            if (mediaPlayer != null) {
+                mediaPlayer.btnStop_Click(null, null);
             }
         }
     }

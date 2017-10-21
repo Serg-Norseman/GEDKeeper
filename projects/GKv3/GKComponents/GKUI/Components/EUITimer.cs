@@ -31,7 +31,7 @@ namespace GKUI.Components
     public class EUITimer : BaseObject, ITimer
     {
         private readonly UITimer fInnerTimer;
-        private EventHandler fElapsedHandler;
+        private readonly EventHandler fElapsedHandler;
 
         public bool Enabled
         {

@@ -46,17 +46,16 @@ namespace Externals.IniFiles
         /// <summary>Gets or sets a string of white characters which precedes any meaningful content of a line.</summary>
         public string Intendation
         {
-            get
-            {
+            get {
                 StringBuilder intend = new StringBuilder();
                 for (int i = 0; i < fFormatting.Length; i++) {
-                    if (!char.IsWhiteSpace(fFormatting[i])) break;
+                    if (!char.IsWhiteSpace(fFormatting[i]))
+                        break;
                     intend.Append(fFormatting[i]);
                 }
                 return intend.ToString();
             }
-            set
-            {
+            set {
                 if (value.TrimStart().Length > 0)
                     throw new ArgumentException("Intendation property cannot contain any characters which are not condsidered as white ones.");
                 if (IniFileEx.TabReplacement != null)
@@ -76,8 +75,7 @@ namespace Externals.IniFiles
         /// <summary>Gets full text representation of a config file element, including intendation.</summary>
         public string Line
         {
-            get
-            {
+            get {
                 string intendation = Intendation;
                 if (fLine.Contains(Environment.NewLine)) {
                     string[] lines = fLine.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);

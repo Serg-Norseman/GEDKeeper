@@ -28,9 +28,6 @@ namespace GKCore.Interfaces
         void ProgressStep();
         void ProgressStep(int value);
 
-        /*bool IsAborting
-		{
-			get;
-		}*/
+        /*bool IsCanceled { get; }*/
     }
 }

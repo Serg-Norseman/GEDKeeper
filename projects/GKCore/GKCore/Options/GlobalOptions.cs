@@ -40,7 +40,6 @@ namespace GKCore.Options
         private static GlobalOptions fInstance = null;
 
         private readonly TreeChartOptions fChartOptions;
-        /*private GEDCOMCharacterSet fDefCharacterSet;*/
         private DateFormat fDefDateFormat;
         private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
@@ -95,12 +94,6 @@ namespace GKCore.Options
         {
             get { return fAncestorsCircleOptions; }
         }
-
-        /*public GEDCOMCharacterSet DefCharacterSet
-        {
-            get { return fDefCharacterSet; }
-            set { fDefCharacterSet = value; }
-        }*/
 
         public GEDCOMCharacterSet DefCharacterSet
         {
@@ -379,8 +372,7 @@ namespace GKCore.Options
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fLastBases.Dispose();
                 //fLanguages.Dispose();
                 fRelations.Dispose();
@@ -458,7 +450,6 @@ namespace GKCore.Options
 
             int optsVersion = ini.ReadInteger("Common", "OptsVersion", 0);
 
-            /*fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);*/
             fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
             fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
             fLastDir = ini.ReadString("Common", "LastDir", "");
@@ -572,7 +563,6 @@ namespace GKCore.Options
 
             ini.WriteInteger("Common", "OptsVersion", OPTS_VERSION);
 
-            /*ini.WriteInteger("Common", "DefCharacterSet", (int)fDefCharacterSet);*/
             ini.WriteInteger("Common", "DefNameFormat", (int)fDefNameFormat);
             ini.WriteInteger("Common", "DefDateFormat", (int)fDefDateFormat);
             ini.WriteString("Common", "LastDir", fLastDir);
@@ -630,7 +620,6 @@ namespace GKCore.Options
             {
                 fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
             }
-            //FMRUFiles.Sort();
 
             cnt = fRelations.Count;
             ini.WriteInteger("Relations", "Count", cnt);

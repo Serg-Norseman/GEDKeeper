@@ -113,7 +113,7 @@ namespace GKCore.Kinships
                 GEDCOMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
-                foreach (Edge edge in edgesPath)
+                foreach (IEdge edge in edgesPath)
                 {
                     GEDCOMIndividualRecord xFrom = (GEDCOMIndividualRecord)edge.Source.Value;
                     GEDCOMIndividualRecord xTo = (GEDCOMIndividualRecord)edge.Target.Value;
@@ -245,24 +245,18 @@ namespace GKCore.Kinships
                 if (rel == RelationKind.rkUncle || rel == RelationKind.rkAunt)
                 {
                     tmp = GKData.Numerals[great] + GKData.NumKinship[(int)target.Sex] + " ";
-                    if (rel == RelationKind.rkUncle)
-                    {
+                    if (rel == RelationKind.rkUncle) {
                         rel = RelationKind.rkGrandfather;
-                    }
-                    if (rel == RelationKind.rkAunt)
-                    {
+                    } else if (rel == RelationKind.rkAunt) {
                         rel = RelationKind.rkGrandmother;
                     }
                 }
                 else if (rel == RelationKind.rkNephew || rel == RelationKind.rkNiece)
                 {
                     tmp = GKData.Numerals[great] + GKData.NumKinship[(int)target.Sex] + " ";
-                    if (rel == RelationKind.rkNephew)
-                    {
+                    if (rel == RelationKind.rkNephew) {
                         rel = RelationKind.rkBrother;
-                    }
-                    if (rel == RelationKind.rkNiece)
-                    {
+                    } else if (rel == RelationKind.rkNiece) {
                         rel = RelationKind.rkSister;
                     }
                 }

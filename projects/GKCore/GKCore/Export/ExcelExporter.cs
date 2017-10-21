@@ -49,8 +49,6 @@ namespace GKCore.Export
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
-            //TCellAttributeSet cas = (TCellAttributeSet.acBottomBorder | TCellAttributeSet.acTopBorder | TCellAttributeSet.acRightBorder | TCellAttributeSet.acLeftBorder);
-
             try
             {
                 worksheet.Cells[1,  1] = new Cell("№");
@@ -71,8 +69,9 @@ namespace GKCore.Export
                 for (int i = 0; i < num; i++)
                 {
                     GEDCOMRecord rec = fTree[i];
-                    if (rec is GEDCOMIndividualRecord) {
-                        GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+                        GEDCOMIndividualRecord ind = (GEDCOMIndividualRecord)rec;
+
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
                             var parts = GKUtils.GetNameParts(ind);
 

@@ -78,11 +78,11 @@ namespace GKCore.Cultures
             return sn;
         }
 
+        private const string CONSONANTS = "бвгджзклмнпрстфхцчшщ";
+        private const string VOWELS = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
+
         public string GetMarriedSurname(string husbSurname)
         {
-            const string consonants = "бвгджзклмнпрстфхцчшщ";
-            //const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
-
             string res;
             if (string.IsNullOrEmpty(husbSurname)) {
                 res = "?";
@@ -91,7 +91,7 @@ namespace GKCore.Cultures
 
                 char lastSym = res[res.Length - 1];
 
-                if (consonants.IndexOf(lastSym) >= 0) {
+                if (CONSONANTS.IndexOf(lastSym) >= 0) {
                     res = res + "а";
                 } else if (res.EndsWith("кий")) {
                     res = res.Substring(0, res.Length - 3) + "кая";

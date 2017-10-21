@@ -56,7 +56,6 @@ namespace GKCore.Charts
     {
         private readonly TreeChartModel fModel;
 
-        // strictly private
         private string fBirthDate;
         private string fDeathDate;
         private EnumSet<PersonFlag> fFlags;

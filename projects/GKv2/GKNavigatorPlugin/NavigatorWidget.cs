@@ -217,12 +217,9 @@ namespace GKNavigatorPlugin
             object tag = e.Node.Tag;
             if (tag == null) return;
 
-            if (tag.GetType() == typeof(GEDCOMRecordType))
-            {
+            if (tag is GEDCOMRecordType) {
                 ShowData(DataCategory.Records, (GEDCOMRecordType)tag);
-            }
-            else if (tag.GetType() == typeof(DataCategory))
-            {
+            } else if (tag is DataCategory) {
                 ShowData((DataCategory)tag, GEDCOMRecordType.rtNone);
             }
         }
@@ -289,10 +286,10 @@ namespace GKNavigatorPlugin
                             break;
                     }
 
-                    GKListItem item = lvData.AddItem(null, new object[] { act,
-                                                         recordInfo.XRef,
-                                                         recordInfo.Name,
-                                                         recordInfo.Time.ToString() });
+                    lvData.AddItem(null, new object[] { act,
+                                       recordInfo.XRef,
+                                       recordInfo.Name,
+                                       recordInfo.Time.ToString() });
                 }
             }
             finally

@@ -84,10 +84,11 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        
+
         private List<T> fDataList; // lazy implementation
-        private readonly GEDCOMObject fOwner;
+        private GEDCOMObject fOwner;
         private bool fDisposed;
+
 
         public int Count
         {
@@ -110,6 +111,7 @@ namespace GKCommon.GEDCOM
             }
         }
         
+
         public GEDCOMList(GEDCOMObject owner)
         {
             fOwner = owner;
@@ -253,6 +255,8 @@ namespace GKCommon.GEDCOM
 
         public void ResetOwner(GEDCOMTree newOwner)
         {
+            fOwner = newOwner;
+
             if (fDataList == null) return;
 
             int num = fDataList.Count;
@@ -262,8 +266,6 @@ namespace GKCommon.GEDCOM
                     item.ResetOwner(newOwner);
                 }
             }
-
-            //this._owner = newOwner;
         }
 
         public void Pack()

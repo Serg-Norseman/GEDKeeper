@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
         private bool IsSelected(GEDCOMRecord iRec)
         {
-            bool res = (fSelectedPersons == null || (fSelectedPersons != null && fSelectedPersons.IndexOf(iRec) >= 0));
+            bool res = (fSelectedPersons == null || (fSelectedPersons.IndexOf(iRec) >= 0));
             return res;
         }
 
@@ -152,12 +152,9 @@ namespace GKUI.Forms
                 condBirth = chkBirth.Checked;
                 condDeath = chkDeath.Checked;
                 condResidence = chkResidence.Checked;
-            } else if (radSelected.Checked) {
-                if (cmbPersons.SelectedIndex >= 0)
-                {
-                    GKComboItem item = (GKComboItem)cmbPersons.Items[cmbPersons.SelectedIndex];
-                    ind = (item.Tag as GEDCOMIndividualRecord);
-                }
+            } else if (radSelected.Checked && (cmbPersons.SelectedIndex >= 0)) {
+                GKComboItem item = (GKComboItem)cmbPersons.Items[cmbPersons.SelectedIndex];
+                ind = (item.Tag as GEDCOMIndividualRecord);
             }
 
             fMapBrowser.ShowLines = (ind != null && chkLinesVisible.Checked);

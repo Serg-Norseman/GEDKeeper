@@ -55,8 +55,7 @@ namespace GKUI
     {
         private static void LogSysInfo()
         {
-            try
-            {
+            try {
                 #if __MonoCS__
                 Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
                 Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
@@ -66,8 +65,9 @@ namespace GKUI
                 Assembly execAssembly = Assembly.GetExecutingAssembly();
                 Logger.LogWrite("CLR Version: " + execAssembly.ImageRuntimeVersion);
                 Logger.LogWrite("GK Version: " + execAssembly.GetName().Version.ToString());
+            } catch {
+                // dummy
             }
-            catch { }
         }
 
         [STAThread]

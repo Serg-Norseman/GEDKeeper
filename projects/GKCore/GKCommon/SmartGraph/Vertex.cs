@@ -25,9 +25,6 @@ namespace GKCommon.SmartGraph
 {
     public class Vertex : IVertex
     {
-        //private static int nextNodeIdx = 1;
-        //public int Idx;
-
         public string Sign { get; set; }
         public object Value { get; set; }
 
@@ -40,8 +37,6 @@ namespace GKCommon.SmartGraph
 
         public Vertex()
         {
-            //this.Idx = nextNodeIdx++;
-
             EdgesOut = new List<IEdge>();
         }
 

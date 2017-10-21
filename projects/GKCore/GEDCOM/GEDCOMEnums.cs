@@ -49,8 +49,9 @@ namespace GKCommon.GEDCOM
         gf_AGES,
         gf_PAF,
         gf_Ahnenblatt,
+        gf_Genealogy_RusOld,
 
-        gf_Last = gf_Ahnenblatt
+        gf_Last = gf_Genealogy_RusOld
     }
 
     public enum GEDCOMCharacterSet

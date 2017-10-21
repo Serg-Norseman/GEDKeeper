@@ -797,7 +797,7 @@ namespace Externals
                     if (--len1 == 1)
                         goto break_outer;
                     minGallop--;
-                } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+                } while (count1 >= MIN_GALLOP || count2 >= MIN_GALLOP);
 
                 if (minGallop < 0)
                     minGallop = 0;
@@ -927,7 +927,7 @@ namespace Externals
                     if (--len1 == 0)
                         goto break_outer;
                     minGallop--;
-                } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+                } while (count1 >= MIN_GALLOP || count2 >= MIN_GALLOP);
 
                 if (minGallop < 0)
                     minGallop = 0;

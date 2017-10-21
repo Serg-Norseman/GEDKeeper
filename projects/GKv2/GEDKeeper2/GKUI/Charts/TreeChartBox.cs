@@ -192,15 +192,16 @@ namespace GKUI.Charts
 
         #region Private fields
 
+        private readonly TreeChartModel fModel;
         private readonly ToolTip fToolTip;
         private readonly TreeControlsList<ITreeControl> fTreeControls;
+        private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
         private int fBorderWidth;
         private IContainer fComponents;
         private long fHighlightedStart;
         private ChartControlMode fMode = ChartControlMode.ccmDefault;
-        private TreeChartModel fModel;
         private int fMouseX;
         private int fMouseY;
         private TreeChartOptions fOptions;
@@ -211,7 +212,6 @@ namespace GKUI.Charts
         private Timer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
-        private TweenLibrary fTween;
 
         private static readonly object EventPersonModify;
         private static readonly object EventRootChanged;

@@ -24,7 +24,7 @@ namespace GKCore.Interfaces
     /// Interface for windows of different charts with support
     /// for working functions and localization, and printing.
     /// </summary>
-    public interface IChartWindow : IWorkWindow, ILocalization
+    public interface IChartWindow : IWorkWindow
     {
         IBaseWindow Base { get; }
 

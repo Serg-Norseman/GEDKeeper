@@ -277,8 +277,6 @@ namespace GKUI.Components
                     } else {
                         VirtualMode = false;
                     }
-
-                    //VirtualMode = (fListMan != null);
                 }
             }
         }

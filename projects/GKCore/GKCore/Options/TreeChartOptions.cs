@@ -56,7 +56,7 @@ namespace GKCore.Options
         public string DefFontName;
         public int DefFontSize;
         public IColor DefFontColor;
-        //public FontStyle DefFontStyle;
+        public ExtFontStyle DefFontStyle;
 
         public TreeChartOptions()
         {
@@ -88,7 +88,7 @@ namespace GKCore.Options
             DefFontName = AppHost.Instance.GetDefaultFontName();
             DefFontSize = 8;
             DefFontColor = ChartRenderer.GetColor(ChartRenderer.Black);
-            //DefFontStyle = FontStyle.Regular;
+            DefFontStyle = ExtFontStyle.None;
         }
 
         public void Assign(IOptions source)
@@ -120,7 +120,7 @@ namespace GKCore.Options
             DefFontName = srcOptions.DefFontName;
             DefFontSize = srcOptions.DefFontSize;
             DefFontColor = srcOptions.DefFontColor;
-            //DefFontStyle = srcOptions.DefFontStyle;
+            DefFontStyle = srcOptions.DefFontStyle;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -156,7 +156,7 @@ namespace GKCore.Options
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.Instance.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
             DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", ChartRenderer.Black));
-            //DefFontStyle = (FontStyle)((uint)iniFile.ReadInteger("Chart", "FontStyle", 0));
+            DefFontStyle = (ExtFontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -192,7 +192,7 @@ namespace GKCore.Options
             iniFile.WriteString("Chart", "FontName", DefFontName);
             iniFile.WriteInteger("Chart", "FontSize", DefFontSize);
             iniFile.WriteInteger("Chart", "FontColor", DefFontColor.ToArgb());
-            //iniFile.WriteInteger("Chart", "FontStyle", (byte)DefFontStyle);
+            iniFile.WriteInteger("Chart", "FontStyle", (byte)DefFontStyle);
         }
     }
 }

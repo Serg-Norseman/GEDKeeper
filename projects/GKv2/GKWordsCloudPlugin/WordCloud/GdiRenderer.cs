@@ -9,18 +9,19 @@
  *  Adapted for the GEDKeeper project by Sergey V. Zhdanovskih in September 2017.
  */
 
+//#define DEBUG_DRAW
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
+using GKUI.Components;
 
 namespace WordCloud
 {
     public class GdiRenderer : ICloudRenderer
     {
-        private const bool DEBUG_DRAW = true;
-
         private const TextFormatFlags FLAGS = TextFormatFlags.NoPadding;
 
         private Font fCurrentFont;
@@ -67,38 +68,17 @@ namespace WordCloud
             RectangleF itemRt = word.Rectangle;
 
             if (highlight) {
-                color = Darker(color, 0.5f);
+                color = UIHelper.Darker(color, 0.5f);
             }
 
             Brush brush = new SolidBrush(color);
             fGraphics.DrawString(word.Text, font, brush, itemRt, StringFormat.GenericTypographic);
 
-            if (DEBUG_DRAW) {
-                fGraphics.DrawRectangle(new Pen(color), Rectangle.Round(itemRt));
-            }
+            #if DEBUG_DRAW
+            fGraphics.DrawRectangle(new Pen(color), Rectangle.Round(itemRt));
+            #endif
 
             //TextRenderer.DrawText(_graphics, word.Text, font, point, color, FLAGS);
-        }
-
-        private static Color Darker(Color color, float fraction)
-        {
-            float factor = (1.0f - fraction);
-
-            int rgb = color.ToArgb();
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = (rgb >> 0) & 0xFF;
-            //int alpha = (rgb >> 24) & 0xFF;
-
-            red = (int)(red * factor);
-            green = (int)(green * factor);
-            blue = (int)(blue * factor);
-
-            red = (red < 0) ? 0 : red;
-            green = (green < 0) ? 0 : green;
-            blue = (blue < 0) ? 0 : blue;
-
-            return Color.FromArgb(red, green, blue);
         }
 
         private Font GetFont(int weight)

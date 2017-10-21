@@ -121,7 +121,6 @@ namespace GKCore.Charts
         private GEDCOMIndividualRecord fRootPerson;
         private readonly List<CircleSegment> fSegments;
         private CircleSegment fSelected;
-        private ShieldState fShieldState;
 
         #region Only ancestors circle
         private int fGroupCount;
@@ -134,10 +133,7 @@ namespace GKCore.Charts
         public IBaseWindow Base
         {
             get { return fBase; }
-            set {
-                fBase = value;
-                fShieldState = fBase.Context.ShieldState;
-            }
+            set { fBase = value; }
         }
 
         public ExtRectF Bounds
@@ -517,12 +513,9 @@ namespace GKCore.Charts
 
             rootSegment.WedgeAngle = 360.0f;
 
-            GEDCOMIndividualRecord father, mother;
+            GEDCOMIndividualRecord father = null, mother = null;
             GEDCOMFamilyRecord fam = fRootPerson.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
+            if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                 father = fam.GetHusband();
                 mother = fam.GetWife();
             }
@@ -578,12 +571,9 @@ namespace GKCore.Charts
                     segment.IntRad = inRad - 50;
                     segment.ExtRad = extRad - 50;
 
-                    GEDCOMIndividualRecord father, mother;
+                    GEDCOMIndividualRecord father = null, mother = null;
                     GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
-                    if (fam == null) {
-                        father = null;
-                        mother = null;
-                    } else {
+                    if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                         father = fam.GetHusband();
                         mother = fam.GetWife();
                     }

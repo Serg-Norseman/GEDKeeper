@@ -149,7 +149,6 @@ namespace GKUI.Components
             fToolBar = new ToolStrip();
             fToolBar.Name = "ToolBar";
             fToolBar.Dock = DockStyle.Right;
-            //fToolBar.Appearance = ToolBarAppearance.Flat;
             fToolBar.Items.AddRange(new ToolStripItem[] {
                                         fBtnAdd,
                                         fBtnEdit,
@@ -159,8 +158,8 @@ namespace GKUI.Components
                                         fBtnMoveDown});
             fToolBar.GripStyle = ToolStripGripStyle.Hidden;
             fToolBar.ImageScalingSize = new Size(24, 20);
-            //fToolBar.AutoSize = true;
-            //fToolBar.ShowToolTips = true;
+            fToolBar.AutoSize = true;
+            fToolBar.ShowItemToolTips = true;
 
             fList = new GKListView();
             fList.Dock = DockStyle.Fill;
@@ -176,8 +175,6 @@ namespace GKUI.Components
             SuspendLayout();
             Controls.Add(fList);
             Controls.Add(fToolBar);
-            //Controls.SetChildIndex(fList, 1);
-            //Controls.SetChildIndex(fToolBar, 0);
             ResumeLayout(false);
 
             Dock = DockStyle.Fill;
@@ -209,9 +206,8 @@ namespace GKUI.Components
         /// <summary>
         /// The library NUnitForms has a bug in the class Finder.
         /// So we need unique names for hierarchical included components.
-        /// TODO: Need to fix this bug in NUnitForms.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">name of component</param>
         public void SetControlName(string name)
         {
             Name = name;

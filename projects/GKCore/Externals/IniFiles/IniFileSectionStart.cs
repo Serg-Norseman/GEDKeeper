@@ -6,9 +6,9 @@ namespace Externals.IniFiles
     /// <summary>Represents section's start line, e.g. "[SectionName]".</summary>
     public class IniFileSectionStart : IniFileElement
     {
-        private string fSectionName;
-        private string fTextOnTheRight; // e.g.  "[SectionName] some text"
         private string fInlineComment;
+        private string fSectionName;
+        private readonly string fTextOnTheRight; // e.g.  "[SectionName] some text"
 
         private IniFileSectionStart() : base()
         {
@@ -18,7 +18,6 @@ namespace Externals.IniFiles
         /// <param name="content">Actual content of a line in an INI file. Initializer assumes that it is valid.</param>
         public IniFileSectionStart(string content) : base(content)
         {
-            //content = Content;
             fFormatting = ExtractFormat(content);
             content = content.TrimStart();
             if (IniFileEx.AllowInlineComments) {
@@ -86,8 +85,7 @@ namespace Externals.IniFiles
             if (IniFileEx.PreserveFormatting) {
                 ret.fFormatting = fFormatting;
                 ret.Format();
-            }
-            else
+            } else
                 ret.Format();
 
             return ret;
@@ -102,28 +100,29 @@ namespace Externals.IniFiles
             string insideWhiteChars = "";
 
             StringBuilder form = new StringBuilder();
-            for (int i = 0; i < content.Length; i++)
-            {
+            for (int i = 0; i < content.Length; i++) {
                 char currC = content[i];
                 if (char.IsLetterOrDigit(currC) && beforeS) {
-                    afterS = true; beforeS = false; form.Append('$');
-                }
-                else if (afterS && char.IsLetterOrDigit(currC)) {
+                    afterS = true;
+                    beforeS = false;
+                    form.Append('$');
+                } else if (afterS && char.IsLetterOrDigit(currC)) {
                     insideWhiteChars = "";
-                }
-                else if (content.Length - i >= IniFileEx.SectionOpenBracket.Length && content.Substring(i, IniFileEx.SectionOpenBracket.Length) == IniFileEx.SectionOpenBracket && beforeEvery) {
-                    beforeS = true; beforeEvery = false; form.Append('[');
-                }
-                else if (content.Length - i >= IniFileEx.SectionCloseBracket.Length && content.Substring(i, IniFileEx.SectionOpenBracket.Length) == IniFileEx.SectionCloseBracket && afterS) {
+                } else if (content.Length - i >= IniFileEx.SectionOpenBracket.Length && content.Substring(i, IniFileEx.SectionOpenBracket.Length) == IniFileEx.SectionOpenBracket && beforeEvery) {
+                    beforeS = true;
+                    beforeEvery = false;
+                    form.Append('[');
+                } else if (content.Length - i >= IniFileEx.SectionCloseBracket.Length && content.Substring(i, IniFileEx.SectionOpenBracket.Length) == IniFileEx.SectionCloseBracket && afterS) {
                     form.Append(insideWhiteChars);
-                    afterS = false; form.Append(IniFileEx.SectionCloseBracket);
-                }
-                else if ((OfAny(i, content, IniFileEx.CommentChars)) != null) {
+                    afterS = false;
+                    form.Append(IniFileEx.SectionCloseBracket);
+                } else if ((OfAny(i, content, IniFileEx.CommentChars)) != null) {
                     form.Append(';');
-                }
-                else if (char.IsWhiteSpace(currC)) {
-                    if (afterS) insideWhiteChars += currC;
-                    else form.Append(currC);
+                } else if (char.IsWhiteSpace(currC)) {
+                    if (afterS)
+                        insideWhiteChars += currC;
+                    else
+                        form.Append(currC);
                 }
             }
             string ret = form.ToString();

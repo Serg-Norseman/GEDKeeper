@@ -12,6 +12,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using GKUI.Components;
 
 namespace ConwayLife
 {
@@ -300,7 +301,7 @@ namespace ConwayLife
             }
 
             Color cellColor = fOptions.LivingCellColor;
-            Color bordColor = lighter(cellColor, 0.5f);
+            Color bordColor = UIHelper.Lighter(cellColor, 0.5f);
 
             // Draw all the live cells
             using (Brush brush = new SolidBrush(cellColor))
@@ -321,41 +322,6 @@ namespace ConwayLife
             }
 
             base.OnPaint(e);
-        }
-
-        public static Color lighter(Color color, float fraction)
-        {
-            float factor = (1.0f + fraction);
-            
-            int rgb = color.ToArgb();
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = (rgb >> 0) & 0xFF;
-            //int alpha = (rgb >> 24) & 0xFF;
-
-            red = (int) (red * factor);
-            green = (int) (green * factor);
-            blue = (int) (blue * factor);
-
-            if (red < 0) {
-                red = 0;
-            } else if (red > 255) {
-                red = 255;
-            }
-            if (green < 0) {
-                green = 0;
-            } else if (green > 255) {
-                green = 255;
-            }
-            if (blue < 0) {
-                blue = 0;
-            } else if (blue > 255) {
-                blue = 255;
-            }
-
-            //int alpha = color.getAlpha();
-
-            return Color.FromArgb(red, green, blue);
         }
 
         protected override void OnResize(EventArgs e)

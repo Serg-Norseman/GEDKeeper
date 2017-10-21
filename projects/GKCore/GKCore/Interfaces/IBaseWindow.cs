@@ -26,7 +26,7 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public interface IBaseWindow : IWorkWindow, ILocalization
+    public interface IBaseWindow : IWorkWindow
     {
         IBaseContext Context { get; }
 
@@ -47,8 +47,8 @@ namespace GKCore.Interfaces
         IListManager GetRecordsListManByType(GEDCOMRecordType recType);
         GEDCOMIndividualRecord GetSelectedPerson();
         GEDCOMRecordType GetSelectedRecordType();
-        void RefreshLists(bool titles);
-        //void RefreshRecordsView(GEDCOMRecordType recType);
+        void RefreshLists(bool columnsChanged);
+        void RefreshRecordsView(GEDCOMRecordType recType);
         void ShowRecordsTab(GEDCOMRecordType recType);
         void SelectRecordByXRef(string xref);
         void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);

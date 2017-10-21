@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GKLifePlugin</RootNamespace>
     <AssemblyName>GKLifePlugin</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -115,6 +115,10 @@
     <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

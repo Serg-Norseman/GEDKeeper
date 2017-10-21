@@ -103,7 +103,7 @@ namespace GKUI.Components
                     } else {
                         using (var xFont = new Font(e.Font, FontStyle.Bold)) {
                             Font font = (isSelected) ? xFont : e.Font;
-                            gfx.DrawString("x", xFont, Brushes.Black, closeRect.Left, closeRect.Top);
+                            gfx.DrawString("x", font, Brushes.Black, closeRect.Left, closeRect.Top);
                         }
                     }
                 }

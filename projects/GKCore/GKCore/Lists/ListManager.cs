@@ -493,7 +493,7 @@ namespace GKCore.Lists
             return null;
         }
 
-        public void ChangeColumnWidth(int colIndex, int newWidth)
+        public void ChangeColumnWidth(int colIndex, int colWidth)
         {
             if (colIndex <= 0) return;
 
@@ -501,7 +501,7 @@ namespace GKCore.Lists
             ListColumn props = FindColumnProps(colrec.ColType);
 
             if (props != null) {
-                props.CurWidth = newWidth;
+                props.CurWidth = colWidth;
             }
         }
 

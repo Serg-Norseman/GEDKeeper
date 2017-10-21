@@ -830,7 +830,6 @@ namespace GKCore
 
             if (record != null)
             {
-                //string xref = record.XRef;
                 string msg = "";
                 switch (record.RecordType)
                 {

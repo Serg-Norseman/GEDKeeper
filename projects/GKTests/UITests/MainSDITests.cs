@@ -328,7 +328,7 @@ namespace GKTests.UITests
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.SelectSpouseFor(null); });
             baseWin.NotifyRecord(null, RecordAction.raAdd);
 
-            IList<ISearchResult> search = ((IWorkWindow)baseWin).FindAll("Maria");
+            IList<ISearchResult> search = baseWin.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
             Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
@@ -1608,7 +1608,7 @@ namespace GKTests.UITests
             ctl.FireEvent("DoubleClick", new EventArgs());
 
             // empty methods
-            Assert.IsNull(ccWin.FindAll(""));
+            Assert.IsNotNull(ccWin.FindAll(""));
             ccWin.QuickSearch();
             ccWin.SelectByRec(null);
             ccWin.SetFilter();
@@ -1758,7 +1758,7 @@ namespace GKTests.UITests
 
             SlideshowWin slidesWin = (SlideshowWin)frm;
 
-            Assert.AreEqual(null, slidesWin.FindAll(""));
+            Assert.IsNotNull(slidesWin.FindAll(""));
 
             Assert.AreEqual(false, slidesWin.AllowFilter());
             slidesWin.SetFilter();

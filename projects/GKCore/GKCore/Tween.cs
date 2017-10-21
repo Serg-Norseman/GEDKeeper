@@ -41,6 +41,8 @@ namespace GKCommon
     ///</summary>
     public sealed class TweenLibrary : BaseObject
     {
+        private readonly ITimer fTimer;
+
         private TweenAnimation fAnimation;
         private bool fBusy;
         private int fCounter;
@@ -49,7 +51,6 @@ namespace GKCommon
         private float fStartX, fStartY;
         private int fTimeStart;
         private int fTimeDest;
-        private ITimer fTimer;
         private TweenDelegate fTweenDelegate;
 
         public TweenLibrary()

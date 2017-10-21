@@ -46,7 +46,19 @@ namespace GKUI.Forms
             fTipShow = false;
 
             using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
-                PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
+                ArborSystem sys = arborViewer1.Sys;
+
+                foreach (IVertex vtx in graph.Vertices) {
+                    var arbNode = sys.addNode(vtx.Sign) as ArborNodeEx;
+                    PGNode pgNode = (PGNode)vtx.Value;
+
+                    arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;
+                    arbNode.Mass = pgNode.Size;
+                }
+
+                foreach (IEdge edge in graph.Edges) {
+                    sys.addEdge(edge.Source.Sign, edge.Target.Sign);
+                }
             }
 
             arborViewer1.Name = "arborViewer1";
@@ -66,30 +78,12 @@ namespace GKUI.Forms
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    //GEDCOMIndividualRecord iRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-                    //string txt = iRec.GetNameString(true, false) + " [" + xref + "]";
-
                     GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     fTip.Show(txt, arborViewer1, e.X + 24, e.Y);
                     fTipShow = true;
                 }
-            }
-        }
-
-        private static void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
-        {
-            foreach (Vertex vtx in graph.Vertices) {
-                var arbNode = sys.addNode(vtx.Sign) as ArborNodeEx;
-                PGNode pgNode = (PGNode)vtx.Value;
-
-                arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;
-                arbNode.Mass = pgNode.Size;
-            }
-
-            foreach (Edge edge in graph.Edges) {
-                sys.addEdge(edge.Source.Sign, edge.Target.Sign);
             }
         }
     }

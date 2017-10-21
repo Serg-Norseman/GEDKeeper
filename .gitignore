@@ -11,8 +11,12 @@
 gource-gk.cmd
 build_coverity.cmd
 /projects/GEDKeeper2.mswin-cov.sln
-sonarqube.cmd
 code_heat.sh
+
+/.sonarqube/
+NUnitResults.xml
+opencover.xml
+sonarqube.cmd
 
 /projects/GKv2/GEDKeeper2/bin/
 /projects/GKv2/GEDKeeper2/obj/

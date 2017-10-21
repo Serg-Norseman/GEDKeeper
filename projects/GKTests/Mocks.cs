@@ -96,7 +96,8 @@ namespace GKTests.Mocks
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
         public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
         public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
-        public void RefreshLists(bool titles) { }
+        public void RefreshLists(bool columnsChanged) { }
+        public void RefreshRecordsView(GEDCOMRecordType recType) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate) { }
 

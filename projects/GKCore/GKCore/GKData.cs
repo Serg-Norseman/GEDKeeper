@@ -484,12 +484,11 @@ namespace GKCore
             array6[34] = new PersonEventStruct(LSID.LSID_MiliDis, "_MILI_DIS", PersonEventKind.ekFact);
             array6[35] = new PersonEventStruct(LSID.LSID_MiliRank, "_MILI_RANK", PersonEventKind.ekFact);
 
-            array6[36] = new PersonEventStruct(LSID.LSID_BloodGroup, "_BGRO", PersonEventKind.ekFact); // {MyFamilyTree}
-            array6[37] = new PersonEventStruct(LSID.LSID_HairColor, "_HAIR", PersonEventKind.ekFact); // {BKW6, PAF}
-            array6[38] = new PersonEventStruct(LSID.LSID_EyesColor, "_EYES", PersonEventKind.ekFact); // {Gen}
-
-            array6[39] = new PersonEventStruct(LSID.LSID_MDNAHaplogroup, "_MDNA", PersonEventKind.ekFact); // {MyFamilyTree}
-            array6[40] = new PersonEventStruct(LSID.LSID_YDNAHaplogroup, "_YDNA", PersonEventKind.ekFact); // {MyFamilyTree}
+            array6[36] = new PersonEventStruct(LSID.LSID_BloodGroup, "_BGRO", PersonEventKind.ekFact); // MyFamilyTree
+            array6[37] = new PersonEventStruct(LSID.LSID_HairColor, "_HAIR", PersonEventKind.ekFact); // BKW6, PAF
+            array6[38] = new PersonEventStruct(LSID.LSID_EyesColor, "_EYES", PersonEventKind.ekFact); // Gen
+            array6[39] = new PersonEventStruct(LSID.LSID_MDNAHaplogroup, "_MDNA", PersonEventKind.ekFact); // MyFamilyTree
+            array6[40] = new PersonEventStruct(LSID.LSID_YDNAHaplogroup, "_YDNA", PersonEventKind.ekFact); // MyFamilyTree
             PersonEvents = array6;
 
 
@@ -601,7 +600,6 @@ namespace GKCore
                 LSID.LSID_NTMarried
             };
 
-            //BloodGroups = "|A+|A-|B+|B-|AB+|AB-|O+|O-";
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
             //BloodGroups = new string[] { "", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
         }

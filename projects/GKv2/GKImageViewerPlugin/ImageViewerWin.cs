@@ -35,7 +35,7 @@ namespace GKImageViewerPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class ImageViewerWin : Form, ILocalization, IWindow
+    public partial class ImageViewerWin : Form, IWindow
     {
         private ImageView fImageCtl;
         private readonly Plugin fPlugin;

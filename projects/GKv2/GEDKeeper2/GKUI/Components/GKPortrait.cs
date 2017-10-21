@@ -30,6 +30,10 @@ namespace GKUI.Components
     /// </summary>
     public class GKPortrait : UserControl
     {
+        private int fPixelSpeed = 5;
+        private readonly List<Button> fBtnsList = new List<Button>();
+
+
         public Image Image
         {
             get { return pictureBox1.Image; }
@@ -78,8 +82,6 @@ namespace GKUI.Components
             }
         }
 
-        private int fPixelSpeed = 5;
-        private List<Button> fBtnsList = new List<Button>();
 
         public GKPortrait()
         {
@@ -175,10 +177,6 @@ namespace GKUI.Components
         private Panel btnPanel;
         private Timer timer;
 
-        /// <summary>
-        /// Disposes resources used by the control.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -189,15 +187,9 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// This method is required for Windows Forms designer support.
-        /// Do not change the method contents inside the source code editor. The Forms designer might
-        /// not be able to load this method if it was changed manually.
-        /// </summary>
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GKPortrait));
             pictureBox1 = new PictureBox();
             btnPanel = new Panel();
             timer = new Timer(components);

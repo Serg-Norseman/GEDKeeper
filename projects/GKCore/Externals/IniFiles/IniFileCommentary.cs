@@ -32,9 +32,9 @@ namespace Externals.IniFiles
         public string CommentChar
         {
             get { return fCommentChar; }
-            set
-            {
-                if (fCommentChar == value) return;
+            set {
+                if (fCommentChar == value)
+                    return;
                 fCommentChar = value;
                 Rewrite();
             }
@@ -44,9 +44,9 @@ namespace Externals.IniFiles
         public string Comment
         {
             get { return fComment; }
-            set
-            {
-                if (fComment == value) return;
+            set {
+                if (fComment == value)
+                    return;
                 fComment = value;
                 Rewrite();
             }

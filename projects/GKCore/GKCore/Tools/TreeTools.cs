@@ -151,7 +151,7 @@ namespace GKCore.Tools
                 for (int i = 0; i < num; i++) {
                     PatriarchObj pObj = patList[i];
 
-                    if ((!loneSuppress) || (loneSuppress && pObj.HasLinks)) {
+                    if (!loneSuppress || pObj.HasLinks) {
                         string color = (pObj.IRec.Sex == GEDCOMSex.svFemale) ? "pink" : "blue";
                         gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
                     }
@@ -269,16 +269,17 @@ namespace GKCore.Tools
 
         private static void CheckRecord_PreparePtr(GEDCOMTree tree, GEDCOMFormat format, GEDCOMPointerWithNotes ptr)
         {
-            /*GEDCOMRecord val = ptr.Value;
-			if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
-				ptr.Value = null;
-			}*/
+            // TODO: checkit!
+            GEDCOMRecord val = ptr.Value;
+            if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
+                ptr.Value = null;
+            }
 
             int num = ptr.Notes.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GEDCOMNotes note = ptr.Notes[i];
-                if (!note.IsPointer) ReformNote(tree, note);
+                if (!note.IsPointer)
+                    ReformNote(tree, note);
             }
         }
 
@@ -1010,13 +1011,13 @@ namespace GKCore.Tools
                 case CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
                     baseWin.Context.CreateEventEx(iRec, "DEAT", "", "");
-                    //this.Base.ChangeRecord(iRec);
+                    baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
 
                 case CheckDiag.cdPersonSexless:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
                     baseWin.Context.CheckPersonSex(iRec);
-                    //this.Base.ChangeRecord(iRec);
+                    baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
 
                 case CheckDiag.cdEmptyFamily:
@@ -1252,9 +1253,9 @@ namespace GKCore.Tools
             {
                 GEDCOMRecord rec = tree[i];
 
-                if (rec is GEDCOMIndividualRecord)
+                if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                 {
-                    GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
                     string[] fams = baseWin.Context.Culture.GetSurnames(iRec);
 
@@ -1281,8 +1282,8 @@ namespace GKCore.Tools
             // find all persons of one surname, not related by ties of kinship
             foreach (KeyValuePair<string, List<GEDCOMIndividualRecord>> entry in families)
             {
-                string fam = (string)entry.Key;
-                List<GEDCOMIndividualRecord> ps = (List<GEDCOMIndividualRecord>)entry.Value;
+                string fam = entry.Key;
+                List<GEDCOMIndividualRecord> ps = entry.Value;
 
                 int i = 0;
                 while (i < ps.Count)
@@ -1350,10 +1351,10 @@ namespace GKCore.Tools
             {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
                     GEDCOMRecord recA = treeA[i];
-                    if (recA is GEDCOMIndividualRecord) {
+                    if (recA.RecordType == GEDCOMRecordType.rtIndividual) {
                         for (int k = 0; k < treeB.RecordsCount; k++) {
                             GEDCOMRecord recB = treeB[k];
-                            if (recB is GEDCOMIndividualRecord) {
+                            if (recB.RecordType == GEDCOMRecordType.rtIndividual) {
                                 GEDCOMIndividualRecord indivA = (GEDCOMIndividualRecord) recA;
                                 GEDCOMIndividualRecord indivB = (GEDCOMIndividualRecord) recB;
 
@@ -1555,11 +1556,9 @@ namespace GKCore.Tools
 
                 for (int i = 0; i < recsCount; i++) {
                     pc.ProgressStep();
-                    GEDCOMRecord record = tree[i];
 
-                    if (record is GEDCOMRecordWithEvents) {
-                        GEDCOMRecordWithEvents evsRec = (GEDCOMRecordWithEvents) record;
-
+                    var evsRec = tree[i] as GEDCOMRecordWithEvents;
+                    if (evsRec != null) {
                         int num2 = evsRec.Events.Count;
                         for (int j = 0; j < num2; j++) {
                             GEDCOMCustomEvent evt = evsRec.Events[j];

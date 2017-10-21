@@ -99,7 +99,7 @@ namespace GKTimeLinePlugin
                 Logger.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;

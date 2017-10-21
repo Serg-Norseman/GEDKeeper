@@ -130,7 +130,7 @@ namespace GKUI.Components
 
         private void Events_ParsedChanged(object sender, MediaParseChange e)
         {
-            //Console.WriteLine(e.Parsed);
+            // dummy
         }
 
         #endregion

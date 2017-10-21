@@ -212,7 +212,6 @@ namespace GKUI.Components
 
         #region Design
 
-        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Button btnMergeToRight;
         private System.Windows.Forms.Button btnMergeToLeft;
         private System.Windows.Forms.Button btnRec2Select;
@@ -222,25 +221,14 @@ namespace GKUI.Components
         private System.Windows.Forms.Label Lab2;
         private System.Windows.Forms.Label Lab1;
 
-        /// <summary>
-        /// Disposes resources used by the control.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (components != null) {
-                    components.Dispose();
-                }
+                // dummy
             }
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// This method is required for Windows Forms designer support.
-        /// Do not change the method contents inside the source code editor. The Forms designer might
-        /// not be able to load this method if it was changed manually.
-        /// </summary>
         private void InitializeComponent()
         {
             Lab1 = new System.Windows.Forms.Label();

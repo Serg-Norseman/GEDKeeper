@@ -51,17 +51,19 @@ namespace GKCore
     /// </summary>
     public abstract class AppHost : IHost, ISingleInstanceEnforcer
     {
-        protected static AppHost fInstance = null;
-
         private static string fAppSign;
+        private static AppHost fInstance = null;
+
+        private readonly List<WidgetInfo> fActiveWidgets;
+        private readonly StringList fTips;
 
         protected IBaseWindow fActiveBase;
-        private readonly List<WidgetInfo> fActiveWidgets;
-        private string[] fCommandArgs;
         protected IList<IWindow> fRunningForms;
-        private int fLoadingCount;
-        private readonly StringList fTips;
+
         private ITimer fAutosaveTimer;
+        private string[] fCommandArgs;
+        private int fLoadingCount;
+
 
         public static AppHost Instance
         {
@@ -70,6 +72,7 @@ namespace GKCore
                 return fInstance;
             }
         }
+
 
         public IList<WidgetInfo> ActiveWidgets
         {
@@ -80,6 +83,7 @@ namespace GKCore
         {
             get { return fRunningForms; }
         }
+
 
         protected AppHost()
         {

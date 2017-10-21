@@ -155,15 +155,41 @@ namespace GKUI.Forms
 
     public sealed class ProgressController : IProgressController
     {
-        private ProgressProxy fProxy;
+        //private ManualResetEvent fMRE = new ManualResetEvent(false);
+
+        private bool fFormLoaded;
+        private int fMax;
+        private IntPtr fParentHandle;
+        private ProgressDlg fProgressForm;
+        //private Thread fThread;
+        private string fTitle;
         private int fVal;
+
+        /*public bool IsCanceled
+        {
+            get { return fProxy.IsCanceled; }
+        }*/
 
         public void ProgressInit(string title, int max)
         {
-            if (fProxy != null) {
-                fProxy.ProgressReset(title, max);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressInit(title, max);
             } else {
-                fProxy = new ProgressProxy(title, max);
+                fFormLoaded = false;
+                fTitle = title;
+                fMax = max;
+                fParentHandle = AppHost.Instance.GetTopWindowHandle();
+
+                ShowProgressForm();
+                //fThread = new Thread(ShowProgressForm);
+                //fThread.SetApartmentState(ApartmentState.STA);
+                //fThread.Start();
+
+                while (!fFormLoaded)
+                {
+                    Thread.Sleep(100);
+                }
+                //fMRE.WaitOne();
             }
 
             fVal = 0;
@@ -171,54 +197,24 @@ namespace GKUI.Forms
 
         public void ProgressDone()
         {
-            if (fProxy != null) {
-                fProxy.Close();
-                fProxy = null;
+            if (fProgressForm != null) {
+                fProgressForm.ProgressDone();
+                fProgressForm = null;
             }
         }
 
         public void ProgressStep()
         {
-            if (fProxy != null) {
-                fProxy.UpdateProgress(fVal++);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressStep(fVal++);
             }
         }
 
         public void ProgressStep(int value)
         {
-            if (fProxy != null) {
-                fProxy.UpdateProgress(value);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressStep(value);
             }
-        }
-    }
-
-    internal sealed class ProgressProxy
-    {
-        private ProgressDlg fProgressForm;
-        private readonly string fTitle;
-        private readonly int fMax;
-        //private ManualResetEvent fMRE = new ManualResetEvent(false);
-        private bool fFormLoaded;
-        //private readonly Thread fThread;
-        private readonly IntPtr fParentHandle;
-
-        public ProgressProxy(string title, int max)
-        {
-            fFormLoaded = false;
-            fTitle = title;
-            fMax = max;
-            fParentHandle = AppHost.Instance.GetTopWindowHandle();
-
-            ShowProgressForm();
-            //fThread = new Thread(ShowProgressForm);
-            //fThread.SetApartmentState(ApartmentState.STA);
-            //fThread.Start();
-
-            while (!fFormLoaded)
-            {
-                Thread.Sleep(100);
-            }
-            //fMRE.WaitOne();
         }
 
         private void ShowProgressForm()
@@ -239,21 +235,6 @@ namespace GKUI.Forms
         {
             //fMRE.Set();
             fFormLoaded = true;
-        }
-
-        public void ProgressReset(string title, int max)
-        {
-            fProgressForm.ProgressInit(title, max);
-        }
-
-        public void UpdateProgress(int percent)
-        {
-            fProgressForm.ProgressStep(percent);
-        }
-
-        public void Close()
-        {
-            fProgressForm.ProgressDone();
         }
     }
 }

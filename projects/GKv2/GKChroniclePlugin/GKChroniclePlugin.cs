@@ -99,7 +99,7 @@ namespace GKChroniclePlugin
                 Logger.LogWrite("GKChroniclePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;
@@ -148,7 +148,7 @@ namespace GKChroniclePlugin
         }
 
         void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() { }
+        void IWidget.WidgetEnable() {}
 
         #endregion
     }

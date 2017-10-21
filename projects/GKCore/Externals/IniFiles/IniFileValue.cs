@@ -6,11 +6,11 @@ namespace Externals.IniFiles
     /// <summary>Represents one key-value pair.</summary>
     public class IniFileValue : IniFileElement
     {
-        private string fKey;
-        private string fValue;
-        private string fTextOnTheRight; // only if qoutes are on, e.g. "Name = 'Jack' text-on-the-right"
         private string fInlineComment;
         private string fInlineCommentChar;
+        private string fKey;
+        private string fValue;
+        private readonly string fTextOnTheRight; // only if qoutes are on, e.g. "Name = 'Jack' text-on-the-right"
 
         private IniFileValue() : base()
         {

@@ -97,9 +97,6 @@ namespace GKUI.Forms
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    //GEDCOMIndividualRecord iRec = fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-                    //string txt = iRec.GetNameString(true, false) + " [" + xref + "]";
-
                     GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKComponents</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -68,9 +68,6 @@
   <ItemGroup>
     <Reference Include="ArborGVT">
       <HintPath>libs\ArborGVT.dll</HintPath>
-    </Reference>
-    <Reference Include="LinqBridge">
-      <HintPath>libs\LinqBridge.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>libs\NLog.dll</HintPath>

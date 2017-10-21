@@ -37,7 +37,6 @@ namespace GKUI.Charts
     {
         private Graphics fCanvas;
         private Matrix fMatrix;
-        private Matrix fBackMatrix;
 
         public TreeChartGfxRenderer() : base()
         {
@@ -267,8 +266,7 @@ namespace GKUI.Charts
 
         public override object SaveTransform()
         {
-            fBackMatrix = fCanvas.Transform;
-            return fBackMatrix;
+            return fCanvas.Transform;
         }
 
         public override void RestoreTransform(object matrix)

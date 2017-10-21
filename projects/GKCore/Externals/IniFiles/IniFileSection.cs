@@ -30,10 +30,10 @@ namespace Externals.IniFiles
             get {
                 return Name == "" ? "" : getComment(sectionStart);
             }
-            set
-            {
-                if (Name != "")
+            set {
+                if (Name != "") {
                     setComment(sectionStart, value);
+                }
             }
         }
 
@@ -145,21 +145,12 @@ namespace Externals.IniFiles
         /// <param name="key">Name of key.</param>
         public string this[string key]
         {
-            get
-            {
+            get {
                 IniFileValue v = GetValue(key);
                 return v == null ? null : v.Value;
             }
-            set
-            {
+            set {
                 IniFileValue v = GetValue(key);
-                //if (!IniFileEx.AllowEmptyValues && value == "") {
-                //    if (v != null) {
-                //        elements.Remove(v);
-                //        parent.elements.Remove(v);
-                //        return;
-                //    }
-                //}
                 if (v != null) {
                     v.Value = value;
                     return;
@@ -173,8 +164,7 @@ namespace Externals.IniFiles
         /// <param name="defaultValue">A value to return if the requested key was not found.</param>
         public string this[string key, string defaultValue]
         {
-            get
-            {
+            get {
                 string val = this[key];
                 return string.IsNullOrEmpty(val) ? defaultValue : val;
             }
@@ -193,9 +183,9 @@ namespace Externals.IniFiles
                     bool valFound = false;
                     for (int i = parent.elements.IndexOf(sectionStart) - 1; i >= 0; i--)
                     {
-                        IniFileElement el = parent.elements[i];
-                        if (el is IniFileValue) {
-                            ret = ((IniFileValue)el).CreateNew(key, value);
+                        var ifVal = parent.elements[i] as IniFileValue;
+                        if (ifVal != null) {
+                            ret = ifVal.CreateNew(key, value);
                             valFound = true;
                             break;
                         }
@@ -240,20 +230,6 @@ namespace Externals.IniFiles
                     return value;
             }
             return null;
-        }
-
-        /// <summary>Gets an array of names of values in this section.</summary>
-        public System.Collections.ObjectModel.ReadOnlyCollection<string> GetKeys()
-        {
-            List<string> list = new List<string>(elements.Count);
-            for (int i = 0; i < elements.Count; i++)
-            {
-                IniFileValue value = elements[i] as IniFileValue;
-                if (value != null)
-                    list.Add(value.Key);
-            }
-
-            return new System.Collections.ObjectModel.ReadOnlyCollection<string>(list);
         }
 
         /// <summary>Gets a string representation of this IniFileSectionReader object.</summary>

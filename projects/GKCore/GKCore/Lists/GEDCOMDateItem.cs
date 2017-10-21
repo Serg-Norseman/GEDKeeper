@@ -164,7 +164,6 @@ namespace GKCore.Lists
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)
         {
             throw new NotImplementedException();
-            //throw new InvalidCastException($"Converting type \"{typeof()}\" to type \"{conversionType.Name}\" is not supported.");
         }
 
         #endregion

@@ -28,10 +28,10 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class WinUITimer : BaseObject, ITimer
+    public sealed class WinUITimer : BaseObject, ITimer
     {
         private readonly Timer fInnerTimer;
-        private EventHandler fElapsedHandler;
+        private readonly EventHandler fElapsedHandler;
 
         public bool Enabled
         {

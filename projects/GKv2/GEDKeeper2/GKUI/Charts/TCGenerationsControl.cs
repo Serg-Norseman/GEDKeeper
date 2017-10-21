@@ -39,8 +39,8 @@ namespace GKUI.Charts
 
         private const int RADIUS = 150;
         private const int SEGMENT_ANGLE = 45;
+        private const int D_COUNT = 10;
 
-        private int fDCount = 10;
         private int fThumbPos = 9; /* Counts from zero to 9. */
 
         private static readonly Color BLANK_COLOR = Color.FromArgb(191, 191, 191);
@@ -100,7 +100,7 @@ namespace GKUI.Charts
             gfx.CompositingQuality = CompositingQuality.HighQuality;
 
             int intervalHeight = 2;
-            int segmentHeight = (int)((fDestRect.Height - (9 /* intervals */ * intervalHeight)) / 10);
+            int segmentHeight = ((fDestRect.Height - (9 /* intervals */ * intervalHeight)) / 10);
             int ctX = fDestRect.Left + (fDestRect.Width / 2);
             int ctY = fDestRect.Top;
             int inRad = 0;
@@ -130,7 +130,7 @@ namespace GKUI.Charts
 
         private Rectangle GetDRect(int stepIndex)
         {
-            int step = fDestRect.Height / fDCount;
+            int step = fDestRect.Height / D_COUNT;
             int thumbTop = fDestRect.Top + stepIndex * step;
             return new Rectangle(fDestRect.Left, thumbTop, fDestRect.Width, step);
         }
@@ -139,7 +139,7 @@ namespace GKUI.Charts
         {
             if (!fMouseCaptured) return;
 
-            for (int i = 0; fDCount >= i; ++i) {
+            for (int i = 0; D_COUNT >= i; ++i) {
                 Rectangle r = GetDRect(i);
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {

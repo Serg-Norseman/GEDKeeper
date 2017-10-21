@@ -743,7 +743,6 @@ namespace GKUI.Forms
         {
             ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
             ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
-            //ListCompare.AppendText("\r\n");
         }
 
         private TreeMatchType GetTreeMatchType()
@@ -778,7 +777,6 @@ namespace GKUI.Forms
                         ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0)
                         {
-                            int num = uln.Count;
                             foreach (TreeTools.ULIndividual indiv in uln)
                             {
                                 ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");

@@ -48,6 +48,9 @@ namespace GKUI.Charts
             mcDrag
         }
 
+        private const float ZOOM_LOW_LIMIT = 0.0125f;
+        private const float ZOOM_HIGH_LIMIT = 1000.0f;
+
         private readonly CircleChartModel fModel;
         private readonly ChartRenderer fRenderer;
 
@@ -57,8 +60,6 @@ namespace GKUI.Charts
         private float fOffsetY = 0;
         /* Zoom factors */
         private float fZoom = 1.0f;
-        private float fZoomLowLimit = 0.0125f;
-        private float fZoomHighLimit = 1000.0f;
         /* Mouse capturing. */
         private MouseCaptured fMouseCaptured;
         private int fMouseCaptureX;
@@ -284,13 +285,13 @@ namespace GKUI.Charts
             switch (e.Key) {
                 case Keys.Plus:
                     if (Keys.None == e.Modifiers) {
-                        Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
+                        Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
                     }
                     break;
 
                 case Keys.Minus:
                     if (Keys.None == e.Modifiers) {
-                        Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
+                        Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                     }
                     break;
 
@@ -403,9 +404,9 @@ namespace GKUI.Charts
         {
             if (Keys.None != (Keys.Control & e.Modifiers)) {
                 if (0 > e.Delta.Height) {
-                    Zoom = Math.Max(fZoom * 0.95f, fZoomLowLimit);
+                    Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                 } else {
-                    Zoom = Math.Min(fZoom * 1.05f, fZoomHighLimit);
+                    Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
                 }
             }
 

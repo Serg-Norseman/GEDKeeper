@@ -41,7 +41,7 @@ namespace GKCore.Charts
         ExtSize GetImageSize();
         ExtPoint GetOffsets();
         void Invalidate();
-        void RenderStatic(BackgroundMode background, bool centered);
+        void RenderStatic(BackgroundMode background, bool centered = false);
         void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);
     }

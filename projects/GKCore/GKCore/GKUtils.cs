@@ -1364,9 +1364,9 @@ namespace GKCore
 
         private static void ShowPersonExtInfo(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
         {
-            //if (tree == null || iRec == null || summary == null) return;
+            /*if (tree == null || iRec == null || summary == null) return;
 
-            /*summary.Add("");
+            summary.Add("");
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
         		GEDCOMRecord rec = tree[i];
@@ -1580,6 +1580,10 @@ namespace GKCore
                     int num = record.Notes.Count;
                     for (int i = 0; i < num; i++)
                     {
+                        if (i > 0) {
+                            summary.Add("");
+                        }
+
                         GEDCOMNotes note = record.Notes[i];
 
                         int num2 = note.Notes.Count;
@@ -1587,10 +1591,6 @@ namespace GKCore
                         {
                             string st = note.Notes[k];
                             summary.Add(st);
-                        }
-
-                        if (i < num) {
-                            summary.Add("");
                         }
                     }
                 }

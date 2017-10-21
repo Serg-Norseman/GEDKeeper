@@ -20,6 +20,7 @@
 
 namespace GKCommon
 {
+    // TODO: refactor this!
     public static class CalendarData
     {
         public static string[] BahaiMonths;

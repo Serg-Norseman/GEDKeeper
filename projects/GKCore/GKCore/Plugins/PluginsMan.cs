@@ -137,8 +137,6 @@ namespace GKCore.Plugins
             if (sender == null)
                 return null;
 
-            //CultureInfo cultInfo = new CultureInfo(fOptions.InterfaceLang);
-            //string ext = cultInfo.ThreeLetterISOLanguageName;
             string lngSign = GlobalOptions.Instance.GetLanguageSign();
 
             Assembly asm = sender.GetType().Assembly;

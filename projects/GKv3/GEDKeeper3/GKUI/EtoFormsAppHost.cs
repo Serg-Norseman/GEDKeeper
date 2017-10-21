@@ -99,7 +99,7 @@ namespace GKUI
             }
         }
 
-        public override bool ShowModalX(ICommonDialog form, bool keepModeless)
+        public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             IntPtr mainHandle = GetTopWindowHandle();
 

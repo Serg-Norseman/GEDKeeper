@@ -348,57 +348,62 @@ namespace GKFlowInputPlugin
 
                         GEDCOMFamilyRecord family = null;
 
-                        if (link > PersonLink.plPerson && iMain == null) {
-                            throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
-                        }
+                        if (link == PersonLink.plPerson) {
 
-                        switch (link) {
-                            case PersonLink.plNone:
-                                break;
+                            iMain = iRec;
+                            string evName = "";
 
-                            case PersonLink.plPerson:
-                                {
-                                    iMain = iRec;
-                                    string evName = "";
-
-                                    if (rbSK_Met.Checked) {
-                                        switch (cbEventType.SelectedIndex) {
-                                                case  0: evName = "BIRT"; break;
-                                                case  1: evName = "DEAT"; break;
-                                                case  2: evName = "MARR"; break;
-                                        }
-                                    }
-
-                                    if (evName == "BIRT" || evName == "DEAT") {
-                                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                                        evt.Place.StringValue = place;
-                                    } else if (evName == "MARR") {
-                                        family = iRec.GetMarriageFamily(true);
-                                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                                        evt.Place.StringValue = place;
-                                    }
+                            if (rbSK_Met.Checked) {
+                                switch (cbEventType.SelectedIndex) {
+                                    case  0:
+                                        evName = "BIRT";
+                                        break;
+                                    case  1:
+                                        evName = "DEAT";
+                                        break;
+                                    case  2:
+                                        evName = "MARR";
+                                        break;
                                 }
-                                break;
+                            }
 
-                            case PersonLink.plFather:
-                            case PersonLink.plMother:
-                                family = iMain.GetParentsFamily(true);
-                                family.AddSpouse(iRec);
-                                break;
+                            if (evName == "BIRT" || evName == "DEAT") {
+                                GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
+                                evt.Place.StringValue = place;
+                            } else if (evName == "MARR") {
+                                family = iRec.GetMarriageFamily(true);
+                                GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
+                                evt.Place.StringValue = place;
+                            }
 
-                            case PersonLink.plGodparent:
-                                iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
-                                break;
+                        } else if (link > PersonLink.plPerson) {
 
-                            case PersonLink.plSpouse:
-                                family = iMain.GetMarriageFamily(true);
-                                family.AddSpouse(iRec);
-                                break;
+                            if (iMain == null) {
+                                throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
+                            } else {
+                                switch (link) {
+                                    case PersonLink.plFather:
+                                    case PersonLink.plMother:
+                                        family = iMain.GetParentsFamily(true);
+                                        family.AddSpouse(iRec);
+                                        break;
 
-                            case PersonLink.plChild:
-                                family = iMain.GetMarriageFamily(true);
-                                family.AddChild(iRec);
-                                break;
+                                    case PersonLink.plGodparent:
+                                        iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
+                                        break;
+
+                                    case PersonLink.plSpouse:
+                                        family = iMain.GetMarriageFamily(true);
+                                        family.AddSpouse(iRec);
+                                        break;
+
+                                    case PersonLink.plChild:
+                                        family = iMain.GetMarriageFamily(true);
+                                        family.AddChild(iRec);
+                                        break;
+                                }
+                            }
+
                         }
                     }
                 }
@@ -410,21 +415,28 @@ namespace GKFlowInputPlugin
         }
 
         #endregion
-        
+
         #region Form handlers
-        
+
         private void btnParseClick(object sender, EventArgs e)
         {
-            switch (PageControl1.SelectedIndex) {
-                case 0:
-                    ParseSimple();
-                    break;
-                case 1:
-                    ParseSource();
-                    break;
-            }
+            try {
+                try {
+                    switch (PageControl1.SelectedIndex) {
+                        case 0:
+                            ParseSimple();
+                            break;
 
-            fBase.RefreshLists(false);
+                        case 1:
+                            ParseSource();
+                            break;
+                    }
+                } finally {
+                    fBase.RefreshLists(false);
+                }
+            } catch (Exception ex) {
+                ShowError(ex.Message);
+            }
         }
 
         private void BtnMaleClick(object sender, EventArgs e)

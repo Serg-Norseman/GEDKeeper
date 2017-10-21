@@ -43,11 +43,13 @@ namespace GKCommon.GEDCOM
     {
         public readonly string Sign;
         public readonly string Name;
+        public readonly int PredefCharset;
 
-        public GEDCOMAppFormat(string sign, string name)
+        public GEDCOMAppFormat(string sign, string name, int predefCharset)
         {
             Sign = sign;
             Name = name;
+            PredefCharset = predefCharset;
         }
     }
 
@@ -85,13 +87,14 @@ namespace GKCommon.GEDCOM
             fTagsBase = CreatePropertiesDict();
 
             GEDCOMFormats = new GEDCOMAppFormat[] {
-                new GEDCOMAppFormat("", ""),
-                new GEDCOMAppFormat("GEDKeeper", ""),
-                new GEDCOMAppFormat("GENBOX", "Genbox Family History"),
-                new GEDCOMAppFormat("ALTREE", "Agelong Tree"),
-                new GEDCOMAppFormat("AGES", "Ages!"),
-                new GEDCOMAppFormat("PAF", "Personal Ancestral File"),
-                new GEDCOMAppFormat("AHN", "Ahnenblatt")
+                new GEDCOMAppFormat("", "", -1),
+                new GEDCOMAppFormat("GEDKeeper", "", -1),
+                new GEDCOMAppFormat("GENBOX", "Genbox Family History", -1),
+                new GEDCOMAppFormat("ALTREE", "Agelong Tree", -1),
+                new GEDCOMAppFormat("AGES", "Ages!", -1),
+                new GEDCOMAppFormat("PAF", "Personal Ancestral File", -1),
+                new GEDCOMAppFormat("AHN", "Ahnenblatt", -1),
+                new GEDCOMAppFormat("├σφσαδεπΦ", "Genealogy (Rus, old)", 1251) // signature in CP437
             };
         }
 
@@ -99,7 +102,7 @@ namespace GKCommon.GEDCOM
 
         private enum EncodingState { esUnchecked, esUnchanged, esChanged }
 
-        private const int DEF_CODEPAGE = 1251;
+        private const int DEF_CODEPAGE = 437;
         private static readonly Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
         private Encoding fSourceEncoding;
         private EncodingState fEncodingState;
@@ -111,6 +114,12 @@ namespace GKCommon.GEDCOM
             return str;
         }
 
+        private void SetEncoding(Encoding encoding)
+        {
+            fSourceEncoding = encoding;
+            fEncodingState = EncodingState.esChanged;
+        }
+
         private void DefineEncoding(StreamReader reader)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet;
@@ -118,8 +127,7 @@ namespace GKCommon.GEDCOM
             {
                 case GEDCOMCharacterSet.csUTF8:
                     if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
-                        fSourceEncoding = Encoding.UTF8;
-                        fEncodingState = EncodingState.esChanged; // file without BOM
+                        SetEncoding(Encoding.UTF8); // file without BOM
                     } else {
                         fEncodingState = EncodingState.esUnchanged;
                     }
@@ -127,22 +135,34 @@ namespace GKCommon.GEDCOM
 
                 case GEDCOMCharacterSet.csUNICODE:
                     if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
-                        fSourceEncoding = Encoding.Unicode;
-                        fEncodingState = EncodingState.esChanged; // file without BOM
+                        SetEncoding(Encoding.Unicode); // file without BOM
                     } else {
                         fEncodingState = EncodingState.esUnchanged;
                     }
                     break;
 
+                case GEDCOMCharacterSet.csANSEL:
+                    SetEncoding(new AnselEncoding());
+                    break;
+
                 case GEDCOMCharacterSet.csASCII:
-                    string cpVers = fTree.Header.CharacterSetVersion;
-                    if (!string.IsNullOrEmpty(cpVers)) {
-                        int sourceCodepage = SysUtils.ParseInt(cpVers, DEF_CODEPAGE);
-                        fSourceEncoding = Encoding.GetEncoding(sourceCodepage);
-                        fEncodingState = EncodingState.esChanged;
+                    var format = GetGEDCOMFormat(fTree);
+                    if (format == GEDCOMFormat.gf_Native) {
+                        // GEDKeeper native format (old) and ASCII charset
+                        SetEncoding(Encoding.GetEncoding(1251));
                     } else {
-                        fSourceEncoding = Encoding.GetEncoding(DEF_CODEPAGE);
-                        fEncodingState = EncodingState.esChanged;
+                        var fmtProps = GEDCOMFormats[(int)format];
+                        if (fmtProps.PredefCharset > -1) {
+                            SetEncoding(Encoding.GetEncoding(fmtProps.PredefCharset));
+                        } else {
+                            string cpVers = fTree.Header.CharacterSetVersion;
+                            if (!string.IsNullOrEmpty(cpVers)) {
+                                int sourceCodepage = SysUtils.ParseInt(cpVers, DEF_CODEPAGE);
+                                SetEncoding(Encoding.GetEncoding(sourceCodepage));
+                            } else {
+                                SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
+                            }
+                        }
                     }
                     break;
             }
@@ -489,10 +509,11 @@ namespace GKCommon.GEDCOM
         public static GEDCOMFormat GetGEDCOMFormat(GEDCOMTree tree)
         {
             if (tree != null) {
-                string sour = tree.Header.Source;
+                string sour = tree.Header.Source.Trim();
 
                 for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++) {
-                    if (GEDCOMProvider.GEDCOMFormats[(int)gf].Sign == sour) {
+                    string fmtSign = GEDCOMProvider.GEDCOMFormats[(int)gf].Sign;
+                    if (string.Equals(fmtSign, sour, StringComparison.Ordinal)) {
                         return gf;
                     }
                 }

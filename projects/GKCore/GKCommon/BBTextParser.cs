@@ -89,10 +89,10 @@ namespace GKCommon
         }
 
         private List<BBTextChunk> fChunks;
-        private float fDefaultFontSize;
-        private IGraphicsProvider fGfxProvider;
-        private IColor fLinkColor;
-        private IColor fTextColor;
+        private readonly float fDefaultFontSize;
+        private readonly IGraphicsProvider fGfxProvider;
+        private readonly IColor fLinkColor;
+        private readonly IColor fTextColor;
 
         public BBTextParser(IGraphicsProvider gfxProvider, float defaultFontSize,
                             IColor linkColor, IColor textColor)
@@ -113,7 +113,7 @@ namespace GKCommon
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.Regular;
+                fntStyle = ExtFontStyle.None;
             }
 
             if (chunk == null || chunk.Text.Length != 0) {
@@ -128,7 +128,7 @@ namespace GKCommon
 
         private BBTextChunk SetChunkFontSize(int tokenLine, BBTextChunk chunk, float newSize)
         {
-            ExtFontStyle fntStyle = (chunk != null) ? chunk.Style : ExtFontStyle.Regular;
+            ExtFontStyle fntStyle = (chunk != null) ? chunk.Style : ExtFontStyle.None;
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, newSize, fntStyle, fTextColor);
@@ -149,7 +149,7 @@ namespace GKCommon
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.Regular;
+                fntStyle = ExtFontStyle.None;
             }
 
             if (active) {
@@ -177,7 +177,7 @@ namespace GKCommon
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.Regular;
+                fntStyle = ExtFontStyle.None;
             }
 
             if (chunk == null) {

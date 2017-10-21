@@ -34,7 +34,11 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class ProgressDlg : Form
     {
+        //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
+        //private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
+        private bool fRequiresClose;
         private DateTime fStartTime;
+        private int fVal;
 
         public ProgressDlg()
         {
@@ -45,28 +49,70 @@ namespace GKUI.Forms
             lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
         }
 
+        #region Private methods
+
+        private delegate void PInit(string title, int max);
+        private delegate void PStep(int value);
+        private delegate void PDone();
+
+        private void DoInit(string title, int max)
+        {
+            lblTitle.Text = title;
+            ProgressBar1.Maximum = max;
+            ProgressBar1.Minimum = 0;
+            ProgressBar1.Value = 0;
+            fStartTime = DateTime.Now;
+            fVal = 0;
+        }
+
+        private void DoDone()
+        {
+            Close();
+        }
+
+        private void DoStep(int value)
+        {
+            if (fVal == value)
+                return;
+
+            fVal = value;
+            ProgressBar1.Value = fVal;
+
+            double max = ProgressBar1.Maximum;
+            double pos = fVal;
+            if (pos == 0.0d)
+                pos = 1;
+
+            TimeSpan passTime = DateTime.Now - fStartTime;
+            TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));
+            TimeSpan sumTime = passTime + restTime;
+
+            lblPassedVal.Text = TimeSpanToString(passTime);
+            lblRemainVal.Text = TimeSpanToString(restTime);
+            lblTotalVal.Text = TimeSpanToString(sumTime);
+
+            Update();
+        }
+
         private static string TimeSpanToString(TimeSpan ts)
         {
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
-        #region Protected methods
+        #endregion
 
-        //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
-        //private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
-        private bool requiresClose;
-        private int fVal;
+        #region Protected methods
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             //initEvent.Set();
-            requiresClose = true;
+            fRequiresClose = true;
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            requiresClose = false;
+            fRequiresClose = false;
             //abortEvent.Set();
             base.OnClosing(e);
         }
@@ -89,7 +135,7 @@ namespace GKUI.Forms
         internal void ProgressDone()
         {
             try {
-                if (requiresClose) {
+                if (fRequiresClose) {
                     if (InvokeRequired) {
                         Invoke(new PDone(DoDone));
                     } else {
@@ -135,64 +181,37 @@ namespace GKUI.Forms
         }*/
 
         #endregion
-
-        #region Private methods
-
-        private void DoInit(string title, int max)
-        {
-            lblTitle.Text = title;
-            ProgressBar1.Maximum = max;
-            ProgressBar1.Minimum = 0;
-            ProgressBar1.Value = 0;
-            fStartTime = DateTime.Now;
-            fVal = 0;
-        }
-
-        private void DoDone()
-        {
-            Close();
-        }
-
-        private void DoStep(int value)
-        {
-            if (fVal == value) return;
-
-            fVal = value;
-            ProgressBar1.Value = fVal;
-
-            double max = ProgressBar1.Maximum;
-            double pos = fVal;
-            if (pos == 0.0d) pos = 1;
-
-            TimeSpan passTime = DateTime.Now - fStartTime;
-            TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));
-            TimeSpan sumTime = passTime + restTime;
-
-            lblPassedVal.Text = TimeSpanToString(passTime);
-            lblRemainVal.Text = TimeSpanToString(restTime);
-            lblTotalVal.Text = TimeSpanToString(sumTime);
-
-            Update();
-        }
-
-        #endregion
-
-        private delegate void PInit(string title, int max);
-        private delegate void PStep(int value);
-        private delegate void PDone();
     }
 
     public sealed class ProgressController : IProgressController
     {
-        private ProgressProxy fProxy;
+        private bool fFormLoaded;
+        private int fMax;
+        //private ManualResetEvent fMRE = new ManualResetEvent(false);
+        private IntPtr fParentHandle;
+        private ProgressDlg fProgressForm;
+        private Thread fThread;
+        private string fTitle;
         private int fVal;
 
         public void ProgressInit(string title, int max)
         {
-            if (fProxy != null) {
-                fProxy.ProgressReset(title, max);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressInit(title, max);
             } else {
-                fProxy = new ProgressProxy(title, max);
+                fFormLoaded = false;
+                fTitle = title;
+                fMax = max;
+                fParentHandle = AppHost.Instance.GetTopWindowHandle();
+
+                fThread = new Thread(ShowProgressForm);
+                fThread.SetApartmentState(ApartmentState.STA);
+                fThread.Start();
+
+                while (!fFormLoaded) {
+                    Thread.Sleep(100);
+                }
+                //fMRE.WaitOne();
             }
 
             fVal = 0;
@@ -200,55 +219,27 @@ namespace GKUI.Forms
 
         public void ProgressDone()
         {
-            if (fProxy != null) {
-                fProxy.Close();
-                fProxy = null;
+            if (fProgressForm != null) {
+                fProgressForm.ProgressDone();
+                //fProgressForm.Dispose();
+                fProgressForm = null;
             }
         }
 
         public void ProgressStep()
         {
-            if (fProxy != null) {
-                fProxy.UpdateProgress(fVal++);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressStep(fVal++);
                 //System.Threading.Thread.Sleep(0); // debug
             }
         }
 
         public void ProgressStep(int value)
         {
-            if (fProxy != null) {
-                fProxy.UpdateProgress(value);
+            if (fProgressForm != null) {
+                fProgressForm.ProgressStep(value);
                 //System.Threading.Thread.Sleep(0); // debug
             }
-        }
-    }
-
-    internal sealed class ProgressProxy
-    {
-        private ProgressDlg fProgressForm;
-        private readonly string fTitle;
-        private readonly int fMax;
-        //private ManualResetEvent fMRE = new ManualResetEvent(false);
-        private bool fFormLoaded;
-        private readonly Thread fThread;
-        private readonly IntPtr fParentHandle;
-
-        public ProgressProxy(string title, int max)
-        {
-            fFormLoaded = false;
-            fTitle = title;
-            fMax = max;
-            fParentHandle = AppHost.Instance.GetTopWindowHandle();
-
-            fThread = new Thread(ShowProgressForm);
-            fThread.SetApartmentState(ApartmentState.STA);
-            fThread.Start();
-
-            while (!fFormLoaded)
-            {
-                Thread.Sleep(100);
-            }
-            //fMRE.WaitOne();
         }
 
         private void ShowProgressForm()
@@ -262,28 +253,13 @@ namespace GKUI.Forms
             }
 
             fProgressForm.ShowDialog();
-            fProgressForm.Close();
+            //fProgressForm.Close();
         }
 
         private void ProgressForm_Load(object sender, EventArgs e)
         {
             //fMRE.Set();
             fFormLoaded = true;
-        }
-
-        public void ProgressReset(string title, int max)
-        {
-            fProgressForm.ProgressInit(title, max);
-        }
-
-        public void UpdateProgress(int percent)
-        {
-            fProgressForm.ProgressStep(percent);
-        }
-
-        public void Close()
-        {
-            fProgressForm.ProgressDone();
         }
     }
 }

@@ -30,7 +30,6 @@ namespace GKUI.Components
 {
     public class ImageView : UserControl, ILocalization
     {
-        private IContainer components = null;
         private ImageBox imageBox;
         private ToolStrip toolStrip;
         private ToolStripComboBox cbZoomLevels;
@@ -87,17 +86,12 @@ namespace GKUI.Components
             btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
-        #region Component design
+        #region Design
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
+            if (disposing) {
+                // dummy
             }
             base.Dispose(disposing);
         }

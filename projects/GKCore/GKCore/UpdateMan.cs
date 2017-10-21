@@ -71,8 +71,9 @@ namespace GKCore
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogWrite("UpdateMan.GetLastVersion(): " + ex.Message);
             }
             finally
             {

@@ -161,6 +161,9 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
+            // Special cleaning of Husband and Wife is not necessary,
+            // because these are sub-tags and they will be cleared in the call base.Clear()
+
             int num = fChildren.Count;
             for (int i = 0; i < num; i++)
             {
@@ -170,14 +173,6 @@ namespace GKCommon.GEDCOM
             fChildren.Clear();
 
             fSpouseSealings.Clear();
-
-            // This is not required, because Husband and Wife are sub-tags
-            // and will be cleared in the call base.Clear()
-            /*GEDCOMIndividualRecord spouse;
-            spouse = GetHusband();
-            RemoveSpouse(spouse);
-            spouse = GetWife();
-            RemoveSpouse(spouse);*/
         }
 
         public override bool IsEmpty()

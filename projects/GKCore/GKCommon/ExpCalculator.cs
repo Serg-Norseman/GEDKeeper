@@ -92,8 +92,6 @@ namespace GKCommon
         private bool fCaseSensitive;
         private StringTokenizer fTokenizer;
 
-        //private static readonly object EventGetVar;
-
         #endregion
 
         #region Instance control
@@ -104,32 +102,14 @@ namespace GKCommon
             set { fCaseSensitive = value; }
         }
 
-        public event GetVarEventHandler OnGetVar;/*
-		{
-			add { base.Events.AddHandler(ExpCalculator.EventGetVar, value); }
-			remove { base.Events.RemoveHandler(ExpCalculator.EventGetVar, value); }
-		}*/
+        public event GetVarEventHandler OnGetVar;
         
-        static ExpCalculator()
-        {
-            //ExpCalculator.EventGetVar = new object();
-        }
-
         public ExpCalculator()
         {
             fVars = new List<NamedVar>();
             fCaseSensitive = false;
             fTokenizer = null;
         }
-
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this.ClearVars();
-            }
-            base.Dispose(disposing);
-        }*/
 
         public void ClearVars()
         {

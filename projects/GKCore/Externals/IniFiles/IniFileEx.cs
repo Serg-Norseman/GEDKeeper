@@ -115,15 +115,6 @@ namespace Externals.IniFiles
             return null;
         }
 
-        /// <summary>Gets an array of names of sections in this INI file.</summary>
-        public string[] GetSectionNames()
-        {
-            string[] ret = new string[sections.Count];
-            for (int i = 0; i < sections.Count; i++)
-                ret[i] = sections[i].Name;
-            return ret;
-        }
-
         /// <summary>Reads a INI file from a file or creates one.</summary>
         public static IniFileEx FromFile(string path)
         {
@@ -214,7 +205,7 @@ namespace Externals.IniFiles
         /// <summary>Parses given text.</summary>
         private static List<IniFileElement> ParseText(StreamReader reader)
         {
-            List<IniFileElement> ret = new List<IniFileElement>();
+            var ret = new List<IniFileElement>();
 
             if (reader == null)
                 return ret;
@@ -306,7 +297,7 @@ namespace Externals.IniFiles
         /// <summary>Joins sections which are definied more than one time.</summary>
         public void UnifySections()
         {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
+            var dict = new Dictionary<string, int>();
             for (int i = 0; i < sections.Count; i++)
             {
                 IniFileSection sect = sections[i];

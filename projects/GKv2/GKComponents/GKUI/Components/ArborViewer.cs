@@ -123,9 +123,9 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        protected override void OnPaint(PaintEventArgs pe)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            Graphics gfx = pe.Graphics;
+            Graphics gfx = e.Graphics;
 
             try
             {
@@ -174,7 +174,7 @@ namespace GKUI.Components
                 Debug.WriteLine("ArborViewer.OnPaint(): " + ex.Message);
             }
 
-            base.OnPaint(pe);
+            base.OnPaint(e);
         }
 
         public static ArborPoint intersect_line_line(ArborPoint p1, ArborPoint p2, ArborPoint p3, ArborPoint p4)

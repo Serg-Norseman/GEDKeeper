@@ -103,10 +103,10 @@ namespace GKWordsCloudPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKChroniclePlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("GKWordsCloudPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;
@@ -116,7 +116,7 @@ namespace GKWordsCloudPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKChroniclePlugin.Startup(): " + ex.Message);
+                Logger.LogWrite("GKWordsCloudPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -131,7 +131,7 @@ namespace GKWordsCloudPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKChroniclePlugin.Shutdown(): " + ex.Message);
+                Logger.LogWrite("GKWordsCloudPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -156,7 +156,7 @@ namespace GKWordsCloudPlugin
         }
 
         void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() { }
+        void IWidget.WidgetEnable() {}
 
         #endregion
     }

@@ -216,7 +216,7 @@ namespace GKUI.Forms
 
         public IList<ISearchResult> FindAll(string searchPattern)
         {
-            return null;
+            return new List<ISearchResult>();
         }
 
         public void SelectByRec(GEDCOMIndividualRecord iRec)
