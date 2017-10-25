@@ -1,0 +1,3 @@
+files:
+  - source: /locales/english.sample
+    translation: /locales/%language%.lng
