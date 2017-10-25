@@ -5,17 +5,18 @@
 
 [![License: GPL v3](https://img.shields.io/github/license/Serg-Norseman/GEDKeeper.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
-
-[![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
+[![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 
 [![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
 [![Join the chat at https://gitter.im/Serg-Norseman/GEDKeeper](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
 [![Technical debt ratio](https://sonarcloud.io/api/badges/measure?key=gedkeeper&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard?id=gedkeeper)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
 
