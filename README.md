@@ -4,6 +4,8 @@
 [![Website](https://img.shields.io/badge/www-gedkeeper.github.io-0099BC.svg?maxAge=3600)](https://gedkeeper.github.io/)
 
 [![License: GPL v3](https://img.shields.io/github/license/Serg-Norseman/GEDKeeper.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
+
 [![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
