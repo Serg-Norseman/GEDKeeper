@@ -356,7 +356,7 @@ namespace GKCommon
         public static DateRet jd_to_hebrew(double jd)
         {
             jd = (Math.Floor(jd) + 0.5);
-            int count = iFloor(((jd - HEBREW_EPOCH) * 98496.0 / 35975351.0));
+            int count = iFloor((jd - HEBREW_EPOCH) * 98496.0 / 35975351.0);
             int year = count - 1;
             int i = count;
             while (jd >= hebrew_to_jd(i, 7, 1))

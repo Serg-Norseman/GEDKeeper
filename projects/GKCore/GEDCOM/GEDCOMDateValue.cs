@@ -38,6 +38,15 @@ namespace GKCommon.GEDCOM
             fValue = null;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (fValue != null) fValue.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         protected override string GetStringValue()
         {
             return ((fValue == null) ? "" : fValue.StringValue);

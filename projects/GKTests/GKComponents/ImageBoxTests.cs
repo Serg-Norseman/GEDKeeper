@@ -52,7 +52,7 @@ namespace GKTests.GKComponents
         }
 
         [TestFixtureTearDown]
-        public void Dispose()
+        public void Done()
         {
             fForm.Dispose();
         }

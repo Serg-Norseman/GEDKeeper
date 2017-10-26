@@ -249,9 +249,9 @@ namespace GKFlowInputPlugin
         }
 
         #endregion
-        
+
         #region Parse functions
-        
+
         private void ParseSimple()
         {
             string tmp = EditName.Text.ToLower();
@@ -285,6 +285,7 @@ namespace GKFlowInputPlugin
             InitSimpleControls();
         }
 
+        // TODO: rollback changes when exception!
         private void ParseSource()
         {
             int srcYear;
@@ -293,125 +294,124 @@ namespace GKFlowInputPlugin
                 return;
             }
 
-            try
+            string srcName = cbSource.Text;
+            string srcPage = edPage.Text;
+            string place = edPlace.Text;
+
+            GEDCOMSourceRecord srcRec = null;
+            if (!string.IsNullOrEmpty(srcName)) {
+                srcRec = fBase.Context.FindSource(srcName);
+                if (srcRec == null) {
+                    srcRec = fBase.Context.Tree.CreateSource();
+                    srcRec.FiledByEntry = srcName;
+                }
+            }
+
+            GEDCOMIndividualRecord iMain = null;
+
+            int num = dataGridView1.Rows.Count;
+            for (int r = 0; r < num; r++)
             {
-                string srcName = cbSource.Text;
-                string srcPage = edPage.Text;
-                string place = edPlace.Text;
+                DataGridViewRow row = dataGridView1.Rows[r];
 
-                GEDCOMIndividualRecord iMain = null;
+                string lnk = (string)row.Cells[0].Value;
+                string nm = (string)row.Cells[1].Value;
+                string pt = (string)row.Cells[2].Value;
+                string fm = (string)row.Cells[3].Value;
+                string age = (string)row.Cells[4].Value;
+                string comment = (string)row.Cells[5].Value;
 
-                int num = dataGridView1.Rows.Count;
-                for (int r = 0; r < num; r++)
-                {
-                    DataGridViewRow row = dataGridView1.Rows[r];
+                if (!string.IsNullOrEmpty(lnk)) {
+                    PersonLink link = GetLinkByName(lnk);
 
-                    string lnk = (string)row.Cells[0].Value;
-                    string nm = (string)row.Cells[1].Value;
-                    string pt = (string)row.Cells[2].Value;
-                    string fm = (string)row.Cells[3].Value;
-                    string age = (string)row.Cells[4].Value;
-                    string comment = (string)row.Cells[5].Value;
+                    GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
+                    GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
-                    if (!string.IsNullOrEmpty(lnk)) {
-                        PersonLink link = GetLinkByName(lnk);
+                    if (!string.IsNullOrEmpty(age) && SysUtils.IsDigits(age)) {
+                        int birthYear = srcYear - int.Parse(age);
+                        fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
+                    }
 
-                        GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
-                        GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
+                    if (!string.IsNullOrEmpty(place)) {
+                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, "RESI", "", "");
+                        evt.Place.StringValue = place;
+                    }
 
-                        if (!string.IsNullOrEmpty(age) && SysUtils.IsDigits(age)) {
-                            int birthYear = srcYear - int.Parse(age);
-                            fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
+                    if (!string.IsNullOrEmpty(comment)) {
+                        GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
+                        noteRec.SetNoteText(comment);
+                        iRec.AddNote(noteRec);
+                    }
+
+                    if (srcRec != null) {
+                        iRec.AddSource(srcRec, srcPage, 0);
+                    }
+
+                    fBase.NotifyRecord(iRec, RecordAction.raAdd);
+
+                    GEDCOMFamilyRecord family = null;
+
+                    if (link == PersonLink.plPerson) {
+
+                        iMain = iRec;
+                        string evName = "";
+
+                        if (rbSK_Met.Checked) {
+                            switch (cbEventType.SelectedIndex) {
+                                case  0:
+                                    evName = "BIRT";
+                                    break;
+                                case  1:
+                                    evName = "DEAT";
+                                    break;
+                                case  2:
+                                    evName = "MARR";
+                                    break;
+                            }
                         }
 
-                        if (!string.IsNullOrEmpty(place)) {
-                            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, "RESI", "", "");
+                        if (evName == "BIRT" || evName == "DEAT") {
+                            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
+                            evt.Place.StringValue = place;
+                        } else if (evName == "MARR") {
+                            family = iRec.GetMarriageFamily(true);
+                            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;
                         }
 
-                        if (!string.IsNullOrEmpty(comment)) {
-                            GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
-                            noteRec.SetNoteText(comment);
-                            iRec.AddNote(noteRec);
+                    } else if (link > PersonLink.plPerson) {
+
+                        if (iMain == null) {
+                            throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
+                        } else {
+                            switch (link) {
+                                case PersonLink.plFather:
+                                case PersonLink.plMother:
+                                    family = iMain.GetParentsFamily(true);
+                                    family.AddSpouse(iRec);
+                                    break;
+
+                                case PersonLink.plGodparent:
+                                    iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
+                                    break;
+
+                                case PersonLink.plSpouse:
+                                    family = iMain.GetMarriageFamily(true);
+                                    family.AddSpouse(iRec);
+                                    break;
+
+                                case PersonLink.plChild:
+                                    family = iMain.GetMarriageFamily(true);
+                                    family.AddChild(iRec);
+                                    break;
+                            }
                         }
 
-                        if (!string.IsNullOrEmpty(srcName)) {
-                            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(srcName);
-                            if (srcRec == null) {
-                                srcRec = fBase.Context.Tree.CreateSource();
-                                srcRec.FiledByEntry = srcName;
-                            }
-                            iRec.AddSource(srcRec, srcPage, 0);
-                        }
-
-                        fBase.NotifyRecord(iRec, RecordAction.raAdd);
-
-                        GEDCOMFamilyRecord family = null;
-
-                        if (link == PersonLink.plPerson) {
-
-                            iMain = iRec;
-                            string evName = "";
-
-                            if (rbSK_Met.Checked) {
-                                switch (cbEventType.SelectedIndex) {
-                                    case  0:
-                                        evName = "BIRT";
-                                        break;
-                                    case  1:
-                                        evName = "DEAT";
-                                        break;
-                                    case  2:
-                                        evName = "MARR";
-                                        break;
-                                }
-                            }
-
-                            if (evName == "BIRT" || evName == "DEAT") {
-                                GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                                evt.Place.StringValue = place;
-                            } else if (evName == "MARR") {
-                                family = iRec.GetMarriageFamily(true);
-                                GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                                evt.Place.StringValue = place;
-                            }
-
-                        } else if (link > PersonLink.plPerson) {
-
-                            if (iMain == null) {
-                                throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
-                            } else {
-                                switch (link) {
-                                    case PersonLink.plFather:
-                                    case PersonLink.plMother:
-                                        family = iMain.GetParentsFamily(true);
-                                        family.AddSpouse(iRec);
-                                        break;
-
-                                    case PersonLink.plGodparent:
-                                        iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
-                                        break;
-
-                                    case PersonLink.plSpouse:
-                                        family = iMain.GetMarriageFamily(true);
-                                        family.AddSpouse(iRec);
-                                        break;
-
-                                    case PersonLink.plChild:
-                                        family = iMain.GetMarriageFamily(true);
-                                        family.AddChild(iRec);
-                                        break;
-                                }
-                            }
-
-                        }
                     }
                 }
             }
-            finally
-            {
-                InitSourceControls();
-            }
+
+            InitSourceControls();
         }
 
         #endregion

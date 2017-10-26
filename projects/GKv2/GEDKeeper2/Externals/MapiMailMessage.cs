@@ -187,7 +187,7 @@ namespace Externals.MapiMail
                 // Check for error
                 if (error != SUCCESS_SUCCESS)
                 {
-                    LogErrorMapi(error);
+                    throw new Exception(LogErrorMapi(error));
                 }
             }
         }

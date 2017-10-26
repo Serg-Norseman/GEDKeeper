@@ -389,7 +389,7 @@ namespace GKCommon.GEDCOM
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str != null && str.Length == 3)
+            if (str.Length == 3)
             {
                 str = str.ToUpperInvariant();
 
@@ -410,7 +410,7 @@ namespace GKCommon.GEDCOM
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str != null && str.Length == 4)
+            if (str.Length == 4)
             {
                 str = str.ToUpperInvariant();
 
@@ -431,7 +431,7 @@ namespace GKCommon.GEDCOM
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str != null && str.Length == 3)
+            if (str.Length == 3)
             {
                 str = str.ToUpperInvariant();
 

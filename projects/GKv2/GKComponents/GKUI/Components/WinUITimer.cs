@@ -68,6 +68,7 @@ namespace GKUI.Components
             if (disposing) {
                 fInnerTimer.Dispose();
             }
+            base.Dispose(disposing);
         }
 
         private void ElapsedEventHandler(object sender, ElapsedEventArgs e)

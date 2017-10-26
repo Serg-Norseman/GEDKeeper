@@ -24,7 +24,7 @@ namespace GKCore.SingleInstance
     {
         private bool fDisposed;
         private readonly bool fIsFirstInstance;
-        private SingleInstanceProxy fProxy;
+        private readonly SingleInstanceProxy fProxy;
 
         #if IPC_SUPPORTS
         private IChannel fIpcChannel;

@@ -1247,9 +1247,8 @@ namespace GKUI.Components
             {
                 fStartMousePosition = mpt;
                 IsSelecting = true;
+                return;
             }
-
-            if (!fIsSelecting) return;
 
             float x, y, w, h;
 

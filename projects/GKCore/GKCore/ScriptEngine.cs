@@ -594,7 +594,7 @@ namespace GKCore
 
         public string gt_define_patronymic(string fatherName, string childSex, bool confirm)
         {
-            GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[1]) : GEDCOMSex.svNone;
+            GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GEDCOMSex.svNone;
 
             string childPatronymic = fBase.Context.DefinePatronymic(fatherName, sex, confirm);
             return childPatronymic;

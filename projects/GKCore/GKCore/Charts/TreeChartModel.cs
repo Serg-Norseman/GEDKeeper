@@ -1353,7 +1353,7 @@ namespace GKCore.Charts
 
             int crY = person.PtY + person.Height + fLevelDistance / 2;
             int cx = 0;
-            if (person.BaseSpouse == null || (person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() > 1))
+            if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1))
             {
                 cx = person.PtX;
                 spbBeg = person.PtY + person.Height - 1;

@@ -38,7 +38,7 @@ namespace GKTests.GKComponents
         private ImageView fImageView;
 
         [TestFixtureSetUp]
-        public void init()
+        public void Init()
         {
             fForm = new Form();
             fForm.ClientSize = new Size(383, 221);
@@ -54,7 +54,7 @@ namespace GKTests.GKComponents
         }
 
         [TestFixtureTearDown]
-        public void Dispose()
+        public void Done()
         {
             fForm.Dispose();
         }

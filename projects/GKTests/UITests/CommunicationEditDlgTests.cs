@@ -58,6 +58,7 @@ namespace GKTests.UITests
         public override void TearDown()
         {
             fDialog.Dispose();
+            fCommunicationRecord.Dispose();
         }
 
         [Test]

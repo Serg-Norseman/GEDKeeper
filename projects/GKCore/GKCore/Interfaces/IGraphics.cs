@@ -24,7 +24,7 @@ using GKCommon;
 namespace GKCore.Interfaces
 {
     /// <summary>
-    /// 
+    /// Interface for platform-independent class of color representation.
     /// </summary>
     public interface IColor
     {

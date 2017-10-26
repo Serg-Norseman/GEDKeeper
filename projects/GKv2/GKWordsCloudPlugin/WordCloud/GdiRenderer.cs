@@ -85,9 +85,15 @@ namespace WordCloud
         {
             float fontSize = (float)(weight - fMinWordWeight) / (fMaxWordWeight - fMinWordWeight) * (MaxFontSize - MinFontSize) + MinFontSize;
             if (Math.Abs(fCurrentFont.Size - fontSize) > float.Epsilon) {
-                fCurrentFont = new Font(FontFamily, fontSize, FontStyle);
+                SetFont(new Font(FontFamily, fontSize, FontStyle));
             }
             return fCurrentFont;
+        }
+
+        private void SetFont(Font font)
+        {
+            if (fCurrentFont != null) fCurrentFont.Dispose();
+            fCurrentFont = font;
         }
 
         private Color GetPresudoRandomColorFromPalette(Word word)
@@ -98,6 +104,7 @@ namespace WordCloud
 
         public void Dispose()
         {
+            if (fCurrentFont != null) fCurrentFont.Dispose();
             fGraphics.Dispose();
         }
     }

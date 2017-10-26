@@ -211,10 +211,11 @@ namespace GKUI.Components
 
         private string HintRequest(int fragmentNumber, int size)
         {
-            if (OnHintRequest == null) return string.Empty;
+            var onHintRequest = OnHintRequest;
+            if (onHintRequest == null) return string.Empty;
 
             HintRequestEventArgs args = new HintRequestEventArgs(fragmentNumber, size);
-            OnHintRequest(this, args);
+            onHintRequest(this, args);
             return args.Hint;
         }
 

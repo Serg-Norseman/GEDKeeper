@@ -435,7 +435,7 @@ namespace GKTreeVizPlugin
                     for (int i = 0; i < num; i++) {
                         PatriarchObj pObj = patList[i];
 
-                        if ((!loneSuppress) || (loneSuppress && pObj.HasLinks)) {
+                        if (!loneSuppress || pObj.HasLinks) {
                             ArborNode node = fSys.addNode(pObj.IRec.XRef);
                             node.Data = pObj;
                         }

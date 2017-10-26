@@ -71,6 +71,7 @@ namespace WordCloud
 
             const double pointsOnSpital = 500;
 
+            // FIXME: bug!
             Math.Min(fCenter.Y, fCenter.X);
             for (int pointIndex = 0; pointIndex < pointsOnSpital; pointIndex++) {
                 double dX = pointIndex / pointsOnSpital * Math.Sin(alpha) * fCenter.X;

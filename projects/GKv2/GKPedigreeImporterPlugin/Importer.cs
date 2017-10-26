@@ -260,7 +260,7 @@ namespace GKPedigreeImporterPlugin
                 int ob_pos = tmp.IndexOf("(*");
                 if (ob_pos >= 0) {
                     int cb_pos = tmp.IndexOf(")", ob_pos);
-                    if (ob_pos >= 0 && cb_pos > ob_pos) {
+                    if (cb_pos > ob_pos) {
                         dates = tmp.Substring(ob_pos + 1, cb_pos - ob_pos - 1).Trim();
                         tmp = tmp.Remove(ob_pos, dates.Length + 2);
                     }
@@ -293,15 +293,13 @@ namespace GKPedigreeImporterPlugin
 
                 if (d_pos >= 0 && d_pos > b_pos) {
                     dd = dates.Substring(d_pos + 1, dates.Length - d_pos - 1);
-                    int num2 = ((dd != null) ? dd.Length : 0) + 1;
-                    dates = dates.Remove(d_pos, num2);
+                    dates = dates.Remove(d_pos, dd.Length + 1);
                     dates = dates.Trim();
                 }
 
                 if (b_pos >= 0) {
                     bd = dates.Substring(b_pos + 1, dates.Length - b_pos - 1);
-                    int num3 = ((bd != null) ? bd.Length : 0) + 1;
-                    dates = dates.Remove(b_pos, num3);
+                    dates = dates.Remove(b_pos, bd.Length + 1);
                     dates = dates.Trim();
                 }
 

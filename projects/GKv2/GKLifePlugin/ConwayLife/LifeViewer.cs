@@ -338,15 +338,6 @@ namespace ConwayLife
             }
         }
 
-        private void cmpLifeDoesCellLive(int X, int Y, LifeGrid grid, ref bool result)
-        {
-            if (grid[X, Y] > 0) {
-                result = fRules.GetLiveCells(grid.NumberOfNeighbours(X, Y));
-            } else {
-                result = fRules.GetDeadCells(grid.NumberOfNeighbours(X, Y));
-            }
-        }
-
         public void ClearCells()
         {
             fGrid.Clear();

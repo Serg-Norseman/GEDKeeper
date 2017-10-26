@@ -41,7 +41,7 @@ namespace GKUI.Components
     public delegate void HintRequestEventHandler(object sender, HintRequestEventArgs args);
 
     /// <summary>
-    /// 
+    /// Logarithmic graph of fragmented data.
     /// </summary>
     public sealed class LogChart : Drawable
     {
@@ -211,10 +211,11 @@ namespace GKUI.Components
 
         private string HintRequest(int fragmentNumber, int size)
         {
-            if (OnHintRequest == null) return string.Empty;
+            var onHintRequest = OnHintRequest;
+            if (onHintRequest == null) return string.Empty;
 
             HintRequestEventArgs args = new HintRequestEventArgs(fragmentNumber, size);
-            OnHintRequest(this, args);
+            onHintRequest(this, args);
             return args.Hint;
         }
 

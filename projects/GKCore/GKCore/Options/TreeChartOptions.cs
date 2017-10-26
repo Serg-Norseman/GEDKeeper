@@ -30,6 +30,12 @@ namespace GKCore.Options
     /// </summary>
     public sealed class TreeChartOptions : BaseObject, IOptions
     {
+        public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
+        public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6
+        public static readonly int UNK_SEX_COLOR = -14593; // FFFFC6FF
+        public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
+        public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
+
         public bool ChildlessExclude;
         public bool Decorative;
         public bool FamilyVisible;
@@ -79,11 +85,11 @@ namespace GKCore.Options
             ChildlessExclude = false;
             Decorative = true;
 
-            MaleColor = ChartRenderer.GetColor(-3750145);
-            FemaleColor = ChartRenderer.GetColor(-14650);
-            UnkSexColor = ChartRenderer.GetColor(-14593);
-            UnHusbandColor = ChartRenderer.GetColor(-2631681);
-            UnWifeColor = ChartRenderer.GetColor(-10281);
+            MaleColor = ChartRenderer.GetColor(MALE_COLOR);
+            FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
+            UnkSexColor = ChartRenderer.GetColor(UNK_SEX_COLOR);
+            UnHusbandColor = ChartRenderer.GetColor(UN_HUSBAND_COLOR);
+            UnWifeColor = ChartRenderer.GetColor(UN_WIFE_COLOR);
 
             DefFontName = AppHost.Instance.GetDefaultFontName();
             DefFontSize = 8;
@@ -147,11 +153,11 @@ namespace GKCore.Options
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
 
-            MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", -3750145));
-            FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", -14650));
-            UnkSexColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnkSexColor", -14593));
-            UnHusbandColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnHusbandColor", -2631681));
-            UnWifeColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnWifeColor", -10281));
+            MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
+            FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
+            UnkSexColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnkSexColor", UNK_SEX_COLOR));
+            UnHusbandColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnHusbandColor", UN_HUSBAND_COLOR));
+            UnWifeColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnWifeColor", UN_WIFE_COLOR));
 
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.Instance.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);

@@ -525,7 +525,6 @@ namespace GKTests.GKCore
             for (int k = 0; k < REP_COUNT; k++) {
                 GEDCOMListTest11(iRec);
                 GEDCOMListTest12(iRec);
-                GEDCOMListTest13(iRec);
                 GEDCOMListTest21(iRec);
                 GEDCOMListTest22(iRec);
                 GEDCOMListTest23(iRec);
@@ -544,13 +543,6 @@ namespace GKTests.GKCore
             IGEDCOMListEnumerator<GEDCOMCustomEvent> enumer = iRec.Events.GetEnumerator();
             while (enumer.MoveNext()) {
                 GEDCOMCustomEvent evt1 = enumer.Current;
-                evt1.GetHashCode();
-            }
-        }
-
-        private static void GEDCOMListTest13(GEDCOMIndividualRecord iRec)
-        {
-            foreach (GEDCOMCustomEvent evt1 in iRec.Events) {
                 evt1.GetHashCode();
             }
         }

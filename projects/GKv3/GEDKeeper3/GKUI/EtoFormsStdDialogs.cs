@@ -29,7 +29,7 @@ using GKUI.Components;
 namespace GKUI
 {
     /// <summary>
-    /// The implementation of the contract for working with WinForms dialogs.
+    /// The implementation of the contract for working with EtoForms dialogs.
     /// </summary>
     public sealed class EtoFormsStdDialogs : IStdDialogs
     {

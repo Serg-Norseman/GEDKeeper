@@ -24,7 +24,7 @@ using GKCommon;
 namespace GKCore.Interfaces
 {
     /// <summary>
-    /// 
+    /// Interface for platform-independent graphics rendering providers.
     /// </summary>
     public interface IGraphicsProvider
     {

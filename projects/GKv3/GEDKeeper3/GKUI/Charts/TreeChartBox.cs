@@ -352,7 +352,7 @@ namespace GKUI.Charts
             DateTime cur = DateTime.Now;
             TimeSpan d = cur - st;
 
-            if (d.Seconds >= 1/* && !fPersonControl.Visible*/)
+            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/)
             {
                 fModel.HighlightedPerson = null;
                 //fPersonControl.Visible = true;

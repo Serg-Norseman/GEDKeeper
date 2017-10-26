@@ -62,8 +62,8 @@ namespace GKUI.Charts
 
         private CircleChartType fChartType;
         private string fHint;
-        private float fOffsetX = 0;
-        private float fOffsetY = 0;
+        private float fOffsetX;
+        private float fOffsetY;
         /* Zoom factors */
         private float fZoom = 1.0f;
         /* Mouse capturing. */
@@ -206,6 +206,9 @@ namespace GKUI.Charts
         {
             var bounds = fModel.Bounds;
 
+            fOffsetX = AutoScrollPosition.X;
+            fOffsetY = AutoScrollPosition.Y;
+
             if (target == RenderTarget.rtScreen) {
 
                 // Returns the center point of this chart relative to the upper left
@@ -221,13 +224,13 @@ namespace GKUI.Charts
                 if (ClientSize.Width > boundary.Width) {
                     center.X = Math.Min(ClientSize.Width - bounds.Right * fZoom, ClientSize.Width >> 1);
                 } else {
-                    center.X = AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom;
+                    center.X = fOffsetX - bounds.Left * fZoom;
                 }
 
                 if (ClientSize.Height > boundary.Height) {
                     center.Y = Math.Min(ClientSize.Height - bounds.Bottom * fZoom, ClientSize.Height >> 1);
                 } else {
-                    center.Y = AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom;
+                    center.Y = fOffsetY - bounds.Top * fZoom;
                 }
 
                 return center;
@@ -236,8 +239,7 @@ namespace GKUI.Charts
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(AutoScrollPosition.X + fOffsetX - bounds.Left * fZoom,
-                                  AutoScrollPosition.Y + fOffsetY - bounds.Top * fZoom);
+                return new PointF(fOffsetX - bounds.Left * fZoom, fOffsetY - bounds.Top * fZoom);
 
             }
         }

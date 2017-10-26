@@ -351,8 +351,9 @@ namespace GKCommon.Controls
 
             private void OnDropStateChange(DropDownState state)
             {
-                if (DropStateChange != null)
-                    DropStateChange(state);
+                var dropStateChange = DropStateChange;
+                if (dropStateChange != null)
+                    dropStateChange(state);
             }
 
             protected override void OnPaint(PaintEventArgs e)

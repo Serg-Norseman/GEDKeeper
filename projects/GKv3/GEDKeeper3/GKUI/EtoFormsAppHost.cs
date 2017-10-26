@@ -35,6 +35,10 @@ using GKUI.Forms;
 
 namespace GKUI
 {
+    /// <summary>
+    /// The main implementation of the platform-specific application's host for
+    /// EtoForms.
+    /// </summary>
     public sealed class EtoFormsAppHost : AppHost
     {
         static EtoFormsAppHost()

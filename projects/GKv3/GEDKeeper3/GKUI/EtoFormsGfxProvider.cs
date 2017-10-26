@@ -28,7 +28,8 @@ using GKUI.Components;
 namespace GKUI
 {
     /// <summary>
-    /// 
+    /// The main implementation of the platform-specific graphics provider for
+    /// EtoForms.
     /// </summary>
     public class EtoFormsGfxProvider : IGraphicsProvider
     {

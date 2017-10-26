@@ -236,7 +236,7 @@ namespace GKCore.Export
                     for (i = 0; i < num; i++)
                     {
                         GEDCOMCustomEvent evt = person.IRec.Events[i];
-                        if (!(evt is GEDCOMIndividualAttribute) || (evt is GEDCOMIndividualAttribute && fOptions.PedigreeOptions.IncludeAttributes))
+                        if (!(evt is GEDCOMIndividualAttribute) || fOptions.PedigreeOptions.IncludeAttributes)
                         {
                             evList.Add(new PedigreeEvent(person.IRec, evt));
                         }

@@ -55,7 +55,7 @@ namespace GKCore.Interfaces
 
         void AddCondition(byte columnId, ConditionKind condition, string value);
         DataType GetColumnDataType(int columnId);
-        string GetColumnName(byte columnId);
+        string GetColumnName(int columnId);
 
         void ChangeColumnWidth(int colIndex, int colWidth);
         IListItem CreateListItem(object rowData, CreateListItemHandler handler);

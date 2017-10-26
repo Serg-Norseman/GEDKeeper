@@ -326,7 +326,7 @@ namespace GKCore.Lists
             ColumnsHaveBeenChanged = false;
         }
 
-        public string GetColumnName(byte columnId)
+        public string GetColumnName(int columnId)
         {
             if (columnId >= 0 && columnId < fListColumns.Count) {
                 return LangMan.LS(fListColumns[columnId].ColName);

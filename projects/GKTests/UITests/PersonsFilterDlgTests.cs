@@ -52,6 +52,7 @@ namespace GKTests.UITests
         public override void TearDown()
         {
             fDialog.Dispose();
+            fListMan.Dispose();
         }
 
         [Test]

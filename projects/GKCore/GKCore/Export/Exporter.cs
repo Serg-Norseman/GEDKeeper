@@ -55,6 +55,15 @@ namespace GKCore.Export
             fTree = baseWin.Context.Tree;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (fWriter != null) fWriter.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public abstract void Generate(bool show);
 
         protected void ShowResult()
