@@ -29,22 +29,6 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(this, value); }
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == "CONC" || tagName == "CONT")
-            {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-            else
-            {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }

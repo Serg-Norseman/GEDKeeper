@@ -157,7 +157,7 @@ namespace GKUI.Forms
     {
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
 
-        private bool fFormLoaded;
+        private volatile bool fFormLoaded;
         private int fMax;
         private IntPtr fParentHandle;
         private ProgressDlg fProgressForm;

@@ -274,7 +274,7 @@ namespace GKUI.Forms
             ToolBar = ToolBar1;
             KeyDown += TreeChartWin_KeyDown;
 
-            UIHelper.SetPredefProperties(this, 820, 450);
+            UIHelper.SetPredefProperties(this, 820, 450, true, true);
             ResumeLayout();
         }
     }

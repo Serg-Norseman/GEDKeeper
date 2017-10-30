@@ -74,7 +74,7 @@ namespace GKUI.Forms
             Title = "StatisticsWin";
             //ToolBar = ToolBar1;
 
-            UIHelper.SetPredefProperties(this, 900, 600);
+            UIHelper.SetPredefProperties(this, 900, 600, true, true);
             ResumeLayout();
         }
     }

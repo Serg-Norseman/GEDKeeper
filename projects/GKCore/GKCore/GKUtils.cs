@@ -1958,7 +1958,6 @@ namespace GKCore
 
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
-                        //summary.Add("[r]");
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
                         try
                         {

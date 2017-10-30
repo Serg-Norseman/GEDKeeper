@@ -67,10 +67,7 @@ namespace GKCore
 
         public static AppHost Instance
         {
-            get {
-                //if (fInstance == null) fInstance = new AppHost();
-                return fInstance;
-            }
+            get { return fInstance; }
         }
 
 

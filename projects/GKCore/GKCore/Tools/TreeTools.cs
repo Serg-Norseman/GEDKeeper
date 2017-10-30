@@ -1345,6 +1345,7 @@ namespace GKCore.Tools
             mParams.NamesIndistinctThreshold = 90.0f / 100.0f;
             mParams.DatesCheck = true;
             mParams.YearsInaccuracy = 3;
+            mParams.CheckEventPlaces = false;
 
             pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount);
             try

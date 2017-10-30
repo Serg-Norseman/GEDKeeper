@@ -45,7 +45,7 @@ namespace GKTextSearchPlugin
         }
 
         #region Private methods
-        
+
         private static string GetSign(IBaseWindow baseWin)
         {
             return Path.GetFileNameWithoutExtension(baseWin.Context.FileName);

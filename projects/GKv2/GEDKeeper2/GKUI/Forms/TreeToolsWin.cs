@@ -225,6 +225,7 @@ namespace GKUI.Forms
             mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(edNameAccuracy.Value) / 100.0f;
             mParams.DatesCheck = chkBirthYear.Checked;
             mParams.YearsInaccuracy = decimal.ToInt32(edYearInaccuracy.Value);
+            mParams.CheckEventPlaces = false;
 
             bool res = false;
             btnSkip.Enabled = false;

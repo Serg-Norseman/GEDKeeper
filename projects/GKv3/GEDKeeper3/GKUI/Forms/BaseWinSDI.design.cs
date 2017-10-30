@@ -323,6 +323,7 @@ namespace GKUI.Forms
             miSearch = new ButtonMenuItem();
             miSearch.Text = "miSearch";
             miSearch.Click += miSearch_Click;
+            miSearch.Image = Bitmap.FromResource("Resources.btn_search.gif");
 
             miFilter = new ButtonMenuItem();
             miFilter.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.F)));
@@ -440,6 +441,7 @@ namespace GKUI.Forms
             miOptions = new ButtonMenuItem();
             miOptions.Text = "miOptions";
             miOptions.Click += miOptions_Click;
+            miOptions.Image = Bitmap.FromResource("Resources.btn_tools.gif");
 
             miService = new ButtonMenuItem();
             miService.Text = "Service";
@@ -548,7 +550,7 @@ namespace GKUI.Forms
             //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;
 
-            UIHelper.SetPredefProperties(this, 980, 460, true);
+            UIHelper.SetPredefProperties(this, 980, 460, true, true);
             ResumeLayout();
         }
     }

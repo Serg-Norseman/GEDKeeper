@@ -205,7 +205,6 @@ namespace GKUI.Charts
         private int fMouseX;
         private int fMouseY;
         private TreeChartOptions fOptions;
-        //private PersonControl fPersonControl;
         private ChartRenderer fRenderer;
         private TreeChartPerson fSelected;
         private GEDCOMIndividualRecord fSaveSelection;
@@ -732,7 +731,6 @@ namespace GKUI.Charts
 
             // interactive controls
             fTreeControls.Draw(gfx);
-            //if (fPersonControl.Visible) fPersonControl.Draw(gfx);
 
             base.OnPaint(e);
         }

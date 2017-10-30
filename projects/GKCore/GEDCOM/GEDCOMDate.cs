@@ -587,7 +587,7 @@ namespace GKCommon.GEDCOM
             return month;
         }
 
-        public void SetDate(GEDCOMCalendar calendar, int day, int month, int year)
+        public void SetDate(GEDCOMCalendar calendar, int day, int month, int year, bool yearBC = false)
         {
             switch (calendar) {
                 case GEDCOMCalendar.dcGregorian:
@@ -607,15 +607,15 @@ namespace GKCommon.GEDCOM
                     break;
 
                 case GEDCOMCalendar.dcRoman:
-                    //SetRoman(day, month, year);
+                    SetRoman(day, month, year, yearBC);
                     break;
 
                 case GEDCOMCalendar.dcIslamic:
-                    //SetIslamic(day, month, year);
+                    SetIslamic(day, month, year);
                     break;
 
                 case GEDCOMCalendar.dcUnknown:
-                    //SetUnknown(day, month, year);
+                    SetUnknown(day, month, year, yearBC);
                     break;
             }
         }
@@ -672,14 +672,40 @@ namespace GKCommon.GEDCOM
             SetDateInternal(GEDCOMCalendar.dcFrench, day, CheckGEDCOMMonthFrench(month), year, "", yearBC);
         }
 
+        // TODO: not implemented yet
+        public void SetRoman(int day, int month, int year, bool yearBC)
+        {
+            SetRoman(day, IntToGEDCOMMonth(month), year, yearBC);
+        }
+
+        // TODO: not implemented yet
         public void SetRoman(int day, string month, int year, bool yearBC)
         {
             SetDateInternal(GEDCOMCalendar.dcRoman, day, CheckGEDCOMMonth(month), year, "", yearBC);
         }
 
+        // TODO: not implemented yet
+        public void SetUnknown(int day, int month, int year, bool yearBC)
+        {
+            SetUnknown(day, IntToGEDCOMMonth(month), year, yearBC);
+        }
+
+        // TODO: not implemented yet
         public void SetUnknown(int day, string month, int year, bool yearBC)
         {
             SetDateInternal(GEDCOMCalendar.dcUnknown, day, CheckGEDCOMMonth(month), year, "", yearBC);
+        }
+
+        // TODO: not implemented yet
+        public void SetIslamic(int day, int month, int year)
+        {
+            SetIslamic(day, IntToGEDCOMMonth(month), year);
+        }
+
+        // TODO: not implemented yet
+        public void SetIslamic(int day, string month, int year)
+        {
+            SetDateInternal(GEDCOMCalendar.dcIslamic, day, CheckGEDCOMMonth(month), year, "", false);
         }
 
         #region UDN processing

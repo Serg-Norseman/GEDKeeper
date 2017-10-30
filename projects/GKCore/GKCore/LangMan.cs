@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 namespace GKCore
@@ -1717,7 +1718,10 @@ namespace GKCore
                 lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + LS_DEF_SIGN + "," + LS_DEF_NAME);
                 for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++)
                 {
-                    lf.WriteLine(LSDefList[(int)i - 1]);
+                    string ls = LSDefList[(int)i - 1];
+                    if (!string.IsNullOrEmpty(ls)) {
+                        lf.WriteLine(SysUtils.AdjustNum((int)i, 3) + "=" + ls);
+                    }
                 }
             }
             finally

@@ -208,6 +208,7 @@ namespace GKUI.Forms
             mParams.NamesIndistinctThreshold = (float)(edNameAccuracy.Value / 100.0f);
             mParams.DatesCheck = chkBirthYear.Checked.GetValueOrDefault();
             mParams.YearsInaccuracy = (int)edYearInaccuracy.Value;
+            mParams.CheckEventPlaces = false;
 
             bool res = false;
             btnSkip.Enabled = false;

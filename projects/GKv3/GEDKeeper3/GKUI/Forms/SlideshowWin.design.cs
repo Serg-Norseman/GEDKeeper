@@ -40,7 +40,7 @@ namespace GKUI.Forms
             Load += SlideshowWin_Load;
             KeyDown += SlideshowWin_KeyDown;
 
-            UIHelper.SetPredefProperties(this, 790, 570);
+            UIHelper.SetPredefProperties(this, 790, 570, true, true);
             ResumeLayout();
         }
     }

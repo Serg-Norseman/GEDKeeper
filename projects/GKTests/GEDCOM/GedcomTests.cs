@@ -115,6 +115,7 @@ namespace GKTests.GEDCOM
             mParams.NamesIndistinctThreshold = 1.0f;
             mParams.DatesCheck = true;
             mParams.YearsInaccuracy = 0;
+            mParams.CheckEventPlaces = false;
 
             // null
             res = dtVal1.IsMatch(null, mParams);

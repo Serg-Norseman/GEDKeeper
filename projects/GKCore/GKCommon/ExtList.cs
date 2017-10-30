@@ -45,11 +45,6 @@ namespace GKCommon
         private readonly List<T> fList;
         private bool fOwnsObjects;
 
-        /*public IList<T> List
-        {
-            get { return this.fList; }
-        }*/
-
         public int Count
         {
             get { return fList.Count; }
@@ -101,9 +96,7 @@ namespace GKCommon
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //if (this.fList != null) this.fList = null;
+            if (disposing) {
                 Clear();
             }
             base.Dispose(disposing);

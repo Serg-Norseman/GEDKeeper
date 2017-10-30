@@ -112,16 +112,15 @@ namespace GKUI.Components
                     double[] yValuesM = new double[itemscount];
                     double[] xValues = new double[itemscount];
 
-                    for (int i = 0; i < itemscount; i++)
-                    {
+                    for (int i = 0; i < itemscount; i++) {
                         StatsItem sti = vals[i];
                         xValues[i] = SysUtils.ParseInt(sti.Caption, 0);
                         yValuesF[i] = sti.ValF;
                         yValuesM[i] = sti.ValM;
                     }
 
-                    /*BarItem bar1 = */gPane.AddBar("F", xValues, yValuesF, Color.Red);
-                    /*BarItem bar2 = */gPane.AddBar("M", xValues, yValuesM, Color.Blue);
+                    gPane.AddBar("F", xValues, yValuesF, Color.Red);
+                    gPane.AddBar("M", xValues, yValuesM, Color.Blue);
 
                     gPane.BarSettings.MinBarGap = 0.0f;
                     gPane.BarSettings.MinClusterGap = 2.5f;

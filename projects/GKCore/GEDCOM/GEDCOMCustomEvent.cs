@@ -95,28 +95,29 @@ namespace GKCommon.GEDCOM
 
             // match date
             float dateMatch = 0.0f;
+            float locMatch = 0.0f;
+            int matches = 0;
+
             GEDCOMDateValue dtVal = this.Date;
             GEDCOMDateValue dtVal2 = ev.Date;
 
+            matches += 1;
             if (dtVal != null && dtVal2 != null) {
                 dateMatch = dtVal.IsMatch(dtVal2, matchParams);
             }
 
             // match location - late code-on by option implementation
-            /*float locMatch = 0.0f;
-			if (this.Place == null && ev.Place == null)
-			{
-				locMatch = 100.0f;
-			}
-			else if (this.Place != null && ev.Place != null)
-			{
-				if (this.Place.StringValue == ev.Place.StringValue)
-				{
-					locMatch = 100.0f;
-				}
-			}*/
+            if (matchParams.CheckEventPlaces) {
+                matches += 1;
 
-            float match = (dateMatch); /* + locMatch) / 2.0f;*/
+                if (this.Place == null && ev.Place == null) {
+                    locMatch = 100.0f;
+                } else if (this.Place != null && ev.Place != null && this.Place.StringValue == ev.Place.StringValue) {
+                    locMatch = 100.0f;
+                }
+            }
+
+            float match = (dateMatch + locMatch) / matches;
             return match;
         }
 

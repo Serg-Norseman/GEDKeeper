@@ -26,5 +26,7 @@ namespace GKCommon.GEDCOM
 
         public bool DatesCheck;
         public int YearsInaccuracy;
+
+        public bool CheckEventPlaces; // not yet used
     }
 }

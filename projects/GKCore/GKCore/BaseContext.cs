@@ -1273,7 +1273,6 @@ namespace GKCore
                 byte[] salt = SCCrypt.CreateRandomSalt(7);
 
                 PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-
                 try {
                     using (var cryptic = CreateCryptoServiceProvider(gsMajVer, gsMinVer, pdb)) {
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
@@ -1286,8 +1285,6 @@ namespace GKCore
                         SCCrypt.ClearBytes(salt);
                     }
                 } finally {
-                    // The project is mainly compiled under .NET 3.0,
-                    // where these objects are simple, but in .NET 4.x they disposable
                     var pdbDisp = pdb as IDisposable;
                     if (pdbDisp != null) pdbDisp.Dispose();
                 }
@@ -1307,7 +1304,6 @@ namespace GKCore
                 byte[] salt = SCCrypt.CreateRandomSalt(7);
 
                 PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-
                 try {
                     using (var cryptic = CreateCryptoServiceProvider(GS_MAJOR_VER, GS_MINOR_VER, pdb)) {
                         using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
@@ -1324,8 +1320,6 @@ namespace GKCore
                         SCCrypt.ClearBytes(salt);
                     }
                 } finally {
-                    // The project is mainly compiled under .NET 3.0,
-                    // where these objects are simple, but in .NET 4.x they disposable
                     var pdbDisp = pdb as IDisposable;
                     if (pdbDisp != null) pdbDisp.Dispose();
                 }

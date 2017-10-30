@@ -263,7 +263,7 @@ namespace GKUI.Components
             int red = (rgb >> 16) & 0xFF;
             int green = (rgb >> 8) & 0xFF;
             int blue = (rgb >> 0) & 0xFF;
-            //int alpha = (rgb >> 24) & 0xFF;
+            int alpha = (rgb >> 24) & 0xFF;
 
             red = (int) (red * factor);
             green = (int) (green * factor);
@@ -273,7 +273,7 @@ namespace GKUI.Components
             green = (green < 0) ? 0 : green;
             blue = (blue < 0) ? 0 : blue;
 
-            return Color.FromArgb(red, green, blue);
+            return Color.FromArgb(alpha, red, green, blue);
         }
 
         public static Color Lighter(Color color, float fraction)
@@ -284,7 +284,7 @@ namespace GKUI.Components
             int red = (rgb >> 16) & 0xFF;
             int green = (rgb >> 8) & 0xFF;
             int blue = (rgb >> 0) & 0xFF;
-            //int alpha = (rgb >> 24) & 0xFF;
+            int alpha = (rgb >> 24) & 0xFF;
 
             red = (int) (red * factor);
             green = (int) (green * factor);
@@ -306,9 +306,7 @@ namespace GKUI.Components
                 blue = 255;
             }
 
-            //int alpha = color.getAlpha();
-
-            return Color.FromArgb(red, green, blue);
+            return Color.FromArgb(alpha, red, green, blue);
         }
     }
 }

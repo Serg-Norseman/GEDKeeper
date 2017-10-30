@@ -110,16 +110,6 @@ namespace GKUI.Forms
 
         private void UpdateForm()
         {
-            /*switch (fOptions.DefCharacterSet)
-            {
-                case GEDCOMCharacterSet.csASCII:
-                    radASCII.Checked = true;
-                    break;
-                case GEDCOMCharacterSet.csUTF8:
-                    radUTF.Checked = true;
-                    break;
-            }*/
-
             switch (fOptions.DefNameFormat)
             {
                 case NameFormat.nfFNP:
@@ -333,12 +323,6 @@ namespace GKUI.Forms
         {
             fTempColumns.CopyTo(fOptions.IndividualListColumns);
 
-            /*if (radASCII.Checked) {
-                fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
-            } else if (radUTF.Checked) {
-                fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
-            }*/
-
             if (radSNP.Checked) {
                 fOptions.DefNameFormat = NameFormat.nfFNP;
             } else if (radS_NP.Checked) {
@@ -514,7 +498,6 @@ namespace GKUI.Forms
             pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
             pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
             pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
-            /*grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);*/
 
             grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
             chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);

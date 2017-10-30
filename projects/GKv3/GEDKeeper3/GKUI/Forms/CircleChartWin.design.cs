@@ -62,7 +62,7 @@ namespace GKUI.Forms
             ToolBar = ToolBar1;
             KeyDown += CircleChartWin_KeyDown;
 
-            UIHelper.SetPredefProperties(this, 1100, 580);
+            UIHelper.SetPredefProperties(this, 1100, 580, true, true);
             ResumeLayout();
         }
     }

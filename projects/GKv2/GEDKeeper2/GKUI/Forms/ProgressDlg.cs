@@ -185,7 +185,7 @@ namespace GKUI.Forms
 
     public sealed class ProgressController : IProgressController
     {
-        private bool fFormLoaded;
+        private volatile bool fFormLoaded;
         private int fMax;
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
         private IntPtr fParentHandle;
