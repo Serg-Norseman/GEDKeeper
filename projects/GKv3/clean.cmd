@@ -1,6 +1,8 @@
 
 rem <<< Main assemblies cleaning >>>
 
+rmdir .\.vs /s /q
+
 rmdir .\GEDKeeper3\bin /s /q
 rmdir .\GEDKeeper3\obj /s /q
 
@@ -9,8 +11,6 @@ rmdir .\GKComponents\obj /s /q
 
 rmdir .\GKTestsE\bin /s /q
 rmdir .\GKTestsE\obj /s /q
-
-=======
 
 rmdir .\GEDKeeper3.Gtk2\bin /s /q
 rmdir .\GEDKeeper3.Gtk2\obj /s /q

@@ -13,6 +13,8 @@ del .\GKUpdater.log
 
 rem <<< Main assemblies cleaning >>>
 
+rmdir .\projects\.vs /s /q
+
 rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
 rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
 

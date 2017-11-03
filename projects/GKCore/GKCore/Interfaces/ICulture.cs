@@ -44,5 +44,6 @@ namespace GKCore.Interfaces
         string[] GetSurnames(GEDCOMIndividualRecord iRec);
 
         string GetPossessiveName(string name);
+        string GetPossessiveName(GEDCOMIndividualRecord iRec);
     }
 }

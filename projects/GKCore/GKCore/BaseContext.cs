@@ -521,8 +521,7 @@ namespace GKCore
                                 firstTip = false;
                             }
 
-                            string nm = GKUtils.GetNameString(iRec, true, false);
-                            nm = Culture.GetPossessiveName(nm);
+                            string nm = Culture.GetPossessiveName(iRec);
 
                             switch (days) {
                                 case 0:

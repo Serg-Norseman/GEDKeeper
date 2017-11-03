@@ -180,10 +180,10 @@ namespace GKCore.Kinships
                 return "???";
 
             string rel = FixRelation(ind2, xrel, great);
-            string name1 = GKUtils.GetNameString(ind1, true, false);
+            //string name1 = GKUtils.GetNameString(ind1, true, false);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
-            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, fContext.Culture.GetPossessiveName(name1));
+            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, fContext.Culture.GetPossessiveName(/*name1*/ind1));
             return rel;
         }
 

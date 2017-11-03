@@ -34,6 +34,8 @@ Google maps (© Google).
 The aim of the program is as quick and effective means of conducting personal 
 genealogical database.
 
+To enhance the capabilities of the program supports scripts on Lua and plug-ins.
+
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
 Alternatively why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
@@ -56,6 +58,8 @@ Google Maps (© Google).
 
 Цель программы - максимально быстрое и эффективное средство ведения личной 
 генеалогической базы данных.
+
+Для расширения возможностей программы поддерживаются скрипты на Lua и плагины.
 
 Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 

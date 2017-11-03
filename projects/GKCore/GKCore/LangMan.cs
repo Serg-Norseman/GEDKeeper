@@ -1594,7 +1594,7 @@ namespace GKCore
             /* 712 */ "Table of contents",
             /* 713 */ "Records of individuals",
             /* 714 */ "Directories",
-            /* 715 */ "Unable to auto-detect gender using name \"{1}\". Is it male gender?",
+            /* 715 */ "Unable to auto-detect gender using name \"{0}\". Is it male gender?",
             /* 716 */ "Autosave every",
             /* 717 */ "minutes",
             /* 718 */ "Including number of generations",

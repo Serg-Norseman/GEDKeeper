@@ -1,4 +1,33 @@
 
+## ??.??.2017 [v2.13.0]
+- Restored supporting of Ansel GEDCOM encoding.
+- Added a new plugin "WordsCloud".
+- Fixed the problem of extra lines in family records while saving
+GEDCOM files, which led to import problems in other programs.
+
+## 17.06.2017 [[v2.12.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.12.0)]
+- Created the Chinese translation [Cui Jianquan (崔建全)].
+- Created the German translation [Gleb Buzhinsky].
+- The way in the interface for working with multiple files is changed 
+from MDI to SDI (preparation for the future full porting).
+- Considerable redesign of the program architecture.
+- Created the Italian translation of the program [Amalia Boffa].
+- Various minor improvements.
+- Fixed error sending error log in Ubuntu 1604 LTS (Unity).
+- Added a new plugin "Chronicle of events".
+- Fixed saving of column widths in the list of individual records.
+- Improved checking and excluding the second instance of the program.
+- Improved operation of the record lists and processing of the columns.
+- Implemented the formatting of text notes.
+- Automatic replacement of direct links paths to multimedia files 
+when using the program simultaneously between two operating systems (Windows / Linux);
+you need to manually edit the file of paths.
+- Implemented display of progression when adding very large media files.
+- Implemented option to disable the ability to add multimedia files with direct links.
+- Replacement of absolute paths to multimedia files is realized when using
+ the program and databases between Windows and Linux (for advanced users).
+- Fixed the cache of portraits in case of two links to one photo.
+
 ## 28.02.2017 [[v2.11.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.11.0)]
 
 - Added French localization (thanks to Diana Shilnikova).

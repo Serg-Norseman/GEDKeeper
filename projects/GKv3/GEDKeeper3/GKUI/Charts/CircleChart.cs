@@ -208,8 +208,8 @@ namespace GKUI.Charts
         {
             Point imPt = GetImageRelativeLocation(mpt);
             ExtSize imSize = GetImageSize();
-            float dX = (imPt.X - imSize.Width / 2) / fZoom;
-            float dY = (imPt.Y - imSize.Height / 2) / fZoom;
+            float dX = (imPt.X - imSize.Width / 2.0f) / fZoom;
+            float dY = (imPt.Y - imSize.Height / 2.0f) / fZoom;
             return fModel.FindSegment(dX, dY);
         }
 

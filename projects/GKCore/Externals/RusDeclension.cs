@@ -247,21 +247,23 @@ namespace Externals.Linguistics
         /// <param name="z5"></param>
         /// <returns></returns>
         public static string GetDeclension(string fn, DeclensionCase declCase, DeclensionGender gender = DeclensionGender.NotDefind,
-                                           string part = "123", int z5 = 1)
+                                           string partsMask = "123", int part = 1)
         {
             try
             {
                 string z6 = LCase(Right(RTrim(fn), 4));
                 string z7 = Right(z6, 1);
-                if (z5 < 4) {
-                    string _FIO = Replace(Mid(fn, InStr(fn + " ", " ") + 1), ".", ". ").Trim();
-                    string _base = ((z5 == 3) && (z7 == "ы") ? fn : Left(fn, InStr(fn + " ", " ") - 1));
-                    string _token = _declension(_base, (int)declCase, Mid("ча" + z7, (gender == DeclensionGender.NotDefind ? (z6 == "оглы" || z6 == "кызы" ? 1 : 3) : (int)gender), 1), z5) + " ";
-                    string _part = Replace(part, z5.ToString(), _token);
 
-                    return GetDeclension(_FIO, declCase, gender, _part, z5 + 1).Trim();
+                string sp = part.ToString();
+                if (part < 4 && partsMask.Contains(sp)) {
+                    string _FIO = Replace(Mid(fn, InStr(fn + " ", " ") + 1), ".", ". ").Trim();
+                    string _base = ((part == 3) && (z7 == "ы") ? fn : Left(fn, InStr(fn + " ", " ") - 1));
+                    string _token = _declension(_base, (int)declCase, Mid("ча" + z7, (gender == DeclensionGender.NotDefind ? (z6 == "оглы" || z6 == "кызы" ? 1 : 3) : (int)gender), 1), part) + " ";
+                    partsMask = Replace(partsMask, sp, _token);
+
+                    return GetDeclension(_FIO, declCase, gender, partsMask, part + 1).Trim();
                 } else {
-                    return part;
+                    return partsMask;
                 }
             }
             catch

@@ -569,12 +569,11 @@ namespace GKCommon.GEDCOM
             result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
             result.Add("ALIA", new TagProperties("ALIA", true, false));
 
-            #if !DEBUG
             // need for compatibility with Agelong Tree (ALTREE), and other
             result.Add("HUSB", new TagProperties("HUSB", true, false));
             result.Add("WIFE", new TagProperties("WIFE", true, false));
-            #endif
 
+            // extensions
             result.Add("_BGRO", new TagProperties("_BGRO", true,  true));
             result.Add("_HAIR", new TagProperties("_HAIR", true,  true));
             result.Add("_EYES", new TagProperties("_EYES", true,  true));

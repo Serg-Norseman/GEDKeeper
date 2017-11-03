@@ -73,5 +73,12 @@ namespace GKCore.Cultures
         {
             return name;
         }
+
+        public virtual string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        {
+            string nm = GKUtils.GetNameString(iRec, true, false);
+            nm = GetPossessiveName(nm);
+            return nm;
+        }
     }
 }

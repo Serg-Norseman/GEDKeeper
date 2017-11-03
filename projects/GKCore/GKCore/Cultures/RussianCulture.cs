@@ -182,11 +182,52 @@ namespace GKCore.Cultures
             return GetSurnames(parts.Surname, female);
         }
 
+        public string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        {
+            var nameParts = GKUtils.GetNameParts(iRec);
+            var gender = DeclGenders[(int)iRec.Sex];
+
+            string result = "";
+            string surname = nameParts.Surname.Trim();
+
+            int p = surname.IndexOf('(');
+            if (p >= 0) {
+                string part = surname.Substring(0, p).Trim();
+                if (part != "") {
+                    result = RusDeclension.GetDeclension(part, DeclensionCase.Genitive, gender, "1", 1);
+                    result += " ";
+                }
+                part = surname.Substring(p).Trim();
+                part = part.Substring(1, part.Length-2);
+
+                result += "(";
+                string[] parts = part.Split(',');
+                for (int i = 0; i < parts.Length; i++) {
+                    if (i > 0) result += "(";
+                    part = RusDeclension.GetDeclension(parts[i], DeclensionCase.Genitive, gender, "1", 1);
+                    result += part;
+                }
+                result += ")";
+            } else {
+                result = RusDeclension.GetDeclension(surname, DeclensionCase.Genitive, gender, "1", 1);
+            }
+
+            result += " " + RusDeclension.GetDeclension(nameParts.Name + " " + nameParts.Patronymic, DeclensionCase.Genitive, gender, "23", 2);
+            return result;
+        }
+
         public string GetPossessiveName(string name)
         {
             // (genitive) "[the] sailor's / [of the] sailor"
             // (e.g. Сын моряка — художник – the sailor's son is an artist)
             return RusDeclension.GetDeclension(name, DeclensionCase.Genitive);
         }
+
+        private static readonly DeclensionGender[] DeclGenders = new DeclensionGender[] {
+            /* svNone */         DeclensionGender.None,
+            /* svMale */         DeclensionGender.Masculine,
+            /* svFemale */       DeclensionGender.Feminine,
+            /* svUndetermined */ DeclensionGender.NotDefind
+        };
     }
 }
