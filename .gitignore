@@ -83,6 +83,9 @@ sonarqube.cmd
 /projects/GKv2/GKWordsCloudPlugin/bin/
 /projects/GKv2/GKWordsCloudPlugin/obj/
 
+/projects/GKv2/GKDataQualityPlugin/bin/
+/projects/GKv2/GKDataQualityPlugin/obj/
+
 
 /projects/GKv3/GEDKeeper3/bin/
 /projects/GKv3/GEDKeeper3/obj/

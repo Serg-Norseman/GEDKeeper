@@ -81,3 +81,6 @@ rmdir .\projects\GKv2\GKChroniclePlugin\obj /s /q
 
 rmdir .\projects\GKv2\GKWordsCloudPlugin\bin /s /q
 rmdir .\projects\GKv2\GKWordsCloudPlugin\obj /s /q
+
+rmdir .\projects\GKv2\GKDataQualityPlugin\bin /s /q
+rmdir .\projects\GKv2\GKDataQualityPlugin\obj /s /q
