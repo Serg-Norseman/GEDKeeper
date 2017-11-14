@@ -30,7 +30,7 @@ namespace GKCore.Export
     /// <summary>
     /// 
     /// </summary>
-    public abstract class Exporter : BaseObject
+    public abstract class Exporter : BaseObject, IExporter
     {
         public static bool TEST_MODE = false;
 
