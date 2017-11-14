@@ -1545,10 +1545,12 @@ namespace GKUI.Forms
                 for (int i = 0; i < num; i++) {
                     IPlugin plugin = AppHost.Plugins[i];
                     string dispName = plugin.DisplayName;
+                    ImageHandler hIcon = plugin.Icon as ImageHandler;
 
                     ToolStripMenuItemEx mi = new ToolStripMenuItemEx(dispName/*, i*/);
                     mi.Click += Plugin_Click;
                     mi.Tag = plugin;
+                    mi.Image = (hIcon == null) ? null : hIcon.Handle;
                     miPlugins.DropDownItems.Add(mi);
 
                     if (plugin is IWidget) {

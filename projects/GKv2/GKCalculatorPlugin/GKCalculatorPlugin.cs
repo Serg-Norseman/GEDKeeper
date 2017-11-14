@@ -19,11 +19,14 @@
  */
 
 using System;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 using GKCommon;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]
@@ -51,10 +54,12 @@ namespace GKCalculatorPlugin
         private string fDisplayName = "GKCalculatorPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
+        private IImage fIcon;
 
         public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
+        public IImage Icon { get { return fIcon; } }
 
         private CalcWidget fForm;
 
@@ -95,13 +100,20 @@ namespace GKCalculatorPlugin
                 Logger.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;
             try
             {
                 fHost = host;
+
+                Assembly assembly = typeof(Plugin).Assembly;
+                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_calc.gif"))
+                {
+                    Image bmp = Image.FromStream(stmIcon);
+                    fIcon = new ImageHandler(bmp);
+                }
             }
             catch (Exception ex)
             {

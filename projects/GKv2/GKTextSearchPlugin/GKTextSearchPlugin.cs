@@ -62,6 +62,7 @@ namespace GKTextSearchPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
         public SearchManager SearchMan { get { return fSearchMan; } }
+        public IImage Icon { get { return null; } }
 
         internal TextSearchWin fForm;
 

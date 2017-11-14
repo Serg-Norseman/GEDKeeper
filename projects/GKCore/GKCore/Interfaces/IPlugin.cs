@@ -52,6 +52,8 @@ namespace GKCore.Interfaces
 
         ILangMan LangMan { get; }
 
+        IImage Icon { get; }
+
         void Execute();
         bool Startup(IHost host);
         bool Shutdown();

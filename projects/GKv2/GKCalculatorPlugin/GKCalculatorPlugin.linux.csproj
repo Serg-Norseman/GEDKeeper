@@ -7,7 +7,6 @@
     <ProjectGuid>{782E9338-ECA7-4095-9157-6CA003801F05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKCalculatorPlugin</RootNamespace>
     <AssemblyName>GKCalculatorPlugin</AssemblyName>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -118,11 +117,16 @@
     <None Include="GKCalculatorPlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Resources\icon_calc.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore.linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents.linux</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

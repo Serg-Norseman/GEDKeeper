@@ -21,7 +21,7 @@
 using System;
 using GKCore.Types;
 
-namespace GKCore.Interfaces
+namespace GKCore.Types
 {
     /// <summary>
     /// 

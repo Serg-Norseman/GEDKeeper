@@ -56,6 +56,7 @@ namespace GKTimeLinePlugin
         public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
+        public IImage Icon { get { return null; } }
 
         private TimeLineWidget fForm;
 

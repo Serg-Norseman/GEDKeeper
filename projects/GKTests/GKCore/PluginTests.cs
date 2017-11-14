@@ -54,6 +54,7 @@ namespace GKTests.GKCore
             public string DisplayName { get { return "PluginTest"; } }
             public IHost Host { get { return null; } }
             public ILangMan LangMan { get { return null; } }
+            public IImage Icon { get { return null; } }
 
             public void Execute() { }
             public void OnHostClosing(HostClosingEventArgs eventArgs) {}

@@ -5,7 +5,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>GKCore</RootNamespace>
     <AssemblyName>GKCore</AssemblyName>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -216,6 +215,8 @@
     <Compile Include="GKCore\Interfaces\ICommonDialog.cs" />
     <Compile Include="GKCore\Interfaces\ICulture.cs" />
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
+    <Compile Include="GKCore\Interfaces\IDialogReplacement.cs" />
+    <Compile Include="GKCore\Interfaces\IExporter.cs" />
     <Compile Include="GKCore\Interfaces\IGraphics.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
@@ -238,11 +239,11 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
-    <Compile Include="GKCore\Interfaces\MediaStore.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
+    <Compile Include="GKCore\Types\MediaStore.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />
@@ -367,7 +368,6 @@
     <Compile Include="GKCore\UIContracts\UIContracts.cs" />
   </ItemGroup>
   <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
       <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
@@ -376,4 +376,5 @@
       <LogicalName>Resources.fonts.FreeSansBold.ttf</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

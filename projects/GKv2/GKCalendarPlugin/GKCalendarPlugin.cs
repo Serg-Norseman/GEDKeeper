@@ -19,11 +19,14 @@
  */
 
 using System;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 using GKCommon;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]
@@ -72,10 +75,12 @@ namespace GKCalendarPlugin
         private string fDisplayName = "GKCalendarPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
+        private IImage fIcon;
 
         public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
+        public IImage Icon { get { return fIcon; } }
 
         private CalendarWidget fForm;
 
@@ -136,6 +141,13 @@ namespace GKCalendarPlugin
             try
             {
                 fHost = host;
+
+                Assembly assembly = typeof(Plugin).Assembly;
+                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_time.gif"))
+                {
+                    Image bmp = Image.FromStream(stmIcon);
+                    fIcon = new ImageHandler(bmp);
+                }
             }
             catch (Exception ex)
             {

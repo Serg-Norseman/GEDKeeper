@@ -580,6 +580,8 @@ namespace GKCommon.GEDCOM
             result.Add("_MDNA", new TagProperties("_MDNA", true,  true));
             result.Add("_YDNA", new TagProperties("_YDNA", true,  true));
 
+            //result.Add("_EXCM", new TagProperties("_EXCM", true,  true)); // Excommunication!
+
             return result;
         }
 
