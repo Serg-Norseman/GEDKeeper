@@ -242,6 +242,11 @@ namespace GKCore
             fAppSign = value;
         }
 
+        public static string GetAppPath()
+        {
+            return GKUtils.GetAppPath();
+        }
+
         public static string GetAppDataPathStatic()
         {
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +

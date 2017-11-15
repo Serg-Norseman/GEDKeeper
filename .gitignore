@@ -86,6 +86,9 @@ sonarqube.cmd
 /projects/GKv2/GKDataQualityPlugin/bin/
 /projects/GKv2/GKDataQualityPlugin/obj/
 
+/projects/GKv2/GKHistoryDataPlugin/bin/
+/projects/GKv2/GKHistoryDataPlugin/obj/
+
 
 /projects/GKv3/GEDKeeper3/bin/
 /projects/GKv3/GEDKeeper3/obj/

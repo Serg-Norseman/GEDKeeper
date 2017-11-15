@@ -40,6 +40,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+// TODO: other encodings
+// TODO: other eol
 namespace Externals
 {
     /// <summary>
