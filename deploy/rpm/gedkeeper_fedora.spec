@@ -1,7 +1,7 @@
 %global 	rname GEDKeeper
 %global 	summary GEDKeeper - program for work with personal genealogical database
 
-Name:		gedkeeper	
+Name:		gedkeeper
 Version:	2.12.0
 Release:	1
 Summary:	%{summary}
@@ -42,6 +42,7 @@ cp -r *.dll %{rname}2.exe \
 	samples \
 	scripts %{buildroot}%{_libdir}/%{name}
 ## E: zero-length
+
 rm -rf %{buildroot}%{_libdir}/%{name}/scripts/readme.txt
 
 %changelog
