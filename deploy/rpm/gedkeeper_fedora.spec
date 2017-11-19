@@ -3,15 +3,15 @@
 
 Name:		gedkeeper
 Version:	2.12.0
-Release:	1
+Release:	1{?dist}
 Summary:	%{summary}
 License:	GPLv3
 Group:		Applications/Editors
 Url:		https://github.com/serg-norseman/gedkeeper
-Source0:	%{url}/archive/v%{version}.tar.gz
+Source0:	%{url}/archive/v%{version}.tar.gz?/%{rname}-%{version}.tar.gz
 BuildArch:	noarch
 
-BuildRequires:	pkgconfig(mono)
+BuildRequires:	pkgconfig(mono) =< 4.6.0
 Requires:	pkgconfig(lua)
 %description
 %{summary}.
