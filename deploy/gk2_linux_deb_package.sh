@@ -9,13 +9,16 @@ PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
 
+rm -f ~/gedkeeper_2.12.0-1_all.deb
+rm -rf ~/$PACK_PATH
+
 # Create directories if missing
-mkdir -p $PACK_PATH
-mkdir -p $BIN_PATH
-mkdir -p $LIB_PATH
-mkdir -p $PACK_PATH/usr/share/applications
-mkdir -p $PACK_PATH/usr/share/pixmaps
-mkdir -p $PACK_PATH/usr/share/mime/packages
+mkdir -p ~/$PACK_PATH
+mkdir -p ~/$BIN_PATH
+mkdir -p ~/$LIB_PATH
+mkdir -p ~/$PACK_PATH/usr/share/applications
+mkdir -p ~/$PACK_PATH/usr/share/pixmaps
+mkdir -p ~/$PACK_PATH/usr/share/mime/packages
 
 cp -r $DEV_PATH/deploy/DEBIAN/ ~/$PACK_PATH/
 
@@ -51,32 +54,32 @@ cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
 cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 
-chmod -x $LIB_PATH/GKCore.dll
-chmod -x $LIB_PATH/GKComponents.dll
+chmod -x ~/$LIB_PATH/GKCore.dll
+chmod -x ~/$LIB_PATH/GKComponents.dll
 
-chmod -x $LIB_PATH/LinqBridge.dll
-chmod -x $LIB_PATH/NLog.dll
-chmod -x $LIB_PATH/nVLC.dll
-chmod -x $LIB_PATH/YamlSerializer.dll
+chmod -x ~/$LIB_PATH/LinqBridge.dll
+chmod -x ~/$LIB_PATH/NLog.dll
+chmod -x ~/$LIB_PATH/nVLC.dll
+chmod -x ~/$LIB_PATH/YamlSerializer.dll
 
-chmod -x $LIB_PATH/ArborGVT.dll
-chmod -x $LIB_PATH/DotNetRtfWriter.dll
-chmod -x $LIB_PATH/ExcelLibrary.dll
-chmod -x $LIB_PATH/itextsharp.dll
-chmod -x $LIB_PATH/KopiLua.dll
-chmod -x $LIB_PATH/NLua.dll
-chmod -x $LIB_PATH/ZedGraph.dll
-chmod -x $LIB_PATH/LICENSE
+chmod -x ~/$LIB_PATH/ArborGVT.dll
+chmod -x ~/$LIB_PATH/DotNetRtfWriter.dll
+chmod -x ~/$LIB_PATH/ExcelLibrary.dll
+chmod -x ~/$LIB_PATH/itextsharp.dll
+chmod -x ~/$LIB_PATH/KopiLua.dll
+chmod -x ~/$LIB_PATH/NLua.dll
+chmod -x ~/$LIB_PATH/ZedGraph.dll
+chmod -x ~/$LIB_PATH/LICENSE
 
-find $LIB_PATH/locales -type f -exec chmod -x '{}' \;
-find $LIB_PATH/plugins -type f -exec chmod -x '{}' \;
-find $LIB_PATH/scripts -type f -exec chmod -x '{}' \;
-find $LIB_PATH/samples -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/locales -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/plugins -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/scripts -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/samples -type f -exec chmod -x '{}' \;
 
-chmod -x $LIB_PATH/gedkeeper.png
-chmod -x $PACK_PATH/usr/share/pixmaps/gedkeeper.png
-chmod -x $PACK_PATH/usr/share/applications/gedkeeper.desktop
-chmod -x $PACK_PATH/usr/share/mime/packages/application-x-gedkeeper.xml
+chmod -x ~/$LIB_PATH/gedkeeper.png
+chmod -x ~/$PACK_PATH/usr/share/pixmaps/gedkeeper.png
+chmod -x ~/$PACK_PATH/usr/share/applications/gedkeeper.desktop
+chmod -x ~/$PACK_PATH/usr/share/mime/packages/application-x-gedkeeper.xml
 
 cd ~/$PACK_PATH
 #md5deep -r -l usr > DEBIAN/md5sums
