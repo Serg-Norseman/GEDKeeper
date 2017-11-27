@@ -549,7 +549,8 @@
             this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGeocoder.Items.AddRange(new object[] {
                                     "Google",
-                                    "Yandex"});
+                                    "Yandex",
+                                    "OSM"});
             this.cmbGeocoder.Location = new System.Drawing.Point(470, 425);
             this.cmbGeocoder.Margin = new System.Windows.Forms.Padding(2);
             this.cmbGeocoder.Name = "cmbGeocoder";

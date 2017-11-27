@@ -211,6 +211,7 @@
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
     <Compile Include="GKCommon\YamlHelper.cs" />
+    <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
     <Compile Include="GKCore\Interfaces\IBaseWindow.cs" />

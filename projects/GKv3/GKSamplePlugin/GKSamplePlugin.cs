@@ -50,6 +50,7 @@ namespace GKSamplePlugin
         public string DisplayName { get { return DISPLAY_NAME; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
+        public IImage Icon { get { return null; } }
 
         public void Execute()
         {

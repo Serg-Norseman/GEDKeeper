@@ -83,6 +83,9 @@ namespace GKCore.Geocoding
                 case "Yandex":
                     return new YandexGeocoder();
 
+                case "OSM":
+                    return new OSMGeocoder();
+
                 default:
                     return new GoogleGeocoder();
             }

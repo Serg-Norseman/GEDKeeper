@@ -236,6 +236,7 @@ namespace GKUI.Forms
             cmbGeocoder.ReadOnly = true;
             cmbGeocoder.Items.Add("Google");
             cmbGeocoder.Items.Add("Yandex");
+            cmbGeocoder.Items.Add("OSM");
 
             lblLanguage = new Label();
             lblLanguage.Text = "lblLanguage";

@@ -27,6 +27,9 @@ rmdir .\GEDKeeper3.WinForms\obj /s /q
 rmdir .\GEDKeeper3.Wpf\bin /s /q
 rmdir .\GEDKeeper3.Wpf\obj /s /q
 
+rmdir .\GKBenchmarks\bin /s /q
+rmdir .\GKBenchmarks\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\GKSamplePlugin\bin /s /q
