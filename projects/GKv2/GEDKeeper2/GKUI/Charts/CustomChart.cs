@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -182,7 +183,7 @@ namespace GKUI.Charts
         #region Print and snaphots support
 
         public abstract ExtSize GetImageSize();
-        public abstract void RenderStaticImage(Graphics gfx, bool printer);
+        public abstract void RenderStaticImage(Graphics gfx, OutputType outputType);
 
         public bool IsLandscape()
         {
@@ -201,10 +202,15 @@ namespace GKUI.Charts
             }
 
             using (Graphics gfx = Graphics.FromImage(image)) {
-                RenderStaticImage(gfx, true);
+                RenderStaticImage(gfx, OutputType.Printer);
             }
 
             return new ImageHandler(image);
+        }
+
+        public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            // dummy
         }
 
         /* TODO(zsv): Need to find an appropriate icon in the general style
@@ -214,6 +220,21 @@ namespace GKUI.Charts
             string ext = SysUtils.GetFileExtension(fileName);
 
             ExtSize imageSize = GetImageSize();
+
+            if (ext == ".svg") {
+                try {
+                    SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
+
+                    using (var gfx = CreateGraphics()) {
+                        RenderStaticImage(gfx, OutputType.SVG);
+                    }
+                } finally {
+                    SetSVGMode(false, "", 0, 0);
+                }
+
+                return;
+            }
+
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
             {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
@@ -243,7 +264,7 @@ namespace GKUI.Charts
                 try
                 {
                     using (Graphics gfx = Graphics.FromImage(pic)) {
-                        RenderStaticImage(gfx, false);
+                        RenderStaticImage(gfx, OutputType.StdFile);
                     }
 
                     pic.Save(fileName, imFmt);

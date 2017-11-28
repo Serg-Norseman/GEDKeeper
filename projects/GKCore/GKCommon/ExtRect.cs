@@ -115,6 +115,11 @@ namespace GKCommon
         public float Right;
         public float Bottom;
 
+        public static implicit operator ExtRectF(ExtRect rt)
+        {
+            return Create(rt.Left, rt.Top, rt.Right, rt.Bottom);
+        }
+
         public static ExtRectF Create(float left, float top, float right, float bottom)
         {
             ExtRectF result;

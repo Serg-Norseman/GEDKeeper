@@ -36,6 +36,7 @@ namespace GKCore.Interfaces
         byte GetR();
         byte GetG();
         byte GetB();
+        byte GetA();
         bool IsTransparent();
     }
 
@@ -102,5 +103,8 @@ namespace GKCore.Interfaces
         string FontFamilyName { get; }
         string Name { get; }
         float Size { get; }
+
+        //int Ascent { get; }
+        //int Descent { get; }
     }
 }

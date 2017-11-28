@@ -80,6 +80,11 @@ namespace GKUI.Components
             return Handle.B;
         }
 
+        public byte GetA()
+        {
+            return Handle.A;
+        }
+
         public bool IsTransparent()
         {
             return (Handle == Color.Transparent);

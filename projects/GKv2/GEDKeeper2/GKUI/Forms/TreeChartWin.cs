@@ -222,9 +222,11 @@ namespace GKUI.Forms
             fTreeBox.Select();
         }
 
+        // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
+            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 fTreeBox.SaveSnapshot(fileName);
             }

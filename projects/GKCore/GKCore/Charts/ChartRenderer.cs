@@ -38,6 +38,14 @@ namespace GKCore.Charts
         bmAny
     }
 
+    public enum OutputType
+    {
+        Screen,
+        Printer,
+        StdFile,
+        SVG
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -66,6 +74,11 @@ namespace GKCore.Charts
 
         protected ChartRenderer()
         {
+        }
+
+        public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            // dummy
         }
 
         public static IColor GetColor(int argb)

@@ -1046,9 +1046,9 @@ namespace GKUI.Charts
             return new ExtSize(fModel.ImageWidth, fModel.ImageHeight);
         }
 
-        public override void RenderStaticImage(Graphics gfx, bool printer)
+        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
         {
-            BackgroundMode bgMode = (printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
+            BackgroundMode bgMode = (outputType == OutputType.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
 
             fRenderer.SetTarget(gfx, false);
             RenderStatic(bgMode);
@@ -1061,5 +1061,10 @@ namespace GKUI.Charts
         }
 
         #endregion
+
+        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            fRenderer.SetSVGMode(active, svgFileName, width, height);
+        }
     }
 }

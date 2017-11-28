@@ -457,7 +457,7 @@ namespace GKUI.Charts
             return new ExtSize((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
-        public override void RenderStaticImage(Graphics gfx, bool printer)
+        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
         {
             Render(gfx, RenderTarget.rtNonScreenCanvas);
         }
