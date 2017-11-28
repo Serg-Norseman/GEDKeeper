@@ -1,5 +1,9 @@
 
 ## ??.??.2017 [v2.13.0]
+- Added support for saving a snapshot of a tree in SVG format.
+- Rpm-packages for Fedora / Rosa Linux are added.
+- Added a new geocoder (OSM).
+- Added a new plugin "Data Quality".
 - Restored supporting of Ansel GEDCOM encoding.
 - Added a new plugin "WordsCloud".
 - Fixed the problem of extra lines in family records while saving
