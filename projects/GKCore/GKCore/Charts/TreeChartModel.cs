@@ -511,6 +511,25 @@ namespace GKCore.Charts
                     if (!CheckDescendantFilter(person, level))
                         return null;
 
+                    // Kevin Routley (aka fire-eggs, aka KBR). Partially address issue #147.
+                    // Here, multiple instances of the same person _in_a_generation_ are
+                    // combined together. The subsequent changes to the drawing code don't
+                    // cope with connecting people across generations.
+                    if (person.SpouseToFamilyLinks.Count == 1 &&
+                        fPreparedFamilies.IndexOf(person.SpouseToFamilyLinks[0].Family.XRef) >= 0)
+                    {
+                        for (int i = 0; i < fPersons.Count; i++)
+                        {
+                            TreeChartPerson p = fPersons[i];
+                            if (p != null && p.Rec != null && p.Rec.XRef == person.XRef && p.Generation == level)
+                            {
+                                p.Parent = parent;
+                                parent.AddChild(p);
+                                return null;
+                            }
+                        }
+                    }
+
                     TreeChartPerson res = AddDescPerson(parent, person, false, level);
                     result = res;
 
@@ -1014,6 +1033,55 @@ namespace GKCore.Charts
             if (person.Sex == GEDCOMSex.svNone || person.Sex == GEDCOMSex.svUndetermined) {
                 fEdges[gen] = person.Rect.Right;
             }
+
+            // Kevin Routley (aka fire-eggs, aka KBR). Partially address issue #147.
+            // As a result of combining duplicate people together, there may be overlapping
+            // boxes. Here, these overlaps are corrected. NOTE: duplicate people _across_generations_
+            // have not been combined as no adjustment is being made to shift a box down as 
+            // would be necessary.
+            FixOverlap(person);
+        }
+
+        private void AdjustChildren(TreeChartPerson person, int offset)
+        {
+            // Kevin Routley (aka fire-eggs, aka KBR). Partially address issue #147.
+            // a person has been shifted because of collision. Recursively adjust 
+            // _descendants_ of that person
+            if (person.GetChildsCount() < 1)
+                return;
+            int cMax = person.GetChildsCount();
+            for (int i = 0; i < cMax; i++)
+            {
+                var pp = person.GetChild(i);
+                pp.PtX += offset;
+                AdjustChildren(pp, offset);
+            }
+        }
+
+        private int FixOverlap(TreeChartPerson person)
+        {
+            // Kevin Routley (aka fire-eggs, aka KBR). Partially address issue #147.
+            // Check for, and correct, collisions of boxes in this person's 
+            // generational row.
+            int shiftAmount = 0;
+            for (int m = 0; m <= fPersons.Count; m++)
+            {
+                if (fPersons[m].Generation != person.Generation)
+                    continue;
+                if (person.Rec == null || fPersons[m].Rec.XRef == person.Rec.XRef)
+                    break;
+
+                if (!person.Rect.IntersectsWith(fPersons[m].Rect))
+                    continue; // No overlap
+
+                int thisShift = fPersons[m].Rect.Right + 25 - person.Rect.Left; // Add a little extra spacing
+                ShiftDesc(person, thisShift, true); // Note that ShiftDesc moves this person and ANCESTORS; descendants need to be fixed
+                shiftAmount += thisShift;
+            }
+
+            if (shiftAmount != 0)
+                AdjustChildren(person, shiftAmount);
+            return shiftAmount;
         }
 
         private void RecalcDescendantsChart(bool predef)
