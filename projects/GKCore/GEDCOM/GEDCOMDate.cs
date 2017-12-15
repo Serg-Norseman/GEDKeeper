@@ -763,6 +763,7 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(dateStr)) return null;
 
+            if (dateStr.IndexOf("-") >= 0) dateStr = dateStr.Replace("-", ".");
             if (dateStr.IndexOf("/") >= 0) dateStr = dateStr.Replace("/", ".");
             if (dateStr.IndexOf("_") >= 0) dateStr = dateStr.Replace("_", " ");
 

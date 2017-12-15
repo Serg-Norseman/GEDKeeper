@@ -78,6 +78,11 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
         }
 
+        public GEDCOMLanguage Language
+        {
+            get { return TagClass("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
+        }
+
         protected override string GetStringValue()
         {
             // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
@@ -100,7 +105,8 @@ namespace GKCommon.GEDCOM
             fLastPart = "";
 
             string sv = strValue;
-            if (string.IsNullOrEmpty(sv)) return string.Empty;
+            if (string.IsNullOrEmpty(sv))
+                return string.Empty;
 
             int p = sv.IndexOf('/');
             if (p < 0) {
@@ -112,12 +118,14 @@ namespace GKCommon.GEDCOM
             fFirstPart = GEDCOMUtils.TrimRight(fFirstPart);
 
             int p2 = sv.IndexOf('/', p + 1);
-            if (p2 < 0) return string.Empty;
+            if (p2 < 0)
+                return string.Empty;
 
             p++;
             fSurname = sv.Substring(p, p2 - p).Trim();
 
-            if (p2 >= sv.Length - 1) return string.Empty;
+            if (p2 >= sv.Length - 1)
+                return string.Empty;
 
             fLastPart = GEDCOMUtils.TrimLeft(sv.Substring(p2 + 1));
             return string.Empty;
@@ -145,8 +153,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fPieces.Dispose();
             }
             base.Dispose(disposing);
@@ -156,12 +163,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "TYPE" || tagName == "FONE" || tagName == "ROMN")
-            {
+            if (tagName == "TYPE" || tagName == "FONE" || tagName == "ROMN" || tagName == "_LANG") {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-            else
-            {
+            } else {
                 result = fPieces.AddTag(tagName, tagValue, tagConstructor);
             }
 
@@ -191,7 +195,8 @@ namespace GKCommon.GEDCOM
             fSurname = "";
             fLastPart = "";
 
-            if (fPieces != null) fPieces.Clear();
+            if (fPieces != null)
+                fPieces.Clear();
         }
 
         public override bool IsEmpty()
@@ -232,16 +237,17 @@ namespace GKCommon.GEDCOM
 
         public float IsMatch(GEDCOMPersonalName otherName, bool onlyFirstPart)
         {
-            if (otherName == null) return 0.0f;
+            if (otherName == null)
+                return 0.0f;
 
             int parts = 0;
             float matches = 0;
             bool surnameMatched = false;
 
-            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(fFirstPart)))
-            {
+            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(fFirstPart))) {
                 parts++;
-                if (otherName.FirstPart == fFirstPart) matches++;
+                if (otherName.FirstPart == fFirstPart)
+                    matches++;
             }
 
             if (!onlyFirstPart) {
@@ -266,10 +272,10 @@ namespace GKCommon.GEDCOM
                 surnameMatched = true;
             }
 
-            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(fPieces.Nickname)))
-            {
+            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(fPieces.Nickname))) {
                 parts++;
-                if (otherName.Pieces.Nickname == fPieces.Nickname) matches++;
+                if (otherName.Pieces.Nickname == fPieces.Nickname)
+                    matches++;
             }
 
             float match = (parts == 0) ? 0.0f : (matches / parts) * 100.0f;
@@ -284,7 +290,8 @@ namespace GKCommon.GEDCOM
             return match;
         }
 
-        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            : base(owner, parent, tagName, tagValue)
         {
         }
 

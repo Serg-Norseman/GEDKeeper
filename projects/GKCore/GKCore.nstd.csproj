@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+		<AssemblyName>GKCore</AssemblyName>
+		<RootNamespace />
+		<Company />
+		<Product>GEDKeeper</Product>
+		<Copyright>Copyright © 2014-2017 Sergey V. Zhdanovskih</Copyright>
+		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+		<Reference Include="System.Runtime.Remoting" />
+		<Reference Include="DotNetRtfWriter">
+			<HintPath>libs\DotNetRtfWriter.dll</HintPath>
+		</Reference>
+		<Reference Include="ExcelLibrary">
+			<HintPath>libs\ExcelLibrary.dll</HintPath>
+		</Reference>
+		<Reference Include="itextsharp">
+			<HintPath>libs\itextsharp.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+</Project>

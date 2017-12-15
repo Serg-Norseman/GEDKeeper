@@ -53,6 +53,8 @@ namespace GKTests.GKCommon
             parser.ParseText(chunksList, sample);
 
             Assert.IsFalse(chunksList[0].HasCoord(5, 5, 0, 0));
+
+            Assert.IsFalse(chunksList[0].HasCoord(5, 5));
         }
     }
 }

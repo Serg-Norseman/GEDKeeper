@@ -19,7 +19,6 @@
  */
 
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace GKCommon
 {
@@ -275,11 +274,6 @@ namespace GKCommon
             this.Y += dy;
         }
 
-        public void Offset(ExtPoint p)
-        {
-            Offset(p.X, p.Y);
-        }
-
         public override string ToString()
         {
             return string.Concat(new string[]
@@ -367,6 +361,12 @@ namespace GKCommon
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public void Offset(float dx, float dy)
+        {
+            this.X += dx;
+            this.Y += dy;
         }
 
         public override string ToString()

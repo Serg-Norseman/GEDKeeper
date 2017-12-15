@@ -277,6 +277,7 @@
 		    // 
 		    this.txtEventDate1.AllowDrop = true;
 		    this.txtEventDate1.BackColor = System.Drawing.SystemColors.Window;
+		    this.txtEventDate1.Culture = new System.Globalization.CultureInfo("");
 		    this.txtEventDate1.Location = new System.Drawing.Point(190, 204);
 		    this.txtEventDate1.Mask = "00/00/0000";
 		    this.txtEventDate1.Name = "txtEventDate1";
@@ -289,6 +290,7 @@
 		    // txtEventDate2
 		    // 
 		    this.txtEventDate2.AllowDrop = true;
+		    this.txtEventDate2.Culture = new System.Globalization.CultureInfo("");
 		    this.txtEventDate2.Location = new System.Drawing.Point(400, 204);
 		    this.txtEventDate2.Mask = "00/00/0000";
 		    this.txtEventDate2.Name = "txtEventDate2";
@@ -391,6 +393,7 @@
 		    this.pageCommon.ResumeLayout(false);
 		    this.pageCommon.PerformLayout();
 		    this.ResumeLayout(false);
+
 		}
 		private System.Windows.Forms.ToolTip toolTip1;
 	}

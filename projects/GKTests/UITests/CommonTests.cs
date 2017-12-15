@@ -53,6 +53,29 @@ namespace GKTests.UITests
             color = AppHost.GfxProvider.CreateColor(50, 50, 50);
             chk_res = AppHost.GfxProvider.CreateColor(75, 75, 75);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Lighter(0.5f)).Handle);
+            Assert.AreEqual(75, chk_res.GetR());
+            Assert.AreEqual(75, chk_res.GetG());
+            Assert.AreEqual(75, chk_res.GetB());
+            Assert.AreEqual(255, chk_res.GetA());
+            Assert.IsFalse(chk_res.IsTransparent());
+            Assert.AreEqual("ff4b4b4b", chk_res.GetName());
+        }
+
+        [Test]
+        public void Test_Brush()
+        {
+            var color = AppHost.GfxProvider.CreateColor(50, 50, 50);
+            var brush = AppHost.GfxProvider.CreateSolidBrush(color);
+            Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)brush.Color).Handle);
+        }
+
+        [Test]
+        public void Test_Pen()
+        {
+            var color = AppHost.GfxProvider.CreateColor(50, 50, 50);
+            var pen = AppHost.GfxProvider.CreatePen(color, 1.0f);
+            Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)pen.Color).Handle);
+            Assert.AreEqual(1.0f, pen.Width);
         }
     }
 }

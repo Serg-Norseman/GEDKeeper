@@ -1527,9 +1527,22 @@ namespace GKTests.GEDCOM
 
             persName.Pack();
 
+            //
+
+            Assert.AreEqual(GEDCOMLanguageID.Unknown, persName.Language.Value);
+            persName.Language.Value = GEDCOMLanguageID.English;
+            Assert.AreEqual(GEDCOMLanguageID.English, persName.Language.Value);
+            persName.Language.Value = GEDCOMLanguageID.Unknown;
+            Assert.AreEqual(GEDCOMLanguageID.Unknown, persName.Language.Value);
+            persName.Language.Value = GEDCOMLanguageID.Polish;
+            Assert.AreEqual(GEDCOMLanguageID.Polish, persName.Language.Value);
+
+            //
+
             string buf = TagStreamTest(persName);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                             "2 TYPE birth\r\n"+
+                            "2 _LANG Polish\r\n"+ // extension
                             "2 SURN Surname\r\n"+
                             "2 GIVN Given\r\n"+
                             "2 _PATN PatronymicName\r\n"+
@@ -1540,6 +1553,9 @@ namespace GKTests.GEDCOM
                             "2 _MARN MarriedName\r\n"+
                             "2 _RELN ReligiousName\r\n"+
                             "2 _CENN CensusName\r\n", buf);
+
+            persName.Language.Value = GEDCOMLanguageID.Unknown;
+            persName.Pack();
 
             using (GEDCOMPersonalName nameCopy = new GEDCOMPersonalName(iRec.Owner, iRec, "", "")) {
                 Assert.Throws(typeof(ArgumentException), () => { nameCopy.Assign(null); });

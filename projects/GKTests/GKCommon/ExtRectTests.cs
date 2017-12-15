@@ -108,6 +108,62 @@ namespace GKTests.GKCommon
             Assert.IsTrue(rt.IsEmpty());
 
             Assert.IsFalse(rt.Contains(5, 5));
+
+            // implicit
+            ExtRectF rtf = ExtRect.CreateBounds(11, 11, 20, 20);
+            Assert.AreEqual("{X=11,Y=11,Width=20,Height=20}", rtf.ToString());
+        }
+
+
+        [Test]
+        public void Test_ExtSize()
+        {
+            ExtSize sz = new ExtSize(9, 9);
+            Assert.AreEqual(9, sz.Width);
+            Assert.AreEqual(9, sz.Height);
+            Assert.IsFalse(sz.IsEmpty);
+            Assert.AreEqual("{Width=9, Height=9}", sz.ToString());
+        }
+
+        [Test]
+        public void Test_ExtSizeF()
+        {
+            ExtSizeF sz = new ExtSizeF(11, 11);
+            Assert.AreEqual(11, sz.Width);
+            Assert.AreEqual(11, sz.Height);
+            Assert.IsFalse(sz.IsEmpty);
+            Assert.AreEqual("{Width=11, Height=11}", sz.ToString());
+        }
+
+
+        [Test]
+        public void Test_ExtPoint()
+        {
+            var pt = new ExtPoint(9, 9);
+            Assert.AreEqual(9, pt.X);
+            Assert.AreEqual(9, pt.Y);
+
+            pt.Offset(2, 3);
+            Assert.AreEqual(11, pt.X);
+            Assert.AreEqual(12, pt.Y);
+
+            Assert.IsFalse(pt.IsEmpty);
+            Assert.AreEqual("{X=11,Y=12}", pt.ToString());
+        }
+
+        [Test]
+        public void Test_ExtPointF()
+        {
+            var pt = new ExtPointF(11, 11);
+            Assert.AreEqual(11, pt.X);
+            Assert.AreEqual(11, pt.Y);
+
+            pt.Offset(2, 3);
+            Assert.AreEqual(13, pt.X);
+            Assert.AreEqual(14, pt.Y);
+
+            Assert.IsFalse(pt.IsEmpty);
+            Assert.AreEqual("{X=13, Y=14}", pt.ToString());
         }
     }
 }

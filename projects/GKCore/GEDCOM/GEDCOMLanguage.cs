@@ -56,8 +56,7 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            if (!string.IsNullOrEmpty(strValue))
-            {
+            if (!string.IsNullOrEmpty(strValue)) {
                 fValue = GEDCOMLanguageEnum.Instance.GetEnumValue(strValue);
             }
 
@@ -75,7 +74,8 @@ namespace GKCommon.GEDCOM
             SetName("LANG");
         }
 
-        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            : base(owner, parent, tagName, tagValue)
         {
         }
 

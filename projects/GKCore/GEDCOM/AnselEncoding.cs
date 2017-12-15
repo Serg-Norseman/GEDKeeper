@@ -70,31 +70,35 @@ namespace GKCommon.GEDCOM
 		{
 		}
 
+		#if !NETSTANDARD1_6
 		public override string BodyName
 		{
-			get { return "ansel"; }
+		    get { return "ansel"; }
 		}
 		public override string HeaderName
 		{
-			get { return "ansel"; }	
-		}
-		public override string WebName
-		{
-			get { return "ansel"; }
-		}
-		public override string EncodingName
-		{
-			get { return "ANSEL"; }
+		    get { return "ansel"; }
 		}
 		public override bool IsMailNewsDisplay
 		{
-			get { return false; }
+		    get { return false; }
 		}
 		public override bool IsMailNewsSave
 		{
-			get { return false; }
+		    get { return false; }
 		}
-		
+		#endif
+
+		public override string WebName
+		{
+		    get { return "ansel"; }
+		}
+
+		public override string EncodingName
+		{
+		    get { return "ANSEL"; }
+		}
+
 		private static int GetMarc8Index(int c)
 		{
 			int i = 0;

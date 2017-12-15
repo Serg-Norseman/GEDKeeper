@@ -660,16 +660,17 @@ namespace GKCommon.GEDCOM
         public void testCreateByFormattedStr_exception()
         {
             Assert.Throws(typeof(GEDCOMDateException), () => {
-                GEDCOMDate.CreateByFormattedStr("1.2", true);
-            });
+                              GEDCOMDate.CreateByFormattedStr("1.2", true);
+                          });
         }
 
         [Test]
-        public void testgetUDNByFormattedStr_exception()
+        public void testgetUDNByFormattedStr2()
         {
-            Assert.Throws(typeof(GEDCOMDateException), () => {
-                GEDCOMDate.GetUDNByFormattedStr("20-12-1980", GEDCOMCalendar.dcGregorian, true);
-            });
+            //Assert.Throws(typeof(GEDCOMDateException), () => {
+            var dtx = GEDCOMDate.GetUDNByFormattedStr("20-12-1980", GEDCOMCalendar.dcGregorian, true);
+            Assert.AreEqual("1980/12/20", dtx.ToString());
+            //});
         }
 
         /*

@@ -58,12 +58,21 @@ namespace GKTests.GKComponents
         }
 
         [Test]
+        public void TestNamedRegion()
+        {
+            var region = new NamedRegion("test", RectangleF.Empty);
+            Assert.AreEqual("test", region.Name);
+        }
+
+        [Test]
         public void TestMethod()
         {
             GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(ImageViewTests).Assembly);
             Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
 
             fImageBox.BeginUpdate();
+            fImageBox.Image = null;
+            Assert.AreEqual(null, fImageBox.Image);
             fImageBox.Image = img;
             Assert.AreEqual(img, fImageBox.Image);
             fImageBox.EndUpdate();
@@ -116,6 +125,11 @@ namespace GKTests.GKComponents
             Assert.AreEqual(false, fImageBox.IsSelecting);
             fImageBox.IsSelecting = true;
             Assert.AreEqual(true, fImageBox.IsSelecting);
+
+            fImageBox.ShowNamedRegionTips = false;
+            Assert.AreEqual(false, fImageBox.ShowNamedRegionTips);
+            fImageBox.ShowNamedRegionTips = true;
+            Assert.AreEqual(true, fImageBox.ShowNamedRegionTips);
 
             fImageBox.ActualSize();
             fImageBox.CenterAt(100, 100);

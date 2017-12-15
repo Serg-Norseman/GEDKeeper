@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using GKCommon;
 using GKCore.Interfaces;
@@ -31,9 +32,18 @@ namespace GKTests.GKCommon
         [Test]
         public void Test_General()
         {
+            Assert.Throws(typeof(ArgumentNullException), () => { new ObjHandler(null); });
+
             var handler = new ColorHandler(Color.PaleVioletRed);
             Assert.IsNotNull(handler);
             Assert.AreEqual(Color.PaleVioletRed, handler.Handle);
+        }
+
+        private sealed class ObjHandler: TypeHandler<Object>
+        {
+            public ObjHandler(Object handle) : base(handle)
+            {
+            }
         }
 
         private sealed class ColorHandler: TypeHandler<Color>, IColor
