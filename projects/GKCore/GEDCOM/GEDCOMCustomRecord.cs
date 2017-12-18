@@ -38,7 +38,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        protected override void SaveValueToStream(StreamWriter stream)
+        protected internal override void SaveValueToStream(StreamWriter stream)
         {
             string str = Level.ToString();
 
