@@ -491,26 +491,32 @@ namespace GKCommon
         private static int ConvertIntNumber(char[] buf, int first, int last, byte numBase)
         {
             int fvalue = 0;
-
-            while (first < last)
+            try
             {
-                char ch = buf[first];
-                byte c = (byte)((int)ch - 48);
-                if (c > 9)
+                while (first < last)
                 {
-                    c -= 7;
+                    char ch = buf[first];
+                    byte c = (byte)((int)ch - 48);
+                    if (c > 9)
+                    {
+                        c -= 7;
 
-                    if (c > 15) {
-                        c -= 32;
+                        if (c > 15) {
+                            c -= 32;
+                        }
                     }
-                }
 
-                if (c >= numBase) {
-                    break;
-                }
+                    if (c >= numBase) {
+                        break;
+                    }
 
-                fvalue = (fvalue * numBase + c);
-                first++;
+                    fvalue = (fvalue * numBase + c);
+                    first++;
+                }
+            }
+            catch (OverflowException)
+            {
+                // KBR Parser blows up when trying to parse a large number
             }
 
             return fvalue;
