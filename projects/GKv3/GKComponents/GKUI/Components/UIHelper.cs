@@ -475,5 +475,10 @@ namespace GKUI.Components
                 fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
             }
         }
+
+        public static void SortItems(this ComboBox comboBox)
+        {
+            comboBox.Items.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
+        }
     }
 }

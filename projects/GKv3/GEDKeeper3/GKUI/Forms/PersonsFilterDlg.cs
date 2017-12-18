@@ -105,14 +105,17 @@ namespace GKUI.Forms
 
             txtName.Items.Clear();
             txtName.Items.AddRange(GKComboItem.Convert(options.NameFilters.ToArray()));
+            txtName.SortItems();
             txtName.Items.Insert(0, new GKComboItem("*"));
 
             cmbResidence.Items.Clear();
             cmbResidence.Items.AddRange(GKComboItem.Convert(options.ResidenceFilters.ToArray()));
+            cmbResidence.SortItems();
             cmbResidence.Items.Insert(0, new GKComboItem("*"));
 
             cmbEventVal.Items.Clear();
             cmbEventVal.Items.AddRange(GKComboItem.Convert(options.EventFilters.ToArray()));
+            cmbEventVal.SortItems();
             cmbEventVal.Items.Insert(0, new GKComboItem("*"));
 
             int lifeSel;
@@ -163,7 +166,6 @@ namespace GKUI.Forms
             GEDCOMTree tree = Base.Context.Tree;
 
             cmbGroup.Items.Clear();
-            //cmbGroup.Sorted = true;
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = tree[i];
@@ -171,7 +173,7 @@ namespace GKUI.Forms
                     cmbGroup.Items.Add(new GKComboItem((rec as GEDCOMGroupRecord).GroupName, rec));
                 }
             }
-            //cmbGroup.Sorted = false;
+            cmbGroup.SortItems();
             cmbGroup.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
             cmbGroup.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
             cmbGroup.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
@@ -183,14 +185,13 @@ namespace GKUI.Forms
             }
 
             cmbSource.Items.Clear();
-            //cmbSource.Sorted = true;
             for (int i = 0; i < tree.RecordsCount; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMSourceRecord) {
                     cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
                 }
             }
-            //cmbSource.Sorted = false;
+            cmbSource.SortItems();
             cmbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
             cmbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
             cmbSource.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));

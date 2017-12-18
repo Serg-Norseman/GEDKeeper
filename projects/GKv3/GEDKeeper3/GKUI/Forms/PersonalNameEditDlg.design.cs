@@ -26,6 +26,8 @@ namespace GKUI.Forms
         private Label lblName;
         private Button btnAccept;
         private Label lblSurname;
+        private ComboBox cmbLanguage;
+        private Label lblLanguage;
 
         private void InitializeComponent()
         {
@@ -83,6 +85,12 @@ namespace GKUI.Forms
             cmbNameType = new ComboBox();
             cmbNameType.ReadOnly = true;
 
+            lblLanguage = new Label();
+            lblLanguage.Text = "lblLanguage";
+
+            cmbLanguage = new ComboBox();
+            cmbLanguage.ReadOnly = true;
+
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
             btnAccept.Size = new Size(130, 26);
@@ -131,6 +139,12 @@ namespace GKUI.Forms
                     new TableRow {
                         //ScaleHeight = true,
                         Cells = { cmbNameType, null }
+                    },
+                    new TableRow {
+                        Cells = { lblLanguage, null }
+                    },
+                    new TableRow {
+                        Cells = { cmbLanguage, null }
                     },
                     null
                 }

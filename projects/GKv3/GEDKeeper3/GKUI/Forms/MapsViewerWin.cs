@@ -97,7 +97,7 @@ namespace GKUI.Forms
                     }
 
                     fBaseRoot.Expanded = true; //ExpandAll();
-                    //cmbPersons.Sorted = true;
+                    cmbPersons.SortItems();
 
                     btnSelectPlaces.Enabled = true;
                 }

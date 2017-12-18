@@ -84,13 +84,11 @@ namespace GKUI.Forms
             lblNameMask.Text = "lblNameMask";
 
             txtName = new ComboBox();
-            //txtName.Sorted = true;
 
             lblPlaceMask = new Label();
             lblPlaceMask.Text = "lblPlaceMask";
 
             cmbResidence = new ComboBox();
-            //cmbResidence.Sorted = true;
 
             lblGroups = new Label();
             lblGroups.Text = "lblGroups";
@@ -102,7 +100,6 @@ namespace GKUI.Forms
             lblEventsMask.Text = "lblEventsMask";
 
             cmbEventVal = new ComboBox();
-            //cmbEventVal.Sorted = true;
 
             lblSources = new Label();
             lblSources.Text = "lblSources";

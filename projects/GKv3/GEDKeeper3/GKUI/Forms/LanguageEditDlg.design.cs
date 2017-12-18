@@ -10,7 +10,7 @@ namespace GKUI.Forms
         private Label lblLanguage;
         private Button btnCancel;
         private Button btnAccept;
-        
+
         private void InitializeComponent()
         {
             SuspendLayout();
@@ -34,7 +34,6 @@ namespace GKUI.Forms
 
             cmbLanguage = new ComboBox();
             cmbLanguage.ReadOnly = true;
-            //cmbLanguage.Sorted = true;
 
             Content = new DefTableLayout {
                 Rows = {

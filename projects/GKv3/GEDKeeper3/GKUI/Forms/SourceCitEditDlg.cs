@@ -46,8 +46,7 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 int idx = fSourcesList.IndexOf(cmbSource.Text);
                 GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
@@ -60,9 +59,7 @@ namespace GKUI.Forms
                     fSourceCitation.CertaintyAssessment = txtCertainty.SelectedIndex;
                     DialogResult = DialogResult.Ok;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -72,8 +69,9 @@ namespace GKUI.Forms
         {
             object[] anArgs = new object[0];
             GEDCOMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
-            if (src == null) return;
-            
+            if (src == null)
+                return;
+
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
             cmbSource.Text = src.FiledByEntry;
@@ -93,8 +91,7 @@ namespace GKUI.Forms
         private void RefreshSourcesList(string filter)
         {
             //cmbSource.BeginUpdate();
-            try
-            {
+            try {
                 cmbSource.Items.Clear();
 
                 string flt = "*" + filter + "*";
@@ -103,14 +100,13 @@ namespace GKUI.Forms
                 for (int i = 0; i < num; i++) {
                     string st = fSourcesList[i];
 
-                    if (filter == "" || SysUtils.MatchesMask(st, flt))
-                    {
+                    if (filter == "" || SysUtils.MatchesMask(st, flt)) {
                         cmbSource.Items.Add(new GKComboItem(st, fSourcesList.GetObject(i)));
                     }
                 }
-            }
-            finally
-            {
+
+                cmbSource.SortItems();
+            } finally {
                 //cmbSource.EndUpdate();
             }
         }
@@ -120,7 +116,8 @@ namespace GKUI.Forms
             fSourceCitation = value;
 
             GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null) cmbSource.Text = src.FiledByEntry;
+            if (src != null)
+                cmbSource.Text = src.FiledByEntry;
 
             txtPage.Text = fSourceCitation.Page;
             txtCertainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
@@ -128,8 +125,7 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSourcesList.Dispose();
             }
             base.Dispose(disposing);
@@ -139,8 +135,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
-            {
+            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
                 txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
 

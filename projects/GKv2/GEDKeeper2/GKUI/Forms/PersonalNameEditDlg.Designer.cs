@@ -22,16 +22,10 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Label lblSurname;
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.ComboBox cmbLanguage;
+        private System.Windows.Forms.Label lblLanguage;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -41,12 +35,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.lblSurname = new System.Windows.Forms.Label();
@@ -69,6 +57,8 @@
             this.cmbNameType = new System.Windows.Forms.ComboBox();
             this.lblMarriedSurname = new System.Windows.Forms.Label();
             this.txtMarriedSurname = new System.Windows.Forms.TextBox();
+            this.cmbLanguage = new System.Windows.Forms.ComboBox();
+            this.lblLanguage = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblSurname
@@ -84,7 +74,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(195, 282);
+            this.btnAccept.Location = new System.Drawing.Point(200, 333);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
@@ -117,7 +107,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(314, 282);
+            this.btnCancel.Location = new System.Drawing.Point(319, 333);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
@@ -258,13 +248,35 @@
             this.txtMarriedSurname.Size = new System.Drawing.Size(226, 24);
             this.txtMarriedSurname.TabIndex = 3;
             // 
+            // cmbLanguage
+            // 
+            this.cmbLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLanguage.Location = new System.Drawing.Point(12, 285);
+            this.cmbLanguage.Margin = new System.Windows.Forms.Padding(4);
+            this.cmbLanguage.Name = "cmbLanguage";
+            this.cmbLanguage.Size = new System.Drawing.Size(226, 25);
+            this.cmbLanguage.Sorted = true;
+            this.cmbLanguage.TabIndex = 21;
+            // 
+            // lblLanguage
+            // 
+            this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Location = new System.Drawing.Point(12, 264);
+            this.lblLanguage.Margin = new System.Windows.Forms.Padding(8, 8, 0, 0);
+            this.lblLanguage.Name = "lblLanguage";
+            this.lblLanguage.Size = new System.Drawing.Size(80, 17);
+            this.lblLanguage.TabIndex = 20;
+            this.lblLanguage.Text = "lblLanguage";
+            // 
             // PersonalNameEditDlg
             // 
             this.AcceptButton = this.btnAccept;
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(444, 323);
+            this.ClientSize = new System.Drawing.Size(444, 374);
+            this.Controls.Add(this.cmbLanguage);
+            this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.lblMarriedSurname);
             this.Controls.Add(this.txtMarriedSurname);
             this.Controls.Add(this.lblType);
@@ -296,7 +308,5 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-
-        #endregion
     }
 }

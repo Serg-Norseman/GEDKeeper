@@ -27,6 +27,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -44,12 +45,9 @@ namespace GKUI.Forms
         private void SetPersonalName(GEDCOMPersonalName value)
         {
             fPersonalName = value;
-            try
-            {
+            try {
                 UpdateControls();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
             }
         }
@@ -97,6 +95,9 @@ namespace GKUI.Forms
             ICulture culture = fBase.Context.Culture;
             txtSurname.Enabled = txtSurname.Enabled && culture.HasSurname();
             txtPatronymic.Enabled = txtPatronymic.Enabled && culture.HasPatronymic();
+
+            GEDCOMLanguageID langID = fPersonalName.Language.Value;
+            cmbLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(langID);
         }
 
         private void AcceptChanges()
@@ -110,17 +111,18 @@ namespace GKUI.Forms
             pieces.Suffix = txtNameSuffix.Text;
 
             fPersonalName.NameType = (GEDCOMNameType)cmbNameType.SelectedIndex;
+
+            var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
+            var langID = (GEDCOMLanguageID)item.Tag;
+            fPersonalName.Language.Value = langID;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -130,10 +132,14 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)
-            {
+            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
                 cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
+
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+                cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
+            }
+            cmbLanguage.SortItems();
 
             SetLang();
         }
@@ -152,6 +158,7 @@ namespace GKUI.Forms
             lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
+            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
     }
 }

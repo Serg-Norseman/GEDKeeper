@@ -40,7 +40,6 @@ namespace GKUI.Forms
             txtCertainty.ReadOnly = true;
 
             cmbSource = new ComboBox();
-            //cmbSource.Sorted = true;
             cmbSource.KeyDown += cbSource_KeyDown;
             cmbSource.KeyUp += cbSource_KeyUp;
             cmbSource.Width = 400;

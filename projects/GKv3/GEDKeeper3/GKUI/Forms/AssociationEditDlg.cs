@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -50,11 +51,9 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 string rel = cmbRelation.Text.Trim();
-                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0)
-                {
+                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
                     GlobalOptions.Instance.Relations.Add(rel);
                 }
 
@@ -62,9 +61,7 @@ namespace GKUI.Forms
                 fAssociation.Individual = fTempInd;
 
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("AssociationEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -81,10 +78,10 @@ namespace GKUI.Forms
             InitializeComponent();
 
             int num = GlobalOptions.Instance.Relations.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 cmbRelation.Items.Add(GlobalOptions.Instance.Relations[i]);
             }
+            cmbRelation.SortItems();
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

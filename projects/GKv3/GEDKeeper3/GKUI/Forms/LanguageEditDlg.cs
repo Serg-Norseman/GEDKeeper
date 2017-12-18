@@ -50,10 +50,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++)
-            {
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
                 cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
             }
+            cmbLanguage.SortItems();
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -64,14 +64,11 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
                 fLanguageID = (GEDCOMLanguageID)item.Tag;
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("LanguageEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }

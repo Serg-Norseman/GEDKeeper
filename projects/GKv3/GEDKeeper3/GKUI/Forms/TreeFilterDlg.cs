@@ -215,15 +215,14 @@ namespace GKUI.Forms
             GEDCOMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
-            //cmbSource.Sorted = true;
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = tree[i];
-                if (rec is GEDCOMSourceRecord) {
+                if (rec.RecordType == GEDCOMRecordType.rtSource) {
                     cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
                 }
             }
-            //cmbSource.Sorted = false;
+            cmbSource.SortItems();
 
             cmbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll)));
             cmbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot)));

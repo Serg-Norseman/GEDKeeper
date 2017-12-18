@@ -30,7 +30,6 @@ namespace GKUI.Forms
             btnPersonAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
 
             cmbRelation = new ComboBox();
-            //cmbRelation.Sorted = true;
 
             txtPerson = new TextBox();
             txtPerson.ReadOnly = true;
