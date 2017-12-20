@@ -261,11 +261,11 @@ namespace GKCommon
                     break;
 
                 case TokenKind.HexNumber:
-                    val = Convert.ToInt32(tokVal, 16);
+                    val = ConvertIntNumber(fData, fSavePos, fPos, 16);
                     break;
 
                 case TokenKind.BinNumber:
-                    val = Convert.ToInt32(tokVal.Substring(2), 2);
+                    val = ConvertIntNumber(fData, fSavePos, fPos, 2);
                     break;
             }
 
@@ -483,9 +483,7 @@ namespace GKCommon
                 throw new Exception("Required integer not found");
             }
 
-            int result = /*fCurrentToken.IntVal; //*/ConvertNumber(fCurrentToken.Value, 10);
-            //int.Parse(fCurrentToken.Value, NumberStyles.Integer, NumberFormat);
-            return result;
+            return (int)fCurrentToken.ValObj;
         }
 
         private static int ConvertIntNumber(char[] buf, int first, int last, byte numBase)
@@ -517,33 +515,6 @@ namespace GKCommon
             catch (OverflowException)
             {
                 // KBR Parser blows up when trying to parse a large number
-            }
-
-            return fvalue;
-        }
-
-        private static int ConvertNumber(string expr, byte numBase)
-        {
-            int fvalue = 0;
-
-            for (int i = 0; i < expr.Length; i++)
-            {
-                char ch = expr[i];
-                byte c = (byte)((int)ch - 48);
-                if (c > 9)
-                {
-                    c -= 7;
-
-                    if (c > 15) {
-                        c -= 32;
-                    }
-                }
-
-                if (c >= numBase) {
-                    break;
-                }
-
-                fvalue = (fvalue * numBase + c);
             }
 
             return fvalue;

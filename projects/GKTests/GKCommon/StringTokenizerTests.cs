@@ -161,6 +161,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("beta", tok.Value);
 
             tok = strTok.Next();
+            Assert.IsTrue(strTok.RequireToken(TokenKind.Number));
             Assert.AreEqual(TokenKind.Number, tok.Kind);
             Assert.AreEqual("123", tok.Value);
 
@@ -169,6 +170,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("456.57", tok.Value);
 
             tok = strTok.Next();
+            strTok.RequestSymbol(',');
             Assert.AreEqual(TokenKind.Symbol, tok.Kind);
             Assert.AreEqual(",", tok.Value);
 
@@ -180,6 +182,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual(TokenKind.Symbol, tok.Kind);
             Assert.AreEqual(";", tok.Value);
             Assert.AreEqual(1, tok.Line);
+            Assert.Throws(typeof(Exception), () => { strTok.RequestSymbol('x'); });
 
 
             tok = strTok.Next();
@@ -206,7 +209,7 @@ namespace GKTests.GKCommon
 
             //
 
-            strTok = new StringTokenizer("alpha 0x601 0b11000000001 alg_123");
+            strTok = new StringTokenizer("alpha 0x601 0b11000000001 alg_123 12345");
             Assert.IsNotNull(strTok);
             strTok.IgnoreWhiteSpace = true;
 
@@ -220,6 +223,7 @@ namespace GKTests.GKCommon
             Assert.IsTrue(strTok.RecognizeIdents);
 
             tok = strTok.Next();
+            Assert.IsNotNull(strTok.CurrentToken);
             Assert.AreEqual(TokenKind.Word, tok.Kind);
             Assert.AreEqual("alpha", tok.Value);
 
@@ -231,9 +235,17 @@ namespace GKTests.GKCommon
             Assert.AreEqual(TokenKind.BinNumber, tok.Kind);
             Assert.AreEqual("0b11000000001", tok.Value);
 
+            Assert.AreEqual(" alg_123 12345", strTok.GetRest());
+
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.Ident, tok.Kind);
             Assert.AreEqual("alg_123", tok.Value);
+            Assert.Throws(typeof(Exception), () => { strTok.RequestInt(); });
+
+            tok = strTok.Next();
+            Assert.AreEqual(12345, strTok.RequestInt());
+
+            Assert.AreEqual("", strTok.GetRest());
         }
     }
 }

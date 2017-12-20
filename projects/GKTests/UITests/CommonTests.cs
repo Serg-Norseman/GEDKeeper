@@ -77,5 +77,20 @@ namespace GKTests.UITests
             Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)pen.Color).Handle);
             Assert.AreEqual(1.0f, pen.Width);
         }
+
+        [Test]
+        public void Test_Font()
+        {
+            string fontName;
+            #if __MonoCS__
+            fontName = "Noto Sans";
+            #else
+            fontName = "Verdana";
+            #endif
+            var fnt = AppHost.GfxProvider.CreateFont(fontName, 10, true);
+            Assert.AreEqual(fontName, fnt.FontFamilyName);
+            Assert.AreEqual(fontName, fnt.Name);
+            Assert.AreEqual(10.0f, fnt.Size);
+        }
     }
 }
