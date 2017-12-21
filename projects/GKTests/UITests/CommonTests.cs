@@ -83,7 +83,7 @@ namespace GKTests.UITests
         {
             string fontName;
             #if __MonoCS__
-            fontName = "Noto Sans";
+            fontName = "DejaVu Sans"; // "Noto Sans";
             #else
             fontName = "Verdana";
             #endif

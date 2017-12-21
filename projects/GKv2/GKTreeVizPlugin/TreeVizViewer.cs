@@ -19,10 +19,11 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-
 using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
@@ -36,12 +37,12 @@ namespace GKTreeVizPlugin
 
         private readonly IBaseWindow fBase;
         private readonly int fMinGens;
-        private readonly HighResolutionTimer fHighresTimer;
+        private readonly Stopwatch fHighresTimer;
         private readonly Thread fBackThread;
+        private readonly ManualResetEvent fStopEvent;
 
-        private ulong fLastCalculationTime;
-        private ulong fFramesDrawn;
-        private double fCurrentFramerate;
+        private long fLastCalculationTime;
+        private long fFramesDrawn;
 
         private StatusBar fStatusBar;
         private StatusBarPanel sbpCurrentFps;
@@ -56,20 +57,18 @@ namespace GKTreeVizPlugin
             fBase = baseWin;
             fMinGens = minGens;
 
-            fHighresTimer = new HighResolutionTimer();
+            fHighresTimer = new Stopwatch();
+
+            fStopEvent = new ManualResetEvent(false);
             fBackThread = new Thread(DoRenderThread);
             fBackThread.IsBackground = true;
+            fBackThread.Start();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fBackThread.Suspend();
-
-                sbpCurrentFps.Dispose();
-                fTreeVizView.Dispose();
             }
-
             base.Dispose(disposing);
         }
 
@@ -107,20 +106,39 @@ namespace GKTreeVizPlugin
             SizeChanged += Form_SizeChanged;
             Activated += Form_Activated;
             Load += Form_Load;
+            Closing += Form_Closed;
 
             ResumeLayout();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            fBackThread.Start();
+            SetActive(true);
             fTreeVizView.CreateArborGraph(fBase, fMinGens, true);
+        }
+
+        private void Form_Closed(object sender, CancelEventArgs e)
+        {
+            SetActive(false);
+        }
+
+        private void SetActive(bool value)
+        {
+            if (value) {
+                fStopEvent.Reset();
+            } else {
+                fStopEvent.Set();
+                //fBackThread.Join();
+            }
         }
 
         private void DoRenderThread()
         {
-            while (true) {
-                Invoke((RenderDelegate)RenderStep);
+            try {
+                while (!fStopEvent.WaitOne(0)) {
+                    Invoke((RenderDelegate)RenderStep);
+                }
+            } catch (Exception) {
             }
         }
 
@@ -129,26 +147,25 @@ namespace GKTreeVizPlugin
             fTreeVizView.Invalidate(false);
 
             fFramesDrawn++;
-            ulong currentFrameTime = fHighresTimer.Count;
-            ulong timerFrequency = fHighresTimer.Frequency;
+            long currentFrameTime = fHighresTimer.ElapsedMilliseconds;
+            long timerFrequency = 1000;
 
             if ((currentFrameTime - fLastCalculationTime) > timerFrequency) {
-                fCurrentFramerate = (double)(fFramesDrawn * timerFrequency) / (currentFrameTime - fLastCalculationTime);
+                double fps = (double)(fFramesDrawn * timerFrequency) / (currentFrameTime - fLastCalculationTime);
                 fLastCalculationTime = currentFrameTime;
                 fFramesDrawn = 0;
+
+                sbpCurrentFps.Text = "FPS: " + fps.ToString("0.00") + "; Selected: " + fTreeVizView.SelectedObject +
+                    "; Current year: " + fTreeVizView.CurYear;
             }
-
-            sbpCurrentFps.Text = "Current: " + fCurrentFramerate.ToString() + " FPS; Selected: " + fTreeVizView.SelectedObject +
-                "; Current year: " + fTreeVizView.CurYear;
-
-            Application.DoEvents();
         }
 
         private void ResetFramerate()
         {
-            fLastCalculationTime = fHighresTimer.Count;
+            fHighresTimer.Reset();
+            fLastCalculationTime = 0;
             fFramesDrawn = 0;
-            fCurrentFramerate = 0.0f;
+            fHighresTimer.Start();
         }
 
         private void Form_Activated(object sender, EventArgs e)
