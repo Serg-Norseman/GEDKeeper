@@ -22,13 +22,14 @@
 
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Mocks;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// Isolated test of dialogue (ResearchEditDlg), without the ability

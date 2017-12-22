@@ -30,7 +30,7 @@ namespace GKCommon.TreeMap
         private MapRect fBounds;
         private double fCalcSize;
         private int fDepth;
-        private List<MapItem> fItems;
+        private readonly List<MapItem> fItems;
         private string fName;
         private int fOrder = 0;
         private double fRatio;

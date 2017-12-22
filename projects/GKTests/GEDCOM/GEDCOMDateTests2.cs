@@ -179,12 +179,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void testCreate()
         {
-            GEDCOMTree owner = null;
-            GEDCOMObject parent = null;
-            string tagName = "BLAH";
-            string tagValue = "";
-            GEDCOMTag expResult = null;
-            GEDCOMTag result = GEDCOMDate.Create(owner, parent, tagName, tagValue);
+            const string tagName = "BLAH";
+            GEDCOMTag result = GEDCOMDate.Create(null, null, tagName, "");
             Assert.IsNotNull(result);
             Assert.AreEqual(tagName, result.Name);
         }
@@ -242,7 +238,7 @@ namespace GKCommon.GEDCOM
                 expResult = ParseDT("1980-01-20");
                 DateTime result = instance.GetDateTime();
                 Assert.AreEqual(expResult, result);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 Assert.Fail("Parse exception for date");
             }
         }
@@ -256,7 +252,7 @@ namespace GKCommon.GEDCOM
                 expResult = ParseDT("1980-01-20");
                 instance.SetDateTime(expResult);
                 Assert.AreEqual(expResult, instance.GetDateTime());
-            } catch (Exception ex) {
+            } catch (Exception) {
                 Assert.Fail("Parse exception for date");
             }
         }
@@ -686,7 +682,7 @@ namespace GKCommon.GEDCOM
             GEDCOMProvider gp = new GEDCOMProvider(tee);
             try {
                 gp.LoadFromString(gedcom);
-            } catch (Exception e) {
+            } catch (Exception) {
             }
             Assert.AreEqual(1, tee.RecordsCount);
             GEDCOMRecord rec = tee[0];

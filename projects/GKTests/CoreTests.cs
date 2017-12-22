@@ -134,13 +134,13 @@ namespace GKTests.GKCore
             fContext.EndUpdate();
             Assert.IsFalse(fContext.IsUpdated());
 
-            //Graph patrGraph = fContext.GetPatriarchsGraph(1, true, false);
-            //Assert.IsNotNull(patrGraph);
-
             fContext.DoUndo();
             fContext.DoRedo();
             fContext.DoCommit();
             fContext.DoRollback();
+
+            var patrGraph = PatriarchsMan.GetPatriarchsGraph(fContext, 1, true, false);
+            Assert.IsNotNull(patrGraph);
         }
 
         [Test]
@@ -533,42 +533,47 @@ namespace GKTests.GKCore
 
         private static void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
         {
+            int hash;
             foreach (GEDCOMCustomEvent evt1 in iRec.Events) {
-                evt1.GetHashCode();
+                hash = evt1.GetHashCode();
             }
         }
 
         private static void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
         {
+            int hash;
             IGEDCOMListEnumerator<GEDCOMCustomEvent> enumer = iRec.Events.GetEnumerator();
             while (enumer.MoveNext()) {
                 GEDCOMCustomEvent evt1 = enumer.Current;
-                evt1.GetHashCode();
+                hash = evt1.GetHashCode();
             }
         }
 
         private static void GEDCOMListTest21(GEDCOMIndividualRecord iRec)
         {
+            int hash;
             for (int i = 0; i < iRec.Events.Count; i++) {
                 GEDCOMCustomEvent evt1 = iRec.Events[i];
-                evt1.GetHashCode();
+                hash = evt1.GetHashCode();
             }
         }
 
         private static void GEDCOMListTest22(GEDCOMIndividualRecord iRec)
         {
+            int hash;
             for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                 GEDCOMCustomEvent evt1 = iRec.Events[i];
-                evt1.GetHashCode();
+                hash = evt1.GetHashCode();
             }
         }
 
         private static void GEDCOMListTest23(GEDCOMIndividualRecord iRec)
         {
+            int hash;
             GEDCOMList<GEDCOMCustomEvent> events = iRec.Events;
             for (int i = 0, num = events.Count; i < num; i++) {
                 GEDCOMCustomEvent evt1 = events[i];
-                evt1.GetHashCode();
+                hash = evt1.GetHashCode();
             }
         }
 
@@ -748,11 +753,12 @@ namespace GKTests.GKCore
         [Test]
         public void Kinships_Tests()
         {
-            var ks = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon);
-            Assert.AreEqual(RelationKind.rkBrother, ks.FinRel);
+            int g, lev;
+            var finRel = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon, out g, out lev);
+            Assert.AreEqual(RelationKind.rkBrother, finRel);
 
-            ks = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon);
-            Assert.AreEqual(RelationKind.rkSon, ks.FinRel);
+            finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out g, out lev);
+            Assert.AreEqual(RelationKind.rkSon, finRel);
 
             GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;

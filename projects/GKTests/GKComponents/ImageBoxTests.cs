@@ -27,7 +27,7 @@ using GKCommon;
 using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.GKComponents
+namespace GKUI.Components
 {
     [TestFixture]
     public class ImageBoxTests

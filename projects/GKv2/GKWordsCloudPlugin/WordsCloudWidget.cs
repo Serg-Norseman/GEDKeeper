@@ -150,7 +150,7 @@ namespace GKWordsCloudPlugin
 
         public void SetLang()
         {
-            Text = fPlugin.LangMan.LS(CLS.LSID_Title);
+            Text = fPlugin.LangMan.LS(PLS.LSID_Title);
         }
 
         #endregion

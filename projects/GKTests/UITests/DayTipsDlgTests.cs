@@ -22,10 +22,11 @@
 
 using System;
 using System.Windows.Forms;
+using GKTests;
 using GKUI.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// 

@@ -40,14 +40,14 @@ using GKCore.Interfaces;
 
 namespace GKWordsCloudPlugin
 {
-    public enum CLS
+    public enum PLS
     {
-        /* 00 */ LSID_Title,
-        /* 01 */ LSID_1,
-        /* 02 */ LSID_2,
-        /* 03 */ LSID_3,
-        /* 04 */ LSID_4,
-        /* 05 */ LSID_5
+        LSID_Title,
+        LSID_1,
+        LSID_2,
+        LSID_3,
+        LSID_4,
+        LSID_5
     }
 
     public sealed class Plugin : BaseObject, IPlugin, IWidget
@@ -65,8 +65,7 @@ namespace GKWordsCloudPlugin
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 CloseForm();
             }
             base.Dispose(disposing);
@@ -89,21 +88,25 @@ namespace GKWordsCloudPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
+        public void OnHostClosing(HostClosingEventArgs eventArgs)
+        {
+        }
+        public void OnHostActivate()
+        {
+        }
+        public void OnHostDeactivate()
+        {
+        }
 
         public void OnLanguageChange()
         {
-            try
-            {
+            try {
                 fLangMan = fHost.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(CLS.LSID_Title);
+                fDisplayName = fLangMan.LS(PLS.LSID_Title);
 
-                if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+                if (fForm != null)
+                    fForm.SetLang();
+            } catch (Exception ex) {
                 Logger.LogWrite("GKWordsCloudPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
@@ -111,12 +114,9 @@ namespace GKWordsCloudPlugin
         public bool Startup(IHost host)
         {
             bool result = true;
-            try
-            {
+            try {
                 fHost = host;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKWordsCloudPlugin.Startup(): " + ex.Message);
                 result = false;
             }
@@ -126,12 +126,9 @@ namespace GKWordsCloudPlugin
         public bool Shutdown()
         {
             bool result = true;
-            try
-            {
+            try {
                 CloseForm();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKWordsCloudPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
@@ -140,7 +137,9 @@ namespace GKWordsCloudPlugin
 
         #region IWidget common
 
-        void IWidget.WidgetInit(IHost host) {}
+        void IWidget.WidgetInit(IHost host)
+        {
+        }
 
         void IWidget.BaseChanged(IBaseWindow baseWin)
         {
@@ -156,8 +155,12 @@ namespace GKWordsCloudPlugin
             }
         }
 
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
+        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        {
+        }
+        void IWidget.WidgetEnable()
+        {
+        }
 
         #endregion
     }

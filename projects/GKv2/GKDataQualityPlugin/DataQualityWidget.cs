@@ -87,19 +87,15 @@ namespace GKDataQualityPlugin
             GEDCOMTree tree = fBase.Context.Tree;
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
-            try
-            {
+            try {
                 int groupNum = 0;
                 int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMRecord rec = tree[i];
 
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
-                    {
+                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-                        if (prepared.IndexOf(iRec) < 0)
-                        {
+                        if (prepared.IndexOf(iRec) < 0) {
                             groupNum++;
                             groupRecords.Clear();
 
@@ -107,8 +103,7 @@ namespace GKDataQualityPlugin
 
                             int groupSize = groupRecords.Count;
                             float quality = 0.0f;
-                            for (int j = 0; j < groupSize; j++)
-                            {
+                            for (int j = 0; j < groupSize; j++) {
                                 iRec = (GEDCOMIndividualRecord)groupRecords[j];
                                 prepared.Add(iRec);
 
@@ -122,11 +117,8 @@ namespace GKDataQualityPlugin
                         }
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 groupRecords.Clear();
-                //prepared.Dispose();
             }
 
             fDataMap.UpdateView();

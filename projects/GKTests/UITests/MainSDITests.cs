@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -34,6 +33,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKTests;
 using GKTests.ControlTesters;
 using GKUI;
 using GKUI.Components;
@@ -41,7 +41,7 @@ using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// Tests for the main application window. Dependent calls of other windows
@@ -68,21 +68,6 @@ namespace GKTests.UITests
                 var colProps = indiCols[i];
                 colProps.CurActive = true;
             }
-        }
-
-        public void Test_Other()
-        {
-            Rectangle rect1 = UIHelper.Rt2Rt(ExtRect.Empty);
-            Assert.AreEqual(0, rect1.Left);
-            Assert.AreEqual(0, rect1.Top);
-            Assert.AreEqual(0, rect1.Right);
-            Assert.AreEqual(0, rect1.Bottom);
-
-            RectangleF rect2 = UIHelper.Rt2Rt(ExtRectF.Empty);
-            Assert.AreEqual(0, rect2.Left);
-            Assert.AreEqual(0, rect2.Top);
-            Assert.AreEqual(0, rect2.Right);
-            Assert.AreEqual(0, rect2.Bottom);
         }
 
         [STAThread, Test]
@@ -132,14 +117,14 @@ namespace GKTests.UITests
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
 
             // Stage 3: call to FilePropertiesDlg
-            ModalFormHandler = FilePropertiesDlg_btnCancel_Handler;
+            ModalFormHandler = Dialog_Cancel_Handler;
             ClickToolStripMenuItem("miFileProperties", fMainWin);
             ModalFormHandler = FilePropertiesDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miFileProperties", fMainWin);
 
 
             // Stage 4: call to OptionsDlg
-            ModalFormHandler = OptionsDlg_btnCancel_Handler;
+            ModalFormHandler = Dialog_Cancel_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
             ModalFormHandler = OptionsDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
@@ -284,13 +269,13 @@ namespace GKTests.UITests
 
                 baseWin.ShowRecordsTab(rt);
 
-                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ModalFormHandler = Dialog_Cancel_Handler;
                 ClickToolStripButton("tbRecordAdd", fMainWin);
 
                 ModalFormHandler = EditorDlg_btnAccept_Handler;
                 ClickToolStripButton("tbRecordAdd", fMainWin);
 
-                ModalFormHandler = EditorDlg_btnCancel_Handler;
+                ModalFormHandler = Dialog_Cancel_Handler;
                 ClickToolStripButton("tbRecordEdit", fMainWin);
 
                 ModalFormHandler = EditorDlg_btnAccept_Handler;
@@ -487,11 +472,6 @@ namespace GKTests.UITests
 
         #region FilePropertiesDlg handlers
 
-        private void FilePropertiesDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnCancel", form);
-        }
-
         private void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             Assert.AreEqual(fCurBase, ((IBaseEditor)form).Base);
@@ -511,11 +491,6 @@ namespace GKTests.UITests
         #endregion
 
         #region OptionsDlg handlers
-
-        private void OptionsDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnCancel", form);
-        }
 
         private void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
@@ -715,7 +690,7 @@ namespace GKTests.UITests
             txtScriptText.Enter("file = gk_select_file();");
             ClickToolStripButton("tbRun", form);
 
-            ModalFormHandler = RecordSelectDlg_Cancel_Handler;
+            ModalFormHandler = Dialog_Cancel_Handler;
             txtScriptText.Enter("R = gt_select_record(rtIndividual);");
             ClickToolStripButton("tbRun", form);
 
@@ -728,11 +703,6 @@ namespace GKTests.UITests
             ModalFormHandler = MessageBox_NoHandler;
             KeyDownForm(form.Name, Keys.Escape);
             form.Dispose();
-        }
-
-        public void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnCancel", form);
         }
 
         #endregion
@@ -923,11 +893,6 @@ namespace GKTests.UITests
         private static bool SourceEditDlg_FirstCall = true;
         private static bool CommunicationEditDlg_FirstCall = true;
         private static bool TaskEditDlg_FirstCall = true;
-
-        public void EditorDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnCancel", form);
-        }
 
         public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
@@ -1330,16 +1295,14 @@ namespace GKTests.UITests
 
         private void LocationEditDlg_Handler(LocationEditDlg dlg)
         {
-            GEDCOMLocationRecord resRecord = dlg.LocationRecord;
-
             var tabs = new TabControlTester("tabsData", dlg);
             tabs.SelectTab(0);
 
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("Moscow");
 
-            var ListGeoCoords = new ListViewTester("ListGeoCoords", dlg);
-            ListGeoCoords.FireEvent("Click", new EventArgs());
+            var listGeoCoords = new ListViewTester("ListGeoCoords", dlg);
+            listGeoCoords.FireEvent("Click", new EventArgs());
 
             ClickButton("btnSearch", dlg);
             ClickButton("btnSelect", dlg);
@@ -1720,25 +1683,20 @@ namespace GKTests.UITests
             PrepareFileSave("test.jpg", hWnd);
         }
 
-        private void PrintDialog_Handler(string name, IntPtr ptr, Form form)
+        private static void PrintDialog_Handler(string name, IntPtr ptr, Form form)
         {
             form.Close();
         }
 
-        private void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
+        private static void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
         {
             form.Refresh();
             form.Close();
         }
 
-        private void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        private static void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnAccept", form);
-        }
-
-        private void TreeFilterDlg_btnCancel_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnCancel", form);
         }
 
         private void StatsWin_Tests(Form frm, string stage)

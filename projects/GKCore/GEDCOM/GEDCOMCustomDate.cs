@@ -144,6 +144,12 @@ namespace GKCommon.GEDCOM
             return -1;
         }
 
+        public override int GetHashCode()
+        {
+            var udn = GetUDN();
+            return udn.GetHashCode();
+        }
+
         public override bool Equals(object obj)
         {
             GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;

@@ -177,13 +177,13 @@ namespace GKCommon.Controls
         {
             get
             {
-                if (fDropContainer != null)
+                if (fDropContainer != null) {
                     return false;
-
-                if (fDropContainer == null && fClosedWhileInControl)
-                {
-                    fClosedWhileInControl = false;
-                    return false;
+                } else {
+                    if (fClosedWhileInControl) {
+                        fClosedWhileInControl = false;
+                        return false;
+                    }
                 }
 
                 return !fClosedWhileInControl;

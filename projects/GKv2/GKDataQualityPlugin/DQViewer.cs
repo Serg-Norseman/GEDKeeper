@@ -55,7 +55,7 @@ namespace GKDataQualityPlugin
             }
         }
 
-        private TreemapModel fModel;
+        private readonly TreemapModel fModel;
 
         public TreemapModel Model
         {
@@ -68,7 +68,6 @@ namespace GKDataQualityPlugin
 
             int w = 1200;
             int h = 800;
-
             fModel = new DQModel(w, h);
             fModel.CalcLayout(new MapRect(0, 0, w, h));
         }
@@ -82,12 +81,9 @@ namespace GKDataQualityPlugin
         protected override void OnMouseMove(MouseEventArgs e)
         {
             MapItem item = fModel.FindByCoord(e.X, e.Y);
-            if (item == null) {
-                return;
+            if (item != null) {
+                (Parent as Form).Text = item.Name;
             }
-
-            //getLayeredPane().setToolTipText(item.getName());
-            (Parent as Form).Text = item.Name;
         }
 
         protected override void OnResize(EventArgs e)

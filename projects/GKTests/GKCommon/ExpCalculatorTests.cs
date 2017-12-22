@@ -54,22 +54,22 @@ namespace GKTests.GKCommon
             Assert.Throws(typeof(CalculateException), () => { calc.Calc(")"); }); // syntax error
 
             double val = calc.Calc("2 + 7.703 - 3");
-            Assert.AreEqual(Math.Round(val, 3), 6.703);
+            Assert.AreEqual(6.703, Math.Round(val, 3));
 
             val = calc.Calc("2**3");
-            Assert.AreEqual(val, 8.0);
+            Assert.AreEqual(8.0, val);
 
             val = calc.Calc("2 * 3");
-            Assert.AreEqual(val, 6.0);
+            Assert.AreEqual(6.0, val);
 
             val = calc.Calc("3 / 2");
-            Assert.AreEqual(val, 1.5);
+            Assert.AreEqual(1.5, val);
 
             val = calc.Calc("3 % 2");
-            Assert.AreEqual(val, 1.0);
+            Assert.AreEqual(1.0, val);
 
             val = calc.Calc("3 %% 2");
-            Assert.AreEqual(val, 150.0);
+            Assert.AreEqual(150.0, val);
 
             Assert.AreEqual(-2.0005, calc.Calc("-2.0005"));
 

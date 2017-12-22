@@ -128,7 +128,6 @@ namespace GKTreeVizPlugin
             yrot = 0;
             zrot = 0;
             z = -5.0f;
-            Dock = DockStyle.Fill;
 
             OpenGL.glShadeModel(OpenGL.GL_SMOOTH);
             //GL.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);

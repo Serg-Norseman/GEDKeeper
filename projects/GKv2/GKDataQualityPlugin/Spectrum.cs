@@ -103,7 +103,7 @@ namespace GKDataQualityPlugin
                 int B = adjust(blue, factor);
 
                 return Color.FromArgb(R, G, B);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 return Color.Black;
             }
         }

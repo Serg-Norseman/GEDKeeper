@@ -24,7 +24,7 @@ using System;
 using System.Windows.Forms;
 using NUnit.Extensions.Forms;
 
-namespace GKTests.UITests
+namespace GKTests
 {
     /// <summary>
     /// 
@@ -123,6 +123,11 @@ namespace GKTests.UITests
         {
             var saveDlg = new SaveFileDialogTester(hWnd);
             saveDlg.ClickCancel();
+        }
+
+        public static void Dialog_Cancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnCancel", form);
         }
     }
 }

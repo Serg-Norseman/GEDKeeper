@@ -25,12 +25,12 @@ namespace GKCore.Operations
     public sealed class IndividualNameChange : CustomOperation
     {
         private readonly GEDCOMIndividualRecord fPerson;
+        private readonly string fNewSurname;
+        private readonly string fNewName;
+        private readonly string fNewPatronymic;
         private string fOldSurname;
-        private string fNewSurname;
         private string fOldName;
-        private string fNewName;
         private string fOldPatronymic;
-        private string fNewPatronymic;
 
         public IndividualNameChange(UndoManager manager, GEDCOMIndividualRecord person,
                                     string surname, string name, string patronymic) : base(manager)

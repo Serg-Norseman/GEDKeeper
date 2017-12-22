@@ -114,19 +114,6 @@ namespace GKCalendarPlugin
                 fLangMan = fHost.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MICalendar);
 
-                CalendarData.BahaiMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiMonths));
-                CalendarData.BahaiWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiWeekdays));
-                CalendarData.ClassicMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ClassicMonths));
-                CalendarData.ClassicWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ClassicWeekdays));
-                CalendarData.HebrewMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_HebrewMonths));
-                CalendarData.HebrewWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_HebrewWeekdays));
-                CalendarData.IndianCivilMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IndianCivilMonths));
-                CalendarData.IndianCivilWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IndianCivilWeekdays));
-                CalendarData.IslamicMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IslamicMonths));
-                CalendarData.IslamicWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IslamicWeekdays));
-                CalendarData.PersianMonths = CalendarData.InitNames(fLangMan.LS(PLS.LSID_PersianMonths));
-                CalendarData.PersianWeekdays = CalendarData.InitNames(fLangMan.LS(PLS.LSID_PersianWeekdays));
-
                 if (fForm != null) fForm.SetLang();
             }
             catch (Exception ex)

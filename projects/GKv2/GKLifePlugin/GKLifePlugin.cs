@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using ConwayLife;
 using GKCommon;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKLifePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Conway's Game of Life plugin")]
@@ -40,89 +41,51 @@ using GKCore.Interfaces;
 
 namespace GKLifePlugin
 {
-    public enum LLS
+    public enum PLS
     {
-        /* 000 */ LSID_LifeGame,
-        /* 001 */ LSID_Step,
-        /* 002 */ LSID_Start,
-        /* 003 */ LSID_Stop,
-        /* 004 */ LSID_SetCells,
-        /* 005 */ LSID_Clear,
-        /* 006 */ LSID_Random,
-        /* 007 */ LSID_Options,
+        LSID_LifeGame,
+        LSID_Step,
+        LSID_Start,
+        LSID_Stop,
+        LSID_SetCells,
+        LSID_Clear,
+        LSID_Random,
+        LSID_Options,
     }
 
-    public class Plugin : IPlugin
+    public class Plugin : OrdinaryPlugin, IPlugin
     {
         private string fDisplayName = "Conway's Game of Life";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
 
-        public void Execute()
+        public override void Execute()
         {
             using (LifeForm frm = new LifeForm()) {
-                frm.Viewer.Options.LS_LifeGame = fLangMan.LS(LLS.LSID_LifeGame);
-                frm.Viewer.Options.LS_Step = fLangMan.LS(LLS.LSID_Step);
-                frm.Viewer.Options.LS_Start = fLangMan.LS(LLS.LSID_Start);
-                frm.Viewer.Options.LS_Stop = fLangMan.LS(LLS.LSID_Stop);
-                frm.Viewer.Options.LS_SetCells = fLangMan.LS(LLS.LSID_SetCells);
-                frm.Viewer.Options.LS_Clear = fLangMan.LS(LLS.LSID_Clear);
-                frm.Viewer.Options.LS_Random = fLangMan.LS(LLS.LSID_Random);
-                frm.Viewer.Options.LS_Options = fLangMan.LS(LLS.LSID_Options);
+                frm.Viewer.Options.LS_LifeGame = fLangMan.LS(PLS.LSID_LifeGame);
+                frm.Viewer.Options.LS_Step = fLangMan.LS(PLS.LSID_Step);
+                frm.Viewer.Options.LS_Start = fLangMan.LS(PLS.LSID_Start);
+                frm.Viewer.Options.LS_Stop = fLangMan.LS(PLS.LSID_Stop);
+                frm.Viewer.Options.LS_SetCells = fLangMan.LS(PLS.LSID_SetCells);
+                frm.Viewer.Options.LS_Clear = fLangMan.LS(PLS.LSID_Clear);
+                frm.Viewer.Options.LS_Random = fLangMan.LS(PLS.LSID_Random);
+                frm.Viewer.Options.LS_Options = fLangMan.LS(PLS.LSID_Options);
 
                 frm.ShowDialog();
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(LLS.LSID_LifeGame);
-            }
-            catch (Exception ex)
-            {
+            try {
+                fLangMan = Host.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_LifeGame);
+            } catch (Exception ex) {
                 Logger.LogWrite("GKLifePlugin.OnLanguageChange(): " + ex.Message);
             }
-        }
-
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKLifePlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKLifePlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
         }
     }
 }

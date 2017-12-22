@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
@@ -33,21 +32,21 @@ namespace GKTreeVizPlugin
         {
             get { return decimal.ToInt32(edMinGens.Value); }
         }
-        
+
         public TVSettingsDlg(IPlugin plugin)
         {
             InitializeComponent();
-            
+
             fPlugin = plugin;
             Text = fPlugin.DisplayName;
-            
+
             // SetLang()
-            chkWithoutDates.Text = fPlugin.LangMan.LS(TVLS.LSID_WithoutDates);
-            lblMinGens.Text = fPlugin.LangMan.LS(TVLS.LSID_MinGens);
-            btnAccept.Text = fPlugin.LangMan.LS(TVLS.LSID_Accept);
-            btnCancel.Text = fPlugin.LangMan.LS(TVLS.LSID_Cancel);
+            chkWithoutDates.Text = fPlugin.LangMan.LS(PLS.LSID_WithoutDates);
+            lblMinGens.Text = fPlugin.LangMan.LS(PLS.LSID_MinGens);
+            btnAccept.Text = fPlugin.LangMan.LS(PLS.LSID_Accept);
+            btnCancel.Text = fPlugin.LangMan.LS(PLS.LSID_Cancel);
         }
-        
+
         private void btnAccept_Click(object sender, EventArgs e)
         {
         }

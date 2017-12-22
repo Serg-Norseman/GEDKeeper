@@ -57,8 +57,8 @@ namespace GKTests.Mocks
     {
         private static IHost fHost = new HostMock();
 
-        private IBaseContext fContext;
-        private GEDCOMTree fTree;
+        private readonly IBaseContext fContext;
+        private readonly GEDCOMTree fTree;
 
         public BaseWindowMock()
         {
@@ -146,7 +146,7 @@ namespace GKTests.Mocks
         public void EnableWindow(IWidgetForm form, bool value) {}
         public void Restore() {}
 
-        public bool ShowModalX(ICommonDialog form, bool keepModeless) { return false; }
+        public bool ShowModalX(ICommonDialog form, bool keepModeless = false) { return false; }
 
         public void SetLang() {}
     }

@@ -22,14 +22,13 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-
 using GKCommon;
-using GKTests.UITests;
+using GKTests;
 using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.GKComponents
+namespace GKUI.Components
 {
     [TestFixture]
     public class ImageViewTests : CustomWindowTest

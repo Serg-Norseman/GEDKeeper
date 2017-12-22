@@ -56,6 +56,9 @@
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>..\GKCore\libs\ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>nunit.framework.dll</HintPath>
     </Reference>

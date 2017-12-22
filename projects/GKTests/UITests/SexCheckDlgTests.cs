@@ -23,11 +23,12 @@
 using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
+using GKTests;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// 

@@ -25,12 +25,13 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests;
 using GKTests.GEDCOM;
 using GKTests.Mocks;
 using GKUI.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// 

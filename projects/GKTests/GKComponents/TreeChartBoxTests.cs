@@ -29,7 +29,7 @@ using GKUI;
 using GKUI.Charts;
 using NUnit.Framework;
 
-namespace GKTests.GKComponents
+namespace GKUI.Charts
 {
     [TestFixture]
     public class TreeChartBoxTests

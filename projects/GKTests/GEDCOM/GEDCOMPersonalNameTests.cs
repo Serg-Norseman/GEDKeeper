@@ -434,12 +434,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void testCreate()
         {
-            GEDCOMTree owner = null;
-            GEDCOMObject parent = null;
-            string tagName = "";
-            string tagValue = "";
-            GEDCOMTag expResult = null;
-            GEDCOMTag result = GEDCOMPersonalName.Create(owner, parent, tagName, tagValue);
+            GEDCOMTag result = GEDCOMPersonalName.Create(null, null, "", "");
             Assert.IsNotNull(result);
         }
     }

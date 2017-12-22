@@ -128,11 +128,9 @@ namespace GKCore.Kinships
 
                     if (prevRel != RelationKind.rkUndefined)
                     {
-                        //int g, lev;
-
-                        var ks = KinshipsMan.FindKinship(prevRel, curRel);
-                        finRel = ks.FinRel;
-                        great += ks.Great;
+                        int g, lev;
+                        finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
+                        great += g;
 
                         // it's gap
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
@@ -144,9 +142,8 @@ namespace GKCore.Kinships
                             if (fullRel.Length > 0) fullRel += ", ";
                             fullRel += part;
 
-                            ks = KinshipsMan.FindKinship(prevRel, curRel);
-                            finRel = ks.FinRel;
-                            great += ks.Great;
+                            finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
+                            great += g;
                         }
 
                         prevRel = finRel;
@@ -180,10 +177,10 @@ namespace GKCore.Kinships
                 return "???";
 
             string rel = FixRelation(ind2, xrel, great);
-            //string name1 = GKUtils.GetNameString(ind1, true, false);
+            string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
-            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, fContext.Culture.GetPossessiveName(/*name1*/ind1));
+            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, name1);
             return rel;
         }
 

@@ -112,7 +112,6 @@
       <DependentUpon>TVSettingsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKTreeVizPlugin.cs" />
-    <Compile Include="HighResolutionTimer.cs" />
     <Compile Include="TreeVizControl.cs">
       <SubType>Component</SubType>
     </Compile>

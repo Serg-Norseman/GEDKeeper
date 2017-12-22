@@ -19,13 +19,15 @@
  */
 
 using System;
+using System.Drawing;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Components
 {
     [TestFixture]
     public class CommonTests
@@ -41,6 +43,22 @@ namespace GKTests.UITests
         {
             Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateListView(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
+        }
+
+        [Test]
+        public void Test_Other()
+        {
+            Rectangle rect1 = UIHelper.Rt2Rt(ExtRect.Empty);
+            Assert.AreEqual(0, rect1.Left);
+            Assert.AreEqual(0, rect1.Top);
+            Assert.AreEqual(0, rect1.Right);
+            Assert.AreEqual(0, rect1.Bottom);
+
+            RectangleF rect2 = UIHelper.Rt2Rt(ExtRectF.Empty);
+            Assert.AreEqual(0, rect2.Left);
+            Assert.AreEqual(0, rect2.Top);
+            Assert.AreEqual(0, rect2.Right);
+            Assert.AreEqual(0, rect2.Bottom);
         }
 
         [Test]

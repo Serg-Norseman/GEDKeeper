@@ -22,11 +22,9 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.GKComponents
+namespace GKUI.Components
 {
     [TestFixture]
     public class HyperViewTests

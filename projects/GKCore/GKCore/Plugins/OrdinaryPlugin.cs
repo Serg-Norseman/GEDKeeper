@@ -18,54 +18,56 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
-
-using GKCommon.GEDCOM;
+using System;
+using GKCommon;
 using GKCore.Interfaces;
-using GKTests;
-using GKTests.Mocks;
-using GKUI.Forms;
-using NUnit.Framework;
 
-namespace GKUI.Forms
+namespace GKCore.Plugins
 {
     /// <summary>
     /// 
     /// </summary>
-    [TestFixture]
-    public class OrganizerWinTests : CustomWindowTest
+    public abstract class OrdinaryPlugin : BaseObject, IPlugin
     {
-        private GEDCOMAddress fAddress;
-        private IBaseWindow fBase;
-        private OrganizerWin fDialog;
+        private IHost fHost;
 
-        public override void Setup()
+        public IHost Host { get { return fHost; } }
+
+        public abstract string DisplayName { get; }
+        public abstract ILangMan LangMan { get; }
+        public abstract IImage Icon { get; }
+
+        public abstract void Execute();
+
+        public virtual void OnHostClosing(HostClosingEventArgs eventArgs)
         {
-            base.Setup();
-
-            fBase = new BaseWindowMock();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree, fBase.Context.Tree, "", "");
-
-            fAddress.AddWebPage("test");
-            fAddress.AddPhoneNumber("test");
-            fAddress.AddEmailAddress("test");
-            fAddress.AddFaxNumber("test");
-
-            fDialog = new OrganizerWin(fBase);
-            fDialog.Show();
+            // dummy
         }
 
-        public override void TearDown()
+        public virtual void OnHostActivate()
         {
-            fDialog.Dispose();
-            fAddress.Dispose();
+            // dummy
         }
 
-        [Test]
-        public void Test_Common()
+        public virtual void OnHostDeactivate()
         {
+            // dummy
+        }
+
+        public virtual void OnLanguageChange()
+        {
+            // dummy
+        }
+
+        public bool Startup(IHost host)
+        {
+            fHost = host;
+            return true;
+        }
+
+        public bool Shutdown()
+        {
+            return true;
         }
     }
 }
-
-#endif

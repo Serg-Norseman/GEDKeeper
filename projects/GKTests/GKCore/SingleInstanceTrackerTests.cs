@@ -35,6 +35,20 @@ namespace GKTests.GKCore
         }
 
         [Test]
+        public void Test_IpcFake()
+        {
+            var ipcParam = new IpcParamEx();
+            Assert.IsNotNull(ipcParam);
+            Assert.AreEqual("", ipcParam.Message);
+            Assert.AreEqual("", ipcParam.Params);
+
+            ipcParam = new IpcParamEx("message", "params");
+            Assert.IsNotNull(ipcParam);
+            Assert.AreEqual("message", ipcParam.Message);
+            Assert.AreEqual("params", ipcParam.Params);
+        }
+
+        [Test]
         public void Test_Common()
         {
             //Assert.Throws(typeof(ArgumentNullException), () => { new SingleInstanceProxy(null); });

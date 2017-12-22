@@ -252,11 +252,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void testAddTag()
         {
-            string tagName = "BABA";
-            string tagValue = "YAGA";
+            const string tagName = "BABA";
+            const string tagValue = "YAGA";
             TagConstructor tagConstructor = null;
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
-            GEDCOMTag expResult = null;
             GEDCOMTag result = instance.AddTag(tagName, tagValue, tagConstructor);
             Assert.IsNotNull(instance.FindTag(tagName, 0));
         }
@@ -350,7 +349,7 @@ namespace GKCommon.GEDCOM
             GEDCOMProvider gp = new GEDCOMProvider(tee);
             try {
                 gp.LoadFromString(text);
-            } catch (Exception e) {
+            } catch (Exception) {
             }
             Assert.AreEqual(1, tee.RecordsCount);
             GEDCOMRecord rec = tee[0];

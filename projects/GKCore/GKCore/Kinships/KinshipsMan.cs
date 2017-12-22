@@ -50,7 +50,7 @@ namespace GKCore.Kinships
             RegisterKinship(
                 RelationSet.Create(RelationKind.rkNone),
                 RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother,
-                                   RelationKind.rkHusband, RelationKind.rkWife, RelationKind.rkSon, RelationKind.rkDaughter),
+                    RelationKind.rkHusband, RelationKind.rkWife, RelationKind.rkSon, RelationKind.rkDaughter),
                 RelationKind.rkSame, 0, 0);
 
             RegisterKinship(
@@ -221,15 +221,14 @@ namespace GKCore.Kinships
                 RelationKind.rkSisterInLaw_W, 0, 1);
         }
 
-        public static KinshipRet FindKinship(RelationKind prev, RelationKind cur)
+        public static RelationKind FindKinship(RelationKind prev, RelationKind cur, out int great, out int level)
         {
             RelationKind finRel = RelationKind.rkUndefined;
-            int great = 0;
-            int level = 0;
+            great = 0;
+            level = 0;
 
             int num = fKinships.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 KinshipRec kinship = fKinships[i];
 
                 if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur)) {
@@ -245,21 +244,7 @@ namespace GKCore.Kinships
                 }
             }
 
-            return new KinshipRet(finRel, great, level);
-        }
-
-        public sealed class KinshipRet
-        {
-            public RelationKind FinRel;
-            public int Great;
-            public int Level;
-
-            internal KinshipRet(RelationKind finRel, int great, int level)
-            {
-                FinRel = finRel;
-                Great = great;
-                Level = level;
-            }
+            return finRel;
         }
     }
 }

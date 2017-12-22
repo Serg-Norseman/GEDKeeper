@@ -24,12 +24,13 @@ using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKTests;
 using GKTests.Mocks;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// 
@@ -77,9 +78,8 @@ namespace GKTests.UITests
             Assert.AreEqual("sample text", cmbRelation.Text);
 
             // TODO: click and select Individual reference
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
+            //ModalFormHandler = RecordSelectDlg_Cancel_Handler;
+            //ClickButton("btnPersonAdd", fDialog);
 
             ClickButton("btnAccept", fDialog);
 

@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 
 using GKCommon;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKImageViewerPlugin")]
 [assembly: AssemblyDescription("GEDKeeper ImageViewer plugin")]
@@ -42,94 +43,54 @@ using GKCore.Interfaces;
 
 namespace GKImageViewerPlugin
 {
-    public enum IVLS
+    public enum PLS
     {
         LSID_ImgViewer,
         LSID_FilesFilter,
         LSID_FileLoad
     }
 
-    public class Plugin : BaseObject, IPlugin
+    public class Plugin : OrdinaryPlugin, IPlugin
     {
         private string fDisplayName = "ImageViewer";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
 
         internal ImageViewerWin fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                if (fForm != null) fForm.Dispose();
+            if (disposing) {
+                if (fForm != null)
+                    fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        public void Execute()
+        public override void Execute()
         {
-            try
-            {
+            try {
                 fForm = new ImageViewerWin(this);
-                fHost.ShowWindow(fForm);
-            }
-            catch (Exception ex)
-            {
+                Host.ShowWindow(fForm);
+            } catch (Exception ex) {
                 Logger.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(IVLS.LSID_ImgViewer);
+            try {
+                fLangMan = Host.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_ImgViewer);
 
-                if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+                if (fForm != null)
+                    fForm.SetLang();
+            } catch (Exception ex) {
                 Logger.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
             }
-        }
-
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKImageViewerPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKImageViewerPlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
         }
     }
 }

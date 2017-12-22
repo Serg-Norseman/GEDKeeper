@@ -68,7 +68,7 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == tbFileLoad) {
-                string fileName = AppHost.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+                string fileName = AppHost.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(PLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     SetFileRef(fileName);
@@ -201,8 +201,8 @@ namespace GKImageViewerPlugin
 
         public void SetLang()
         {
-            Text = fPlugin.LangMan.LS(IVLS.LSID_ImgViewer);
-            tbFileLoad.ToolTipText = fPlugin.LangMan.LS(IVLS.LSID_FileLoad);
+            Text = fPlugin.LangMan.LS(PLS.LSID_ImgViewer);
+            tbFileLoad.ToolTipText = fPlugin.LangMan.LS(PLS.LSID_FileLoad);
 
             if (fImageCtl != null) {
                 fImageCtl.SetLang();

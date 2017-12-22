@@ -12,7 +12,7 @@ using System;
 
 namespace ConwayLife
 {
-    public sealed class LifeGrid : IDisposable
+    public sealed class LifeGrid : IDisposable, IEquatable<LifeGrid>
     {
         private short[] fGrid;
         private int fGridHeight;
@@ -97,17 +97,15 @@ namespace ConwayLife
             return result;
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(LifeGrid obj)
         {
-            LifeGrid source = obj as LifeGrid;
-            if (source == null) return false;
-            
-            if (this == source) return true;
-            
-            if (source.fGridWidth != fGridWidth || source.fGridHeight != fGridHeight) {
+            if (obj == null) return false;
+            if (this == obj) return true;
+
+            if (obj.fGridWidth != fGridWidth || obj.fGridHeight != fGridHeight) {
                 return false;
             } else {
-                short[] sourceGrid = source.fGrid;
+                short[] sourceGrid = obj.fGrid;
                 for (int i = 0; i < fGridHeight * fGridWidth; i++) {
                     if (fGrid[i] != sourceGrid[i]) {
                         return false;

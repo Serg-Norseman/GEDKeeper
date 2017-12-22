@@ -47,7 +47,6 @@ namespace GKTreeVizPlugin
         private StatusBar fStatusBar;
         private StatusBarPanel sbpCurrentFps;
         private StatusBarPanel sbpKeysControl;
-        private StatusBarPanel sbpTimeControl;
         private TreeVizControl fTreeVizView;
 
         public TreeVizViewer(IBaseWindow baseWin, int minGens)
@@ -77,7 +76,6 @@ namespace GKTreeVizPlugin
             fStatusBar = new StatusBar();
             sbpCurrentFps = new StatusBarPanel();
             sbpKeysControl = new StatusBarPanel();
-            sbpTimeControl = new StatusBarPanel();
 
             SuspendLayout();
 
@@ -87,20 +85,16 @@ namespace GKTreeVizPlugin
 
             sbpKeysControl.Alignment = HorizontalAlignment.Left;
             sbpKeysControl.AutoSize = StatusBarPanelAutoSize.Contents;
-            sbpKeysControl.Text = "Debug (D); Free-rotate (R)";
+            sbpKeysControl.Text = "Debug (D); Free-rotate (R); Time stop (T)";
 
-            sbpTimeControl.Alignment = HorizontalAlignment.Left;
-            sbpTimeControl.AutoSize = StatusBarPanelAutoSize.Contents;
-            sbpTimeControl.Text = "Time stop (T)";
-
-            fStatusBar.Panels.AddRange(new StatusBarPanel[] { sbpCurrentFps, sbpKeysControl, sbpTimeControl });
+            fStatusBar.Panels.AddRange(new StatusBarPanel[] { sbpCurrentFps, sbpKeysControl });
             fStatusBar.ShowPanels = true;
 
             fTreeVizView = new TreeVizControl();
             fTreeVizView.Parent = this;
+            fTreeVizView.Dock = DockStyle.Fill;
 
             Controls.AddRange(new Control[] { fTreeVizView, fStatusBar });
-
             Size = new Size(800, 600);
             StartPosition = FormStartPosition.CenterScreen;
             SizeChanged += Form_SizeChanged;

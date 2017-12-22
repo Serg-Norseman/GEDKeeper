@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKTreeVizPlugin")]
 [assembly: AssemblyDescription("")]
@@ -42,7 +43,7 @@ using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
 {
-    public enum TVLS
+    public enum PLS
     {
         LSID_DisplayName,
         LSID_WithoutDates,
@@ -50,85 +51,42 @@ namespace GKTreeVizPlugin
         LSID_Accept,
         LSID_Cancel
     }
-    
-    public sealed class Plugin : IPlugin
+
+    public sealed class Plugin : OrdinaryPlugin, IPlugin
     {
         private string fDisplayName = "GKTreeVizPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
 
-        public void Execute()
+        public override void Execute()
         {
             if (SysUtils.IsUnix()) {
                 AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 
-            using (TVSettingsDlg dlg = new TVSettingsDlg(this))
-            {
-                if (dlg.ShowDialog() != DialogResult.OK) return;
+            using (TVSettingsDlg dlg = new TVSettingsDlg(this)) {
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
 
-                IBaseWindow curBase = fHost.GetCurrentFile(true);
-
-                using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
-                {
+                IBaseWindow curBase = Host.GetCurrentFile(true);
+                using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens)) {
                     viewer.ShowDialog();
                 }
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(TVLS.LSID_DisplayName);
-            }
-            catch (Exception ex)
-            {
+            try {
+                fLangMan = Host.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.LSID_DisplayName);
+            } catch (Exception ex) {
                 Logger.LogWrite("GKTreeVizPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-                // Implement any startup code here
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKTreeVizPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-                // Implement any shutdown code here
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKTreeVizPlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
     }
 }

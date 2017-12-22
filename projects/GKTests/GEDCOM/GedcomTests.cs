@@ -760,11 +760,13 @@ namespace GKTests.GEDCOM
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
-                Assert.AreEqual((dtx1.Value as GEDCOMDateInterpreted).DatePhrase, "today");
+                Assert.AreEqual("today", (dtx1.Value as GEDCOMDateInterpreted).DatePhrase);
+
                 (dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "now";
-                Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (now)");
+                Assert.AreEqual("INT 20 JAN 2013 (now)", dtx1.StringValue);
+
                 (dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "(yesterday)";
-                Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
+                Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
 
                 dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
                 Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
@@ -1415,17 +1417,13 @@ namespace GKTests.GEDCOM
 
                 // MoveTo test
                 GEDCOMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
-                GEDCOMAssociation asso1 = indi.AddAssociation("test", ind);
 
-                GEDCOMAlias als = indi.Aliases.Add(new GEDCOMAlias(fContext.Tree, indi, "", ""));
-
-                GEDCOMIndividualOrdinance indOrd = indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(fContext.Tree, indi, "", ""));
-
-                GEDCOMPointer ancInt = indi.AncestorsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
-
-                GEDCOMPointer descInt = indi.DescendantsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
-
-                GEDCOMPointer subm = indi.Submittors.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
+                indi.AddAssociation("test", ind);
+                indi.Aliases.Add(new GEDCOMAlias(fContext.Tree, indi, "", ""));
+                indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(fContext.Tree, indi, "", ""));
+                indi.AncestorsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
+                indi.DescendantsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
+                indi.Submittors.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
                 using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
                     indi.MoveTo(indi3, false);

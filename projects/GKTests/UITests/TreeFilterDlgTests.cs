@@ -22,12 +22,13 @@
 
 using GKCore.Charts;
 using GKCore.Interfaces;
+using GKTests;
 using GKTests.Mocks;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
-namespace GKTests.UITests
+namespace GKUI.Forms
 {
     /// <summary>
     /// 
