@@ -49,20 +49,13 @@ namespace GKTests.GKCore
             Assert.AreEqual("1.0.0.0", pluginInfo.Version);
         }
 
-        private class PluginTest : IPlugin
+        private class PluginTest : OrdinaryPlugin, IPlugin
         {
-            public string DisplayName { get { return "PluginTest"; } }
-            public IHost Host { get { return null; } }
-            public ILangMan LangMan { get { return null; } }
-            public IImage Icon { get { return null; } }
+            public override string DisplayName { get { return "PluginTest"; } }
+            public override ILangMan LangMan { get { return null; } }
+            public override IImage Icon { get { return null; } }
 
-            public void Execute() { }
-            public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-            public void OnHostActivate() {}
-            public void OnHostDeactivate() {}
-            public void OnLanguageChange() {}
-            public bool Startup(IHost host) { return true; }
-            public bool Shutdown() { return true; }
+            public override void Execute() { }
         }
 
         [Test]

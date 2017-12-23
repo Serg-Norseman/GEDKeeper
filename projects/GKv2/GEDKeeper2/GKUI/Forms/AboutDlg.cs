@@ -22,6 +22,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCore;
 
 namespace GKUI.Forms
@@ -48,9 +49,9 @@ namespace GKUI.Forms
         private void LabelMail_Click(object sender, EventArgs e)
         {
             Label lbl = sender as Label;
-            if (lbl == null) return;
-
-            Process.Start(lbl.Text);
+            if (lbl != null) {
+                SysUtils.LoadExtFile(lbl.Text);
+            }
         }
     }
 }

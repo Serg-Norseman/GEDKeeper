@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
@@ -254,6 +255,34 @@ namespace GKTests.GKCore
 
                 ExtRect rt = model.VisibleArea;
                 Assert.IsTrue(rt.IsEmpty());
+            }
+        }
+
+        [Test]
+        public void Test_SvgGraphics()
+        {
+            using (MemoryStream stm = new MemoryStream()) {
+                var svg = new SvgGraphics(stm, ExtRectF.CreateBounds(0, 0, 100, 100));
+                svg.IncludeXmlAndDoctype = true;
+                Assert.AreEqual(true, svg.IncludeXmlAndDoctype);
+
+                svg.BeginDrawing();
+                svg.Clear(UIHelper.ConvertColor(Color.Yellow));
+
+                svg.DrawLine(10, 10, 50, 10, 1);
+                svg.DrawArc(60, 60, 20, 15, 25, 1);
+                svg.DrawOval(10, 10, 30, 30, 1);
+                svg.DrawRect(50, 50, 20, 20, 2);
+                svg.DrawRoundedRect(80, 80, 10, 10, 3, 1);
+
+                svg.FillArc(60, 60, 20, 15, 25);
+                svg.FillOval(10, 10, 30, 30);
+                svg.FillRect(50, 50, 20, 20);
+
+                svg.SetColor(UIHelper.ConvertColor(Color.Red));
+                svg.FillRoundedRect(80, 80, 10, 10, 3);
+
+                svg.EndDrawing();
             }
         }
     }

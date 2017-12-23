@@ -89,6 +89,8 @@ namespace GKCore.Charts
         {
         }
 
+        #region Private methods
+
         void WriteLine(string s)
         {
             fWriter.WriteLine(s);
@@ -108,6 +110,13 @@ namespace GKCore.Charts
         {
             Write(string.Format(fFmt, format, args));
         }
+
+        static string FormatColor(IColor c)
+        {
+            return string.Format("#{0:X2}{1:X2}{2:X2}", c.GetR(), c.GetG(), c.GetB());
+        }
+
+        #endregion
 
         public void BeginDrawing()
         {
@@ -183,11 +192,6 @@ namespace GKCore.Charts
         public void SetFont(IFont f)
         {
             fLastFont = f;
-        }
-
-        static string FormatColor(IColor c)
-        {
-            return string.Format("#{0:X2}{1:X2}{2:X2}", c.GetR(), c.GetG(), c.GetB());
         }
 
         public void SetColor(IColor c)

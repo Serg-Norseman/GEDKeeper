@@ -157,11 +157,13 @@ namespace GKCommon
 
         public static void LoadExtFile(string fileName)
         {
+            #if !CI_MODE
             if (File.Exists(fileName)) {
                 Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
             } else {
                 Process.Start(fileName);
             }
+            #endif
         }
 
         public static bool IsRemovableDrive(string filePath)

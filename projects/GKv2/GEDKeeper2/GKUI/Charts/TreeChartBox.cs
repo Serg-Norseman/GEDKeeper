@@ -1000,7 +1000,7 @@ namespace GKUI.Charts
             SetSelected(null);
         }
 
-        private void CenterPerson(TreeChartPerson person, bool animation = true)
+        public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
             if (person == null) return;
 

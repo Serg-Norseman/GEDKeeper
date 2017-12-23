@@ -20,10 +20,12 @@
 
 #if !__MonoCS__
 
+using System;
 using GKTests;
 using GKUI;
 using GKUI.Forms;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -53,6 +55,9 @@ namespace GKUI.Forms
         [Test]
         public void Test_Close()
         {
+            //var lblMail = new LabelTester("lblMail", fDialog);
+            //lblMail.FireEvent("Click", new EventArgs());
+
             ClickButton("btnClose", fDialog);
         }
     }

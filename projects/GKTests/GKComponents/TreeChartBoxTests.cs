@@ -80,6 +80,19 @@ namespace GKUI.Charts
             fTreeChartBox.Kind = TreeChartKind.ckBoth;
             Assert.AreEqual(TreeChartKind.ckBoth, fTreeChartBox.Kind);
 
+            fTreeChartBox.CertaintyIndex = true;
+            Assert.AreEqual(true, fTreeChartBox.CertaintyIndex);
+
+            fTreeChartBox.TraceSelected = true;
+            Assert.AreEqual(true, fTreeChartBox.TraceSelected);
+
+            fTreeChartBox.TraceKinships = true;
+            Assert.AreEqual(true, fTreeChartBox.TraceKinships);
+
+            fTreeChartBox.CenterPerson(null); // nothing
+
+            fTreeChartBox.RefreshTree(); // nothing
+
             fForm.Show();
 
             fForm.Close();
