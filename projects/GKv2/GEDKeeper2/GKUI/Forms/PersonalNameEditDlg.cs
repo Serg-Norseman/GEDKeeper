@@ -111,6 +111,8 @@ namespace GKUI.Forms
             var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
             var langID = (GEDCOMLanguageID)item.Tag;
             fPersonalName.Language.Value = langID;
+
+            fBase.Context.CollectNameLangs(fPersonalName);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

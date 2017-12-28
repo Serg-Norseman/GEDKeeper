@@ -37,6 +37,7 @@ namespace GKCore.Interfaces
         ShieldState ShieldState { get; set; }
         bool Modified { get; set; }
         IBaseWindow Viewer { get; }
+        List<GEDCOMLanguageID> LangsList { get; }
 
         bool IsUnknown();
         void Clear();
@@ -57,6 +58,7 @@ namespace GKCore.Interfaces
         int FindBirthYear(GEDCOMIndividualRecord iRec);
         int FindDeathYear(GEDCOMIndividualRecord iRec);
         void CollectEventValues(GEDCOMCustomEvent evt);
+        void CollectNameLangs(GEDCOMPersonalName persName);
         void CollectTips(StringList tipsList);
         IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);
 

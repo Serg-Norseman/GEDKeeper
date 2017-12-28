@@ -303,7 +303,7 @@ namespace GKTests.GKCore
 
             //
 
-            GKUtils.CollectEventValues(null, null);
+            fContext.CollectEventValues(null);
 
             //
 
@@ -1443,8 +1443,8 @@ namespace GKTests.GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, null); });
-            TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, fContext, null); });
+            TreeTools.CheckGEDCOMFormat(fContext.Tree, fContext, progress);
 
             //
 

@@ -59,6 +59,7 @@ namespace GKCore
         private bool fModified;
         private ShieldState fShieldState;
 
+        private readonly List<GEDCOMLanguageID> fLangsList;
         private readonly List<GEDCOMRecord> fLockedRecords;
         private readonly GEDCOMTree fTree;
         private readonly ValuesCollection fValuesCollection;
@@ -133,6 +134,11 @@ namespace GKCore
             get { return fFileName; }
         }
 
+        public List<GEDCOMLanguageID> LangsList
+        {
+            get { return fLangsList; }
+        }
+
         public bool Modified
         {
             get {
@@ -196,6 +202,7 @@ namespace GKCore
             fUndoman = new ChangeTracker(fTree);
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GEDCOMRecord>();
+            fLangsList = new List<GEDCOMLanguageID>();
         }
 
         protected override void Dispose(bool disposing)
@@ -213,7 +220,23 @@ namespace GKCore
 
         public void CollectEventValues(GEDCOMCustomEvent evt)
         {
-            GKUtils.CollectEventValues(evt, fValuesCollection);
+            if (evt == null) return;
+
+            string evName = evt.Name;
+            string evVal = evt.StringValue;
+            if (!string.IsNullOrEmpty(evName) && !string.IsNullOrEmpty(evVal)) {
+                fValuesCollection.Add(evName, evVal, true);
+            }
+        }
+
+        public void CollectNameLangs(GEDCOMPersonalName persName)
+        {
+            if (persName == null) return;
+
+            GEDCOMLanguageID lang = persName.Language.Value;
+            if (lang != GEDCOMLanguageID.Unknown && !fLangsList.Contains(lang)) {
+                fLangsList.Add(lang);
+            }
         }
 
         public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, GEDCOMCustomDate evDate, string evPlace)
@@ -1099,7 +1122,7 @@ namespace GKCore
                 try
                 {
                     FileLoad(fileName, pw);
-                    TreeTools.CheckGEDCOMFormat(fTree, fValuesCollection, progress);
+                    TreeTools.CheckGEDCOMFormat(fTree, this, progress);
                     result = true;
                 }
                 finally

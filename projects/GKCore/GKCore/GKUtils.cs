@@ -299,18 +299,6 @@ namespace GKCore
 
         #region Event Utils
 
-        public static void CollectEventValues(GEDCOMCustomEvent evt, ValuesCollection valuesCollection)
-        {
-            if (evt == null || valuesCollection == null) return;
-
-            string evName = evt.Name;
-            string evVal = evt.StringValue;
-
-            if (string.IsNullOrEmpty(evName) || string.IsNullOrEmpty(evVal)) return;
-
-            valuesCollection.Add(evName, evVal, true);
-        }
-
         public static string GetAttributeValue(GEDCOMIndividualRecord iRec, string attrName)
         {
             if (iRec == null) return string.Empty;

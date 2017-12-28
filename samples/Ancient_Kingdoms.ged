@@ -7,21 +7,26 @@
 1 GEDC
 2 VERS 5.5.1
 2 FORM LINEAGE-LINKED
-1 FILE Ancient_Kingdoms_1.ged
-2 _REV 112
-1 DATE 26 DEC 2017
-2 TIME 21:52:08.9
+1 FILE Ancient_Kingdoms.ged
+2 _REV 113
+1 DATE 28 DEC 2017
+2 TIME 15:15:26
 1 SUBM @SUB1@
 0 @I1@ INDI
 1 _UID 3277E3953061E04A9509366FCC834D7A35FC
 1 SEX M
 1 CHAN
-2 DATE 20 DEC 2011
-3 TIME 11:31:27.2
+2 DATE 28 DEC 2017
+3 TIME 15:15:23.7
 1 SOUR @S1@
 2 PAGE стр. 427
 2 QUAY 0
-1 NAME Мардук-апла-иддин_I
+1 NAME Мардук-апла-иддин I
+2 _LANG Russian
+2 GIVN Мардук-апла-иддин I
+1 NAME Marduk-apla-iddina I
+2 _LANG Akkadian
+2 GIVN Marduk-apla-iddina I
 1 FAMC @F1@
 1 BIRT
 1 TITL касситский царь Вавилонии

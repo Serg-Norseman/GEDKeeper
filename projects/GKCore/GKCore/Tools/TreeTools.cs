@@ -308,26 +308,32 @@ namespace GKCore.Tools
         {
         }
 
-        private static void CheckRecord_Individual(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec, ValuesCollection valuesCollection)
+        private static void CheckRecord_Name(GEDCOMIndividualRecord iRec, GEDCOMPersonalName persName, IBaseContext baseContext)
+        {
+            baseContext.CollectNameLangs(persName);
+        }
+
+        private static void CheckRecord_Individual(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec,
+                                                   IBaseContext baseContext)
         {
             if (format == GEDCOMFormat.gf_Native)
             {
-                int num = iRec.Events.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                     GEDCOMCustomEvent evt = iRec.Events[i];
 
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
                     CheckRecord_RepairTag(tree, format, evt);
 
-                    GKUtils.CollectEventValues(evt, valuesCollection);
+                    baseContext.CollectEventValues(evt);
                 }
 
-                int num2 = iRec.UserReferences.Count;
-                for (int i = 0; i < num2; i++)
-                {
+                for (int i = 0, num = iRec.UserReferences.Count; i < num; i++) {
                     CheckRecord_URefCompatible(iRec, iRec.UserReferences[i]);
+                }
+
+                for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
+                    CheckRecord_Name(iRec, iRec.PersonalNames[i], baseContext);
                 }
             }
             else
@@ -372,7 +378,8 @@ namespace GKCore.Tools
             AppHost.NamesTable.ImportNames(iRec);
         }
 
-        private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam, ValuesCollection valuesCollection)
+        private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam,
+                                               IBaseContext baseContext)
         {
             if (format == GEDCOMFormat.gf_Native)
             {
@@ -467,7 +474,7 @@ namespace GKCore.Tools
 
         private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec,
                                         GEDCOMFormat format, int fileVer,
-                                        ValuesCollection valuesCollection)
+                                        IBaseContext baseContext)
         {
             rec.RequireUID();
 
@@ -497,11 +504,11 @@ namespace GKCore.Tools
 
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
-                    CheckRecord_Individual(tree, format, rec as GEDCOMIndividualRecord, valuesCollection);
+                    CheckRecord_Individual(tree, format, rec as GEDCOMIndividualRecord, baseContext);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    CheckRecord_Family(tree, format, rec as GEDCOMFamilyRecord, valuesCollection);
+                    CheckRecord_Family(tree, format, rec as GEDCOMFamilyRecord, baseContext);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
@@ -555,13 +562,13 @@ namespace GKCore.Tools
             }
         }
 
-        public static bool CheckGEDCOMFormat(GEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
+        public static bool CheckGEDCOMFormat(GEDCOMTree tree, IBaseContext baseContext, IProgressController pc)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
 
-            if (valuesCollection == null)
-                throw new ArgumentNullException("valuesCollection");
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
 
             if (pc == null)
                 throw new ArgumentNullException("pc");
@@ -598,7 +605,7 @@ namespace GKCore.Tools
                     for (int i = 0; i < num; i++)
                     {
                         GEDCOMRecord rec = tree[i];
-                        CheckRecord(tree, rec, format, fileVer, valuesCollection);
+                        CheckRecord(tree, rec, format, fileVer, baseContext);
 
                         if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0)
                         {
