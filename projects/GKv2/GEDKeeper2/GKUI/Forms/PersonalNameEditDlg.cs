@@ -64,7 +64,9 @@ namespace GKUI.Forms
 
         private void UpdateControls()
         {
-            var parts = GKUtils.GetNameParts(fPersonalName);
+            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+
+            var parts = GKUtils.GetNameParts(iRec, fPersonalName);
 
             txtSurname.Text = parts.Surname;
             txtName.Text = parts.Name;
@@ -133,7 +135,7 @@ namespace GKUI.Forms
                 cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
                 cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
             }
 

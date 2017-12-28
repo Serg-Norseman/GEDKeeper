@@ -20,7 +20,6 @@
 
 namespace GKCommon.GEDCOM
 {
-    // FIXME: possible numerous violations of the standard; need to recheck the nesting of tags
     public sealed class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
     {
         public GEDCOMDateValue Date
@@ -77,10 +76,9 @@ namespace GKCommon.GEDCOM
             get { return GetChangeDate(); }
         }
 
-
         private GEDCOMDate GetChangeDate()
         {
-            return DateStatus.TagClass("CHAN", GEDCOMDate.Create) as GEDCOMDate;
+            return DateStatus.TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate;
         }
 
         public GEDCOMDateStatus DateStatus
@@ -92,12 +90,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "STAT")
-            {
+            if (tagName == "STAT") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
-            }
-            else
-            {
+            } else {
                 // define "DATE", "FAMC" by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -105,7 +100,8 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMIndividualOrdinance(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMIndividualOrdinance(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            : base(owner, parent, tagName, tagValue)
         {
         }
 

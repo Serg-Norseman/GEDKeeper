@@ -725,6 +725,7 @@ namespace GKCore.Lists
 
             fListColumns.AddColumn(LSID.LSID_Name, 350, false);
             fListColumns.AddColumn(LSID.LSID_Type, 100, false);
+            fListColumns.AddColumn(LSID.LSID_Language, 150, false);
             fListColumns.ResetDefaults();
         }
 
@@ -740,7 +741,8 @@ namespace GKCore.Lists
 
                 foreach (GEDCOMPersonalName pn in iRec.PersonalNames)
                 {
-                    fSheetList.AddItem(pn, new object[] { pn.FullName, LangMan.LS(GKData.NameTypes[(int)pn.NameType]) } );
+                    string lang = GEDCOMLanguageEnum.Instance.GetStrValue(pn.Language.Value);
+                    fSheetList.AddItem(pn, new object[] { pn.FullName, LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang } );
                 }
 
                 fSheetList.EndUpdate();

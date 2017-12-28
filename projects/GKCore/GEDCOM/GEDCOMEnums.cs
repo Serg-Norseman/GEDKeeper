@@ -145,12 +145,17 @@ namespace GKCommon.GEDCOM
         bdsUncleared
     }
 
-    public enum GEDCOMChildLinkageStatus
+    public enum GEDCOMEndowmentDateStatus
     {
-        clNone,
-        clChallenged,
-        clDisproven,
-        clProven
+        edsNone,
+        edsChild,
+        edsCompleted,
+        edsExcluded,
+        edsInfant,
+        edsPre1970,
+        edsStillborn,
+        edsSubmitted,
+        edsUncleared
     }
 
     public enum GEDCOMChildSealingDateStatus
@@ -164,17 +169,12 @@ namespace GKCommon.GEDCOM
         cdsUncleared
     }
 
-    public enum GEDCOMEndowmentDateStatus
+    public enum GEDCOMChildLinkageStatus
     {
-        edsNone,
-        edsChild,
-        edsCompleted,
-        edsExcluded,
-        edsInfant,
-        edsPre1970,
-        edsStillborn,
-        edsSubmitted,
-        edsUncleared
+        clNone,
+        clChallenged,
+        clDisproven,
+        clProven
     }
 
     public enum GEDCOMOrdinanceProcessFlag

@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate SpouseSealingChangeDate
         {
-            get { return DateStatus.TagClass("CHAN", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return DateStatus.TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDateStatus DateStatus
@@ -58,12 +58,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "STAT")
-            {
+            if (tagName == "STAT") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
-            }
-            else
-            {
+            } else {
                 // define "DATE" by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -76,7 +73,8 @@ namespace GKCommon.GEDCOM
             return new GEDCOMSpouseSealing(owner, parent, tagName, tagValue);
         }
 
-        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            : base(owner, parent, tagName, tagValue)
         {
         }
     }

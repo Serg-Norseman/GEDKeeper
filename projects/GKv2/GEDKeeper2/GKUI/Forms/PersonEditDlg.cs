@@ -80,10 +80,8 @@ namespace GKUI.Forms
 
             try
             {
-                var parts = GKUtils.GetNameParts(fPerson, false);
-                txtSurname.Text = parts.Surname;
-                txtName.Text = parts.Name;
-                cmbPatronymic.Text = parts.Patronymic;
+                GEDCOMPersonalName np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
+                UpdateNameControls(np);
 
                 cmbSex.SelectedIndex = (sbyte)fPerson.Sex;
                 chkPatriarch.Checked = fPerson.Patriarch;
@@ -92,17 +90,6 @@ namespace GKUI.Forms
                 cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
                 cmbRestriction.SelectedIndex = (sbyte)fPerson.Restriction;
                 cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
-
-                if (fPerson.PersonalNames.Count > 0)
-                {
-                    GEDCOMPersonalName np = fPerson.PersonalNames[0];
-                    txtNamePrefix.Text = np.Pieces.Prefix;
-                    txtNickname.Text = np.Pieces.Nickname;
-                    txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
-                    txtNameSuffix.Text = np.Pieces.Suffix;
-
-                    txtMarriedSurname.Text = np.Pieces.MarriedName;
-                }
 
                 fEventsList.ListModel.DataOwner = fPerson;
                 fNotesList.ListModel.DataOwner = fPerson;
@@ -120,6 +107,34 @@ namespace GKUI.Forms
             catch (Exception ex)
             {
                 Logger.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
+            }
+        }
+
+        private void UpdateNameControls(GEDCOMPersonalName np)
+        {
+            if (np != null) {
+                var parts = GKUtils.GetNameParts(fPerson, np, false);
+                txtSurname.Text = parts.Surname;
+                txtName.Text = parts.Name;
+                cmbPatronymic.Text = parts.Patronymic;
+
+                txtNamePrefix.Text = np.Pieces.Prefix;
+                txtNickname.Text = np.Pieces.Nickname;
+                txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
+                txtNameSuffix.Text = np.Pieces.Suffix;
+
+                txtMarriedSurname.Text = np.Pieces.MarriedName;
+            } else {
+                txtSurname.Text = "";
+                txtName.Text = "";
+                cmbPatronymic.Text = "";
+
+                txtNamePrefix.Text = "";
+                txtNickname.Text = "";
+                txtSurnamePrefix.Text = "";
+                txtNameSuffix.Text = "";
+
+                txtMarriedSurname.Text = "";
             }
         }
 
@@ -411,6 +426,13 @@ namespace GKUI.Forms
             fLocalUndoman.DoIndividualNameChange(fPerson, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
         }
 
+        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+                UpdateNameControls(fPerson.PersonalNames[0]);
+            }
+        }
+
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
@@ -635,6 +657,7 @@ namespace GKUI.Forms
             fSpousesList.OnModify += ModifySpousesSheet;
 
             fNamesList = new GKSheetList(pageNames);
+            fNamesList.OnModify += ModifyNamesSheet;
             fNamesList.SetControlName("fNamesList"); // for purpose of tests
 
             fAssociationsList = new GKSheetList(pageAssociations);

@@ -2775,7 +2775,7 @@ namespace GKCore
             personalName.Pieces.PatronymicName = patronymic;
         }
 
-        public static NamePartsRet GetNameParts(GEDCOMPersonalName personalName)
+        public static NamePartsRet GetNameParts(GEDCOMIndividualRecord iRec, GEDCOMPersonalName personalName, bool formatted = true)
         {
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
@@ -2800,6 +2800,10 @@ namespace GKCore
                 }
             }
 
+            if (formatted) {
+                surname = GetFmtSurname(iRec, personalName, surname);
+            }
+
             return new NamePartsRet(surname, name, patronymic);
         }
 
@@ -2809,14 +2813,7 @@ namespace GKCore
                 throw new ArgumentNullException("iRec");
 
             if (iRec.PersonalNames.Count > 0) {
-                GEDCOMPersonalName np = iRec.PersonalNames[0];
-                var parts = GetNameParts(np);
-
-                if (formatted) {
-                    parts.Surname = GetFmtSurname(iRec, np, parts.Surname);
-                }
-
-                return parts;
+                return GetNameParts(iRec, iRec.PersonalNames[0], formatted);
             } else {
                 return new NamePartsRet("", "", "");
             }

@@ -579,9 +579,12 @@ namespace GKCommon.GEDCOM
             result.Add("_EYES", new TagProperties("_EYES", true,  true));
             result.Add("_MDNA", new TagProperties("_MDNA", true,  true));
             result.Add("_YDNA", new TagProperties("_YDNA", true,  true));
-
             result.Add("_LANG", new TagProperties("_LANG", true,  true));
 
+            // TODO
+            //result.Add("_OBIT", new TagProperties("_OBIT", true,  true)); // Obituary
+            //result.Add("_ELEC", new TagProperties("_ELEC", true,  true)); // Election
+            //result.Add("_MDCL", new TagProperties("_MDCL", true,  true)); // Medical condition
             //result.Add("_EXCM", new TagProperties("_EXCM", true,  true)); // Excommunication!
 
             return result;

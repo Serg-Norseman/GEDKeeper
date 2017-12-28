@@ -37,19 +37,17 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE")
-            {
+            if (tagName == "DATE") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 
             return result;
         }
 
-        public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            : base(owner, parent, tagName, tagValue)
         {
         }
 

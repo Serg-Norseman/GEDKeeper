@@ -49,7 +49,7 @@ namespace GKCore.Operations
                 result = false;
             } else {
                 GEDCOMPersonalName np = fPerson.PersonalNames[0];
-                var parts = GKUtils.GetNameParts(np);
+                var parts = GKUtils.GetNameParts(fPerson, np);
 
                 fOldSurname = parts.Surname;
                 fOldName = parts.Name;

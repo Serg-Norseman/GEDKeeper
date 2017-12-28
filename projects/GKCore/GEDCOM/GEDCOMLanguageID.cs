@@ -112,6 +112,7 @@ namespace GKCommon.GEDCOM
         Vietnamese,
         Yiddish,
 
+        AncientGreek, Latin,
         // TODO: GK Extensions, extinct languages
         Akkadian, Eblaite, Hattic, Hittite, Hurrian, Luwian, MitanniAryan, Palaic, Sumerian
     }
@@ -131,6 +132,7 @@ namespace GKCommon.GEDCOM
             "Rajasthani", "Russian", "Sanskrit", "Serb", "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Ukrainian", "Urdu",
             "Vietnamese", "Yiddish",
 
+            "Ancient Greek", "Latin", 
             "Akkadian", "Eblaite", "Hattic", "Hittite", "Hurrian", "Luwian", "Mitanni-Aryan", "Palaic", "Sumerian"
         };
 
@@ -139,5 +141,7 @@ namespace GKCommon.GEDCOM
         }
 
         public static readonly GEDCOMLanguageEnum Instance = new GEDCOMLanguageEnum();
+
+        public static readonly GEDCOMLanguageID LastVal = GEDCOMLanguageID.Sumerian;
     }
 }

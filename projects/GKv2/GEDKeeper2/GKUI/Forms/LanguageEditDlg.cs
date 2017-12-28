@@ -54,7 +54,7 @@ namespace GKUI.Forms
             btnAccept.Image = GKResources.iBtnAccept;
             btnCancel.Image = GKResources.iBtnCancel;
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++)
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++)
             {
                 cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
             }
