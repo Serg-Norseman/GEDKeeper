@@ -541,6 +541,7 @@ namespace GKCommon.GEDCOM
             result.Add("CTRY", new TagProperties("CTRY", true, false));
             result.Add("DATE", new TagProperties("DATE", true, false));
             result.Add("PAGE", new TagProperties("PAGE", true, false));
+            result.Add("PHON", new TagProperties("PHON", true, false));
             result.Add("PLAC", new TagProperties("PLAC", true, false));
             result.Add("POST", new TagProperties("POST", true, false));
             result.Add("PUBL", new TagProperties("PUBL", true, false));
