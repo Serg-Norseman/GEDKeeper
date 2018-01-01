@@ -1,0 +1,10 @@
+﻿**/.vs/
+/CalendarConverterLib/bin/
+/CalendarConverterLib/obj/
+/CalendarConverterTests/bin/
+/CalendarConverterTests/obj/
+/UDNTest/bin/
+/UDNTest/obj/
+*.suo
+*.userprefs
+*.DotSettings.user
