@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;

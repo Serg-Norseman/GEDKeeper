@@ -67,19 +67,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
-      <HintPath>libs\ArborGVT.dll</HintPath>
+      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>libs\NLog.dll</HintPath>
+      <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nVLC">
-      <HintPath>libs\mswin\nVLC.dll</HintPath>
+      <HintPath>..\..\libs\mswin\nVLC.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="ZedGraph">
-      <HintPath>libs\ZedGraph.dll</HintPath>
+      <HintPath>..\..\libs\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

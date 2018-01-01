@@ -77,7 +77,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
-      <HintPath>ArborGVT.dll</HintPath>
+      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="csgl">
       <HintPath>csgl.dll</HintPath>

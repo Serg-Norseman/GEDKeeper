@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Geocoding;

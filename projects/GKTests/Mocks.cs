@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Export;

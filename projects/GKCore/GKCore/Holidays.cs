@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using BSLib;
 using GKCommon;
 
 namespace GKCore

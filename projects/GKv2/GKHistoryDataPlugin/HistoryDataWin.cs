@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Externals;
+using BSLib;
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;

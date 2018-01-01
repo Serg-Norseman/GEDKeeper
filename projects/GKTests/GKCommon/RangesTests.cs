@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon;
+using BSLib;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

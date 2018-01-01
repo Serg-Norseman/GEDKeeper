@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon;
+using BSLib;
 
 namespace GKCore
 {

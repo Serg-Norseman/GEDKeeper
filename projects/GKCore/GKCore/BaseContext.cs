@@ -27,6 +27,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using BSLib;
 using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;

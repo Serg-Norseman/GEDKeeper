@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using GKCommon.GEDCOM;
 using NUnit.Framework;
 

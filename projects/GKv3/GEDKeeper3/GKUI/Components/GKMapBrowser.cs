@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using Eto.Forms;
 using GKCommon;
 using GKCore.Geocoding;

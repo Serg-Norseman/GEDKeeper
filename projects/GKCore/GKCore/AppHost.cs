@@ -24,6 +24,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 
+using BSLib;
 using GKCommon;
 using GKCommon.IoC;
 using GKCore.Geocoding;

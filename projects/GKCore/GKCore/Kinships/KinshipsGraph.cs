@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections.Generic;
+
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;

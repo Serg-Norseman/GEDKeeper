@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;

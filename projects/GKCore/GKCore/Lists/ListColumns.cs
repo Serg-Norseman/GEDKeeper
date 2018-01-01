@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 
@@ -209,7 +210,7 @@ namespace GKCore.Lists
             fOrderedColumns.Clear();
             if (fColumns.Count > 0) {
                 foreach (var column in fColumns) fOrderedColumns.Add(column);
-                SysUtils.MergeSort(fOrderedColumns, CompareItems);
+                SortHelper.MergeSort(fOrderedColumns, CompareItems);
             }
         }
 

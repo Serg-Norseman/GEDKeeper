@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;

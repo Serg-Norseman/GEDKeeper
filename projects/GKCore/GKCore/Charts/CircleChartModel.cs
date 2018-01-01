@@ -21,11 +21,11 @@
 using System;
 using System.Collections.Generic;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Charts
 {

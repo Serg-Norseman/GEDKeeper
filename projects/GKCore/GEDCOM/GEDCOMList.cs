@@ -23,7 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-using Externals;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {

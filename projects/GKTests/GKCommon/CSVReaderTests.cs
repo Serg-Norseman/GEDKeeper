@@ -20,8 +20,7 @@
 
 using System.Collections.Generic;
 using System.Data;
-
-using Externals;
+using BSLib;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

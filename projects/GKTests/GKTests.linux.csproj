@@ -60,7 +60,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
-      <HintPath>..\GKCore\libs\ArborGVT.dll</HintPath>
+      <HintPath>..\libs\ArborGVT.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib">
+      <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>nunit.framework.dll</HintPath>

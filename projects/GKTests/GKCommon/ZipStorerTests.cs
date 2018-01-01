@@ -21,8 +21,7 @@
 using System;
 using System.IO;
 using System.Text;
-
-using Externals;
+using BSLib;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

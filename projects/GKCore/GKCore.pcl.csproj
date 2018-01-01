@@ -34,14 +34,17 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\libs\BSLib.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetRtfWriter">
-      <HintPath>libs\DotNetRtfWriter.dll</HintPath>
+      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
     </Reference>
     <Reference Include="ExcelLibrary">
-      <HintPath>libs\ExcelLibrary.dll</HintPath>
+      <HintPath>..\libs\ExcelLibrary.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
-      <HintPath>libs\itextsharp.dll</HintPath>
+      <HintPath>..\libs\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -49,18 +52,17 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
     <Reference Include="KopiLua">
-      <HintPath>libs\linux\KopiLua.dll</HintPath>
+      <HintPath>..\libs\linux\KopiLua.dll</HintPath>
     </Reference>
     <Reference Include="NLua">
-      <HintPath>libs\linux\NLua.dll</HintPath>
+      <HintPath>..\libs\linux\NLua.dll</HintPath>
     </Reference>
     <Reference Include="YamlSerializer">
-      <HintPath>libs\YamlSerializer.dll</HintPath>
+      <HintPath>..\libs\YamlSerializer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\CSVReader.cs" />
     <Compile Include="Externals\IniFiles\IniFileBlankLine.cs" />
     <Compile Include="Externals\IniFiles\IniFileCommentary.cs" />
     <Compile Include="Externals\IniFiles\IniFileSection.cs" />
@@ -72,12 +74,9 @@
     <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />
-    <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\BBTextParser.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />
-    <Compile Include="Externals\ListTimSort.cs" />
-    <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />
     <Compile Include="GEDCOM\GEDCOMFactory.cs" />
@@ -144,9 +143,7 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
-    <Compile Include="GKCommon\EnumSet.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
-    <Compile Include="GKCommon\ExtList.cs" />
     <Compile Include="GKCommon\ExtRect.cs" />
     <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\ImportUtils.cs" />
@@ -155,7 +152,6 @@
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Margins.cs" />
-    <Compile Include="GKCommon\Range.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
     <Compile Include="GKCommon\SmartGraph\Graph.cs" />
     <Compile Include="GKCommon\SmartGraph\GraphvizWriter.cs" />
@@ -164,7 +160,6 @@
     <Compile Include="GKCommon\SmartGraph\IGraph.cs" />
     <Compile Include="GKCommon\SmartGraph\IVertex.cs" />
     <Compile Include="GKCommon\SmartGraph\Vertex.cs" />
-    <Compile Include="GKCommon\StringList.cs" />
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\TypeHandler.cs" />

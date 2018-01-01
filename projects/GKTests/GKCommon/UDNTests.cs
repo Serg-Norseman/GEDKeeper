@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using GKCommon;
 using NUnit.Framework;
 
@@ -134,7 +135,7 @@ namespace GKTests.GKCommon
                 UDNCalendarType.ctGregorian, 2015, 2, 28), UDNCalendarType.ctGregorian, "~ 2015/02/28 [g]"));
 
             // standart sort for .NET and Mono gives different result at items 31 and 32
-            SysUtils.QuickSort(fDates, delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
+            SortHelper.QuickSort(fDates, delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
             //fDates.Sort(delegate(UDNRecord left, UDNRecord right) { return left.Value.CompareTo(right.Value); });
 
             Assert.AreEqual("??/??/?? [g]", fDates[0].Description, "(00)");

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;

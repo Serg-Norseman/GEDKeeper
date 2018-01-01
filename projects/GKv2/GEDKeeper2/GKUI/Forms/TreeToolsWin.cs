@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

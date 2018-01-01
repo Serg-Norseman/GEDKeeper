@@ -21,10 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

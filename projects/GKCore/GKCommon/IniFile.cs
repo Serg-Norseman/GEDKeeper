@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using Externals.IniFiles;
 
 namespace GKCommon

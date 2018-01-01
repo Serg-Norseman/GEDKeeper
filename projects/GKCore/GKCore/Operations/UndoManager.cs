@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 

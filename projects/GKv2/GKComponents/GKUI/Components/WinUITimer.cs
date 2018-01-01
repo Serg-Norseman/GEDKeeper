@@ -20,7 +20,7 @@
 
 using System;
 using System.Timers;
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKUI.Components

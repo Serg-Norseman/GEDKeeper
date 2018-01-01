@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
@@ -344,7 +345,7 @@ namespace GKUI.Components
                 if (fListMan != null) {
                     fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
                 } else {
-                    SysUtils.MergeSort(fItems, CompareItems);
+                    SortHelper.MergeSort(fItems, CompareItems);
                 }
             }
         }

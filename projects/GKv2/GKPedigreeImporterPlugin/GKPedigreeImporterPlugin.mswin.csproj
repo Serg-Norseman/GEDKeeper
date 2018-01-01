@@ -81,6 +81,9 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel" />
     <Reference Include="Microsoft.Office.Interop.Word" />
     <Reference Include="System" />

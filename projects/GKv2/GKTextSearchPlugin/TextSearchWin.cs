@@ -24,7 +24,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKUI.Components;

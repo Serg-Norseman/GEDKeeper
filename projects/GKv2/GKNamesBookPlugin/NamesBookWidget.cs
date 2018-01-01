@@ -26,7 +26,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon;
+using BSLib;
 using GKCore;
 using NUnit.Framework;
 
