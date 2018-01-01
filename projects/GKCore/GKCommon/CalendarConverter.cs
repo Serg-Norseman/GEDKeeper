@@ -15,34 +15,8 @@ using System;
 
 namespace GKCommon
 {
-    public sealed class CalendarConverter
+    public class CalendarConverter
     {
-        public sealed class DateRet
-        {
-            public int BahaiMajor;
-            public int BahaiCycle;
-
-            public int Year;
-            public int Month;
-            public int Day;
-
-            public DateRet(int year, int month, int day)
-            {
-                Year = year;
-                Month = month;
-                Day = day;
-            }
-
-            public DateRet(int bahaiMajor, int bahaiCycle, int year, int month, int day)
-            {
-                BahaiMajor = bahaiMajor;
-                BahaiCycle = bahaiCycle;
-                Year = year;
-                Month = month;
-                Day = day;
-            }
-        }
-
         #region Aux functions
 
         private static int iFloor(double x)
@@ -65,7 +39,7 @@ namespace GKCommon
             return (int)Math.Truncate(a - b * Math.Floor(a / b));
         }
 
-        private static int downwardRounding(int dividend, int divisor)
+        protected static int downwardRounding(int dividend, int divisor)
         {
             if (0 <= dividend)
             {
@@ -107,7 +81,7 @@ namespace GKCommon
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_gregorian(double jd)
+        public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
         {
             double wjd = (Math.Floor((jd - 0.5)) + 0.5);
             double depoch = (wjd - GREGORIAN_EPOCH);
@@ -118,17 +92,15 @@ namespace GKCommon
             int quad = iFloor((dcent / 1461.0));
             double dquad = _modf(dcent, 1461.0);
             int yindex = iFloor((dquad / 365.0));
-            int year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
+            year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
             if (cent != 4 && yindex != 4)
             {
                 year++;
             }
             double yearday = (wjd - gregorian_to_jd(year, 1, 1));
             int leapadj = (wjd < gregorian_to_jd(year, 3, 1) ? 0 : (leap_gregorian(year) ? 1 : 2));
-            int month = iFloor((((yearday + leapadj) * 12.0 + 373.0) / 367.0));
-            int day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
-
-            return new DateRet(year, month, day);
+            month = iFloor((((yearday + leapadj) * 12.0 + 373.0) / 367.0));
+            day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
         }
 
         // Based on https://en.wikipedia.org/wiki/Julian_day
@@ -143,20 +115,18 @@ namespace GKCommon
 
         // Based on https://en.wikipedia.org/wiki/Julian_day
         // astronomical years, 0 = "-4713/11/24"
-        public static DateRet jd_to_gregorian2(int jd)
+        public static void jd_to_gregorian2(int jd, out int year, out int month, out int day)
         {
-            int a = jd + 32044;
+            int a = (jd) + 32044;
             int b = (4 * a + 3) / 146097;
             int c = a - (146097 * b) / 4;
             int d = (4 * c + 3) / 1461;
             int e = c - (1461 * d) / 4;
             int m = (5 * e + 2) / 153;
 
-            int day = e - (153 * m + 2) / 5 + 1;
-            int month = m + 3 - 12 * (m / 10);
-            int year = 100 * b + d - 4800 + m / 10;
-
-            return new DateRet(year, month, day);
+            day = e - (153 * m + 2) / 5 + 1;
+            month = m + 3 - 12 * (m / 10);
+            year = 100 * b + d - 4800 + m / 10;
         }
 
         #endregion
@@ -186,22 +156,19 @@ namespace GKCommon
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_julian(double jd)
+        public static void jd_to_julian(double jd, out int year, out int month, out int day)
         {
             int b = iFloor(jd + 0.5) + 1524;
             int c = iFloor(((b - 122.1) / 365.25));
             int d = iFloor((365.25 * c));
             int e = iFloor(((b - d) / 30.6001));
-
-            int month = iFloor((e < 14 ? e - 1 : e - 13));
-            int year = iFloor((month > 2 ? c - 4716 : c - 4715));
-            int day = b - d - iFloor((30.6001 * e));
+            month = iFloor((e < 14 ? e - 1 : e - 13));
+            year = iFloor((month > 2 ? c - 4716 : c - 4715));
+            day = b - d - iFloor((30.6001 * e));
             if (year < 1)
             {
                 year--;
             }
-
-            return new DateRet(year, month, day);
         }
 
         public static int julian_to_jd2(int year, int month, int day)
@@ -213,18 +180,16 @@ namespace GKCommon
             return (day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083);
         }
 
-        public static DateRet jd_to_julian2(int jd)
+        public static void jd_to_julian2(int jd, out int year, out int month, out int day)
         {
-            int c = jd + 32082;
+            int c = ((int) (jd)) + 32082;
             int d = (4 * c + 3) / 1461;
             int e = c - (1461 * d) / 4;
             int m = (5 * e + 2) / 153;
 
-            int day = e - (153 * m + 2) / 5 + 1;
-            int month = m + 3 - 12 * (m / 10);
-            int year = d - 4800 + m / 10;
-
-            return new DateRet(year, month, day);
+            day = e - (153 * m + 2) / 5 + 1;
+            month = m + 3 - 12 * (m / 10);
+            year = d - 4800 + m / 10;
         }
 
         #endregion
@@ -353,11 +318,11 @@ namespace GKCommon
             return jd;
         }
 
-        public static DateRet jd_to_hebrew(double jd)
+        public static void jd_to_hebrew(double jd, out int year, out int month, out int day)
         {
             jd = (Math.Floor(jd) + 0.5);
-            int count = iFloor((jd - HEBREW_EPOCH) * 98496.0 / 35975351.0);
-            int year = count - 1;
+            int count = iFloor(((jd - HEBREW_EPOCH) * 98496.0 / 35975351.0));
+            year = count - 1;
             int i = count;
             while (jd >= hebrew_to_jd(i, 7, 1))
             {
@@ -365,16 +330,14 @@ namespace GKCommon
                 year++;
             }
             int first = (jd < hebrew_to_jd(year, 1, 1) ? 7 : 1);
-            int month = first;
+            month = first;
             i = first;
             while (jd > hebrew_to_jd(year, i, hebrew_month_days(year, i)))
             {
                 i++;
                 month++;
             }
-            int day = (int)Math.Truncate(jd - hebrew_to_jd(year, month, 1) + 1.0);
-
-            return new DateRet(year, month, day);
+            day = (int)Math.Truncate(jd - hebrew_to_jd(year, month, 1) + 1.0);
         }
 
         // Everything below is based on http://aa.quae.nl/en/reken/juliaansedag.html
@@ -452,9 +415,10 @@ namespace GKCommon
             return (347821 + c2 + c3 + z4);
         }
 
-        public static DateRet jd_to_hebrew3(int jd)
+        public static void jd_to_hebrew3(int jd, out int year, out int month,
+                                         out int day)
         {
-            int y4 = jd - 347821;
+            int y4 = (jd) - 347821;
             int q = downwardRounding(y4, 1447);
             int r = y4 - 1447 * q;
             int gamma1 = 49 * q +
@@ -496,11 +460,9 @@ namespace GKCommon
                 c9 * downwardRounding(mu3 + 3, 12);
             int z4 = y4 - (c2 + c3);
             int c = downwardRounding(12 - mu3, 7);
-            int year = xi3 + 1 - c;
-            int month = mu3 + 1;
-            int day = z4 + 1;
-
-            return new DateRet(year, month, day);
+            year = xi3 + 1 - c;
+            month = mu3 + 1;
+            day = z4 + 1;
         }
 
         #endregion
@@ -521,14 +483,12 @@ namespace GKCommon
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_islamic(double jd)
+        public static void jd_to_islamic(double jd, out int year, out int month, out int day)
         {
             jd = (Math.Floor(jd) + 0.5);
-            int year = iFloor(((30.0 * (jd - ISLAMIC_EPOCH) + 10646.0) / 10631.0));
-            int month = Math.Min(12, iCeil(((jd - (29.0 + islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
-            int day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
-
-            return new DateRet(year, month, day);
+            year = iFloor(((30.0 * (jd - ISLAMIC_EPOCH) + 10646.0) / 10631.0));
+            month = Math.Min(12, iCeil(((jd - (29.0 + islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
+            day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
@@ -540,17 +500,16 @@ namespace GKCommon
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static DateRet jd_to_islamic3(int jd)
+        public static void jd_to_islamic3(int jd, out int year, out int month,
+                                          out int day)
         {
-            int k2 = 30 * (jd - 1948440) + 15;
+            int k2 = 30 * ((jd) - 1948440) + 15;
             int temp = k2 - 10631 * downwardRounding(k2, 10631);
             int k1 = downwardRounding(temp, 30) * 11 + 5;
-            int year = downwardRounding(k2, 10631) + 1;
-            int month = downwardRounding(k1, 325) + 1;
+            year = downwardRounding(k2, 10631) + 1;
+            month = downwardRounding(k1, 325) + 1;
             temp = k1 - 325 * downwardRounding(k1, 325);
-            int day = downwardRounding(temp, 11) + 1;
-
-            return new DateRet(year, month, day);
+            day = downwardRounding(temp, 11) + 1;
         }
 
         #endregion
@@ -573,7 +532,7 @@ namespace GKCommon
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_persian(double jd)
+        public static void jd_to_persian(double jd, out int year, out int month, out int day)
         {
             jd = (Math.Floor(jd) + 0.5);
             double depoch = (jd - persian_to_jd(475, 1, 1));
@@ -590,16 +549,14 @@ namespace GKCommon
                 int aux2 = _modi(cyear, 366.0);
                 ycycle = iFloor(((2134 * aux + 2816 * aux2 + 2815) / 1028522.0)) + aux + 1;
             }
-            int year = ycycle + 2820 * cycle + 474;
+            year = ycycle + 2820 * cycle + 474;
             if (year <= 0)
             {
                 year--;
             }
             double yday = (jd - persian_to_jd(year, 1, 1) + 1.0);
-            int month = (yday <= 186f ? iCeil((yday / 31.0)) : iCeil(((yday - 6.0) / 30.0)));
-            int day = (int)Math.Truncate(jd - persian_to_jd(year, month, 1) + 1.0);
-
-            return new DateRet(year, month, day);
+            month = (yday <= 186f ? iCeil((yday / 31.0)) : iCeil(((yday - 6.0) / 30.0)));
+            day = (int)Math.Truncate(jd - persian_to_jd(year, month, 1) + 1.0);
         }
 
         #endregion
@@ -635,17 +592,18 @@ namespace GKCommon
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_indian_civil(double jd)
+        public static void jd_to_indian_civil(double jd, out int year, out int month, out int day)
         {
             const int saka = 78;
             const double start = 80.0;
             jd = (Math.Floor(jd) + 0.5);
 
-            var gregDate = jd_to_gregorian(jd);
+            int gregY, gregM, gregD;
+            jd_to_gregorian(jd, out gregY, out gregM, out gregD);
 
-            bool leap = leap_gregorian(gregDate.Year);
-            int year = gregDate.Year - saka;
-            double greg = gregorian_to_jd(gregDate.Year, 1, 1);
+            bool leap = leap_gregorian(gregY);
+            year = gregY - saka;
+            double greg = gregorian_to_jd(gregY, 1, 1);
             double yday = (jd - greg);
             int caitra = (leap ? 31 : 30);
             if (yday < start)
@@ -654,7 +612,6 @@ namespace GKCommon
                 yday = (yday + caitra + 155.0 + 90.0 + 10.0 + start);
             }
             yday = (yday - start);
-            int month, day;
             if (yday < caitra)
             {
                 month = 1;
@@ -675,8 +632,6 @@ namespace GKCommon
                     day = mday % 30 + 1;
                 }
             }
-
-            return new DateRet(year, month, day);
         }
 
         #endregion
@@ -686,30 +641,32 @@ namespace GKCommon
         // Based on "Fourmilab Calendar Converter"
         public static double bahai_to_jd(int major, int cycle, int year, int month, int day)
         {
-            var gregDate = jd_to_gregorian(2394646.5);
+            int by, dummy;
+            jd_to_gregorian(2394646.5, out by, out dummy, out dummy);
 
-            int gy = 361 * (major - 1) + 19 * (cycle - 1) + (year - 1) + gregDate.Year;
+            int gy = 361 * (major - 1) + 19 * (cycle - 1) + (year - 1) + by;
             return (gregorian_to_jd(gy, 3, 20) + 19 * (month - 1) + (month != 20 ? 0 : (leap_gregorian(gy + 1) ? -14 : -15)) + day);
         }
 
         // Based on "Fourmilab Calendar Converter"
-        public static DateRet jd_to_bahai(double jd)
+        public static void jd_to_bahai(double jd, out int major, out int cycle, out int year, out int month, out int day)
         {
             jd = (Math.Floor(jd) + 0.5);
 
-            var gy = jd_to_gregorian(jd);
-            var bstarty = jd_to_gregorian(2394646.5);
+            int gy, dummy;
+            jd_to_gregorian(jd, out gy, out dummy, out dummy);
 
-            int bys = gy.Year - (bstarty.Year + (gregorian_to_jd(gy.Year, 1, 1) <= jd && jd <= gregorian_to_jd(gy.Year, 3, 20) ? 1 : 0));
-            int major = iFloor((bys / 361.0)) + 1;
-            int cycle = iFloor((_modf(bys, 361.0) / 19.0)) + 1;
-            int year = _modi(bys, 19.0) + 1;
+            int bstarty;
+            jd_to_gregorian(2394646.5, out bstarty, out dummy, out dummy);
+
+            int bys = gy - (bstarty + (gregorian_to_jd(gy, 1, 1) <= jd && jd <= gregorian_to_jd(gy, 3, 20) ? 1 : 0));
+            major = iFloor((bys / 361.0)) + 1;
+            cycle = iFloor((_modf(bys, 361.0) / 19.0)) + 1;
+            year = _modi(bys, 19.0) + 1;
             double days = (jd - bahai_to_jd(major, cycle, year, 1, 1));
             double bld = bahai_to_jd(major, cycle, year, 20, 1);
-            int month = (jd >= bld ? 20 : iFloor((days / 19.0)) + 1);
-            int day = iFloor((jd + 1.0 - bahai_to_jd(major, cycle, year, month, 1)));
-
-            return new DateRet(major, cycle, year, month, day);
+            month = (jd >= bld ? 20 : iFloor((days / 19.0)) + 1);
+            day = iFloor((jd + 1.0 - bahai_to_jd(major, cycle, year, month, 1)));
         }
 
         #endregion

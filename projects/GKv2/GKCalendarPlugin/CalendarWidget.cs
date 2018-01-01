@@ -75,9 +75,10 @@ namespace GKCalendarPlugin
             return string.Format("{0} {1} {2}, {3}", day, month, year, weekday);
         }
 
-        private void AddCItem(double jd, CalendarConverter.DateRet dtx, string[] months, string[] weekdays, string ext, string cdrName)
+        private void AddCItem(double jd, int year, int month, int day,
+                              string[] months, string[] weekdays, string ext, string cdrName)
         {
-            string s = ext + d2s(dtx.Day, months[dtx.Month - 1], dtx.Year, weekdays[CalendarConverter.jwday(jd)]);
+            string s = ext + d2s(day, months[month - 1], year, weekdays[CalendarConverter.jwday(jd)]);
             AddItem(cdrName, s);
         }
 
@@ -91,27 +92,30 @@ namespace GKCalendarPlugin
                 DateTime gdt = qtc.SelectionStart;
                 double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 
-                var dtx = CalendarConverter.jd_to_gregorian(jd);
-                AddCItem(jd, dtx, fClassicMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian));
+                int year, month, day;
 
-                dtx = CalendarConverter.jd_to_julian(jd);
-                AddCItem(jd, dtx, fClassicMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Julian));
+                CalendarConverter.jd_to_gregorian(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fClassicMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian));
 
-                dtx = CalendarConverter.jd_to_hebrew(jd);
-                AddCItem(jd, dtx, fHebrewMonths, fHebrewWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew));
+                CalendarConverter.jd_to_julian(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fClassicMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Julian));
 
-                dtx = CalendarConverter.jd_to_islamic(jd);
-                AddCItem(jd, dtx, fIslamicMonths, fIslamicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Islamic));
+                CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fHebrewMonths, fHebrewWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew));
 
-                dtx = CalendarConverter.jd_to_persian(jd);
-                AddCItem(jd, dtx, fPersianMonths, fPersianWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Persian));
+                CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fIslamicMonths, fIslamicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Islamic));
 
-                dtx = CalendarConverter.jd_to_indian_civil(jd);
-                AddCItem(jd, dtx, fIndianCivilMonths, fIndianCivilWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Indian));
+                CalendarConverter.jd_to_persian(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fPersianMonths, fPersianWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Persian));
 
-                dtx = CalendarConverter.jd_to_bahai(jd);
-                string s = string.Format(fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), dtx.BahaiMajor, dtx.BahaiCycle) + ", ";
-                AddCItem(jd, dtx, fBahaiMonths, fBahaiWeekdays, s, fPlugin.LangMan.LS(PLS.LSID_Cal_Bahai));
+                CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
+                AddCItem(jd, year, month, day, fIndianCivilMonths, fIndianCivilWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Indian));
+
+                int major, cycle;
+                CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
+                string s = string.Format(fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), major, cycle) + ", ";
+                AddCItem(jd, year, month, day, fBahaiMonths, fBahaiWeekdays, s, fPlugin.LangMan.LS(PLS.LSID_Cal_Bahai));
             }
             finally
             {

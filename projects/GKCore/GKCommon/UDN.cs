@@ -100,10 +100,7 @@ namespace GKCommon
 
             if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
                 int unmaskedVal = GetUnmaskedValue();
-                var dtx = CalendarConverter.jd_to_gregorian2((int)unmaskedVal);
-                y = dtx.Year;
-                m = dtx.Month;
-                d = dtx.Day;
+                CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
             }
 
             int sign = Math.Sign(y);

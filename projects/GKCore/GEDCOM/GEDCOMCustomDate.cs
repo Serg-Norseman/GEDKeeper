@@ -122,8 +122,8 @@ namespace GKCommon.GEDCOM
 
             UDN udn = GetUDN();
             if (udn.HasKnownYear()) {
-                var dtx = CalendarConverter.jd_to_gregorian2(udn.GetUnmaskedValue());
-                resultYear = dtx.Year;
+                int month, day;
+                CalendarConverter.jd_to_gregorian2(udn.GetUnmaskedValue(), out resultYear, out month, out day);
             } else {
                 resultYear = 0;
             }
