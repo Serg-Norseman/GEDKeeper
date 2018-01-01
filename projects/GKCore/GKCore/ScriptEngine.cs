@@ -24,7 +24,6 @@ using System.IO;
 using System.Reflection;
 
 using BSLib;
-using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;

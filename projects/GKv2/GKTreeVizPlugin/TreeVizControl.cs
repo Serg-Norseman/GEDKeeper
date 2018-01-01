@@ -33,6 +33,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKTreeVizPlugin
 {
@@ -424,7 +425,7 @@ namespace GKTreeVizPlugin
 
             try
             {
-                fSys = new ArborSystem(1000, 1000, 0.1, null); //(10000, 1000, 0.1, this);
+                fSys = new ArborSystemEx(1000, 1000, 0.1, null); //(10000, 1000, 0.1, this);
                 fSys.setScreenSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
