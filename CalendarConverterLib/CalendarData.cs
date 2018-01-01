@@ -22,25 +22,26 @@ namespace GKCommon
 {
     public static class CalendarData
     {
-        public static string[] BahaiMonths;
-        public static string[] BahaiWeekdays;
-        public static string[] ClassicMonths;
-        public static string[] ClassicWeekdays;
-        public static string[] HebrewMonths;
-        public static string[] HebrewWeekdays;
-        public static string[] IndianCivilMonths;
-        public static string[] IndianCivilWeekdays;
-        public static string[] IslamicMonths;
-        public static string[] IslamicWeekdays;
-        public static string[] PersianMonths;
-        public static string[] PersianWeekdays;
+        // Default names
+        public static readonly string[] BahaiMonths;
+        public static readonly string[] BahaiWeekdays;
+        public static readonly string[] ClassicMonths;
+        public static readonly string[] ClassicWeekdays;
+        public static readonly string[] HebrewMonths;
+        public static readonly string[] HebrewWeekdays;
+        public static readonly string[] IndianCivilMonths;
+        public static readonly string[] IndianCivilWeekdays;
+        public static readonly string[] IslamicMonths;
+        public static readonly string[] IslamicWeekdays;
+        public static readonly string[] PersianMonths;
+        public static readonly string[] PersianWeekdays;
 
         public static string[] InitNames(string text)
         {
             return text.Split('|');
         }
 
-        public static void ResetCalendarNames()
+        static CalendarData()
         {
             BahaiMonths = InitNames("Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|"+
                                     "Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’");
@@ -67,11 +68,6 @@ namespace GKCommon
 
             PersianMonths = InitNames("Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand");
             PersianWeekdays = InitNames("Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh");
-        }
-
-        static CalendarData()
-        {
-            ResetCalendarNames();
         }
     }
 }

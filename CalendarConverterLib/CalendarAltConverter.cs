@@ -15,19 +15,19 @@ namespace GKCommon
         #region Gregorian calendar
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static uint gregorian_to_jd3(int year, int month, int day)
+        public static int gregorian_to_jd3(int year, int month, int day)
         {
             int c0 = downwardRounding(month - 3, 12);
             int x4 = year + c0;
             int x3 = downwardRounding(x4, 100);
             int x2 = x4 - 100 * x3;
             int x1 = month - 3 - 12 * c0;
-            return (uint) (downwardRounding(146097 * x3, 4) +
-                           downwardRounding(36525 * x2, 100) +
-                           downwardRounding(153 * x1 + 2, 5) + day + 1721119);
+            return (downwardRounding(146097 * x3, 4) +
+                    downwardRounding(36525 * x2, 100) +
+                    downwardRounding(153 * x1 + 2, 5) + day + 1721119);
         }
 
-        public static uint gregorian_to_jd4(int year, int month, int day)
+        public static int gregorian_to_jd4(int year, int month, int day)
         {
             int c3 = downwardRounding(month - 3, 12);
             int x1 = month - 3 - 12 * c3;
@@ -35,10 +35,10 @@ namespace GKCommon
             int x2 = year + c3;
             int c2 = 365 * x2 + downwardRounding(x2, 4) -
                 downwardRounding(x2, 100) + downwardRounding(x2, 400);
-            return (uint) (c2 + z2 + 1721120);
+            return (c2 + z2 + 1721120);
         }
 
-        public static uint gregorian_to_jd5(int year, int month, int day)
+        public static int gregorian_to_jd5(int year, int month, int day)
         {
             int x2 = 12 * year + month - 1;
             int c2 = 30 * x2 + downwardRounding(7 * x2 + 5, 12) -
@@ -46,14 +46,14 @@ namespace GKCommon
                 downwardRounding(x2 + 46, 48) -
                 downwardRounding(x2 + 1198, 1200) +
                 downwardRounding(x2 + 4798, 4800);
-            return (uint) (c2 + day - 1 + 1721060);
+            return (c2 + day - 1 + 1721060);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_gregorian3(uint jd, out int year,
+        public static void jd_to_gregorian3(int jd, out int year,
                                             out int month, out int day)
         {
-            int sjd = (int) (jd);
+            int sjd = (jd);
             int x3 = downwardRounding(4 * sjd - 6884477, 146097);
             int r3 = 4 * sjd - 6884477 - 146097 * x3;
             int temp = 100 * downwardRounding(r3, 4);
@@ -68,10 +68,10 @@ namespace GKCommon
             year = 100 * x3 + x2 + c0;
         }
 
-        public static void jd_to_gregorian4(uint jd, out int year,
+        public static void jd_to_gregorian4(int jd, out int year,
                                             out int month, out int day)
         {
-            int sjd = (int) (jd);
+            int sjd = (jd);
             int y2 = sjd - 1721120;
             int x2 = downwardRounding(400 * y2 + 799, 146097);
             int c2 = 365 * x2 + downwardRounding(x2, 4) -
@@ -91,10 +91,10 @@ namespace GKCommon
             day = z1 + 1;
         }
 
-        public static void jd_to_gregorian5(uint jd, out int year,
+        public static void jd_to_gregorian5(int jd, out int year,
                                             out int month, out int day)
         {
-            int sjd = (int) (jd);
+            int sjd = (jd);
             int y2 = sjd - 1721060;
             int x2 = downwardRounding(4800 * y2 + 15793, 146097);
             int c2 = 30 * x2 + downwardRounding(7 * x2 + 5, 12) -
@@ -123,19 +123,19 @@ namespace GKCommon
         #region Julian calendar
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static uint julian_to_jd3(int year, int month, int day)
+        public static int julian_to_jd3(int year, int month, int day)
         {
             int c0 = downwardRounding(month - 3, 12);
             int j1 = downwardRounding(1461 * (year + c0), 4);
             int j2 = downwardRounding(153 * month - 1836 * c0 - 457, 5);
-            return (uint) (j1 + j2 + day + 1721117);
+            return (j1 + j2 + day + 1721117);
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_julian3(uint jd, out int year, out int month,
+        public static void jd_to_julian3(int jd, out int year, out int month,
                                          out int day)
         {
-            int y2 = ((int) (jd)) - 1721118;
+            int y2 = (jd) - 1721118;
             int k2 = 4 * y2 + 3;
             int temp = downwardRounding(k2, 1461);
             int k1 = 5 * downwardRounding(k2 - 1461 * temp, 4) + 2;
