@@ -103,20 +103,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\IniFiles\IniFileBlankLine.cs" />
-    <Compile Include="Externals\IniFiles\IniFileCommentary.cs" />
-    <Compile Include="Externals\IniFiles\IniFileSection.cs" />
-    <Compile Include="Externals\IniFiles\IniFileSectionStart.cs" />
-    <Compile Include="Externals\IniFiles\IniFileValue.cs" />
-    <Compile Include="Externals\IniFiles\IniFileElement.cs" />
-    <Compile Include="Externals\IniFiles\IniFileEx.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
     <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GKCommon\BBTextParser.cs" />
-    <Compile Include="GKCommon\CalendarConverter.cs" />
-    <Compile Include="GKCommon\CalendarData.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />
     <Compile Include="GEDCOM\GEDCOMFactory.cs" />
@@ -188,7 +179,6 @@
     <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\ImportUtils.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
-    <Compile Include="GKCommon\IniFile.cs" />
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Margins.cs" />
@@ -203,7 +193,6 @@
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\TypeHandler.cs" />
-    <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
     <Compile Include="GKCommon\YamlHelper.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />

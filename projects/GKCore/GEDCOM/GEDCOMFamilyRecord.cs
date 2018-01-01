@@ -21,6 +21,8 @@
 using System;
 using System.IO;
 
+using BSLib.Calendar;
+
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents

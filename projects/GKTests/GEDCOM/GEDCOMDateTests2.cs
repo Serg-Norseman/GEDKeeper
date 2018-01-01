@@ -6,6 +6,8 @@
 
 using System;
 using System.Globalization;
+
+using BSLib.Calendar;
 using GKCommon.GEDCOM;
 using GKCore.Types;
 using NUnit.Framework;

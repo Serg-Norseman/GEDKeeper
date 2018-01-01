@@ -20,8 +20,9 @@
 
 using System;
 using System.Collections.Generic;
+
 using BSLib;
-using GKCommon;
+using BSLib.Calendar;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

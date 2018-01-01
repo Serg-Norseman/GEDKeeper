@@ -20,7 +20,8 @@
 
 using System;
 using System.IO;
-using GKCommon;
+
+using BSLib;
 using GKCore;
 using NUnit.Framework;
 

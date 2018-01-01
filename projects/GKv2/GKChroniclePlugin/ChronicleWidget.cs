@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib.Calendar;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
