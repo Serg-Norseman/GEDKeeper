@@ -21,7 +21,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 
 namespace GKUI.Components
 {

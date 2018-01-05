@@ -21,6 +21,7 @@
 //#define HV_DEBUG
 
 using System.Collections.Generic;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCommon

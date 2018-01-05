@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 

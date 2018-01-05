@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-using GKCommon;
+using BSLib;
 using GKCore;
 using GKUI.Components;
 

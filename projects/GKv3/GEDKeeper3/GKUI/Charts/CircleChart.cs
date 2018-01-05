@@ -19,9 +19,9 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;

@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
 using Eto.Drawing;
-using GKCommon;
 using GKCore.Charts;
 using GKUI.Components;
 

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCore.Charts

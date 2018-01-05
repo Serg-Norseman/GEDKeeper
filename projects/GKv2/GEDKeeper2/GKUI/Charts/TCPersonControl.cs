@@ -20,7 +20,8 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using GKCommon;
+
+using BSLib;
 using GKCore.Charts;
 using GKUI.Components;
 

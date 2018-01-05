@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;

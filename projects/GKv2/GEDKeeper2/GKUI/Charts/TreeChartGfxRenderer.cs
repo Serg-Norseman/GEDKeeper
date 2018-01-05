@@ -25,6 +25,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Text;
 
+using BSLib;
 using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;

@@ -175,7 +175,6 @@
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
-    <Compile Include="GKCommon\ExtRect.cs" />
     <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\ImportUtils.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />

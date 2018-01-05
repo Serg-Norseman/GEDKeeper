@@ -24,6 +24,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 using GKUI.Components;

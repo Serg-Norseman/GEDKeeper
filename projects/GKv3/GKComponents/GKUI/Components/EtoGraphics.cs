@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using BSLib;
 using Eto.Drawing;
 using GKCommon;
 using GKCore.Interfaces;

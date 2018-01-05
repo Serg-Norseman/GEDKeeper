@@ -19,7 +19,7 @@
  */
 
 using System.IO;
-using GKCommon;
+using BSLib;
 
 namespace GKCore.Interfaces
 {

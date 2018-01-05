@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;

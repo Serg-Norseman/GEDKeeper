@@ -20,7 +20,7 @@
 
 using System;
 using System.Drawing;
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKUI;

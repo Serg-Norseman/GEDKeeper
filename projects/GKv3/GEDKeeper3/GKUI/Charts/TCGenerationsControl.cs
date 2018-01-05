@@ -19,8 +19,8 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
-using GKCommon;
 using GKCore;
 using GKUI.Components;
 
