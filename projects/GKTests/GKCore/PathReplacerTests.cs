@@ -19,10 +19,9 @@
  */
 
 using System;
-using GKCore;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     [TestFixture]
     public class PathReplacerTests

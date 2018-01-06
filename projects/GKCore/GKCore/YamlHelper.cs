@@ -22,7 +22,7 @@ using System;
 using System.Yaml;
 using System.Yaml.Serialization;
 
-namespace GKCommon
+namespace GKCore
 {
     /// <summary>
     /// This class is a helper for serializing/deserializing data in yaml format.

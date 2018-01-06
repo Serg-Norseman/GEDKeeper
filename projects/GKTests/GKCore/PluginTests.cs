@@ -24,7 +24,7 @@ using GKCore.Plugins;
 using GKCore.Types;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     [TestFixture]
     public class PluginTests

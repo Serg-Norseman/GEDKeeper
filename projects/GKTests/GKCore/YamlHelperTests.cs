@@ -21,11 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
-using GKCommon;
 using NUnit.Framework;
 
-namespace GKTests.GKCommon
+namespace GKCore
 {
     [TestFixture]
     public class YamlHelperTests

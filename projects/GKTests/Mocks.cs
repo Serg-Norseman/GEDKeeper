@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 
 using BSLib;
-using GKCommon;
+using GKCore;
 using GKCommon.GEDCOM;
 using GKCore.Export;
 using GKCore.Interfaces;

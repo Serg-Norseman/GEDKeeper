@@ -20,10 +20,9 @@
 
 using System;
 using GKCommon;
-using GKCore;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     /// <summary>
     /// 

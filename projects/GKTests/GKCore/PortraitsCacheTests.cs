@@ -18,10 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     [TestFixture]
     public class PortraitsCacheTests

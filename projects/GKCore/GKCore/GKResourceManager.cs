@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 
-namespace GKCommon
+namespace GKCore
 {
     public sealed class GKResourceManager : ResourceManager
     {

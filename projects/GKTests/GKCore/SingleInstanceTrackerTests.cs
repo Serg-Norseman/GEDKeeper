@@ -19,10 +19,9 @@
  */
 
 using System;
-using GKCore.SingleInstance;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore.SingleInstance
 {
     [TestFixture]
     public class SingleInstanceTrackerTests

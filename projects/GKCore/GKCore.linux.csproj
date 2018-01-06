@@ -173,8 +173,6 @@
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="GKCommon\ExpCalculator.cs" />
-    <Compile Include="GKCommon\GKResourceManager.cs" />
-    <Compile Include="GKCommon\ImportUtils.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
@@ -190,10 +188,10 @@
     <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCommon\TypeHandler.cs" />
-    <Compile Include="GKCommon\ValuesCollection.cs" />
-    <Compile Include="GKCommon\YamlHelper.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
+    <Compile Include="GKCore\GKResourceManager.cs" />
+    <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
     <Compile Include="GKCore\Interfaces\IBaseWindow.cs" />
@@ -353,6 +351,8 @@
     <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
     <Compile Include="GKCore\Charts\ChartRenderer.cs" />
     <Compile Include="GKCore\UIContracts\UIContracts.cs" />
+    <Compile Include="GKCore\ValuesCollection.cs" />
+    <Compile Include="GKCore\YamlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

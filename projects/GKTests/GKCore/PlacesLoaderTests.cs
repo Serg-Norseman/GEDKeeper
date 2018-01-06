@@ -23,7 +23,7 @@ using GKCore.Geocoding;
 using GKCore.Maps;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     [TestFixture]
     public class PlacesLoaderTests

@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore;
 using GKUI.Components;
 using NUnit.Framework;
 
