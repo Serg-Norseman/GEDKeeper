@@ -59,11 +59,6 @@ namespace GKCommon
             InitRome();
         }
 
-        public static bool IsSetBit(int val, int pos)
-        {
-            return (val & (1 << pos)) != 0;
-        }
-
         public static bool IsDigit(char chr)
         {
             return chr >= '0' && chr <= '9';
@@ -101,51 +96,6 @@ namespace GKCommon
             }
             return -1;
         }
-
-        #region Math helpers
-
-        public static long Trunc(double value)
-        {
-            return (long)Math.Truncate(value);
-        }
-
-        public static double SafeDiv(double dividend, double divisor)
-        {
-            return (divisor == 0.0d) ? 0.0d : (dividend / divisor);
-        }
-
-        public static double DegreesToRadians(double degrees)
-        {
-            return degrees * (Math.PI / 180);
-        }
-
-        public static double RadiansToDegrees(double radians)
-        {
-            return radians * 180 / Math.PI;
-        }
-
-        #endregion
-
-        #region Date functions
-
-        public static int DaysBetween(DateTime now, DateTime then)
-        {
-            TimeSpan span = then - now;
-            return span.Days;
-        }
-
-        private static readonly byte[][] MONTH_DAYS = new byte[][]
-        {
-            new byte[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-            new byte[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-        };
-
-        public static byte DaysInAMonth(short year, byte month)
-        {
-            return MONTH_DAYS[(month == 2 && DateTime.IsLeapYear(year)) ? 1 : 0][month - 1];
-        }
-
-        #endregion
 
         #region FileSystem helpers
 

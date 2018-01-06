@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -294,7 +293,7 @@ namespace GKCore.Charts
         public CircleSegment FindSegment(float dX, float dY)
         {
             double rad = Math.Sqrt(dX * dX + dY * dY);
-            double angle = SysUtils.RadiansToDegrees(Math.Atan2(dY, dX));
+            double angle = MathHelper.RadiansToDegrees(Math.Atan2(dY, dX));
             if (angle <= -90) angle += 360.0f;
 
             CircleSegment result = null;
@@ -456,7 +455,7 @@ namespace GKCore.Charts
             ExtSizeF size = fRenderer.GetTextSize(text, font);
             radius = radius + size.Height / 2.0f;
 
-            float wedgeL = radius * (float)SysUtils.DegreesToRadians(wedgeAngle);
+            float wedgeL = radius * (float)MathHelper.DegreesToRadians(wedgeAngle);
 
             return (wedgeL / size.Width <= 0.9f);
         }

@@ -765,7 +765,7 @@ namespace GKCore
                                     double dt2 = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
                                     double dt3 = curY + curM / 12.0 + curD / 12.0 / 31.0;
                                     int bdY = (dt2 < dt3) ? (curY + 1) : curY;
-                                    distance = SysUtils.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
+                                    distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
                                 }
                             }
                         }

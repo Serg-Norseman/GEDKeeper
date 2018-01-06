@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+using BSLib;
 using ExcelLibrary.SpreadSheet;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -366,7 +367,7 @@ namespace GKCore.Stats
                                 case StatsMode.smAAF_1:
                                     int dty1 = iRec.GetChronologicalYear("BIRT");
                                     if (dty1 != 0) {
-                                        key = SysUtils.Trunc(dty1 / 10 * 10).ToString();
+                                        key = MathHelper.Trunc(dty1 / 10 * 10).ToString();
 
                                         if (!xvals.TryGetValue(key, out valsList))
                                         {
@@ -381,7 +382,7 @@ namespace GKCore.Stats
                                 case StatsMode.smAAF_2:
                                     int dty2 = iChild.GetChronologicalYear("BIRT");
                                     if (dty2 != 0) {
-                                        key = SysUtils.Trunc(dty2 / 10 * 10).ToString();
+                                        key = MathHelper.Trunc(dty2 / 10 * 10).ToString();
 
                                         if (!xvals.TryGetValue(key, out valsList))
                                         {

@@ -33,57 +33,6 @@ namespace GKTests.GKCommon
     [TestFixture]
     public class SysUtilsTests
     {
-        [Test]
-        public void Sort_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.QuickSort<ValItem>(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.MergeSort<ValItem>(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
-
-            Random rnd = new Random();
-
-            List<ValItem> listQS = new List<ValItem>();
-            List<ValItem> listMS = new List<ValItem>();
-            List<ValItem> listTS = new List<ValItem>();
-            List<ValItem> listCS = new List<ValItem>();
-
-            //const int MaxCount = 1000000; // for performance test
-            const int MaxCount = 1000; // for common test
-
-            for (int i = 0; i < MaxCount; i++)
-            {
-                double val = rnd.NextDouble();
-
-                listTS.Add(new ValItem(val));
-                listQS.Add(new ValItem(val));
-                listMS.Add(new ValItem(val));
-                listCS.Add(new ValItem(val));
-            }
-
-            listCS.Sort(CompareItems);
-
-            SortHelper.QuickSort(listQS, CompareItems);
-
-            SortHelper.MergeSort(listMS, CompareItems);
-
-            ListTimSort<ValItem>.Sort(listTS, CompareItems);
-
-            // test for sort valid
-            //(only for numbers, because some methods is with the permutations, and part - no)
-            for (int i = 0; i < MaxCount; i++)
-            {
-                Assert.AreEqual(listTS[i].Value, listQS[i].Value);
-                Assert.AreEqual(listQS[i].Value, listMS[i].Value);
-                Assert.AreEqual(listMS[i].Value, listCS[i].Value);
-            }
-        }
-
-        private static int CompareItems(ValItem item1, ValItem item2)
-        {
-            return item1.Value.CompareTo(item2.Value);
-        }
-
-
         /*public void MyTestFunc1(
             [Values(1, 2, 5)]int x,
             [Values("hello", "buy")]string s)
@@ -171,29 +120,6 @@ namespace GKTests.GKCommon
 
             //
 
-            int days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
-            Assert.AreEqual(3, days);
-
-            days = SysUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 02));
-            Assert.AreEqual(-8, days);
-
-            Assert.AreEqual(31, SysUtils.DaysInAMonth(1990, 5));
-
-            //
-
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
-            Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
-            Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
-
-            //
-
-            Assert.AreEqual(495, SysUtils.Trunc(495.575));
-
-            Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
-            Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
-
-            //
-
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.FirstOrDefault<int>(null); });
             int N = SysUtils.FirstOrDefault(new int[] { 5, 7, 10 });
             Assert.AreEqual(5, N);
@@ -227,9 +153,6 @@ namespace GKTests.GKCommon
         [Test]
         public void GfxHelper_Tests()
         {
-            Assert.AreEqual(57.295779513, SysUtils.RadiansToDegrees(1.0), 0.0000000001);
-            Assert.AreEqual(1.0, SysUtils.DegreesToRadians(57.295779513), 0.0000000001);
-
             Assert.AreEqual(2.0, SysUtils.ZoomToFit(50, 20, 100, 50));
             Assert.AreEqual(3.0, SysUtils.ZoomToFit(15, 40, 45, 120));
 

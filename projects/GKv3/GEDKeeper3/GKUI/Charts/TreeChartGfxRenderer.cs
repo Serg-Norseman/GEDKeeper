@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using Eto.Drawing;
-using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -262,7 +261,7 @@ namespace GKUI.Charts
             ExtSizeF size = GetTextSize(text, font);
             radius = radius + size.Height / 2.0f;
 
-            float textAngle = Math.Min((float)SysUtils.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
+            float textAngle = Math.Min((float)MathHelper.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
             float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
 
             if (clockwise) {

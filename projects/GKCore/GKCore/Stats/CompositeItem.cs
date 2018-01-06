@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 
 namespace GKCore.Stats
@@ -36,9 +36,9 @@ namespace GKCore.Stats
         private int MaleCount;
         private int FemaleCount;
 
-        public double CommonVal { get { return SysUtils.SafeDiv(CommonSum, CommonCount); } }
-        public double MaleVal { get { return SysUtils.SafeDiv(MaleSum, MaleCount); } }
-        public double FemaleVal { get { return SysUtils.SafeDiv(FemaleSum, FemaleCount); } }
+        public double CommonVal { get { return MathHelper.SafeDiv(CommonSum, CommonCount); } }
+        public double MaleVal { get { return MathHelper.SafeDiv(MaleSum, MaleCount); } }
+        public double FemaleVal { get { return MathHelper.SafeDiv(FemaleSum, FemaleCount); } }
 
         public CompositeItem()
         {

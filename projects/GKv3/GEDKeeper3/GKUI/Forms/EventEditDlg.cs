@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon;
@@ -532,8 +533,8 @@ namespace GKUI.Forms
             if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
             byte dates = GKData.DateKinds[idx].Dates;
-            txtEventDate1.Enabled = SysUtils.IsSetBit(dates, 0);
-            txtEventDate2.Enabled = SysUtils.IsSetBit(dates, 1);
+            txtEventDate1.Enabled = BitHelper.IsSetBit(dates, 0);
+            txtEventDate2.Enabled = BitHelper.IsSetBit(dates, 1);
 
             cmbDate1Calendar.Enabled = txtEventDate1.Enabled;
             cmbDate2Calendar.Enabled = txtEventDate2.Enabled;

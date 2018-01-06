@@ -152,16 +152,6 @@ namespace GKTests.Mocks
         public void SetLang() {}
     }
 
-    internal class ValItem
-    {
-        public double Value;
-
-        public ValItem(double value)
-        {
-            Value = value;
-        }
-    }
-
     public class MockWriter : CustomWriter
     {
         public MockWriter() { }
