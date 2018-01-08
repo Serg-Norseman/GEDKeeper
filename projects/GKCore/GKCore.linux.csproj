@@ -72,6 +72,9 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.SmartGraph">
+      <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
     </Reference>
@@ -174,14 +177,6 @@
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
-    <Compile Include="GKCommon\SmartGraph\Edge.cs" />
-    <Compile Include="GKCommon\SmartGraph\Graph.cs" />
-    <Compile Include="GKCommon\SmartGraph\GraphvizWriter.cs" />
-    <Compile Include="GKCommon\SmartGraph\IDataProvider.cs" />
-    <Compile Include="GKCommon\SmartGraph\IEdge.cs" />
-    <Compile Include="GKCommon\SmartGraph\IGraph.cs" />
-    <Compile Include="GKCommon\SmartGraph\IVertex.cs" />
-    <Compile Include="GKCommon\SmartGraph\Vertex.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />

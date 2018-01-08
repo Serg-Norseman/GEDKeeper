@@ -20,9 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
@@ -154,7 +154,7 @@ namespace GKCore
 
                 if (node != null && node.Type != PGNodeType.Default)
                 {
-                    IVertex vtx = graph.FindVertex(node.FamilyXRef);
+                    Vertex vtx = graph.FindVertex(node.FamilyXRef);
                     if (vtx == null)
                     {
                         vtx = graph.AddVertex(node.FamilyXRef, node);

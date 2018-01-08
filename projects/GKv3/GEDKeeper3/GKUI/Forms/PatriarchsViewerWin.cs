@@ -20,10 +20,10 @@
 
 using System;
 using ArborGVT;
+using BSLib.SmartGraph;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

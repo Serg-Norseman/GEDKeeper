@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 
 using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -65,12 +65,12 @@ namespace GKCore.Kinships
             fGraph.Clear();
         }
 
-        public IVertex AddIndividual(GEDCOMIndividualRecord iRec)
+        public Vertex AddIndividual(GEDCOMIndividualRecord iRec)
         {
             return (iRec == null) ? null : fGraph.AddVertex(iRec.XRef, iRec);
         }
 
-        public IVertex FindVertex(string sign)
+        public Vertex FindVertex(string sign)
         {
             return fGraph.FindVertex(sign);
         }
@@ -83,7 +83,7 @@ namespace GKCore.Kinships
         /// <param name="tsRel">target to source relation (if target is parent of source = Parent)</param>
         /// <param name="stRel">source to target relation (if target is parent of source = Child)</param>
         /// <returns></returns>
-        public bool AddRelation(IVertex source, IVertex target, RelationKind tsRel, RelationKind stRel)
+        public bool AddRelation(Vertex source, Vertex target, RelationKind tsRel, RelationKind stRel)
         {
             return fGraph.AddUndirectedEdge(source, target, 1, (int)tsRel, (int)stRel);
         }
@@ -91,7 +91,7 @@ namespace GKCore.Kinships
         public void SetTreeRoot(GEDCOMIndividualRecord rootRec)
         {
             if (rootRec == null) return;
-            IVertex root = fGraph.FindVertex(rootRec.XRef);
+            Vertex root = fGraph.FindVertex(rootRec.XRef);
             if (root == null) return;
 
             fGraph.FindPathTree(root);
@@ -100,12 +100,12 @@ namespace GKCore.Kinships
         public string GetRelationship(GEDCOMIndividualRecord targetRec, bool fullFormat = false)
         {
             if (targetRec == null) return "???";
-            IVertex target = fGraph.FindVertex(targetRec.XRef);
+            Vertex target = fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";
 
             try
             {
-                IEnumerable<IEdge> edgesPath = fGraph.GetPath(target);
+                IEnumerable<Edge> edgesPath = fGraph.GetPath(target);
 
                 string tmp = "";
                 RelationKind prevRel = RelationKind.rkNone;
@@ -115,7 +115,7 @@ namespace GKCore.Kinships
                 GEDCOMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
-                foreach (IEdge edge in edgesPath)
+                foreach (Edge edge in edgesPath)
                 {
                     GEDCOMIndividualRecord xFrom = (GEDCOMIndividualRecord)edge.Source.Value;
                     GEDCOMIndividualRecord xTo = (GEDCOMIndividualRecord)edge.Target.Value;

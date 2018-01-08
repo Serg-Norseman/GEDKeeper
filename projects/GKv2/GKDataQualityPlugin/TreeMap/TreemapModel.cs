@@ -35,7 +35,6 @@ namespace GKCommon.TreeMap
         private readonly List<MapItem> fItems;
         private readonly int fHeight;
         private readonly int fWidth;
-        private int fMid = 0;
 
         /// <summary>
         /// Creates a Map Model instance based on the relative size of the mappable items and the frame size.
@@ -150,13 +149,13 @@ namespace GKCommon.TreeMap
                 items[start].Bounds = bounds;
             }
 
-            fMid = start;
-            while (fMid < end) {
-                if (GetHighestAspect(items, start, fMid, bounds) > GetHighestAspect(items, start, fMid + 1, bounds)) {
-                    fMid++;
+            int mid = start;
+            while (mid < end) {
+                if (GetHighestAspect(items, start, mid, bounds) > GetHighestAspect(items, start, mid + 1, bounds)) {
+                    mid++;
                 } else {
-                    MapRect newBounds = LayoutRow(items, start, fMid, bounds);
-                    CalcLayout(items, fMid + 1, end, newBounds);
+                    MapRect newBounds = LayoutRow(items, start, mid, bounds);
+                    CalcLayout(items, mid + 1, end, newBounds);
                 }
             }
         }

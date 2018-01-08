@@ -20,9 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -90,7 +90,7 @@ namespace GKCore.Charts
         public bool OutsideKin;
         public string Kinship;
         public string[] Lines;
-        public IVertex Node;
+        public Vertex Node;
         public string PathDebug;
         public ExtRect PortraitArea;
 

@@ -22,8 +22,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using ArborGVT;
+using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
                 ArborSystem sys = arborViewer1.Sys;
 
-                foreach (IVertex vtx in graph.Vertices) {
+                foreach (Vertex vtx in graph.Vertices) {
                     var arbNode = sys.addNode(vtx.Sign) as ArborNodeEx;
                     PGNode pgNode = (PGNode)vtx.Value;
 
@@ -56,7 +56,7 @@ namespace GKUI.Forms
                     arbNode.Mass = pgNode.Size;
                 }
 
-                foreach (IEdge edge in graph.Edges) {
+                foreach (Edge edge in graph.Edges) {
                     sys.addEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }

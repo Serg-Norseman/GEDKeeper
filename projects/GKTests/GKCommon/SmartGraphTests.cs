@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.SmartGraph;
+using BSLib.SmartGraph;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon
@@ -47,16 +47,16 @@ namespace GKTests.GKCommon
             Assert.AreEqual(vertex2, edge.Target);
             Assert.AreEqual(null, edge.Value);
 
-            IEdge idg = edge;
+            Edge idg = edge;
             Assert.AreEqual(vertex, idg.Source);
             Assert.AreEqual(vertex2, idg.Target);
 
             Assert.AreNotEqual(0, edge.CompareTo(new Edge(vertex, vertex2, 1, null)));
             Assert.Throws(typeof(ArgumentException), () => { edge.CompareTo(null); });
             
-            IVertex vert1 = edge.Source;
+            Vertex vert1 = edge.Source;
             Assert.AreEqual(vertex, vert1);
-            IVertex vert2 = edge.Target;
+            Vertex vert2 = edge.Target;
             Assert.AreEqual(vertex2, vert2);
             
             using (Graph graph = new Graph())
@@ -82,11 +82,11 @@ namespace GKTests.GKCommon
                 
                 vert1 = graph.AddVertex("src", null);
                 vert2 = graph.AddVertex("tgt", null);
-                IEdge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
+                Edge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
                 Assert.IsNotNull(edge3);
                 graph.DeleteEdge(edge3);
                 
-                edge3 = graph.AddDirectedEdge("1", "2", 1, null);
+                edge3 = graph.AddDirectedEdge("1", "2", 1, null, false);
                 Assert.IsNull(edge3);
                 
                 bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
@@ -94,10 +94,10 @@ namespace GKTests.GKCommon
 
                 graph.DeleteVertex(vert1); // "src", will be deleted subordinate edges
 
-                foreach (IVertex vtx in graph.Vertices) {
+                foreach (Vertex vtx in graph.Vertices) {
                 }
 
-                foreach (IEdge edg in graph.Edges) {
+                foreach (Edge edg in graph.Edges) {
                 }
 
                 graph.Clear();
@@ -114,18 +114,18 @@ namespace GKTests.GKCommon
         {
             using (Graph graph = new Graph())
             {
-                IVertex vert1 = graph.AddVertex("test", null);
+                Vertex vert1 = graph.AddVertex("test", null);
                 Assert.IsNotNull(vert1);
                 
-                IVertex vert2 = graph.AddVertex("test2");
+                Vertex vert2 = graph.AddVertex("test2");
                 Assert.IsNotNull(vert2);
                 
                 vert1 = graph.AddVertex("src", null);
                 vert2 = graph.AddVertex("tgt", null);
-                IEdge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
+                Edge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
                 Assert.IsNotNull(edge3);
                 
-                edge3 = graph.AddDirectedEdge("1", "2", 1, null);
+                edge3 = graph.AddDirectedEdge("1", "2", 1, null, false);
                 Assert.IsNull(edge3);
                 
                 bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
@@ -137,11 +137,11 @@ namespace GKTests.GKCommon
                 string[] options = { "ratio=auto" };
                 var gvw = new GraphvizWriter("testGraph", options);
                 
-                foreach (IVertex vtx in graph.Vertices) {
+                foreach (Vertex vtx in graph.Vertices) {
                     gvw.WriteNode(vtx.Sign, "name", "filled", "black", "box");
                 }
 
-                foreach (IEdge edg in graph.Edges) {
+                foreach (Edge edg in graph.Edges) {
                     gvw.WriteEdge(edg.Source.Sign, edg.Target.Sign);
                 }
 

@@ -6,6 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GEDKeeper2</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Zhdanovskih_SV\Application Data\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
@@ -37,7 +38,6 @@
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <StartupObject>GKUI.GKProgram</StartupObject>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>..\..\..\</OutputPath>
@@ -97,6 +97,9 @@
     </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.SmartGraph">
+      <HintPath>..\..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />

@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 
 using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Types;
@@ -740,12 +740,12 @@ namespace GKCore.Tools
             return graph;
         }
 
-        private static void SearchKGInt(IVertex prevNode, GEDCOMIndividualRecord iRec,
+        private static void SearchKGInt(Vertex prevNode, GEDCOMIndividualRecord iRec,
                                         KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation)
         {
             if (iRec == null) return;
 
-            IVertex currNode = graph.FindVertex(iRec.XRef);
+            Vertex currNode = graph.FindVertex(iRec.XRef);
             if (currNode != null) {
                 if (prevNode != null) {
                     graph.AddRelation(prevNode, currNode, relation, inverseRelation);
