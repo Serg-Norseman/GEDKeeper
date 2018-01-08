@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -157,7 +158,7 @@ namespace GKCommon.GEDCOM
                         } else {
                             string cpVers = fTree.Header.CharacterSetVersion;
                             if (!string.IsNullOrEmpty(cpVers)) {
-                                int sourceCodepage = SysUtils.ParseInt(cpVers, DEF_CODEPAGE);
+                                int sourceCodepage = ConvertHelper.ParseInt(cpVers, DEF_CODEPAGE);
                                 SetEncoding(Encoding.GetEncoding(sourceCodepage));
                             } else {
                                 SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
@@ -218,7 +219,7 @@ namespace GKCommon.GEDCOM
                     str = GEDCOMUtils.TrimLeft(str);
                     if (str.Length == 0) continue;
 
-                    if (!SysUtils.IsDigit(str[0]))
+                    if (!ConvertHelper.IsDigit(str[0]))
                     {
                         FixFTBLine(curRecord, curTag, lineNum, str);
                     }

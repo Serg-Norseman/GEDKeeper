@@ -597,7 +597,7 @@ namespace GKCore.Tools
                         tag = header.FindTag("_EXT_NAME", 0);
                         if (tag != null) header.DeleteTag("_EXT_NAME");
 
-                        fileVer = SysUtils.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
+                        fileVer = ConvertHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
                     } else {
                         fileVer = -1;
                     }

@@ -102,7 +102,7 @@ namespace GKCore.Export
 
         public FamilyBookExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fMargins = new Margins(20);
+            fMargins = new ExtMargins(20);
             fAlbumPage = true;
         }
 

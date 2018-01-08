@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -101,7 +101,7 @@ namespace GKUI.Forms
                     ListViewItem item = fListStats.Items[i];
 
                     string s = item.Text;
-                    double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
+                    double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
 
                     if (lab != 0.0d || !excludeUnknowns)
                     {

@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using BSLib.Calendar;
 using GKCore;
 using GKCore.Types;
@@ -782,9 +783,9 @@ namespace GKCommon.GEDCOM
             string pm = dtParts[1].Trim();
             string py = dtParts[2].Trim();
 
-            int day = (pd == "") ? 0 : SysUtils.ParseInt(pd, 0);
-            int month = (pm == "") ? 0 : SysUtils.ParseInt(pm, 0);
-            int year = (py == "") ? UNKNOWN_YEAR : SysUtils.ParseInt(py, UNKNOWN_YEAR);
+            int day = (pd == "") ? 0 : ConvertHelper.ParseInt(pd, 0);
+            int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
+            int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
             var date = new GEDCOMDate(null, null, "", "");
             date.SetDate(calendar, day, month, year);
@@ -810,15 +811,15 @@ namespace GKCommon.GEDCOM
             {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
-                        result += day > 0 ? SysUtils.AdjustNum(day, 2) + "." : "__.";
-                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? ConvertHelper.AdjustNum(day, 2) + "." : "__.";
+                        result += month > 0 ? ConvertHelper.AdjustNum(month, 2) + "." : "__.";
                         result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
                         break;
 
                     case DateFormat.dfYYYY_MM_DD:
                         result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        result += month > 0 ? SysUtils.AdjustNum(month, 2) + "." : "__.";
-                        result += day > 0 ? SysUtils.AdjustNum(day, 2) : "__";
+                        result += month > 0 ? ConvertHelper.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? ConvertHelper.AdjustNum(day, 2) : "__";
                         break;
 
                     case DateFormat.dfYYYY:

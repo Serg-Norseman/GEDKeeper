@@ -328,7 +328,7 @@ namespace GKFlowInputPlugin
                     GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
                     GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
-                    if (!string.IsNullOrEmpty(age) && SysUtils.IsDigits(age)) {
+                    if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
                         int birthYear = srcYear - int.Parse(age);
                         fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
                     }

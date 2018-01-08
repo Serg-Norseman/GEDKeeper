@@ -345,7 +345,7 @@ namespace GKCommon.GEDCOM
         public int GetTagIntegerValue(string tagName, int defValue)
         {
             string str = GetTagStringValue(tagName);
-            int result = ((str == "") ? defValue : SysUtils.ParseInt(str, defValue));
+            int result = ((str == "") ? defValue : ConvertHelper.ParseInt(str, defValue));
             return result;
         }
 
@@ -358,7 +358,7 @@ namespace GKCommon.GEDCOM
         public double GetTagFloatValue(string tagName, double defValue)
         {
             string str = GetTagStringValue(tagName);
-            double result = ((str == "") ? defValue : SysUtils.ParseFloat(str, defValue));
+            double result = ((str == "") ? defValue : ConvertHelper.ParseFloat(str, defValue));
             return result;
         }
 

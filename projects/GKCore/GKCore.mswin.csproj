@@ -174,11 +174,8 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
-    <Compile Include="GKCommon\ExpCalculator.cs" />
-    <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IocContainer.cs" />
     <Compile Include="GKCommon\Logger.cs" />
-    <Compile Include="GKCommon\Margins.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />
     <Compile Include="GKCommon\SmartGraph\Graph.cs" />
     <Compile Include="GKCommon\SmartGraph\GraphvizWriter.cs" />
@@ -187,9 +184,7 @@
     <Compile Include="GKCommon\SmartGraph\IGraph.cs" />
     <Compile Include="GKCommon\SmartGraph\IVertex.cs" />
     <Compile Include="GKCommon\SmartGraph\Vertex.cs" />
-    <Compile Include="GKCommon\StringTokenizer.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
-    <Compile Include="GKCommon\TypeHandler.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
     <Compile Include="GKCore\GKResourceManager.cs" />

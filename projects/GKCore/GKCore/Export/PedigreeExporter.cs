@@ -52,14 +52,14 @@ namespace GKCore.Export
 
             private string GetOrderStr()
             {
-                string order = SysUtils.AdjustNum(FamilyOrder, 2);
+                string order = ConvertHelper.AdjustNum(FamilyOrder, 2);
                 string result = ((Parent == null) ? order : Parent.GetOrderStr() + order);
                 return result;
             }
 
             public string GetInternalStr()
             {
-                return SysUtils.AdjustNum(Level, 2) + GetOrderStr();
+                return ConvertHelper.AdjustNum(Level, 2) + GetOrderStr();
             }
         }
 
@@ -453,7 +453,7 @@ namespace GKCore.Export
                     if (includeGens && curLevel != person.Level)
                     {
                         curLevel = person.Level;
-                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + SysUtils.GetRome(curLevel);
+                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
 
                         fWriter.beginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
                         fWriter.addParagraphChunk(genTitle, fChapFont);

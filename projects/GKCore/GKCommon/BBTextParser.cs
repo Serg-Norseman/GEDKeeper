@@ -268,7 +268,7 @@ namespace GKCommon
                                         tok = strTok.Next();
                                     }
                                     if (tok.Kind == TokenKind.Number) {
-                                        float newSize = lastFontSize + factor * SysUtils.ParseInt(tok.Value, 0);
+                                        float newSize = lastFontSize + factor * ConvertHelper.ParseInt(tok.Value, 0);
                                         stackSizes.Push(new SizeChange(lastFontSize, newSize));
                                         lastChunk = SetChunkFontSize(tok.Line, lastChunk, newSize);
                                         lastFontSize = newSize;

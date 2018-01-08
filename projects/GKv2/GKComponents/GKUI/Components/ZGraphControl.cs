@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCore.Stats;
 using ZedGraph;
 
@@ -83,7 +83,7 @@ namespace GKUI.Components
                         StatsItem item = vals[i];
 
                         string s = item.Caption;
-                        double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
+                        double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
 
                         if (lab != 0.0d || !excludeUnknowns)
                         {
@@ -114,7 +114,7 @@ namespace GKUI.Components
 
                     for (int i = 0; i < itemscount; i++) {
                         StatsItem sti = vals[i];
-                        xValues[i] = SysUtils.ParseInt(sti.Caption, 0);
+                        xValues[i] = ConvertHelper.ParseInt(sti.Caption, 0);
                         yValuesF[i] = sti.ValF;
                         yValuesM[i] = sti.ValM;
                     }

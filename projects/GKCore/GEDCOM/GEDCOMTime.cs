@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {

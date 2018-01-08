@@ -25,7 +25,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-using GKCommon;
+using BSLib;
 
 namespace GKCore.Geocoding
 {
@@ -78,8 +78,8 @@ namespace GKCore.Geocoding
                                 if (addressNode != null && pointNode != null)
                                 {
                                     string ptHint = addressNode.InnerText;
-                                    double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-                                    double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+                                    double ptLongitude = ConvertHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                    double ptLatitude = ConvertHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
 
                                     if (ptLatitude != -1.0 && ptLongitude != -1.0)
                                     {

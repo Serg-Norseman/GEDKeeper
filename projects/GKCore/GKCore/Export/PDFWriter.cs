@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 using iTextSharp.text;

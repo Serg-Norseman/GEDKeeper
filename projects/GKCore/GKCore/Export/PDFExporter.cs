@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 
+using BSLib;
 using GKCommon;
 using GKCore.Interfaces;
 using iTextSharp.text;
@@ -34,13 +35,13 @@ namespace GKCore.Export
     public abstract class PDFExporter : Exporter
     {
         protected bool fAlbumPage;
-        protected Margins fMargins;
+        protected ExtMargins fMargins;
         protected Document fDocument;
         protected PdfWriter fPdfWriter;
 
         protected PDFExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fMargins = new Margins(20);
+            fMargins = new ExtMargins(20);
             fAlbumPage = true;
         }
 

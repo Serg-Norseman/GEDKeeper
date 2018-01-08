@@ -379,10 +379,10 @@ namespace GKCore.Lists
                     return val;
 
                 case DataType.dtInteger:
-                    return SysUtils.ParseInt(val, 0);
+                    return ConvertHelper.ParseInt(val, 0);
 
                 case DataType.dtFloat:
-                    return SysUtils.ParseFloat(val, 0.0);
+                    return ConvertHelper.ParseFloat(val, 0.0);
 
                 case DataType.dtDateTime:
                     return DateTime.Parse(val);

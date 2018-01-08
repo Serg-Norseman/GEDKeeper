@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCore
@@ -1720,7 +1720,7 @@ namespace GKCore
                 {
                     string ls = LSDefList[(int)i - 1];
                     if (!string.IsNullOrEmpty(ls)) {
-                        lf.WriteLine(SysUtils.AdjustNum((int)i, 3) + "=" + ls);
+                        lf.WriteLine(ConvertHelper.AdjustNum((int)i, 3) + "=" + ls);
                     }
                 }
             }

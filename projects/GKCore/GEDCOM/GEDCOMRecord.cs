@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -338,7 +339,7 @@ namespace GKCommon.GEDCOM
             try
             {
                 string xref = GetXRefNum();
-                result = SysUtils.ParseInt(xref, 0);
+                result = ConvertHelper.ParseInt(xref, 0);
             }
             catch (Exception)
             {

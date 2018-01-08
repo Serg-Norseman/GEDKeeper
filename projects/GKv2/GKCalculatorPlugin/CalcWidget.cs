@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCalculatorPlugin

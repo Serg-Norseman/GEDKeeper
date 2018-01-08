@@ -34,12 +34,12 @@ namespace GKCore.Export
         protected bool fAlbumPage;
         protected string fDocumentTitle;
         protected string fFileName;
-        protected Margins fMargins;
+        protected ExtMargins fMargins;
 
         protected CustomWriter()
         {
             fAlbumPage = false;
-            fMargins = new Margins(20);
+            fMargins = new ExtMargins(20);
         }
 
         public virtual void SetAlbumPage(bool value)

@@ -19,7 +19,7 @@
  */
 
 using Elistia.DotNetRtfWriter;
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCore.Export

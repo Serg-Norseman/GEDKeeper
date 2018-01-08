@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -119,8 +120,8 @@ namespace GKUI.Forms
         {
             try {
                 fLocationRecord.LocationName = txtName.Text;
-                fLocationRecord.Map.Lati = SysUtils.ParseFloat(txtLatitude.Text, 0.0);
-                fLocationRecord.Map.Long = SysUtils.ParseFloat(txtLongitude.Text, 0.0);
+                fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(txtLatitude.Text, 0.0);
+                fLocationRecord.Map.Long = ConvertHelper.ParseFloat(txtLongitude.Text, 0.0);
 
                 CommitChanges();
 
@@ -217,7 +218,7 @@ namespace GKUI.Forms
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
             if (txtLatitude.Text != "" && txtLongitude.Text != "") {
-                fMapBrowser.SetCenter(SysUtils.ParseFloat(txtLatitude.Text, 0), SysUtils.ParseFloat(txtLongitude.Text, 0), -1);
+                fMapBrowser.SetCenter(ConvertHelper.ParseFloat(txtLatitude.Text, 0), ConvertHelper.ParseFloat(txtLongitude.Text, 0), -1);
             }
         }
 

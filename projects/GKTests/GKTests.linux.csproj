@@ -87,17 +87,10 @@
     <Compile Include="GEDCOM\GedcomTests.cs" />
     <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="GKCommon\BBTextParserTests.cs" />
-    <Compile Include="GKCommon\CalendarTests.cs" />
-    <Compile Include="GKCommon\ExpCalculatorTests.cs" />
-    <Compile Include="GKCommon\IndistinctMatchingTests.cs" />
     <Compile Include="GKCommon\IocContainerTests.cs" />
-    <Compile Include="GKCommon\MarginsTests.cs" />
     <Compile Include="GKCommon\RusDeclensionTests.cs" />
-    <Compile Include="GKCommon\TypeHandlerTests.cs" />
     <Compile Include="GKCommon\SmartGraphTests.cs" />
-    <Compile Include="GKCommon\StringTokenizerTests.cs" />
     <Compile Include="GKCommon\SysUtilsTests.cs" />
-    <Compile Include="GKCommon\UDNTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
     <Compile Include="GKComponents\ImageBoxTests.cs" />

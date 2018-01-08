@@ -21,12 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace GKCommon
 {
@@ -56,33 +54,6 @@ namespace GKCommon
         static SysUtils()
         {
             InitCRC32();
-            InitRome();
-        }
-
-        public static bool IsDigit(char chr)
-        {
-            return chr >= '0' && chr <= '9';
-        }
-
-        public static bool IsDigits(string str)
-        {
-            bool res = false;
-
-            if (!string.IsNullOrEmpty(str))
-            {
-                int I;
-                for (I = 1; I <= str.Length; I++)
-                {
-                    char c = str[I - 1];
-                    if (c < '0' || c >= ':')
-                    {
-                        break;
-                    }
-                }
-                res = (I > str.Length);
-            }
-
-            return res;
         }
 
         public static int IndexOf<T>(T[] array, T value)
@@ -328,89 +299,6 @@ namespace GKCommon
         #endregion
 
         #region Convert helpers
-
-        private static int[] RN_N;
-        private static string[] RN_S;
-
-        private static void InitRome()
-        {
-            RN_N = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-            RN_S = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
-        }
-
-        public static string GetRome(int num)
-        {
-            string rome = "";
-            int T = 12;
-
-            if (num > 0)
-            {
-                while (true)
-                {
-                    int rn = RN_N[T];
-
-                    if (num >= rn) {
-                        while (num >= rn) {
-                            num -= rn;
-                            rome += RN_S[T];
-                        }
-
-                        if (num <= 0) break;
-                    } else {
-                        T -= 1;
-                    }
-                }
-            }
-            return rome;
-        }
-
-        public static NumberFormatInfo CreateDefaultNumberFormat()
-        {
-            var result = new NumberFormatInfo();
-            result.NumberDecimalSeparator = ".";
-            result.NumberGroupSeparator = "";
-            return result;
-        }
-
-        public static int ParseInt(string str, int Default)
-        {
-            int res;
-            if (!int.TryParse(str, out res)) res = Default;
-            return res;
-        }
-
-        public static double ParseFloat(string str, double defaultValue, bool checkSeparator = false)
-        {
-            if (string.IsNullOrEmpty(str)) return defaultValue;
-
-            string decSep;
-            if (checkSeparator) {
-                decSep = (str.Contains(",") ? "," : ".");
-            } else {
-                decSep = ".";
-            }
-
-            NumberFormatInfo formatInfo = (NumberFormatInfo)Thread.CurrentThread.CurrentCulture.NumberFormat.Clone();
-            formatInfo.NumberDecimalSeparator = decSep;
-            formatInfo.NumberGroupSeparator = " ";
-
-            double value;
-            double result;
-            if (double.TryParse(str, NumberStyles.Float, formatInfo, out value)) {
-                result = value;
-            } else {
-                result = defaultValue;
-            }
-            return result;
-        }
-
-        public static string AdjustNum(int val, int up)
-        {
-            StringBuilder res = new StringBuilder(up);
-            res.Append(val.ToString());
-            while (res.Length < up) res.Insert(0, "0");
-            return res.ToString();
-        }
 
         public static string NormalizeName(string s)
         {

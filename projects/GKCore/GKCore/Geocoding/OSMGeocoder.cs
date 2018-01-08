@@ -25,7 +25,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-using GKCommon;
+using BSLib;
 
 namespace GKCore.Geocoding
 {
@@ -71,8 +71,8 @@ namespace GKCore.Geocoding
                             if (xNode.Name == "place")
                             {
                                 string ptHint = xNode.Attributes["display_name"].InnerText;
-                                double ptLongitude = SysUtils.ParseFloat(xNode.Attributes["lon"].InnerText, -1.0);
-                                double ptLatitude = SysUtils.ParseFloat(xNode.Attributes["lat"].InnerText, -1.0);
+                                double ptLongitude = ConvertHelper.ParseFloat(xNode.Attributes["lon"].InnerText, -1.0);
+                                double ptLatitude = ConvertHelper.ParseFloat(xNode.Attributes["lat"].InnerText, -1.0);
 
                                 if (xNode.Attributes["class"].InnerText == "place" && ptLatitude != -1.0 && ptLongitude != -1.0)
                                 {
