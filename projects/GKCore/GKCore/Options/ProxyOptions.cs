@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GKCommon;
 using GKCore.Interfaces;
 
 namespace GKCore.Options
@@ -61,7 +60,7 @@ namespace GKCore.Options
             Server = iniFile.ReadString("Proxy", "Server", "");
             Port = iniFile.ReadString("Proxy", "Port", "");
             Login = iniFile.ReadString("Proxy", "Login", "");
-            Password = SCCrypt.scDecrypt(iniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
+            Password = SCCrypt.scDecrypt(iniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)CRC32.CrcStr("GEDKeeper")));
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -74,7 +73,7 @@ namespace GKCore.Options
             iniFile.WriteString("Proxy", "Port", Port);
             iniFile.WriteString("Proxy", "Login", Login);
 
-            string pw = SCCrypt.scEncrypt(Password, unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
+            string pw = SCCrypt.scEncrypt(Password, unchecked((ushort)CRC32.CrcStr("GEDKeeper")));
             iniFile.WriteString("Proxy", "Password", pw);
         }
     }

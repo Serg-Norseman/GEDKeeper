@@ -107,9 +107,9 @@ namespace GKCore.Export
                         treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
 
                         ExtSize imageSize = treeBox.GetImageSize();
-                        float scaleFactor = SysUtils.ZoomToFit(imageSize.Width,
-                                                               imageSize.Height,
-                                                               pageWidth, pageHeight);
+                        float scaleFactor = GfxHelper.ZoomToFit(imageSize.Width,
+                                                                imageSize.Height,
+                                                                pageWidth, pageHeight);
                         scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
 
                         treeBox.SetScale(scaleFactor);

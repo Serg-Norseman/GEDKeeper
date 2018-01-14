@@ -91,7 +91,7 @@ namespace GKUI
                 int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
 
                 if (thumbWidth > 0 && thumbHeight > 0) {
-                    float ratio = SysUtils.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
+                    float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
                     imgWidth = (int)(imgWidth * ratio);
                     imgHeight = (int)(imgHeight * ratio);
                 }

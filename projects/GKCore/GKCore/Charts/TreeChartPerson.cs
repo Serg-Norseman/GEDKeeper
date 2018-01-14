@@ -489,7 +489,7 @@ namespace GKCore.Charts
                     int rtH = portRt.GetHeight();
                     int imgW = fPortrait.Width;
                     int imgH = fPortrait.Height;
-                    float ratio = SysUtils.ZoomToFit(imgW, imgH, rtW, rtH);
+                    float ratio = GfxHelper.ZoomToFit(imgW, imgH, rtW, rtH);
                     imgW = (int)Math.Round(imgW * ratio);
                     imgH = (int)Math.Round(imgH * ratio);
 

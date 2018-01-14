@@ -51,11 +51,6 @@ namespace GKCommon
 
     public static class SysUtils
     {
-        static SysUtils()
-        {
-            InitCRC32();
-        }
-
         public static int IndexOf<T>(T[] array, T value)
         {
             for (int i = 0; i < array.Length; i++)
@@ -311,56 +306,6 @@ namespace GKCommon
 
         #endregion
 
-        #region CRC32
-
-        private const uint DEFAULT_POLYNOMIAL = 0xedb88320u;
-        private static uint[] CCITT32_TABLE;
-
-        private static void InitCRC32()
-        {
-            CCITT32_TABLE = new uint[256];
-
-            for (uint i = 0; i < 256; i++)
-            {
-                uint val = i;
-
-                for (uint j = 0; j < 8; j++)
-                    if ((val & 1) == 1)
-                        val = (val >> 1) ^ DEFAULT_POLYNOMIAL;
-                    else
-                        val = val >> 1;
-
-                CCITT32_TABLE[i] = val;
-            }
-        }
-
-        public static uint CrcBytes(byte[] data)
-        {
-            uint crc = 0u;
-            if (data != null && data.Length != 0)
-            {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    byte c = data[i];
-                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ c) & 255u)]);
-                }
-            }
-            return crc;
-        }
-
-        public static uint CrcStr(string str)
-        {
-            uint crc = 0u;
-            if (!string.IsNullOrEmpty(str))
-            {
-                byte[] data = Encoding.Unicode.GetBytes(str);
-                crc = CrcBytes(data);
-            }
-            return crc;
-        }
-
-        #endregion
-
         #region Encoding
 
         public static string EncodeUID(byte[] binaryKey)
@@ -398,34 +343,6 @@ namespace GKCommon
             Buffer.BlockCopy(by2, 0, buffer, 6, 2);
 
             return SysUtils.EncodeUID(buffer);
-        }
-
-        #endregion
-
-        #region Graphics functions
-
-        public static float ZoomToFit(float imgWidth, float imgHeight,
-                                      float requireWidth, float requireHeight)
-        {
-            if (imgWidth == 0.0f || imgHeight == 0.0f) return 1.0f;
-
-            float aspectRatio;
-
-            if (imgWidth > imgHeight) {
-                aspectRatio = requireWidth / imgWidth;
-
-                if (requireHeight < imgHeight * aspectRatio) {
-                    aspectRatio = requireHeight / imgHeight;
-                }
-            } else {
-                aspectRatio = requireHeight / imgHeight;
-
-                if (requireWidth < imgWidth * aspectRatio) {
-                    aspectRatio = requireWidth / imgWidth;
-                }
-            }
-
-            return aspectRatio;
         }
 
         #endregion

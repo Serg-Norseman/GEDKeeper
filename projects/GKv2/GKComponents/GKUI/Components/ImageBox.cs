@@ -24,7 +24,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 
 namespace GKUI.Components
 {
@@ -722,7 +722,7 @@ namespace GKUI.Components
             AutoScrollMinSize = Size.Empty;
 
             Rectangle innerRectangle = GetInsideViewport();
-            double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon;
+using BSLib;
 using NUnit.Framework;
 
 namespace GKCore
@@ -34,8 +34,8 @@ namespace GKCore
         public void Test_Complex()
         {
             const string pw = "test password";
-            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)SysUtils.CrcStr("test")));
-            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)SysUtils.CrcStr("test")));
+            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)CRC32.CrcStr("test")));
+            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
 
             Assert.AreEqual(pw, pw1, "SCCrypt_Test");
 

@@ -674,7 +674,7 @@ namespace GKUI.Components
             viewportSize.Height -= 40;
             viewportSize.Width -= 40;
 
-            double aspectRatio = SysUtils.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width, viewportSize.Height);
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width, viewportSize.Height);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
