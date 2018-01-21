@@ -36,7 +36,7 @@ namespace GKCore
             var config = new YamlConfig();
             config.DontUseVerbatimTag = true;
             config.OmitTagForRootNode = true;
-            config.ExcludeYamlVersion = true;
+            config.EmitYamlVersion = false;
             serializer = new YamlSerializer(config);
         }
 

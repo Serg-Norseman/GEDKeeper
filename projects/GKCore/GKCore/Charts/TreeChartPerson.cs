@@ -483,7 +483,7 @@ namespace GKCore.Charts
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);
-                    portRt.Inflate(3, 3);
+                    portRt.Inflate(-3, -3);
 
                     int rtW = portRt.GetWidth();
                     int rtH = portRt.GetHeight();

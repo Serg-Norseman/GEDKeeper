@@ -95,9 +95,6 @@
     <Reference Include="NLua">
       <HintPath>..\libs\linux\NLua.dll</HintPath>
     </Reference>
-    <Reference Include="LinqBridge">
-      <HintPath>..\libs\LinqBridge.dll</HintPath>
-    </Reference>
     <Reference Include="YamlSerializer">
       <HintPath>..\libs\YamlSerializer.dll</HintPath>
     </Reference>

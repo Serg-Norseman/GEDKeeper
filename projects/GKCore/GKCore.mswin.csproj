@@ -81,9 +81,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\libs\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LinqBridge">
-      <HintPath>..\libs\LinqBridge.dll</HintPath>
-    </Reference>
     <Reference Include="LuaInterface">
       <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
     </Reference>
