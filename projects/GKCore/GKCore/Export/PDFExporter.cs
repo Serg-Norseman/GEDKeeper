@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !NETSTANDARD
+
 using System;
 using System.IO;
 
@@ -85,3 +87,5 @@ namespace GKCore.Export
         protected abstract void InternalGenerate();
     }
 }
+
+#endif

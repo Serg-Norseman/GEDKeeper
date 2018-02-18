@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !NETSTANDARD
+
 using System;
 using System.IO;
 
@@ -71,12 +73,12 @@ namespace GKCore.Export
             var fontBytes = SysUtils.ReadByteArray(fontStream);
             fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
 
-            /*#if !__MonoCS__
+            /*if !__MonoCS__
             fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            #else
+            else
             //BaseFont.TIMES_ROMAN, "Cp1251"
             this.fBaseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            #endif*/
+            endif*/
         }
 
         protected override void Dispose(bool disposing)
@@ -225,3 +227,5 @@ namespace GKCore.Export
         }
     }
 }
+
+#endif

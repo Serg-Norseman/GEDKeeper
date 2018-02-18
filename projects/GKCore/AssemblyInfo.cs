@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Resources;
 
+#if !NETSTANDARD
+
 [assembly: AssemblyTitle("GKCore")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -14,3 +16,5 @@ using System.Resources;
 [assembly: AssemblyFileVersion("3.0.0.0")]
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguage("en")]
+
+#endif

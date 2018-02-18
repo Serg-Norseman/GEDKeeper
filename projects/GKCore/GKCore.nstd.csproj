@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
 		<AssemblyName>GKCore</AssemblyName>
 		<RootNamespace />
 		<Company />
@@ -20,4 +20,21 @@
 			<HintPath>libs\itextsharp.dll</HintPath>
 		</Reference>
 	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<Reference Include="BSLib.netstd">
+			<HintPath>..\libs\netstd\BSLib.netstd.dll</HintPath>
+		</Reference>
+		<Reference Include="BSLib.SmartGraph.netstd">
+			<HintPath>..\libs\netstd\BSLib.SmartGraph.netstd.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;RELEASE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
 </Project>
