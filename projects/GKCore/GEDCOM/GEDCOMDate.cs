@@ -811,15 +811,15 @@ namespace GKCommon.GEDCOM
             {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
-                        result += day > 0 ? ConvertHelper.AdjustNum(day, 2) + "." : "__.";
-                        result += month > 0 ? ConvertHelper.AdjustNum(month, 2) + "." : "__.";
+                        result += day > 0 ? ConvertHelper.AdjustNumber(day, 2) + "." : "__.";
+                        result += month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
                         result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
                         break;
 
                     case DateFormat.dfYYYY_MM_DD:
                         result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        result += month > 0 ? ConvertHelper.AdjustNum(month, 2) + "." : "__.";
-                        result += day > 0 ? ConvertHelper.AdjustNum(day, 2) : "__";
+                        result += month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
+                        result += day > 0 ? ConvertHelper.AdjustNumber(day, 2) : "__";
                         break;
 
                     case DateFormat.dfYYYY:

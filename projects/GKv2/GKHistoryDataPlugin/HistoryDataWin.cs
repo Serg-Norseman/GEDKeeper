@@ -19,7 +19,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using BSLib;
@@ -35,8 +40,20 @@ namespace GKHistoryDataPlugin
     /// </summary>
     public partial class HistoryDataWin : Form, ILocalization, IWidgetForm
     {
+        private class LinkItem
+        {
+            public GKListItem Item;
+            public bool Valid;
+
+            public LinkItem(GKListItem item)
+            {
+                Item = item;
+            }
+        }
+
         private readonly Plugin fPlugin;
         private int fLinkColumn;
+        private List<LinkItem> fItems;
 
         public HistoryDataWin(Plugin plugin)
         {
@@ -47,7 +64,8 @@ namespace GKHistoryDataPlugin
             Screen scr = Screen.PrimaryScreen;
             Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
 
-            LoadData();
+            fItems = new List<LinkItem>();
+            LoadFiles();
 
             SetLang();
         }
@@ -62,12 +80,24 @@ namespace GKHistoryDataPlugin
             fPlugin.Host.WidgetClose(fPlugin);
         }
 
-        private void LoadData()
+        private void LoadFiles()
         {
-            string csvPath = AppHost.GetAppPath() + "externals/sources-ru.csv";
+            string csvPath = AppHost.GetAppPath() + "externals/";
+            string[] csvFiles = Directory.GetFiles(csvPath, "*.csv");
 
+            cbDataFiles.Items.Clear();
+            foreach (string cf in csvFiles) {
+                cbDataFiles.Items.Add(Path.GetFileName(cf));
+            }
+        }
+
+        private void LoadDataFile(string fileName)
+        {
+            string csvPath = AppHost.GetAppPath() + "externals/" + fileName;
+
+            fItems.Clear();
             fLinkColumn = -1;
-            using (var csv = CSVReader.CreateFromFile(csvPath)) {
+            using (var csv = CSVReader.CreateFromFile(csvPath, Encoding.UTF8)) {
                 var row = csv.ReadRow();
                 for (int i = 0; i < row.Count; i++) {
                     bool autoSize = (i == 0);
@@ -85,7 +115,7 @@ namespace GKHistoryDataPlugin
                         }
                     }
 
-                    lvData.AddItem(null, row.ToArray());
+                    fItems.Add(new LinkItem(lvData.AddItem(null, row.ToArray())));
 
                     row = csv.ReadRow();
                 }
@@ -108,6 +138,54 @@ namespace GKHistoryDataPlugin
         }
 
         #endregion
+
+        private void btnCheck_Click(object sender, EventArgs e)
+        {
+            try {
+                Thread worker = new Thread(WorkerMethod);
+                worker.SetApartmentState(ApartmentState.STA);
+                worker.IsBackground = true;
+                worker.Start();
+            } catch (Exception ex) {
+                Logger.LogWrite("HistoryDataWin.btnCheck_Click(): " + ex.Message);
+            }
+        }
+
+        private void btnLoadFile_Click(object sender, EventArgs e)
+        {
+            LoadDataFile(cbDataFiles.Text);
+        }
+
+        public static bool IsValidUrl(string url)
+        {
+            try {
+                var request = WebRequest.Create(url);
+                request.Timeout = 5000;
+                request.Method = "HEAD";
+
+                using (var response = (HttpWebResponse)request.GetResponse()) {
+                    response.Close();
+                    return response.StatusCode == HttpStatusCode.OK;
+                }
+            } catch (Exception) {
+                return false;
+            }
+        }
+
+        private void WorkerMethod()
+        {
+            try {
+                int num = fItems.Count;
+                for (int i = 0; i < num; i++) {
+                    var linkItem = fItems[i];
+                    string url = linkItem.Item.SubItems[fLinkColumn].Text;
+                    linkItem.Valid = IsValidUrl(url);
+                    linkItem.Item.BackColor = (linkItem.Valid) ? Color.PaleGreen : Color.IndianRed;
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("HistoryDataWin.WorkerMethod(): " + ex.Message);
+            }
+        }
     }
 }
 

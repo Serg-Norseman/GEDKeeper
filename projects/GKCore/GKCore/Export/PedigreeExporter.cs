@@ -52,14 +52,14 @@ namespace GKCore.Export
 
             private string GetOrderStr()
             {
-                string order = ConvertHelper.AdjustNum(FamilyOrder, 2);
+                string order = ConvertHelper.AdjustNumber(FamilyOrder, 2);
                 string result = ((Parent == null) ? order : Parent.GetOrderStr() + order);
                 return result;
             }
 
             public string GetInternalStr()
             {
-                return ConvertHelper.AdjustNum(Level, 2) + GetOrderStr();
+                return ConvertHelper.AdjustNumber(Level, 2) + GetOrderStr();
             }
         }
 

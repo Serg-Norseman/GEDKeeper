@@ -5,11 +5,12 @@
 
 		private void InitializeComponent()
 		{
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoryDataWin));
 		    this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-		    this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+		    this.btnCheck = new System.Windows.Forms.ToolStripButton();
+		    this.btnLoadFile = new System.Windows.Forms.ToolStripButton();
+		    this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+		    this.cbDataFiles = new System.Windows.Forms.ToolStripComboBox();
 		    this.lvData = new GKUI.Components.GKListView();
-		    this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 		    this.toolStrip1.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
@@ -17,23 +18,44 @@
 		    // 
 		    this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 		    this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2});
+		    		    		    this.btnCheck,
+		    		    		    this.btnLoadFile,
+		    		    		    this.toolStripSeparator1,
+		    		    		    this.cbDataFiles});
 		    this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 		    this.toolStrip1.Name = "toolStrip1";
-		    this.toolStrip1.Size = new System.Drawing.Size(694, 25);
+		    this.toolStrip1.Size = new System.Drawing.Size(694, 28);
 		    this.toolStrip1.TabIndex = 0;
 		    this.toolStrip1.Text = "toolStrip1";
 		    // 
-		    // toolStripButton1
+		    // btnCheck
 		    // 
-		    this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-		    this.toolStripButton1.Enabled = false;
-		    this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-		    this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-		    this.toolStripButton1.Name = "toolStripButton1";
-		    this.toolStripButton1.Size = new System.Drawing.Size(44, 22);
-		    this.toolStripButton1.Text = "Check";
+		    this.btnCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+		    this.btnCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+		    this.btnCheck.Name = "btnCheck";
+		    this.btnCheck.Size = new System.Drawing.Size(52, 25);
+		    this.btnCheck.Text = "Check";
+		    this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
+		    // 
+		    // btnLoadFile
+		    // 
+		    this.btnLoadFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+		    this.btnLoadFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+		    this.btnLoadFile.Name = "btnLoadFile";
+		    this.btnLoadFile.Size = new System.Drawing.Size(71, 25);
+		    this.btnLoadFile.Text = "Load file";
+		    this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
+		    // 
+		    // toolStripSeparator1
+		    // 
+		    this.toolStripSeparator1.Name = "toolStripSeparator1";
+		    this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
+		    // 
+		    // cbDataFiles
+		    // 
+		    this.cbDataFiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+		    this.cbDataFiles.Name = "cbDataFiles";
+		    this.cbDataFiles.Size = new System.Drawing.Size(200, 28);
 		    // 
 		    // lvData
 		    // 
@@ -41,30 +63,20 @@
 		    this.lvData.FullRowSelect = true;
 		    this.lvData.HideSelection = false;
 		    this.lvData.ListMan = null;
-		    this.lvData.Location = new System.Drawing.Point(0, 25);
+		    this.lvData.Location = new System.Drawing.Point(0, 28);
 		    this.lvData.Name = "lvData";
 		    this.lvData.Order = System.Windows.Forms.SortOrder.None;
 		    this.lvData.OwnerDraw = true;
-		    this.lvData.Size = new System.Drawing.Size(694, 372);
+		    this.lvData.Size = new System.Drawing.Size(694, 369);
 		    this.lvData.SortColumn = 0;
 		    this.lvData.TabIndex = 1;
 		    this.lvData.UseCompatibleStateImageBehavior = false;
 		    this.lvData.View = System.Windows.Forms.View.Details;
 		    this.lvData.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvData_MouseDoubleClick);
 		    // 
-		    // toolStripButton2
-		    // 
-		    this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-		    this.toolStripButton2.Enabled = false;
-		    this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-		    this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-		    this.toolStripButton2.Name = "toolStripButton2";
-		    this.toolStripButton2.Size = new System.Drawing.Size(56, 22);
-		    this.toolStripButton2.Text = "Load file";
-		    // 
 		    // HistoryDataWin
 		    // 
-		    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+		    this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 		    this.ClientSize = new System.Drawing.Size(694, 397);
 		    this.Controls.Add(this.lvData);
@@ -82,11 +94,12 @@
 		    this.toolStrip1.PerformLayout();
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
-
 		}
 		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton btnCheck;
 		private GKUI.Components.GKListView lvData;
-		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.Windows.Forms.ToolStripButton btnLoadFile;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripComboBox cbDataFiles;
 	}
 }

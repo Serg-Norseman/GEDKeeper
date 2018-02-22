@@ -1207,7 +1207,7 @@ namespace GKCore
                     {
                         int rev = fTree.Header.FileRevision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
-                        string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNum(rev, 3);
+                        string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNumber(rev, 3);
 
                         if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
                         File.Move(fileName, bakPath + bakFile);

@@ -22,6 +22,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 using BSLib;
 using GKCommon;
@@ -711,7 +712,7 @@ namespace GKCore
 
             try
             {
-                fCSVData = CSVReader.ReadCSVFile(fileName, hasHeader);
+                fCSVData = CSVReader.ReadCSVFile(fileName, Encoding.Unicode, hasHeader);
                 result = true;
             }
             catch
