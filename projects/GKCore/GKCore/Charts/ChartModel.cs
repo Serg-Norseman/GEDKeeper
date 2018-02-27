@@ -30,6 +30,8 @@ namespace GKCore.Charts
     {
         protected int fImageHeight;
         protected int fImageWidth;
+        protected int fOffsetX;
+        protected int fOffsetY;
         protected ChartRenderer fRenderer;
 
         public int ImageHeight
@@ -59,6 +61,17 @@ namespace GKCore.Charts
         public virtual void SetRenderer(ChartRenderer renderer)
         {
             fRenderer = renderer;
+        }
+
+        public ExtPoint GetOffsets()
+        {
+            return new ExtPoint(fOffsetX, fOffsetY);
+        }
+
+        public void SetOffsets(int offsetX, int offsetY)
+        {
+            fOffsetX = offsetX;
+            fOffsetY = offsetY;
         }
     }
 }

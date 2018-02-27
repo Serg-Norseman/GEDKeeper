@@ -54,6 +54,11 @@ namespace GKCommon
         private int fTimeDest;
         private TweenDelegate fTweenDelegate;
 
+        public bool Busy
+        {
+            get { return fBusy; }
+        }
+
         public TweenLibrary()
         {
             fBusy = false;

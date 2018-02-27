@@ -54,6 +54,8 @@ namespace GKCore.Options
         public bool CertaintyIndexVisible;
         public bool TraceSelected;
 
+        public bool DeepMode;
+
         public IColor MaleColor;
         public IColor FemaleColor;
         public IColor UnkSexColor;
@@ -85,6 +87,7 @@ namespace GKCore.Options
             TraceSelected = true;
             ChildlessExclude = false;
             Decorative = true;
+            DeepMode = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -153,6 +156,7 @@ namespace GKCore.Options
             TraceSelected = iniFile.ReadBool("Chart", "TraceSelected", true);
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
+            DeepMode = iniFile.ReadBool("Chart", "DeepMode", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -189,6 +193,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "TraceSelected", TraceSelected);
             iniFile.WriteBool("Chart", "ChildlessExclude", ChildlessExclude);
             iniFile.WriteBool("Chart", "Decorative", Decorative);
+            iniFile.WriteBool("Chart", "DeepMode", DeepMode);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

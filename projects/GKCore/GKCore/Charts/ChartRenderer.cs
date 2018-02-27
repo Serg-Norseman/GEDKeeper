@@ -142,5 +142,7 @@ namespace GKCore.Charts
         public abstract void DrawArcText(string text, float centerX, float centerY, float radius,
                                          float startAngle, float wedgeAngle,
                                          bool inside, bool clockwise, IFont font, IBrush brush);
+
+        public abstract void SetTranslucent(float value);
     }
 }

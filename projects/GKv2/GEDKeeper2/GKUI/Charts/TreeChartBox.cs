@@ -199,7 +199,6 @@ namespace GKUI.Charts
         private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
-        private int fBorderWidth;
         private IContainer fComponents;
         private long fHighlightedStart;
         private ChartControlMode fMode = ChartControlMode.ccmDefault;
@@ -243,19 +242,6 @@ namespace GKUI.Charts
         {
             get { return fModel.Base; }
             set { fModel.Base = value; }
-        }
-
-        public int BorderWidth
-        {
-            get {
-                return fBorderWidth;
-            }
-            set {
-                if (fBorderWidth != value) {
-                    fBorderWidth = value;
-                    Invalidate();
-                }
-            }
         }
 
         public bool CertaintyIndex
@@ -530,39 +516,27 @@ namespace GKUI.Charts
             int spx = 0;
             int spy = 0;
 
+            Size clientSize = ClientSize;
+            ExtPoint scrollPos = new ExtPoint(Math.Abs(AutoScrollPosition.X), Math.Abs(AutoScrollPosition.Y));
+
             if (drawMode == ChartDrawMode.dmInteractive) {
-                /*Rectangle viewPort = GetImageViewPort();
-                fSPX = -viewPort.Left;
-                fSPY = -viewPort.Top;*/
+                spx += -scrollPos.X;
+                spy += -scrollPos.Y;
 
-                spx += fBorderWidth - -AutoScrollPosition.X;
-                spy += fBorderWidth - -AutoScrollPosition.Y;
-
-                Size sz = ClientSize;
-
-                if (fModel.ImageWidth < sz.Width) {
-                    spx += (sz.Width - fModel.ImageWidth) / 2;
-                }
-
-                if (fModel.ImageHeight < sz.Height) {
-                    spy += (sz.Height - fModel.ImageHeight) / 2;
-                }
-
-                fModel.VisibleArea = GetSourceImageRegion();
+                Rectangle viewPort = GetImageViewPort();
+                fModel.VisibleArea = ExtRect.CreateBounds(scrollPos.X, scrollPos.Y, viewPort.Width, viewPort.Height);
             } else {
-                if (drawMode == ChartDrawMode.dmStaticCentered) {
-                    Size sz = ClientSize;
+                fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
+            }
 
-                    if (fModel.ImageWidth < sz.Width) {
-                        spx += (sz.Width - fModel.ImageWidth) / 2;
-                    }
-
-                    if (fModel.ImageHeight < sz.Height) {
-                        spy += (sz.Height - fModel.ImageHeight) / 2;
-                    }
+            if (drawMode == ChartDrawMode.dmInteractive || drawMode == ChartDrawMode.dmStaticCentered) {
+                if (fModel.ImageWidth < clientSize.Width) {
+                    spx += (clientSize.Width - fModel.ImageWidth) / 2;
                 }
 
-                fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                if (fModel.ImageHeight < clientSize.Height) {
+                    spy += (clientSize.Height - fModel.ImageHeight) / 2;
+                }
             }
 
             fModel.SetOffsets(spx, spy);
@@ -575,7 +549,29 @@ namespace GKUI.Charts
             }
             #endif
 
-            fModel.Draw(fModel.Root, fModel.Kind, drawMode);
+            if (fOptions.DeepMode && fSelected != null && fSelected != fModel.Root && fSelected.Rec != null) {
+                try {
+                    using (var deepModel = new TreeChartModel()) {
+                        deepModel.Assign(fModel);
+                        deepModel.SetRenderer(fRenderer);
+                        deepModel.DepthLimit = 3;
+                        deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
+                        deepModel.RecalcChart(true);
+
+                        var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                        deepModel.SetOffsets((spx + (fSelected.PtX - pers.PtX)), (spy + (fSelected.PtY - pers.PtY)));
+                        deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
+
+                        fRenderer.SetTranslucent(0.75f);
+                        deepModel.Draw(ChartDrawMode.dmStatic);
+                    }
+                } catch (Exception ex) {
+                    Logger.LogWrite("TreeChartBox.DrawDeep(): " + ex.Message);
+                }
+            }
+
+            fRenderer.SetTranslucent(0.0f);
+            fModel.Draw(drawMode);
         }
 
         #endregion
@@ -590,9 +586,6 @@ namespace GKUI.Charts
 
         public void RecalcChart(bool noRedraw = false)
         {
-            float fsz = (float)Math.Round(fOptions.DefFontSize * fModel.Scale);
-            fModel.DrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
-
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {
                 gfx = CreateGraphics();
@@ -609,61 +602,6 @@ namespace GKUI.Charts
 
             var imageSize = GetImageSize();
             AdjustViewport(imageSize, noRedraw);
-        }
-
-        private Rectangle GetInsideViewPort(bool includePadding)
-        {
-            int left = 0;
-            int top = 0;
-            int width = ClientSize.Width;
-            int height = ClientSize.Height;
-
-            if (includePadding)
-            {
-                left += Padding.Left;
-                top += Padding.Top;
-                width -= Padding.Horizontal;
-                height -= Padding.Vertical;
-            }
-
-            return new Rectangle(left, top, width, height);
-        }
-
-        private Rectangle GetImageViewPort()
-        {
-            Rectangle viewPort;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle innerRectangle = GetInsideViewPort(true);
-
-                int x = !HScroll ? (innerRectangle.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
-                int y = !VScroll ? (innerRectangle.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
-
-                int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
-                int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
-
-                viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
-            } else {
-                viewPort = Rectangle.Empty;
-            }
-
-            return viewPort;
-        }
-
-        private ExtRect GetSourceImageRegion()
-        {
-            ExtRect region;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle viewPort = GetImageViewPort();
-                region = ExtRect.CreateBounds(-AutoScrollPosition.X, -AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
-            } else {
-                region = ExtRect.Empty;
-            }
-
-            return region;
         }
 
         #endregion
@@ -1003,38 +941,22 @@ namespace GKUI.Charts
 
         public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
-            if (person == null) return;
+            if (person == null || fTween.Busy) return;
 
-            int dstX = ((person.PtX) - (ClientSize.Width / 2));
-            int dstY = ((person.PtY + (person.Height / 2)) - (ClientSize.Height / 2));
+            int width = ClientSize.Width;
+            int height = ClientSize.Height;
+            int dstX = ((person.PtX) - (width / 2));
+            int dstY = ((person.PtY + (person.Height / 2)) - (height / 2));
 
-            if (dstX < 0) dstX = dstX + (0 - dstX);
-            if (dstY < 0) dstY = dstY + (0 - dstY);
+            dstX = SysUtils.CheckBounds(dstX, 0, fModel.ImageWidth - width);
+            dstY = SysUtils.CheckBounds(dstY, 0, fModel.ImageHeight - height);
 
-            int oldX = Math.Abs(AutoScrollPosition.X);
-            int oldY = Math.Abs(AutoScrollPosition.Y);
+            int srcX = Math.Abs(AutoScrollPosition.X);
+            int srcY = Math.Abs(AutoScrollPosition.Y);
 
-            if ((oldX == dstX) && (oldY == dstY)) return;
-
-            if (animation) {
-                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
-            } else {
-                //fTween.StopTween();
-                //SetScroll(dstX, dstY);
-                fTween.StartTween(SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 1);
-            }
-        }
-
-        private void SetScroll(int x, int y)
-        {
-            TweenDelegate invoker = delegate(int newX, int newY) {
-                UpdateScrollPosition(newX, newY);
-            };
-
-            if (InvokeRequired) {
-                Invoke(invoker, x, y);
-            } else {
-                invoker(x, y);
+            if ((srcX != dstX) || (srcY != dstY)) {
+                int timeInterval = animation ? 20 : 1;
+                fTween.StartTween(UpdateScrollPosition, srcX, srcY, dstX, dstY, TweenAnimation.EaseInOutQuad, timeInterval);
             }
         }
 
@@ -1044,7 +966,7 @@ namespace GKUI.Charts
 
         public override ExtSize GetImageSize()
         {
-            return new ExtSize(fModel.ImageWidth, fModel.ImageHeight);
+            return fModel.ImageSize;
         }
 
         public override void RenderStaticImage(Graphics gfx, OutputType outputType)

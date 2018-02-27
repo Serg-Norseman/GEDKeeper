@@ -183,6 +183,28 @@ namespace GKUI.Charts
 
         #region Print and snaphots support
 
+        protected Rectangle GetImageViewPort()
+        {
+            Rectangle viewPort;
+
+            var imageSize = GetImageSize();
+            if (!imageSize.IsEmpty) {
+                Rectangle clientRect = GetClientRect(true);
+
+                int x = !HScroll ? (clientRect.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
+                int y = !VScroll ? (clientRect.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
+
+                int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), clientRect.Width);
+                int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), clientRect.Height);
+
+                viewPort = new Rectangle(x + clientRect.Left, y + clientRect.Top, width, height);
+            } else {
+                viewPort = Rectangle.Empty;
+            }
+
+            return viewPort;
+        }
+
         public abstract ExtSize GetImageSize();
         public abstract void RenderStaticImage(Graphics gfx, OutputType outputType);
 
