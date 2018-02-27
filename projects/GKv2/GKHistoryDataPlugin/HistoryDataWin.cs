@@ -40,10 +40,17 @@ namespace GKHistoryDataPlugin
     /// </summary>
     public partial class HistoryDataWin : Form, ILocalization, IWidgetForm
     {
+        public enum LinkState
+        {
+            Normal,
+            Invalid,
+            Duplicate
+        }
+
         private class LinkItem
         {
             public GKListItem Item;
-            public bool Valid;
+            public LinkState State;
 
             public LinkItem(GKListItem item)
             {
@@ -177,10 +184,37 @@ namespace GKHistoryDataPlugin
             try {
                 int num = fItems.Count;
                 for (int i = 0; i < num; i++) {
+                    var linkItem1 = fItems[i];
+                    string url1 = linkItem1.Item.SubItems[fLinkColumn].Text;
+
+                    for (int k = i + 1; k < num; k++) {
+                        var linkItem2 = fItems[i];
+                        string url2 = linkItem2.Item.SubItems[fLinkColumn].Text;
+
+                        if (string.Compare(url1, url2, true) == 0) {
+                            linkItem2.State = LinkState.Duplicate;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < num; i++) {
                     var linkItem = fItems[i];
                     string url = linkItem.Item.SubItems[fLinkColumn].Text;
-                    linkItem.Valid = IsValidUrl(url);
-                    linkItem.Item.BackColor = (linkItem.Valid) ? Color.PaleGreen : Color.IndianRed;
+                    if (!IsValidUrl(url)) {
+                        linkItem.State = LinkState.Invalid;
+                    }
+
+                    switch (linkItem.State) {
+                        case LinkState.Normal:
+                            linkItem.Item.BackColor = Color.PaleGreen;
+                            break;
+                        case LinkState.Invalid:
+                            linkItem.Item.BackColor = Color.IndianRed;
+                            break;
+                        case LinkState.Duplicate:
+                            linkItem.Item.BackColor = Color.Orange;
+                            break;
+                    }
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("HistoryDataWin.WorkerMethod(): " + ex.Message);
