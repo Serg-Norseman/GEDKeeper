@@ -1,4 +1,5 @@
-# GEDKeeper
+![Logo](../master/dev_info/gk_logo_full_v0.png)
+
 
 [![Website](https://img.shields.io/badge/www-en.gedkeeper.net-0099BC.svg?maxAge=3600)](http://en.gedkeeper.net/)
 [![Website](https://img.shields.io/badge/www-gedkeeper.github.io-0099BC.svg?maxAge=3600)](https://gedkeeper.github.io/)
