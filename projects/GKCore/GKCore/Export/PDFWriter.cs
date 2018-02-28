@@ -90,7 +90,7 @@ namespace GKCore.Export
             base.Dispose(disposing);
         }
 
-        public override void beginWrite()
+        public override void BeginWrite()
         {
             iTextSharp.text.Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
@@ -104,7 +104,7 @@ namespace GKCore.Export
             fDocument.Open();
         }
 
-        public override void endWrite()
+        public override void EndWrite()
         {
             fDocument.Close();
         }

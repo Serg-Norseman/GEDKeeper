@@ -23,7 +23,6 @@ using System.Collections.Generic;
 
 using BSLib;
 using BSLib.Calendar;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -33,7 +32,7 @@ namespace GKCore.Export
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PedigreeExporter : Exporter
+    public sealed class PedigreeExporter : ReportExporter
     {
         private class PedigreePerson
         {
@@ -84,10 +83,11 @@ namespace GKCore.Export
             pkDescend_Konovalov
         }
 
-        private GEDCOMIndividualRecord fRoot;
+        private PedigreeFormat fFormat;
         private PedigreeKind fKind;
         private ExtList<PedigreePerson> fPersonList;
-        private ShieldState fShieldState;
+        private readonly GEDCOMIndividualRecord fRoot;
+        private readonly ShieldState fShieldState;
         private StringList fSourceList;
 
         private IFont fTitleFont;
@@ -96,29 +96,27 @@ namespace GKCore.Export
         private IFont fLinkFont;
         private IFont fTextFont, fSupText;
 
-        private PedigreeFormat fFormat;
-        private string fTitle;
-
-        public GEDCOMIndividualRecord Root
-        {
-            get { return fRoot; }
-            set { fRoot = value; }
-        }
-
         public PedigreeKind Kind
         {
             get { return fKind; }
             set { fKind = value; }
         }
 
+        public GEDCOMIndividualRecord Root
+        {
+            get { return fRoot; }
+        }
+
         public ShieldState ShieldState
         {
             get { return fShieldState; }
-            set { fShieldState = value; }
         }
 
-        public PedigreeExporter(IBaseWindow baseWin) : base(baseWin)
+        public PedigreeExporter(IBaseWindow baseWin, GEDCOMIndividualRecord root) : base(baseWin)
         {
+            fRoot = root;
+            fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(fRoot, true, false);
+            fShieldState = baseWin.Context.ShieldState;
         }
 
         private PedigreePerson FindPerson(GEDCOMIndividualRecord iRec)
@@ -431,142 +429,6 @@ namespace GKCore.Export
             fWriter.endList();
         }
 
-        private void InternalGenerate()
-        {
-            bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;
-
-            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter);
-
-            fPersonList = new ExtList<PedigreePerson>(true);
-            fSourceList = new StringList();
-            try
-            {
-                GenStep(null, fRoot, 1, 1);
-                ReIndex();
-
-                int curLevel = 0;
-                int num = fPersonList.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    PedigreePerson person = fPersonList[i];
-
-                    if (includeGens && curLevel != person.Level)
-                    {
-                        curLevel = person.Level;
-                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
-
-                        fWriter.beginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
-                        fWriter.addParagraphChunk(genTitle, fChapFont);
-                        fWriter.endParagraph();
-                    }
-
-                    WritePerson(person);
-                }
-
-                if (fSourceList.Count > 0)
-                {
-                    fWriter.beginParagraph(CustomWriter.TextAlignment.taCenter, 12f, 6f);
-                    fWriter.addParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
-                    fWriter.endParagraph();
-
-                    int num2 = fSourceList.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        string sn = (j + 1).ToString();
-                        string sst = sn + ". " + fSourceList[j];
-                        string sanc = "src_" + sn;
-
-                        fWriter.addParagraphAnchor(sst, fTextFont, sanc);
-                    }
-                }
-            }
-            finally
-            {
-                fSourceList.Dispose();
-                fPersonList.Dispose();
-            }
-        }
-
-        public bool Generate(CustomWriter writer)
-        {
-            bool result = false;
-
-            fFormat = fOptions.PedigreeOptions.Format;
-
-            try
-            {
-                fWriter = writer;
-                fWriter.SetAlbumPage(false);
-                fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(fRoot, true, false);
-                fWriter.SetDocumentTitle(fTitle);
-                fWriter.SetFileName(fPath);
-
-                IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
-                IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
-
-                fWriter.beginWrite();
-                try
-                {
-                    fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
-                    fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
-                    fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
-                    fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
-                    fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
-                    fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, clrBlue);
-
-                    InternalGenerate();
-                    result = true;
-                }
-                finally
-                {
-                    fWriter.endWrite();
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PedigreeExporter.Generate(): " + ex.Message);
-                Logger.LogWrite("PedigreeExporter.Generate(): " + ex.StackTrace);
-            }
-
-            return result;
-        }
-
-        public override void Generate(bool show)
-        {
-            if (fRoot == null)
-            {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-                return;
-            }
-
-            string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
-
-            fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
-            if (string.IsNullOrEmpty(fPath)) return;
-
-            string ext = SysUtils.GetFileExtension(fPath);
-
-            CustomWriter writer;
-            if (string.Equals(ext, ".html")) {
-                writer = new HTMLWriter();
-            } else if (string.Equals(ext, ".rtf")) {
-                writer = new RTFWriter();
-            } else {
-                writer = new PDFWriter();
-            }
-
-            bool success = Generate(writer);
-
-            #if !CI_MODE
-            if (!success) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
-            } else {
-                if (show) ShowResult();
-            }
-            #endif
-        }
-
         private void GenStep(PedigreePerson parent, GEDCOMIndividualRecord iRec, int level, int familyOrder)
         {
             if (iRec == null) return;
@@ -673,6 +535,74 @@ namespace GKCore.Export
                         }
                         break;
                 }
+            }
+        }
+
+        protected override void InternalGenerate()
+        {
+            IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
+            IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
+
+            fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
+            fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
+            fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
+            fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
+            fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
+            fSupText = fWriter.CreateFont("", ((fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, clrBlue);
+
+            fFormat = fOptions.PedigreeOptions.Format;
+
+            bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;
+
+            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter);
+
+            fPersonList = new ExtList<PedigreePerson>(true);
+            fSourceList = new StringList();
+            try
+            {
+                GenStep(null, fRoot, 1, 1);
+                ReIndex();
+
+                int curLevel = 0;
+                int num = fPersonList.Count;
+                for (int i = 0; i < num; i++)
+                {
+                    PedigreePerson person = fPersonList[i];
+
+                    if (includeGens && curLevel != person.Level)
+                    {
+                        curLevel = person.Level;
+                        string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
+
+                        fWriter.beginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
+                        fWriter.addParagraphChunk(genTitle, fChapFont);
+                        fWriter.endParagraph();
+                    }
+
+                    WritePerson(person);
+                }
+
+                if (fSourceList.Count > 0)
+                {
+                    fWriter.beginParagraph(CustomWriter.TextAlignment.taCenter, 12f, 6f);
+                    fWriter.addParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
+                    fWriter.endParagraph();
+
+                    int num2 = fSourceList.Count;
+                    for (int j = 0; j < num2; j++)
+                    {
+                        string sn = (j + 1).ToString();
+                        string sst = sn + ". " + fSourceList[j];
+                        string sanc = "src_" + sn;
+
+                        fWriter.addParagraphAnchor(sst, fTextFont, sanc);
+                    }
+                }
+            }
+            finally
+            {
+                fSourceList.Dispose();
+                fPersonList.Dispose();
             }
         }
     }

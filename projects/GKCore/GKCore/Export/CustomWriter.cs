@@ -57,8 +57,8 @@ namespace GKCore.Export
             fFileName = fileName;
         }
 
-        public abstract void beginWrite();
-        public abstract void endWrite();
+        public abstract void BeginWrite();
+        public abstract void EndWrite();
 
         public abstract void addParagraph(string text, IFont font);
         public abstract void addParagraph(string text, IFont font, TextAlignment alignment);

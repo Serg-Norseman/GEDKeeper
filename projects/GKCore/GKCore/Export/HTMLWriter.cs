@@ -62,7 +62,7 @@ namespace GKCore.Export
             fStyles = new Dictionary<string, string>();
         }
 
-        public override void beginWrite()
+        public override void BeginWrite()
         {
             fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create), Encoding.UTF8);
 
@@ -83,7 +83,7 @@ namespace GKCore.Export
             fStream.WriteLine("<body>");
         }
 
-        public override void endWrite()
+        public override void EndWrite()
         {
             fStream.WriteLine("</body>");
             fStream.WriteLine("</html>");

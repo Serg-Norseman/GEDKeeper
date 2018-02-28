@@ -1693,18 +1693,16 @@ namespace GKTests.GKCore
                 // TravisCI crash
             }*/
 
-            Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null, null); });
 
-            using (PedigreeExporter exporter = new PedigreeExporter(baseWin)) {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            baseWin.Context.ShieldState = ShieldState.None;
+
+            using (PedigreeExporter exporter = new PedigreeExporter(baseWin, iRec)) {
                 exporter.Options = GlobalOptions.Instance;
                 Assert.IsNotNull(exporter.Options);
 
-                GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-
-                exporter.Root = iRec;
                 Assert.AreEqual(iRec, exporter.Root);
-
-                exporter.ShieldState = ShieldState.None;
                 Assert.AreEqual(ShieldState.None, exporter.ShieldState);
 
                 exporter.Options.PedigreeOptions.IncludeAttributes = true;

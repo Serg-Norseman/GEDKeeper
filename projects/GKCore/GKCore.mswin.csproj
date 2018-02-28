@@ -178,6 +178,7 @@
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\SysUtils.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
+    <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
     <Compile Include="GKCore\GKResourceManager.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />

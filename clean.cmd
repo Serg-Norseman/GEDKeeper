@@ -87,3 +87,6 @@ rmdir .\projects\GKv2\GKDataQualityPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GKHistoryDataPlugin\bin /s /q
 rmdir .\projects\GKv2\GKHistoryDataPlugin\obj /s /q
+
+rmdir .\projects\GKv2\GKStdReports\bin /s /q
+rmdir .\projects\GKv2\GKStdReports\obj /s /q

@@ -74,7 +74,6 @@ namespace GKTests.Mocks
         public IBaseContext Context { get { return fContext; } }
 
         public bool Modified { get { return false; } set {} }
-        public ShieldState ShieldState { get { return ShieldState.None; } set {} }
         public GEDCOMTree Tree { get { return fTree; } }
         public ValuesCollection ValuesCollection { get { return null; } }
 
@@ -155,8 +154,8 @@ namespace GKTests.Mocks
     public class MockWriter : CustomWriter
     {
         public MockWriter() { }
-        public override void beginWrite() { }
-        public override void endWrite() { }
+        public override void BeginWrite() { }
+        public override void EndWrite() { }
         public override void addParagraph(string text, IFont font, TextAlignment alignment) { }
         public override void addParagraph(string text, IFont font) { }
         public override void addParagraphAnchor(string text, IFont font, string anchor) { }

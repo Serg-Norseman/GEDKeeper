@@ -1429,12 +1429,13 @@ namespace GKUI.Forms
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
             var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
+            if (selPerson == null) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
 
-            using (PedigreeExporter p = new PedigreeExporter(this)) {
-                p.Root = selPerson;
+            using (var p = new PedigreeExporter(this, selPerson)) {
                 p.Options = AppHost.Options;
-                p.ShieldState = this.Context.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
             }

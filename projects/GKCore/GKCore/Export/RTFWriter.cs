@@ -63,20 +63,20 @@ namespace GKCore.Export
 
         private readonly Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
 
-        private readonly RtfDocument fDocument;
+        private RtfDocument fDocument;
         private RtfParagraph fParagraph;
 
         public RTFWriter()
+        {
+        }
+
+        public override void BeginWrite()
         {
             PaperOrientation po = (fAlbumPage) ? PaperOrientation.Landscape : PaperOrientation.Portrait;
             fDocument = new RtfDocument(PaperSize.A4, po, Lcid.English);
         }
 
-        public override void beginWrite()
-        {
-        }
-
-        public override void endWrite()
+        public override void EndWrite()
         {
             fDocument.save(fFileName);
         }

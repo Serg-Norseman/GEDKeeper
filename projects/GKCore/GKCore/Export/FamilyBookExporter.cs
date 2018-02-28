@@ -575,7 +575,7 @@ namespace GKCore.Export
         void IPdfPageEvent.OnGenericTag(PdfWriter writer, Document document, Rectangle rect, string text) { }
     }
 
-    public class SimpleColumnText : ColumnText
+    internal class SimpleColumnText : ColumnText
     {
         private readonly Document fDocument;
         private readonly List<Rectangle> fColumns;
