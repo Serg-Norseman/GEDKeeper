@@ -74,16 +74,6 @@ namespace GKTests.GKCommon
             Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
             Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
 
-            //
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.FirstOrDefault<int>(null); });
-            int N = SysUtils.FirstOrDefault(new int[] { 5, 7, 10 });
-            Assert.AreEqual(5, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.LastOrDefault<int>(null); });
-            N = SysUtils.LastOrDefault(new int[] { 5, 7, 10 });
-            Assert.AreEqual(10, N);
-
             // other
             string st = "ivan";
             st = SysUtils.NormalizeName(st);

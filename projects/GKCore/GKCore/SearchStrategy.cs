@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using GKCommon;
+using System.Linq;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -69,7 +69,7 @@ namespace GKCore
             if (fCurResult == null) {
                 if (fCurrentResults == null) fCurrentResults = FindAll();
 
-                fCurResult = SysUtils.FirstOrDefault(fCurrentResults);
+                fCurResult = fCurrentResults.FirstOrDefault();
             } else {
                 int idx = fCurrentResults.IndexOf(fCurResult) + 1;
 
@@ -84,7 +84,7 @@ namespace GKCore
             if (fCurResult == null) {
                 if (fCurrentResults == null) fCurrentResults = FindAll();
 
-                fCurResult = SysUtils.LastOrDefault(fCurrentResults);
+                fCurResult = fCurrentResults.LastOrDefault();
             } else {
                 int idx = fCurrentResults.IndexOf(fCurResult) - 1;
 

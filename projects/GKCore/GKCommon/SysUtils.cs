@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -28,12 +27,14 @@ using System.Text.RegularExpressions;
 
 namespace GKCommon
 {
+    /*
     #if PCL
     public interface ICloneable
     {
         object Clone();
     }
     #endif
+    */
 
     public enum DesktopType
     {
@@ -268,27 +269,6 @@ namespace GKCommon
             }
 
             return deskType;
-        }
-
-        #endregion
-
-        #region Linq-pieces
-
-        public static T FirstOrDefault<T>(IList<T> list)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-
-            return (list.Count > 0) ? list[0] : default(T);
-        }
-
-        public static T LastOrDefault<T>(IList<T> list)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-
-            int count = list.Count;
-            return (count > 0) ? list[count - 1] : default(T);
         }
 
         #endregion
