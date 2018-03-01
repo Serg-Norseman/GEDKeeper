@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -28,7 +29,7 @@ using GKCore.Interfaces;
 
 namespace GKStdReports
 {
-    public sealed class TopNamesReport : ReportExporter
+    public sealed class NamesFreqReport : ReportExporter
     {
         private class NameItem
         {
@@ -42,13 +43,12 @@ namespace GKStdReports
             }
         }
 
-        private IFont fTitleFont;
-        private IFont fTextFont;
+        private IFont fTitleFont, fChapFont, fTextFont;
 
-        public TopNamesReport(IBaseWindow baseWin)
+        public NamesFreqReport(IBaseWindow baseWin)
             : base(baseWin)
         {
-            fTitle = "Top Names";
+            fTitle = SRLangMan.LS(RLS.LSID_NFR_Title);
         }
 
         protected override void InternalGenerate()
@@ -56,12 +56,14 @@ namespace GKStdReports
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-            fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
+            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
             fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
 
             var names = new List<NameItem>();
+            var surnames = new List<NameItem>();
 
             GEDCOMTree tree = fBase.Context.Tree;
             var enumer = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
@@ -76,13 +78,29 @@ namespace GKStdReports
                 } else {
                     names.Add(new NameItem(nameParts.Name));
                 }
+
+                item = surnames.Find(x => x.Name.Equals(nameParts.Surname));
+                if (item != null) {
+                    item.Amount += 1;
+                } else {
+                    surnames.Add(new NameItem(nameParts.Surname));
+                }
             }
 
             SortHelper.QuickSort(names, ItemsCompare);
+            SortHelper.QuickSort(surnames, ItemsCompare);
 
+            fWriter.addParagraph(SRLangMan.LS(RLS.LSID_Names), fChapFont, CustomWriter.TextAlignment.taLeft);
             fWriter.beginList();
-            for (int i = 0; i < names.Count; i++) {
-                fWriter.addListItem(" " + names[i].Name + "\t" + names[i].Amount, fTextFont);
+            foreach (var item in names) {
+                fWriter.addListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
+            }
+            fWriter.endList();
+
+            fWriter.addParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.beginList();
+            foreach (var item in surnames) {
+                fWriter.addListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
             }
             fWriter.endList();
         }

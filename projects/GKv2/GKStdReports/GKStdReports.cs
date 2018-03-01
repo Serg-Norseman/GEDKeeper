@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 
@@ -41,22 +42,48 @@ using GKCore.Plugins;
 
 namespace GKStdReports
 {
-    public class TNRPlugin : OrdinaryPlugin, IPlugin
+    public enum RLS
     {
-        private const string DISPLAY_NAME = "Top Names Report";
+        LSID_NFR_Title,
+        LSID_PER_Title,
+        LSID_Names,
+        LSID_Surnames
+    }
 
-        private ILangMan fLangMan;
+    public static class SRLangMan
+    {
+        private static ILangMan fInstance;
 
-        public override string DisplayName { get { return DISPLAY_NAME; } }
-        public override ILangMan LangMan { get { return fLangMan; } }
+        public static ILangMan Instance
+        {
+            get { return fInstance; }
+            set {
+                // TODO: for lang changes
+                //if (fInstance == null /* finstance.Lang != value.Lang */) {
+                    fInstance = value;
+                //}
+            }
+        }
+
+        public static string LS(Enum lsid)
+        {
+            return (fInstance == null) ? "" : fInstance.LS(lsid);
+        }
+    }
+
+    public class NFRPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_NFR_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
         public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         public override void Execute()
         {
             IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
-            using (var report = new TopNamesReport(curBase)) {
+            using (var report = new NamesFreqReport(curBase)) {
                 report.Generate(true);
             }
         }
@@ -64,30 +91,33 @@ namespace GKStdReports
         public override void OnLanguageChange()
         {
             try {
-                fLangMan = Host.CreateLangMan(this);
+                SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("TNRPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("NFRPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }
 
 
-    public class PEPlugin : OrdinaryPlugin, IPlugin
+    public class PERPlugin : OrdinaryPlugin, IPlugin
     {
-        private const string DISPLAY_NAME = "Personal Events Report";
-
-        private ILangMan fLangMan;
-
-        public override string DisplayName { get { return DISPLAY_NAME; } }
-        public override ILangMan LangMan { get { return fLangMan; } }
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_PER_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
         public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         public override void Execute()
         {
             IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
-            using (var report = new PersonalEventsReport(curBase)) {
+            var selPerson = curBase.GetSelectedPerson();
+            if (selPerson == null) {
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
+
+            using (var report = new PersonalEventsReport(curBase, selPerson)) {
                 report.Generate(true);
             }
         }
@@ -95,9 +125,9 @@ namespace GKStdReports
         public override void OnLanguageChange()
         {
             try {
-                fLangMan = Host.CreateLangMan(this);
+                SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PEPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogWrite("PERPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }

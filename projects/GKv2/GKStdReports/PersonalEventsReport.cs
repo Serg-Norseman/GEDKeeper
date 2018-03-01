@@ -20,11 +20,14 @@
 
 using System;
 using System.Collections.Generic;
+
 using BSLib;
+using BSLib.Calendar;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKStdReports
 {
@@ -33,53 +36,101 @@ namespace GKStdReports
     /// </summary>
     public sealed class PersonalEventsReport : ReportExporter
     {
-        private IFont fTitleFont;
-        private IFont fTextFont;
-
-        public PersonalEventsReport(IBaseWindow baseWin) : base(baseWin)
+        private class PersonalEvent
         {
-            fTitle = "Personal Events";
+            public readonly GEDCOMIndividualRecord IRec;
+            public readonly GEDCOMCustomEvent Event;
+            public readonly UDN Date;
+
+            public PersonalEvent(GEDCOMIndividualRecord iRec, GEDCOMCustomEvent evt)
+            {
+                IRec = iRec;
+                Event = evt;
+                Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
+            }
         }
 
+        private readonly GEDCOMIndividualRecord fPerson;
+        private IFont fTitleFont, fChapFont, fTextFont;
+
+        public PersonalEventsReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
+            : base(baseWin)
+        {
+            fTitle = SRLangMan.LS(RLS.LSID_PER_Title);
+            fPerson = selectedPerson;
+        }
+
+        // TODO: output marriage and child events
         protected override void InternalGenerate()
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-            fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
+            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
             fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.addParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, CustomWriter.TextAlignment.taLeft);
 
-            /*var names = new List<NameItem>();
+            var evList = new List<PersonalEvent>();
+            int num = fPerson.Events.Count;
+            for (int i = 0; i < num; i++) {
+                GEDCOMCustomEvent evt = fPerson.Events[i];
+                if (evt.GetChronologicalYear() == 0) continue;
 
-            GEDCOMTree tree = fBase.Context.Tree;
-            var enumer = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord record;
-            while (enumer.MoveNext(out record)) {
-                var iRec = record as GEDCOMIndividualRecord;
-                var nameParts = GKUtils.GetNameParts(iRec, false);
-
-                var item = names.Find(x => x.Name.Equals(nameParts.Name));
-                if (item != null) {
-                    item.Amount += 1;
-                } else {
-                    names.Add(new NameItem(nameParts.Name));
-                }
+                evList.Add(new PersonalEvent(fPerson, evt));
             }
-
-            SortHelper.QuickSort(names, ItemsCompare);
+            SortHelper.QuickSort(evList, EventsCompare);
 
             fWriter.beginList();
-            for (int i = 0; i < names.Count; i++) {
-                fWriter.addListItem(" " + names[i].Name + "\t" + names[i].Amount, fTextFont);
+
+            int num4 = evList.Count;
+            for (int i = 0; i < num4; i++) {
+                PersonalEvent evObj = evList[i];
+                if (!evObj.Date.HasKnownYear()) continue;
+
+                GEDCOMCustomEvent evt = evObj.Event;
+
+                string li;
+
+                if (evObj.IRec == fPerson) {
+                    int ev = GKUtils.GetPersonEventIndex(evt.Name);
+                    string st;
+                    if (ev == 0) {
+                        st = evt.Classification;
+                    } else {
+                        st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
+                    }
+
+                    string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    li = dt + ": " + st + ".";
+                    if (evt.Place.StringValue != "") {
+                        li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+                    }
+
+                    fWriter.addListItem(" " + li, fTextFont);
+                }
+                /*else
+                {
+                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+
+                    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
+
+                    li = dt + st + GKUtils.GetNameString(evObj.IRec, true, false);
+                    PedigreePerson prs = FindPerson(evObj.IRec);
+                    string id = (prs != null) ? prs.Id : "";
+
+                    fWriter.addListItemLink(" " + li + " ", fTextFont, id, fLinkFont);
+                }*/
             }
-            fWriter.endList();*/
+
+            fWriter.endList();
         }
 
-        /*private static int ItemsCompare(NameItem item1, NameItem item2)
+        private static int EventsCompare(PersonalEvent item1, PersonalEvent item2)
         {
-            return -item1.Amount.CompareTo(item2.Amount);
-        }*/
+            return item1.Date.CompareTo(item2.Date);
+        }
     }
 }

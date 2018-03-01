@@ -84,13 +84,27 @@
   <ItemGroup>
     <Compile Include="GKStdReports.cs" />
     <Compile Include="PersonalEventsReport.cs" />
-    <Compile Include="TopNamesReport.cs" />
+    <Compile Include="NamesFreqReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GKStdReports.deu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKStdReports.enu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKStdReports.fra">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKStdReports.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
