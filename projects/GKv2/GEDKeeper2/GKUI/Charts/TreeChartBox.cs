@@ -549,29 +549,55 @@ namespace GKUI.Charts
             }
             #endif
 
-            if (fOptions.DeepMode && fSelected != null && fSelected != fModel.Root && fSelected.Rec != null) {
-                try {
-                    using (var deepModel = new TreeChartModel()) {
-                        deepModel.Assign(fModel);
-                        deepModel.SetRenderer(fRenderer);
-                        deepModel.DepthLimit = 3;
-                        deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
-                        deepModel.RecalcChart(true);
+            bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
 
-                        var pers = deepModel.FindPersonByRec(fSelected.Rec);
-                        deepModel.SetOffsets((spx + (fSelected.PtX - pers.PtX)), (spy + (fSelected.PtY - pers.PtY)));
-                        deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
-
-                        fRenderer.SetTranslucent(0.75f);
-                        deepModel.Draw(ChartDrawMode.dmStatic);
-                    }
-                } catch (Exception ex) {
-                    Logger.LogWrite("TreeChartBox.DrawDeep(): " + ex.Message);
-                }
+            if (hasDeep && fOptions.DeepMode == DeepMode.Background) {
+                DrawDeep(fOptions.DeepMode, spx, spy);
             }
 
             fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
+
+            if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
+                DrawDeep(fOptions.DeepMode, spx, spy);
+            }
+        }
+
+        private void DrawDeep(DeepMode mode, int spx, int spy)
+        {
+            try {
+                using (var deepModel = new TreeChartModel()) {
+                    deepModel.Assign(fModel);
+                    deepModel.SetRenderer(fRenderer);
+                    deepModel.DepthLimit = 2;
+                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
+                    deepModel.RecalcChart(true);
+
+                    var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                    int dmX = (spx + (fSelected.PtX - pers.PtX));
+                    int dmY = (spy + (fSelected.PtY - pers.PtY));
+                    deepModel.SetOffsets(dmX, dmY);
+                    deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
+
+                    switch (mode) {
+                        case DeepMode.Background:
+                            fRenderer.SetTranslucent(0.75f);
+                            break;
+
+                        case DeepMode.Foreground:
+                            fRenderer.SetTranslucent(0.25f);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(ChartRenderer.White);
+                            fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
+                            fRenderer.SetTranslucent(0.00f);
+                            break;
+                    }
+
+                    deepModel.Draw(ChartDrawMode.dmStatic);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartBox.DrawDeep(): " + ex.Message);
+            }
         }
 
         #endregion
