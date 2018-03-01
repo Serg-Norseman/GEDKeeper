@@ -70,6 +70,8 @@ namespace GKCore.Charts
 
         private readonly ChartFilter fFilter;
         private readonly PersonList fPersons;
+        private readonly IList<string> fPreparedFamilies;
+        private readonly IList<string> fPreparedIndividuals;
 
         private IBaseWindow fBase;
         private int fBranchDistance;
@@ -90,15 +92,11 @@ namespace GKCore.Charts
         private int fNodePadding;
         private TreeChartOptions fOptions;
         private bool fPathDebug;
-        private readonly IList<string> fPreparedFamilies;
-        private readonly IList<string> fPreparedIndividuals;
         private TreeChartPerson fRoot;
         private float fScale;
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
         private int fSpouseDistance;
-        private int fSPX;
-        private int fSPY;
         private GEDCOMTree fTree;
         private ExtRect fTreeBounds;
         private ExtRect fVisibleArea;
@@ -250,6 +248,7 @@ namespace GKCore.Charts
                 fPersons.Dispose();
 
                 DoneGraphics();
+                DoneSigns();
                 if (fDrawFont != null) fDrawFont.Dispose();
             }
             base.Dispose(disposing);
@@ -294,6 +293,40 @@ namespace GKCore.Charts
         private void DoneSigns()
         {
             // dummy
+        }
+
+        public void Assign(TreeChartModel sourceModel)
+        {
+            Base = sourceModel.fBase;
+
+            fBranchDistance = sourceModel.fBranchDistance;
+            fCertaintyIndex = sourceModel.fCertaintyIndex;
+            fDecorativeLinePen = sourceModel.fDecorativeLinePen;
+            fDepthLimit = sourceModel.fDepthLimit;
+            fDrawFont = sourceModel.fDrawFont;
+            //fEdges = sourceModel.fEdges;
+            fExpPic = sourceModel.fExpPic;
+            //fGraph = sourceModel.fGraph;
+            //fHasMediaFail = sourceModel.fHasMediaFail;
+            //fHighlightedPerson = sourceModel.fHighlightedPerson;
+            //fKind = sourceModel.fKind;
+            //fKinRoot = sourceModel.fKinRoot;
+            fLevelDistance = sourceModel.fLevelDistance;
+            fLinePen = sourceModel.fLinePen;
+            fMargins = sourceModel.fMargins;
+            fNodePadding = sourceModel.fNodePadding;
+            fOptions = sourceModel.fOptions;
+            //fPathDebug = sourceModel.fPathDebug;
+            //fRoot = sourceModel.fRoot;
+            fScale = sourceModel.fScale;
+            fSignsPic = sourceModel.fSignsPic;
+            fSolidBlack = sourceModel.fSolidBlack;
+            fSpouseDistance = sourceModel.fSpouseDistance;
+            //fSPX = sourceModel.fSPX;
+            //fSPY = sourceModel.fSPY;
+            fTree = sourceModel.fTree;
+            //fTreeBounds = sourceModel.fTreeBounds;
+            //fVisibleArea = sourceModel.fVisibleArea;
         }
 
         public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -717,6 +750,9 @@ namespace GKCore.Charts
 
         public void RecalcChart(bool noRedraw = false)
         {
+            float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
+            fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
+
             Predef();
 
             if (fOptions.Kinship && fKinRoot != null) {
@@ -1108,12 +1144,27 @@ namespace GKCore.Charts
 
         #region Navigation
 
+        public TreeChartPerson FindPersonByRec(GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null) return null;
+
+            int num = fPersons.Count;
+            for (int i = 0; i < num; i++) {
+                TreeChartPerson p = fPersons[i];
+                if (p.Rec == iRec) {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
         public TreeChartPerson FindPersonByCoords(int aX, int aY)
         {
             TreeChartPerson result = null;
 
-            aX -= fSPX;
-            aY -= fSPY;
+            aX -= fOffsetX;
+            aY -= fOffsetY;
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson p = fPersons[i];
@@ -1134,12 +1185,14 @@ namespace GKCore.Charts
         {
             base.SetRenderer(renderer);
 
+            InitSigns();
             InitGraphics();
         }
 
-        private void InitGraphics()
+        public void InitGraphics()
         {
-            InitSigns();
+            DoneGraphics();
+
             fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1f);
             fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Silver), 1f);
             fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(ChartRenderer.Black));
@@ -1150,7 +1203,6 @@ namespace GKCore.Charts
             if (fLinePen != null) fLinePen.Dispose();
             if (fDecorativeLinePen != null) fDecorativeLinePen.Dispose();
             if (fSolidBlack != null) fSolidBlack.Dispose();
-            DoneSigns();
         }
 
         public static ExtRect GetExpanderRect(ExtRect personRect)
@@ -1192,10 +1244,10 @@ namespace GKCore.Charts
         {
             if (!IsLineVisible(x1, y1, x2, y2)) return;
 
-            int sX = fSPX + x1;
-            int sX2 = fSPX + x2;
-            int sY = fSPY + y1;
-            int sY2 = fSPY + y2;
+            int sX = fOffsetX + x1;
+            int sX2 = fOffsetX + x2;
+            int sY = fOffsetY + y1;
+            int sY2 = fOffsetY + y2;
             fRenderer.DrawLine(fLinePen, sX, sY, sX2, sY2);
 
             if (fOptions.Decorative) {
@@ -1228,7 +1280,7 @@ namespace GKCore.Charts
                 if (drawMode == ChartDrawMode.dmInteractive && !IsPersonVisible(prt))
                     return;
 
-                prt.Offset(fSPX, fSPY);
+                prt.Offset(fOffsetX, fOffsetY);
 
                 if (person.IsDead) {
                     ExtRect dt = prt.GetOffset(-2, -2);
@@ -1295,7 +1347,7 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartBox.DrawPerson(): " + ex.Message);
+                Logger.LogWrite("TreeChartModel.DrawPerson(): " + ex.Message);
             }
         }
 
@@ -1397,11 +1449,17 @@ namespace GKCore.Charts
             }
         }
 
-        public void Draw(TreeChartPerson person, TreeChartKind dirKind, ChartDrawMode drawMode)
+        public void Draw(ChartDrawMode drawMode)
+        {
+            InitGraphics();
+            Draw(fRoot, fKind, drawMode);
+        }
+
+        private void Draw(TreeChartPerson person, TreeChartKind dirKind, ChartDrawMode drawMode)
         {
             if (person == null) return;
 
-            switch (fKind)
+            switch (dirKind)
             {
                 case TreeChartKind.ckAncestors:
                     DrawAncestors(person, drawMode);
@@ -1423,17 +1481,6 @@ namespace GKCore.Charts
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background, int fSPX, int fSPY)
         {
             // FIXME: dummy
-        }
-
-        public void SetOffsets(int spx, int spy)
-        {
-            fSPX = spx;
-            fSPY = spy;
-        }
-
-        public ExtPoint GetOffsets()
-        {
-            return new ExtPoint(fSPX, fSPY);
         }
 
         #endregion

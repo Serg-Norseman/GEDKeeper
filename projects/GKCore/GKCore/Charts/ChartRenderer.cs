@@ -51,6 +51,7 @@ namespace GKCore.Charts
     /// </summary>
     public abstract class ChartRenderer
     {
+        public const int White = 0xFFFFFF;
         public const int Black = 0x000000;
         public const int Silver = 0xC0C0C0;
         public const int Blue = 0x0000FF;
@@ -142,5 +143,7 @@ namespace GKCore.Charts
         public abstract void DrawArcText(string text, float centerX, float centerY, float radius,
                                          float startAngle, float wedgeAngle,
                                          bool inside, bool clockwise, IFont font, IBrush brush);
+
+        public abstract void SetTranslucent(float value);
     }
 }

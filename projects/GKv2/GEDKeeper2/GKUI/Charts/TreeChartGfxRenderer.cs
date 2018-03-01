@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Text;
@@ -43,6 +44,7 @@ namespace GKUI.Charts
 
         private TextWriter fSVGWriter;
         private SvgGraphics fSVGGfx;
+        private float fTranslucent;
 
         public TreeChartGfxRenderer() : base()
         {
@@ -84,7 +86,16 @@ namespace GKUI.Charts
                                        float width, float height)
         {
             var sdImage = ((ImageHandler)image).Handle;
-            fCanvas.DrawImage(sdImage, x, y, width, height);
+            //fCanvas.DrawImage(sdImage, x, y, width, height);
+
+            using (var attributes = new ImageAttributes()) {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = 1 - fTranslucent; // opacity 0 = completely transparent, 1 = completely opaque
+
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                var destRect = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, attributes);
+            }
         }
 
         public override int GetTextHeight(IFont font)
@@ -139,6 +150,8 @@ namespace GKUI.Charts
 
             using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
                 if (sdFillColor != Color.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
                 }
 
@@ -150,6 +163,8 @@ namespace GKUI.Charts
 
             if (fSVGGfx != null) {
                 if (sdFillColor != Color.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fSVGGfx.SetColor(fillColor);
                     fSVGGfx.FillRect(x, y, width, height);
                 }
@@ -168,6 +183,8 @@ namespace GKUI.Charts
 
             using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
                 if (sdFillColor != Color.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
                 }
 
@@ -179,6 +196,8 @@ namespace GKUI.Charts
 
             if (fSVGGfx != null) {
                 if (sdFillColor != Color.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fSVGGfx.SetColor(fillColor);
                     fSVGGfx.FillRoundedRect(x, y, width, height, radius);
                 }
@@ -222,9 +241,16 @@ namespace GKUI.Charts
             fCanvas.DrawPath(sdPen, sdPath);
         }
 
+        private Color PrepareColor(Color color)
+        {
+            int alpha = (int)((1 - fTranslucent) * 255);
+            return Color.FromArgb(alpha, color);
+        }
+
         public override IPen CreatePen(IColor color, float width)
         {
             Color sdColor = ((ColorHandler)color).Handle;
+            sdColor = PrepareColor(sdColor);
 
             return new PenHandler(new Pen(sdColor, width));
         }
@@ -232,6 +258,7 @@ namespace GKUI.Charts
         public override IBrush CreateSolidBrush(IColor color)
         {
             Color sdColor = ((ColorHandler)color).Handle;
+            sdColor = PrepareColor(sdColor);
 
             return new BrushHandler(new SolidBrush(sdColor));
         }
@@ -377,6 +404,11 @@ namespace GKUI.Charts
             }
 
             fCanvas.Transform = previousTransformation;
+        }
+
+        public override void SetTranslucent(float value)
+        {
+            fTranslucent = SysUtils.CheckBounds(value, 0.0f, 1.0f);
         }
     }
 }

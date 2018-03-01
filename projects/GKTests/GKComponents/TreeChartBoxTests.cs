@@ -67,9 +67,6 @@ namespace GKUI.Charts
         [Test]
         public void TestMethod()
         {
-            fTreeChartBox.BorderWidth = 3;
-            Assert.AreEqual(3, fTreeChartBox.BorderWidth);
-
             Assert.IsNull(fTreeChartBox.Base);
             fTreeChartBox.Base = fBase;
             Assert.AreEqual(fBase, fTreeChartBox.Base);

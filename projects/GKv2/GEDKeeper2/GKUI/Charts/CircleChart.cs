@@ -139,6 +139,7 @@ namespace GKUI.Charts
 
         public CircleChart()
         {
+            BorderStyle = BorderStyle.Fixed3D;
             DoubleBuffered = true;
 
             fRenderer = new TreeChartGfxRenderer();

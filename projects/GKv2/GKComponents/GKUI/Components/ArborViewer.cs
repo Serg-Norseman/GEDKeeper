@@ -45,7 +45,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new WinUITimer(ParamTimeout / 1000, TimerElapsed);
+            fTimer = new WinUITimer(ParamTimeout/* / 1000*/, TimerElapsed);
             fTimer.Start();
         }
 

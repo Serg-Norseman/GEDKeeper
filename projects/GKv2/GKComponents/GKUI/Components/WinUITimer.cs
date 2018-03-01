@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Timers;
+using System.Windows.Forms;
 using BSLib;
 using GKCore.Interfaces;
 
@@ -51,7 +51,7 @@ namespace GKUI.Components
         public double Interval
         {
             get { return fInnerTimer.Interval; }
-            set { fInnerTimer.Interval = value; }
+            set { fInnerTimer.Interval = (int)value; }
         }
 
         public WinUITimer(double msInterval, EventHandler elapsedHandler)
@@ -59,8 +59,8 @@ namespace GKUI.Components
             fElapsedHandler = elapsedHandler;
 
             fInnerTimer = new Timer();
-            fInnerTimer.Interval = msInterval;
-            fInnerTimer.Elapsed += ElapsedEventHandler;
+            fInnerTimer.Interval = (int)msInterval;
+            fInnerTimer.Tick += ElapsedEventHandler;
         }
 
         protected override void Dispose(bool disposing)
@@ -71,7 +71,7 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
-        private void ElapsedEventHandler(object sender, ElapsedEventArgs e)
+        private void ElapsedEventHandler(object sender, EventArgs e)
         {
             fElapsedHandler(sender, e);
         }

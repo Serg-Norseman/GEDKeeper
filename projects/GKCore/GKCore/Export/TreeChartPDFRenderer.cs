@@ -282,6 +282,11 @@ namespace GKCore.Export
                                          bool inside, bool clockwise, IFont font, IBrush brush)
         {
         }
+
+        public override void SetTranslucent(float value)
+        {
+            // dummy
+        }
     }
 }
 

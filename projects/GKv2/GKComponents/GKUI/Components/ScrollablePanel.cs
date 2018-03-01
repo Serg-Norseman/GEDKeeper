@@ -33,6 +33,23 @@ namespace GKUI.Components
             ResizeRedraw = true;
         }
 
+        protected Rectangle GetClientRect(bool includePadding)
+        {
+            int left = 0;
+            int top = 0;
+            int width = ClientSize.Width;
+            int height = ClientSize.Height;
+
+            if (includePadding) {
+                left += Padding.Left;
+                top += Padding.Top;
+                width -= Padding.Horizontal;
+                height -= Padding.Vertical;
+            }
+
+            return new Rectangle(left, top, width, height);
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!Focused)
@@ -49,34 +66,18 @@ namespace GKUI.Components
         /// </param>
         protected override void OnScroll(ScrollEventArgs se)
         {
-            if (se.Type != ScrollEventType.EndScroll) {
-                switch (se.ScrollOrientation)
-                {
+            if (se.Type == ScrollEventType.ThumbTrack) {
+                switch (se.ScrollOrientation) {
                     case ScrollOrientation.HorizontalScroll:
-                        ScrollByOffset(se.NewValue + AutoScrollPosition.X, 0);
+                        AutoScrollPosition = new Point(se.NewValue, -AutoScrollPosition.Y);
                         break;
 
                     case ScrollOrientation.VerticalScroll:
-                        ScrollByOffset(0, se.NewValue + AutoScrollPosition.Y);
+                        AutoScrollPosition = new Point(-AutoScrollPosition.X, se.NewValue);
                         break;
                 }
-            } else {
-                Invalidate();
             }
-
             base.OnScroll(se);
-        }
-
-        private void ScrollByOffset(int offsetX, int offsetY)
-        {
-            if (offsetX != 0 || offsetY != 0) {
-                AutoScrollPosition = new Point(-(AutoScrollPosition.X - offsetX), -(AutoScrollPosition.Y - offsetY));
-                #if !__MonoCS__
-                Invalidate();
-                #else
-                Update();
-                #endif
-            }
         }
 
         /// <summary>
@@ -86,8 +87,6 @@ namespace GKUI.Components
         protected void UpdateScrollPosition(int posX, int posY)
         {
             AutoScrollPosition = new Point(posX, posY);
-            Invalidate();
-            //OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
         }
 
         /// <summary>
@@ -95,9 +94,9 @@ namespace GKUI.Components
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        protected void AdjustScroll(int x, int y)
+        protected void AdjustScroll(int dx, int dy)
         {
-            UpdateScrollPosition(HorizontalScroll.Value + x, VerticalScroll.Value + y);
+            UpdateScrollPosition(HorizontalScroll.Value + dx, VerticalScroll.Value + dy);
         }
 
         protected void AdjustViewport(ExtSize imageSize, bool noRedraw = false)
@@ -106,7 +105,8 @@ namespace GKUI.Components
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
             }
 
-            if (!noRedraw) Invalidate();
+            if (!noRedraw)
+                Invalidate();
         }
     }
 }
