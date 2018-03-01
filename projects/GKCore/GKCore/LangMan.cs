@@ -814,9 +814,9 @@ namespace GKCore
         /* 756 */ LSID_Actions,
         /* 757 */ LSID_SelectAndCopy,
         /* 758 */ LSID_NumberSym,
+        /* 759 */ LSID_Reports,
 
-        /* 759 */ // reserved begin
-        /* 760 */
+        /* 760 */ // reserved begin
         /* 761 */
         /* 762 */
         /* 763 */
@@ -1638,9 +1638,9 @@ namespace GKCore
             /* 756 */ "Actions",
             /* 757 */ "Select and copy",
             /* 758 */ "№",
+            /* 759 */ "Reports",
 
-            /* 759 */ "", // reserved begin
-            /* 760 */ "",
+            /* 760 */ "", // reserved begin
             /* 761 */ "",
             /* 762 */ "",
             /* 763 */ "",

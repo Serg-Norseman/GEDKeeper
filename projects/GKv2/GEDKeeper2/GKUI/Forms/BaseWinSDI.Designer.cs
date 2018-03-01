@@ -84,6 +84,7 @@
         private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
         private System.Windows.Forms.StatusBarPanel StatusBarPanel2;
         private System.Windows.Forms.ToolTip ToolTip1;
+        private System.Windows.Forms.ToolStripMenuItem miReports;
         private System.Windows.Forms.ToolStripMenuItem miPlugins;
         private System.Windows.Forms.ToolStripMenuItem miSlideshow;
         private System.Windows.Forms.ToolStripDropDownButton tbLoadMRU;
@@ -180,6 +181,7 @@
             this.miTreeTools = new System.Windows.Forms.ToolStripMenuItem();
             this.N10 = new System.Windows.Forms.ToolStripSeparator();
             this.miOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.miReports = new System.Windows.Forms.ToolStripMenuItem();
             this.miPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.miHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.miContext = new System.Windows.Forms.ToolStripMenuItem();
@@ -442,6 +444,7 @@
                                     this.miEdit,
                                     this.miPedigree,
                                     this.miService,
+                                    this.miReports,
                                     this.miPlugins,
                                     this.miHelp});
             this.MainMenu1.Location = new System.Drawing.Point(0, 0);
@@ -808,6 +811,12 @@
             this.miOptions.Size = new System.Drawing.Size(204, 24);
             this.miOptions.Text = "miOptions";
             this.miOptions.Click += new System.EventHandler(this.miOptions_Click);
+            // 
+            // miReports
+            // 
+            this.miReports.Name = "miReports";
+            this.miReports.Size = new System.Drawing.Size(68, 24);
+            this.miReports.Text = "Reports";
             // 
             // miPlugins
             // 

@@ -49,7 +49,7 @@ namespace GKCalculatorPlugin
         /* 031 */ LSID_MICalc,
         /* 167 */ LSID_CopyResultToClipboard,
     }
-    
+
     public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKCalculatorPlugin";
@@ -61,6 +61,7 @@ namespace GKCalculatorPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
         public IImage Icon { get { return fIcon; } }
+        public PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private CalcWidget fForm;
 

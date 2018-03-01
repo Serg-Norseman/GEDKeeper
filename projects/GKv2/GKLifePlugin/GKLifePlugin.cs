@@ -61,6 +61,7 @@ namespace GKLifePlugin
         public override string DisplayName { get { return fDisplayName; } }
         public override ILangMan LangMan { get { return fLangMan; } }
         public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
 
         public override void Execute()
         {

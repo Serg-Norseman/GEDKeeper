@@ -82,6 +82,7 @@ namespace GKCalendarPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
         public IImage Icon { get { return fIcon; } }
+        public PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private CalendarWidget fForm;
 

@@ -59,6 +59,7 @@ namespace GKNamesBookPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
         public IImage Icon { get { return null; } }
+        public PluginCategory Category { get { return PluginCategory.Common; } }
 
         private NamesBookWidget fForm;
         

@@ -227,6 +227,7 @@ namespace GKCommon.GEDCOM
         mtLast = mtVideo
     }
 
+    // TODO: doc/docx/odt, xls/xlsx/ods, ppt/pptx/odp
     public enum GEDCOMMultimediaFormat
     {
         mfNone,

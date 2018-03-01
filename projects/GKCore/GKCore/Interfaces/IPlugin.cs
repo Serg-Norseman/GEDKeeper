@@ -38,6 +38,25 @@ namespace GKCore.Interfaces
         }
     }
 
+    public enum PluginCategory
+    {
+        /// <summary>
+        /// Plugin general purpose.
+        /// </summary>
+        Common,
+
+        /// <summary>
+        /// A plugin that modifies data, visual representation of data,
+        /// or ancillary capabilities for working with data.
+        /// </summary>
+        Tool,
+
+        /// <summary>
+        /// Plugin for exporting data to external report files.
+        /// </summary>
+        Report
+    }
+
     public interface IPlugin
     {
         /// <summary>
@@ -53,6 +72,8 @@ namespace GKCore.Interfaces
         ILangMan LangMan { get; }
 
         IImage Icon { get; }
+
+        PluginCategory Category { get; }
 
         void Execute();
         bool Startup(IHost host);

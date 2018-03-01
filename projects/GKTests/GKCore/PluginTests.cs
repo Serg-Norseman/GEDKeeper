@@ -54,6 +54,7 @@ namespace GKCore
             public override string DisplayName { get { return "PluginTest"; } }
             public override ILangMan LangMan { get { return null; } }
             public override IImage Icon { get { return null; } }
+            public override PluginCategory Category { get { return PluginCategory.Common; } }
 
             public override void Execute() { }
         }

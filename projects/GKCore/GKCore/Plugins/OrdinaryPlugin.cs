@@ -36,6 +36,7 @@ namespace GKCore.Plugins
         public abstract string DisplayName { get; }
         public abstract ILangMan LangMan { get; }
         public abstract IImage Icon { get; }
+        public abstract PluginCategory Category { get; }
 
         public abstract void Execute();
 

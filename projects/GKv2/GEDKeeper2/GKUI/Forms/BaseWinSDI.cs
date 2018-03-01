@@ -737,6 +737,7 @@ namespace GKUI.Forms
             miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
             miLogView.Text = LangMan.LS(LSID.LSID_LogView);
             miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+            miReports.Text = LangMan.LS(LSID.LSID_Reports);
 
             tbFileNew.ToolTipText = LangMan.LS(LSID.LSID_FileNewTip);
             tbFileLoad.ToolTipText = LangMan.LS(LSID.LSID_FileLoadTip);
@@ -1538,8 +1539,8 @@ namespace GKUI.Forms
         private void UpdatePluginsItems()
         {
             try {
-                miPlugins.Visible = (AppHost.Plugins.Count > 0);
                 miPlugins.DropDownItems.Clear();
+                miReports.DropDownItems.Clear();
 
                 AppHost.Instance.ActiveWidgets.Clear();
 
@@ -1553,7 +1554,12 @@ namespace GKUI.Forms
                     mi.Click += Plugin_Click;
                     mi.Tag = plugin;
                     mi.Image = (hIcon == null) ? null : hIcon.Handle;
-                    miPlugins.DropDownItems.Add(mi);
+
+                    if (plugin.Category == PluginCategory.Report) {
+                        miReports.DropDownItems.Add(mi);
+                    } else {
+                        miPlugins.DropDownItems.Add(mi);
+                    }
 
                     if (plugin is IWidget) {
                         WidgetInfo widInfo = new WidgetInfo();
@@ -1564,6 +1570,9 @@ namespace GKUI.Forms
                         (plugin as IWidget).WidgetInit(AppHost.Instance);
                     }
                 }
+
+                miReports.Visible = (miReports.DropDownItems.Count > 0);
+                miPlugins.Visible = (miPlugins.DropDownItems.Count > 0);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
             }
