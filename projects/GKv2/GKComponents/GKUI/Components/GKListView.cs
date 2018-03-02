@@ -27,7 +27,7 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKUI.Components

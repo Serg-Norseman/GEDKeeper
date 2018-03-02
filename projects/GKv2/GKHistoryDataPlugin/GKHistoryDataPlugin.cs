@@ -19,15 +19,12 @@
  */
 
 using System;
-using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 using BSLib;
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 [assembly: AssemblyTitle("GKHistoryDataPlugin")]
 [assembly: AssemblyDescription("GEDKeeper HistoryData plugin")]

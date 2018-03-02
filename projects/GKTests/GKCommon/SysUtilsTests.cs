@@ -24,7 +24,7 @@ using System.Reflection;
 using System.Text;
 
 using BSLib;
-using GKCommon;
+using GKCore;
 using GKTests.Mocks;
 using NUnit.Framework;
 

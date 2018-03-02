@@ -24,7 +24,7 @@ using System.Resources;
 using System.Runtime.InteropServices;
 
 using BSLib;
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKNamesBookPlugin")]

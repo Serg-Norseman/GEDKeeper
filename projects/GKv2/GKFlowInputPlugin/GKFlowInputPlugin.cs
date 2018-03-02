@@ -22,7 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKFlowInputPlugin")]

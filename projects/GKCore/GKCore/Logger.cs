@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace GKCommon
+namespace GKCore
 {
     public static class Logger
     {

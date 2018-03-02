@@ -23,11 +23,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
 
-using GKCommon;
-using GKCommon.IoC;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Charts;

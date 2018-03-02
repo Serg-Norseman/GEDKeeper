@@ -21,8 +21,9 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using ConwayLife;
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 

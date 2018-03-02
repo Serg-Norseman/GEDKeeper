@@ -23,14 +23,14 @@ using System.Collections.Generic;
 using System.IO;
 
 using BSLib;
-using GKCommon;
+using Externals.Linguistics;
 using GKCommon.GEDCOM;
-using GKCommon.IoC;
 using GKCore;
 using GKCore.Cultures;
 using GKCore.Export;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
+using GKCore.IoC;
 using GKCore.Kinships;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -64,6 +64,16 @@ namespace GKTests.GKCore
         [TestFixtureTearDown]
         public void TearDown()
         {
+        }
+
+        [Test]
+        public void Translit_Tests()
+        {
+            Assert.AreEqual("Zhdanovskikh", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
+            Assert.AreEqual("ZHDANOVSKIKH", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
+
+            Assert.AreEqual("Ждановских", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
+            Assert.AreEqual("ЖДАНОВСКИХ", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
         }
 
         [Test]

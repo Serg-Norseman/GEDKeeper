@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using GKCore;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;

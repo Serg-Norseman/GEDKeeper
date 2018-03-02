@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.IoC;
+using GKCore.IoC;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon

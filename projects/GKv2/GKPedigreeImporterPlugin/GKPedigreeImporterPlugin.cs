@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]

@@ -25,8 +25,8 @@ using System.Net;
 using System.Reflection;
 
 using BSLib;
-using GKCommon;
-using GKCommon.IoC;
+using GKCore;
+using GKCore.IoC;
 using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Options;

@@ -25,7 +25,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace GKCommon
+namespace GKCore
 {
     /*
     #if PCL

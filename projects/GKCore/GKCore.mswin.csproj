@@ -104,10 +104,10 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Externals\RusDeclension.cs" />
+    <Compile Include="Externals\Translit.cs" />
     <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />
-    <Compile Include="GKCommon\BBTextParser.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />
     <Compile Include="GEDCOM\GEDCOMFactory.cs" />
@@ -174,9 +174,7 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
-    <Compile Include="GKCommon\IocContainer.cs" />
-    <Compile Include="GKCommon\Logger.cs" />
-    <Compile Include="GKCommon\SysUtils.cs" />
+    <Compile Include="GKCore\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
@@ -213,7 +211,10 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
+    <Compile Include="GKCore\IocContainer.cs" />
+    <Compile Include="GKCore\Logger.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
+    <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />

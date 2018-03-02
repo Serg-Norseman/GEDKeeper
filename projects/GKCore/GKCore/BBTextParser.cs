@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore.Interfaces;
 
-namespace GKCommon
+namespace GKCore
 {
     public sealed class BBTextChunk
     {

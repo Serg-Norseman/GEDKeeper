@@ -86,10 +86,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Database\GKDatabase.cs" />
+    <Compile Include="DoubleMetaphone.cs" />
     <Compile Include="GKIFlags.Designer.cs">
       <DependentUpon>GKIFlags.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="IOptions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +110,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ShortDoubleMetaphone.cs" />
     <Compile Include="Validation\NumericFieldValidator.cs" />
     <Compile Include="Validation\RequiredFieldValidator.cs" />
     <Compile Include="Validation\ValidatableControlConverter.cs" />

@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using BSLib;
+using GKCore;
 
 namespace GKCommon.GEDCOM
 {
