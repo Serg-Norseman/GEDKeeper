@@ -27,15 +27,6 @@ using System.Text.RegularExpressions;
 
 namespace GKCore
 {
-    /*
-    #if PCL
-    public interface ICloneable
-    {
-        object Clone();
-    }
-    #endif
-    */
-
     public enum DesktopType
     {
         None = 0,
@@ -52,57 +43,12 @@ namespace GKCore
 
     public static class SysUtils
     {
-        public static float CheckBounds(float value, float min, float max)
-        {
-            if (value < min) {
-                value = min;
-            }
-            if (value > max) {
-                value = max;
-            }
-            return value;
-        }
-
-        public static int CheckBounds(int value, int min, int max)
-        {
-            if (value < min) {
-                value = min;
-            }
-            if (value > max) {
-                value = max;
-            }
-            return value;
-        }
-
-        public static int IndexOf<T>(T[] array, T value)
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
-                if (array[i].Equals(value))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
         #region FileSystem helpers
 
         public static string GetFileExtension(string fileName)
         {
             string extension = Path.GetExtension(fileName);
             return string.IsNullOrEmpty(extension) ? string.Empty : extension.ToLowerInvariant();
-        }
-
-        public static void LoadExtFile(string fileName)
-        {
-            #if !CI_MODE
-            if (File.Exists(fileName)) {
-                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
-            } else {
-                Process.Start(fileName);
-            }
-            #endif
         }
 
         public static bool IsRemovableDrive(string filePath)
@@ -291,118 +237,6 @@ namespace GKCore
             }
 
             return deskType;
-        }
-
-        #endregion
-
-        #region Convert helpers
-
-        public static string NormalizeName(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return "";
-
-            StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
-            stb[0] = char.ToUpperInvariant(stb[0]);
-            return stb.ToString();
-        }
-
-        #endregion
-
-        #region Encoding
-
-        public static string EncodeUID(byte[] binaryKey)
-        {
-            StringBuilder result = new StringBuilder(36);
-            byte checkA = 0;
-            byte checkB = 0;
-
-            int num = binaryKey.Length;
-            for (int i = 0; i < num; i++)
-            {
-                byte val = binaryKey[i];
-                checkA = unchecked((byte)(checkA + (uint)val));
-                checkB = unchecked((byte)(checkB + (uint)checkA));
-                result.Append(val.ToString("X2"));
-            }
-
-            result.Append(checkA.ToString("X2"));
-            result.Append(checkB.ToString("X2"));
-
-            return result.ToString();
-        }
-
-        public static string GetRectUID(int x1, int y1, int x2, int y2)
-        {
-            byte[] bx1 = BitConverter.GetBytes((ushort)x1);
-            byte[] by1 = BitConverter.GetBytes((ushort)y1);
-            byte[] bx2 = BitConverter.GetBytes((ushort)x2);
-            byte[] by2 = BitConverter.GetBytes((ushort)y2);
-
-            byte[] buffer = new byte[8];
-            Buffer.BlockCopy(bx1, 0, buffer, 0, 2);
-            Buffer.BlockCopy(by1, 0, buffer, 2, 2);
-            Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
-            Buffer.BlockCopy(by2, 0, buffer, 6, 2);
-
-            return SysUtils.EncodeUID(buffer);
-        }
-
-        #endregion
-
-        #region Match functions
-
-        public static Regex InitMaskRegex(string mask)
-        {
-            Regex result = null;
-
-            if (!string.IsNullOrEmpty(mask))
-            {
-                string regexStr = "";
-                int curPos = 0;
-                int len = mask.Length;
-
-                while (curPos < len)
-                {
-                    int I = mask.IndexOfAny("*?".ToCharArray(), curPos);
-                    if (I < curPos) break;
-                    if (I > curPos) {
-                        string part = mask.Substring(curPos, I - curPos);
-                        regexStr += Regex.Escape(part);
-                    }
-
-                    char c = mask[I];
-                    switch (c) {
-                        case '*':
-                            regexStr += ".*";
-                            break;
-                        case '?':
-                            regexStr += ".";
-                            break;
-                    }
-
-                    curPos = I + 1;
-                }
-
-                if (curPos < len) {
-                    string part = mask.Substring(curPos, len - curPos);
-                    regexStr += Regex.Escape(part);
-                }
-
-                result = new Regex(regexStr, RegexOptions.IgnoreCase);
-            }
-
-            return result;
-        }
-
-        public static bool MatchesRegex(string str, Regex regex)
-        {
-            return (regex != null) && regex.IsMatch(str);
-        }
-
-        public static bool MatchesMask(string str, string mask)
-        {
-            Regex regex = InitMaskRegex(mask);
-            return MatchesRegex(str, regex);
         }
 
         #endregion

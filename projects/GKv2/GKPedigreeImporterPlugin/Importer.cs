@@ -32,7 +32,6 @@ using System.IO;
 using System.Text;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -327,7 +326,7 @@ namespace GKPedigreeImporterPlugin
             }
 
             if (SurnamesNormalize) {
-                f_fam = SysUtils.NormalizeName(f_fam);
+                f_fam = ConvertHelper.UniformName(f_fam);
             }
 
             return new PersonNameRet(f_name, f_pat, f_fam, bd, dd);

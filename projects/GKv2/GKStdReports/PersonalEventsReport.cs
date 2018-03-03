@@ -85,6 +85,8 @@ namespace GKStdReports
 
             fWriter.beginList();
 
+            int birthYear = -1;
+
             int num4 = evList.Count;
             for (int i = 0; i < num4; i++) {
                 PersonalEvent evObj = evList[i];
@@ -95,6 +97,9 @@ namespace GKStdReports
                 string li;
 
                 if (evObj.IRec == fPerson) {
+                    int year = evt.GetChronologicalYear();
+                    int age = GKUtils.GetAge(fPerson, year);
+
                     int ev = GKUtils.GetPersonEventIndex(evt.Name);
                     string st;
                     if (ev == 0) {
@@ -104,6 +109,10 @@ namespace GKStdReports
                     }
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    if (/*ShowAges*/true) {
+                        dt += string.Format(" ({0})", age);
+                    }
+
                     li = dt + ": " + st + ".";
                     if (evt.Place.StringValue != "") {
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;

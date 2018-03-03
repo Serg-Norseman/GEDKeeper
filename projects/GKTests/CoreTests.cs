@@ -77,6 +77,16 @@ namespace GKTests.GKCore
         }
 
         [Test]
+        public void SpellNum_Tests()
+        {
+            Assert.AreEqual("сто двадцать три", Translit.SpellNum(123));
+
+            //Assert.AreEqual("ZHDANOVSKIKH", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
+            //Assert.AreEqual("Ждановских", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
+            //Assert.AreEqual("ЖДАНОВСКИХ", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+        }
+
+        [Test]
         public void Context_Tests()
         {
             Assert.IsNotNull(fContext.Culture);

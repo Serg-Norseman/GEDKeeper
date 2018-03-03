@@ -406,7 +406,7 @@ namespace GKCore
                 return;
             }
 
-            SysUtils.LoadExtFile(topic);
+            GKUtils.LoadExtFile(topic);
         }
 
         public string GetUserFilesPath(string filePath)

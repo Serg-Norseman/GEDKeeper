@@ -204,7 +204,7 @@ namespace GKCore.Lists
             int num = masks.Length;
             for (int i = 0; i < num; i++)
             {
-                result = result || SysUtils.MatchesMask(stx, masks[i]);
+                result = result || GKUtils.MatchesMask(stx, masks[i]);
             }
 
             return result;
@@ -442,11 +442,11 @@ namespace GKCore.Lists
                         break;
 
                     case ConditionKind.ck_Contains:
-                        res = SysUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
 
                     case ConditionKind.ck_NotContains:
-                        res = !SysUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
             }

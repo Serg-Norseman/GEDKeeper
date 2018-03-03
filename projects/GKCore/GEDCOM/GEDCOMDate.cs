@@ -220,7 +220,7 @@ namespace GKCommon.GEDCOM
                 var token = strTok.CurrentToken;
                 if (token.Kind == TokenKind.Word) {
                     string su = token.Value.ToUpperInvariant();
-                    int idx = SysUtils.IndexOf(GEDCOMDateApproximatedArray, su);
+                    int idx = Algorithms.IndexOf(GEDCOMDateApproximatedArray, su);
                     if (idx >= 0) {
                         fApproximated = (GEDCOMApproximated)idx;
                         strTok.Next();
@@ -239,7 +239,7 @@ namespace GKCommon.GEDCOM
                     } while (token.Kind != TokenKind.Symbol || token.Value[0] != '@');
                     // FIXME: check for errors
 
-                    int idx = SysUtils.IndexOf(GEDCOMDateEscapeArray, escapeStr);
+                    int idx = Algorithms.IndexOf(GEDCOMDateEscapeArray, escapeStr);
                     if (idx >= 0) {
                         fCalendar = (GEDCOMCalendar)idx;
                     }
@@ -269,7 +269,7 @@ namespace GKCommon.GEDCOM
                 if (token.Kind == TokenKind.Word) {
                     string mth = token.Value;
 
-                    int idx = SysUtils.IndexOf(monthes, mth);
+                    int idx = Algorithms.IndexOf(monthes, mth);
                     if (idx >= 0) {
                         fMonth = mth;
                     }

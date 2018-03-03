@@ -71,7 +71,7 @@ namespace GKCore.Export
         {
             if (TEST_MODE) return;
 
-            SysUtils.LoadExtFile(fPath);
+            GKUtils.LoadExtFile(fPath);
         }
     }
 }

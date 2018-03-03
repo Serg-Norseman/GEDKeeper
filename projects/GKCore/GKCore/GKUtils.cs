@@ -20,12 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -39,6 +40,17 @@ namespace GKCore
     public static class GKUtils
     {
         #region Aux functions
+
+        public static void LoadExtFile(string fileName)
+        {
+            #if !CI_MODE
+            if (File.Exists(fileName)) {
+                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
+            } else {
+                Process.Start(fileName);
+            }
+            #endif
+        }
 
         public static string SexChar(GEDCOMSex sex)
         {
@@ -294,6 +306,105 @@ namespace GKCore
             }
 
             return string.Empty;
+        }
+
+        #endregion
+
+        #region Encoding
+
+        public static string EncodeUID(byte[] binaryKey)
+        {
+            StringBuilder result = new StringBuilder(36);
+            byte checkA = 0;
+            byte checkB = 0;
+
+            int num = binaryKey.Length;
+            for (int i = 0; i < num; i++)
+            {
+                byte val = binaryKey[i];
+                checkA = unchecked((byte)(checkA + (uint)val));
+                checkB = unchecked((byte)(checkB + (uint)checkA));
+                result.Append(val.ToString("X2"));
+            }
+
+            result.Append(checkA.ToString("X2"));
+            result.Append(checkB.ToString("X2"));
+
+            return result.ToString();
+        }
+
+        public static string GetRectUID(int x1, int y1, int x2, int y2)
+        {
+            byte[] bx1 = BitConverter.GetBytes((ushort)x1);
+            byte[] by1 = BitConverter.GetBytes((ushort)y1);
+            byte[] bx2 = BitConverter.GetBytes((ushort)x2);
+            byte[] by2 = BitConverter.GetBytes((ushort)y2);
+
+            byte[] buffer = new byte[8];
+            Buffer.BlockCopy(bx1, 0, buffer, 0, 2);
+            Buffer.BlockCopy(by1, 0, buffer, 2, 2);
+            Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
+            Buffer.BlockCopy(by2, 0, buffer, 6, 2);
+
+            return GKUtils.EncodeUID(buffer);
+        }
+
+        #endregion
+
+        #region Match functions
+
+        public static Regex InitMaskRegex(string mask)
+        {
+            Regex result = null;
+
+            if (!string.IsNullOrEmpty(mask))
+            {
+                string regexStr = "";
+                int curPos = 0;
+                int len = mask.Length;
+
+                while (curPos < len)
+                {
+                    int I = mask.IndexOfAny("*?".ToCharArray(), curPos);
+                    if (I < curPos) break;
+                    if (I > curPos) {
+                        string part = mask.Substring(curPos, I - curPos);
+                        regexStr += Regex.Escape(part);
+                    }
+
+                    char c = mask[I];
+                    switch (c) {
+                        case '*':
+                            regexStr += ".*";
+                            break;
+                        case '?':
+                            regexStr += ".";
+                            break;
+                    }
+
+                    curPos = I + 1;
+                }
+
+                if (curPos < len) {
+                    string part = mask.Substring(curPos, len - curPos);
+                    regexStr += Regex.Escape(part);
+                }
+
+                result = new Regex(regexStr, RegexOptions.IgnoreCase);
+            }
+
+            return result;
+        }
+
+        public static bool MatchesRegex(string str, Regex regex)
+        {
+            return (regex != null) && regex.IsMatch(str);
+        }
+
+        public static bool MatchesMask(string str, string mask)
+        {
+            Regex regex = InitMaskRegex(mask);
+            return MatchesRegex(str, regex);
         }
 
         #endregion

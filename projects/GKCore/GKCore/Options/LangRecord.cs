@@ -19,7 +19,7 @@
  */
 
 using System.IO;
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 
 namespace GKCore.Options
@@ -39,7 +39,7 @@ namespace GKCore.Options
             Name = name;
             FileName = fileName;
 
-            string engLangName = SysUtils.NormalizeName(Path.GetFileNameWithoutExtension(fileName));
+            string engLangName = ConvertHelper.UniformName(Path.GetFileNameWithoutExtension(fileName));
             LangID = GEDCOMLanguageEnum.Instance.GetEnumValue(engLangName);
         }
     }

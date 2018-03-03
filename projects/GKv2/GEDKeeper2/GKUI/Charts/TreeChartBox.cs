@@ -974,8 +974,8 @@ namespace GKUI.Charts
             int dstX = ((person.PtX) - (width / 2));
             int dstY = ((person.PtY + (person.Height / 2)) - (height / 2));
 
-            dstX = SysUtils.CheckBounds(dstX, 0, fModel.ImageWidth - width);
-            dstY = SysUtils.CheckBounds(dstY, 0, fModel.ImageHeight - height);
+            dstX = Algorithms.CheckBounds(dstX, 0, fModel.ImageWidth - width);
+            dstY = Algorithms.CheckBounds(dstY, 0, fModel.ImageHeight - height);
 
             int srcX = Math.Abs(AutoScrollPosition.X);
             int srcY = Math.Abs(AutoScrollPosition.Y);

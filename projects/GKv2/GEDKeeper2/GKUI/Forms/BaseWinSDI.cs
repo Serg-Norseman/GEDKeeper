@@ -648,7 +648,7 @@ namespace GKUI.Forms
 
             if (externalViewer) {
                 string targetFile = fContext.MediaLoad(fileRef);
-                SysUtils.LoadExtFile(targetFile);
+                GKUtils.LoadExtFile(targetFile);
             } else {
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try
@@ -1510,7 +1510,7 @@ namespace GKUI.Forms
 
         private void miLogView_Click(object sender, EventArgs e)
         {
-            SysUtils.LoadExtFile(AppHost.GetLogFilename());
+            GKUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
         private void miAbout_Click(object sender, EventArgs e)

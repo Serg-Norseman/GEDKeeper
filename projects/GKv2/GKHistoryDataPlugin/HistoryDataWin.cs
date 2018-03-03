@@ -133,7 +133,7 @@ namespace GKHistoryDataPlugin
         {
             GKListItem item = lvData.GetSelectedItem();
             if (item != null && fLinkColumn != -1) {
-                SysUtils.LoadExtFile(item.SubItems[fLinkColumn].Text);
+                GKUtils.LoadExtFile(item.SubItems[fLinkColumn].Text);
             }
         }
 

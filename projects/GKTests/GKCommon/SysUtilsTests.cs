@@ -76,10 +76,10 @@ namespace GKTests.GKCommon
 
             // other
             string st = "ivan";
-            st = SysUtils.NormalizeName(st);
+            st = ConvertHelper.UniformName(st);
             Assert.AreEqual("Ivan", st);
 
-            st = SysUtils.NormalizeName(null);
+            st = ConvertHelper.UniformName(null);
             Assert.AreEqual("", st);
 
             //
@@ -109,17 +109,17 @@ namespace GKTests.GKCommon
         [Test]
         public void Test_Matches()
         {
-            bool res = SysUtils.MatchesMask("abrakadabra", "*kad*");
+            bool res = GKUtils.MatchesMask("abrakadabra", "*kad*");
             Assert.IsTrue(res);
 
-            res = SysUtils.MatchesMask("abrakadabra", "*test*");
+            res = GKUtils.MatchesMask("abrakadabra", "*test*");
             Assert.IsFalse(res);
         }
 
         [Test]
         public void Test_GetRectUID()
         {
-            Assert.AreEqual("0F000F00D700D700CCDC", SysUtils.GetRectUID(15, 15, 215, 215));
+            Assert.AreEqual("0F000F00D700D700CCDC", GKUtils.GetRectUID(15, 15, 215, 215));
         }
     }
 }

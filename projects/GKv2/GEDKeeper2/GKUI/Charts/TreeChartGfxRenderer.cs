@@ -408,7 +408,7 @@ namespace GKUI.Charts
 
         public override void SetTranslucent(float value)
         {
-            fTranslucent = SysUtils.CheckBounds(value, 0.0f, 1.0f);
+            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
         }
     }
 }

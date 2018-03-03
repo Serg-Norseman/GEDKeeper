@@ -50,7 +50,7 @@ namespace GKUI.Forms
         {
             Label lbl = sender as Label;
             if (lbl != null) {
-                SysUtils.LoadExtFile(lbl.Text);
+                GKUtils.LoadExtFile(lbl.Text);
             }
         }
     }

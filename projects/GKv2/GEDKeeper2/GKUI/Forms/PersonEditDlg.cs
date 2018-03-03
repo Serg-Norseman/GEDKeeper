@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -596,7 +596,7 @@ namespace GKUI.Forms
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && e.KeyCode == Keys.Down && e.Control) {
-                tb.Text = SysUtils.NormalizeName(tb.Text);
+                tb.Text = ConvertHelper.UniformName(tb.Text);
             }
         }
 

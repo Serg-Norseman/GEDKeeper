@@ -366,7 +366,7 @@ namespace GKCore
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
-            Regex regex = SysUtils.InitMaskRegex(searchPattern);
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -374,7 +374,7 @@ namespace GKCore
                 if (rec.RecordType != recordType) continue;
 
                 string recName = GKUtils.GetRecordName(rec, false);
-                if (SysUtils.MatchesRegex(recName, regex)) {
+                if (GKUtils.MatchesRegex(recName, regex)) {
                     result.Add(new SearchResult(rec));
                 }
             }

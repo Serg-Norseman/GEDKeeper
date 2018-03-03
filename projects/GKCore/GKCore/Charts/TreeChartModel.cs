@@ -1123,7 +1123,7 @@ namespace GKCore.Charts
         {
             var result = new List<ISearchResult>();
 
-            Regex regex = SysUtils.InitMaskRegex(searchPattern);
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
@@ -1132,7 +1132,7 @@ namespace GKCore.Charts
                 if (iRec == null) continue;
 
                 string fullname = GKUtils.GetNameString(iRec, true, false);
-                if (SysUtils.MatchesRegex(fullname, regex)) {
+                if (GKUtils.MatchesRegex(fullname, regex)) {
                     result.Add(new SearchResult(iRec));
                 }
             }

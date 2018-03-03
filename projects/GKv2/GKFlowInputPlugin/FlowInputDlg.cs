@@ -23,7 +23,6 @@ using System.Windows.Forms;
 
 using BSLib;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -262,9 +261,9 @@ namespace GKFlowInputPlugin
                 return;
             }
 
-            string fam = SysUtils.NormalizeName(tokens[0]);
-            string nam = SysUtils.NormalizeName(tokens[1]);
-            string pat = SysUtils.NormalizeName(tokens[2]);
+            string fam = ConvertHelper.UniformName(tokens[0]);
+            string nam = ConvertHelper.UniformName(tokens[1]);
+            string pat = ConvertHelper.UniformName(tokens[2]);
 
             GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
             if (CheckBirth.Checked) {
