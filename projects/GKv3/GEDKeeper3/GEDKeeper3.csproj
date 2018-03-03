@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <ProjectGuid>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</ProjectGuid>
@@ -10,7 +10,7 @@
     <AssemblyName>GEDKeeper3</AssemblyName>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -231,11 +231,11 @@
     <Reference Include="ArborGVT">
       <HintPath>..\..\libs\ArborGVT.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib">
-      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    <Reference Include="BSLib.netstd">
+      <HintPath>..\..\libs\netstd\BSLib.netstd.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.SmartGraph.netstd">
+      <HintPath>..\..\libs\netstd\BSLib.SmartGraph.netstd.dll</HintPath>
     </Reference>
     <Reference Include="Eto, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Eto.Forms.2.3.0\lib\portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Eto.dll</HintPath>
@@ -312,22 +312,14 @@
     <EmbeddedResource Include="Resources\btn_search.gif" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.pcl</Name>
+    <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore.nstd</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.csproj">
-      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Externals" />
-    <Folder Include="GKUI" />
-    <Folder Include="GKUI\Components" />
-    <Folder Include="GKUI\Forms" />
-    <Folder Include="GKUI\Charts" />
-    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

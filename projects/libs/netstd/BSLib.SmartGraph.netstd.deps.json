@@ -9,7 +9,7 @@
     ".NETStandard,Version=v2.0/": {
       "BSLib.SmartGraph.netstd/1.0.0": {
         "dependencies": {
-          "BSLib": "0.32.8",
+          "BSLib": "0.33.9",
           "NETStandard.Library": "2.0.1"
         },
         "runtime": {
@@ -22,7 +22,7 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
-      "BSLib/0.32.8": {
+      "BSLib/0.33.9": {
         "runtime": {
           "BSLib.netstd.dll": {}
         }
@@ -49,7 +49,7 @@
       "path": "netstandard.library/2.0.1",
       "hashPath": "netstandard.library.2.0.1.nupkg.sha512"
     },
-    "BSLib/0.32.8": {
+    "BSLib/0.33.9": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

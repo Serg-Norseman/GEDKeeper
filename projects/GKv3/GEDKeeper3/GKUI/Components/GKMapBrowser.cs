@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using Eto.Forms;
-using GKCommon;
+using GKCore;
 using GKCore.Geocoding;
 using GKCore.Maps;
 using GKCore.UIContracts;

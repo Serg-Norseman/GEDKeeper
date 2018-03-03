@@ -46,7 +46,7 @@ namespace GKUI.Forms
         {
             var lbl = sender as LinkButton;
             if (lbl != null) {
-                SysUtils.LoadExtFile(lbl.Text);
+                GKUtils.LoadExtFile(lbl.Text);
             }
         }
     }

@@ -22,7 +22,7 @@ using System;
 using ArborGVT;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
+using GKCore;
 
 namespace GKUI.Components
 {

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+		<TargetFrameworks>net461</TargetFrameworks>
 		<AssemblyName>GKCore</AssemblyName>
 		<RootNamespace />
 		<Company />
@@ -8,16 +8,15 @@
 		<Copyright>Copyright © 2014-2017 Sergey V. Zhdanovskih</Copyright>
 		<AssemblyVersion>3.0.0.0</AssemblyVersion>
 	</PropertyGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
 		<Reference Include="System.Runtime.Remoting" />
-		<Reference Include="DotNetRtfWriter">
-			<HintPath>libs\DotNetRtfWriter.dll</HintPath>
+
+		<Reference Include="BSLib.netstd">
+			<HintPath>..\libs\netstd\BSLib.netstd.dll</HintPath>
 		</Reference>
-		<Reference Include="ExcelLibrary">
-			<HintPath>libs\ExcelLibrary.dll</HintPath>
-		</Reference>
-		<Reference Include="itextsharp">
-			<HintPath>libs\itextsharp.dll</HintPath>
+		<Reference Include="BSLib.SmartGraph.netstd">
+			<HintPath>..\libs\netstd\BSLib.SmartGraph.netstd.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -30,11 +29,46 @@
 		</Reference>
 	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
+	<ItemGroup>
+		<Reference Include="DotNetRtfWriter">
+			<HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
+		</Reference>
+		<Reference Include="ExcelLibrary">
+			<HintPath>..\libs\ExcelLibrary.dll</HintPath>
+		</Reference>
+		<Reference Include="itextsharp">
+			<HintPath>..\libs\itextsharp.dll</HintPath>
+		</Reference>
+		<Reference Include="NLua">
+			<HintPath>..\libs\linux\NLua.dll</HintPath>
+		</Reference>
+		<Reference Include="YamlSerializer">
+			<HintPath>..\libs\YamlSerializer.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;RELEASE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\libs\mswin\lua51.dll">
+			<Link>lua51.dll</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<EmbeddedResource Include="Resources\fonts\FreeSans.ttf" />
+		<EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>TRACE;DEBUG</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>TRACE;RELEASE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
 </Project>

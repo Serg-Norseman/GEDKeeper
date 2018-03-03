@@ -22,7 +22,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -603,7 +603,7 @@ namespace GKUI.Forms
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && e.Key == Keys.Down && e.Control) {
-                tb.Text = SysUtils.NormalizeName(tb.Text);
+                tb.Text = ConvertHelper.UniformName(tb.Text);
             } else if (e.KeyChar == '/') {
                 e.Handled = true;
             }

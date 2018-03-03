@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Resources;
 
-#if !NETSTANDARD
+#if !NETSTANDARD && !NET461
 
 [assembly: AssemblyTitle("GKCore")]
 [assembly: AssemblyDescription("")]

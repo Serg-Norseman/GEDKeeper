@@ -509,7 +509,7 @@ namespace GKUI.Charts
             }
             #endif
 
-            fModel.Draw(fModel.Root, fModel.Kind, drawMode);
+            fModel.Draw(drawMode);
         }
 
         #endregion

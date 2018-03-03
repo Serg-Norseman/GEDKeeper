@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKUI.Components

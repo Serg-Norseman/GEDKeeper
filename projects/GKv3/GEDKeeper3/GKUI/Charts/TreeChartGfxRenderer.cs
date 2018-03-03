@@ -33,6 +33,7 @@ namespace GKUI.Charts
     public sealed class TreeChartGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
+        private float fTranslucent;
 
         public TreeChartGfxRenderer() : base()
         {
@@ -294,6 +295,11 @@ namespace GKUI.Charts
 
                 fCanvas.RestoreTransform();
             }
+        }
+
+        public override void SetTranslucent(float value)
+        {
+            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
         }
     }
 }

@@ -612,7 +612,7 @@ namespace GKUI.Forms
 
             if (externalViewer) {
                 string targetFile = fContext.MediaLoad(fileRef);
-                SysUtils.LoadExtFile(targetFile);
+                GKUtils.LoadExtFile(targetFile);
             } else {
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try
@@ -1383,10 +1383,8 @@ namespace GKUI.Forms
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            using (PedigreeExporter p = new PedigreeExporter(this)) {
-                p.Root = selPerson;
+            using (PedigreeExporter p = new PedigreeExporter(this, selPerson)) {
                 p.Options = AppHost.Options;
-                p.ShieldState = Context.ShieldState;
                 p.Kind = kind;
                 p.Generate(true);
             }
@@ -1460,7 +1458,7 @@ namespace GKUI.Forms
 
         private void miLogView_Click(object sender, EventArgs e)
         {
-            SysUtils.LoadExtFile(AppHost.GetLogFilename());
+            GKUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
         private void miAbout_Click(object sender, EventArgs e)
