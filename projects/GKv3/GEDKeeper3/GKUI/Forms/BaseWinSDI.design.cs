@@ -73,6 +73,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miTreeBoth;
         private ButtonMenuItem miAncestorsCircle;
         private ButtonToolItem tbTreeBoth;
+        private ButtonMenuItem miReports;
         private ButtonMenuItem miPlugins;
         private ButtonMenuItem miSlideshow;
         private ButtonToolItem tbLoadMRU;
@@ -454,6 +455,9 @@ namespace GKUI.Forms
                                          new SeparatorMenuItem(),
                                          miOptions});
 
+            miReports = new ButtonMenuItem();
+            miReports.Text = "Reports";
+
             miPlugins = new ButtonMenuItem();
             miPlugins.Text = "Plugins";
 
@@ -492,6 +496,7 @@ namespace GKUI.Forms
                                          miEdit,
                                          miPedigree,
                                          miService,
+                                         miReports,
                                          miPlugins,
                                          miHelp});
 

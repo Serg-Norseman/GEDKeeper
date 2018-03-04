@@ -140,7 +140,7 @@ namespace GKUI.Forms
                 cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
                 cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
             }
             cmbLanguage.SortItems();

@@ -701,6 +701,7 @@ namespace GKUI.Forms
             miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
             miLogView.Text = LangMan.LS(LSID.LSID_LogView);
             miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+            miReports.Text = LangMan.LS(LSID.LSID_Reports);
 
             tbFileNew.ToolTip = LangMan.LS(LSID.LSID_FileNewTip);
             tbFileLoad.ToolTip = LangMan.LS(LSID.LSID_FileLoadTip);
@@ -1487,8 +1488,8 @@ namespace GKUI.Forms
         private void UpdatePluginsItems()
         {
             try {
-                miPlugins.Enabled = (AppHost.Plugins.Count > 0);
                 miPlugins.Items.Clear();
+                miReports.Items.Clear();
 
                 AppHost.Instance.ActiveWidgets.Clear();
 
@@ -1496,11 +1497,18 @@ namespace GKUI.Forms
                 for (int i = 0; i < num; i++) {
                     IPlugin plugin = AppHost.Plugins[i];
                     string dispName = plugin.DisplayName;
+                    ImageHandler hIcon = plugin.Icon as ImageHandler;
 
                     MenuItemEx mi = new MenuItemEx(dispName/*, i*/);
                     mi.Click += Plugin_Click;
                     mi.Tag = plugin;
-                    miPlugins.Items.Add(mi);
+                    mi.Image = (hIcon == null) ? null : hIcon.Handle;
+
+                    if (plugin.Category == PluginCategory.Report) {
+                        miReports.Items.Add(mi);
+                    } else {
+                        miPlugins.Items.Add(mi);
+                    }
 
                     if (plugin is IWidget) {
                         WidgetInfo widInfo = new WidgetInfo();
@@ -1511,6 +1519,9 @@ namespace GKUI.Forms
                         (plugin as IWidget).WidgetInit(AppHost.Instance);
                     }
                 }
+
+                miReports.Enabled = (miReports.Items.Count > 0);
+                miPlugins.Enabled = (miPlugins.Items.Count > 0);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
             }

@@ -22,9 +22,9 @@ using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -119,7 +119,7 @@ namespace GKUI.Charts
         #region Print and snaphots support
 
         public abstract ExtSize GetImageSize();
-        public abstract void RenderStaticImage(Graphics gfx, bool printer);
+        public abstract void RenderStaticImage(Graphics gfx, OutputType outputType);
 
         public bool IsLandscape()
         {
@@ -143,10 +143,15 @@ namespace GKUI.Charts
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
-                RenderStaticImage(gfx, true);
+                RenderStaticImage(gfx, OutputType.Printer);
             }
 
             return new ImageHandler(image);
+        }
+
+        public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            // dummy
         }
 
         /* TODO(zsv): Need to find an appropriate icon in the general style
@@ -156,22 +161,36 @@ namespace GKUI.Charts
             string ext = SysUtils.GetFileExtension(fileName);
 
             ExtSize imageSize = GetImageSize();
-            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
-            {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+
+            if (ext == ".svg") {
+                try {
+                    SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
+
+                    using (var gfx = CreateGraphics()) {
+                        RenderStaticImage(gfx, OutputType.SVG);
+                    }
+                } finally {
+                    SetSVGMode(false, "", 0, 0);
+                }
+
+                return;
             }
-            else
-            {
+
+            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+            } else {
                 ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") { imFmt = ImageFormat.Bitmap; }
+                if (ext == ".bmp") {
+                    imFmt = ImageFormat.Bitmap;
+                } else if (ext == ".png") {
+                    imFmt = ImageFormat.Png;
+                } else if (ext == ".gif") {
+                    imFmt = ImageFormat.Gif;
+                } else if (ext == ".jpg") {
+                    imFmt = ImageFormat.Jpeg;
+                }
                 /*else
                     if (ext == ".emf") { imFmt = ImageFormat.Emf; }*/
-                else
-                    if (ext == ".png") { imFmt = ImageFormat.Png; }
-                else
-                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-                else
-                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
 
                 /*Image pic;
                 if (Equals(imFmt, ImageFormat.Emf)) {
@@ -181,19 +200,16 @@ namespace GKUI.Charts
                 } else {
                     pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 }*/
-                Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
 
-                try
-                {
+                Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                try {
                     //using (Graphics gfx = Graphics.FromImage(pic)) {
                     using (Graphics gfx = new Graphics(pic)) {
-                        RenderStaticImage(gfx, false);
+                        RenderStaticImage(gfx, OutputType.StdFile);
                     }
 
                     ((Bitmap)pic).Save(fileName, imFmt);
-                }
-                finally
-                {
+                } finally {
                     pic.Dispose();
                 }
             }

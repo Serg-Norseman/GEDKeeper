@@ -30,7 +30,7 @@
 using System;
 using System.Text;
 
-namespace GKSandbox
+namespace GKStdReports
 {
     /// <summary>Subclass of DoubleMetaphone, Adam Nelson's (anelson@nullpointer.net)
     ///     C# implementation of Lawrence Phillips' Double Metaphone algorithm,

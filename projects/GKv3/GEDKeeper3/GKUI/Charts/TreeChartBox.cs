@@ -509,7 +509,55 @@ namespace GKUI.Charts
             }
             #endif
 
+            bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
+
+            if (hasDeep && fOptions.DeepMode == DeepMode.Background) {
+                DrawDeep(fOptions.DeepMode, spx, spy);
+            }
+
+            fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
+
+            if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
+                DrawDeep(fOptions.DeepMode, spx, spy);
+            }
+        }
+
+        private void DrawDeep(DeepMode mode, int spx, int spy)
+        {
+            try {
+                using (var deepModel = new TreeChartModel()) {
+                    deepModel.Assign(fModel);
+                    deepModel.SetRenderer(fRenderer);
+                    deepModel.DepthLimit = 2;
+                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
+                    deepModel.RecalcChart(true);
+
+                    var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                    int dmX = (spx + (fSelected.PtX - pers.PtX));
+                    int dmY = (spy + (fSelected.PtY - pers.PtY));
+                    deepModel.SetOffsets(dmX, dmY);
+                    deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
+
+                    switch (mode) {
+                        case DeepMode.Background:
+                            fRenderer.SetTranslucent(0.75f);
+                            break;
+
+                        case DeepMode.Foreground:
+                            fRenderer.SetTranslucent(0.25f);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(ChartRenderer.White);
+                            fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
+                            fRenderer.SetTranslucent(0.00f);
+                            break;
+                    }
+
+                    deepModel.Draw(ChartDrawMode.dmStatic);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartBox.DrawDeep(): " + ex.Message);
+            }
         }
 
         #endregion
@@ -540,9 +588,6 @@ namespace GKUI.Charts
 
         public void RecalcChart(bool noRedraw = false)
         {
-            float fsz = (float)Math.Round(fOptions.DefFontSize * fModel.Scale);
-            fModel.DrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
-
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {
                 //gfx = CreateGraphics();
@@ -919,25 +964,22 @@ namespace GKUI.Charts
             int widthMax = fModel.ImageWidth - viewport.Width;
             int heightMax = fModel.ImageHeight - viewport.Height;
 
-            int oldX = viewport.Left;
-            int oldY = viewport.Top;
-            int newX = Math.Min(Math.Max(0, ((person.PtX) - (viewport.Width / 2))), widthMax);
-            int newY = Math.Min(Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2))), heightMax);
+            int srcX = viewport.Left;
+            int srcY = viewport.Top;
+            int dstX = Math.Min(Math.Max(0, ((person.PtX) - (viewport.Width / 2))), widthMax);
+            int dstY = Math.Min(Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2))), heightMax);
 
-            if ((oldX == newX) && (oldY == newY)) return;
-
-            if (animation) {
-                fTween.StartTween(SetScroll, oldX, oldY, newX, newY, TweenAnimation.EaseInOutQuad, 20);
-            } else {
-                fTween.StopTween();
-                UpdateScrollPosition(newX, newY);
+            if ((srcX != dstX) || (srcY != dstY))
+            {
+                int timeInterval = animation ? 20 : 1;
+                fTween.StartTween(UpdateScrollPosition, srcX, srcY, dstX, dstY, TweenAnimation.EaseInOutQuad, timeInterval);
             }
         }
 
-        private void SetScroll(int x, int y)
+        /*private void SetScroll(int x, int y)
         {
             UpdateScrollPosition(x, y);
-        }
+        }*/
 
         #endregion
 
@@ -948,9 +990,9 @@ namespace GKUI.Charts
             return fModel.ImageSize;
         }
 
-        public override void RenderStaticImage(Graphics gfx, bool printer)
+        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
         {
-            BackgroundMode bgMode = (printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
+            BackgroundMode bgMode = (outputType == OutputType.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
 
             fRenderer.SetTarget(gfx, false);
             RenderStatic(bgMode);
@@ -963,5 +1005,10 @@ namespace GKUI.Charts
         }
 
         #endregion
+
+        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            fRenderer.SetSVGMode(active, svgFileName, width, height);
+        }
     }
 }

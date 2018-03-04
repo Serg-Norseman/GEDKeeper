@@ -43,7 +43,7 @@ namespace Externals.Linguistics
     /// </summary>
     public static class Translit
     {
-        public static string[][] TranslitTable;
+        private static string[][] TranslitTable;
 
         static Translit()
         {
@@ -158,18 +158,18 @@ namespace Externals.Linguistics
             return result;
         }
 
-        public static string[] hundrs = new string[] {
+        private static string[] hundrs = new string[] {
             "", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ",
             "шестьсот ", "семьсот ", "восемьсот ", "девятьсот "
         };
 
         // 2..9
-        public static string[] tens = new string[] {
+        private static string[] tens = new string[] {
             "двадцать ", "тридцать ", "сорок ", "пятьдесят ",
             "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто "
         };
 
-        public static string[] ones = new string[] {
+        private static string[] ones = new string[] {
             "", "один ", "два ", "три ", "четыре ", "пять ", "шесть ",
             "семь ", "восемь ", "девять ", "десять ", "одиннадцать ",
             "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ",
@@ -177,13 +177,13 @@ namespace Externals.Linguistics
         };
 
         // 0..1, 1..2
-        public static string[][] onetwo = {
+        private static string[][] onetwo = {
             new string[] {"один ", "два "},
             new string[] {"одна ", "две "}
         };
 
         // 0..3, 1..5
-        public static string[][] abbrs = {
+        private static string[][] abbrs = {
             new string[] {"миллиарда ", "миллиард ", "миллиардов ", "млрд. ", ""},
             new string[] {"миллиона ", "миллион ", "миллионов ", "млн. ", ""},
             new string[] {"тысячи ", "тысяча ", "тысяч ", "тыс. ", ""},

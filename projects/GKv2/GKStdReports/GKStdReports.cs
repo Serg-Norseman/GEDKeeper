@@ -47,7 +47,8 @@ namespace GKStdReports
         LSID_NFR_Title,
         LSID_PER_Title,
         LSID_Names,
-        LSID_Surnames
+        LSID_Surnames,
+        LSID_Phonetics_Title
     }
 
     public static class SRLangMan
@@ -128,6 +129,33 @@ namespace GKStdReports
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
                 Logger.LogWrite("PERPlugin.OnLanguageChange(): " + ex.Message);
+            }
+        }
+    }
+
+    public class PhonPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Phonetics_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new PhoneticsReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.LogWrite("PhonPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }

@@ -56,8 +56,8 @@ namespace GKUI.Charts
 
         private CircleChartType fChartType;
         private string fHint;
-        private float fOffsetX = 0;
-        private float fOffsetY = 0;
+        private float fOffsetX;
+        private float fOffsetY;
         /* Zoom factors */
         private float fZoom = 1.0f;
         /* Mouse capturing. */
@@ -181,6 +181,9 @@ namespace GKUI.Charts
         /// <returns>Center point of this chart.</returns>
         private PointF GetCenter(RenderTarget target)
         {
+            fOffsetX = 0;
+            fOffsetY = 0;
+
             if (target == RenderTarget.rtScreen) {
 
                 // Returns the center point of this chart relative to the upper left
@@ -428,7 +431,7 @@ namespace GKUI.Charts
             return new ExtSize((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
-        public override void RenderStaticImage(Graphics gfx, bool printer)
+        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
         {
             Render(gfx, RenderTarget.rtNonScreenCanvas);
         }

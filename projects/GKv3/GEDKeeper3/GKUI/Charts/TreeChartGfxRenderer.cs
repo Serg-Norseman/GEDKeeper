@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.IO;
+using System.Text;
 using BSLib;
 using Eto.Drawing;
 using GKCore.Charts;
@@ -35,8 +37,29 @@ namespace GKUI.Charts
         private Graphics fCanvas;
         private float fTranslucent;
 
+        private TextWriter fSVGWriter;
+        private SvgGraphics fSVGGfx;
+
         public TreeChartGfxRenderer() : base()
         {
+        }
+
+        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            if (active) {
+                fSVGWriter = new StreamWriter(new FileStream(svgFileName, FileMode.Create), Encoding.UTF8);
+                fSVGGfx = new SvgGraphics(fSVGWriter, ExtRectF.CreateBounds(0, 0, width, height));
+                fSVGGfx.BeginDrawing();
+            } else {
+                if (fSVGWriter != null) {
+                    fSVGGfx.EndDrawing();
+                    fSVGGfx = null;
+
+                    fSVGWriter.Flush();
+                    fSVGWriter.Close();
+                    fSVGWriter = null;
+                }
+            }
         }
 
         public override void SetTarget(object target, bool antiAlias)
@@ -81,6 +104,12 @@ namespace GKUI.Charts
             Font sdFnt = ((FontHandler)font).Handle;
 
             fCanvas.DrawText(sdFnt, sdBrush, x, y, text);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.SetFont(font);
+                fSVGGfx.SetColor(brush.Color);
+                fSVGGfx.DrawString(text, x, y);
+            }
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
@@ -88,6 +117,11 @@ namespace GKUI.Charts
             Pen sdPen = ((PenHandler)pen).Handle;
 
             fCanvas.DrawLine(sdPen, x1, y1, x2, y2);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.SetColor(pen.Color);
+                fSVGGfx.DrawLine(x1, y1, x2, y2, pen.Width);
+            }
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
@@ -97,12 +131,26 @@ namespace GKUI.Charts
 
             using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
                 if (sdFillColor != Colors.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
                 }
 
                 if (pen != null) {
                     Pen sdPen = ((PenHandler)pen).Handle;
                     fCanvas.DrawPath(sdPen, path);
+                }
+            }
+
+            if (fSVGGfx != null) {
+                if (sdFillColor != Colors.Transparent) {
+                    fSVGGfx.SetColor(fillColor);
+                    fSVGGfx.FillRect(x, y, width, height);
+                }
+
+                if (pen != null) {
+                    fSVGGfx.SetColor(pen.Color);
+                    fSVGGfx.DrawRect(x, y, width, height, pen.Width);
                 }
             }
         }
@@ -114,12 +162,26 @@ namespace GKUI.Charts
 
             using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
                 if (sdFillColor != Colors.Transparent) {
+                    sdFillColor = PrepareColor(sdFillColor);
+
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
                 }
 
                 if (pen != null) {
                     Pen sdPen = ((PenHandler)pen).Handle;
                     fCanvas.DrawPath(sdPen, path);
+                }
+            }
+
+            if (fSVGGfx != null) {
+                if (sdFillColor != Colors.Transparent) {
+                    fSVGGfx.SetColor(fillColor);
+                    fSVGGfx.FillRoundedRect(x, y, width, height, radius);
+                }
+
+                if (pen != null) {
+                    fSVGGfx.SetColor(pen.Color);
+                    fSVGGfx.DrawRoundedRect(x, y, width, height, radius, pen.Width);
                 }
             }
         }
@@ -156,9 +218,16 @@ namespace GKUI.Charts
             fCanvas.DrawPath(sdPen, sdPath);
         }
 
+        private Color PrepareColor(Color color)
+        {
+            float alpha = (1 - fTranslucent);
+            return new Color(color, alpha);
+        }
+
         public override IPen CreatePen(IColor color, float width)
         {
             Color sdColor = ((ColorHandler)color).Handle;
+            sdColor = PrepareColor(sdColor);
 
             return new PenHandler(new Pen(sdColor, width));
         }
@@ -166,6 +235,7 @@ namespace GKUI.Charts
         public override IBrush CreateSolidBrush(IColor color)
         {
             Color sdColor = ((ColorHandler)color).Handle;
+            sdColor = PrepareColor(sdColor);
 
             return new BrushHandler(new SolidBrush(sdColor));
         }
