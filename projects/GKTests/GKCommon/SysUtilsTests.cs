@@ -80,7 +80,7 @@ namespace GKTests.GKCommon
             Assert.AreEqual("Ivan", st);
 
             st = ConvertHelper.UniformName(null);
-            Assert.AreEqual("", st);
+            Assert.AreEqual(null, st);
 
             //
             Assert.AreEqual("", SysUtils.GetFileExtension("testfile"));

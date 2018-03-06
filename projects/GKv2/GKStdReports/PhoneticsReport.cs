@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 
 using BSLib;
-using Externals.Linguistics;
+using BSLib.Linguistics.Grammar;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Export;
@@ -70,7 +70,7 @@ namespace GKStdReports
             for (int i = 0; i < surnames.Count; i++) {
                 string item = surnames[i];
                 string primaryKey = "", alternateKey = "";
-                string translit = Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, item);
+                string translit = BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, item);
                 DoubleMetaphone.doubleMetaphone(translit, ref primaryKey, ref alternateKey);
                 fWriter.addListItem(" " + item + "\t" + translit + "\t" + primaryKey + "\t" + alternateKey, fTextFont);
             }

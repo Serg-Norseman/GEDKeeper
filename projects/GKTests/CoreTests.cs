@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using BSLib;
-using Externals.Linguistics;
+using BSLib.Linguistics.Grammar;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
@@ -69,17 +69,20 @@ namespace GKTests.GKCore
         [Test]
         public void Translit_Tests()
         {
-            Assert.AreEqual("Zhdanovskikh", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
-            Assert.AreEqual("ZHDANOVSKIKH", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
+            Assert.AreEqual("Zhdanovskikh", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
+            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
 
-            Assert.AreEqual("Ждановских", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
-            Assert.AreEqual("ЖДАНОВСКИХ", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+            Assert.AreEqual("Ждановских", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
+            Assert.AreEqual("ЖДАНОВСКИХ", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+
+            Assert.AreEqual("ЖдАноВскИх", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZhdAnoVskIkh"));
+            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ZHDANOVSKIKH"));
         }
 
         [Test]
         public void SpellNum_Tests()
         {
-            Assert.AreEqual("сто двадцать три", Translit.SpellNum(123));
+            Assert.AreEqual("сто двадцать три", BaseMorpher.SpellNumber(123));
 
             //Assert.AreEqual("ZHDANOVSKIKH", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
             //Assert.AreEqual("Ждановских", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));

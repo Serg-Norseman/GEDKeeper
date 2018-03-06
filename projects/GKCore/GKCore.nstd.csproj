@@ -30,6 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="BSLib.Linguistics.netstd">
+		  <HintPath>..\libs\netstd\BSLib.Linguistics.netstd.dll</HintPath>
+		</Reference>
 		<Reference Include="DotNetRtfWriter">
 			<HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
 		</Reference>

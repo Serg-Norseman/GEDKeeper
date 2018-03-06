@@ -69,6 +69,9 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Linguistics">
+      <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>
@@ -103,8 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\RusDeclension.cs" />
-    <Compile Include="Externals\Translit.cs" />
     <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />

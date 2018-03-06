@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Externals.Linguistics;
+using BSLib.Linguistics.Grammar;
 using NUnit.Framework;
 
 namespace GKTests.GKCommon
@@ -29,9 +29,9 @@ namespace GKTests.GKCommon
         [Test]
         public void Test_Common()
         {
-            Assert.AreEqual("Иванова Ивана Ивановича", RusDeclension.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
+            Assert.AreEqual("Иванова Ивана Ивановича", Morpher.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
 
-            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", RusDeclension.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
+            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", Morpher.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
 
             //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
             //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));

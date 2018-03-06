@@ -79,6 +79,9 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Linguistics">
+      <HintPath>..\..\libs\BSLib.Linguistics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>

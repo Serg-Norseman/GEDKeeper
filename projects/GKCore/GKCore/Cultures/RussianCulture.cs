@@ -19,7 +19,7 @@
  */
 
 using System;
-using Externals.Linguistics;
+using BSLib.Linguistics.Grammar;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -194,7 +194,7 @@ namespace GKCore.Cultures
             if (p >= 0) {
                 string part = surname.Substring(0, p).Trim();
                 if (part != "") {
-                    result = RusDeclension.GetDeclension(part, DeclensionCase.Genitive, gender, "1", 1);
+                    result = Morpher.GetDeclension(part, DeclensionCase.Genitive, gender, "1", 1);
                     result += " ";
                 }
                 part = surname.Substring(p).Trim();
@@ -204,15 +204,15 @@ namespace GKCore.Cultures
                 string[] parts = part.Split(',');
                 for (int i = 0; i < parts.Length; i++) {
                     if (i > 0) result += "(";
-                    part = RusDeclension.GetDeclension(parts[i], DeclensionCase.Genitive, gender, "1", 1);
+                    part = Morpher.GetDeclension(parts[i], DeclensionCase.Genitive, gender, "1", 1);
                     result += part;
                 }
                 result += ")";
             } else {
-                result = RusDeclension.GetDeclension(surname, DeclensionCase.Genitive, gender, "1", 1);
+                result = Morpher.GetDeclension(surname, DeclensionCase.Genitive, gender, "1", 1);
             }
 
-            result += " " + RusDeclension.GetDeclension(nameParts.Name + " " + nameParts.Patronymic, DeclensionCase.Genitive, gender, "23", 2);
+            result += " " + Morpher.GetDeclension(nameParts.Name + " " + nameParts.Patronymic, DeclensionCase.Genitive, gender, "23", 2);
             return result;
         }
 
@@ -220,14 +220,14 @@ namespace GKCore.Cultures
         {
             // (genitive) "[the] sailor's / [of the] sailor"
             // (e.g. Сын моряка — художник – the sailor's son is an artist)
-            return RusDeclension.GetDeclension(name, DeclensionCase.Genitive);
+            return Morpher.GetDeclension(name, DeclensionCase.Genitive);
         }
 
         private static readonly DeclensionGender[] DeclGenders = new DeclensionGender[] {
             /* svNone */         DeclensionGender.None,
             /* svMale */         DeclensionGender.Masculine,
             /* svFemale */       DeclensionGender.Feminine,
-            /* svUndetermined */ DeclensionGender.NotDefind
+            /* svUndetermined */ DeclensionGender.Neutral
         };
     }
 }
