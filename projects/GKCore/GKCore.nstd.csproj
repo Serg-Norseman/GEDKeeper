@@ -5,33 +5,29 @@
 		<RootNamespace />
 		<Company />
 		<Product>GEDKeeper</Product>
-		<Copyright>Copyright © 2014-2017 Sergey V. Zhdanovskih</Copyright>
+		<Copyright>Copyright © 2014-2018 Sergey V. Zhdanovskih</Copyright>
 		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+		<FileVersion>3.0.0.0</FileVersion>
+		<Authors>Sergey V. Zhdanovskih</Authors>
+		<Version>3.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
 		<Reference Include="System.Runtime.Remoting" />
-
-		<Reference Include="BSLib.netstd">
-			<HintPath>..\libs\netstd\BSLib.netstd.dll</HintPath>
-		</Reference>
-		<Reference Include="BSLib.SmartGraph.netstd">
-			<HintPath>..\libs\netstd\BSLib.SmartGraph.netstd.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<Reference Include="BSLib.netstd">
-			<HintPath>..\libs\netstd\BSLib.netstd.dll</HintPath>
-		</Reference>
-		<Reference Include="BSLib.SmartGraph.netstd">
-			<HintPath>..\libs\netstd\BSLib.SmartGraph.netstd.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="BSLib.Linguistics.netstd">
-		  <HintPath>..\libs\netstd\BSLib.Linguistics.netstd.dll</HintPath>
+		<Reference Include="BSLib">
+			<HintPath>..\libs\netstd\BSLib.dll</HintPath>
+		</Reference>
+		<Reference Include="BSLib.SmartGraph">
+			<HintPath>..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+		</Reference>
+		<Reference Include="BSLib.Linguistics">
+		  <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
 		</Reference>
 		<Reference Include="DotNetRtfWriter">
 			<HintPath>..\libs\DotNetRtfWriter.dll</HintPath>

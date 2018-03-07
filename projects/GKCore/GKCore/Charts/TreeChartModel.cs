@@ -62,11 +62,10 @@ namespace GKCore.Charts
         public const int DEF_SPOUSE_DISTANCE = 10;
         public const int DEF_BRANCH_DISTANCE = 40;
         public const int DEF_LEVEL_DISTANCE = 46;
+        public const float HIGHLIGHTED_VAL = 0.1f;
 
         // Specifies the interior spacing of a node.
         public const int DEF_PERSON_NODE_PADDING = 10;
-
-        private const float HIGHLIGHTED_VAL = 0.1f;
 
         private readonly ChartFilter fFilter;
         private readonly PersonList fPersons;
@@ -241,8 +240,7 @@ namespace GKCore.Charts
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fGraph != null) fGraph.Dispose();
                 fFilter.Dispose();
                 fPersons.Dispose();
@@ -1489,23 +1487,19 @@ namespace GKCore.Charts
         {
             bool result = true;
 
-            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth)
-            {
+            if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
                 GKUtils.InitExtCounts(tree, -1);
                 int ancCount = GKUtils.GetAncestorsCount(iRec);
-                if (ancCount > 2048)
-                {
+                if (ancCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;
                 }
             }
 
-            if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth)
-            {
+            if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth) {
                 GKUtils.InitExtCounts(tree, -1);
                 int descCount = GKUtils.GetDescendantsCount(iRec);
-                if (descCount > 2048)
-                {
+                if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;
                 }

@@ -42,7 +42,7 @@
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -55,8 +55,8 @@
     <Reference Include="ArborGVT">
       <HintPath>..\..\libs\ArborGVT.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.netstd">
-      <HintPath>..\..\libs\netstd\BSLib.netstd.dll</HintPath>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
