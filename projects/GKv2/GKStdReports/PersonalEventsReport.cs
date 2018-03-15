@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
 using BSLib.Calendar;
 using GKCommon.GEDCOM;
@@ -85,7 +84,7 @@ namespace GKStdReports
 
             fWriter.beginList();
 
-            int birthYear = -1;
+            //int birthYear = -1;
 
             int num4 = evList.Count;
             for (int i = 0; i < num4; i++) {

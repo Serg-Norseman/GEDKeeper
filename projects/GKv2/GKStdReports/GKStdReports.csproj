@@ -85,6 +85,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContemporariesReport.cs" />
     <Compile Include="DoubleMetaphone.cs" />
     <Compile Include="GKStdReports.cs" />
     <Compile Include="PersonalEventsReport.cs" />

@@ -21,8 +21,6 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -37,8 +35,8 @@ using GKCore.Plugins;
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyFileVersion("0.4.0.0")]
 
 namespace GKStdReports
 {
@@ -48,7 +46,8 @@ namespace GKStdReports
         LSID_PER_Title,
         LSID_Names,
         LSID_Surnames,
-        LSID_Phonetics_Title
+        LSID_Phonetics_Title,
+        LSID_Contemporaries_Title
     }
 
     public static class SRLangMan
@@ -156,6 +155,40 @@ namespace GKStdReports
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
                 Logger.LogWrite("PhonPlugin.OnLanguageChange(): " + ex.Message);
+            }
+        }
+    }
+
+
+    public class ContempPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Contemporaries_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            var selPerson = curBase.GetSelectedPerson();
+            if (selPerson == null) {
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
+
+            using (var report = new ContemporariesReport(curBase, selPerson)) {
+                report.Generate(true);
+            }
+        }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.LogWrite("ContempPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }
