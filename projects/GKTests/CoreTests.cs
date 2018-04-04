@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 using BSLib;
 using BSLib.Linguistics.Grammar;
@@ -38,12 +39,13 @@ using GKCore.Options;
 using GKCore.Stats;
 using GKCore.Tools;
 using GKCore.Types;
+using GKTests;
 using GKTests.Mocks;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.GKCore
+namespace GKCore
 {
     [TestFixture]
     public class CoreTests
@@ -87,6 +89,81 @@ namespace GKTests.GKCore
             //Assert.AreEqual("ZHDANOVSKIKH", Translit.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
             //Assert.AreEqual("Ждановских", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
             //Assert.AreEqual("ЖДАНОВСКИХ", Translit.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+        }
+
+        [Test]
+        public void ContextCrypto_Tests()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    string tempFileName = TestStubs.GetTempFilePath("test.geds");
+                    ctx.SaveToSecFile(tempFileName, GEDCOMCharacterSet.csASCII, "test");
+
+                    using (var ctx2 = new BaseContext(null)) {
+                        ctx2.LoadFromSecFile(tempFileName, "test");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void ContextMerge_Tests()
+        {
+            List<List<GEDCOMRecord>> treeFragments;
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowMock(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                treeFragments = TreeTools.SearchTreeFragments(ctx1.Tree, null);
+                Assert.AreEqual(2, treeFragments.Count);
+                Assert.AreEqual(13, treeFragments[0].Count);
+                Assert.AreEqual(1, treeFragments[1].Count);
+
+                using (var ctx2 = new BaseContext(null)) {
+                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                        var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
+                        gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
+                    }
+
+                    treeFragments = TreeTools.SearchTreeFragments(ctx2.Tree, null);
+                    Assert.AreEqual(2, treeFragments.Count);
+                    Assert.AreEqual(15, treeFragments[0].Count);
+                    Assert.AreEqual(1, treeFragments[1].Count);
+
+                    TreeTools.MergeTree(ctx1.Tree, ctx2.Tree, null);
+
+                    treeFragments = TreeTools.SearchTreeFragments(ctx1.Tree, null);
+                    Assert.AreEqual(4, treeFragments.Count);
+                    Assert.AreEqual(13, treeFragments[0].Count);
+                    Assert.AreEqual(1, treeFragments[1].Count);
+                    Assert.AreEqual(15, treeFragments[2].Count);
+                    Assert.AreEqual(1, treeFragments[3].Count);
+
+                    GEDCOMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+
+                    GEDCOMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec2);
+
+                    TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+
+                    treeFragments = TreeTools.SearchTreeFragments(ctx1.Tree, null);
+                    Assert.AreEqual(3, treeFragments.Count);
+                    Assert.AreEqual(13, treeFragments[0].Count);
+                    Assert.AreEqual(15, treeFragments[1].Count);
+                    Assert.AreEqual(1, treeFragments[2].Count);
+                }
+            }
         }
 
         [Test]
@@ -606,6 +683,7 @@ namespace GKTests.GKCore
         public void Cultures_Tests()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(iRec);
 
             ICulture culture = new RussianCulture();
             Assert.IsNotNull(culture);
@@ -1474,6 +1552,9 @@ namespace GKTests.GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTree(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTree(fContext.Tree, null, null); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTreeFile(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeTreeFile(fContext.Tree, null, null); });
 
             //
 

@@ -65,8 +65,7 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 //fChecksList.Dispose();
                 TreeTools.SearchPlaces_Clear(fPlaces);
                 fPlaces.Dispose();
@@ -169,16 +168,11 @@ namespace GKUI.Forms
 
         private void tabsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabsTools.SelectedTab == pageFamilyGroups)
-            {
+            if (tabsTools.SelectedTab == pageFamilyGroups) {
                 CheckGroups();
-            }
-            else if (tabsTools.SelectedTab == pageTreeCheck)
-            {
+            } else if (tabsTools.SelectedTab == pageTreeCheck) {
                 CheckBase();
-            }
-            else if (tabsTools.SelectedTab == pagePlaceManage)
-            {
+            } else if (tabsTools.SelectedTab == pagePlaceManage) {
                 CheckPlaces();
             }
         }
@@ -191,7 +185,7 @@ namespace GKUI.Forms
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.MergeTree(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
+            TreeTools.MergeTreeFile(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
             Base.RefreshLists(false);
         }
 
@@ -294,8 +288,7 @@ namespace GKUI.Forms
 
         private void btnSkip_Click(object sender, EventArgs e)
         {
-            if (MergeCtl.Rec1 != null && MergeCtl.Rec2 != null)
-            {
+            if (MergeCtl.Rec1 != null && MergeCtl.Rec2 != null) {
                 fRMSkip.Add(MergeCtl.Rec1.XRef + "-" + MergeCtl.Rec2.XRef);
             }
             SearchDuplicates();
@@ -315,63 +308,41 @@ namespace GKUI.Forms
         private void CheckGroups()
         {
             IProgressController progress = AppHost.Progress;
-
             gkLogChart1.Clear();
-            progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
-            List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
-            List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
-            try
-            {
-                int groupNum = 0;
+            List<List<GEDCOMRecord>> treeFragments = TreeTools.SearchTreeFragments(fTree, progress);
+
+            //progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
+            try {
                 tvGroups.Nodes.Clear();
 
-                int num = fTree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
-                    GEDCOMRecord rec = fTree[i];
+                int num = treeFragments.Count;
+                for (int i = 0; i < num; i++) {
+                    var groupRecords = treeFragments[i];
 
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
-                    {
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-                        if (prepared.IndexOf(iRec) < 0)
-                        {
-                            groupNum++;
-                            groupRecords.Clear();
+                    int cnt = groupRecords.Count;
 
-                            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                    TreeNode root = tvGroups.Nodes.Add(
+                        (i + 1).ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
 
-                            int cnt = groupRecords.Count;
+                    for (int j = 0; j < cnt; j++) {
+                        var iRec = (GEDCOMIndividualRecord)groupRecords[j];
 
-                            TreeNode root = tvGroups.Nodes.Add(
-                                groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
-
-                            for (int j = 0; j < cnt; j++)
-                            {
-                                iRec = (GEDCOMIndividualRecord)groupRecords[j];
-                                prepared.Add(iRec);
-
-                                string pn = GKUtils.GetNameString(iRec, true, false);
-                                if (iRec.Patriarch)
-                                {
-                                    pn = "(*) " + pn;
-                                }
-                                root.Nodes.Add(new GKTreeNode(pn, iRec));
-                            }
-                            root.ExpandAll();
-
-                            gkLogChart1.AddFragment(cnt);
+                        string pn = GKUtils.GetNameString(iRec, true, false);
+                        if (iRec.Patriarch) {
+                            pn = "(*) " + pn;
                         }
+                        root.Nodes.Add(new GKTreeNode(pn, iRec));
                     }
+                    root.ExpandAll();
 
-                    progress.ProgressStep();
+                    gkLogChart1.AddFragment(cnt);
+
+                    //progress.ProgressStep();
                     Application.DoEvents();
                 }
-            }
-            finally
-            {
-                groupRecords.Clear();
-                //prepared.Dispose();
-                progress.ProgressDone();
+            } finally {
+                treeFragments.Clear();
+                //progress.ProgressDone();
             }
         }
 

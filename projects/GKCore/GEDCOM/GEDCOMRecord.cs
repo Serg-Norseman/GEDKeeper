@@ -168,54 +168,44 @@ namespace GKCommon.GEDCOM
 
         public virtual void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
-            if (clearDest)
-            {
+            if (clearDest) {
                 targetRecord.Clear();
             }
 
-            if (fTags != null)
-            {
-                while (fTags.Count > 0)
-                {
+            if (fTags != null) {
+                while (fTags.Count > 0) {
                     GEDCOMTag tag = fTags.Extract(0);
-                    if (tag.Name == "CHAN" && !clearDest)
-                    {
+                    if (tag.Name == "CHAN" && !clearDest) {
                         tag.Dispose();
-                    }
-                    else
-                    {
+                    } else {
                         tag.ResetParent(targetRecord);
                         targetRecord.InsertTag(tag);
                     }
                 }
             }
 
-            while (fNotes.Count > 0)
-            {
+            while (fNotes.Count > 0) {
                 GEDCOMTag tag = fNotes.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.Notes.Add((GEDCOMNotes) tag);
+                targetRecord.Notes.Add((GEDCOMNotes)tag);
             }
 
-            while (fMultimediaLinks.Count > 0)
-            {
+            while (fMultimediaLinks.Count > 0) {
                 GEDCOMTag tag = fMultimediaLinks.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.MultimediaLinks.Add((GEDCOMMultimediaLink) tag);
+                targetRecord.MultimediaLinks.Add((GEDCOMMultimediaLink)tag);
             }
 
-            while (fSourceCitations.Count > 0)
-            {
+            while (fSourceCitations.Count > 0) {
                 GEDCOMTag tag = fSourceCitations.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.SourceCitations.Add((GEDCOMSourceCitation) tag);
+                targetRecord.SourceCitations.Add((GEDCOMSourceCitation)tag);
             }
 
-            while (fUserReferences.Count > 0)
-            {
+            while (fUserReferences.Count > 0) {
                 GEDCOMTag tag = fUserReferences.Extract(0);
                 tag.ResetParent(targetRecord);
-                targetRecord.UserReferences.Add((GEDCOMUserReference) tag);
+                targetRecord.UserReferences.Add((GEDCOMUserReference)tag);
             }
         }
 

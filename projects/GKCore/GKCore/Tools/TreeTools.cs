@@ -23,7 +23,6 @@ using System.Collections.Generic;
 
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
@@ -797,30 +796,24 @@ namespace GKCore.Tools
 
         #endregion
 
-        #region Tree Merge
+        #region Merge trees and records
 
-        public static void MergeTree(GEDCOMTree mainTree, string fileName, ITextControl logBox)
+        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextControl logBox)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
 
-            if (logBox == null)
-                throw new ArgumentNullException("logBox");
+            if (extTree == null)
+                throw new ArgumentNullException("extTree");
 
-            logBox.Clear();
-            logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+            if (logBox != null) {
+                logBox.Clear();
+                logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+            }
 
-            GEDCOMTree extTree = new GEDCOMTree();
-
-            XRefReplacer repMap = new XRefReplacer();
-            try
-            {
-                var gedcomProvider = new GEDCOMProvider(extTree);
-                gedcomProvider.LoadFromFile(fileName);
-
+            using (var repMap = new XRefReplacer()) {
                 extTree.Header.Clear();
-                while (extTree.RecordsCount > 0)
-                {
+                while (extTree.RecordsCount > 0) {
                     GEDCOMRecord rec = extTree.Extract(0);
                     string newXRef = mainTree.XRefIndex_NewXRef(rec);
                     repMap.AddXRef(rec, rec.XRef, newXRef);
@@ -835,12 +828,57 @@ namespace GKCore.Tools
                     rec.ReplaceXRefs(repMap);
                 }
 
-                logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+                if (logBox != null) {
+                    logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+                }
             }
-            finally
-            {
-                repMap.Dispose();
-                extTree.Dispose();
+        }
+
+        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextControl logBox)
+        {
+            if (mainTree == null)
+                throw new ArgumentNullException("mainTree");
+
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
+            using (var extTree = new GEDCOMTree()) {
+                var gedcomProvider = new GEDCOMProvider(extTree);
+                gedcomProvider.LoadFromFile(fileName);
+
+                MergeTree(mainTree, extTree, logBox);
+            }
+        }
+
+        public static void MergeRecord(IBaseWindow baseWin, GEDCOMRecord targetRec, GEDCOMRecord sourceRec, bool bookmark)
+        {
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
+
+            if (targetRec == null)
+                throw new ArgumentNullException("targetRec");
+
+            if (sourceRec == null)
+                throw new ArgumentNullException("sourceRec");
+
+            using (var repMap = new XRefReplacer()) {
+                repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
+
+                GEDCOMTree tree = baseWin.Context.Tree;
+                int num = tree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    tree[i].ReplaceXRefs(repMap);
+                }
+
+                sourceRec.MoveTo(targetRec, false);
+                bool res = baseWin.Context.DeleteRecord(sourceRec);
+
+                if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && bookmark) {
+                    ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
+                }
+
+                baseWin.NotifyRecord(targetRec, RecordAction.raEdit);
+                baseWin.RefreshLists(false);
             }
         }
 
@@ -1579,6 +1617,47 @@ namespace GKCore.Tools
             } finally {
                 pc.ProgressDone();
             }
+        }
+
+        #endregion
+
+        #region Tree fragments
+
+        public static List<List<GEDCOMRecord>> SearchTreeFragments(GEDCOMTree tree, IProgressController progress)
+        {
+            List<List<GEDCOMRecord>> result = new List<List<GEDCOMRecord>>();
+
+            if (progress != null) {
+                progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), tree.RecordsCount);
+            }
+
+            List<GEDCOMRecord> prepared = new List<GEDCOMRecord>();
+            try {
+                int num = tree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    GEDCOMIndividualRecord iRec = tree[i] as GEDCOMIndividualRecord;
+                    if (iRec != null) {
+                        if (prepared.IndexOf(iRec) < 0) {
+                            var groupRecords = new List<GEDCOMRecord>();
+                            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                            result.Add(groupRecords);
+                            prepared.AddRange(groupRecords);
+                        }
+                    }
+
+                    if (progress != null) {
+                        progress.ProgressStep();
+                    }
+                }
+            } finally {
+                prepared.Clear();
+
+                if (progress != null) {
+                    progress.ProgressDone();
+                }
+            }
+
+            return result;
         }
 
         #endregion

@@ -177,18 +177,18 @@ namespace GKCommon.GEDCOM
         public void LoadFromString(string gedcomText)
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(gedcomText))) {
-                LoadFromStreamExt(stream, stream, "");
+                LoadFromStreamExt(stream, stream);
             }
         }
 
         public void LoadFromFile(string fileName)
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream, fileName);
+                LoadFromStreamExt(fileStream, fileStream);
             }
         }
 
-        public void LoadFromStreamExt(Stream fileStream, Stream inputStream, string fileName)
+        public void LoadFromStreamExt(Stream fileStream, Stream inputStream)
         {
             using (StreamReader reader = SysUtils.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
                 fTree.Clear();
@@ -409,13 +409,12 @@ namespace GKCommon.GEDCOM
         {
             // Attention: processing of Header moved to BaseContext!
 
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
-            {
-                SaveToStreamExt(fileStream, fileName, charSet);
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                SaveToStreamExt(fileStream, charSet);
             }
         }
 
-        public void SaveToStreamExt(Stream outputStream, string fileName, GEDCOMCharacterSet charSet)
+        public void SaveToStreamExt(Stream outputStream, GEDCOMCharacterSet charSet)
         {
             // Attention: processing of Header moved to BaseContext!
 

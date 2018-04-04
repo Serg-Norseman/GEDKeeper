@@ -465,103 +465,93 @@ namespace GKCommon.GEDCOM
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
             GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
-            if (toRec == null)
+            if (toRec == null) {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+            }
 
-            if (!clearDest)
-            {
+            if (!clearDest) {
                 DeleteTag("SEX");
                 DeleteTag("_UID");
             }
 
             base.MoveTo(targetRecord, clearDest);
 
-            while (fPersonalNames.Count > 0)
-            {
+            while (fPersonalNames.Count > 0) {
                 GEDCOMPersonalName obj = fPersonalNames.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.AddPersonalName(obj);
             }
 
-            if (toRec.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null)
-            {
+            if (toRec.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
                 GEDCOMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
                 GEDCOMFamilyRecord family = ctfLink.Family;
 
                 int num = family.Children.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMPointer childPtr = family.Children[i];
-                    
+
                     if (childPtr.StringValue == "@" + XRef + "@") {
                         childPtr.StringValue = "@" + targetRecord.XRef + "@";
                     }
                 }
-                
+
                 ctfLink.ResetParent(toRec);
                 toRec.ChildToFamilyLinks.Add(ctfLink);
             }
 
-            while (fSpouseToFamilyLinks.Count > 0)
-            {
+            while (fSpouseToFamilyLinks.Count > 0) {
                 GEDCOMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
                 GEDCOMFamilyRecord family = stfLink.Family;
 
+                string targetXRef = "@" + targetRecord.XRef + "@";
+
                 if (family.Husband.StringValue == "@" + XRef + "@") {
-                    family.Husband.StringValue = "@" + targetRecord.XRef + "@";
-                } else
-                    if (family.Wife.StringValue == "@" + XRef + "@") {
-                    family.Wife.StringValue = "@" + targetRecord.XRef + "@";
+                    family.Husband.StringValue = targetXRef;
+                } else if (family.Wife.StringValue == "@" + XRef + "@") {
+                    family.Wife.StringValue = targetXRef;
                 }
 
                 stfLink.ResetParent(toRec);
                 toRec.SpouseToFamilyLinks.Add(stfLink);
             }
 
-            while (fIndividualOrdinances.Count > 0)
-            {
+            while (fIndividualOrdinances.Count > 0) {
                 GEDCOMIndividualOrdinance ord = fIndividualOrdinances.Extract(0);
                 ord.ResetParent(toRec);
                 toRec.IndividualOrdinances.Add(ord);
             }
 
-            while (fSubmittors.Count > 0)
-            {
+            while (fSubmittors.Count > 0) {
                 GEDCOMPointer obj = fSubmittors.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.Submittors.Add(obj);
             }
 
-            while (fAssociations.Count > 0)
-            {
+            while (fAssociations.Count > 0) {
                 GEDCOMAssociation obj = fAssociations.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.Associations.Add(obj);
             }
 
-            while (fAliasses.Count > 0)
-            {
+            while (fAliasses.Count > 0) {
                 GEDCOMAlias obj = fAliasses.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.Aliases.Add(obj);
             }
 
-            while (fAncestorsInterest.Count > 0)
-            {
+            while (fAncestorsInterest.Count > 0) {
                 GEDCOMPointer obj = fAncestorsInterest.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.AncestorsInterest.Add(obj);
             }
 
-            while (fDescendantsInterest.Count > 0)
-            {
+            while (fDescendantsInterest.Count > 0) {
                 GEDCOMPointer obj = fDescendantsInterest.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.DescendantsInterest.Add(obj);
             }
 
-            while (fGroups.Count > 0)
-            {
+            while (fGroups.Count > 0) {
                 GEDCOMPointer obj = fGroups.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.Groups.Add(obj);

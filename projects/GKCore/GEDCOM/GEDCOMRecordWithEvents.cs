@@ -85,8 +85,7 @@ namespace GKCommon.GEDCOM
 
             base.MoveTo(targetRecord, clearDest);
 
-            while (fEvents.Count > 0)
-            {
+            while (fEvents.Count > 0) {
                 GEDCOMCustomEvent obj = fEvents.Extract(0);
                 obj.ResetParent(target);
                 target.AddEvent(obj);

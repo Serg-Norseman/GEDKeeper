@@ -1248,103 +1248,106 @@ namespace GKCore
         private const byte GS_MAJOR_VER = 1;
         private const byte GS_MINOR_VER = 2;
 
-        private static SymmetricAlgorithm CreateCryptoServiceProvider(byte majorVer, byte minorVer, PasswordDeriveBytes pdb)
+        private static SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer, string password)
         {
             if (majorVer >= 1) {
                 SymmetricAlgorithm csp = null;
 
+                byte[] pwd = Encoding.Unicode.GetBytes(password);
+
                 switch (minorVer) {
                     case 1:
-                        csp = new DESCryptoServiceProvider();
-                        csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
+                        {
+                            byte[] salt = SCCrypt.CreateRandomSalt(7);
+                            csp = new DESCryptoServiceProvider();
+                            var pdb = new PasswordDeriveBytes(pwd, salt);
+                            try {
+                                csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
+                                SCCrypt.ClearBytes(salt);
+                            } finally {
+                                var pdbDisp = pdb as IDisposable;
+                                if (pdbDisp != null) pdbDisp.Dispose();
+                            }
+                        }
                         break;
 
                     case 2:
-                        csp = new AesCryptoServiceProvider();
-                        csp.Key = pdb.CryptDeriveKey("AES", "SHA1", csp.KeySize, csp.IV);
+                        {
+                            var keyBytes = new byte[32];
+                            Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
+                            csp = new RijndaelManaged();
+                            csp.KeySize = 256;
+                            csp.BlockSize = 256;
+                            csp.Key = keyBytes;
+                            csp.IV = keyBytes;
+                            csp.Padding = PaddingMode.PKCS7;
+                            csp.Mode = CipherMode.CBC;
+                        }
                         break;
                 }
+
+                SCCrypt.ClearBytes(pwd);
 
                 return csp;
             }
             return null;
         }
 
-        private void LoadFromSecFile(string fileName, string password)
+        public void LoadFromSecStream(Stream stream, string password)
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-            {
-                byte[] gsHeader = new byte[8];
-                fileStream.Read(gsHeader, 0, 8);
-                byte gsMajVer = gsHeader[6];
-                byte gsMinVer = gsHeader[7];
-                gsHeader[6] = 65;
-                gsHeader[7] = 65;
-                string gsh = Encoding.ASCII.GetString(gsHeader);
+            byte[] gsHeader = new byte[8];
+            stream.Read(gsHeader, 0, 8);
+            byte gsMajVer = gsHeader[6];
+            byte gsMinVer = gsHeader[7];
+            gsHeader[6] = 65;
+            gsHeader[7] = 65;
+            string gsh = Encoding.ASCII.GetString(gsHeader);
 
-                if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                    throw new Exception(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
-                }
+            if (!string.Equals(gsh, GEDSEC_HEADER)) {
+                throw new Exception(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
+            }
 
-                if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER)
-                {
-                    // dummy for future
-                }
+            if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
+                // dummy for future
+            }
 
-                byte[] pwd = Encoding.Unicode.GetBytes(password);
-                byte[] salt = SCCrypt.CreateRandomSalt(7);
-
-                PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-                try {
-                    using (var cryptic = CreateCryptoServiceProvider(gsMajVer, gsMinVer, pdb)) {
-                        using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
-                        {
-                            var gedcomProvider = new GEDCOMProvider(fTree);
-                            gedcomProvider.LoadFromStreamExt(fileStream, crStream, fileName);
-                        }
-
-                        SCCrypt.ClearBytes(pwd);
-                        SCCrypt.ClearBytes(salt);
-                    }
-                } finally {
-                    var pdbDisp = pdb as IDisposable;
-                    if (pdbDisp != null) pdbDisp.Dispose();
+            using (var cryptic = CreateCSP(gsMajVer, gsMinVer, password)) {
+                using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
+                    var gedcomProvider = new GEDCOMProvider(fTree);
+                    gedcomProvider.LoadFromStreamExt(stream, crStream);
                 }
             }
         }
 
-        private void SaveToSecFile(string fileName, GEDCOMCharacterSet charSet, string password)
+        public void SaveToSecStream(Stream stream, GEDCOMCharacterSet charSet, string password)
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
-            {
-                byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSEC_HEADER);
-                gsHeader[6] = GS_MAJOR_VER;
-                gsHeader[7] = GS_MINOR_VER;
-                fileStream.Write(gsHeader, 0, 8);
+            byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSEC_HEADER);
+            gsHeader[6] = GS_MAJOR_VER;
+            gsHeader[7] = GS_MINOR_VER;
+            stream.Write(gsHeader, 0, 8);
 
-                byte[] pwd = Encoding.Unicode.GetBytes(password);
-                byte[] salt = SCCrypt.CreateRandomSalt(7);
-
-                PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-                try {
-                    using (var cryptic = CreateCryptoServiceProvider(GS_MAJOR_VER, GS_MINOR_VER, pdb)) {
-                        using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
-                        {
-                            GKUtils.PrepareHeader(fTree, fileName, charSet, false);
-
-                            var gedcomProvider = new GEDCOMProvider(fTree);
-                            gedcomProvider.SaveToStreamExt(crStream, fileName, charSet);
-
-                            crStream.Flush();
-                        }
-
-                        SCCrypt.ClearBytes(pwd);
-                        SCCrypt.ClearBytes(salt);
-                    }
-                } finally {
-                    var pdbDisp = pdb as IDisposable;
-                    if (pdbDisp != null) pdbDisp.Dispose();
+            using (var cryptic = CreateCSP(GS_MAJOR_VER, GS_MINOR_VER, password)) {
+                using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateEncryptor(), CryptoStreamMode.Write)) {
+                    var gedcomProvider = new GEDCOMProvider(fTree);
+                    gedcomProvider.SaveToStreamExt(crStream, charSet);
+                    crStream.Flush();
                 }
+            }
+        }
+
+        public void LoadFromSecFile(string fileName, string password)
+        {
+            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+                LoadFromSecStream(fileStream, password);
+            }
+        }
+
+        public void SaveToSecFile(string fileName, GEDCOMCharacterSet charSet, string password)
+        {
+            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                GKUtils.PrepareHeader(fTree, fileName, charSet, false);
+
+                SaveToSecStream(fileStream, charSet, password);
             }
         }
 

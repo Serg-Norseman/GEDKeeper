@@ -183,5 +183,9 @@
       <LastGenOutput>GXResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test1.ged" />
+    <EmbeddedResource Include="Resources\test2.ged" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

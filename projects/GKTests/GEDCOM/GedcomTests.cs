@@ -2729,16 +2729,14 @@ namespace GKTests.GEDCOM
             GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
             byte[] gedcom = (byte[])resMgr.GetObjectEx("TGC55CLF_GED");
 
-            using (MemoryStream inStream = new MemoryStream(gedcom))
-            {
-                using (GEDCOMTree tree = new GEDCOMTree())
-                {
+            using (MemoryStream inStream = new MemoryStream(gedcom)) {
+                using (GEDCOMTree tree = new GEDCOMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream, "TGC55CLF.GED");
+                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
                     using (MemoryStream outStream = new MemoryStream()) {
                         gedcomProvider = new GEDCOMProvider(tree);
-                        gedcomProvider.SaveToStreamExt(outStream, "", GEDCOMCharacterSet.csASCII);
+                        gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csASCII);
                     }
                 }
             }

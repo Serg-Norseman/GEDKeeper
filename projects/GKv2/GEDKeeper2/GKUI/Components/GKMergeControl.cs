@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKUI.Components
@@ -111,41 +112,6 @@ namespace GKUI.Components
             base.OnResize(e);
         }
 
-        private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord sourceRec)
-        {
-            if (targetRec == null)
-                throw new ArgumentNullException("targetRec");
-
-            if (sourceRec == null)
-                throw new ArgumentNullException("sourceRec");
-
-            var repMap = new XRefReplacer();
-            try
-            {
-                repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
-
-                GEDCOMTree tree = fBase.Context.Tree;
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    tree[i].ReplaceXRefs(repMap);
-                }
-
-                sourceRec.MoveTo(targetRec, false);
-                BaseController.DeleteRecord(fBase, sourceRec, false);
-
-                if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && fBookmark) {
-                    ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
-                }
-
-                fBase.NotifyRecord(targetRec, RecordAction.raEdit);
-                fBase.RefreshLists(false);
-            }
-            finally
-            {
-                repMap.Dispose();
-            }
-        }
-
         private void UpdateMergeButtons()
         {
             btnMergeToLeft.Enabled = (fRec1 != null && fRec2 != null);
@@ -198,14 +164,14 @@ namespace GKUI.Components
 
         private void btnMergeToLeft_Click(object sender, EventArgs e)
         {
-            RecordMerge(fRec1, fRec2);
+            TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
             SetRec1(fRec1);
             SetRec2(null);
         }
 
         private void btnMergeToRight_Click(object sender, EventArgs e)
         {
-            RecordMerge(fRec2, fRec1);
+            TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
             SetRec1(null);
             SetRec2(fRec2);
         }
