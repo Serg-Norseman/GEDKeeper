@@ -28,7 +28,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
 using GKCore.Interfaces;
@@ -705,7 +704,7 @@ namespace GKCore
             int treeVer = 0;
             Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
 
-            targetFn = SysUtils.NormalizeFilename(targetFn);
+            targetFn = FileHelper.NormalizeFilename(targetFn);
 
             using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset))
             {
@@ -938,7 +937,7 @@ namespace GKCore
             }
 
             if (result) {
-                refPath = SysUtils.NormalizeFilename(refPath);
+                refPath = FileHelper.NormalizeFilename(refPath);
                 fileReference.LinkFile(refPath);
             }
 
@@ -1110,7 +1109,7 @@ namespace GKCore
             try
             {
                 string pw = null;
-                string ext = SysUtils.GetFileExtension(fileName);
+                string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                     return false;
@@ -1159,7 +1158,7 @@ namespace GKCore
             try
             {
                 string pw = null;
-                string ext = SysUtils.GetFileExtension(fileName);
+                string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                     return false;

@@ -466,7 +466,7 @@ namespace GKCore.Tools
 
                     var mediaStore = GKUtils.GetStoreType(fileRef);
                     if (mediaStore.StoreType != MediaStoreType.mstReference) {
-                        fileRef.StringValue = SysUtils.NormalizeFilename(fileRef.StringValue);
+                        fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
                     }
                 }
             }

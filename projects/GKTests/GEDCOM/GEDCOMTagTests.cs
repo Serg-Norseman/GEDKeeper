@@ -22,7 +22,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using NUnit.Framework;
 
-namespace GKTests.GEDCOM
+namespace GKCommon.GEDCOM
 {
     [TestFixture]
     public class GEDCOMTagTests

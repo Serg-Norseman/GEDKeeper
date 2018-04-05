@@ -19,10 +19,10 @@
  */
 
 using System;
-using BSLib.SmartGraph;
+using GKTests;
 using NUnit.Framework;
 
-namespace GKTests.GKCommon
+namespace BSLib.SmartGraph
 {
     [TestFixture]
     public class SmartGraphTests

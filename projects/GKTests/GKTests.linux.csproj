@@ -96,7 +96,6 @@
     <Compile Include="GKCommon\IocContainerTests.cs" />
     <Compile Include="GKCommon\RusDeclensionTests.cs" />
     <Compile Include="GKCommon\SmartGraphTests.cs" />
-    <Compile Include="GKCommon\SysUtilsTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
     <Compile Include="GKComponents\ImageBoxTests.cs" />

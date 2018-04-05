@@ -20,10 +20,9 @@
 
 using System;
 using BSLib;
-using GKCore;
 using GKCore.Interfaces;
 
-namespace GKCommon
+namespace GKCore
 {
     public enum TweenAnimation
     {

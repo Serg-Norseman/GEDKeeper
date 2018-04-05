@@ -20,7 +20,7 @@
 
 using System;
 using System.IO;
-using GKCommon;
+using BSLib;
 
 namespace GKCore
 {
@@ -82,7 +82,7 @@ namespace GKCore
                     var pathsMapping = fPathsMappings.PathsMappings[i];
 
                     if (path.StartsWith(pathsMapping.Source)) {
-                        string newPath = SysUtils.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
+                        string newPath = FileHelper.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
                         if (File.Exists(newPath)) {
                             return newPath;
                         }

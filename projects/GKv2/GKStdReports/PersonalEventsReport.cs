@@ -69,8 +69,8 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
-            fWriter.addParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, CustomWriter.TextAlignment.taLeft);
 
             var evList = new List<PersonalEvent>();
             int num = fPerson.Events.Count;
@@ -82,7 +82,7 @@ namespace GKStdReports
             }
             SortHelper.QuickSort(evList, EventsCompare);
 
-            fWriter.beginList();
+            fWriter.BeginList();
 
             //int birthYear = -1;
 
@@ -117,7 +117,7 @@ namespace GKStdReports
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                     }
 
-                    fWriter.addListItem(" " + li, fTextFont);
+                    fWriter.AddListItem(" " + li, fTextFont);
                 }
                 /*else
                 {
@@ -133,7 +133,7 @@ namespace GKStdReports
                 }*/
             }
 
-            fWriter.endList();
+            fWriter.EndList();
         }
 
         private static int EventsCompare(PersonalEvent item1, PersonalEvent item2)

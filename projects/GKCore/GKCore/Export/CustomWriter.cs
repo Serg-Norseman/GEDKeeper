@@ -60,24 +60,24 @@ namespace GKCore.Export
         public abstract void BeginWrite();
         public abstract void EndWrite();
 
-        public abstract void addParagraph(string text, IFont font);
-        public abstract void addParagraph(string text, IFont font, TextAlignment alignment);
-        public abstract void addParagraphAnchor(string text, IFont font, string anchor);
-        public abstract void addParagraphLink(string text, IFont font, string link, IFont linkFont);
+        public abstract void AddParagraph(string text, IFont font);
+        public abstract void AddParagraph(string text, IFont font, TextAlignment alignment);
+        public abstract void AddParagraphAnchor(string text, IFont font, string anchor);
+        public abstract void AddParagraphLink(string text, IFont font, string link, IFont linkFont);
 
         public abstract IFont CreateFont(string name, float size, bool bold, bool underline, IColor color);
 
-        public abstract void beginList();
-        public abstract void addListItem(string text, IFont font);
-        public abstract void addListItemLink(string text, IFont font, string link, IFont linkFont);
-        public abstract void endList();
+        public abstract void BeginList();
+        public abstract void AddListItem(string text, IFont font);
+        public abstract void AddListItemLink(string text, IFont font, string link, IFont linkFont);
+        public abstract void EndList();
 
-        public abstract void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter);
-        public abstract void addParagraphChunk(string text, IFont font);
-        public abstract void addParagraphChunkAnchor(string text, IFont font, string anchor);
-        public abstract void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup);
-        public abstract void endParagraph();
+        public abstract void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter);
+        public abstract void AddParagraphChunk(string text, IFont font);
+        public abstract void AddParagraphChunkAnchor(string text, IFont font, string anchor);
+        public abstract void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup);
+        public abstract void EndParagraph();
 
-        public abstract void addNote(string text, IFont font);
+        public abstract void AddNote(string text, IFont font);
     }
 }

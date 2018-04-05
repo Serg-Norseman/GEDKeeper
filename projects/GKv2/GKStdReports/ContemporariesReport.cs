@@ -83,12 +83,12 @@ namespace GKStdReports
             var stats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
             fStats = stats.GetCommonStats();
 
-            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
 
             var personRange = GetIndividualDates(fPerson);
-            fWriter.addParagraph(GetPersonalInfo(fPerson), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(GetPersonalInfo(fPerson), fChapFont, CustomWriter.TextAlignment.taLeft);
             
-            fWriter.beginList();
+            fWriter.BeginList();
 
             var enumer = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
             GEDCOMRecord record;
@@ -97,13 +97,13 @@ namespace GKStdReports
                 var indRange = GetIndividualDates(iRec);
                 try {
                     if (personRange.IsOverlapped(indRange)) {
-                        fWriter.addListItem(" " + GetPersonalInfo(iRec), fTextFont);
+                        fWriter.AddListItem(" " + GetPersonalInfo(iRec), fTextFont);
                     }
                 } catch {
                 }
             }
 
-            fWriter.endList();
+            fWriter.EndList();
         }
     }
 }

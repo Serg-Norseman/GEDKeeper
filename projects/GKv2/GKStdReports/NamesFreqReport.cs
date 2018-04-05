@@ -59,7 +59,7 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
 
             var names = new List<NameItem>();
             var surnames = new List<NameItem>();
@@ -89,19 +89,19 @@ namespace GKStdReports
             SortHelper.QuickSort(names, ItemsCompare);
             SortHelper.QuickSort(surnames, ItemsCompare);
 
-            fWriter.addParagraph(SRLangMan.LS(RLS.LSID_Names), fChapFont, CustomWriter.TextAlignment.taLeft);
-            fWriter.beginList();
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Names), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.BeginList();
             foreach (var item in names) {
-                fWriter.addListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
+                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
             }
-            fWriter.endList();
+            fWriter.EndList();
 
-            fWriter.addParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
-            fWriter.beginList();
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.BeginList();
             foreach (var item in surnames) {
-                fWriter.addListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
+                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
             }
-            fWriter.endList();
+            fWriter.EndList();
         }
 
         private static int ItemsCompare(NameItem item1, NameItem item2)

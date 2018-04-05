@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon;
+using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCore.Export
@@ -71,7 +71,7 @@ namespace GKCore.Export
             fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
 
-            string ext = SysUtils.GetFileExtension(fPath);
+            string ext = FileHelper.GetFileExtension(fPath);
 
             CustomWriter writer;
             if (string.Equals(ext, ".html")) {

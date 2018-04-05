@@ -162,20 +162,20 @@ namespace GKTests.Mocks
         public MockWriter() { }
         public override void BeginWrite() { }
         public override void EndWrite() { }
-        public override void addParagraph(string text, IFont font, TextAlignment alignment) { }
-        public override void addParagraph(string text, IFont font) { }
-        public override void addParagraphAnchor(string text, IFont font, string anchor) { }
-        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont) { }
+        public override void AddParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void AddParagraph(string text, IFont font) { }
+        public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
+        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont) { }
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color) { return null; }
-        public override void beginList() { }
-        public override void endList() { }
-        public override void addListItem(string text, IFont font) { }
-        public override void addListItemLink(string text, IFont font, string link, IFont linkFont) { }
-        public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter) { }
-        public override void endParagraph() { }
-        public override void addParagraphChunk(string text, IFont font) { }
-        public override void addParagraphChunkAnchor(string text, IFont font, string anchor) { }
-        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup) { }
-        public override void addNote(string text, IFont font) { }
+        public override void BeginList() { }
+        public override void EndList() { }
+        public override void AddListItem(string text, IFont font) { }
+        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
+        public override void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter) { }
+        public override void EndParagraph() { }
+        public override void AddParagraphChunk(string text, IFont font) { }
+        public override void AddParagraphChunkAnchor(string text, IFont font, string anchor) { }
+        public override void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup) { }
+        public override void AddNote(string text, IFont font) { }
     }
 }

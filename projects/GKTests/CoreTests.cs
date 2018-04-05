@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 using BSLib;
 using BSLib.Linguistics.Grammar;
@@ -66,6 +67,65 @@ namespace GKCore
         [TestFixtureTearDown]
         public void TearDown()
         {
+        }
+
+        /*public void MyTestFunc1(
+            [Values(1, 2, 5)]int x,
+            [Values("hello", "buy")]string s)
+        {
+            Assert.IsTrue(x < 10);
+        }
+
+        [Test]
+        public void MyTestFunc2(
+            [Range(1, 100, 2)]int x,
+            [Values("hello", "buy")]string s)
+        {
+            Assert.IsTrue(x < 50);
+        }
+
+        public void MyTestFunc3(
+            [Random(100)]int x,
+            [Values("hello", "buy")]string s)
+        {
+        }*/
+
+        [Test]
+        public void SysUtils_Tests()
+        {
+            #if __MonoCS__
+            Assert.IsTrue(SysUtils.IsUnix());
+            Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
+            Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+            Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
+            #else
+            Assert.IsFalse(SysUtils.IsUnix());
+            Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
+            Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+            Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
+            #endif
+
+            //
+
+            Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
+            Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
+
+            // other
+            string st = "ivan";
+            st = ConvertHelper.UniformName(st);
+            Assert.AreEqual("Ivan", st);
+
+            st = ConvertHelper.UniformName(null);
+            Assert.AreEqual(null, st);
+
+            //
+
+            Assembly asm = this.GetType().Assembly;
+            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
+            Assert.IsNotNull(attr1);
+            Assert.AreEqual("GKTests", attr1.Title);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
         }
 
         [Test]
@@ -374,6 +434,22 @@ namespace GKCore
             Assert.AreEqual("Petrov Alex Ivanovich", GKUtils.GetNameString(iRec, true, false));
             fContext.Undoman.Rollback();
             Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
+        }
+
+        [Test]
+        public void Test_Matches()
+        {
+            bool res = GKUtils.MatchesMask("abrakadabra", "*kad*");
+            Assert.IsTrue(res);
+
+            res = GKUtils.MatchesMask("abrakadabra", "*test*");
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void Test_GetRectUID()
+        {
+            Assert.AreEqual("0F000F00D700D700CCDC", GKUtils.GetRectUID(15, 15, 215, 215));
         }
 
         [Test]

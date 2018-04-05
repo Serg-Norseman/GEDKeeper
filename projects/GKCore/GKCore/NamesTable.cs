@@ -24,7 +24,6 @@ using System.IO;
 using System.Text;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -88,7 +87,7 @@ namespace GKCore
                 fNames.Clear();
 
                 using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                    using (StreamReader reader = SysUtils.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
+                    using (StreamReader reader = FileHelper.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
                         while (reader.Peek() != -1) {
                             string line = reader.ReadLine();
                             if (string.IsNullOrEmpty(line)) continue;

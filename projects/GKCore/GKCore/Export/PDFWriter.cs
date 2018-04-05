@@ -24,7 +24,6 @@ using System;
 using System.IO;
 
 using BSLib;
-using GKCommon;
 using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -70,7 +69,7 @@ namespace GKCore.Export
             //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
 
             Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
-            var fontBytes = SysUtils.ReadByteArray(fontStream);
+            var fontBytes = FileHelper.ReadByteArray(fontStream);
             fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
 
             /*if !__MonoCS__
@@ -120,26 +119,26 @@ namespace GKCore.Export
             return new FontHandler(new it.Font(fBaseFont, size, style, clr));
         }
 
-        public override void addParagraph(string text, IFont font)
+        public override void AddParagraph(string text, IFont font)
         {
             fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = Element.ALIGN_LEFT });
         }
 
-        public override void addParagraph(string text, IFont font, TextAlignment alignment)
+        public override void AddParagraph(string text, IFont font, TextAlignment alignment)
         {
             int al = iAlignments[(int)alignment];
             
             fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = al });
         }
 
-        public override void addParagraphAnchor(string text, IFont font, string anchor)
+        public override void AddParagraphAnchor(string text, IFont font, string anchor)
         {
             Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             chunk.SetLocalDestination(anchor);
             fDocument.Add(new Paragraph(chunk));
         }
 
-        public override void addParagraphLink(string text, IFont font, string link, IFont linkFont)
+        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
             Paragraph pg = new Paragraph();
             pg.Add(new Chunk(text, ((FontHandler)font).Handle));
@@ -147,24 +146,24 @@ namespace GKCore.Export
             fDocument.Add(pg);
         }
 
-        public override void beginList()
+        public override void BeginList()
         {
             fList = new List(List.UNORDERED);
             fList.SetListSymbol("\u2022");
             fList.IndentationLeft = 10f;
         }
 
-        public override void endList()
+        public override void EndList()
         {
             fDocument.Add(fList);
         }
 
-        public override void addListItem(string text, IFont font)
+        public override void AddListItem(string text, IFont font)
         {
             fList.Add(new ListItem(new Chunk(text, ((FontHandler)font).Handle)));
         }
 
-        public override void addListItemLink(string text, IFont font, string link, IFont linkFont)
+        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
         {
             Paragraph p1 = new Paragraph();
             p1.Add(new Chunk(text, ((FontHandler)font).Handle));
@@ -176,7 +175,7 @@ namespace GKCore.Export
             fList.Add(new ListItem(p1));
         }
 
-        public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
+        public override void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
         {
             int al = iAlignments[(int)alignment];
 
@@ -184,22 +183,22 @@ namespace GKCore.Export
             p.Alignment = al;
         }
 
-        public override void endParagraph()
+        public override void EndParagraph()
         {
             fDocument.Add(p);
         }
 
-        public override void addParagraphChunk(string text, IFont font)
+        public override void AddParagraphChunk(string text, IFont font)
         {
             p.Add(new Chunk(text, ((FontHandler)font).Handle));
         }
 
-        public override void addParagraphChunkAnchor(string text, IFont font, string anchor)
+        public override void AddParagraphChunkAnchor(string text, IFont font, string anchor)
         {
             p.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalDestination(anchor));
         }
 
-        public override void addParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
         {
             Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             if (sup) {
@@ -214,7 +213,7 @@ namespace GKCore.Export
             p.Add(chunk);
         }
 
-        public override void addNote(string text, IFont font)
+        public override void AddNote(string text, IFont font)
         {
             
         }

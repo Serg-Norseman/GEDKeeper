@@ -190,7 +190,7 @@ namespace GKCommon.GEDCOM
 
         public void LoadFromStreamExt(Stream fileStream, Stream inputStream)
         {
-            using (StreamReader reader = SysUtils.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
+            using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
                 fTree.Clear();
                 LoadFromStream(fileStream, reader);
                 fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;

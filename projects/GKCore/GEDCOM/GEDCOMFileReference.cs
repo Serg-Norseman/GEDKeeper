@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -57,7 +57,7 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
 
-            string ext = SysUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
             if (!string.IsNullOrEmpty(ext) && ext[0] == '.') {
                 ext = ext.Remove(0, 1);
             }

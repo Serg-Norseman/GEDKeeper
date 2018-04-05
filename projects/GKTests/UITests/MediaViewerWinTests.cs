@@ -27,7 +27,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.GEDCOM;
 using GKTests.Mocks;
 using GKUI.Forms;
 using NUnit.Framework;

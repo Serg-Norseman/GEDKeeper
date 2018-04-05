@@ -18,14 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.GKCommon
+namespace GKCore
 {
     [TestFixture]
     public class CommonTests

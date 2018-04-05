@@ -21,13 +21,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using GKCommon;
 using GKCore;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKTests.GKCommon
+namespace GKCore
 {
     [TestFixture]
     public class BBTextParserTests

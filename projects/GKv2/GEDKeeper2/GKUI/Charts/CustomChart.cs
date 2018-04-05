@@ -24,7 +24,6 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -240,7 +239,7 @@ namespace GKUI.Charts
          * for the main toolbar - screenshot capture for windows with charts. */
         public void SaveSnapshot(string fileName)
         {
-            string ext = SysUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 
             ExtSize imageSize = GetImageSize();
 

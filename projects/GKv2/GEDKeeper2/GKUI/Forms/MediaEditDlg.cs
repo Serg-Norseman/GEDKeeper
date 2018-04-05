@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -154,7 +154,7 @@ namespace GKUI.Forms
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
-            if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
+            if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
                 if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
                     return;
                 }

@@ -25,14 +25,14 @@ using System.Text;
 
 using BSLib;
 using BSLib.Calendar;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
+using GKTests;
 using GKUI;
 using NUnit.Framework;
 
-namespace GKTests.GEDCOM
+namespace GKCommon.GEDCOM
 {
     /// <summary>
     /// 

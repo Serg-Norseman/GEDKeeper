@@ -47,7 +47,7 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
 
             var surnames = new StringList();
             surnames.Sorted = true;
@@ -63,16 +63,16 @@ namespace GKStdReports
                 surnames.Add(surname);
             }
 
-            fWriter.addParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
-            fWriter.beginList();
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.BeginList();
             for (int i = 0; i < surnames.Count; i++) {
                 string item = surnames[i];
                 string primaryKey = "", alternateKey = "";
                 string translit = BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, item);
                 DoubleMetaphone.doubleMetaphone(translit, ref primaryKey, ref alternateKey);
-                fWriter.addListItem(" " + item + "\t" + translit + "\t" + primaryKey + "\t" + alternateKey, fTextFont);
+                fWriter.AddListItem(" " + item + "\t" + translit + "\t" + primaryKey + "\t" + alternateKey, fTextFont);
             }
-            fWriter.endList();
+            fWriter.EndList();
         }
     }
 }
