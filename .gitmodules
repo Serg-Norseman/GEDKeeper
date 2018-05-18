@@ -1,0 +1,3 @@
+[submodule "projects/GKCommunicator"]
+	path = projects/GKCommunicator
+	url = https://github.com/Serg-Norseman/GKCommunicator.git
