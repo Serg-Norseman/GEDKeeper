@@ -370,15 +370,8 @@ namespace GKCore.Charts
                     result = fRoot;
                     result.Parent = parent;
                 } else {
-                    result = new TreeChartPerson(this);
-                    result.BuildBy(iRec);
-                    result.Generation = generation;
+                    result = CreatePerson(iRec, generation);
                     result.Parent = parent;
-                    fPersons.Add(result);
-
-                    if (fOptions.Kinship && iRec != null) {
-                        result.Node = fGraph.AddIndividual(iRec);
-                    }
 
                     if (!outsideKin && parent != null) {
                         parent.AddChild(result);
@@ -397,6 +390,25 @@ namespace GKCore.Charts
             }
         }
 
+        private TreeChartPerson CreatePerson(GEDCOMIndividualRecord iRec, int generation, bool prevSearch = false)
+        {
+            // search root or previous added ancestors
+            TreeChartPerson result = (!prevSearch) ? null : FindPersonByRec(iRec);
+
+            if (result == null) {
+                result = new TreeChartPerson(this);
+                result.BuildBy(iRec);
+                result.Generation = generation;
+                fPersons.Add(result);
+
+                if (fOptions.Kinship && iRec != null) {
+                    result.Node = fGraph.AddIndividual(iRec);
+                }
+            }
+
+            return result;
+        }
+
         private TreeChartPerson DoAncestorsStep(TreeChartPerson aChild, GEDCOMIndividualRecord aPerson, int generation, bool dupFlag)
         {
             try
@@ -405,20 +417,11 @@ namespace GKCore.Charts
 
                 if (aPerson != null)
                 {
-                    result = new TreeChartPerson(this);
-                    result.BuildBy(aPerson);
-                    result.Generation = generation;
+                    result = CreatePerson(aPerson, generation);
+
                     result.SetFlag(PersonFlag.pfAncWalk);
-                    fPersons.Add(result);
-
-                    if (aChild != null)
-                    {
+                    if (aChild != null) {
                         result.AddChild(aChild);
-                    }
-
-                    if (fOptions.Kinship)
-                    {
-                        result.Node = fGraph.AddIndividual(aPerson);
                     }
 
                     if ((fDepthLimit <= -1 || generation != fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
@@ -1144,13 +1147,13 @@ namespace GKCore.Charts
 
         public TreeChartPerson FindPersonByRec(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) return null;
-
-            int num = fPersons.Count;
-            for (int i = 0; i < num; i++) {
-                TreeChartPerson p = fPersons[i];
-                if (p.Rec == iRec) {
-                    return p;
+            if (iRec != null) {
+                int num = fPersons.Count;
+                for (int i = 0; i < num; i++) {
+                    TreeChartPerson p = fPersons[i];
+                    if (p.Rec == iRec) {
+                        return p;
+                    }
                 }
             }
 
