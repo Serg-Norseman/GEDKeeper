@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKCore</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -25,6 +25,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
+    <DefineConstants>DEBUG;TRACE;LUA_DLL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\</OutputPath>
@@ -33,39 +34,24 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>TRACE;LUA_DLL</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE;LUA_DLL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants>TRACE;LUA_DLL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE;LUA_DLL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <DefineConstants>TRACE;LUA_DLL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' " />
+  <PropertyGroup Condition="'$(MonoCS)'=='true'">
+    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MonoCS)'=='false'">
+    <DefineConstants>$(DefineConstants);LUA_DLL</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
@@ -85,9 +71,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\libs\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LuaInterface">
-      <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -98,12 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="LuaInterface">
+      <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
+    </Reference>
     <None Include="..\libs\mswin\lua51.dll">
       <Link>lua51.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf" />
-    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -348,23 +332,12 @@
     <Compile Include="GKCore\YamlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCore" />
-    <Folder Include="GKCore\Cultures" />
-    <Folder Include="GKCore\Export" />
-    <Folder Include="GKCore\Geocoding" />
-    <Folder Include="GKCore\Kinships" />
-    <Folder Include="GKCore\Lists" />
-    <Folder Include="GKCore\Maps" />
-    <Folder Include="GKCore\Operations" />
-    <Folder Include="GKCore\Options" />
-    <Folder Include="GKCore\Plugins" />
-    <Folder Include="GKCore\SingleInstance" />
-    <Folder Include="GKCore\Stats" />
-    <Folder Include="GKCore\Tools" />
-    <Folder Include="GKCore\Charts" />
-    <Folder Include="GKCore\UIContracts" />
-    <Folder Include="Resources" />
-    <Folder Include="Resources\fonts" />
+    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
+      <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf">
+      <LogicalName>Resources.fonts.FreeSansBold.ttf</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

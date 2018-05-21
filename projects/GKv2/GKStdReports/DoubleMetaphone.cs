@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * DoubleMetaphone.cs
  * 
  * An implemenatation of Lawrence Phillips' Double Metaphone phonetic matching
@@ -199,7 +199,7 @@ namespace GKStdReports
                             current	+=1;
                         break;
                         
-                    case 'Ç':
+                    case 'Ð—':
                         addMetaphoneCharacter("S");
                         current += 1;
                         break;
@@ -559,7 +559,7 @@ namespace GKStdReports
                         addMetaphoneCharacter("N");
                         break;
                         
-                    case 'Ñ':
+                    case 'Ð¡':
                         current += 1;
                         addMetaphoneCharacter("N");
                         break;
