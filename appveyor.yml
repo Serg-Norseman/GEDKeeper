@@ -10,6 +10,9 @@ configuration: Debug
 
 platform: x86
 
+install:
+  - cmd: git submodule -q update --init
+
 build:
   project: projects/GEDKeeper2.mswin-av.sln
   verbosity: minimal
