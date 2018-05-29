@@ -65,6 +65,7 @@ namespace GKUI.Forms
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
+            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
             Controls.Add(fCircleChart);
             Controls.SetChildIndex(fCircleChart, 0);
 

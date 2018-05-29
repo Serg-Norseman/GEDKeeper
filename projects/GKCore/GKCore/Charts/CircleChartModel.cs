@@ -96,6 +96,7 @@ namespace GKCore.Charts
         public const int CENTRAL_INDEX = 9;
         public const float CENTER_RAD = 90;
         public const float DEFAULT_GEN_WIDTH = 60;
+        public const int MAX_GENERATIONS = 8;
 
         private readonly IBrush[] fCircleBrushes;
         private readonly IBrush[] fDarkBrushes;
@@ -104,22 +105,12 @@ namespace GKCore.Charts
         private ExtRectF fBounds;
         private float fGenWidth;
         private int fIndividualsCount;
-        /* TODO(brigadir15@gmail.com): Member `fMaxGenerations` should be a
-         * const field, I believe. Member `CircleSegment::Gen` is used as an
-         * index when accessing the array `fCircleBrushes`, for example. The
-         * latter contains **predefined** brush list, with first eight elements
-         * used as brushes for eight possible generations (`CircleChart` ctor
-         * assigns `fMaxGenerations` with `8`; see code below).
-         * Thus, if one will want to extent number of available visible
-         * generation, he/she will have to change a huge amount of the code.
-         * Therefore, to avoid someone's tendency to change initial values of
-         * member `fMaxGenerations`, the member should be a const field. */
-        private int fMaxGenerations;
         private AncestorsCircleOptions fOptions;
         private IPen fPen;
         private GEDCOMIndividualRecord fRootPerson;
         private readonly List<CircleSegment> fSegments;
         private CircleSegment fSelected;
+        private int fVisibleGenerations;
 
         #region Only ancestors circle
         private int fGroupCount;
@@ -160,10 +151,10 @@ namespace GKCore.Charts
             set {
                 fGroupsMode = value;
                 if (value) {
-                    fMaxGenerations = 8;
+                    fVisibleGenerations = MAX_GENERATIONS;
                     GenWidth = 60;
                 } else {
-                    fMaxGenerations = 8;
+                    fVisibleGenerations = MAX_GENERATIONS;
                     GenWidth = CircleChartModel.DEFAULT_GEN_WIDTH;
                 }
             }
@@ -208,6 +199,16 @@ namespace GKCore.Charts
             set { fSelected = value; }
         }
 
+        public int VisibleGenerations
+        {
+            get { return fVisibleGenerations; }
+            set {
+                if (value >= 1 && value <= MAX_GENERATIONS) {
+                    fVisibleGenerations = value;
+                }
+            }
+        }
+
 
         public CircleChartModel()
         {
@@ -216,9 +217,9 @@ namespace GKCore.Charts
 
             fBounds = new ExtRectF();
             fGenWidth = CircleChartModel.DEFAULT_GEN_WIDTH;
-            fMaxGenerations = 8;
             fSegments = new List<CircleSegment>();
             fSelected = null;
+            fVisibleGenerations = MAX_GENERATIONS;
         }
 
         protected override void Dispose(bool disposing)
@@ -481,7 +482,7 @@ namespace GKCore.Charts
             fSegments.Add(segment);
 
             int maxSteps = 1;
-            for (int gen = 1; gen <= fMaxGenerations; gen++) {
+            for (int gen = 1; gen <= fVisibleGenerations; gen++) {
                 inRad = startRad + ((gen - 1) * fGenWidth);
                 float extRad = inRad + fGenWidth;
 
@@ -562,7 +563,7 @@ namespace GKCore.Charts
                 int idx = prevSteps + (int)(v / ang);
                 AncPersonSegment segment = SetSegmentParams(idx, iRec, rad, groupIndex);
 
-                if (segment != null && gen < fMaxGenerations)
+                if (segment != null && gen < fVisibleGenerations)
                 {
                     float inRad = rad;
                     float extRad = rad + fGenWidth;
@@ -613,7 +614,7 @@ namespace GKCore.Charts
             for (int i = 0; i < numberOfSegments; i++) {
                 AncPersonSegment segment = (AncPersonSegment)fSegments[i];
 
-                bool draw = (!Options.HideEmptySegments || segment.IRec != null);
+                bool draw = (!fOptions.HideEmptySegments || segment.IRec != null);
 
                 if (draw) {
                     int brIndex;
@@ -714,7 +715,7 @@ namespace GKCore.Charts
                 resultSegment.IRec = iRec;
                 fSegments.Add(resultSegment);
 
-                if (gen < fMaxGenerations)
+                if (gen < fVisibleGenerations)
                 {
                     int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
                     for (int j = 0; j < numberOfFamilyLinks; j++)

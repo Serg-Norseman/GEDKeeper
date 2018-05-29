@@ -24,13 +24,17 @@ using System.IO;
 using System.Text;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Lists;
 using GKCore.Types;
 
 namespace GKCore.Options
 {
+    public enum OptionsPage
+    {
+        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree, opMultimedia
+    }
+
     /// <summary>
     /// 
     /// </summary>

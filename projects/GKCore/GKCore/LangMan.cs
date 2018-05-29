@@ -815,9 +815,9 @@ namespace GKCore
         /* 757 */ LSID_SelectAndCopy,
         /* 758 */ LSID_NumberSym,
         /* 759 */ LSID_Reports,
+        /* 760 */ LSID_InvertedTree,
 
-        /* 760 */ // reserved begin
-        /* 761 */
+        /* 761 */ // reserved begin
         /* 762 */
         /* 763 */
         /* 764 */
@@ -1639,9 +1639,9 @@ namespace GKCore
             /* 757 */ "Select and copy",
             /* 758 */ "№",
             /* 759 */ "Reports",
+            /* 760 */ "Inverted tree",
 
-            /* 760 */ "", // reserved begin
-            /* 761 */ "",
+            /* 761 */ "", // reserved begin
             /* 762 */ "",
             /* 763 */ "",
             /* 764 */ "",

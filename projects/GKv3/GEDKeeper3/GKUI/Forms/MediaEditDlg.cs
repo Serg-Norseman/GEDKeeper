@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using Eto.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -142,7 +143,7 @@ namespace GKUI.Forms
             if (string.IsNullOrEmpty(fileName))
                 return;
 
-            if (GlobalOptions.Instance.RemovableMediaWarning && SysUtils.IsRemovableDrive(fileName)) {
+            if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
                 if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
                     return;
                 }

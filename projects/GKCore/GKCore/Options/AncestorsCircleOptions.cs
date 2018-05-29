@@ -87,6 +87,7 @@ namespace GKCore.Options
                     BrushColor[i] = utils.CreateColor(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i]));
                 }
 
+                ArcText = iniFile.ReadBool("AncestorsCircle", "ArcText", true);
                 HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);
             }
             catch (Exception)
@@ -104,6 +105,7 @@ namespace GKCore.Options
                 iniFile.WriteInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), BrushColor[i].ToArgb());
             }
 
+            iniFile.WriteBool("AncestorsCircle", "ArcText", ArcText);
             iniFile.WriteBool("AncestorsCircle", "HideEmptySegments", HideEmptySegments);
         }
     }

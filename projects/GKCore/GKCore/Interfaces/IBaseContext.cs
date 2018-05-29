@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Types;
 
@@ -103,8 +102,8 @@ namespace GKCore.Interfaces
                                             TargetMode targetMode, GEDCOMSex needSex);
         GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);
         GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild,
-                                                 bool canCreate,
-                                                 GEDCOMIndividualRecord newParent);
+                                          bool canCreate,
+                                          GEDCOMIndividualRecord newParent);
         GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
         GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex);
         GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec);

@@ -119,7 +119,7 @@ namespace GKUI.Charts
         #region Print and snaphots support
 
         public abstract ExtSize GetImageSize();
-        public abstract void RenderStaticImage(Graphics gfx, OutputType outputType);
+        public abstract void RenderStaticImage(Graphics gfx, RenderTarget target);
 
         public bool IsLandscape()
         {
@@ -143,7 +143,7 @@ namespace GKUI.Charts
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
-                RenderStaticImage(gfx, OutputType.Printer);
+                RenderStaticImage(gfx, RenderTarget.Printer);
             }
 
             return new ImageHandler(image);
@@ -158,7 +158,7 @@ namespace GKUI.Charts
          * for the main toolbar - screenshot capture for windows with charts. */
         public void SaveSnapshot(string fileName)
         {
-            string ext = SysUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 
             ExtSize imageSize = GetImageSize();
 
@@ -167,7 +167,7 @@ namespace GKUI.Charts
                     SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
 
                     using (var gfx = CreateGraphics()) {
-                        RenderStaticImage(gfx, OutputType.SVG);
+                        RenderStaticImage(gfx, RenderTarget.SVG);
                     }
                 } finally {
                     SetSVGMode(false, "", 0, 0);
@@ -205,7 +205,7 @@ namespace GKUI.Charts
                 try {
                     //using (Graphics gfx = Graphics.FromImage(pic)) {
                     using (Graphics gfx = new Graphics(pic)) {
-                        RenderStaticImage(gfx, OutputType.StdFile);
+                        RenderStaticImage(gfx, RenderTarget.RasterFile);
                     }
 
                     ((Bitmap)pic).Save(fileName, imFmt);

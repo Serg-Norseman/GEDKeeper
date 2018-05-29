@@ -995,9 +995,9 @@ namespace GKUI.Charts
             return fModel.ImageSize;
         }
 
-        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
+        public override void RenderStaticImage(Graphics gfx, RenderTarget target)
         {
-            BackgroundMode bgMode = (outputType == OutputType.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
+            BackgroundMode bgMode = (target == RenderTarget.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
 
             fRenderer.SetTarget(gfx, false);
             RenderStatic(bgMode);

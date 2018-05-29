@@ -205,7 +205,7 @@ namespace GKUI.Charts
         }
 
         public abstract ExtSize GetImageSize();
-        public abstract void RenderStaticImage(Graphics gfx, OutputType outputType);
+        public abstract void RenderStaticImage(Graphics gfx, RenderTarget target);
 
         public bool IsLandscape()
         {
@@ -224,7 +224,7 @@ namespace GKUI.Charts
             }
 
             using (Graphics gfx = Graphics.FromImage(image)) {
-                RenderStaticImage(gfx, OutputType.Printer);
+                RenderStaticImage(gfx, RenderTarget.Printer);
             }
 
             return new ImageHandler(image);
@@ -248,7 +248,7 @@ namespace GKUI.Charts
                     SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
 
                     using (var gfx = CreateGraphics()) {
-                        RenderStaticImage(gfx, OutputType.SVG);
+                        RenderStaticImage(gfx, RenderTarget.SVG);
                     }
                 } finally {
                     SetSVGMode(false, "", 0, 0);
@@ -286,7 +286,7 @@ namespace GKUI.Charts
                 try
                 {
                     using (Graphics gfx = Graphics.FromImage(pic)) {
-                        RenderStaticImage(gfx, OutputType.StdFile);
+                        RenderStaticImage(gfx, RenderTarget.RasterFile);
                     }
 
                     pic.Save(fileName, imFmt);

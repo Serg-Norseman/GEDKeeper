@@ -25,7 +25,6 @@ using System.IO;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -38,9 +37,9 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    #if !__MonoCS__
+#if !__MonoCS__
     using Externals.MapiMail;
-    #endif
+#endif
 
     /// <summary>
     /// 

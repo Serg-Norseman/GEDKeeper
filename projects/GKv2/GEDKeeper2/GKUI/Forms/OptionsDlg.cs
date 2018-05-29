@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -32,11 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public enum OptionsPage
-    {
-        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree, opMultimedia
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -158,6 +152,7 @@ namespace GKUI.Forms
             chkTreeDecorative.Checked = fOptions.ChartOptions.Decorative;
             chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
             chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
+            chkInvertedTree.Checked = fOptions.ChartOptions.InvertedTree;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
@@ -362,6 +357,7 @@ namespace GKUI.Forms
             fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked;
             fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
             fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
+            fOptions.ChartOptions.InvertedTree = chkInvertedTree.Checked;
 
             fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -535,6 +531,7 @@ namespace GKUI.Forms
             chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
             chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
+            chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
             lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);

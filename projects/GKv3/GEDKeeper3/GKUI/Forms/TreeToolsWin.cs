@@ -178,7 +178,7 @@ namespace GKUI.Forms
             if (string.IsNullOrEmpty(fileName)) return;
 
             edUpdateBase.Text = fileName;
-            TreeTools.MergeTree(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
+            TreeTools.MergeTreeFile(Base.Context.Tree, edUpdateBase.Text, mSyncRes);
             Base.RefreshLists(false);
         }
 

@@ -855,8 +855,7 @@ namespace GKCore.Charts
             fEdges[gen] = person.Rect.Right;
 
             prev.Add(person);
-            if (person.Rect.Top < 0)
-            {
+            if (person.Rect.Top < 0) {
                 offset = 0 - person.Rect.Top + fMargins;
                 int num = prev.Count;
                 for (int i = 0; i < num; i++) {
@@ -864,16 +863,13 @@ namespace GKCore.Charts
                 }
             }
 
-            if (person.Father != null && person.Mother != null)
-            {
-                RecalcAnc(prev, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), person.PtY - fLevelDistance - person.Height);
-                RecalcAnc(prev, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), person.PtY - fLevelDistance - person.Height);
+            if (person.Father != null && person.Mother != null) {
+                RecalcAnc(prev, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
+                RecalcAnc(prev, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
 
                 person.PtX = (person.Father.PtX + person.Mother.PtX) / 2;
                 fEdges[gen] = person.Rect.Right;
-            }
-            else
-            {
+            } else {
                 TreeChartPerson anc = null;
                 if (person.Father != null) {
                     anc = person.Father;
@@ -882,9 +878,18 @@ namespace GKCore.Charts
                 }
 
                 if (anc != null) {
-                    RecalcAnc(prev, anc, person.PtX, person.PtY - fLevelDistance - person.Height);
+                    RecalcAnc(prev, anc, person.PtX, NextGenY(person, true));
                 }
             }
+        }
+
+        private int NextGenY(TreeChartPerson person, bool ancestors)
+        {
+            int sign = (ancestors) ? -1 : +1;
+            //int sign2 = +1;
+            int sign2 = (!fOptions.InvertedTree) ? +1 : -1;
+            int offset = (fLevelDistance + person.Height) * sign * sign2;
+            return person.PtY + offset;
         }
 
         private void RecalcAncestorsChart()
@@ -893,12 +898,9 @@ namespace GKCore.Charts
             Array.Clear(fEdges, 0, fEdges.Length);
 
             var prev = new ExtList<TreeChartPerson>();
-            try
-            {
+            try {
                 RecalcAnc(prev, fRoot, fMargins, fMargins);
-            }
-            finally
-            {
+            } finally {
                 prev.Dispose();
                 fEdges = new int[0];
             }
@@ -966,11 +968,11 @@ namespace GKCore.Charts
             }
 
             int curX = centX - childrenWidth / 2;
-            int curY = person.PtY + fLevelDistance + person.Height;
+            int curY = NextGenY(person, false);
 
             for (int i = 0; i < childrenCount; i++) {
                 TreeChartPerson child = person.GetChild(i);
-                RecalcDesc(child, new ExtPoint(curX + child.Width / 2, curY), true);
+                RecalcDesc(child, curX + child.Width / 2, curY, true);
                 curX = child.Rect.Right + fBranchDistance;
             }
 
@@ -996,14 +998,14 @@ namespace GKCore.Charts
             }
         }
 
-        private void RecalcDesc(TreeChartPerson person, ExtPoint aPt, bool predef)
+        private void RecalcDesc(TreeChartPerson person, int ptX, int ptY, bool predef)
         {
             if (person == null) return;
 
             int gen = person.Generation;
             if (predef) {
-                person.PtX = aPt.X;
-                person.PtY = aPt.Y;
+                person.PtX = ptX;
+                person.PtY = ptY;
             }
 
             int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
@@ -1022,19 +1024,21 @@ namespace GKCore.Charts
                 int num = person.GetSpousesCount();
                 for (int i = 0; i < num; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
-                    var spPt = new ExtPoint();
+                    int spX = 0, spY = 0;
 
                     switch (person.Sex) {
                         case GEDCOMSex.svMale:
-                            spPt = new ExtPoint(prev.Rect.Right + (fBranchDistance + sp.Width / 2), person.PtY);
+                            spX = prev.Rect.Right + (fBranchDistance + sp.Width / 2);
+                            spY = person.PtY;
                             break;
 
                         case GEDCOMSex.svFemale:
-                            spPt = new ExtPoint(prev.Rect.Left - (fBranchDistance + sp.Width / 2), person.PtY);
+                            spX = prev.Rect.Left - (fBranchDistance + sp.Width / 2);
+                            spY = person.PtY;
                             break;
                     }
 
-                    RecalcDesc(sp, spPt, true);
+                    RecalcDesc(sp, spX, spY, true);
 
                     if (sp.Sex != GEDCOMSex.svMale) {
                         prev = sp;
@@ -1059,12 +1063,9 @@ namespace GKCore.Charts
             fEdges = new int[256];
             Array.Clear(fEdges, 0, fEdges.Length);
 
-            try
-            {
-                RecalcDesc(fRoot, new ExtPoint(fMargins, fMargins), predef);
-            }
-            finally
-            {
+            try {
+                RecalcDesc(fRoot, fMargins, fMargins, predef);
+            } finally {
                 fEdges = new int[0];
             }
         }
@@ -1354,22 +1355,32 @@ namespace GKCore.Charts
 
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
         {
+            if (person.Father == null && person.Mother == null) {
+                return;
+            }
+
             Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
             Draw(person.Mother, TreeChartKind.ckAncestors, drawMode);
-            int crY = person.PtY - fLevelDistance / 2;
+
+            int crY, parY;
+            if (!fOptions.InvertedTree) {
+                crY = person.PtY - fLevelDistance / 2;
+                parY = (person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height;
+            } else {
+                crY = person.PtY + person.Height + fLevelDistance / 2;
+                parY = (person.Father != null) ? person.Father.PtY : person.Mother.PtY;
+            }
+
+            DrawLine(person.PtX, crY, person.PtX, person.PtY); // v
 
             if (person.Father != null) {
-                DrawLine(person.Father.PtX, crY, person.PtX, crY);
-                DrawLine(person.Father.PtX, person.Father.PtY + person.Father.Height, person.Father.PtX, crY);
+                DrawLine(person.Father.PtX, crY, person.PtX, crY); // h
+                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY); // v
             }
 
             if (person.Mother != null) {
-                DrawLine(person.PtX, crY, person.Mother.PtX, crY);
-                DrawLine(person.Mother.PtX, person.Mother.PtY + person.Mother.Height, person.Mother.PtX, crY);
-            }
-
-            if (person.Father != null || person.Mother != null) {
-                DrawLine(person.PtX, crY, person.PtX, person.PtY);
+                DrawLine(person.PtX, crY, person.Mother.PtX, crY); // h
+                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY); // v
             }
         }
 
@@ -1378,13 +1389,14 @@ namespace GKCore.Charts
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
 
+            // draw children
             for (int i = 0; i < childrenCount; i++) {
                 Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
             }
 
+            // draw lines of spouses
             int spbOfs = (person.Height - 10) / (spousesCount + 1);
             int spbBeg = person.PtY + (person.Height - spbOfs * (spousesCount - 1)) / 2;
-
             switch (person.Sex) {
                 case GEDCOMSex.svMale:
                     for (int i = 0; i < spousesCount; i++) {
@@ -1401,21 +1413,24 @@ namespace GKCore.Charts
                     break;
             }
 
+            // draw spouses
             for (int i = 0; i < spousesCount; i++) {
                 Draw(person.GetSpouse(i), TreeChartKind.ckDescendants, drawMode);
             }
 
-            int crY = person.PtY + person.Height + fLevelDistance / 2;
+            int crY;
+            if (!fOptions.InvertedTree) {
+                crY = person.PtY + person.Height + fLevelDistance / 2;
+            } else {
+                crY = person.PtY - fLevelDistance / 2;
+            }
+
             int cx = 0;
-            if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1))
-            {
+            if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1)) {
                 cx = person.PtX;
                 spbBeg = person.PtY + person.Height - 1;
-            }
-            else
-            {
-                switch (person.Sex)
-                {
+            } else {
+                switch (person.Sex) {
                     case GEDCOMSex.svMale:
                         cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                         break;
@@ -1428,24 +1443,21 @@ namespace GKCore.Charts
                 spbBeg -= spbOfs / 2;
             }
 
-            if (childrenCount != 0)
-            {
-                DrawLine(cx, spbBeg, cx, crY);
-                if (childrenCount == 1)
-                {
-                    TreeChartPerson child = person.GetChild(0);
-                    DrawLine(child.PtX, crY, child.PtX, child.PtY);
-                }
-                else
-                {
+            if (childrenCount != 0) {
+                DrawLine(cx, spbBeg, cx, crY); // v
+
+                TreeChartPerson child0 = person.GetChild(0);
+                int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
+
+                if (childrenCount > 1) {
                     int bpx = person.GetChild(0).PtX;
                     int epx = person.GetChild(childrenCount - 1).PtX;
-                    DrawLine(bpx, crY, epx, crY);
+                    DrawLine(bpx, crY, epx, crY); // h
+                }
 
-                    for (int i = 0; i < childrenCount; i++) {
-                        TreeChartPerson child = person.GetChild(i);
-                        DrawLine(child.PtX, crY, child.PtX, child.PtY);
-                    }
+                for (int i = 0; i < childrenCount; i++) {
+                    TreeChartPerson child = person.GetChild(i);
+                    DrawLine(child.PtX, crY, child.PtX, chY); // v
                 }
             }
         }

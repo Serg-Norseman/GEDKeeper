@@ -21,8 +21,6 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -33,11 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public enum OptionsPage
-    {
-        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree, opMultimedia
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -167,6 +160,7 @@ namespace GKUI.Forms
             chkTreeDecorative.Checked = fOptions.ChartOptions.Decorative;
             chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
             chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
+            chkInvertedTree.Checked = fOptions.ChartOptions.InvertedTree;
 
             lblMaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
             lblFemaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
@@ -372,6 +366,7 @@ namespace GKUI.Forms
             fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked.GetValueOrDefault();
             fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked.GetValueOrDefault();
             fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked.GetValueOrDefault();
+            fOptions.ChartOptions.InvertedTree = chkInvertedTree.Checked.GetValueOrDefault();
 
             fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackgroundColor);
             fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackgroundColor);
@@ -544,6 +539,7 @@ namespace GKUI.Forms
             chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
             chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
+            chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
             lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);

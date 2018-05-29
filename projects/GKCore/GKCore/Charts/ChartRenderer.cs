@@ -38,11 +38,11 @@ namespace GKCore.Charts
         bmAny
     }
 
-    public enum OutputType
+    public enum RenderTarget
     {
         Screen,
         Printer,
-        StdFile,
+        RasterFile,
         SVG
     }
 

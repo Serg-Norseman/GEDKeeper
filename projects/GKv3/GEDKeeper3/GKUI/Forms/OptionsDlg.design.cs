@@ -107,6 +107,7 @@ namespace GKUI.Forms
         private CheckBox chkLoadRecentFiles;
         private CheckBox chkRemovableMediaWarning;
         private CheckBox chkDefaultPortraits;
+        private CheckBox chkInvertedTree;
         private ComboBox cmbGeocoder;
         private Label lblGeocoder;
 
@@ -336,12 +337,15 @@ namespace GKUI.Forms
             chkPortraitsVisible.Text = "chkPortraitsVisible";
             chkPortraitsVisible.CheckedChanged += chkPortraitsVisible_CheckedChanged;
 
+            chkInvertedTree = new CheckBox();
+            chkInvertedTree.Text = "chkInvertedTree";
+
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkChildlessExclude }
+                    chkChildlessExclude, chkInvertedTree }
             };
 
             //

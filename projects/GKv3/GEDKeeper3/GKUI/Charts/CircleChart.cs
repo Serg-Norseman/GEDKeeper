@@ -36,12 +36,6 @@ namespace GKUI.Charts
     /// </summary>
     public sealed class CircleChart : CustomChart
     {
-        private enum RenderTarget
-        {
-            rtScreen,
-            rtNonScreenCanvas
-        }
-
         private enum MouseCaptured
         {
             mcNone,
@@ -86,6 +80,15 @@ namespace GKUI.Charts
         public AncestorsCircleOptions Options
         {
             get { return fModel.Options; }
+        }
+
+        public int VisibleGenerations
+        {
+            get { return fModel.VisibleGenerations; }
+            set {
+                fModel.VisibleGenerations = value;
+                Changed();
+            }
         }
 
         public new float Zoom
@@ -184,7 +187,7 @@ namespace GKUI.Charts
             fOffsetX = 0;
             fOffsetY = 0;
 
-            if (target == RenderTarget.rtScreen) {
+            if (target == RenderTarget.Screen) {
 
                 // Returns the center point of this chart relative to the upper left
                 // point of this window's client area.
@@ -232,7 +235,7 @@ namespace GKUI.Charts
             fModel.Renderer.SaveTransform();
             fModel.Renderer.TranslateTransform(center.X, center.Y);
 
-            if (target == RenderTarget.rtScreen) {
+            if (target == RenderTarget.Screen) {
                 fModel.Renderer.ScaleTransform(fZoom, fZoom);
             } else {
                 fModel.Renderer.ScaleTransform(1, 1);
@@ -272,7 +275,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Render(e.Graphics, RenderTarget.rtScreen);
+            Render(e.Graphics, RenderTarget.Screen);
 
             base.OnPaint(e);
         }
@@ -285,6 +288,7 @@ namespace GKUI.Charts
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            // FIXME: dont't work!
             switch (e.Key) {
                 case Keys.Plus:
                     if (Keys.None == e.Modifiers) {
@@ -301,6 +305,18 @@ namespace GKUI.Charts
                 case Keys.D0:
                     if (e.Control) {
                         Zoom = 1.0f;
+                    }
+                    break;
+
+                case Keys.Up:
+                    if (Keys.None == e.Modifiers) {
+                        VisibleGenerations += 1;
+                    }
+                    break;
+
+                case Keys.Down:
+                    if (Keys.None == e.Modifiers) {
+                        VisibleGenerations -= 1;
                     }
                     break;
 
@@ -431,9 +447,9 @@ namespace GKUI.Charts
             return new ExtSize((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
-        public override void RenderStaticImage(Graphics gfx, OutputType outputType)
+        public override void RenderStaticImage(Graphics gfx, RenderTarget target)
         {
-            Render(gfx, RenderTarget.rtNonScreenCanvas);
+            Render(gfx, target);
         }
     }
 }

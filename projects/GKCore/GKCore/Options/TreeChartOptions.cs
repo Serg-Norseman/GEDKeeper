@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GKCommon;
 using GKCore.Charts;
 using GKCore.Interfaces;
 
@@ -58,6 +57,7 @@ namespace GKCore.Options
         public bool SignsVisible;
         public bool CertaintyIndexVisible;
         public bool TraceSelected;
+        public bool InvertedTree;
 
         public DeepMode DeepMode;
 
@@ -93,6 +93,7 @@ namespace GKCore.Options
             ChildlessExclude = false;
             Decorative = true;
             DeepMode = DeepMode.None;
+            InvertedTree = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -136,6 +137,7 @@ namespace GKCore.Options
             DefFontSize = srcOptions.DefFontSize;
             DefFontColor = srcOptions.DefFontColor;
             DefFontStyle = srcOptions.DefFontStyle;
+            InvertedTree = srcOptions.InvertedTree;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -162,6 +164,7 @@ namespace GKCore.Options
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
             //DeepMode = (DeepMode)iniFile.ReadInteger("Chart", "DeepMode", 0);
+            InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -199,6 +202,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "ChildlessExclude", ChildlessExclude);
             iniFile.WriteBool("Chart", "Decorative", Decorative);
             //iniFile.WriteInteger("Chart", "DeepMode", (int)DeepMode);
+            iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());
