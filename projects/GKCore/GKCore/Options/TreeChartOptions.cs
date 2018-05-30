@@ -58,6 +58,7 @@ namespace GKCore.Options
         public bool CertaintyIndexVisible;
         public bool TraceSelected;
         public bool InvertedTree;
+        public bool MarriagesDates;
 
         public DeepMode DeepMode;
 
@@ -94,6 +95,7 @@ namespace GKCore.Options
             Decorative = true;
             DeepMode = DeepMode.None;
             InvertedTree = false;
+            MarriagesDates = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -138,6 +140,7 @@ namespace GKCore.Options
             DefFontColor = srcOptions.DefFontColor;
             DefFontStyle = srcOptions.DefFontStyle;
             InvertedTree = srcOptions.InvertedTree;
+            MarriagesDates = srcOptions.MarriagesDates;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -165,6 +168,7 @@ namespace GKCore.Options
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
             //DeepMode = (DeepMode)iniFile.ReadInteger("Chart", "DeepMode", 0);
             InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
+            MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -203,6 +207,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "Decorative", Decorative);
             //iniFile.WriteInteger("Chart", "DeepMode", (int)DeepMode);
             iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
+            iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

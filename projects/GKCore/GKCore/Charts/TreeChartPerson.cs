@@ -93,6 +93,7 @@ namespace GKCore.Charts
         public Vertex Node;
         public string PathDebug;
         public ExtRect PortraitArea;
+        public string MarriageDate;
 
 
         public IImage Portrait

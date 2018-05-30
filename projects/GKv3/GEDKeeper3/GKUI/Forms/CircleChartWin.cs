@@ -53,6 +53,7 @@ namespace GKUI.Forms
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
+            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
             Content = fCircleChart;
 
             SetLang();

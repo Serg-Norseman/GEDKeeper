@@ -153,6 +153,7 @@ namespace GKUI.Forms
             chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
             chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
             chkInvertedTree.Checked = fOptions.ChartOptions.InvertedTree;
+            chkMarriagesDates.Checked = fOptions.ChartOptions.MarriagesDates;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
@@ -358,6 +359,7 @@ namespace GKUI.Forms
             fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
             fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
             fOptions.ChartOptions.InvertedTree = chkInvertedTree.Checked;
+            fOptions.ChartOptions.MarriagesDates = chkMarriagesDates.Checked;
 
             fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -532,6 +534,7 @@ namespace GKUI.Forms
             chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
             chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
+            chkMarriagesDates.Text = LangMan.LS(LSID.LSID_MarriagesDates);
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
             lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);

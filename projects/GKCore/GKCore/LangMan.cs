@@ -816,9 +816,9 @@ namespace GKCore
         /* 758 */ LSID_NumberSym,
         /* 759 */ LSID_Reports,
         /* 760 */ LSID_InvertedTree,
+        /* 761 */ LSID_MarriagesDates,
 
-        /* 761 */ // reserved begin
-        /* 762 */
+        /* 762 */ // reserved begin
         /* 763 */
         /* 764 */
         /* 765 */
@@ -1640,9 +1640,9 @@ namespace GKCore
             /* 758 */ "№",
             /* 759 */ "Reports",
             /* 760 */ "Inverted tree",
+            /* 761 */ "Dates of marriages",
 
-            /* 761 */ "", // reserved begin
-            /* 762 */ "",
+            /* 762 */ "", // reserved begin
             /* 763 */ "",
             /* 764 */ "",
             /* 765 */ "",

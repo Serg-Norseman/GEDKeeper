@@ -136,8 +136,6 @@ namespace GKUI.Charts
             fModel.Font = AppHost.GfxProvider.CreateFont(Font.FamilyName, Font.Size, false);
 
             fMouseCaptured = MouseCaptured.mcNone;
-
-            BackgroundColor = UIHelper.ConvertColor(fModel.Options.BrushColor[9]);
         }
 
         protected override void Dispose(bool disposing)
@@ -232,6 +230,14 @@ namespace GKUI.Charts
             PointF center = GetCenter(target);
 
             fModel.Renderer.SetTarget(context, true);
+
+            var backColor = fModel.Options.BrushColor[9];
+            if (target == RenderTarget.Screen) {
+                fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
+            } else if (target != RenderTarget.Printer) {
+                fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+            }
+
             fModel.Renderer.SaveTransform();
             fModel.Renderer.TranslateTransform(center.X, center.Y);
 
@@ -363,8 +369,7 @@ namespace GKUI.Charts
             if (fMouseCaptured == MouseCaptured.mcDrag) {
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
-            }
-            else if (e.Buttons == MouseButtons.Primary) {
+            } else if (e.Buttons == MouseButtons.Primary) {
                 CircleSegment selected = FindSegment(e.Location);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
@@ -378,8 +383,7 @@ namespace GKUI.Charts
         protected override void OnMouseMove(MouseEventArgs e)
         {
             switch (fMouseCaptured) {
-                case MouseCaptured.mcNone:
-                    {
+                case MouseCaptured.mcNone: {
                         CircleSegment selected = FindSegment(e.Location);
 
                         string hint = "";
@@ -405,8 +409,7 @@ namespace GKUI.Charts
                     }
                     break;
 
-                case MouseCaptured.mcDrag:
-                    {
+                case MouseCaptured.mcDrag: {
                         Point pt = new Point(e.Location);
                         AdjustScroll(-(pt.X - fMouseCaptureX), -(pt.Y - fMouseCaptureY));
                         fMouseCaptureX = pt.X;

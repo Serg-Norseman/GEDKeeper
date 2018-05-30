@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
@@ -624,6 +623,13 @@ namespace GKCore.Charts
                             resParent.BaseFamily = family;
 
                             if (resParent.Rec != null) {
+                                if (fOptions.MarriagesDates) {
+                                    //DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                                    DateFormat dateFormat = DateFormat.dfYYYY;
+                                    var marDate = GKUtils.GetMarriageDateStr(family, dateFormat);
+                                    resParent.MarriageDate = marDate;
+                                }
+
                                 if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
                                     resParent.SetFlag(PersonFlag.pfHasInvAnc);
                                 }
@@ -1384,6 +1390,31 @@ namespace GKCore.Charts
             }
         }
 
+        private void DrawText(string text, float x, float y, int quad = 2)
+        {
+            // quadrant clockwise from 00 hours
+            x += fOffsetX;
+            y += fOffsetY;
+            ExtSizeF tsz = fRenderer.GetTextSize(text, fDrawFont);
+
+            switch (quad) {
+                case 1:
+                    y -= tsz.Height;
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    x -= tsz.Width;
+                    break;
+                case 4:
+                    x -= tsz.Width;
+                    y -= tsz.Height;
+                    break;
+            }
+
+            fRenderer.DrawString(text, fDrawFont, fSolidBlack, x, y);
+        }
+
         private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode)
         {
             int spousesCount = person.GetSpousesCount();
@@ -1400,15 +1431,29 @@ namespace GKCore.Charts
             switch (person.Sex) {
                 case GEDCOMSex.svMale:
                     for (int i = 0; i < spousesCount; i++) {
+                        TreeChartPerson spouse = person.GetSpouse(i);
+
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(person.Rect.Right + 1, spbV, person.GetSpouse(i).Rect.Left, spbV);
+                        DrawLine(person.Rect.Right + 1, spbV, spouse.Rect.Left, spbV); // h
+
+                        if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
+                            int q = (!fOptions.InvertedTree) ? 4 : 3;
+                            DrawText(spouse.MarriageDate, spouse.Rect.Left, spbV, q);
+                        }
                     }
                     break;
 
                 case GEDCOMSex.svFemale:
                     for (int i = 0; i < spousesCount; i++) {
+                        TreeChartPerson spouse = person.GetSpouse(i);
+
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(person.GetSpouse(i).Rect.Right + 1, spbV, person.Rect.Left, spbV);
+                        DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV); // h
+
+                        if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
+                            int q = (!fOptions.InvertedTree) ? 1 : 2;
+                            DrawText(spouse.MarriageDate, spouse.Rect.Right + 1, spbV, q);
+                        }
                     }
                     break;
             }
