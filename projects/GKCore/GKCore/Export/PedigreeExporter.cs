@@ -112,7 +112,7 @@ namespace GKCore.Export
             get { return fShieldState; }
         }
 
-        public PedigreeExporter(IBaseWindow baseWin, GEDCOMIndividualRecord root) : base(baseWin)
+        public PedigreeExporter(IBaseWindow baseWin, GEDCOMIndividualRecord root) : base(baseWin, false)
         {
             fRoot = root;
             fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + GKUtils.GetNameString(fRoot, true, false);
@@ -141,7 +141,7 @@ namespace GKCore.Export
 
         private void WritePerson(PedigreePerson person)
         {
-            fWriter.BeginParagraph(CustomWriter.TextAlignment.taJustify, 6f, 6f);
+            fWriter.BeginParagraph(TextAlignment.taJustify, 6f, 6f);
             fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
             fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
 
@@ -154,10 +154,10 @@ namespace GKCore.Export
                     string lnk = person.Sources[i];
 
                     if (i > 0) {
-                        fWriter.AddParagraphChunkLink(", ", fTextFont, "", null, true);
+                        fWriter.AddParagraphChunkLink(", ", fTextFont, "", true);
                     }
 
-                    fWriter.AddParagraphChunkLink(lnk, fSupText, "src_" + lnk, fLinkFont, true);
+                    fWriter.AddParagraphChunkLink(lnk, fSupText, "src_" + lnk, true);
                 }
             }
 
@@ -554,7 +554,7 @@ namespace GKCore.Export
 
             bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;
 
-            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter);
+            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
 
             fPersonList = new ExtList<PedigreePerson>(true);
             fSourceList = new StringList();
@@ -574,7 +574,7 @@ namespace GKCore.Export
                         curLevel = person.Level;
                         string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
 
-                        fWriter.BeginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
+                        fWriter.BeginParagraph(TextAlignment.taLeft, 12f, 6f);
                         fWriter.AddParagraphChunk(genTitle, fChapFont);
                         fWriter.EndParagraph();
                     }
@@ -584,7 +584,7 @@ namespace GKCore.Export
 
                 if (fSourceList.Count > 0)
                 {
-                    fWriter.BeginParagraph(CustomWriter.TextAlignment.taCenter, 12f, 6f);
+                    fWriter.BeginParagraph(TextAlignment.taCenter, 12f, 6f);
                     fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
                     fWriter.EndParagraph();
 

@@ -33,7 +33,7 @@ namespace GKStdReports
         private IFont fTitleFont, fChapFont, fTextFont;
 
         public PhoneticsReport(IBaseWindow baseWin)
-            : base(baseWin)
+            : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_Phonetics_Title);
         }
@@ -47,7 +47,7 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
 
             var surnames = new StringList();
             surnames.Sorted = true;
@@ -63,7 +63,7 @@ namespace GKStdReports
                 surnames.Add(surname);
             }
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             for (int i = 0; i < surnames.Count; i++) {
                 string item = surnames[i];

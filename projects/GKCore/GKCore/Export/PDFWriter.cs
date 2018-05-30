@@ -28,6 +28,8 @@ using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;
+using itFont = iTextSharp.text.Font;
+using itImage = iTextSharp.text.Image;
 
 namespace GKCore.Export
 {
@@ -58,10 +60,12 @@ namespace GKCore.Export
         private readonly int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
         
         private readonly BaseFont fBaseFont;
-
+        private float fColumnWidth;
+        private SimpleColumnText fColumns;
         private Document fDocument;
-        private PdfWriter fWriter;
         private List fList;
+        private bool fMulticolumns;
+        private PdfWriter fPdfWriter;
         private Paragraph p;
 
         public PDFWriter()
@@ -94,7 +98,7 @@ namespace GKCore.Export
             iTextSharp.text.Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
             fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
-            fWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
+            fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
 
             fDocument.AddTitle(fDocumentTitle);
             fDocument.AddSubject("");
@@ -106,6 +110,27 @@ namespace GKCore.Export
         public override void EndWrite()
         {
             fDocument.Close();
+        }
+
+        public override void EnablePageNumbers()
+        {
+            fPdfWriter.PageEvent = new PDFWriterEvents(fBaseFont, LangMan.LS(LSID.LSID_Page)+": ");
+        }
+
+        public override void NewPage()
+        {
+            fDocument.NewPage();
+        }
+
+        public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f)
+        {
+            var pg = new Paragraph(Chunk.NEWLINE) { SpacingAfter = spacingAfter };
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
         }
 
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
@@ -121,21 +146,51 @@ namespace GKCore.Export
 
         public override void AddParagraph(string text, IFont font)
         {
-            fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = Element.ALIGN_LEFT });
+            var pg = new Paragraph(text, ((FontHandler)font).Handle) { Alignment = Element.ALIGN_LEFT };
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
         }
 
         public override void AddParagraph(string text, IFont font, TextAlignment alignment)
         {
             int al = iAlignments[(int)alignment];
             
-            fDocument.Add(new Paragraph(text, ((FontHandler)font).Handle) { Alignment = al });
+            var pg = new Paragraph(text, ((FontHandler)font).Handle) { Alignment = al };
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
         }
 
         public override void AddParagraphAnchor(string text, IFont font, string anchor)
         {
             Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             chunk.SetLocalDestination(anchor);
-            fDocument.Add(new Paragraph(chunk));
+            var pg = new Paragraph(chunk);
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
+        }
+
+        public override void AddParagraphLink(string text, IFont font, string link)
+        {
+            Paragraph pg = new Paragraph();
+            pg.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalGoto(link));
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
         }
 
         public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
@@ -143,7 +198,25 @@ namespace GKCore.Export
             Paragraph pg = new Paragraph();
             pg.Add(new Chunk(text, ((FontHandler)font).Handle));
             pg.Add(new Chunk(link, ((FontHandler)linkFont).Handle).SetLocalGoto(link));
-            fDocument.Add(pg);
+
+            if (fMulticolumns) {
+                fColumns.AddElement(pg);
+            } else {
+                fDocument.Add(pg);
+            }
+        }
+
+        public override void BeginMulticolumns(int columnCount, float columnSpacing)
+        {
+            fMulticolumns = true;
+            fColumns = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, columnCount, columnSpacing);
+            float pageWidth = fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin;
+            fColumnWidth = (pageWidth - (columnSpacing * (columnCount - 1))) / columnCount;
+        }
+
+        public override void EndMulticolumns()
+        {
+            fMulticolumns = false;
         }
 
         public override void BeginList()
@@ -155,7 +228,11 @@ namespace GKCore.Export
 
         public override void EndList()
         {
-            fDocument.Add(fList);
+            if (fMulticolumns) {
+                fColumns.AddElement(fList);
+            } else {
+                fDocument.Add(fList);
+            }
         }
 
         public override void AddListItem(string text, IFont font)
@@ -175,17 +252,25 @@ namespace GKCore.Export
             fList.Add(new ListItem(p1));
         }
 
-        public override void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
+        public override void BeginParagraph(TextAlignment alignment,
+                                            float spacingBefore, float spacingAfter,
+                                            float indent = 0.0f, bool keepTogether = false)
         {
-            int al = iAlignments[(int)alignment];
-
             p = new Paragraph();
-            p.Alignment = al;
+            p.Alignment = iAlignments[(int)alignment];
+            p.SpacingBefore = spacingBefore;
+            p.SpacingAfter = spacingAfter;
+            p.IndentationLeft = indent;
+            p.KeepTogether = keepTogether;
         }
 
         public override void EndParagraph()
         {
-            fDocument.Add(p);
+            if (fMulticolumns) {
+                fColumns.AddElement(p);
+            } else {
+                fDocument.Add(p);
+            }
         }
 
         public override void AddParagraphChunk(string text, IFont font)
@@ -198,7 +283,7 @@ namespace GKCore.Export
             p.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalDestination(anchor));
         }
 
-        public override void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup)
         {
             Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             if (sup) {
@@ -207,7 +292,7 @@ namespace GKCore.Export
 
             if (!string.IsNullOrEmpty(link)) {
                 chunk.SetLocalGoto(link);
-                chunk.SetUnderline(0.5f, 3f);
+                //chunk.SetUnderline(0.5f, 3f);
             }
             
             p.Add(chunk);
@@ -223,6 +308,130 @@ namespace GKCore.Export
         {
             var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
             fDocument.Add(new Chunk(line1));
+        }
+
+        public override void AddImage(IImage image)
+        {
+            if (image != null) {
+                itImage img = TreeChartPDFRenderer.ConvertImage(image);
+
+                float fitWidth = fColumnWidth * 0.5f;
+                img.ScaleToFit(fitWidth, fitWidth);
+
+                // FIXME: the moving, if the page height is insufficient for the image height
+
+                //img.Alignment = Image.TEXTWRAP;
+                img.IndentationLeft = 5f;
+                img.SpacingBefore = 5f;
+                img.SpacingAfter = 5f;
+
+                //Paragraph imgpar = new Paragraph(new Chunk(img, 0, 0, true));
+                //imgpar.KeepTogether = true;
+
+                if (fMulticolumns) {
+                    fColumns.AddElement(img);
+                } else {
+                    fDocument.Add(img);
+                }
+            }
+        }
+    }
+
+    public sealed class PDFWriterEvents : IPdfPageEvent
+    {
+        private readonly BaseFont fFont;
+        private readonly string fFooter;
+
+        public PDFWriterEvents(BaseFont font, string footer)
+        {
+            fFont = font;
+            fFooter = footer;
+        }
+
+        void IPdfPageEvent.OnOpenDocument(PdfWriter writer, Document document) { }
+        void IPdfPageEvent.OnCloseDocument(PdfWriter writer, Document document) { }
+        void IPdfPageEvent.OnStartPage(PdfWriter writer, Document document) { }
+
+        void IPdfPageEvent.OnEndPage(PdfWriter writer, Document document)
+        {
+            if (writer.PageNumber == 1) return;
+
+            PdfContentByte cb = writer.DirectContent;
+            Rectangle pageSize = document.PageSize;
+            string text = fFooter + writer.PageNumber;
+
+            cb.SaveState();
+            cb.BeginText();
+
+            cb.SetFontAndSize(fFont, 9);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, text,
+                               pageSize.GetRight(document.RightMargin), pageSize.GetBottom(document.BottomMargin), 0);
+
+            cb.EndText();
+            cb.RestoreState();
+        }
+
+        void IPdfPageEvent.OnParagraph(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnParagraphEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnChapter(PdfWriter writer, Document document, float paragraphPosition, Paragraph title) { }
+        void IPdfPageEvent.OnChapterEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnSection(PdfWriter writer, Document document, float paragraphPosition, int depth, Paragraph title) { }
+        void IPdfPageEvent.OnSectionEnd(PdfWriter writer, Document document, float paragraphPosition) { }
+        void IPdfPageEvent.OnGenericTag(PdfWriter writer, Document document, Rectangle rect, string text) { }
+    }
+
+    internal class SimpleColumnText : ColumnText
+    {
+        private readonly Document fDocument;
+        private readonly System.Collections.Generic.List<Rectangle> fColumns;
+        private int fCurrentColumn;
+
+        public SimpleColumnText(Document document, PdfContentByte content, int columnCount, float columnSpacing) : base(content)
+        {
+            fDocument = document;
+            fColumns = new System.Collections.Generic.List<Rectangle>();
+            fCurrentColumn = 0;
+            CalculateColumnBoundries(columnCount, columnSpacing);
+        }
+
+        private void CalculateColumnBoundries(int columnCount, float columnSpacing)
+        {
+            float columnHeight = (fDocument.PageSize.Height - fDocument.TopMargin - fDocument.BottomMargin);
+            float columnWidth = ((fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin) - (columnSpacing * (columnCount - 1))) / columnCount;
+
+            for (int x = 0; x < columnCount; x++)
+            {
+                float llx = ((columnWidth + columnSpacing) * x) + fDocument.LeftMargin;
+                float lly = fDocument.BottomMargin;
+                float urx = llx + columnWidth;
+                float ury = columnHeight;
+
+                Rectangle newRectangle = new Rectangle(llx, lly, urx, ury);
+                fColumns.Add(newRectangle);
+            }
+        }
+
+        public override void AddElement(IElement element)
+        {
+            base.AddElement(element);
+
+            int status = 0;
+            if (fCurrentColumn == 0) {
+                status = NO_MORE_COLUMN;
+            }
+
+            do {
+                if (status == NO_MORE_COLUMN) {
+                    if (fCurrentColumn == fColumns.Count) {
+                        fDocument.NewPage();
+                        fCurrentColumn = 0;
+                    }
+                    SetSimpleColumn(fColumns[fCurrentColumn]);
+                    fCurrentColumn += 1;
+                }
+
+                status = Go();
+            } while (HasMoreText(status));
         }
     }
 }

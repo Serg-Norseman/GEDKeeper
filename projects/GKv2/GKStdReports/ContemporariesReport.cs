@@ -39,7 +39,7 @@ namespace GKStdReports
         private CommonStats fStats;
 
         public ContemporariesReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
-            : base(baseWin)
+            : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_Contemporaries_Title);
             fPerson = selectedPerson;
@@ -83,10 +83,10 @@ namespace GKStdReports
             var stats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
             fStats = stats.GetCommonStats();
 
-            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
 
             var personRange = GetIndividualDates(fPerson);
-            fWriter.AddParagraph(GetPersonalInfo(fPerson), fChapFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(GetPersonalInfo(fPerson), fChapFont, TextAlignment.taLeft);
             
             fWriter.BeginList();
 

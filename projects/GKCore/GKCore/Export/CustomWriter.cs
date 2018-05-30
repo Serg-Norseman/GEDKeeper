@@ -19,26 +19,35 @@
  */
 
 using BSLib;
-using GKCommon;
 using GKCore.Interfaces;
 
 namespace GKCore.Export
 {
+    public enum TextAlignment
+    {
+        taLeft,
+        taCenter,
+        taRight,
+        taJustify
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public abstract class CustomWriter : BaseObject
     {
-        public enum TextAlignment { taLeft, taCenter, taRight, taJustify }
-
         protected bool fAlbumPage;
         protected string fDocumentTitle;
         protected string fFileName;
         protected ExtMargins fMargins;
 
-        protected CustomWriter()
+        protected CustomWriter() : this(false)
         {
-            fAlbumPage = false;
+        }
+
+        protected CustomWriter(bool albumPage)
+        {
+            fAlbumPage = albumPage;
             fMargins = new ExtMargins(20);
         }
 
@@ -59,25 +68,36 @@ namespace GKCore.Export
 
         public abstract void BeginWrite();
         public abstract void EndWrite();
+        public abstract void EnablePageNumbers();
 
         public abstract void AddParagraph(string text, IFont font);
         public abstract void AddParagraph(string text, IFont font, TextAlignment alignment);
         public abstract void AddParagraphAnchor(string text, IFont font, string anchor);
+        public abstract void AddParagraphLink(string text, IFont font, string link);
         public abstract void AddParagraphLink(string text, IFont font, string link, IFont linkFont);
 
         public abstract IFont CreateFont(string name, float size, bool bold, bool underline, IColor color);
+        public abstract void NewPage();
+        public abstract void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f);
+
+        public abstract void BeginMulticolumns(int columnCount, float columnSpacing);
+        public abstract void EndMulticolumns();
 
         public abstract void BeginList();
         public abstract void AddListItem(string text, IFont font);
         public abstract void AddListItemLink(string text, IFont font, string link, IFont linkFont);
         public abstract void EndList();
 
-        public abstract void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter);
+        public abstract void BeginParagraph(TextAlignment alignment,
+                                            float spacingBefore, float spacingAfter,
+                                            float indent = 0.0f, bool keepTogether = false);
         public abstract void AddParagraphChunk(string text, IFont font);
         public abstract void AddParagraphChunkAnchor(string text, IFont font, string anchor);
-        public abstract void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup);
+        public abstract void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false);
         public abstract void EndParagraph();
 
         public abstract void AddNote(string text, IFont font);
+
+        public abstract void AddImage(IImage image);
     }
 }

@@ -81,6 +81,18 @@ namespace GKCore.Export
             fDocument.save(fFileName);
         }
 
+        public override void EnablePageNumbers()
+        {
+        }
+
+        public override void NewPage()
+        {
+        }
+
+        public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f)
+        {
+        }
+
         private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, IFont font)
         {
             FontStruct fntStr = ((FontHandler)font).Handle;
@@ -121,6 +133,13 @@ namespace GKCore.Export
             fmt.Bookmark = anchor;
         }
 
+        public override void AddParagraphLink(string text, IFont font, string link)
+        {
+            RtfParagraph par = fDocument.addParagraph();
+            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            fmt.LocalHyperlink = link;
+        }
+
         public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
             RtfParagraph par = fDocument.addParagraph();
@@ -141,6 +160,14 @@ namespace GKCore.Export
             fntStr.Underline = underline;
 
             return new FontHandler(fntStr);
+        }
+
+        public override void BeginMulticolumns(int columnCount, float columnSpacing)
+        {
+        }
+
+        public override void EndMulticolumns()
+        {
         }
 
         public override void BeginList()
@@ -178,7 +205,9 @@ namespace GKCore.Export
             }
         }
 
-        public override void BeginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
+        public override void BeginParagraph(TextAlignment alignment,
+                                            float spacingBefore, float spacingAfter,
+                                            float indent = 0.0f, bool keepTogether = false)
         {
             fParagraph = fDocument.addParagraph();
             fParagraph.Alignment = iAlignments[(int)alignment];
@@ -203,7 +232,7 @@ namespace GKCore.Export
             fmt.Bookmark = anchor;
         }
 
-        public override void AddParagraphChunkLink(string text, IFont font, string link, IFont linkFont, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup)
         {
             RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
@@ -213,6 +242,10 @@ namespace GKCore.Export
         public override void AddNote(string text, IFont font)
         {
             
+        }
+
+        public override void AddImage(IImage image)
+        {
         }
     }
 }

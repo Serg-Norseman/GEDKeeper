@@ -19,6 +19,7 @@
  */
 
 using System;
+
 using BSLib;
 using GKCore.Interfaces;
 
@@ -30,10 +31,12 @@ namespace GKCore.Export
     public abstract class ReportExporter : Exporter
     {
         protected string fTitle;
+        private bool fAlbumPage;
 
-        protected ReportExporter(IBaseWindow baseWin)
+        protected ReportExporter(IBaseWindow baseWin, bool albumPage)
             : base(baseWin)
         {
+            fAlbumPage = albumPage;
         }
 
         protected abstract void InternalGenerate();
@@ -44,7 +47,7 @@ namespace GKCore.Export
 
             try {
                 fWriter = writer;
-                fWriter.SetAlbumPage(false);
+                fWriter.SetAlbumPage(fAlbumPage);
                 fWriter.SetDocumentTitle(fTitle);
                 fWriter.SetFileName(fPath);
 

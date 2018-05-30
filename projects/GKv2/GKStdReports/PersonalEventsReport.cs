@@ -53,7 +53,7 @@ namespace GKStdReports
         private IFont fTitleFont, fChapFont, fTextFont;
 
         public PersonalEventsReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
-            : base(baseWin)
+            : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_PER_Title);
             fPerson = selectedPerson;
@@ -69,8 +69,8 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taLeft);
-            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, CustomWriter.TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
 
             var evList = new List<PersonalEvent>();
             int num = fPerson.Events.Count;
