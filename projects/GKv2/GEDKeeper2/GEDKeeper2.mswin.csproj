@@ -47,6 +47,7 @@
     <StartAction>Project</StartAction>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\</OutputPath>
@@ -55,6 +56,7 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -67,7 +69,6 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -80,12 +81,20 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' " />
+  <PropertyGroup Condition="'$(MonoCS)'=='true'">
+    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
       <HintPath>..\..\libs\ArborGVT.dll</HintPath>
@@ -156,7 +165,9 @@
     <Compile Include="GKUI\Forms\AssociationEditDlg.Designer.cs">
       <DependentUpon>AssociationEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\BaseWinSDI.cs" />
+    <Compile Include="GKUI\Forms\BaseWinSDI.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\BaseWinSDI.Designer.cs">
       <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </Compile>
@@ -412,12 +423,8 @@
     <Compile Include="GKUI\GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TreeChartBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\WinFormsAppHost.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
+    <Compile Include="GKUI\WinFormsAppHost.cs" />
     <Compile Include="GKUI\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\WinFormsStdDialogs.cs" />
   </ItemGroup>
@@ -462,12 +469,6 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Charts" />
-    <Folder Include="GKUI\Components" />
-    <Folder Include="GKUI\Forms" />
-    <Folder Include="Externals" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

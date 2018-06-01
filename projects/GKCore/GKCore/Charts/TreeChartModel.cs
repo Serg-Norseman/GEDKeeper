@@ -698,7 +698,12 @@ namespace GKCore.Charts
             if (target.Node == null || target.Rec == null) {
                 target.Kinship = "";
             } else {
-                target.Kinship = "[" + fGraph.GetRelationship(target.Rec) + "]";
+                string kinship = fGraph.GetRelationship(target.Rec);
+                if (kinship == "?") {
+                    kinship = "-";
+                }
+                target.Kinship = "[" + kinship + "]";
+
                 if (fPathDebug) {
                     target.PathDebug = fGraph.IndividualsPath;
                 }

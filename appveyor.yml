@@ -14,7 +14,7 @@ install:
   - cmd: git submodule -q update --init
 
 build:
-  project: projects/GEDKeeper2.mswin-av.sln
+  project: projects/GEDKeeper2.mswin.sln
   verbosity: minimal
 
 after_test: 

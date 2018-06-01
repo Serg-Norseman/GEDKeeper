@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GEDKeeper2</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -47,6 +47,7 @@
     <StartAction>Project</StartAction>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\</OutputPath>
@@ -55,35 +56,38 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <OutputPath>..\..\..</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <OutputPath>..\..\..</OutputPath>
-    <EnvironmentVariables>
-      <EnvironmentVariables>
-        <Variable name="MONO_ENABLE_SHM" value="1" />
-      </EnvironmentVariables>
-    </EnvironmentVariables>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>..\..\..</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>..\..\..</OutputPath>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
@@ -417,12 +421,8 @@
     <Compile Include="GKUI\GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TreeChartBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\WinFormsAppHost.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
+    <Compile Include="GKUI\WinFormsAppHost.cs" />
     <Compile Include="GKUI\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\WinFormsStdDialogs.cs" />
   </ItemGroup>
