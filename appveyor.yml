@@ -17,6 +17,10 @@ build:
   project: projects/GEDKeeper2.mswin.sln
   verbosity: minimal
 
+test_script:
+  - cmd: nunit-console-x86.exe C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll
+#- cmd: nunit-console-x86.exe ./x.exe /framework:net-4.5
+
 after_test: 
   - .\projects\packages\OpenCover\OpenCover.Console.exe -register:user -target:"nunit-console-x86.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
