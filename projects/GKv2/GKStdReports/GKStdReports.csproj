@@ -22,6 +22,7 @@
     <TargetFrameworkProfile />
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -43,6 +44,12 @@
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(CIMode)'=='true'">
+    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MonoCS)'=='true'">
+    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
@@ -61,10 +68,16 @@
     <Compile Include="PhoneticsReport.cs" />
     <Compile Include="ShortDoubleMetaphone.cs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
     <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+    <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore.linux</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

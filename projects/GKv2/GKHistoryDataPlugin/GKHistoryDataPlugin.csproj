@@ -21,6 +21,7 @@
     <TargetFrameworkProfile />
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -41,6 +42,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CIMode)'=='true'">
+    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MonoCS)'=='true'">
+    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BSLib">
@@ -67,7 +74,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
     <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
@@ -75,6 +82,16 @@
     <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
       <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
       <Name>GKComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+    <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore.linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents.linux</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
