@@ -35,15 +35,25 @@ namespace GKStdReports
     /// </summary>
     public sealed class PersonalEventsReport : ReportExporter
     {
+        private enum EventType
+        {
+            Personal,
+            Parent,
+            Spouse,
+            Child
+        }
+
         private class PersonalEvent
         {
-            public readonly GEDCOMIndividualRecord IRec;
+            public readonly EventType Type;
+            public readonly GEDCOMRecord Rec;
             public readonly GEDCOMCustomEvent Event;
             public readonly UDN Date;
 
-            public PersonalEvent(GEDCOMIndividualRecord iRec, GEDCOMCustomEvent evt)
+            public PersonalEvent(EventType type, GEDCOMRecord rec, GEDCOMCustomEvent evt)
             {
-                IRec = iRec;
+                Type = type;
+                Rec = rec;
                 Event = evt;
                 Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
             }
@@ -52,6 +62,8 @@ namespace GKStdReports
         private readonly GEDCOMIndividualRecord fPerson;
         private IFont fTitleFont, fChapFont, fTextFont;
 
+        public bool ShowAges = true;
+
         public PersonalEventsReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
@@ -59,32 +71,63 @@ namespace GKStdReports
             fPerson = selectedPerson;
         }
 
-        // TODO: output marriage and child events
+        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGEDCOMRecordWithEvents record)
+        {
+            int num = record.Events.Count;
+            for (int i = 0; i < num; i++) {
+                GEDCOMCustomEvent evt = record.Events[i];
+                if (evt.GetChronologicalYear() != 0) {
+                    list.Add(new PersonalEvent(type, (GEDCOMRecord)record, evt));
+                }
+            }
+        }
+
         protected override void InternalGenerate()
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            fTitleFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
+            fChapFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            //fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
             fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
+            fWriter.NewLine();
 
             var evList = new List<PersonalEvent>();
-            int num = fPerson.Events.Count;
-            for (int i = 0; i < num; i++) {
-                GEDCOMCustomEvent evt = fPerson.Events[i];
-                if (evt.GetChronologicalYear() == 0) continue;
 
-                evList.Add(new PersonalEvent(fPerson, evt));
+            GEDCOMIndividualRecord father = null, mother = null;
+            if (fPerson.ChildToFamilyLinks.Count > 0) {
+                GEDCOMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                if (fBase.Context.IsRecordAccess(family.Restriction)) {
+                    father = family.GetHusband();
+                    mother = family.GetWife();
+                }
             }
+
+            ExtractEvents(EventType.Personal, evList, fPerson);
+
+            int num2 = fPerson.SpouseToFamilyLinks.Count;
+            for (int j = 0; j < num2; j++) {
+                GEDCOMFamilyRecord family = fPerson.SpouseToFamilyLinks[j].Family;
+                if (!fBase.Context.IsRecordAccess(family.Restriction))
+                    continue;
+
+                ExtractEvents(EventType.Spouse, evList, family);
+
+                int num3 = family.Children.Count;
+                for (int i = 0; i < num3; i++) {
+                    GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
+                    GEDCOMCustomEvent evt = child.FindEvent("BIRT");
+                    if (evt != null && evt.GetChronologicalYear() != 0) {
+                        evList.Add(new PersonalEvent(EventType.Child, child, evt));
+                    }
+                }
+            }
+
             SortHelper.QuickSort(evList, EventsCompare);
-
             fWriter.BeginList();
-
-            //int birthYear = -1;
 
             int num4 = evList.Count;
             for (int i = 0; i < num4; i++) {
@@ -92,45 +135,76 @@ namespace GKStdReports
                 if (!evObj.Date.HasKnownYear()) continue;
 
                 GEDCOMCustomEvent evt = evObj.Event;
+                string st = GKUtils.GetEventName(evt);
+                string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 
-                string li;
-
-                if (evObj.IRec == fPerson) {
+                if (ShowAges) {
                     int year = evt.GetChronologicalYear();
-                    int age = GKUtils.GetAge(fPerson, year);
-
-                    int ev = GKUtils.GetPersonEventIndex(evt.Name);
-                    string st;
-                    if (ev == 0) {
-                        st = evt.Classification;
-                    } else {
-                        st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
-                    }
-
-                    string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
-                    if (/*ShowAges*/true) {
+                    int age = (evObj.Rec == fPerson) ? GKUtils.GetAge(fPerson, year) : -1;
+                    if (age >= 0) {
                         dt += string.Format(" ({0})", age);
                     }
+                }
 
-                    li = dt + ": " + st + ".";
-                    if (evt.Place.StringValue != "") {
-                        li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+                string li = dt + ": " + st + ".";
+                if (evt.Place.StringValue != "") {
+                    li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+                }
+                fWriter.AddListItem("   " + li, fTextFont);
+
+                if (evObj.Rec is GEDCOMIndividualRecord) {
+                    GEDCOMIndividualRecord iRec = evObj.Rec as GEDCOMIndividualRecord;
+
+                    if (evt.Name == "BIRT") {
+                        if (evObj.Type == EventType.Personal) {
+                            if (father != null) {
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont);
+                            }
+                            if (mother != null) {
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont);
+                            }
+                        } else if (evObj.Type == EventType.Child) {
+                            string unk;
+                            if (iRec.Sex == GEDCOMSex.svMale) {
+                                st = LangMan.LS(LSID.LSID_RK_Son) + ": ";
+                                unk = LangMan.LS(LSID.LSID_UnkFemale);
+                            } else {
+                                st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
+                                unk = LangMan.LS(LSID.LSID_UnkMale);
+                            }
+                            st = ConvertHelper.UniformName(st);
+                            string chd;
+                            if (iRec != null) {
+                                chd = st + GKUtils.GetNameString(iRec, true, false)/* + GKUtils.GetPedigreeLifeStr(sp, fOptions.PedigreeOptions.Format)*/;
+                            } else {
+                                chd = st + unk;
+                            }
+                            fWriter.AddListItem("   " + "   " + chd, fTextFont);
+                        }
+                    }
+                } else if (evObj.Rec is GEDCOMFamilyRecord) {
+                    GEDCOMFamilyRecord famRec = evObj.Rec as GEDCOMFamilyRecord;
+
+                    GEDCOMIndividualRecord sp;
+                    string unk;
+                    if (fPerson.Sex == GEDCOMSex.svMale) {
+                        sp = famRec.GetWife();
+                        st = LangMan.LS(LSID.LSID_Wife) + ": ";
+                        unk = LangMan.LS(LSID.LSID_UnkFemale);
+                    } else {
+                        sp = famRec.GetHusband();
+                        st = LangMan.LS(LSID.LSID_Husband) + ": ";
+                        unk = LangMan.LS(LSID.LSID_UnkMale);
                     }
 
-                    fWriter.AddListItem(" " + li, fTextFont);
+                    string sps;
+                    if (sp != null) {
+                        sps = st + GKUtils.GetNameString(sp, true, false)/* + GKUtils.GetPedigreeLifeStr(sp, fOptions.PedigreeOptions.Format)*/;
+                    } else {
+                        sps = st + unk;
+                    }
+                    fWriter.AddListItem("   " + "   " + sps, fTextFont);
                 }
-                /*else
-                {
-                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
-
-                    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
-
-                    li = dt + st + GKUtils.GetNameString(evObj.IRec, true, false);
-                    PedigreePerson prs = FindPerson(evObj.IRec);
-                    string id = (prs != null) ? prs.Id : "";
-
-                    fWriter.addListItemLink(" " + li + " ", fTextFont, id, fLinkFont);
-                }*/
             }
 
             fWriter.EndList();
