@@ -466,13 +466,10 @@ namespace GKUI.Charts
         {
             if (!fOptions.Kinship || fSelected == null) return;
 
-            try
-            {
+            try {
                 fModel.KinRoot = fSelected;
                 RecalcChart(noRedraw);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
             }
         }
@@ -630,6 +627,19 @@ namespace GKUI.Charts
             AdjustViewport(imageSize, noRedraw);
         }
 
+        public void ToggleCollapse()
+        {
+            try {
+                TreeChartPerson p = fSelected;
+                if (p != null) {
+                    p.IsCollapsed = !p.IsCollapsed;
+                    RecalcChart(false);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartBox.ToggleCollapse(): " + ex.Message);
+            }
+        }
+
         #endregion
 
         #region Event processing
@@ -659,6 +669,10 @@ namespace GKUI.Charts
         {
             switch (e.KeyCode)
             {
+                case Keys.F4:
+                    ToggleCollapse();
+                    break;
+
                 case Keys.Add:
                 case Keys.Oemplus:
                     SetScale(fModel.Scale + 0.05f);
