@@ -714,6 +714,21 @@ namespace GKCore.Charts
 
         #region Sizes and adjustment routines
 
+        public void ToggleCollapse(TreeChartPerson person)
+        {
+            if (person != null) {
+                person.IsCollapsed = !person.IsCollapsed;
+
+                if (person.GetSpousesCount() > 0) {
+                    int num = person.GetSpousesCount();
+                    for (int i = 0; i < num; i++) {
+                        TreeChartPerson sp = person.GetSpouse(i);
+                        sp.IsCollapsed = person.IsCollapsed;
+                    }
+                }
+            }
+        }
+
         private int InitInfoSize()
         {
             int lines = 0;
@@ -874,6 +889,10 @@ namespace GKCore.Charts
                 }
             }
 
+            if (person.IsCollapsed) {
+                return;
+            }
+
             if (person.Father != null && person.Mother != null) {
                 RecalcAnc(prev, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
                 RecalcAnc(prev, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
@@ -948,6 +967,10 @@ namespace GKCore.Charts
 
         private void RecalcDescChilds(TreeChartPerson person)
         {
+            if (person.IsCollapsed) {
+                return;
+            }
+
             int childrenCount = person.GetChildsCount();
             if (childrenCount == 0) return;
 
@@ -1366,7 +1389,7 @@ namespace GKCore.Charts
 
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
         {
-            if (person.Father == null && person.Mother == null) {
+            if (person.IsCollapsed || (person.Father == null && person.Mother == null)) {
                 return;
             }
 
@@ -1425,11 +1448,6 @@ namespace GKCore.Charts
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
 
-            // draw children
-            for (int i = 0; i < childrenCount; i++) {
-                Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
-            }
-
             // draw lines of spouses
             int spbOfs = (person.Height - 10) / (spousesCount + 1);
             int spbBeg = person.PtY + (person.Height - spbOfs * (spousesCount - 1)) / 2;
@@ -1468,32 +1486,38 @@ namespace GKCore.Charts
                 Draw(person.GetSpouse(i), TreeChartKind.ckDescendants, drawMode);
             }
 
-            int crY;
-            if (!fOptions.InvertedTree) {
-                crY = person.PtY + person.Height + fLevelDistance / 2;
-            } else {
-                crY = person.PtY - fLevelDistance / 2;
-            }
-
-            int cx = 0;
-            if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1)) {
-                cx = person.PtX;
-                spbBeg = person.PtY + person.Height - 1;
-            } else {
-                switch (person.Sex) {
-                    case GEDCOMSex.svMale:
-                        cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
-                        break;
-
-                    case GEDCOMSex.svFemale:
-                        cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
-                        break;
+            // draw lines of children
+            if (!person.IsCollapsed && childrenCount != 0) {
+                // draw children
+                for (int i = 0; i < childrenCount; i++) {
+                    Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
                 }
 
-                spbBeg -= spbOfs / 2;
-            }
+                int crY;
+                if (!fOptions.InvertedTree) {
+                    crY = person.PtY + person.Height + fLevelDistance / 2;
+                } else {
+                    crY = person.PtY - fLevelDistance / 2;
+                }
 
-            if (childrenCount != 0) {
+                int cx = 0;
+                if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1)) {
+                    cx = person.PtX;
+                    spbBeg = person.PtY + person.Height - 1;
+                } else {
+                    switch (person.Sex) {
+                        case GEDCOMSex.svMale:
+                            cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
+                            break;
+
+                        case GEDCOMSex.svFemale:
+                            cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
+                            break;
+                    }
+
+                    spbBeg -= spbOfs / 2;
+                }
+
                 DrawLine(cx, spbBeg, cx, crY); // v
 
                 TreeChartPerson child0 = person.GetChild(0);

@@ -630,9 +630,8 @@ namespace GKUI.Charts
         public void ToggleCollapse()
         {
             try {
-                TreeChartPerson p = fSelected;
-                if (p != null) {
-                    p.IsCollapsed = !p.IsCollapsed;
+                if (fSelected != null) {
+                    fModel.ToggleCollapse(fSelected);
                     RecalcChart(false);
                 }
             } catch (Exception ex) {
