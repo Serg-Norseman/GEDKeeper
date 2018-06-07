@@ -39,9 +39,9 @@ namespace GKCommon.GEDCOM
                 if (!IsPointer) {
                     description = GetTagStrings(this);
                 } else {
-                    GEDCOMRecord sourceRecord = Value;
-                    if (sourceRecord is GEDCOMSourceRecord) {
-                        description = ((sourceRecord as GEDCOMSourceRecord).Title);
+                    GEDCOMSourceRecord sourceRecord = Value as GEDCOMSourceRecord;
+                    if (sourceRecord != null) {
+                        description = sourceRecord.Title;
                     } else {
                         description = new StringList();
                     }

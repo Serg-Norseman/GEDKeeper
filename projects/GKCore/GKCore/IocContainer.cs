@@ -43,9 +43,9 @@ namespace GKCore.IoC
     {
         void Register<TTypeToResolve, TConcrete>();
         void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
-        TTypeToResolve Resolve<TTypeToResolve>();
         void Reset();
-        object Resolve(Type typeToResolve);
+        TTypeToResolve Resolve<TTypeToResolve>(object[] parameters = null);
+        object Resolve(Type typeToResolve, object[] parameters = null);
     }
 
 
@@ -105,27 +105,12 @@ namespace GKCore.IoC
                                                        typeof(TConcrete), lifeCycle));
         }
 
-        public TTypeToResolve Resolve<TTypeToResolve>()
-        {
-            return (TTypeToResolve) Resolve(typeof(TTypeToResolve));
-        }
-
-        public TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters)
+        public TTypeToResolve Resolve<TTypeToResolve>(object[] parameters = null)
         {
             return (TTypeToResolve) Resolve(typeof(TTypeToResolve), parameters);
         }
 
-        public object Resolve(Type typeToResolve)
-        {
-            RegisteredObject registeredObject;
-            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
-                throw new TypeNotRegisteredException(string.Format(
-                    "The type {0} has not been registered", typeToResolve.Name));
-            }
-            return GetInstance(registeredObject);
-        }
-
-        public object Resolve(Type typeToResolve, params object[] parameters)
+        public object Resolve(Type typeToResolve, object[] parameters = null)
         {
             RegisteredObject registeredObject;
             if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
@@ -135,34 +120,24 @@ namespace GKCore.IoC
             return GetInstance(registeredObject, parameters);
         }
 
-        private object GetInstance(RegisteredObject registeredObject)
+        private object GetInstance(RegisteredObject registeredObject, object[] parameters)
         {
-            if (registeredObject.Instance == null || registeredObject.LifeCycle == LifeCycle.Transient)
-            {
-                Type implementation = registeredObject.ConcreteType;
-                ConstructorInfo constructor = implementation.GetConstructors()[0];
-                ParameterInfo[] constructorParameters = constructor.GetParameters();
+            if (registeredObject.Instance == null || registeredObject.LifeCycle == LifeCycle.Transient) {
+                if (parameters == null) {
+                    Type implementation = registeredObject.ConcreteType;
+                    ConstructorInfo constructor = implementation.GetConstructors()[0];
+                    ParameterInfo[] constructorParameters = constructor.GetParameters();
 
-                int paramsLength = constructorParameters.Length;
-                object[] parameters = new object[paramsLength];
-                if (paramsLength > 0)
-                {
-                    for (int i = 0; i < paramsLength; i++)
-                    {
-                        ParameterInfo parameterInfo = constructorParameters[i];
-                        parameters[i] = Resolve(parameterInfo.ParameterType);
+                    int paramsLength = constructorParameters.Length;
+                    parameters = new object[paramsLength];
+                    if (paramsLength > 0) {
+                        for (int i = 0; i < paramsLength; i++) {
+                            ParameterInfo parameterInfo = constructorParameters[i];
+                            parameters[i] = Resolve(parameterInfo.ParameterType);
+                        }
                     }
                 }
 
-                registeredObject.CreateInstance(parameters);
-            }
-
-            return registeredObject.Instance;
-        }
-
-        private object GetInstance(RegisteredObject registeredObject, params object[] parameters)
-        {
-            if (registeredObject.Instance == null || registeredObject.LifeCycle == LifeCycle.Transient) {
                 registeredObject.CreateInstance(parameters);
             }
 

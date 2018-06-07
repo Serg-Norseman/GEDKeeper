@@ -1138,6 +1138,8 @@ namespace GKCommon.GEDCOM
                 int idx = tree.IndexOf(rec2);
                 Assert.AreEqual(i, idx);
             }
+            
+            Assert.IsFalse(tree.IsEmpty);
 
             Assert.IsFalse(tree.DeleteFamilyRecord(null));
             Assert.IsTrue(tree.DeleteFamilyRecord(famRec));
@@ -1174,6 +1176,7 @@ namespace GKCommon.GEDCOM
 
             tree.Clear();
             Assert.AreEqual(0, tree.RecordsCount);
+            Assert.IsTrue(tree.IsEmpty);
 
             tree.State = GEDCOMState.osReady;
             Assert.AreEqual(GEDCOMState.osReady, tree.State);
