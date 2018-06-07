@@ -3,13 +3,13 @@ APP="GEDKeeper2"
 EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
-APP_VER="2.12.0"
+APP_VER="2.13.0"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
 
-rm -f ~/gedkeeper_2.12.0-1_all.deb
+rm -f ~/gedkeeper_2.13.0-1_all.deb
 rm -rf ~/$PACK_PATH
 
 # Create directories if missing
@@ -36,17 +36,18 @@ cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
 cp $DEV_PATH/GKCore.dll ~/$LIB_PATH
 cp $DEV_PATH/GKComponents.dll ~/$LIB_PATH
 
-cp $DEV_PATH/LinqBridge.dll ~/$LIB_PATH
-cp $DEV_PATH/NLog.dll ~/$LIB_PATH
-cp $DEV_PATH/nVLC.dll ~/$LIB_PATH
-cp $DEV_PATH/YamlSerializer.dll ~/$LIB_PATH
-
 cp $DEV_PATH/ArborGVT.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.Linguistics.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.SmartGraph.dll ~/$LIB_PATH
 cp $DEV_PATH/DotNetRtfWriter.dll ~/$LIB_PATH
 cp $DEV_PATH/ExcelLibrary.dll ~/$LIB_PATH
 cp $DEV_PATH/itextsharp.dll ~/$LIB_PATH
 cp $DEV_PATH/KopiLua.dll ~/$LIB_PATH
 cp $DEV_PATH/NLua.dll ~/$LIB_PATH
+cp $DEV_PATH/NLog.dll ~/$LIB_PATH
+cp $DEV_PATH/nVLC.dll ~/$LIB_PATH
+cp $DEV_PATH/YamlSerializer.dll ~/$LIB_PATH
 cp $DEV_PATH/ZedGraph.dll ~/$LIB_PATH
 
 cp $DEV_PATH/LICENSE ~/$LIB_PATH
@@ -59,18 +60,20 @@ cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 chmod -x ~/$LIB_PATH/GKCore.dll
 chmod -x ~/$LIB_PATH/GKComponents.dll
 
-chmod -x ~/$LIB_PATH/LinqBridge.dll
-chmod -x ~/$LIB_PATH/NLog.dll
-chmod -x ~/$LIB_PATH/nVLC.dll
-chmod -x ~/$LIB_PATH/YamlSerializer.dll
-
 chmod -x ~/$LIB_PATH/ArborGVT.dll
+chmod -x ~/$LIB_PATH/BSLib.dll
+chmod -x ~/$LIB_PATH/BSLib.Linguistics.dll
+chmod -x ~/$LIB_PATH/BSLib.SmartGraph.dll
 chmod -x ~/$LIB_PATH/DotNetRtfWriter.dll
 chmod -x ~/$LIB_PATH/ExcelLibrary.dll
 chmod -x ~/$LIB_PATH/itextsharp.dll
 chmod -x ~/$LIB_PATH/KopiLua.dll
 chmod -x ~/$LIB_PATH/NLua.dll
+chmod -x ~/$LIB_PATH/NLog.dll
+chmod -x ~/$LIB_PATH/nVLC.dll
+chmod -x ~/$LIB_PATH/YamlSerializer.dll
 chmod -x ~/$LIB_PATH/ZedGraph.dll
+
 chmod -x ~/$LIB_PATH/LICENSE
 
 find ~/$LIB_PATH/locales -type f -exec chmod -x '{}' \;

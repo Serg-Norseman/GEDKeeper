@@ -1,5 +1,5 @@
 ﻿; "GEDKeeper", the personal genealogical database editor.
-; Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+; Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
 !include "MUI2.nsh"
@@ -39,6 +39,10 @@ LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
 LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
 LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
 LangString gkp_chron ${LANG_ENGLISH} "Chronicle"
+LangString gkp_cloud ${LANG_ENGLISH} "Words Cloud"
+LangString gkp_dqlt ${LANG_ENGLISH} "Data Quality"
+LangString gkp_histdata ${LANG_ENGLISH} "History Data (links)"
+LangString gkp_stdreports ${LANG_ENGLISH} "Standard Reports"
 
 !insertmacro MUI_LANGUAGE "Russian"
 LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
@@ -57,6 +61,10 @@ LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
 LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
 LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
 LangString gkp_chron ${LANG_RUSSIAN} "Хроника"
+LangString gkp_cloud ${LANG_RUSSIAN} "Облако слов/тэгов"
+LangString gkp_dqlt ${LANG_RUSSIAN} "Качество данных"
+LangString gkp_histdata ${LANG_RUSSIAN} "Исторические данные (ссылки)"
+LangString gkp_stdreports ${LANG_RUSSIAN} "Стандартные отчеты"
 
 !insertmacro MUI_LANGUAGE "Ukrainian"
 LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
@@ -75,6 +83,10 @@ LangString gkp_tv ${LANG_UKRAINIAN} "3D візуалізатор"
 LangString gkp_iv ${LANG_UKRAINIAN} "Перегляд зображень"
 LangString gkp_cl ${LANG_UKRAINIAN} "Гра 'Життя Конвея'"
 LangString gkp_chron ${LANG_UKRAINIAN} "Хроніка"
+LangString gkp_cloud ${LANG_UKRAINIAN} "Слова хмара"
+LangString gkp_dqlt ${LANG_UKRAINIAN} "Якість даних"
+LangString gkp_histdata ${LANG_UKRAINIAN} "Історія даних (посилання)"
+LangString gkp_stdreports ${LANG_UKRAINIAN} "Стандартні звіти"
 
 !insertmacro MUI_LANGUAGE "Polish"
 LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
@@ -93,6 +105,10 @@ LangString gkp_tv ${LANG_POLISH} "Wizualizacja 3D"
 LangString gkp_iv ${LANG_POLISH} "Podgląd zdjęcia"
 LangString gkp_cl ${LANG_POLISH} "Gra w życie"
 LangString gkp_chron ${LANG_POLISH} "Kronika"
+LangString gkp_cloud ${LANG_POLISH} "Chmura słów"
+LangString gkp_dqlt ${LANG_POLISH} "Jakość danych"
+LangString gkp_histdata ${LANG_POLISH} "Dane historyczne (linki)"
+LangString gkp_stdreports ${LANG_POLISH} "Raporty standardowe"
 
 !insertmacro MUI_LANGUAGE "French"
 LangString gkreq ${LANG_FRENCH} "GEDKeeper2 (obligatoire)"
@@ -111,6 +127,10 @@ LangString gkp_tv ${LANG_FRENCH} "3D TreeViz"
 LangString gkp_iv ${LANG_FRENCH} "Visionneuse d'images"
 LangString gkp_cl ${LANG_FRENCH} "Jeu de la vie"
 LangString gkp_chron ${LANG_FRENCH} "Chronique"
+LangString gkp_cloud ${LANG_FRENCH} "Nuage de mots"
+LangString gkp_dqlt ${LANG_FRENCH} "Qualité des données"
+LangString gkp_histdata ${LANG_FRENCH} "Données historiques (liens)"
+LangString gkp_stdreports ${LANG_FRENCH} "Rapports standards"
 
 !insertmacro MUI_LANGUAGE "Italian"
 LangString gkreq ${LANG_ITALIAN} "GEDKeeper2 (necessario)"
@@ -129,6 +149,10 @@ LangString gkp_tv ${LANG_ITALIAN} "3D TreeViz"
 LangString gkp_iv ${LANG_ITALIAN} "Visualizzatore di immagini"
 LangString gkp_cl ${LANG_ITALIAN} "Conway Life"
 LangString gkp_chron ${LANG_ITALIAN} "Cronaca"
+LangString gkp_cloud ${LANG_ITALIAN} "Nuvola di parole"
+LangString gkp_dqlt ${LANG_ITALIAN} "Qualità dei dati"
+LangString gkp_histdata ${LANG_ITALIAN} "Dati storici (collegamenti)"
+LangString gkp_stdreports ${LANG_ITALIAN} "Rapporti standard"
 
 !insertmacro MUI_LANGUAGE "German"
 LangString gkreq ${LANG_GERMAN} "GEDKeeper2 (benötigt)"
@@ -147,6 +171,10 @@ LangString gkp_tv ${LANG_GERMAN} "3D TreeViz/3D-Baum-Visualisierung"
 LangString gkp_iv ${LANG_GERMAN} "Bilderbetrachter"
 LangString gkp_cl ${LANG_GERMAN} "Conway Spiel des Lebens"
 LangString gkp_chron ${LANG_GERMAN} "Chronik"
+LangString gkp_cloud ${LANG_GERMAN} "Wörter Wolke"
+LangString gkp_dqlt ${LANG_GERMAN} "Datenqualität"
+LangString gkp_histdata ${LANG_GERMAN} "Verlaufsdaten (Links)"
+LangString gkp_stdreports ${LANG_GERMAN} "Standardberichte"
 
 !insertmacro MUI_LANGUAGE "SimpChinese"
 LangString gkreq ${LANG_SIMPCHINESE} "GEDKeeper2 (必装)"
@@ -165,6 +193,10 @@ LangString gkp_tv ${LANG_SIMPCHINESE} "3D TreeViz"
 LangString gkp_iv ${LANG_SIMPCHINESE} "图片浏览器"
 LangString gkp_cl ${LANG_SIMPCHINESE} "康威生命游戏"
 LangString gkp_chron ${LANG_SIMPCHINESE} "编年史"
+LangString gkp_cloud ${LANG_SIMPCHINESE} "词云"
+LangString gkp_dqlt ${LANG_SIMPCHINESE} "数据质量"
+LangString gkp_histdata ${LANG_SIMPCHINESE} "历史数据（链接）"
+LangString gkp_stdreports ${LANG_SIMPCHINESE} "标准报告"
 
 
 ; Registry key to check for directory (so if you install again, it will 
@@ -196,18 +228,19 @@ Section "$(gkreq)"
   File "..\GKComponents.dll"
   File "..\GKCore.dll"
 
-  File "..\LinqBridge.dll"
-  File "..\NLog.dll"
-  File "..\nVLC.dll"
-  File "..\YamlSerializer.dll"
-
   File "..\ArborGVT.dll"
+  File "..\BSLib.dll"
+  File "..\BSLib.Linguistics.dll"
+  File "..\BSLib.SmartGraph.dll"
   File "..\DotNetRtfWriter.dll"
   File "..\ExcelLibrary.dll"
   File "..\itextsharp.dll"
   File "..\lua51.dll"
   File "..\LuaInterface.dll"
+  File "..\NLog.dll"
+  File "..\nVLC.dll"
   File "..\ZedGraph.dll"
+  File "..\YamlSerializer.dll"
 
   File "..\LICENSE"
 
@@ -215,7 +248,7 @@ Section "$(gkreq)"
   SetOutPath "$INSTDIR\locales"
   File "..\locales\readme_rus.html"
   File "..\locales\readme_eng.html"
-  File "..\locales\english.sample"
+  File "..\locales\english.lng"
 
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
@@ -289,6 +322,8 @@ SectionGroup /e "$(gklang)"
 
 		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка (русский).lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
 		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Род Пушкиных (пример).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
+		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Происхождение Человечества (пример).lnk" "$INSTDIR\samples\Human_Origins.ged" "" "$INSTDIR\samples\Human_Origins.ged" 0
+		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Древние царства (пример).lnk" "$INSTDIR\samples\Ancient_Kingdoms.ged" "" "$INSTDIR\samples\Ancient_Kingdoms.ged" 0
 	SectionEnd
 
 	Section "Українська"
@@ -318,7 +353,7 @@ SectionGroup /e "$(gklang)"
 
 	Section "中文"
 		SetOutPath "$INSTDIR\locales"
-		File "..\locales\chinese.lng"
+		File "..\locales\Chinese Simplified.lng"
 	SectionEnd
 SectionGroupEnd
 
@@ -426,6 +461,37 @@ SectionGroup /e "$(gkplg)"
   		File "..\plugins\GKChroniclePlugin.enu"
   		File "..\plugins\GKChroniclePlugin.ukr"
 		File "..\plugins\GKChroniclePlugin.pol"
+	SectionEnd
+
+	Section "$(gkp_cloud)"
+  		SetOutPath "$INSTDIR\plugins"
+		File "..\plugins\GKWordsCloudPlugin.dll"
+  		File "..\plugins\GKWordsCloudPlugin.rus"
+  		File "..\plugins\GKWordsCloudPlugin.enu"
+  		File "..\plugins\GKWordsCloudPlugin.ukr"
+		File "..\plugins\GKWordsCloudPlugin.pol"
+	SectionEnd
+
+	Section "$(gkp_dqlt)"
+  		SetOutPath "$INSTDIR\plugins"
+		File "..\plugins\GKDataQualityPlugin.dll"
+  		File "..\plugins\GKDataQualityPlugin.enu"
+	SectionEnd
+
+	Section "$(gkp_histdata)"
+  		SetOutPath "$INSTDIR\plugins"
+		File "..\plugins\GKHistoryDataPlugin.dll"
+  		File "..\plugins\GKHistoryDataPlugin.rus"
+  		File "..\plugins\GKHistoryDataPlugin.enu"
+	SectionEnd
+
+	Section "$(gkp_stdreports)"
+  		SetOutPath "$INSTDIR\plugins"
+		File "..\plugins\GKStdReports.dll"
+  		File "..\plugins\GKStdReports.rus"
+  		File "..\plugins\GKStdReports.enu"
+  		File "..\plugins\GKStdReports.fra"
+		File "..\plugins\GKStdReports.deu"
 	SectionEnd
 SectionGroupEnd
 
