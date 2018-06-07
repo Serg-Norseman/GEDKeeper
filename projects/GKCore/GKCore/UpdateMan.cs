@@ -20,10 +20,10 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Threading;
 using System.Xml;
-
-using GKCommon;
 
 namespace GKCore
 {
@@ -34,50 +34,61 @@ namespace GKCore
     {
         private const string UPDATE_URL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
 
+        #if NET35
+        // TODO: only for .net 3.5
+        private const int Tls11 = 768;
+        private const int Tls12 = 3072;
+        #endif
+
         public static Version GetLastVersion(out string url)
         {
             Version newVersion = null;
             url = "";
 
             XmlTextReader reader = null;
-            try
-            {
-                reader = new XmlTextReader(UPDATE_URL);
-                reader.MoveToContent();
+            try {
+                #if NET35
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+                #else
+                #endif
 
-                string nodeName = "";
-                if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "gedkeeper"))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element)
-                            nodeName = reader.Name;
-                        else
-                        {
-                            if ((reader.NodeType == XmlNodeType.Text) && (reader.HasValue))
-                            {
-                                switch (nodeName)
-                                {
-                                    case "version":
-                                        newVersion = new Version(reader.Value);
-                                        break;
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UPDATE_URL);
+                webRequest.ContentType = "text/xml; encoding='utf-8'";
+                webRequest.KeepAlive = false;
+                webRequest.Method = "GET";
 
-                                    case "url":
-                                        url = reader.Value;
-                                        break;
+                using (WebResponse webResponse = webRequest.GetResponse()) {
+                    using (Stream stream = webResponse.GetResponseStream()) {
+                        reader = new XmlTextReader(stream);
+                        reader.MoveToContent();
+
+                        string nodeName = "";
+                        if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "gedkeeper")) {
+                            while (reader.Read()) {
+                                if (reader.NodeType == XmlNodeType.Element)
+                                    nodeName = reader.Name;
+                                else {
+                                    if ((reader.NodeType == XmlNodeType.Text) && (reader.HasValue)) {
+                                        switch (nodeName) {
+                                            case "version":
+                                                newVersion = new Version(reader.Value);
+                                                break;
+
+                                            case "url":
+                                                url = reader.Value;
+                                                break;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("UpdateMan.GetLastVersion(): " + ex.Message);
-            }
-            finally
-            {
-                if (reader != null) reader.Close();
+            } finally {
+                if (reader != null)
+                    reader.Close();
             }
 
             return newVersion;
@@ -91,28 +102,23 @@ namespace GKCore
                 string url;
                 Version newVersion = GetLastVersion(out url);
 
-                if (curVersion.CompareTo(newVersion) < 0)
-                {
+                if (curVersion.CompareTo(newVersion) < 0) {
                     string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
 
                     #if !CI_MODE
-                    if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion))) {
                         Process.Start(url);
                     }
                     #endif
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("UpdateMan.WorkerMethod(): " + ex.Message);
             }
         }
 
         public static void CheckUpdate()
         {
-            try
-            {
+            try {
                 #if __MonoCS__
                 DesktopType desktopType = SysUtils.GetDesktopType();
                 if (desktopType == DesktopType.Unity) {
@@ -128,9 +134,7 @@ namespace GKCore
                 worker.SetApartmentState(ApartmentState.STA);
                 worker.IsBackground = true;
                 worker.Start();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("UpdateMan.CheckUpdate(): " + ex.Message);
             }
         }
