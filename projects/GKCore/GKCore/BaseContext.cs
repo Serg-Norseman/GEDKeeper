@@ -1133,6 +1133,7 @@ namespace GKCore
             catch (Exception ex)
             {
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.Message);
+                Logger.LogWrite("BaseContext.FileLoad(): " + ex.StackTrace.ToString());
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 

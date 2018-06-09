@@ -124,6 +124,8 @@ namespace GKCommon.GEDCOM
 
         private void DefineEncoding(StreamReader reader)
         {
+            var format = GetGEDCOMFormat(fTree);
+
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet;
             switch (charSet)
             {
@@ -144,11 +146,16 @@ namespace GKCommon.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csANSEL:
-                    SetEncoding(new AnselEncoding());
+                    if (format == GEDCOMFormat.gf_ALTREE) {
+                        // Agelong Tree 4.0 with ANSEL is actually characteristic 
+                        // for the Russian-language data export
+                        SetEncoding(Encoding.GetEncoding(1251));
+                    } else {
+                        SetEncoding(new AnselEncoding());
+                    }
                     break;
 
                 case GEDCOMCharacterSet.csASCII:
-                    var format = GetGEDCOMFormat(fTree);
                     if (format == GEDCOMFormat.gf_Native) {
                         // GEDKeeper native format (old) and ASCII charset
                         SetEncoding(Encoding.GetEncoding(1251));

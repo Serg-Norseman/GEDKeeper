@@ -1,0 +1,251 @@
+0 HEAD
+1 SOUR ALTREE
+2 NAME Agelong Tree
+2 VERS 4.7
+2 CORP Genery Software
+2 ADDR http://www.genery.com
+1 CHAR ANSEL
+1 DATE 4 MAR 2016
+1 GEDC 
+2 VERS 5.5.1
+2 FORM Lineage-Linked
+0 @I1@ INDI
+1 _UID 19jAHwPqGj
+1 NAME Иван  /ОВЕЧКИН/
+2 GIVN Иван 
+1 SEX M
+1 BIRT
+2 DATE 1888
+1 DEAT
+2 DATE 1965
+1 FAMS @F1@
+0 @I2@ INDI
+1 _UID 19jAiBqKCR
+1 NAME Петр Иванович /ОВЕЧКИН/
+2 GIVN Петр Иванович
+1 SEX M
+1 BIRT
+2 DATE 1914
+1 FAMC @F1@
+1 DEAT
+2 DATE 2012
+1 RESI 
+2 PLAC Россия, г. Санкт-Петербург
+1 FAMS @F3@
+0 @I3@ INDI
+1 _UID 19jAiRF7SR
+1 NAME Василий Иванович /ОВЕЧКИН/
+2 GIVN Василий Иванович
+1 SEX M
+1 BIRT
+2 DATE 1920
+1 FAMC @F1@
+1 DEAT
+2 DATE 2014
+1 RESI 
+2 PLAC Россия, г. Москва
+1 FAMS @F2@
+0 @I4@ INDI
+1 _UID 19jAiyluYa
+1 NAME Александр Петрович /ОВЕЧКИН/
+2 GIVN Александр Петрович
+1 SEX M
+1 BIRT
+2 DATE 1935
+1 FAMC @F3@
+1 RESI 
+2 PLAC Россия, г. Санкт-Петербург
+1 FAMS @F4@
+1 FAMS @F8@
+1 FAMS @F9@
+0 @I5@ INDI
+1 _UID 19jAIbBVXs
+1 NAME Анна Васильевна / (ОВЕЧКИНА)/
+2 GIVN Анна Васильевна
+2 SURN ОВЕЧКИНА
+1 SEX F
+1 BIRT
+2 DATE 1945
+1 FAMC @F2@
+1 FAMS @F4@
+0 @I6@ INDI
+1 _UID 19jAjRRuiB
+1 NAME Кирилл Александрович /ОВЕЧКИН/
+2 GIVN Кирилл Александрович
+1 SEX M
+1 BIRT
+2 DATE 1967
+1 FAMC @F4@
+1 RESI 
+2 PLAC Россия, г. Санкт-Петербург
+1 FAMS @F7@
+0 @I7@ INDI
+1 _UID 19jAJ1X4XU
+1 NAME Илья Васильевич /ОВЕЧКИН/
+2 GIVN Илья Васильевич
+1 SEX M
+1 BIRT
+2 DATE 1938
+1 FAMC @F2@
+1 RESI 
+2 PLAC Россия, г. Владимир
+1 FAMS @F5@
+0 @I8@ INDI
+1 _UID 19jAJlIxkf
+1 NAME Ирина  //
+2 GIVN Ирина 
+1 SEX F
+1 BIRT
+2 DATE 1940
+1 FAMC @F1@
+1 FAMS @F5@
+0 @I9@ INDI
+1 _UID 19jAKGnERA
+1 NAME Мария Ильинична /ТОЛОВА (ОВЕЧКИНА)/
+2 GIVN Мария Ильинична
+2 SURN ОВЕЧКИНА
+1 SEX F
+1 BIRT
+2 DATE 1958
+1 FAMC @F5@
+1 FAMS @F6@
+0 @I10@ INDI
+1 _UID 19jAKtt3Wa
+1 NAME Олег Игоревич /ТОЛОВ/
+2 GIVN Олег Игоревич
+1 SEX M
+1 BIRT
+2 DATE 1942
+1 RESI 
+2 PLAC Россия, г. Новгород
+1 FAMS @F6@
+0 @I11@ INDI
+1 _UID 19jAL3GwBX
+1 NAME Ольга  //
+2 GIVN Ольга 
+1 SEX F
+1 BIRT
+2 DATE 1975
+1 FAMC @F6@
+1 FAMS @F7@
+0 @I12@ INDI
+1 _UID 19jAmoC6u3
+1 NAME Иван  /ОВЕЧКИН/
+2 GIVN Иван 
+1 SEX M
+1 BIRT
+2 DATE 2001
+1 FAMC @F7@
+0 @I13@ INDI
+1 _UID 19jAx4mrmR
+1 NAME Андрей Васильевич /ОВЕЧКИН/
+2 GIVN Андрей Васильевич
+1 SEX M
+1 BIRT
+2 DATE 1942
+1 FAMC @F2@
+0 @I14@ INDI
+1 _UID 19r3XC90ys
+1 NAME Варвара Степановна / (ЕЛОВА)/
+2 GIVN Варвара Степановна
+2 SURN ЕЛОВА
+1 SEX F
+1 OCCU крестьянка
+1 BIRT
+2 DATE 1937
+1 RESI 
+2 PLAC Россия, д. Малые Пружаны
+1 FAMS @F8@
+0 @I15@ INDI
+1 _UID 19r435RLoL
+1 NAME Алла Александровна / (ОВЕЧКИНА)/
+2 GIVN Алла Александровна
+2 SURN ОВЕЧКИНА
+1 SEX F
+1 BIRT
+2 DATE 1957
+1 FAMC @F8@
+0 @I16@ INDI
+1 _UID 19r45lGkaL
+1 NAME Вера  //
+2 GIVN Вера 
+1 SEX F
+1 FAMS @F9@
+0 @I17@ INDI
+1 _UID 19r479riIo
+1 NAME Виктор Александрович /ОВЕЧКИН/
+2 GIVN Виктор Александрович
+1 SEX M
+1 BIRT
+2 DATE 1963
+1 FAMC @F9@
+1 RESI 
+2 PLAC Россия, г. Магнитогорск
+0 @I18@ INDI
+1 _UID 19r48gFo2r
+1 NAME Егор  /ОВЕЧКИН/
+2 GIVN Егор 
+1 SEX M
+1 BIRT
+2 DATE 2003
+1 FAMC @F7@
+0 @I19@ INDI
+1 _UID 19r48TOGXi
+1 NAME Дарья  //
+2 GIVN Дарья 
+1 SEX F
+1 BIRT
+2 DATE 2007
+1 FAMC @F7@
+0 @F1@ FAM
+1 HUSB @I1@
+1 CHIL @I2@
+1 CHIL @I3@
+1 CHIL @I8@
+0 @F2@ FAM
+1 HUSB @I3@
+1 CHIL @I5@
+1 CHIL @I7@
+1 CHIL @I13@
+0 @F3@ FAM
+1 HUSB @I2@
+1 CHIL @I4@
+0 @F4@ FAM
+1 HUSB @I4@
+1 WIFE @I5@
+1 CHIL @I6@
+1 MARR
+2 DATE 1965
+0 @F5@ FAM
+1 HUSB @I7@
+1 WIFE @I8@
+1 CHIL @I9@
+1 MARR
+2 DATE 1957
+0 @F6@ FAM
+1 HUSB @I10@
+1 WIFE @I9@
+1 CHIL @I11@
+1 MARR
+2 DATE 1975
+0 @F7@ FAM
+1 HUSB @I6@
+1 WIFE @I11@
+1 CHIL @I12@
+1 CHIL @I18@
+1 CHIL @I19@
+1 MARR
+2 DATE 1997
+0 @F8@ FAM
+1 HUSB @I4@
+1 WIFE @I14@
+1 CHIL @I15@
+1 MARR
+2 DATE 1956
+0 @F9@ FAM
+1 HUSB @I4@
+1 WIFE @I16@
+1 CHIL @I17@
+1 MARR
+2 DATE 1962
+0 TRLR
