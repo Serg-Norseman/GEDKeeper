@@ -47,10 +47,15 @@ namespace GKCore
 
             XmlTextReader reader = null;
             try {
-                #if NET35
-                ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
-                #else
-                #endif
+                try {
+                    #if NET35
+                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+                    #else
+                    #endif
+                } catch (Exception ex) {
+                    // crash on WinXP, TLS 1.2 not supported
+                    Logger.LogWrite("UpdateMan.GetLastVersion.SP(): " + ex.Message);
+                }
 
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UPDATE_URL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";
