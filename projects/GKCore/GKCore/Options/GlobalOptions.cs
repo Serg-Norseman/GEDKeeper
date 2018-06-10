@@ -79,6 +79,7 @@ namespace GKCore.Options
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
         private bool fUseExtendedNotes;
+        private bool fAutoCheckUpdates;
 
 
         public static GlobalOptions Instance
@@ -289,6 +290,12 @@ namespace GKCore.Options
             set { fUseExtendedNotes = value; }
         }
 
+        public bool AutoCheckUpdates
+        {
+            get { return fAutoCheckUpdates; }
+            set { fAutoCheckUpdates = value; }
+        }
+
 
         public IEnumerable<LangRecord> Languages
         {
@@ -364,6 +371,7 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
             fUseExtendedNotes = false;
+            fAutoCheckUpdates = true;
 
             fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -468,6 +476,7 @@ namespace GKCore.Options
             fLoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
+            fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -581,6 +590,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "LoadRecentFiles", fLoadRecentFiles);
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
+            ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

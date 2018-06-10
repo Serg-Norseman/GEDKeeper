@@ -136,7 +136,9 @@ namespace GKCore
                     EndLoading();
                 }
 
-                UpdateMan.CheckUpdate();
+                if (Options.AutoCheckUpdates) {
+                    UpdateMan.CheckUpdate();
+                }
             } catch (Exception ex) {
                 Logger.LogWrite("AppHost.StartupWork(): " + ex.Message);
             }

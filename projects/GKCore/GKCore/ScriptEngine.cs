@@ -34,12 +34,12 @@ using GKCore.UIContracts;
 namespace GKCore
 {
     #if !__MonoCS__
-    using LuaInterface;
-    #else
-    using NLua;
     #endif
 
     #if LUA_DLL
+    using LuaInterface;
+    #else
+    using NLua;
     #endif
 
     public class ScriptException : Exception

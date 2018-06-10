@@ -47,10 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\libs\mswin\lua51.dll">
-			<Link>lua51.dll</Link>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<EmbeddedResource Include="Resources\fonts\FreeSans.ttf" />
 		<EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf" />
 	</ItemGroup>

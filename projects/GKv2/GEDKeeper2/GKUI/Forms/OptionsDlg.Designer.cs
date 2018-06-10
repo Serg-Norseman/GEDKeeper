@@ -146,6 +146,7 @@
             this.chkPatronymic = new System.Windows.Forms.CheckBox();
             this.chkDiffLines = new System.Windows.Forms.CheckBox();
             this.chkBirthDate = new System.Windows.Forms.CheckBox();
+            this.chkMarriagesDates = new System.Windows.Forms.CheckBox();
             this.chkDeathDate = new System.Windows.Forms.CheckBox();
             this.chkKinship = new System.Windows.Forms.CheckBox();
             this.chkDefaultPortraits = new System.Windows.Forms.CheckBox();
@@ -216,7 +217,7 @@
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.chkMarriagesDates = new System.Windows.Forms.CheckBox();
+            this.chkAutoCheckUpdates = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -280,7 +281,7 @@
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageCommon.Name = "pageCommon";
             this.pageCommon.Padding = new System.Windows.Forms.Padding(8);
-            this.pageCommon.Size = new System.Drawing.Size(591, 381);
+            this.pageCommon.Size = new System.Drawing.Size(591, 404);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
             // 
@@ -515,6 +516,7 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.chkAutoCheckUpdates);
             this.grpOther.Controls.Add(this.chkLoadRecentFiles);
             this.grpOther.Controls.Add(this.chkShowOnStart);
             this.grpOther.Location = new System.Drawing.Point(9, 195);
@@ -578,7 +580,7 @@
             this.pageMultimedia.Margin = new System.Windows.Forms.Padding(2);
             this.pageMultimedia.Name = "pageMultimedia";
             this.pageMultimedia.Padding = new System.Windows.Forms.Padding(8);
-            this.pageMultimedia.Size = new System.Drawing.Size(591, 381);
+            this.pageMultimedia.Size = new System.Drawing.Size(591, 404);
             this.pageMultimedia.TabIndex = 6;
             this.pageMultimedia.Text = "pageMultimedia";
             // 
@@ -718,6 +720,15 @@
             this.chkBirthDate.Size = new System.Drawing.Size(279, 17);
             this.chkBirthDate.TabIndex = 4;
             this.chkBirthDate.Text = "chkBirthDate";
+            // 
+            // chkMarriagesDates
+            // 
+            this.chkMarriagesDates.Location = new System.Drawing.Point(16, 166);
+            this.chkMarriagesDates.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
+            this.chkMarriagesDates.Name = "chkMarriagesDates";
+            this.chkMarriagesDates.Size = new System.Drawing.Size(279, 16);
+            this.chkMarriagesDates.TabIndex = 5;
+            this.chkMarriagesDates.Text = "chkMarriagesDates";
             // 
             // chkDeathDate
             // 
@@ -975,7 +986,7 @@
             this.pageAncCircle.Location = new System.Drawing.Point(4, 22);
             this.pageAncCircle.Margin = new System.Windows.Forms.Padding(2);
             this.pageAncCircle.Name = "pageAncCircle";
-            this.pageAncCircle.Size = new System.Drawing.Size(567, 339);
+            this.pageAncCircle.Size = new System.Drawing.Size(567, 362);
             this.pageAncCircle.TabIndex = 4;
             this.pageAncCircle.Text = "pageAncCircle";
             // 
@@ -987,7 +998,7 @@
             this.ancOptionsControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ancOptionsControl1.Name = "ancOptionsControl1";
             this.ancOptionsControl1.Options = null;
-            this.ancOptionsControl1.Size = new System.Drawing.Size(567, 339);
+            this.ancOptionsControl1.Size = new System.Drawing.Size(567, 362);
             this.ancOptionsControl1.TabIndex = 0;
             // 
             // pageUIView
@@ -997,7 +1008,7 @@
             this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
             this.pageUIView.Name = "pageUIView";
             this.pageUIView.Padding = new System.Windows.Forms.Padding(8);
-            this.pageUIView.Size = new System.Drawing.Size(591, 381);
+            this.pageUIView.Size = new System.Drawing.Size(591, 404);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
             // 
@@ -1010,7 +1021,7 @@
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl2.Name = "PageControl2";
             this.PageControl2.SelectedIndex = 0;
-            this.PageControl2.Size = new System.Drawing.Size(575, 365);
+            this.PageControl2.Size = new System.Drawing.Size(575, 388);
             this.PageControl2.TabIndex = 0;
             // 
             // pageViewCommon
@@ -1027,7 +1038,7 @@
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
             this.pageViewCommon.Padding = new System.Windows.Forms.Padding(8);
-            this.pageViewCommon.Size = new System.Drawing.Size(567, 339);
+            this.pageViewCommon.Size = new System.Drawing.Size(567, 362);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
             // 
@@ -1233,7 +1244,7 @@
             this.pageViewPersons.Location = new System.Drawing.Point(4, 22);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
-            this.pageViewPersons.Size = new System.Drawing.Size(567, 339);
+            this.pageViewPersons.Size = new System.Drawing.Size(567, 362);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
             // 
@@ -1245,7 +1256,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(8);
-            this.panel1.Size = new System.Drawing.Size(390, 339);
+            this.panel1.Size = new System.Drawing.Size(390, 362);
             this.panel1.TabIndex = 2;
             // 
             // lstPersonColumns
@@ -1254,7 +1265,7 @@
             this.lstPersonColumns.Location = new System.Drawing.Point(8, 8);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
-            this.lstPersonColumns.Size = new System.Drawing.Size(374, 323);
+            this.lstPersonColumns.Size = new System.Drawing.Size(374, 346);
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
@@ -1293,7 +1304,7 @@
             this.pagePedigree.Margin = new System.Windows.Forms.Padding(2);
             this.pagePedigree.Name = "pagePedigree";
             this.pagePedigree.Padding = new System.Windows.Forms.Padding(8);
-            this.pagePedigree.Size = new System.Drawing.Size(591, 381);
+            this.pagePedigree.Size = new System.Drawing.Size(591, 404);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
             // 
@@ -1388,7 +1399,7 @@
             this.pagePlugins.Margin = new System.Windows.Forms.Padding(0);
             this.pagePlugins.Name = "pagePlugins";
             this.pagePlugins.Padding = new System.Windows.Forms.Padding(8);
-            this.pagePlugins.Size = new System.Drawing.Size(591, 381);
+            this.pagePlugins.Size = new System.Drawing.Size(591, 404);
             this.pagePlugins.TabIndex = 5;
             this.pagePlugins.Text = "pagePlugins";
             // 
@@ -1405,7 +1416,7 @@
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(575, 365);
+            this.lvPlugins.Size = new System.Drawing.Size(575, 388);
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
@@ -1453,14 +1464,15 @@
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // chkMarriagesDates
+            // chkAutoCheckUpdates
             // 
-            this.chkMarriagesDates.Location = new System.Drawing.Point(16, 166);
-            this.chkMarriagesDates.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
-            this.chkMarriagesDates.Name = "chkMarriagesDates";
-            this.chkMarriagesDates.Size = new System.Drawing.Size(279, 16);
-            this.chkMarriagesDates.TabIndex = 5;
-            this.chkMarriagesDates.Text = "chkMarriagesDates";
+            this.chkAutoCheckUpdates.AutoSize = true;
+            this.chkAutoCheckUpdates.Location = new System.Drawing.Point(16, 79);
+            this.chkAutoCheckUpdates.Margin = new System.Windows.Forms.Padding(8, 8, 8, 0);
+            this.chkAutoCheckUpdates.Name = "chkAutoCheckUpdates";
+            this.chkAutoCheckUpdates.Size = new System.Drawing.Size(134, 17);
+            this.chkAutoCheckUpdates.TabIndex = 9;
+            this.chkAutoCheckUpdates.Text = "chkAutoCheckUpdates";
             // 
             // OptionsDlg
             // 
@@ -1532,5 +1544,6 @@
         private System.Windows.Forms.Label lblGeocoder;
         private System.Windows.Forms.CheckBox chkInvertedTree;
         private System.Windows.Forms.CheckBox chkMarriagesDates;
+        private System.Windows.Forms.CheckBox chkAutoCheckUpdates;
     }
 }

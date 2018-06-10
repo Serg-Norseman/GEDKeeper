@@ -138,6 +138,7 @@ namespace GKUI.Forms
             chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
             chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
+            chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
 
             chkSurname.Checked = fOptions.ChartOptions.FamilyVisible;
             chkName.Checked = fOptions.ChartOptions.NameVisible;
@@ -344,6 +345,7 @@ namespace GKUI.Forms
             fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
+            fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked;
 
             fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
             fOptions.ChartOptions.NameVisible = chkName.Checked;
@@ -578,6 +580,7 @@ namespace GKUI.Forms
             chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
             chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
+            chkAutoCheckUpdates.Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
         }
     }
 }

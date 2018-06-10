@@ -102,6 +102,7 @@ namespace GKUI.Forms
         private RadioButton radMarried;
         private GroupBox grpAdvancedNames;
         private CheckBox chkAllowMediaDirectRefs;
+        private CheckBox chkAutoCheckUpdates;
         private TabPage pageMultimedia;
         private CheckBox chkEmbeddedMediaPlayer;
         private CheckBox chkLoadRecentFiles;
@@ -231,6 +232,9 @@ namespace GKUI.Forms
             chkShowOnStart = new CheckBox();
             chkShowOnStart.Text = "chkShowOnStart";
 
+            chkAutoCheckUpdates = new CheckBox();
+            chkAutoCheckUpdates.Text = "chkAutoCheckUpdates";
+
             lblGeocoder = new Label();
             lblGeocoder.Text = "lblGeocoder";
 
@@ -255,6 +259,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { chkShowOnStart }
+                    },
+                    new TableRow {
+                        Cells = { chkAutoCheckUpdates }
                     },
                     new TableRow {
                         Cells = { lblLanguage, cmbLanguages }
