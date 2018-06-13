@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace GKCommon.TreeMap
@@ -104,19 +105,6 @@ namespace GKCommon.TreeMap
 
         public void CalcRecursiveLayout(List<MapItem> itemsList, MapRect bounds)
         {
-            CalcLayout(itemsList, bounds);
-
-            foreach (MapItem item in itemsList) {
-                if (item.IsLeaf()) {
-                    continue;
-                }
-
-                CalcRecursiveLayout(item.Items, item.Bounds);
-            }
-        }
-
-        public void CalcLayout(List<MapItem> itemsList, MapRect bounds)
-        {
             if (itemsList == null || itemsList.Count <= 0) {
                 return;
             }
@@ -133,14 +121,25 @@ namespace GKCommon.TreeMap
                 item.Ratio = (totalArea / sum * item.GetCalcSize());
             }
 
-            MapItem[] itemsArr = new MapItem[itemsList.Count];
-            itemsArr = itemsList.ToArray();
-            QuickSortDesc(itemsArr, 0, itemsArr.Length - 1);
+            itemsList.Sort(ItemsCompare);
 
-            CalcLayout(itemsArr, 0, itemsArr.Length - 1, bounds);
+            CalcLayout(itemsList, 0, itemsList.Count - 1, bounds);
+
+            foreach (MapItem item in itemsList) {
+                if (!item.IsLeaf()) {
+                    CalcRecursiveLayout(item.Items, item.Bounds);
+                }
+            }
         }
 
-        private void CalcLayout(MapItem[] items, int start, int end, MapRect bounds)
+        private static int ItemsCompare(MapItem it1, MapItem it2)
+        {
+            return -it1.Ratio.CompareTo(it2.Ratio);
+        }
+
+        private int fMid = 0; // don't change it!
+
+        private void CalcLayout(List<MapItem> items, int start, int end, MapRect bounds)
         {
             if (start > end) {
                 return;
@@ -149,34 +148,39 @@ namespace GKCommon.TreeMap
                 items[start].Bounds = bounds;
             }
 
-            int mid = start;
-            while (mid < end) {
-                if (GetHighestAspect(items, start, mid, bounds) > GetHighestAspect(items, start, mid + 1, bounds)) {
-                    mid++;
+            fMid = start;
+            while (fMid < end) {
+                if (GetHighestAspect(items, start, fMid, bounds) > GetHighestAspect(items, start, fMid + 1, bounds)) {
+                    fMid++;
                 } else {
-                    MapRect newBounds = LayoutRow(items, start, mid, bounds);
-                    CalcLayout(items, mid + 1, end, newBounds);
+                    MapRect newBounds = LayoutRow(items, start, fMid, bounds);
+                    CalcLayout(items, fMid + 1, end, newBounds);
                 }
             }
         }
 
-        private double GetHighestAspect(MapItem[] items, int start, int end, MapRect bounds)
+        private static double GetHighestAspect(List<MapItem> items, int start, int end, MapRect bounds)
         {
             LayoutRow(items, start, end, bounds);
+
             double max = double.MinValue;
             for (int i = start; i <= end; i++) {
-                if (items[i].Bounds.GetAspectRatio() > max) {
-                    max = items[i].Bounds.GetAspectRatio();
-                }
+                max = Math.Max(max, items[i].Bounds.GetAspectRatio());
             }
             return max;
         }
 
-        private MapRect LayoutRow(MapItem[] items, int start, int end, MapRect bounds)
+        private static MapRect LayoutRow(IList<MapItem> items, int start, int end, MapRect bounds)
         {
             bool isHorizontal = bounds.W > bounds.H;
-            double total = bounds.W * bounds.H; //totalSize(items, 0, items.length-1);
-            double rowSize = GetTotalSize(items, start, end);
+            double total = bounds.W * bounds.H;
+
+            // GetTotalSize(Ratio)
+            double rowSize = 0;
+            for (int i = start; i <= end; i++) {
+                rowSize += items[i].Ratio;
+            }
+
             double rowRatio = rowSize / total;
             double offset = 0;
 
@@ -198,57 +202,11 @@ namespace GKCommon.TreeMap
                 items[i].Bounds = r;
                 offset += ratio;
             }
+
             if (isHorizontal) {
                 return new MapRect(bounds.X + bounds.W * rowRatio, bounds.Y, bounds.W - bounds.W * rowRatio, bounds.H);
             } else {
                 return new MapRect(bounds.X, bounds.Y + bounds.H * rowRatio, bounds.W, bounds.H - bounds.H * rowRatio);
-            }
-        }
-
-        private static double GetTotalSize(MapItem[] items, int start, int end)
-        {
-            double sum = 0;
-            for (int i = start; i <= end; i++) {
-                sum += items[i].Ratio;
-            }
-            return sum;
-        }
-
-        private void QuickSortDesc(MapItem[] inputArr, int lowerIndex, int higherIndex)
-        {
-            int i = lowerIndex;
-            int j = higherIndex;
-            // calculate pivot number
-            double pivot = inputArr[lowerIndex + (higherIndex - lowerIndex) / 2].Ratio;
-            // Divide into two arrays
-            while (i <= j) {
-                /**
-                 * In each iteration, we will identify a number from left side which
-                 * is greater then the pivot value, and also we will identify a
-                 * number from right side which is less then the pivot value. Once
-                 * the search is done, then we exchange both numbers.
-                 */
-                while (inputArr[i].Ratio > pivot) {
-                    i++;
-                }
-                while (inputArr[j].Ratio < pivot) {
-                    j--;
-                }
-                if (i <= j) {
-                    MapItem temp = inputArr[i];
-                    inputArr[i] = inputArr[j];
-                    inputArr[j] = temp;
-                    //move index to next position on both sides
-                    i++;
-                    j--;
-                }
-            }
-            // call quickSort() method recursively
-            if (lowerIndex < j) {
-                QuickSortDesc(inputArr, lowerIndex, j);
-            }
-            if (i < higherIndex) {
-                QuickSortDesc(inputArr, i, higherIndex);
             }
         }
     }

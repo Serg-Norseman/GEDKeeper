@@ -84,6 +84,8 @@ namespace GKDataQualityPlugin
                 return;
             }
 
+            string hint = fPlugin.LangMan.LS(CLS.LSID_Hint);
+
             GEDCOMTree tree = fBase.Context.Tree;
             List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
@@ -111,7 +113,7 @@ namespace GKDataQualityPlugin
                             }
                             quality /= groupSize;
 
-                            string name = groupNum.ToString() + " group (" + groupSize.ToString() + ") " + quality.ToString("0.00");
+                            string name = string.Format(hint, groupNum, groupSize, quality.ToString("0.00"));
 
                             CreateItem(null, name, groupSize, quality);
                         }

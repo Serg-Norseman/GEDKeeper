@@ -476,6 +476,7 @@ SectionGroup /e "$(gkplg)"
   		SetOutPath "$INSTDIR\plugins"
 		File "..\plugins\GKDataQualityPlugin.dll"
   		File "..\plugins\GKDataQualityPlugin.enu"
+  		File "..\plugins\GKDataQualityPlugin.rus"
 	SectionEnd
 
 	Section "$(gkp_histdata)"

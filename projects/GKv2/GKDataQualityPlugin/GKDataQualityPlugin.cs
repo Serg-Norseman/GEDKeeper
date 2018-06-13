@@ -44,7 +44,7 @@ namespace GKDataQualityPlugin
     public enum CLS
     {
         /* 00 */ LSID_Title,
-        /* 01 */ LSID_1,
+        /* 01 */ LSID_Hint,
         /* 02 */ LSID_2,
         /* 03 */ LSID_3,
         /* 04 */ LSID_4,

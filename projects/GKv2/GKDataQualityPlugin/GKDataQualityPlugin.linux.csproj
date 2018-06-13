@@ -74,6 +74,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKDataQualityPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKDataQualityPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
