@@ -16,6 +16,8 @@
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
 [![Technical debt ratio](https://sonarcloud.io/api/badges/measure?key=gedkeeper&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard?id=gedkeeper)
+[![BCH compliance](https://bettercodehub.com/edge/badge/Serg-Norseman/GEDKeeper?branch=master)](https://bettercodehub.com/)
+[![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper/badge)](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
