@@ -28,7 +28,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -89,12 +88,19 @@ namespace GKHistoryDataPlugin
 
         private void LoadFiles()
         {
-            string csvPath = AppHost.GetAppPath() + "externals/";
-            string[] csvFiles = Directory.GetFiles(csvPath, "*.csv");
+            try {
+                string csvPath = AppHost.GetAppPath() + "externals/";
+                if (!Directory.Exists(csvPath)) {
+                    Directory.CreateDirectory(csvPath);
+                }
+                string[] csvFiles = Directory.GetFiles(csvPath, "*.csv");
 
-            cbDataFiles.Items.Clear();
-            foreach (string cf in csvFiles) {
-                cbDataFiles.Items.Add(Path.GetFileName(cf));
+                cbDataFiles.Items.Clear();
+                foreach (string cf in csvFiles) {
+                    cbDataFiles.Items.Add(Path.GetFileName(cf));
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("HistoryDataWin.LoadFiles(): " + ex.Message);
             }
         }
 
