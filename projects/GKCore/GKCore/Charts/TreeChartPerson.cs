@@ -95,6 +95,7 @@ namespace GKCore.Charts
         public ExtRect PortraitArea;
         public string MarriageDate;
         public bool IsCollapsed;
+        public bool IsVisible;
 
 
         public IImage Portrait

@@ -796,6 +796,7 @@ namespace GKCore.Charts
                     FindRelationship(p);
                 }
 
+                p.IsVisible = false;
                 p.CalcBounds(lines, fRenderer);
             }
 
@@ -819,7 +820,9 @@ namespace GKCore.Charts
             int num2 = fPersons.Count;
             for (int i = 0; i < num2; i++) {
                 TreeChartPerson p = fPersons[i];
-                AdjustTreeBounds(p);
+                if (p.IsVisible) {
+                    AdjustTreeBounds(p);
+                }
             }
 
             // adjust bounds
@@ -828,9 +831,11 @@ namespace GKCore.Charts
             fTreeBounds = ExtRect.Create(int.MaxValue, int.MaxValue, 0, 0);
             for (int i = 0; i < num2; i++) {
                 TreeChartPerson p = fPersons[i];
-                p.PtX += offsetX;
-                p.PtY += offsetY;
-                AdjustTreeBounds(p);
+                if (p.IsVisible) {
+                    p.PtX += offsetX;
+                    p.PtY += offsetY;
+                    AdjustTreeBounds(p);
+                }
             }
 
             fImageHeight = fTreeBounds.GetHeight() + fMargins * 2;
@@ -888,6 +893,8 @@ namespace GKCore.Charts
                     prev[i].PtY += offset;
                 }
             }
+
+            person.IsVisible = true;
 
             if (person.IsCollapsed) {
                 return;
@@ -1052,6 +1059,8 @@ namespace GKCore.Charts
                 RecalcDescChilds(person);
                 fEdges[gen] = person.Rect.Right;
             }
+
+            person.IsVisible = true;
 
             if (person.GetSpousesCount() > 0) {
                 TreeChartPerson prev = person;
