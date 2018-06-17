@@ -321,8 +321,7 @@ namespace GKUI.Charts
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fTween.Dispose();
                 fModel.Dispose();
 
@@ -352,8 +351,7 @@ namespace GKUI.Charts
             DateTime cur = DateTime.Now;
             TimeSpan d = cur - st;
 
-            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/)
-            {
+            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
                 fModel.HighlightedPerson = null;
                 //fPersonControl.Visible = true;
                 Invalidate();
@@ -366,8 +364,7 @@ namespace GKUI.Charts
 
             RecalcChart();
 
-            if (fTraceSelected && fSelected != null)
-            {
+            if (fTraceSelected && fSelected != null) {
                 CenterPerson(fSelected, false);
             }
 
@@ -378,8 +375,7 @@ namespace GKUI.Charts
         {
             if (iRec == null) return;
 
-            try
-            {
+            try {
                 fSelected = null;
 
                 fModel.GenChart(iRec, kind, rootCenter);
@@ -390,9 +386,7 @@ namespace GKUI.Charts
 
                 NavAdd(iRec);
                 DoRootChanged(fModel.Root);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
             }
         }
@@ -407,9 +401,7 @@ namespace GKUI.Charts
                 SaveSelection();
                 GenChart(rootRec, fModel.Kind, false);
                 RestoreSelection();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
             }
         }
@@ -500,11 +492,11 @@ namespace GKUI.Charts
 
             DrawBackground(background);
 
-            #if DEBUG_IMAGE
+#if DEBUG_IMAGE
             using (Pen pen = new Pen(Color.Red)) {
                 fRenderer.DrawRectangle(pen, Color.Transparent, fSPX, fSPY, fImageWidth, fImageHeight);
             }
-            #endif
+#endif
 
             bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
 
@@ -606,10 +598,11 @@ namespace GKUI.Charts
         public void ToggleCollapse()
         {
             try {
-                TreeChartPerson p = fSelected;
-                if (p != null) {
-                    p.IsCollapsed = !p.IsCollapsed;
+                if (fSelected != null) {
+                    fModel.ToggleCollapse(fSelected);
+                    SaveSelection();
                     RecalcChart(false);
+                    RestoreSelection();
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.ToggleCollapse(): " + ex.Message);
@@ -643,8 +636,7 @@ namespace GKUI.Charts
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            switch (e.Key)
-            {
+            switch (e.Key) {
                 case Keys.F4:
                     ToggleCollapse();
                     break;
@@ -736,18 +728,13 @@ namespace GKUI.Charts
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meDown)
-                    {
+                    if (e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meDown) {
                         result = MouseAction.maSelect;
                         break;
-                    }
-                    else if (e.Buttons == MouseButtons.Alternate && mouseEvent == MouseEvent.meUp)
-                    {
+                    } else if (e.Buttons == MouseButtons.Alternate && mouseEvent == MouseEvent.meUp) {
                         result = MouseAction.maProperties;
                         break;
-                    }
-                    else if (mouseEvent == MouseEvent.meMove)
-                    {
+                    } else if (mouseEvent == MouseEvent.meMove) {
                         result = MouseAction.maHighlight;
                         break;
                     }
@@ -811,8 +798,7 @@ namespace GKUI.Charts
         {
             Point scrPt = GetScrollRelativeLocation(e.Location);
 
-            switch (fMode)
-            {
+            switch (fMode) {
                 case ChartControlMode.ccmDefault:
                     TreeChartPerson mPers;
                     MouseAction mAct = GetMouseAction(e, MouseEvent.meMove, out mPers);
@@ -878,8 +864,7 @@ namespace GKUI.Charts
 
                         case MouseAction.maProperties:
                             SelectBy(mPers, false);
-                            if (fSelected == mPers && fSelected.Rec != null)
-                            {
+                            if (fSelected == mPers && fSelected.Rec != null) {
                                 DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, e.Location));
                             }
                             break;
@@ -983,8 +968,7 @@ namespace GKUI.Charts
             int dstX = Math.Min(Math.Max(0, ((person.PtX) - (viewport.Width / 2))), widthMax);
             int dstY = Math.Min(Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2))), heightMax);
 
-            if ((srcX != dstX) || (srcY != dstY))
-            {
+            if ((srcX != dstX) || (srcY != dstY)) {
                 int timeInterval = animation ? 20 : 1;
                 fTween.StartTween(UpdateScrollPosition, srcX, srcY, dstX, dstY, TweenAnimation.EaseInOutQuad, timeInterval);
             }

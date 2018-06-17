@@ -103,14 +103,10 @@ namespace GKCore
         {
             string s = string.Empty;
 
-            if (0 != value.Count)
-            {
-                if (size < value[0].Length)
-                {
+            if (value != null && value.Count != 0) {
+                if (size < value[0].Length) {
                     s = value[0].Substring(0, size) + "...";
-                }
-                else
-                {
+                } else {
                     s = value[0];
                 }
             }

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -40,14 +41,14 @@ namespace GKUI.Charts
     public sealed class TreeChartGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
-        private Matrix fMatrix;
-
-        private TextWriter fSVGWriter;
         private SvgGraphics fSVGGfx;
+        private TextWriter fSVGWriter;
+        private readonly Stack<Matrix> fTransforms;
         private float fTranslucent;
 
         public TreeChartGfxRenderer() : base()
         {
+            fTransforms = new Stack<Matrix>();
         }
 
         public override void SetSVGMode(bool active, string svgFileName, int width, int height)
@@ -268,6 +269,11 @@ namespace GKUI.Charts
             return new GfxPathHandler(new GraphicsPath());
         }
 
+        public override void SetTranslucent(float value)
+        {
+            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+        }
+
         #region Private helpers
 
         private static GraphicsPath CreateRectangle(float x, float y, float width, float height)
@@ -317,98 +323,75 @@ namespace GKUI.Charts
 
         #endregion
 
-        public override void ResetTransform()
-        {
-            fCanvas.ResetTransform();
-            fMatrix = fCanvas.Transform;
-        }
-
         public override void ScaleTransform(float sx, float sy)
         {
+            var matrix = fCanvas.Transform;
             Matrix m = new Matrix(sx, 0, 0, sy, 0, 0);
-            m.Multiply(fMatrix, MatrixOrder.Append);
+            m.Multiply(matrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Scale(sx, sy);
+            }
         }
 
         public override void TranslateTransform(float dx, float dy)
         {
+            var matrix = fCanvas.Transform;
             Matrix m = new Matrix(1, 0, 0, 1, dx, dy);
-            m.Multiply(fMatrix, MatrixOrder.Append);
+            m.Multiply(matrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Translate(dx, dy);
+            }
         }
 
         public override void RotateTransform(float angle)
         {
+            var matrix = fCanvas.Transform;
             float rotation = (float)((angle) * Math.PI / 180.0f);
             float cosine = (float)(Math.Cos(rotation));
             float sine = (float)(Math.Sin(rotation));
             Matrix m = new Matrix(cosine, sine, -sine, cosine, 0, 0);
-            m.Multiply(fMatrix, MatrixOrder.Append);
+            m.Multiply(matrix, MatrixOrder.Append);
             fCanvas.Transform = m;
-            fMatrix = m;
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Rotate(angle);
+            }
         }
 
-        public override object SaveTransform()
+        public override void ResetTransform()
         {
-            return fCanvas.Transform;
+            fCanvas.ResetTransform();
+            fTransforms.Push(fCanvas.Transform);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.ResetState();
+            }
         }
 
-        public override void RestoreTransform(object matrix)
+        public override void RestoreTransform()
         {
-            var mtx = matrix as Matrix;
-
-            fCanvas.Transform = mtx;
-            fMatrix = mtx;
-        }
-
-        public override void DrawArcText(string text, float centerX, float centerY, float radius,
-                                         float startAngle, float wedgeAngle,
-                                         bool inside, bool clockwise, IFont font, IBrush brush)
-        {
-            ExtSizeF size = GetTextSize(text, font);
-            radius = radius + size.Height / 2.0f;
-
-            float textAngle = Math.Min((float)MathHelper.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
-            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
-
-            if (clockwise) {
-                startAngle += deltaAngle;
+            if (fTransforms.Count > 1) {
+                fCanvas.Transform = fTransforms.Pop();
             } else {
-                startAngle += wedgeAngle - deltaAngle;
-            }
-            startAngle = -startAngle;
-
-            Matrix previousTransformation = fCanvas.Transform;
-
-            for (int i = 0; i < text.Length; ++i)
-            {
-                float offset = (textAngle * ((float)(i) / text.Length));
-                float angle = clockwise ? startAngle - offset : startAngle + offset;
-
-                double radAngle = angle * (Math.PI / 180.0d);
-                float x = (float)(centerX + Math.Cos(radAngle) * radius);
-                float y = (float)(centerY - Math.Sin(radAngle) * radius);
-                float charRotation = 90 - (inside ? angle : angle + 180);
-                charRotation *= (float)(Math.PI / 180.0f);
-                float cosine = (float)(Math.Cos(charRotation));
-                float sine = (float)(Math.Sin(charRotation));
-
-                Matrix m = new Matrix(cosine, sine, -sine, cosine, x, y);
-                m.Multiply(previousTransformation, MatrixOrder.Append);
-                fCanvas.Transform = m;
-
-                string chr = new string(text[i], 1);
-                DrawString(chr, font, brush, 0, 0);
+                ResetTransform();
             }
 
-            fCanvas.Transform = previousTransformation;
+            if (fSVGGfx != null) {
+                fSVGGfx.RestoreState();
+            }
         }
 
-        public override void SetTranslucent(float value)
+        public override void SaveTransform()
         {
-            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+            fTransforms.Push(fCanvas.Transform);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.SaveState();
+            }
         }
     }
 }

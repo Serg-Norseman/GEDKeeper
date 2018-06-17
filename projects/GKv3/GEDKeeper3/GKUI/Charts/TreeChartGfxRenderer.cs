@@ -245,6 +245,11 @@ namespace GKUI.Charts
             return new GfxPathHandler(new GraphicsPath());
         }
 
+        public override void SetTranslucent(float value)
+        {
+            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+        }
+
         #region Private helpers
 
         private static GraphicsPath CreateRectangle(float x, float y, float width, float height)
@@ -294,82 +299,58 @@ namespace GKUI.Charts
 
         #endregion
 
-        public override void ResetTransform()
-        {
-            // unsupported in Eto
-        }
-
         public override void ScaleTransform(float sx, float sy)
         {
             fCanvas.ScaleTransform(sx, sy);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Scale(sx, sy);
+            }
         }
 
         public override void TranslateTransform(float dx, float dy)
         {
             fCanvas.TranslateTransform(dx, dy);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Translate(dx, dy);
+            }
         }
 
         public override void RotateTransform(float angle)
         {
             fCanvas.RotateTransform(angle);
+
+            if (fSVGGfx != null) {
+                fSVGGfx.Rotate(angle);
+            }
         }
 
-        public override object SaveTransform()
+        public override void ResetTransform()
         {
-            fCanvas.SaveTransform();
-            return fCanvas.CurrentTransform;
+            // unsupported in Eto
+
+            if (fSVGGfx != null) {
+                fSVGGfx.ResetState();
+            }
         }
 
-        public override void RestoreTransform(object matrix)
+        public override void RestoreTransform()
         {
             fCanvas.RestoreTransform();
-        }
 
-        public override void DrawArcText(string text, float centerX, float centerY, float radius,
-                                         float startAngle, float wedgeAngle,
-                                         bool inside, bool clockwise, IFont font, IBrush brush)
-        {
-            ExtSizeF size = GetTextSize(text, font);
-            radius = radius + size.Height / 2.0f;
-
-            float textAngle = Math.Min((float)MathHelper.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
-            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
-
-            if (clockwise) {
-                startAngle += deltaAngle;
-            } else {
-                startAngle += wedgeAngle - deltaAngle;
-            }
-            startAngle = -startAngle;
-
-            for (int i = 0; i < text.Length; ++i)
-            {
-                float offset = (textAngle * ((float)(i) / text.Length));
-                float angle = clockwise ? startAngle - offset : startAngle + offset;
-
-                double radAngle = angle * (Math.PI / 180.0d);
-                float x = (float)(centerX + Math.Cos(radAngle) * radius);
-                float y = (float)(centerY - Math.Sin(radAngle) * radius);
-                float charRotation = 90 - (inside ? angle : angle + 180);
-                charRotation *= (float)(Math.PI / 180.0f);
-                float cosine = (float)(Math.Cos(charRotation));
-                float sine = (float)(Math.Sin(charRotation));
-
-                fCanvas.SaveTransform();
-
-                IMatrix m = Matrix.Create(cosine, sine, -sine, cosine, x, y);
-                fCanvas.MultiplyTransform(m);
-
-                string chr = new string(text[i], 1);
-                DrawString(chr, font, brush, 0, 0);
-
-                fCanvas.RestoreTransform();
+            if (fSVGGfx != null) {
+                fSVGGfx.RestoreState();
             }
         }
 
-        public override void SetTranslucent(float value)
+        public override void SaveTransform()
         {
-            fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+            fCanvas.SaveTransform();
+
+            if (fSVGGfx != null) {
+                fSVGGfx.SaveState();
+            }
         }
     }
 }

@@ -1317,7 +1317,6 @@ namespace GKCore
             Assert.AreEqual(0.5f, mapPoint.Latitude);
             Assert.AreEqual(0.5f, mapPoint.Longitude);
             Assert.AreEqual("test", mapPoint.Hint);
-
         }
 
         [Test]

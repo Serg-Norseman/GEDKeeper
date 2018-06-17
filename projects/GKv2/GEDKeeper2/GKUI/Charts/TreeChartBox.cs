@@ -632,7 +632,10 @@ namespace GKUI.Charts
             try {
                 if (fSelected != null) {
                     fModel.ToggleCollapse(fSelected);
+
+                    SaveSelection();
                     RecalcChart(false);
+                    RestoreSelection();
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.ToggleCollapse(): " + ex.Message);

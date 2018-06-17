@@ -252,10 +252,6 @@ namespace GKCore.Export
             return AppHost.GfxProvider.CreatePath();
         }
 
-        public override void ResetTransform()
-        {
-        }
-
         public override void ScaleTransform(float sx, float sy)
         {
         }
@@ -268,24 +264,20 @@ namespace GKCore.Export
         {
         }
 
-        public override object SaveTransform()
-        {
-            return null;
-        }
-
-        public override void RestoreTransform(object matrix)
+        public override void ResetTransform()
         {
         }
 
-        public override void DrawArcText(string text, float centerX, float centerY, float radius,
-                                         float startAngle, float wedgeAngle,
-                                         bool inside, bool clockwise, IFont font, IBrush brush)
+        public override void RestoreTransform()
+        {
+        }
+
+        public override void SaveTransform()
         {
         }
 
         public override void SetTranslucent(float value)
         {
-            // dummy
         }
     }
 }

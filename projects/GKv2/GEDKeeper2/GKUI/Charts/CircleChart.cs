@@ -479,5 +479,10 @@ namespace GKUI.Charts
         {
             Render(gfx, target);
         }
+
+        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            fRenderer.SetSVGMode(active, svgFileName, width, height);
+        }
     }
 }

@@ -257,7 +257,7 @@ namespace GKUI.Charts
                     break;
             }
 
-            fModel.Renderer.RestoreTransform(null);
+            fModel.Renderer.RestoreTransform();
 
             //context.ResetClip();
         }
@@ -453,6 +453,11 @@ namespace GKUI.Charts
         public override void RenderStaticImage(Graphics gfx, RenderTarget target)
         {
             Render(gfx, target);
+        }
+
+        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
+        {
+            fRenderer.SetSVGMode(active, svgFileName, width, height);
         }
     }
 }

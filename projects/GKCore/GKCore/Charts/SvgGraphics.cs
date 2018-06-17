@@ -48,9 +48,33 @@ namespace GKCore.Charts
     {
         private class State
         {
+            public float Rotate;
             public ExtPointF Scale;
             public ExtPointF Translation;
             public ExtRectF ClippingRect;
+
+            public State()
+            {
+                Rotate = 0;
+                Scale = new ExtPointF(1, 1);
+                Translation = new ExtPointF(0, 0);
+            }
+
+            public string ToString()
+            {
+                string transform = "";
+                if (Rotate != 0.0f) {
+                    transform += string.Format(" rotate({0})", Rotate);
+                }
+                if (Scale.X != 1.0f || Scale.Y != 1.0f) {
+                    transform += string.Format(" scale({0} {1})", Scale.X, Scale.Y);
+                }
+                if (Translation.X != 0.0f || Translation.Y != 0.0f) {
+                    transform += string.Format(" translate({0} {1})", Translation.X, Translation.Y);
+                }
+                string result = (string.IsNullOrEmpty(transform)) ? "" : string.Format(" transform='{0}'", transform);
+                return result;
+            }
         }
 
         private bool fInGroup = false;
@@ -130,6 +154,16 @@ namespace GKCore.Charts
             fInGroup = false;
         }
 
+        public void EndDrawing()
+        {
+            if (fInGroup) {
+                WriteLine("</g>");
+                fInGroup = false;
+            }
+            WriteLine("</svg>");
+            fWriter.Flush();
+        }
+
         public void BeginEntity(object entity)
         {
             if (fInGroup) {
@@ -146,16 +180,6 @@ namespace GKCore.Charts
                 fViewBox.Left, fViewBox.Top, fViewBox.GetWidth(), fViewBox.GetHeight(), FormatColor(clearColor));
         }
 
-        public void EndDrawing()
-        {
-            if (fInGroup) {
-                WriteLine("</g>");
-                fInGroup = false;
-            }
-            WriteLine("</svg>");
-            fWriter.Flush();
-        }
-
         public void SaveState()
         {
             var ns = new State() {
@@ -163,6 +187,19 @@ namespace GKCore.Charts
             };
             fStates.Push(ns);
             fState = ns;
+        }
+
+        public void RestoreState()
+        {
+            if (fStates.Count > 1) {
+                fState = fStates.Pop();
+            }
+        }
+
+        public void ResetState()
+        {
+            fStates.Clear();
+            fStates.Push(new State());
         }
 
         public void Scale(float sx, float sy)
@@ -177,16 +214,14 @@ namespace GKCore.Charts
             fState.Translation.Y += dy;
         }
 
+        public void Rotate(float angle)
+        {
+            fState.Rotate += angle;
+        }
+
         public void SetClippingRect(float x, float y, float width, float height)
         {
             fState.ClippingRect = ExtRectF.CreateBounds(x, y, width, height);
-        }
-
-        public void RestoreState()
-        {
-            if (fStates.Count > 1) {
-                fState = fStates.Pop();
-            }
         }
 
         public void SetFont(IFont f)

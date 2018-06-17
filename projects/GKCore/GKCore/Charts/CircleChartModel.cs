@@ -352,7 +352,7 @@ namespace GKCore.Charts
 
             bool isNarrow = IsNarrowSegment(givn, rad, wedgeAngle, Font);
 
-            object mtx = fRenderer.SaveTransform();
+            fRenderer.SaveTransform();
 
             if (gen == 0) {
 
@@ -413,8 +413,8 @@ namespace GKCore.Charts
                             dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
                             dy = (float)Math.Cos(Math.PI * angle / 180.0f) * (rad - size.Height);
 
-                            fRenderer.RestoreTransform(mtx);
-                            mtx = fRenderer.SaveTransform();
+                            fRenderer.RestoreTransform();
+                            fRenderer.SaveTransform();
 
                             fRenderer.TranslateTransform(dx, -dy);
                             fRenderer.RotateTransform(angle);
@@ -448,7 +448,7 @@ namespace GKCore.Charts
                 }
             }
 
-            fRenderer.RestoreTransform(mtx);
+            fRenderer.RestoreTransform();
         }
 
         private bool IsNarrowSegment(string text, float radius, float wedgeAngle, IFont font)
@@ -631,7 +631,7 @@ namespace GKCore.Charts
                     fRenderer.DrawPath(fPen, path);
                 }
 
-                DrawPersonName(fSegments[i]);
+                DrawPersonName(segment);
             }
         }
 
@@ -760,7 +760,7 @@ namespace GKCore.Charts
                 IGfxPath path = segment.Path;
                 fRenderer.FillPath(brush, path);
                 fRenderer.DrawPath(fPen, path);
-                DrawPersonName(fSegments[i]);
+                DrawPersonName(segment);
             }
         }
 

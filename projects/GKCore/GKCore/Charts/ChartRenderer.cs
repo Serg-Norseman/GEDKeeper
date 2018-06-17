@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GKCore.Interfaces;
 
@@ -132,18 +133,47 @@ namespace GKCore.Charts
 
         public abstract IGfxPath CreatePath();
 
-        public abstract void ResetTransform();
+        public abstract void SetTranslucent(float value);
+
         public abstract void ScaleTransform(float sx, float sy);
         public abstract void TranslateTransform(float dx, float dy);
         public abstract void RotateTransform(float angle);
 
-        public abstract object SaveTransform();
-        public abstract void RestoreTransform(object matrix);
+        public abstract void ResetTransform();
+        public abstract void RestoreTransform();
+        public abstract void SaveTransform();
 
-        public abstract void DrawArcText(string text, float centerX, float centerY, float radius,
-                                         float startAngle, float wedgeAngle,
-                                         bool inside, bool clockwise, IFont font, IBrush brush);
+        public void DrawArcText(string text, float centerX, float centerY, float radius,
+                                float startAngle, float wedgeAngle,
+                                bool inside, bool clockwise, IFont font, IBrush brush)
+        {
+            ExtSizeF size = GetTextSize(text, font);
+            radius = radius + size.Height / 2.0f;
 
-        public abstract void SetTranslucent(float value);
+            float textAngle = Math.Min((float)MathHelper.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
+            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
+
+            if (clockwise) {
+                startAngle += deltaAngle;
+            } else {
+                startAngle += wedgeAngle - deltaAngle;
+            }
+            startAngle = -startAngle;
+
+            for (int i = 0; i < text.Length; ++i) {
+                float offset = (textAngle * ((float)(i) / text.Length));
+                float angle = clockwise ? startAngle - offset : startAngle + offset;
+                double radAngle = angle * (Math.PI / 180.0d);
+                float x = (float)(centerX + Math.Cos(radAngle) * radius);
+                float y = (float)(centerY - Math.Sin(radAngle) * radius);
+                float charRotation = 90 - (inside ? angle : angle + 180);
+
+                SaveTransform();
+                TranslateTransform(x, y);
+                RotateTransform(charRotation);
+                DrawString(text.Substring(i, 1), font, brush, 0, 0);
+                RestoreTransform();
+            }
+        }
     }
 }
