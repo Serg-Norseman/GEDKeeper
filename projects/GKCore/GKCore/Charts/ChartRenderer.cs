@@ -73,6 +73,7 @@ namespace GKCore.Charts
         // with the ascent and descent of elements.
         protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
+        public abstract bool IsSVG { get; }
 
         protected ChartRenderer()
         {
@@ -119,6 +120,13 @@ namespace GKCore.Charts
         public abstract void FillPath(IBrush brush, IGfxPath path);
 
         public abstract void DrawPath(IPen pen, IGfxPath path);
+
+        public abstract void DrawCircle(IPen pen, IBrush brush, float x, float y,
+                                        float width, float height);
+
+        public abstract void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
+                                               float inRad, float extRad,
+                                               float startAngle, float wedgeAngle);
 
         public abstract void CreateCircleSegment(IGfxPath path,
                                                  float inRad, float extRad, float wedgeAngle,

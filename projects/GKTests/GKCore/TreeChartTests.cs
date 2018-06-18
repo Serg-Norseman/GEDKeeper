@@ -272,12 +272,12 @@ namespace GKCore
 
                 svg.DrawLine(10, 10, 50, 10, 1);
                 svg.DrawArc(60, 60, 20, 15, 25, 1);
-                svg.DrawOval(10, 10, 30, 30, 1);
+                svg.DrawEllipse(10, 10, 30, 30, null, null);
                 svg.DrawRect(50, 50, 20, 20, 2);
                 svg.DrawRoundedRect(80, 80, 10, 10, 3, 1);
 
                 svg.FillArc(60, 60, 20, 15, 25);
-                svg.FillOval(10, 10, 30, 30);
+                svg.DrawEllipse(10, 10, 30, 30, null, null);
                 svg.FillRect(50, 50, 20, 20);
 
                 svg.SetColor(UIHelper.ConvertColor(Color.Red));

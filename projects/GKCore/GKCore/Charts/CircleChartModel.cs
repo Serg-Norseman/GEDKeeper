@@ -54,8 +54,7 @@ namespace GKCore.Charts
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (Path != null) Path.Dispose();
             }
             base.Dispose(disposing);
@@ -461,6 +460,43 @@ namespace GKCore.Charts
             return (wedgeL / size.Width <= 0.9f);
         }
 
+        private void DefineSegment(CircleSegment segment,
+                                   float rad, float inRad, float extRad,
+                                   float startAngle, float wedgeAngle)
+        {
+            IGfxPath path = segment.Path;
+
+            segment.StartAngle = startAngle;
+            segment.WedgeAngle = wedgeAngle;
+            segment.Rad = rad;
+            segment.IntRad = inRad;
+            segment.ExtRad = extRad;
+
+            if (wedgeAngle == 360.0f) {
+                path.StartFigure();
+                path.AddEllipse(-extRad, -extRad, extRad * 2.0f, extRad * 2.0f);
+                path.CloseFigure();
+            } else {
+                fRenderer.CreateCircleSegment(path, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
+            }
+        }
+
+        private void DrawSegment(CircleSegment segment, IPen pen, IBrush brush)
+        {
+            if (fRenderer.IsSVG) {
+                if (segment.WedgeAngle == 360.0f) {
+                    fRenderer.DrawCircle(pen, brush, -segment.ExtRad, -segment.ExtRad, segment.ExtRad * 2, segment.ExtRad * 2);
+                } else {
+                    fRenderer.DrawCircleSegment(pen, brush, 0, 0, segment.IntRad, segment.ExtRad, segment.StartAngle, segment.WedgeAngle);
+                }
+            } else {
+                IGfxPath path = segment.Path;
+                fRenderer.FillPath(brush, path);
+                fRenderer.DrawPath(pen, path);
+            }
+            DrawPersonName(segment);
+        }
+
         #region Ancestors Circle
 
         public void BuildAncTree()
@@ -471,14 +507,7 @@ namespace GKCore.Charts
             float inRad = startRad;
 
             AncPersonSegment segment = new AncPersonSegment(0);
-            segment.IntRad = 0;
-            segment.ExtRad = inRad;
-            segment.StartAngle = 0 - 90.0f;
-            segment.WedgeAngle = segment.StartAngle + 360.0f;
-            IGfxPath path = segment.Path;
-            path.StartFigure();
-            path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
-            path.CloseFigure();
+            DefineSegment(segment, 0, 0, inRad, 0 - 90.0f, 360.0f);
             fSegments.Add(segment);
 
             int maxSteps = 1;
@@ -487,17 +516,13 @@ namespace GKCore.Charts
                 float extRad = inRad + fGenWidth;
 
                 maxSteps *= 2;
-                float stepAngle = (360.0f / maxSteps);
+                float wedgeAngle = (360.0f / maxSteps);
 
-                for (int step = 0; step < maxSteps; step++)
-                {
-                    float ang1 = (step * stepAngle) - 90.0f;
-                    float ang2 = ang1 + stepAngle;
+                for (int step = 0; step < maxSteps; step++) {
+                    float startAngle = (step * wedgeAngle) - 90.0f;
 
                     segment = new AncPersonSegment(gen);
-                    segment.StartAngle = ang1;
-                    segment.WedgeAngle = stepAngle;
-                    fRenderer.CreateCircleSegment(segment.Path, inRad, extRad, stepAngle, ang1, ang2);
+                    DefineSegment(segment, 0, inRad, extRad, startAngle, wedgeAngle);
                     fSegments.Add(segment);
                 }
             }
@@ -623,15 +648,10 @@ namespace GKCore.Charts
                     } else {
                         brIndex = (segment.Gen == 0) ? CircleChartModel.CENTRAL_INDEX : segment.Gen - 1;
                     }
-
                     IBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
-                    IGfxPath path = segment.Path;
-                    fRenderer.FillPath(brush, path);
-                    fRenderer.DrawPath(fPen, path);
+                    DrawSegment(segment, fPen, brush);
                 }
-
-                DrawPersonName(segment);
             }
         }
 
@@ -657,18 +677,9 @@ namespace GKCore.Charts
 
         private void CalcDescendants(DescPersonSegment segment, float inRad, float startAngle, float stepAngle)
         {
-            IGfxPath path = segment.Path;
-
             float extRad;
             if (segment.Gen == 0) {
-                segment.StartAngle = startAngle;
-                segment.WedgeAngle = 360.0f;
-                segment.IntRad = 0;
-                segment.ExtRad = inRad;
-
-                path.StartFigure();
-                path.AddEllipse(-inRad, -inRad, inRad * 2.0f, inRad * 2.0f);
-                path.CloseFigure();
+                DefineSegment(segment, 0, 0, inRad, startAngle, 360.0f);
 
                 extRad = inRad;
             } else {
@@ -683,13 +694,7 @@ namespace GKCore.Charts
                     wedgeAngle -= 0.1f;
                 }
 
-                segment.StartAngle = startAngle;
-                segment.WedgeAngle = wedgeAngle;
-                segment.Rad = inRad + 50;
-                segment.IntRad = inRad;
-                segment.ExtRad = extRad;
-
-                fRenderer.CreateCircleSegment(path, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
+                DefineSegment(segment, inRad + 50, inRad, extRad, startAngle, wedgeAngle);
             }
 
             for (int i = 0; i < segment.ChildSegments.Count; i++) {
@@ -698,7 +703,6 @@ namespace GKCore.Charts
                 CalcDescendants(childSegment, extRad, startAngle, stepAngle);
 
                 int steps = Math.Max(1, childSegment.TotalSubSegments);
-
                 startAngle += stepAngle * steps;
             }
         }
@@ -757,10 +761,7 @@ namespace GKCore.Charts
                 int brIndex = (segment.Gen == 0) ? CircleChartModel.CENTRAL_INDEX : segment.Gen - 1;
                 IBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
 
-                IGfxPath path = segment.Path;
-                fRenderer.FillPath(brush, path);
-                fRenderer.DrawPath(fPen, path);
-                DrawPersonName(segment);
+                DrawSegment(segment, fPen, brush);
             }
         }
 

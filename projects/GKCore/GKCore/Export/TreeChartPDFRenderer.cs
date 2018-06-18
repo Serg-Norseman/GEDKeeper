@@ -41,6 +41,8 @@ namespace GKCore.Export
         private readonly float fPageHeight;
         private readonly float fPageWidth;
 
+        public override bool IsSVG { get { return false; } }
+
         public TreeChartPDFRenderer(float pageWidth, float pageHeight) : base()
         {
             fPageHeight = pageHeight;
@@ -235,6 +237,17 @@ namespace GKCore.Export
         public override void DrawPath(IPen pen, IGfxPath path)
         {
             
+        }
+
+        public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
+                                        float width, float height)
+        {
+        }
+
+        public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
+                                               float inRad, float extRad,
+                                               float startAngle, float wedgeAngle)
+        {
         }
 
         public override IPen CreatePen(IColor color, float width)
