@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

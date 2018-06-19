@@ -79,6 +79,14 @@ namespace GKCore.Charts
         {
         }
 
+        public virtual void BeginDrawing()
+        {
+        }
+
+        public virtual void EndDrawing()
+        {
+        }
+
         public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
         {
             // dummy
@@ -151,9 +159,9 @@ namespace GKCore.Charts
         public abstract void RestoreTransform();
         public abstract void SaveTransform();
 
-        public void DrawArcText(string text, float centerX, float centerY, float radius,
-                                float startAngle, float wedgeAngle,
-                                bool inside, bool clockwise, IFont font, IBrush brush)
+        public virtual void DrawArcText(string text, float centerX, float centerY,
+                                        float radius, float startAngle, float wedgeAngle,
+                                        bool inside, bool clockwise, IFont font, IBrush brush)
         {
             ExtSizeF size = GetTextSize(text, font);
             radius = radius + size.Height / 2.0f;

@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;

@@ -319,6 +319,37 @@ namespace GKCore.Charts
                 cx, cy, rx, ry, stroke, fill, transform);
         }
 
+        public void DrawCircleSegment(int ctX, int ctY, float inRad, float extRad,
+                                      float startAngle, float endAngle, IPen pen, IBrush brush)
+        {
+            if (pen != null || brush != null) {
+                string transform = GetTransform();
+                string stroke = GetStroke(pen);
+                string fill = GetFill(brush);
+
+                var sa = startAngle * (Math.PI / 180.0d);
+                var ea = endAngle * (Math.PI / 180.0d);
+
+                var sx1 = (float)(ctX + inRad * Math.Cos(sa));
+                var sy1 = (float)(ctY + inRad * Math.Sin(sa));
+                var ex1 = (float)(ctX + extRad * Math.Cos(sa));
+                var ey1 = (float)(ctY + extRad * Math.Sin(sa));
+
+                var sx2 = (float)(ctX + inRad * Math.Cos(ea));
+                var sy2 = (float)(ctY + inRad * Math.Sin(ea));
+                var ex2 = (float)(ctX + extRad * Math.Cos(ea));
+                var ey2 = (float)(ctY + extRad * Math.Sin(ea));
+
+                WriteLine("<path d=\"M {0} {1} L {2} {3} A {4} {5} 0 0 1 {6} {7} L {8} {9} A {10} {11} 0 0 0 {12} {13}\" {14} {15} {16} />",
+                    ex1, ey1, /* M */
+                    sx1, sy1, /* L */
+                    inRad, inRad, sx2, sy2, /* A */
+                    ex2, ey2, /* L */
+                    extRad, extRad, ex1, ey1, /* A */
+                    stroke, fill, transform);
+            }
+        }
+
         public void FillArc(float cx, float cy, float radius, float startAngle, float endAngle)
         {
             WriteArc(cx, cy, radius, startAngle, endAngle, 0, "none", "0", fLastColor, fLastColorOpacity);
