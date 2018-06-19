@@ -32,7 +32,7 @@ namespace GKUI.Charts
     public sealed class TCScaleControl : ITreeControl
     {
         #region Private fields
-        
+
         /* Define areas within the resource bitmap. */
         private static readonly Rectangle SCALE_RECT = new Rectangle(0, 0, 26, 320);
         private static readonly Rectangle THUMB_RECT = new Rectangle(0, 322, 26, 11);
@@ -138,8 +138,7 @@ namespace GKUI.Charts
             destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
                                             fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
             gfx.DrawImage(fControlsImage, sourceRect, destinationRect);
-            if (0 < fDCount)
-            {
+            if (fDCount > 0) {
                 gfx.DrawImage(fControlsImage, THUMB_RECT, GetDRect(fThumbPos));
             }
         }

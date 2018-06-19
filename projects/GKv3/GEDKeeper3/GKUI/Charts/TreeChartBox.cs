@@ -441,7 +441,7 @@ namespace GKUI.Charts
         {
             if (background == BackgroundMode.bmNone) return;
 
-            bool bgImage = false;/*((BackgroundImage != null) &&
+            bool bgImage = false; /*((BackgroundImage != null) &&
                             (background == BackgroundMode.bmAny ||
                              background == BackgroundMode.bmImage));*/
 
@@ -599,7 +599,8 @@ namespace GKUI.Charts
         {
             try {
                 if (fSelected != null) {
-                    fModel.ToggleCollapse(fSelected);
+                    fModel.ToggleCollapse(fSelected);
+
                     SaveSelection();
                     RecalcChart(false);
                     RestoreSelection();

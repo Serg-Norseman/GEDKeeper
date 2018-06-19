@@ -425,7 +425,7 @@ namespace GKUI.Charts
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None != (Keys.Control & e.Modifiers)) {
-                if (0 > e.Delta.Height) {
+                if (e.Delta.Height < 0) {
                     Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                 } else {
                     Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);

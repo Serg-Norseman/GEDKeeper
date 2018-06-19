@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
@@ -50,28 +49,22 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 int length = 0;
-                for (int it = 0; txtNote.Lines.Length > it; ++it)
-                {
+                for (int it = 0; txtNote.Lines.Length > it; ++it) {
                     length += txtNote.Lines[it].Trim().Length;
                 }
-                if (0 != length)
-                {
+
+                if (length != 0) {
                     fNoteRecord.SetNotesArray(txtNote.Lines);
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
 
                     DialogResult = DialogResult.OK;
-                }
-                else
-                {
+                } else {
                     DialogResult = DialogResult.Cancel;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }

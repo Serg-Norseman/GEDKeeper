@@ -140,7 +140,7 @@ pre.syntax
   color: #000000;
   }
 
-pre.example
+.example
   {
   margin-left: 2.0em;
   /*margin-top: 12.0em;*/
@@ -221,7 +221,7 @@ a.parameter:visited
   text-decoration:none;
   }
 
-div.footer
+.footer
   {
   width: 100%;
   border: none;
@@ -233,7 +233,7 @@ div.footer
   font-size: 70%;
   }
 
-span.filename
+.filename
 {
   color: #F00000;
 }

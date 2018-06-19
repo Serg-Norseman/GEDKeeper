@@ -142,8 +142,7 @@ namespace GKUI.Charts
             destinationRect = new Rectangle(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
                                             fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
             gfx.DrawImage(fControlsImage, destinationRect, sourceRect, GraphicsUnit.Pixel);
-            if (0 < fDCount)
-            {
+            if (fDCount > 0) {
                 gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT, GraphicsUnit.Pixel);
             }
         }

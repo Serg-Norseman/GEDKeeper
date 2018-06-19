@@ -546,10 +546,10 @@ namespace GKUI.Components
             if (!fImageSize.IsEmpty)
             {
                 //Rectangle viewport = GetImageViewport();
-                float sourceLeft = 0;//(viewport.Left / fZoomFactor);
-                float sourceTop = 0;//(viewport.Top / fZoomFactor);
-                float sourceWidth = fImageSize.Width;//(viewport.Width / fZoomFactor);
-                float sourceHeight = fImageSize.Height;//(viewport.Height / fZoomFactor);
+                float sourceLeft = 0; //(viewport.Left / fZoomFactor);
+                float sourceTop = 0; //(viewport.Top / fZoomFactor);
+                float sourceWidth = fImageSize.Width; //(viewport.Width / fZoomFactor);
+                float sourceHeight = fImageSize.Height; //(viewport.Height / fZoomFactor);
 
                 region = new RectangleF(sourceLeft, sourceTop, sourceWidth, sourceHeight);
             }

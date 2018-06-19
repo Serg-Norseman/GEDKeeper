@@ -494,7 +494,7 @@ namespace GKStdReports
                         }
                         
                         if ((current == 0) && !areStringsAt(current, 4, "JOSE"))
-                            addMetaphoneCharacter("J", "A");//Yankelovich/Jankelowicz
+                            addMetaphoneCharacter("J", "A"); //Yankelovich/Jankelowicz
                         else
                             //spanish pron. of e.g. 'bajador'
                             if (isVowel(current - 1)
@@ -509,7 +509,7 @@ namespace GKStdReports
                                         && !areStringsAt((current - 1), 1, "S", "K", "L"))
                                         addMetaphoneCharacter("J");
                         
-                        if (m_word[current + 1] == 'J')//it could happen!
+                        if (m_word[current + 1] == 'J') //it could happen!
                             current += 2;
                         else
                             current	+= 1;

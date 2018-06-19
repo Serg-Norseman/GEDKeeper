@@ -1,6 +1,6 @@
 .ctx
   {
-  margin-top: 0em;   
+  margin-top: 0em;
   margin-bottom: 0em;
   margin-left: 0em;
   }
@@ -8,7 +8,7 @@
 body
   {
   padding: 0px 0px 0px 26px;
-  background: #ffffff; 
+  background: #ffffff;
   color: #000000;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 80%;
@@ -21,34 +21,34 @@ div
   padding: 4px 8px;
   background: #cccccc;
   }
-  
+
 h1, h2, h3, h4
   {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   margin-left: -26px;
   }
-  
+
 h1
   {
   font-size: 145%;
   margin-top: .9em;
   margin-bottom: .9em;
   }
-  
+
 h2
   {
   font-size: 130%;
   margin-top: 1.8em;
   margin-bottom: .9em;
   }
-  
+
 h3
   {
   font-size: 115%;
   margin-top: 1.8em;
   margin-bottom: .9em;
   }
-  
+
 h4
   {
   font-size: 100%;
@@ -82,25 +82,25 @@ dt
 dd
   {
   margin-top: .6em;
-  margin-bottom: .6em;  
-  margin-left: 1.8em; 
+  margin-bottom: .6em;
+  margin-left: 1.8em;
   }
 
 
 ul, ol
   {
-  margin-top: .8em;   
+  margin-top: .8em;
   margin-bottom: 0em;
   }
-  
+
 ol
   {
-  margin-left: 3.6em; 
-  } 
-  
+  margin-left: 3.6em;
+  }
+
 ul
   {
-  list-style-type: disc; 
+  list-style-type: disc;
   margin-left: 1.8em;
   }
 
@@ -118,13 +118,13 @@ ul ol, ol ol
 pre
   {
   margin-top: .6em;
-  margin-bottom: .6em; 
+  margin-bottom: .6em;
   }
   */
 
 pre,code
   {
-  font: 100% Courier New, Courier, mono; 
+  font: 100% Courier New, Courier, mono;
   color: #000000;
   cursor: text;
   }
@@ -140,7 +140,7 @@ pre.syntax
   color: #000000;
   }
 
-pre.example
+.example
   {
   margin-left: 2.0em;
   /*margin-top: 12.0em;*/
@@ -156,9 +156,9 @@ table
   margin-top: .6em;
   margin-bottom: .3em;
   }
-    
+
 th
-  { 
+  {
   padding: 4px 8px;
   background: #cccccc;
   text-align: left;
@@ -167,13 +167,13 @@ th
   }
 
 th.cc
-  { 
+  {
   text-align: center;
   vertical-align: middle;
   }
 
 td
-  { 
+  {
   padding: 4px 8px;
   background: #ffffff;
   vertical-align: top;
@@ -181,7 +181,7 @@ td
   }
 
 td.cc
-  { 
+  {
   text-align: center;
   vertical-align: middle;
   }
@@ -199,17 +199,17 @@ a:link
   {
   color: #0066ff;
   }
-  
+
 a:visited
   {
-  color: #996600; 
+  color: #996600;
   }
-  
+
 a:hover
   {
   color: #cc9900;
   }
-  
+
 a.parameter:link
   {
   color: #0066ff;
@@ -221,7 +221,7 @@ a.parameter:visited
   text-decoration:none;
   }
 
-div.footer
+.footer
   {
   width: 100%;
   border: none;
@@ -233,7 +233,7 @@ div.footer
   font-size: 70%;
   }
 
-span.filename
+.filename
 {
   color: #F00000;
 }
@@ -241,14 +241,14 @@ span.filename
 
 ol.ctx
   {
-  margin-top: 0em;   
+  margin-top: 0em;
   margin-bottom: 0em;
-  margin-left: 0em; 
+  margin-left: 0em;
   }
 
 li.ctx
   {
-  margin-top: 0em;   
+  margin-top: 0em;
   margin-bottom: 0em;
-  margin-left: 0em; 
+  margin-left: 0em;
   }

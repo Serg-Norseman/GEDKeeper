@@ -50,10 +50,8 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (txtNote.Text.Length != 0)
-                {
+            try {
+                if (txtNote.Text.Length != 0) {
                     fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
@@ -64,9 +62,7 @@ namespace GKUI.Forms
                 {
                     DialogResult = DialogResult.Cancel;
                 }*/
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }

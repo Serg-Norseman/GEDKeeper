@@ -181,7 +181,7 @@ namespace GKStdReports
                 
                 result <<= 4;
                 result |= charResult;
-            };
+            }
             return result;
         }
     }
