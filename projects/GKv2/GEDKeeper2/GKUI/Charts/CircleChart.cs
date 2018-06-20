@@ -241,7 +241,8 @@ namespace GKUI.Charts
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
-                return new PointF(fOffsetX - bounds.Left * fZoom, fOffsetY - bounds.Top * fZoom);
+                //return new PointF(fOffsetX - bounds.Left * fZoom, fOffsetY - bounds.Top * fZoom);
+                return new PointF(-bounds.Left * fZoom, -bounds.Top * fZoom);
 
             }
         }

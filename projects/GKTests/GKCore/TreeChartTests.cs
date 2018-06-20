@@ -264,8 +264,6 @@ namespace GKCore
         {
             using (MemoryStream stm = new MemoryStream()) {
                 var svg = new SvgGraphics(stm, ExtRectF.CreateBounds(0, 0, 100, 100));
-                svg.IncludeXmlAndDoctype = true;
-                Assert.AreEqual(true, svg.IncludeXmlAndDoctype);
 
                 svg.BeginDrawing();
                 svg.Clear(UIHelper.ConvertColor(Color.Yellow));

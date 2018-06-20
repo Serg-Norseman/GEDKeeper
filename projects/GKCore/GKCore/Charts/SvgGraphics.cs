@@ -28,21 +28,6 @@ using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {
-    public enum LineBreakMode
-    {
-        None,
-        Clip,
-        WordWrap,
-    }
-
-    public enum TextAlignment
-    {
-        Left,
-        Center,
-        Right,
-        Justified
-    }
-
     public class SvgGraphics
     {
         private class State
@@ -68,11 +53,18 @@ namespace GKCore.Charts
                 return (Rotate != STD_Rotate) || !Scale.Equals(STD_Scale) || !Translation.Equals(STD_Translation);
             }
 
+            public override string ToString()
+            {
+                return ToString(CultureInfo.InvariantCulture);
+            }
+
             public string ToString(IFormatProvider fmt)
             {
                 string transform = "";
                 if (Rotate != 0.0f) {
-                    transform += string.Format(fmt, " rotate({0})", Rotate);
+                    var tx = Translation.X;
+                    var ty = Translation.Y;
+                    transform += string.Format(fmt, " rotate({0} {1} {2})", Rotate, tx, ty);
                 }
                 if (Scale.X != 1.0f || Scale.Y != 1.0f) {
                     transform += string.Format(fmt, " scale({0} {1})", Scale.X, Scale.Y);
@@ -91,25 +83,20 @@ namespace GKCore.Charts
         private string fLastColorOpacity = null;
         private IFont fLastFont = null;
         private bool fStartedPolyline = false;
-        private State fState = new State();
+        private State fState;
 
         private readonly IFormatProvider fFmt;
         private readonly Stack<State> fStates;
         private readonly ExtRectF fViewBox;
         private readonly TextWriter fWriter;
 
-        public bool IncludeXmlAndDoctype { get; set; }
-
         public SvgGraphics(TextWriter tw, ExtRectF viewBox)
         {
             fFmt = CultureInfo.InvariantCulture;
+            fState = new State();
+            fStates = new Stack<State>();
             fViewBox = viewBox;
             fWriter = tw;
-
-            fStates = new Stack<State>();
-            fStates.Push(fState);
-
-            IncludeXmlAndDoctype = true;
         }
 
         public SvgGraphics(Stream s, ExtRectF viewBox)
@@ -179,10 +166,8 @@ namespace GKCore.Charts
 
         public void BeginDrawing()
         {
-            if (IncludeXmlAndDoctype) {
-                WriteLine(@"<?xml version=""1.0""?>");
-                WriteLine(@"<!DOCTYPE svg PUBLIC ""-//W3C//DTD SVG 1.1//EN"" ""http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"">");
-            }
+            WriteLine(@"<?xml version=""1.0""?>");
+            WriteLine(@"<!DOCTYPE svg PUBLIC ""-//W3C//DTD SVG 1.1//EN"" ""http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"">");
             WriteLine(@"<svg viewBox=""{0} {1} {2} {3}"" preserveAspectRatio=""xMinYMin meet"" version=""1.1"" xmlns=""http://www.w3.org/2000/svg"">",
                 fViewBox.Left, fViewBox.Top, fViewBox.GetWidth(), fViewBox.GetHeight());
 
@@ -225,38 +210,45 @@ namespace GKCore.Charts
 
         public void SaveState()
         {
+            fStates.Push(fState);
+
             var ns = new State() {
                 Rotate = fState.Rotate,
                 Scale = fState.Scale,
                 Translation = fState.Translation,
             };
-            fStates.Push(ns);
             fState = ns;
         }
 
         public void RestoreState()
         {
-            if (fStates.Count > 1) {
+            if (fStates.Count > 0) {
                 fState = fStates.Pop();
+            } else {
+                fState = new State();
             }
         }
 
         public void ResetState()
         {
             fStates.Clear();
-            fStates.Push(new State());
+            fState = new State();
         }
 
         public void Scale(float sx, float sy)
         {
-            fState.Scale.X *= sx;
-            fState.Scale.Y *= sy;
+            var scale = fState.Scale;
+            scale.X *= sx;
+            scale.Y *= sy;
+            fState.Scale = scale;
         }
 
         public void Translate(float dx, float dy)
         {
-            fState.Translation.X += dx;
-            fState.Translation.Y += dy;
+            var translation = fState.Translation;
+            translation.X += dx;
+            translation.Y += dy;
+            fState.Translation = translation;
         }
 
         public void Rotate(float angle)
@@ -280,10 +272,14 @@ namespace GKCore.Charts
             fLastColorOpacity = string.Format(fFmt, "{0}", c.GetA() / 255.0);
         }
 
-        /*public void FillPolygon(Polygon poly)
+        public void DrawPolygon(ExtPointF[] poly, IPen pen, IBrush brush)
         {
-            Write("<polygon fill=\"{0}\" fill-opacity=\"{1}\" stroke=\"none\" points=\"", _lastColor, _lastColorOpacity);
-            foreach (var p in poly.Points) {
+            string transform = GetTransform();
+            string stroke = GetStroke(pen);
+            string fill = GetFill(brush);
+
+            Write("<polygon {0} {1} {2} points=\"", stroke, fill, transform);
+            foreach (var p in poly) {
                 Write("{0}", p.X);
                 Write(",");
                 Write("{0}", p.Y);
@@ -291,18 +287,6 @@ namespace GKCore.Charts
             }
             WriteLine("\" />");
         }
-
-        public void DrawPolygon(Polygon poly, float w)
-        {
-            Write("<polygon stroke=\"{0}\" stroke-opacity=\"{1}\" stroke-width=\"{2}\" fill=\"none\" points=\"", _lastColor, _lastColorOpacity, w);
-            foreach (var p in poly.Points) {
-                Write("{0}", p.X);
-                Write(",");
-                Write("{0}", p.Y);
-                Write(" ");
-            }
-            WriteLine("\" />");
-        }*/
 
         public void DrawEllipse(float x, float y, float width, float height, IPen pen, IBrush brush)
         {
@@ -322,32 +306,34 @@ namespace GKCore.Charts
         public void DrawCircleSegment(int ctX, int ctY, float inRad, float extRad,
                                       float startAngle, float endAngle, IPen pen, IBrush brush)
         {
-            if (pen != null || brush != null) {
-                string transform = GetTransform();
-                string stroke = GetStroke(pen);
-                string fill = GetFill(brush);
-
-                var sa = startAngle * (Math.PI / 180.0d);
-                var ea = endAngle * (Math.PI / 180.0d);
-
-                var sx1 = (float)(ctX + inRad * Math.Cos(sa));
-                var sy1 = (float)(ctY + inRad * Math.Sin(sa));
-                var ex1 = (float)(ctX + extRad * Math.Cos(sa));
-                var ey1 = (float)(ctY + extRad * Math.Sin(sa));
-
-                var sx2 = (float)(ctX + inRad * Math.Cos(ea));
-                var sy2 = (float)(ctY + inRad * Math.Sin(ea));
-                var ex2 = (float)(ctX + extRad * Math.Cos(ea));
-                var ey2 = (float)(ctY + extRad * Math.Sin(ea));
-
-                WriteLine("<path d=\"M {0} {1} L {2} {3} A {4} {5} 0 0 1 {6} {7} L {8} {9} A {10} {11} 0 0 0 {12} {13}\" {14} {15} {16} />",
-                    ex1, ey1, /* M */
-                    sx1, sy1, /* L */
-                    inRad, inRad, sx2, sy2, /* A */
-                    ex2, ey2, /* L */
-                    extRad, extRad, ex1, ey1, /* A */
-                    stroke, fill, transform);
+            if (pen == null && brush == null) {
+                return;
             }
+
+            string transform = GetTransform();
+            string stroke = GetStroke(pen);
+            string fill = GetFill(brush);
+
+            var sa = startAngle * (Math.PI / 180.0d);
+            var ea = endAngle * (Math.PI / 180.0d);
+
+            var sx1 = (float)(ctX + inRad * Math.Cos(sa));
+            var sy1 = (float)(ctY + inRad * Math.Sin(sa));
+            var ex1 = (float)(ctX + extRad * Math.Cos(sa));
+            var ey1 = (float)(ctY + extRad * Math.Sin(sa));
+
+            var sx2 = (float)(ctX + inRad * Math.Cos(ea));
+            var sy2 = (float)(ctY + inRad * Math.Sin(ea));
+            var ex2 = (float)(ctX + extRad * Math.Cos(ea));
+            var ey2 = (float)(ctY + extRad * Math.Sin(ea));
+
+            WriteLine("<path d=\"M {0} {1} L {2} {3} A {4} {5} 0 0 1 {6} {7} L {8} {9} A {10} {11} 0 0 0 {12} {13}\" {14} {15} {16} />",
+                ex1, ey1, /* M */
+                sx1, sy1, /* L */
+                inRad, inRad, sx2, sy2, /* A */
+                ex2, ey2, /* L */
+                extRad, extRad, ex1, ey1, /* A */
+                stroke, fill, transform);
         }
 
         public void FillArc(float cx, float cy, float radius, float startAngle, float endAngle)
@@ -406,6 +392,15 @@ namespace GKCore.Charts
             fInPolyline = true;
         }
 
+        public void EndLines()
+        {
+            if (fInPolyline) {
+                WriteLine("\" />");
+                fInPolyline = false;
+                fStartedPolyline = false;
+            }
+        }
+
         public void DrawLine(float sx, float sy, float ex, float ey, float w)
         {
             string transform = GetTransform();
@@ -421,23 +416,6 @@ namespace GKCore.Charts
                 WriteLine("<line x1=\"{0}\" y1=\"{1}\" x2=\"{2}\" y2=\"{3}\" stroke=\"{4}\" stroke-opacity=\"{5}\" stroke-width=\"{6}\" stroke-linecap=\"round\" fill=\"none\" {7} />",
                           sx, sy, ex, ey, fLastColor, fLastColorOpacity, w, transform);
             }
-        }
-
-        public void EndLines()
-        {
-            if (fInPolyline) {
-                WriteLine("\" />");
-                fInPolyline = false;
-                fStartedPolyline = false;
-            }
-        }
-
-        public void DrawString(string s, float x, float y, float width, float height, LineBreakMode lineBreak, TextAlignment align)
-        {
-            WriteLine("<text x=\"{0}\" y=\"{1}\" font-family=\"{2}\" font-size=\"{3}\">{4}</text>",
-                x, y + fLastFont.Size, fLastFont.FontFamilyName, 
-                fLastFont.Size * 3 / 2,
-                s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"));
         }
 
         public void DrawString(string s, float x, float y)

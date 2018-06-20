@@ -344,6 +344,7 @@ namespace GKCore.Charts
                 givn = parts.Name;
             }
 
+            var brush = fCircleBrushes[8];
             ExtSizeF size;
             float rad = segment.Rad - 20;
             float angle = segment.StartAngle + 90.0f + segment.WedgeAngle / 2;
@@ -356,9 +357,9 @@ namespace GKCore.Charts
             if (gen == 0) {
 
                 size = fRenderer.GetTextSize(surn, Font);
-                fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
+                fRenderer.DrawString(surn, Font, brush, -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
                 size = fRenderer.GetTextSize(givn, Font);
-                fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, 0f);
+                fRenderer.DrawString(givn, Font, brush, -size.Width / 2f, 0f);
 
             } else {
 
@@ -370,7 +371,7 @@ namespace GKCore.Charts
                     fRenderer.RotateTransform(angle - 90.0f);
 
                     size = fRenderer.GetTextSize(givn, Font);
-                    fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                    fRenderer.DrawString(givn, Font, brush, -size.Width / 2f, -size.Height / 2f);
 
                 } else {
 
@@ -382,7 +383,7 @@ namespace GKCore.Charts
                         fRenderer.RotateTransform(angle);
 
                         size = fRenderer.GetTextSize(givn, Font);
-                        fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                        fRenderer.DrawString(givn, Font, brush, -size.Width / 2f, -size.Height / 2f);
 
                     } else if (wedgeAngle < 180) {
 
@@ -390,14 +391,14 @@ namespace GKCore.Charts
                             if (gen == 2) {
                                 size = fRenderer.GetTextSize(surn, Font);
                                 fRenderer.DrawArcText(surn, 0.0f, 0.0f, rad + size.Height / 2f,
-                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, brush);
 
                                 size = fRenderer.GetTextSize(givn, Font);
                                 fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad - size.Height / 2f,
-                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, brush);
                             } else {
                                 fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad,
-                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                                      segment.StartAngle, segment.WedgeAngle, true, true, Font, brush);
                             }
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
@@ -406,7 +407,7 @@ namespace GKCore.Charts
                             fRenderer.RotateTransform(angle);
 
                             size = fRenderer.GetTextSize(surn, Font);
-                            fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            fRenderer.DrawString(surn, Font, brush, -size.Width / 2f, -size.Height / 2f);
 
                             size = fRenderer.GetTextSize(givn, Font);
                             dx = (float)Math.Sin(Math.PI * angle / 180.0f) * (rad - size.Height);
@@ -418,7 +419,7 @@ namespace GKCore.Charts
                             fRenderer.TranslateTransform(dx, -dy);
                             fRenderer.RotateTransform(angle);
 
-                            fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            fRenderer.DrawString(givn, Font, brush, -size.Width / 2f, -size.Height / 2f);
                         }
 
                     } else if (wedgeAngle < 361) {
@@ -426,11 +427,11 @@ namespace GKCore.Charts
                         if (fOptions.ArcText) {
                             size = fRenderer.GetTextSize(surn, Font);
                             fRenderer.DrawArcText(surn, 0.0f, 0.0f, rad + size.Height / 2f,
-                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, brush);
 
                             size = fRenderer.GetTextSize(givn, Font);
                             fRenderer.DrawArcText(givn, 0.0f, 0.0f, rad - size.Height / 2f,
-                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, fCircleBrushes[8]);
+                                                  segment.StartAngle, segment.WedgeAngle, true, true, Font, brush);
                         } else {
                             float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                             float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
@@ -438,9 +439,9 @@ namespace GKCore.Charts
                             fRenderer.RotateTransform(angle);
 
                             size = fRenderer.GetTextSize(surn, Font);
-                            fRenderer.DrawString(surn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
+                            fRenderer.DrawString(surn, Font, brush, -size.Width / 2f, -size.Height / 2f);
                             size = fRenderer.GetTextSize(givn, Font);
-                            fRenderer.DrawString(givn, Font, fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f + size.Height);
+                            fRenderer.DrawString(givn, Font, brush, -size.Width / 2f, -size.Height / 2f + size.Height);
                         }
 
                     }
