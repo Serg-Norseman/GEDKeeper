@@ -239,7 +239,7 @@ namespace GKUI.Components
 
             path.StartFigure();
             path.AddLine(px2, py2, px1, py1);
-            if (0 < ir2) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
             path.AddLine(nx1, ny1, nx2, ny2);
             path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
             path.CloseFigure();

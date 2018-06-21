@@ -67,7 +67,7 @@ namespace GKUI.Components
         public PictureBoxSizeMode SizeMode
         {
             get { return pictureBox1.SizeMode; }
-            set { pictureBox1.SizeMode = value;}
+            set { pictureBox1.SizeMode = value; }
         }
 
         public override Cursor Cursor

@@ -54,8 +54,8 @@ namespace GKCore.Plugins
             var attr3 = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
             if (attr3 != null) info.Copyright = attr3.Copyright;
 
-            var attr4 = SysUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
-            if (attr4 != null) info.Version = attr4.Version;
+            var attr4 = asm.GetName().Version;
+            if (attr4 != null) info.Version = attr4.ToString();
 
             return info;
         }

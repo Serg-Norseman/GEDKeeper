@@ -572,7 +572,7 @@ namespace GKUI.Components
         {
             int x, y;
 
-            Rectangle viewport = Viewport;//GetImageViewPort();
+            Rectangle viewport = Viewport; //GetImageViewPort();
             if (viewport.Contains(new Point(point)) || fitToBounds)
             {
                 Point pt = GetImageRelativeLocation(point);
@@ -764,7 +764,7 @@ namespace GKUI.Components
 
             //graphics.SetClip(GetInsideViewPort(false)); // make sure the image border doesn't overwrite the control border
 
-            Rectangle viewPort = ImageRect;//GetImageViewPort();
+            Rectangle viewPort = ImageRect; //GetImageViewPort();
             viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
 
             using (var borderPen = new Pen(fImageBorderColor))

@@ -60,8 +60,7 @@ namespace GKCore
         {
             if (!File.Exists(fileName)) return;
 
-            try
-            {
+            try {
                 // loading database
                 using (var reader = new StreamReader(fileName)) {
                     string content = reader.ReadToEnd();
@@ -80,9 +79,7 @@ namespace GKCore
                         holiday.XDate = DateTime.FromBinary(0);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("Holidays.Load(): " + ex.Message);
             }
         }
@@ -92,53 +89,38 @@ namespace GKCore
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");
 
-            try
-            {
-                try
-                {
-                    DateTime dtNow = DateTime.Now.Date;
+            try {
+                DateTime dtNow = DateTime.Now.Date;
 
-                    bool firstTip = true;
-                    for (int i = 0; i < fHolidays.Holidays.Length; i++) {
-                        var holiday = fHolidays.Holidays[i];
+                bool firstTip = true;
+                for (int i = 0; i < fHolidays.Holidays.Length; i++) {
+                    var holiday = fHolidays.Holidays[i];
 
-                        int days = DateHelper.DaysBetween(dtNow, holiday.XDate);
+                    int days = DateHelper.DaysBetween(dtNow, holiday.XDate);
 
-                        if (days >= 0 && 3 > days) {
-                            string tip;
+                    if (days >= 0 && days < 3) {
+                        string tip;
 
-                            if (firstTip) {
-                                tipsList.Add("#" + LangMan.LS(LSID.LSID_Holidays));
-                                firstTip = false;
-                            }
-
-                            if (0 == days)
-                            {
-                                tip = string.Format(
-                                    LangMan.LS(LSID.LSID_HolidayToday), holiday.Name);
-                            }
-                            else if (1 == days)
-                            {
-                                tip = string.Format(
-                                    LangMan.LS(LSID.LSID_HolidayTomorrow), holiday.Name);
-                            }
-                            else
-                            {
-                                tip = string.Format(
-                                    LangMan.LS(LSID.LSID_DaysRemainedBeforeHoliday), holiday.Name, days);
-                            }
-
-                            tipsList.Add(tip);
+                        if (firstTip) {
+                            tipsList.Add("#" + LangMan.LS(LSID.LSID_Holidays));
+                            firstTip = false;
                         }
+
+                        if (days == 0) {
+                            tip = string.Format(
+                                LangMan.LS(LSID.LSID_HolidayToday), holiday.Name);
+                        } else if (days == 1) {
+                            tip = string.Format(
+                                LangMan.LS(LSID.LSID_HolidayTomorrow), holiday.Name);
+                        } else {
+                            tip = string.Format(
+                                LangMan.LS(LSID.LSID_DaysRemainedBeforeHoliday), holiday.Name, days);
+                        }
+
+                        tipsList.Add(tip);
                     }
                 }
-                finally
-                {
-                    // temp stub, remove try/finally here?
-                }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("Holidays.CollectTips(): " + ex.Message);
             }
         }

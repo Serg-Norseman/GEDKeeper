@@ -28,16 +28,12 @@ using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
 [assembly: AssemblyDescription("GEDKeeper PedigreeImporter plugin")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2014,2016 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.0")]
 [assembly: NeutralResourcesLanguage("en")]
 
 namespace GKPedigreeImporterPlugin

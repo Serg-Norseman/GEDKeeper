@@ -33,7 +33,7 @@ namespace GKUI.Forms
             cbType.ReadOnly = true;
             cbType.SelectedIndexChanged += cbType_SelectedIndexChanged;
 
-            tbExcelExport = new Button();//ButtonToolItem();
+            tbExcelExport = new Button(); //ButtonToolItem();
             tbExcelExport.Click += tbExcelExport_Click;
             tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
             tbExcelExport.Size = new Size(26, 26);

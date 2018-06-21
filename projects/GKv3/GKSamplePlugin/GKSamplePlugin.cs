@@ -27,16 +27,12 @@ using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKSamplePlugin1")]
 [assembly: AssemblyDescription("GEDKeeper sample plugin")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 
 namespace GKSamplePlugin
 {

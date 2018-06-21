@@ -7,7 +7,7 @@ solution: projects/GEDKeeper2.linux.sln
 install:
   - sudo apt-get install nunit-console
   - nuget restore ./projects/GEDKeeper2.linux.sln
- 
+
 script:
   - msbuild /p:Configuration=Debug /p:CIMode=true /p:MonoCS=true ./projects/GEDKeeper2.linux.sln
   - nunit-console ./projects/GKTests/bin/Debug/GKTests.dll

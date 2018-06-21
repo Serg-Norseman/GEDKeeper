@@ -56,7 +56,7 @@ namespace GKCore.Export
             try
             {
                 {
-                    string title = "Trees Album";//LangMan.LS(LSID.LSID_TreesAlbum)
+                    string title = "Trees Album"; //LangMan.LS(LSID.LSID_TreesAlbum)
 
                     fDocument.AddTitle(title);
                     fDocument.AddSubject("");

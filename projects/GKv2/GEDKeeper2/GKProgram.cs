@@ -26,19 +26,15 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.SingleInstance;
 
+[assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2009-2018 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyVersion("2.13.1.0")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyTitle("GEDKeeper")]
-[assembly: AssemblyVersion("2.13.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
