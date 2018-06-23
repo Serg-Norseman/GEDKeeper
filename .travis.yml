@@ -11,3 +11,18 @@ install:
 script:
   - msbuild /p:Configuration=Debug /p:CIMode=true /p:MonoCS=true ./projects/GEDKeeper2.linux.sln
   - nunit-console ./projects/GKTests/bin/Debug/GKTests.dll
+
+env:
+  global:
+   - secure: "OZVJYxzDr66xEukljlpiQQqJ8jSCKOEKzurw3woXxxKm54iIJ9t84ikaSOjrj1quMoEmz8v8cpvMVHSrd5selyViR0iCk8s1AfQdBD8m2/xsle1vX27NWK3hnXaJeKuYpdyP12rz8e4hFWyfdrgibxNrHWfTDuvBPdsW+76hOjE="
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "Serg-Norseman/GEDKeeper"
+    notification_email: serg.zhdanovskih@yandex.ru
+    build_command: "msbuild /p:Configuration=Debug /p:CIMode=true /p:MonoCS=true ./projects/GEDKeeper2.linux.sln"
+    branch_pattern: master
