@@ -9,9 +9,12 @@
 *.DotSettings.user
 
 gource-gk.cmd
+code_heat.sh
+
+/cov-int/
 build_coverity.cmd
 /projects/GEDKeeper2.mswin-cov.sln
-code_heat.sh
+coverity.zip
 
 /.sonarqube/
 NUnitResults.xml

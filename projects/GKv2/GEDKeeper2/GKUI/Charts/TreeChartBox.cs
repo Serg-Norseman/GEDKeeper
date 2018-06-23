@@ -571,6 +571,11 @@ namespace GKUI.Charts
                     deepModel.RecalcChart(true);
 
                     var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                    if (pers == null) {
+                        Logger.LogWrite("TreeChartBox.DrawDeep(): unexpected failure");
+                        return;
+                    }
+
                     int dmX = (spx + (fSelected.PtX - pers.PtX));
                     int dmY = (spy + (fSelected.PtY - pers.PtY));
                     deepModel.SetOffsets(dmX, dmY);

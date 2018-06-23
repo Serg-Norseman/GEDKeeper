@@ -64,8 +64,11 @@ namespace GKUI.Charts
 
         protected override void Dispose(bool disposing)
         {
-            fCtlPen.Dispose();
-            fCtlBrush.Dispose();
+            if (disposing) {
+                fCtlPen.Dispose();
+                fCtlBrush.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public void SetPerson(TreeChartPerson person)

@@ -164,22 +164,13 @@ namespace GKStdReports
                                 fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont);
                             }
                         } else if (evObj.Type == EventType.Child) {
-                            string unk;
                             if (iRec.Sex == GEDCOMSex.svMale) {
                                 st = LangMan.LS(LSID.LSID_RK_Son) + ": ";
-                                unk = LangMan.LS(LSID.LSID_UnkFemale);
                             } else {
                                 st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
-                                unk = LangMan.LS(LSID.LSID_UnkMale);
                             }
-                            st = ConvertHelper.UniformName(st);
-                            string chd;
-                            if (iRec != null) {
-                                chd = st + GKUtils.GetNameString(iRec, true, false)/* + GKUtils.GetPedigreeLifeStr(sp, fOptions.PedigreeOptions.Format)*/;
-                            } else {
-                                chd = st + unk;
-                            }
-                            fWriter.AddListItem("   " + "   " + chd, fTextFont);
+                            st = ConvertHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
+                            fWriter.AddListItem("   " + "   " + st, fTextFont);
                         }
                     }
                 } else if (evObj.Rec is GEDCOMFamilyRecord) {

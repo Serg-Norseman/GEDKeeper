@@ -110,27 +110,35 @@ namespace GKHistoryDataPlugin
 
             fItems.Clear();
             fLinkColumn = -1;
+            int rowNum = 0;
             using (var csv = CSVReader.CreateFromFile(csvPath, Encoding.UTF8)) {
                 var row = csv.ReadRow();
-                for (int i = 0; i < row.Count; i++) {
-                    bool autoSize = (i == 0);
-                    lvData.AddColumn(row[i].ToString(), 200, autoSize);
-                }
-
-                row = csv.ReadRow();
                 while (row != null) {
-                    if (fLinkColumn == -1) {
+                    if (rowNum == 0) {
                         for (int i = 0; i < row.Count; i++) {
-                            if (row[i].ToString().StartsWith("http")) {
-                                fLinkColumn = i;
-                                break;
-                            }
+                            bool autoSize = (i == 0);
+                            lvData.AddColumn(row[i].ToString(), 200, autoSize);
                         }
+                    } else {
+                        if (fLinkColumn == -1) {
+                            CheckLinkColumn(row);
+                        }
+
+                        fItems.Add(new LinkItem(lvData.AddItem(null, row.ToArray())));
                     }
 
-                    fItems.Add(new LinkItem(lvData.AddItem(null, row.ToArray())));
-
                     row = csv.ReadRow();
+                    rowNum += 1;
+                }
+            }
+        }
+
+        private void CheckLinkColumn(List<object> row)
+        {
+            for (int i = 0; i < row.Count; i++) {
+                if (row[i].ToString().StartsWith("http")) {
+                    fLinkColumn = i;
+                    break;
                 }
             }
         }

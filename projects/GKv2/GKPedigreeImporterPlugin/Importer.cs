@@ -580,18 +580,22 @@ namespace GKPedigreeImporterPlugin
                         // extract name
                         line = line.Substring(slRet.Pos).Trim();
 
-                        if (!string.IsNullOrEmpty(line))
-                        {
+                        if (!string.IsNullOrEmpty(line)) {
                             GEDCOMIndividualRecord spouse = DefinePerson(line, sx);
-
                             GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, slRet.MarrNum);
-                            family.AddSpouse(spouse);
 
-                            // extract marriage date
-                            if (!string.IsNullOrEmpty(slRet.ExtData)) {
-                                string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
+                            if (spouse == null || family == null) {
+                                // TODO: error to log, reporting causes
+                            } else {
+                                family.AddSpouse(spouse);
 
-                                if (marrDate != "") SetEvent(family, "MARR", marrDate);
+                                // extract marriage date
+                                if (!string.IsNullOrEmpty(slRet.ExtData)) {
+                                    string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
+
+                                    if (marrDate != "")
+                                        SetEvent(family, "MARR", marrDate);
+                                }
                             }
                         }
                     }

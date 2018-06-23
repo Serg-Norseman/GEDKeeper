@@ -80,6 +80,8 @@ namespace GKDataQualityPlugin
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            base.OnMouseMove(e);
+
             MapItem item = fModel.FindByCoord(e.X, e.Y);
             if (item != null) {
                 (Parent as Form).Text = item.Name;
@@ -89,12 +91,14 @@ namespace GKDataQualityPlugin
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+
             UpdateView();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
             DrawItems(e.Graphics, fModel.GetItems(), Color.Black);
         }
 
