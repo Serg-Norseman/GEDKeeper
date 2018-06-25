@@ -19,7 +19,7 @@ coverity.zip
 /.sonarqube/
 NUnitResults.xml
 opencover.xml
-sonarqube.cmd
+build_sonarqube.cmd
 
 /projects/GKv2/GEDKeeper2/bin/
 /projects/GKv2/GEDKeeper2/obj/

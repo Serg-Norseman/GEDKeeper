@@ -96,30 +96,6 @@ namespace GKUI.Charts
     {
         #region Subtypes
 
-        private enum ChartControlMode
-        {
-            ccmDefault,
-            ccmDragImage,
-            ccmControlsVisible
-        }
-
-        private enum MouseAction
-        {
-            maNone,
-            maSelect,
-            maExpand,
-            maDrag,
-            maProperties,
-            maHighlight
-        }
-
-        private enum MouseEvent
-        {
-            meDown,
-            meMove,
-            meUp
-        }
-
         public sealed class TreeControlsList<T> : List<T>, IDisposable where T : ITreeControl
         {
             public void Draw(Graphics gfx)
@@ -219,6 +195,8 @@ namespace GKUI.Charts
         #endregion
 
         #region Public properties
+
+        protected override ChartRenderer Renderer { get { return fRenderer; } }
 
         public event PersonModifyEventHandler PersonModify
         {
@@ -390,8 +368,7 @@ namespace GKUI.Charts
             DateTime cur = DateTime.Now;
             TimeSpan d = cur - st;
 
-            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/)
-            {
+            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
                 fModel.HighlightedPerson = null;
                 //fPersonControl.Visible = true;
                 Invalidate();
@@ -404,8 +381,7 @@ namespace GKUI.Charts
 
             RecalcChart();
 
-            if (fTraceSelected && fSelected != null)
-            {
+            if (fTraceSelected && fSelected != null) {
                 CenterPerson(fSelected, false);
             }
 
@@ -416,8 +392,7 @@ namespace GKUI.Charts
         {
             if (iRec == null) return;
 
-            try
-            {
+            try {
                 fSelected = null;
 
                 fModel.GenChart(iRec, kind, rootCenter);
@@ -428,9 +403,7 @@ namespace GKUI.Charts
 
                 NavAdd(iRec);
                 DoRootChanged(fModel.Root);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
             }
         }
@@ -445,9 +418,7 @@ namespace GKUI.Charts
                 SaveSelection();
                 GenChart(rootRec, fModel.Kind, false);
                 RestoreSelection();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
             }
         }
@@ -1028,11 +999,6 @@ namespace GKUI.Charts
         {
             ChartDrawMode drawMode = (!centered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
             InternalDraw(drawMode, background);
-        }
-
-        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            fRenderer.SetSVGMode(active, svgFileName, width, height);
         }
 
         #endregion

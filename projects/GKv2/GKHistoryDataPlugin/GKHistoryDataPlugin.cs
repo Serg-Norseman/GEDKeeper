@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,14 +22,14 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKHistoryDataPlugin")]
 [assembly: AssemblyDescription("GEDKeeper HistoryData plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2017-2018 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
@@ -42,32 +42,36 @@ namespace GKHistoryDataPlugin
         LSID_Title,
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+    public sealed class Plugin : OrdinaryPlugin, IWidget
     {
         private string fDisplayName = "GKHistoryDataPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Common; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
 
         private HistoryDataWin fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                if (fForm != null) fForm.Dispose();
+            if (disposing) {
+                CloseForm();
             }
             base.Dispose(disposing);
         }
 
-        public void Execute()
+        internal void CloseForm()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (fForm != null) {
+                fForm = null;
+            }
+        }
+
+        public override void Execute()
+        {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new HistoryDataWin(this);
                 fForm.Show();
             } else {
@@ -75,48 +79,24 @@ namespace GKHistoryDataPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(HDLS.LSID_Title);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKHistoryDataPlugin.OnLanguageChange(): " + ex.Message);
             }
-        }
-
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKHistoryDataPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
         }
 
         public bool Shutdown()
         {
             bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
+            try {
+                CloseForm();
+            } catch (Exception ex) {
                 Logger.LogWrite("GKHistoryDataPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }

@@ -25,6 +25,30 @@ using GKCore.Options;
 
 namespace GKCore.Charts
 {
+    public enum ChartControlMode
+    {
+        ccmDefault,
+        ccmDragImage,
+        ccmControlsVisible
+    }
+
+    public enum MouseAction
+    {
+        maNone,
+        maSelect,
+        maExpand,
+        maDrag,
+        maProperties,
+        maHighlight
+    }
+
+    public enum MouseEvent
+    {
+        meDown,
+        meMove,
+        meUp
+    }
+
     public interface ITreeChartBox
     {
         IBaseWindow Base { get; set; }

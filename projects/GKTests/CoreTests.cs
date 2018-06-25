@@ -260,6 +260,13 @@ namespace GKCore
 
             Assert.AreEqual(false, fContext.IsChildless(iRec));
 
+            Assert.IsNotNull(fContext.LangsList);
+            Assert.AreEqual(0, fContext.LangsList.Count);
+            fContext.CollectNameLangs(null);
+            iRec.PersonalNames[0].Language.Value = GEDCOMLanguageID.AncientGreek;
+            fContext.CollectNameLangs(iRec.PersonalNames[0]);
+            Assert.AreEqual(1, fContext.LangsList.Count);
+            
             // FIXME: move to other tests
             Assert.AreEqual(1990, iRec.GetChronologicalYear("BIRT"));
 

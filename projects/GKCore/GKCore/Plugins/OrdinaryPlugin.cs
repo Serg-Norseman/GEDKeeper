@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,13 +60,13 @@ namespace GKCore.Plugins
             // dummy
         }
 
-        public bool Startup(IHost host)
+        public virtual bool Startup(IHost host)
         {
             fHost = host;
             return true;
         }
 
-        public bool Shutdown()
+        public virtual bool Shutdown()
         {
             return true;
         }

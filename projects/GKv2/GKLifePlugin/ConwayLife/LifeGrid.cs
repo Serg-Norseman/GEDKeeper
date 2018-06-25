@@ -97,15 +97,15 @@ namespace ConwayLife
             return result;
         }
 
-        public bool Equals(LifeGrid obj)
+        public bool Equals(LifeGrid other)
         {
-            if (obj == null) return false;
-            if (this == obj) return true;
+            if (other == null) return false;
+            if (this == other) return true;
 
-            if (obj.fGridWidth != fGridWidth || obj.fGridHeight != fGridHeight) {
+            if (other.fGridWidth != fGridWidth || other.fGridHeight != fGridHeight) {
                 return false;
             } else {
-                short[] sourceGrid = obj.fGrid;
+                short[] sourceGrid = other.fGrid;
                 for (int i = 0; i < fGridHeight * fGridWidth; i++) {
                     if (fGrid[i] != sourceGrid[i]) {
                         return false;

@@ -232,7 +232,7 @@ namespace GKCore.Export
             fmt.Bookmark = anchor;
         }
 
-        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
             RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);

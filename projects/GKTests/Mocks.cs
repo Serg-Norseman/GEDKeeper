@@ -181,7 +181,7 @@ namespace GKTests.Mocks
         public override void EndParagraph() { }
         public override void AddParagraphChunk(string text, IFont font) { }
         public override void AddParagraphChunkAnchor(string text, IFont font, string anchor) { }
-        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup) { }
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false) { }
         public override void AddNote(string text, IFont font) { }
         public override void BeginMulticolumns(int columnCount, float columnSpacing) { }
         public override void EndMulticolumns() { }

@@ -22,9 +22,9 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKCore.Types;
 
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
@@ -43,18 +43,16 @@ namespace GKNavigatorPlugin
         /* 001 */ LSID_Navigator,
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, IWidget, ISubscriber
+    public sealed class Plugin : OrdinaryPlugin, IWidget, ISubscriber
     {
         private string fDisplayName = "GKNavigatorPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
         private readonly NavigatorData fData;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Tool; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private NavigatorWidget fForm;
 
@@ -70,8 +68,7 @@ namespace GKNavigatorPlugin
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fForm != null) {
                     fForm.Dispose();
                     fForm = null;
@@ -80,11 +77,18 @@ namespace GKNavigatorPlugin
             base.Dispose(disposing);
         }
 
+        internal void CloseForm()
+        {
+            if (fForm != null) {
+                fForm = null;
+            }
+        }
+
         #region IPlugin support
 
-        public void Execute()
+        public override void Execute()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new NavigatorWidget(this);
                 fForm.Show();
             } else {
@@ -93,50 +97,24 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_Navigator);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKNavigatorPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
-        public bool Startup(IHost host)
+        public override bool Shutdown()
         {
             bool result = true;
-            try
-            {
-                fHost = host;
-                // Implement any startup code here
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKNavigatorPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-                // Implement any shutdown code here
-            }
-            catch (Exception ex)
-            {
+            try {
+                CloseForm();
+            } catch (Exception ex) {
                 Logger.LogWrite("GKNavigatorPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }

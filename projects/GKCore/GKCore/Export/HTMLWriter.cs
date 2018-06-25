@@ -201,7 +201,7 @@ namespace GKCore.Export
             fStream.WriteLine("<a name=\""+anchor+"\">"+text+"</a>");
         }
 
-        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
             if (sup) fStream.WriteLine("<sup>");
             fStream.WriteLine("<a href=\"#"+link+"\">"+text+"</a>");

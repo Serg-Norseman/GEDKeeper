@@ -58,6 +58,28 @@ namespace GKCommon.GEDCOM
         {
         }
 
+        [Test]
+        public void ANSEL_Tests()
+        {
+            var ansel = new AnselEncoding();
+            Assert.IsNotNull(ansel);
+            Assert.AreEqual("ansel", ansel.HeaderName);
+            Assert.AreEqual("ansel", ansel.WebName);
+            Assert.AreEqual("ansel", ansel.BodyName);
+            Assert.AreEqual("ANSEL", ansel.EncodingName);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetString(null, 0, 0); });
+
+            byte[] data;
+            string res, sample;
+
+            // code: E0 (Unicode: hook above, 0309)/low rising tone mark/
+            sample = "ẢB̉C̉D̉ẺF̉G̉H̉ỈJ̉K̉L̉M̉N̉ỎP̉Q̉R̉S̉T̉ỦV̉W̉X̉ỶZ̉";
+            data = Encoding.GetEncoding(437).GetBytes("αAαBαCαDαEαFαGαHαIαJαKαLαMαNαOαPαQαRαSαTαUαVαWαXαYαZ");
+            res = ansel.GetString(data);
+            Assert.AreEqual(sample, res);
+        }
+
         #region True Tests
 
         private GEDCOMTag TagConstructorTest(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

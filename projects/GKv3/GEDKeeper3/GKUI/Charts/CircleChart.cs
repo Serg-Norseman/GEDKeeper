@@ -59,6 +59,8 @@ namespace GKUI.Charts
         private int fMouseCaptureX;
         private int fMouseCaptureY;
 
+        protected override ChartRenderer Renderer { get { return fRenderer; } }
+
 
         public IBaseWindow Base
         {
@@ -453,11 +455,6 @@ namespace GKUI.Charts
         public override void RenderStaticImage(Graphics gfx, RenderTarget target)
         {
             Render(gfx, target);
-        }
-
-        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            fRenderer.SetSVGMode(active, svgFileName, width, height);
         }
     }
 }

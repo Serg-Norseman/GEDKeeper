@@ -37,6 +37,7 @@ namespace GKUI.Charts
 
         public event EventHandler NavRefresh;
 
+        protected abstract ChartRenderer Renderer { get; }
 
         protected CustomChart() : base()
         {
@@ -149,11 +150,6 @@ namespace GKUI.Charts
             return new ImageHandler(image);
         }
 
-        public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            // dummy
-        }
-
         /* TODO(zsv): Need to find an appropriate icon in the general style
          * for the main toolbar - screenshot capture for windows with charts. */
         public void SaveSnapshot(string fileName)
@@ -164,13 +160,13 @@ namespace GKUI.Charts
 
             if (ext == ".svg") {
                 try {
-                    SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
+                    Renderer.SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
 
                     using (var gfx = CreateGraphics()) {
                         RenderStaticImage(gfx, RenderTarget.SVG);
                     }
                 } finally {
-                    SetSVGMode(false, "", 0, 0);
+                    Renderer.SetSVGMode(false, "", 0, 0);
                 }
 
                 return;

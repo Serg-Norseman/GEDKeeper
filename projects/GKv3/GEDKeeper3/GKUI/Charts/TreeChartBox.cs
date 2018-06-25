@@ -94,30 +94,6 @@ namespace GKUI.Charts
     {
         #region Subtypes
 
-        private enum ChartControlMode
-        {
-            ccmDefault,
-            ccmDragImage,
-            ccmControlsVisible
-        }
-
-        private enum MouseAction
-        {
-            maNone,
-            maSelect,
-            maExpand,
-            maDrag,
-            maProperties,
-            maHighlight
-        }
-
-        private enum MouseEvent
-        {
-            meDown,
-            meMove,
-            meUp
-        }
-
         public sealed class TreeControlsList<T> : List<T>, IDisposable where T : ITreeControl
         {
             public void Draw(Graphics gfx)
@@ -211,6 +187,8 @@ namespace GKUI.Charts
         #endregion
 
         #region Public properties
+
+        protected override ChartRenderer Renderer { get { return fRenderer; } }
 
         public event PersonModifyEventHandler PersonModify;
 
@@ -1004,10 +982,5 @@ namespace GKUI.Charts
         }
 
         #endregion
-
-        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            fRenderer.SetSVGMode(active, svgFileName, width, height);
-        }
     }
 }

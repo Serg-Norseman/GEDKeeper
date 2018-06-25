@@ -22,9 +22,9 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKDataQualityPlugin")]
 [assembly: AssemblyDescription("GEDKeeper DataQuality plugin")]
@@ -47,24 +47,21 @@ namespace GKDataQualityPlugin
         /* 05 */ LSID_5
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+    public sealed class Plugin : OrdinaryPlugin, IWidget
     {
         private string fDisplayName = "GKDataQualityPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Tool; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private DataQualityWidget fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 CloseForm();
             }
             base.Dispose(disposing);
@@ -77,9 +74,9 @@ namespace GKDataQualityPlugin
             }
         }
 
-        public void Execute()
+        public override void Execute()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new DataQualityWidget(this);
                 fForm.Show();
             } else {
@@ -87,49 +84,24 @@ namespace GKDataQualityPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(CLS.LSID_Title);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKDataQualityPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
-        public bool Startup(IHost host)
+        public override bool Shutdown()
         {
             bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKDataQualityPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
+            try {
                 CloseForm();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKDataQualityPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }

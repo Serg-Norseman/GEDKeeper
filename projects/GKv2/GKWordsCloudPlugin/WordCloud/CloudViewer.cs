@@ -190,20 +190,13 @@ namespace WordCloud
 
         public IEnumerable<Word> GetItemsInArea(RectangleF area)
         {
-            if (fModel == null) {
-                return new Word[] { };
-            }
-
-            return fModel.GetWordsInArea(area);
+            return (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
         }
 
         public Word GetItemAtLocation(Point location)
         {
             IEnumerable<Word> itemsInArea = GetItemsInArea(new RectangleF(location, new SizeF(0, 0)));
-            foreach (Word item in itemsInArea) {
-                return item;
-            }
-            return null;
+            return itemsInArea.FirstOrDefault();
         }
     }
 }

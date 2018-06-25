@@ -283,7 +283,7 @@ namespace GKCore.Export
             p.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalDestination(anchor));
         }
 
-        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup)
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
             Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
             if (sup) {
