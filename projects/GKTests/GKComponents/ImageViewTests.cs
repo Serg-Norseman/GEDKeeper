@@ -66,7 +66,7 @@ namespace GKUI.Components
             fImageView.OpenImage(null); // return without exceptions
 
             Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
 
             fImageView.OpenImage(img);
 

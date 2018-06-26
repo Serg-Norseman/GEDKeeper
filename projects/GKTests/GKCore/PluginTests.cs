@@ -45,7 +45,7 @@ namespace GKCore
             var pluginInfo = PluginInfo.GetPluginInfo(plugin);
             Assert.AreEqual("GKTests", pluginInfo.Title);
             Assert.AreEqual("", pluginInfo.Description);
-            Assert.AreEqual("Copyright © 2013-2017 by Sergey V. Zhdanovskih", pluginInfo.Copyright);
+            Assert.AreEqual("Copyright © 2013-2018 by Sergey V. Zhdanovskih", pluginInfo.Copyright);
             Assert.AreEqual("1.0.0.0", pluginInfo.Version);
         }
 

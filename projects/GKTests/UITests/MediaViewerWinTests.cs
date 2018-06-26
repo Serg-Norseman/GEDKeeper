@@ -74,7 +74,7 @@ namespace GKUI.Forms
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
             Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
 
             fDialog.SetViewImage(img, fileRef);
 

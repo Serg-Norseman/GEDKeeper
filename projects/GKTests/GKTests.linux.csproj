@@ -162,7 +162,7 @@
     <EmbeddedResource Include="Resources\test1.ged" />
     <EmbeddedResource Include="Resources\test2.ged" />
     <EmbeddedResource Include="Resources\test_agelong_ansel%28win1251%29.ged" />
-    <EmbeddedResource Include="Resources\shaytan_plant.png" />
+    <EmbeddedResource Include="Resources\shaytan_plant.jpg" />
     <EmbeddedResource Include="Resources\TGC55CLF.GED" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

@@ -69,7 +69,7 @@ namespace GKUI.Components
         public void TestMethod()
         {
             Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
 
             fImageBox.BeginUpdate();
             fImageBox.Image = null;
