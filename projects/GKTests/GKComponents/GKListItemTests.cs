@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,61 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKCore.Types;
-using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKUI.Components
 {
     [TestFixture]
-    public class CommonTests
+    public class GKListItemTests
     {
         [Test]
-        public void PG_Tests()
-        {
-            PatriarchObj pObj = new PatriarchObj();
-            Assert.IsNotNull(pObj);
-            Assert.IsNotNull(pObj.Links);
-
-            PGNode pgNode = new PGNode("label", PGNodeType.Default);
-            Assert.IsNotNull(pgNode);
-
-            pgNode = new PGNode("label", PGNodeType.Default, 5);
-            Assert.IsNotNull(pgNode);
-        }
-
-        private bool TestExternalFilterHandler(GEDCOMRecord record)
-        {
-            return false;
-        }
-
-        [Test]
-        public void FiltersIntf_Tests()
-        {
-            FilterCondition cond = new FilterCondition(0, ConditionKind.ck_Contains, null);
-            Assert.IsNotNull(cond);
-
-            ExternalFilterHandler handler = TestExternalFilterHandler;
-            Assert.IsFalse(handler.Invoke(null));
-        }
-
-        private void TweenHandler(int newX, int newY)
-        {
-        }
-
-        [Test]
-        public void Tween_Tests()
-        {
-            #if !__MonoCS__
-            TweenLibrary tween = new TweenLibrary();
-            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
-            #endif
-        }
-
-        [Test]
-        public void ListItems_Tests()
+        public void Test_Common()
         {
             var item1 = new GKListItem(10, null);
             var item2 = new GKListItem(20, null);

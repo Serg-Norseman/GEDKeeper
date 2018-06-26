@@ -268,6 +268,10 @@ namespace GKCore.Charts
 
         public void SetColor(IColor c)
         {
+            if (c == null) {
+                throw new ArgumentNullException("c");
+            }
+
             fLastColor = FormatColor(c);
             fLastColorOpacity = string.Format(fFmt, "{0}", c.GetA() / 255.0);
         }
@@ -420,6 +424,10 @@ namespace GKCore.Charts
 
         public void DrawString(string s, float x, float y)
         {
+            if (fLastFont == null) {
+                return;
+            }
+
             string transform = GetTransform();
 
             WriteLine("<text x=\"{0}\" y=\"{1}\" font-family=\"{2}\" font-size=\"{3}\" {4}>{5}</text>",

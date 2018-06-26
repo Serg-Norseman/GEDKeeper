@@ -21,8 +21,8 @@
 #if !__MonoCS__
 
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCore;
 using GKUI.Components;
@@ -68,8 +68,8 @@ namespace GKUI.Components
         [Test]
         public void TestMethod()
         {
-            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(ImageViewTests).Assembly);
-            Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
 
             fImageBox.BeginUpdate();
             fImageBox.Image = null;

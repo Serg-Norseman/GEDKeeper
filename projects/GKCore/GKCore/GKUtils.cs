@@ -651,12 +651,34 @@ namespace GKCore
             return result;
         }
 
+        public static void GetEventDatePlace(GEDCOMIndividualRecord iRec, string eventName, DateFormat dateFormat,
+                                             bool compact, bool markUnkDate, out string dateStr, out string placeStr)
+        {
+            dateStr = string.Empty;
+            placeStr = string.Empty;
+
+            if (iRec != null) {
+                GEDCOMCustomEvent evt = iRec.FindEvent(eventName);
+                if (evt != null) {
+                    dateStr = GEDCOMEventToDateStr(evt, dateFormat, false);
+                    if (dateStr != "") {
+                        if (compact) dateStr = CompactDate(dateStr);
+                    }
+                    if (dateStr == "" && markUnkDate) {
+                        dateStr = "?";
+                    }
+
+                    placeStr = GetPlaceStr(evt, false);
+                }
+            }
+        }
+
         public static string GetPedigreeLifeStr(GEDCOMIndividualRecord iRec, PedigreeFormat fmt)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string resStr = "";
+            string result = "";
 
             switch (fmt) {
                 case PedigreeFormat.Excess:
@@ -666,7 +688,7 @@ namespace GKCore
                         {
                             ds = "?";
                         }
-                        resStr += ds;
+                        result += ds;
                         ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
                         if (ds == "")
                         {
@@ -678,56 +700,44 @@ namespace GKCore
                         }
                         if (ds != "")
                         {
-                            resStr = resStr + " - " + ds;
+                            result = result + " - " + ds;
                         }
                     }
                     break;
 
                 case PedigreeFormat.Compact:
                     {
-                        string ds = GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, true);
-                        string ps = GetBirthPlace(iRec);
-                        if (ps != "")
-                        {
-                            if (ds != "")
-                            {
+                        string ds, ps;
+
+                        GetEventDatePlace(iRec, "BIRT", DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        if (ps != "") {
+                            if (ds != "") {
                                 ds += ", ";
                             }
                             ds += ps;
                         }
-                        if (ds != "")
-                        {
+                        if (ds != "") {
                             ds = ImportUtils.STD_BIRTH_SIGN + ds;
                         }
-                        resStr += ds;
-                        ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
-                        ps = GetDeathPlace(iRec);
-                        if (ps != "")
-                        {
-                            if (ds != "")
-                            {
+                        result += ds;
+
+                        GetEventDatePlace(iRec, "DEAT", DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        if (ps != "") {
+                            if (ds != "") {
                                 ds += ", ";
                             }
                             ds += ps;
                         }
-                        if (ds != "")
-                        {
+                        if (ds != "") {
                             ds = ImportUtils.STD_DEATH_SIGN + ds;
-                        }
-                        if (ds != "")
-                        {
-                            resStr = resStr + " " + ds;
+                            result = result + " " + ds;
                         }
                     }
                     break;
             }
-            
-            string result;
-            if (resStr == "" || resStr == " ") {
-                result = "";
-            } else {
-                result = " (" + resStr + ")";
-            }
+
+            result = result.Trim();
+            result = (result == "") ? "" : " (" + result + ")";
             return result;
         }
 

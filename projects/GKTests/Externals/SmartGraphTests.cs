@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,16 +19,17 @@
  */
 
 using System;
+using BSLib.SmartGraph;
 using GKTests;
 using NUnit.Framework;
 
-namespace BSLib.SmartGraph
+namespace Externals
 {
     [TestFixture]
     public class SmartGraphTests
     {
         [Test]
-        public void Graph_Tests()
+        public void Test_Graph()
         {
             Vertex vertex = new Vertex();
             Assert.IsNotNull(vertex);
@@ -110,7 +111,7 @@ namespace BSLib.SmartGraph
         }
 
         [Test]
-        public void GraphvizWriter_Tests()
+        public void Test_GraphvizWriter()
         {
             using (Graph graph = new Graph())
             {

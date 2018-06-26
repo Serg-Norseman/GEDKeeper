@@ -20,8 +20,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-
-using GKCore;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
@@ -38,7 +36,7 @@ namespace GKCore
         }
 
         [Test]
-        public void TestMethod()
+        public void Test_Common()
         {
             string sample = "[size=+1][color=red][b]bold text[/b] [i][u]italic[/i] and underline[/u] qq[/color] "+
                 "[size=-1][s]strikeout[/s][/size] \r\n [url=http://test.com/~user/index.html]url text[/url][/size]";

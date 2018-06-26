@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using GKCommon;
 using GKCore;
@@ -64,8 +65,9 @@ namespace GKUI.Components
         {
             fImageView.OpenImage(null); // return without exceptions
 
-            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(ImageViewTests).Assembly);
-            Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
+
             fImageView.OpenImage(img);
 
             fForm.Show();

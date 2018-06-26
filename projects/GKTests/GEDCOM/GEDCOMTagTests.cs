@@ -28,7 +28,7 @@ namespace GKCommon.GEDCOM
     public class GEDCOMTagTests
     {
         [Test]
-        public void TestMethod()
+        public void Test_Method()
         {
             // Reminder for yourself, about the work of string.Remove()
 
@@ -42,7 +42,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void TestSetTagStringsA()
+        public void Test_SetTagStringsA()
         {
             var tag = new GEDCOMTag(null, null, "TEST", "");
             Assert.IsNotNull(tag);
@@ -60,7 +60,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void TestSetTagStringsL()
+        public void Test_SetTagStringsL()
         {
             var tag = new GEDCOMTag(null, null, "TEST", "");
             Assert.IsNotNull(tag);

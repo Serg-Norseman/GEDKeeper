@@ -21,8 +21,8 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
-
 using BSLib;
 using BSLib.Calendar;
 using GKCommon.GEDCOM;
@@ -34,9 +34,6 @@ using NUnit.Framework;
 
 namespace GKCommon.GEDCOM
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [TestFixture]
     public class GedcomTests
     {
@@ -2751,10 +2748,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Standart_Tests()
         {
-            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
-            byte[] gedcom = (byte[])resMgr.GetObjectEx("TGC55CLF_GED");
-
-            using (MemoryStream inStream = new MemoryStream(gedcom)) {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
                 using (GEDCOMTree tree = new GEDCOMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);

@@ -270,13 +270,13 @@
             // 
             this.tbFileNew.Name = "tbFileNew";
             this.tbFileNew.Size = new System.Drawing.Size(23, 22);
-            this.tbFileNew.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbFileNew.Click += new System.EventHandler(this.miFileNew_Click);
             // 
             // tbFileLoad
             // 
             this.tbFileLoad.Name = "tbFileLoad";
             this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
-            this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbFileLoad.Click += new System.EventHandler(this.miFileLoad_Click);
             // 
             // tbLoadMRU
             // 
@@ -298,7 +298,7 @@
             // 
             this.tbFileSave.Name = "tbFileSave";
             this.tbFileSave.Size = new System.Drawing.Size(23, 22);
-            this.tbFileSave.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbFileSave.Click += new System.EventHandler(this.miFileSave_Click);
             // 
             // TBS1
             // 
@@ -309,19 +309,19 @@
             // 
             this.tbRecordAdd.Name = "tbRecordAdd";
             this.tbRecordAdd.Size = new System.Drawing.Size(23, 22);
-            this.tbRecordAdd.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbRecordAdd.Click += new System.EventHandler(this.miRecordAdd_Click);
             // 
             // tbRecordEdit
             // 
             this.tbRecordEdit.Name = "tbRecordEdit";
             this.tbRecordEdit.Size = new System.Drawing.Size(23, 22);
-            this.tbRecordEdit.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbRecordEdit.Click += new System.EventHandler(this.miRecordEdit_Click);
             // 
             // tbRecordDelete
             // 
             this.tbRecordDelete.Name = "tbRecordDelete";
             this.tbRecordDelete.Size = new System.Drawing.Size(23, 22);
-            this.tbRecordDelete.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbRecordDelete.Click += new System.EventHandler(this.miRecordDelete_Click);
             // 
             // TBS2
             // 
@@ -333,7 +333,7 @@
             this.tbFilter.ImageTransparentColor = System.Drawing.Color.White;
             this.tbFilter.Name = "tbFilter";
             this.tbFilter.Size = new System.Drawing.Size(23, 22);
-            this.tbFilter.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbFilter.Click += new System.EventHandler(this.miFilter_Click);
             // 
             // TBS4
             // 
@@ -344,19 +344,19 @@
             // 
             this.tbTreeAncestors.Name = "tbTreeAncestors";
             this.tbTreeAncestors.Size = new System.Drawing.Size(23, 22);
-            this.tbTreeAncestors.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbTreeAncestors.Click += new System.EventHandler(this.miTreeAncestors_Click);
             // 
             // tbTreeDescendants
             // 
             this.tbTreeDescendants.Name = "tbTreeDescendants";
             this.tbTreeDescendants.Size = new System.Drawing.Size(23, 22);
-            this.tbTreeDescendants.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbTreeDescendants.Click += new System.EventHandler(this.miTreeDescendants_Click);
             // 
             // tbTreeBoth
             // 
             this.tbTreeBoth.Name = "tbTreeBoth";
             this.tbTreeBoth.Size = new System.Drawing.Size(23, 22);
-            this.tbTreeBoth.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbTreeBoth.Click += new System.EventHandler(this.miTreeBoth_Click);
             // 
             // TBS5
             // 
@@ -399,7 +399,7 @@
             // 
             this.tbStats.Name = "tbStats";
             this.tbStats.Size = new System.Drawing.Size(23, 22);
-            this.tbStats.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbStats.Click += new System.EventHandler(this.miStats_Click);
             // 
             // TBS7
             // 
@@ -411,14 +411,14 @@
             this.tbPrev.Enabled = false;
             this.tbPrev.Name = "tbPrev";
             this.tbPrev.Size = new System.Drawing.Size(23, 22);
-            this.tbPrev.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbPrev.Click += new System.EventHandler(this.tbPrev_Click);
             // 
             // tbNext
             // 
             this.tbNext.Enabled = false;
             this.tbNext.Name = "tbNext";
             this.tbNext.Size = new System.Drawing.Size(23, 22);
-            this.tbNext.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbNext.Click += new System.EventHandler(this.tbNext_Click);
             // 
             // TBS8
             // 
@@ -429,13 +429,13 @@
             // 
             this.tbDocPreview.Name = "tbDocPreview";
             this.tbDocPreview.Size = new System.Drawing.Size(23, 22);
-            this.tbDocPreview.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbDocPreview.Click += new System.EventHandler(this.tbDocPreview_Click);
             // 
             // tbDocPrint
             // 
             this.tbDocPrint.Name = "tbDocPrint";
             this.tbDocPrint.Size = new System.Drawing.Size(23, 22);
-            this.tbDocPrint.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.tbDocPrint.Click += new System.EventHandler(this.tbDocPrint_Click);
             // 
             // MainMenu1
             // 

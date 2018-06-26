@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,17 +21,16 @@
 using System;
 using System.IO;
 using System.Reflection;
-using GKCommon.GEDCOM;
 using GKCore;
 using NUnit.Framework;
 
-namespace GKTests
+namespace GKCommon.GEDCOM
 {
     [TestFixture]
     public class FileFormatTests
     {
         [Test]
-        public void Agelong_Ansel_Win1251_Tests()
+        public void Test_Agelong_PseudoAnsel_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;

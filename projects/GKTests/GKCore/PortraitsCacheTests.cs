@@ -36,5 +36,13 @@ namespace GKCore
             var inst = PortraitsCache.Instance;
             Assert.IsNotNull(inst);
         }
+
+        [Test]
+        public void Test_Common()
+        {
+            PortraitsCache cache = PortraitsCache.Instance;
+            Assert.IsNull(cache.GetImage(null, null));
+            cache.RemoveObsolete(null);
+        }
     }
 }

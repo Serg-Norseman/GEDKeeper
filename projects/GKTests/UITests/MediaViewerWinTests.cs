@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -72,8 +73,9 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
-            Bitmap img = (Bitmap)resMgr.GetObjectEx("shaytan_plant");
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.png"));
+
             fDialog.SetViewImage(img, fileRef);
 
             fDialog.Refresh();

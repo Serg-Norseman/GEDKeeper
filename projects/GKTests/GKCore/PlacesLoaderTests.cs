@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
 using BSLib;
 using GKCore.Geocoding;
 using GKCore.Maps;
@@ -49,6 +51,45 @@ namespace GKCore
             Assert.IsNotNull(mapPlace);
             Assert.IsNotNull(mapPlace.Points);
             Assert.IsNotNull(mapPlace.PlaceRefs);
+        }
+
+        [Test]
+        public void Test_GeoPoint()
+        {
+            GeoPoint mapPoint = new GeoPoint(0.5f, 0.5f, "test");
+            Assert.IsNotNull(mapPoint);
+            Assert.AreEqual(0.5f, mapPoint.Latitude);
+            Assert.AreEqual(0.5f, mapPoint.Longitude);
+            Assert.AreEqual("test", mapPoint.Hint);
+        }
+
+        [Test]
+        public void Test_Geocoding()
+        {
+            IGeocoder geocoder = IGeocoder.Create("");
+            IList<GeoPoint> geoPoints;
+
+            geocoder.SetKey("");
+            geocoder.SetProxy(null);
+            geocoder.SetLang("");
+
+            try {
+                geocoder = IGeocoder.Create("Google");
+                geocoder.SetKey(GKData.GAPI_KEY);
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
+
+                geocoder = IGeocoder.Create("Yandex");
+                geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
+
+                // FIXME!
+                //geocoder = IGeocoder.Create("OSM");
+                //geoPoints = geocoder.Geocode("New York", 1);
+                //Assert.IsTrue(geoPoints.Count > 0);
+            } catch (Exception) {
+                Assert.Fail();
+            }
         }
 
         [Test]

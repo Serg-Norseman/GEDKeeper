@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,14 +31,10 @@ namespace GKCommon.GEDCOM
      * @author Kevin Routley
      */
     [TestFixture]
-    public class GEDCOMAddressTest
+    public class GEDCOMAddressTests
     {
-        public GEDCOMAddressTest()
-        {
-        }
-
         [Test]
-        public void testSetAddress()
+        public void Test_SetAddress()
         {
             var vals = new string[] {
                 "Address Line 1",
@@ -54,7 +50,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressLine1()
+        public void Test_SetAddressLine1()
         {
             string value = "1234 Main St";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -64,7 +60,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressLine2()
+        public void Test_SetAddressLine2()
         {
             string value = "Novozavodskaya ul., 10";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -74,7 +70,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressLine3()
+        public void Test_SetAddressLine3()
         {
             string value = "ALEKSCEVSKTY r-n";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -84,7 +80,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressCity()
+        public void Test_SetAddressCity()
         {
             string value = "Moskva";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -94,7 +90,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressState()
+        public void Test_SetAddressState()
         {
             string value = "VORONEJSKAYA obl";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -104,7 +100,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressPostalCode()
+        public void Test_SetAddressPostalCode()
         {
             string value = "1234A567";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -114,7 +110,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressCountry()
+        public void Test_SetAddressCountry()
         {
             string value = "Moosylvania";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -124,7 +120,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddEmailAddress()
+        public void Test_AddEmailAddress()
         {
             string value = "serg.zhdanovskih@yandex.ru";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -136,7 +132,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddFaxNumber()
+        public void Test_AddFaxNumber()
         {
             string value = "(214) 748-3647";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -148,7 +144,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddPhoneNumber()
+        public void Test_AddPhoneNumber()
         {
             string value = "(214) 748-3647";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -160,7 +156,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddPhoneNumber2()
+        public void Test_AddPhoneNumber2()
         {
             string value1 = "(214) 748-3647";
             string value2 = "(999) 748-3647";
@@ -176,7 +172,7 @@ namespace GKCommon.GEDCOM
         }
         
         [Test]
-        public void testAddWebPage1()
+        public void Test_AddWebPage1()
         {
             string value = "http://www.bitboost.com/ref/international-address-formats/russia/";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -188,7 +184,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddWebPage2()
+        public void Test_AddWebPage2()
         {
             string value1 = "http://www.bitboost.com/ref/international-address-formats/russia/";
             string value2 = "http://google.com/search";
@@ -215,7 +211,7 @@ namespace GKCommon.GEDCOM
         //    }
 
         [Test]
-        public void testSaveTagsToStream()
+        public void Test_SaveTagsToStream()
         {
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
 
@@ -236,7 +232,7 @@ namespace GKCommon.GEDCOM
         //    }
 
         [Test]
-        public void testAssign()
+        public void Test_Assign()
         {
             GEDCOMTag source = null;
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -250,7 +246,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddTag()
+        public void Test_AddTag()
         {
             const string tagName = "BABA";
             const string tagValue = "YAGA";
@@ -261,7 +257,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testClear()
+        public void Test_Clear()
         {
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
             instance.SetAddressText("blah");
@@ -270,7 +266,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testIsEmptyT()
+        public void Test_IsEmptyT()
         {
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
             bool expResult = true;
@@ -279,7 +275,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testIsEmptyF()
+        public void Test_IsEmptyF()
         {
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
             instance.SetAddressText("blah");
@@ -289,7 +285,7 @@ namespace GKCommon.GEDCOM
         }
         
         [Test]
-        public void testResetOwner()
+        public void Test_ResetOwner()
         {
             GEDCOMTree newOwner = new GEDCOMTree();
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -313,7 +309,7 @@ namespace GKCommon.GEDCOM
         //    }
         
         [Test]
-        public void testSetAddressText()
+        public void Test_SetAddressText()
         {
             string value = "this is a test";
             GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
@@ -324,7 +320,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testSetAddressArray()
+        public void Test_SetAddressArray()
         {
             // http://www.bitboost.com/ref/international-address-formats/russia/
             string[] value = new string[] {
@@ -364,7 +360,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddress1Fail()
+        public void Test_Address1Fail()
         {
             string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n3 ADR1 Novozavodskaya ul., 10\n3 CITY Moskva\n3 CTRY Russia\n3 POST 121309";
             GEDCOMAddress res = AddrParse(text);
@@ -373,7 +369,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddressParse2()
+        public void Test_AddressParse2()
         {
             string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n3 CONT Novozavodskaya ul., 10\n3 CITY Moskva\n3 CTRY Russia\n3 POST 121309";
             GEDCOMAddress res = AddrParse(text);
@@ -383,7 +379,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testAddressParse()
+        public void Test_AddressParse()
         {
             string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n3 ADR1 Novozavodskaya ul., 10\n3 CITY Moskva\n3 CTRY Russia\n3 POST 121309";
             GEDCOMAddress res = AddrParse(text);
@@ -392,9 +388,9 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual("121309", res.AddressPostalCode);
             Assert.AreEqual("", res.AddressState);
         }
-        
+
         [Test]
-        public void testPhoneParse()
+        public void Test_PhoneParse()
         {
             // TODO The standard should be the second version of the input line, but in the future we can work out the first
             //string text = "0 @I1@ INDI\n1 FACT\n2 PHON +7 499 277-71-00\n2 ADDR Institute for Higher\n3 CONT Learning\n2 PHON +7 495 967-77-76\n";

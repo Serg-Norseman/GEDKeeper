@@ -65,29 +65,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonTests.cs" />
-    <Compile Include="CoreTests.cs" />
-    <Compile Include="FileFormatTests.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Externals\ExternalsTests.cs" />
+    <Compile Include="GEDCOM\FileFormatTests.cs" />
     <Compile Include="GEDCOM\GEDCOMAddressTests.cs" />
     <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
     <Compile Include="GEDCOM\GEDCOMDateTests2.cs" />
+    <Compile Include="GEDCOM\GEDCOMListTests.cs" />
     <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
     <Compile Include="GEDCOM\GEDCOMPersonalNameTests.cs" />
     <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GEDCOM\GEDCOMTagTests.cs" />
     <Compile Include="GEDCOM\GedcomTests.cs" />
     <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
-    <Compile Include="GKCommon\BBTextParserTests.cs" />
-    <Compile Include="GKCommon\IocContainerTests.cs" />
-    <Compile Include="GKCommon\RusDeclensionTests.cs" />
-    <Compile Include="GKCommon\SmartGraphTests.cs" />
+    <Compile Include="Externals\SmartGraphTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
+    <Compile Include="GKComponents\GKListItemTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
     <Compile Include="GKComponents\ImageBoxTests.cs" />
     <Compile Include="GKComponents\ImageViewTests.cs" />
     <Compile Include="GKComponents\TreeChartBoxTests.cs" />
+    <Compile Include="GKCore\BaseContextTests.cs" />
+    <Compile Include="GKCore\BBTextParserTests.cs" />
+    <Compile Include="GKCore\CoreTests.cs" />
+    <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
+    <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
     <Compile Include="GKCore\PluginTests.cs" />
@@ -95,14 +99,10 @@
     <Compile Include="GKCore\SCCTests.cs" />
     <Compile Include="GKCore\SingleInstanceTrackerTests.cs" />
     <Compile Include="GKCore\TreeChartTests.cs" />
+    <Compile Include="GKCore\TreeToolsTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
-    <Compile Include="GXResources.Designer.cs">
-      <DependentUpon>GXResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Mocks.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
     <Compile Include="ControlTesters\GKSheetListTester.cs" />
@@ -162,17 +162,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GXResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>GXResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test1.ged" />
     <EmbeddedResource Include="Resources\test2.ged" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_agelong_ansel%28win1251%29.ged" />
+    <EmbeddedResource Include="Resources\shaytan_plant.png" />
+    <EmbeddedResource Include="Resources\TGC55CLF.GED" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

@@ -668,33 +668,25 @@ namespace GKCore.Tools
             walkList.Add(iRec);
 
             if (mode == TreeWalkMode.twmNone) return;
-            
-            if ((mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) && iRec.ChildToFamilyLinks.Count > 0)
-            {
-                GEDCOMIndividualRecord father, mother;
-                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
-                if (fam == null) {
-                    father = null;
-                    mother = null;
-                } else {
-                    father = fam.GetHusband();
-                    mother = fam.GetWife();
-                }
 
-                WalkTreeInt(father, mode, walkList);
-                WalkTreeInt(mother, mode, walkList);
+            if (mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) {
+                GEDCOMFamilyRecord family = iRec.GetParentsFamily();
+                if (family != null) {
+                    GEDCOMIndividualRecord father, mother;
+                    father = family.GetHusband();
+                    mother = family.GetWife();
+
+                    WalkTreeInt(father, mode, walkList);
+                    WalkTreeInt(mother, mode, walkList);
+                }
             }
 
             // twmAll, twmFamily, twmDescendants
-            if (mode < TreeWalkMode.twmAncestors || mode == TreeWalkMode.twmDescendants)
-            {
+            if (mode < TreeWalkMode.twmAncestors || mode == TreeWalkMode.twmDescendants) {
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-
-                    GEDCOMPointer spPtr = ((iRec.Sex == GEDCOMSex.svMale) ? family.Wife : family.Husband);
-                    GEDCOMIndividualRecord spouse = spPtr.Value as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
                     WalkTreeInt(spouse, intMode, walkList);
@@ -714,8 +706,7 @@ namespace GKCore.Tools
                     }
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
+                    for (int j = 0; j < num2; j++) {
                         GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
                         WalkTreeInt(child, intMode, walkList);
                     }

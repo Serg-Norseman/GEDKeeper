@@ -22,7 +22,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -268,11 +267,13 @@ namespace GKCore
                 svg.BeginDrawing();
                 svg.Clear(UIHelper.ConvertColor(Color.Yellow));
 
+                svg.BeginEntity(null);
                 svg.DrawLine(10, 10, 50, 10, 1);
                 svg.DrawArc(60, 60, 20, 15, 25, 1);
                 svg.DrawEllipse(10, 10, 30, 30, null, null);
                 svg.DrawRect(50, 50, 20, 20, 2);
                 svg.DrawRoundedRect(80, 80, 10, 10, 3, 1);
+                svg.EndEntity();
 
                 svg.FillArc(60, 60, 20, 15, 25);
                 svg.DrawEllipse(10, 10, 30, 30, null, null);
@@ -280,6 +281,26 @@ namespace GKCore
 
                 svg.SetColor(UIHelper.ConvertColor(Color.Red));
                 svg.FillRoundedRect(80, 80, 10, 10, 3);
+
+                svg.DrawCircleSegment(0, 0, 10, 20, 0, 17, null, null);
+                svg.DrawImage(null, 0, 0, 100, 100);
+                svg.DrawPolygon(new ExtPointF[] {}, null, null);
+                svg.DrawString("x", 10, 10);
+
+                svg.ResetState();
+                svg.SaveState();
+                svg.RestoreState();
+
+                svg.Rotate(75);
+                svg.Translate(10, 10);
+                svg.Scale(0.5f, 0.5f);
+                svg.SetClippingRect(0.0f, 0.0f, 10f, 10f);
+
+                svg.SetFont(null);
+                Assert.Throws(typeof(ArgumentNullException), () => { svg.SetColor(null); });
+
+                svg.BeginLines(false);
+                svg.EndLines();
 
                 svg.EndDrawing();
             }

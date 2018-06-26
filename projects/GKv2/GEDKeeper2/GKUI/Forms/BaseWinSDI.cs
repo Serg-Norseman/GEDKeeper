@@ -1098,41 +1098,6 @@ namespace GKUI.Forms
             }
         }
 
-        private void ToolBar1_ButtonClick(object sender, EventArgs e)
-        {
-            if (sender == tbFileNew) {
-                miFileNew_Click(null, null);
-            } else if (sender == tbFileLoad) {
-                miFileLoad_Click(null, null);
-            } else if (sender == tbFileSave) {
-                miFileSave_Click(null, null);
-            } else if (sender == tbRecordAdd) {
-                miRecordAdd_Click(null, null);
-            } else if (sender == tbRecordEdit) {
-                miRecordEdit_Click(null, null);
-            } else if (sender == tbRecordDelete) {
-                miRecordDelete_Click(null, null);
-            } else if (sender == tbFilter) {
-                miFilter_Click(null, null);
-            } else if (sender == tbTreeAncestors) {
-                miTreeAncestors_Click(null, null);
-            } else if (sender == tbTreeDescendants) {
-                miTreeDescendants_Click(null, null);
-            } else if (sender == tbTreeBoth) {
-                miTreeBoth_Click(null, null);
-            } else if (sender == tbStats) {
-                miStats_Click(null, null);
-            } else if (sender == tbPrev) {
-                tbPrev_Click(null, null);
-            } else if (sender == tbNext) {
-                tbNext_Click(null, null);
-            } else if (sender == tbDocPrint) {
-                tbDocPrint_Click(null, null);
-            } else if (sender == tbDocPreview) {
-                tbDocPreview_Click(null, null);
-            }
-        }
-
         private void MRUFileClick(object sender, EventArgs e)
         {
             int idx = (int)((GKToolStripMenuItem)sender).Tag;

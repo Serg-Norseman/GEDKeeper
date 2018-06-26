@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,12 +31,8 @@ namespace GKCommon.GEDCOM
      * Modified by Kevin Routley (KBR) aka fire-eggs
      */
     [TestFixture]
-    public class GEDCOMNoteRecordTest
+    public class GEDCOMNoteRecordTests
     {
-        public GEDCOMNoteRecordTest()
-        {
-        }
-
         [Test]
         public void testCommon()
         {
