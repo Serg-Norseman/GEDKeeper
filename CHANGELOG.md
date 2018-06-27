@@ -1,10 +1,37 @@
 
-## ??.??.2017 [v2.13.0]
+## 28.06.2018 [[v2.13.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.1)]
+- Implemented the saving of circle charts in SVG.
+- Fixed bug in the tree's chart with folding of branches.
+- Fixed bug in the plugin "History Data".
+- Fixed bug in the plugin "Data quality".
+- Added option "Automatically check for updates".
+- Fixed bug of loading of files "Agelong Tree" with incorrect encoding ANSEL.
+- Fixed a crash in checking for new versions in WinXP.
+
+## 08.06.2018 [[v2.13.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.0)]
+- Added the folding of tree branches.
+- The generator "Family Book" has been revised.
+- Added option of displaying dates of marriages in tree diagrams.
+- Added the inverted tree mode (ancestors at the bottom, descendants at the top).
+- Added control keys for the number of generations displayed in circle charts.
+- Fixed drawing of background of circle charts when outputting to a file.
+- Fixed working of option "Hide empty segments" in circle charts.
+- Added reports "Phonetics" and "Contemporaries".
+- Created the first reporting plugin (reports "Frequency of names" and
+"Personal events").
+- Created the subsystem of external reporting plugins.
+- Fixed auto-scrolling of tree diagram when clicking on personal record.
+- Added an examples of the databases "The Human Origins" (rus, lat) and 
+"Ancient Kingdoms" (rus).
+- Added a new plugin "History Data (links)".
+- Added support for editing names in different languages.
 - Added support for saving a snapshot of a tree in SVG format.
 - Rpm-packages for Fedora / Rosa Linux are added.
 - Added a new geocoder (OSM).
 - Added a new plugin "Data Quality".
+- Added possibility of highlighting portraits on general photos.
 - Restored supporting of Ansel GEDCOM encoding.
+- Fixed minor translation errors.
 - Added a new plugin "WordsCloud".
 - Fixed the problem of extra lines in family records while saving
 GEDCOM files, which led to import problems in other programs.
