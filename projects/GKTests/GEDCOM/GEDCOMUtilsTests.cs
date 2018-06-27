@@ -50,44 +50,34 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void Test_()
-        {
-        }
-
-        [Test]
-        public void GEDCOMUtils_Tests()
+        public void Test_GEDCOMObject()
         {
             GEDCOMObject obj = new GEDCOMObject();
             obj.ExtData = this;
             Assert.AreEqual(obj.ExtData, this);
             obj.Dispose();
-
-            //
-
-            Assert.AreEqual("I12", GEDCOMUtils.CleanXRef("@I12@"), "CleanXRef(@I12@)");
-            Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
-
-            //
-            string s1 = " 12345 efgh";
-            string s2 = "";
-
-            s2 = GEDCOMUtils.ExtractDelimiter(s1, 0);
-            Assert.AreEqual("12345 efgh", s2);
-
-            //
-
-            string s3 = GEDCOMUtils.ExtractDelimiter("    abrvalg", 2);
-            Assert.AreEqual("  abrvalg", s3);
         }
 
-        /*[TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
-        [TestCase("@sample", Description = "Bad XRef Test", ExpectedException = typeof(EGEDCOMException))]
-        public void GEDCOMUtils_ExtractXRef_Tests(string arg)
+        [Test]
+        public void Test_XRef_CleanEnclose()
         {
-        }*/
+            Assert.AreEqual("I12", GEDCOMUtils.CleanXRef("@I12@"), "CleanXRef(@I12@)");
+            Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
+        }
 
         [Test]
-        public void GEDCOMEnumSx_Tests()
+        public void Test_ExtractDelimiter()
+        {
+            string res;
+            res = GEDCOMUtils.ExtractDelimiter(" 12345 efgh", 0);
+            Assert.AreEqual("12345 efgh", res);
+
+            res = GEDCOMUtils.ExtractDelimiter("    abrvalg", 2);
+            Assert.AreEqual("  abrvalg", res);
+        }
+
+        [Test]
+        public void Test_GEDCOMEnumSx()
         {
             Assert.AreEqual("M", GEDCOMUtils.GetSexStr(GEDCOMSex.svMale), "GetSexStr(svMale)");
             Assert.AreEqual("F", GEDCOMUtils.GetSexStr(GEDCOMSex.svFemale), "GetSexStr(svFemale)");
@@ -102,7 +92,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumRP_Tests()
+        public void Test_GEDCOMEnumRP()
         {
             Assert.AreEqual(GKResearchPriority.rpLow, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpLow)));
             Assert.AreEqual(GKResearchPriority.rpNormal, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpNormal)));
@@ -113,7 +103,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumOPF_Tests()
+        public void Test_GEDCOMEnumOPF()
         {
             Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag.opYes)));
             Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opNo, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag.opNo)));
@@ -122,7 +112,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumRS_Tests()
+        public void Test_GEDCOMEnumRS()
         {
             Assert.AreEqual(GKResearchStatus.rsInProgress, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsInProgress)));
             Assert.AreEqual(GKResearchStatus.rsOnHold, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsOnHold)));
@@ -135,7 +125,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEncoding_Tests()
+        public void Test_GEDCOMEncoding()
         {
             Assert.AreEqual("ASCII", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csASCII));
             Assert.AreEqual("ANSEL", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csANSEL));
@@ -161,7 +151,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumNT_Tests()
+        public void Test_GEDCOMEnumNT()
         {
             Assert.AreEqual(GEDCOMNameType.ntNone, GEDCOMUtils.GetNameTypeVal("unk"));
             Assert.AreEqual(GEDCOMNameType.ntNone, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntNone)));
@@ -173,7 +163,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumCT_Tests()
+        public void Test_GEDCOMEnumCT()
         {
             Assert.AreEqual(GKCommunicationType.ctCall, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctCall)));
             Assert.AreEqual(GKCommunicationType.ctEMail, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctEMail)));
@@ -186,7 +176,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumCLS_Tests()
+        public void Test_GEDCOMEnumCLS()
         {
             Assert.AreEqual(GEDCOMChildLinkageStatus.clChallenged, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clChallenged)));
             Assert.AreEqual(GEDCOMChildLinkageStatus.clDisproven, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clDisproven)));
@@ -196,7 +186,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumPLT_Tests()
+        public void Test_GEDCOMEnumPLT()
         {
             Assert.AreEqual(GEDCOMPedigreeLinkageType.plAdopted, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plAdopted)));
             Assert.AreEqual(GEDCOMPedigreeLinkageType.plBirth, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plBirth)));
@@ -207,7 +197,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumRestr_Tests()
+        public void Test_GEDCOMEnumRestr()
         {
             Assert.AreEqual(GEDCOMRestriction.rnConfidential, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnConfidential)));
             Assert.AreEqual(GEDCOMRestriction.rnLocked, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnLocked)));
@@ -217,7 +207,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumMT_Tests()
+        public void Test_GEDCOMEnumMT()
         {
             Assert.AreEqual(GEDCOMMediaType.mtUnknown, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtUnknown)));
             Assert.AreEqual(GEDCOMMediaType.mtAudio, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtAudio)));
@@ -237,7 +227,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumMF_Tests()
+        public void Test_GEDCOMEnumMF()
         {
             Assert.AreEqual(GEDCOMMultimediaFormat.mfNone, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfNone)));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfBMP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfBMP)));
@@ -269,7 +259,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumSSDS_Tests()
+        public void Test_GEDCOMEnumSSDS()
         {
             Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal("unk"));
             Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsNone)));
@@ -284,7 +274,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumBDS_Tests()
+        public void Test_GEDCOMEnumBDS()
         {
             Assert.AreEqual(GEDCOMBaptismDateStatus.bdsNone, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GEDCOMBaptismDateStatus.bdsNone)));
             Assert.AreEqual(GEDCOMBaptismDateStatus.bdsChild, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GEDCOMBaptismDateStatus.bdsChild)));
@@ -298,7 +288,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumEDS_Tests()
+        public void Test_GEDCOMEnumEDS()
         {
             Assert.AreEqual(GEDCOMEndowmentDateStatus.edsNone, GEDCOMUtils.GetEndowmentDateStatusVal("unk"));
             Assert.AreEqual(GEDCOMEndowmentDateStatus.edsNone, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GEDCOMEndowmentDateStatus.edsNone)));
@@ -313,7 +303,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEnumCSDS_Tests()
+        public void Test_GEDCOMEnumCSDS()
         {
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsNone, GEDCOMUtils.GetChildSealingDateStatusVal("unk"));
             Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsNone, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus.cdsNone)));

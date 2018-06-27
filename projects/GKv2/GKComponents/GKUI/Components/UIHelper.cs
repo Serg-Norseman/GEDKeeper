@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Windows.Forms;
 
 using BSLib;
@@ -265,6 +266,17 @@ namespace GKUI.Components
         {
             int rgb = color.ToArgb();
             return Color.FromArgb(GfxHelper.Lighter(rgb, fraction));
+        }
+
+        public static Bitmap LoadBitmapFromResource(string resName)
+        {
+            return LoadBitmapFromResource(typeof(UIHelper), resName);
+        }
+
+        public static Bitmap LoadBitmapFromResource(Type baseType, string resName)
+        {
+            Assembly assembly = baseType.Assembly;
+            return new Bitmap(assembly.GetManifestResourceStream(resName));
         }
     }
 }

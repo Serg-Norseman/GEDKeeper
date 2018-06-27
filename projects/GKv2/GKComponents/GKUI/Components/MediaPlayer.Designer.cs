@@ -49,7 +49,6 @@
             // 
             // btnMute
             // 
-            this.btnMute.BackgroundImage = global::ExtResources.btnVolumeMute;
             this.btnMute.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMute.ImageKey = "(none)";
             this.btnMute.Location = new System.Drawing.Point(7, 3);
@@ -61,7 +60,6 @@
             // 
             // btnPause
             // 
-            this.btnPause.BackgroundImage = global::ExtResources.btnPause;
             this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPause.Location = new System.Drawing.Point(3, 3);
             this.btnPause.Name = "btnPause";
@@ -72,7 +70,6 @@
             // 
             // btnPlay
             // 
-            this.btnPlay.BackgroundImage = global::ExtResources.btnPlay;
             this.btnPlay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPlay.Location = new System.Drawing.Point(49, 3);
             this.btnPlay.Name = "btnPlay";
@@ -83,7 +80,6 @@
             // 
             // btnStop
             // 
-            this.btnStop.BackgroundImage = global::ExtResources.btnStop;
             this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnStop.Location = new System.Drawing.Point(95, 3);
             this.btnStop.Name = "btnStop";
@@ -206,7 +202,6 @@
             // pnlVideo
             // 
             this.pnlVideo.BackColor = System.Drawing.SystemColors.WindowText;
-            this.pnlVideo.BackgroundImage = global::ExtResources.pnlVideo;
             this.pnlVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pnlVideo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlVideo.Dock = System.Windows.Forms.DockStyle.Fill;

@@ -53,6 +53,12 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
+            this.btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
+            this.btnPause.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_pause.png");
+            this.btnPlay.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_play.png");
+            this.btnStop.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_stop.png");
+            this.pnlVideo.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.pnl_video.png");
+
             fFactory = new MediaPlayerFactory(FIND_LIBVLC);
             fPlayer = fFactory.CreatePlayer<IDiskPlayer>();
 
@@ -163,16 +169,16 @@ namespace GKUI.Components
             fPlayer.Volume = trkVolume.Value;
 
             if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMax;
+                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_max.png");
             }
             if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMiddle;
+                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_middle.png");
             }
             if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMin;
+                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_min.png");
             }
             if (fPlayer.Volume == 0) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
+                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
             }
         }
 
@@ -196,7 +202,7 @@ namespace GKUI.Components
             fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
+                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
             } else {
                 trkVolume_Scroll(sender, e);
             }

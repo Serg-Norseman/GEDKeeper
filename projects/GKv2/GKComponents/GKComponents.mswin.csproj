@@ -73,10 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ExtResources.Designer.cs">
-      <DependentUpon>ExtResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
@@ -111,16 +107,27 @@
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExtResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\btn_close.png" />
+    <EmbeddedResource Include="Resources\btn_pause.png" />
+    <EmbeddedResource Include="Resources\btn_play.png" />
+    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
+    <EmbeddedResource Include="Resources\btn_stop.png" />
+    <EmbeddedResource Include="Resources\btn_volume_max.png" />
+    <EmbeddedResource Include="Resources\btn_volume_middle.png" />
+    <EmbeddedResource Include="Resources\btn_volume_min.png" />
+    <EmbeddedResource Include="Resources\btn_volume_mute.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
+    <EmbeddedResource Include="Resources\pnl_video.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

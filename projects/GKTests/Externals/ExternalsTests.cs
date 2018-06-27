@@ -48,6 +48,12 @@ namespace Externals
         {
         }*/
 
+        /*[TestCase("", Description = "Empty XRef Test", ExpectedException = typeof(EGEDCOMException))]
+        [TestCase("@sample", Description = "Bad XRef Test", ExpectedException = typeof(EGEDCOMException))]
+        public void GEDCOMUtils_ExtractXRef_Tests(string arg)
+        {
+        }*/
+
         [Test]
         public void Test_ConvertHelper_UniformName()
         {

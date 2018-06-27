@@ -96,7 +96,7 @@ namespace GKUI.Components
                 // Draw the close button.
                 //if (tab.HasCloseButton)
                 {
-                    Image closeImg = ExtResources.iBtnClose;
+                    Image closeImg = UIHelper.LoadBitmapFromResource("Resources.btn_close.png");
 
                     if (closeImg != null) {
                         gfx.DrawImageUnscaled(closeImg, closeRect.Left, closeRect.Top + innerRec.Y);
@@ -140,7 +140,7 @@ namespace GKUI.Components
 
         private Rectangle GetCloseButtonRect(Rectangle tabRect)
         {
-            Image closeImg = ExtResources.iBtnClose;
+            Image closeImg = UIHelper.LoadBitmapFromResource("Resources.btn_close.png");
             int closeX = tabRect.Right - TAB_PADDING - closeImg.Width;
             int closeY = (tabRect.Height - closeImg.Height + tabRect.Y) / 2;
             var closeButton = new Rectangle(closeX, closeY, closeImg.Width, closeImg.Height);

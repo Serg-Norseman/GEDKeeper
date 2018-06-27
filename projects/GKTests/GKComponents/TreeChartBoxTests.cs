@@ -21,7 +21,6 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKTests.Mocks;
