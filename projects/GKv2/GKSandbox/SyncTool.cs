@@ -22,9 +22,9 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 
-namespace GKCore
+namespace GKCommon.GKCore
 {
-    public class SyncTool
+    public static class SyncTool
     {
         public enum SyncState
         {

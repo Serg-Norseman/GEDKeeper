@@ -437,6 +437,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <EmbeddedResource Include="Resources\sym_female.png" />
+    <EmbeddedResource Include="Resources\sym_male.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -469,6 +471,9 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

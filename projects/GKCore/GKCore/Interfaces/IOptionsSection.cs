@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Drawing;
 
-namespace GKSandbox
+namespace GKCore.Interfaces
 {
-    public interface IOptions
+    public interface IOptionsSection
     {
         void Accept();
         void Cancel();
         bool HasValidationErrors();
         string DisplayName { get; }
         string TreePosition { get; }
-        Image MenuIcon { get; }
+        IImage MenuIcon { get; }
     }
 }

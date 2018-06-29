@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define SEX_SYMBOLS
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -646,7 +648,20 @@ namespace GKUI.Forms
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
             {
-                cmbSex.Items.Add(GKUtils.SexStr(sx));
+                string name = GKUtils.SexStr(sx);
+                Image image = null;
+                #if SEX_SYMBOLS
+                switch (sx) {
+                    case GEDCOMSex.svMale:
+                        image = UIHelper.LoadBitmapFromResource(this.GetType(), "Resources.sym_male.png");
+                        break;
+                    case GEDCOMSex.svFemale:
+                        image = UIHelper.LoadBitmapFromResource(this.GetType(), "Resources.sym_female.png");
+                        break;
+                }
+                #endif
+                var item = new GKComboItem(name, null, image);
+                cmbSex.Items.Add(item);
             }
 
             fEventsList = new GKSheetList(pageEvents);
