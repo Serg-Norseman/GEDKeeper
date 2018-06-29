@@ -313,7 +313,7 @@ namespace GKCore.Export
         public override void AddImage(IImage image)
         {
             if (image != null) {
-                itImage img = TreeChartPDFRenderer.ConvertImage(image);
+                itImage img = PDFRenderer.ConvertImage(image);
 
                 float fitWidth = fColumnWidth * 0.5f;
                 img.ScaleToFit(fitWidth, fitWidth);

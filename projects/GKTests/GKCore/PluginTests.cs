@@ -29,15 +29,58 @@ namespace GKCore
     [TestFixture]
     public class PluginTests
     {
+        private class SampleOrdPlugin : OrdinaryPlugin
+        {
+            private const string DISPLAY_NAME = "SampleOrdPlugin";
+
+            public override string DisplayName { get { return DISPLAY_NAME; } }
+            public override ILangMan LangMan { get { return null; } }
+            public override IImage Icon { get { return null; } }
+            public override PluginCategory Category { get { return PluginCategory.Common; } }
+
+            public override void Execute()
+            {
+            }
+        }
+
         [TestFixtureSetUp]
         public void SetUp()
         {
         }
 
         [Test]
+        public void Test_OrdinaryPlugin()
+        {
+            var plugin = new SampleOrdPlugin();
+            Assert.AreEqual(PluginCategory.Common, plugin.Category);
+            Assert.AreEqual(null, plugin.Icon);
+            Assert.AreEqual(null, plugin.LangMan);
+            Assert.AreEqual("SampleOrdPlugin", plugin.DisplayName);
+
+            plugin.Startup(null);
+            Assert.AreEqual(null, plugin.Host);
+
+            plugin.OnHostClosing(null);
+            plugin.OnHostActivate();
+            plugin.OnHostDeactivate();
+            plugin.OnLanguageChange();
+
+            plugin.Shutdown();
+        }
+
+        [Test]
+        public void Test_HostClosingEventArgs()
+        {
+            var args = new HostClosingEventArgs();
+            Assert.AreEqual(false, args.Cancel);
+        }
+
+        [Test]
         public void Test_GetPluginInfo()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { PluginInfo.GetPluginInfo(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                PluginInfo.GetPluginInfo(null);
+            });
 
             var plugin = new PluginTest();
             Assert.IsNotNull(plugin);
@@ -56,7 +99,9 @@ namespace GKCore
             public override IImage Icon { get { return null; } }
             public override PluginCategory Category { get { return PluginCategory.Common; } }
 
-            public override void Execute() { }
+            public override void Execute()
+            {
+            }
         }
 
         [Test]

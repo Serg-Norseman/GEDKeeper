@@ -52,19 +52,15 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_X()
-        {
-            
-        }
-
-        [Test]
         public void Test_GetXPath()
         {
             string st = GKUtils.GetTempDir();
             Assert.IsTrue(Directory.Exists(st));
-            
-            st = GKUtils.GetAppPath();
-            Assert.IsTrue(Directory.Exists(st));
+
+            string appPath = GKUtils.GetAppPath();
+            Assert.IsTrue(Directory.Exists(appPath));
+
+            Assert.AreEqual(appPath + "plugins" + Path.DirectorySeparatorChar, GKUtils.GetPluginsPath());
         }
 
         [Test]
@@ -174,6 +170,36 @@ namespace GKCore
         {
             GEDCOMRecord rec = fContext.Tree.XRefIndex_Find("I1");
             Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("F1");
+            Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("G1");
+            Assert.AreEqual("GroupTest", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("L1");
+            Assert.AreEqual("Test Location", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("R1");
+            Assert.AreEqual("Test repository", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("RS1");
+            Assert.AreEqual("Test research", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("S1");
+            Assert.AreEqual("Test source", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("N1");
+            Assert.AreEqual("Test note", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("TK1");
+            Assert.AreEqual("Test task", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("O1");
+            Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(rec, false));
+
+            rec = fContext.Tree.XRefIndex_Find("CM1");
+            Assert.AreEqual("Test communication", GKUtils.GetRecordName(rec, false));
         }
 
         [Test]
@@ -236,32 +262,139 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_InitExtData()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
+            GKUtils.InitExtData(fContext.Tree);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
+            GKUtils.InitExtCounts(fContext.Tree, 0);
+        }
+
+        [Test]
+        public void Test_GetXGoalStr()
+        {
+            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
+            Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
+
+            var rec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
+            Assert.IsNotNull(rec);
+            Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(rec));
+        }
+
+        [Test]
+        public void Test_GetDaysForBirth()
+        {
+            Assert.AreEqual(-1, GKUtils.GetDaysForBirth(null));
+        }
+
+        [Test]
+        public void Test_GetCorresponderStr()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
+        }
+
+        [Test]
+        public void Test_GetAncestorsCount()
+        {
+            GEDCOMIndividualRecord iRec5 = fContext.Tree.XRefIndex_Find("I6") as GEDCOMIndividualRecord;
+
+            GKUtils.InitExtCounts(fContext.Tree, -1);
+            Assert.AreEqual(0, GKUtils.GetAncestorsCount(null));
+            Assert.AreEqual(3, GKUtils.GetAncestorsCount(iRec5) - 1);
+        }
+
+        [Test]
+        public void Test_GetDescendantsCount()
+        {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            GKUtils.InitExtCounts(fContext.Tree, -1);
+            Assert.AreEqual(0, GKUtils.GetDescendantsCount(null));
+            Assert.AreEqual(3, GKUtils.GetDescendantsCount(iRec) - 1);
+        }
+
+        [Test]
+        public void Test_GetDescGenerations()
+        {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            Assert.AreEqual(2, GKUtils.GetDescGenerations(iRec));
+        }
+
+        [Test]
+        public void Test_GetMarriagesCount()
+        {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            Assert.AreEqual(1, GKUtils.GetMarriagesCount(iRec));
+        }
+
+        [Test]
+        public void Test_GetSpousesDiff()
+        {
+            GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+
+            Assert.AreEqual(1, GKUtils.GetSpousesDiff(famRec));
+        }
+
+        [Test]
+        public void Test_GetFirstborn()
+        {
+            GEDCOMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec3 = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+
+            Assert.AreEqual(iRec3, GKUtils.GetFirstborn(iRec1));
+            Assert.AreEqual(20, GKUtils.GetFirstbornAge(iRec1, iRec3));
+        }
+
+        [Test]
+        public void Test_GetMarriageAge()
+        {
+            GEDCOMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            // specially bad date also for CheckBase functions
+            Assert.AreEqual(10, GKUtils.GetMarriageAge(iRec1));
+        }
+
+        [Test]
+        public void Test_GetStoreFolder()
+        {
+            var sep = Path.DirectorySeparatorChar;
+            Assert.AreEqual("unknown" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkNone));
+            Assert.AreEqual("images" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkImage));
+            Assert.AreEqual("audio" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkAudio));
+            Assert.AreEqual("texts" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkText));
+            Assert.AreEqual("video" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkVideo));
+        }
+
+        [Test]
+        public void Test_X()
+        {
+        }
+
+        [Test]
         public void Test_CommonX()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetAttributeStr(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, "", ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
-
-            Assert.AreEqual(-1, GKUtils.GetDaysForBirth(null));
-            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
-            Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
         }
 
         [Test]
         public void Test_GetBirthDateD()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            Assert.IsNull(GKUtils.GetBirthDate(null));
 
             GEDCOMCustomDate date = GKUtils.GetBirthDate(iRec);
             Assert.IsNotNull(date);
@@ -298,6 +431,8 @@ namespace GKCore
         public void Test_GetLifeStr()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+
+            Assert.AreEqual("", GKUtils.GetLifeStr(null));
 
             string st3;
             st3 = GKUtils.GetLifeStr(iRec);

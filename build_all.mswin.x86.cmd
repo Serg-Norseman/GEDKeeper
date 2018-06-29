@@ -1,5 +1,7 @@
 @echo off
-@%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Debug /p:Platform="x86"
+set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
+%MSBDIR%\msbuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Debug /p:Platform="x86" /t:Rebuild
+rem /p:TargetFrameworkVersion=v4.5
 
 set BUILD_STATUS=%ERRORLEVEL% 
 if %BUILD_STATUS%==0 goto test 

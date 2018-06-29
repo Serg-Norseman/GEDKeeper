@@ -65,16 +65,52 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual("ansel", ansel.BodyName);
             Assert.AreEqual("ANSEL", ansel.EncodingName);
 
+            Assert.AreEqual(false, ansel.IsMailNewsDisplay);
+            Assert.AreEqual(false, ansel.IsMailNewsSave);
+            Assert.AreEqual(true, ansel.IsSingleByte);
+
+            Assert.AreEqual(10, ansel.GetMaxCharCount(10));
+            Assert.AreEqual(20, ansel.GetMaxByteCount(10));
+
+            char[] chars = null;
+            string s = null;
+
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetByteCount(chars, 0, 0); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetByteCount(s); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetBytes(chars, 0, 0, null, 0); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetBytes(s, 0, 0, null, 0); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetCharCount(null, 0, 0); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetChars(null, 0, 0, null, 0); });
+
             Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetString(null, 0, 0); });
+            byte[] bytes = Encoding.GetEncoding(437).GetBytes("test");
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ansel.GetString(bytes, -1, 0); });
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ansel.GetString(bytes, 0, -1); });
+            var res1 = ansel.GetString(bytes, 0, 0);
+            Assert.AreEqual(string.Empty, res1);
+            res1 = ansel.GetString(bytes, 0, bytes.Length);
+            Assert.AreEqual("test", res1);
 
             byte[] data;
-            string res, sample;
+            string res, sampleUnic, sampleAnsel;
 
             // code: E0 (Unicode: hook above, 0309)/low rising tone mark/
-            sample = "ẢB̉C̉D̉ẺF̉G̉H̉ỈJ̉K̉L̉M̉N̉ỎP̉Q̉R̉S̉T̉ỦV̉W̉X̉ỶZ̉";
-            data = Encoding.GetEncoding(437).GetBytes("αAαBαCαDαEαFαGαHαIαJαKαLαMαNαOαPαQαRαSαTαUαVαWαXαYαZ");
+            sampleAnsel = "αAαBαCαDαEαFαGαHαIαJαKαLαMαNαOαPαQαRαSαTαUαVαWαXαYαZ";
+            sampleUnic = "ẢB̉C̉D̉ẺF̉G̉H̉ỈJ̉K̉L̉M̉N̉ỎP̉Q̉R̉S̉T̉ỦV̉W̉X̉ỶZ̉";
+
+            //chars = sampleUnic.ToCharArray();
+            //Assert.AreEqual(52, ansel.GetByteCount(chars, 0, chars.Length));
+            //Assert.AreEqual(52, ansel.GetByteCount(sampleUnic));
+
+            data = Encoding.GetEncoding(437).GetBytes(sampleAnsel);
             res = ansel.GetString(data);
-            Assert.AreEqual(sample, res);
+            Assert.AreEqual(sampleUnic, res);
+
+            data = ansel.GetBytes(res);
+            res = Encoding.GetEncoding(437).GetString(data);
+            Assert.AreEqual(sampleAnsel, res.Trim('\0')); //FIXME: ALERT!
         }
 
         #region True Tests

@@ -84,7 +84,7 @@ namespace GKCore.Export
                     float pageHeight = itPS.Height;
                     float pageWidth = itPS.Width;
 
-                    var renderer = new TreeChartPDFRenderer(pageWidth, pageHeight);
+                    var renderer = new PDFRenderer(pageWidth, pageHeight);
                     renderer.SetTarget(fPdfWriter.DirectContent, false);
 
                     // TODO: replace by local options in TreeChartBox
@@ -129,9 +129,9 @@ namespace GKCore.Export
             }
         }
 
-        private static int PatriarchsCompare(object item1, object item2)
+        private static int PatriarchsCompare(PatriarchObj item1, PatriarchObj item2)
         {
-            return ((PatriarchObj)item2).DescendantsCount - ((PatriarchObj)item1).DescendantsCount;
+            return item2.DescendantsCount - item1.DescendantsCount;
         }
 
         private void PreparePatriarchs()

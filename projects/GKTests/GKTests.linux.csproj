@@ -85,10 +85,15 @@
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
+    <Compile Include="GKCore\CulturesTests.cs" />
+    <Compile Include="GKCore\ExportersTests.cs" />
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
     <Compile Include="GKCore\IocContainerTests.cs" />
+    <Compile Include="GKCore\KinshipsTests.cs" />
+    <Compile Include="GKCore\ListsTests.cs" />
+    <Compile Include="GKCore\OptionsTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
     <Compile Include="GKCore\PluginTests.cs" />

@@ -251,7 +251,7 @@
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
-    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\PDFRenderer.cs" />
     <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
     <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
     <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
