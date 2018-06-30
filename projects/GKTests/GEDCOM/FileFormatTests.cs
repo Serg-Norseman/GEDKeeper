@@ -46,5 +46,16 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        [Test]
+        public void Test_TrueAnsel()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ansel.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+            }
+        }
     }
 }
