@@ -67,6 +67,7 @@ namespace GKUI.Components
             acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
             acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
             chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
+            chkArcText.Text = LangMan.LS(LSID.LSID_ArcText);
         }
 
         public void AcceptChanges()
@@ -86,6 +87,7 @@ namespace GKUI.Components
             fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.BackgroundColor);
 
             fOptions.HideEmptySegments = chkHideEmptySegments.Checked.GetValueOrDefault();
+            fOptions.ArcText = chkArcText.Checked.GetValueOrDefault();
             //fOptions.Apply();
         }
 
@@ -107,6 +109,7 @@ namespace GKUI.Components
             acbLine.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[10]);
 
             chkHideEmptySegments.Checked = fOptions.HideEmptySegments;
+            chkArcText.Checked = fOptions.ArcText;
         }
 
         /*private void PanDefFont_Click(object sender, EventArgs e)
@@ -147,6 +150,7 @@ namespace GKUI.Components
         private Label acbBack;
         private Label acbLine;
         private CheckBox chkHideEmptySegments;
+        private CheckBox chkArcText;
 
         private void InitializeComponent()
         {
@@ -235,6 +239,10 @@ namespace GKUI.Components
             //chkHideEmptySegments.Size = new Size(328, 24);
             chkHideEmptySegments.Text = "chkHideEmptySegments";
 
+            chkArcText = new CheckBox();
+            //chkArcText.Size = new Size(328, 24);
+            chkArcText.Text = "chkArcText";
+
             Content = new DefTableLayout() {
                 Rows = {
                     new TableRow {
@@ -248,7 +256,11 @@ namespace GKUI.Components
                     },
                     new TableRow {
                         Cells = { chkHideEmptySegments }
-                    }
+                    },
+                    new TableRow {
+                        Cells = { chkArcText }
+                    },
+                    null
                 }
             };
 
