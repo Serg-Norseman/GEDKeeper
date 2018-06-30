@@ -54,6 +54,7 @@ namespace GKCore
     {
         private static string fAppSign;
         private static AppHost fInstance = null;
+        private static string fAppDataPath = null;
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private readonly StringList fTips;
@@ -252,9 +253,17 @@ namespace GKCore
 
         public static string GetAppDataPathStatic()
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
+            string path;
+
+            if (string.IsNullOrEmpty(fAppDataPath)) {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                    Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
+            } else {
+                path = fAppDataPath;
+            }
+
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
             return path;
         }
 
@@ -524,12 +533,20 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Verify and load the databases specified in the command line arguments.
+        /// </summary>
+        /// <returns>number of loaded files</returns>
         public int LoadArgs()
         {
             int result = 0;
             if (fCommandArgs != null && fCommandArgs.Length > 0) {
-                AppHost.Instance.CreateBase(fCommandArgs[0]);
-                result += 1;
+                foreach (var arg in fCommandArgs) {
+                    if (File.Exists(arg)) {
+                        AppHost.Instance.CreateBase(arg);
+                        result += 1;
+                    }
+                }
             }
             return result;
         }
@@ -856,6 +873,37 @@ namespace GKCore
         static AppHost()
         {
             fIocContainer = new IocContainer();
+        }
+
+        public static void CheckPortable(string[] args)
+        {
+            const string HomeDirArg = "-homedir:";
+            const string LocalAppDataFolder = ".\\appdata\\";
+
+            string appPath = GetAppPath();
+
+            string homedir = "";
+            if (args != null && args.Length > 0) {
+                foreach (var arg in args) {
+                    if (arg.StartsWith(HomeDirArg)) {
+                        homedir = arg.Remove(0, HomeDirArg.Length);
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(homedir)) {
+                string path = Path.Combine(appPath, homedir);
+                if (Directory.Exists(path)) {
+                    fAppDataPath = Path.Combine(path, LocalAppDataFolder);
+                }
+            }
+
+            if (string.IsNullOrEmpty(fAppDataPath)) {
+                string path = Path.Combine(appPath, LocalAppDataFolder);
+                if (Directory.Exists(path)) {
+                    fAppDataPath = path;
+                }
+            }
         }
 
         public static void InitSettings()

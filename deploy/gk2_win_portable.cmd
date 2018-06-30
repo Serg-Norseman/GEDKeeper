@@ -11,6 +11,9 @@ set log_fn=".\%out_fn%.log"
 
 echo Processing portable installation start
 
+del .\*.zip /q
+del ..\appdata\*.* /q
+
 echo "..\GEDKeeper2.exe" > %lstfile%
 echo "..\GKComponents.dll" >> %lstfile%
 echo "..\GKCore.dll" >> %lstfile%
@@ -31,6 +34,7 @@ echo "..\ZedGraph.dll" >> %lstfile%
 
 echo "..\LICENSE" >> %lstfile%
 
+echo "..\appdata\" >> %lstfile%
 echo "..\locales\" >> %lstfile%
 echo "..\plugins\" >> %lstfile%
 echo "..\samples\" >> %lstfile%

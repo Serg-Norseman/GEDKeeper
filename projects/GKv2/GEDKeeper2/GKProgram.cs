@@ -84,6 +84,8 @@ namespace GKUI
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
                 if (tracker.IsFirstInstance) {
+                    AppHost.CheckPortable(args);
+
                     AppHost.InitSettings();
                     try
                     {
