@@ -27,7 +27,6 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -1356,12 +1355,12 @@ namespace GKUI.Forms
 
         private void miMap_Click(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            #else
+            //#if __MonoCS__
+            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            //#else
             MapsViewerWin mapsWin = new MapsViewerWin(this);
             mapsWin.ProcessMap();
-            #endif
+            //#endif
         }
 
         private void miOrganizer_Click(object sender, EventArgs e)

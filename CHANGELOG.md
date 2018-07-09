@@ -1,4 +1,8 @@
 
+## ??.??.2018 [v2.14.0]
+- Restored the work of the maps module
+- Implemented portable mode of the program.
+
 ## 28.06.2018 [[v2.13.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.1)]
 - Implemented the saving of circle charts in SVG.
 - Fixed bug in the tree's chart with folding of branches.

@@ -140,9 +140,6 @@
     <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKMapBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TextBoxEx.cs">
       <SubType>Component</SubType>

@@ -71,6 +71,7 @@ namespace GKUI
         private static void Main(string[] args)
         {
             WinFormsAppHost.ConfigureBootstrap(false);
+            AppHost.CheckPortable(args);
             Logger.LogInit(WinFormsAppHost.GetLogFilename());
             LogSysInfo();
 
@@ -84,8 +85,6 @@ namespace GKUI
             using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
             {
                 if (tracker.IsFirstInstance) {
-                    AppHost.CheckPortable(args);
-
                     AppHost.InitSettings();
                     try
                     {

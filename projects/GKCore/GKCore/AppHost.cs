@@ -878,7 +878,7 @@ namespace GKCore
         public static void CheckPortable(string[] args)
         {
             const string HomeDirArg = "-homedir:";
-            const string LocalAppDataFolder = ".\\appdata\\";
+            const string LocalAppDataFolder = "appdata\\";
 
             string appPath = GetAppPath();
 
