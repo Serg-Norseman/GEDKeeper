@@ -265,17 +265,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_AppHost()
-        {
-            Assert.IsNotNullOrEmpty(AppHost.GetAppPath());
-            Assert.IsNotNullOrEmpty(AppHost.GetLogFilename());
-
-            Assert.IsNotNullOrEmpty(AppHost.Instance.GetAppDataPath());
-
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });
-        }
-
-        [Test]
         public void Test_NamesTable()
         {
             using (NamesTable namesTable = new NamesTable())

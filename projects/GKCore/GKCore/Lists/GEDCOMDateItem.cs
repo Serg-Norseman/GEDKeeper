@@ -61,19 +61,13 @@ namespace GKCore.Lists
             IComparable cv2 = otherItem.fDate;
 
             int compRes;
-            if (cv1 != null && cv2 != null)
-            {
+            if (cv1 != null && cv2 != null) {
                 compRes = cv1.CompareTo(cv2);
-            }
-            else if (cv1 != null)
-            {
+            } else if (cv1 != null) {
                 compRes = -1;
-            }
-            else if (cv2 != null)
-            {
+            } else if (cv2 != null) {
                 compRes = 1;
-            }
-            else {
+            } else {
                 compRes = 0;
             }
             return compRes;

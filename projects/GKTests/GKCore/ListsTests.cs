@@ -54,13 +54,40 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_DateItems()
+        public void Test_DateItems_IConvertible()
         {
             var dtx1 = new GEDCOMDateValue(null, null, "DATE", "05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
 
+            Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToBoolean(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToChar(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToSByte(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToByte(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt16(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt16(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt32(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt32(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt64(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt64(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToSingle(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDouble(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDecimal(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDateTime(null); });
+            Assert.AreEqual("05.01.2013", ((IConvertible)dtItem1).ToString(null));
+            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToType(typeof(Int32), null); });
+        }
+
+        [Test]
+        public void Test_DateItems()
+        {
+            var dtx1 = new GEDCOMDateValue(null, null, "DATE", "05 JAN 2013");
+            var dtItem1 = new GEDCOMDateItem(dtx1);
+            Assert.AreEqual("05.01.2013", dtItem1.ToString());
+
             var dtx2 = new GEDCOMDateValue(null, null, "DATE", "17 FEB 2013");
             var dtItem2 = new GEDCOMDateItem(dtx2);
+            Assert.AreEqual("17.02.2013", dtItem2.ToString());
 
             Assert.AreEqual(0, dtItem1.CompareTo(dtItem1));
             Assert.AreEqual(-1, dtItem1.CompareTo(dtItem2));

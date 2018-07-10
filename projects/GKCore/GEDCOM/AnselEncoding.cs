@@ -170,16 +170,16 @@ namespace GKCommon.GEDCOM
 
             int byteCount = 0;
             for (int p = 0; p < count; p++) {
-                if ((int)chars[index + p] <= 0x7f) {
+                int chr = (int)chars[index + p];
+                if (chr <= 0x7f) {
                     byteCount++;
                 } else {
-                    int i = GetUCSIndex((int)chars[index + p]);
+                    int i = GetUCSIndex(chr);
                     byteCount++;
                     if (i >= marc8CombinerStart) {
                         byteCount++;
                     }
                 }
-                count--;
             }
             return byteCount;
         }
@@ -190,18 +190,8 @@ namespace GKCommon.GEDCOM
                 throw new ArgumentNullException("s");
             }
 
-            int byteCount = 0;
-            for (int p = 0; p < s.Length; p++) {
-                if ((int)s[p] <= 0x7f) {
-                    byteCount++;
-                } else {
-                    int i = GetUCSIndex((int)s[p]);
-                    byteCount++;
-                    if (i >= marc8CombinerStart) {
-                        byteCount++;
-                    }
-                }
-            }
+            char[] chars = s.ToCharArray();
+            int byteCount = GetByteCount(chars, 0, chars.Length);
             return byteCount;
         }
 
@@ -224,46 +214,8 @@ namespace GKCommon.GEDCOM
             }
 
             int count = charCount;
-
             while (count-- > 0) {
                 char ch = chars[charIndex++];
-                if (ch < (char)0x80) {
-                    bytes[byteIndex++] = (byte)ch;
-                } else {
-                    int i = GetUCSIndex(ch);
-                    if (i != -1) {
-                        bytes[byteIndex++] = (byte)marc8[i];
-                    } else {
-                        bytes[byteIndex++] = (byte)'?';
-                    }
-                }
-            }
-
-            return charCount;
-        }
-		
-        public override int GetBytes(string s, int charIndex, int charCount, byte[] bytes, int byteIndex)
-        {
-            if (s == null) {
-                throw new ArgumentNullException("s");
-            }
-            if (bytes == null) {
-                throw new ArgumentNullException("bytes");
-            }
-            if (charIndex < 0 || charIndex > s.Length) {
-                throw new ArgumentOutOfRangeException("charIndex");
-            }
-            if (byteIndex < 0 || byteIndex > bytes.Length) {
-                throw new ArgumentOutOfRangeException("byteIndex");
-            }
-            if ((bytes.Length - byteIndex) < charCount) {
-                throw new ArgumentException("Arg_InsufficientSpace");
-            }
-
-            int count = charCount;
-
-            while (count-- > 0) {
-                char ch = s[charIndex++];
                 if (ch < (char)0x80) {
                     bytes[byteIndex++] = (byte)ch;
                 } else {
@@ -282,7 +234,17 @@ namespace GKCommon.GEDCOM
                     }
                 }
             }
+            return charCount;
+        }
 
+        public override int GetBytes(string s, int charIndex, int charCount, byte[] bytes, int byteIndex)
+        {
+            if (s == null) {
+                throw new ArgumentNullException("s");
+            }
+
+            char[] chars = s.ToCharArray();
+            charCount = GetBytes(chars, charIndex, charCount, bytes, byteIndex);
             return charCount;
         }
 

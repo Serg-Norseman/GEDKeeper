@@ -75,6 +75,9 @@ namespace GKCommon.GEDCOM
             char[] chars = null;
             string s = null;
 
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ansel.GetMaxCharCount(-1); });
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ansel.GetMaxByteCount(-1); });
+
             Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetByteCount(chars, 0, 0); });
             Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetByteCount(s); });
 
@@ -100,13 +103,22 @@ namespace GKCommon.GEDCOM
             sampleAnsel = "αAαBαCαDαEαFαGαHαIαJαKαLαMαNαOαPαQαRαSαTαUαVαWαXαYαZ";
             sampleUnic = "ẢB̉C̉D̉ẺF̉G̉H̉ỈJ̉K̉L̉M̉N̉ỎP̉Q̉R̉S̉T̉ỦV̉W̉X̉ỶZ̉";
 
+            //Assert.AreEqual(52, ansel.GetByteCount(sampleAnsel));
+
             //chars = sampleUnic.ToCharArray();
             //Assert.AreEqual(52, ansel.GetByteCount(chars, 0, chars.Length));
             //Assert.AreEqual(52, ansel.GetByteCount(sampleUnic));
 
             data = Encoding.GetEncoding(437).GetBytes(sampleAnsel);
+            Assert.AreEqual(52, data.Length);
+
             res = ansel.GetString(data);
             Assert.AreEqual(sampleUnic, res);
+            Assert.AreEqual(52, res.Length);
+
+            res = ansel.GetString(data, 0, data.Length);
+            Assert.AreEqual(sampleUnic, res);
+            Assert.AreEqual(52, res.Length);
 
             data = ansel.GetBytes(res);
             res = Encoding.GetEncoding(437).GetString(data);
