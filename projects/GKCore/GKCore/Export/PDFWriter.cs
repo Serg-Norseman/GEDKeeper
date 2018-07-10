@@ -24,6 +24,7 @@ using System;
 using System.IO;
 
 using BSLib;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -86,11 +87,26 @@ namespace GKCore.Export
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fDocument != null) fDocument.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override ChartRenderer GetPageRenderer()
+        {
+            var itPS = fDocument.PageSize;
+            float pageHeight = itPS.Height;
+            float pageWidth = itPS.Width;
+
+            var renderer = new PDFRenderer(pageWidth, pageHeight);
+            renderer.SetTarget(fPdfWriter.DirectContent, false);
+            return renderer;
+        }
+
+        public override ExtRectF GetPageSize()
+        {
+            return ExtRectF.Create(fDocument.Left, fDocument.Top, fDocument.Right, fDocument.Bottom);
         }
 
         public override void BeginWrite()

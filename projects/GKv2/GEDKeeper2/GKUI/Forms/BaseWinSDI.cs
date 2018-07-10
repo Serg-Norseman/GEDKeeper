@@ -228,19 +228,8 @@ namespace GKUI.Forms
                     }
                     break;
 
-                    /*case Keys.F12:
-                    throw new NotSupportedException(); // debug!*/
-
                 case Keys.F12:
-                    {
-                        #if __MonoCS__
-                        AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-                        #else
-                        using (TreesAlbumExporter fb = new TreesAlbumExporter(this)) {
-                            fb.Generate(true);
-                        }
-                        #endif
-                    }
+                    miExportToTreesAlbum_Click(null, null);
                     break;
 
                     /*case Keys.F:
@@ -1225,13 +1214,27 @@ namespace GKUI.Forms
 
         private void miExportToFamilyBook_Click(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            #else
+            //#if __MonoCS__
+            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            //#else
+            //#endif
+
             using (FamilyBookExporter fb = new FamilyBookExporter(this)) {
                 fb.Generate(true);
             }
-            #endif
+        }
+
+        private void miExportToTreesAlbum_Click(object sender, EventArgs e)
+        {
+            //#if __MonoCS__
+            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
+            //#else
+            //#endif
+            AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed");
+
+            using (TreesAlbumExporter ta = new TreesAlbumExporter(this)) {
+                ta.Generate(true);
+            }
         }
 
         private void miExportToExcelFile_Click(object sender, EventArgs e)

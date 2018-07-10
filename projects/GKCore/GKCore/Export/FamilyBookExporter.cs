@@ -19,7 +19,6 @@
  */
 
 using System;
-
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -141,9 +140,9 @@ namespace GKCore.Export
 
                 fWriter.EnablePageNumbers();
 
-                /*float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
-                fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
-                fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_FamilyBook), fTitleFont) { Alignment = Element.ALIGN_CENTER });*/
+                var pageSize = fWriter.GetPageSize();
+                float halfpage = (pageSize.Top - pageSize.Bottom - (fTitleFont.Size) * 4) / 2f;
+                fWriter.NewLine(0.0f, halfpage);
                 fWriter.AddParagraph(LangMan.LS(LSID.LSID_FamilyBook), fTitleFont, TextAlignment.taCenter);
                 fWriter.NewPage();
 

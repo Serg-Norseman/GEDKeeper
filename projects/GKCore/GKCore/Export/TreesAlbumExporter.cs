@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !NETSTANDARD
-
 using System;
 using BSLib;
 using GKCommon.GEDCOM;
@@ -27,103 +25,95 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
-    using itFont = iTextSharp.text.Font;
-
-    public sealed class TreesAlbumExporter : PDFExporter
+    public sealed class TreesAlbumExporter : ReportExporter
     {
         private readonly StringList fPatList;
 
-        private itFont fTitleFont;
-        private itFont fChapFont;
-        private itFont fSubchapFont;
-        private itFont fLinkFont;
-        private itFont fTextFont;
-        private itFont fBoldFont;
-        private itFont fSymFont;
+        private IFont fTitleFont;
+        private IFont fChapFont;
+        private IFont fSubchapFont;
+        private IFont fLinkFont;
+        private IFont fTextFont;
+        private IFont fBoldFont;
+        private IFont fSymFont;
 
-        public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin)
+        public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin, true)
         {
             fPatList = new StringList();
+            fTitle = "Trees Album"; //LangMan.LS(LSID.LSID_TreesAlbum);
         }
 
         protected override void InternalGenerate()
         {
-            try
-            {
-                {
-                    string title = "Trees Album"; //LangMan.LS(LSID.LSID_TreesAlbum)
+            try {
+                IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
+                IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-                    fDocument.AddTitle(title);
-                    fDocument.AddSubject("");
-                    fDocument.AddAuthor("");
-                    fDocument.AddCreator(GKData.APP_TITLE);
-                    fDocument.Open();
+                fTitleFont = fWriter.CreateFont("", 30f, true, false, clrBlack);
+                fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+                fSubchapFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
+                fLinkFont = fWriter.CreateFont("", 8f, false, true, clrBlue);
+                fTextFont = fWriter.CreateFont("", 8f, false, false, clrBlack);
+                fBoldFont = fWriter.CreateFont("", 8f, true, false, clrBlack);
+                fSymFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
-                    BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                    fTitleFont = new itFont(baseFont, 30f, itFont.BOLD);
-                    fChapFont = new itFont(baseFont, 16f, itFont.BOLD, BaseColor.BLACK);
-                    fSubchapFont = new itFont(baseFont, 14f, itFont.BOLD, BaseColor.BLACK);
-                    fLinkFont = new itFont(baseFont, 8f, itFont.UNDERLINE, BaseColor.BLUE);
-                    fTextFont = new itFont(baseFont, 8f, itFont.NORMAL, BaseColor.BLACK);
-                    fBoldFont = new itFont(baseFont, 8f, itFont.BOLD, BaseColor.BLACK);
-                    fSymFont = new itFont(baseFont, 12f, itFont.BOLD, BaseColor.BLACK);
+                fWriter.EnablePageNumbers();
 
-                    float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
-                    fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
-                    fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER });
-                    fDocument.NewPage();
+                var pageSize = fWriter.GetPageSize();
+                float halfpage = (pageSize.Top - pageSize.Bottom - (fTitleFont.Size) * 4) / 2f;
+                fWriter.NewLine(0.0f, halfpage);
+                fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
+                fWriter.NewPage();
 
-                    PreparePatriarchs();
-
-                    var itPS = fDocument.PageSize;
-                    float pageHeight = itPS.Height;
-                    float pageWidth = itPS.Width;
-
-                    var renderer = new PDFRenderer(pageWidth, pageHeight);
-                    renderer.SetTarget(fPdfWriter.DirectContent, false);
-
-                    // TODO: replace by local options in TreeChartBox
-                    bool prevKinship = GlobalOptions.Instance.ChartOptions.Kinship;
-                    GlobalOptions.Instance.ChartOptions.Kinship = false;
-
-                    var treeBox = AppHost.Container.Resolve<ITreeChartBox>();
-                    treeBox.SetRenderer(renderer);
-                    treeBox.Base = fBase;
-                    treeBox.Options = GlobalOptions.Instance.ChartOptions;
-                    treeBox.DepthLimit = 3;
-                    treeBox.Height = (int)pageHeight;
-                    treeBox.Width = (int)pageWidth;
-
-                    int num = fPatList.Count;
-                    for (int i = 0; i < num; i++) {
-                        string iName = fPatList[i];
-                        GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
-
-                        treeBox.SetScale(1.0f);
-                        treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
-
-                        ExtSize imageSize = treeBox.GetImageSize();
-                        float scaleFactor = GfxHelper.ZoomToFit(imageSize.Width,
-                                                                imageSize.Height,
-                                                                pageWidth, pageHeight);
-                        scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
-
-                        treeBox.SetScale(scaleFactor);
-                        treeBox.RenderStatic(BackgroundMode.bmNone, true);
-
-                        fDocument.NewPage();
-                    }
-
-                    GlobalOptions.Instance.ChartOptions.Kinship = prevKinship;
+                var renderer = fWriter.GetPageRenderer();
+                if (renderer == null) {
+                    // TODO: warning
+                    return;
                 }
-            }
-            catch (Exception ex)
-            {
+
+                PreparePatriarchs();
+
+                var itPS = fWriter.GetPageSize();
+                float pageHeight = itPS.GetHeight();
+                float pageWidth = itPS.GetWidth();
+
+                // TODO: replace by local options in TreeChartBox
+                bool prevKinship = GlobalOptions.Instance.ChartOptions.Kinship;
+                GlobalOptions.Instance.ChartOptions.Kinship = false;
+
+                var treeBox = AppHost.Container.Resolve<ITreeChartBox>();
+                treeBox.SetRenderer(renderer);
+                treeBox.Base = fBase;
+                treeBox.Options = GlobalOptions.Instance.ChartOptions;
+                treeBox.DepthLimit = 3;
+                treeBox.Height = (int)pageHeight;
+                treeBox.Width = (int)pageWidth;
+
+                int num = fPatList.Count;
+                for (int i = 0; i < num; i++) {
+                    string iName = fPatList[i];
+                    GEDCOMIndividualRecord iRec = fPatList.GetObject(i) as GEDCOMIndividualRecord;
+
+                    treeBox.SetScale(1.0f);
+                    treeBox.GenChart(iRec, TreeChartKind.ckDescendants, false);
+
+                    ExtSize imageSize = treeBox.GetImageSize();
+                    float scaleFactor = GfxHelper.ZoomToFit(imageSize.Width,
+                                                imageSize.Height,
+                                                pageWidth, pageHeight);
+                    scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
+
+                    treeBox.SetScale(scaleFactor);
+                    treeBox.RenderStatic(BackgroundMode.bmNone, true);
+
+                    fWriter.NewPage();
+                }
+
+                GlobalOptions.Instance.ChartOptions.Kinship = prevKinship;
+            } catch (Exception ex) {
                 Logger.LogWrite("TreesAlbumExporter.InternalGenerate(): " + ex.Message);
                 throw;
             }
@@ -149,5 +139,3 @@ namespace GKCore.Export
         }
     }
 }
-
-#endif
