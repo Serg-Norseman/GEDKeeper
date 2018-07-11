@@ -39,6 +39,7 @@
         private System.Windows.Forms.ToolStripSeparator N2;
         private System.Windows.Forms.ToolStripMenuItem miExportToExcelFile;
         private System.Windows.Forms.ToolStripMenuItem miExportToFamilyBook;
+        private System.Windows.Forms.ToolStripMenuItem miExportToTreesAlbum;
         private System.Windows.Forms.ToolStripSeparator N3;
         private System.Windows.Forms.ToolStripMenuItem miTreeTools;
         private System.Windows.Forms.ToolStripMenuItem miExit;
@@ -167,6 +168,7 @@
             this.miPedigree_dAboville = new System.Windows.Forms.ToolStripMenuItem();
             this.miPedigree_Konovalov = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportToFamilyBook = new System.Windows.Forms.ToolStripMenuItem();
+            this.miExportToTreesAlbum = new System.Windows.Forms.ToolStripMenuItem();
             this.N7 = new System.Windows.Forms.ToolStripSeparator();
             this.miMap = new System.Windows.Forms.ToolStripMenuItem();
             this.N8 = new System.Windows.Forms.ToolStripSeparator();
@@ -632,6 +634,7 @@
                                     this.miPedigree_dAboville,
                                     this.miPedigree_Konovalov,
                                     this.miExportToFamilyBook,
+                                    this.miExportToTreesAlbum,
                                     this.N7,
                                     this.miMap,
                                     this.N8,
@@ -713,6 +716,13 @@
             this.miExportToFamilyBook.Size = new System.Drawing.Size(281, 24);
             this.miExportToFamilyBook.Text = "miExportToFamilyBook";
             this.miExportToFamilyBook.Click += new System.EventHandler(this.miExportToFamilyBook_Click);
+            // 
+            // miExportToTreesAlbum
+            // 
+            this.miExportToTreesAlbum.Name = "miExportToTreesAlbum";
+            this.miExportToTreesAlbum.Size = new System.Drawing.Size(281, 24);
+            this.miExportToTreesAlbum.Text = "miExportToTreesAlbum";
+            this.miExportToTreesAlbum.Click += new System.EventHandler(this.miExportToTreesAlbum_Click);
             // 
             // N7
             // 

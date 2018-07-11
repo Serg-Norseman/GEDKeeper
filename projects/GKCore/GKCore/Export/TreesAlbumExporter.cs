@@ -63,7 +63,7 @@ namespace GKCore.Export
                 fWriter.EnablePageNumbers();
 
                 var pageSize = fWriter.GetPageSize();
-                float halfpage = (pageSize.Top - pageSize.Bottom - (fTitleFont.Size) * 4) / 2f;
+                float halfpage = (pageSize.Top - pageSize.Bottom - (fTitleFont.Size)) / 2f;
                 fWriter.NewLine(0.0f, halfpage);
                 fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
                 fWriter.NewPage();

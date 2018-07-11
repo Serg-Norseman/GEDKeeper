@@ -41,6 +41,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miFileProperties;
         private ButtonMenuItem miExportToExcelFile;
         private ButtonMenuItem miExportToFamilyBook;
+        private ButtonMenuItem miExportToTreesAlbum;
         private ButtonMenuItem miTreeTools;
         private ButtonMenuItem miExit;
         private ButtonMenuItem miEdit;
@@ -385,6 +386,10 @@ namespace GKUI.Forms
             miExportToFamilyBook.Text = "miExportToFamilyBook";
             miExportToFamilyBook.Click += miExportToFamilyBook_Click;
 
+            miExportToTreesAlbum = new ButtonMenuItem();
+            miExportToTreesAlbum.Text = "miExportToTreesAlbum";
+            miExportToTreesAlbum.Click += miExportToTreesAlbum_Click;
+
             miMap = new ButtonMenuItem();
             miMap.Shortcut = ((Keys)((Application.Instance.CommonModifier | Keys.M)));
             miMap.Text = "miMap";
@@ -413,6 +418,7 @@ namespace GKUI.Forms
                                           miPedigree_dAboville,
                                           miPedigree_Konovalov,
                                           miExportToFamilyBook,
+                                          miExportToTreesAlbum,
                                           new SeparatorMenuItem(),
                                           miMap,
                                           new SeparatorMenuItem(),

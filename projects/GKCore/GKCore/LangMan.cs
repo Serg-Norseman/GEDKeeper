@@ -819,9 +819,9 @@ namespace GKCore
         /* 761 */ LSID_MarriagesDates,
         /* 762 */ LSID_AutoCheckUpdates,
         /* 763 */ LSID_ArcText,
+        /* 764 */ LSID_MIExportToTreesAlbum,
 
-        /* 764 */ // reserved begin
-        /* 765 */
+        /* 765 */ // reserved begin
         /* 766 */
         /* 767 */
         /* 768 */
@@ -1643,9 +1643,9 @@ namespace GKCore
             /* 761 */ "Dates of marriages",
             /* 762 */ "Automatically check for updates",
             /* 763 */ "Arc text",
+            /* 764 */ "Album of Trees...",
 
-            /* 764 */ "", // reserved begin
-            /* 765 */ "",
+            /* 765 */ "", // reserved begin
             /* 766 */ "",
             /* 767 */ "",
             /* 768 */ "",

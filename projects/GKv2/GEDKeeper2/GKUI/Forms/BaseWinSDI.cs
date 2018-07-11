@@ -38,10 +38,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    #if !__MonoCS__
-    using Externals.MapiMail;
-    #endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -229,7 +225,6 @@ namespace GKUI.Forms
                     break;
 
                 case Keys.F12:
-                    miExportToTreesAlbum_Click(null, null);
                     break;
 
                     /*case Keys.F:
@@ -686,6 +681,7 @@ namespace GKUI.Forms
             miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
             miExport.Text = LangMan.LS(LSID.LSID_MIExport);
             miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
+            miExportToTreesAlbum.Text = LangMan.LS(LSID.LSID_MIExportToTreesAlbum);
             miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             miExit.Text = LangMan.LS(LSID.LSID_MIExit);
 
@@ -1163,6 +1159,7 @@ namespace GKUI.Forms
 
                 miTreeTools.Enabled = baseEn;
                 miExportToFamilyBook.Enabled = baseEn;
+                miExportToTreesAlbum.Enabled = baseEn;
                 miExportToExcelFile.Enabled = baseEn;
                 miFileClose.Enabled = baseEn;
                 miFileProperties.Enabled = baseEn;
@@ -1230,8 +1227,8 @@ namespace GKUI.Forms
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
-            AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed");
 
+            AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed. Only for PDF!");
             using (TreesAlbumExporter ta = new TreesAlbumExporter(this)) {
                 ta.Generate(true);
             }
@@ -1472,7 +1469,7 @@ namespace GKUI.Forms
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
+            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
         }
 
         private void miLogView_Click(object sender, EventArgs e)
@@ -1542,38 +1539,6 @@ namespace GKUI.Forms
                 miPlugins.Visible = (miPlugins.DropDownItems.Count > 0);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
-            }
-        }
-
-        public static void SendMail(string address, string subject, string body, string attach)
-        {
-            if (!File.Exists(attach)) return;
-
-            try
-            {
-                #if __MonoCS__
-
-                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
-                string args = string.Format(mailto, address, subject, body, attach);
-
-                var proc = new System.Diagnostics.Process();
-                proc.EnableRaisingEvents = false;
-                proc.StartInfo.FileName = "xdg-email";
-                proc.StartInfo.Arguments = args;
-                proc.Start();
-
-                #else
-
-                MapiMailMessage message = new MapiMailMessage(subject, body);
-                message.Recipients.Add(address);
-                message.Files.Add(attach);
-                message.ShowDialog();
-
-                #endif
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("BaseWinSDI.SendMail(): " + ex.Message);
             }
         }
 
