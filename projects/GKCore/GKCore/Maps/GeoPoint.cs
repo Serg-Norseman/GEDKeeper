@@ -20,7 +20,7 @@
 
 using System;
 
-namespace GKCore.Geocoding
+namespace GKCore.Maps
 {
     public sealed class GeoPoint
     {

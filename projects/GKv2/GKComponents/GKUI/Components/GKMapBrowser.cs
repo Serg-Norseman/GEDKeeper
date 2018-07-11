@@ -27,7 +27,6 @@ using System.Windows.Forms;
 
 using BSLib;
 using GKCore;
-using GKCore.Geocoding;
 using GKCore.Maps;
 using GKCore.UIContracts;
 

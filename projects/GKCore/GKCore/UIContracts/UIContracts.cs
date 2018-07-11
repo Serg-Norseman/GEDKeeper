@@ -20,8 +20,8 @@
 
 using BSLib;
 using GKCommon.GEDCOM;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKCore.Types;
 
 namespace GKCore.UIContracts

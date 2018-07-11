@@ -23,10 +23,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;

@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace GKCore.Geocoding
+namespace GKCore.Maps
 {
     public abstract class IGeocoder
     {

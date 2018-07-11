@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs" />
     <Compile Include="GKUI\Charts\CustomChart.cs" />
     <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />

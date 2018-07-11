@@ -110,7 +110,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>

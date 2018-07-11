@@ -24,7 +24,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-namespace GKCore.Geocoding
+namespace GKCore.Maps
 {
     public sealed class YandexGeocoder : IGeocoder
     {

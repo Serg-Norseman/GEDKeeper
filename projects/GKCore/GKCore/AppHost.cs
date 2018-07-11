@@ -26,9 +26,9 @@ using System.Reflection;
 
 using BSLib;
 using GKCore;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.IoC;
+using GKCore.Maps;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;

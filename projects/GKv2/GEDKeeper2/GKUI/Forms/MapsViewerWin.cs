@@ -25,7 +25,6 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Geocoding;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKUI.Components;

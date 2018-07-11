@@ -27,13 +27,13 @@ using System.Xml;
 
 using BSLib;
 
-namespace GKCore.Geocoding
+namespace GKCore.Maps
 {
-    public sealed class OSMGeocoder : IGeocoder
+    public sealed class GoogleGeocoder : IGeocoder
     {
-        private const string REQUEST_URL = "http://nominatim.openstreetmap.org/search.php?q={0}&format=xml";
+        private const string REQUEST_URL = "https://maps.googleapis.com/maps/api/geocode/xml?address={0}&language={1}";
 
-        public OSMGeocoder()
+        public GoogleGeocoder()
         {
             CultureInfo cInfo = CultureInfo.CurrentUICulture;
             fLang = cInfo.TwoLetterISOLanguageName;
@@ -42,7 +42,8 @@ namespace GKCore.Geocoding
         public override IList<GeoPoint> Geocode(string location, short results, string lang)
         {
             string requestUrl =
-                string.Format(REQUEST_URL, MakeValidString(location), lang);
+                string.Format(REQUEST_URL, MakeValidString(location), lang) +
+                (string.IsNullOrEmpty(fKey) ? string.Empty : "&key=" + fKey);
 
             return ParseXml(requestUrl);
         }
@@ -68,16 +69,23 @@ namespace GKCore.Geocoding
                         for (int i = 0; i < num; i++)
                         {
                             XmlNode xNode = node.ChildNodes[i];
-                            if (xNode.Name == "place")
+                            if (xNode.Name == "result")
                             {
-                                string ptHint = xNode.Attributes["display_name"].InnerText;
-                                double ptLongitude = ConvertHelper.ParseFloat(xNode.Attributes["lon"].InnerText, -1.0);
-                                double ptLatitude = ConvertHelper.ParseFloat(xNode.Attributes["lat"].InnerText, -1.0);
+                                XmlNode addressNode = xNode["formatted_address"];
+                                XmlNode geometry = xNode["geometry"];
+                                XmlNode pointNode = geometry["location"];
 
-                                if (xNode.Attributes["class"].InnerText == "place" && ptLatitude != -1.0 && ptLongitude != -1.0)
+                                if (addressNode != null && pointNode != null)
                                 {
-                                    GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
-                                    geoObjects.Add(gpt);
+                                    string ptHint = addressNode.InnerText;
+                                    double ptLongitude = ConvertHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                    double ptLatitude = ConvertHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
+
+                                    if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                                    {
+                                        GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
+                                        geoObjects.Add(gpt);
+                                    }
                                 }
                             }
                         }

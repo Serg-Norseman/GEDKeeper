@@ -163,7 +163,6 @@
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
-    <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
     <Compile Include="GKCore\GKResourceManager.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
@@ -200,7 +199,13 @@
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
     <Compile Include="GKCore\IocContainer.cs" />
     <Compile Include="GKCore\Logger.cs" />
+    <Compile Include="GKCore\Maps\GeoPoint.cs" />
+    <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
+    <Compile Include="GKCore\Maps\IGeocoder.cs" />
+    <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
+    <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
+    <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
@@ -253,10 +258,6 @@
     <Compile Include="GKCore\Export\RTFWriter.cs" />
     <Compile Include="GKCore\Export\PDFRenderer.cs" />
     <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
-    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
-    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\Holidays.cs" />

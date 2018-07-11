@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 
-namespace Externals.MapiMail
+namespace GKCore.MapiMail
 {
     /// <summary>
     /// Represents an email message to be sent through MAPI.
@@ -146,6 +146,10 @@ namespace Externals.MapiMail
             _manualResetEvent.Reset();
         }
 
+        private const int MAPI_DIALOG = 0x8;
+        private const int MAPI_LOGON_UI = 0x1;
+        private const int SUCCESS_SUCCESS = 0;
+
         /// <summary>
         /// Sends the mail message.
         /// </summary>
@@ -173,9 +177,6 @@ namespace Externals.MapiMail
                 // Signal the creating thread (make the remaining code async)
                 _manualResetEvent.Set();
 
-                const int MAPI_DIALOG = 0x8;
-                //const int MAPI_LOGON_UI = 0x1;
-                const int SUCCESS_SUCCESS = 0;
                 int error = (int)NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
 
                 if (_files.Count > 0)
