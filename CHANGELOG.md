@@ -1,4 +1,7 @@
 
+## 14.07.2018 [v2.13.2]
+- Fixed the bug of reading standard GEDCOM notes.
+
 ## 28.06.2018 [[v2.13.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.1)]
 - Implemented the saving of circle charts in SVG.
 - Fixed bug in the tree's chart with folding of branches.

@@ -115,9 +115,11 @@ namespace GKCommon.GEDCOM
         {
             CreateObj(owner, parent);
 
-            if (tagName != "" || tagValue != "")
-            {
+            if (!string.IsNullOrEmpty(tagName)) {
                 SetName(tagName);
+            }
+
+            if (!string.IsNullOrEmpty(tagValue)) {
                 SetStringValue(tagValue);
             }
         }
@@ -469,21 +471,18 @@ namespace GKCommon.GEDCOM
             if (tag == null) return;
 
             tag.StringValue = "";
-            for (int i = tag.Count - 1; i >= 0; i--)
-            {
-                if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
-                {
+            for (int i = tag.Count - 1; i >= 0; i--) {
+                string subtag = tag[i].Name;
+                if (subtag == "CONT" || subtag == "CONC") {
                     tag.Delete(i);
                 }
             }
 
-            if (strings != null)
-            {
+            if (strings != null) {
                 bool isRecordTag = (tag is GEDCOMRecord);
 
                 int num = strings.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     string str = strings[i];
 
                     int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
@@ -496,8 +495,7 @@ namespace GKCommon.GEDCOM
                         tag.AddTag("CONT", sub, null);
                     }
 
-                    while (str.Length > 0)
-                    {
+                    while (str.Length > 0) {
                         len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);
@@ -511,21 +509,18 @@ namespace GKCommon.GEDCOM
             if (tag == null) return;
 
             tag.StringValue = "";
-            for (int i = tag.Count - 1; i >= 0; i--)
-            {
-                if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
-                {
+            for (int i = tag.Count - 1; i >= 0; i--) {
+                string subtag = tag[i].Name;
+                if (subtag == "CONT" || subtag == "CONC") {
                     tag.Delete(i);
                 }
             }
 
-            if (strings != null)
-            {
+            if (strings != null) {
                 bool isRecordTag = (tag is GEDCOMRecord);
 
                 int num = strings.Length;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     string str = strings[i];
 
                     int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
@@ -538,8 +533,7 @@ namespace GKCommon.GEDCOM
                         tag.AddTag("CONT", sub, null);
                     }
 
-                    while (str.Length > 0)
-                    {
+                    while (str.Length > 0) {
                         len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);

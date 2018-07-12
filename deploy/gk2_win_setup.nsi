@@ -8,7 +8,7 @@
 
 Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.13.1_winsetup.exe"
+OutFile "gedkeeper_2.13.2_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
