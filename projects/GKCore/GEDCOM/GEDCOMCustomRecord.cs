@@ -42,15 +42,15 @@ namespace GKCommon.GEDCOM
         {
             string str = Level.ToString();
 
-            if (!string.IsNullOrEmpty(fXRef))
-            {
-                str = str + " " + "@" + fXRef + "@";
+            if (!string.IsNullOrEmpty(fXRef)) {
+                str = str + " @" + fXRef + "@";
             }
+
             str = str + " " + Name;
 
-            if (StringValue != "")
-            {
-                str = str + " " + StringValue;
+            string strValue = StringValue;
+            if (!string.IsNullOrEmpty(strValue)) {
+                str = str + " " + strValue;
             }
 
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);

@@ -315,7 +315,7 @@ namespace GKCommon.GEDCOM
                             }
                             else if (tagName == "NOTE")
                             {
-                                curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", ""));
+                                curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
                             }
                             else if (tagName == "REPO")
                             {

@@ -47,6 +47,25 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
+        public void Test_StdGEDCOM_Notes()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_stdgedcom_notes.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                    Assert.IsNotNull(noteRec1);
+                    Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
+
+                    GEDCOMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GEDCOMNoteRecord;
+                    Assert.IsNotNull(noteRec2);
+                    Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
+                }
+            }
+        }
+
         public void Test_TrueAnsel()
         {
             using (BaseContext ctx = new BaseContext(null)) {
