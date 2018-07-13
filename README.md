@@ -46,6 +46,8 @@ site (this is the most popular).
 
 Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
 
+Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/forum/#!forum/gedkeeper-en)
+
 
 ## Russian
 Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
@@ -70,6 +72,8 @@ Google Maps (© Google).
 [Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
 
 Основной сайт проекта: [http://ru.gedkeeper.net/](http://ru.gedkeeper.net/)
+
+Группа сообщества: [Google Groups: GEDKeeper (ru)](https://groups.google.com/forum/#!forum/gedkeeper-ru)
 
 
 ## Docs & Help
